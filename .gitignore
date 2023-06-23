@@ -1,0 +1,9 @@
+# git
+.gitattributes
+
+# mac
+.DS_Store
+
+# vs code
+.vscode/
+
