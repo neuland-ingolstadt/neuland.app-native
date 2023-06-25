@@ -19,12 +19,19 @@ export default function RootLayout() {
           options={{
             title: "Login",
             presentation: "modal",
+            gestureEnabled: false,
           }}
         />
         <Stack.Screen
           name="(food)/detail"
           options={{
             title: "Food Detail",
+          }}
+        />
+        <Stack.Screen
+          name="(user)/settings"
+          options={{
+            title: "Settings",
           }}
         />
       </Stack>

@@ -6,7 +6,7 @@ export function MapScreen() {
       <MapView
         showsPointsOfInterest={false}
         showsBuildings={false}
-        // mapType={Platform.OS == "android" ? "none" : "standard"}
+        mapType={Platform.OS == "android" ? "none" : "standard"}
         style={styles.map}
         initialRegion={{
           latitude: 48.76659,

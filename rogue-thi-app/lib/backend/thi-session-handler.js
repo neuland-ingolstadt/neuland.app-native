@@ -1,21 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SecureStore from 'expo-secure-store'
-import CredentialStorage from '../credential-storage'
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
-const CRED_NAME = 'credentials'
-const CRED_ID = 'thi.de'
 
-async function save(key, value) {
+async function save (key, value) {
   await SecureStore.setItemAsync(key, value)
 }
 
+async function load (key) {
+  return await SecureStore.getItemAsync(key)
+}
 /**
  * Thrown when the user is not logged in.
  */
 export class NoSessionError extends Error {
-  constructor() {
+  constructor () {
     super('User is not logged in')
   }
 }
@@ -24,7 +24,7 @@ export class NoSessionError extends Error {
  * Thrown when the user is logged in as a guest.
  */
 export class UnavailableSessionError extends Error {
-  constructor() {
+  constructor () {
     super('User is logged in as guest')
   }
 }
@@ -32,7 +32,7 @@ export class UnavailableSessionError extends Error {
 /**
  * Logs in the user and persists the session to AsyncStorage
  */
-export async function createSession(username, password, stayLoggedIn) {
+export async function createSession (username, password, stayLoggedIn) {
   // convert to lowercase just to be safe
   // (the API used to show weird behavior when using upper case usernames)
   username = username.toLowerCase()
@@ -42,14 +42,8 @@ export async function createSession(username, password, stayLoggedIn) {
   username = username.replace(/\s/g, '')
   const { session, isStudent } = await API.login(username, password)
 
-  async (value) => {
-    try {
-      await AsyncStorage.setItem('sessionCreated', value)
-      await AsyncStorage.setItem('isStudent', isStudent)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  await AsyncStorage.setItem('sessionCreated', Date.now().toString())
+  await AsyncStorage.setItem('isStudent', isStudent.toString())
 
   await save('session', session)
   if (stayLoggedIn) {
@@ -61,7 +55,7 @@ export async function createSession(username, password, stayLoggedIn) {
 /**
  * Logs in the user as a guest.
  */
-export async function createGuestSession() {
+export async function createGuestSession () {
   await API.clearCache()
   await save('session', 'guest')
 }
@@ -75,30 +69,31 @@ export async function createGuestSession() {
  * @param {object} method Method which will receive the session token
  * @returns {*} Value returned by `method`
  */
-export async function callWithSession(method) {
-  let session = localStorage.session
-  const sessionCreated = parseInt(localStorage.sessionCreated)
-
+export async function callWithSession (method) {
+  let session = await load('session')
+  const sessionCreated = parseInt(await AsyncStorage.getItem('sessionCreated'))
   // redirect user if he never had a session
   if (!session) {
     throw new NoSessionError()
-  } else if (session === 'guest2' || process.env.NEXT_PUBLIC_GUEST_ONLY) {
+  } else if (session === 'guest' || process.env.NEXT_PUBLIC_GUEST_ONLY) {
     throw new UnavailableSessionError()
   }
 
-  const credStore = new CredentialStorage(CRED_NAME)
-  const { username, password } = (await credStore.read(CRED_ID)) || {}
-
+  const username = await load('username')
+  const password = await load('password')
   // log in if the session is older than SESSION_EXPIRES
   if (sessionCreated + SESSION_EXPIRES < Date.now() && username && password) {
     try {
-      console.log('no session, logging in...')
-      const { session: newSession, isStudent } = await API.login(username, password)
+      console.log('old session, logging in...')
+      const { session: newSession, isStudent } = await API.login(
+        username,
+        password
+      )
       session = newSession
 
-      localStorage.session = session
-      localStorage.sessionCreated = Date.now()
-      localStorage.isStudent = isStudent
+      await save('session', session)
+      await AsyncStorage.setItem('sessionCreated', Date.now().toString())
+      await AsyncStorage.setItem('isStudent', isStudent.toString())
     } catch (e) {
       throw new NoSessionError()
     }
@@ -111,14 +106,18 @@ export async function callWithSession(method) {
     // the backend can throw different errors such as 'No Session' or 'Session Is Over'
     if (/session/i.test(e.message)) {
       if (username && password) {
-        console.log('seems to have received a session error trying to get a new session!')
+        console.log(
+          'seems to have received a session error trying to get a new session!'
+        )
         try {
-          const { session: newSession, isStudent } = await API.login(username, password)
+          const { session: newSession, isStudent } = await API.login(
+            username,
+            password
+          )
           session = newSession
-
-          localStorage.session = session
-          localStorage.sessionCreated = Date.now()
-          localStorage.isStudent = isStudent
+          await save('session', session)
+          await AsyncStorage.setItem('sessionCreated', Date.now())
+          await AsyncStorage.setItem('isStudent', isStudent)
         } catch (e) {
           throw new NoSessionError()
         }
@@ -141,12 +140,12 @@ export async function callWithSession(method) {
  *
  * @param {object} router Next.js router object
  */
-export async function obtainSession(router) {
-  let session = localStorage.session
-  const age = parseInt(localStorage.sessionCreated)
+export async function obtainSession (router) {
+  let session = await load('session')
+  const age = parseInt(await AsyncStorage.getItem('sessionCreated'))
 
-  const credStore = new CredentialStorage(CRED_NAME)
-  const { username, password } = (await credStore.read(CRED_ID)) || {}
+  const username = await load('username')
+  const password = await load('password')
 
   // invalidate expired session
   if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
@@ -159,12 +158,14 @@ export async function obtainSession(router) {
   if (!session && username && password) {
     try {
       console.log('Logging in again')
-      const { session: newSession, isStudent } = await API.login(username, password)
+      const { session: newSession, isStudent } = await API.login(
+        username,
+        password
+      )
       session = newSession
-
-      localStorage.session = session
-      localStorage.sessionCreated = Date.now()
-      localStorage.isStudent = isStudent
+      await save('session', session)
+      await AsyncStorage.setItem('sessionCreated', Date.now().toString())
+      await AsyncStorage.setItem('isStudent', isStudent.toString())
     } catch (e) {
       console.log('Failed to log in again')
 
@@ -185,19 +186,27 @@ export async function obtainSession(router) {
  *
  * @param {object} router Next.js router object
  */
-export async function forgetSession(router) {
+export async function forgetSession () {
   try {
     await API.logout(localStorage.session)
   } catch (e) {
     // ignore
   }
 
-  localStorage.removeItem('session')
-  localStorage.removeItem('sessionCreated')
-  localStorage.removeItem('isStudent')
+  // clear all AsyncStorage data
+  await SecureStore.deleteItemAsync('session')
+  await SecureStore.deleteItemAsync('username')
+  await SecureStore.deleteItemAsync('password')
 
-  const credStore = new CredentialStorage(CRED_NAME)
-  await credStore.delete(CRED_ID)
+  // clear all AsyncStorage data
+  try {
+    const list = await AsyncStorage.getAllKeys()
+    console.log('list', list)
+    await AsyncStorage.clear()
+  } catch (e) {
+    console.error(e)
+  }
 
-  router.replace('/login')
+  // clear memory cache (this is not persistent)
+  API.clearCache()
 }
