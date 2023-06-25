@@ -69,6 +69,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         ...params,
       })
       if (res.status === 0) {
+        console.log(res)
         return res
       } else {
         throw new APIError(res.status, res.data)
@@ -83,11 +84,13 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
    * @returns {object}
    */
   async requestCached(cacheKey, params) {
-    const cached = this.cache.get(cacheKey)
+    const cached = await this.cache.get(cacheKey)
     if (cached) {
+      console.log('Loading from cache', cacheKey)
       return cached
     }
 
+    console.log('Loading from API', cacheKey)
     const resp = await this.requestAuthenticated(params)
     this.cache.set(cacheKey, resp)
 
@@ -100,7 +103,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       method: 'persdata',
       format: 'json',
     })
-
     return res.data[1]
   }
 

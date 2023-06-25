@@ -32,17 +32,10 @@ export function HomeScreen() {
           </HStack>
         </Box>
       </VStack>
-
-      <HStack>
-        <Button
-          size="lg"
-          onPress={() => {
-            navigation.navigate("(user)/login");
-          }}
-        >
-          Sign In
-        </Button>
-      </HStack>
+      <HStack space={2}>
+        <Heading size="md" color={"primary.600"}
+        >Checkout Settings</Heading>
+       </HStack>
     </VStack>
   );
 }

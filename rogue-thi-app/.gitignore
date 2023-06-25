@@ -33,3 +33,6 @@ thumbs.db
 
 # dist
 /dist/
+
+# builds
+build*

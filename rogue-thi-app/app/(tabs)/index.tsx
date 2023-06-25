@@ -27,13 +27,13 @@ export default function Screen() {
             headerLargeTitle: true,
             headerRight: () => (
               <Button
-                onPress={() => {
-                  navigation.navigate("(user)/settings");
-                }}
-                variant="ghost-sharp"
-              >
-                <Ionicons name="cog-outline" size={24} color={scheme === "dark" ? "white" : "black"} />
-              </Button>
+              onPress={() => {
+                navigation.navigate("(user)/settings");
+              }}
+              variant="ghost-sharp"
+            >
+              <Ionicons name="cog-outline" size={24} color={scheme === "dark" ? "white" : "black"} />
+            </Button>
             ),
           }}
           component={HomeScreen}

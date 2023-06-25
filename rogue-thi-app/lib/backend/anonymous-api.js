@@ -1,12 +1,10 @@
 import packageInfo from '../../package.json'
 import LocalStorageCache from '../cache/localstorage-cache'
-import MemoryCache from '../cache/memory-cache'
 import obtainFetchImplementation from '../fetch-implementations'
 
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
 
-const ENDPOINT_MODE = process.env.NEXT_PUBLIC_THI_API_MODE || 'direct'
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
@@ -67,16 +65,10 @@ export class APIError extends Error {
  */
 export class AnonymousAPIClient {
   constructor() {
-    if (typeof localStorage === 'undefined') {
-      this.cache = new MemoryCache({
-        ttl: CACHE_TTL,
-      })
-    } else {
       this.cache = new LocalStorageCache({
         namespace: CACHE_NAMESPACE,
         ttl: CACHE_TTL,
       })
-    }
   }
 
   /**

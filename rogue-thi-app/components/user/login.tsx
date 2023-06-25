@@ -56,7 +56,7 @@ export function LoginScreen() {
       await createSession(username, password, saveCredentials);
 
       console.log("Login successful");
-      navigation.goBack();
+      navigation.navigate("(tabs)");
     } catch (e) {
       setFailure(e.message);
     }
@@ -64,7 +64,7 @@ export function LoginScreen() {
 
   async function guestLogin() {
     createGuestSession();
-    navigation.goBack();
+    navigation.navigate("(tabs)");
   }
 
   return (
@@ -102,7 +102,7 @@ export function LoginScreen() {
                   marginTop: 10,
                 }}
               >
-                Sign in to your account
+                Sign in with your THI account
               </Text>
 
               {failure ? (
