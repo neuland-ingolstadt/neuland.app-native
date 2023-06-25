@@ -5,7 +5,7 @@ export default function HomeLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#9003fc",
+        tabBarActiveTintColor: "#3a8fb0",
       }}
     >
       <Tabs.Screen

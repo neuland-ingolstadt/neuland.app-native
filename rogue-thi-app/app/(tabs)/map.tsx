@@ -8,7 +8,7 @@ const Stack2 = createNativeStackNavigator();
 
 export default function Screen() {
   return (
-    <>
+    <> 
       <Stack.Screen
         options={{
           headerShown: false,
