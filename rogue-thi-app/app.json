@@ -3,6 +3,7 @@
     "name": "Neuland Next",
     "slug": "neuland-app-native",
     "scheme": "neuland",
+    "owner": "neuland-ingolstadt",
     "version": "0.2.1",
     "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
     "orientation": "portrait",
