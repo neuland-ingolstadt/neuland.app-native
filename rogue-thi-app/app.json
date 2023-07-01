@@ -15,10 +15,12 @@
     },
     "ios": {
       "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-      "buildNumber": "3",
+      "buildNumber": "9",
       "supportsTablet": true,
       "userInterfaceStyle": "automatic",
-      "associatedDomains": ["webcredentials:neuland.app"],
+      "associatedDomains": [
+        "webcredentials:neuland.app"
+      ],
       "config": {
         "usesNonExemptEncryption": false
       }
@@ -26,7 +28,7 @@
     "android": {
       "package": "app.neuland",
       "userInterfaceStyle": "automatic",
-      "versionCode": 2
+      "versionCode": 14
     },
     "extra": {
       "eas": {

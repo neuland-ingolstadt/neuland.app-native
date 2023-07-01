@@ -9,6 +9,7 @@
 
 # expo
 .expo/
+eas.json
 
 # production
 /build
@@ -16,6 +17,7 @@
 
 # local env files
 .env.local
+
 
 # typescript
 *.tsbuildinfo

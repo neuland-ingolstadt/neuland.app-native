@@ -1,8 +1,8 @@
 import { useNavigation } from "expo-router";
-import { SettingsScreen } from "../../screens/user/settings";
+import { AboutScreen } from "../../screens/user/about";
 
 export default function Modal() {
   const navigation = useNavigation();
 
-  return <SettingsScreen />;
+  return <AboutScreen />;
 }

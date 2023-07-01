@@ -10,28 +10,52 @@ import {
   Icon,
   IconButton,
   Input,
+  KeyboardAvoidingView,
   Pressable,
   Text,
   VStack,
+  useToast,
 } from "native-base";
 
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  Dimensions,
   Keyboard,
-  KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  useColorScheme,
 } from "react-native";
 import {
   createGuestSession,
   createSession,
 } from "../../lib/backend/thi-session-handler";
 
-import { useColorScheme } from "react-native";
+const useIsFloatingKeyboard = () => {
+  const windowWidth = Dimensions.get("window").width;
+
+  const [floating, setFloating] = useState(false);
+
+  useEffect(() => {
+    const onKeyboardWillChangeFrame = (event: KeyboardEvent) => {
+      setFloating(event.endCoordinates.width !== windowWidth);
+    };
+
+    Keyboard.addListener("keyboardWillChangeFrame", onKeyboardWillChangeFrame);
+    return () => {
+      Keyboard.removeListener(
+        "keyboardWillChangeFrame",
+        onKeyboardWillChangeFrame
+      );
+    };
+  }, [windowWidth]);
+
+  return floating;
+};
 
 export function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -40,12 +64,13 @@ export function LoginScreen() {
   const [failure, setFailure] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
-
+  const toast = useToast();
   const colorScheme = useColorScheme();
   const toggleSaveCredentials = () => setSaveCredentials(!saveCredentials);
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  const floatingKeyboard = useIsFloatingKeyboard();
 
   const resetFailure = () => {
     setFailure(false);
@@ -55,7 +80,12 @@ export function LoginScreen() {
     try {
       await createSession(username, password, saveCredentials);
 
-      console.log("Login successful");
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      toast.show({
+        title: "Login successful",
+        placement: "top",
+        duration: 3000,
+      });
       navigation.navigate("(tabs)");
     } catch (e) {
       setFailure(e.message);
@@ -80,6 +110,7 @@ export function LoginScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
+        enabled={!floatingKeyboard}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View
@@ -109,7 +140,7 @@ export function LoginScreen() {
                 <Center>
                   <Alert
                     status="error"
-                    width="90%"
+                    width="100%"
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -119,7 +150,7 @@ export function LoginScreen() {
                         space={2}
                         justifyContent="space-between"
                       >
-                        <HStack flexShrink={1} space={2}>
+                        <HStack flexShrink={1} space={2} alignItems="center">
                           <Alert.Icon />
                           <Text
                             fontSize="md"
@@ -149,7 +180,13 @@ export function LoginScreen() {
                           color: "coolGray.600",
                         }}
                       >
-                        {failure}
+                        <Text
+                          ellipsizeMode="tail"
+                          numberOfLines={1}
+                          color="black"
+                        >
+                          {failure}
+                        </Text>
                       </Box>
                     </VStack>
                   </Alert>
@@ -181,13 +218,8 @@ export function LoginScreen() {
                   InputRightElement={
                     <Pressable onPress={() => toggleShowPassword()}>
                       <Icon
-                        as={
-                          <Ionicons
-                            name={
-                              showPassword ? "eye-outline" : "eye-off-outline"
-                            }
-                          />
-                        }
+                        as={Ionicons}
+                        name={showPassword ? "eye-off-outline" : "eye-outline"}
                         size={5}
                         mr="2"
                         color="muted.400"

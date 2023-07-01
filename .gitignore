@@ -7,3 +7,6 @@
 # vs code
 .vscode/
 
+# target folders 
+ios/
+android/

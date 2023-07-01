@@ -18,7 +18,7 @@ const KEY_GET_LECTURERS = 'getLecturers'
  * @param {object} data Personal data
  * @returns {string} Faculty name (e.g. `Informatik`)
  */
-function extractFacultyFromPersonalData(data) {
+function extractFacultyFromPersonalData (data) {
   if (!data || !data.persdata || !data.persdata.stg) {
     return null
   }
@@ -36,7 +36,7 @@ function extractFacultyFromPersonalData(data) {
  * @param {object} data Personal data
  * @returns {string}
  */
-function extractSpoFromPersonalData(data) {
+function extractSpoFromPersonalData (data) {
   if (!data || !data.persdata || !data.persdata.po_url) {
     return null
   }
@@ -51,7 +51,7 @@ function extractSpoFromPersonalData(data) {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AuthenticatedAPIClient extends AnonymousAPIClient {
-  constructor() {
+  constructor () {
     super()
 
     this.sessionHandler = callWithSession
@@ -62,18 +62,23 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
    * @param {object} params Request data
    * @returns {object}
    */
-  async requestAuthenticated(params) {
+  async requestAuthenticated (params) {
     return await this.sessionHandler(async (session) => {
       const res = await this.request({
         session,
-        ...params,
+        ...params
       })
-      if (res.status === 0) {
-        console.log(res)
-        return res
-      } else {
+
+      // old status format
+      if (res.status !== 0) {
         throw new APIError(res.status, res.data)
       }
+      // new status format
+      if (res.data[0] !== 0) {
+        throw new APIError(res.data[0], res.data[1])
+      }
+
+      return res.data[1]
     })
   }
 
@@ -83,40 +88,40 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
    * @param {object} params Request data
    * @returns {object}
    */
-  async requestCached(cacheKey, params) {
+  async requestCached (cacheKey, params) {
     const cached = await this.cache.get(cacheKey)
     if (cached) {
-      console.log('Loading from cache', cacheKey)
+      console.log('Using cached value for', cacheKey)
       return cached
     }
-
-    console.log('Loading from API', cacheKey)
+    console.log('Requesting', cacheKey)
     const resp = await this.requestAuthenticated(params)
     this.cache.set(cacheKey, resp)
 
     return resp
   }
 
-  async getPersonalData() {
+  async getPersonalData () {
     const res = await this.requestCached(KEY_GET_PERSONAL_DATA, {
       service: 'thiapp',
       method: 'persdata',
-      format: 'json',
+      format: 'json'
     })
-    return res.data[1]
+
+    return res
   }
 
-  async getFaculty() {
+  async getFaculty () {
     const data = await this.getPersonalData()
     return extractFacultyFromPersonalData(data)
   }
 
-  async getSpoName() {
+  async getSpoName () {
     const data = await this.getPersonalData()
     return extractSpoFromPersonalData(data)
   }
 
-  async getTimetable(date, detailed = false) {
+  async getTimetable (date, detailed = false) {
     try {
       const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${detailed}`
       const res = await this.requestCached(key, {
@@ -126,20 +131,19 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         day: date.getDate(),
         month: date.getMonth() + 1,
         year: 1900 + date.getYear(),
-        details: detailed ? 1 : 0,
+        details: detailed ? 1 : 0
       })
 
       return {
-        semester: res.data[1],
-        holidays: res.data[2],
-        events: res.data[2],
-        timetable: res.data[3],
+        semester: res[0],
+        holidays: res[1],
+        timetable: res[2]
       }
     } catch (e) {
       // when the user did not select any classes, the timetable returns 'Query not possible'
       if (e.data === 'Query not possible') {
         return {
-          timetable: [],
+          timetable: []
         }
       } else {
         throw e
@@ -147,18 +151,22 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
   }
 
-  async getExams() {
+  async getExams () {
     try {
       const res = await this.requestCached(KEY_GET_EXAMS, {
         service: 'thiapp',
         method: 'exams',
         format: 'json',
+        modus: '1' // what does this mean? if only we knew
       })
 
-      return res.data[1]
+      return res
     } catch (e) {
       // when you have no exams the API sometimes returns "No exam data available"
-      if (e.data === 'No exam data available' || e.data === 'Query not possible') {
+      if (
+        e.data === 'No exam data available' ||
+        e.data === 'Query not possible'
+      ) {
         return []
       } else {
         throw e
@@ -166,30 +174,30 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
   }
 
-  async getGrades() {
+  async getGrades () {
     const res = await this.requestCached(KEY_GET_GRADES, {
       service: 'thiapp',
       method: 'grades',
-      format: 'json',
+      format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 
-  async getMensaPlan() {
+  async getMensaPlan () {
     const res = await this.requestCached(KEY_GET_MENSA_PLAN, {
       service: 'thiapp',
       method: 'mensa',
-      format: 'json',
+      format: 'json'
     })
 
-    return res.data
+    return res
   }
 
   /**
    * @param {Date} date Date to fetch the room availability for
    */
-  async getFreeRooms(date) {
+  async getFreeRooms (date) {
     const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
     const res = await this.requestCached(key, {
       service: 'thiapp',
@@ -197,66 +205,67 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json',
       day: date.getDate(),
       month: date.getMonth() + 1,
-      year: 1900 + date.getYear(),
+      year: 1900 + date.getYear()
     })
 
-    return res.data[1]
+    return res
   }
 
-  async getCampusParkingData() {
+  async getCampusParkingData () {
     const res = await this.requestCached(KEY_GET_PARKING_DATA, {
       service: 'thiapp',
       method: 'parking',
-      format: 'json',
+      format: 'json'
     })
 
-    return res.data
+    return res
   }
 
-  async getPersonalLecturers() {
+  async getPersonalLecturers () {
     const res = await this.requestCached(KEY_GET_PERSONAL_LECTURERS, {
       service: 'thiapp',
       method: 'stpllecturers',
-      format: 'json',
+      format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 
   /**
    * @param {string} from Single character indicating where to start listing the lecturers
    * @param {string} to Single character indicating where to end listing the lecturers
    */
-  async getLecturers(from, to) {
+  async getLecturers (from, to) {
     const key = `${KEY_GET_LECTURERS}-${from}-${to}`
     const res = await this.requestCached(key, {
       service: 'thiapp',
       method: 'lecturers',
       format: 'json',
       from,
-      to,
+      to
     })
 
-    return res.data[1]
+    return res
   }
 
-  async getLibraryReservations() {
+  async getLibraryReservations () {
     try {
       const res = await this.requestAuthenticated({
         service: 'thiapp',
         method: 'reservations',
         type: 1,
-        subtype: 1,
-        cmd: 'getreservation',
-        data: '',
-        format: 'json',
+        cmd: 'getreservations',
+        format: 'json'
       })
 
-      return res.data[1]
+      return res[1]
     } catch (e) {
       // as of 2021-06 the API returns "Service not available" when the user has no reservations
       // thus we dont alert the error here, but just silently set the reservations to none
-      if (e.data === 'No reservation data' || e.data === 'Service not available') {
+      if (
+        e.data === 'No reservation data' ||
+        e.data === 'Service not available'
+      ) {
         return []
       } else {
         throw e
@@ -264,24 +273,33 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
   }
 
-  async getAvailableLibrarySeats() {
-    const res = await this.requestAuthenticated({
-      service: 'thiapp',
-      method: 'reservations',
-      type: 1,
-      subtype: 1,
-      cmd: 'getavailabilities',
-      data: '',
-      format: 'json',
-    })
+  async getAvailableLibrarySeats () {
+    try {
+      const res = await this.requestAuthenticated({
+        service: 'thiapp',
+        method: 'reservations',
+        type: 1,
+        subtype: 1,
+        cmd: 'getavailabilities',
+        format: 'json'
+      })
 
-    return res.data[1]
+      return res[1]
+    } catch (e) {
+      // Unbekannter Fehler means the user has already reserved a spot
+      // and can not reserve additional ones
+      if (e.data === 'Unbekannter Fehler') {
+        return []
+      } else {
+        throw e
+      }
+    }
   }
 
   /**
    * TODO documentation
    */
-  async addLibraryReservation(roomId, day, start, end, place) {
+  async addLibraryReservation (roomId, day, start, end, place) {
     const res = await this.requestAuthenticated({
       service: 'thiapp',
       method: 'reservations',
@@ -293,18 +311,19 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         at: day,
         from: start,
         to: end,
-        place,
+        place
       }),
-      format: 'json',
+      dblslots: 0,
+      format: 'json'
     })
 
-    return res.data[1][0]
+    return res[0]
   }
 
   /**
    * @param {string} reservationId Reservation ID returned by `getLibraryReservations`
    */
-  async removeLibraryReservation(reservationId) {
+  async removeLibraryReservation (reservationId) {
     try {
       await this.requestAuthenticated({
         service: 'thiapp',
@@ -313,14 +332,17 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         subtype: 1,
         cmd: 'delreservation',
         data: reservationId,
-        format: 'json',
+        format: 'json'
       })
 
       return true
     } catch (e) {
       // as of 2021-06 the API returns "Service not available" when the user has no reservations
       // thus we dont alert the error here, but just silently set the reservations to none
-      if (e.data === 'No reservation data' || e.data === 'Service not available') {
+      if (
+        e.data === 'No reservation data' ||
+        e.data === 'Service not available'
+      ) {
         return true
       } else {
         throw e
@@ -328,14 +350,14 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
   }
 
-  async getImprint() {
+  async getImprint () {
     const res = await this.requestAuthenticated({
       service: 'thiapp',
       method: 'impressum',
-      format: 'json',
+      format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 }
 

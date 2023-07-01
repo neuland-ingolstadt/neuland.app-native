@@ -1,5 +1,5 @@
 import { useNavigation } from "expo-router";
-import { LoginScreen } from "../../components/user/login";
+import { LoginScreen } from "../../screens/user/login";
 
 export default function Modal() {
   const navigation = useNavigation();

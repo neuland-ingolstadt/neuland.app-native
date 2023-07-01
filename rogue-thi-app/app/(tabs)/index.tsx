@@ -1,4 +1,4 @@
-import { HomeScreen } from "../../components/home/screen";
+import { HomeScreen } from "../../screens/home/screen";
 import { Button } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
