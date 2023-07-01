@@ -116,8 +116,8 @@ export async function callWithSession (method) {
           )
           session = newSession
           await save('session', session)
-          await AsyncStorage.setItem('sessionCreated', Date.now())
-          await AsyncStorage.setItem('isStudent', isStudent)
+          await AsyncStorage.setItem('sessionCreated', Date.now().toString())
+          await AsyncStorage.setItem('isStudent', isStudent.toString())
         } catch (e) {
           throw new NoSessionError()
         }
@@ -200,8 +200,6 @@ export async function forgetSession () {
 
   // clear all AsyncStorage data
   try {
-    const list = await AsyncStorage.getAllKeys()
-    console.log('list', list)
     await AsyncStorage.clear()
   } catch (e) {
     console.error(e)

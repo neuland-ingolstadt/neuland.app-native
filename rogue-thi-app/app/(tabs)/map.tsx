@@ -1,4 +1,4 @@
-import { MapScreen } from "../../components/map/screen";
+import { MapScreen } from "../../screens/map/screen";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Stack } from "expo-router";

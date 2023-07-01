@@ -1,4 +1,4 @@
-import { FoodScreen } from "../../components/food/screen";
+import { FoodScreen } from "../../screens/food/screen";
 
 export default function Screen() {
   return (

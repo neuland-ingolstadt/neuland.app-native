@@ -34,7 +34,19 @@ export default function RootLayout() {
             title: "Settings",
           }}
         />
+        <Stack.Screen
+          name="(user)/profile"
+          options={{
+            title: "Profile",
+          }}
+        />
+        <Stack.Screen
+          name="(user)/about"
+          options={{
+            title: "About",
+          }}
+        />
       </Stack>
-      </Provider>
+    </Provider>
   );
 }
