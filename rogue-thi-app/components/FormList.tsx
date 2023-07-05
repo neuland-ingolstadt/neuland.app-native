@@ -49,7 +49,7 @@ const FormList = ({ sections, scheme }) => {
                       {setting.title}
                     </Text>
                     {setting.value && (
-                      <Text mr={2} fontSize="md">
+                      <Text mr={2} fontSize="md" color="gray.400">
                         {setting.value}
                       </Text>
                     )}

@@ -1,7 +1,6 @@
 import LocalStorageCache from '../cache/localstorage-cache'
 import obtainFetchImplementation from '../fetch-implementations'
 import packageInfo from '../../package.json'
-import { API_KEY } from '@env'
 
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
@@ -66,12 +65,12 @@ export class APIError extends Error {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AnonymousAPIClient {
-  constructor() {
-      this.cache = new LocalStorageCache({
-        namespace: CACHE_NAMESPACE,
-        ttl: CACHE_TTL,
-      })
-    }
+  constructor () {
+    this.cache = new LocalStorageCache({
+      namespace: CACHE_NAMESPACE,
+      ttl: CACHE_TTL
+    })
+  }
 
   /**
    * Submits an API request to the THI backend using a WebSocket proxy
@@ -92,14 +91,14 @@ export class AnonymousAPIClient {
       })
     }
 
-    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {    
+    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
       method: 'POST',
       body: new URLSearchParams(params).toString(),
       headers: {
         Host: ENDPOINT_HOST,
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': ENDPOINT_MODE !== 'direct' ? USER_AGENT : undefined,
-        'X-API-KEY': API_KEY
+        'X-API-KEY': process.env.EXPO_PUBLIC_THI_API_KEY
       }
     })
     try {

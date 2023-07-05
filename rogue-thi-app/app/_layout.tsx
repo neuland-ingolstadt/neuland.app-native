@@ -1,9 +1,11 @@
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 import { Provider } from "../provider";
+import { Platform } from "react-native";
 
 export default function RootLayout() {
   const scheme = useColorScheme();
+
 
   return (
     <Provider>

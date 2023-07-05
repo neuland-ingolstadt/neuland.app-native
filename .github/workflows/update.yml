@@ -35,5 +35,7 @@ jobs:
         working-directory: rogue-thi-app/
 
       - name: Publish update
+        env:
+          EXPO_PUBLIC_THI_API_KEY: ${{ secrets.THI_API_KEY }}
         run: eas update --auto
         working-directory: rogue-thi-app/
