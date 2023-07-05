@@ -20,10 +20,7 @@
       "userInterfaceStyle": "automatic",
       "associatedDomains": [
         "webcredentials:neuland.app"
-      ],
-      "config": {
-        "usesNonExemptEncryption": false
-      }
+      ]
     },
     "android": {
       "package": "app.neuland",

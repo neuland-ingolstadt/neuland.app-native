@@ -166,7 +166,7 @@ export function SettingsScreen() {
         {
           title: "Rate the app",
           icon: "star-outline",
-          onPress: () => navigation.navigate("(user)/privacy"),
+          onPress: () => navigation.navigate("(user)/rate"),
         },
       ],
     },
@@ -174,12 +174,15 @@ export function SettingsScreen() {
 
   return (
     <ScrollView
-        refreshControl={
-          isLoaded !== LoadingState.LOADED && isLoaded !== LoadingState.GUEST ? (
-            <RefreshControl refreshing={isLoaded === LoadingState.REFRESHING} onRefresh={handleRefresh} />
-          ) : null
-        }
-      >
+      refreshControl={
+        isLoaded !== LoadingState.LOADED && isLoaded !== LoadingState.GUEST ? (
+          <RefreshControl
+            refreshing={isLoaded === LoadingState.REFRESHING}
+            onRefresh={handleRefresh}
+          />
+        ) : null
+      }
+    >
       <VStack mt={4}>
         <Pressable
           onPress={() => {
