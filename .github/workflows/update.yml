@@ -1,6 +1,10 @@
-name: update
-on: push
-
+name: Expo Go Update
+on:
+  push:
+    branches:
+      - main
+      - develop
+    
 jobs:
   update:
     name: EAS Update
