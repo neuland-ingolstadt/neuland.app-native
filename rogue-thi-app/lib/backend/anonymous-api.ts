@@ -1,20 +1,18 @@
-import LocalStorageCache from '../cache/localstorage-cache'
-import obtainFetchImplementation from '../fetch-implementations'
-import packageInfo from '../../package.json'
+import packageInfo from "../../package.json";
+import LocalStorageCache from "../cache/localstorage-cache";
 
-const CACHE_NAMESPACE = 'thi-api-client'
-const CACHE_TTL = 10 * 60 * 1000
+const CACHE_NAMESPACE = "thi-api-client";
+const CACHE_TTL = 10 * 60 * 1000;
 
-const ENDPOINT_MODE = 'direct'
-const ENDPOINT_HOST = 'hiplan.thi.de'
-const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
-const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
-const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const USER_AGENT = `neuland.app/${packageInfo.version} (+${GIT_URL})`
+const ENDPOINT_MODE = "direct";
+const ENDPOINT_HOST = "hiplan.thi.de";
+const ENDPOINT_URL = "/webservice/zits_s_40_test/index.php";
+const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL;
+const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`;
 
 // AAA Certificate Services
 // valid until 01.01.2029
-const THI_CERTS = [
+const THI_CERTS: string[] = [
   `-----BEGIN CERTIFICATE-----
   MIIEMjCCAxqgAwIBAgIBATANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJHQjEb
   MBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHDAdTYWxmb3JkMRow
@@ -39,21 +37,20 @@ const THI_CERTS = [
   G9w84FoVxp7Z8VlIMCFlA2zs6SFz7JsDoeA3raAVGI/6ugLOpyypEBMs1OUIJqsi
   l2D4kF501KKaU73yqWjgom7C12yxow+ev+to51byrvLjKzg6CYG1a4XXvi3tPxq3
   smPi9WIsgtRqAEFQ8TmDn5XpNpaYbg==
-  -----END CERTIFICATE-----`
-]
+  -----END CERTIFICATE-----`,
+];
 
 /**
  * Error that is thrown when the API indicates an error.
  */
 export class APIError extends Error {
-  /**
-   * @param {number} status HTTP status code
-   * @param {object} data Error data
-   */
-  constructor (status, data) {
-    super(`${data} (${status})`)
-    this.status = status
-    this.data = data
+  public status: number;
+  public data: object;
+
+  constructor(status: number, data: object) {
+    super(`${data} (${status})`);
+    this.status = status;
+    this.data = data;
   }
 }
 
@@ -65,71 +62,62 @@ export class APIError extends Error {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AnonymousAPIClient {
-  constructor () {
+  protected cache: LocalStorageCache;
+
+  constructor() {
     this.cache = new LocalStorageCache({
       namespace: CACHE_NAMESPACE,
-      ttl: CACHE_TTL
-    })
+      ttl: CACHE_TTL,
+    });
   }
 
   /**
    * Submits an API request to the THI backend using a WebSocket proxy
    */
-  async request (params) {
-    if (!this.connection) {
-      this.connection = obtainFetchImplementation(ENDPOINT_MODE, {
-        target: ENDPOINT_HOST,
-        via: PROXY_URL,
-        certs: THI_CERTS,
-        closed: () => {
-          this.connection = null
-        },
-        error: err => {
-          console.error(err)
-          this.connection = null
-        }
-      })
-    }
-
-    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
-      method: 'POST',
+  async request(params: Record<string, string>): Promise<any> {
+    const resp = await fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
+      method: "POST",
       body: new URLSearchParams(params).toString(),
       headers: {
         Host: ENDPOINT_HOST,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': ENDPOINT_MODE !== 'direct' ? USER_AGENT : undefined,
-        'X-API-KEY': process.env.EXPO_PUBLIC_THI_API_KEY
-      }
-    })
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": USER_AGENT,
+        "X-API-KEY": process.env.EXPO_PUBLIC_THI_API_KEY,
+      },
+    });
+
     try {
-      return await resp.json()
+      return await resp.json();
     } catch (e) {
-      throw new Error(`Response is not valid JSON (${await resp.text()})`)
+      throw new Error(`Response is not valid JSON (${await resp.text()})`);
     }
   }
 
   /**
    * Creates a login session.
    */
-  async login (username, passwd) {
-    await this.clearCache()
+  async login(
+    username: string,
+    passwd: string
+  ): Promise<{ session: any; isStudent: boolean }> {
+    await this.clearCache();
 
     const res = await this.request({
-      service: 'session',
-      method: 'open',
-      format: 'json',
+      service: "session",
+      method: "open",
+      format: "json",
       username,
-      passwd
-    })
+      passwd,
+    });
 
     if (res.status !== 0) {
-      throw new APIError(res.status, res.data)
+      throw new APIError(res.status, res.data);
     }
 
     return {
       session: res.data[0],
-      isStudent: res.data[2] === 3
-    }
+      isStudent: res.data[2] === 3,
+    };
   }
 
   /**
@@ -137,15 +125,15 @@ export class AnonymousAPIClient {
    * @param {string} session Session token
    * @returns {boolean} `true` if the session is valid.
    */
-  async isAlive (session) {
+  async isAlive(session: string): Promise<boolean> {
     const res = await this.request({
-      service: 'session',
-      method: 'isalive',
-      format: 'json',
-      session
-    })
+      service: "session",
+      method: "isalive",
+      format: "json",
+      session,
+    });
 
-    return res.data === 'STATUS_OK'
+    return res.data === "STATUS_OK";
   }
 
   /**
@@ -153,15 +141,15 @@ export class AnonymousAPIClient {
    * @param {string} session Session token
    * @returns {boolean} `true` if the session was destroyed.
    */
-  async logout (session) {
+  async logout(session: string): Promise<boolean> {
     const res = await this.request({
-      service: 'session',
-      method: 'close',
-      format: 'json',
-      session
-    })
+      service: "session",
+      method: "close",
+      format: "json",
+      session,
+    });
 
-    return res.data === 'STATUS_OK'
+    return res.data === "STATUS_OK";
   }
 
   /**
@@ -169,9 +157,9 @@ export class AnonymousAPIClient {
    * Should be called either before login or after logout
    * to prevent responses from different users from being mixed up.
    */
-  async clearCache () {
-    this.cache.flushAll()
+  async clearCache(): Promise<void> {
+    this.cache.flushAll();
   }
 }
 
-export default new AnonymousAPIClient()
+export default new AnonymousAPIClient();
