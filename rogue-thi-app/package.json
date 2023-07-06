@@ -5,8 +5,7 @@
   "homepage": "https://github.com/neuland-ingolstadt/neuland.app-native",
   "private": true,
   "scripts": {
-    "go": "expo start -c",
-    "start": "expo start --dev-client -c",
+    "start": "expo start -c",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
