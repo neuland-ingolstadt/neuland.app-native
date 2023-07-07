@@ -1,8 +1,10 @@
 {
-  "extends": "expo/tsconfig.base",
-  "compilerOptions": {
-    "paths": {
-      "@components/*": ["./components/*"],
+    "extends": "expo/tsconfig.base",
+    "compilerOptions": {
+        "paths": {
+            "@components/*": ["./components/*"],
+            "@customTypes/*": ["./lib/types/*"]
+        },
+        "strict": true
     }
-  }
 }

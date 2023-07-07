@@ -1,0 +1,11 @@
+# Ignore artifacts:
+ios/
+android/
+dist/
+node_modules/
+.expo/
+.husky/
+.yarn/
+yarn.lock
+
+**/*.md

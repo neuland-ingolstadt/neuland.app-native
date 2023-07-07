@@ -38,3 +38,6 @@ thumbs.db
 
 # builds
 build*
+
+# wachtman
+.watchmanconfig

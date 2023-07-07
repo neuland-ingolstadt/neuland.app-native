@@ -1,0 +1,20 @@
+name: CI
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rogue-thi-app
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: yarn
+        cache-dependency-path: 'rogue-thi-app/yarn.lock'
+    - name: Install modules
+      run: yarn install
+    - name: Run ESLint
+      run: npx eslint . --ext .js,.jsx,.ts,.tsx

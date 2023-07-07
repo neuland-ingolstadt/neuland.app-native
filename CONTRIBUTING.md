@@ -41,6 +41,18 @@ To contribute, please follow these guidelines:
 - Use meaningful variable and function names to improve code readability.
 - Document your code when necessary using inline comments.
 
+- Follow the existing code style and conventions used in the project.
+- Use meaningful variable and function names to improve code readability.
+- Document your code when necessary using inline comments.
+
+We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
+But you can also run these commands manually:
+  - `yarn lint` to check for linting errors
+  - `yarn lint:fix` to automatically fix linting errors
+  - `yarn format` to format the code using Prettier
+    
+In addition is recommended to use the ESLint and Prettier extensions for your IDE to get real-time feedback on your code.
+
 ## Issues and Discussions
 
 - Feel free to open an issue if you encounter a bug or want to suggest an improvement.
