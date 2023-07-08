@@ -1,8 +1,7 @@
-import { useNavigation } from "expo-router";
-import { AboutScreen } from "../../screens/user/about";
+import React from 'react'
 
-export default function Modal() {
-  const navigation = useNavigation();
+import { AboutScreen } from '../../screens/user/about'
 
-  return <AboutScreen />;
+export default function Modal(): JSX.Element {
+    return <AboutScreen />
 }

@@ -1,11 +1,11 @@
-import { useRoute } from "@react-navigation/native";
-import { ProfileScreen } from "../../screens/user/profile";
+import React from 'react'
 
-export default function FoodDetail() {
-  const route = useRoute();
-  return (
-    <>
-      <ProfileScreen />
-    </>
-  );
+import { ProfileScreen } from '../../screens/user/profile'
+
+export default function FoodDetail(): JSX.Element {
+    return (
+        <>
+            <ProfileScreen />
+        </>
+    )
 }

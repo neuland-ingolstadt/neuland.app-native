@@ -12,7 +12,7 @@
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
-        "project": "./tsconfig.json",
+        "project": "**/tsconfig.json",
         "tsconfigRootDir": "./",
         "noUnusedLocals": true
     },
@@ -20,7 +20,8 @@
     "rules": {},
     "settings": {
         "react": {
-          "version": "detect"
+            "version": "detect"
         }
-      }
+    },
+    "ignorePatterns": ["metro.config.js"]
 }

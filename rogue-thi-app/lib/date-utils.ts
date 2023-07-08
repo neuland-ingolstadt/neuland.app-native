@@ -1,9 +1,9 @@
-const WORD_TODAY = "Heute";
-const WORD_TOMORROW = "Morgen";
-export const WORD_THIS_WEEK = "Diese Woche";
-export const WORD_NEXT_WEEK = "Nächste Woche";
+const WORD_TODAY = 'Heute'
+const WORD_TOMORROW = 'Morgen'
+export const WORD_THIS_WEEK = 'Diese Woche'
+export const WORD_NEXT_WEEK = 'Nächste Woche'
 
-export const DATE_LOCALE = "de-DE";
+export const DATE_LOCALE = 'de-DE'
 
 /**
  * Formats a date like "Mo., 1.10.2020"
@@ -11,26 +11,26 @@ export const DATE_LOCALE = "de-DE";
  * @returns {string}
  */
 export function formatFriendlyDate(datetime: Date | string): string {
-  if (typeof datetime === "string") {
-    datetime = new Date(datetime);
-  }
+    if (typeof datetime === 'string') {
+        datetime = new Date(datetime)
+    }
 
-  const today = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(today.getDate() + 1)
 
-  if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY;
-  } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW;
-  } else {
-    return datetime.toLocaleString(DATE_LOCALE, {
-      weekday: "short",
-      day: "numeric",
-      month: "2-digit",
-      year: "numeric",
-    });
-  }
+    if (datetime.toDateString() === today.toDateString()) {
+        return WORD_TODAY
+    } else if (datetime.toDateString() === tomorrow.toDateString()) {
+        return WORD_TOMORROW
+    } else {
+        return datetime.toLocaleString(DATE_LOCALE, {
+            weekday: 'short',
+            day: 'numeric',
+            month: '2-digit',
+            year: 'numeric',
+        })
+    }
 }
 
 /**
@@ -40,11 +40,11 @@ export function formatFriendlyDate(datetime: Date | string): string {
  * @returns {string}
  */
 export function formatFriendlyDateRange(begin: Date, end?: Date): string {
-  let str = formatFriendlyDate(begin);
-  if (end && begin.toDateString() !== end.toDateString()) {
-    str += " – " + formatFriendlyDate(end);
-  }
-  return str;
+    let str = formatFriendlyDate(begin)
+    if (end != null && begin.toDateString() !== end.toDateString()) {
+        str += ' – ' + formatFriendlyDate(end)
+    }
+    return str
 }
 
 /**
@@ -53,14 +53,14 @@ export function formatFriendlyDateRange(begin: Date, end?: Date): string {
  * @returns {string}
  */
 export function formatFriendlyTime(datetime: Date | string): string {
-  if (typeof datetime === "string") {
-    datetime = new Date(datetime);
-  }
+    if (typeof datetime === 'string') {
+        datetime = new Date(datetime)
+    }
 
-  return datetime.toLocaleTimeString(DATE_LOCALE, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+    return datetime.toLocaleTimeString(DATE_LOCALE, {
+        hour: 'numeric',
+        minute: '2-digit',
+    })
 }
 
 /**
@@ -70,15 +70,16 @@ export function formatFriendlyTime(datetime: Date | string): string {
  * @returns {string}
  */
 export function formatFriendlyDateTimeRange(begin: Date, end?: Date): string {
-  let str = formatFriendlyDate(begin) + ", " + formatFriendlyTime(begin);
-  if (end) {
-    if (begin.toDateString() === end.toDateString()) {
-      str += " – " + formatFriendlyTime(end);
-    } else {
-      str += " – " + formatFriendlyDate(end) + ", " + formatFriendlyTime(end);
+    let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
+    if (end != null) {
+        if (begin.toDateString() === end.toDateString()) {
+            str += ' – ' + formatFriendlyTime(end)
+        } else {
+            str +=
+                ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
+        }
     }
-  }
-  return str;
+    return str
 }
 
 /**
@@ -87,10 +88,10 @@ export function formatFriendlyDateTimeRange(begin: Date, end?: Date): string {
  * @returns {string}
  */
 export function formatFriendlyDateTime(datetime: Date | string): string {
-  const date = formatFriendlyDate(datetime);
-  const time = formatFriendlyTime(datetime);
+    const date = formatFriendlyDate(datetime)
+    const time = formatFriendlyTime(datetime)
 
-  return `${date}, ${time}`;
+    return `${date}, ${time}`
 }
 
 /**
@@ -99,25 +100,25 @@ export function formatFriendlyDateTime(datetime: Date | string): string {
  * @returns {string}
  */
 export function formatNearDate(datetime: Date | string): string {
-  if (typeof datetime === "string") {
-    datetime = new Date(datetime);
-  }
+    if (typeof datetime === 'string') {
+        datetime = new Date(datetime)
+    }
 
-  const today = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+    const today = new Date()
+    const tomorrow = new Date()
+    tomorrow.setDate(today.getDate() + 1)
 
-  if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY;
-  } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW;
-  } else {
-    return datetime.toLocaleString(DATE_LOCALE, {
-      weekday: "long",
-      day: "numeric",
-      month: "numeric",
-    });
-  }
+    if (datetime.toDateString() === today.toDateString()) {
+        return WORD_TODAY
+    } else if (datetime.toDateString() === tomorrow.toDateString()) {
+        return WORD_TOMORROW
+    } else {
+        return datetime.toLocaleString(DATE_LOCALE, {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'numeric',
+        })
+    }
 }
 
 /**
@@ -126,28 +127,28 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-  const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
-    numeric: "auto",
-    style: "long",
-  });
+    const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
+        numeric: 'auto',
+        style: 'long',
+    })
 
-  const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0;
-  if (Math.abs(weeks) > 0) {
-    return rtl.format(weeks, "week");
-  }
+    const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
+    if (Math.abs(weeks) > 0) {
+        return rtl.format(weeks, 'week')
+    }
 
-  const days = (delta / (24 * 60 * 60 * 1000)) | 0;
-  if (Math.abs(days) > 0) {
-    return rtl.format(days, "day");
-  }
+    const days = (delta / (24 * 60 * 60 * 1000)) | 0
+    if (Math.abs(days) > 0) {
+        return rtl.format(days, 'day')
+    }
 
-  const hours = (delta / (60 * 60 * 1000)) | 0;
-  if (Math.abs(hours) > 0) {
-    return rtl.format(hours, "hour");
-  }
+    const hours = (delta / (60 * 60 * 1000)) | 0
+    if (Math.abs(hours) > 0) {
+        return rtl.format(hours, 'hour')
+    }
 
-  const minutes = (delta / (60 * 1000)) | 0;
-  return rtl.format(minutes, "minute");
+    const minutes = (delta / (60 * 1000)) | 0
+    return rtl.format(minutes, 'minute')
 }
 
 /**
@@ -156,24 +157,24 @@ function formatFriendlyTimeDelta(delta: number): string {
  * @returns {string}
  */
 export function formatFriendlyRelativeTime(date: Date): string {
-  const startOfDay = new Date();
-  startOfDay.setHours(0);
-  startOfDay.setMinutes(0);
-  startOfDay.setSeconds(0);
-  startOfDay.setMilliseconds(0);
+    const startOfDay = new Date()
+    startOfDay.setHours(0)
+    startOfDay.setMinutes(0)
+    startOfDay.setSeconds(0)
+    startOfDay.setMilliseconds(0)
 
-  const deltaFromNow = date.getTime() - Date.now();
-  const deltaFromStartOfDay = date.getTime() - startOfDay.getTime();
+    const deltaFromNow = date.getTime() - Date.now()
+    const deltaFromStartOfDay = date.getTime() - startOfDay.getTime()
 
-  // when the event is more than 24h away, use the start of the day as a reference
-  // (because that is how humans measure time, apparently)
-  if (Math.abs(deltaFromNow) < 86400000) {
-    return formatFriendlyTimeDelta(deltaFromNow);
-  } else if (deltaFromNow > 0) {
-    return formatFriendlyTimeDelta(deltaFromStartOfDay);
-  } else {
-    return formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000);
-  }
+    // when the event is more than 24h away, use the start of the day as a reference
+    // (because that is how humans measure time, apparently)
+    if (Math.abs(deltaFromNow) < 86400000) {
+        return formatFriendlyTimeDelta(deltaFromNow)
+    } else if (deltaFromNow > 0) {
+        return formatFriendlyTimeDelta(deltaFromStartOfDay)
+    } else {
+        return formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000)
+    }
 }
 
 /**
@@ -182,15 +183,15 @@ export function formatFriendlyRelativeTime(date: Date): string {
  * @returns {string}
  */
 export function formatRelativeMinutes(datetime: Date | string): string {
-  if (typeof datetime === "string") {
-    datetime = new Date(datetime);
-  }
+    if (typeof datetime === 'string') {
+        datetime = new Date(datetime)
+    }
 
-  const minutes = Math.max(
-    Math.floor((datetime.getTime() - Date.now()) / 60000),
-    0
-  );
-  return `${minutes} min`;
+    const minutes = Math.max(
+        Math.floor((datetime.getTime() - Date.now()) / 60000),
+        0
+    )
+    return `${minutes} min`
 }
 
 /**
@@ -199,13 +200,13 @@ export function formatRelativeMinutes(datetime: Date | string): string {
  * @returns {string}
  */
 export function formatISODate(date: Date): string {
-  return (
-    date.getFullYear().toString().padStart(4, "0") +
-    "-" +
-    (date.getMonth() + 1).toString().padStart(2, "0") +
-    "-" +
-    date.getDate().toString().padStart(2, "0")
-  );
+    return (
+        date.getFullYear().toString().padStart(4, '0') +
+        '-' +
+        (date.getMonth() + 1).toString().padStart(2, '0') +
+        '-' +
+        date.getDate().toString().padStart(2, '0')
+    )
 }
 
 /**
@@ -214,11 +215,11 @@ export function formatISODate(date: Date): string {
  * @returns {string}
  */
 export function formatISOTime(date: Date): string {
-  return (
-    date.getHours().toString().padStart(2, "0") +
-    ":" +
-    date.getMinutes().toString().padStart(2, "0")
-  );
+    return (
+        date.getHours().toString().padStart(2, '0') +
+        ':' +
+        date.getMinutes().toString().padStart(2, '0')
+    )
 }
 
 /**
@@ -228,11 +229,11 @@ export function formatISOTime(date: Date): string {
  * @returns {string}
  */
 export function getMonday(date: Date): Date {
-  date = new Date(date);
-  const day = date.getDay();
-  date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() - day + (day === 0 ? -6 : 1));
-  return date;
+    date = new Date(date)
+    const day = date.getDay()
+    date.setHours(0, 0, 0, 0)
+    date.setDate(date.getDate() - day + (day === 0 ? -6 : 1))
+    return date
 }
 
 /**
@@ -241,10 +242,10 @@ export function getMonday(date: Date): Date {
  * @returns {string}
  */
 export function getWeek(date: Date): [Date, Date] {
-  const start = getMonday(date);
-  const end = getMonday(date);
-  end.setDate(end.getDate() + 7);
-  return [start, end];
+    const start = getMonday(date)
+    const end = getMonday(date)
+    end.setDate(end.getDate() + 7)
+    return [start, end]
 }
 
 /**
@@ -254,9 +255,9 @@ export function getWeek(date: Date): [Date, Date] {
  * @returns {Date}
  */
 export function addWeek(date: Date, delta: number): Date {
-  date = new Date(date);
-  date.setDate(date.getDate() + delta * 7);
-  return date;
+    date = new Date(date)
+    date.setDate(date.getDate() + delta * 7)
+    return date
 }
 
 /**
@@ -265,23 +266,29 @@ export function addWeek(date: Date, delta: number): Date {
  * @returns {string}
  */
 export function getFriendlyWeek(date: Date): string {
-  const [currStart, currEnd] = getWeek(new Date());
-  const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1));
-  if (date >= currStart && date < currEnd) {
-    return WORD_THIS_WEEK;
-  } else if (date >= nextStart && date < nextEnd) {
-    return WORD_NEXT_WEEK;
-  } else {
-    const monday = getMonday(date);
-    const sunday = new Date(monday);
-    sunday.setDate(sunday.getDate() + 6);
+    const [currStart, currEnd] = getWeek(new Date())
+    const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
+    if (date >= currStart && date < currEnd) {
+        return WORD_THIS_WEEK
+    } else if (date >= nextStart && date < nextEnd) {
+        return WORD_NEXT_WEEK
+    } else {
+        const monday = getMonday(date)
+        const sunday = new Date(monday)
+        sunday.setDate(sunday.getDate() + 6)
 
-    return (
-      monday.toLocaleString(DATE_LOCALE, { day: "numeric", month: "numeric" }) +
-      " – " +
-      sunday.toLocaleString(DATE_LOCALE, { day: "numeric", month: "numeric" })
-    );
-  }
+        return (
+            monday.toLocaleString(DATE_LOCALE, {
+                day: 'numeric',
+                month: 'numeric',
+            }) +
+            ' – ' +
+            sunday.toLocaleString(DATE_LOCALE, {
+                day: 'numeric',
+                month: 'numeric',
+            })
+        )
+    }
 }
 
 /**
@@ -290,7 +297,7 @@ export function getFriendlyWeek(date: Date): string {
  * @returns {boolean}
  */
 export function isWeekend(date: Date): boolean {
-  return date.getDay() === 0 || date.getDay() === 6;
+    return date.getDay() === 0 || date.getDay() === 6
 }
 
 /**
@@ -299,10 +306,10 @@ export function isWeekend(date: Date): boolean {
  * @returns {Date}
  */
 export function getAdjustedDay(date: Date): Date {
-  if (isWeekend(date)) {
-    return getMonday(addWeek(date, 1));
-  }
-  return date;
+    if (isWeekend(date)) {
+        return getMonday(addWeek(date, 1))
+    }
+    return date
 }
 
 /**
@@ -312,9 +319,9 @@ export function getAdjustedDay(date: Date): Date {
  * @returns {boolean}
  **/
 export function isSameDay(a: Date, b: Date): boolean {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+    return (
+        a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate()
+    )
 }

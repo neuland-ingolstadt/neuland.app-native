@@ -1,9 +1,7 @@
-import { useNavigation } from "expo-router";
-import { LoginScreen } from "../../screens/user/login";
+import React from 'react'
 
-export default function Modal() {
-  const navigation = useNavigation();
-  const isPresented = navigation.canGoBack();
+import { LoginScreen } from '../../screens/user/login'
 
-  return <LoginScreen />;
+export default function Modal(): JSX.Element {
+    return <LoginScreen />
 }

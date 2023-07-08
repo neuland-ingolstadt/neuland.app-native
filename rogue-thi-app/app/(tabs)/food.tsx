@@ -1,9 +1,11 @@
-import { FoodScreen } from "../../screens/food/screen";
+import React from 'react'
 
-export default function Screen() {
-  return (
-    <>
-      <FoodScreen />
-    </>
-  );
+import { FoodScreen } from '../../screens/food/screen'
+
+export default function Screen(): JSX.Element {
+    return (
+        <>
+            <FoodScreen />
+        </>
+    )
 }
