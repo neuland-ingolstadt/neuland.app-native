@@ -1,5 +1,9 @@
-const ENDPOINT =
-    process.env.EXPO_PUBLIC_NEULAND_ENDPOINT ?? 'https://neuland.app'
+import packageInfo from '../../package.json'
+
+const ENDPOINT: string =
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
+    process.env.EXPO_PUBLIC_NEULAND_ENDPOINT || 'https://neuland.app'
+const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 class NeulandAPIClient {
     /**
@@ -7,7 +11,11 @@ class NeulandAPIClient {
      * @param {string} url
      */
     async performRequest(url: string): Promise<any> {
-        const resp = await fetch(`${url}`)
+        const resp = await fetch(`${url}`, {
+            headers: {
+                'User-Agent': USER_AGENT,
+            },
+        })
 
         if (resp.status === 200) {
             return await resp.json()

@@ -35,6 +35,7 @@ export const FoodScreen = (): JSX.Element => {
 
     return (
         <ScrollView>
+            <Text>{typeof process.env.EXPO_PUBLIC_NEULAND_ENDPOINT}</Text>
             <Text>{JSON.stringify(days, null, 2)}</Text>
         </ScrollView>
     )
