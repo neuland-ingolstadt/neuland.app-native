@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: 18.x
           cache: yarn
-          cache-dependency-path: 'rogue-thi-app/yarn.lock'
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
