@@ -6,6 +6,7 @@
             "@customTypes/*": ["./src/lib/types/*"],
             "@/*": ["./src/*"]
         },
+
         "strict": true
     }
 }
