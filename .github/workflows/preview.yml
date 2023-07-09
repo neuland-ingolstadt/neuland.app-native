@@ -1,4 +1,3 @@
-name: Expo PR Preview
 on: pull_request
 
 jobs:
@@ -15,22 +14,22 @@ jobs:
                     exit 1
                   fi
 
-            - name: 🏗 Setup repo
+            - name: Checkout repository
               uses: actions/checkout@v3
 
-            - name: 🏗 Setup Node
+            - name: Setup Node
               uses: actions/setup-node@v3
               with:
                   node-version: 18.x
                   cache: yarn
 
-            - name: 🏗 Setup Expo
+            - name: Setup EAS
               uses: expo/expo-github-action@v8
               with:
-                  expo-version: latest
+                  eas-version: latest
                   token: ${{ secrets.EXPO_TOKEN }}
 
-            - name: 📦 Install dependencies
+            - name: Install dependencies
               run: yarn install
 
             - name: Create preview
@@ -39,4 +38,3 @@ jobs:
                   EXPO_PUBLIC_THI_API_KEY: ${{ secrets.THI_API_KEY }}
               with:
                   command: eas update --auto
-                  working-directory: ./
