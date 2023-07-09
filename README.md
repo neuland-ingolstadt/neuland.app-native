@@ -12,6 +12,10 @@ It features a modern user interface and utilizes the Expo framework for easy dev
 The app aims at implementing all important features of the official app as free and open source software with a modern UI and native features.
 To achieve this, the existing React backend is adapted and the API of the neuland.app is used.
 
+### Contributing
+We are always looking for contributors to help us improve the app.
+Check out the [contributing guidelines](.github/CONTRIBUTING.md) to get started.
+
 ### Current State
 
 > **Warning**
