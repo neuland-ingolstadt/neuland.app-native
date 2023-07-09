@@ -55,6 +55,7 @@ To contribute, please follow these guidelines:
   │
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 ```
+Note: For the scope, any value can be used, but make sure to use a consistent scope for the same type of changes.
 
 </details>
 
