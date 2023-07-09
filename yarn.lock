@@ -5628,6 +5628,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commit-msg-linter@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "commit-msg-linter@npm:1.0.0"
+  dependencies:
+    did-you-mean: ^0.0.1
+    supports-color: ^8.1.1
+  checksum: 8f5293fdfcc7ef76a0d41060d6cceec655ef949c0b78939528863316fba06c2a29d298888042c5555ed0df8b810c3955c92eb54e7a0374c2bb007ca8b996993f
+  languageName: node
+  linkType: hard
+
 "commondir@npm:^1.0.1":
   version: 1.0.1
   resolution: "commondir@npm:1.0.1"
@@ -6049,6 +6059,16 @@ __metadata:
   bin:
     detect-libc: ./bin/detect-libc.js
   checksum: daaaed925ffa7889bd91d56e9624e6c8033911bb60f3a50a74a87500680652969dbaab9526d1e200a4c94acf80fc862a22131841145a0a8482d60a99c24f4a3e
+  languageName: node
+  linkType: hard
+
+"did-you-mean@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "did-you-mean@npm:0.0.1"
+  dependencies:
+    levenshtein: "*"
+    underscore: "*"
+  checksum: df777543e834facfccede1285ba06c907314a6c72059165b8688c8905df9065feb23a4419a16897a5e5b54c46a099dda2ff1eccdd08d7bf0602e72045057bc44
   languageName: node
   linkType: hard
 
@@ -7585,6 +7605,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"git-commit-msg-linter@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "git-commit-msg-linter@npm:5.0.4"
+  dependencies:
+    chalk: ^2.4.2
+    commit-msg-linter: ^1.0.0
+  bin:
+    commit-msg-linter: cli/validate.js
+  checksum: 858b2869bfc1cc85a647b4e3bf4465b934bf2967358d1b65f3cc5dd9c28f5276e246e7ffe1ec086f9e6c09f3af68a9b7612977db6f94da379f5f52bdabe9443a
+  languageName: node
+  linkType: hard
+
 "glob-parent@npm:^5.1.2":
   version: 5.1.2
   resolution: "glob-parent@npm:5.1.2"
@@ -8864,6 +8896,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"levenshtein@npm:*":
+  version: 1.0.5
+  resolution: "levenshtein@npm:1.0.5"
+  checksum: d5ceca3bfc4804ad50515291841d968eea5f1f740310c21b5ae6cb6d5514ee68b9c00405059f36934611d3258967bad6d306dcf299f446c7cdd25bdda2c4720c
+  languageName: node
+  linkType: hard
+
 "levn@npm:^0.4.1":
   version: 0.4.1
   resolution: "levn@npm:0.4.1"
@@ -10094,6 +10133,7 @@ __metadata:
     expo-splash-screen: ~0.20.4
     expo-status-bar: ~1.6.0
     expo-updates: ~0.18.8
+    git-commit-msg-linter: ^5.0.4
     husky: ^8.0.0
     lint-staged: ">=10"
     moment: ^2.29.4
@@ -12496,7 +12536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^8.0.0":
+"supports-color@npm:^8.0.0, supports-color@npm:^8.1.1":
   version: 8.1.1
   resolution: "supports-color@npm:8.1.1"
   dependencies:
@@ -12894,6 +12934,13 @@ __metadata:
     has-symbols: ^1.0.3
     which-boxed-primitive: ^1.0.2
   checksum: b7a1cf5862b5e4b5deb091672ffa579aa274f648410009c81cca63fed3b62b610c4f3b773f912ce545bb4e31edc3138975b5bc777fc6e4817dca51affb6380e9
+  languageName: node
+  linkType: hard
+
+"underscore@npm:*":
+  version: 1.13.6
+  resolution: "underscore@npm:1.13.6"
+  checksum: d5cedd14a9d0d91dd38c1ce6169e4455bb931f0aaf354108e47bd46d3f2da7464d49b2171a5cf786d61963204a42d01ea1332a903b7342ad428deaafaf70ec36
   languageName: node
   linkType: hard
 
