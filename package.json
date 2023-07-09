@@ -61,6 +61,7 @@
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-react": "latest",
         "eslint-plugin-react-native": "^4.0.0",
+        "git-commit-msg-linter": "^5.0.4",
         "husky": "^8.0.0",
         "lint-staged": ">=10",
         "prettier": "3.0.0",

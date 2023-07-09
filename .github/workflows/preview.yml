@@ -15,28 +15,30 @@ jobs:
                     exit 1
                   fi
 
-            - name: Checkout repository
+            - name: 🏗 Setup repo
               uses: actions/checkout@v3
 
-            - name: Setup Node
+            - name: 🏗 Setup Node
               uses: actions/setup-node@v3
               with:
                   node-version: 18.x
                   cache: yarn
-                  cache-dependency-path: './yarn.lock'
 
-            - name: Setup EAS
+            - name: 🏗 Setup Expo
               uses: expo/expo-github-action@v8
               with:
-                  eas-version: latest
+                  expo-version: latest
                   token: ${{ secrets.EXPO_TOKEN }}
 
-            - name: Install dependencies
+            - name: 📦 Install dependencies
               run: yarn install
 
-            - name: Create preview
-              uses: expo/expo-github-action/preview@v8
+            - name: 🚀 Publish to Expo
               env:
                   EXPO_PUBLIC_THI_API_KEY: ${{ secrets.THI_API_KEY }}
+              run: eas update --auto
+
+            - name: 💬 Comment in preview
+              uses: expo/expo-github-action/preview-comment@v8
               with:
-                  command: eas update --auto
+                  channel: pr-${{ github.event.number }}
