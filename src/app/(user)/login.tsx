@@ -68,7 +68,7 @@ export default function Login(): JSX.Element {
 
             Toast.show('Login successful', {
                 duration: Toast.durations.LONG,
-                position: 55,
+                position: 60,
                 shadow: false,
                 animation: true,
                 hideOnPress: true,

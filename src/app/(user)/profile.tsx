@@ -67,7 +67,7 @@ export default function Profile(): JSX.Element {
 
         toast = Toast.show('copied to clipboard', {
             duration: Toast.durations.SHORT,
-            position: 55,
+            position: 60,
             shadow: false,
             animation: true,
             hideOnPress: true,
