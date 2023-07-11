@@ -1,6 +1,6 @@
 import { type Food } from '@/stores/types/neuland-api'
-import { ScrollView, Text } from 'native-base'
 import React, { useEffect, useState } from 'react'
+import { ScrollView, Text } from 'react-native'
 
 import { formatNearDate } from '../../utils/date-utils'
 import { loadFoodEntries } from '../../utils/food-utils'

@@ -4,9 +4,17 @@ import { type PersDataDetails } from '@/stores/types/thi-api'
 import { Ionicons } from '@expo/vector-icons'
 import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
-import { Box, Button, ScrollView, useToast } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Linking, Platform, useColorScheme } from 'react-native'
+import {
+    Linking,
+    Platform,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+    useColorScheme,
+} from 'react-native'
+import Toast from 'react-native-root-toast'
 
 import API from '../../api/authenticated-api'
 import {
@@ -18,8 +26,6 @@ export default function Profile(): JSX.Element {
     const scheme = useColorScheme()
     const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
-    const toastIdRef = React.useRef()
-
     const logout = async (): Promise<void> => {
         try {
             await forgetSession()
@@ -44,7 +50,8 @@ export default function Profile(): JSX.Element {
 
         void load()
     }, [])
-    const toast = useToast()
+
+    let toast: any = null
     const copyToClipboard = async (text: string): Promise<void> => {
         if (text.length === 0) {
             return
@@ -54,13 +61,17 @@ export default function Profile(): JSX.Element {
         if (Platform.OS === 'android') {
             return
         }
-        if (toastIdRef.current !== undefined) {
-            toast.close(toastIdRef.current)
+        if (toast !== null) {
+            Toast.hide(toast)
         }
-        toastIdRef.current = toast.show({
-            title: 'Copied to clipboard',
-            placement: 'top',
-            duration: 2000,
+
+        toast = Toast.show('copied to clipboard', {
+            duration: Toast.durations.SHORT,
+            position: 55,
+            shadow: false,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
         })
     }
 
@@ -164,34 +175,39 @@ export default function Profile(): JSX.Element {
     return (
         <ScrollView>
             <FormList sections={sections} />
-            <Box
-                alignSelf="center"
-                bg={scheme === 'dark' ? 'gray.900' : 'white'}
-                rounded="lg"
-                width="42%"
-                mt={5}
-                justifyContent="center"
+            <View
+                style={{
+                    backgroundColor: scheme === 'dark' ? 'gray.900' : 'white',
+                    borderRadius: 10,
+                    width: '42%',
+                    marginTop: 14,
+
+                    alignItems: 'center',
+                    alignSelf: 'center',
+                }}
             >
-                <Button
+                <TouchableOpacity
                     onPress={() => {
                         logout().catch((e) => {
                             console.log(e)
                         })
                     }}
-                    _pressed={{ opacity: 0.5 }}
-                    variant="ghost"
-                    colorScheme="red"
-                    startIcon={
-                        <Ionicons
-                            name="log-out-outline"
-                            size={24}
-                            color="red"
-                        />
-                    }
+                    activeOpacity={0.5}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 10,
+                    }}
                 >
-                    Logout
-                </Button>
-            </Box>
+                    <Ionicons
+                        name="log-out-outline"
+                        size={24}
+                        color="red"
+                        style={{ marginRight: 10 }}
+                    />
+                    <Text style={{ color: 'red' }}>Logout</Text>
+                </TouchableOpacity>
+            </View>
         </ScrollView>
     )
 }

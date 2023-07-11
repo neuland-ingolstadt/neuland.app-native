@@ -1,12 +1,11 @@
-import { type Colors } from '@/components/provider'
+import { type Colors } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import { Button } from 'native-base'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 const Stack2 = createNativeStackNavigator()
 
@@ -36,18 +35,21 @@ export default function Screen(): JSX.Element {
                         headerShown: true,
                         headerLargeTitle: true,
                         headerRight: () => (
-                            <Button
+                            <TouchableOpacity
                                 onPress={() => {
                                     router.push('(user)/settings')
                                 }}
-                                variant="ghost-sharp"
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    padding: 10,
+                                }}
                             >
                                 <Ionicons
                                     name="cog-outline"
                                     size={24}
                                     color={colors.text}
                                 />
-                            </Button>
+                            </TouchableOpacity>
                         ),
                     }}
                     component={HomeScreen}

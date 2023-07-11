@@ -1,4 +1,4 @@
-import { type Colors } from '@/components/provider'
+import { type Colors } from '@/stores/provider'
 import { useTheme } from '@react-navigation/native'
 import React, { type ReactNode } from 'react'
 import { Text, View } from 'react-native'

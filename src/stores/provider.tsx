@@ -4,9 +4,9 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import { type Theme } from '@react-navigation/native'
-import { NativeBaseProvider, extendTheme } from 'native-base'
 import React from 'react'
 import { useColorScheme } from 'react-native'
+import { RootSiblingParent } from 'react-native-root-siblings'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -55,16 +55,10 @@ export default function Provider({
     }
 
     const scheme = useColorScheme()
-    const config = {
-        useSystemColorMode: true,
-    }
-    const customTheme = extendTheme({ config })
 
     return (
-        <NativeBaseProvider theme={customTheme}>
-            <ThemeProvider value={scheme === 'dark' ? darkTheme : lightTheme}>
-                {children}
-            </ThemeProvider>
-        </NativeBaseProvider>
+        <ThemeProvider value={scheme === 'dark' ? darkTheme : lightTheme}>
+            <RootSiblingParent>{children}</RootSiblingParent>
+        </ThemeProvider>
     )
 }

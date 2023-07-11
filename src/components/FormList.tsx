@@ -1,5 +1,5 @@
 import Divider from '@/components/Divider'
-import { type Colors } from '@/components/provider'
+import { type Colors } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -17,7 +17,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
             {sections.map((section, sectionIndex) => (
                 <View
                     key={sectionIndex}
-                    style={{ marginTop: 15, width: '92%', alignSelf: 'center' }}
+                    style={{ marginTop: 18, width: '92%', alignSelf: 'center' }}
                 >
                     <Text
                         style={{

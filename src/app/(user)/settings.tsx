@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import FormList from '@/components/FormList'
 import { Avatar, NameBox } from '@/components/Settings'
-import { type Colors } from '@/components/provider'
+import { type Colors } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         width: '92%',
 
         justifyContent: 'center',
-        paddingVertical: 22,
+        paddingVertical: 28,
         paddingHorizontal: 14,
     },
     nameBox: {

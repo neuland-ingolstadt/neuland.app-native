@@ -1,23 +1,10 @@
+import { type Colors } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
+import Checkbox from 'expo-checkbox'
 import * as Haptics from 'expo-haptics'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
-import {
-    Alert,
-    Box,
-    Button,
-    Center,
-    Checkbox,
-    FormControl,
-    HStack,
-    Icon,
-    IconButton,
-    Input,
-    Pressable,
-    Text,
-    VStack,
-    useToast,
-} from 'native-base'
 import React, { useEffect, useState } from 'react'
 import {
     Dimensions,
@@ -25,11 +12,14 @@ import {
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
+    Text,
+    TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
     useColorScheme,
 } from 'react-native'
+import Toast from 'react-native-root-toast'
 
 import {
     createGuestSession,
@@ -62,21 +52,15 @@ export default function Login(): JSX.Element {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [saveCredentials, setSaveCredentials] = useState(true)
-    const [failure, setFailure] = useState(false)
-    const [showPassword, setShowPassword] = useState(false)
+    const [failure, setFailure] = useState('')
     const router = useRouter()
-    const toast = useToast()
+    const colors = useTheme().colors as Colors
     const colorScheme = useColorScheme()
-    const toggleSaveCredentials = (): void => {
-        setSaveCredentials(!saveCredentials)
-    }
-    const toggleShowPassword = (): void => {
-        setShowPassword(!showPassword)
-    }
+
     const floatingKeyboard = useIsFloatingKeyboard()
 
     const resetFailure = (): void => {
-        setFailure(false)
+        setFailure('')
     }
 
     async function login(): Promise<void> {
@@ -86,14 +70,29 @@ export default function Login(): JSX.Element {
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
-            toast.show({
-                title: 'Login successful',
-                placement: 'top',
-                duration: 3000,
+
+            Toast.show('Login successful', {
+                duration: Toast.durations.LONG,
+                position: 55,
+                shadow: false,
+                animation: true,
+                hideOnPress: true,
+                delay: 0,
             })
             router.push('(tabs)')
         } catch (e: any) {
-            setFailure(e.message)
+            const message = removeNumber(e.message)
+            console.log(message)
+            setFailure(message)
+        }
+    }
+
+    const removeNumber = (str: string): string => {
+        const match = str.match(/"([^"]*)"/)
+        if (match !== null) {
+            return match[1].trim()
+        } else {
+            return str
         }
     }
 
@@ -116,161 +115,221 @@ export default function Login(): JSX.Element {
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.container}>
-                        <Box
-                            bg={colorScheme === 'dark' ? 'black' : 'white'}
-                            shadow={2}
-                            rounded="lg"
-                            maxWidth={500}
-                            width="90%"
-                            p={8}
-                            justifyContent="center"
+                        <View
+                            style={{
+                                backgroundColor:
+                                    colorScheme === 'dark' ? 'black' : 'white',
+                                shadowColor: '#00000',
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 2,
+                                },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 3.84,
+                                elevation: 5,
+                                borderRadius: 10,
+                                maxWidth: 500,
+                                width: '90%',
+                                paddingVertical: 30,
+                                paddingHorizontal: 20,
+                                justifyContent: 'center',
+                            }}
                         >
                             <Text
                                 style={{
                                     fontSize: 22,
                                     fontWeight: 'bold',
-                                    marginBottom: 30,
+                                    marginBottom: 20,
                                     marginTop: 10,
+                                    alignSelf: 'center',
+                                    color: colors.text,
                                 }}
                             >
                                 Sign in with your THI account
                             </Text>
 
-                            {failure ? (
-                                <Center>
-                                    <Alert
-                                        status="error"
-                                        width="100%"
-                                        justifyContent="center"
-                                        alignItems="center"
+                            {failure !== '' ? (
+                                <View style={{ alignItems: 'center' }}>
+                                    <View
+                                        style={{
+                                            backgroundColor: '#f9c0c0df',
+                                            width: '100%',
+                                            justifyContent: 'center',
+
+                                            paddingVertical: 10,
+                                            paddingHorizontal: 20,
+                                            borderRadius: 5,
+                                        }}
                                     >
-                                        <VStack space={1} w={'90%'}>
-                                            <HStack
-                                                flexShrink={1}
-                                                space={2}
-                                                justifyContent="space-between"
-                                            >
-                                                <HStack
-                                                    flexShrink={1}
-                                                    space={2}
-                                                    alignItems="center"
-                                                >
-                                                    <Alert.Icon />
-                                                    <Text
-                                                        fontSize="md"
-                                                        fontWeight="medium"
-                                                        color="coolGray.800"
-                                                    >
-                                                        Login failed
-                                                    </Text>
-                                                </HStack>
-                                                <IconButton
-                                                    variant="unstyled"
-                                                    _focus={{
-                                                        borderWidth: 0,
-                                                    }}
-                                                    icon={
-                                                        <Ionicons
-                                                            name="close"
-                                                            size={14}
-                                                            color="black"
-                                                        />
-                                                    }
-                                                    _icon={{
-                                                        color: 'coolGray.600',
-                                                    }}
-                                                    onPress={resetFailure}
-                                                />
-                                            </HStack>
-                                            <Box
-                                                flexShrink={1}
-                                                _text={{
-                                                    color: 'coolGray.600',
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                width: '90%',
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
                                                 }}
                                             >
                                                 <Text
-                                                    ellipsizeMode="tail"
-                                                    numberOfLines={1}
-                                                    color="black"
+                                                    style={{
+                                                        fontSize: 16,
+                                                        fontWeight: 'bold',
+                                                        color: 'black',
+                                                    }}
                                                 >
-                                                    {failure}
+                                                    Login failed
                                                 </Text>
-                                            </Box>
-                                        </VStack>
-                                    </Alert>
-                                </Center>
-                            ) : null}
-                            <FormControl paddingTop={3}>
-                                <FormControl.Label>
-                                    THI Username
-                                </FormControl.Label>
-                                <Input
-                                    size="lg"
-                                    placeholder="abc1234"
-                                    onChangeText={(text) => {
-                                        setUsername(text)
-                                    }}
-                                    textContentType="username"
-                                    autoCapitalize="none"
-                                />
-                            </FormControl>
-                            <FormControl paddingTop={3}>
-                                <FormControl.Label>Password</FormControl.Label>
-                                <Input
-                                    size="lg"
-                                    placeholder="Password"
-                                    onChangeText={(text) => {
-                                        setPassword(text)
-                                    }}
-                                    textContentType="password"
-                                    secureTextEntry={!showPassword}
-                                    type={showPassword ? 'text' : 'password'}
-                                    InputRightElement={
-                                        <Pressable
-                                            onPress={() => {
-                                                toggleShowPassword()
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={resetFailure}
+                                                style={{
+                                                    marginLeft: 'auto',
+                                                }}
+                                            >
+                                                <Ionicons
+                                                    name="close"
+                                                    size={16}
+                                                    color="black"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View
+                                            style={{
+                                                width: '90%',
+                                                alignItems: 'flex-start',
                                             }}
                                         >
-                                            <Icon
-                                                as={Ionicons}
-                                                name={
-                                                    showPassword
-                                                        ? 'eye-off-outline'
-                                                        : 'eye-outline'
-                                                }
-                                                size={5}
-                                                mr="2"
-                                                color="muted.400"
-                                            />
-                                        </Pressable>
-                                    }
-                                />
-                            </FormControl>
-
-                            <Box width="100%" mt={2} mb={2} paddingY={3}>
-                                <Checkbox
-                                    size={'sm'}
-                                    value="saveCredentials"
-                                    my={1}
-                                    onChange={toggleSaveCredentials}
-                                    defaultIsChecked={true}
+                                            <Text
+                                                numberOfLines={1}
+                                                style={{ marginTop: 4 }}
+                                            >
+                                                {failure}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            ) : null}
+                            <View style={{ paddingTop: 3 }}>
+                                <Text
+                                    style={{
+                                        paddingBottom: 5,
+                                        color: colors.text,
+                                    }}
                                 >
-                                    Stay signed in
-                                </Checkbox>
-                            </Box>
+                                    THI Username
+                                </Text>
+                                <View
+                                    style={{
+                                        borderWidth: 1,
+                                        borderColor: colors.labelTertiaryColor,
+                                        borderRadius: 5,
+                                    }}
+                                >
+                                    <TextInput
+                                        style={{
+                                            fontSize: 16,
+                                            paddingVertical: 8,
+                                            paddingHorizontal: 10,
+                                            color: colors.text,
+                                        }}
+                                        placeholder="abc1234"
+                                        onChangeText={(text) => {
+                                            setUsername(text)
+                                        }}
+                                        autoCapitalize="none"
+                                        autoComplete="username"
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ paddingTop: 15 }}>
+                                <Text
+                                    style={{
+                                        paddingBottom: 5,
+                                        color: colors.text,
+                                    }}
+                                >
+                                    Password
+                                </Text>
+                                <View
+                                    style={{
+                                        borderWidth: 1,
+                                        borderColor: colors.labelTertiaryColor,
+                                        borderRadius: 5,
+                                    }}
+                                >
+                                    <TextInput
+                                        style={{
+                                            fontSize: 16,
+                                            paddingVertical: 8,
+                                            paddingHorizontal: 10,
+                                        }}
+                                        placeholder="Passwort"
+                                        onChangeText={(text) => {
+                                            setPassword(text)
+                                        }}
+                                        autoCapitalize="none"
+                                        secureTextEntry={true}
+                                        autoComplete="current-password"
+                                    />
+                                </View>
+                            </View>
 
-                            <Button
+                            <View
+                                style={{
+                                    paddingTop: 20,
+                                    paddingBottom: 10,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Checkbox
+                                    onValueChange={setSaveCredentials}
+                                    value={saveCredentials}
+                                    color={
+                                        saveCredentials
+                                            ? colors.primary
+                                            : colors.labelSecondaryColor
+                                    }
+                                    style={{ marginRight: 10 }}
+                                />
+
+                                <Text style={{ color: colors.text }}>
+                                    Stay signed in
+                                </Text>
+                            </View>
+
+                            <TouchableOpacity
                                 onPress={() => {
                                     login().catch((error: Error) => {
                                         console.log(error)
                                     })
                                 }}
-                                colorScheme={'primary'}
+                                style={{
+                                    backgroundColor: colors.primary,
+                                    paddingHorizontal: 20,
+                                    paddingVertical: 10,
+                                    borderRadius: 5,
+                                    alignItems: 'center',
+                                }}
                             >
-                                {'Sign in'}
-                            </Button>
-
-                            <HStack>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        color: colors.text,
+                                    }}
+                                >
+                                    Sign in
+                                </Text>
+                            </TouchableOpacity>
+                            <View
+                                style={{
+                                    paddingTop: 3,
+                                    alignItems: 'center',
+                                }}
+                            >
                                 <TouchableOpacity
                                     onPress={() => {
                                         guestLogin().catch((error: Error) => {
@@ -283,13 +342,14 @@ export default function Login(): JSX.Element {
                                             opacity: 0.7,
                                             fontSize: 13,
                                             marginTop: 10,
+                                            color: colors.labelColor,
                                         }}
                                     >
-                                        {'Or continue as guest'}
+                                        {'or continue as guest'}
                                     </Text>
                                 </TouchableOpacity>
-                            </HStack>
-                        </Box>
+                            </View>
+                        </View>
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
