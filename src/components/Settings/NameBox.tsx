@@ -48,6 +48,8 @@ const NameBox = ({
                         lineHeight: 14,
                         color: colors.text,
                     }}
+                    numberOfLines={1}
+                    allowFontScaling={true}
                 >
                     {subTitle1}
                 </Text>

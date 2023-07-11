@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
         width: '92%',
 
         justifyContent: 'center',
-        paddingVertical: 28,
+        paddingVertical: 24,
         paddingHorizontal: 14,
     },
     nameBox: {

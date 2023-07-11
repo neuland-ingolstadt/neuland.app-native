@@ -1,14 +1,25 @@
 import FormList from '@/components/FormList'
+import { type Colors } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
+import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import { Image, Linking, Pressable, ScrollView, Text, View } from 'react-native'
+import {
+    Image,
+    Linking,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 import { version } from '../../../package.json'
 
 export default function About(): JSX.Element {
     const router = useRouter()
+    const colors = useTheme().colors as Colors
     const sections: FormListSections[] = [
         {
             header: 'Legal',
@@ -92,14 +103,8 @@ export default function About(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <View style={{ paddingTop: 30, paddingBottom: 20 }}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-evenly',
-                        }}
-                    >
+                <View style={styles.container}>
+                    <View style={styles.logoContainer}>
                         <Pressable
                             onPress={() => {
                                 void Haptics.impactAsync(
@@ -109,46 +114,52 @@ export default function About(): JSX.Element {
                             }}
                         >
                             <View
-                                style={{
-                                    shadowColor: '#000',
-                                    shadowOffset: { width: 0, height: 5 },
-                                    shadowOpacity: 0.5,
-                                    shadowRadius: 8,
-                                    borderRadius: 9,
-                                }}
+                                style={[
+                                    styles.logoIcon,
+                                    {
+                                        shadowColor: colors.text,
+                                        backgroundColor: colors.card,
+                                    },
+                                ]}
                             >
                                 <Image
                                     source={require('../../assets/icon.png')}
                                     alt="Neuland Next Logo"
-                                    style={{
-                                        flex: 1,
-                                        width: 100,
-                                        height: 100,
-                                        resizeMode: 'contain',
-                                        borderRadius: 9,
-                                    }}
+                                    style={styles.logoImage}
                                 />
                             </View>
                         </Pressable>
 
                         <View style={{ flexDirection: 'column' }}>
-                            <View>
+                            <View style={{ marginBottom: 10 }}>
                                 <Text
-                                    style={{ fontSize: 22, fontWeight: 'bold' }}
+                                    style={{
+                                        fontSize: 22,
+                                        fontWeight: 'bold',
+                                        color: colors.text,
+                                    }}
                                 >
                                     Neuland App
                                 </Text>
-                                <Text style={{ fontSize: 16 }}>
+                                <Text
+                                    style={{ fontSize: 16, color: colors.text }}
+                                >
                                     Native Version
                                 </Text>
                             </View>
                             <View>
                                 <Text
-                                    style={{ fontSize: 16, fontWeight: 'bold' }}
+                                    style={{
+                                        fontSize: 16,
+                                        fontWeight: 'bold',
+                                        color: colors.text,
+                                    }}
                                 >
                                     Developed by
                                 </Text>
-                                <Text style={{ fontSize: 16 }}>
+                                <Text
+                                    style={{ fontSize: 16, color: colors.text }}
+                                >
                                     Neuland Ingolstadt e.V.
                                 </Text>
                             </View>
@@ -161,3 +172,28 @@ export default function About(): JSX.Element {
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingTop: 30,
+        paddingBottom: 20,
+    },
+    logoContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+    },
+    logoIcon: {
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+        borderRadius: 9,
+    },
+    logoImage: {
+        flex: 1,
+        width: 100,
+        height: 100,
+        resizeMode: 'contain',
+        borderRadius: 9,
+    },
+})

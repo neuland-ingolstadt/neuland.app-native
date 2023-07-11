@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { type StyleProp, View, type ViewStyle } from 'react-native'
 
 const Avatar = ({
     size = 50,
@@ -19,7 +19,8 @@ const Avatar = ({
         shadowOffset: { width: 0, height: 2 },
         elevation: 2,
     }
-    const avatarSize = {
+
+    const avatarSize: StyleProp<ViewStyle> = {
         width: size,
         height: size,
         borderRadius: size / 2,

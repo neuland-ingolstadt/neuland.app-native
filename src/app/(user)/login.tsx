@@ -1,5 +1,7 @@
+import { createGuestSession, createSession } from '@/api/thi-session-handler'
+import { LoginFailureAlert } from '@/components/Settings'
 import { type Colors } from '@/stores/provider'
-import { Ionicons } from '@expo/vector-icons'
+import { trimErrorMsg } from '@/utils/api-utils'
 import { useTheme } from '@react-navigation/native'
 import Checkbox from 'expo-checkbox'
 import * as Haptics from 'expo-haptics'
@@ -17,14 +19,8 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
-    useColorScheme,
 } from 'react-native'
 import Toast from 'react-native-root-toast'
-
-import {
-    createGuestSession,
-    createSession,
-} from '../../api/thi-session-handler'
 
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
@@ -55,7 +51,6 @@ export default function Login(): JSX.Element {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const colorScheme = useColorScheme()
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
@@ -81,18 +76,8 @@ export default function Login(): JSX.Element {
             })
             router.push('(tabs)')
         } catch (e: any) {
-            const message = removeNumber(e.message)
-            console.log(message)
+            const message = trimErrorMsg(e.message)
             setFailure(message)
-        }
-    }
-
-    const removeNumber = (str: string): string => {
-        const match = str.match(/"([^"]*)"/)
-        if (match !== null) {
-            return match[1].trim()
-        } else {
-            return str
         }
     }
 
@@ -103,7 +88,7 @@ export default function Login(): JSX.Element {
 
     return (
         <LinearGradient
-            colors={['#f7ba2c', '#ea5459']}
+            colors={[colors.primary, '#cd148c']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.gradient}
@@ -116,125 +101,48 @@ export default function Login(): JSX.Element {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.container}>
                         <View
-                            style={{
-                                backgroundColor:
-                                    colorScheme === 'dark' ? 'black' : 'white',
-                                shadowColor: '#00000',
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 2,
-                                },
-                                shadowOpacity: 0.25,
-                                shadowRadius: 3.84,
-                                elevation: 5,
-                                borderRadius: 10,
-                                maxWidth: 500,
-                                width: '90%',
-                                paddingVertical: 30,
-                                paddingHorizontal: 20,
-                                justifyContent: 'center',
-                            }}
+                            style={[
+                                styles.loginContainer,
+                                { backgroundColor: colors.background },
+                            ]}
                         >
                             <Text
-                                style={{
-                                    fontSize: 22,
-                                    fontWeight: 'bold',
-                                    marginBottom: 20,
-                                    marginTop: 10,
-                                    alignSelf: 'center',
-                                    color: colors.text,
-                                }}
+                                style={[styles.header, { color: colors.text }]}
+                                adjustsFontSizeToFit={true}
+                                numberOfLines={1}
                             >
                                 Sign in with your THI account
                             </Text>
 
                             {failure !== '' ? (
-                                <View style={{ alignItems: 'center' }}>
-                                    <View
-                                        style={{
-                                            backgroundColor: '#f9c0c0df',
-                                            width: '100%',
-                                            justifyContent: 'center',
-
-                                            paddingVertical: 10,
-                                            paddingHorizontal: 20,
-                                            borderRadius: 5,
-                                        }}
-                                    >
-                                        <View
-                                            style={{
-                                                flexDirection: 'row',
-                                                width: '90%',
-                                            }}
-                                        >
-                                            <View
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center',
-                                                }}
-                                            >
-                                                <Text
-                                                    style={{
-                                                        fontSize: 16,
-                                                        fontWeight: 'bold',
-                                                        color: 'black',
-                                                    }}
-                                                >
-                                                    Login failed
-                                                </Text>
-                                            </View>
-                                            <TouchableOpacity
-                                                onPress={resetFailure}
-                                                style={{
-                                                    marginLeft: 'auto',
-                                                }}
-                                            >
-                                                <Ionicons
-                                                    name="close"
-                                                    size={16}
-                                                    color="black"
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View
-                                            style={{
-                                                width: '90%',
-                                                alignItems: 'flex-start',
-                                            }}
-                                        >
-                                            <Text
-                                                numberOfLines={1}
-                                                style={{ marginTop: 4 }}
-                                            >
-                                                {failure}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
+                                <LoginFailureAlert
+                                    errorMsg={failure}
+                                    resetFailure={resetFailure}
+                                />
                             ) : null}
                             <View style={{ paddingTop: 3 }}>
                                 <Text
                                     style={{
                                         paddingBottom: 5,
-                                        color: colors.text,
+                                        color: colors.labelColor,
                                     }}
                                 >
                                     THI Username
                                 </Text>
                                 <View
-                                    style={{
-                                        borderWidth: 1,
-                                        borderColor: colors.labelTertiaryColor,
-                                        borderRadius: 5,
-                                    }}
+                                    style={[
+                                        styles.textInputContainer,
+                                        {
+                                            borderColor:
+                                                colors.labelTertiaryColor,
+                                        },
+                                    ]}
                                 >
                                     <TextInput
-                                        style={{
-                                            fontSize: 16,
-                                            paddingVertical: 8,
-                                            paddingHorizontal: 10,
-                                            color: colors.text,
-                                        }}
+                                        style={[
+                                            styles.textInput,
+                                            { color: colors.text },
+                                        ]}
                                         placeholder="abc1234"
                                         onChangeText={(text) => {
                                             setUsername(text)
@@ -248,24 +156,25 @@ export default function Login(): JSX.Element {
                                 <Text
                                     style={{
                                         paddingBottom: 5,
-                                        color: colors.text,
+                                        color: colors.labelColor,
                                     }}
                                 >
                                     Password
                                 </Text>
                                 <View
-                                    style={{
-                                        borderWidth: 1,
-                                        borderColor: colors.labelTertiaryColor,
-                                        borderRadius: 5,
-                                    }}
+                                    style={[
+                                        styles.textInputContainer,
+                                        {
+                                            borderColor:
+                                                colors.labelTertiaryColor,
+                                        },
+                                    ]}
                                 >
                                     <TextInput
-                                        style={{
-                                            fontSize: 16,
-                                            paddingVertical: 8,
-                                            paddingHorizontal: 10,
-                                        }}
+                                        style={[
+                                            styles.textInput,
+                                            { color: colors.text },
+                                        ]}
                                         placeholder="Passwort"
                                         onChangeText={(text) => {
                                             setPassword(text)
@@ -277,14 +186,7 @@ export default function Login(): JSX.Element {
                                 </View>
                             </View>
 
-                            <View
-                                style={{
-                                    paddingTop: 20,
-                                    paddingBottom: 10,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <View style={styles.checkboxContainer}>
                                 <Checkbox
                                     onValueChange={setSaveCredentials}
                                     value={saveCredentials}
@@ -307,29 +209,21 @@ export default function Login(): JSX.Element {
                                         console.log(error)
                                     })
                                 }}
-                                style={{
-                                    backgroundColor: colors.primary,
-                                    paddingHorizontal: 20,
-                                    paddingVertical: 10,
-                                    borderRadius: 5,
-                                    alignItems: 'center',
-                                }}
+                                style={[
+                                    styles.loginButton,
+                                    { backgroundColor: colors.primary },
+                                ]}
                             >
                                 <Text
                                     style={{
                                         fontWeight: 'bold',
-                                        color: colors.text,
+                                        color: 'black',
                                     }}
                                 >
                                     Sign in
                                 </Text>
                             </TouchableOpacity>
-                            <View
-                                style={{
-                                    paddingTop: 3,
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <View style={styles.guestContainer}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         guestLogin().catch((error: Error) => {
@@ -338,14 +232,15 @@ export default function Login(): JSX.Element {
                                     }}
                                 >
                                     <Text
-                                        style={{
-                                            opacity: 0.7,
-                                            fontSize: 13,
-                                            marginTop: 10,
-                                            color: colors.labelColor,
-                                        }}
+                                        style={[
+                                            styles.guestText,
+                                            {
+                                                color: colors.labelSecondaryColor,
+                                            },
+                                        ]}
+                                        allowFontScaling={true}
                                     >
-                                        {'or continue as guest'}
+                                        or continue as guest
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -362,5 +257,57 @@ const styles = StyleSheet.create({
     gradient: {
         height: '100%',
         width: '100%',
+    },
+    loginContainer: {
+        shadowColor: '#00000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        borderRadius: 10,
+        maxWidth: 500,
+        width: '90%',
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+        justifyContent: 'center',
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 30,
+        marginTop: 5,
+        alignSelf: 'center',
+    },
+    loginButton: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    textInput: {
+        fontSize: 16,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+    },
+    textInputContainer: {
+        borderWidth: 1,
+        borderRadius: 5,
+    },
+    checkboxContainer: {
+        paddingTop: 20,
+        paddingBottom: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    guestContainer: {
+        paddingTop: 3,
+        alignItems: 'center',
+    },
+    guestText: {
+        fontSize: 13,
+        marginTop: 10,
     },
 })
