@@ -1,7 +1,6 @@
+import Provider from '@/stores/provider'
 import { Stack } from 'expo-router'
 import React from 'react'
-
-import { Provider } from '../provider'
 
 export default function RootLayout(): JSX.Element {
     return (
@@ -19,12 +18,6 @@ export default function RootLayout(): JSX.Element {
                         title: 'Login',
                         presentation: 'modal',
                         gestureEnabled: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="(food)/detail"
-                    options={{
-                        title: 'Food Detail',
                     }}
                 />
                 <Stack.Screen

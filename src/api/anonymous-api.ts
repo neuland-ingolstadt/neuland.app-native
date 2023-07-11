@@ -1,5 +1,6 @@
-import packageInfo from '../../../package.json'
-import LocalStorageCache from '../cache/localstorage-cache'
+import LocalStorageCache from '@/stores/cache'
+
+import packageInfo from '../../package.json'
 
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000

@@ -1,11 +1,11 @@
-import { type CourseShortNames } from '@customTypes/data'
+import courseShortNames from '@/stores/data/course-short-names.json'
+import { type CourseShortNames } from '@/stores/types/data'
 import {
     type Grades,
     type Lecturers,
     type PersData,
-} from '@customTypes/thi-api'
+} from '@/stores/types/thi-api'
 
-import courseShortNames from '../../data/course-short-names.json'
 import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 

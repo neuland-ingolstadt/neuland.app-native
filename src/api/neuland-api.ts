@@ -1,4 +1,4 @@
-import packageInfo from '../../../package.json'
+import packageInfo from '../../package.json'
 
 const ENDPOINT: string =
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing

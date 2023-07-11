@@ -13,7 +13,6 @@ import {
     Icon,
     IconButton,
     Input,
-    KeyboardAvoidingView,
     Pressable,
     Text,
     VStack,
@@ -23,7 +22,9 @@ import React, { useEffect, useState } from 'react'
 import {
     Dimensions,
     Keyboard,
+    KeyboardAvoidingView,
     Platform,
+    StyleSheet,
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
@@ -33,7 +34,7 @@ import {
 import {
     createGuestSession,
     createSession,
-} from '../../lib/backend/thi-session-handler'
+} from '../../api/thi-session-handler'
 
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
@@ -106,10 +107,7 @@ export default function Login(): JSX.Element {
             colors={['#f7ba2c', '#ea5459']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={{
-                height: '100%',
-                width: '100%',
-            }}
+            style={styles.gradient}
         >
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -117,13 +115,7 @@ export default function Login(): JSX.Element {
                 enabled={!floatingKeyboard}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
+                    <View style={styles.container}>
                         <Box
                             bg={colorScheme === 'dark' ? 'black' : 'white'}
                             shadow={2}
@@ -304,3 +296,11 @@ export default function Login(): JSX.Element {
         </LinearGradient>
     )
 }
+
+const styles = StyleSheet.create({
+    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    gradient: {
+        height: '100%',
+        width: '100%',
+    },
+})

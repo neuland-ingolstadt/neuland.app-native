@@ -1,5 +1,5 @@
 import FormList from '@/components/FormList'
-import { type FormListSections } from '@customTypes/components'
+import { type FormListSections } from '@/stores/types/components'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'

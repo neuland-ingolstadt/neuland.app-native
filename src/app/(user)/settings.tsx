@@ -1,70 +1,24 @@
+import API from '@/api/authenticated-api'
 import FormList from '@/components/FormList'
-import { type FormListSections } from '@customTypes/components'
-import { type PersDataDetails } from '@customTypes/thi-api'
+import { Avatar, NameBox } from '@/components/Settings'
+import { type Colors } from '@/components/provider'
+import { type FormListSections } from '@/stores/types/components'
+import { type PersDataDetails } from '@/stores/types/thi-api'
+import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import {
-    Avatar,
-    Box,
-    HStack,
-    Icon,
-    Pressable,
-    ScrollView,
-    Skeleton,
-    Text,
-    VStack,
-} from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Linking, RefreshControl, useColorScheme } from 'react-native'
-
-import API from '../../lib/backend/authenticated-api'
-
-/**
- * Generates the initials of a given name.
- * @param name The name to generate the initials from.
- * @returns The initials of the name.
- */
-function getInitials(name: string): string {
-    const names = name.split(' ')
-    const firstName = names[0] ?? ''
-    const lastName = names[names.length - 1] ?? ''
-
-    let initials = (firstName.charAt(0) ?? '') + (lastName.charAt(0) ?? '')
-    initials = initials.toUpperCase()
-
-    return initials
-}
-
-/**
- * Generates a hexadecimal color code based on the given name.
- * @param name The name to generate the color from.
- * @returns The hexadecimal color code.
- */
-function getColor(name: string): string {
-    let hash = 0
-    for (let i = 0; i < name.length; i++) {
-        hash = name.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    let colour = '#'
-    for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xff
-        colour += ('00' + value.toString(16)).substr(-2)
-    }
-    return colour
-}
-
-/**
- * Calculates the appropriate text color (black or white) based on the given background color.
- * @param background The background color in hexadecimal format (#RRGGBB).
- * @returns The appropriate text color (black or white).
- */
-function getTextColor(background: string): string {
-    const r = parseInt(background.substr(1, 2), 16)
-    const g = parseInt(background.substr(3, 2), 16)
-    const b = parseInt(background.substr(5, 2), 16)
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000
-    return yiq >= 128 ? 'black' : 'white'
-}
+import {
+    ActivityIndicator,
+    Linking,
+    Pressable,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 enum LoadingState {
     LOADING,
@@ -78,12 +32,11 @@ export default function Settings(): JSX.Element {
     const [userdata, setUserdata] = useState<PersDataDetails | null>(null)
     const [fullName, setFullName] = useState('')
     const [isLoaded, setIsLoaded] = useState(LoadingState.LOADING)
-    const [errorMsg, setErrorMsg] = useState()
+    const [errorMsg, setErrorMsg] = useState('')
 
     const router = useRouter()
-    const color = getColor(fullName)
-    const textColor = getTextColor(color)
-    const scheme = useColorScheme()
+    const colors = useTheme().colors as Colors
+    const nameColor = getNameColor(fullName)
 
     const loadData = async (): Promise<void> => {
         try {
@@ -200,7 +153,7 @@ export default function Settings(): JSX.Element {
                 ) : undefined
             }
         >
-            <VStack mt={4}>
+            <View style={{ paddingTop: 20 }}>
                 <Pressable
                     onPress={() => {
                         if (isLoaded === LoadingState.LOADED) {
@@ -209,175 +162,142 @@ export default function Settings(): JSX.Element {
                             router.push('(user)/login')
                         }
                     }}
-                    _pressed={{ opacity: 0.5 }}
                     disabled={
                         isLoaded === LoadingState.LOADING ||
                         isLoaded === LoadingState.ERROR
                     }
                 >
-                    <Box
-                        alignSelf={'center'}
-                        bg={scheme === 'dark' ? 'gray.900' : 'white'}
-                        rounded="lg"
-                        width="92%"
-                        p={8}
-                        mt={4}
-                        justifyContent="center"
+                    <View
+                        style={[
+                            styles.container,
+                            { backgroundColor: colors.card },
+                        ]}
                     >
-                        <HStack
-                            justifyContent="space-between"
-                            alignItems="center"
-                        >
-                            <HStack alignItems="center">
-                                {isLoaded === LoadingState.LOADING ? (
-                                    <>
-                                        <Skeleton
-                                            height={12}
-                                            width={12}
-                                            borderRadius={'full'}
-                                        />
-                                        <VStack space={2} ml={4}>
-                                            <Skeleton
-                                                height={7}
-                                                width={130}
-                                                borderRadius={3}
-                                            />
-                                            <Skeleton
-                                                height={4}
-                                                width={200}
-                                                borderRadius={3}
-                                            />
-                                        </VStack>
-                                    </>
-                                ) : isLoaded === LoadingState.ERROR ? (
-                                    <>
+                        <View style={styles.nameBox}>
+                            {isLoaded === LoadingState.LOADING ? (
+                                <>
+                                    <View style={styles.loading}>
+                                        <ActivityIndicator />
+                                    </View>
+                                </>
+                            ) : isLoaded === LoadingState.ERROR ? (
+                                <>
+                                    <NameBox title="Error" subTitle1={errorMsg}>
                                         <Avatar
-                                            size="md"
-                                            background="gray.500"
-                                            shadow={2}
+                                            background={
+                                                colors.labelTertiaryColor
+                                            }
                                         >
-                                            <Icon
-                                                as={Ionicons}
-                                                name="warning-outline"
-                                                size="md"
-                                                color="gray.100"
+                                            <Ionicons
+                                                name="alert-circle-outline"
+                                                size={20}
+                                                color={colors.background}
                                             />
                                         </Avatar>
-                                        <VStack>
-                                            <Text
-                                                ml="4"
-                                                fontWeight="bold"
-                                                fontSize="lg"
-                                            >
-                                                Error
-                                            </Text>
-                                            <Text
-                                                ml="4"
-                                                fontSize="xs"
-                                                ellipsizeMode="tail"
-                                                numberOfLines={1}
-                                            >
-                                                {errorMsg}
-                                            </Text>
-                                        </VStack>
-                                    </>
-                                ) : isLoaded === LoadingState.GUEST ? (
-                                    <>
+                                    </NameBox>
+                                </>
+                            ) : isLoaded === LoadingState.GUEST ? (
+                                <>
+                                    <NameBox
+                                        title="Sign in"
+                                        subTitle1="Sign in to unlock all features of
+                                        the app"
+                                        subTitle2={''}
+                                    >
                                         <Avatar
-                                            size="md"
-                                            background="gray.500"
-                                            shadow={2}
+                                            background={
+                                                colors.labelTertiaryColor
+                                            }
                                         >
-                                            <Icon
-                                                as={Ionicons}
+                                            <Ionicons
                                                 name="person"
-                                                size="md"
-                                                color="gray.100"
+                                                size={20}
+                                                color={colors.background}
                                             />
                                         </Avatar>
-                                        <VStack>
+                                    </NameBox>
+                                </>
+                            ) : (
+                                <>
+                                    <NameBox
+                                        title={fullName}
+                                        subTitle1={
+                                            (userdata?.stgru ?? '') +
+                                            '. Semester'
+                                        }
+                                        subTitle2={userdata?.fachrich ?? ''}
+                                    >
+                                        <Avatar background={nameColor}>
                                             <Text
-                                                ml="4"
-                                                fontWeight="bold"
-                                                fontSize="lg"
-                                            >
-                                                Sign in
-                                            </Text>
-                                            <Text ml="4" fontSize="xs">
-                                                Sign in to unlock all features
-                                                of the app
-                                            </Text>
-                                        </VStack>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Avatar
-                                            size="md"
-                                            background={color}
-                                            shadow={4}
-                                        >
-                                            <Text
-                                                color={textColor}
-                                                fontWeight="bold"
-                                                fontSize="lg"
+                                                style={{
+                                                    color: getContrastColor(
+                                                        nameColor
+                                                    ),
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold',
+                                                }}
                                             >
                                                 {getInitials(fullName)}
                                             </Text>
                                         </Avatar>
-                                        <VStack
-                                            maxWidth="92%"
-                                            alignItems="flex-start"
-                                        >
-                                            <Text
-                                                ml="4"
-                                                fontWeight="bold"
-                                                fontSize="lg"
-                                                ellipsizeMode="tail"
-                                                numberOfLines={1}
-                                            >
-                                                {fullName}
-                                            </Text>
-                                            <Text ml="4" fontSize="xs">
-                                                {(userdata?.stgru ?? '') +
-                                                    '. Semester'}
-                                            </Text>
+                                    </NameBox>
+                                </>
+                            )}
 
-                                            <Text
-                                                ml="4"
-                                                fontSize="xs"
-                                                ellipsizeMode="tail"
-                                                numberOfLines={2}
-                                            >
-                                                {userdata?.fachrich ?? ''}
-                                            </Text>
-                                        </VStack>
-                                    </>
-                                )}
-                            </HStack>
                             {isLoaded === LoadingState.LOADED ||
                             isLoaded === LoadingState.GUEST ? (
-                                <Icon
-                                    as={Ionicons}
-                                    name="chevron-forward"
-                                    size="sm"
+                                <Ionicons
+                                    name="chevron-forward-outline"
+                                    size={24}
+                                    color={colors.labelSecondaryColor}
                                 />
                             ) : null}
-                        </HStack>
-                    </Box>
+                        </View>
+                    </View>
                 </Pressable>
 
                 <FormList sections={sections} />
-            </VStack>
+            </View>
 
             <Text
-                alignSelf="center"
-                mt={4}
-                mb={4}
-                color="gray.500"
-                paddingTop={4}
+                style={[
+                    styles.copyrigth,
+                    { color: colors.labelSecondaryColor },
+                ]}
             >
-                © 2023 by Neuland Ingolstadt e.V.
+                {'© 2023 by Neuland Ingolstadt e.V.'}
             </Text>
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    copyrigth: {
+        fontSize: 12,
+        textAlign: 'center',
+        marginBottom: 20,
+        marginTop: 20,
+    },
+    container: {
+        alignSelf: 'center',
+
+        borderRadius: 10,
+        width: '92%',
+
+        justifyContent: 'center',
+        paddingVertical: 22,
+        paddingHorizontal: 14,
+    },
+    nameBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    loading: {
+        marginRight: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        flex: 1,
+    },
+})

@@ -1,20 +1,27 @@
+import { type Colors } from '@/components/provider'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
+import Head from 'expo-router/head'
 import { Button } from 'native-base'
 import React from 'react'
-import { useColorScheme } from 'react-native'
-
-import { HomeScreen } from '../../screens/home/screen'
+import { StyleSheet, Text, View } from 'react-native'
 
 const Stack2 = createNativeStackNavigator()
 
 export default function Screen(): JSX.Element {
-    const scheme = useColorScheme()
     const router = useRouter()
+    const colors = useTheme().colors as Colors
 
     return (
         <>
+            <Head>
+                <title>Dashboard</title>
+                <meta name="Dahsboard" content="Customizable Dashboard" />
+                <meta property="expo:handoff" content="true" />
+                <meta property="expo:spotlight" content="true" />
+            </Head>
             <Stack.Screen
                 options={{
                     headerShown: false,
@@ -38,9 +45,7 @@ export default function Screen(): JSX.Element {
                                 <Ionicons
                                     name="cog-outline"
                                     size={24}
-                                    color={
-                                        scheme === 'dark' ? 'white' : 'black'
-                                    }
+                                    color={colors.text}
                                 />
                             </Button>
                         ),
@@ -51,3 +56,45 @@ export default function Screen(): JSX.Element {
         </>
     )
 }
+
+function HomeScreen(): JSX.Element {
+    const colors = useTheme().colors as Colors
+    return (
+        <View style={styles.container}>
+            <View style={styles.innerContainer}>
+                <Text style={styles.heading}>🚧🏗️⚒️</Text>
+
+                <Text
+                    style={{
+                        fontSize: 16,
+                        textAlign: 'center',
+                        paddingTop: 16,
+                        color: colors.text,
+                    }}
+                >
+                    Nothing to see here yet. Later you will find a customizable
+                    dashboard here, where you can add widgets and cards.
+                </Text>
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 16,
+    },
+    innerContainer: {
+        maxWidth: 600,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    heading: {
+        fontSize: 32,
+        textAlign: 'center',
+        paddingTop: 16,
+    },
+})

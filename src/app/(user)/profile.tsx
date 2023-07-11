@@ -1,6 +1,6 @@
 import FormList from '@/components/FormList'
-import { type FormListSections } from '@customTypes/components'
-import { type PersDataDetails } from '@customTypes/thi-api'
+import { type FormListSections } from '@/stores/types/components'
+import { type PersDataDetails } from '@/stores/types/thi-api'
 import { Ionicons } from '@expo/vector-icons'
 import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
@@ -8,11 +8,11 @@ import { Box, Button, ScrollView, useToast } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { Linking, Platform, useColorScheme } from 'react-native'
 
-import API from '../../lib/backend/authenticated-api'
+import API from '../../api/authenticated-api'
 import {
     createGuestSession,
     forgetSession,
-} from '../../lib/backend/thi-session-handler'
+} from '../../api/thi-session-handler'
 
 export default function Profile(): JSX.Element {
     const scheme = useColorScheme()

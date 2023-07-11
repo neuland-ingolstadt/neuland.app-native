@@ -1,11 +1,41 @@
-import React from 'react'
+import { type Food } from '@/stores/types/neuland-api'
+import { ScrollView, Text } from 'native-base'
+import React, { useEffect, useState } from 'react'
 
-import { FoodScreen } from '../../screens/food/screen'
+import { formatNearDate } from '../../utils/date-utils'
+import { loadFoodEntries } from '../../utils/food-utils'
 
-export default function Screen(): JSX.Element {
+export default function FoodScreen(): JSX.Element {
+    const [days, setDays] = useState<any>([])
+
+    useEffect(() => {
+        function load(): void {
+            loadFoodEntries(['mensa'])
+                .then((loadedDays: Food[]) => {
+                    const filteredDays: Food[] = loadedDays.filter(
+                        (day: Food) =>
+                            new Date(day.timestamp).getTime() >= Date.now()
+                    )
+                    const formattedDays: Food[] = filteredDays.map(
+                        (day: Food) => ({
+                            timestamp: formatNearDate(day.timestamp),
+                            meals: day.meals,
+                        })
+                    )
+                    setDays(formattedDays)
+                })
+                .catch((e: Error) => {
+                    console.error(e)
+                    alert(e)
+                })
+        }
+
+        load()
+    }, [])
+
     return (
-        <>
-            <FoodScreen />
-        </>
+        <ScrollView>
+            <Text>{JSON.stringify(days, null, 2)}</Text>
+        </ScrollView>
     )
 }

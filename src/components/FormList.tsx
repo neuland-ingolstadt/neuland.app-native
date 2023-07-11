@@ -1,20 +1,17 @@
 import Divider from '@/components/Divider'
-import { type FormListSections } from '@customTypes/components'
+import { type Colors } from '@/components/provider'
+import { type FormListSections } from '@/stores/types/components'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
-import { type Theme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
-
-import { type Colors } from '../provider'
 
 interface FormListProps {
     sections: FormListSections[]
 }
 
 const FormList: React.FC<FormListProps> = ({ sections }) => {
-    const theme: Theme = useTheme()
-    const colors = theme.colors as Colors
+    const colors = useTheme().colors as Colors
     return (
         <>
             {sections.map((section, sectionIndex) => (
@@ -25,7 +22,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                     <Text
                         style={{
                             fontSize: 12,
-                            color: '#999',
+                            color: colors.labelSecondaryColor,
                             fontWeight: 'normal',
                             textTransform: 'uppercase',
                             marginBottom: 6,
@@ -37,7 +34,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                     <View
                         style={{
                             alignSelf: 'center',
-                            backgroundColor: colors.secondary,
+                            backgroundColor: colors.card,
                             borderRadius: 8,
                             width: '100%',
                             marginTop: 2,
@@ -76,7 +73,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 style={{
                                                     marginRight: 8,
                                                     fontSize: 16,
-                                                    color: '#999',
+                                                    color: colors.labelColor,
                                                 }}
                                             >
                                                 {item.value}
@@ -87,13 +84,17 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 name={item.icon as any}
                                                 size={18}
                                                 style={{ marginRight: 8 }}
-                                                color={colors.text}
+                                                color={
+                                                    colors.labelSecondaryColor
+                                                }
                                             />
                                         )}
                                     </View>
                                 </Pressable>
                                 {index < section.items.length - 1 && (
-                                    <Divider />
+                                    <Divider
+                                        color={colors.labelTertiaryColor}
+                                    />
                                 )}
                             </React.Fragment>
                         ))}

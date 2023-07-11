@@ -1,7 +1,7 @@
-import { type Food, type Meal } from '@customTypes/neuland-api'
+import { type Food, type Meal } from '@/stores/types/neuland-api'
 
-import NeulandAPI from '../backend/neuland-api'
-import { formatISODate, getAdjustedDay, getMonday } from '../date-utils'
+import NeulandAPI from '../api/neuland-api'
+import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
 
 /**
  * Fetches and parses the meal plan
