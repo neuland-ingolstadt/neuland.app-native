@@ -7,6 +7,27 @@
 # vs code
 .vscode/
 
-# target folders 
-ios/
-android/
+# yarn
+**/node_modules
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+
+# expo 
+.expo/
+
+# builds
+/ios
+/android
+/dist
+
+# env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+eas.json

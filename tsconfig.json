@@ -1,0 +1,12 @@
+{
+    "extends": "expo/tsconfig.base",
+    "baseUrl": ".",
+    "compilerOptions": {
+        "paths": {
+            "@customTypes/*": ["./src/stores/types/*"],
+            "@/*": ["./src/*"]
+        },
+
+        "strict": true
+    }
+}
