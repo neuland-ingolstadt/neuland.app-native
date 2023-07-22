@@ -1,11 +1,13 @@
-import { type Colors } from '@/components/provider'
+import { type Colors } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
-import { Tabs } from 'expo-router'
+import { Tabs, useRouter } from 'expo-router'
 import React from 'react'
+import { TouchableOpacity } from 'react-native'
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
+    const router = useRouter()
     const colors = theme.colors as Colors
 
     return (
@@ -22,6 +24,7 @@ export default function HomeLayout(): JSX.Element {
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="home" size={size} color={color} />
                         ),
+                        tabBarBadge: 3,
                     }}
                 />
 
@@ -55,6 +58,23 @@ export default function HomeLayout(): JSX.Element {
                                 size={size}
                                 color={color}
                             />
+                        ),
+                        headerRight: () => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    router.push('(food)/preferences')
+                                }}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    padding: 10,
+                                }}
+                            >
+                                <Ionicons
+                                    name="filter"
+                                    size={24}
+                                    color={colors.text}
+                                />
+                            </TouchableOpacity>
                         ),
                     }}
                 />

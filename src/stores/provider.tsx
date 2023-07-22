@@ -4,9 +4,11 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import { type Theme } from '@react-navigation/native'
-import React from 'react'
+import React, { createContext } from 'react'
 import { useColorScheme } from 'react-native'
 import { RootSiblingParent } from 'react-native-root-siblings'
+
+import { type FoodFilter, useFoodFilter } from './hooks/food-filter'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -27,6 +29,15 @@ export interface Colors {
 export interface AppTheme extends Theme {
     colors: Colors
 }
+
+export const FoodFilterContext = createContext<FoodFilter>({
+    allergenSelection: [],
+    preferencesSelection: [],
+    selectedRestaurants: [],
+    toggleSelectedAllergens: () => {},
+    toggleSelectedPreferences: () => {},
+    toggleSelectedRestaurant: () => {},
+})
 
 export default function Provider({
     children,
@@ -56,9 +67,13 @@ export default function Provider({
 
     const scheme = useColorScheme()
 
+    const foodFilter = useFoodFilter()
+
     return (
-        <ThemeProvider value={scheme === 'dark' ? darkTheme : lightTheme}>
-            <RootSiblingParent>{children}</RootSiblingParent>
-        </ThemeProvider>
+        <FoodFilterContext.Provider value={foodFilter}>
+            <ThemeProvider value={scheme === 'dark' ? darkTheme : lightTheme}>
+                <RootSiblingParent>{children}</RootSiblingParent>
+            </ThemeProvider>
+        </FoodFilterContext.Provider>
     )
 }
