@@ -4,12 +4,11 @@ import flapMap from '@/stores/data/mensa-flags.json'
 import { type Colors, FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
+import { formatPrice } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'
 import { Linking, ScrollView, Text, View } from 'react-native'
-
-import { formatPrice } from '../(tabs)/food'
 
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors

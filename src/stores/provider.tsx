@@ -52,7 +52,7 @@ export default function Provider({
             labelTertiaryColor: '#99999a',
             labelSecondaryColor: '#777778',
             labelColor: '#606062',
-            labelBackground: '#bababa',
+            labelBackground: '#d4d2d2',
         },
     }
 
