@@ -199,10 +199,10 @@ export default function Profile(): JSX.Element {
                     <Ionicons
                         name="log-out-outline"
                         size={24}
-                        color="green"
+                        color={colors.notification}
                         style={{ marginRight: 10 }}
                     />
-                    <Text style={{ color: 'green' }}>Logout</Text>
+                    <Text style={{ color: colors.notification }}>Logout</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>

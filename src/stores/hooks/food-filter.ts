@@ -11,9 +11,10 @@ export interface FoodFilter {
 }
 
 export function useFoodFilter(): FoodFilter {
-    const [preferencesSelection, setPreferencesSelection] = useState<string[]>(
-        []
-    )
+    const [preferencesSelection, setPreferencesSelection] = useState<string[]>([
+        'veg',
+        'V',
+    ])
     const [selectedRestaurants, setSelectedRestaurants] = useState<string[]>([
         'mensa',
     ])
@@ -25,7 +26,7 @@ export function useFoodFilter(): FoodFilter {
                 setAllergenSelection(JSON.parse(data))
             }
         })
-        void AsyncStorage.getItem('preferencesSelection').then((data) => {
+        void AsyncStorage.getItem('selectedPreferences').then((data) => {
             if (data != null) {
                 setPreferencesSelection(JSON.parse(data))
             }

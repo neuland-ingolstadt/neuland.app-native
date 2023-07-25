@@ -52,8 +52,8 @@ export default function FoodPreferences(): JSX.Element {
     ]
 
     return (
-        <View>
-            <>
+        <>
+            <View style={{ flex: 1 }}>
                 <View
                     style={{ marginTop: 18, width: '92%', alignSelf: 'center' }}
                 >
@@ -86,21 +86,42 @@ export default function FoodPreferences(): JSX.Element {
                         />
                     </View>
                 </View>
-            </>
 
-            <FormList sections={sections} />
-            <Text
+                <FormList sections={sections} />
+            </View>
+            <View
                 style={{
-                    fontSize: 11,
-                    margin: 17,
-                    fontWeight: 'normal',
-                    color: colors.labelColor,
-                    textAlign: 'justify',
+                    width: '92%',
+                    alignSelf: 'center',
+                    paddingBottom: 50,
                 }}
             >
-                We do not store any of your data on our servers. All data is
-                only stored locally on your device.
-            </Text>
-        </View>
+                <Text
+                    style={{
+                        fontSize: 11,
+                        fontWeight: 'normal',
+                        color: colors.labelColor,
+                        textAlign: 'justify',
+                    }}
+                >
+                    We do not store any of your data on our servers. All data is
+                    only stored locally on your device.
+                </Text>
+                <Text
+                    style={{
+                        fontSize: 11,
+                        fontWeight: 'normal',
+                        color: colors.labelColor,
+                        paddingTop: 8,
+                        textAlign: 'justify',
+                    }}
+                >
+                    We are not responsible for the correctness of the data.
+                    Please verify the correctness of the data with the
+                    respective restaurant before consume anything. You can also
+                    check the data source of each meal in the details view.
+                </Text>
+            </View>
+        </>
     )
 }

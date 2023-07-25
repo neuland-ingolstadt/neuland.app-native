@@ -4,7 +4,7 @@ import { type Colors, FoodFilterContext } from '@/stores/provider'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function FoodPreferences(): JSX.Element {
     const { q } = useGlobalSearchParams<{ q: string }>()
@@ -35,6 +35,17 @@ export default function FoodPreferences(): JSX.Element {
                     action={toggleSelectedPreferences}
                 />
             </View>
+            {filteredFlags.length === 0 && (
+                <Text
+                    style={{
+                        alignSelf: 'center',
+                        marginTop: 20,
+                        color: colors.labelColor,
+                    }}
+                >
+                    No matching flags found.
+                </Text>
+            )}
         </ScrollView>
     )
 }

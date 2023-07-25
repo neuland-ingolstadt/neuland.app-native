@@ -3,7 +3,7 @@ import { type Colors } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface Element {
     title: string
@@ -36,21 +36,8 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
                             { padding: 8 },
                         ]}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 5,
-                                paddingVertical: 4,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    marginLeft: 8,
-                                    fontSize: 16,
-                                    color: colors.text,
-                                }}
-                            >
+                        <View style={styles.container}>
+                            <Text style={[styles.text, { color: colors.text }]}>
                                 {item.title}
                             </Text>
                             {selectedItems.includes(item.key) ? (
@@ -59,6 +46,7 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
                                     size={18}
                                     style={{
                                         marginRight: 8,
+                                        alignSelf: 'center',
                                     }}
                                     color={colors.primary}
                                 />
@@ -75,3 +63,17 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
 }
 
 export default SectionPicker
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 5,
+        paddingVertical: 4,
+    },
+    text: {
+        marginLeft: 8,
+        fontSize: 16,
+        paddingVertical: 1,
+    },
+})

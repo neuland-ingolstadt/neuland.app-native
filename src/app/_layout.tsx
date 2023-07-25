@@ -1,9 +1,15 @@
 import Provider from '@/stores/provider'
 import { Stack, useRouter } from 'expo-router'
 import React from 'react'
+import { Platform, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
+
+    // workaround for not yet loaded theme in useTheme()
+    const theme = useColorScheme()
+    const colorText = theme === 'dark' ? '#fff' : '#000'
+
     return (
         <Provider>
             <Stack>
@@ -41,34 +47,76 @@ export default function RootLayout(): JSX.Element {
                         title: 'Flags',
                         headerSearchBarOptions: {
                             placeholder: 'Search flags',
-                            headerIconColor: 'grey',
+                            ...Platform.select({
+                                android: {
+                                    headerIconColor: colorText,
+                                    textColor: colorText,
+                                    hintTextColor: colorText,
+                                    tintColor: colorText,
+                                },
+                            }),
                             hideWhenScrolling: false,
                             onChangeText: (event) => {
-                                console.log('text', event.nativeEvent.text)
                                 router.setParams({
                                     q: event.nativeEvent.text,
                                 })
                             },
                         },
-                        presentation: 'modal',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
                     }}
                 />
                 <Stack.Screen
                     name="(food)/allergens"
                     options={{
                         title: 'Allergens',
+
                         headerSearchBarOptions: {
                             placeholder: 'Search allergens',
-                            headerIconColor: 'grey',
+                            ...Platform.select({
+                                android: {
+                                    headerIconColor: colorText,
+                                    textColor: colorText,
+                                    hintTextColor: colorText,
+                                    tintColor: colorText,
+                                },
+                            }),
                             hideWhenScrolling: false,
                             onChangeText: (event) => {
-                                console.log('text', event.nativeEvent.text)
                                 router.setParams({
                                     q: event.nativeEvent.text,
                                 })
                             },
+                            shouldShowHintSearchIcon: false,
                         },
-                        presentation: 'modal',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(food)/details"
+                    options={{
+                        title: 'Detail',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
                     }}
                 />
                 <Stack.Screen

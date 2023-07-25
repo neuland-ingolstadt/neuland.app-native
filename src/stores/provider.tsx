@@ -24,6 +24,7 @@ export interface Colors {
     card: string
     border: string
     background: string
+    labelBackground: string
 }
 
 export interface AppTheme extends Theme {
@@ -51,6 +52,7 @@ export default function Provider({
             labelTertiaryColor: '#99999a',
             labelSecondaryColor: '#777778',
             labelColor: '#606062',
+            labelBackground: '#bababa',
         },
     }
 
@@ -62,6 +64,7 @@ export default function Provider({
             labelTertiaryColor: '#4b4b4c',
             labelSecondaryColor: '#8e8e8f',
             labelColor: '#a4a4a5',
+            labelBackground: '#4a4a4a',
         },
     }
 

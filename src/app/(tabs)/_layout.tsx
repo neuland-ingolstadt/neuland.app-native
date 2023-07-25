@@ -15,6 +15,10 @@ export default function HomeLayout(): JSX.Element {
             <Tabs
                 screenOptions={{
                     tabBarActiveTintColor: colors.primary,
+
+                    tabBarLabelStyle: {
+                        marginBottom: 2,
+                    },
                 }}
             >
                 <Tabs.Screen
@@ -24,7 +28,6 @@ export default function HomeLayout(): JSX.Element {
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="home" size={size} color={color} />
                         ),
-                        tabBarBadge: 3,
                     }}
                 />
 
