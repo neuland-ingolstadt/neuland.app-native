@@ -1,3 +1,5 @@
+import LocalStorageCache from '@/stores/cache'
+
 import packageInfo from '../../package.json'
 
 const ENDPOINT: string =
@@ -6,6 +8,15 @@ const ENDPOINT: string =
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 class NeulandAPIClient {
+    protected cache: LocalStorageCache
+
+    constructor() {
+        this.cache = new LocalStorageCache({
+            namespace: 'neuland-api-client',
+            ttl: 5 * 60 * 1000, // 5 minutes
+        })
+    }
+
     /**
      * Performs a request against the neuland.app API
      * @param {string} url
@@ -24,16 +35,41 @@ class NeulandAPIClient {
         }
     }
 
+    /**
+     * Performs an cached request against the API
+     * @param {string} cacheKey Unique key that identifies this request
+     * @param {object} params Request data
+     * @returns {object}
+     */
+    async requestCached(cacheKey: string, url: string): Promise<any> {
+        const cached = await this.cache.get(cacheKey)
+        if (cached !== undefined) {
+            console.log('Using cached value for', cacheKey)
+            return cached
+        }
+        console.log('Requesting', cacheKey)
+        const resp = await this.performRequest(url)
+        await this.cache.set(cacheKey, resp)
+
+        return resp
+    }
+
     async getMensaPlan(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/mensa`)
+        return await this.requestCached('mensa-plan', `${ENDPOINT}/api/mensa`)
     }
 
     async getReimannsPlan(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/reimanns`)
+        return await this.requestCached(
+            'reimanns-plan',
+            `${ENDPOINT}/api/reimanns`
+        )
     }
 
     async getCanisiusPlan(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/canisius`)
+        return await this.requestCached(
+            'canisius-plan',
+            `${ENDPOINT}/api/canisius`
+        )
     }
 
     /**

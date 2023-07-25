@@ -18,7 +18,6 @@ const MealGroup = ({
 }: {
     group: Record<string, Meal[]>
 }): JSX.Element => {
-    console.log(JSON.stringify(group))
     return (
         <>
             {Object.entries(group).map(([key, value]) => (
