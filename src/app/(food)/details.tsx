@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     titleText: {
         marginVertical: 10,
         fontSize: 20,
-        fontWeight: '500',
     },
     notesContainer: {
         alignSelf: 'center',
