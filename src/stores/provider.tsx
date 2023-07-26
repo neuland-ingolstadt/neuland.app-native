@@ -9,6 +9,7 @@ import { useColorScheme } from 'react-native'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import { type FoodFilter, useFoodFilter } from './hooks/food-filter'
+import { useUserKind } from './hooks/user-kind'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -38,6 +39,11 @@ export const FoodFilterContext = createContext<FoodFilter>({
     toggleSelectedAllergens: () => {},
     toggleSelectedPreferences: () => {},
     toggleSelectedRestaurant: () => {},
+})
+
+export const UserKindContext = createContext<any>({
+    userKind: 'guest',
+    updateUserKind: () => {},
 })
 
 export default function Provider({
@@ -71,12 +77,17 @@ export default function Provider({
     const scheme = useColorScheme()
 
     const foodFilter = useFoodFilter()
+    const userKind = useUserKind()
 
     return (
-        <FoodFilterContext.Provider value={foodFilter}>
-            <ThemeProvider value={scheme === 'dark' ? darkTheme : lightTheme}>
-                <RootSiblingParent>{children}</RootSiblingParent>
-            </ThemeProvider>
-        </FoodFilterContext.Provider>
+        <UserKindContext.Provider value={userKind}>
+            <FoodFilterContext.Provider value={foodFilter}>
+                <ThemeProvider
+                    value={scheme === 'dark' ? darkTheme : lightTheme}
+                >
+                    <RootSiblingParent>{children}</RootSiblingParent>
+                </ThemeProvider>
+            </FoodFilterContext.Provider>
+        </UserKindContext.Provider>
     )
 }

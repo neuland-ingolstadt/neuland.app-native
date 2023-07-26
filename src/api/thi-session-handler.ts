@@ -38,7 +38,7 @@ export async function createSession(
     username: string,
     password: string,
     stayLoggedIn: boolean
-): Promise<void> {
+): Promise<boolean> {
     // convert to lowercase just to be safe
     // (the API used to show weird behavior when using upper case usernames)
     username = username.toLowerCase()
@@ -49,13 +49,13 @@ export async function createSession(
     const { session, isStudent } = await API.login(username, password)
 
     await AsyncStorage.setItem('sessionCreated', Date.now().toString())
-    await AsyncStorage.setItem('isStudent', isStudent.toString())
 
     await save('session', session)
     if (stayLoggedIn) {
         await save('username', username)
         await save('password', password)
     }
+    return isStudent
 }
 
 /**

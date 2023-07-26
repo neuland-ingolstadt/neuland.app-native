@@ -1,6 +1,11 @@
 import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/stores/data/allergens.json'
 import flapMap from '@/stores/data/mensa-flags.json'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/stores/hooks/user-kind'
 import { type Food, type Meal } from '@/stores/types/neuland-api'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
@@ -126,4 +131,46 @@ export function convertRelevantFlags(
  */
 export function formatPrice(price?: number): string {
     return price != null ? price.toFixed(2) + ' €' : ''
+}
+
+interface Prices {
+    [key: string]: number
+    guest: number
+    employee: number
+    student: number
+}
+/**
+ * Formats a price according to the users group (student, employee or guest).
+ * @param {object} meal Parsed meal object
+ * @param {string} userKind User group (student, employee or guest)
+ * @returns {string}
+ */
+export function getUserSpecificPrice(meal: Meal, userKind: string): string {
+    const prices: Prices = {
+        guest: meal.prices.guest,
+        employee: meal.prices.employee,
+        student: meal.prices.student,
+    }
+    return formatPrice(prices[userKind])
+}
+
+interface Labels {
+    [key: string]: string
+    guest: string
+    employee: string
+    student: string
+}
+/**
+ * Returns a label according to the users group (student, employee or guest).
+ * @param {string} userKind User group (student, employee or guest)
+ * @returns {string}
+ */
+
+export function getUserSpecificLabel(userKind: string): string {
+    const labels: Labels = {
+        [USER_GUEST]: 'for guests',
+        [USER_EMPLOYEE]: 'for employees',
+        [USER_STUDENT]: 'for students',
+    }
+    return labels[userKind]
 }

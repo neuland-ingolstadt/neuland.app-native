@@ -1,13 +1,19 @@
-import { type Colors, FoodFilterContext } from '@/stores/provider'
+import {
+    type Colors,
+    FoodFilterContext,
+    UserKindContext,
+} from '@/stores/provider'
 import {
     convertRelevantAllergens,
     convertRelevantFlags,
-    formatPrice,
+    getUserSpecificLabel,
+    getUserSpecificPrice,
 } from '@/utils/food-utils'
+import { type Meal } from '@customTypes/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 /**
@@ -20,17 +26,23 @@ export const MealEntry = ({
     meal,
     index,
 }: {
-    meal: any
+    meal: Meal
     index: number
 }): JSX.Element => {
     const { preferencesSelection, allergenSelection } =
         useContext(FoodFilterContext)
     const userAllergens = convertRelevantAllergens(
-        meal.allergens,
+        meal.allergens ?? [],
         allergenSelection
     )
     const colors = useTheme().colors as Colors
-    const userFlags = convertRelevantFlags(meal.flags, preferencesSelection)
+    const { userKind } = useContext(UserKindContext)
+    const userFlags = convertRelevantFlags(
+        meal.flags ?? [],
+        preferencesSelection
+    )
+
+    useEffect(() => {}, [userKind])
 
     return (
         <Pressable
@@ -112,7 +124,7 @@ export const MealEntry = ({
                     </View>
                     <View style={styles.priceContainer}>
                         <Text style={[styles.price, { color: colors.text }]}>
-                            {formatPrice(meal.prices.student)}
+                            {getUserSpecificPrice(meal, userKind)}
                         </Text>
                         <Text
                             style={[
@@ -120,7 +132,7 @@ export const MealEntry = ({
                                 { color: colors.labelColor },
                             ]}
                         >
-                            for students
+                            {getUserSpecificLabel(userKind)}
                         </Text>
                     </View>
                 </View>
