@@ -21,7 +21,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                 >
                     <Text
                         style={{
-                            fontSize: 12,
+                            fontSize: 13,
                             color: colors.labelSecondaryColor,
                             fontWeight: 'normal',
                             textTransform: 'uppercase',
@@ -57,6 +57,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                             justifyContent: 'space-between',
                                             paddingHorizontal: 5,
                                             paddingVertical: 4,
+                                            alignItems: 'center',
                                         }}
                                     >
                                         <Text
@@ -73,7 +74,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 style={{
                                                     marginRight: 8,
                                                     fontSize: 16,
-                                                    color: colors.labelColor,
+                                                    color:
+                                                        item.iconColor ??
+                                                        colors.labelColor,
                                                 }}
                                             >
                                                 {item.value}
@@ -85,6 +88,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 size={18}
                                                 style={{ marginRight: 8 }}
                                                 color={
+                                                    item.iconColor ??
                                                     colors.labelSecondaryColor
                                                 }
                                             />
@@ -99,6 +103,19 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                             </React.Fragment>
                         ))}
                     </View>
+                    {section.footer != null && (
+                        <Text
+                            style={{
+                                fontSize: 12,
+                                alignSelf: 'flex-start',
+                                color: colors.labelSecondaryColor,
+                                fontWeight: '400',
+                                marginTop: 6,
+                            }}
+                        >
+                            {section.footer}
+                        </Text>
+                    )}
                 </View>
             ))}
         </>

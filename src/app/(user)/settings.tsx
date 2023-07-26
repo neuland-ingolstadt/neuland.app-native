@@ -93,6 +93,13 @@ export default function Settings(): JSX.Element {
                         router.push('(user)/dashboard')
                     },
                 },
+                {
+                    title: 'Food',
+                    icon: 'fast-food-outline',
+                    onPress: () => {
+                        router.push('(food)/preferences')
+                    },
+                },
             ],
         },
         {
@@ -189,7 +196,7 @@ export default function Settings(): JSX.Element {
                                             }
                                         >
                                             <Ionicons
-                                                name="alert-circle-outline"
+                                                name="alert"
                                                 size={20}
                                                 color={colors.background}
                                             />

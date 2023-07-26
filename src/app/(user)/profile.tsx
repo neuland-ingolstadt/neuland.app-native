@@ -2,6 +2,7 @@ import API from '@/api/authenticated-api'
 import { createGuestSession, forgetSession } from '@/api/thi-session-handler'
 import FormList from '@/components/FormList'
 import { type Colors } from '@/stores/provider'
+import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { Ionicons } from '@expo/vector-icons'
@@ -23,9 +24,11 @@ export default function Profile(): JSX.Element {
     const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const { updateUserKind } = React.useContext(UserKindContext)
     const logout = async (): Promise<void> => {
         try {
             await forgetSession()
+            updateUserKind(undefined)
             await createGuestSession()
             router.push('(tabs)')
         } catch (e) {
@@ -199,10 +202,10 @@ export default function Profile(): JSX.Element {
                     <Ionicons
                         name="log-out-outline"
                         size={24}
-                        color="green"
+                        color={colors.notification}
                         style={{ marginRight: 10 }}
                     />
-                    <Text style={{ color: 'green' }}>Logout</Text>
+                    <Text style={{ color: colors.notification }}>Logout</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>

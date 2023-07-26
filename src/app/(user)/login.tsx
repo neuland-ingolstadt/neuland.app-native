@@ -1,6 +1,6 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { LoginFailureAlert } from '@/components/Settings'
-import { type Colors } from '@/stores/provider'
+import { type Colors, UserKindContext } from '@/stores/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { useTheme } from '@react-navigation/native'
 import Checkbox from 'expo-checkbox'
@@ -24,7 +24,6 @@ import Toast from 'react-native-root-toast'
 
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
-
     const [floating, setFloating] = useState(false)
 
     useEffect(() => {
@@ -51,6 +50,7 @@ export default function Login(): JSX.Element {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const { updateUserKind } = React.useContext(UserKindContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
@@ -60,8 +60,12 @@ export default function Login(): JSX.Element {
 
     async function login(): Promise<void> {
         try {
-            await createSession(username, password, saveCredentials)
-
+            const userKind = await createSession(
+                username,
+                password,
+                saveCredentials
+            )
+            updateUserKind(userKind)
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
