@@ -24,6 +24,7 @@
 /ios
 /android
 /dist
+*.aab
 
 # env
 .env.local
@@ -31,3 +32,4 @@
 .env.test.local
 .env.production.local
 eas.json
+
