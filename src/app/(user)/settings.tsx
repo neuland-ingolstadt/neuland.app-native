@@ -196,7 +196,7 @@ export default function Settings(): JSX.Element {
                                             }
                                         >
                                             <Ionicons
-                                                name="alert-circle-outline"
+                                                name="alert"
                                                 size={20}
                                                 color={colors.background}
                                             />

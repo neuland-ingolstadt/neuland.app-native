@@ -200,13 +200,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '92%',
         marginTop: 20,
-
         borderRadius: 8,
         alignItems: 'center',
     },
     titleText: {
         marginVertical: 10,
-        fontSize: 20,
+        fontSize: 18,
+        textAlign: 'center',
     },
     notesContainer: {
         alignSelf: 'center',

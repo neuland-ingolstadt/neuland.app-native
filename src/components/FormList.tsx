@@ -57,6 +57,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                             justifyContent: 'space-between',
                                             paddingHorizontal: 5,
                                             paddingVertical: 4,
+                                            alignItems: 'center',
                                         }}
                                     >
                                         <Text
@@ -74,7 +75,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                     marginRight: 8,
                                                     fontSize: 16,
                                                     color:
-                                                        item.color ??
+                                                        item.iconColor ??
                                                         colors.labelColor,
                                                 }}
                                             >

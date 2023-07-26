@@ -117,9 +117,9 @@ export default function FoodPreferences(): JSX.Element {
                     }}
                 >
                     We are not responsible for the correctness of the data.
-                    Please verify the correctness of the data with the
-                    respective restaurant before consume anything. You can also
-                    check the data source of each meal in the details view.
+                    Please verify the data with the respective restaurant before
+                    consume anything. You can also check the data source of each
+                    meal in the details view.
                 </Text>
             </View>
         </>

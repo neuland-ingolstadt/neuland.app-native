@@ -74,7 +74,7 @@ const MealCategory = ({
                                     : 'chevron-up-outline'
                             }
                             size={16}
-                            style={styles.warningIcon}
+                            style={styles.toogleIcon}
                             color={colors.primary}
                         />
                     </View>
@@ -186,7 +186,7 @@ export const MealDay = (
                     alignItems: 'center',
                 }}
             >
-                <Text style={{ color: colors.text }}>
+                <Text style={{ color: colors.text, fontSize: 16 }}>
                     No meals found for this day.
                 </Text>
             </View>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         paddingTop: 2,
         paddingBottom: 4,
     },
-    warningIcon: {
+    toogleIcon: {
         marginRight: 4,
         alignSelf: 'center',
     },
