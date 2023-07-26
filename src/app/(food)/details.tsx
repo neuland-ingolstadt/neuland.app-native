@@ -8,7 +8,7 @@ import { formatPrice } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'
-import { Linking, ScrollView, Text, View } from 'react-native'
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -167,38 +167,24 @@ export default function FoodDetail(): JSX.Element {
 
     return (
         <ScrollView>
-            <Text
-                style={{
-                    marginTop: 18,
-                    fontSize: 20,
-                    alignContent: 'center',
-                    width: '92%',
-                    alignSelf: 'center',
-                    textAlign: 'center',
-                    fontWeight: '500',
-                    color: colors.text,
-                }}
-                allowFontScaling={true}
-                adjustsFontSizeToFit={true}
-            >
-                {meal?.name.en}
-            </Text>
-            <FormList sections={sections} />
             <View
-                style={{
-                    alignSelf: 'center',
-                    width: '92%',
-                    marginTop: 20,
-                    marginBottom: 40,
-                }}
+                style={[
+                    styles.titleContainer,
+                    { backgroundColor: colors.card },
+                ]}
             >
                 <Text
-                    style={{
-                        textAlign: 'justify',
-                        fontSize: 12,
-                        color: colors.labelColor,
-                    }}
+                    style={[styles.titleText, { color: colors.text }]}
+                    allowFontScaling={true}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={2}
                 >
+                    {meal?.name.en}
+                </Text>
+            </View>
+            <FormList sections={sections} />
+            <View style={styles.notesContainer}>
+                <Text style={[styles.notesText, { color: colors.labelColor }]}>
                     This meal has been automatically translated. We are not
                     responsible for the correctness of the data. Please verify
                     the correctness of the data with the respective restaurant
@@ -208,3 +194,29 @@ export default function FoodDetail(): JSX.Element {
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    titleContainer: {
+        alignSelf: 'center',
+        width: '92%',
+        marginTop: 20,
+
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    titleText: {
+        marginVertical: 10,
+        fontSize: 20,
+        fontWeight: '500',
+    },
+    notesContainer: {
+        alignSelf: 'center',
+        width: '92%',
+        marginTop: 20,
+        marginBottom: 40,
+    },
+    notesText: {
+        textAlign: 'justify',
+        fontSize: 12,
+    },
+})

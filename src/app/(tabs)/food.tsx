@@ -111,6 +111,7 @@ export default function FoodScreen(): JSX.Element {
                             shadowRadius: 1,
                             elevation: 1,
                             alignItems: 'center',
+
                             paddingHorizontal: 16,
                             paddingVertical: 10,
                         }}

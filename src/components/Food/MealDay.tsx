@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     categoryText: {
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: '500',
     },
 })

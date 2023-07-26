@@ -108,7 +108,7 @@ export default function RootLayout(): JSX.Element {
                 <Stack.Screen
                     name="(food)/details"
                     options={{
-                        title: 'Detail',
+                        title: 'Details',
                         ...Platform.select({
                             android: {
                                 animation: 'slide_from_right',
