@@ -16,6 +16,13 @@ interface SectionPickerProps {
     action: (item: string) => void
 }
 
+/**
+ * A component that renders a list of selectable items with a title and a checkmark icon.
+ * @param {Element[]} elements - The list of selectable items.
+ * @param {string[]} selectedItems - The list of selected items.
+ * @param {(item: string) => void} action - The function to be called when an item is selected.
+ * @returns {JSX.Element} - The SectionPicker component.
+ */
 export const SectionPicker: React.FC<SectionPickerProps> = ({
     elements,
     selectedItems,

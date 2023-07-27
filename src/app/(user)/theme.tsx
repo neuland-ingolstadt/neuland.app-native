@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React from 'react'
-import { Pressable, ScrollView, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -57,27 +57,14 @@ export default function Theme(): JSX.Element {
                     style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
                 >
                     <View
-                        style={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: 4,
-
-                            marginHorizontal: 15,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center',
-                            flexDirection: 'row',
-                            backgroundColor: themeAccentColor,
-                            borderColor: colors.border,
-
-                            borderWidth: 2,
-                            borderTopLeftRadius: 10,
-                            borderTopRightRadius: 10,
-                            borderBottomLeftRadius: 10,
-                            borderBottomRightRadius: 10,
-                        }}
+                        style={[
+                            styles.colorBox,
+                            {
+                                backgroundColor: themeAccentColor,
+                                borderColor: colors.border,
+                            },
+                        ]}
                     >
-                        {/* Conditional rendering of checkmark icon */}
                         {accentColor === code && (
                             <Ionicons
                                 name={'checkmark-sharp'}
@@ -128,7 +115,6 @@ export default function Theme(): JSX.Element {
         )
     }
 
-    // Divide the accent colors into 3 rows of 3 colors each
     const colorRows = Array.from({ length: 3 }, (_, rowIndex) =>
         Object.entries(accentColors)
             .slice(rowIndex * 3, (rowIndex + 1) * 3)
@@ -149,27 +135,24 @@ export default function Theme(): JSX.Element {
                     }}
                 >
                     <Text
-                        style={{
-                            fontSize: 13,
-                            color: colors.labelSecondaryColor,
-                            fontWeight: 'normal',
-                            textTransform: 'uppercase',
-                            marginBottom: 4,
-                        }}
+                        style={[
+                            styles.sectionHeaderText,
+                            { color: colors.labelSecondaryColor },
+                        ]}
                     >
                         Accent Color
                     </Text>
 
                     <View
-                        style={{
-                            flexDirection: 'column',
-                            flexWrap: 'wrap',
-                            backgroundColor: colors.card,
-                            borderRadius: 8,
-                            alignContent: 'center',
-                            justifyContent: 'center',
-                            paddingVertical: 10,
-                        }}
+                        style={[
+                            styles.sectionContainer,
+                            {
+                                backgroundColor: colors.card,
+                                flexDirection: 'column',
+                                flexWrap: 'wrap',
+                                paddingVertical: 10,
+                            },
+                        ]}
                     >
                         {colorRows.map((rowColors, index) => (
                             <ColorBoxMatrix colors={rowColors} key={index} />
@@ -184,24 +167,21 @@ export default function Theme(): JSX.Element {
                     }}
                 >
                     <Text
-                        style={{
-                            fontSize: 13,
-                            color: colors.labelSecondaryColor,
-                            fontWeight: 'normal',
-                            textTransform: 'uppercase',
-                            marginBottom: 4,
-                        }}
+                        style={[
+                            styles.sectionHeaderText,
+                            { color: colors.labelSecondaryColor },
+                        ]}
                     >
                         Theme
                     </Text>
 
                     <View
-                        style={{
-                            backgroundColor: colors.card,
-                            borderRadius: 8,
-                            alignContent: 'center',
-                            justifyContent: 'center',
-                        }}
+                        style={[
+                            styles.sectionContainer,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
                     >
                         <SectionPicker
                             elements={myThemes}
@@ -214,3 +194,34 @@ export default function Theme(): JSX.Element {
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    colorBox: {
+        width: 60,
+        height: 60,
+        borderRadius: 4,
+
+        marginHorizontal: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        flexDirection: 'row',
+
+        borderWidth: 2,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+    },
+    sectionHeaderText: {
+        fontSize: 13,
+        fontWeight: 'normal',
+        textTransform: 'uppercase',
+        marginBottom: 4,
+    },
+    sectionContainer: {
+        borderRadius: 8,
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+})

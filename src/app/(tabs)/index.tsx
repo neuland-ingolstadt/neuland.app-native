@@ -17,7 +17,7 @@ export default function Screen(): JSX.Element {
         <>
             <Head>
                 <title>Dashboard</title>
-                <meta name="Dahsboard" content="Customizable Dashboard" />
+                <meta name="Dashboard" content="Customizable Dashboard" />
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>

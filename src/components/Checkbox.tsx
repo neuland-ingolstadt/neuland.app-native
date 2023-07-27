@@ -11,6 +11,15 @@ interface CheckboxProps {
     inactiveButtonStyle?: ViewStyle
 }
 
+/**
+ * Checkbox component that allows the user to select or deselect an option.
+ * @param checked - A boolean value that determines whether the checkbox is checked or not.
+ * @param onChange - A function that is called when the checkbox is pressed. It takes a boolean parameter that represents the new checked state.
+ * @param style - An optional style object that can be used to override the default styles of the checkbox.
+ * @param activeButtonStyle - An optional style object that can be used to override the default styles of the checkbox when it is checked.
+ * @param inactiveButtonStyle - An optional style object that can be used to override the default styles of the checkbox when it is unchecked.
+ * @returns A JSX.Element that represents the Checkbox component.
+ */
 export function Checkbox({
     checked,
     onChange,
