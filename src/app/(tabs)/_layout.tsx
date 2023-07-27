@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { Tabs, useRouter } from 'expo-router'

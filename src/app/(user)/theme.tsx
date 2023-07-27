@@ -1,0 +1,216 @@
+import SectionPicker from '@/components/SectionPicker'
+import { type Colors, accentColors } from '@/stores/colors'
+import { ThemeContext } from '@/stores/provider'
+import { getContrastColor } from '@/utils/ui-utils'
+import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
+import * as Haptics from 'expo-haptics'
+import React from 'react'
+import { Pressable, ScrollView, Text, View } from 'react-native'
+
+export default function Theme(): JSX.Element {
+    const colors = useTheme().colors as Colors
+    const deviceTheme = useTheme()
+    const { accentColor, toggleAccentColor, theme, toggleTheme } =
+        React.useContext(ThemeContext)
+
+    const myThemes = [
+        {
+            title: 'Dark',
+            key: 'dark',
+        },
+        {
+            title: 'Light',
+            key: 'light',
+        },
+        {
+            title: 'System',
+            key: 'system',
+        },
+    ]
+
+    interface ColorBoxColor {
+        name: string
+        light: string
+        dark: string
+    }
+
+    const ColorBox = ({
+        color,
+        code,
+    }: {
+        color: ColorBoxColor
+        code: string
+    }): JSX.Element => {
+        const themeAccentColor = deviceTheme.dark ? color.dark : color.light
+        return (
+            <View
+                style={{
+                    justifyContent: 'center',
+                }}
+            >
+                <Pressable
+                    onPress={() => {
+                        toggleAccentColor(code)
+                        void Haptics.selectionAsync()
+                    }}
+                    style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+                >
+                    <View
+                        style={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 4,
+
+                            marginHorizontal: 15,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            alignContent: 'center',
+                            flexDirection: 'row',
+                            backgroundColor: themeAccentColor,
+                            borderColor: colors.border,
+
+                            borderWidth: 2,
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10,
+                        }}
+                    >
+                        {/* Conditional rendering of checkmark icon */}
+                        {accentColor === code && (
+                            <Ionicons
+                                name={'checkmark-sharp'}
+                                size={24}
+                                color={getContrastColor(themeAccentColor)}
+                            />
+                        )}
+                    </View>
+                </Pressable>
+                <Text
+                    style={{
+                        color: colors.text,
+                        textAlign: 'center',
+                        paddingTop: 4,
+                    }}
+                >
+                    {color.name}
+                </Text>
+            </View>
+        )
+    }
+
+    interface ColorBoxMatrixProps {
+        colors: Array<{
+            code: string
+            color: ColorBoxColor
+        }>
+    }
+
+    const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    marginVertical: 2,
+                    paddingVertical: 4,
+                }}
+            >
+                {colors.map((color, index) => (
+                    <ColorBox
+                        color={color.color}
+                        code={color.code}
+                        key={index}
+                    />
+                ))}
+            </View>
+        )
+    }
+
+    // Divide the accent colors into 3 rows of 3 colors each
+    const colorRows = Array.from({ length: 3 }, (_, rowIndex) =>
+        Object.entries(accentColors)
+            .slice(rowIndex * 3, (rowIndex + 1) * 3)
+            .map(([key, value]) => ({
+                code: key,
+                color: value,
+            }))
+    )
+
+    return (
+        <>
+            <ScrollView>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        width: '92%',
+                        marginTop: 18,
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 13,
+                            color: colors.labelSecondaryColor,
+                            fontWeight: 'normal',
+                            textTransform: 'uppercase',
+                            marginBottom: 4,
+                        }}
+                    >
+                        Accent Color
+                    </Text>
+
+                    <View
+                        style={{
+                            flexDirection: 'column',
+                            flexWrap: 'wrap',
+                            backgroundColor: colors.card,
+                            borderRadius: 8,
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                            paddingVertical: 10,
+                        }}
+                    >
+                        {colorRows.map((rowColors, index) => (
+                            <ColorBoxMatrix colors={rowColors} key={index} />
+                        ))}
+                    </View>
+                </View>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        width: '92%',
+                        marginTop: 18,
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 13,
+                            color: colors.labelSecondaryColor,
+                            fontWeight: 'normal',
+                            textTransform: 'uppercase',
+                            marginBottom: 4,
+                        }}
+                    >
+                        Theme
+                    </Text>
+
+                    <View
+                        style={{
+                            backgroundColor: colors.card,
+                            borderRadius: 8,
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <SectionPicker
+                            elements={myThemes}
+                            selectedItems={[theme]}
+                            action={toggleTheme}
+                        />
+                    </View>
+                </View>
+            </ScrollView>
+        </>
+    )
+}

@@ -1,9 +1,11 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
+import { Checkbox } from '@/components/Checkbox'
 import { LoginFailureAlert } from '@/components/Settings'
-import { type Colors, UserKindContext } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
+import { UserKindContext } from '@/stores/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import Checkbox from 'expo-checkbox'
 import * as Haptics from 'expo-haptics'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
@@ -13,6 +15,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
+    Pressable,
     StyleSheet,
     Text,
     TextInput,
@@ -50,7 +53,7 @@ export default function Login(): JSX.Element {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { updateUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind } = React.useContext(UserKindContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
@@ -65,7 +68,7 @@ export default function Login(): JSX.Element {
                 password,
                 saveCredentials
             )
-            updateUserKind(userKind)
+            toggleUserKind(userKind)
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
@@ -191,20 +194,35 @@ export default function Login(): JSX.Element {
                             </View>
 
                             <View style={styles.checkboxContainer}>
-                                <Checkbox
-                                    onValueChange={setSaveCredentials}
-                                    value={saveCredentials}
-                                    color={
-                                        saveCredentials
-                                            ? colors.primary
-                                            : colors.labelSecondaryColor
-                                    }
-                                    style={{ marginRight: 10 }}
-                                />
+                                <Pressable
+                                    onPress={() => {
+                                        setSaveCredentials(!saveCredentials)
+                                    }}
+                                    style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Checkbox
+                                        checked={saveCredentials}
+                                        onChange={setSaveCredentials}
+                                        activeButtonStyle={{
+                                            backgroundColor: colors.primary,
+                                            borderColor: colors.border,
+                                        }}
+                                        inactiveButtonStyle={{
+                                            backgroundColor: colors.card,
+                                            borderColor: colors.labelColor,
+                                        }}
+                                        style={{
+                                            marginRight: 5,
+                                        }}
+                                    />
 
-                                <Text style={{ color: colors.text }}>
-                                    Stay signed in
-                                </Text>
+                                    <Text style={{ color: colors.text }}>
+                                        Stay signed in
+                                    </Text>
+                                </Pressable>
                             </View>
 
                             <TouchableOpacity
@@ -221,7 +239,7 @@ export default function Login(): JSX.Element {
                                 <Text
                                     style={{
                                         fontWeight: 'bold',
-                                        color: 'black',
+                                        color: getContrastColor(colors.primary),
                                     }}
                                 >
                                     Sign in
@@ -302,6 +320,7 @@ const styles = StyleSheet.create({
     },
     checkboxContainer: {
         paddingTop: 20,
+        marginRight: 10,
         paddingBottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
@@ -313,5 +332,13 @@ const styles = StyleSheet.create({
     guestText: {
         fontSize: 13,
         marginTop: 10,
+    },
+    checkboxChecked: {
+        backgroundColor: 'blue',
+        borderColor: 'blue',
+    },
+    checkboxUnchecked: {
+        backgroundColor: 'white',
+        borderColor: 'black',
     },
 })

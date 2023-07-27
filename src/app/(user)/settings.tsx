@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import FormList from '@/components/FormList'
 import { Avatar, NameBox } from '@/components/Settings'
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'

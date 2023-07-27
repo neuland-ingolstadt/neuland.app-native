@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession, forgetSession } from '@/api/thi-session-handler'
 import FormList from '@/components/FormList'
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
@@ -24,11 +24,11 @@ export default function Profile(): JSX.Element {
     const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { updateUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind } = React.useContext(UserKindContext)
     const logout = async (): Promise<void> => {
         try {
             await forgetSession()
-            updateUserKind(undefined)
+            toggleUserKind(undefined)
             await createGuestSession()
             router.push('(tabs)')
         } catch (e) {

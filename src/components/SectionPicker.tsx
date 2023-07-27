@@ -1,5 +1,5 @@
 import Divider from '@/components/Divider'
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
@@ -22,6 +22,7 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
     action,
 }) => {
     const colors = useTheme().colors as Colors
+    console.log(selectedItems)
 
     return (
         <>
