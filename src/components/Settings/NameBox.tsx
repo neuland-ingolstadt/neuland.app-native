@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
 import React, { type ReactNode } from 'react'
 import { Text, View } from 'react-native'
@@ -10,6 +10,16 @@ interface NameBoxProps {
     subTitle2?: string
 }
 
+/**
+ * A component that displays a box with a title and two subtitles.
+ *
+ * @param {NameBoxProps} props - The props object.
+ * @param {ReactNode} props.children - The children of the component.
+ * @param {string} props.title - The title of the box.
+ * @param {string} props.subTitle1 - The first subtitle of the box.
+ * @param {string} [props.subTitle2] - The second subtitle of the box (optional).
+ * @returns {JSX.Element} - The JSX element representing the component.
+ */
 const NameBox = ({
     children,
     title,

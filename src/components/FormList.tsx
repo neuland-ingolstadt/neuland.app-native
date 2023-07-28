@@ -1,5 +1,5 @@
 import Divider from '@/components/Divider'
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -10,6 +10,11 @@ interface FormListProps {
     sections: FormListSections[]
 }
 
+/**
+ * A component that renders a list of forms with headers and footers.
+ * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
+ * @returns {JSX.Element} - A React component that renders the list of forms.
+ */
 const FormList: React.FC<FormListProps> = ({ sections }) => {
     const colors = useTheme().colors as Colors
     return (

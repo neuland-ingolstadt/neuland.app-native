@@ -1,7 +1,8 @@
 import FormList from '@/components/FormList'
+import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
 import flapMap from '@/stores/data/mensa-flags.json'
-import { type Colors, FoodFilterContext } from '@/stores/provider'
+import { FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
 import { formatPrice } from '@/utils/food-utils'
@@ -200,11 +201,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '92%',
         marginTop: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
     },
     titleText: {
-        marginVertical: 10,
         fontSize: 18,
         textAlign: 'center',
     },
