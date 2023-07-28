@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { type Meal } from '@/stores/types/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -216,12 +216,12 @@ const styles = StyleSheet.create({
     dayRestaurantContainer: {
         width: '92%',
         alignSelf: 'center',
-        marginTop: 20,
-        marginBottom: 10,
+        marginTop: 10,
     },
     dayRestaurantTitle: {
         fontWeight: 'bold',
         fontSize: 18,
+        paddingTop: 5,
         paddingBottom: 5,
     },
     categoryContainer: {

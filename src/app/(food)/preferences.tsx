@@ -1,6 +1,7 @@
 import FormList from '@/components/FormList'
 import { SectionPicker } from '@/components/SectionPicker'
-import { type Colors, FoodFilterContext } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
+import { FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@customTypes/components'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -96,17 +97,6 @@ export default function FoodPreferences(): JSX.Element {
                     paddingBottom: 50,
                 }}
             >
-                <Text
-                    style={{
-                        fontSize: 11,
-                        fontWeight: 'normal',
-                        color: colors.labelColor,
-                        textAlign: 'justify',
-                    }}
-                >
-                    We do not store any of your data on our servers. All data is
-                    only stored locally on your device.
-                </Text>
                 <Text
                     style={{
                         fontSize: 11,

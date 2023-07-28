@@ -37,10 +37,11 @@ export function getNameColor(name: string): string {
  * @param background The background color in hexadecimal format (#RRGGBB).
  * @returns The appropriate text color (black or white).
  */
-export function getContrastColor(background: string): string {
-    const r = parseInt(background.substr(1, 2), 16)
-    const g = parseInt(background.substr(3, 2), 16)
-    const b = parseInt(background.substr(5, 2), 16)
+export const getContrastColor = (background: string): string => {
+    const hex = background.replace('#', '')
+    const r = parseInt(hex.substring(0, 2), 16)
+    const g = parseInt(hex.substring(2, 4), 16)
+    const b = parseInt(hex.substring(4, 6), 16)
     const yiq = (r * 299 + g * 587 + b * 114) / 1000
-    return yiq >= 128 ? 'black' : 'white'
+    return yiq >= 128 ? '#000000' : '#ffffff'
 }

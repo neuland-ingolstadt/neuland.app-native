@@ -120,6 +120,13 @@ export default function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
+                    name="(user)/theme"
+                    options={{
+                        title: 'Details',
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
                     name="(user)/profile"
                     options={{
                         title: 'Profile',

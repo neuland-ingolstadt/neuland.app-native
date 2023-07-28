@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession, forgetSession } from '@/api/thi-session-handler'
 import FormList from '@/components/FormList'
-import { type Colors } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
@@ -11,6 +11,7 @@ import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
+    Alert,
     Linking,
     Platform,
     ScrollView,
@@ -24,11 +25,11 @@ export default function Profile(): JSX.Element {
     const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { updateUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind } = React.useContext(UserKindContext)
     const logout = async (): Promise<void> => {
         try {
             await forgetSession()
-            updateUserKind(undefined)
+            toggleUserKind(undefined)
             await createGuestSession()
             router.push('(tabs)')
         } catch (e) {
@@ -73,6 +74,28 @@ export default function Profile(): JSX.Element {
             hideOnPress: true,
             delay: 0,
         })
+    }
+
+    const logoutAlert = (): void => {
+        Alert.alert(
+            'Confirm',
+            'This will log you out of the app and clear all your data.',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Logout',
+                    style: 'destructive',
+                    onPress: () => {
+                        logout().catch((e) => {
+                            console.log(e)
+                        })
+                    },
+                },
+            ]
+        )
     }
 
     if (userData == null) {
@@ -186,11 +209,7 @@ export default function Profile(): JSX.Element {
                 }}
             >
                 <TouchableOpacity
-                    onPress={() => {
-                        logout().catch((e) => {
-                            console.log(e)
-                        })
-                    }}
+                    onPress={logoutAlert}
                     activeOpacity={0.5}
                     style={{
                         flexDirection: 'row',

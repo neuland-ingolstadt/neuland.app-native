@@ -6,6 +6,7 @@
 
 # vs code
 .vscode/
+.VSCodeCounter/
 
 # yarn
 **/node_modules

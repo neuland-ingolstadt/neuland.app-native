@@ -1,4 +1,4 @@
-import LocalStorageCache from '@/stores/cache'
+import LocalStorageCache from '@/api/cache'
 
 import packageInfo from '../../package.json'
 

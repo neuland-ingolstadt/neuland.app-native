@@ -27,11 +27,14 @@ module.exports = {
             config: {
                 usesNonExemptEncryption: false,
             },
+            infoPlist: {
+                RCTAsyncStorageExcludeFromBackup: false,
+            },
         },
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 22,
+            versionCode: 23,
         },
         extra: {
             eas: {

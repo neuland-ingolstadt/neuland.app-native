@@ -5576,13 +5576,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-checkbox@npm:~2.4.0":
-  version: 2.4.0
-  resolution: "expo-checkbox@npm:2.4.0"
-  checksum: d468a6d8d23ea4f34651f1817b9ee46fce714cfb32d6461d12ec8514e65fc441748ba4752b688c2aa83f0c728b111fa81560bb6064dac24917d600ec69b2916e
-  languageName: node
-  linkType: hard
-
 "expo-clipboard@npm:~4.3.0":
   version: 4.3.0
   resolution: "expo-clipboard@npm:4.3.0"
@@ -8740,7 +8733,6 @@ __metadata:
     eslint-plugin-react: latest
     eslint-plugin-react-native: ^4.0.0
     expo: ^49.0.0
-    expo-checkbox: ~2.4.0
     expo-clipboard: ~4.3.0
     expo-constants: ~14.4.2
     expo-haptics: ~12.4.0

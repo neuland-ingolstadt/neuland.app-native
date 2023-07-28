@@ -1,9 +1,10 @@
 import { MealDay } from '@/components/Food'
-import { type Colors, FoodFilterContext } from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
+import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
-import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
+import * as Haptics from 'expo-haptics'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -44,6 +45,11 @@ export default function FoodScreen(): JSX.Element {
                     timestamp: day.timestamp,
                     meals: day.meals,
                 }))
+                if (formattedDays.length === 0) {
+                    setError(new Error('No meals available'))
+                    setLoadingState(LoadingState.ERROR)
+                    return
+                }
                 setDays(formattedDays)
                 setLoadingState(LoadingState.LOADED)
             })
@@ -92,29 +98,18 @@ export default function FoodScreen(): JSX.Element {
                 {/* Assign a unique key prop to the top-level View element */}
                 <Pressable
                     onPress={() => {
-                        void impactAsync(ImpactFeedbackStyle.Light)
+                        void Haptics.selectionAsync()
                         setSelectedDay(index)
                     }}
                 >
                     <View
-                        style={{
-                            backgroundColor: colors.card,
-                            width: '100%',
-                            alignSelf: 'center',
-                            borderRadius: 8,
-                            shadowColor: colors.text,
-                            shadowOffset: {
-                                width: 0,
-                                height: 1,
+                        style={[
+                            styles.dayButtonContainer,
+                            {
+                                backgroundColor: colors.card,
+                                shadowColor: colors.text,
                             },
-                            shadowOpacity: 0.1,
-                            shadowRadius: 1,
-                            elevation: 1,
-                            alignItems: 'center',
-
-                            paddingHorizontal: 16,
-                            paddingVertical: 10,
-                        }}
+                        ]}
                     >
                         <Text
                             style={{
@@ -122,7 +117,8 @@ export default function FoodScreen(): JSX.Element {
                                     selectedDay === index
                                         ? colors.primary
                                         : colors.text,
-                                fontWeight: '500',
+                                fontWeight:
+                                    selectedDay === index ? '600' : '500',
                                 fontSize: 16,
                             }}
                             adjustsFontSizeToFit={true}
@@ -141,6 +137,8 @@ export default function FoodScreen(): JSX.Element {
                                         ? colors.primary
                                         : colors.text,
                                 fontSize: 15,
+                                fontWeight:
+                                    selectedDay === index ? '500' : 'normal',
                             }}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
@@ -253,5 +251,21 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    dayButtonContainer: {
+        width: '100%',
+        alignSelf: 'center',
+        borderRadius: 8,
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+        elevation: 1,
+        alignItems: 'center',
+
+        paddingHorizontal: 16,
+        paddingVertical: 10,
     },
 })

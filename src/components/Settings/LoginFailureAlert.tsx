@@ -1,3 +1,9 @@
+/**
+ * A component that displays an alert when login fails.
+ * @param {string} errorMsg - The error message to display.
+ * @param {function} resetFailure - A function to reset the login failure state.
+ * @returns {JSX.Element} - A JSX element that displays the login failure alert.
+ */
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'

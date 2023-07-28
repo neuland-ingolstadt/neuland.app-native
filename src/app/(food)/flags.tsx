@@ -1,6 +1,7 @@
 import { SectionPicker } from '@/components/SectionPicker'
+import { type Colors } from '@/stores/colors'
 import flapMap from '@/stores/data/mensa-flags.json'
-import { type Colors, FoodFilterContext } from '@/stores/provider'
+import { FoodFilterContext } from '@/stores/provider'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'

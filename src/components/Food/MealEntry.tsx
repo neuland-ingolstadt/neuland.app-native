@@ -1,8 +1,5 @@
-import {
-    type Colors,
-    FoodFilterContext,
-    UserKindContext,
-} from '@/stores/provider'
+import { type Colors } from '@/stores/colors'
+import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import {
     convertRelevantAllergens,
     convertRelevantFlags,
