@@ -54,7 +54,12 @@ export default function Theme(): JSX.Element {
                         toggleAccentColor(code)
                         void Haptics.selectionAsync()
                     }}
-                    style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+                    style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.8 : 1,
+                            marginHorizontal: 15,
+                        },
+                    ]}
                 >
                     <View
                         style={[
@@ -201,7 +206,6 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 4,
 
-        marginHorizontal: 15,
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',

@@ -62,9 +62,33 @@ export default function Provider({
             const primary = accentColors[themeHook.accentColor][scheme]
             return primary
         } catch (e) {
-            console.log(e)
             return accentColors.teal[scheme]
         }
+    }
+
+    /**
+     * Returns the appropriate theme based on the current user preference and system scheme.
+     * @returns {AppTheme} The theme object to be used for styling the app.
+     */
+    const userTheme = (): AppTheme => {
+        switch (themeHook.theme) {
+            case 'light':
+                return lightTheme
+            case 'dark':
+                return darkTheme
+            case 'system':
+                return scheme === 'dark' ? darkTheme : lightTheme
+            default:
+                return lightTheme
+        }
+    }
+
+    /**
+     * Returns the status bar style based on the user's theme.
+     * @returns {'light-content' | 'dark-content'} The status bar style.
+     */
+    const statusBarStyle = (): 'light-content' | 'dark-content' => {
+        return userTheme().dark ? 'light-content' : 'dark-content'
     }
 
     const lightTheme: AppTheme = {
@@ -85,34 +109,12 @@ export default function Provider({
         },
     }
 
-    /**
-     * Returns the appropriate theme based on the current user preference and system scheme.
-     * @returns {AppTheme} The theme object to be used for styling the app.
-     */
-    const userTheme = (): AppTheme => {
-        switch (themeHook.theme) {
-            case 'light':
-                return lightTheme
-            case 'dark':
-                return darkTheme
-            case 'system':
-                return scheme === 'dark' ? darkTheme : lightTheme
-            default:
-                return lightTheme
-        }
-    }
     return (
         <ThemeContext.Provider value={themeHook}>
             <UserKindContext.Provider value={userKind}>
                 <FoodFilterContext.Provider value={foodFilter}>
                     <ThemeProvider value={userTheme()}>
-                        <StatusBar
-                            barStyle={
-                                userTheme().dark
-                                    ? 'light-content'
-                                    : 'dark-content'
-                            }
-                        />
+                        <StatusBar barStyle={statusBarStyle()} />
                         <RootSiblingParent>{children}</RootSiblingParent>
                     </ThemeProvider>
                 </FoodFilterContext.Provider>

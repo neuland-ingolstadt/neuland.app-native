@@ -42,7 +42,7 @@ export const accentColors: AccentColors = {
     thi: {
         name: 'THI',
         light: '#0b468a',
-        dark: '#104f98',
+        dark: '#115db3',
     },
     contrast: {
         name: 'Contrast',
@@ -64,19 +64,16 @@ export const accentColors: AccentColors = {
         light: '#74209e',
         dark: '#9b37d8',
     },
-
     yellow: {
         name: 'Yellow',
         light: '#d8c412',
         dark: '#e6d81f',
     },
-
     orange: {
         name: 'Orange',
         light: '#e3661d',
         dark: '#f1932e',
     },
-
     green: {
         name: 'Green',
         light: '#1fa31f',

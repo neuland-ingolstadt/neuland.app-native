@@ -29,7 +29,6 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
     action,
 }) => {
     const colors = useTheme().colors as Colors
-    console.log(selectedItems)
 
     return (
         <>

@@ -11,6 +11,7 @@ import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
+    Alert,
     Linking,
     Platform,
     ScrollView,
@@ -73,6 +74,28 @@ export default function Profile(): JSX.Element {
             hideOnPress: true,
             delay: 0,
         })
+    }
+
+    const logoutAlert = (): void => {
+        Alert.alert(
+            'Confirm',
+            'This will log you out of the app and clear all your data.',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Logout',
+                    style: 'destructive',
+                    onPress: () => {
+                        logout().catch((e) => {
+                            console.log(e)
+                        })
+                    },
+                },
+            ]
+        )
     }
 
     if (userData == null) {
@@ -186,11 +209,7 @@ export default function Profile(): JSX.Element {
                 }}
             >
                 <TouchableOpacity
-                    onPress={() => {
-                        logout().catch((e) => {
-                            console.log(e)
-                        })
-                    }}
+                    onPress={logoutAlert}
                     activeOpacity={0.5}
                     style={{
                         flexDirection: 'row',

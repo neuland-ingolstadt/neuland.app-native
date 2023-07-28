@@ -4,7 +4,7 @@ import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
-import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
+import * as Haptics from 'expo-haptics'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -98,7 +98,7 @@ export default function FoodScreen(): JSX.Element {
                 {/* Assign a unique key prop to the top-level View element */}
                 <Pressable
                     onPress={() => {
-                        void impactAsync(ImpactFeedbackStyle.Light)
+                        void Haptics.selectionAsync()
                         setSelectedDay(index)
                     }}
                 >
