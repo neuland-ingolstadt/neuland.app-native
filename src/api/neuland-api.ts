@@ -45,6 +45,7 @@ class NeulandAPIClient {
      * @param {string} cacheKey Unique key that identifies this request
      * @param {string} url The URL to perform the request against
      * @returns {Promise<any>} A promise that resolves with the response data
+
      */
     async requestCached(cacheKey: string, url: string): Promise<any> {
         const cached = await this.cache.get(cacheKey)

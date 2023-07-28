@@ -37,6 +37,7 @@ export const ThemeContext = createContext<any>({
     toggleTheme: () => {},
 })
 
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.

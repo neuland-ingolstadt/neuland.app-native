@@ -53,6 +53,7 @@ export default function Login(): JSX.Element {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    
     const { toggleUserKind } = React.useContext(UserKindContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
@@ -69,6 +70,7 @@ export default function Login(): JSX.Element {
                 saveCredentials
             )
             toggleUserKind(userKind)
+
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
