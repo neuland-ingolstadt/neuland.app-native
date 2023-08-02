@@ -1,11 +1,13 @@
 import { type Colors } from '@/stores/colors'
+import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 
 const Stack2 = createNativeStackNavigator()
 
@@ -60,39 +62,28 @@ export default function Screen(): JSX.Element {
 }
 
 function HomeScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
-    return (
-        <View style={styles.container}>
-            <View style={styles.innerContainer}>
-                <Text style={styles.heading}>🚧🏗️⚒️</Text>
+    const { shownDashboardEntries } = React.useContext(DashboardContext)
 
-                <Text
-                    style={{
-                        fontSize: 16,
-                        textAlign: 'center',
-                        paddingTop: 16,
-                        color: colors.text,
-                    }}
-                >
-                    Nothing to see here yet. Later you will find a customizable
-                    dashboard here, where you can add widgets and cards.
-                </Text>
-            </View>
-        </View>
+    return (
+        <>
+            <ScrollView contentInsetAdjustmentBehavior="automatic">
+                <View style={styles.container}>
+                    {shownDashboardEntries.map((item: any) => (
+                        <React.Fragment key={item.key}>
+                            {item.card()}
+                        </React.Fragment>
+                    ))}
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 16,
-    },
-    innerContainer: {
-        maxWidth: 600,
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '92%',
+        alignSelf: 'center',
+        paddingTop: 16,
     },
     heading: {
         fontSize: 32,

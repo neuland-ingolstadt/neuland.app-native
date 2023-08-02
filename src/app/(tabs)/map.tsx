@@ -1,12 +1,14 @@
+import htmlScript from '@/components/Map/html_script'
+import GeoJson from '@/stores/data/rooms_neuland.json'
+import { type Feature } from '@customTypes/data'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import React from 'react'
+import React, { useRef } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
-import MapView, { Marker } from 'react-native-maps'
+import { WebView } from 'react-native-webview'
 
 const Stack2 = createNativeStackNavigator()
-
 export default function Screen(): JSX.Element {
     return (
         <>
@@ -22,6 +24,7 @@ export default function Screen(): JSX.Element {
                     headerBackButtonMenuEnabled: false,
                 }}
             />
+
             <Stack2.Navigator>
                 <Stack2.Screen
                     name="Map"
@@ -32,11 +35,12 @@ export default function Screen(): JSX.Element {
                         ...Platform.select({
                             ios: {
                                 headerTransparent: true,
-                                headerBlurEffect: 'systemMaterial',
+                                headerBlurEffect: 'regular',
                             },
                         }),
                         headerSearchBarOptions: {
                             placeholder: 'Search for rooms, buildings, etc.',
+                            hideWhenScrolling: false,
                         },
                     }}
                     component={MapScreen}
@@ -47,31 +51,62 @@ export default function Screen(): JSX.Element {
 }
 
 export const MapScreen = (): JSX.Element => {
+    // inject geoson overlay to map
+
+    const features = GeoJson[0].features
+
+    const filterEtage = (etage: string): Feature[] => {
+        return features.filter((feature) => feature.properties.Etage === etage)
+    }
+    const _addGeoJson = (): void => {
+        const filteredFeatures = filterEtage('EG')
+        filteredFeatures.forEach((feature) => {
+            const coordinates = feature?.geometry?.coordinates
+            const name = feature?.properties?.Raum
+            const functionType = feature?.properties?.Funktion
+
+            if (coordinates == null) return
+
+            mapRef.current?.injectJavaScript(`
+                var geojsonFeature = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": ${JSON.stringify(coordinates)}
+                    },
+                    
+
+                };
+
+                    var roomMarker = L.geoJSON(geojsonFeature).addTo(mymap);
+
+                    
+
+
+
+                    L.geoJSON(geojsonFeature).addTo(mymap)
+                    .bindPopup("<b>${name.toString()}</b><br />${
+                        functionType != null ? functionType.toString() : ''
+                    }")
+                    true
+
+            `)
+        })
+    }
+
+    const mapRef = useRef<WebView>(null)
+
     return (
         <View style={styles.container}>
-            <MapView
-                showsPointsOfInterest={false}
-                showsBuildings={false}
-                mapType={Platform.OS === 'android' ? 'none' : 'standard'}
-                style={styles.map}
-                initialRegion={{
-                    latitude: 48.76659,
-                    longitude: 11.43328,
-                    latitudeDelta: 0.0022,
-                    longitudeDelta: 0.00421,
+            <WebView
+                ref={mapRef}
+                source={{ html: htmlScript }}
+                style={{ marginTop: 20 }}
+                // load the overlay after the map is loaded
+                onLoadEnd={() => {
+                    _addGeoJson()
                 }}
-                loadingEnabled={true}
-                showsUserLocation={true}
-                showsMyLocationButton={true}
-                userLocationCalloutEnabled={true}
-            >
-                <Marker
-                    draggable
-                    coordinate={{ latitude: 48.76659, longitude: 11.43328 }}
-                    title={'THI'}
-                    description={'Technische Hochschule Ingolstadt'}
-                />
-            </MapView>
+            />
         </View>
     )
 }
@@ -82,5 +117,22 @@ const styles = StyleSheet.create({
     },
     map: {
         flex: 1,
+    },
+    ButtonArea: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    Button: {
+        width: 80,
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: 'black',
+        alignItems: 'center',
+    },
+    ButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 14,
     },
 })

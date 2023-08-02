@@ -14,19 +14,16 @@ interface StaticThemeColors {
     labelSecondaryColor: string
     labelColor: string
     labelBackground: string
+    success: string
 }
 
-export interface Colors {
+export interface Colors extends StaticThemeColors {
     text: string
     primary: string
     notification: string
-    labelTertiaryColor: string
-    labelSecondaryColor: string
-    labelColor: string
     card: string
     border: string
     background: string
-    labelBackground: string
 }
 
 export interface AppTheme extends Theme {
@@ -86,6 +83,7 @@ export const lightColors: StaticThemeColors = {
     labelSecondaryColor: '#777778',
     labelColor: '#606062',
     labelBackground: '#d4d2d2',
+    success: '#1fa31f',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -93,4 +91,5 @@ export const darkColors: StaticThemeColors = {
     labelTertiaryColor: '#4b4b4c',
     labelColor: '#a4a4a5',
     labelBackground: '#4a4a4a',
+    success: '#37d837',
 }

@@ -88,14 +88,14 @@ export default function Settings(): JSX.Element {
                 },
                 {
                     title: 'Dashboard',
-                    icon: 'cube-outline',
+                    icon: 'grid-outline',
                     onPress: () => {
                         router.push('(user)/dashboard')
                     },
                 },
                 {
                     title: 'Food',
-                    icon: 'fast-food-outline',
+                    icon: 'restaurant-sharp',
                     onPress: () => {
                         router.push('(food)/preferences')
                     },

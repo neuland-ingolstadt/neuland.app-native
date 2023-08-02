@@ -19,6 +19,7 @@ export default function HomeLayout(): JSX.Element {
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
+                    lazy: false,
                 }}
             >
                 <Tabs.Screen
@@ -57,7 +58,7 @@ export default function HomeLayout(): JSX.Element {
                         title: 'Food',
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons
-                                name="fast-food"
+                                name="restaurant-sharp"
                                 size={size}
                                 color={color}
                             />

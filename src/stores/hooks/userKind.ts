@@ -1,7 +1,6 @@
 import * as SecureStore from 'expo-secure-store'
 import { useEffect, useState } from 'react'
 
-
 export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
