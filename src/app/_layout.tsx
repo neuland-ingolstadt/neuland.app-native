@@ -7,7 +7,6 @@ export default function RootLayout(): JSX.Element {
     const router = useRouter()
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
-    console.log('ThemeContext', theme)
 
     return (
         <>
@@ -122,7 +121,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/theme"
                         options={{
-                            title: 'Details',
+                            title: 'Accent Color',
                             animation: 'slide_from_right',
                         }}
                     />

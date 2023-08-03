@@ -33,8 +33,6 @@ export const UserKindContext = createContext<any>({
 export const ThemeContext = createContext<any>({
     accentColor: 'teal',
     toggleAccentColor: () => {},
-    theme: 'system',
-    toggleTheme: () => {},
 })
 
 export const DashboardContext = createContext<Dashboard>({
@@ -61,6 +59,8 @@ export default function Provider({
     const themeHook = useTheme()
     const dashboard = useDashboard()
 
+    const colorScheme = useColorScheme()
+
     /**
      * Returns the primary color for a given color scheme.
      * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
@@ -72,25 +72,6 @@ export default function Provider({
             return primary
         } catch (e) {
             return accentColors.teal[scheme]
-        }
-    }
-
-    /**
-     * Returns the appropriate theme based on the current user preference and system scheme.
-     * @returns {AppTheme} The theme object to be used for styling the app.
-     */
-
-    const colorScheme = useColorScheme()
-    const userTheme = (): AppTheme => {
-        switch (themeHook.theme) {
-            case 'light':
-                return lightTheme
-            case 'dark':
-                return darkTheme
-            case 'system':
-                return colorScheme === 'dark' ? darkTheme : lightTheme // Updated based on system color scheme
-            default:
-                return lightTheme
         }
     }
 
@@ -113,7 +94,7 @@ export default function Provider({
     }
 
     return (
-        <ThemeProvider value={userTheme()}>
+        <ThemeProvider value={colorScheme === 'dark' ? darkTheme : lightTheme}>
             <ThemeContext.Provider value={themeHook}>
                 <UserKindContext.Provider value={userKind}>
                     <DashboardContext.Provider value={dashboard}>

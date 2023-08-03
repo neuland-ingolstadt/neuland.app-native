@@ -24,7 +24,7 @@ const htmlScript = `
 <div id="mapid" style="width: 100%; height: 100vh;"></div>
 <script>
 
-	var mymap = L.map('mapid', {zoomControl: false}).setView([48.76659, 11.43328], 19);
+	var mymap = L.map('mapid', {zoomControl: false}).setView([48.76709, 11.4328], 17.5);
 
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,

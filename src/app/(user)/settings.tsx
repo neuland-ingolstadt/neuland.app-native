@@ -73,10 +73,24 @@ export default function Settings(): JSX.Element {
             header: 'Preferences',
             items: [
                 {
-                    title: 'Theme',
+                    title: 'Appearance',
                     icon: 'color-palette-outline',
                     onPress: () => {
                         router.push('(user)/theme')
+                    },
+                },
+                {
+                    title: 'Dashboard',
+                    icon: 'apps-outline',
+                    onPress: () => {
+                        router.push('(user)/dashboard')
+                    },
+                },
+                {
+                    title: 'Food',
+                    icon: 'restaurant-outline',
+                    onPress: () => {
+                        router.push('(food)/preferences')
                     },
                 },
                 {
@@ -86,20 +100,6 @@ export default function Settings(): JSX.Element {
                         await Linking.openSettings()
                     },
                 },
-                {
-                    title: 'Dashboard',
-                    icon: 'grid-outline',
-                    onPress: () => {
-                        router.push('(user)/dashboard')
-                    },
-                },
-                {
-                    title: 'Food',
-                    icon: 'restaurant-sharp',
-                    onPress: () => {
-                        router.push('(food)/preferences')
-                    },
-                },
             ],
         },
         {
@@ -107,7 +107,7 @@ export default function Settings(): JSX.Element {
             items: [
                 {
                     title: 'Primuss',
-                    icon: 'link-outline',
+                    icon: 'compass-outline',
                     onPress: async () =>
                         await Linking.openURL(
                             'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
@@ -115,13 +115,13 @@ export default function Settings(): JSX.Element {
                 },
                 {
                     title: 'Moodle',
-                    icon: 'link-outline',
+                    icon: 'compass-outline',
                     onPress: async () =>
                         await Linking.openURL('https://moodle.thi.de/'),
                 },
                 {
                     title: 'Webmail',
-                    icon: 'link-outline',
+                    icon: 'compass-outline',
                     onPress: async () =>
                         await Linking.openURL('http://outlook.thi.de/'),
                 },

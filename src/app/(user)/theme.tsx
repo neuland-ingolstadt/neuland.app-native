@@ -1,4 +1,3 @@
-import SectionPicker from '@/components/SectionPicker'
 import { type Colors, accentColors } from '@/stores/colors'
 import { ThemeContext } from '@/stores/provider'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -11,23 +10,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, toggleAccentColor, theme, toggleTheme } =
-        React.useContext(ThemeContext)
-
-    const myThemes = [
-        {
-            title: 'Dark',
-            key: 'dark',
-        },
-        {
-            title: 'Light',
-            key: 'light',
-        },
-        {
-            title: 'System',
-            key: 'system',
-        },
-    ]
+    const { accentColor, toggleAccentColor } = React.useContext(ThemeContext)
 
     interface ColorBoxColor {
         name: string
@@ -155,7 +138,7 @@ export default function Theme(): JSX.Element {
                                 backgroundColor: colors.card,
                                 flexDirection: 'column',
                                 flexWrap: 'wrap',
-                                paddingVertical: 10,
+                                paddingVertical: 18,
                             },
                         ]}
                     >
@@ -164,6 +147,7 @@ export default function Theme(): JSX.Element {
                         ))}
                     </View>
                 </View>
+
                 <View
                     style={{
                         alignSelf: 'center',
@@ -177,23 +161,42 @@ export default function Theme(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        Theme
+                        Exclusive Desings
                     </Text>
-
                     <View
                         style={[
                             styles.sectionContainer,
                             {
                                 backgroundColor: colors.card,
+                                flexDirection: 'column',
+                                flexWrap: 'wrap',
+                                paddingVertical: 36,
                             },
                         ]}
                     >
-                        <SectionPicker
-                            elements={myThemes}
-                            selectedItems={[theme]}
-                            action={toggleTheme}
-                        />
+                        <Text
+                            style={{
+                                color: colors.labelSecondaryColor,
+                                textAlign: 'center',
+                                fontSize: 16,
+                                alignSelf: 'center',
+                                justifyContent: 'center',
+                                letterSpacing: 1.5,
+                            }}
+                        >
+                            Coming Soon
+                        </Text>
                     </View>
+                    <Text
+                        style={{
+                            color: colors.labelSecondaryColor,
+                            marginTop: 14,
+                            fontSize: 12,
+                        }}
+                    >
+                        Change the accent color to match your style. This
+                        changes the color of the icons and buttons in the app.
+                    </Text>
                 </View>
             </ScrollView>
         </>
