@@ -26,7 +26,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
 })
 
 export const UserKindContext = createContext<any>({
-    userKind: 'guest',
+    userKind: 'student',
     toggleUserKind: () => {},
 })
 
@@ -92,6 +92,12 @@ export default function Provider({
             ...darkColors,
         },
     }
+
+    // log the userkind to the console
+
+    // if ( userKind.userKind === 'unkown' ) {
+    //     router.push('login')
+    // }
 
     return (
         <ThemeProvider value={colorScheme === 'dark' ? darkTheme : lightTheme}>

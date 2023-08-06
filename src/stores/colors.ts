@@ -15,6 +15,7 @@ interface StaticThemeColors {
     labelColor: string
     labelBackground: string
     success: string
+    datePickerBackground: string
 }
 
 export interface Colors extends StaticThemeColors {
@@ -84,6 +85,7 @@ export const lightColors: StaticThemeColors = {
     labelColor: '#606062',
     labelBackground: '#d4d2d2',
     success: '#1fa31f',
+    datePickerBackground: '#ebebec',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -92,4 +94,5 @@ export const darkColors: StaticThemeColors = {
     labelColor: '#a4a4a5',
     labelBackground: '#4a4a4a',
     success: '#37d837',
+    datePickerBackground: '#2a2a2c',
 }

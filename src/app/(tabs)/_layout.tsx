@@ -19,7 +19,7 @@ export default function HomeLayout(): JSX.Element {
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
-                    lazy: false,
+                    lazy: true,
                 }}
             >
                 <Tabs.Screen

@@ -134,7 +134,7 @@ export interface PersDataDetails {
 }
 
 export interface Rooms {
-    datum: Date
+    datum: string
     rtypes: Rtype[]
 }
 

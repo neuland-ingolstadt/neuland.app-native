@@ -148,6 +148,7 @@ export interface CRSProperties {
 }
 
 export interface Feature {
+    coordinates: any
     type: FeatureType
     id: string
     geometry: Geometry | null
@@ -172,7 +173,7 @@ export interface FeatureProperties {
     Standort: Standort
     Gebaeude: Gebaeude
     Etage: null | string
-    Ebene: number | string
+    Ebene: null | string
     Raum: string
     Funktion: null | string
 }

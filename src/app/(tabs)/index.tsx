@@ -49,7 +49,7 @@ export default function Screen(): JSX.Element {
                                 <Ionicons
                                     name="cog-outline"
                                     size={24}
-                                    color={colors.text}
+                                    color={colors.primary}
                                 />
                             </TouchableOpacity>
                         ),

@@ -146,6 +146,13 @@ export default function RootLayout(): JSX.Element {
                             animation: 'slide_from_right',
                         }}
                     />
+                    <Stack.Screen
+                        name="(map)/advanced"
+                        options={{
+                            title: 'Advanced Search',
+                            animation: 'slide_from_right',
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

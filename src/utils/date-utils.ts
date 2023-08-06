@@ -199,7 +199,10 @@ export function formatRelativeMinutes(datetime: Date | string): string {
  * @param {Date} date
  * @returns {string}
  */
-export function formatISODate(date: Date): string {
+export function formatISODate(date: Date | undefined): string {
+    if (date == null) {
+        return ''
+    }
     return (
         date.getFullYear().toString().padStart(4, '0') +
         '-' +
@@ -214,7 +217,10 @@ export function formatISODate(date: Date): string {
  * @param {Date} date
  * @returns {string}
  */
-export function formatISOTime(date: Date): string {
+export function formatISOTime(date: Date | undefined): string {
+    if (date == null) {
+        return ''
+    }
     return (
         date.getHours().toString().padStart(2, '0') +
         ':' +

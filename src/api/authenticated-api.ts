@@ -4,6 +4,7 @@ import {
     type Grades,
     type Lecturers,
     type PersData,
+    type Rooms,
 } from '@/stores/types/thi-api'
 
 import { APIError, AnonymousAPIClient } from './anonymous-api'
@@ -109,8 +110,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
             console.log('Using cached value for', cacheKey)
             return cached
         }
-        console.log('Requesting', cacheKey)
+        console.log('Requesting fron API', cacheKey)
         const resp = await this.requestAuthenticated(params)
+        console.log('Caching', cacheKey)
         await this.cache.set(cacheKey, resp)
 
         return resp
@@ -208,7 +210,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     /**
      * @param {Date} date Date to fetch the room availability for
      */
-    async getFreeRooms(date: Date): Promise<object> {
+    async getFreeRooms(date: Date): Promise<Rooms[]> {
         const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
         const res = await this.requestCached(key, {
             service: 'thiapp',
@@ -216,7 +218,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
             format: 'json',
             day: date.getDate(),
             month: date.getMonth() + 1,
-            year: 1900 + date.getFullYear(),
+            year: date.getFullYear(),
         })
 
         return res
