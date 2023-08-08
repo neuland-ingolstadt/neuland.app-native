@@ -38,7 +38,7 @@ const htmlScript = `
 
         var mymap = L.map('mapid', { zoomControl: false }).setView([48.76709, 11.4328], 17.5);
 
-        L.tileLayer('https://tileopenstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: 'Map data &copy; OpenStreetMap contributors, '
         }).addTo(mymap);

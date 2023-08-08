@@ -65,6 +65,14 @@ export default function Screen(): JSX.Element {
                                     q: event.nativeEvent.text,
                                 })
                             },
+                            ...Platform.select({
+                                android: {
+                                    headerIconColor: colors.text,
+                                    textColor: colors.text,
+                                    hintTextColor: colors.text,
+                                    tintColor: colors.text,
+                                },
+                            }),
                         },
                         ...Platform.select({
                             ios: {
@@ -96,13 +104,12 @@ export default function Screen(): JSX.Element {
 export const MapScreen = (): JSX.Element => {
     const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
     const FLOOR_SUBSTITUTES: Record<string, string> = {
-        0: 'EG', // room G0099
+        0: 'EG',
         0.5: '1.5',
         1: '1',
         2: '2',
         3: '3',
     }
-    const SEARCHED_PROPERTIES = ['Gebaeude', 'Raum', 'Funktion']
     const DEFAULT_CENTER = [48.76709, 11.4328]
     enum LoadingState {
         LOADING,
@@ -194,9 +201,9 @@ export const MapScreen = (): JSX.Element => {
 
             return room.properties[prop]?.toUpperCase()
         }
-
+        const searchProps = ['Gebaeude', 'Raum', 'Funktion']
         const fullTextSearcher = (room: any): boolean =>
-            SEARCHED_PROPERTIES.some(
+            searchProps.some(
                 (x) => getProp(room, x)?.toUpperCase().includes(cleanedText)
             )
         const roomOnlySearcher = (room: any): boolean =>
@@ -237,6 +244,33 @@ export const MapScreen = (): JSX.Element => {
         setCurrentFloor(currentFloor)
         _setView(q !== '' ? center : DEFAULT_CENTER, mapRef)
     }, [filteredRooms])
+
+    useEffect(() => {
+        _removeAllGeoJson(mapRef)
+        _addGeoJson()
+    }, [currentFloor, filteredRooms, colors])
+
+    useEffect(() => {
+        async function load(): Promise<void> {
+            try {
+                const dateObj = getNextValidDate()
+                const date = formatISODate(dateObj)
+                const time = formatISOTime(dateObj)
+                const rooms = await filterRooms(date, time)
+                setAvailableRooms(rooms)
+            } catch (e) {
+                if (
+                    e instanceof NoSessionError ||
+                    e instanceof UnavailableSessionError
+                ) {
+                    setAvailableRooms([])
+                } else {
+                    console.error(e)
+                }
+            }
+        }
+        void load()
+    }, [userKind, webViewKey])
 
     const filterEtage = (etage: string): RoomEntry[] => {
         const result = filteredRooms.filter(
@@ -349,34 +383,6 @@ export const MapScreen = (): JSX.Element => {
         })
     }
 
-    // add the geojson overlay to the map if floor is changed
-    useEffect(() => {
-        _removeAllGeoJson(mapRef)
-        _addGeoJson()
-    }, [currentFloor, filteredRooms, colors])
-
-    useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                const dateObj = getNextValidDate()
-                const date = formatISODate(dateObj)
-                const time = formatISOTime(dateObj)
-                const rooms = await filterRooms(date, time)
-                setAvailableRooms(rooms)
-            } catch (e) {
-                if (
-                    e instanceof NoSessionError ||
-                    e instanceof UnavailableSessionError
-                ) {
-                    setAvailableRooms([])
-                } else {
-                    console.error(e)
-                }
-            }
-        }
-        void load()
-    }, [userKind, webViewKey])
-
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <View style={{ flex: 1, position: 'relative' }}>
@@ -392,7 +398,7 @@ export const MapScreen = (): JSX.Element => {
                             left: 0,
                             right: 0,
                             zIndex: 3,
-                            backgroundColor: 'white',
+                            backgroundColor: colors.background,
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}
@@ -403,6 +409,7 @@ export const MapScreen = (): JSX.Element => {
                                 marginBottom: 10,
                                 textAlign: 'center',
                                 fontWeight: 'bold',
+                                color: colors.text,
                             }}
                         >
                             {errorMsg === 'noInternetConnection' &&
@@ -414,6 +421,7 @@ export const MapScreen = (): JSX.Element => {
                                 fontSize: 16,
                                 marginBottom: 20,
                                 textAlign: 'center',
+                                color: colors.text,
                             }}
                         >
                             There was a problem loading the map.
@@ -477,26 +485,6 @@ export const MapScreen = (): JSX.Element => {
                         onContentProcessDidTerminate={
                             onContentProcessDidTerminate
                         }
-                        renderError={() => (
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    zIndex: 2,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Text>
-                                    Beim Laden der Karte ist ein Fehler
-                                    aufgetreten.
-                                </Text>
-                            </View>
-                        )}
-                        cacheMode="LOAD_NO_CACHE"
                         onMessage={(event) => {
                             const data = event.nativeEvent.data
                             if (
