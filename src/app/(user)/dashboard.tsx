@@ -17,11 +17,6 @@ import DraggableFlatList, {
     ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
-import Animated, { useAnimatedStyle } from 'react-native-reanimated'
-import SwipeableItem, {
-    OpenDirection,
-    useSwipeableItemParams,
-} from 'react-native-swipeable-item'
 
 interface Item {
     key: string
@@ -39,16 +34,23 @@ export default function DashboardEdit(): JSX.Element {
     } = React.useContext(DashboardContext)
     const colors = useTheme().colors as Colors
     const itemRefs = useRef(new Map())
+    const [refresh, setRefresh] = useState(false)
 
     // update view if shownDashboardEntries changes
     useEffect(() => {
         itemRefs.current = new Map()
-    }, [shownDashboardEntries, bringBackDashboardEntry, hideDashboardEntry])
+    }, [
+        shownDashboardEntries,
+        bringBackDashboardEntry,
+        hideDashboardEntry,
+        refresh,
+    ])
 
     const renderItem = useCallback((params: RenderItemParams<Item>) => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             hideDashboardEntry(params.item.key)
+            setRefresh(!refresh)
         }
 
         return (
@@ -232,85 +234,49 @@ interface RowItemProps {
     itemRefs: React.MutableRefObject<Map<any, any>>
 }
 
-function RowItem({
-    item,
-    itemRefs,
-    drag,
-    onPressDelete,
-}: RowItemProps): JSX.Element {
-    const [snapPointsLeft] = useState([75])
+function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
-    useEffect(() => {
-        if (item.key === 'key-0') {
-            setTimeout(() => {
-                itemRefs.current
-                    ?.get(item.key)
-                    ?.open(OpenDirection.LEFT, undefined, { animated: true })
-            }, 1000)
-        }
-    }, [item.key])
+
     const { shownDashboardEntries } = React.useContext(DashboardContext)
 
     return (
         <ScaleDecorator>
-            <SwipeableItem
-                key={item.key}
-                item={item}
-                renderUnderlayLeft={() => (
-                    <UnderlayLeft onPressDelete={onPressDelete} />
-                )}
-                snapPointsLeft={snapPointsLeft}
+            <TouchableOpacity
+                activeOpacity={1}
+                onLongPress={drag}
+                style={[styles.row, { backgroundColor: colors.card }]}
             >
-                <TouchableOpacity
-                    activeOpacity={1}
-                    onLongPress={drag}
-                    style={[styles.row, { backgroundColor: colors.card }]}
+                <View
+                    style={{
+                        flexDirection: 'row',
+
+                        alignItems: 'center',
+                    }}
                 >
-                    <Text
-                        style={[styles.text, { color: colors.text }]}
-                    >{`${item.text}`}</Text>
                     <Ionicons
                         name="reorder-three-outline"
                         size={24}
-                        color={colors.labelSecondaryColor}
-                        style={{ marginRight: 10 }}
+                        color={colors.labelTertiaryColor}
+                        style={{ marginLeft: 10 }}
                     />
-                </TouchableOpacity>
-                {shownDashboardEntries.findIndex((i) => i.key === item.key) <
-                    shownDashboardEntries.length - 1 && (
-                    <Divider color={colors.labelTertiaryColor} />
-                )}
-            </SwipeableItem>
-        </ScaleDecorator>
-    )
-}
+                    <Text
+                        style={[styles.text, { color: colors.text }]}
+                    >{`${item.text}`}</Text>
+                </View>
 
-const UnderlayLeft = ({
-    onPressDelete,
-}: {
-    onPressDelete: () => void
-}): React.ReactElement => {
-    const { percentOpen } = useSwipeableItemParams<Item>()
-    const animStyle = useAnimatedStyle(
-        () => ({
-            opacity: percentOpen.value,
-        }),
-        [percentOpen]
-    )
-
-    return (
-        <Animated.View
-            style={[styles.row, styles.underlayLeft, animStyle]} // Fade in on open
-        >
-            <TouchableOpacity onPress={onPressDelete}>
                 <Ionicons
-                    name="trash-outline"
+                    name="remove-circle-outline"
                     size={24}
-                    color="white"
+                    color={colors.labelSecondaryColor}
+                    onPress={onPressDelete}
                     style={{ marginRight: 10 }}
                 />
             </TouchableOpacity>
-        </Animated.View>
+            {shownDashboardEntries.findIndex((i) => i.key === item.key) <
+                shownDashboardEntries.length - 1 && (
+                <Divider color={colors.labelTertiaryColor} />
+            )}
+        </ScaleDecorator>
     )
 }
 
