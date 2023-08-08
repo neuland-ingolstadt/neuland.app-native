@@ -60,6 +60,8 @@ export default function Screen(): JSX.Element {
 
                         headerSearchBarOptions: {
                             placeholder: 'Search for: G, W003, Toilette, ...',
+                            hideWhenScrolling: false,
+                            hideNavigationBar: true,
                             onChangeText: (event) => {
                                 router.setParams({
                                     q: event.nativeEvent.text,
@@ -128,7 +130,7 @@ export const MapScreen = (): JSX.Element => {
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const mapRef = useRef<WebView>(null)
-    const onContentProcessDidTerminate = (): void => mapRef.current?.reload()
+
     const router = useRouter()
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })
@@ -375,6 +377,9 @@ export const MapScreen = (): JSX.Element => {
             </View>
         )
     }
+    const onContentProcessDidTerminate = (): void => {
+        setWebViewKey((k) => k + 1)
+    }
 
     const _addGeoJson = (): void => {
         const filteredFeatures = filterEtage(currentFloor)
@@ -384,7 +389,10 @@ export const MapScreen = (): JSX.Element => {
     }
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView
+            style={styles.container}
+            edges={Platform.OS === 'ios' ? ['top'] : []}
+        >
             <View style={{ flex: 1, position: 'relative' }}>
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
@@ -446,19 +454,6 @@ export const MapScreen = (): JSX.Element => {
                 )}
 
                 <View style={styles.map}>
-                    {loadingState === LoadingState.LOADING && (
-                        <ActivityIndicator
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                zIndex: 2,
-                            }}
-                        />
-                    )}
-
                     <WebView
                         key={webViewKey}
                         ref={mapRef}
@@ -471,16 +466,28 @@ export const MapScreen = (): JSX.Element => {
                         }}
                         startInLoadingState={true}
                         renderLoading={() => (
-                            <ActivityIndicator
+                            <View
                                 style={{
-                                    position: 'absolute',
+                                    backgroundColor: colors.background,
                                     top: 0,
                                     bottom: 0,
                                     left: 0,
+                                    position: 'absolute',
                                     right: 0,
                                     zIndex: 2,
                                 }}
-                            />
+                            >
+                                <ActivityIndicator
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        zIndex: 3,
+                                    }}
+                                />
+                            </View>
                         )}
                         onContentProcessDidTerminate={
                             onContentProcessDidTerminate
@@ -495,6 +502,9 @@ export const MapScreen = (): JSX.Element => {
                                 setErrorMsg(data)
                             }
                         }}
+                        style={{
+                            backgroundColor: colors.background,
+                        }}
                     />
                 </View>
             </View>
@@ -503,32 +513,6 @@ export const MapScreen = (): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 16,
-        borderRadius: 8,
-    },
-    modalTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    filteredRoomsList: {
-        maxHeight: 200,
-        overflow: 'scroll',
-        marginBottom: 16,
-    },
-    dismissButton: {
-        color: 'blue',
-        fontSize: 16,
-        textAlign: 'center',
-    },
     container: {
         flex: 1,
         position: 'relative',
