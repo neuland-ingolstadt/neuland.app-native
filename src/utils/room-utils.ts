@@ -177,6 +177,22 @@ export interface AvailableRoom {
     room: string
     type: string
 }
+
+export interface RoomEntry {
+    coordinates: number[][]
+    options?: string[]
+    properties: Properties
+}
+
+interface Properties {
+    Ebene: string
+    Etage: string
+    Funktion: string
+    Gebaeude: string
+    Raum: string
+    Standort: string
+}
+
 /**
  * Filters suitable room openings.
  * @param {string} date Start date as an ISO string
@@ -223,7 +239,6 @@ export async function searchRooms(
 ): Promise<AvailableRoom[]> {
     const data = await API.getFreeRooms(beginDate)
     const openings = getRoomOpenings(data, beginDate)
-    console.log('openings')
     return Object.keys(openings)
         .flatMap((room) =>
             openings[room].map((opening) => ({

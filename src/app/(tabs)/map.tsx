@@ -3,16 +3,14 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import htmlScript from '@/components/Map/html_script'
+import { _addRoom, _removeAllGeoJson, _setView } from '@/components/Map/inject'
 import { type Colors } from '@/stores/colors'
 import GeoJson from '@/stores/data/map.json'
 import { UserKindContext } from '@/stores/provider'
-import {
-    formatFriendlyTime,
-    formatISODate,
-    formatISOTime,
-} from '@/utils/date-utils'
+import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     type AvailableRoom,
+    type RoomEntry,
     filterRooms,
     getNextValidDate,
 } from '@/utils/room-utils'
@@ -96,6 +94,7 @@ export default function Screen(): JSX.Element {
 }
 
 export const MapScreen = (): JSX.Element => {
+    const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
     const FLOOR_SUBSTITUTES: Record<string, string> = {
         0: 'EG', // room G0099
         0.5: '1.5',
@@ -103,26 +102,49 @@ export const MapScreen = (): JSX.Element => {
         2: '2',
         3: '3',
     }
+    const SEARCHED_PROPERTIES = ['Gebaeude', 'Raum', 'Funktion']
+    const DEFAULT_CENTER = [48.76709, 11.4328]
+    enum LoadingState {
+        LOADING,
+        LOADED,
+        ERROR,
+    }
+    const [errorMsg, setErrorMsg] = useState('')
+    const selectedLocation = 'IN'
+    const colors = useTheme().colors as Colors
     const { userKind } = React.useContext(UserKindContext)
     const { q } = useLocalSearchParams<{ q: string }>()
     const { h } = useLocalSearchParams<{ h: string }>()
 
-    const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
     const [showDismissModal, setShowDismissModal] = useState(false)
+    const [currentFloor, setCurrentFloor] = useState('EG')
+    const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
+    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const mapRef = useRef<WebView>(null)
+    const onContentProcessDidTerminate = (): void => mapRef.current?.reload()
     const router = useRouter()
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })
         router.setParams({ q: '' })
-        _setView(DEFAULT_CENTER)
+        _setView(DEFAULT_CENTER, mapRef)
         setShowDismissModal(false)
     }
-    const selectedLocation = 'IN'
 
     useEffect(() => {
-        if (h !== '') {
+        // if the user was redirected to the map screen, show the dismiss modal
+        if (h !== '' && h !== undefined) {
             setShowDismissModal(true)
         }
     }, [h])
+
+    useEffect(() => {
+        // if the user starts a new search, reset the dismiss modal button
+        if (q?.length === 1) {
+            setShowDismissModal(false)
+            router.setParams({ h: '' })
+        }
+    }, [q])
+
     const allRooms = useMemo(() => {
         return GeoJson.features
             .map((feature) => {
@@ -154,20 +176,7 @@ export const MapScreen = (): JSX.Element => {
             })
             .flat()
     }, [GeoJson])
-
-    const SEARCHED_PROPERTIES = ['Gebaeude', 'Raum', 'Funktion']
-
-    const [currentFloor, setCurrentFloor] = useState('EG')
-    const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-    }
-
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-
+    const [webViewKey, setWebViewKey] = useState(0)
     const [filteredRooms, center] = useMemo(() => {
         if (q == null) {
             return [allRooms, DEFAULT_CENTER]
@@ -226,7 +235,7 @@ export const MapScreen = (): JSX.Element => {
             ? 'EG'
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
-        _setView(center)
+        _setView(q !== '' ? center : DEFAULT_CENTER, mapRef)
     }, [filteredRooms])
 
     const filterEtage = (etage: string): RoomEntry[] => {
@@ -235,9 +244,10 @@ export const MapScreen = (): JSX.Element => {
         )
         return result
     }
-    const colors = useTheme().colors as Colors
+
     const FloorPicker = (floors: { floors: string[] }): JSX.Element => {
         const isEmpty = floors.floors.length === 0
+        const colors = useTheme().colors as Colors
         return (
             <View style={[styles.ButtonArea, { marginTop: 100 }]}>
                 <View
@@ -332,97 +342,18 @@ export const MapScreen = (): JSX.Element => {
         )
     }
 
-    const DEFAULT_CENTER = [48.76709, 11.4328]
-
     const _addGeoJson = (): void => {
         const filteredFeatures = filterEtage(currentFloor)
-        // create two layers for available and unavailable rooms
-        // the available rooms are purple and in the front
-
         filteredFeatures.forEach((feature) => {
-            console.log(feature)
-            _addRoom(feature)
+            _addRoom(feature, availableRooms, mapRef, colors)
         })
-    }
-
-    interface RoomEntry {
-        coordinates: number[][]
-        options?: string[]
-        properties: Properties
-    }
-
-    interface Properties {
-        Ebene: string
-        Etage: string
-        Funktion: string
-        Gebaeude: string
-        Raum: string
-        Standort: string
-    }
-
-    const _addRoom = (room: RoomEntry): void => {
-        const coordinates = [[...room.coordinates]]
-        const name = room?.properties?.Raum
-        const functionType = room?.properties?.Funktion
-        const avail = availableRooms?.find((x) => x.room === name)
-
-        const color = avail != null ? colors.primary : 'grey'
-
-        if (coordinates == null) return
-        mapRef.current?.injectJavaScript(`
-    var geojsonFeature = {
-        "type": "Feature",
-        "geometry": {
-            "type": "Polygon",
-            "coordinates": ${JSON.stringify(coordinates)}
-        },
-    };
-
-    L.geoJSON(geojsonFeature, {
-        color: ${JSON.stringify(color)},
-        fillOpacity: 0.2,
-    }).addTo(mymap).bringToBack()
-    .bindPopup("<b>${name.toString()} </b><br>${
-        functionType != null ? functionType.toString() : ''
-    }<br>${
-        avail != null
-            ? 'Free from ' +
-              formatFriendlyTime(avail.from) +
-              ' to ' +
-              formatFriendlyTime(avail.until)
-            : ''
-    }");
-    true
-`)
-    }
-
-    const _removeAllGeoJson = (): void => {
-        mapRef.current?.injectJavaScript(`
-            mymap.eachLayer(function (layer) {
-                if (layer instanceof L.GeoJSON) {
-                    mymap.removeLayer(layer);
-                }
-            });
-            true
-        `)
-    }
-
-    const _setView = (center: number[] | undefined): void => {
-        if (center == null) return
-        mapRef.current?.injectJavaScript(`
-    mymap.setView(${JSON.stringify(center)}, 18);
-    true;
-  `)
     }
 
     // add the geojson overlay to the map if floor is changed
     useEffect(() => {
-        _removeAllGeoJson()
+        _removeAllGeoJson(mapRef)
         _addGeoJson()
     }, [currentFloor, filteredRooms, colors])
-
-    const mapRef = useRef<WebView>(null)
-    const onContentProcessDidTerminate = (): void => mapRef.current?.reload()
 
     useEffect(() => {
         async function load(): Promise<void> {
@@ -437,24 +368,73 @@ export const MapScreen = (): JSX.Element => {
                     e instanceof NoSessionError ||
                     e instanceof UnavailableSessionError
                 ) {
-                    alert(e.message)
                     setAvailableRooms([])
                 } else {
                     console.error(e)
-                    alert(e)
                 }
             }
         }
         void load()
-    }, [userKind])
-
-    // ...
+    }, [userKind, webViewKey])
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
+                )}
+                {loadingState === LoadingState.ERROR && (
+                    <View
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            zIndex: 3,
+                            backgroundColor: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                marginBottom: 10,
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            {errorMsg === 'noInternetConnection' &&
+                                'No internet connection'}
+                            {errorMsg === 'mapLoadError' && 'Unknown error'}
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                marginBottom: 20,
+                                textAlign: 'center',
+                            }}
+                        >
+                            There was a problem loading the map.
+                            {'\n'}
+                            Please try again.
+                        </Text>
+                        <Pressable
+                            onPress={() => {
+                                // Increment the key to trigger a WebView reload
+                                setWebViewKey(webViewKey + 1)
+                                setLoadingState(LoadingState.LOADING)
+                            }}
+                            style={{
+                                backgroundColor: colors.datePickerBackground,
+                                padding: 10,
+                                borderRadius: 5,
+                            }}
+                        >
+                            <Text style={{ color: colors.text }}> Reload </Text>
+                        </Pressable>
+                    </View>
                 )}
 
                 <View style={styles.map}>
@@ -470,20 +450,63 @@ export const MapScreen = (): JSX.Element => {
                             }}
                         />
                     )}
+
                     <WebView
+                        key={webViewKey}
                         ref={mapRef}
                         source={{ html: htmlScript }}
-                        onLoadStart={() => {
-                            setLoadingState(LoadingState.LOADING)
-                        }}
                         onLoadEnd={() => {
-                            setLoadingState(LoadingState.LOADED)
-                            _addGeoJson()
+                            if (loadingState === LoadingState.LOADING) {
+                                setLoadingState(LoadingState.LOADED)
+                                _addGeoJson()
+                            }
                         }}
+                        startInLoadingState={true}
+                        renderLoading={() => (
+                            <ActivityIndicator
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    zIndex: 2,
+                                }}
+                            />
+                        )}
                         onContentProcessDidTerminate={
                             onContentProcessDidTerminate
                         }
-                        cacheMode="LOAD_CACHE_ELSE_NETWORK"
+                        renderError={() => (
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    zIndex: 2,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text>
+                                    Beim Laden der Karte ist ein Fehler
+                                    aufgetreten.
+                                </Text>
+                            </View>
+                        )}
+                        cacheMode="LOAD_NO_CACHE"
+                        onMessage={(event) => {
+                            const data = event.nativeEvent.data
+                            if (
+                                data === 'mapLoadError' ||
+                                data === 'noInternetConnection'
+                            ) {
+                                setLoadingState(LoadingState.ERROR)
+                                setErrorMsg(data)
+                            }
+                        }}
                     />
                 </View>
             </View>

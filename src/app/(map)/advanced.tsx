@@ -3,12 +3,9 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import Divider from '@/components/Divider'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
 import { type Colors } from '@/stores/colors'
-import {
-    formatFriendlyTime,
-    formatISODate,
-    formatISOTime,
-} from '@/utils/date-utils'
+import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     type AvailableRoom,
     BUILDINGS,
@@ -23,12 +20,12 @@ import { useRouter } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
-    Pressable,
     ScrollView,
     StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { RefreshControl } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
 
 const DURATIONS = [
@@ -73,6 +70,18 @@ export default function AdvancedSearch(): JSX.Element {
         null
     )
 
+    enum LoadingState {
+        LOADING,
+        LOADED,
+        ERROR,
+        REFRESHING,
+    }
+
+    const [loadingState, setLoadingState] = useState<LoadingState>(
+        LoadingState.LOADING
+    )
+    const [error, setError] = useState<Error | null>(null)
+
     const filter = useCallback(async () => {
         // when entering dates on desktop, for a short time the date is invalid (e.g. 2023-07-00) when the user is still typing
         const validateDate = new Date(date)
@@ -81,43 +90,61 @@ export default function AdvancedSearch(): JSX.Element {
         }
 
         setFilterResults(null)
-
         const rooms = await filterRooms(date, time, building, duration)
-
-        console.log(`Found ${rooms.length} results`)
-        setFilterResults(rooms)
+        if (rooms == null) {
+            throw new Error('Error while filtering rooms')
+        } else {
+            setFilterResults(rooms)
+            setLoadingState(LoadingState.LOADED)
+        }
     }, [building, date, duration, time])
 
     useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                await filter()
-            } catch (e) {
-                if (
-                    e instanceof NoSessionError ||
-                    e instanceof UnavailableSessionError
-                ) {
-                    router.replace('(user)/login')
-                } else {
-                    console.error(e)
-                    alert(e)
-                }
+        setLoadingState(LoadingState.LOADING)
+        void loadData()
+    }, [filter, router])
+
+    const loadData = async (): Promise<void> => {
+        try {
+            await filter()
+        } catch (e) {
+            if (
+                e instanceof NoSessionError ||
+                e instanceof UnavailableSessionError
+            ) {
+                router.replace('(user)/login')
+            } else {
+                setLoadingState(LoadingState.ERROR)
+                setError(e as Error)
+                console.error(e)
             }
         }
-        void load()
-    }, [filter, router])
+    }
+
+    const onRefresh: () => void = () => {
+        void loadData()
+    }
+
     return (
         <>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    loadingState !== LoadingState.LOADED ? (
+                        <RefreshControl
+                            refreshing={
+                                loadingState === LoadingState.REFRESHING
+                            }
+                            onRefresh={onRefresh}
+                        />
+                    ) : undefined
+                }
+            >
                 <View style={[styles.container]}>
                     <Text
-                        style={{
-                            fontSize: 13,
-                            color: colors.labelSecondaryColor,
-                            fontWeight: 'normal',
-                            textTransform: 'uppercase',
-                            marginBottom: 4,
-                        }}
+                        style={[
+                            styles.sectionHeader,
+                            { color: colors.labelSecondaryColor },
+                        ]}
                     >
                         Search options
                     </Text>
@@ -224,23 +251,18 @@ export default function AdvancedSearch(): JSX.Element {
                                     selectedItem,
                                     index
                                 ) => {
-                                    // text represented after item is selected
-                                    // if data array is an array of objects then return selectedItem.property to render after item is selected
                                     return selectedItem
                                 }}
                                 rowTextForSelection={(item, index) => {
-                                    // text represented for each item in dropdown
-                                    // if data array is an array of objects then return item.property to represent item in dropdown
                                     return item
                                 }}
-                                buttonStyle={{
-                                    backgroundColor:
-                                        colors.datePickerBackground,
-                                    borderRadius: 8,
-                                    width: 90,
-                                    height: 32,
-                                    justifyContent: 'center',
-                                }}
+                                buttonStyle={[
+                                    styles.dropdownButton,
+                                    {
+                                        backgroundColor:
+                                            colors.datePickerBackground,
+                                    },
+                                ]}
                                 buttonTextStyle={{
                                     color: colors.text,
                                     fontSize: 15,
@@ -256,11 +278,12 @@ export default function AdvancedSearch(): JSX.Element {
                                         colors.labelTertiaryColor,
                                     height: 45,
                                 }}
-                                dropdownStyle={{
-                                    backgroundColor: colors.card,
-                                    height: 250,
-                                    borderRadius: 8,
-                                }}
+                                dropdownStyle={[
+                                    styles.dropdownStyle,
+                                    {
+                                        backgroundColor: colors.card,
+                                    },
+                                ]}
                                 selectedRowStyle={{
                                     backgroundColor: colors.primary,
                                 }}
@@ -298,23 +321,18 @@ export default function AdvancedSearch(): JSX.Element {
                                     selectedItem,
                                     index
                                 ) => {
-                                    // text represented after item is selected
-                                    // if data array is an array of objects then return selectedItem.property to render after item is selected
                                     return selectedItem
                                 }}
                                 rowTextForSelection={(item, index) => {
-                                    // text represented for each item in dropdown
-                                    // if data array is an array of objects then return item.property to represent item in dropdown
                                     return item
                                 }}
-                                buttonStyle={{
-                                    backgroundColor:
-                                        colors.datePickerBackground,
-                                    borderRadius: 8,
-                                    width: 90,
-                                    height: 32,
-                                    justifyContent: 'center',
-                                }}
+                                buttonStyle={[
+                                    styles.dropdownButton,
+                                    {
+                                        backgroundColor:
+                                            colors.datePickerBackground,
+                                    },
+                                ]}
                                 buttonTextStyle={{
                                     color: colors.text,
                                     fontSize: 15,
@@ -330,11 +348,12 @@ export default function AdvancedSearch(): JSX.Element {
                                         colors.labelTertiaryColor,
                                     height: 45,
                                 }}
-                                dropdownStyle={{
-                                    backgroundColor: colors.card,
-                                    height: 250,
-                                    borderRadius: 8,
-                                }}
+                                dropdownStyle={[
+                                    styles.dropdownStyle,
+                                    {
+                                        backgroundColor: colors.card,
+                                    },
+                                ]}
                                 selectedRowStyle={{
                                     backgroundColor: colors.primary,
                                 }}
@@ -349,13 +368,10 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                     </View>
                     <Text
-                        style={{
-                            fontSize: 13,
-                            color: colors.labelSecondaryColor,
-                            fontWeight: 'normal',
-                            textTransform: 'uppercase',
-                            marginBottom: 4,
-                        }}
+                        style={[
+                            styles.sectionHeader,
+                            { color: colors.labelSecondaryColor },
+                        ]}
                     >
                         Available free rooms
                     </Text>
@@ -370,95 +386,41 @@ export default function AdvancedSearch(): JSX.Element {
                             justifyContent: 'center',
                         }}
                     >
-                        {filterResults != null ? (
-                            filterResults.length > 0 ? (
-                                filterResults.map((room, index) => (
-                                    <>
-                                        <View
-                                            key={room.room}
-                                            style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                                backgroundColor: colors.card,
-                                                padding: 10,
-                                                marginHorizontal: 10,
-                                            }}
-                                        >
-                                            <View
-                                                style={{
-                                                    flexDirection: 'column',
-                                                    paddingRight: 10,
-                                                }}
-                                            >
-                                                <Pressable
-                                                    onPress={() => {
-                                                        router.push(
-                                                            '(tabs)/map'
-                                                        )
-                                                        router.setParams({
-                                                            q: room.room,
-                                                            h: 'true',
-                                                        })
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{
-                                                            fontWeight: '500',
-                                                            color: colors.primary,
-                                                            fontSize: 16,
-                                                        }}
-                                                    >
-                                                        {room.room}
-                                                    </Text>
-                                                </Pressable>
-                                                <Text
-                                                    style={{
-                                                        fontSize: 13,
-                                                        color: colors.labelColor,
-                                                    }}
-                                                    numberOfLines={2}
-                                                >
-                                                    {room.type}
-                                                </Text>
-                                            </View>
-
-                                            <Text
-                                                style={{
-                                                    fontSize: 15,
-                                                    color: colors.text,
-                                                    width: '40%',
-
-                                                    textAlign: 'right',
-                                                }}
-                                                numberOfLines={2}
-                                            >
-                                                {formatFriendlyTime(room.from)}{' '}
-                                                -{' '}
-                                                {formatFriendlyTime(room.until)}
-                                            </Text>
-                                        </View>
-                                        {index < filterResults.length - 1 && (
-                                            <Divider />
-                                        )}
-                                    </>
-                                ))
-                            ) : (
-                                <Text
-                                    style={{
-                                        textAlign: 'center',
-                                        paddingVertical: 30,
-                                        color: colors.text,
-                                    }}
-                                >
-                                    No rooms available
-                                </Text>
-                            )
-                        ) : (
+                        {loadingState === LoadingState.LOADING && (
                             <ActivityIndicator
                                 color={colors.primary}
                                 style={{ paddingVertical: 30 }}
                             />
+                        )}
+                        {loadingState === LoadingState.ERROR && (
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    paddingVertical: 30,
+                                }}
+                            >
+                                <Text
+                                    style={[
+                                        styles.errorMessage,
+                                        { color: colors.text },
+                                    ]}
+                                >
+                                    {error?.message}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.errorInfo,
+                                        { color: colors.text },
+                                    ]}
+                                >
+                                    An error occurred while loading the data.
+                                    {'\n'}Pull down to refresh.
+                                </Text>
+                            </View>
+                        )}
+                        {loadingState === LoadingState.LOADED && (
+                            <FreeRoomsList rooms={filterResults} />
                         )}
                     </View>
                 </View>
@@ -476,4 +438,31 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     centeredView: {},
+    sectionHeader: {
+        fontSize: 13,
+
+        fontWeight: 'normal',
+        textTransform: 'uppercase',
+        marginBottom: 4,
+    },
+    errorMessage: {
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    errorInfo: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    dropdownButton: {
+        borderRadius: 8,
+        width: 90,
+        height: 32,
+        justifyContent: 'center',
+    },
+    dropdownStyle: {
+        height: 250,
+        borderRadius: 8,
+    },
 })
