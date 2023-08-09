@@ -41,10 +41,6 @@ export default function Screen(): JSX.Element {
                                 onPress={() => {
                                     router.push('(user)/settings')
                                 }}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    padding: 10,
-                                }}
                             >
                                 <Ionicons
                                     name="cog-outline"

@@ -28,7 +28,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { WebView } from 'react-native-webview'
 
 const Stack2 = createNativeStackNavigator()
@@ -228,7 +227,7 @@ export const MapScreen = (): JSX.Element => {
             count > 0 ? [lat / count, lon / count] : DEFAULT_CENTER
 
         return [filtered, filteredCenter]
-    }, [q, allRooms])
+    }, [q, allRooms, userKind])
 
     const uniqueEtages = Array.from(
         new Set(
@@ -285,7 +284,12 @@ export const MapScreen = (): JSX.Element => {
         const isEmpty = floors.floors.length === 0
         const colors = useTheme().colors as Colors
         return (
-            <View style={[styles.ButtonArea, { marginTop: 100 }]}>
+            <View
+                style={[
+                    styles.ButtonArea,
+                    { marginTop: Platform.OS === 'ios' ? 175 : 20 },
+                ]}
+            >
                 <View
                     style={[
                         styles.ButtonAreaSection,
@@ -377,9 +381,6 @@ export const MapScreen = (): JSX.Element => {
             </View>
         )
     }
-    const onContentProcessDidTerminate = (): void => {
-        setWebViewKey((k) => k + 1)
-    }
 
     const _addGeoJson = (): void => {
         const filteredFeatures = filterEtage(currentFloor)
@@ -388,11 +389,12 @@ export const MapScreen = (): JSX.Element => {
         })
     }
 
+    const onContentProcessDidTerminate = (): void => {
+        setWebViewKey((k) => k + 1)
+        _addGeoJson()
+    }
     return (
-        <SafeAreaView
-            style={styles.container}
-            edges={Platform.OS === 'ios' ? ['top'] : []}
-        >
+        <View style={styles.container}>
             <View style={{ flex: 1, position: 'relative' }}>
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
@@ -421,8 +423,8 @@ export const MapScreen = (): JSX.Element => {
                             }}
                         >
                             {errorMsg === 'noInternetConnection' &&
-                                'No internet connection'}
-                            {errorMsg === 'mapLoadError' && 'Unknown error'}
+                                'Network request failed'}
+                            {errorMsg === 'mapLoadError' && 'Map load error'}
                         </Text>
                         <Text
                             style={{
@@ -508,7 +510,7 @@ export const MapScreen = (): JSX.Element => {
                     />
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

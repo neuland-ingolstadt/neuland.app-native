@@ -11,7 +11,7 @@
         "web": "expo start --web",
         "build:android": "eas build --platform android --local",
         "build:ios": "expo prebuild --platform ios && xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext",
-        "build:all": "yarn prebuild:ios && yarn build:android",
+        "build:all": "yarn build:ios && yarn build:android",
         "format": "prettier --write .",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
