@@ -207,13 +207,11 @@ export default function AdvancedSearch(): JSX.Element {
                                 onChange={(event, selectedDate) => {
                                     setTime(formatISOTime(selectedDate))
                                 }}
-                                // now minus one hour
                                 minimumDate={
-                                    new Date(
-                                        new Date().setHours(
-                                            new Date().getHours() - 1
-                                        )
-                                    )
+                                    new Date(new Date().setHours(8, 15, 0, 0))
+                                }
+                                maximumDate={
+                                    new Date(new Date().setHours(21, 25, 0, 0))
                                 }
                             />
                         </View>

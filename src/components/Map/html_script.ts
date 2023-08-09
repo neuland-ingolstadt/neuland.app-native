@@ -40,7 +40,7 @@ const htmlScript = `
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 21,
-            attribution: 'Map data &copy; OpenStreetMap contributors, '
+            attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(mymap);
         
         // Initial check for internet connection

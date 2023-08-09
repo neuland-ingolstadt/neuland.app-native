@@ -309,7 +309,6 @@ export const MapScreen = (): JSX.Element => {
                             <Pressable
                                 onPress={() => {
                                     setCurrentFloor(floor)
-                                    void Haptics.selectionAsync()
                                 }}
                                 key={floor}
                             >
@@ -360,8 +359,8 @@ export const MapScreen = (): JSX.Element => {
                     >
                         <Pressable
                             onPress={() => {
-                                handleDismissModal()
                                 void Haptics.selectionAsync()
+                                handleDismissModal()
                             }}
                         >
                             <View
