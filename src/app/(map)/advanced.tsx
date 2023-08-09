@@ -156,15 +156,10 @@ export default function AdvancedSearch(): JSX.Element {
                         }}
                     >
                         <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                backgroundColor: colors.card,
-                                padding: 10,
-                                marginHorizontal: 8,
-                                height: 50,
-                            }}
+                            style={[
+                                styles.optionsRow,
+                                { backgroundColor: colors.card },
+                            ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
                                 {' '}
@@ -191,15 +186,10 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider />
                         <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                backgroundColor: colors.card,
-                                padding: 10,
-                                marginHorizontal: 8,
-                                height: 50,
-                            }}
+                            style={[
+                                styles.optionsRow,
+                                { backgroundColor: colors.card },
+                            ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
                                 {' '}
@@ -229,15 +219,10 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider />
                         <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                backgroundColor: colors.card,
-                                padding: 10,
-                                marginHorizontal: 8,
-                                height: 50,
-                            }}
+                            style={[
+                                styles.optionsRow,
+                                { backgroundColor: colors.card },
+                            ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
                                 {' '}
@@ -247,11 +232,8 @@ export default function AdvancedSearch(): JSX.Element {
                                 data={DURATIONS}
                                 defaultValue={DURATION_PRESET}
                                 defaultButtonText={DURATION_PRESET}
-                                buttonTextAfterSelection={(
-                                    selectedItem,
-                                    index
-                                ) => {
-                                    return selectedItem
+                                buttonTextAfterSelection={() => {
+                                    return duration
                                 }}
                                 rowTextForSelection={(item, index) => {
                                     return item
@@ -291,23 +273,17 @@ export default function AdvancedSearch(): JSX.Element {
                                     color: colors.text,
                                     fontWeight: '500',
                                 }}
-                                onSelect={(selectedItem) => {
+                                onSelect={(selectedItem, index) => {
                                     setDuration(selectedItem)
                                 }}
                             />
                         </View>
                         <Divider />
-
                         <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                backgroundColor: colors.card,
-                                padding: 10,
-                                marginHorizontal: 8,
-                                height: 50,
-                            }}
+                            style={[
+                                styles.optionsRow,
+                                { backgroundColor: colors.card },
+                            ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
                                 {' '}
@@ -317,11 +293,8 @@ export default function AdvancedSearch(): JSX.Element {
                                 data={ALL_BUILDINGS}
                                 defaultValue={BUILDINGS_ALL}
                                 defaultButtonText="All"
-                                buttonTextAfterSelection={(
-                                    selectedItem,
-                                    index
-                                ) => {
-                                    return selectedItem
+                                buttonTextAfterSelection={() => {
+                                    return building
                                 }}
                                 rowTextForSelection={(item, index) => {
                                     return item
@@ -361,7 +334,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     color: colors.text,
                                     fontWeight: '500',
                                 }}
-                                onSelect={(selectedItem) => {
+                                onSelect={(selectedItem, index) => {
                                     setBuilding(selectedItem)
                                 }}
                             />
@@ -464,5 +437,14 @@ const styles = StyleSheet.create({
     dropdownStyle: {
         height: 250,
         borderRadius: 8,
+    },
+    optionsRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+
+        padding: 10,
+        marginHorizontal: 8,
+        height: 50,
     },
 })

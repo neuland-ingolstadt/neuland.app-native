@@ -17,6 +17,7 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import * as Haptics from 'expo-haptics'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -308,6 +309,7 @@ export const MapScreen = (): JSX.Element => {
                             <Pressable
                                 onPress={() => {
                                     setCurrentFloor(floor)
+                                    void Haptics.selectionAsync()
                                 }}
                                 key={floor}
                             >
@@ -359,6 +361,7 @@ export const MapScreen = (): JSX.Element => {
                         <Pressable
                             onPress={() => {
                                 handleDismissModal()
+                                void Haptics.selectionAsync()
                             }}
                         >
                             <View
