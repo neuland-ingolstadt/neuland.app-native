@@ -3,6 +3,7 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import Divider from '@/components/Divider'
+import { Dropdown } from '@/components/Map/Dropdown'
 import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
 import { type Colors } from '@/stores/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -26,7 +27,6 @@ import {
     View,
 } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
-import SelectDropdown from 'react-native-select-dropdown'
 
 const DURATIONS = [
     '00:15',
@@ -226,54 +226,12 @@ export default function AdvancedSearch(): JSX.Element {
                                 {' '}
                                 Duration{' '}
                             </Text>
-                            <SelectDropdown
+                            <Dropdown
                                 data={DURATIONS}
                                 defaultValue={DURATION_PRESET}
-                                defaultButtonText={DURATION_PRESET}
-                                buttonTextAfterSelection={() => {
-                                    return duration
-                                }}
-                                rowTextForSelection={(item, index) => {
-                                    return item
-                                }}
-                                buttonStyle={[
-                                    styles.dropdownButton,
-                                    {
-                                        backgroundColor:
-                                            colors.datePickerBackground,
-                                    },
-                                ]}
-                                buttonTextStyle={{
-                                    color: colors.text,
-                                    fontSize: 15,
-                                }}
-                                rowTextStyle={{
-                                    color: colors.text,
-                                    fontSize: 17,
-                                }}
-                                rowStyle={{
-                                    backgroundColor:
-                                        colors.datePickerBackground,
-                                    borderBottomColor:
-                                        colors.labelTertiaryColor,
-                                    height: 45,
-                                }}
-                                dropdownStyle={[
-                                    styles.dropdownStyle,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                                selectedRowStyle={{
-                                    backgroundColor: colors.primary,
-                                }}
-                                selectedRowTextStyle={{
-                                    color: colors.text,
-                                    fontWeight: '500',
-                                }}
-                                onSelect={(selectedItem, index) => {
-                                    setDuration(selectedItem)
-                                }}
+                                defaultText={DURATION_PRESET}
+                                onSelect={setDuration}
+                                selected={duration}
                             />
                         </View>
                         <Divider />
@@ -287,54 +245,12 @@ export default function AdvancedSearch(): JSX.Element {
                                 {' '}
                                 Building{' '}
                             </Text>
-                            <SelectDropdown
+                            <Dropdown
                                 data={ALL_BUILDINGS}
                                 defaultValue={BUILDINGS_ALL}
-                                defaultButtonText="All"
-                                buttonTextAfterSelection={() => {
-                                    return building
-                                }}
-                                rowTextForSelection={(item, index) => {
-                                    return item
-                                }}
-                                buttonStyle={[
-                                    styles.dropdownButton,
-                                    {
-                                        backgroundColor:
-                                            colors.datePickerBackground,
-                                    },
-                                ]}
-                                buttonTextStyle={{
-                                    color: colors.text,
-                                    fontSize: 15,
-                                }}
-                                rowTextStyle={{
-                                    color: colors.text,
-                                    fontSize: 17,
-                                }}
-                                rowStyle={{
-                                    backgroundColor:
-                                        colors.datePickerBackground,
-                                    borderBottomColor:
-                                        colors.labelTertiaryColor,
-                                    height: 45,
-                                }}
-                                dropdownStyle={[
-                                    styles.dropdownStyle,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                                selectedRowStyle={{
-                                    backgroundColor: colors.primary,
-                                }}
-                                selectedRowTextStyle={{
-                                    color: colors.text,
-                                    fontWeight: '500',
-                                }}
-                                onSelect={(selectedItem, index) => {
-                                    setBuilding(selectedItem)
-                                }}
+                                defaultText={BUILDINGS_ALL}
+                                onSelect={setBuilding}
+                                selected={building}
                             />
                         </View>
                     </View>
@@ -425,16 +341,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         marginTop: 10,
-    },
-    dropdownButton: {
-        borderRadius: 8,
-        width: 90,
-        height: 32,
-        justifyContent: 'center',
-    },
-    dropdownStyle: {
-        height: 250,
-        borderRadius: 8,
     },
     optionsRow: {
         flexDirection: 'row',

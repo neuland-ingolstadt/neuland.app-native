@@ -2,8 +2,12 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import htmlScript from '@/components/Map/html_script'
-import { _addRoom, _removeAllGeoJson, _setView } from '@/components/Map/inject'
+import {
+    _addRoom,
+    _removeAllGeoJson,
+    _setView,
+    htmlScript,
+} from '@/components/Map/leaflet'
 import { type Colors } from '@/stores/colors'
 import GeoJson from '@/stores/data/map.json'
 import { UserKindContext } from '@/stores/provider'
@@ -124,14 +128,14 @@ export const MapScreen = (): JSX.Element => {
     const { userKind } = React.useContext(UserKindContext)
     const { q } = useLocalSearchParams<{ q: string }>()
     const { h } = useLocalSearchParams<{ h: string }>()
-
+    const [webViewKey, setWebViewKey] = useState(0)
     const [showDismissModal, setShowDismissModal] = useState(false)
     const [currentFloor, setCurrentFloor] = useState('EG')
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const mapRef = useRef<WebView>(null)
-
     const router = useRouter()
+
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })
         router.setParams({ q: '' })
@@ -153,6 +157,28 @@ export const MapScreen = (): JSX.Element => {
             router.setParams({ h: '' })
         }
     }, [q])
+
+    useEffect(() => {
+        async function load(): Promise<void> {
+            try {
+                const dateObj = getNextValidDate()
+                const date = formatISODate(dateObj)
+                const time = formatISOTime(dateObj)
+                const rooms = await filterRooms(date, time)
+                setAvailableRooms(rooms)
+            } catch (e) {
+                if (
+                    e instanceof NoSessionError ||
+                    e instanceof UnavailableSessionError
+                ) {
+                    setAvailableRooms([])
+                } else {
+                    console.error(e)
+                }
+            }
+        }
+        void load()
+    }, [userKind, webViewKey])
 
     const allRooms = useMemo(() => {
         return GeoJson.features
@@ -185,7 +211,7 @@ export const MapScreen = (): JSX.Element => {
             })
             .flat()
     }, [GeoJson])
-    const [webViewKey, setWebViewKey] = useState(0)
+
     const [filteredRooms, center] = useMemo(() => {
         if (q == null) {
             return [allRooms, DEFAULT_CENTER]
@@ -248,31 +274,12 @@ export const MapScreen = (): JSX.Element => {
     }, [filteredRooms])
 
     useEffect(() => {
-        _removeAllGeoJson(mapRef)
-        _addGeoJson()
-    }, [currentFloor, filteredRooms, colors])
-
-    useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                const dateObj = getNextValidDate()
-                const date = formatISODate(dateObj)
-                const time = formatISOTime(dateObj)
-                const rooms = await filterRooms(date, time)
-                setAvailableRooms(rooms)
-            } catch (e) {
-                if (
-                    e instanceof NoSessionError ||
-                    e instanceof UnavailableSessionError
-                ) {
-                    setAvailableRooms([])
-                } else {
-                    console.error(e)
-                }
-            }
+        // Only execute if the map is already loaded
+        if (loadingState === LoadingState.LOADED) {
+            _removeAllGeoJson(mapRef)
+            _addGeoJson()
         }
-        void load()
-    }, [userKind, webViewKey])
+    }, [currentFloor, filteredRooms, colors, availableRooms])
 
     const filterEtage = (etage: string): RoomEntry[] => {
         const result = filteredRooms.filter(
@@ -535,7 +542,6 @@ const styles = StyleSheet.create({
     },
     ButtonAreaSection: {
         borderRadius: 7,
-
         overflow: 'hidden',
     },
 
