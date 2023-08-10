@@ -184,7 +184,7 @@ export default function DashboardEdit(): JSX.Element {
                         marginTop: 24,
                     }}
                 >
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => {
                             resetOrder()
                         }}
@@ -199,7 +199,7 @@ export default function DashboardEdit(): JSX.Element {
                         >
                             Reset Order
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <View
                     style={{

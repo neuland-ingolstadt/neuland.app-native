@@ -56,7 +56,7 @@ export default function Screen(): JSX.Element {
 
             <Stack2.Navigator>
                 <Stack2.Screen
-                    name="Home"
+                    name="Map"
                     options={{
                         title: 'Campus Map',
                         headerShown: true,
