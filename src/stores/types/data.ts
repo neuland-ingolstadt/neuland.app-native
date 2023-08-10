@@ -127,3 +127,84 @@ export interface TrainStation {
     id: string
     name: string
 }
+
+export interface RoomPlan {
+    type: string
+    features: Feature[]
+    totalFeatures: number
+    numberMatched: number
+    numberReturned: number
+    timeStamp: Date
+    crs: CRS
+}
+
+export interface CRS {
+    type: string
+    properties: CRSProperties
+}
+
+export interface CRSProperties {
+    name: string
+}
+
+export interface Feature {
+    coordinates: any
+    type: FeatureType
+    id: string
+    geometry: Geometry | null
+    geometry_name?: GeometryName
+    properties: FeatureProperties
+}
+
+export interface Geometry {
+    type: GeometryType
+    coordinates: number[][][]
+}
+
+export enum GeometryType {
+    Polygon = 'Polygon',
+}
+
+export enum GeometryName {
+    Location = 'Location',
+}
+
+export interface FeatureProperties {
+    Standort: Standort
+    Gebaeude: Gebaeude
+    Etage: null | string
+    Ebene: null | string
+    Raum: string
+    Funktion: null | string
+}
+
+export enum Gebaeude {
+    A = 'A',
+    B = 'B',
+    Bn = 'BN',
+    C = 'C',
+    CN = 'CN',
+    D = 'D',
+    E = 'E',
+    F = 'F',
+    G = 'G',
+    H = 'H',
+    I = 'I',
+    J = 'J',
+    K = 'K',
+    M = 'M',
+    N = 'N',
+    P = 'P',
+    S = 'S',
+    W = 'W',
+    Z = 'Z',
+}
+
+export enum Standort {
+    In = 'IN',
+    Nd = 'ND',
+}
+
+export enum FeatureType {
+    Feature = 'Feature',
+}

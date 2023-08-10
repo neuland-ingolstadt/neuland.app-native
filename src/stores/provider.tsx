@@ -4,13 +4,13 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import React, { createContext } from 'react'
-import { StatusBar, useColorScheme } from 'react-native'
+import { useColorScheme } from 'react-native'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
-import { type FoodFilter, useFoodFilter } from './hooks/food-filter'
-import { useThemeHook } from './hooks/theme'
-import { useUserKind } from './hooks/user-kind'
+import { useDashboard, useFoodFilter, useTheme, useUserKind } from './hooks'
+import { type Dashboard } from './hooks/dashboard'
+import { type FoodFilter } from './hooks/foodFilter'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -26,17 +26,23 @@ export const FoodFilterContext = createContext<FoodFilter>({
 })
 
 export const UserKindContext = createContext<any>({
-    userKind: 'guest',
+    userKind: 'student',
     toggleUserKind: () => {},
 })
 
 export const ThemeContext = createContext<any>({
     accentColor: 'teal',
     toggleAccentColor: () => {},
-    theme: 'system',
-    toggleTheme: () => {},
 })
 
+export const DashboardContext = createContext<Dashboard>({
+    shownDashboardEntries: [],
+    hiddenDashboardEntries: [],
+    hideDashboardEntry: () => {},
+    bringBackDashboardEntry: () => {},
+    resetOrder: () => {},
+    updateDashboardOrder: () => {},
+})
 
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
@@ -50,8 +56,10 @@ export default function Provider({
 }: ProviderProps): JSX.Element {
     const foodFilter = useFoodFilter()
     const userKind = useUserKind()
-    const themeHook = useThemeHook()
-    const scheme = useColorScheme()
+    const themeHook = useTheme()
+    const dashboard = useDashboard()
+
+    const colorScheme = useColorScheme()
 
     /**
      * Returns the primary color for a given color scheme.
@@ -65,31 +73,6 @@ export default function Provider({
         } catch (e) {
             return accentColors.teal[scheme]
         }
-    }
-
-    /**
-     * Returns the appropriate theme based on the current user preference and system scheme.
-     * @returns {AppTheme} The theme object to be used for styling the app.
-     */
-    const userTheme = (): AppTheme => {
-        switch (themeHook.theme) {
-            case 'light':
-                return lightTheme
-            case 'dark':
-                return darkTheme
-            case 'system':
-                return scheme === 'dark' ? darkTheme : lightTheme
-            default:
-                return lightTheme
-        }
-    }
-
-    /**
-     * Returns the status bar style based on the user's theme.
-     * @returns {'light-content' | 'dark-content'} The status bar style.
-     */
-    const statusBarStyle = (): 'light-content' | 'dark-content' => {
-        return userTheme().dark ? 'light-content' : 'dark-content'
     }
 
     const lightTheme: AppTheme = {
@@ -110,16 +93,23 @@ export default function Provider({
         },
     }
 
+    // log the userkind to the console
+
+    // if ( userKind.userKind === 'unkown' ) {
+    //     router.push('login')
+    // }
+
     return (
-        <ThemeContext.Provider value={themeHook}>
-            <UserKindContext.Provider value={userKind}>
-                <FoodFilterContext.Provider value={foodFilter}>
-                    <ThemeProvider value={userTheme()}>
-                        <StatusBar barStyle={statusBarStyle()} />
-                        <RootSiblingParent>{children}</RootSiblingParent>
-                    </ThemeProvider>
-                </FoodFilterContext.Provider>
-            </UserKindContext.Provider>
-        </ThemeContext.Provider>
+        <ThemeProvider value={colorScheme === 'dark' ? darkTheme : lightTheme}>
+            <ThemeContext.Provider value={themeHook}>
+                <UserKindContext.Provider value={userKind}>
+                    <DashboardContext.Provider value={dashboard}>
+                        <FoodFilterContext.Provider value={foodFilter}>
+                            <RootSiblingParent>{children}</RootSiblingParent>
+                        </FoodFilterContext.Provider>
+                    </DashboardContext.Provider>
+                </UserKindContext.Provider>
+            </ThemeContext.Provider>
+        </ThemeProvider>
     )
 }

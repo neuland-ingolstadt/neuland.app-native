@@ -2,6 +2,7 @@ import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { Checkbox } from '@/components/Checkbox'
 import { LoginFailureAlert } from '@/components/Settings'
 import { type Colors } from '@/stores/colors'
+import { USER_GUEST } from '@/stores/hooks/userKind'
 import { UserKindContext } from '@/stores/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -53,7 +54,7 @@ export default function Login(): JSX.Element {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    
+
     const { toggleUserKind } = React.useContext(UserKindContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
@@ -92,6 +93,7 @@ export default function Login(): JSX.Element {
 
     async function guestLogin(): Promise<void> {
         await createGuestSession()
+        toggleUserKind(USER_GUEST)
         router.push('(tabs)')
     }
 

@@ -9,6 +9,7 @@ module.exports = {
         version: packageInfo.version,
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
+        userInterfaceStyle: 'automatic',
         icon: './src/assets/icon.png',
         splash: {
             image: './src/assets/splash.png',
@@ -17,7 +18,7 @@ module.exports = {
         },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
-            buildNumber: '1',
+            buildNumber: '10',
             supportsTablet: true,
             userInterfaceStyle: 'automatic',
             associatedDomains: [
@@ -34,7 +35,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 23,
+            versionCode: 24,
         },
         extra: {
             eas: {
