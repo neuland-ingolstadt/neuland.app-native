@@ -1,35 +1,34 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
-export interface FoodFilter {
+export interface ThemeHook {
     accentColor: string
     toggleAccentColor: (name: string) => void
-    theme: string
-    toggleTheme: (name: 'light' | 'dark' | 'system') => void
 }
 
 /**
  * Custom hook that manages the theme and accent color of the app.
- * Uses AsyncStorage to persist the theme and accent color across app sessions.
- * @returns FoodFilter object with accentColor, toggleAccentColor, theme, and toggleTheme properties.
+ * Uses AsyncStorage to persist the accent color across app sessions.
+ * @returns ThemeHook object with accentColor and toggleAccentColor properties.
  */
-export function useThemeHook(): FoodFilter {
+export function useTheme(): ThemeHook {
     const [accentColor, setAccentColor] = useState<string>('teal')
-    const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
 
     useEffect(() => {
-        void AsyncStorage.getItem('accentColor').then((data) => {
-            if (data != null) {
-                setAccentColor(data)
+        const loadAsyncStorageData = async (): Promise<void> => {
+            try {
+                const data = await AsyncStorage.getItem('accentColor')
+                if (data != null) {
+                    setAccentColor(data)
+                }
+            } catch (error) {
+                console.error(
+                    'Error while retrieving data from AsyncStorage:',
+                    error
+                )
             }
-        })
-
-        // Load theme from AsyncStorage
-        void AsyncStorage.getItem('theme').then((data) => {
-            if (data != null) {
-                setTheme(data as 'light' | 'dark' | 'system')
-            }
-        })
+        }
+        void loadAsyncStorageData()
     }, [])
 
     /**
@@ -39,25 +38,11 @@ export function useThemeHook(): FoodFilter {
     function toggleAccentColor(name: string): void {
         setAccentColor(name)
 
-        // Save new accent color to AsyncStorage
         void AsyncStorage.setItem('accentColor', name)
-    }
-
-    /**
-     * Function to toggle the theme of the app.
-     * @param name - The name of the new theme ('light', 'dark', or 'system').
-     */
-    function toggleTheme(name: 'light' | 'dark' | 'system'): void {
-        setTheme(name)
-
-        // Save new theme to AsyncStorage
-        void AsyncStorage.setItem('theme', name)
     }
 
     return {
         accentColor,
         toggleAccentColor,
-        theme,
-        toggleTheme,
     }
 }

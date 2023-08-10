@@ -17,6 +17,7 @@ export function useFoodFilter(): FoodFilter {
     ])
     const [selectedRestaurants, setSelectedRestaurants] = useState<string[]>([
         'mensa',
+        'reimanns',
     ])
     const [allergenSelection, setAllergenSelection] = useState<string[]>([])
 

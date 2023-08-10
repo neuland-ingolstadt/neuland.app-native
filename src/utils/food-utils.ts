@@ -5,7 +5,7 @@ import {
     USER_EMPLOYEE,
     USER_GUEST,
     USER_STUDENT,
-} from '@/stores/hooks/user-kind'
+} from '@/stores/hooks/userKind'
 import { type Food, type Meal } from '@/stores/types/neuland-api'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'

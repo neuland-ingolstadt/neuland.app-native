@@ -34,8 +34,16 @@ export interface Meal {
     allergens: string[] | null
     flags: string[] | null
     nutrition: Nutrition | null
-    originalLanguage: OriginalLanguage
+    variations: Variation[]
+    originalLanguage: string
+    static: boolean
     restaurant?: string
+}
+
+export interface Variation {
+    name: Name
+    additional?: boolean
+    prices: Prices
 }
 
 export enum Category {
