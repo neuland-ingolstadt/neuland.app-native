@@ -6,8 +6,7 @@ import {
 import { useRouter } from 'expo-router'
 import React from 'react'
 
-import { BaseCard } from './Cards/BaseCard'
-import { EventsCard } from './Cards/EventsCard'
+import { BaseCard, EventsCard, FoodCard } from './Cards'
 
 const router = useRouter()
 
@@ -43,19 +42,11 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Mensa',
+        text: 'Food',
         key: 'mensa',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="Mensa"
-                icon="restaurant"
-                onPress={() => {
-                    router.replace('(tabs)/food')
-                }}
-            />
-        ),
+        card: () => <FoodCard />,
     },
     {
         text: 'Mobility',
@@ -88,7 +79,7 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Events',
+        text: 'Campus Life Events',
         key: 'events',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],

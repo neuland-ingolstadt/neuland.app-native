@@ -76,7 +76,7 @@ export default function Events(): JSX.Element {
                         <Text
                             style={{
                                 fontSize: 16,
-                                fontWeight: '500',
+                                fontWeight: '600',
                                 color: colors.text,
                                 marginBottom: 1,
                             }}
@@ -128,7 +128,7 @@ export default function Events(): JSX.Element {
                                         <Ionicons
                                             name="globe"
                                             size={19}
-                                            color={colors.labelColor}
+                                            color={colors.labelSecondaryColor}
                                             style={{ marginRight: 7 }}
                                             onPress={() => {
                                                 void Linking.openURL(
@@ -141,7 +141,7 @@ export default function Events(): JSX.Element {
                                         <Ionicons
                                             name="logo-instagram"
                                             size={19}
-                                            color={colors.labelColor}
+                                            color={colors.labelSecondaryColor}
                                             onPress={() => {
                                                 void Linking.openURL(
                                                     club.instagram
@@ -228,7 +228,10 @@ export default function Events(): JSX.Element {
                         <React.Fragment key={index}>
                             <EventCard event={event} colors={colors} />
                             {index !== events.length - 1 && (
-                                <Divider width={'100%'} />
+                                <Divider
+                                    color={colors.labelTertiaryColor}
+                                    width={'90%'}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -253,7 +256,7 @@ const styles = StyleSheet.create({
     eventContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 7,
+        paddingHorizontal: 10,
         paddingVertical: 12,
     },
     detailsContainer: {

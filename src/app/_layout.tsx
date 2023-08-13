@@ -154,7 +154,7 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(cards)/events"
+                        name="(pages)/events"
                         options={{
                             title: 'Campus Life Events',
                             ...Platform.select({

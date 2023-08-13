@@ -12,7 +12,7 @@ interface BaseCardProps {
     children?: React.ReactNode
 }
 
-export const BaseCard: React.FC<BaseCardProps> = ({
+const BaseCard: React.FC<BaseCardProps> = ({
     title,
     onPress,
     icon,
@@ -68,3 +68,5 @@ export const BaseCard: React.FC<BaseCardProps> = ({
         </TouchableOpacity>
     )
 }
+
+export default BaseCard

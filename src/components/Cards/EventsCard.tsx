@@ -8,9 +8,9 @@ import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 
-import { BaseCard } from './BaseCard'
+import BaseCard from './BaseCard'
 
-export const EventsCard = (): JSX.Element => {
+const EventsCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
 
@@ -80,7 +80,8 @@ export const EventsCard = (): JSX.Element => {
                                         <Text
                                             style={{
                                                 color: colors.text,
-                                                fontSize: 17,
+                                                fontWeight: '500',
+                                                fontSize: 16,
                                             }}
                                             numberOfLines={1}
                                         >
@@ -112,3 +113,5 @@ export const EventsCard = (): JSX.Element => {
         </BaseCard>
     )
 }
+
+export default EventsCard
