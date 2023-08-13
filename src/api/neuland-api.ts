@@ -133,7 +133,10 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
     async getCampusLifeEvents(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/cl-events`)
+        return await this.requestCached(
+            'cl-events',
+            `${ENDPOINT}/api/cl-events`
+        )
     }
 }
 

@@ -95,7 +95,6 @@ export default function FoodScreen(): JSX.Element {
 
         return (
             <View style={buttonStyle} key={index}>
-                {/* Assign a unique key prop to the top-level View element */}
                 <Pressable
                     onPress={() => {
                         void Haptics.selectionAsync()

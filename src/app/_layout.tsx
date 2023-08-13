@@ -153,6 +153,20 @@ export default function RootLayout(): JSX.Element {
                             animation: 'slide_from_right',
                         }}
                     />
+                    <Stack.Screen
+                        name="(cards)/events"
+                        options={{
+                            title: 'Campus Life Events',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

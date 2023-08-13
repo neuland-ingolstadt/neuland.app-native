@@ -69,7 +69,13 @@ export function formatFriendlyTime(datetime: Date | string): string {
  * @param {Date} end
  * @returns {string}
  */
-export function formatFriendlyDateTimeRange(begin: Date, end?: Date): string {
+export function formatFriendlyDateTimeRange(
+    begin: Date | null,
+    end: Date | null
+): string {
+    if (begin == null) {
+        return ''
+    }
     let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
     if (end != null) {
         if (begin.toDateString() === end.toDateString()) {
@@ -127,28 +133,23 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-    const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
-        numeric: 'auto',
-        style: 'long',
-    })
-
     const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
     if (Math.abs(weeks) > 0) {
-        return rtl.format(weeks, 'week')
+        return `in ${Math.abs(weeks)} week${Math.abs(weeks) !== 1 ? 's' : ''}`
     }
 
     const days = (delta / (24 * 60 * 60 * 1000)) | 0
     if (Math.abs(days) > 0) {
-        return rtl.format(days, 'day')
+        return `in ${Math.abs(days)} day${Math.abs(days) !== 1 ? 's' : ''}`
     }
 
     const hours = (delta / (60 * 60 * 1000)) | 0
     if (Math.abs(hours) > 0) {
-        return rtl.format(hours, 'hour')
+        return `in ${Math.abs(hours)} hour${Math.abs(hours) !== 1 ? 's' : ''}`
     }
 
     const minutes = (delta / (60 * 1000)) | 0
-    return rtl.format(minutes, 'minute')
+    return `in ${Math.abs(minutes)} minute${Math.abs(minutes) !== 1 ? 's' : ''}`
 }
 
 /**
