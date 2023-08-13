@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router'
 import React from 'react'
 
 import { BaseCard } from './Cards/BaseCard'
+import { EventsCard } from './Cards/EventsCard'
 
 const router = useRouter()
 
@@ -91,15 +92,7 @@ export const AllCards: Card[] = [
         key: 'events',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="Events"
-                icon="bonfire"
-                onPress={() => {
-                    router.push('events')
-                }}
-            />
-        ),
+        card: () => <EventsCard />,
     },
     {
         text: 'Rooms',

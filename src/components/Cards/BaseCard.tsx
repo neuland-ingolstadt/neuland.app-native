@@ -9,9 +9,15 @@ interface BaseCardProps {
     title: string
     onPress: () => void
     icon: typeof Ionicons.defaultProps.name
+    children?: React.ReactNode
 }
 
-export const BaseCard: React.FC<BaseCardProps> = ({ title, onPress, icon }) => {
+export const BaseCard: React.FC<BaseCardProps> = ({
+    title,
+    onPress,
+    icon,
+    children,
+}) => {
     const colors = useTheme().colors as Colors
     return (
         <TouchableOpacity onPress={onPress} style={{ marginVertical: 8 }}>
@@ -57,6 +63,7 @@ export const BaseCard: React.FC<BaseCardProps> = ({ title, onPress, icon }) => {
                         color={colors.labelColor}
                     />
                 </View>
+                {children}
             </View>
         </TouchableOpacity>
     )
