@@ -1,4 +1,4 @@
-import { SectionPicker } from '@/components/SectionPicker'
+import { SectionPicker } from '@/components/Elements/Universal/SectionPicker'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
 import { FoodFilterContext } from '@/stores/provider'

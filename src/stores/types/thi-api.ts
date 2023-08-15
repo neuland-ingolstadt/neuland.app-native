@@ -33,7 +33,7 @@ export interface Exams {
     exam_rooms: string
     exam_seat: string
     pruefer_namen: string[]
-    anmerkung: null
+    anmerkung: string
     pruefungs_art: string
     modus: string
     hilfsmittel: string[]

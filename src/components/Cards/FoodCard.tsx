@@ -1,4 +1,4 @@
-import Divider from '@/components/Divider'
+import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { formatISODate } from '@/utils/date-utils'
@@ -174,9 +174,8 @@ const EventsCard = (): JSX.Element => {
                             </View>
                         )}
                         {foodEntries.map((meal, index) => (
-                            <>
+                            <React.Fragment key={index}>
                                 <View
-                                    key={index}
                                     style={{
                                         flexDirection: 'row',
                                         paddingBottom: 12,
@@ -209,7 +208,7 @@ const EventsCard = (): JSX.Element => {
                                                 }}
                                                 numberOfLines={1}
                                             >
-                                                for {meal.price}
+                                                {meal.price}
                                             </Text>
                                         )}
                                     </View>
@@ -221,7 +220,7 @@ const EventsCard = (): JSX.Element => {
                                         width={'90%'}
                                     />
                                 )}
-                            </>
+                            </React.Fragment>
                         ))}
                     </View>
                 )}

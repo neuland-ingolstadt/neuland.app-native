@@ -161,6 +161,28 @@ export default function RootLayout(): JSX.Element {
                                 android: {
                                     animation: 'slide_from_right',
                                 },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/calendar"
+                        options={{
+                            title: 'Calendar',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/exam"
+                        options={{
+                            title: 'Exam Details',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
                                 ios: {
                                     presentation: 'modal',
                                 },

@@ -1,4 +1,4 @@
-import Divider from '@/components/Divider'
+import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { Ionicons } from '@expo/vector-icons'
@@ -70,6 +70,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 marginLeft: 8,
                                                 fontSize: 16,
                                                 color: colors.text,
+                                                maxWidth: '50%',
                                             }}
                                         >
                                             {item.title}
@@ -82,6 +83,8 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                     color:
                                                         item.iconColor ??
                                                         colors.labelColor,
+                                                    maxWidth: '70%',
+                                                    textAlign: 'right',
                                                 }}
                                             >
                                                 {item.value}

@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession, forgetSession } from '@/api/thi-session-handler'
-import FormList from '@/components/FormList'
+import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'

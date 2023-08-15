@@ -1,5 +1,5 @@
-import FormList from '@/components/FormList'
-import { SectionPicker } from '@/components/SectionPicker'
+import FormList from '@/components/Elements/Universal/FormList'
+import { SectionPicker } from '@/components/Elements/Universal/SectionPicker'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@customTypes/components'

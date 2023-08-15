@@ -52,7 +52,10 @@ export function formatFriendlyDateRange(begin: Date, end?: Date): string {
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyTime(datetime: Date | string): string {
+export function formatFriendlyTime(datetime?: Date | string): string {
+    if (datetime == null) {
+        return ''
+    }
     if (typeof datetime === 'string') {
         datetime = new Date(datetime)
     }
@@ -82,7 +85,10 @@ export function formatFriendlyDateTimeRange(
             str += ' – ' + formatFriendlyTime(end)
         } else {
             str +=
-                ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
+                ' –\n' +
+                formatFriendlyDate(end) +
+                ', ' +
+                formatFriendlyTime(end)
         }
     }
     return str
@@ -93,7 +99,10 @@ export function formatFriendlyDateTimeRange(
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime(datetime: Date | string): string {
+export function formatFriendlyDateTime(datetime?: Date | string): string {
+    if (datetime == null || isNaN(new Date(datetime).getTime())) {
+        return 'No date available'
+    }
     const date = formatFriendlyDate(datetime)
     const time = formatFriendlyTime(datetime)
 
@@ -133,23 +142,54 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
+    const isPast = delta < 0
+    delta = Math.abs(delta)
+
     const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
     if (Math.abs(weeks) > 0) {
-        return `in ${Math.abs(weeks)} week${Math.abs(weeks) !== 1 ? 's' : ''}`
+        return `${
+            isPast
+                ? weeks.toString() + ' weeks ago'
+                : 'in ' +
+                  weeks.toString() +
+                  ' week' +
+                  (Math.abs(weeks) !== 1 ? 's' : '')
+        }`
     }
 
     const days = (delta / (24 * 60 * 60 * 1000)) | 0
     if (Math.abs(days) > 0) {
-        return `in ${Math.abs(days)} day${Math.abs(days) !== 1 ? 's' : ''}`
+        return `${
+            isPast
+                ? days.toString() + ' days ago'
+                : 'in ' +
+                  days.toString() +
+                  ' day' +
+                  (Math.abs(days) !== 1 ? 's' : '')
+        }`
     }
 
     const hours = (delta / (60 * 60 * 1000)) | 0
     if (Math.abs(hours) > 0) {
-        return `in ${Math.abs(hours)} hour${Math.abs(hours) !== 1 ? 's' : ''}`
+        return `${
+            isPast
+                ? hours.toString() + ' hours ago'
+                : 'in ' +
+                  hours.toString() +
+                  ' hour' +
+                  (Math.abs(hours) !== 1 ? 's' : '')
+        }`
     }
 
     const minutes = (delta / (60 * 1000)) | 0
-    return `in ${Math.abs(minutes)} minute${Math.abs(minutes) !== 1 ? 's' : ''}`
+    return `${
+        isPast
+            ? minutes.toString() + ' minutes ago'
+            : 'in ' +
+              minutes.toString() +
+              ' minute' +
+              (Math.abs(minutes) !== 1 ? 's' : '')
+    }`
 }
 
 /**
@@ -158,6 +198,9 @@ function formatFriendlyTimeDelta(delta: number): string {
  * @returns {string}
  */
 export function formatFriendlyRelativeTime(date: Date): string {
+    if (date == null || isNaN(new Date(date).getTime())) {
+        return ''
+    }
     const startOfDay = new Date()
     startOfDay.setHours(0)
     startOfDay.setMinutes(0)

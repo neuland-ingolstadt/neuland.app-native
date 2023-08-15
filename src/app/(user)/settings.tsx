@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
-import FormList from '@/components/FormList'
-import { Avatar, NameBox } from '@/components/Settings'
+import { Avatar, NameBox } from '@/components/Elements/Settings'
+import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'

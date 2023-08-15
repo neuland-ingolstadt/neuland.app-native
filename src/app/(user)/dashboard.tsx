@@ -1,4 +1,4 @@
-import Divider from '@/components/Divider'
+import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'

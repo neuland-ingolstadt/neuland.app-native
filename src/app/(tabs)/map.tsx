@@ -7,7 +7,7 @@ import {
     _removeAllGeoJson,
     _setView,
     htmlScript,
-} from '@/components/Map/leaflet'
+} from '@/components/Elements/Map/leaflet'
 import { type Colors } from '@/stores/colors'
 import GeoJson from '@/stores/data/map.json'
 import { UserKindContext } from '@/stores/provider'

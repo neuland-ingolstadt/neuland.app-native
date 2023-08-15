@@ -1,4 +1,4 @@
-import { MealDay } from '@/components/Food'
+import { MealDay } from '@/components/Elements/Food'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
