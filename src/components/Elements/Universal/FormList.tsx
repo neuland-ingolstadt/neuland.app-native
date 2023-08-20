@@ -79,6 +79,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                             <Text
                                                 style={{
                                                     marginRight: 8,
+                                                    paddingLeft: 20,
                                                     fontSize: 16,
                                                     color:
                                                         item.iconColor ??

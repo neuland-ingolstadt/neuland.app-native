@@ -189,6 +189,49 @@ export default function RootLayout(): JSX.Element {
                             }),
                         }}
                     />
+                    <Stack.Screen
+                        name="(pages)/lecturers"
+                        options={{
+                            title: 'Lecturers',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                            headerSearchBarOptions: {
+                                placeholder: 'Search all lecturers',
+                                ...Platform.select({
+                                    android: {
+                                        headerIconColor: colorText,
+                                        textColor: colorText,
+                                        hintTextColor: colorText,
+                                        tintColor: colorText,
+                                    },
+                                }),
+                                hideWhenScrolling: false,
+                                onChangeText: (event) => {
+                                    router.setParams({
+                                        q: event.nativeEvent.text,
+                                    })
+                                },
+                                shouldShowHintSearchIcon: false,
+                            },
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/lecturer"
+                        options={{
+                            title: 'Lecturer Details',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

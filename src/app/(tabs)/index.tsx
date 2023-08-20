@@ -46,6 +46,7 @@ export default function Screen(): JSX.Element {
                                     name="cog-outline"
                                     size={24}
                                     color={colors.primary}
+                                    style={{ marginRight: 6 }}
                                 />
                             </Pressable>
                         ),
