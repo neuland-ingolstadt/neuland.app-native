@@ -47,7 +47,7 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: 'Room',
                     value: lecturer?.room_short,
-                    disabled: lecturer?.room_short == null,
+                    disabled: lecturer?.room_short === '',
                     iconColor: colors.primary,
                     onPress: () => {
                         router.push('(tabs)/map')
@@ -60,8 +60,13 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: 'E-Mail',
                     value: lecturer?.email,
-                    disabled: lecturer?.email == null,
-                    iconColor: colors.primary,
+                    disabled:
+                        lecturer?.email === '' ||
+                        !(lecturer?.email.includes('@') ?? false),
+                    iconColor:
+                        lecturer?.email.includes('@') ?? false
+                            ? colors.primary
+                            : undefined,
                     onPress: () => {
                         void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
                     },
@@ -69,7 +74,7 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: 'Phone',
                     value: lecturer?.tel_dienst,
-                    disabled: lecturer?.tel_dienst == null,
+                    disabled: lecturer?.tel_dienst === '',
                     iconColor: colors.primary,
                     onPress: () => {
                         void Linking.openURL(
