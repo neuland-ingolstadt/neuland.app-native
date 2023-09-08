@@ -186,8 +186,7 @@ export const MapScreen = (): JSX.Element => {
                 const { geometry, properties } = feature
 
                 if (
-                    geometry == null ||
-                    geometry.coordinates == null ||
+                    geometry?.coordinates == null ||
                     geometry.type !== 'Polygon'
                 ) {
                     return []

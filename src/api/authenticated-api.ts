@@ -31,7 +31,7 @@ interface PersonalData {
  * @returns {string} Faculty name (e.g. `Informatik`)
  */
 function extractFacultyFromPersonalData(data: PersonalData): string | null {
-    if (data === null || data.persdata == null || data.persdata.stg == null) {
+    if (data?.persdata?.stg == null) {
         return null
     }
     const shortNames: CourseShortNames = courseShortNames
@@ -51,7 +51,7 @@ function extractFacultyFromPersonalData(data: PersonalData): string | null {
  * @returns {string}
  */
 function extractSpoFromPersonalData(data: PersonalData): string | null {
-    if (data == null || data.persdata == null || data.persdata.po_url == null) {
+    if (data?.persdata?.po_url == null) {
         return null
     }
 
