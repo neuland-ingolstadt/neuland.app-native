@@ -2,9 +2,9 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import Dropdown from '@/components/Elements/Map/Dropdown'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
+import Dropdown from '@/components/Elements/Universal/Dropdown'
 import { type Colors } from '@/stores/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
