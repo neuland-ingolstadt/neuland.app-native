@@ -195,8 +195,9 @@ const EventsCard = (): JSX.Element => {
                                                 color: colors.text,
                                                 fontWeight: '500',
                                                 fontSize: 16,
+                                                maxWidth: '80%',
                                             }}
-                                            numberOfLines={1}
+                                            numberOfLines={2}
                                         >
                                             {meal.name}
                                         </Text>
