@@ -232,6 +232,17 @@ export default function RootLayout(): JSX.Element {
                             }),
                         }}
                     />
+                    <Stack.Screen
+                        name="(pages)/mobility"
+                        options={{
+                            title: 'Mobility',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

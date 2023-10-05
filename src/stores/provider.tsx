@@ -8,7 +8,13 @@ import { useColorScheme } from 'react-native'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
-import { useDashboard, useFoodFilter, useTheme, useUserKind } from './hooks'
+import {
+    useDashboard,
+    useFoodFilter,
+    useMobility,
+    useTheme,
+    useUserKind,
+} from './hooks'
 import { type Dashboard } from './hooks/dashboard'
 import { type FoodFilter } from './hooks/foodFilter'
 
@@ -44,6 +50,13 @@ export const DashboardContext = createContext<Dashboard>({
     updateDashboardOrder: () => {},
 })
 
+export const MobilityContext = createContext<any>({
+    mobilityKind: 'bus',
+    mobilityStation: 'Hauptbahnhof',
+    toggleMobility: () => {},
+    toggleStation: () => {},
+})
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -58,6 +71,7 @@ export default function Provider({
     const userKind = useUserKind()
     const themeHook = useTheme()
     const dashboard = useDashboard()
+    const mobility = useMobility()
 
     const colorScheme = useColorScheme()
 
@@ -105,7 +119,11 @@ export default function Provider({
                 <UserKindContext.Provider value={userKind}>
                     <DashboardContext.Provider value={dashboard}>
                         <FoodFilterContext.Provider value={foodFilter}>
-                            <RootSiblingParent>{children}</RootSiblingParent>
+                            <MobilityContext.Provider value={mobility}>
+                                <RootSiblingParent>
+                                    {children}
+                                </RootSiblingParent>
+                            </MobilityContext.Provider>
                         </FoodFilterContext.Provider>
                     </DashboardContext.Provider>
                 </UserKindContext.Provider>
