@@ -8,6 +8,7 @@ import * as Haptics from 'expo-haptics'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
+    Platform,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -97,7 +98,10 @@ export default function FoodScreen(): JSX.Element {
             <View style={buttonStyle} key={index}>
                 <Pressable
                     onPress={() => {
-                        void Haptics.selectionAsync()
+                        // only vibrate on iOS
+                        if (Platform.OS === 'ios' && index !== selectedDay) {
+                            void Haptics.selectionAsync()
+                        }
                         setSelectedDay(index)
                     }}
                 >
@@ -253,7 +257,9 @@ const styles = StyleSheet.create({
     },
     dayButtonContainer: {
         width: '100%',
+        height: 60,
         alignSelf: 'center',
+        alignContent: 'center',
         borderRadius: 8,
         shadowOffset: {
             width: 0,
@@ -263,8 +269,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         elevation: 1,
         alignItems: 'center',
-
-        paddingHorizontal: 16,
-        paddingVertical: 10,
+        justifyContent: 'space-evenly',
+        paddingVertical: 8,
     },
 })
