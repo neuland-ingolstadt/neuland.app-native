@@ -365,7 +365,9 @@ export const MapScreen = (): JSX.Element => {
                     >
                         <Pressable
                             onPress={() => {
-                                void Haptics.selectionAsync()
+                                if (Platform.OS === 'ios') {
+                                    void Haptics.selectionAsync()
+                                }
                                 handleDismissModal()
                             }}
                         >

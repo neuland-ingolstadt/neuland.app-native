@@ -1,6 +1,5 @@
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
-import * as Haptics from 'expo-haptics'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
@@ -31,7 +30,6 @@ const ToggleRow = ({
                     <View style={buttonStyle} key={index}>
                         <Pressable
                             onPress={() => {
-                                void Haptics.selectionAsync() // Make sure to import Haptics if needed
                                 setSelectedElement(item as 'Events' | 'Exams')
                             }}
                         >
