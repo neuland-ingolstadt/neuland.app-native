@@ -272,7 +272,7 @@ export default function Settings(): JSX.Element {
                     { color: colors.labelSecondaryColor },
                 ]}
             >
-                {'© 2023 by Neuland Ingolstadt e.V.'}
+                {`© ${new Date().getFullYear()} by Neuland Ingolstadt e.V.`}
             </Text>
         </ScrollView>
     )
