@@ -65,21 +65,6 @@ const CalendarCard = (): JSX.Element => {
         setMixedCalendar(combined.slice(0, 2))
     }
 
-    const styles = StyleSheet.create({
-        calendarView: {
-            gap: 12,
-        },
-        eventTitle: {
-            color: colors.text,
-            fontWeight: '500',
-            fontSize: 16,
-        },
-        eventDetails: {
-            color: colors.labelColor,
-            fontSize: 15,
-        },
-    })
-
     return (
         <BaseCard
             title="Calendar"
@@ -94,7 +79,12 @@ const CalendarCard = (): JSX.Element => {
                         <React.Fragment key={index}>
                             <View>
                                 <Text
-                                    style={styles.eventTitle}
+                                    style={[
+                                        styles.eventTitle,
+                                        {
+                                            color: colors.text,
+                                        },
+                                    ]}
                                     numberOfLines={2}
                                 >
                                     {/* Always use .de or .en? */}
@@ -103,7 +93,10 @@ const CalendarCard = (): JSX.Element => {
                                         : event.name}
                                 </Text>
                                 <Text
-                                    style={styles.eventDetails}
+                                    style={[
+                                        styles.eventDetails,
+                                        { color: colors.labelColor },
+                                    ]}
                                     numberOfLines={1}
                                 >
                                     {event.end != null && event.begin < time
@@ -125,5 +118,18 @@ const CalendarCard = (): JSX.Element => {
         </BaseCard>
     )
 }
+
+const styles = StyleSheet.create({
+    calendarView: {
+        gap: 12,
+    },
+    eventTitle: {
+        fontWeight: '500',
+        fontSize: 16,
+    },
+    eventDetails: {
+        fontSize: 15,
+    },
+})
 
 export default CalendarCard

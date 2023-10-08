@@ -134,32 +134,6 @@ const EventsCard = (): JSX.Element => {
         }
     }
 
-    const styles = StyleSheet.create({
-        listView: {
-            gap: 12,
-        },
-        mealTitle: {
-            color: colors.text,
-            fontWeight: '500',
-            fontSize: 16,
-            flexGrow: 1,
-            flexShrink: 1,
-        },
-        mealPrice: {
-            color: colors.labelColor,
-            fontSize: 15,
-        },
-        mealEntry: {
-            flexDirection: 'row',
-            gap: 12,
-        },
-        emptyMenu: {
-            color: colors.labelColor,
-            fontWeight: '500',
-            fontSize: 16,
-        },
-    })
-
     return (
         <BaseCard
             title={foodCardTitle}
@@ -171,7 +145,12 @@ const EventsCard = (): JSX.Element => {
             {loadingState === LoadingState.LOADED && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
-                        <Text style={styles.emptyMenu}>
+                        <Text
+                            style={[
+                                styles.emptyMenu,
+                                { color: colors.labelColor },
+                            ]}
+                        >
                             Today&rsquo;s menu is empty.
                         </Text>
                     )}
@@ -179,14 +158,20 @@ const EventsCard = (): JSX.Element => {
                         <React.Fragment key={index}>
                             <View style={styles.mealEntry}>
                                 <Text
-                                    style={styles.mealTitle}
+                                    style={[
+                                        styles.mealTitle,
+                                        { color: colors.text },
+                                    ]}
                                     numberOfLines={2}
                                 >
                                     {meal.name}
                                 </Text>
                                 {meal.price != null && (
                                     <Text
-                                        style={styles.mealPrice}
+                                        style={[
+                                            styles.mealPrice,
+                                            { color: colors.labelColor },
+                                        ]}
                                         numberOfLines={1}
                                     >
                                         {meal.price}
@@ -203,5 +188,28 @@ const EventsCard = (): JSX.Element => {
         </BaseCard>
     )
 }
+
+const styles = StyleSheet.create({
+    listView: {
+        gap: 12,
+    },
+    mealTitle: {
+        fontWeight: '500',
+        fontSize: 16,
+        flexGrow: 1,
+        flexShrink: 1,
+    },
+    mealPrice: {
+        fontSize: 15,
+    },
+    mealEntry: {
+        flexDirection: 'row',
+        gap: 12,
+    },
+    emptyMenu: {
+        fontWeight: '500',
+        fontSize: 16,
+    },
+})
 
 export default EventsCard
