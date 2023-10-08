@@ -7,7 +7,7 @@ import { type Meal } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
@@ -134,6 +134,32 @@ const EventsCard = (): JSX.Element => {
         }
     }
 
+    const styles = StyleSheet.create({
+        listView: {
+            gap: 12,
+        },
+        mealTitle: {
+            color: colors.text,
+            fontWeight: '500',
+            fontSize: 16,
+            flexGrow: 1,
+            flexShrink: 1,
+        },
+        mealPrice: {
+            color: colors.labelColor,
+            fontSize: 15,
+        },
+        mealEntry: {
+            flexDirection: 'row',
+            gap: 12,
+        },
+        emptyMenu: {
+            color: colors.labelColor,
+            fontWeight: '500',
+            fontSize: 16,
+        },
+    })
+
     return (
         <BaseCard
             title={foodCardTitle}
@@ -142,90 +168,38 @@ const EventsCard = (): JSX.Element => {
                 router.replace('food')
             }}
         >
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}
-            >
-                {loadingState === LoadingState.LOADED && (
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            width: '100%',
-                        }}
-                    >
-                        {foodEntries.length === 0 && (
-                            <View
-                                style={{
-                                    paddingBottom: 12,
-                                    width: '90%',
-                                }}
-                            >
+            {loadingState === LoadingState.LOADED && (
+                <View style={styles.listView}>
+                    {foodEntries.length === 0 && (
+                        <Text style={styles.emptyMenu}>
+                            Today&rsquo;s menu is empty.
+                        </Text>
+                    )}
+                    {foodEntries.map((meal, index) => (
+                        <React.Fragment key={index}>
+                            <View style={styles.mealEntry}>
                                 <Text
-                                    style={{
-                                        color: colors.labelColor,
-                                        fontWeight: '500',
-                                        fontSize: 16,
-                                    }}
+                                    style={styles.mealTitle}
+                                    numberOfLines={2}
                                 >
-                                    Today&rsquo;s menu is empty.
+                                    {meal.name}
                                 </Text>
-                            </View>
-                        )}
-                        {foodEntries.map((meal, index) => (
-                            <React.Fragment key={index}>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        paddingBottom: 12,
-                                        paddingTop: index === 0 ? 0 : 12,
-                                        width: '90%',
-                                    }}
-                                >
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            width: '100%',
-                                        }}
+                                {meal.price != null && (
+                                    <Text
+                                        style={styles.mealPrice}
+                                        numberOfLines={1}
                                     >
-                                        <Text
-                                            style={{
-                                                color: colors.text,
-                                                fontWeight: '500',
-                                                fontSize: 16,
-                                                maxWidth: '80%',
-                                            }}
-                                            numberOfLines={2}
-                                        >
-                                            {meal.name}
-                                        </Text>
-                                        {meal.price != null && (
-                                            <Text
-                                                style={{
-                                                    color: colors.labelColor,
-                                                    fontSize: 15,
-                                                }}
-                                                numberOfLines={1}
-                                            >
-                                                {meal.price}
-                                            </Text>
-                                        )}
-                                    </View>
-                                </View>
-                                {foodEntries.length - 1 !== index && (
-                                    <Divider
-                                        color={colors.border}
-                                        position="center"
-                                        width={'90%'}
-                                    />
+                                        {meal.price}
+                                    </Text>
                                 )}
-                            </React.Fragment>
-                        ))}
-                    </View>
-                )}
-            </View>
+                            </View>
+                            {foodEntries.length - 1 !== index && (
+                                <Divider color={colors.border} width={'100%'} />
+                            )}
+                        </React.Fragment>
+                    ))}
+                </View>
+            )}
         </BaseCard>
     )
 }

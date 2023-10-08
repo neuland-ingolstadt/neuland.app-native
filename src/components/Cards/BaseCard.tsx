@@ -3,7 +3,7 @@ import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface BaseCardProps {
     title: string
@@ -19,51 +19,49 @@ const BaseCard: React.FC<BaseCardProps> = ({
     children,
 }) => {
     const colors = useTheme().colors as Colors
+
+    const styles = StyleSheet.create({
+        touchable: {
+            marginVertical: 8,
+        },
+        title: {
+            fontSize: 16,
+            color: colors.text,
+            fontWeight: '500',
+            flex: 1,
+        },
+        titleView: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+        },
+        card: {
+            borderRadius: 8,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            padding: 16,
+            gap: 12,
+        },
+        children: {
+            marginHorizontal: 2,
+        },
+    })
+
     return (
-        <TouchableOpacity onPress={onPress} style={{ marginVertical: 8 }}>
-            <View
-                style={{
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    borderRadius: 8,
-                    borderColor: colors.border,
-                    backgroundColor: colors.card,
-                    shadowOffset: {
-                        width: 0,
-                        height: 1,
-                    },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 1,
-                    elevation: 1,
-                    shadowColor: colors.text,
-                }}
-            >
-                <View
-                    style={{
-                        marginHorizontal: 16,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
+        <TouchableOpacity onPress={onPress} style={styles.touchable}>
+            <View style={styles.card}>
+                <View style={styles.titleView}>
                     <Ionicons name={icon} size={20} color={colors.primary} />
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: colors.text,
-                            fontWeight: '500',
-                            padding: 16,
-                            flex: 1,
-                        }}
-                    >
-                        {title}
-                    </Text>
+                    <Text style={styles.title}>{title}</Text>
                     <Ionicons
                         name="chevron-forward-outline"
                         size={20}
                         color={colors.labelColor}
                     />
                 </View>
-                {children}
+                {children != null && (
+                    <View style={styles.children}>{children}</View>
+                )}
             </View>
         </TouchableOpacity>
     )

@@ -6,7 +6,7 @@ import { type CLEvents } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
@@ -44,6 +44,21 @@ const EventsCard = (): JSX.Element => {
         setEvents(newEvents.slice(0, 2))
     }
 
+    const styles = StyleSheet.create({
+        calendarView: {
+            gap: 12,
+        },
+        eventTitle: {
+            color: colors.text,
+            fontWeight: '500',
+            fontSize: 16,
+        },
+        eventDetails: {
+            color: colors.labelColor,
+            fontSize: 15,
+        },
+    })
+
     return (
         <BaseCard
             title="Events"
@@ -52,63 +67,34 @@ const EventsCard = (): JSX.Element => {
                 router.push('events')
             }}
         >
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}
-            >
-                {loadingState === LoadingState.LOADED && (
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            width: '100%',
-                        }}
-                    >
-                        {events.map((event, index) => (
-                            <React.Fragment key={index}>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        paddingBottom: 12,
-                                        paddingTop: index === 0 ? 0 : 12,
-                                        width: '90%',
-                                    }}
-                                >
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text
-                                            style={{
-                                                color: colors.text,
-                                                fontWeight: '500',
-                                                fontSize: 16,
-                                            }}
-                                            numberOfLines={1}
-                                        >
-                                            {event.title}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: colors.labelColor,
-                                                fontSize: 15,
-                                            }}
-                                            numberOfLines={1}
-                                        >
-                                            by {event.organizer}
-                                        </Text>
-                                    </View>
+            {loadingState === LoadingState.LOADED && (
+                <View style={styles.calendarView}>
+                    {events.map((event, index) => (
+                        <React.Fragment key={index}>
+                            <View>
+                                <View>
+                                    <Text
+                                        style={styles.eventTitle}
+                                        numberOfLines={1}
+                                    >
+                                        {event.title}
+                                    </Text>
+                                    <Text
+                                        style={styles.eventDetails}
+                                        numberOfLines={1}
+                                    >
+                                        by {event.organizer}
+                                    </Text>
                                 </View>
-                                {events.length - 1 !== index && (
-                                    <Divider
-                                        color={colors.border}
-                                        position="center"
-                                        width={'90%'}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </View>
-                )}
-            </View>
+                            </View>
+
+                            {events.length - 1 !== index && (
+                                <Divider color={colors.border} width={'100%'} />
+                            )}
+                        </React.Fragment>
+                    ))}
+                </View>
+            )}
         </BaseCard>
     )
 }

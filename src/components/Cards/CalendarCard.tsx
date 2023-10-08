@@ -7,7 +7,7 @@ import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
@@ -65,6 +65,21 @@ const CalendarCard = (): JSX.Element => {
         setMixedCalendar(combined.slice(0, 2))
     }
 
+    const styles = StyleSheet.create({
+        calendarView: {
+            gap: 12,
+        },
+        eventTitle: {
+            color: colors.text,
+            fontWeight: '500',
+            fontSize: 16,
+        },
+        eventDetails: {
+            color: colors.labelColor,
+            fontSize: 15,
+        },
+    })
+
     return (
         <BaseCard
             title="Calendar"
@@ -73,73 +88,40 @@ const CalendarCard = (): JSX.Element => {
                 router.push('calendar')
             }}
         >
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}
-            >
-                {loadingState === LoadingState.LOADED && (
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            width: '100%',
-                        }}
-                    >
-                        {mixedCalendar.map((event, index) => (
-                            <React.Fragment key={index}>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        paddingBottom: 12,
-                                        paddingTop: index === 0 ? 0 : 12,
-                                        width: '90%',
-                                    }}
+            {loadingState === LoadingState.LOADED && (
+                <View style={styles.calendarView}>
+                    {mixedCalendar.map((event, index) => (
+                        <React.Fragment key={index}>
+                            <View>
+                                <Text
+                                    style={styles.eventTitle}
+                                    numberOfLines={2}
                                 >
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <Text
-                                            style={{
-                                                color: colors.text,
-                                                fontWeight: '500',
-                                                fontSize: 16,
-                                            }}
-                                            numberOfLines={2}
-                                        >
-                                            {typeof event.name === 'object'
-                                                ? event.name.en
-                                                : event.name}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: colors.labelColor,
-                                                fontSize: 15,
-                                            }}
-                                            numberOfLines={1}
-                                        >
-                                            {event.end != null &&
-                                            event.begin < time
-                                                ? 'ends ' +
-                                                  formatFriendlyRelativeTime(
-                                                      event.end
-                                                  )
-                                                : formatFriendlyRelativeTime(
-                                                      event.begin
-                                                  )}
-                                        </Text>
-                                    </View>
-                                </View>
-                                {mixedCalendar.length - 1 !== index && (
-                                    <Divider
-                                        color={colors.border}
-                                        position="center"
-                                        width={'90%'}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </View>
-                )}
-            </View>
+                                    {/* Always use .de or .en? */}
+                                    {typeof event.name === 'object'
+                                        ? event.name.en
+                                        : event.name}
+                                </Text>
+                                <Text
+                                    style={styles.eventDetails}
+                                    numberOfLines={1}
+                                >
+                                    {event.end != null && event.begin < time
+                                        ? 'ends ' +
+                                          formatFriendlyRelativeTime(event.end)
+                                        : formatFriendlyRelativeTime(
+                                              event.begin
+                                          )}
+                                </Text>
+                            </View>
+
+                            {mixedCalendar.length - 1 !== index && (
+                                <Divider color={colors.border} width={'100%'} />
+                            )}
+                        </React.Fragment>
+                    ))}
+                </View>
+            )}
         </BaseCard>
     )
 }
