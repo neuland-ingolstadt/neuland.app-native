@@ -1,10 +1,13 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
-import { type FormListSections, type SectionGroup } from '@/stores/types/components'
+import {
+    type FormListSections,
+    type SectionGroup,
+} from '@/stores/types/components'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface FormListProps {
     sections: FormListSections[]
@@ -36,13 +39,13 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
         blockCard: {
             borderRadius: 8,
             backgroundColor: colors.card,
-            padding: 12,
+            paddingVertical: 12,
             gap: 12,
         },
         cardRow: {
             flexDirection: 'row',
             gap: 12,
-            paddingHorizontal: 4,
+            paddingHorizontal: 15,
         },
         blockFooter: {
             fontSize: 12,
@@ -51,8 +54,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
         },
     })
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const itemStyles = (item: SectionGroup) =>
+    const itemStyles = (item: SectionGroup): any =>
         StyleSheet.create({
             rowTitle: {
                 fontSize: 16,
@@ -67,8 +69,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
             },
         })
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const pressedStyle = (pressed: boolean) =>
+    const pressedStyle = (pressed: boolean): any =>
         StyleSheet.create({
             children: {
                 opacity: pressed ? 0.5 : 1,
@@ -120,7 +121,16 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                 {index < section.items.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
-                                        width={'100%'}
+                                        width={
+                                            Platform.OS === 'android'
+                                                ? '92%'
+                                                : undefined
+                                        }
+                                        position={
+                                            Platform.OS === 'android'
+                                                ? 'center'
+                                                : 'flex-end'
+                                        }
                                     />
                                 )}
                             </React.Fragment>
