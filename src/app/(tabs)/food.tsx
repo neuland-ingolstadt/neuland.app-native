@@ -5,6 +5,7 @@ import { type Food } from '@/stores/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
+import Head from 'expo-router/head'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -159,6 +160,12 @@ export default function FoodScreen(): JSX.Element {
 
     return (
         <>
+            <Head>
+                <title>Food</title>
+                <meta name="Food" content="Meal plan for the canteens" />
+                <meta property="expo:handoff" content="true" />
+                <meta property="expo:spotlight" content="true" />
+            </Head>
             <ScrollView
                 refreshControl={
                     loadingState !== LoadingState.LOADING &&
