@@ -62,7 +62,6 @@ const Dropdown: React.FC<Props> = ({
             dropdownStyle={{
                 borderRadius: 8,
                 shadowOpacity: 0.3,
-                elevation: 3,
                 shadowOffset: { width: 0.1, height: 0.1 },
             }}
             selectedRowStyle={{
