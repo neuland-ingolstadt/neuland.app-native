@@ -1,5 +1,5 @@
 import NeulandAPI from '@/api/neuland-api'
-import CLEventRow from '@/components/Elements/Pages/EventRow'
+import MobilityRow from '@/components/Elements/Pages/MobilityRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
 import { MobilityContext } from '@/stores/provider'
@@ -65,8 +65,7 @@ export default function Mobility(): JSX.Element {
     return (
         <ScrollView
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                loadingState !== LoadingState.LOADING ? (
                     <RefreshControl
                         refreshing={loadingState === LoadingState.REFRESHING}
                         onRefresh={onRefresh}
@@ -92,17 +91,6 @@ export default function Mobility(): JSX.Element {
             )}
             {loadingState === LoadingState.LOADED && (
                 <>
-                    <View>
-                        <Text style={{ color: colors.text }}>
-                            {mobilityKind}
-                        </Text>
-                        <Text style={{ color: colors.text }}>
-                            {mobilityStation}
-                        </Text>
-                        <Text style={{ color: colors.text }}>
-                            {JSON.stringify(events, null, 2)}
-                        </Text>
-                    </View>
                     <View
                         style={[
                             styles.loadedContainer,
@@ -111,7 +99,12 @@ export default function Mobility(): JSX.Element {
                     >
                         {events.map((event, index) => (
                             <React.Fragment key={index}>
-                                <CLEventRow event={event} colors={colors} />
+                                <MobilityRow
+                                    item={event}
+                                    colors={colors}
+                                    detailed={true}
+                                    kind={mobilityKind}
+                                />
                                 {index !== events.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}

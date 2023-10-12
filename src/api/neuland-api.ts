@@ -27,6 +27,7 @@ class NeulandAPIClient {
      * @throws {Error} If the API returns an error
      */
     async performRequest(url: string): Promise<any> {
+        console.log('Requesting', url)
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,

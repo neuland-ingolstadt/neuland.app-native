@@ -78,7 +78,7 @@ function HomeScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     container: {
-        width: '92%',
+        width: '94%',
         alignSelf: 'center',
         paddingTop: 5,
     },
