@@ -56,7 +56,7 @@ export default function FoodDetail(): JSX.Element {
             header: 'Flags',
             items:
                 meal?.flags?.map((flag: string) => ({
-                    title: flapMap[flag as keyof typeof flapMap].en,
+                    title: flapMap[flag as keyof typeof flapMap]?.en ?? flag,
                     disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
@@ -68,7 +68,9 @@ export default function FoodDetail(): JSX.Element {
             header: 'Allergens',
             items:
                 meal?.allergens?.map((allergen: string) => ({
-                    title: allergenMap[allergen as keyof typeof allergenMap].en,
+                    title:
+                        allergenMap[allergen as keyof typeof allergenMap]?.en ??
+                        allergen,
                     disabled: true,
                     icon: allergenSelection.includes(allergen)
                         ? 'warning-outline'
