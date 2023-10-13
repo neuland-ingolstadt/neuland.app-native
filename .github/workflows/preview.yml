@@ -34,7 +34,7 @@ jobs:
               run: yarn install
 
             - name: Create preview
-              uses: nderscore/expo-github-action/preview@workaround
+              uses: robert27/expo-github-action/preview@main
               env:
                   EXPO_PUBLIC_THI_API_KEY: ${{ secrets.THI_API_KEY }}
               with:
