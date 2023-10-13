@@ -7,7 +7,7 @@ import {
     _removeAllGeoJson,
     _setView,
     htmlScript,
-} from '@/components/Map/leaflet'
+} from '@/components/Elements/Map/leaflet'
 import { type Colors } from '@/stores/colors'
 import GeoJson from '@/stores/data/map.json'
 import { UserKindContext } from '@/stores/provider'
@@ -186,8 +186,7 @@ export const MapScreen = (): JSX.Element => {
                 const { geometry, properties } = feature
 
                 if (
-                    geometry == null ||
-                    geometry.coordinates == null ||
+                    geometry?.coordinates == null ||
                     geometry.type !== 'Polygon'
                 ) {
                     return []
@@ -366,7 +365,9 @@ export const MapScreen = (): JSX.Element => {
                     >
                         <Pressable
                             onPress={() => {
-                                void Haptics.selectionAsync()
+                                if (Platform.OS === 'ios') {
+                                    void Haptics.selectionAsync()
+                                }
                                 handleDismissModal()
                             }}
                         >

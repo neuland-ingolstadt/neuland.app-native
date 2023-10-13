@@ -1,4 +1,4 @@
-import { SectionPicker } from '@/components/SectionPicker'
+import { SectionPicker } from '@/components/Elements/Universal/SectionPicker'
 import { type Colors } from '@/stores/colors'
 import flapMap from '@/stores/data/mensa-flags.json'
 import { FoodFilterContext } from '@/stores/provider'

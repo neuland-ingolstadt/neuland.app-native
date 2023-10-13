@@ -9,7 +9,7 @@ To contribute, please follow these guidelines:
 1. Fork the repository and clone it to your local machine.
 2. Install the required dependencies:
 
--   [Node.js 18 LTS](https://nodejs.org/en/)
+-   [Node.js 18 LTS](https://nodejs.org/en/) or higher
 -   [Yarn](https://docs.expo.dev/get-started/installation/)
 -   [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
@@ -33,7 +33,8 @@ To contribute, please follow these guidelines:
 
 ## Submitting Changes
 
-1. Commit your changes to your branch. Please use the [Angular commit message style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-header) for your commit messages.
+1. Commit your changes to your branch. To ensure descriptive commit messages, we recommend using the
+ [Angular commit message style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-header) for your commit messages.
 1. Create a pull request from your branch to the develop branch of this repository.
 1. Provide a clear and descriptive title and description for your pull request, summarizing the changes you made.
 1. Once your pull request is submitted, our team will review your changes and provide feedback or request further modifications if needed.
@@ -55,7 +56,6 @@ To contribute, please follow these guidelines:
   │
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 ```
-Note: For the scope, any value can be used, but make sure to use a consistent scope for the same type of changes.
 
 </details>
 
@@ -69,7 +69,7 @@ Note: For the scope, any value can be used, but make sure to use a consistent sc
 -   Use meaningful variable and function names to improve code readability.
 -   Document your code when necessary using inline comments.
 
-We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier. Also the commit message is checked for compliance with the Angular commit message style-
+We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
 But you can also run these commands manually:
 
 -   `yarn lint` to check for linting errors

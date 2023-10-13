@@ -1,4 +1,4 @@
-import FormList from '@/components/FormList'
+import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
 import flapMap from '@/stores/data/mensa-flags.json'

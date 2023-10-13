@@ -1,4 +1,4 @@
-import FormList from '@/components/FormList'
+import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { useTheme } from '@react-navigation/native'

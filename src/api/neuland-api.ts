@@ -27,6 +27,7 @@ class NeulandAPIClient {
      * @throws {Error} If the API returns an error
      */
     async performRequest(url: string): Promise<any> {
+        console.log('Requesting', url)
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,
@@ -133,7 +134,10 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
     async getCampusLifeEvents(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/cl-events`)
+        return await this.requestCached(
+            'cl-events',
+            `${ENDPOINT}/api/cl-events`
+        )
     }
 }
 

@@ -21,7 +21,7 @@ interface Props {
  * @param onSelect - A function that is called when an option is selected.
  * @param selected - The currently selected option.
  */
-export const Dropdown: React.FC<Props> = ({
+const Dropdown: React.FC<Props> = ({
     data,
     defaultValue,
     defaultText,
@@ -59,12 +59,11 @@ export const Dropdown: React.FC<Props> = ({
                 borderBottomColor: colors.labelTertiaryColor,
                 height: 45,
             }}
-            dropdownStyle={[
-                styles.dropdownStyle,
-                {
-                    backgroundColor: colors.card,
-                },
-            ]}
+            dropdownStyle={{
+                borderRadius: 8,
+                shadowOpacity: 0.3,
+                shadowOffset: { width: 0.1, height: 0.1 },
+            }}
             selectedRowStyle={{
                 backgroundColor: colors.primary,
             }}
@@ -86,8 +85,6 @@ const styles = StyleSheet.create({
         height: 32,
         justifyContent: 'center',
     },
-    dropdownStyle: {
-        height: 250,
-        borderRadius: 8,
-    },
 })
+
+export default Dropdown

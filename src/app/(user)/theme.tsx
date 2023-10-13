@@ -5,7 +5,14 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React from 'react'
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -35,7 +42,9 @@ export default function Theme(): JSX.Element {
                 <Pressable
                     onPress={() => {
                         toggleAccentColor(code)
-                        void Haptics.selectionAsync()
+                        if (Platform.OS === 'ios') {
+                            void Haptics.selectionAsync()
+                        }
                     }}
                     style={({ pressed }) => [
                         {

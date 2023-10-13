@@ -82,7 +82,7 @@ export async function loadFoodEntries(restaurants: string[]): Promise<Food[]> {
             (r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
         )
         return {
-            timestamp: new Date(day), // convert string to Date object
+            timestamp: day,
             meals: dayEntries,
         }
     })
