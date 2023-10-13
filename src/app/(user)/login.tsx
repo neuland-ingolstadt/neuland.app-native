@@ -1,6 +1,6 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
-import { Checkbox } from '@/components/Checkbox'
-import { LoginFailureAlert } from '@/components/Settings'
+import { LoginFailureAlert } from '@/components/Elements/Settings'
+import { Checkbox } from '@/components/Elements/Universal/Checkbox'
 import { type Colors } from '@/stores/colors'
 import { USER_GUEST } from '@/stores/hooks/userKind'
 import { UserKindContext } from '@/stores/provider'
@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
         borderRadius: 10,
         maxWidth: 500,
         width: '90%',

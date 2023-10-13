@@ -1,4 +1,4 @@
-import Divider from '@/components/Divider'
+import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
@@ -61,18 +61,30 @@ export default function DashboardEdit(): JSX.Element {
             />
         )
     }, [])
+
+    const handleRestore = useCallback(
+        (item: Item) => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            bringBackDashboardEntry(item.key)
+            setRefresh(!refresh)
+        },
+        [bringBackDashboardEntry, refresh]
+    )
+
+    const handleReset = useCallback(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+        resetOrder()
+        setRefresh(!refresh)
+    }, [resetOrder, refresh])
+
     return (
-        <>
-            <ScrollView contentInsetAdjustmentBehavior="automatic">
-                <View style={styles.container}>
-                    <View
-                        style={{
-                            width: '92%',
-                            alignSelf: 'center',
-                            marginTop: 20,
-                            marginBottom: 20,
-                        }}
-                    >
+        <View>
+            <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                style={styles.page}
+            >
+                <View style={styles.wrapper}>
+                    <View style={styles.block}>
                         <Text
                             style={[
                                 styles.sectionHeaderText,
@@ -81,149 +93,112 @@ export default function DashboardEdit(): JSX.Element {
                         >
                             Shown Cards
                         </Text>
-                        <DraggableFlatList
-                            keyExtractor={(item) => item.key}
-                            data={shownDashboardEntries}
-                            renderItem={renderItem}
-                            onDragEnd={({ data }) => {
-                                updateDashboardOrder(data)
-                            }}
-                            activationDistance={10}
-                            style={{ borderRadius: 10, overflow: 'hidden' }}
-                            scrollEnabled={false}
-                        />
-                    </View>
-                </View>
-                <View
-                    style={{
-                        width: '92%',
-                        alignSelf: 'center',
-                    }}
-                >
-                    {hiddenDashboardEntries.length > 0 && (
-                        <Text
+                        <View
                             style={[
-                                styles.sectionHeaderText,
-                                { color: colors.labelSecondaryColor },
+                                styles.card,
+                                {
+                                    backgroundColor: colors.card,
+                                },
                             ]}
                         >
-                            Hidden Cards
-                        </Text>
-                    )}
-                    <View
-                        style={{
-                            backgroundColor: colors.card,
-                            borderRadius: 8,
-                            marginTop: 2,
-                        }}
-                    >
-                        {hiddenDashboardEntries.map((item, index) => (
-                            <React.Fragment key={index}>
-                                <Pressable
-                                    onPress={() => {
-                                        bringBackDashboardEntry(item.key)
-                                    }}
-                                    style={({ pressed }) => [
-                                        { opacity: pressed ? 0.5 : 1 },
-                                        { padding: 8 },
-                                    ]}
-                                >
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            marginVertical: 3,
+                            <DraggableFlatList
+                                keyExtractor={(item) => item.key}
+                                data={shownDashboardEntries}
+                                renderItem={renderItem}
+                                onDragEnd={({ data }) => {
+                                    updateDashboardOrder(data)
+                                }}
+                                activationDistance={10}
+                                style={styles.dragList}
+                                scrollEnabled={false}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.block}>
+                        {hiddenDashboardEntries.length > 0 && (
+                            <Text
+                                style={[
+                                    styles.sectionHeaderText,
+                                    { color: colors.labelSecondaryColor },
+                                ]}
+                            >
+                                Hidden Cards
+                            </Text>
+                        )}
+                        <View
+                            style={[
+                                styles.card,
+                                {
+                                    backgroundColor: colors.card,
+                                },
+                            ]}
+                        >
+                            {hiddenDashboardEntries.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    <Pressable
+                                        onPress={() => {
+                                            handleRestore(item)
                                         }}
+                                        style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.5 : 1,
+                                            },
+                                        ]}
                                     >
-                                        <View
-                                            style={{
-                                                width: '90%',
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                            }}
-                                        >
+                                        <View style={styles.row}>
                                             <Text
-                                                style={{
-                                                    color: colors.text,
-                                                    marginLeft: 8,
-                                                    fontSize: 16,
-                                                }}
+                                                style={[
+                                                    styles.text,
+                                                    { color: colors.text },
+                                                ]}
                                             >
                                                 {item.text}
                                             </Text>
-                                        </View>
-                                        <View
-                                            style={{
-                                                width: '10%',
-                                                alignItems: 'center',
-                                            }}
-                                        >
                                             <Ionicons
                                                 name="add-circle"
                                                 size={24}
                                                 color={colors.primary}
                                             />
                                         </View>
-                                    </View>
-                                </Pressable>
-                                {index !==
-                                    hiddenDashboardEntries.length - 1 && (
-                                    <Divider />
-                                )}
-                            </React.Fragment>
-                        ))}
+                                    </Pressable>
+                                    {index !==
+                                        hiddenDashboardEntries.length - 1 && (
+                                        <Divider
+                                            color={colors.labelTertiaryColor}
+                                            width={'100%'}
+                                        />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </View>
                     </View>
-                </View>
 
-                <View
-                    style={{
-                        width: '92%',
-                        alignSelf: 'center',
-                        backgroundColor: colors.card,
-                        borderRadius: 8,
-                        marginTop: 24,
-                    }}
-                >
-                    <Pressable
-                        onPress={() => {
-                            resetOrder()
-                        }}
+                    <View
+                        style={[styles.card, { backgroundColor: colors.card }]}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                fontSize: 16,
-                                marginVertical: 12,
-                                alignSelf: 'center',
-                            }}
-                        >
-                            Reset Order
-                        </Text>
-                    </Pressable>
-                </View>
-                <View
-                    style={{
-                        width: '92%',
-                        alignSelf: 'center',
-                        paddingTop: 30,
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 11,
-                            fontWeight: 'normal',
-                            color: colors.labelColor,
-                            paddingTop: 8,
-                            textAlign: 'justify',
-                        }}
-                    >
-                        Customise your dashboard by dragging and dropping the
+                        <Pressable onPress={handleReset}>
+                            <Text
+                                style={[
+                                    styles.reset,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
+                            >
+                                Reset Order
+                            </Text>
+                        </Pressable>
+                    </View>
+
+                    <Text style={[styles.footer, { color: colors.labelColor }]}>
+                        Customize your dashboard by dragging and dropping the
                         cards to your preferred order. You can also hide cards
                         by swiping left.
                     </Text>
                 </View>
             </ScrollView>
-        </>
+        </View>
     )
 }
 
@@ -244,70 +219,82 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
             <TouchableOpacity
                 activeOpacity={1}
                 onLongPress={drag}
-                style={[styles.row, { backgroundColor: colors.card }]}
+                style={[
+                    styles.row,
+                    {
+                        backgroundColor: colors.card,
+                    },
+                ]}
             >
-                <View
-                    style={{
-                        flexDirection: 'row',
+                <Ionicons
+                    name="reorder-three-outline"
+                    size={24}
+                    color={colors.labelTertiaryColor}
+                />
 
-                        alignItems: 'center',
-                    }}
-                >
-                    <Ionicons
-                        name="reorder-three-outline"
-                        size={24}
-                        color={colors.labelTertiaryColor}
-                        style={{ marginLeft: 10 }}
-                    />
-                    <Text
-                        style={[styles.text, { color: colors.text }]}
-                    >{`${item.text}`}</Text>
-                </View>
+                <Text style={[styles.text, { color: colors.text }]}>
+                    {item.text}
+                </Text>
 
                 <Ionicons
                     name="remove-circle-outline"
                     size={24}
                     color={colors.labelSecondaryColor}
                     onPress={onPressDelete}
-                    style={{ marginRight: 10 }}
                 />
             </TouchableOpacity>
+
             {shownDashboardEntries.findIndex((i) => i.key === item.key) <
                 shownDashboardEntries.length - 1 && (
-                <Divider color={colors.labelTertiaryColor} />
+                <Divider color={colors.labelTertiaryColor} width={'100%'} />
             )}
         </ScaleDecorator>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    page: {
+        padding: 16,
+    },
+    wrapper: {
+        gap: 16,
+    },
+    block: {
+        width: '100%',
+        alignSelf: 'center',
+        gap: 6,
+    },
+    card: {
+        borderRadius: 8,
+        paddingHorizontal: 12,
+    },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 5,
-        paddingVertical: 5,
         alignItems: 'center',
+        gap: 6,
+        paddingVertical: 8,
     },
     text: {
-        marginLeft: 8,
         fontSize: 16,
-        marginVertical: 10,
-    },
-    underlayRight: {
-        flex: 1,
-        backgroundColor: 'teal',
-        justifyContent: 'flex-start',
-    },
-    underlayLeft: {
-        flex: 1,
-        backgroundColor: 'tomato',
-        justifyContent: 'flex-end',
+        flexGrow: 1,
+        flexShrink: 1,
     },
     sectionHeaderText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
-        marginBottom: 4,
+    },
+    dragList: {
+        overflow: 'hidden',
+    },
+    footer: {
+        fontSize: 11,
+        fontWeight: 'normal',
+        textAlign: 'justify',
+    },
+    reset: {
+        fontSize: 16,
+        marginVertical: 12,
+        alignSelf: 'center',
     },
 })

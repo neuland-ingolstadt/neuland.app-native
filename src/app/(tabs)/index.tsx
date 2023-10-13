@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const Stack2 = createNativeStackNavigator()
@@ -37,7 +37,7 @@ export default function Screen(): JSX.Element {
                         headerShown: true,
                         headerLargeTitle: true,
                         headerRight: () => (
-                            <TouchableOpacity
+                            <Pressable
                                 onPress={() => {
                                     router.push('(user)/settings')
                                 }}
@@ -46,8 +46,9 @@ export default function Screen(): JSX.Element {
                                     name="cog-outline"
                                     size={24}
                                     color={colors.primary}
+                                    style={{ marginRight: 6 }}
                                 />
-                            </TouchableOpacity>
+                            </Pressable>
                         ),
                     }}
                     component={HomeScreen}
@@ -77,9 +78,9 @@ function HomeScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     container: {
-        width: '92%',
+        width: '94%',
         alignSelf: 'center',
-        paddingTop: 16,
+        paddingTop: 5,
     },
     heading: {
         fontSize: 32,

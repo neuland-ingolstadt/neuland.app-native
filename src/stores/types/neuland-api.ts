@@ -18,8 +18,8 @@ export interface CLEvents {
     id: string
     organizer: string
     title: string
-    begin: Date
-    end: Date
+    begin: Date | null
+    end: Date | null
 }
 
 export interface Food {

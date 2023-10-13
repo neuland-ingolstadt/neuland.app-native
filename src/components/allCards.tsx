@@ -6,26 +6,11 @@ import {
 import { useRouter } from 'expo-router'
 import React from 'react'
 
-import { BaseCard } from './Cards/BaseCard'
+import { BaseCard, CalendarCard, EventsCard, FoodCard } from './Cards'
 
 const router = useRouter()
 
 export const AllCards: Card[] = [
-    {
-        text: 'Exams',
-        key: 'exams',
-        removable: false,
-        default: [USER_STUDENT],
-        card: () => (
-            <BaseCard
-                title="Exams"
-                icon="pencil"
-                onPress={() => {
-                    router.push('exams')
-                }}
-            />
-        ),
-    },
     {
         text: 'Timetable',
         key: 'timetable',
@@ -42,19 +27,11 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Mensa',
+        text: 'Food',
         key: 'mensa',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="Mensa"
-                icon="restaurant"
-                onPress={() => {
-                    router.replace('(tabs)/food')
-                }}
-            />
-        ),
+        card: () => <FoodCard />,
     },
     {
         text: 'Mobility',
@@ -76,30 +53,14 @@ export const AllCards: Card[] = [
         key: 'calendar',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="Calendar"
-                icon="calendar"
-                onPress={() => {
-                    router.push('calendar')
-                }}
-            />
-        ),
+        card: () => <CalendarCard />,
     },
     {
-        text: 'Events',
+        text: 'Campus Life Events',
         key: 'events',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="Events"
-                icon="bonfire"
-                onPress={() => {
-                    router.push('events')
-                }}
-            />
-        ),
+        card: () => <EventsCard />,
     },
     {
         text: 'Rooms',

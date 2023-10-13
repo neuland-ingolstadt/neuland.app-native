@@ -3,52 +3,37 @@ import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface BaseCardProps {
     title: string
     onPress: () => void
     icon: typeof Ionicons.defaultProps.name
+    children?: React.ReactNode
 }
 
-export const BaseCard: React.FC<BaseCardProps> = ({ title, onPress, icon }) => {
+const BaseCard: React.FC<BaseCardProps> = ({
+    title,
+    onPress,
+    icon,
+    children,
+}) => {
     const colors = useTheme().colors as Colors
+
     return (
-        <TouchableOpacity onPress={onPress} style={{ marginVertical: 8 }}>
+        <TouchableOpacity onPress={onPress} style={styles.touchable}>
             <View
-                style={{
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    borderRadius: 8,
-                    borderColor: colors.border,
-                    backgroundColor: colors.card,
-                    shadowOffset: {
-                        width: 0,
-                        height: 1,
+                style={[
+                    styles.card,
+                    {
+                        borderColor: colors.border,
+                        backgroundColor: colors.card,
                     },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 1,
-                    elevation: 1,
-                    shadowColor: colors.text,
-                }}
+                ]}
             >
-                <View
-                    style={{
-                        marginHorizontal: 16,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
+                <View style={styles.titleView}>
                     <Ionicons name={icon} size={20} color={colors.primary} />
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: colors.text,
-                            fontWeight: '500',
-                            padding: 16,
-                            flex: 1,
-                        }}
-                    >
+                    <Text style={[styles.title, { color: colors.text }]}>
                         {title}
                     </Text>
                     <Ionicons
@@ -57,7 +42,36 @@ export const BaseCard: React.FC<BaseCardProps> = ({ title, onPress, icon }) => {
                         color={colors.labelColor}
                     />
                 </View>
+                {children != null && (
+                    <View style={styles.children}>{children}</View>
+                )}
             </View>
         </TouchableOpacity>
     )
 }
+
+const styles = StyleSheet.create({
+    touchable: {
+        marginVertical: 8,
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: '500',
+        flex: 1,
+    },
+    titleView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    card: {
+        borderRadius: 8,
+        padding: 16,
+        gap: 12,
+    },
+    children: {
+        marginHorizontal: 2,
+    },
+})
+
+export default BaseCard

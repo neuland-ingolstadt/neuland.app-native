@@ -1,13 +1,15 @@
-import { MealDay } from '@/components/Food'
+import { MealDay } from '@/components/Elements/Food'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
+import Head from 'expo-router/head'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
+    Platform,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -95,10 +97,12 @@ export default function FoodScreen(): JSX.Element {
 
         return (
             <View style={buttonStyle} key={index}>
-                {/* Assign a unique key prop to the top-level View element */}
                 <Pressable
                     onPress={() => {
-                        void Haptics.selectionAsync()
+                        // only vibrate on iOS
+                        if (Platform.OS === 'ios' && index !== selectedDay) {
+                            void Haptics.selectionAsync()
+                        }
                         setSelectedDay(index)
                     }}
                 >
@@ -156,6 +160,12 @@ export default function FoodScreen(): JSX.Element {
 
     return (
         <>
+            <Head>
+                <title>Food</title>
+                <meta name="Food" content="Meal plan for the canteens" />
+                <meta property="expo:handoff" content="true" />
+                <meta property="expo:spotlight" content="true" />
+            </Head>
             <ScrollView
                 refreshControl={
                     loadingState !== LoadingState.LOADING &&
@@ -254,7 +264,9 @@ const styles = StyleSheet.create({
     },
     dayButtonContainer: {
         width: '100%',
+        height: 60,
         alignSelf: 'center',
+        alignContent: 'center',
         borderRadius: 8,
         shadowOffset: {
             width: 0,
@@ -262,10 +274,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 1,
-        elevation: 1,
         alignItems: 'center',
-
-        paddingHorizontal: 16,
-        paddingVertical: 10,
+        justifyContent: 'space-evenly',
+        paddingVertical: 8,
     },
 })

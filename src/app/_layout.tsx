@@ -153,6 +153,96 @@ export default function RootLayout(): JSX.Element {
                             animation: 'slide_from_right',
                         }}
                     />
+                    <Stack.Screen
+                        name="(pages)/events"
+                        options={{
+                            title: 'Campus Life Events',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/calendar"
+                        options={{
+                            title: 'Calendar',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/exam"
+                        options={{
+                            title: 'Exam Details',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/lecturers"
+                        options={{
+                            title: 'Lecturers',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                            headerSearchBarOptions: {
+                                placeholder: 'Search all lecturers',
+                                ...Platform.select({
+                                    android: {
+                                        headerIconColor: colorText,
+                                        textColor: colorText,
+                                        hintTextColor: colorText,
+                                        tintColor: colorText,
+                                    },
+                                }),
+                                hideWhenScrolling: false,
+                                onChangeText: (event) => {
+                                    router.setParams({
+                                        q: event.nativeEvent.text,
+                                    })
+                                },
+                                shouldShowHintSearchIcon: false,
+                            },
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/lecturer"
+                        options={{
+                            title: 'Lecturer Details',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/mobility"
+                        options={{
+                            title: 'Mobility',
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

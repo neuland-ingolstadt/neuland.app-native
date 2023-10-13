@@ -31,7 +31,7 @@ interface PersonalData {
  * @returns {string} Faculty name (e.g. `Informatik`)
  */
 function extractFacultyFromPersonalData(data: PersonalData): string | null {
-    if (data === null || data.persdata == null || data.persdata.stg == null) {
+    if (data?.persdata?.stg == null) {
         return null
     }
     const shortNames: CourseShortNames = courseShortNames
@@ -51,7 +51,7 @@ function extractFacultyFromPersonalData(data: PersonalData): string | null {
  * @returns {string}
  */
 function extractSpoFromPersonalData(data: PersonalData): string | null {
-    if (data == null || data.persdata == null || data.persdata.po_url == null) {
+    if (data?.persdata?.po_url == null) {
         return null
     }
 
@@ -224,7 +224,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return res
     }
 
-    async getPersonalLecturers(): Promise<Lecturers> {
+    async getPersonalLecturers(): Promise<Lecturers[]> {
         const res = await this.requestCached(KEY_GET_PERSONAL_LECTURERS, {
             service: 'thiapp',
             method: 'stpllecturers',
@@ -238,7 +238,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @param {string} from Single character indicating where to start listing the lecturers
      * @param {string} to Single character indicating where to end listing the lecturers
      */
-    async getLecturers(from: string, to: string): Promise<Lecturers> {
+    async getLecturers(from: string, to: string): Promise<Lecturers[]> {
         const key = `${KEY_GET_LECTURERS}-${from}-${to}`
         const res = await this.requestCached(key, {
             service: 'thiapp',

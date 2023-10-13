@@ -9,7 +9,7 @@ import { useUserKind } from './userKind'
  * @param userKind - A string representing the user type.
  * @returns An object containing two arrays of Card objects, one for the cards that should be shown by default and one for the hidden cards.
  */
-function getDefaultDashbaordOrder(userKind: string): {
+function getDefaultDashboardOrder(userKind: string): {
     shown: Card[]
     hidden: Card[]
 } {
@@ -47,9 +47,9 @@ export function useDashboard(): Dashboard {
                 'personalDashboardHidden'
             )
             if (personalDashboard != null) {
-                const entries = JSON.parse(personalDashboard).map((x: string) =>
-                    AllCards.find((y) => y.key === x)
-                )
+                const entries = JSON.parse(personalDashboard)
+                    .map((x: string) => AllCards.find((y) => y.key === x))
+                    .filter((x: Record<string, Card>) => x != null)
                 setShownDashboardEntries(entries)
 
                 if (personalDashboardHidden != null) {
@@ -60,7 +60,7 @@ export function useDashboard(): Dashboard {
                     setHiddenDashboardEntries(hiddenEntries)
                 }
             } else {
-                const entries = getDefaultDashbaordOrder(userKind)
+                const entries = getDefaultDashboardOrder(userKind)
                 setShownDashboardEntries(entries.shown)
                 setHiddenDashboardEntries(entries.hidden)
             }
@@ -128,7 +128,7 @@ export function useDashboard(): Dashboard {
     }
 
     function resetOrder(): void {
-        const defaultEntries = getDefaultDashbaordOrder(userKind)
+        const defaultEntries = getDefaultDashboardOrder(userKind)
         setShownDashboardEntries(defaultEntries.shown)
         setHiddenDashboardEntries(defaultEntries.hidden)
         changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)

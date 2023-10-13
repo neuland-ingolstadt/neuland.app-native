@@ -4,8 +4,8 @@ export interface Allergens {
 }
 
 export interface Calendar {
-    name: LanguageClass | string
-    begin: string
+    name: LanguageClass
+    begin: Date
     comments?: string[]
     end?: Date
     hasHours?: boolean

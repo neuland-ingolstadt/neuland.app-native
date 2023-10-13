@@ -33,7 +33,7 @@ export interface Exams {
     exam_rooms: string
     exam_seat: string
     pruefer_namen: string[]
-    anmerkung: null
+    anmerkung: string
     pruefungs_art: string
     modus: string
     hilfsmittel: string[]
@@ -63,15 +63,15 @@ export interface Jobs {
 export interface Lecturers {
     id: string
     name: string
-    vorname: null | string
-    titel: null | string
-    raum: null | string
+    vorname: string
+    titel: string
+    raum: string
     email: string
     tel_dienst: string
-    sprechstunde: null | string
-    einsichtnahme: null | string
+    sprechstunde: string
+    einsichtnahme: string
     ist_intern: IstIntern
-    organisation: Organisation | null
+    organisation: Organisation
     funktion: Funktion
 }
 
