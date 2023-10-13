@@ -4,6 +4,7 @@ module.exports = {
     expo: {
         name: 'Neuland Next',
         slug: 'neuland-app-native',
+        scheme: 'neuland',
         owner: 'neuland-ingolstadt',
         version: packageInfo.version,
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
