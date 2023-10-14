@@ -1,7 +1,7 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
-import flapMap from '@/stores/data/mensa-flags.json'
+import flagMap from '@/stores/data/mensa-flags.json'
 import { FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
@@ -56,7 +56,7 @@ export default function FoodDetail(): JSX.Element {
             header: 'Flags',
             items:
                 meal?.flags?.map((flag: string) => ({
-                    title: flapMap[flag as keyof typeof flapMap].en,
+                    title: flagMap[flag as keyof typeof flagMap]?.en ?? flag,
                     disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
@@ -67,14 +67,20 @@ export default function FoodDetail(): JSX.Element {
         {
             header: 'Allergens',
             items:
-                meal?.allergens?.map((allergen: string) => ({
-                    title: allergenMap[allergen as keyof typeof allergenMap].en,
-                    disabled: true,
-                    icon: allergenSelection.includes(allergen)
-                        ? 'warning-outline'
-                        : undefined,
-                    iconColor: colors.notification,
-                })) ?? [],
+                (meal?.allergens ?? [])
+                    .filter((allergen: string) =>
+                        Object.keys(allergenMap).includes(allergen)
+                    )
+                    .map((allergen: string) => ({
+                        title:
+                            allergenMap[allergen as keyof typeof allergenMap]
+                                ?.en ?? allergen,
+                        disabled: true,
+                        icon: allergenSelection.includes(allergen)
+                            ? 'warning-outline'
+                            : undefined,
+                        iconColor: colors.notification,
+                    })) ?? [],
         },
         {
             header: 'Nutrition',

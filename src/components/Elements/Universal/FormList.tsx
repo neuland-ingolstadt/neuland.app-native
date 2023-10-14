@@ -78,69 +78,79 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
 
     return (
         <View style={styles.wrapper}>
-            {sections.map((section, sectionIndex) => (
-                <View key={sectionIndex} style={styles.block}>
-                    <Text style={styles.blockHeader}>{section.header}</Text>
+            {sections.map((section, sectionIndex) =>
+                // skip whole section if section.items is empty
+                section.items.length === 0 ? null : (
+                    <View key={sectionIndex} style={styles.block}>
+                        <Text style={styles.blockHeader}>{section.header}</Text>
 
-                    <View style={styles.blockCard}>
-                        {section.items.map((item, index) => (
-                            <React.Fragment key={index}>
-                                <Pressable
-                                    onPress={item.onPress}
-                                    style={({ pressed }) =>
-                                        pressedStyle(pressed).children
-                                    }
-                                    disabled={item.disabled ?? false}
-                                >
-                                    <View style={styles.cardRow}>
-                                        <Text style={itemStyles(item).rowTitle}>
-                                            {item.title}
-                                        </Text>
-                                        {item.value != null && (
+                        <View style={styles.blockCard}>
+                            {section.items.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    <Pressable
+                                        onPress={item.onPress}
+                                        style={({ pressed }) =>
+                                            pressedStyle(pressed).children
+                                        }
+                                        disabled={item.disabled ?? false}
+                                    >
+                                        <View style={styles.cardRow}>
                                             <Text
                                                 style={
-                                                    itemStyles(item).rowDetails
+                                                    itemStyles(item).rowTitle
                                                 }
                                             >
-                                                {item.value}
+                                                {item.title}
                                             </Text>
-                                        )}
-                                        {item.icon != null && (
-                                            <Ionicons
-                                                name={item.icon as any}
-                                                size={18}
-                                                color={
-                                                    item.iconColor ??
-                                                    colors.labelSecondaryColor
-                                                }
-                                            />
-                                        )}
-                                    </View>
-                                </Pressable>
+                                            {item.value != null && (
+                                                <Text
+                                                    style={
+                                                        itemStyles(item)
+                                                            .rowDetails
+                                                    }
+                                                >
+                                                    {item.value}
+                                                </Text>
+                                            )}
+                                            {item.icon != null && (
+                                                <Ionicons
+                                                    name={item.icon as any}
+                                                    size={18}
+                                                    color={
+                                                        item.iconColor ??
+                                                        colors.labelSecondaryColor
+                                                    }
+                                                />
+                                            )}
+                                        </View>
+                                    </Pressable>
 
-                                {index < section.items.length - 1 && (
-                                    <Divider
-                                        color={colors.labelTertiaryColor}
-                                        width={
-                                            Platform.OS === 'android'
-                                                ? '92%'
-                                                : undefined
-                                        }
-                                        position={
-                                            Platform.OS === 'android'
-                                                ? 'center'
-                                                : 'flex-end'
-                                        }
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
+                                    {index < section.items.length - 1 && (
+                                        <Divider
+                                            color={colors.labelTertiaryColor}
+                                            width={
+                                                Platform.OS === 'android'
+                                                    ? '92%'
+                                                    : undefined
+                                            }
+                                            position={
+                                                Platform.OS === 'android'
+                                                    ? 'center'
+                                                    : 'flex-end'
+                                            }
+                                        />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </View>
+                        {section.footer != null && (
+                            <Text style={styles.blockFooter}>
+                                {section.footer}
+                            </Text>
+                        )}
                     </View>
-                    {section.footer != null && (
-                        <Text style={styles.blockFooter}>{section.footer}</Text>
-                    )}
-                </View>
-            ))}
+                )
+            )}
         </View>
     )
 }
