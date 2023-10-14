@@ -10,7 +10,7 @@ To contribute, please follow these guidelines:
 2. Install the required dependencies:
 
    - [Node.js 18 LTS](https://nodejs.org/en/) or higher
-   - [Yarn](https://docs.expo.dev/get-started/installation/)
+   - [Yarn](https://classic.yarnpkg.com/en/docs/install)
    - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
 3. Install project dependencies by running the following command in the project directory:
