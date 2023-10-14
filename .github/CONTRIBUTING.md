@@ -19,7 +19,10 @@ To contribute, please follow these guidelines:
     yarn install
     ```
 
-4. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+4. Create an Expo account to be able to run the app on your smartphone or simulator. You can create an account [here](https://expo.dev/signup).
+To access the Expo neuland.app organization, you need to join our Expo organization. Please contact us to get an invitation.
+
+5. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
 
 ### Using the Android Emulator (_Windows, macOS, and Linux_)
 
