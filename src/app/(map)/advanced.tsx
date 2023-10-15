@@ -133,6 +133,7 @@ export default function AdvancedSearch(): JSX.Element {
     return (
         <>
             <ScrollView
+                style={styles.scrollView}
                 refreshControl={
                     loadingState !== LoadingState.LOADED ? (
                         <RefreshControl
@@ -144,7 +145,7 @@ export default function AdvancedSearch(): JSX.Element {
                     ) : undefined
                 }
             >
-                <View style={[styles.container]}>
+                <View>
                     <Text
                         style={[
                             styles.sectionHeader,
@@ -226,7 +227,6 @@ export default function AdvancedSearch(): JSX.Element {
                                     accentColor={colors.primary}
                                     locale="de-DE"
                                     minuteInterval={5}
-                                    display="default"
                                     onChange={(_event, selectedDate) => {
                                         setShowTime(false)
                                         setTime(formatISOTime(selectedDate))
@@ -343,14 +343,9 @@ export default function AdvancedSearch(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '92%',
-        alignContent: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        marginTop: 15,
+    scrollView: {
+        padding: 12,
     },
-    centeredView: {},
     sectionHeader: {
         fontSize: 13,
 
