@@ -155,19 +155,20 @@ export default function AdvancedSearch(): JSX.Element {
                         Search options
                     </Text>
                     <View
-                        style={{
-                            backgroundColor: colors.card,
-                            marginBottom: 15,
-                            borderRadius: 10,
-                        }}
+                        style={[
+                            styles.section,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
                     >
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
                                 Date
                             </Text>
 
@@ -201,13 +202,13 @@ export default function AdvancedSearch(): JSX.Element {
                             )}
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
                                 Time
                             </Text>
 
@@ -245,13 +246,13 @@ export default function AdvancedSearch(): JSX.Element {
                             )}
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
                                 Duration
                             </Text>
                             <Dropdown
@@ -263,13 +264,13 @@ export default function AdvancedSearch(): JSX.Element {
                             />
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
                                 Building
                             </Text>
                             <Dropdown
@@ -290,29 +291,21 @@ export default function AdvancedSearch(): JSX.Element {
                         Available free rooms
                     </Text>
                     <View
-                        style={{
-                            alignSelf: 'center',
-                            backgroundColor: colors.card,
-                            borderRadius: 8,
-                            width: '100%',
-                            marginBottom: 16,
-                            justifyContent: 'center',
-                        }}
+                        style={[
+                            styles.section,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
                     >
                         {loadingState === LoadingState.LOADING && (
                             <ActivityIndicator
                                 color={colors.primary}
-                                style={{ paddingVertical: 30 }}
+                                style={styles.loadingIndicator}
                             />
                         )}
                         {loadingState === LoadingState.ERROR && (
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    paddingVertical: 30,
-                                }}
-                            >
+                            <View style={styles.errorSection}>
                                 <Text
                                     style={[
                                         styles.errorMessage,
@@ -353,6 +346,21 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         marginBottom: 4,
     },
+    optionTitle: {
+        fontSize: 15,
+    },
+    section: {
+        marginBottom: 16,
+        borderRadius: 8,
+    },
+    loadingIndicator: {
+        paddingVertical: 30,
+    },
+    errorSection: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 30,
+    },
     errorMessage: {
         fontWeight: '600',
         fontSize: 16,
@@ -367,9 +375,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-
-        padding: 10,
-        marginHorizontal: 8,
-        height: 50,
+        paddingHorizontal: 15,
+        paddingVertical: 6,
     },
 })
