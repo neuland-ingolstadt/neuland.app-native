@@ -4,7 +4,9 @@ import {
 } from '@/api/thi-session-handler'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
-import Dropdown from '@/components/Elements/Universal/Dropdown'
+import Dropdown, {
+    DropdownButton,
+} from '@/components/Elements/Universal/Dropdown'
 import { type Colors } from '@/stores/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
@@ -65,6 +67,9 @@ export default function AdvancedSearch(): JSX.Element {
     const [date, setDate] = useState(formatISODate(startDate))
     const [time, setTime] = useState(formatISOTime(startDate))
     const [duration, setDuration] = useState(DURATION_PRESET)
+
+    const [showDate, setShowDate] = useState(false)
+    const [showTime, setShowTime] = useState(false)
 
     const [filterResults, setFilterResults] = useState<AvailableRoom[] | null>(
         null
@@ -162,27 +167,37 @@ export default function AdvancedSearch(): JSX.Element {
                             ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Date{' '}
+                                Date
                             </Text>
 
-                            <DateTimePicker
-                                value={new Date(date + 'T' + time)}
-                                mode="date"
-                                accentColor={colors.primary}
-                                locale="de-DE"
-                                onChange={(event, selectedDate) => {
-                                    setDate(formatISODate(selectedDate))
+                            <DropdownButton
+                                onPress={() => {
+                                    setShowDate(true)
                                 }}
-                                minimumDate={new Date()}
-                                maximumDate={
-                                    new Date(
-                                        new Date().setDate(
-                                            new Date().getDate() + 90
+                            >
+                                {date.split('-').reverse().join('.')}
+                            </DropdownButton>
+
+                            {showDate && (
+                                <DateTimePicker
+                                    value={new Date(date + 'T' + time)}
+                                    mode="date"
+                                    accentColor={colors.primary}
+                                    locale="de-DE"
+                                    onChange={(_event, selectedDate) => {
+                                        setShowDate(false)
+                                        setDate(formatISODate(selectedDate))
+                                    }}
+                                    minimumDate={new Date()}
+                                    maximumDate={
+                                        new Date(
+                                            new Date().setDate(
+                                                new Date().getDate() + 90
+                                            )
                                         )
-                                    )
-                                }
-                            />
+                                    }
+                                />
+                            )}
                         </View>
                         <Divider />
                         <View
@@ -192,28 +207,42 @@ export default function AdvancedSearch(): JSX.Element {
                             ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Time{' '}
+                                Time
                             </Text>
 
-                            <DateTimePicker
-                                value={new Date(date + 'T' + time)}
-                                mode="time"
-                                is24Hour={true}
-                                accentColor={colors.primary}
-                                locale="de-DE"
-                                minuteInterval={5}
-                                display="default"
-                                onChange={(event, selectedDate) => {
-                                    setTime(formatISOTime(selectedDate))
+                            <DropdownButton
+                                onPress={() => {
+                                    setShowTime(true)
                                 }}
-                                minimumDate={
-                                    new Date(new Date().setHours(8, 15, 0, 0))
-                                }
-                                maximumDate={
-                                    new Date(new Date().setHours(21, 25, 0, 0))
-                                }
-                            />
+                            >
+                                {time}
+                            </DropdownButton>
+
+                            {showTime && (
+                                <DateTimePicker
+                                    value={new Date(date + 'T' + time)}
+                                    mode="time"
+                                    is24Hour={true}
+                                    accentColor={colors.primary}
+                                    locale="de-DE"
+                                    minuteInterval={5}
+                                    display="default"
+                                    onChange={(_event, selectedDate) => {
+                                        setShowTime(false)
+                                        setTime(formatISOTime(selectedDate))
+                                    }}
+                                    minimumDate={
+                                        new Date(
+                                            new Date().setHours(8, 15, 0, 0)
+                                        )
+                                    }
+                                    maximumDate={
+                                        new Date(
+                                            new Date().setHours(21, 25, 0, 0)
+                                        )
+                                    }
+                                />
+                            )}
                         </View>
                         <Divider />
                         <View
@@ -223,8 +252,7 @@ export default function AdvancedSearch(): JSX.Element {
                             ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Duration{' '}
+                                Duration
                             </Text>
                             <Dropdown
                                 data={DURATIONS}
@@ -242,8 +270,7 @@ export default function AdvancedSearch(): JSX.Element {
                             ]}
                         >
                             <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Building{' '}
+                                Building
                             </Text>
                             <Dropdown
                                 data={ALL_BUILDINGS}
@@ -268,7 +295,6 @@ export default function AdvancedSearch(): JSX.Element {
                             backgroundColor: colors.card,
                             borderRadius: 8,
                             width: '100%',
-
                             marginBottom: 16,
                             justifyContent: 'center',
                         }}
