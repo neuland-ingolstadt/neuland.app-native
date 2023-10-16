@@ -160,7 +160,7 @@ export default function Settings(): JSX.Element {
                 ) : undefined
             }
         >
-            <View style={{ paddingTop: 20 }}>
+            <View style={styles.wrapper}>
                 <Pressable
                     onPress={() => {
                         if (isLoaded === LoadingState.LOADED) {
@@ -279,6 +279,8 @@ export default function Settings(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    wrapper: { paddingTop: 20, paddingHorizontal: 16 },
+
     copyrigth: {
         fontSize: 12,
         textAlign: 'center',
@@ -289,9 +291,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
 
         borderRadius: 10,
-        width: '92%',
-
-        justifyContent: 'center',
+        width: '100%',
         paddingVertical: 24,
         paddingHorizontal: 14,
     },
