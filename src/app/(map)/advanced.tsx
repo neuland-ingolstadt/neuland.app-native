@@ -237,16 +237,6 @@ export default function AdvancedSearch(): JSX.Element {
                                         setShowTime(Platform.OS !== 'android')
                                         setTime(formatISOTime(selectedDate))
                                     }}
-                                    minimumDate={
-                                        new Date(
-                                            new Date().setHours(8, 15, 0, 0)
-                                        )
-                                    }
-                                    maximumDate={
-                                        new Date(
-                                            new Date().setHours(21, 25, 0, 0)
-                                        )
-                                    }
                                 />
                             )}
                         </View>
