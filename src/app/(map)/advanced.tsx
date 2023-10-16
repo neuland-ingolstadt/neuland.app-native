@@ -23,6 +23,7 @@ import { useRouter } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
+    Platform,
     ScrollView,
     StyleSheet,
     Text,
@@ -68,8 +69,8 @@ export default function AdvancedSearch(): JSX.Element {
     const [time, setTime] = useState(formatISOTime(startDate))
     const [duration, setDuration] = useState(DURATION_PRESET)
 
-    const [showDate, setShowDate] = useState(false)
-    const [showTime, setShowTime] = useState(false)
+    const [showDate, setShowDate] = useState(Platform.OS === 'ios')
+    const [showTime, setShowTime] = useState(Platform.OS === 'ios')
 
     const [filterResults, setFilterResults] = useState<AvailableRoom[] | null>(
         null
@@ -172,13 +173,15 @@ export default function AdvancedSearch(): JSX.Element {
                                 Date
                             </Text>
 
-                            <DropdownButton
-                                onPress={() => {
-                                    setShowDate(true)
-                                }}
-                            >
-                                {date.split('-').reverse().join('.')}
-                            </DropdownButton>
+                            {Platform.OS === 'android' && (
+                                <DropdownButton
+                                    onPress={() => {
+                                        setShowDate(true)
+                                    }}
+                                >
+                                    {date.split('-').reverse().join('.')}
+                                </DropdownButton>
+                            )}
 
                             {showDate && (
                                 <DateTimePicker
@@ -187,7 +190,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     accentColor={colors.primary}
                                     locale="de-DE"
                                     onChange={(_event, selectedDate) => {
-                                        setShowDate(false)
+                                        setShowDate(Platform.OS !== 'android')
                                         setDate(formatISODate(selectedDate))
                                     }}
                                     minimumDate={new Date()}
@@ -212,13 +215,15 @@ export default function AdvancedSearch(): JSX.Element {
                                 Time
                             </Text>
 
-                            <DropdownButton
-                                onPress={() => {
-                                    setShowTime(true)
-                                }}
-                            >
-                                {time}
-                            </DropdownButton>
+                            {Platform.OS === 'android' && (
+                                <DropdownButton
+                                    onPress={() => {
+                                        setShowTime(true)
+                                    }}
+                                >
+                                    {time}
+                                </DropdownButton>
+                            )}
 
                             {showTime && (
                                 <DateTimePicker
@@ -229,7 +234,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     locale="de-DE"
                                     minuteInterval={5}
                                     onChange={(_event, selectedDate) => {
-                                        setShowTime(false)
+                                        setShowTime(Platform.OS !== 'android')
                                         setTime(formatISOTime(selectedDate))
                                     }}
                                     minimumDate={
