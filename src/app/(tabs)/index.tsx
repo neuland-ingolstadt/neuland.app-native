@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const Stack2 = createNativeStackNavigator()
@@ -37,18 +37,25 @@ export default function Screen(): JSX.Element {
                         headerShown: true,
                         headerLargeTitle: true,
                         headerRight: () => (
-                            <Pressable
+                            <TouchableOpacity
                                 onPress={() => {
+                                    console.log('pressed')
                                     router.push('(user)/settings')
                                 }}
                             >
-                                <Ionicons
-                                    name="cog-outline"
-                                    size={24}
-                                    color={colors.primary}
-                                    style={{ marginRight: 6 }}
-                                />
-                            </Pressable>
+                                <View
+                                    style={{
+                                        marginRight:
+                                            Platform.OS === 'ios' ? 15 : 0,
+                                    }}
+                                >
+                                    <Ionicons
+                                        name="cog-outline"
+                                        size={24}
+                                        color={colors.primary}
+                                    />
+                                </View>
+                            </TouchableOpacity>
                         ),
                     }}
                     component={HomeScreen}
