@@ -126,7 +126,6 @@ export default function CalendarPage(): JSX.Element {
                                 {index !== data.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
-                                        width={'90%'}
                                     />
                                 )}
                             </React.Fragment>

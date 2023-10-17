@@ -1,7 +1,8 @@
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
 
 interface Props {
@@ -81,10 +82,40 @@ const Dropdown: React.FC<Props> = ({
 const styles = StyleSheet.create({
     dropdownButton: {
         borderRadius: 8,
-        width: 90,
+        width: 100,
         height: 32,
         justifyContent: 'center',
+        alignItems: 'center',
     },
 })
 
 export default Dropdown
+
+export const DropdownButton: React.FC<{
+    children: React.ReactNode
+    onPress: () => void
+}> = ({ children, onPress }) => {
+    const colors = useTheme().colors as Colors
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <View
+                style={[
+                    styles.dropdownButton,
+                    {
+                        backgroundColor: colors.datePickerBackground,
+                    },
+                ]}
+            >
+                <Text
+                    numberOfLines={1}
+                    allowFontScaling={false}
+                    style={{
+                        color: colors.text,
+                    }}
+                >
+                    {children}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    )
+}

@@ -108,7 +108,6 @@ export default function Mobility(): JSX.Element {
                                 {index !== events.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
-                                        width={'90%'}
                                     />
                                 )}
                             </React.Fragment>

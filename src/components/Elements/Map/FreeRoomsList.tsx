@@ -18,22 +18,8 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     return rooms !== null && rooms.length > 0 ? (
         rooms.map((room, index) => (
             <View key={index}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        backgroundColor: colors.card,
-                        padding: 10,
-                        marginHorizontal: 10,
-                    }}
-                >
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            paddingRight: 10,
-                        }}
-                    >
+                <View style={styles.rowEntry}>
+                    <View>
                         <Pressable
                             onPress={() => {
                                 router.push('(tabs)/map')
@@ -44,33 +30,32 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             }}
                         >
                             <Text
-                                style={{
-                                    fontWeight: '500',
-                                    color: colors.primary,
-                                    fontSize: 16,
-                                }}
+                                style={[
+                                    styles.roomName,
+                                    { color: colors.primary },
+                                ]}
                             >
                                 {room.room}
                             </Text>
                         </Pressable>
                         <Text
-                            style={{
-                                fontSize: 13,
-                                color: colors.labelColor,
-                            }}
-                            numberOfLines={2}
+                            style={[
+                                styles.roomDetails,
+                                { color: colors.labelColor },
+                            ]}
+                            numberOfLines={1}
                         >
                             {room.type}
                         </Text>
                     </View>
 
                     <Text
-                        style={{
-                            fontSize: 15,
-                            color: colors.text,
-                            width: '40%',
-                            textAlign: 'right',
-                        }}
+                        style={[
+                            styles.roomTime,
+                            {
+                                color: colors.text,
+                            },
+                        ]}
                         numberOfLines={2}
                     >
                         {formatFriendlyTime(room.from)} -{' '}
@@ -82,13 +67,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
             </View>
         ))
     ) : (
-        <View
-            style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingVertical: 30,
-            }}
-        >
+        <View style={styles.noRoomsFound}>
             <Text style={[styles.errorMessage, { color: colors.text }]}>
                 No free rooms found
             </Text>
@@ -100,20 +79,29 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '92%',
-        alignContent: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        marginTop: 15,
+    rowEntry: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+        // technically 15, but balance feels better with 20
+        paddingRight: 20,
+        paddingVertical: 8,
+        gap: 15,
     },
-    centeredView: {},
-    sectionHeader: {
+    roomName: {
+        fontWeight: '500',
+        fontSize: 16,
+    },
+    roomDetails: {
         fontSize: 13,
-
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
+    },
+    roomTime: {
+        fontSize: 15,
+    },
+    noRoomsFound: {
+        paddingVertical: 20,
+        gap: 5,
     },
     errorMessage: {
         fontWeight: '600',
@@ -123,16 +111,5 @@ const styles = StyleSheet.create({
     errorInfo: {
         fontSize: 14,
         textAlign: 'center',
-        marginTop: 10,
-    },
-    dropdownButton: {
-        borderRadius: 8,
-        width: 90,
-        height: 32,
-        justifyContent: 'center',
-    },
-    dropdownStyle: {
-        height: 250,
-        borderRadius: 8,
     },
 })

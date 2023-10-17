@@ -2,6 +2,7 @@ import React, { type FC } from 'react'
 import {
     type DimensionValue,
     type FlexAlignType,
+    Platform,
     StyleSheet,
     View,
 } from 'react-native'
@@ -22,8 +23,9 @@ interface DividerProps {
 const Divider: FC<DividerProps> = ({ width, color, position }) => {
     const styles = StyleSheet.create({
         container: {
-            width: width ?? '95%',
-            alignSelf: position ?? 'flex-end',
+            width: width ?? (Platform.OS === 'android' ? '92%' : '95%'),
+            alignSelf:
+                position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
             borderBottomColor: color ?? 'grey',
             borderBottomWidth: StyleSheet.hairlineWidth,
         },

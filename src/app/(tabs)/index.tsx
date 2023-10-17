@@ -45,6 +45,7 @@ export default function Screen(): JSX.Element {
                             >
                                 <View
                                     style={{
+                                        padding: Platform.OS === 'ios' ? 5 : 0,
                                         marginRight:
                                             Platform.OS === 'ios' ? 15 : 0,
                                     }}

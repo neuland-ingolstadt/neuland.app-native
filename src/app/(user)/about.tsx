@@ -167,7 +167,15 @@ export default function About(): JSX.Element {
                     </View>
                 </View>
 
-                <FormList sections={sections} />
+                <View
+                    style={{
+                        paddingHorizontal: 16,
+                        width: '100%',
+                        alignSelf: 'center',
+                    }}
+                >
+                    <FormList sections={sections} />
+                </View>
             </ScrollView>
         </>
     )
