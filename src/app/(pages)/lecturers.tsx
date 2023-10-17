@@ -178,7 +178,6 @@ export default function LecturersCard(): JSX.Element {
                                 {index !== personalLecturers.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
-                                        width={'90%'}
                                     />
                                 )}
                             </React.Fragment>
