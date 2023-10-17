@@ -189,7 +189,9 @@ export default function FoodDetail(): JSX.Element {
                     {meal?.name.en}
                 </Text>
             </View>
-            <FormList sections={sections} />
+            <View style={styles.formList}>
+                <FormList sections={sections} />
+            </View>
             <View style={styles.notesContainer}>
                 <Text style={[styles.notesText, { color: colors.labelColor }]}>
                     This meal has been automatically translated. We are not
@@ -203,6 +205,11 @@ export default function FoodDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    formList: {
+        width: '100%',
+        alignSelf: 'center',
+        paddingHorizontal: 16,
+    },
     titleContainer: {
         alignSelf: 'center',
         width: '92%',
