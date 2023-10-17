@@ -118,12 +118,19 @@ export default function LecturerDetail(): JSX.Element {
                         .trim()}`}
                 </Text>
             </View>
-            <FormList sections={sections} />
+            <View style={styles.formList}>
+                <FormList sections={sections} />
+            </View>
         </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    formList: {
+        width: '100%',
+        alignSelf: 'center',
+        paddingHorizontal: 16,
+    },
     titleContainer: {
         alignSelf: 'center',
         width: '92%',

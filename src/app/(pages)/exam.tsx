@@ -87,7 +87,9 @@ export default function ExamDetail(): JSX.Element {
                     {exam?.name}
                 </Text>
             </View>
-            <FormList sections={sections} />
+            <View style={[styles.formList]}>
+                <FormList sections={sections} />
+            </View>
             <View style={styles.notesContainer}>
                 <Text style={[styles.notesText, { color: colors.labelColor }]}>
                     All information without guarantee. Binding information is
@@ -99,6 +101,11 @@ export default function ExamDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    formList: {
+        width: '100%',
+        alignSelf: 'center',
+        paddingHorizontal: 16,
+    },
     titleContainer: {
         alignSelf: 'center',
         width: '92%',
