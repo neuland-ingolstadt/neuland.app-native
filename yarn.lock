@@ -2117,6 +2117,25 @@
     javascript-natural-sort "0.7.1"
     lodash "^4.17.21"
 
+"@types/color-convert@*":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/color-convert/-/color-convert-2.0.2.tgz#a5fa5da9b866732f8bf86b01964869011e2a2356"
+  integrity sha512-KGRIgCxwcgazts4MXRCikPbIMzBpjfdgEZSy8TRHU/gtg+f9sOfHdtK8unPfxIoBtyd2aTTwINVLSNENlC8U8A==
+  dependencies:
+    "@types/color-name" "*"
+
+"@types/color-name@*":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.2.tgz#bdeeb6fdcb78969033767951ab0cb26c7514a658"
+  integrity sha512-JWO/ZyxTKk0bLuOhAavGjnwLR73rUE7qzACnU7gMeyA/gdrSHm2xJwqNPipw2MtaZUaqQ2UG/q7pP6AQiZ8mqw==
+
+"@types/color@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/color/-/color-3.0.5.tgz#658fd9286a44c21dabaa56c2e2f63da3ac15f063"
+  integrity sha512-T9yHCNtd8ap9L/r8KEESu5RDMLkoWXHo7dTureNoI1dbp25NsCN054vOu09iniIjR21MXUL+LU9bkIWrbyg8gg==
+  dependencies:
+    "@types/color-convert" "*"
+
 "@types/geojson@^7946.0.10":
   version "7946.0.11"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.11.tgz#012c17cb2256ad8de78560da851ab914a7b9b40e"
@@ -5800,7 +5819,7 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==
 
-memoize-one@^5.0.0:
+memoize-one@^5.0.0, memoize-one@^5.1.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.2.1.tgz#8337aa3c4335581839ec01c3d594090cebe8f00e"
   integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
@@ -6216,6 +6235,11 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
+moment@^2.19.3:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
   version "2.0.0"
@@ -7074,6 +7098,15 @@ react-native-webview@13.2.2:
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
+
+react-native-week-view@^0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/react-native-week-view/-/react-native-week-view-0.30.0.tgz#89180f60ef45611eb331dfd2017c3a849f9a8546"
+  integrity sha512-6BwkvtK6H7Ik6iHIrKxA+3gUnd0siSSafVfL8BPEg8AiCl5cbZuzk54EhJAyS5+uYoFzx+a8hNM9ZhjDWFmUcQ==
+  dependencies:
+    memoize-one "^5.1.1"
+    moment "^2.19.3"
+    prop-types "^15.7.2"
 
 react-native@0.72.5:
   version "0.72.5"

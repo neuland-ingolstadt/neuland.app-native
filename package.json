@@ -21,6 +21,8 @@
         "@expo/vector-icons": "^13.0.0",
         "@react-native-async-storage/async-storage": "1.18.2",
         "@react-native-community/datetimepicker": "7.2.0",
+        "@types/color": "^3.0.5",
+        "color": "^4.2.3",
         "expo": "^49.0.13",
         "expo-clipboard": "~4.3.0",
         "expo-constants": "~14.4.2",
@@ -44,7 +46,8 @@
         "react-native-screens": "~3.22.0",
         "react-native-select-dropdown": "^3.3.4",
         "react-native-svg": "13.9.0",
-        "react-native-webview": "13.2.2"
+        "react-native-webview": "13.2.2",
+        "react-native-week-view": "^0.30.0"
     },
     "devDependencies": {
         "@babel/core": "^7.20.0",
