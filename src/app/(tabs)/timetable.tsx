@@ -1,14 +1,16 @@
 import { type Colors } from '@/stores/colors'
+import { calendar } from '@/utils/calendar-utils'
 import { isSameDay } from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
 } from '@/utils/timetable-utils'
+import { type Calendar } from '@customTypes/data'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import Head from 'expo-router/head'
-import React, { type FC, useEffect, useMemo, useState } from 'react'
+import React, { type FC, useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
@@ -17,14 +19,19 @@ export default function TimetableScreen(): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
 
-    const eventColor = useMemo(() => {
-        const textColor = Color(colors.text)
-        const primaryColor = Color(colors.primary)
+    const textColor = Color(colors.text)
+    const primaryColor = Color(colors.primary)
 
-        return textColor.contrast(primaryColor) > 5
+    const timetableTextColor =
+        textColor.contrast(primaryColor) > 5
             ? textColor.hex()
             : textColor.negate().hex()
-    }, [colors.primary])
+
+    const calendarColor = Color(colors.primary).rotate(-100)
+    const calendarTextColor =
+        textColor.contrast(calendarColor) > 5
+            ? textColor.hex()
+            : textColor.negate().hex()
 
     const [timetable, setTimetable] = useState<TimetableEvent[]>([])
 
@@ -33,7 +40,17 @@ export default function TimetableScreen(): JSX.Element {
             try {
                 const timetable = await getFriendlyTimetable(new Date())
 
-                setTimetable(timetableToWeekViewEvents(timetable))
+                const timetableEntries = timetableToWeekViewEvents(timetable)
+                const calendarEntries = calendarToWeekViewEvents(calendar)
+
+                /**
+                 * TODO:
+                 * - Exams
+                 * - Holidays
+                 * - Maybe Events from student clubs
+                 */
+
+                setTimetable([...timetableEntries, ...calendarEntries])
             } catch (e) {
                 console.error(e)
             }
@@ -51,35 +68,94 @@ export default function TimetableScreen(): JSX.Element {
                 startDate: entry.startDate,
                 endDate: entry.endDate,
                 title: entry.shortName,
-                color: '',
+                color: colors.primary,
                 description: entry.shortName,
                 location: entry.rooms.join(', '),
                 eventKind: 'standard' as 'standard' | 'block',
                 resolveOverlap: 'stack' as 'stack' | 'lane',
                 stackKey: index.toString(),
+                type: 'timetable',
             }
         })
     }
 
-    const TimetableEntry: FC<TimetableEntryProps> = ({ event }) => {
-        const textStyle = {
-            color: eventColor,
+    function calendarToWeekViewEvents(entries: Calendar[]): TimetableEvent[] {
+        return entries.map((entry, index) => {
+            return {
+                id: index,
+                startDate: entry.begin,
+                endDate: entry.end ?? entry.begin,
+                title: entry.name.en,
+                color: calendarColor.hex(),
+                description: '',
+                eventKind: 'standard' as 'standard' | 'block',
+                resolveOverlap: 'stack' as 'stack' | 'lane',
+                stackKey: index.toString(),
+                allDay: entry.hasHours === false || !entry.hasHours,
+                type: 'calendar',
+            }
+        })
+    }
+
+    function getEntryTextColor(event: TimetableEvent): string {
+        if (event.type === 'calendar') {
+            return calendarTextColor
         }
+
+        return timetableTextColor
+    }
+
+    const TimetableEntry: FC<{ event: TimetableEvent }> = ({ event }) => {
+        const hasLocation = event.location !== undefined
+        const shortEvent = event.startDate.getTime() === event.endDate.getTime()
 
         return (
             <>
-                <Text style={textStyle}>{event.title}</Text>
-                <View style={styles.eventLocation}>
-                    <Ionicons
-                        name="location-outline"
-                        size={12}
-                        color={eventColor}
-                    />
-                    <Text style={[styles.locationText, textStyle]}>
-                        {event.location}
-                    </Text>
-                </View>
+                <Text
+                    numberOfLines={shortEvent && hasLocation ? 1 : 2}
+                    style={{
+                        color: getEntryTextColor(event),
+                    }}
+                >
+                    {event.title}
+                </Text>
+                {hasLocation && (
+                    <View style={styles.eventLocation}>
+                        <Ionicons
+                            name="location-outline"
+                            size={12}
+                            color={getEntryTextColor(event)}
+                        />
+                        <Text
+                            style={[
+                                styles.locationText,
+                                {
+                                    color: getEntryTextColor(event),
+                                },
+                            ]}
+                        >
+                            {event.location}
+                        </Text>
+                    </View>
+                )}
             </>
+        )
+    }
+
+    const AllDayEntry: FC<{ event: TimetableEvent }> = ({ event }) => {
+        return (
+            <Text
+                lineBreakMode="tail"
+                numberOfLines={1}
+                style={[
+                    styles.allDayEventTitle,
+                    {
+                        color: getEntryTextColor(event),
+                    },
+                ]}
+            >
+                {event.title}
+            </Text>
         )
     }
 
@@ -113,11 +189,7 @@ export default function TimetableScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
 
-            <View
-                style={{
-                    height: '100%',
-                }}
-            >
+            <View style={styles.wrapper}>
                 <WeekView
                     events={timetable}
                     selectedDate={new Date()}
@@ -129,16 +201,21 @@ export default function TimetableScreen(): JSX.Element {
                     endAgendaAt={21 * 60}
                     hoursInDisplay={17}
                     showNowLine={true}
+                    nowLineColor={colors.labelColor}
+                    onEventPress={(event) => {
+                        console.log(event)
+                    }}
                     enableVerticalPinch={true}
                     formatDateHeader="ddd D"
                     EventComponent={
                         TimetableEntry as FC<{ event: WeekViewEvent }>
                     }
+                    AllDayEventComponent={
+                        AllDayEntry as FC<{ event: WeekViewEvent }>
+                    }
                     DayHeaderComponent={DayHeaderComponent}
-                    eventContainerStyle={[
-                        styles.eventStyle,
-                        { backgroundColor: colors.primary },
-                    ]}
+                    allDayEventContainerStyle={styles.allDayEventContainer}
+                    eventContainerStyle={styles.eventStyle}
                     hourTextStyle={{
                         color: colors.text,
                     }}
@@ -165,12 +242,10 @@ export default function TimetableScreen(): JSX.Element {
 
 interface TimetableEvent extends WeekViewEvent {
     eventKind: 'standard' | 'block'
-    location: string
+    location?: string
     title: string
-}
-
-interface TimetableEntryProps {
-    event: TimetableEvent
+    allDay?: boolean
+    type: 'calendar' | 'timetable'
 }
 
 const styles = StyleSheet.create({
@@ -193,6 +268,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         paddingHorizontal: 8,
         paddingVertical: 4,
+        minHeight: 43,
     },
     eventLocation: {
         flexDirection: 'row',
@@ -211,5 +287,16 @@ const styles = StyleSheet.create({
         borderRadius: 9999,
         paddingVertical: 4,
         paddingHorizontal: 12,
+    },
+    allDayEventContainer: {
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 1,
+    },
+    wrapper: {
+        height: '100%',
+    },
+    allDayEventTitle: {
+        fontSize: 12,
     },
 })
