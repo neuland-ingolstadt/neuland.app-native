@@ -180,7 +180,7 @@ export interface AvailableRoom {
 
 export interface RoomEntry {
     coordinates: number[][]
-    options?: string[]
+    options?: string[] | object
     properties: Properties
 }
 
