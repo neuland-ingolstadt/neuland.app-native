@@ -66,7 +66,7 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the mensa plan data
      */
     async getMensaPlan(): Promise<any> {
-        return await this.requestCached('mensa-plan', `${ENDPOINT}/api/mensa`)
+        return await this.requestCached('mensa-plan', `${ENDPOINT}/api/mensa/`)
     }
 
     /**
@@ -76,7 +76,7 @@ class NeulandAPIClient {
     async getReimannsPlan(): Promise<any> {
         return await this.requestCached(
             'reimanns-plan',
-            `${ENDPOINT}/api/reimanns`
+            `${ENDPOINT}/api/reimanns/`
         )
     }
 
@@ -87,7 +87,7 @@ class NeulandAPIClient {
     async getCanisiusPlan(): Promise<any> {
         return await this.requestCached(
             'canisius-plan',
-            `${ENDPOINT}/api/canisius`
+            `${ENDPOINT}/api/canisius/`
         )
     }
 
@@ -98,7 +98,7 @@ class NeulandAPIClient {
      */
     async getBusPlan(station: string): Promise<any> {
         return await this.performRequest(
-            `${ENDPOINT}/api/bus/${encodeURIComponent(station)}`
+            `${ENDPOINT}/api/bus/${encodeURIComponent(station)}/`
         )
     }
 
@@ -109,7 +109,7 @@ class NeulandAPIClient {
      */
     async getTrainPlan(station: string): Promise<any> {
         return await this.performRequest(
-            `${ENDPOINT}/api/train/${encodeURIComponent(station)}`
+            `${ENDPOINT}/api/train/${encodeURIComponent(station)}/`
         )
     }
 
@@ -118,7 +118,7 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the parking data
      */
     async getParkingData(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/parking`)
+        return await this.performRequest(`${ENDPOINT}/api/parking/`)
     }
 
     /**
@@ -126,7 +126,7 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the charging station data
      */
     async getCharingStationData(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/charging-stations`)
+        return await this.performRequest(`${ENDPOINT}/api/charging-stations/`)
     }
 
     /**
@@ -136,7 +136,7 @@ class NeulandAPIClient {
     async getCampusLifeEvents(): Promise<any> {
         return await this.requestCached(
             'cl-events',
-            `${ENDPOINT}/api/cl-events`
+            `${ENDPOINT}/api/cl-events/`
         )
     }
 }

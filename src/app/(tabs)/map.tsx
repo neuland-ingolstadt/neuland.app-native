@@ -1,3 +1,4 @@
+import AssetAPI from '@/api/asset-api'
 import {
     NoSessionError,
     UnavailableSessionError,
@@ -9,7 +10,6 @@ import {
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import { type Colors } from '@/stores/colors'
-import GeoJson from '@/stores/data/map.json'
 import { UserKindContext } from '@/stores/provider'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
@@ -18,6 +18,7 @@ import {
     filterRooms,
     getNextValidDate,
 } from '@/utils/room-utils'
+import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -133,6 +134,7 @@ export const MapScreen = (): JSX.Element => {
     const [currentFloor, setCurrentFloor] = useState('EG')
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const [mapOverlay, setMapOverlay] = useState<RoomsOverlay | null>(null)
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
 
@@ -180,8 +182,23 @@ export const MapScreen = (): JSX.Element => {
         void load()
     }, [userKind, webViewKey])
 
+    useEffect(() => {
+        AssetAPI.getMapOverlay()
+            .then((data) => {
+                setMapOverlay(data)
+            })
+            .catch((e) => {
+                console.error(e)
+                setLoadingState(LoadingState.ERROR)
+                setErrorMsg('mapOverlay')
+            })
+    }, [webViewKey])
+
     const allRooms = useMemo(() => {
-        return GeoJson.features
+        if (mapOverlay == null) {
+            return []
+        }
+        return mapOverlay.features
             .map((feature) => {
                 const { geometry, properties } = feature
 
@@ -209,7 +226,7 @@ export const MapScreen = (): JSX.Element => {
                 }))
             })
             .flat()
-    }, [GeoJson])
+    }, [mapOverlay])
 
     const [filteredRooms, center] = useMemo(() => {
         if (q == null) {
@@ -435,6 +452,8 @@ export const MapScreen = (): JSX.Element => {
                             {errorMsg === 'noInternetConnection' &&
                                 'Network request failed'}
                             {errorMsg === 'mapLoadError' && 'Map load error'}
+                            {errorMsg === 'mapOverlay' &&
+                                'Error loading overlay'}
                         </Text>
                         <Text
                             style={{
