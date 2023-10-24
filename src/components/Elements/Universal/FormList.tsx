@@ -60,7 +60,16 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 {item.title}
                                             </Text>
                                             {item.value != null && (
-                                                <Text style={styles.rowDetails}>
+                                                <Text
+                                                    style={[
+                                                        styles.rowDetails,
+                                                        {
+                                                            color:
+                                                                item.iconColor ??
+                                                                colors.labelColor,
+                                                        },
+                                                    ]}
+                                                >
                                                     {item.value}
                                                 </Text>
                                             )}
