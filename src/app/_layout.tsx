@@ -7,7 +7,6 @@ export default function RootLayout(): JSX.Element {
     const router = useRouter()
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
-
     return (
         <>
             <Provider>

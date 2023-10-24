@@ -14,6 +14,7 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
 
     if (flow.isOnboarded === false) {
+        console.log('redirecting to onboard')
         return <Redirect href="(user)/onboard" />
     }
 

@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
+import packageInfo from '../../../package.json'
+
 export interface FlowHook {
     isOnboarded: boolean | null
     toggleOnboarded: () => void
@@ -10,9 +12,8 @@ export interface FlowHook {
 }
 
 /**
- * Custom hook that manages the theme and accent color of the app.
- * Uses AsyncStorage to persist the accent color across app sessions.
- * @returns ThemeHook object with mobilityKind and togglemobilityKind properties.
+ * A custom React hook that provides access to the flow state.
+ * @returns An object containing the `isOnboarded`, `toggleOnboarded`, `isUpdated`, and `toggleUpdated` properties.
  */
 export function useFlow(): FlowHook {
     const [isOnboarded, setOnboarded] = useState<boolean | null>(null)
@@ -21,14 +22,12 @@ export function useFlow(): FlowHook {
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
-                const onboarded = await AsyncStorage.getItem('isssOnboarded')
+                const onboarded = await AsyncStorage.getItem('isOnboarded')
                 if (onboarded === 'true') {
                     setOnboarded(true)
                 } else if (onboarded === null) {
                     setOnboarded(false)
                 }
-                console.log('onboarded')
-
                 const updated = await AsyncStorage.getItem('isUpdated')
                 if (updated === 'true') {
                     setUpdated(true)
@@ -43,18 +42,20 @@ export function useFlow(): FlowHook {
         void loadAsyncStorageData()
     }, [])
 
+    /**
+     * Function to toggle the flow state of the app to show the onboarding screen.
+     */
     function toggleOnboarded(): void {
         setOnboarded(true)
-
-        void AsyncStorage.setItem('isssOnboarded', 'true')
-        console.log('onboarded set')
+        void AsyncStorage.setItem('isOnboarded', 'true')
     }
 
+    /**
+     * Function to toggle the flow state of the app to show the update screen.
+     */
     function toggleUpdated(): void {
-        console.log('updated set')
         setUpdated(true)
-
-        void AsyncStorage.setItem('isUpdated', 'true')
+        void AsyncStorage.setItem(`isUpdated-${packageInfo.version}`, 'true')
     }
 
     return {

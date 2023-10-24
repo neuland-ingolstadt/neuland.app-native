@@ -120,15 +120,6 @@ export default function Provider({
         },
     }
 
-    // log the userkind to the console
-
-    // if ( userKind.userKind === 'unkown' ) {
-    //     router.push('login')
-    // }
-
-    console.log('flow.isOnboarded', flow.isOnboarded)
-    console.log('flow.isUpdated', flow.isUpdated)
-
     return (
         <ThemeProvider value={colorScheme === 'dark' ? darkTheme : lightTheme}>
             <ThemeContext.Provider value={themeHook}>

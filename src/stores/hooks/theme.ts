@@ -37,8 +37,6 @@ export function useTheme(): ThemeHook {
      */
     function toggleAccentColor(name: string): void {
         setAccentColor(name)
-        console.log('accent color set')
-
         void AsyncStorage.setItem('accentColor', name)
     }
 

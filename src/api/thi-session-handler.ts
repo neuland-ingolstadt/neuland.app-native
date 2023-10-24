@@ -195,7 +195,6 @@ export async function obtainSession(router: object): Promise<string | null> {
             await AsyncStorage.setItem('isStudent', isStudent.toString())
         } catch (e) {
             console.log('Failed to log in again')
-
             console.error(e)
         }
     }
