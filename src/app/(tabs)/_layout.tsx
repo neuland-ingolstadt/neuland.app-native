@@ -1,7 +1,8 @@
 import { type Colors } from '@/stores/colors'
+import { FlowContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
-import { Tabs, useRouter } from 'expo-router'
+import { Redirect, Tabs, useRouter } from 'expo-router'
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
 
@@ -9,6 +10,12 @@ export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
     const router = useRouter()
     const colors = theme.colors as Colors
+
+    const flow = React.useContext(FlowContext)
+
+    if (flow.isOnboarded === false) {
+        return <Redirect href="(user)/onboard" />
+    }
 
     return (
         <>

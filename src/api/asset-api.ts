@@ -19,7 +19,7 @@ class AssetAPIClient {
     }
 
     /**
-     * Performs a request against the neuland.app API
+     * Performs a request against the API
      * @param {string} url The URL to perform the request against
      * @returns {Promise<any>} A promise that resolves with the response data
      * @throws {Error} If the API returns an error

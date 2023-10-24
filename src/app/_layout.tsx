@@ -243,6 +243,22 @@ export default function RootLayout(): JSX.Element {
                             }),
                         }}
                     />
+                    <Stack.Screen
+                        name="(user)/onboard"
+                        options={{
+                            headerShown: false,
+                            ...Platform.select({
+                                android: {
+                                    animation: 'none',
+                                },
+                                ios: {
+                                    presentation: 'fullScreenModal',
+                                    animation: 'none',
+                                    gestureEnabled: false,
+                                },
+                            }),
+                        }}
+                    />
                 </Stack>
             </Provider>
         </>

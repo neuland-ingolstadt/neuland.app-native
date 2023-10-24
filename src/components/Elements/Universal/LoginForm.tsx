@@ -1,13 +1,12 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { LoginFailureAlert } from '@/components/Elements/Settings'
 import { type Colors } from '@/stores/colors'
-import { USER_GUEST } from '@/stores/hooks/userKind'
 import { FlowContext, UserKindContext } from '@/stores/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import { LinearGradient } from 'expo-linear-gradient'
+import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
     Dimensions,
@@ -44,14 +43,14 @@ const useIsFloatingKeyboard = (): boolean => {
     return floating
 }
 
-export default function Login(): JSX.Element {
+const LoginForm = (): JSX.Element => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [failure, setFailure] = useState('')
+    const router = useRouter()
     const colors = useTheme().colors as Colors
-
+    const { toggleOnboarded } = React.useContext(FlowContext)
     const { toggleUserKind } = React.useContext(UserKindContext)
-    const flow = React.useContext(FlowContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
@@ -63,7 +62,7 @@ export default function Login(): JSX.Element {
         try {
             const userKind = await createSession(username, password, true)
             toggleUserKind(userKind)
-            flow.toggleOnboarded()
+            toggleOnboarded()
 
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
@@ -77,6 +76,7 @@ export default function Login(): JSX.Element {
                 hideOnPress: true,
                 delay: 0,
             })
+            router.replace('/')
         } catch (e: any) {
             const message = trimErrorMsg(e.message)
             setFailure(message)
@@ -84,19 +84,13 @@ export default function Login(): JSX.Element {
     }
 
     async function guestLogin(): Promise<void> {
-        console.log('guest login')
         await createGuestSession()
-        toggleUserKind(USER_GUEST)
-        flow.toggleOnboarded()
+        toggleOnboarded()
+        router.replace('/')
     }
 
     return (
-        <LinearGradient
-            colors={[colors.primary, '#cd148c']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.gradient}
-        >
+        <>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={{ flex: 1 }}
@@ -107,7 +101,7 @@ export default function Login(): JSX.Element {
                         <View
                             style={[
                                 styles.loginContainer,
-                                { backgroundColor: colors.background },
+                                { backgroundColor: colors.card },
                             ]}
                         >
                             <Text
@@ -234,16 +228,12 @@ export default function Login(): JSX.Element {
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-        </LinearGradient>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-    gradient: {
-        height: '100%',
-        width: '100%',
-    },
     loginContainer: {
         shadowColor: '#00000',
         shadowOffset: {
@@ -253,22 +243,26 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         borderRadius: 10,
-        maxWidth: 500,
-        width: '90%',
-        paddingVertical: 30,
-        paddingHorizontal: 20,
+        width: '100%',
+        maxWidth: 400,
+
+        paddingHorizontal: 25,
+        paddingVertical: 20,
+
         justifyContent: 'center',
     },
     header: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 30,
-        marginTop: 5,
+        marginBottom: 20,
+        marginTop: 20,
+        paddingTop: 15,
         alignSelf: 'center',
     },
     loginButton: {
         paddingHorizontal: 20,
         paddingVertical: 10,
+        marginTop: 20,
         borderRadius: 5,
         alignItems: 'center',
     },
@@ -281,19 +275,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
     },
-    checkboxContainer: {
-        paddingTop: 20,
-        marginRight: 10,
-        paddingBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     guestContainer: {
         paddingTop: 3,
         alignItems: 'center',
+        paddingBottom: 10,
+
+        marginBottom: 15,
     },
     guestText: {
-        fontSize: 13,
+        fontSize: 14,
         marginTop: 10,
     },
     checkboxChecked: {
@@ -305,3 +295,5 @@ const styles = StyleSheet.create({
         borderColor: 'black',
     },
 })
+
+export default LoginForm
