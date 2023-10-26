@@ -39,7 +39,6 @@ export default function Screen(): JSX.Element {
                         headerRight: () => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    console.log('pressed')
                                     router.push('(user)/settings')
                                 }}
                             >

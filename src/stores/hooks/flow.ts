@@ -28,9 +28,13 @@ export function useFlow(): FlowHook {
                 } else if (onboarded === null) {
                     setOnboarded(false)
                 }
-                const updated = await AsyncStorage.getItem('isUpdated')
+                const updated = await AsyncStorage.getItem(
+                    `isUpdated-${packageInfo.version}`
+                )
                 if (updated === 'true') {
                     setUpdated(true)
+                } else if (updated === null) {
+                    setUpdated(false)
                 }
             } catch (error) {
                 console.error(

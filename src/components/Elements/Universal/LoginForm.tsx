@@ -49,7 +49,7 @@ const LoginForm = (): JSX.Element => {
     const [failure, setFailure] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { toggleOnboarded } = React.useContext(FlowContext)
+    const { toggleOnboarded, toggleUpdated } = React.useContext(FlowContext)
     const { toggleUserKind } = React.useContext(UserKindContext)
 
     const floatingKeyboard = useIsFloatingKeyboard()
@@ -62,8 +62,8 @@ const LoginForm = (): JSX.Element => {
         try {
             const userKind = await createSession(username, password, true)
             toggleUserKind(userKind)
+            toggleUpdated()
             toggleOnboarded()
-
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
@@ -76,7 +76,7 @@ const LoginForm = (): JSX.Element => {
                 hideOnPress: true,
                 delay: 0,
             })
-            router.replace('/')
+            router.push('/')
         } catch (e: any) {
             const message = trimErrorMsg(e.message)
             setFailure(message)
@@ -85,8 +85,9 @@ const LoginForm = (): JSX.Element => {
 
     async function guestLogin(): Promise<void> {
         await createGuestSession()
+        toggleUpdated()
         toggleOnboarded()
-        router.replace('/')
+        router.push('/')
     }
 
     return (

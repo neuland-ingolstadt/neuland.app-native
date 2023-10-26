@@ -43,18 +43,7 @@ export default function OnboardingScreen(): JSX.Element {
                     backgroundColor: '#ffffff',
 
                     image: (
-                        <View
-                            style={
-                                {
-                                    // shadowColor: '#000000',
-                                    // shadowOffset: {
-                                    //     width: 2,
-                                    //     height: 2,
-                                    // },
-                                    // shadowOpacity: 0.4,
-                                }
-                            }
-                        >
+                        <View>
                             <Image
                                 source={require('@/assets/icon.png')}
                                 style={{
@@ -294,19 +283,7 @@ export default function OnboardingScreen(): JSX.Element {
                 },
                 {
                     backgroundColor: lighten(3, colors.primary),
-                    image: (
-                        <View style={{ paddingBottom: 10 }}>
-                            {/* <Image
-                                        source={require('@/assets/onboarding/island.png')}
-                                        style={{
-                                            width: 250,
-                                            height: 250,
-                                            
-                                        }}
-                                    />
-   */}
-                        </View>
-                    ),
+                    image: <View style={{ paddingBottom: 10 }}></View>,
                     title: (
                         <View
                             style={{

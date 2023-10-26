@@ -15,7 +15,7 @@ export function useUserKind(): {
     userKind: string
     toggleUserKind: (userKind: boolean) => void
 } {
-    const [userKind, setUserKind] = useState(USER_UNKNOWN)
+    const [userKind, setUserKind] = useState(USER_GUEST)
 
     // Load user kind from SecureStore on mount.
     // USing SecureStore instead of AsyncStorage because it is temporary workaround for the session handler.

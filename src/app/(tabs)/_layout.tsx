@@ -1,10 +1,13 @@
 import { type Colors } from '@/stores/colors'
+import changelog from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
-import { Redirect, Tabs, useRouter } from 'expo-router'
+import { Tabs, useRouter } from 'expo-router'
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
+
+import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
@@ -15,7 +18,20 @@ export default function HomeLayout(): JSX.Element {
 
     if (flow.isOnboarded === false) {
         console.log('redirecting to onboard')
-        return <Redirect href="(user)/onboard" />
+        router.push('(flow)/onboarding')
+    }
+
+    const isChangelogAvailable = Object.keys(changelog.version).includes(
+        packageInfo.version
+    )
+
+    if (
+        flow.isUpdated === false &&
+        isChangelogAvailable &&
+        flow.isOnboarded !== false
+    ) {
+        console.log('redirecting to whatsnew')
+        router.push('(flow)/whatsnew')
     }
 
     return (

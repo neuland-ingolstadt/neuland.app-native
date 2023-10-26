@@ -1,0 +1,39 @@
+{
+    "version": {
+        "0.2.5": [
+            {
+                "title": {
+                    "de": "Neues Dashboard",
+                    "en": "New Dashboard"
+                },
+                "description": {
+                    "de": "Hinzugefügt: Anpassbares Dashboard. Gehe zur Einstellungsseite, um es anzupassen.",
+                    "en": "Added a customizable dashboard. Go to the settings page to customize it."
+                },
+                "icon": "list"
+            },
+            {
+                "title": {
+                    "de": "Akzentfarben",
+                    "en": "Accent Colors"
+                },
+                "description": {
+                    "de": "Wähle aus 9 verschiedenen Akzentfarben, um deine Erfahrung zu personalisieren.",
+                    "en": "Choose from 9 different accent colors to personalize your experience."
+                },
+                "icon": "color-palette-outline"
+            },
+            {
+                "title": {
+                    "de": "Designaktualisierung",
+                    "en": "Design Update"
+                },
+                "description": {
+                    "de": "Das Design der App wurde aktualisiert, um noch besser zum Design deines Betriebssystems zu passen.",
+                    "en": "The design of the app has been updated to be more modern and clean to match your OS design language even better."
+                },
+                "icon": "brush"
+            }
+        ]
+    }
+}

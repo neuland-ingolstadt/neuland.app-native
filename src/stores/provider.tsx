@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native'
 import React, { createContext } from 'react'
 import { useColorScheme } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
@@ -121,22 +122,26 @@ export default function Provider({
     }
 
     return (
-        <ThemeProvider value={colorScheme === 'dark' ? darkTheme : lightTheme}>
-            <ThemeContext.Provider value={themeHook}>
-                <FlowContext.Provider value={flow}>
-                    <UserKindContext.Provider value={userKind}>
-                        <DashboardContext.Provider value={dashboard}>
-                            <FoodFilterContext.Provider value={foodFilter}>
-                                <MobilityContext.Provider value={mobility}>
-                                    <RootSiblingParent>
-                                        {children}
-                                    </RootSiblingParent>
-                                </MobilityContext.Provider>
-                            </FoodFilterContext.Provider>
-                        </DashboardContext.Provider>
-                    </UserKindContext.Provider>
-                </FlowContext.Provider>
-            </ThemeContext.Provider>
-        </ThemeProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <ThemeProvider
+                value={colorScheme === 'dark' ? darkTheme : lightTheme}
+            >
+                <ThemeContext.Provider value={themeHook}>
+                    <FlowContext.Provider value={flow}>
+                        <UserKindContext.Provider value={userKind}>
+                            <DashboardContext.Provider value={dashboard}>
+                                <FoodFilterContext.Provider value={foodFilter}>
+                                    <MobilityContext.Provider value={mobility}>
+                                        <RootSiblingParent>
+                                            {children}
+                                        </RootSiblingParent>
+                                    </MobilityContext.Provider>
+                                </FoodFilterContext.Provider>
+                            </DashboardContext.Provider>
+                        </UserKindContext.Provider>
+                    </FlowContext.Provider>
+                </ThemeContext.Provider>
+            </ThemeProvider>
+        </GestureHandlerRootView>
     )
 }

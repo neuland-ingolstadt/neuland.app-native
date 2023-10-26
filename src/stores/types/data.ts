@@ -208,3 +208,18 @@ export enum Standort {
 export enum FeatureType {
     Feature = 'Feature',
 }
+
+export interface Changelog {
+    version: Record<string, Version[]>
+}
+
+export interface Version {
+    title: Description
+    description: Description
+    icon: string
+}
+
+export interface Description {
+    de: string
+    en: string
+}

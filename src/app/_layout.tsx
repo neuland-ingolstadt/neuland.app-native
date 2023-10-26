@@ -243,17 +243,26 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(user)/onboard"
+                        name="(flow)/onboarding"
                         options={{
                             headerShown: false,
+                            animation: 'none',
+                            gestureEnabled: false,
                             ...Platform.select({
-                                android: {
-                                    animation: 'none',
-                                },
                                 ios: {
                                     presentation: 'fullScreenModal',
-                                    animation: 'none',
-                                    gestureEnabled: false,
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(flow)/whatsnew"
+                        options={{
+                            headerShown: false,
+                            gestureEnabled: false,
+                            ...Platform.select({
+                                ios: {
+                                    presentation: 'formSheet',
                                 },
                             }),
                         }}
