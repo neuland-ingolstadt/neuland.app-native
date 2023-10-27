@@ -119,7 +119,8 @@ export const MapScreen = (): JSX.Element => {
                 const response = await API.getPersonalData()
                 const data: PersDataDetails = response.persdata
                 data.pcounter = response.pcounter
-                data.faculty = await API.getFaculty()
+                const faculty = await API.getFaculty()
+                data.faculty = faculty !== undefined ? faculty : 'Informatik' // Simple Error Handling
                 setUserData(data)
             } catch (e) {
                 console.log(e)
