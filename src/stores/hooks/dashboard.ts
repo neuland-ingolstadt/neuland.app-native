@@ -129,8 +129,6 @@ export function useDashboard(): Dashboard {
 
     function resetOrder(): void {
         const defaultEntries = getDefaultDashboardOrder(userKind)
-        setShownDashboardEntries(defaultEntries.shown)
-        setHiddenDashboardEntries(defaultEntries.hidden)
         changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)
     }
 
