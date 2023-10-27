@@ -170,7 +170,7 @@ export enum GeometryName {
 }
 
 export interface FeatureProperties {
-    Standort: Standort
+    Standort: string
     Gebaeude: Gebaeude
     Etage: null | string
     Ebene: null | string
@@ -200,9 +200,15 @@ export enum Gebaeude {
     Z = 'Z',
 }
 
-export enum Standort {
-    In = 'IN',
-    Nd = 'ND',
+export const Standort = {
+    In: {
+        slug: 'IN',
+        coordinates: { lat: 48.76709, lon: 11.4328, height: 17.5 },
+    },
+    Nd: {
+        slug: 'ND',
+        coordinates: { lat: 48.73201, lon: 11.1737, height: 16.5 },
+    },
 }
 
 export enum FeatureType {

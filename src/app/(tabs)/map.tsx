@@ -1,4 +1,5 @@
 import AssetAPI from '@/api/asset-api'
+import API from '@/api/authenticated-api'
 import {
     NoSessionError,
     UnavailableSessionError,
@@ -18,7 +19,8 @@ import {
     filterRooms,
     getNextValidDate,
 } from '@/utils/room-utils'
-import { type RoomsOverlay } from '@customTypes/asset-api'
+import { type RoomsOverlay, Standort } from '@customTypes/asset-api'
+import { type PersDataDetails } from '@customTypes/thi-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -109,6 +111,24 @@ export default function Screen(): JSX.Element {
 }
 
 export const MapScreen = (): JSX.Element => {
+    const [userData, setUserData] = useState<PersDataDetails | null>(null)
+
+    useEffect(() => {
+        async function load(): Promise<void> {
+            try {
+                const response = await API.getPersonalData()
+                const data: PersDataDetails = response.persdata
+                data.pcounter = response.pcounter
+                data.faculty = await API.getFaculty()
+                setUserData(data)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        void load()
+    }, [])
+
     const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
     const FLOOR_SUBSTITUTES: Record<string, string> = {
         0: 'EG',
@@ -117,14 +137,13 @@ export const MapScreen = (): JSX.Element => {
         2: '2',
         3: '3',
     }
-    const DEFAULT_CENTER = [48.76709, 11.4328]
+
     enum LoadingState {
         LOADING,
         LOADED,
         ERROR,
     }
     const [errorMsg, setErrorMsg] = useState('')
-    const selectedLocation = 'IN'
     const colors = useTheme().colors as Colors
     const { userKind } = React.useContext(UserKindContext)
     const { q } = useLocalSearchParams<{ q: string }>()
@@ -135,6 +154,12 @@ export const MapScreen = (): JSX.Element => {
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [mapOverlay, setMapOverlay] = useState<RoomsOverlay | null>(null)
+    const selectedLocation =
+        userData?.faculty !== 'Nachhaltige Infrastruktur' ? 'In' : 'Nd'
+    const DEFAULT_CENTER = [
+        Standort[selectedLocation].coordinates.lat,
+        Standort[selectedLocation].coordinates.lon,
+    ]
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
 
@@ -208,9 +233,12 @@ export const MapScreen = (): JSX.Element => {
                 ) {
                     return []
                 }
+
+                /* Removed due to issues with this check
                 if (properties.Standort !== selectedLocation) {
                     return []
                 }
+                */
 
                 if (properties.Ebene in FLOOR_SUBSTITUTES) {
                     properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene]
@@ -488,7 +516,12 @@ export const MapScreen = (): JSX.Element => {
                     <WebView
                         key={webViewKey}
                         ref={mapRef}
-                        source={{ html: htmlScript }}
+                        source={{
+                            html: htmlScript.replace(
+                                'DEFAULT_COORDINATES',
+                                `[${Standort[selectedLocation].coordinates.lat},${Standort[selectedLocation].coordinates.lon}], ${Standort[selectedLocation].coordinates.height}`
+                            ),
+                        }}
                         onLoadEnd={() => {
                             if (loadingState === LoadingState.LOADING) {
                                 setLoadingState(LoadingState.LOADED)

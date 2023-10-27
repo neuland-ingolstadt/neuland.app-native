@@ -1,4 +1,6 @@
 {
+    "Nachhaltige Infrastruktur": ["NB", "NUM", "SCE", "WIB"],
+
     "Business School": [
         "AM",
         "BW",
@@ -61,7 +63,18 @@
         "WD"
     ],
 
-    "Informatik": ["CAI", "CLS", "FF", "IF", "IK", "IW", "KI", "UX", "UXM"],
+    "Informatik": [
+        "CAI",
+        "CSI",
+        "CLS",
+        "FF",
+        "IF",
+        "IK",
+        "IW",
+        "KI",
+        "UX",
+        "UXM"
+    ],
 
     "Maschinenbau": [
         "EE",
