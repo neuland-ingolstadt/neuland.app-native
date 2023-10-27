@@ -19,11 +19,6 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
 
-interface Item {
-    key: string
-    text: string
-}
-
 export default function DashboardEdit(): JSX.Element {
     const {
         shownDashboardEntries,
@@ -63,10 +58,8 @@ export default function DashboardEdit(): JSX.Element {
         )
     }
 
-    //  => React.ReactNode;
-
     const handleRestore = useCallback(
-        (item: Item) => {
+        (item: Card) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             bringBackDashboardEntry(item.key)
             setRefresh(!refresh)
@@ -206,7 +199,7 @@ export default function DashboardEdit(): JSX.Element {
 }
 
 interface RowItemProps {
-    item: Item
+    item: Card
     drag: () => void
     onPressDelete: () => void
     itemRefs: React.MutableRefObject<Map<any, any>>
