@@ -1,9 +1,4 @@
-import { AllCards } from '@/components/allCards'
-import {
-    type Card,
-    type CardDisplayed,
-    type CardPersisted,
-} from '@customTypes/settings'
+import { AllCards, type Card } from '@/components/allCards'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
@@ -14,115 +9,134 @@ import { useUserKind } from './userKind'
  * @param userKind - A string representing the user type.
  * @returns An object containing two arrays of Card objects, one for the cards that should be shown by default and one for the hidden cards.
  */
-function getDefaultDashboardOrder(userKind: string): CardDisplayed[] {
-    return AllCards.map(
-        (card): CardDisplayed => ({
-            ...card,
-            isHidden: !card.default.includes(userKind),
-        })
-    )
+function getDefaultDashboardOrder(userKind: string): {
+    shown: Card[]
+    hidden: Card[]
+} {
+    const filter = (x: Card): boolean => x.default.includes(userKind)
+    return {
+        shown: AllCards.filter(filter),
+        hidden: AllCards.filter((x) => !filter(x)),
+    }
 }
 
 export interface Dashboard {
-    dashboardEntries: CardDisplayed[]
+    shownDashboardEntries: Card[]
+    hiddenDashboardEntries: Card[]
     hideDashboardEntry: (key: string) => void
     bringBackDashboardEntry: (key: string) => void
     resetOrder: () => void
-    updateDashboardOrder: (cards: CardDisplayed[]) => void
+    updateDashboardOrder: (shown: Card[]) => void
 }
 
 export function useDashboard(): Dashboard {
-    const [dashboardEntries, setDashboardEntries] = useState<CardDisplayed[]>(
+    const [shownDashboardEntries, setShownDashboardEntries] = useState<Card[]>(
         []
     )
+    const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState<
+        Card[]
+    >([])
     const { userKind } = useUserKind()
 
     useEffect(() => {
         async function load(): Promise<void> {
             const personalDashboard = await AsyncStorage.getItem(
-                'dashboardCards'
+                'personalDashboard'
             )
-
-            if (personalDashboard !== null) {
+            const personalDashboardHidden = await AsyncStorage.getItem(
+                'personalDashboardHidden'
+            )
+            if (personalDashboard != null) {
                 const entries = JSON.parse(personalDashboard)
-                    .map((x: CardPersisted): CardDisplayed | undefined => {
-                        const card = AllCards.find(({ key }) => key === x.key)
-                        if (card !== undefined) {
-                            return { ...card, isHidden: x.isHidden }
-                        }
+                    .map((x: string) => AllCards.find((y) => y.key === x))
+                    .filter((x: Record<string, Card>) => x != null)
+                setShownDashboardEntries(entries)
 
-                        return undefined
-                    })
-                    .filter((x: Card) => x != null)
+                if (personalDashboardHidden != null) {
+                    const hiddenEntries = JSON.parse(
+                        personalDashboardHidden
+                    ).map((x: string) => AllCards.find((y) => y.key === x))
 
-                setDashboardEntries(entries)
+                    setHiddenDashboardEntries(hiddenEntries)
+                }
             } else {
                 const entries = getDefaultDashboardOrder(userKind)
-                setDashboardEntries(
-                    entries.sort((a, b) =>
-                        b.isHidden ? 1 : 0 - (a.isHidden ? 1 : 0)
-                    )
-                )
+                setShownDashboardEntries(entries.shown)
+                setHiddenDashboardEntries(entries.hidden)
             }
         }
 
         void load()
     }, [userKind])
 
-    function updateDashboardOrder(entries: CardDisplayed[]): void {
-        // console.log(dashboardEntries.filter(({isHidden}) => !isHidden));
-        const cards: CardDisplayed[] = entries.sort((a, b) =>
-            b.isHidden ? 1 : 0 - (a.isHidden ? 1 : 0)
-        )
-
-        // console.log(cards)
-
+    function changeDashboardOrder(
+        entries: Card[],
+        hiddenEntries: Card[]
+    ): void {
         void AsyncStorage.setItem(
-            'dashboardCards',
-            JSON.stringify(
-                cards.map(
-                    ({ key, isHidden }): CardPersisted => ({ key, isHidden })
-                )
-            )
+            'personalDashboard',
+            JSON.stringify(entries.map((x) => x.key))
         )
+        void AsyncStorage.setItem(
+            'personalDashboardHidden',
+            JSON.stringify(hiddenEntries.map((x) => x.key))
+        )
+        setShownDashboardEntries(entries)
+        setHiddenDashboardEntries(hiddenEntries)
+    }
 
-        setDashboardEntries(cards)
+    function updateDashboardOrder(entries: Card[]): void {
+        void AsyncStorage.setItem(
+            'personalDashboard',
+            JSON.stringify(entries.map((x) => x.key))
+        )
+        setShownDashboardEntries(entries)
     }
 
     function hideDashboardEntry(key: string): void {
-        console.log(
-            key,
-            dashboardEntries.filter((x) => x.isHidden)
-        )
+        setShownDashboardEntries((prevEntries) => {
+            const entries = [...prevEntries]
+            const hiddenEntries = [...hiddenDashboardEntries]
 
-        const newCards = dashboardEntries.map((card) => ({
-            ...card,
-            isHidden: card.isHidden || card.key === key,
-        }))
+            const index = entries.findIndex((x) => x.key === key)
+            if (index >= 0) {
+                const hiddenCard = entries[index]
+                hiddenEntries.push(hiddenCard)
+                entries.splice(index, 1)
+            }
 
-        console.log(
-            key,
-            newCards.filter((x) => x.isHidden)
-        )
-
-        updateDashboardOrder(newCards)
+            changeDashboardOrder(entries, hiddenEntries)
+            return entries
+        })
     }
 
     function bringBackDashboardEntry(key: string): void {
-        const newCards = dashboardEntries.map((card) => ({
-            ...card,
-            isHidden: !card.isHidden ? false : !(card.key === key),
-        }))
+        setShownDashboardEntries((prevEntries) => {
+            const entries = [...prevEntries]
+            const hiddenEntries = [...hiddenDashboardEntries]
 
-        updateDashboardOrder(newCards)
+            const index = hiddenEntries.findIndex((x) => x.key === key)
+            if (index >= 0) {
+                const shownCard = hiddenEntries[index]
+                entries.push(shownCard)
+                hiddenEntries.splice(index, 1)
+            }
+
+            changeDashboardOrder(entries, hiddenEntries)
+            return entries // Return the updated entries array
+        })
     }
 
     function resetOrder(): void {
-        updateDashboardOrder(getDefaultDashboardOrder(userKind))
+        const defaultEntries = getDefaultDashboardOrder(userKind)
+        setShownDashboardEntries(defaultEntries.shown)
+        setHiddenDashboardEntries(defaultEntries.hidden)
+        changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)
     }
 
     return {
-        dashboardEntries,
+        shownDashboardEntries,
+        hiddenDashboardEntries,
         hideDashboardEntry,
         bringBackDashboardEntry,
         resetOrder,

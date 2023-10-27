@@ -67,19 +67,17 @@ export default function Screen(): JSX.Element {
 }
 
 function HomeScreen(): JSX.Element {
-    const { dashboardEntries } = React.useContext(DashboardContext)
+    const { shownDashboardEntries } = React.useContext(DashboardContext)
 
     return (
         <>
             <ScrollView contentInsetAdjustmentBehavior="automatic">
                 <View style={styles.container}>
-                    {dashboardEntries
-                        .filter(({ isHidden }) => isHidden)
-                        .map((item: any) => (
-                            <React.Fragment key={item.key}>
-                                {item.card()}
-                            </React.Fragment>
-                        ))}
+                    {shownDashboardEntries.map((item: any) => (
+                        <React.Fragment key={item.key}>
+                            {item.card()}
+                        </React.Fragment>
+                    ))}
                 </View>
             </ScrollView>
         </>

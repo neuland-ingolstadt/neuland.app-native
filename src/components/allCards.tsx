@@ -3,7 +3,6 @@ import {
     USER_GUEST,
     USER_STUDENT,
 } from '@/stores/hooks/userKind'
-import type { Card } from '@customTypes/settings'
 import { useRouter } from 'expo-router'
 import React from 'react'
 
@@ -124,3 +123,11 @@ export const AllCards: Card[] = [
         ),
     },
 ]
+
+export interface Card {
+    key: string
+    text: string
+    removable: boolean
+    default: string[]
+    card: () => JSX.Element
+}
