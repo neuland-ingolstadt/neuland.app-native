@@ -1,4 +1,5 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import { type Card } from '@/components/allCards'
 import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
@@ -46,7 +47,7 @@ export default function DashboardEdit(): JSX.Element {
         refresh,
     ])
 
-    const renderItem = useCallback((params: RenderItemParams<Item>) => {
+    const renderItem = (params: RenderItemParams<Card>): JSX.Element => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             hideDashboardEntry(params.item.key)
@@ -60,7 +61,9 @@ export default function DashboardEdit(): JSX.Element {
                 onPressDelete={onPressDelete}
             />
         )
-    }, [])
+    }
+
+    //  => React.ReactNode;
 
     const handleRestore = useCallback(
         (item: Item) => {
