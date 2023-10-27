@@ -42,8 +42,7 @@ export const ThemeContext = createContext<any>({
 })
 
 export const DashboardContext = createContext<Dashboard>({
-    shownDashboardEntries: [],
-    hiddenDashboardEntries: [],
+    dashboardEntries: [],
     hideDashboardEntry: () => {},
     bringBackDashboardEntry: () => {},
     resetOrder: () => {},

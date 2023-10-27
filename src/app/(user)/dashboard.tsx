@@ -25,8 +25,7 @@ interface Item {
 
 export default function DashboardEdit(): JSX.Element {
     const {
-        shownDashboardEntries,
-        hiddenDashboardEntries,
+        dashboardEntries,
         hideDashboardEntry,
         bringBackDashboardEntry,
         resetOrder,
@@ -39,12 +38,7 @@ export default function DashboardEdit(): JSX.Element {
     // update view if shownDashboardEntries changes
     useEffect(() => {
         itemRefs.current = new Map()
-    }, [
-        shownDashboardEntries,
-        bringBackDashboardEntry,
-        hideDashboardEntry,
-        refresh,
-    ])
+    }, [dashboardEntries, bringBackDashboardEntry, hideDashboardEntry, refresh])
 
     const renderItem = useCallback((params: RenderItemParams<Item>) => {
         const onPressDelete = (): void => {
@@ -103,7 +97,9 @@ export default function DashboardEdit(): JSX.Element {
                         >
                             <DraggableFlatList
                                 keyExtractor={(item) => item.key}
-                                data={shownDashboardEntries}
+                                data={dashboardEntries.filter(
+                                    ({ isHidden }) => !isHidden
+                                )}
                                 renderItem={renderItem}
                                 onDragEnd={({ data }) => {
                                     updateDashboardOrder(data)
@@ -116,7 +112,8 @@ export default function DashboardEdit(): JSX.Element {
                     </View>
 
                     <View style={styles.block}>
-                        {hiddenDashboardEntries.length > 0 && (
+                        {dashboardEntries.filter(({ isHidden }) => isHidden)
+                            .length > 0 && (
                             <Text
                                 style={[
                                     styles.sectionHeaderText,
@@ -134,43 +131,50 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            {hiddenDashboardEntries.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <Pressable
-                                        onPress={() => {
-                                            handleRestore(item)
-                                        }}
-                                        style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.5 : 1,
-                                            },
-                                        ]}
-                                    >
-                                        <View style={styles.row}>
-                                            <Text
-                                                style={[
-                                                    styles.text,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {item.text}
-                                            </Text>
-                                            <Ionicons
-                                                name="add-circle"
-                                                size={24}
-                                                color={colors.primary}
+                            {dashboardEntries
+                                .filter(({ isHidden }) => isHidden)
+                                .map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <Pressable
+                                            onPress={() => {
+                                                handleRestore(item)
+                                            }}
+                                            style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.5 : 1,
+                                                },
+                                            ]}
+                                        >
+                                            <View style={styles.row}>
+                                                <Text
+                                                    style={[
+                                                        styles.text,
+                                                        { color: colors.text },
+                                                    ]}
+                                                >
+                                                    {item.text}
+                                                </Text>
+                                                <Ionicons
+                                                    name="add-circle"
+                                                    size={24}
+                                                    color={colors.primary}
+                                                />
+                                            </View>
+                                        </Pressable>
+                                        {index !==
+                                            dashboardEntries.filter(
+                                                ({ isHidden }) => isHidden
+                                            ).length -
+                                                1 && (
+                                            <Divider
+                                                color={
+                                                    colors.labelTertiaryColor
+                                                }
+                                                width={'100%'}
                                             />
-                                        </View>
-                                    </Pressable>
-                                    {index !==
-                                        hiddenDashboardEntries.length - 1 && (
-                                        <Divider
-                                            color={colors.labelTertiaryColor}
-                                            width={'100%'}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            ))}
+                                        )}
+                                    </React.Fragment>
+                                ))}
                         </View>
                     </View>
 
@@ -212,7 +216,7 @@ interface RowItemProps {
 function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
-    const { shownDashboardEntries } = React.useContext(DashboardContext)
+    const { dashboardEntries } = React.useContext(DashboardContext)
 
     return (
         <ScaleDecorator>
@@ -244,8 +248,11 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                 />
             </TouchableOpacity>
 
-            {shownDashboardEntries.findIndex((i) => i.key === item.key) <
-                shownDashboardEntries.length - 1 && (
+            {dashboardEntries
+                .filter(({ isHidden }) => !isHidden)
+                .findIndex((i) => i.key === item.key) <
+                dashboardEntries.filter(({ isHidden }) => !isHidden).length -
+                    1 && (
                 <Divider color={colors.labelTertiaryColor} width={'100%'} />
             )}
         </ScaleDecorator>
