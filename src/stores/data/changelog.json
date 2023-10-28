@@ -1,6 +1,7 @@
 {
+    "_note": "x.y = major.minor version. z versions are bugfixes and may not be listed here.",
     "version": {
-        "0.2.5": [
+        "0.2": [
             {
                 "title": {
                     "de": "Neues Dashboard",

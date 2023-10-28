@@ -1,3 +1,4 @@
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
@@ -22,14 +23,14 @@ export function useFlow(): FlowHook {
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
-                const onboarded = await AsyncStorage.getItem('isOnboardeed')
+                const onboarded = await AsyncStorage.getItem('isOnboarded')
                 if (onboarded === 'true') {
                     setOnboarded(true)
                 } else if (onboarded === null) {
                     setOnboarded(false)
                 }
                 const updated = await AsyncStorage.getItem(
-                    `isUpdatedddd-${packageInfo.version}`
+                    `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`
                 )
                 if (updated === 'true') {
                     setUpdated(true)
@@ -51,7 +52,7 @@ export function useFlow(): FlowHook {
      */
     function toggleOnboarded(): void {
         setOnboarded(true)
-        void AsyncStorage.setItem('isOnboardeed', 'true')
+        void AsyncStorage.setItem('isOnboarded', 'true')
     }
 
     /**
@@ -59,7 +60,10 @@ export function useFlow(): FlowHook {
      */
     function toggleUpdated(): void {
         setUpdated(true)
-        void AsyncStorage.setItem(`isUpdatedddd-${packageInfo.version}`, 'true')
+        void AsyncStorage.setItem(
+            `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`,
+            'true'
+        )
     }
 
     return {

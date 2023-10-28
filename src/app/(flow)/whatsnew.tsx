@@ -2,6 +2,7 @@ import WhatsnewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/stores/colors'
 import changelogData from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
@@ -36,12 +37,16 @@ export default function OnboardingScreen(): JSX.Element {
                     },
                 ]}
             >
-                in version {packageInfo.version}
+                in version {convertToMajorMinorPatch(packageInfo.version)}
             </Text>
 
             <View style={styles.boxesView}>
                 {Object.keys(changelog.version)
-                    .filter((key) => key === packageInfo.version)
+                    .filter(
+                        (key) =>
+                            key ===
+                            convertToMajorMinorPatch(packageInfo.version)
+                    )
                     .map((key) => (
                         <View key={key} style={styles.boxContainer}>
                             {changelog.version[key].map(

@@ -1,6 +1,7 @@
 import { type Colors } from '@/stores/colors'
 import changelog from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { Tabs, useRouter } from 'expo-router'
@@ -21,10 +22,9 @@ export default function HomeLayout(): JSX.Element {
         router.push('(flow)/onboarding')
     }
 
-    const isChangelogAvailable = Object.keys(changelog.version).includes(
-        packageInfo.version
+    const isChangelogAvailable = Object.keys(changelog.version).some(
+        (version) => version === convertToMajorMinorPatch(packageInfo.version)
     )
-
     if (
         flow.isUpdated === false &&
         isChangelogAvailable &&
