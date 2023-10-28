@@ -1,4 +1,4 @@
-import WhatsnewBox from '@/components/Elements/Universal/WhatsnewBox'
+import WhatsnewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/stores/colors'
 import changelogData from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
@@ -7,7 +7,7 @@ import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -19,44 +19,31 @@ export default function OnboardingScreen(): JSX.Element {
     return (
         <View>
             <Text
-                style={{
-                    color: colors.text,
-                    fontSize: 26,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    paddingTop: 20,
-                    paddingBottom: 10,
-                }}
+                style={[
+                    styles.title,
+                    {
+                        color: colors.text,
+                    },
+                ]}
             >
-                {' '}
-                What&apos;s new?{' '}
+                What&apos;s new
             </Text>
             <Text
-                style={{
-                    color: colors.labelColor,
-                    fontSize: 14,
-                    textAlign: 'center',
-                    paddingBottom: 20,
-                }}
+                style={[
+                    styles.subtitle,
+                    {
+                        color: colors.labelColor,
+                    },
+                ]}
             >
-                in Version {packageInfo.version}
+                in version {packageInfo.version}
             </Text>
 
-            <View style={{ height: '80%', justifyContent: 'space-around' }}>
+            <View style={styles.boxesView}>
                 {Object.keys(changelog.version)
                     .filter((key) => key === packageInfo.version)
                     .map((key) => (
-                        <View
-                            key={key}
-                            style={{
-                                flexDirection: 'column',
-                                paddingHorizontal: 20,
-                                paddingTop: 20,
-                                paddingBottom: 10,
-                                gap: 10,
-                                justifyContent: 'flex-start',
-                            }}
-                        >
+                        <View key={key} style={styles.boxContainer}>
                             {changelog.version[key].map(
                                 ({ title, description, icon }) => (
                                     <WhatsnewBox
@@ -72,28 +59,22 @@ export default function OnboardingScreen(): JSX.Element {
 
                 <View style={{}}>
                     <Pressable
-                        style={{
-                            backgroundColor: colors.primary,
-                            borderRadius: 5,
-                            paddingVertical: 10,
-                            paddingHorizontal: 20,
-                            width: '50%',
-                            alignSelf: 'center',
-                            marginTop: 20,
-                            alignContent: 'center',
-                            justifyContent: 'center',
-                        }}
+                        style={[
+                            {
+                                backgroundColor: colors.primary,
+                            },
+                            styles.buttonContainer,
+                        ]}
                         onPress={() => {
-                            router.push('/')
                             flow.toggleUpdated()
-                            console.log(flow.isUpdated)
+                            router.push('/')
                         }}
                     >
                         <Text
-                            style={{
-                                textAlign: 'center',
-                                color: getContrastColor(colors.primary),
-                            }}
+                            style={[
+                                { color: getContrastColor(colors.primary) },
+                                styles.buttonText,
+                            ]}
                         >
                             Continue
                         </Text>
@@ -103,3 +84,39 @@ export default function OnboardingScreen(): JSX.Element {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    title: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        paddingTop: 30,
+        paddingBottom: 10,
+    },
+    subtitle: {
+        fontSize: 14,
+        textAlign: 'center',
+        paddingBottom: 20,
+    },
+    boxesView: {
+        height: '80%',
+        justifyContent: 'space-around',
+    },
+    boxContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 20,
+        gap: 12,
+    },
+    buttonContainer: {
+        borderRadius: 7,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        width: '50%',
+        alignSelf: 'center',
+    },
+    buttonText: {
+        textAlign: 'center',
+        fontSize: 15,
+    },
+})

@@ -45,3 +45,28 @@ export const getContrastColor = (background: string): string => {
     const yiq = (r * 299 + g * 587 + b * 114) / 1000
     return yiq >= 128 ? '#000000' : '#ffffff'
 }
+
+/**
+ * Lightens a color by the given percentage.
+ * @param percentage The percentage to lighten the color by.
+ * @param color The color to lighten in hexadecimal format (#RRGGBB).
+ * @returns The lightened color in hexadecimal format (#RRGGBB).
+ */
+export const lighten = (percentage: number, color: string): string => {
+    const rgb = color
+        .replace(
+            /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+            (_, r, g, b) => r + r + g + g + b + b
+        )
+        .substring(1)
+        .match(/.{2}/g)
+        ?.map((x) => parseInt(x, 16)) ?? [0, 0, 0]
+
+    const newRgb = rgb.map((c) => Math.round(c + (255 - c) * percentage))
+
+    const newColor = `#${newRgb
+        .map((c) => c.toString(16).padStart(2, '0'))
+        .join('')}`
+
+    return newColor
+}

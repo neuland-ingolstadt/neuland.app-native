@@ -22,14 +22,14 @@ export function useFlow(): FlowHook {
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
-                const onboarded = await AsyncStorage.getItem('isOnboarded')
+                const onboarded = await AsyncStorage.getItem('isOnboardeed')
                 if (onboarded === 'true') {
                     setOnboarded(true)
                 } else if (onboarded === null) {
                     setOnboarded(false)
                 }
                 const updated = await AsyncStorage.getItem(
-                    `isUpdated-${packageInfo.version}`
+                    `isUpdatedddd-${packageInfo.version}`
                 )
                 if (updated === 'true') {
                     setUpdated(true)
@@ -51,7 +51,7 @@ export function useFlow(): FlowHook {
      */
     function toggleOnboarded(): void {
         setOnboarded(true)
-        void AsyncStorage.setItem('isOnboarded', 'true')
+        void AsyncStorage.setItem('isOnboardeed', 'true')
     }
 
     /**
@@ -59,7 +59,7 @@ export function useFlow(): FlowHook {
      */
     function toggleUpdated(): void {
         setUpdated(true)
-        void AsyncStorage.setItem(`isUpdated-${packageInfo.version}`, 'true')
+        void AsyncStorage.setItem(`isUpdatedddd-${packageInfo.version}`, 'true')
     }
 
     return {

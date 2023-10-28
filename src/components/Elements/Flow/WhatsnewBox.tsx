@@ -27,9 +27,9 @@ const WhatsnewBox: FC<WhatsnewBoxProps> = ({ title, description, icon }) => {
                 name={(icon as any) ?? 'chevron-forward-circle'}
                 size={26}
                 color={colors.primary}
-                style={{ paddingRight: 15 }}
+                style={{ paddingRight: 20 }}
             />
-            <View style={{ flexDirection: 'column', paddingRight: 30 }}>
+            <View style={styles.textContainer}>
                 <Text
                     style={[
                         {
@@ -48,6 +48,7 @@ const WhatsnewBox: FC<WhatsnewBoxProps> = ({ title, description, icon }) => {
                         styles.description,
                     ]}
                     numberOfLines={4}
+                    adjustsFontSizeToFit={true}
                 >
                     {description}
                 </Text>
@@ -60,13 +61,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-
         borderRadius: 10,
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '100%',
         marginBottom: 10,
     },
+    textContainer: { flexDirection: 'column', paddingRight: 40 },
     title: {
         fontSize: 16,
         fontWeight: 'bold',
