@@ -12,6 +12,7 @@ const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
 const styles = StyleSheet.create({
     // note that the colors are static since the onboarding is not dynamicly themed
     container: {
+        maxWidth: 500,
         backgroundColor: '#e5e5e5',
         borderRadius: 8,
         paddingHorizontal: 14,

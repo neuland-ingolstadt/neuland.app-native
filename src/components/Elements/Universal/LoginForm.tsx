@@ -88,6 +88,7 @@ const LoginForm = (): JSX.Element => {
     }
 
     async function guestLogin(): Promise<void> {
+        setLoading(true)
         await createGuestSession()
         toggleUpdated()
         toggleOnboarded()

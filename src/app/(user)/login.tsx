@@ -39,9 +39,10 @@ export default function Login(): JSX.Element {
     const colors = useTheme().colors as Colors
     const floatingKeyboard = useIsFloatingKeyboard()
 
+    const isIPad = Platform.OS === 'ios' && Platform.isPad
     return (
         <>
-            <StatusBar style="light" />
+            <StatusBar style={isIPad ? 'auto' : 'light'}></StatusBar>
             <LinearGradient
                 colors={[colors.primary, '#cd148c']}
                 start={{ x: 0, y: 0 }}
