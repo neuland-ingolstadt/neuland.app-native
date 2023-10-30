@@ -33,12 +33,20 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(user)/changelog"
+                        options={{
+                            title: 'Changelog',
+                            animation: 'slide_from_right',
+                        }}
+                    />
+                    <Stack.Screen
                         name="(food)/preferences"
                         options={{
                             title: 'Preferences',
                             animation: 'slide_from_right',
                         }}
                     />
+
                     <Stack.Screen
                         name="(food)/flags"
                         options={{

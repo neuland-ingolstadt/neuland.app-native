@@ -17,7 +17,6 @@ interface FormListProps {
  */
 const FormList: React.FC<FormListProps> = ({ sections }) => {
     const colors = useTheme().colors as Colors
-
     return (
         <View style={styles.wrapper}>
             {sections.map((section, sectionIndex) =>
