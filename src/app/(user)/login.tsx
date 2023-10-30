@@ -1,5 +1,6 @@
 import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/stores/colors'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
@@ -39,10 +40,9 @@ export default function Login(): JSX.Element {
     const colors = useTheme().colors as Colors
     const floatingKeyboard = useIsFloatingKeyboard()
 
-    const isIPad = Platform.OS === 'ios' && Platform.isPad
     return (
         <>
-            <StatusBar style={isIPad ? 'auto' : 'light'}></StatusBar>
+            <StatusBar style={getStatusBarStyle()} />
             <LinearGradient
                 colors={[colors.primary, '#cd148c']}
                 start={{ x: 0, y: 0 }}
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         minHeight: 370,
-        paddingHorizontal: 20,
+        paddingHorizontal: 30,
         paddingBottom: 50,
     },
 })
