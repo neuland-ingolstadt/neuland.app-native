@@ -1,6 +1,6 @@
 import { type Colors } from '@/stores/colors'
 import { calendar } from '@/utils/calendar-utils'
-import { isSameDay } from '@/utils/date-utils'
+import { getDateRange, isSameDay } from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
@@ -10,14 +10,18 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import Head from 'expo-router/head'
-import React, { type FC, useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { type FC, useEffect, useRef, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
 
 export default function TimetableScreen(): JSX.Element {
+    const weekViewRef = useRef<typeof WeekView>()
+
     const theme = useTheme()
     const colors = theme.colors as Colors
+
+    const [selectedDate, setSelectedDate] = useState(new Date())
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
@@ -165,19 +169,38 @@ export default function TimetableScreen(): JSX.Element {
     }) => {
         const today = isSameDay(new Date(date), new Date())
         return (
-            <View
-                style={[
-                    styles.dateHeader,
-                    {
-                        backgroundColor: today
-                            ? colors.labelBackground
-                            : colors.card,
-                    },
-                ]}
+            <TouchableOpacity
+                onPress={() => {
+                    weekViewRef.current?.goToDate(date)
+                }}
             >
-                <Text style={{ color: colors.text }}>{formattedDate}</Text>
-            </View>
+                <View
+                    style={[
+                        styles.dateHeader,
+                        {
+                            backgroundColor: today
+                                ? colors.labelBackground
+                                : colors.card,
+                        },
+                    ]}
+                >
+                    <Text style={{ color: colors.text }}>{formattedDate}</Text>
+                </View>
+            </TouchableOpacity>
         )
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    function getTimetable(): TimetableEvent[] {
+        const calendarRange = getDateRange(selectedDate, 3)
+
+        const filteredTimetable = timetable.filter((entry) => {
+            return calendarRange.some((date) => {
+                return isSameDay(date, entry.startDate)
+            })
+        })
+
+        return filteredTimetable
     }
 
     return (
@@ -191,8 +214,9 @@ export default function TimetableScreen(): JSX.Element {
 
             <View style={styles.wrapper}>
                 <WeekView
+                    ref={weekViewRef}
                     events={timetable}
-                    selectedDate={new Date()}
+                    selectedDate={selectedDate}
                     numberOfDays={3}
                     timesColumnWidth={50}
                     showTitle={false}
@@ -204,6 +228,12 @@ export default function TimetableScreen(): JSX.Element {
                     nowLineColor={colors.labelColor}
                     onEventPress={(event) => {
                         console.log(event)
+                    }}
+                    onSwipeNext={(date) => {
+                        setSelectedDate(date)
+                    }}
+                    onSwipePrev={(date) => {
+                        setSelectedDate(date)
                     }}
                     enableVerticalPinch={true}
                     formatDateHeader="ddd D"

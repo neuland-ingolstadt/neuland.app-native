@@ -391,3 +391,14 @@ export function combineDateTime(date: Date, time: Date): Date {
     date.setMilliseconds(time.getMilliseconds())
     return date
 }
+
+export function getDateRange(startDate: Date, delta: number): Date[] {
+    const dates = []
+    let currentDate = startDate
+    for (let i = 0; i < delta; i++) {
+        dates.push(currentDate)
+        currentDate = new Date(currentDate)
+        currentDate.setDate(currentDate.getDate() + 1)
+    }
+    return dates
+}
