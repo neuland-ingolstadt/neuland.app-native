@@ -129,7 +129,7 @@ export const htmlScript = `
         window.addEventListener('online', checkInternetConnection);
         window.addEventListener('offline', checkInternetConnection);
 
-        var mymap = L.map('mapid', { zoomControl: false }).setView(DEFAULT_COORDINATES);
+        var mymap = L.map('mapid', { zoomControl: false }).setView([48.76709, 11.4328], 17.5);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 21,

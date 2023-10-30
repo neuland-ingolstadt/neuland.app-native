@@ -33,6 +33,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
 
 export const UserKindContext = createContext<any>({
     userKind: 'student',
+    userFaculty: 'unknown',
     toggleUserKind: () => {},
 })
 
