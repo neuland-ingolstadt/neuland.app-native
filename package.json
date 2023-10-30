@@ -21,6 +21,7 @@
         "@expo/vector-icons": "^13.0.0",
         "@react-native-async-storage/async-storage": "1.18.2",
         "@react-native-community/datetimepicker": "7.2.0",
+        "@types/react-native-onboarding-swiper": "^1.1.6",
         "expo": "^49.0.16",
         "expo-clipboard": "~4.3.0",
         "expo-constants": "~14.4.2",
