@@ -118,7 +118,7 @@ export default function AdvancedSearch(): JSX.Element {
                 e instanceof NoSessionError ||
                 e instanceof UnavailableSessionError
             ) {
-                // router.replace('(user)/login')
+                router.replace('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setError(e as Error)

@@ -93,13 +93,14 @@ export default function Settings(): JSX.Element {
                         router.push('(food)/preferences')
                     },
                 },
-                {
-                    title: 'Language',
-                    icon: 'language-outline',
-                    onPress: async () => {
-                        await Linking.openSettings()
-                    },
-                },
+                // {
+                //     title: 'Language',
+                //     icon: 'language-outline',
+
+                //     onPress: async () => {
+                //         await Linking.openSettings()
+                //     },
+                // },
             ],
         },
         {
@@ -141,7 +142,7 @@ export default function Settings(): JSX.Element {
                     title: 'Rate the app',
                     icon: 'star-outline',
                     onPress: () => {
-                        router.push('(user)/rate')
+                        alert('Not available yet')
                     },
                 },
             ],

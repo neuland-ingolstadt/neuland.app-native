@@ -7,8 +7,9 @@ import Onboarding from 'react-native-onboarding-swiper'
 
 export default function OnboardingScreen(): JSX.Element {
     const onboardingRef = useRef<Onboarding>(null)
-    const PRIVACY_URL =
-        'https://assets.neuland.app/datenschutzerklaerung-app.pdf'
+
+    const PRIVACY_URL: string = process.env.EXPO_PUBLIC_PRIVACY_URL as string
+    const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
     return (
         <Onboarding
             ref={onboardingRef}
@@ -55,9 +56,7 @@ export default function OnboardingScreen(): JSX.Element {
                                 <Text
                                     style={styles.firstSubtitleLinkText}
                                     onPress={() => {
-                                        void Linking.openURL(
-                                            'https://assets.neuland.app/impressum-app.htm'
-                                        )
+                                        void Linking.openURL(IMPRINT_URL)
                                     }}
                                 >
                                     Imprint

@@ -147,10 +147,12 @@ const LoginForm = (): JSX.Element => {
                                             styles.textInput,
                                             { color: colors.text },
                                         ]}
+                                        returnKeyType="next"
                                         placeholder="abc1234"
                                         onChangeText={(text) => {
                                             setUsername(text)
                                         }}
+                                        selectionColor={colors.primary}
                                         autoCapitalize="none"
                                         autoComplete="username"
                                     />
@@ -179,12 +181,25 @@ const LoginForm = (): JSX.Element => {
                                             styles.textInput,
                                             { color: colors.text },
                                         ]}
-                                        placeholder="Passwort"
+                                        placeholder="Password"
+                                        returnKeyType="done"
                                         onChangeText={(text) => {
                                             setPassword(text)
                                         }}
+                                        onSubmitEditing={() => {
+                                            if (username !== '') {
+                                                login().catch(
+                                                    (error: Error) => {
+                                                        console.log(error)
+                                                    }
+                                                )
+                                            }
+                                        }}
+                                        selectionColor={colors.primary}
+                                        selectTextOnFocus={true}
                                         autoCapitalize="none"
                                         secureTextEntry={true}
+                                        clearButtonMode="while-editing"
                                         autoComplete="current-password"
                                     />
                                 </View>
@@ -204,11 +219,13 @@ const LoginForm = (): JSX.Element => {
                                 {loading ? (
                                     <ActivityIndicator
                                         color={getContrastColor(colors.primary)}
+                                        size={15}
                                     />
                                 ) : (
                                     <Text
                                         style={{
                                             fontWeight: 'bold',
+                                            fontSize: 15,
                                             color: getContrastColor(
                                                 colors.primary
                                             ),
@@ -275,6 +292,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     loginButton: {
+        height: 40,
+        justifyContent: 'center',
         paddingHorizontal: 20,
         paddingVertical: 10,
         marginTop: 20,
