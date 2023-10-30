@@ -110,10 +110,10 @@ export default function OnboardingScreen(): JSX.Element {
                         <View>
                             <OnboardingBox
                                 title={
-                                    `As an alternative to the official THI app, we strictly protect your data.\n\n` +
-                                    `Neuland Next uses the official and encrypted API of the THI. ` +
-                                    `Your password and data is therefore never accessible to us or third parties.\n\n` +
-                                    `No tracking or advertising services are used. We refrain from collecting any user data.`
+                                    `Neuland Next is an open source project and developed by students for students.\n\n` +
+                                    `As an alternative to the official THI app, we strictly protect your data. ` +
+                                    `The app only uses the official and encrypted API provided by the THI.\n\n` +
+                                    `Your password and data is therefore never accessible to us or third parties.`
                                 }
                             />
                             <Text

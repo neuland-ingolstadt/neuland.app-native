@@ -9,6 +9,7 @@ import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
+    ActivityIndicator,
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
@@ -51,6 +52,7 @@ const LoginForm = (): JSX.Element => {
     const colors = useTheme().colors as Colors
     const { toggleOnboarded, toggleUpdated } = React.useContext(FlowContext)
     const { toggleUserKind } = React.useContext(UserKindContext)
+    const [loading, setLoading] = useState(false)
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
@@ -60,6 +62,7 @@ const LoginForm = (): JSX.Element => {
 
     async function login(): Promise<void> {
         try {
+            setLoading(true)
             const userKind = await createSession(username, password, true)
             toggleUserKind(userKind)
             toggleUpdated()
@@ -79,6 +82,7 @@ const LoginForm = (): JSX.Element => {
             router.push('/')
         } catch (e: any) {
             const message = trimErrorMsg(e.message)
+            setLoading(false)
             setFailure(message)
         }
     }
@@ -185,6 +189,7 @@ const LoginForm = (): JSX.Element => {
                                 </View>
                             </View>
                             <TouchableOpacity
+                                disabled={loading}
                                 onPress={() => {
                                     login().catch((error: Error) => {
                                         console.log(error)
@@ -195,14 +200,22 @@ const LoginForm = (): JSX.Element => {
                                     { backgroundColor: colors.primary },
                                 ]}
                             >
-                                <Text
-                                    style={{
-                                        fontWeight: 'bold',
-                                        color: getContrastColor(colors.primary),
-                                    }}
-                                >
-                                    Sign in
-                                </Text>
+                                {loading ? (
+                                    <ActivityIndicator
+                                        color={getContrastColor(colors.primary)}
+                                    />
+                                ) : (
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            color: getContrastColor(
+                                                colors.primary
+                                            ),
+                                        }}
+                                    >
+                                        Sign in
+                                    </Text>
+                                )}
                             </TouchableOpacity>
                             <View style={styles.guestContainer}>
                                 <TouchableOpacity

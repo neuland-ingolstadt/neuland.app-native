@@ -2,6 +2,7 @@ import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import {
     Dimensions,
@@ -39,24 +40,27 @@ export default function Login(): JSX.Element {
     const floatingKeyboard = useIsFloatingKeyboard()
 
     return (
-        <LinearGradient
-            colors={[colors.primary, '#cd148c']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.gradient}
-        >
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1, justifyContent: 'center' }}
-                enabled={!floatingKeyboard}
+        <>
+            <StatusBar style="light" />
+            <LinearGradient
+                colors={[colors.primary, '#cd148c']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradient}
             >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.loginContainer}>
-                        <LoginForm></LoginForm>
-                    </View>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </LinearGradient>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={{ flex: 1, justifyContent: 'center' }}
+                    enabled={!floatingKeyboard}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.loginContainer}>
+                            <LoginForm></LoginForm>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+            </LinearGradient>
+        </>
     )
 }
 
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     loginContainer: {
-        height: 350,
+        minHeight: 370,
         paddingHorizontal: 20,
         paddingBottom: 50,
     },
