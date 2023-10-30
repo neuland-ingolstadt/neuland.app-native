@@ -200,17 +200,6 @@ export enum Gebaeude {
     Z = 'Z',
 }
 
-export const Standort = {
-    In: {
-        slug: 'IN',
-        coordinates: { lat: 48.76709, lon: 11.4328, height: 17.5 },
-    },
-    Nd: {
-        slug: 'ND',
-        coordinates: { lat: 48.73201, lon: 11.1737, height: 16.5 },
-    },
-}
-
 export enum FeatureType {
     Feature = 'Feature',
 }
