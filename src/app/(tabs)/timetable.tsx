@@ -1,8 +1,12 @@
+import { type Colors } from '@/stores/colors'
+import { useTheme } from '@react-navigation/native'
 import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
+import { Text } from 'react-native'
 
 export default function TimetableScreen(): JSX.Element {
+    const colors = useTheme().colors as Colors
     return (
         <>
             <Head>
@@ -16,6 +20,16 @@ export default function TimetableScreen(): JSX.Element {
                     title: 'Timetable',
                 }}
             />
+            <Text
+                style={{
+                    fontSize: 15,
+                    alignSelf: 'center',
+                    padding: 10,
+                    color: colors.text,
+                }}
+            >
+                coming soon
+            </Text>
         </>
     )
 }
