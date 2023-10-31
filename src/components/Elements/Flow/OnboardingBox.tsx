@@ -1,27 +1,41 @@
+import { type Colors } from '@/stores/colors'
+import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
+    const colors = useTheme().colors as Colors
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>{title}</Text>
+        <View
+            style={[
+                styles.container,
+                {
+                    backgroundColor: colors.card,
+                },
+            ]}
+        >
+            <Text
+                style={[
+                    styles.text,
+                    {
+                        color: colors.text,
+                    },
+                ]}
+            >
+                {title}
+            </Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    // note that the colors are static since the onboarding is not dynamicly themed
     container: {
-        maxWidth: 500,
-        backgroundColor: '#e5e5e5',
         borderRadius: 8,
-        paddingHorizontal: 14,
-        marginHorizontal: 16,
-        paddingVertical: 16,
+        padding: 16,
     },
     text: {
         fontSize: 16,
-        color: '#000000',
         textAlign: 'left',
     },
 })

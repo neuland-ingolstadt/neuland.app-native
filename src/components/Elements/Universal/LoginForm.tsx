@@ -147,6 +147,7 @@ const LoginForm = (): JSX.Element => {
                                             styles.textInput,
                                             { color: colors.text },
                                         ]}
+                                        placeholderTextColor={colors.labelColor}
                                         returnKeyType="next"
                                         placeholder="abc1234"
                                         onChangeText={(text) => {
@@ -181,6 +182,7 @@ const LoginForm = (): JSX.Element => {
                                             styles.textInput,
                                             { color: colors.text },
                                         ]}
+                                        placeholderTextColor={colors.labelColor}
                                         placeholder="Password"
                                         returnKeyType="done"
                                         onChangeText={(text) => {

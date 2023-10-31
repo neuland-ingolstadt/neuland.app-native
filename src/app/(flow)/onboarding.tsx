@@ -1,112 +1,171 @@
 import OnboardingBox from '@/components/Elements/Flow/OnboardingBox'
+import EverythingSVG from '@/components/Elements/Flow/svgs/everything'
+import LogoSVG from '@/components/Elements/Flow/svgs/logo'
+import SecureSVG from '@/components/Elements/Flow/svgs/secure'
 import LoginForm from '@/components/Elements/Universal/LoginForm'
-import { lighten } from '@/utils/ui-utils'
+import { type Colors } from '@/stores/colors'
+import { useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
-import { Image, Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View } from 'react-native'
 import Onboarding from 'react-native-onboarding-swiper'
 
 export default function OnboardingScreen(): JSX.Element {
     const onboardingRef = useRef<Onboarding>(null)
-
     const PRIVACY_URL: string = process.env.EXPO_PUBLIC_PRIVACY_URL as string
     const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
+
+    const colors = useTheme().colors as Colors
+
     return (
         <Onboarding
             ref={onboardingRef}
-            onSkip={() => onboardingRef.current.goToPage(3, false)}
+            onSkip={() => onboardingRef.current?.goToPage(3, false)}
             showDone={false}
             pages={[
                 {
-                    backgroundColor: '#ffffff',
+                    backgroundColor: colors.background,
                     image: (
-                        <View>
-                            <Image
-                                source={require('@/assets/icon.png')}
+                        <View style={styles.page}>
+                            <View style={styles.logo}>
+                                <LogoSVG size={150} />
+                            </View>
+
+                            <View
                                 style={{
-                                    width: 250,
-                                    height: 250,
+                                    flexGrow: 1,
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Text
+                                    style={[
+                                        styles.header,
+                                        {
+                                            color: colors.text,
+                                        },
+                                    ]}
+                                >
+                                    Welcome to{'\n'}Neuland Next
+                                </Text>
+                            </View>
+
+                            <View style={styles.secondaryContainer}>
+                                <Text
+                                    style={[
+                                        styles.secondaryText,
+                                        {
+                                            color: colors.text,
+                                        },
+                                    ]}
+                                >
+                                    Swipe to learn more
+                                </Text>
+                                <View style={styles.linkContainer}>
+                                    <Text
+                                        style={[
+                                            styles.linkText,
+                                            {
+                                                color: colors.primary,
+                                            },
+                                        ]}
+                                        onPress={() => {
+                                            void Linking.openURL(PRIVACY_URL)
+                                        }}
+                                    >
+                                        Privacy Policy
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.linkText,
+                                            {
+                                                color: colors.text,
+                                            },
+                                        ]}
+                                    >
+                                        -
+                                    </Text>
+
+                                    <Text
+                                        style={[
+                                            styles.linkText,
+                                            {
+                                                color: colors.primary,
+                                            },
+                                        ]}
+                                        onPress={() => {
+                                            void Linking.openURL(IMPRINT_URL)
+                                        }}
+                                    >
+                                        Imprint
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    ),
+                    subtitle: <></>,
+                    title: <></>,
+                },
+                {
+                    backgroundColor: colors.background,
+                    image: (
+                        <View style={styles.page}>
+                            <View style={styles.logo}>
+                                <EverythingSVG
+                                    size={250}
+                                    primary={colors.primary}
+                                />
+                            </View>
+
+                            <Text
+                                style={[
+                                    styles.header,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
+                            >
+                                Everything in one place
+                            </Text>
+
+                            <OnboardingBox
+                                title={
+                                    `Neuland Next combines all important information about your studies in one app.\n\n` +
+                                    `Customize your dashboard to your needs and get a quick overview of your schedule, grades, and more.\n\n` +
+                                    `The interactive map shows you all important locations on campus.`
+                                }
+                            />
+
+                            <Text
+                                style={{
+                                    color: colors.background,
                                 }}
                             />
                         </View>
                     ),
-
-                    title: (
-                        <Text style={styles.header}>
-                            Welcome to{'\n'}Neuland Next
-                        </Text>
-                    ),
-                    subtitle: (
-                        <View style={styles.firstSubtitleContainer}>
-                            <Text style={styles.firstSubtitleText}>
-                                Swipe to learn more
-                            </Text>
-                            <View style={styles.firstSubtitleLinks}>
-                                <Text
-                                    style={styles.firstSubtitleLinkText}
-                                    onPress={() => {
-                                        void Linking.openURL(PRIVACY_URL)
-                                    }}
-                                >
-                                    Privacy Policy
-                                </Text>
-                                <Text style={styles.firstSubtitleLinkConnector}>
-                                    -
-                                </Text>
-
-                                <Text
-                                    style={styles.firstSubtitleLinkText}
-                                    onPress={() => {
-                                        void Linking.openURL(IMPRINT_URL)
-                                    }}
-                                >
-                                    Imprint
-                                </Text>
+                    title: <></>,
+                    subtitle: <></>,
+                },
+                {
+                    backgroundColor: colors.background,
+                    image: (
+                        <View style={styles.page}>
+                            <View style={styles.logo}>
+                                <SecureSVG
+                                    size={250}
+                                    primary={colors.primary}
+                                />
                             </View>
-                        </View>
-                    ),
-                },
-                {
-                    backgroundColor: '#ffffff',
-                    image: (
-                        <Image
-                            source={require('@/assets/onboarding/map.png')}
-                            style={{
-                                width: 250,
-                                height: 180,
-                            }}
-                        />
-                    ),
 
-                    title: (
-                        <Text style={styles.header}>
-                            Everything in one place
-                        </Text>
-                    ),
-                    subtitle: (
-                        <OnboardingBox
-                            title={
-                                `Neuland Next combines all important information about your studies in one app.\n\n` +
-                                `Customize your dashboard to your needs and get a quick overview of your schedule, grades, and more.\n\n` +
-                                `The interactive map shows you all important locations on campus.`
-                            }
-                        />
-                    ),
-                },
-                {
-                    backgroundColor: '#ffffff',
-                    image: (
-                        <Image
-                            source={require('@/assets/onboarding/pocket-knife.png')}
-                            style={{
-                                width: 250,
-                                height: 150,
-                            }}
-                        />
-                    ),
+                            <Text
+                                style={[
+                                    styles.header,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
+                            >
+                                Data Security
+                            </Text>
 
-                    title: <Text style={styles.header}>Data Security</Text>,
-                    subtitle: (
-                        <View>
                             <OnboardingBox
                                 title={
                                     `Neuland Next is an open source project and developed by students for students.\n\n` +
@@ -115,8 +174,12 @@ export default function OnboardingScreen(): JSX.Element {
                                     `Your password and data is therefore never accessible to us or third parties.`
                                 }
                             />
+
                             <Text
-                                style={styles.thirdPrivacyText}
+                                style={[
+                                    styles.linkText,
+                                    { color: colors.primary },
+                                ]}
                                 onPress={() => {
                                     void Linking.openURL(PRIVACY_URL)
                                 }}
@@ -125,14 +188,16 @@ export default function OnboardingScreen(): JSX.Element {
                             </Text>
                         </View>
                     ),
+                    title: <></>,
+                    subtitle: <></>,
                 },
                 {
-                    backgroundColor: lighten(0.1, '#31aac3'),
+                    backgroundColor: colors.primary,
                     image: <></>,
                     title: <></>,
                     subtitle: (
                         <View style={styles.loginContainer}>
-                            <LoginForm></LoginForm>
+                            <LoginForm />
                         </View>
                     ),
                 },
@@ -142,44 +207,51 @@ export default function OnboardingScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 25,
+        paddingHorizontal: 16,
+    },
     header: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: '#000000',
-        paddingBottom: 35,
         textAlign: 'center',
     },
-    firstSubtitleContainer: {
+    secondaryContainer: {
         gap: 10,
         justifyContent: 'space-around',
         alignItems: 'center',
     },
-    firstSubtitleText: {
+    secondaryText: {
         fontSize: 18,
         fontWeight: '500',
-        color: '#000000',
-        paddingBottom: 30,
-        paddingTop: 40,
     },
-    firstSubtitleLinks: {
+    linkContainer: {
         flexDirection: 'row',
         gap: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    firstSubtitleLinkText: {
+    linkText: {
         fontSize: 14,
-        color: '#2aa2ba',
-    },
-    firstSubtitleLinkConnector: {
-        fontSize: 14,
-        color: '#000000',
     },
     thirdPrivacyText: {
         fontSize: 14,
-        color: '#2aa2ba',
         textAlign: 'center',
         paddingTop: 20,
+    },
+    logo: {
+        height: 150,
+        justifyContent: 'flex-end',
+        flexGrow: 1,
+    },
+    image: {
+        height: 250,
+        justifyContent: 'center',
+        flexGrow: 1,
     },
     loginContainer: {
         minHeight: 300,
