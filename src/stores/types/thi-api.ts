@@ -131,6 +131,7 @@ export interface PersDataDetails {
     swpkt: string
     aaspf_echt: string
     pcounter?: string
+    faculty: string | null // This is being added when the User opens the Map
 }
 
 export interface Rooms {

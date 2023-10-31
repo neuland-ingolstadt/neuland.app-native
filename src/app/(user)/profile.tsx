@@ -198,12 +198,12 @@ export default function Profile(): JSX.Element {
     return (
         <ScrollView>
             <View
-                    style={{
-                        paddingHorizontal: 16,
-                        width: '100%',
-                        alignSelf: 'center',
-                    }}
-                >
+                style={{
+                    paddingHorizontal: 16,
+                    width: '100%',
+                    alignSelf: 'center',
+                }}
+            >
                 <FormList sections={sections} />
             </View>
             <View

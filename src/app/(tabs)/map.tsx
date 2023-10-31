@@ -117,16 +117,15 @@ export const MapScreen = (): JSX.Element => {
         2: '2',
         3: '3',
     }
-    const DEFAULT_CENTER = [48.76709, 11.4328]
+
     enum LoadingState {
         LOADING,
         LOADED,
         ERROR,
     }
     const [errorMsg, setErrorMsg] = useState('')
-    const selectedLocation = 'IN'
     const colors = useTheme().colors as Colors
-    const { userKind } = React.useContext(UserKindContext)
+    const { userKind, userFaculty } = React.useContext(UserKindContext)
     const { q } = useLocalSearchParams<{ q: string }>()
     const { h } = useLocalSearchParams<{ h: string }>()
     const [webViewKey, setWebViewKey] = useState(0)
@@ -135,13 +134,20 @@ export const MapScreen = (): JSX.Element => {
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [mapOverlay, setMapOverlay] = useState<RoomsOverlay | null>(null)
+
+    const INGOLSTADT_CENTER = [48.76709, 11.4328]
+    const NEUBURG_CENTER = [48.73227, 11.17261]
+    const mapCenter =
+        userFaculty === 'Nachhaltige Infrastruktur'
+            ? NEUBURG_CENTER
+            : INGOLSTADT_CENTER
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
 
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })
         router.setParams({ q: '' })
-        _setView(DEFAULT_CENTER, mapRef)
+        _setView(mapCenter, mapRef)
         setShowDismissModal(false)
     }
 
@@ -183,6 +189,7 @@ export const MapScreen = (): JSX.Element => {
     }, [userKind, webViewKey])
 
     useEffect(() => {
+        // load the map overlay from asset api
         AssetAPI.getMapOverlay()
             .then((data) => {
                 setMapOverlay(data)
@@ -195,6 +202,7 @@ export const MapScreen = (): JSX.Element => {
     }, [webViewKey])
 
     const allRooms = useMemo(() => {
+        // filter and process the map overlay data
         if (mapOverlay == null) {
             return []
         }
@@ -206,9 +214,6 @@ export const MapScreen = (): JSX.Element => {
                     geometry?.coordinates == null ||
                     geometry.type !== 'Polygon'
                 ) {
-                    return []
-                }
-                if (properties.Standort !== selectedLocation) {
                     return []
                 }
 
@@ -229,8 +234,9 @@ export const MapScreen = (): JSX.Element => {
     }, [mapOverlay])
 
     const [filteredRooms, center] = useMemo(() => {
+        // logic for filtering the map overlay data
         if (q == null) {
-            return [allRooms, DEFAULT_CENTER]
+            return [allRooms, mapCenter]
         }
 
         const cleanedText = q.toUpperCase().trim()
@@ -258,19 +264,27 @@ export const MapScreen = (): JSX.Element => {
                 : fullTextSearcher
         )
 
+        // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
+        const showNeuburg =
+            userFaculty === 'Nachhaltige Infrastruktur' ||
+            cleanedText.includes('N')
+        const campusRooms = filtered.filter(
+            (x) => x.properties.Raum.includes('N') === showNeuburg
+        )
+        const centerRooms = campusRooms.length > 0 ? campusRooms : filtered
+
         let lon = 0
         let lat = 0
         let count = 0
-        filtered.forEach((x: any) => {
+        centerRooms.forEach((x: any) => {
             lon += Number(x.coordinates[0][0])
             lat += Number(x.coordinates[0][1])
             count += 1
         })
         const filteredCenter =
-            count > 0 ? [lat / count, lon / count] : DEFAULT_CENTER
-
+            count > 0 ? [lat / count, lon / count] : mapCenter
         return [filtered, filteredCenter]
-    }, [q, allRooms, userKind])
+    }, [q, allRooms, userKind, mapCenter])
 
     const uniqueEtages = Array.from(
         new Set(
@@ -280,13 +294,15 @@ export const MapScreen = (): JSX.Element => {
         )
     ).sort((a, b) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b))
 
-    // set the current floor to the first floor in the uniqueEtages array
+    useEffect(() => {
+        _setView(q !== '' ? center : mapCenter, mapRef)
+    }, [center])
+
     useEffect(() => {
         const currentFloor = uniqueEtages.includes('EG')
             ? 'EG'
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
-        _setView(q !== '' ? center : DEFAULT_CENTER, mapRef)
     }, [filteredRooms])
 
     useEffect(() => {
@@ -488,7 +504,9 @@ export const MapScreen = (): JSX.Element => {
                     <WebView
                         key={webViewKey}
                         ref={mapRef}
-                        source={{ html: htmlScript }}
+                        source={{
+                            html: htmlScript,
+                        }}
                         onLoadEnd={() => {
                             if (loadingState === LoadingState.LOADING) {
                                 setLoadingState(LoadingState.LOADED)

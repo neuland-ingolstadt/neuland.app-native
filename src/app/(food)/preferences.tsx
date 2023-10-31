@@ -56,7 +56,12 @@ export default function FoodPreferences(): JSX.Element {
         <>
             <View style={{ flex: 1 }}>
                 <View
-                    style={{ marginTop: 18, paddingHorizontal: 16, width: '100%', alignSelf: 'center' }}
+                    style={{
+                        marginTop: 18,
+                        paddingHorizontal: 16,
+                        width: '100%',
+                        alignSelf: 'center',
+                    }}
                 >
                     <Text
                         style={{
@@ -85,10 +90,9 @@ export default function FoodPreferences(): JSX.Element {
                             selectedItems={selectedRestaurants}
                             action={toggleSelectedRestaurant}
                         />
-                    
-                </View>
+                    </View>
 
-                <FormList sections={sections} />
+                    <FormList sections={sections} />
                 </View>
             </View>
             <View

@@ -35,7 +35,7 @@ export enum GeometryName {
 export interface FeatureProperties {
     fid?: number
     id?: string
-    Standort: Standort
+    Standort: string
     Gebaeude: Gebaeude
     Etage: string
     Ebene: string
@@ -63,11 +63,6 @@ export enum Gebaeude {
     S = 'S',
     W = 'W',
     Z = 'Z',
-}
-
-export enum Standort {
-    In = 'IN',
-    Nd = 'ND',
 }
 
 export enum FeatureType {
