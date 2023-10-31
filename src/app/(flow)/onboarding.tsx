@@ -99,6 +99,7 @@ export default function OnboardingScreen(): JSX.Element {
                             </View>
                         </View>
                     ),
+                    subtitle: <></>,
                 },
                 {
                     backgroundColor: colors.background,
@@ -138,6 +139,7 @@ export default function OnboardingScreen(): JSX.Element {
                             />
                         </View>
                     ),
+                    subtitle: <></>,
                 },
                 {
                     backgroundColor: colors.background,
@@ -181,6 +183,7 @@ export default function OnboardingScreen(): JSX.Element {
                             </Text>
                         </View>
                     ),
+                    subtitle: <></>,
                 },
                 {
                     backgroundColor: colors.primary,
@@ -190,6 +193,7 @@ export default function OnboardingScreen(): JSX.Element {
                             <LoginForm />
                         </View>
                     ),
+                    subtitle: <></>,
                 },
             ]}
         />
