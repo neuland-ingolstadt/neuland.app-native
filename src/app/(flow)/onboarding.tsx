@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 25,
         paddingHorizontal: 16,
-        paddingTop: 32,
+        marginTop: 16,
     },
     header: {
         fontSize: 30,

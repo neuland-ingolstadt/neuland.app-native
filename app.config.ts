@@ -18,7 +18,7 @@ module.exports = {
         },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
-            buildNumber: '1',
+            buildNumber: '4',
             supportsTablet: true,
             userInterfaceStyle: 'automatic',
             associatedDomains: [
