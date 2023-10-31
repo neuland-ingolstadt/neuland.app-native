@@ -19,34 +19,32 @@ export default function OnboardingScreen(): JSX.Element {
     return (
         <Onboarding
             ref={onboardingRef}
-            onSkip={() => onboardingRef.current?.goToPage(3, false)}
+            onSkip={() =>
+                onboardingRef.current
+                    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
+                    ?.goToPage(3, false)
+            }
             showDone={false}
             pages={[
                 {
                     backgroundColor: colors.background,
                     image: (
+                        <View style={styles.logo}>
+                            <LogoSVG size={150} />
+                        </View>
+                    ),
+                    title: (
                         <View style={styles.page}>
-                            <View style={styles.logo}>
-                                <LogoSVG size={150} />
-                            </View>
-
-                            <View
-                                style={{
-                                    flexGrow: 1,
-                                    justifyContent: 'center',
-                                }}
+                            <Text
+                                style={[
+                                    styles.header,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
                             >
-                                <Text
-                                    style={[
-                                        styles.header,
-                                        {
-                                            color: colors.text,
-                                        },
-                                    ]}
-                                >
-                                    Welcome to{'\n'}Neuland Next
-                                </Text>
-                            </View>
+                                Welcome to{'\n'}Neuland Next
+                            </Text>
 
                             <View style={styles.secondaryContainer}>
                                 <Text
@@ -101,20 +99,19 @@ export default function OnboardingScreen(): JSX.Element {
                             </View>
                         </View>
                     ),
-                    subtitle: <></>,
-                    title: <></>,
                 },
                 {
                     backgroundColor: colors.background,
                     image: (
+                        <View style={styles.logo}>
+                            <EverythingSVG
+                                size={250}
+                                primary={colors.primary}
+                            />
+                        </View>
+                    ),
+                    title: (
                         <View style={styles.page}>
-                            <View style={styles.logo}>
-                                <EverythingSVG
-                                    size={250}
-                                    primary={colors.primary}
-                                />
-                            </View>
-
                             <Text
                                 style={[
                                     styles.header,
@@ -141,20 +138,16 @@ export default function OnboardingScreen(): JSX.Element {
                             />
                         </View>
                     ),
-                    title: <></>,
-                    subtitle: <></>,
                 },
                 {
                     backgroundColor: colors.background,
                     image: (
+                        <View style={styles.logo}>
+                            <SecureSVG size={250} primary={colors.primary} />
+                        </View>
+                    ),
+                    title: (
                         <View style={styles.page}>
-                            <View style={styles.logo}>
-                                <SecureSVG
-                                    size={250}
-                                    primary={colors.primary}
-                                />
-                            </View>
-
                             <Text
                                 style={[
                                     styles.header,
@@ -188,14 +181,11 @@ export default function OnboardingScreen(): JSX.Element {
                             </Text>
                         </View>
                     ),
-                    title: <></>,
-                    subtitle: <></>,
                 },
                 {
                     backgroundColor: colors.primary,
                     image: <></>,
-                    title: <></>,
-                    subtitle: (
+                    title: (
                         <View style={styles.loginContainer}>
                             <LoginForm />
                         </View>
@@ -208,13 +198,9 @@ export default function OnboardingScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     page: {
-        height: '100%',
-        width: '100%',
-        justifyContent: 'center',
         alignItems: 'center',
         gap: 25,
         paddingHorizontal: 16,
-        marginTop: 16,
     },
     header: {
         fontSize: 30,
@@ -223,7 +209,6 @@ const styles = StyleSheet.create({
     },
     secondaryContainer: {
         gap: 10,
-        justifyContent: 'space-around',
         alignItems: 'center',
     },
     secondaryText: {
@@ -245,17 +230,15 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     logo: {
-        height: 150,
-        justifyContent: 'flex-end',
+        height: 200,
         flexGrow: 1,
     },
     image: {
-        height: 250,
-        justifyContent: 'center',
+        height: 200,
         flexGrow: 1,
     },
     loginContainer: {
-        minHeight: 300,
-        marginBottom: 50,
+        minHeight: 320,
+        marginBottom: 60,
     },
 })

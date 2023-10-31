@@ -4,7 +4,9 @@
  * @param {function} resetFailure - A function to reset the login failure state.
  * @returns {JSX.Element} - A JSX element that displays the login failure alert.
  */
+import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
@@ -15,9 +17,16 @@ const LoginFailureAlert = ({
     errorMsg: string
     resetFailure: () => void
 }): JSX.Element => {
+    const colors = useTheme().colors as Colors
+
     return (
-        <View style={{ alignItems: 'center', paddingBottom: 10 }}>
-            <View style={styles.failureContainer}>
+        <View style={styles.container}>
+            <View
+                style={[
+                    styles.failureContainer,
+                    { backgroundColor: colors.labelBackground },
+                ]}
+            >
                 <View
                     style={{
                         flexDirection: 'row',
@@ -29,24 +38,24 @@ const LoginFailureAlert = ({
                             alignItems: 'center',
                         }}
                     >
-                        <Text style={styles.failureText}>Login failed</Text>
+                        <Text
+                            style={[styles.failureText, { color: colors.text }]}
+                        >
+                            Login failed
+                        </Text>
                     </View>
                     <TouchableOpacity
                         onPress={resetFailure}
-                        style={{
-                            marginLeft: 'auto',
-                        }}
+                        style={styles.resetButtom}
                     >
-                        <Ionicons name="close" size={16} color="black" />
+                        <Ionicons name="close" size={16} color={colors.text} />
                     </TouchableOpacity>
                 </View>
-                <View
-                    style={{
-                        width: '90%',
-                        alignItems: 'flex-start',
-                    }}
-                >
-                    <Text numberOfLines={1} style={{ marginTop: 4 }}>
+                <View style={styles.errorText}>
+                    <Text
+                        numberOfLines={1}
+                        style={{ marginTop: 4, color: colors.text }}
+                    >
                         {errorMsg}
                     </Text>
                 </View>
@@ -58,18 +67,26 @@ const LoginFailureAlert = ({
 export default LoginFailureAlert
 
 const styles = StyleSheet.create({
+    container: { alignItems: 'center', paddingBottom: 10 },
     failureContainer: {
-        backgroundColor: '#f9c0c0df',
         width: '100%',
         justifyContent: 'center',
 
         paddingVertical: 10,
-        paddingHorizontal: 20,
+        paddingHorizontal: 15,
         borderRadius: 5,
     },
     failureText: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
+    },
+    resetButtom: {
+        marginLeft: 'auto',
+        alignSelf: 'center',
+        padding: 1,
+    },
+    errorText: {
+        width: '90%',
+        alignItems: 'flex-start',
     },
 })

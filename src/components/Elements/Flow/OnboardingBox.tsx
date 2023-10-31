@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 8,
         padding: 16,
+        maxWidth: 600,
     },
     text: {
         fontSize: 16,

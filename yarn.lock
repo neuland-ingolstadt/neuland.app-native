@@ -2792,7 +2792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/virtualized-lists@npm:^0.72.4, @react-native/virtualized-lists@npm:^0.72.8":
+"@react-native/virtualized-lists@npm:^0.72.8":
   version: 0.72.8
   resolution: "@react-native/virtualized-lists@npm:0.72.8"
   dependencies:
@@ -3141,27 +3141,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-native-onboarding-swiper@npm:^1.1.6":
-  version: 1.1.6
-  resolution: "@types/react-native-onboarding-swiper@npm:1.1.6"
-  dependencies:
-    "@types/react": "npm:*"
-    "@types/react-native": "npm:*"
-  checksum: a73b3ad8dbde2e92cf68def0a6bd60b8580c3b891819108c5ebaa9beb09b70fc39894ffabe8f6ff461ebd0764e67b3ba8c199221af4b4f84955ed5ebeda76431
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:*":
-  version: 0.72.5
-  resolution: "@types/react-native@npm:0.72.5"
-  dependencies:
-    "@react-native/virtualized-lists": "npm:^0.72.4"
-    "@types/react": "npm:*"
-  checksum: adf4ce4993445a9bc19d34c9c47d842d3b07bba1e92fbef2808ddf6c75fba54d7088eded3d74f5aa5f9ffe87192279b86984dcba8d83558b3aa4bb5f1771ae17
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:*, @types/react@npm:~18.2.14":
+"@types/react@npm:~18.2.14":
   version: 18.2.31
   resolution: "@types/react@npm:18.2.31"
   dependencies:
@@ -8921,7 +8901,6 @@ __metadata:
     "@react-native-community/datetimepicker": "npm:7.2.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.1.1"
     "@types/react": "npm:~18.2.14"
-    "@types/react-native-onboarding-swiper": "npm:^1.1.6"
     "@typescript-eslint/eslint-plugin": "npm:^6.6.0"
     eslint: "npm:^8.0.1"
     eslint-config-prettier: "npm:^8.8.0"
@@ -8952,7 +8931,7 @@ __metadata:
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-gesture-handler: "npm:~2.12.0"
     react-native-maps: "npm:1.7.1"
-    react-native-onboarding-swiper: "https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#v0.2"
+    react-native-onboarding-swiper: "https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#v0.3"
     react-native-reanimated: "npm:3.3.0"
     react-native-root-toast: "npm:^3.4.1"
     react-native-safe-area-context: "npm:4.6.3"
@@ -10016,16 +9995,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-onboarding-swiper@https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#v0.2":
+"react-native-onboarding-swiper@https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#v0.3":
   version: 1.2.0
-  resolution: "react-native-onboarding-swiper@git+ssh://git@github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#commit=16e7301e8007aef59a106cc7f15de6d3d81ee4ed"
+  resolution: "react-native-onboarding-swiper@https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git#commit=6733030a55523ea53fc1f4f2919326245ec868e6"
   dependencies:
     tinycolor2: "npm:^1.4.1"
   peerDependencies:
     prop-types: "*"
     react: "*"
     react-native: "*"
-  checksum: 3e531f6360c32d32bc8b043cbce2f0c055bec55c405d806a3dea6c782f22a64495b64235386160e035136b0ef8c4a10458173a48d624732263fc75f21720101f
+  checksum: 5e9e9168d42da0a7d527656e74fe4f14817426dea8f28503651ddac1c167513da54549294350de2526a1a5a2c4ec1a5bd807e2bef5eb1b55835f6026b1ae6dd8
   languageName: node
   linkType: hard
 
