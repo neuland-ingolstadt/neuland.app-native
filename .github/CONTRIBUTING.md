@@ -9,9 +9,9 @@ To contribute, please follow these guidelines:
 1. Fork the repository and clone it to your local machine.
 2. Install the required dependencies:
 
-   - [Node.js 18 LTS](https://nodejs.org/en/) or higher
-   - [Yarn](https://classic.yarnpkg.com/en/docs/install)
-   - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
+    - [Node.js 18 LTS](https://nodejs.org/en/) or higher
+    - [Yarn](https://classic.yarnpkg.com/en/docs/install)
+    - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
 3. Install project dependencies by running the following command in the project directory:
 
@@ -20,20 +20,20 @@ To contribute, please follow these guidelines:
     ```
 
 4. Create an Expo account to be able to run the app on your smartphone or simulator. You can create an account [here](https://expo.dev/signup).
-To access the Expo neuland.app organization, you need to join our Expo organization. Please contact us to get an invitation.
+   To access the Expo neuland.app organization, you need to join our Expo organization. Please contact us to get an invitation.
 
 5. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
 
 ### Using the Android Emulator (_Windows, macOS, and Linux_)
 
-- Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
+-   Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
 
 > [!NOTE]  
 > Don't forget to select the right OS for the guide at the top of the page.
 
 ### Using the iOS Simulator (_macOS only_)
 
-- Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
+-   Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
 
 ## Development
 
@@ -50,7 +50,7 @@ To access the Expo neuland.app organization, you need to join our Expo organizat
 ## Submitting Changes
 
 1. Commit your changes to your branch. To ensure descriptive commit messages, we recommend using the
- [Angular commit message style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-header) for your commit messages.
+   [Angular commit message style](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit-message-header) for your commit messages.
 1. Create a pull request from your branch to the develop branch of this repository.
 1. Provide a clear and descriptive title and description for your pull request, summarizing the changes you made.
 1. Once your pull request is submitted, our team will review your changes and provide feedback or request further modifications if needed.
@@ -77,22 +77,22 @@ To access the Expo neuland.app organization, you need to join our Expo organizat
 
 ## Code Style
 
-- Follow the existing code style and conventions used in the project.
-- Use meaningful variable and function names to improve code readability.
-- Document your code when necessary using inline comments.
+-   Follow the existing code style and conventions used in the project.
+-   Use meaningful variable and function names to improve code readability.
+-   Document your code when necessary using inline comments.
 
-- Follow the existing code style and conventions used in the project.
-- Use meaningful variable and function names to improve code readability.
-- Document your code when necessary using inline comments.
+-   Follow the existing code style and conventions used in the project.
+-   Use meaningful variable and function names to improve code readability.
+-   Document your code when necessary using inline comments.
 
 We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
 But you can also run these commands manually:
 
-- `yarn lint` to check for linting errors
-- `yarn lint:fix` to automatically fix linting errors
-- `yarn format` to format the code using Prettier
+-   `yarn lint` to check for linting errors
+-   `yarn lint:fix` to automatically fix linting errors
+-   `yarn format` to format the code using Prettier
 
 ## Issues and Discussions
 
-- Feel free to open an issue if you encounter a bug or want to suggest an improvement.
-- For questions or more general concerns, create a thread in the discussion tab.
+-   Feel free to open an issue if you encounter a bug or want to suggest an improvement.
+-   For questions or more general concerns, create a thread in the discussion tab.
