@@ -62,10 +62,7 @@ export async function createSession(
  * Logs in the user as a guest.
  */
 export async function createGuestSession(): Promise<void> {
-    await SecureStore.deleteItemAsync('session')
-    await SecureStore.deleteItemAsync('username')
-    await SecureStore.deleteItemAsync('password')
-    await API.clearCache()
+    await forgetSession()
     await save('session', 'guest')
 }
 
@@ -207,8 +204,6 @@ export async function obtainSession(router: object): Promise<string | null> {
 
 /**
  * Logs out the user by deleting the session from localStorage.
- *
- * @param {object} router Next.js router object
  */
 export async function forgetSession(): Promise<void> {
     try {
@@ -218,9 +213,11 @@ export async function forgetSession(): Promise<void> {
     }
 
     // clear all AsyncStorage data
-    await SecureStore.deleteItemAsync('session')
-    await SecureStore.deleteItemAsync('username')
-    await SecureStore.deleteItemAsync('password')
+    await Promise.all([
+        SecureStore.deleteItemAsync('session'),
+        SecureStore.deleteItemAsync('username'),
+        SecureStore.deleteItemAsync('password'),
+    ])
 
     // clear all AsyncStorage data
     try {
