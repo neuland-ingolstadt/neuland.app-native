@@ -36,6 +36,7 @@
         "react-native": "0.72.5",
         "react-native-collapsible": "^1.6.1",
         "react-native-draggable-flatlist": "^4.0.1",
+        "react-native-dropdown-select-list": "^2.0.5",
         "react-native-gesture-handler": "~2.12.0",
         "react-native-maps": "1.7.1",
         "react-native-reanimated": "3.3.0",
@@ -44,6 +45,7 @@
         "react-native-screens": "~3.22.0",
         "react-native-select-dropdown": "^3.3.4",
         "react-native-svg": "13.9.0",
+        "react-native-text-ticker": "^1.14.0",
         "react-native-webview": "13.2.2"
     },
     "devDependencies": {

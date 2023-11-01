@@ -50,14 +50,21 @@ const MobilityRow = ({
                 timeString = `in ${formatRelativeMinutes(actualTime)}`
             }
         }
+
         return timeString
     }
-
-    if (kind === 'bus') {
-        const timeString = formatTimes(item.time, 30, 30)
-        return (
-            <Pressable onPress={onPress}>
-                <View style={styles.eventContainer}>
+    const infoString = item.name
+    const parkingString = item.available + ' available'
+    const chargingString = item.available + ' of ' + item.total + ' available'
+    const timeString = formatTimes(
+        kind === 'bus' ? item.time : item.actualTime,
+        30,
+        30
+    )
+    return (
+        <Pressable onPress={onPress}>
+            <View style={styles.eventContainer}>
+                {(kind === 'bus' || kind === 'train') && (
                     <View style={styles.detailsContainer}>
                         <View
                             style={{
@@ -73,52 +80,69 @@ const MobilityRow = ({
                                     fontWeight: '600',
                                     color: colors.text,
                                     marginBottom: 1,
-                                    textAlign: 'center',
                                 }}
                                 numberOfLines={2}
                                 textBreakStrategy="highQuality"
                             >
-                                {item.route}
+                                {kind === 'bus' ? item.route : item.name}
                             </Text>
                         </View>
                         <Text
                             style={{
                                 fontSize: 16,
                                 color: colors.text,
+                                textDecorationLine:
+                                    item.canceled === true
+                                        ? 'line-through'
+                                        : 'none',
                             }}
                             numberOfLines={2}
                         >
                             {item.destination}
                         </Text>
                     </View>
-                    <View
+                )}
+                <View
+                    style={{
+                        flexDirection: 'column',
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                        padding: 5,
+                    }}
+                >
+                    <Text
                         style={{
-                            flexDirection: 'column',
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            padding: 5,
+                            fontSize: 14,
+                            fontWeight: '600',
+                            color: colors.labelColor,
+                            marginBottom: 1,
                         }}
+                        numberOfLines={2}
+                        textBreakStrategy="highQuality"
                     >
-                        <Text
-                            style={{
-                                fontSize: 14,
-                                fontWeight: '600',
-                                color: colors.labelColor,
-                                marginBottom: 1,
-                            }}
-                            numberOfLines={2}
-                            textBreakStrategy="highQuality"
-                        >
-                            {timeString}
-                        </Text>
-                    </View>
+                        {kind === 'bus' || kind === 'train'
+                            ? timeString
+                            : infoString}
+                    </Text>
                 </View>
-            </Pressable>
-        )
-    } else {
-        // TODO: Add other mobility types
-        return <></>
-    }
+                {(kind === 'car' || kind === 'ev') && (
+                    <Text
+                        style={{
+                            fontSize: 14,
+                            fontWeight: '600',
+                            color: colors.labelColor,
+                            marginBottom: 0,
+                            textAlign: 'right',
+                        }}
+                        numberOfLines={2}
+                        textBreakStrategy="highQuality"
+                    >
+                        {kind === 'car' ? parkingString : chargingString}
+                    </Text>
+                )}
+            </View>
+        </Pressable>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -134,5 +158,4 @@ const styles = StyleSheet.create({
         width: '60%',
     },
 })
-
 export default MobilityRow

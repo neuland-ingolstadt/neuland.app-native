@@ -15,7 +15,7 @@ export interface MobilityHook {
  */
 export function useMobility(): MobilityHook {
     const [mobilityKind, setMobilityKind] = useState<string>('bus')
-    const [mobilityStation, setMobilityStation] = useState<string>('hochschule')
+    const [mobilityStation, setMobilityStation] = useState<string>('Hochschule')
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
