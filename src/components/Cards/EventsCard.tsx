@@ -1,4 +1,3 @@
-// BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import NeulandAPI from '@/api/neuland-api'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'

@@ -1,15 +1,41 @@
 import { type Colors } from '@/stores/colors'
+import changelog from '@/stores/data/changelog.json'
+import { FlowContext } from '@/stores/provider'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { Tabs, useRouter } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
+
+import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
     const router = useRouter()
     const colors = theme.colors as Colors
+    const flow = React.useContext(FlowContext)
 
+    if (flow.isOnboarded === false) {
+        console.log('redirecting to onboard')
+        router.push('(flow)/onboarding')
+    }
+
+    const isChangelogAvailable = Object.keys(changelog.version).some(
+        (version) => version === convertToMajorMinorPatch(packageInfo.version)
+    )
+    if (
+        flow.isUpdated === false &&
+        isChangelogAvailable &&
+        flow.isOnboarded !== false
+    ) {
+        console.log('redirecting to whatsnew')
+        router.push('(flow)/whatsnew')
+    }
+    SplashScreen.hideAsync().catch(() => {
+        /* reloading the app might make this fail, so ignore */
+    })
     return (
         <>
             <Tabs

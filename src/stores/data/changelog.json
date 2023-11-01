@@ -1,0 +1,40 @@
+{
+    "_note": "x.y = major.minor version. z versions are bugfixes and may not be listed here.",
+    "version": {
+        "0.2": [
+            {
+                "title": {
+                    "de": "Neues Dashboard",
+                    "en": "New Dashboard"
+                },
+                "description": {
+                    "de": "Hinzugefügt: Anpassbares Dashboard. Gehe zur Einstellungsseite, um es anzupassen.",
+                    "en": "Added a customizable dashboard. Go to the settings page to customize it."
+                },
+                "icon": "grid-outline"
+            },
+            {
+                "title": {
+                    "de": "Akzentfarben",
+                    "en": "Accent Colors"
+                },
+                "description": {
+                    "de": "Wähle aus 9 verschiedenen Akzentfarben, um deine Erfahrung zu personalisieren.",
+                    "en": "Choose from 9 different accent colors to personalize your experience."
+                },
+                "icon": "color-palette-outline"
+            },
+            {
+                "title": {
+                    "de": "Onboarding & Changelog",
+                    "en": "Onboarding & Changelog"
+                },
+                "description": {
+                    "de": "Diese neue Übersicht zeigt die wichtigsten Änderungen nach einem Update. Neue Nutzern wird außerdem ein Onboarding angezeigt.",
+                    "en": "This new overview shows the most important changes after an update. New users also see an onboarding."
+                },
+                "icon": "newspaper-outline"
+            }
+        ]
+    }
+}

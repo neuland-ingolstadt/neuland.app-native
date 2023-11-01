@@ -17,7 +17,6 @@ interface FormListProps {
  */
 const FormList: React.FC<FormListProps> = ({ sections }) => {
     const colors = useTheme().colors as Colors
-
     return (
         <View style={styles.wrapper}>
             {sections.map((section, sectionIndex) =>
@@ -60,7 +59,16 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 {item.title}
                                             </Text>
                                             {item.value != null && (
-                                                <Text style={styles.rowDetails}>
+                                                <Text
+                                                    style={[
+                                                        styles.rowDetails,
+                                                        {
+                                                            color:
+                                                                item.iconColor ??
+                                                                colors.labelColor,
+                                                        },
+                                                    ]}
+                                                >
                                                     {item.value}
                                                 </Text>
                                             )}

@@ -189,8 +189,8 @@ export default function DashboardEdit(): JSX.Element {
 
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
                         Customize your dashboard by dragging and dropping the
-                        cards to your preferred order. You can also hide cards
-                        by swiping left.
+                        cards to your preferred order. Hide cards by pressing on
+                        the remove icon.
                     </Text>
                 </View>
             </ScrollView>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        paddingVertical: 8,
+        paddingVertical: 9,
     },
     text: {
         fontSize: 16,

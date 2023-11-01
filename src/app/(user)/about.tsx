@@ -18,6 +18,8 @@ import {
 import { version } from '../../../package.json'
 
 export default function About(): JSX.Element {
+    const PRIVACY_URL: string = process.env.EXPO_PUBLIC_PRIVACY_URL as string
+    const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const sections: FormListSections[] = [
@@ -27,23 +29,12 @@ export default function About(): JSX.Element {
                 {
                     title: 'Privacy Policy',
                     icon: 'shield',
-                    onPress: () => {
-                        router.push('(user)/privacy')
-                    },
-                },
-                {
-                    title: 'Terms of Use',
-                    icon: 'document-text',
-                    onPress: () => {
-                        router.push('(user)/terms')
-                    },
+                    onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },
                 {
                     title: 'Imprint',
                     icon: 'information-circle',
-                    onPress: () => {
-                        router.push('(user)/imprint')
-                    },
+                    onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
             ],
         },
@@ -130,35 +121,39 @@ export default function About(): JSX.Element {
                             </View>
                         </Pressable>
 
-                        <View style={{ flexDirection: 'column' }}>
-                            <View style={{ marginBottom: 10 }}>
+                        <View style={styles.logoTextContainer}>
+                            <View style={styles.appTitleContainer}>
                                 <Text
-                                    style={{
-                                        fontSize: 22,
-                                        fontWeight: 'bold',
-                                        color: colors.text,
-                                    }}
+                                    style={[
+                                        { color: colors.text },
+                                        styles.header,
+                                    ]}
                                 >
                                     Neuland App
                                 </Text>
                                 <Text
-                                    style={{ fontSize: 16, color: colors.text }}
+                                    style={[
+                                        { color: colors.text },
+                                        styles.text,
+                                    ]}
                                 >
                                     Native Version
                                 </Text>
                             </View>
                             <View>
                                 <Text
-                                    style={{
-                                        fontSize: 16,
-                                        fontWeight: 'bold',
-                                        color: colors.text,
-                                    }}
+                                    style={[
+                                        { color: colors.text },
+                                        styles.subHeader,
+                                    ]}
                                 >
                                     Developed by
                                 </Text>
                                 <Text
-                                    style={{ fontSize: 16, color: colors.text }}
+                                    style={[
+                                        { color: colors.text },
+                                        styles.text,
+                                    ]}
                                 >
                                     Neuland Ingolstadt e.V.
                                 </Text>
@@ -167,13 +162,7 @@ export default function About(): JSX.Element {
                     </View>
                 </View>
 
-                <View
-                    style={{
-                        paddingHorizontal: 16,
-                        width: '100%',
-                        alignSelf: 'center',
-                    }}
-                >
+                <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>
             </ScrollView>
@@ -191,6 +180,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
     },
+    logoTextContainer: {
+        flexDirection: 'column',
+    },
+    appTitleContainer: {
+        marginBottom: 10,
+    },
+    formlistContainer: {
+        paddingHorizontal: 16,
+        width: '100%',
+        alignSelf: 'center',
+    },
     logoIcon: {
         shadowOffset: { width: 2, height: 4 },
         shadowOpacity: 0.4,
@@ -203,5 +203,16 @@ const styles = StyleSheet.create({
         height: 100,
         resizeMode: 'contain',
         borderRadius: 9,
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+    subHeader: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    text: {
+        fontSize: 16,
     },
 })
