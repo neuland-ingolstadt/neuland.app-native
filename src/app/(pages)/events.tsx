@@ -40,11 +40,14 @@ export default function Events(): JSX.Element {
         const campusLifeEvents =
             (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
 
-        const newEvents = campusLifeEvents.map((x) => ({
-            ...x,
-            begin: x.begin !== null ? new Date(x.begin) : null,
-            end: x.end !== null ? new Date(x.end) : null,
-        }))
+        const newEvents = campusLifeEvents
+            .map((x) => ({
+                ...x,
+                begin: x.begin !== null ? new Date(x.begin) : null,
+                end: x.end !== null ? new Date(x.end) : null,
+            }))
+            .filter((x) => x.end === null || x.end > new Date())
+
         setEvents(newEvents)
     }
 

@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Stack, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const Stack2 = createNativeStackNavigator()
@@ -39,17 +39,10 @@ export default function Screen(): JSX.Element {
                         headerRight: () => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    console.log('pressed')
                                     router.push('(user)/settings')
                                 }}
                             >
-                                <View
-                                    style={{
-                                        padding: Platform.OS === 'ios' ? 5 : 0,
-                                        marginRight:
-                                            Platform.OS === 'ios' ? 15 : 0,
-                                    }}
-                                >
+                                <View>
                                     <Ionicons
                                         name="cog-outline"
                                         size={24}
