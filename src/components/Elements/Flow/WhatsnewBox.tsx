@@ -4,7 +4,7 @@ import { useTheme } from '@react-navigation/native'
 import React, { type FC } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-interface WhatsnewBoxProps {
+interface WhatsNewBoxProps {
     title: string
     description: string
     icon?: string
@@ -17,9 +17,9 @@ interface WhatsnewBoxProps {
  * @param {string} icon - The icon of the box.
  * @returns {JSX.Element} - A React component that renders the box.
  * @example
- * <WhatsnewBox title="Title" description="Description" icon="chevron-forward-circle" />
+ * <WhatsNewBox title="Title" description="Description" icon="chevron-forward-circle" />
  */
-const WhatsnewBox: FC<WhatsnewBoxProps> = ({ title, description, icon }) => {
+const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
     const colors = useTheme().colors as Colors
     return (
         <View style={[{ backgroundColor: colors.card }, styles.container]}>
@@ -27,7 +27,7 @@ const WhatsnewBox: FC<WhatsnewBoxProps> = ({ title, description, icon }) => {
                 name={(icon as any) ?? 'chevron-forward-circle'}
                 size={26}
                 color={colors.primary}
-                style={{ paddingRight: 20 }}
+                style={styles.icon}
             />
             <View style={styles.textContainer}>
                 <Text
@@ -77,6 +77,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'left',
     },
+    icon: {
+        paddingRight: 20,
+    },
 })
 
-export default WhatsnewBox
+export default WhatsNewBox

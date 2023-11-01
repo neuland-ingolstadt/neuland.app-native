@@ -1,4 +1,4 @@
-import WhatsnewBox from '@/components/Elements/Flow/WhatsnewBox'
+import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/stores/colors'
 import changelogData from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
@@ -51,7 +51,7 @@ export default function OnboardingScreen(): JSX.Element {
                         <View key={key} style={styles.boxContainer}>
                             {changelog.version[key].map(
                                 ({ title, description, icon }) => (
-                                    <WhatsnewBox
+                                    <WhatsNewBox
                                         key={title.en}
                                         title={title.en}
                                         description={description.en}
