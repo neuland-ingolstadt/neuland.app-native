@@ -5984,9 +5984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.18.16":
-  version: 0.18.16
-  resolution: "expo-updates@npm:0.18.16"
+"expo-updates@npm:~0.18.17":
+  version: 0.18.17
+  resolution: "expo-updates@npm:0.18.17"
   dependencies:
     "@expo/code-signing-certificates": "npm:0.0.5"
     "@expo/config": "npm:~8.1.0"
@@ -6003,7 +6003,7 @@ __metadata:
     expo: "*"
   bin:
     expo-updates: bin/cli.js
-  checksum: 58e9da5ee34baa1405f78d86a3c80009eaf3f3c0fa60fd8c7ce1d260df729840e1d7651c38fc9078696711d27c6317ba4f9174b8ce69c8c13a9f9caba3edbfc3
+  checksum: c89636a93b1771fbd38988464c5c45ab5001490482305664385737304c5454c87fcab13cebae5fbe05ca47447089ed8a58c8fb3b9f9926136691ee65f99f44b5
   languageName: node
   linkType: hard
 
@@ -8920,7 +8920,7 @@ __metadata:
     expo-secure-store: "npm:~12.3.1"
     expo-splash-screen: "npm:~0.20.5"
     expo-status-bar: "npm:^1.6.0"
-    expo-updates: "npm:~0.18.16"
+    expo-updates: "npm:~0.18.17"
     husky: "npm:^8.0.0"
     lint-staged: "npm:>=10"
     prettier: "npm:3.0.0"

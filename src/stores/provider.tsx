@@ -61,9 +61,9 @@ export const MobilityContext = createContext<any>({
 })
 
 export const FlowContext = createContext<any>({
-    isOnboarded: false,
+    isOnboarded: true,
     toggleOnboarded: () => {},
-    isUpdated: false,
+    isUpdated: true,
     toggleUpdated: () => {},
 })
 

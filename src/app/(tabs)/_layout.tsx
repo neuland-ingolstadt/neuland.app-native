@@ -5,6 +5,7 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { Tabs, useRouter } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { TouchableOpacity } from 'react-native'
 
@@ -14,7 +15,6 @@ export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
     const router = useRouter()
     const colors = theme.colors as Colors
-
     const flow = React.useContext(FlowContext)
 
     if (flow.isOnboarded === false) {
@@ -33,7 +33,9 @@ export default function HomeLayout(): JSX.Element {
         console.log('redirecting to whatsnew')
         router.push('(flow)/whatsnew')
     }
-
+    SplashScreen.hideAsync().catch(() => {
+        /* reloading the app might make this fail, so ignore */
+    })
     return (
         <>
             <Tabs

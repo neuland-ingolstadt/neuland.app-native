@@ -1,5 +1,5 @@
 import Avatar from './Avatar'
-import LoginFailureAlert from './LoginFailureAlert'
+import LoginAlert from './LoginAlert'
 import NameBox from './NameBox'
 
-export { Avatar, NameBox, LoginFailureAlert }
+export { Avatar, NameBox, LoginAlert }

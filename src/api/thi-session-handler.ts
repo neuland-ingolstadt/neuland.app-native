@@ -62,6 +62,9 @@ export async function createSession(
  * Logs in the user as a guest.
  */
 export async function createGuestSession(): Promise<void> {
+    await SecureStore.deleteItemAsync('session')
+    await SecureStore.deleteItemAsync('username')
+    await SecureStore.deleteItemAsync('password')
     await API.clearCache()
     await save('session', 'guest')
 }

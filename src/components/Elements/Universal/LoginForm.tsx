@@ -1,5 +1,5 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
-import { LoginFailureAlert } from '@/components/Elements/Settings'
+import { LoginAlert } from '@/components/Elements/Settings'
 import { type Colors } from '@/stores/colors'
 import { FlowContext, UserKindContext } from '@/stores/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
@@ -7,6 +7,7 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
 import React, { useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -47,7 +48,8 @@ const useIsFloatingKeyboard = (): boolean => {
 const LoginForm = (): JSX.Element => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [failure, setFailure] = useState('')
+    const [infoMsg, setInfoMsg] = useState('')
+    const [notice, setNotice] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { toggleOnboarded, toggleUpdated } = React.useContext(FlowContext)
@@ -56,8 +58,9 @@ const LoginForm = (): JSX.Element => {
 
     const floatingKeyboard = useIsFloatingKeyboard()
 
-    const resetFailure = (): void => {
-        setFailure('')
+    const resetInfo = (): void => {
+        setInfoMsg('')
+        setNotice('')
     }
 
     async function login(): Promise<void> {
@@ -83,17 +86,44 @@ const LoginForm = (): JSX.Element => {
         } catch (e: any) {
             const message = trimErrorMsg(e.message)
             setLoading(false)
-            setFailure(message)
+            setNotice('Login failed')
+            setInfoMsg(message)
         }
     }
 
     async function guestLogin(): Promise<void> {
         setLoading(true)
         await createGuestSession()
+        toggleUserKind('guest')
         toggleUpdated()
         toggleOnboarded()
         router.push('/')
     }
+
+    async function load(key: string): Promise<string | null> {
+        return await SecureStore.getItemAsync(key)
+    }
+
+    useEffect(() => {
+        // on iOS secure store is synced with iCloud, so we can prefill the login form
+        if (Platform.OS === 'ios') {
+            const loadSavedData = async (): Promise<void> => {
+                const savedUsername = await load('username')
+                console.log(savedUsername)
+                const savedPassword = await load('password')
+                if (savedUsername !== null && savedPassword !== null) {
+                    setUsername(savedUsername)
+                    setPassword(savedPassword)
+                    setNotice('Credentials restored')
+                    setInfoMsg(
+                        'Previous login data was found in the iOS keychain.'
+                    )
+                }
+            }
+
+            void loadSavedData()
+        }
+    }, [])
 
     return (
         <>
@@ -118,10 +148,11 @@ const LoginForm = (): JSX.Element => {
                                 Sign in with your THI account
                             </Text>
 
-                            {failure !== '' ? (
-                                <LoginFailureAlert
-                                    errorMsg={failure}
-                                    resetFailure={resetFailure}
+                            {infoMsg !== '' ? (
+                                <LoginAlert
+                                    errorMsg={infoMsg}
+                                    errorTitle={notice}
+                                    resetAlert={resetInfo}
                                 />
                             ) : null}
                             <View style={{ paddingTop: 3 }}>
@@ -148,6 +179,7 @@ const LoginForm = (): JSX.Element => {
                                             { color: colors.text },
                                         ]}
                                         placeholderTextColor={colors.labelColor}
+                                        defaultValue={username}
                                         returnKeyType="next"
                                         placeholder="abc1234"
                                         onChangeText={(text) => {
@@ -184,6 +216,7 @@ const LoginForm = (): JSX.Element => {
                                         ]}
                                         placeholderTextColor={colors.labelColor}
                                         placeholder="Password"
+                                        defaultValue={password}
                                         returnKeyType="done"
                                         onChangeText={(text) => {
                                             setPassword(text)

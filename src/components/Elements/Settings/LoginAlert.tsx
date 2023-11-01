@@ -1,7 +1,7 @@
 /**
  * A component that displays an alert when login fails.
  * @param {string} errorMsg - The error message to display.
- * @param {function} resetFailure - A function to reset the login failure state.
+ * @param {function} resetAlert - A function to reset the login failure state.
  * @returns {JSX.Element} - A JSX element that displays the login failure alert.
  */
 import { type Colors } from '@/stores/colors'
@@ -10,12 +10,14 @@ import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const LoginFailureAlert = ({
+const LoginAlert = ({
     errorMsg,
-    resetFailure,
+    resetAlert,
+    errorTitle,
 }: {
     errorMsg: string
-    resetFailure: () => void
+    resetAlert: () => void
+    errorTitle?: string
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
 
@@ -41,11 +43,11 @@ const LoginFailureAlert = ({
                         <Text
                             style={[styles.failureText, { color: colors.text }]}
                         >
-                            Login failed
+                            {errorTitle ?? 'Login failed'}
                         </Text>
                     </View>
                     <TouchableOpacity
-                        onPress={resetFailure}
+                        onPress={resetAlert}
                         style={styles.resetButtom}
                     >
                         <Ionicons name="close" size={16} color={colors.text} />
@@ -53,7 +55,7 @@ const LoginFailureAlert = ({
                 </View>
                 <View style={styles.errorText}>
                     <Text
-                        numberOfLines={1}
+                        numberOfLines={2}
                         style={{ marginTop: 4, color: colors.text }}
                     >
                         {errorMsg}
@@ -64,7 +66,7 @@ const LoginFailureAlert = ({
     )
 }
 
-export default LoginFailureAlert
+export default LoginAlert
 
 const styles = StyleSheet.create({
     container: { alignItems: 'center', paddingBottom: 10 },
