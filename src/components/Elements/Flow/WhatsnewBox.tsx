@@ -65,9 +65,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '100%',
-        marginBottom: 10,
     },
-    textContainer: { flexDirection: 'column', paddingRight: 40 },
+    textContainer: {
+        flexDirection: 'column',
+        paddingRight: 40,
+    },
     title: {
         fontSize: 16,
         fontWeight: 'bold',

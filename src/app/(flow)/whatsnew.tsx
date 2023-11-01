@@ -18,29 +18,31 @@ export default function OnboardingScreen(): JSX.Element {
     const changelog: Changelog = changelogData
 
     return (
-        <View>
-            <Text
-                style={[
-                    styles.title,
-                    {
-                        color: colors.text,
-                    },
-                ]}
-            >
-                What&apos;s new
-            </Text>
-            <Text
-                style={[
-                    styles.subtitle,
-                    {
-                        color: colors.labelColor,
-                    },
-                ]}
-            >
-                in version {convertToMajorMinorPatch(packageInfo.version)}
-            </Text>
+        <View style={styles.page}>
+            <View style={styles.titleBox}>
+                <Text
+                    style={[
+                        styles.title,
+                        {
+                            color: colors.text,
+                        },
+                    ]}
+                >
+                    What&apos;s new
+                </Text>
+                <Text
+                    style={[
+                        styles.subtitle,
+                        {
+                            color: colors.labelColor,
+                        },
+                    ]}
+                >
+                    in version {convertToMajorMinorPatch(packageInfo.version)}
+                </Text>
+            </View>
 
-            <View style={styles.boxesView}>
+            <View style={[styles.boxesContainer, styles.boxes]}>
                 {Object.keys(changelog.version)
                     .filter(
                         (key) =>
@@ -48,7 +50,7 @@ export default function OnboardingScreen(): JSX.Element {
                             convertToMajorMinorPatch(packageInfo.version)
                     )
                     .map((key) => (
-                        <View key={key} style={styles.boxContainer}>
+                        <View key={key} style={styles.boxes}>
                             {changelog.version[key].map(
                                 ({ title, description, icon }) => (
                                     <WhatsNewBox
@@ -61,59 +63,66 @@ export default function OnboardingScreen(): JSX.Element {
                             )}
                         </View>
                     ))}
+            </View>
 
-                <View style={{}}>
-                    <Pressable
+            <View style={styles.buttonContainer}>
+                <Pressable
+                    style={[
+                        {
+                            backgroundColor: colors.primary,
+                        },
+                        styles.button,
+                    ]}
+                    onPress={() => {
+                        flow.toggleUpdated()
+                        router.push('/')
+                    }}
+                >
+                    <Text
                         style={[
-                            {
-                                backgroundColor: colors.primary,
-                            },
-                            styles.buttonContainer,
+                            { color: getContrastColor(colors.primary) },
+                            styles.buttonText,
                         ]}
-                        onPress={() => {
-                            flow.toggleUpdated()
-                            router.push('/')
-                        }}
                     >
-                        <Text
-                            style={[
-                                { color: getContrastColor(colors.primary) },
-                                styles.buttonText,
-                            ]}
-                        >
-                            Continue
-                        </Text>
-                    </Pressable>
-                </View>
+                        Continue
+                    </Text>
+                </Pressable>
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    page: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingVertical: 40,
+        gap: 20,
+    },
+    titleBox: {
+        flex: 1,
+        justifyContent: 'flex-end',
+    },
+    buttonContainer: {
+        flex: 1,
+    },
+    boxesContainer: {
+        flex: 4,
+        justifyContent: 'center',
+    },
+    boxes: {
+        gap: 12,
+    },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'center',
-        paddingTop: 30,
-        paddingBottom: 10,
     },
     subtitle: {
         fontSize: 14,
         textAlign: 'center',
-        paddingBottom: 20,
     },
-    boxesView: {
-        height: '80%',
-        justifyContent: 'space-around',
-    },
-    boxContainer: {
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 20,
-        gap: 12,
-    },
-    buttonContainer: {
+    button: {
         borderRadius: 7,
         paddingVertical: 12,
         paddingHorizontal: 20,
