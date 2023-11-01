@@ -11,7 +11,7 @@ import {
     normalizeLecturers,
 } from '@/utils/lecturers-utils'
 import { useTheme } from '@react-navigation/native'
-import { useGlobalSearchParams, useRouter } from 'expo-router'
+import { useGlobalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -44,7 +44,6 @@ export default function LecturersCard(): JSX.Element {
     const { q } = useGlobalSearchParams<{ q: string }>()
     const [allLecturers, setAllLecturers] = useState<NormalizedLecturer[]>([])
     const colors = useTheme().colors as Colors
-    const router = useRouter()
     async function load(): Promise<void> {
         try {
             const rawData = await API.getPersonalLecturers()
@@ -56,7 +55,7 @@ export default function LecturersCard(): JSX.Element {
                 e instanceof NoSessionError ||
                 e instanceof UnavailableSessionError
             ) {
-                router.replace('(user)/login')
+                // router.replace('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setError(e as Error)
@@ -96,7 +95,7 @@ export default function LecturersCard(): JSX.Element {
                     return
                 } catch (e) {
                     if (e instanceof NoSessionError) {
-                        router.replace('(user)/login')
+                        // router.replace('(user)/login')
                     } else {
                         setError(e as Error)
                     }
@@ -178,7 +177,6 @@ export default function LecturersCard(): JSX.Element {
                                 {index !== personalLecturers.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
-                                        width={'90%'}
                                     />
                                 )}
                             </React.Fragment>

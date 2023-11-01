@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import { createGuestSession, forgetSession } from '@/api/thi-session-handler'
+import { createGuestSession } from '@/api/thi-session-handler'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
@@ -28,7 +28,6 @@ export default function Profile(): JSX.Element {
     const { toggleUserKind } = React.useContext(UserKindContext)
     const logout = async (): Promise<void> => {
         try {
-            await forgetSession()
             toggleUserKind(undefined)
             await createGuestSession()
             router.push('(tabs)')
@@ -197,7 +196,15 @@ export default function Profile(): JSX.Element {
 
     return (
         <ScrollView>
-            <FormList sections={sections} />
+            <View
+                style={{
+                    paddingHorizontal: 16,
+                    width: '100%',
+                    alignSelf: 'center',
+                }}
+            >
+                <FormList sections={sections} />
+            </View>
             <View
                 style={{
                     backgroundColor: colors.card,

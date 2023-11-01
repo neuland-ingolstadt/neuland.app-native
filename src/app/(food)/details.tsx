@@ -1,13 +1,15 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
-import flapMap from '@/stores/data/mensa-flags.json'
+import flagMap from '@/stores/data/mensa-flags.json'
 import { FoodFilterContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
 import { formatPrice } from '@/utils/food-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -56,7 +58,7 @@ export default function FoodDetail(): JSX.Element {
             header: 'Flags',
             items:
                 meal?.flags?.map((flag: string) => ({
-                    title: flapMap[flag as keyof typeof flapMap].en,
+                    title: flagMap[flag as keyof typeof flagMap]?.en ?? flag,
                     disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
@@ -67,14 +69,20 @@ export default function FoodDetail(): JSX.Element {
         {
             header: 'Allergens',
             items:
-                meal?.allergens?.map((allergen: string) => ({
-                    title: allergenMap[allergen as keyof typeof allergenMap].en,
-                    disabled: true,
-                    icon: allergenSelection.includes(allergen)
-                        ? 'warning-outline'
-                        : undefined,
-                    iconColor: colors.notification,
-                })) ?? [],
+                (meal?.allergens ?? [])
+                    .filter((allergen: string) =>
+                        Object.keys(allergenMap).includes(allergen)
+                    )
+                    .map((allergen: string) => ({
+                        title:
+                            allergenMap[allergen as keyof typeof allergenMap]
+                                ?.en ?? allergen,
+                        disabled: true,
+                        icon: allergenSelection.includes(allergen)
+                            ? 'warning-outline'
+                            : undefined,
+                        iconColor: colors.notification,
+                    })) ?? [],
         },
         {
             header: 'Nutrition',
@@ -167,36 +175,49 @@ export default function FoodDetail(): JSX.Element {
             : [...priceSection, ...aboutSection]
 
     return (
-        <ScrollView>
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
-                <Text
-                    style={[styles.titleText, { color: colors.text }]}
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={2}
+        <>
+            <StatusBar style={getStatusBarStyle()} />
+            <ScrollView>
+                <View
+                    style={[
+                        styles.titleContainer,
+                        { backgroundColor: colors.card },
+                    ]}
                 >
-                    {meal?.name.en}
-                </Text>
-            </View>
-            <FormList sections={sections} />
-            <View style={styles.notesContainer}>
-                <Text style={[styles.notesText, { color: colors.labelColor }]}>
-                    This meal has been automatically translated. We are not
-                    responsible for the correctness of the data. Please verify
-                    the correctness of the data with the respective restaurant
-                    before consume anything.
-                </Text>
-            </View>
-        </ScrollView>
+                    <Text
+                        style={[styles.titleText, { color: colors.text }]}
+                        allowFontScaling={true}
+                        adjustsFontSizeToFit={true}
+                        numberOfLines={2}
+                        selectable={true}
+                    >
+                        {meal?.name.en}
+                    </Text>
+                </View>
+                <View style={styles.formList}>
+                    <FormList sections={sections} />
+                </View>
+                <View style={styles.notesContainer}>
+                    <Text
+                        style={[styles.notesText, { color: colors.labelColor }]}
+                    >
+                        This meal has been automatically translated. We are not
+                        responsible for the correctness of the data. Please
+                        verify the correctness of the data with the respective
+                        restaurant before consume anything.
+                    </Text>
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
+    formList: {
+        width: '100%',
+        alignSelf: 'center',
+        paddingHorizontal: 16,
+    },
     titleContainer: {
         alignSelf: 'center',
         width: '92%',

@@ -1,3 +1,4 @@
+import API from '@/api/authenticated-api'
 import * as SecureStore from 'expo-secure-store'
 import { useEffect, useState } from 'react'
 
@@ -13,20 +14,35 @@ export const USER_GUEST = 'guest'
  */
 export function useUserKind(): {
     userKind: string
+    userFaculty: string
     toggleUserKind: (userKind: boolean) => void
 } {
     const [userKind, setUserKind] = useState(USER_GUEST)
+    const [userFaculty, setUserFaculty] = useState('')
 
     // Load user kind from SecureStore on mount.
-    // USing SecureStore instead of AsyncStorage because it is temporary workaround for the session handler.
+    // Using SecureStore instead of AsyncStorage because it is temporary workaround for the session handler.
     useEffect(() => {
-        void SecureStore.getItemAsync('userType').then((data) => {
-            if (data != null) {
-                setUserKind(data)
-            }
-        })
-    }, [])
+        const loadFaculty = async (): Promise<string> => {
+            return (await API.getFaculty()) as string
+        }
 
+        const loadData = async (): Promise<void> => {
+            const userType = await SecureStore.getItemAsync('userType')
+            if (userType != null) {
+                setUserKind(userType)
+            }
+
+            if (userType === USER_STUDENT) {
+                const userFaculty = await loadFaculty()
+                if (userFaculty != null) {
+                    setUserFaculty(userFaculty)
+                }
+            }
+        }
+
+        void loadData()
+    }, [])
     /**
      * Function to toggle the user kind.
      * @param value A boolean indicating whether the user is a student (true) or an employee (false).
@@ -50,6 +66,7 @@ export function useUserKind(): {
 
     return {
         userKind,
+        userFaculty,
         toggleUserKind,
     }
 }

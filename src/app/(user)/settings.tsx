@@ -93,13 +93,14 @@ export default function Settings(): JSX.Element {
                         router.push('(food)/preferences')
                     },
                 },
-                {
-                    title: 'Language',
-                    icon: 'language-outline',
-                    onPress: async () => {
-                        await Linking.openSettings()
-                    },
-                },
+                // {
+                //     title: 'Language',
+                //     icon: 'language-outline',
+
+                //     onPress: async () => {
+                //         await Linking.openSettings()
+                //     },
+                // },
             ],
         },
         {
@@ -141,7 +142,7 @@ export default function Settings(): JSX.Element {
                     title: 'Rate the app',
                     icon: 'star-outline',
                     onPress: () => {
-                        router.push('(user)/rate')
+                        alert('Not available yet')
                     },
                 },
             ],
@@ -160,7 +161,7 @@ export default function Settings(): JSX.Element {
                 ) : undefined
             }
         >
-            <View style={{ paddingTop: 20 }}>
+            <View style={styles.wrapper}>
                 <Pressable
                     onPress={() => {
                         if (isLoaded === LoadingState.LOADED) {
@@ -279,6 +280,8 @@ export default function Settings(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    wrapper: { paddingTop: 20, paddingHorizontal: 16 },
+
     copyrigth: {
         fontSize: 12,
         textAlign: 'center',
@@ -289,9 +292,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
 
         borderRadius: 10,
-        width: '92%',
-
-        justifyContent: 'center',
+        width: '100%',
         paddingVertical: 24,
         paddingHorizontal: 14,
     },

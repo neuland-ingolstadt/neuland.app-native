@@ -7,7 +7,6 @@ export default function RootLayout(): JSX.Element {
     const router = useRouter()
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
-
     return (
         <>
             <Provider>
@@ -34,12 +33,20 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(user)/changelog"
+                        options={{
+                            title: 'Changelog',
+                            animation: 'slide_from_right',
+                        }}
+                    />
+                    <Stack.Screen
                         name="(food)/preferences"
                         options={{
                             title: 'Preferences',
                             animation: 'slide_from_right',
                         }}
                     />
+
                     <Stack.Screen
                         name="(food)/flags"
                         options={{
@@ -239,6 +246,31 @@ export default function RootLayout(): JSX.Element {
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(flow)/onboarding"
+                        options={{
+                            headerShown: false,
+                            animation: 'none',
+                            gestureEnabled: false,
+                            ...Platform.select({
+                                ios: {
+                                    presentation: 'fullScreenModal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(flow)/whatsnew"
+                        options={{
+                            headerShown: false,
+                            gestureEnabled: false,
+                            ...Platform.select({
+                                ios: {
+                                    presentation: 'formSheet',
                                 },
                             }),
                         }}

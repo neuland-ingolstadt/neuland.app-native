@@ -4,7 +4,9 @@ import {
 } from '@/api/thi-session-handler'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
-import Dropdown from '@/components/Elements/Universal/Dropdown'
+import Dropdown, {
+    DropdownButton,
+} from '@/components/Elements/Universal/Dropdown'
 import { type Colors } from '@/stores/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
@@ -21,6 +23,7 @@ import { useRouter } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
+    Platform,
     ScrollView,
     StyleSheet,
     Text,
@@ -65,6 +68,9 @@ export default function AdvancedSearch(): JSX.Element {
     const [date, setDate] = useState(formatISODate(startDate))
     const [time, setTime] = useState(formatISOTime(startDate))
     const [duration, setDuration] = useState(DURATION_PRESET)
+
+    const [showDate, setShowDate] = useState(Platform.OS === 'ios')
+    const [showTime, setShowTime] = useState(Platform.OS === 'ios')
 
     const [filterResults, setFilterResults] = useState<AvailableRoom[] | null>(
         null
@@ -128,6 +134,7 @@ export default function AdvancedSearch(): JSX.Element {
     return (
         <>
             <ScrollView
+                style={styles.scrollView}
                 refreshControl={
                     loadingState !== LoadingState.LOADED ? (
                         <RefreshControl
@@ -139,7 +146,7 @@ export default function AdvancedSearch(): JSX.Element {
                     ) : undefined
                 }
             >
-                <View style={[styles.container]}>
+                <View>
                     <Text
                         style={[
                             styles.sectionHeader,
@@ -149,82 +156,99 @@ export default function AdvancedSearch(): JSX.Element {
                         Search options
                     </Text>
                     <View
-                        style={{
-                            backgroundColor: colors.card,
-                            marginBottom: 15,
-                            borderRadius: 10,
-                        }}
+                        style={[
+                            styles.section,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
                     >
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Date{' '}
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                Date
                             </Text>
 
-                            <DateTimePicker
-                                value={new Date(date + 'T' + time)}
-                                mode="date"
-                                accentColor={colors.primary}
-                                locale="de-DE"
-                                onChange={(event, selectedDate) => {
-                                    setDate(formatISODate(selectedDate))
-                                }}
-                                minimumDate={new Date()}
-                                maximumDate={
-                                    new Date(
-                                        new Date().setDate(
-                                            new Date().getDate() + 90
+                            {Platform.OS === 'android' && (
+                                <DropdownButton
+                                    onPress={() => {
+                                        setShowDate(true)
+                                    }}
+                                >
+                                    {date.split('-').reverse().join('.')}
+                                </DropdownButton>
+                            )}
+
+                            {showDate && (
+                                <DateTimePicker
+                                    value={new Date(date + 'T' + time)}
+                                    mode="date"
+                                    accentColor={colors.primary}
+                                    locale="de-DE"
+                                    onChange={(_event, selectedDate) => {
+                                        setShowDate(Platform.OS !== 'android')
+                                        setDate(formatISODate(selectedDate))
+                                    }}
+                                    minimumDate={new Date()}
+                                    maximumDate={
+                                        new Date(
+                                            new Date().setDate(
+                                                new Date().getDate() + 90
+                                            )
                                         )
-                                    )
-                                }
-                            />
+                                    }
+                                />
+                            )}
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Time{' '}
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                Time
                             </Text>
 
-                            <DateTimePicker
-                                value={new Date(date + 'T' + time)}
-                                mode="time"
-                                is24Hour={true}
-                                accentColor={colors.primary}
-                                locale="de-DE"
-                                minuteInterval={5}
-                                display="default"
-                                onChange={(event, selectedDate) => {
-                                    setTime(formatISOTime(selectedDate))
-                                }}
-                                minimumDate={
-                                    new Date(new Date().setHours(8, 15, 0, 0))
-                                }
-                                maximumDate={
-                                    new Date(new Date().setHours(21, 25, 0, 0))
-                                }
-                            />
+                            {Platform.OS === 'android' && (
+                                <DropdownButton
+                                    onPress={() => {
+                                        setShowTime(true)
+                                    }}
+                                >
+                                    {time}
+                                </DropdownButton>
+                            )}
+
+                            {showTime && (
+                                <DateTimePicker
+                                    value={new Date(date + 'T' + time)}
+                                    mode="time"
+                                    is24Hour={true}
+                                    accentColor={colors.primary}
+                                    locale="de-DE"
+                                    minuteInterval={5}
+                                    onChange={(_event, selectedDate) => {
+                                        setShowTime(Platform.OS !== 'android')
+                                        setTime(formatISOTime(selectedDate))
+                                    }}
+                                />
+                            )}
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Duration{' '}
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                Duration
                             </Text>
                             <Dropdown
                                 data={DURATIONS}
@@ -235,15 +259,14 @@ export default function AdvancedSearch(): JSX.Element {
                             />
                         </View>
                         <Divider />
-                        <View
-                            style={[
-                                styles.optionsRow,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
-                            <Text style={{ fontSize: 15, color: colors.text }}>
-                                {' '}
-                                Building{' '}
+                        <View style={styles.optionsRow}>
+                            <Text
+                                style={[
+                                    styles.optionTitle,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                Building
                             </Text>
                             <Dropdown
                                 data={ALL_BUILDINGS}
@@ -263,30 +286,21 @@ export default function AdvancedSearch(): JSX.Element {
                         Available free rooms
                     </Text>
                     <View
-                        style={{
-                            alignSelf: 'center',
-                            backgroundColor: colors.card,
-                            borderRadius: 8,
-                            width: '100%',
-
-                            marginBottom: 16,
-                            justifyContent: 'center',
-                        }}
+                        style={[
+                            styles.section,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
                     >
                         {loadingState === LoadingState.LOADING && (
                             <ActivityIndicator
                                 color={colors.primary}
-                                style={{ paddingVertical: 30 }}
+                                style={styles.loadingIndicator}
                             />
                         )}
                         {loadingState === LoadingState.ERROR && (
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    paddingVertical: 30,
-                                }}
-                            >
+                            <View style={styles.errorSection}>
                                 <Text
                                     style={[
                                         styles.errorMessage,
@@ -317,20 +331,30 @@ export default function AdvancedSearch(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: '92%',
-        alignContent: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        marginTop: 15,
+    scrollView: {
+        padding: 12,
     },
-    centeredView: {},
     sectionHeader: {
         fontSize: 13,
 
         fontWeight: 'normal',
         textTransform: 'uppercase',
         marginBottom: 4,
+    },
+    optionTitle: {
+        fontSize: 15,
+    },
+    section: {
+        marginBottom: 16,
+        borderRadius: 8,
+    },
+    loadingIndicator: {
+        paddingVertical: 30,
+    },
+    errorSection: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 30,
     },
     errorMessage: {
         fontWeight: '600',
@@ -346,9 +370,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-
-        padding: 10,
-        marginHorizontal: 8,
-        height: 50,
+        paddingHorizontal: 15,
+        paddingVertical: 6,
     },
 })
