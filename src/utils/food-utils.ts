@@ -15,7 +15,10 @@ import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
  * @param {string[]} restaurants Requested restaurants
  * @returns {object[]}
  */
-export async function loadFoodEntries(restaurants: string[]): Promise<Food[]> {
+export async function loadFoodEntries(
+    restaurants: string[],
+    includeStatic: boolean
+): Promise<Food[]> {
     const entries: Food[] = []
 
     if (restaurants.includes('mensa')) {
@@ -36,11 +39,14 @@ export async function loadFoodEntries(restaurants: string[]): Promise<Food[]> {
             (x: any) => new Date(x.timestamp).getTime() >= startOfToday
         )
 
-        filteredData.forEach((day: any) =>
+        filteredData.forEach((day: any) => {
+            day.meals = day.meals.filter(
+                (entry: any) => entry.static === includeStatic
+            )
             day.meals.forEach((entry: any) => {
                 entry.restaurant = 'Reimanns'
             })
-        )
+        })
         entries.push(filteredData)
     }
 

@@ -32,11 +32,11 @@ export default function FoodScreen(): JSX.Element {
         LoadingState.LOADING
     )
     const [selectedDay, setSelectedDay] = useState<number>(0)
-    const { selectedRestaurants } = useContext(FoodFilterContext)
+    const { selectedRestaurants, showStatic } = useContext(FoodFilterContext)
     const [error, setError] = useState<Error | null>(null)
 
     const loadData = (): void => {
-        loadFoodEntries(selectedRestaurants)
+        loadFoodEntries(selectedRestaurants, showStatic)
             .then((loadedDays: Food[]) => {
                 const filteredDays: Food[] = loadedDays.filter(
                     (day: Food) =>
@@ -67,7 +67,7 @@ export default function FoodScreen(): JSX.Element {
 
     useEffect(() => {
         loadData()
-    }, [selectedRestaurants])
+    }, [selectedRestaurants, showStatic])
 
     /**
      * Renders a button for a specific day's food data.
