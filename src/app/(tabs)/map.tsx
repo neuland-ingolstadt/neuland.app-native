@@ -137,10 +137,8 @@ export const MapScreen = (): JSX.Element => {
 
     const INGOLSTADT_CENTER = [48.76709, 11.4328]
     const NEUBURG_CENTER = [48.73227, 11.17261]
-    const mapCenter =
-        userFaculty === 'Nachhaltige Infrastruktur'
-            ? NEUBURG_CENTER
-            : INGOLSTADT_CENTER
+    const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
+
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
 
@@ -150,6 +148,14 @@ export const MapScreen = (): JSX.Element => {
         _setView(mapCenter, mapRef)
         setShowDismissModal(false)
     }
+
+    useEffect(() => {
+        setMapCenter(
+            userFaculty === 'Nachhaltige Infrastruktur'
+                ? NEUBURG_CENTER
+                : INGOLSTADT_CENTER
+        )
+    }, [userFaculty])
 
     useEffect(() => {
         // if the user was redirected to the map screen, show the dismiss modal
@@ -284,7 +290,7 @@ export const MapScreen = (): JSX.Element => {
         const filteredCenter =
             count > 0 ? [lat / count, lon / count] : mapCenter
         return [filtered, filteredCenter]
-    }, [q, allRooms, userKind, mapCenter])
+    }, [q, allRooms, userKind])
 
     const uniqueEtages = Array.from(
         new Set(
@@ -295,14 +301,11 @@ export const MapScreen = (): JSX.Element => {
     ).sort((a, b) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b))
 
     useEffect(() => {
-        _setView(q !== '' ? center : mapCenter, mapRef)
-    }, [center])
-
-    useEffect(() => {
         const currentFloor = uniqueEtages.includes('EG')
             ? 'EG'
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
+        _setView(q !== '' ? center : mapCenter, mapRef)
     }, [filteredRooms])
 
     useEffect(() => {
@@ -510,6 +513,7 @@ export const MapScreen = (): JSX.Element => {
                         onLoadEnd={() => {
                             if (loadingState === LoadingState.LOADING) {
                                 setLoadingState(LoadingState.LOADED)
+                                _setView(mapCenter, mapRef)
                                 _addGeoJson()
                             }
                         }}
