@@ -1,9 +1,11 @@
-import { SectionPicker } from '@/components/Elements/Universal/SectionPicker'
+import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
 import { FoodFilterContext } from '@/stores/provider'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -29,8 +31,9 @@ export default function FoodPreferences(): JSX.Element {
 
     return (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
+            <StatusBar style={getStatusBarStyle()} />
             <View style={[styles.container, { backgroundColor: colors.card }]}>
-                <SectionPicker
+                <MultiSectionPicker
                     elements={filteredAllergens}
                     selectedItems={allergenSelection}
                     action={toggleSelectedAllergens}
@@ -38,11 +41,12 @@ export default function FoodPreferences(): JSX.Element {
             </View>
             {filteredAllergens.length === 0 && (
                 <Text
-                    style={{
-                        alignSelf: 'center',
-                        marginTop: 20,
-                        color: colors.labelColor,
-                    }}
+                    style={[
+                        {
+                            color: colors.labelColor,
+                        },
+                        styles.filteredText,
+                    ]}
                 >
                     No matching allergens found.
                 </Text>
@@ -57,5 +61,9 @@ const styles = StyleSheet.create({
 
         width: '100%',
         justifyContent: 'center',
+    },
+    filteredText: {
+        alignSelf: 'center',
+        marginTop: 20,
     },
 })

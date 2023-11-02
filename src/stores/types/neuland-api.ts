@@ -42,7 +42,7 @@ export interface Meal {
 
 export interface Variation {
     name: Name
-    additional?: boolean
+    additional: boolean
     prices: Prices
 }
 
