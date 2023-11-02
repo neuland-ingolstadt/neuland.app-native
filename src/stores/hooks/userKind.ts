@@ -7,6 +7,9 @@ export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
 
+export interface UserKindContextType {
+    userKind: 'guest' | 'student' | 'employee'
+}
 /**
  * Custom hook that returns the user kind and a function to toggle it.
  * The user kind is stored in SecureStore and defaults to USER_GUEST.

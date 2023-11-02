@@ -91,7 +91,7 @@ const EventsCard = (): JSX.Element => {
         const today = formatISODate(new Date())
 
         try {
-            const entries = await loadFoodEntries(restaurants)
+            const entries = await loadFoodEntries(restaurants, false)
             const todayEntries = entries
                 .find((x) => x.timestamp === today)
                 ?.meals.filter(
