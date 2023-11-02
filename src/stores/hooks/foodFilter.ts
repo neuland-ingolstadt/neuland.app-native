@@ -5,9 +5,11 @@ export interface FoodFilter {
     selectedRestaurants: string[]
     preferencesSelection: string[]
     allergenSelection: string[]
+    showStatic: boolean
     toggleSelectedRestaurant: (name: string) => void
     toggleSelectedAllergens: (name: string) => void
     toggleSelectedPreferences: (name: string) => void
+    toggleShowStatic: () => void
 }
 
 export function useFoodFilter(): FoodFilter {
@@ -20,6 +22,7 @@ export function useFoodFilter(): FoodFilter {
         'reimanns',
     ])
     const [allergenSelection, setAllergenSelection] = useState<string[]>([])
+    const [showStatic, setShowStatic] = useState<boolean>(false)
 
     useEffect(() => {
         void AsyncStorage.getItem('selectedAllergens').then((data) => {
@@ -35,6 +38,11 @@ export function useFoodFilter(): FoodFilter {
         void AsyncStorage.getItem('selectedRestaurants').then((data) => {
             if (data != null) {
                 setSelectedRestaurants(JSON.parse(data))
+            }
+        })
+        void AsyncStorage.getItem('showStatic').then((data) => {
+            if (data != null) {
+                setShowStatic(JSON.parse(data))
             }
         })
     }, [])
@@ -92,12 +100,24 @@ export function useFoodFilter(): FoodFilter {
         )
     }
 
+    /**
+     * Enables or disables the static food.
+     * @param {boolean} value
+     */
+    function toggleShowStatic(): void {
+        const newSelection = !showStatic
+        setShowStatic(newSelection)
+        void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
+    }
+
     return {
         selectedRestaurants,
         preferencesSelection,
         allergenSelection,
+        showStatic,
         toggleSelectedRestaurant,
         toggleSelectedAllergens,
         toggleSelectedPreferences,
+        toggleShowStatic,
     }
 }
