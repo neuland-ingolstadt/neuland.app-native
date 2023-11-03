@@ -16,7 +16,7 @@ void i18n.use(initReactI18next).init({
 
     compatibilityJSON: 'v3',
     resources,
-    debug: false,
+    debug: true,
 
     interpolation: {
         escapeValue: false,
