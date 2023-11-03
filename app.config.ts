@@ -30,6 +30,9 @@ module.exports = {
             },
             infoPlist: {
                 RCTAsyncStorageExcludeFromBackup: false,
+                CFBundleAllowMixedLocalizations: true,
+                CFBundleLocalizations: ['en', 'de'],
+                CFBundleDevelopmentRegion: 'en',
             },
         },
         android: {
@@ -59,6 +62,7 @@ module.exports = {
                     origin: 'https://neuland.app',
                 },
             ],
+            ['expo-localization'],
         ],
     },
 }

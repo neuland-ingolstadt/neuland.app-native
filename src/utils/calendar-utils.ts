@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import rawCalendar from '@/stores/data/calendar.json'
+import rawCalendar from '@/assets/data/calendar.json'
 import { type Exams } from '@customTypes/thi-api'
 
 export const compileTime = new Date()

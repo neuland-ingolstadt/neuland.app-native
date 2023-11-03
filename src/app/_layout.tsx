@@ -1,3 +1,4 @@
+import '@/localization/i18n'
 import Provider from '@/stores/provider'
 import { Stack, useRouter } from 'expo-router'
 import React from 'react'

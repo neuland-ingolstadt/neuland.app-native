@@ -1,5 +1,5 @@
+import changelog from '@/assets/data/changelog.json'
 import { type Colors } from '@/stores/colors'
-import changelog from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'

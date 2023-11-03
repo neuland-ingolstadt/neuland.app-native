@@ -3,6 +3,7 @@ import {
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
+import { getLocales } from 'expo-localization'
 import React, { createContext } from 'react'
 import { useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -105,6 +106,8 @@ export default function Provider({
             return accentColors.teal[scheme]
         }
     }
+    const deviceLanguage = getLocales()[0].languageCode
+    console.log(deviceLanguage)
 
     const lightTheme: AppTheme = {
         ...DefaultTheme,

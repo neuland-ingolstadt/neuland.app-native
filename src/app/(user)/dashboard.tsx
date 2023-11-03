@@ -5,6 +5,7 @@ import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     LayoutAnimation,
     Pressable,
@@ -31,6 +32,7 @@ export default function DashboardEdit(): JSX.Element {
     const colors = useTheme().colors as Colors
     const itemRefs = useRef(new Map())
     const [refresh, setRefresh] = useState(false)
+    const { t } = useTranslation(['settings'])
 
     // update view if shownDashboardEntries changes
     useEffect(() => {
@@ -87,7 +89,7 @@ export default function DashboardEdit(): JSX.Element {
                                 { color: colors.labelSecondaryColor },
                             ]}
                         >
-                            Shown Cards
+                            {t('dashboard.shown')}
                         </Text>
                         <View
                             style={[
@@ -119,7 +121,7 @@ export default function DashboardEdit(): JSX.Element {
                                     { color: colors.labelSecondaryColor },
                                 ]}
                             >
-                                Hidden Cards
+                                {t('dashboard.hidden')}
                             </Text>
                         )}
                         <View
@@ -182,15 +184,13 @@ export default function DashboardEdit(): JSX.Element {
                                     },
                                 ]}
                             >
-                                Reset Order
+                                {t('dashboard.reset')}
                             </Text>
                         </Pressable>
                     </View>
 
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
-                        Customize your dashboard by dragging and dropping the
-                        cards to your preferred order. Hide cards by pressing on
-                        the remove icon.
+                        {t('dashboard.footer')}
                     </Text>
                 </View>
             </ScrollView>

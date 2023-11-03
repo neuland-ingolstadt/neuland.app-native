@@ -1,6 +1,6 @@
+import changelogData from '@/assets/data/changelog.json'
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/stores/colors'
-import changelogData from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'

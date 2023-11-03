@@ -1,6 +1,6 @@
+import allergenMap from '@/assets/data/allergens.json'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import { type Colors } from '@/stores/colors'
-import allergenMap from '@/stores/data/allergens.json'
 import { FoodFilterContext } from '@/stores/provider'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'

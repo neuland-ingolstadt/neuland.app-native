@@ -1,5 +1,5 @@
+import clubs from '@/assets/data/clubs.json'
 import { type Colors } from '@/stores/colors'
-import clubs from '@/stores/data/clubs.json'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,

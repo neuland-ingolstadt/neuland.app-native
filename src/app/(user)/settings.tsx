@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Linking,
@@ -37,6 +38,7 @@ export default function Settings(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const nameColor = getNameColor(fullName)
+    const { t } = useTranslation(['settings'])
 
     const loadData = async (): Promise<void> => {
         try {
@@ -70,10 +72,10 @@ export default function Settings(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: 'Preferences',
+            header: t('menu.formlist.preferences.title'),
             items: [
                 {
-                    title: 'Appearance',
+                    title: t('menu.formlist.preferences.theme'),
                     icon: 'color-palette-outline',
                     onPress: () => {
                         router.push('(user)/theme')
@@ -87,20 +89,20 @@ export default function Settings(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Food',
+                    title: t('menu.formlist.preferences.food'),
                     icon: 'restaurant-outline',
                     onPress: () => {
                         router.push('(food)/preferences')
                     },
                 },
-                // {
-                //     title: 'Language',
-                //     icon: 'language-outline',
+                {
+                    title: t('menu.formlist.preferences.language'),
+                    icon: 'language-outline',
 
-                //     onPress: async () => {
-                //         await Linking.openSettings()
-                //     },
-                // },
+                    onPress: async () => {
+                        await Linking.openSettings()
+                    },
+                },
             ],
         },
         {
@@ -129,17 +131,17 @@ export default function Settings(): JSX.Element {
             ],
         },
         {
-            header: 'Legal',
+            header: t('menu.formlist.legal.title'),
             items: [
                 {
-                    title: 'About',
+                    title: t('menu.formlist.legal.about'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(user)/about')
                     },
                 },
                 {
-                    title: 'Rate the app',
+                    title: t('menu.formlist.legal.rate'),
                     icon: 'star-outline',
                     onPress: () => {
                         alert('Not available yet')
@@ -273,7 +275,7 @@ export default function Settings(): JSX.Element {
                     { color: colors.labelSecondaryColor },
                 ]}
             >
-                {`© ${new Date().getFullYear()} by Neuland Ingolstadt e.V.`}
+                {t('menu.copyright', { year: new Date().getFullYear() })}
             </Text>
         </ScrollView>
     )

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Platform,
     Pressable,
@@ -18,6 +19,7 @@ export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
     const { accentColor, toggleAccentColor } = React.useContext(ThemeContext)
+    const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
         name: string
@@ -137,7 +139,7 @@ export default function Theme(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        Accent Color
+                        {t('theme.accent.title')}
                     </Text>
 
                     <View
@@ -170,7 +172,7 @@ export default function Theme(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        Exclusive Desings
+                        {t('theme.exclusive.title')}
                     </Text>
                     <View
                         style={[
@@ -193,7 +195,7 @@ export default function Theme(): JSX.Element {
                                 letterSpacing: 1.5,
                             }}
                         >
-                            Coming Soon
+                            {t('theme.exclusive.description')}
                         </Text>
                     </View>
                     <Text
@@ -203,8 +205,7 @@ export default function Theme(): JSX.Element {
                             fontSize: 12,
                         }}
                     >
-                        Change the accent color to match your style. This
-                        changes the color of the icons and buttons in the app.
+                        {t('theme.footer')}
                     </Text>
                 </View>
             </ScrollView>
