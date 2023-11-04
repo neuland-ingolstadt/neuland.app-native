@@ -6,7 +6,6 @@ import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type Exam, calendar, loadExamList } from '@/utils/calendar-utils'
 import { useTheme } from '@react-navigation/native'
-import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
     ActivityIndicator,
@@ -32,7 +31,6 @@ export default function CalendarPage(): JSX.Element {
         ERROR,
         REFRESHING,
     }
-    const router = useRouter()
     const [error, setError] = useState<Error | null>(null)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
@@ -51,7 +49,7 @@ export default function CalendarPage(): JSX.Element {
                 })
                 .catch((e) => {
                     if (e instanceof NoSessionError) {
-                        router.replace('login')
+                        // router.replace('login')
                     } else {
                         console.error(e)
                     }

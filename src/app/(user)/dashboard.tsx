@@ -1,4 +1,5 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import { type Card } from '@/components/allCards'
 import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
@@ -17,11 +18,6 @@ import DraggableFlatList, {
     ScaleDecorator,
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
-
-interface Item {
-    key: string
-    text: string
-}
 
 export default function DashboardEdit(): JSX.Element {
     const {
@@ -46,7 +42,7 @@ export default function DashboardEdit(): JSX.Element {
         refresh,
     ])
 
-    const renderItem = useCallback((params: RenderItemParams<Item>) => {
+    const renderItem = (params: RenderItemParams<Card>): JSX.Element => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             hideDashboardEntry(params.item.key)
@@ -60,10 +56,10 @@ export default function DashboardEdit(): JSX.Element {
                 onPressDelete={onPressDelete}
             />
         )
-    }, [])
+    }
 
     const handleRestore = useCallback(
-        (item: Item) => {
+        (item: Card) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             bringBackDashboardEntry(item.key)
             setRefresh(!refresh)
@@ -193,8 +189,8 @@ export default function DashboardEdit(): JSX.Element {
 
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
                         Customize your dashboard by dragging and dropping the
-                        cards to your preferred order. You can also hide cards
-                        by swiping left.
+                        cards to your preferred order. Hide cards by pressing on
+                        the remove icon.
                     </Text>
                 </View>
             </ScrollView>
@@ -203,7 +199,7 @@ export default function DashboardEdit(): JSX.Element {
 }
 
 interface RowItemProps {
-    item: Item
+    item: Card
     drag: () => void
     onPressDelete: () => void
     itemRefs: React.MutableRefObject<Map<any, any>>
@@ -272,7 +268,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        paddingVertical: 8,
+        paddingVertical: 9,
     },
     text: {
         fontSize: 16,

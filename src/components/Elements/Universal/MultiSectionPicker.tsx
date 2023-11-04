@@ -21,9 +21,9 @@ interface SectionPickerProps {
  * @param {Element[]} elements - The list of selectable items.
  * @param {string[]} selectedItems - The list of selected items.
  * @param {(item: string) => void} action - The function to be called when an item is selected.
- * @returns {JSX.Element} - The SectionPicker component.
+ * @returns {JSX.Element} - The MultiSectionPicker component.
  */
-export const SectionPicker: React.FC<SectionPickerProps> = ({
+const MultiSectionPicker: React.FC<SectionPickerProps> = ({
     elements,
     selectedItems,
     action,
@@ -57,7 +57,9 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
                                     }}
                                     color={colors.primary}
                                 />
-                            ) : null}
+                            ) : (
+                                <></>
+                            )}
                         </View>
                     </Pressable>
                     {index < elements.length - 1 && (
@@ -68,8 +70,6 @@ export const SectionPicker: React.FC<SectionPickerProps> = ({
         </>
     )
 }
-
-export default SectionPicker
 
 const styles = StyleSheet.create({
     container: {
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
         paddingVertical: 1,
     },
 })
+
+export default MultiSectionPicker

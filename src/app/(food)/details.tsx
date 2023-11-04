@@ -2,14 +2,26 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
 import allergenMap from '@/stores/data/allergens.json'
 import flagMap from '@/stores/data/mensa-flags.json'
-import { FoodFilterContext } from '@/stores/provider'
+import { type UserKindContextType } from '@/stores/hooks/userKind'
+import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
 import { formatPrice } from '@/utils/food-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
+import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    Pressable,
+    ScrollView,
+    Share,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -19,12 +31,13 @@ export default function FoodDetail(): JSX.Element {
     const { preferencesSelection, allergenSelection } =
         useContext(FoodFilterContext)
 
+    const { userKind } = useContext<UserKindContextType>(UserKindContext)
+
     const dataSources = {
         Mensa: 'https://www.werkswelt.de/?id=ingo',
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
-
     const priceSection: FormListSections[] =
         meal != null
             ? [
@@ -167,40 +180,99 @@ export default function FoodDetail(): JSX.Element {
         },
     ]
 
+    const variantsSection: FormListSections[] = [
+        {
+            header: 'Variations',
+            items:
+                meal?.variations?.map((variant) => ({
+                    title: variant.name.en,
+                    value:
+                        (variant.additional ? '+ ' : '') +
+                        formatPrice(variant.prices[userKind]),
+                    disabled: true,
+                })) ?? [],
+        },
+    ]
+
     const sections: FormListSections[] =
         meal?.restaurant === 'Mensa'
-            ? [...priceSection, ...mensaSection, ...aboutSection]
-            : [...priceSection, ...aboutSection]
-
+            ? [
+                  ...priceSection,
+                  ...mensaSection,
+                  ...variantsSection,
+                  ...aboutSection,
+              ]
+            : [...priceSection, ...variantsSection, ...aboutSection]
     return (
-        <ScrollView>
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
-                <Text
-                    style={[styles.titleText, { color: colors.text }]}
-                    allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
-                    numberOfLines={2}
+        <>
+            <StatusBar style={getStatusBarStyle()} />
+            <ScrollView>
+                <View
+                    style={[
+                        styles.titleContainer,
+                        { backgroundColor: colors.card },
+                    ]}
                 >
-                    {meal?.name.en}
-                </Text>
-            </View>
-            <View style={styles.formList}>
-                <FormList sections={sections} />
-            </View>
-            <View style={styles.notesContainer}>
-                <Text style={[styles.notesText, { color: colors.labelColor }]}>
-                    This meal has been automatically translated. We are not
-                    responsible for the correctness of the data. Please verify
-                    the correctness of the data with the respective restaurant
-                    before consume anything.
-                </Text>
-            </View>
-        </ScrollView>
+                    <Text
+                        style={[styles.titleText, { color: colors.text }]}
+                        allowFontScaling={true}
+                        adjustsFontSizeToFit={true}
+                        numberOfLines={2}
+                        selectable={true}
+                    >
+                        {meal?.name.en}
+                    </Text>
+                </View>
+                <View style={styles.formList}>
+                    <FormList sections={sections} />
+                </View>
+                <View>
+                    <Pressable
+                        style={[
+                            {
+                                backgroundColor: colors.card,
+                            },
+                            styles.shareButton,
+                        ]}
+                        onPress={() => {
+                            void Share.share({
+                                message: `Checkout "${meal?.name
+                                    .en}" (${formatPrice(
+                                    meal?.prices[userKind]
+                                )}) at ${meal?.restaurant}.\nhttps://neuland.app/food/`,
+                            })
+                        }}
+                    >
+                        <View style={styles.shareContent}>
+                            <Ionicons
+                                name="share-outline"
+                                size={18}
+                                color={colors.primary}
+                            />
+
+                            <Text
+                                style={[
+                                    { color: colors.primary },
+                                    styles.shareText,
+                                ]}
+                            >
+                                Share
+                            </Text>
+                        </View>
+                    </Pressable>
+                </View>
+                <View style={styles.notesContainer}>
+                    <Text
+                        style={[styles.notesText, { color: colors.labelColor }]}
+                    >
+                        This meal has been automatically translated. We are not
+                        responsible for the correctness of the data. Please
+                        verify the correctness of the data with the respective
+                        restaurant before consume anything.
+                    </Text>
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
@@ -233,4 +305,17 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         fontSize: 12,
     },
+    shareButton: {
+        alignSelf: 'center',
+        paddingHorizontal: 35,
+        paddingVertical: 9,
+        borderRadius: 6,
+        marginTop: 5,
+    },
+    shareContent: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        gap: 10,
+    },
+    shareText: { fontSize: 16 },
 })
