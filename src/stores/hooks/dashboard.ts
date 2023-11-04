@@ -90,7 +90,6 @@ export function useDashboard(): Dashboard {
             'personalDashboard',
             JSON.stringify(entries.map((x) => x.key))
         )
-        console.log(entries)
         setShownDashboardEntries(entries)
     }
 

@@ -20,7 +20,7 @@ const EventsCard = (): JSX.Element => {
         REFRESHING,
     }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const { t } = useTranslation(['navigation'])
+    const { t, i18n } = useTranslation('food')
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
@@ -114,7 +114,7 @@ const EventsCard = (): JSX.Element => {
                     todayEntries.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
-                        name: x.name.en,
+                        name: x.name[i18n.language as 'en' | 'de'],
                         price: getUserSpecificPrice(x, userKind),
                     })),
                     ...(hiddenEntriesCount > 0
@@ -122,8 +122,8 @@ const EventsCard = (): JSX.Element => {
                               {
                                   name:
                                       hiddenEntriesCount === 1
-                                          ? t('cards.food.oneMore')
-                                          : t('cards.food.more', {
+                                          ? t('dashboard.food.oneMore')
+                                          : t('dashboard.food.more', {
                                                 count: hiddenEntriesCount,
                                             }),
                                   price: null,
@@ -155,7 +155,7 @@ const EventsCard = (): JSX.Element => {
                                 { color: colors.labelColor },
                             ]}
                         >
-                            Today&rsquo;s menu is empty.
+                            {t('dashboard.empty')}
                         </Text>
                     )}
                     {foodEntries.map((meal, index) => (

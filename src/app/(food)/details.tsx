@@ -13,6 +13,7 @@ import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Linking,
     Pressable,
@@ -30,7 +31,7 @@ export default function FoodDetail(): JSX.Element {
         foodEntry != null ? JSON.parse(foodEntry) : undefined
     const { preferencesSelection, allergenSelection } =
         useContext(FoodFilterContext)
-
+    const { t, i18n } = useTranslation('food')
     const { userKind } = useContext<UserKindContextType>(UserKindContext)
 
     const dataSources = {
@@ -42,20 +43,20 @@ export default function FoodDetail(): JSX.Element {
         meal != null
             ? [
                   {
-                      header: 'Prices',
+                      header: t('details.formlist.prices.title'),
                       items: [
                           {
-                              title: 'Student',
+                              title: t('details.formlist.prices.student'),
                               value: formatPrice(meal.prices?.student),
                               disabled: true,
                           },
                           {
-                              title: 'Employee',
+                              title: t('details.formlist.prices.employee'),
                               value: formatPrice(meal.prices?.employee),
                               disabled: true,
                           },
                           {
-                              title: 'Guest',
+                              title: t('details.formlist.prices.guest'),
                               value: formatPrice(meal.prices?.guest),
                               disabled: true,
                           },
@@ -66,10 +67,13 @@ export default function FoodDetail(): JSX.Element {
 
     const mensaSection: FormListSections[] = [
         {
-            header: 'Flags',
+            header: t('preferences.formlist.flags'),
             items:
                 meal?.flags?.map((flag: string) => ({
-                    title: flagMap[flag as keyof typeof flagMap]?.en ?? flag,
+                    title:
+                        flagMap[flag as keyof typeof flagMap]?.[
+                            i18n.language as 'en' | 'de'
+                        ] ?? flag,
                     disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
@@ -78,7 +82,7 @@ export default function FoodDetail(): JSX.Element {
                 })) ?? [],
         },
         {
-            header: 'Allergens',
+            header: t('preferences.formlist.allergens'),
             items:
                 (meal?.allergens ?? [])
                     .filter((allergen: string) =>
@@ -86,8 +90,9 @@ export default function FoodDetail(): JSX.Element {
                     )
                     .map((allergen: string) => ({
                         title:
-                            allergenMap[allergen as keyof typeof allergenMap]
-                                ?.en ?? allergen,
+                            allergenMap[allergen as keyof typeof allergenMap]?.[
+                                i18n.language as 'en' | 'de'
+                            ] ?? allergen,
                         disabled: true,
                         icon: allergenSelection.includes(allergen)
                             ? 'warning-outline'
@@ -96,11 +101,11 @@ export default function FoodDetail(): JSX.Element {
                     })) ?? [],
         },
         {
-            header: 'Nutrition',
-            footer: 'Values are per meal and may vary',
+            header: t('details.formlist.nutrition.title'),
+            footer: t('details.formlist.nutrition.footer'),
             items: [
                 {
-                    title: 'Energy',
+                    title: t('details.formlist.nutrition.energy'),
                     value:
                         (meal?.nutrition?.kj ?? 'n/a').toString() +
                         ' kJ / ' +
@@ -110,40 +115,40 @@ export default function FoodDetail(): JSX.Element {
                 },
 
                 {
-                    title: 'Fat',
+                    title: t('details.formlist.nutrition.fat'),
                     value: (meal?.nutrition?.fat ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Saturated Fat',
+                    title: t('details.formlist.nutrition.saturated'),
                     value:
                         (meal?.nutrition?.fatSaturated ?? 'n/a').toString() +
                         ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Carbohydrates',
+                    title: t('details.formlist.nutrition.carbs'),
                     value: (meal?.nutrition?.carbs ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Sugar',
+                    title: t('details.formlist.nutrition.sugar'),
                     value: (meal?.nutrition?.sugar ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Fiber',
+                    title: t('details.formlist.nutrition.fiber'),
                     value: (meal?.nutrition?.fiber ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Protein',
+                    title: t('details.formlist.nutrition.protein'),
                     value:
                         (meal?.nutrition?.protein ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
                 {
-                    title: 'Salt',
+                    title: t('details.formlist.nutrition.salt'),
                     value: (meal?.nutrition?.salt ?? 'n/a').toString() + ' g',
                     disabled: true,
                 },
@@ -153,7 +158,7 @@ export default function FoodDetail(): JSX.Element {
 
     const aboutSection: FormListSections[] = [
         {
-            header: 'About',
+            header: t('details.formlist.about.title'),
             items: [
                 {
                     title: 'Restaurant',
@@ -161,12 +166,12 @@ export default function FoodDetail(): JSX.Element {
                     disabled: true,
                 },
                 {
-                    title: 'Category',
+                    title: t('details.formlist.about.category'),
                     value: meal?.category,
                     disabled: true,
                 },
                 {
-                    title: 'Data Source',
+                    title: t('details.formlist.about.source'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         if (meal?.restaurant !== null) {
@@ -182,10 +187,10 @@ export default function FoodDetail(): JSX.Element {
 
     const variantsSection: FormListSections[] = [
         {
-            header: 'Variations',
+            header: t('details.formlist.variations'),
             items:
                 meal?.variations?.map((variant) => ({
-                    title: variant.name.en,
+                    title: variant.name[i18n.language as 'en' | 'de'],
                     value:
                         (variant.additional ? '+ ' : '') +
                         formatPrice(variant.prices[userKind]),
@@ -236,10 +241,13 @@ export default function FoodDetail(): JSX.Element {
                         ]}
                         onPress={() => {
                             void Share.share({
-                                message: `Checkout "${meal?.name
-                                    .en}" (${formatPrice(
-                                    meal?.prices[userKind]
-                                )}) at ${meal?.restaurant}.\nhttps://neuland.app/food/`,
+                                message: t('details.share.message', {
+                                    meal: meal?.name[
+                                        i18n.language as 'en' | 'de'
+                                    ],
+                                    price: formatPrice(meal?.prices[userKind]),
+                                    location: meal?.restaurant,
+                                }),
                             })
                         }}
                     >
@@ -256,7 +264,7 @@ export default function FoodDetail(): JSX.Element {
                                     styles.shareText,
                                 ]}
                             >
-                                Share
+                                {t('details.share.button')}
                             </Text>
                         </View>
                     </Pressable>
@@ -265,10 +273,7 @@ export default function FoodDetail(): JSX.Element {
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}
                     >
-                        This meal has been automatically translated. We are not
-                        responsible for the correctness of the data. Please
-                        verify the correctness of the data with the respective
-                        restaurant before consume anything.
+                        {t('details.footer')}
                     </Text>
                 </View>
             </ScrollView>

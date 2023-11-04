@@ -7,16 +7,19 @@ import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function FoodPreferences(): JSX.Element {
     const { q } = useGlobalSearchParams<{ q: string }>()
     const colors = useTheme().colors as Colors
+    const { t, i18n } = useTranslation('food')
+
     let filteredAllergens = Object.entries(allergenMap)
         .filter(([key]) => key !== '_source')
         .map(([key, value]) => ({
             key,
-            title: value.en,
+            title: value[i18n.language as 'en' | 'de'],
         }))
 
     if (q != null) {
@@ -48,7 +51,7 @@ export default function FoodPreferences(): JSX.Element {
                         styles.filteredText,
                     ]}
                 >
-                    No matching allergens found.
+                    {t('empty.allergens')}
                 </Text>
             )}
         </ScrollView>

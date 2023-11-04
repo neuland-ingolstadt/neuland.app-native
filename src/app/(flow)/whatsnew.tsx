@@ -8,6 +8,7 @@ import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import packageInfo from '../../../package.json'
@@ -16,6 +17,7 @@ export default function OnboardingScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData
+    const { t, i18n } = useTranslation('flow')
 
     return (
         <View style={styles.page}>
@@ -28,7 +30,7 @@ export default function OnboardingScreen(): JSX.Element {
                         },
                     ]}
                 >
-                    What&apos;s new
+                    {t('whatsnew.title')}
                 </Text>
                 <Text
                     style={[
@@ -38,7 +40,9 @@ export default function OnboardingScreen(): JSX.Element {
                         },
                     ]}
                 >
-                    in version {convertToMajorMinorPatch(packageInfo.version)}
+                    {t('whatsnew.version', {
+                        version: convertToMajorMinorPatch(packageInfo.version),
+                    })}
                 </Text>
             </View>
 
@@ -54,9 +58,17 @@ export default function OnboardingScreen(): JSX.Element {
                             {changelog.version[key].map(
                                 ({ title, description, icon }) => (
                                     <WhatsNewBox
-                                        key={title.en}
-                                        title={title.en}
-                                        description={description.en}
+                                        key={
+                                            title[i18n.language as 'en' | 'de']
+                                        }
+                                        title={
+                                            title[i18n.language as 'en' | 'de']
+                                        }
+                                        description={
+                                            description[
+                                                i18n.language as 'en' | 'de'
+                                            ]
+                                        }
                                         icon={icon}
                                     />
                                 )
@@ -84,7 +96,7 @@ export default function OnboardingScreen(): JSX.Element {
                             styles.buttonText,
                         ]}
                     >
-                        Continue
+                        {t('whatsnew.continue')}
                     </Text>
                 </Pressable>
             </View>

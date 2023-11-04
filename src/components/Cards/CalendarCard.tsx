@@ -17,7 +17,7 @@ const CalendarCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const time = new Date()
-    const { t } = useTranslation(['navigation'])
+    const { t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
     enum LoadingState {
         LOADING,

@@ -32,13 +32,9 @@ export default {
             library: 'Library',
             events: 'Events',
             reimanns: 'Reimanns',
-            canisius: 'Canisius',
+            canisius: 'Canisius Konvikt',
             mensa: 'Canteen',
             food: 'Food',
-        },
-        food: {
-            oneMore: 'and one more meal',
-            manyMore: 'and {{count}} more meals',
         },
         events: {
             by: 'by {{name}}',

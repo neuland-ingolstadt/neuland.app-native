@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 /**
@@ -28,19 +29,24 @@ export const MealEntry = ({
 }): JSX.Element => {
     const { preferencesSelection, allergenSelection } =
         useContext(FoodFilterContext)
+    const { t, i18n } = useTranslation('food')
     const userAllergens = convertRelevantAllergens(
         meal.allergens ?? [],
-        allergenSelection
+        allergenSelection,
+        i18n.language
     )
     const colors = useTheme().colors as Colors
     const { userKind } = useContext(UserKindContext)
     const userFlags = convertRelevantFlags(
         meal.flags ?? [],
-        preferencesSelection
+        preferencesSelection,
+        i18n.language
     )
 
     useEffect(() => {}, [userKind])
-
+    const price = getUserSpecificPrice(meal, userKind)
+    const label =
+        price !== '' ? getUserSpecificLabel(userKind, t) : t('price.unknown')
     return (
         <Pressable
             onPress={() => {
@@ -66,7 +72,7 @@ export const MealEntry = ({
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
                 >
-                    {meal.name.en}
+                    {meal.name[i18n.language as 'de' | 'en']}
                 </Text>
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailsColumns}>
@@ -129,7 +135,7 @@ export const MealEntry = ({
                                 { color: colors.labelColor },
                             ]}
                         >
-                            {getUserSpecificLabel(userKind)}
+                            {label}
                         </Text>
                     </View>
                 </View>

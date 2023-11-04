@@ -20,7 +20,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     children,
 }) => {
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation(['navigation'])
+    const { t } = useTranslation('navigation')
     return (
         <TouchableOpacity onPress={onPress} style={styles.touchable}>
             <View

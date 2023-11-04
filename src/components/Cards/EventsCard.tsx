@@ -13,7 +13,7 @@ import BaseCard from './BaseCard'
 const EventsCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation(['navigation'])
+    const { t } = useTranslation('navigation')
     const [events, setEvents] = useState<CLEvents[]>([])
     enum LoadingState {
         LOADING,

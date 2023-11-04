@@ -7,6 +7,7 @@ import {
     USER_STUDENT,
 } from '@/stores/hooks/userKind'
 import { type Food, type Meal } from '@/stores/types/neuland-api'
+import { type TFunction } from 'i18next'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
 
@@ -102,13 +103,17 @@ export async function loadFoodEntries(
  */
 export function convertRelevantAllergens(
     allergens: string[],
-    selectedAllergens: string[]
+    selectedAllergens: string[],
+    language: string
 ): string {
     const relevantAllergens = allergens?.filter(
         (allergen) => selectedAllergens?.includes(allergen)
     )
     const convertedAllergens = relevantAllergens?.map(
-        (allergen) => allergenMap[allergen as keyof typeof allergenMap].en
+        (allergen) =>
+            allergenMap[allergen as keyof typeof allergenMap][
+                language as 'de' | 'en'
+            ]
     )
     return convertedAllergens?.join(' • ')
 }
@@ -121,11 +126,12 @@ export function convertRelevantAllergens(
  */
 export function convertRelevantFlags(
     flags: string[],
-    selectedFlags: string[]
+    selectedFlags: string[],
+    language: string
 ): string[] {
     const relevantFlags = flags?.filter((flag) => selectedFlags?.includes(flag))
     const convertedFlags = relevantFlags?.map(
-        (flag) => flapMap[flag as keyof typeof flapMap].en
+        (flag) => flapMap[flag as keyof typeof flapMap][language as 'de' | 'en']
     )
     return convertedFlags
 }
@@ -172,11 +178,11 @@ interface Labels {
  * @returns {string}
  */
 
-export function getUserSpecificLabel(userKind: string): string {
+export function getUserSpecificLabel(userKind: string, t: TFunction): string {
     const labels: Labels = {
-        [USER_GUEST]: 'for guests',
-        [USER_EMPLOYEE]: 'for employees',
-        [USER_STUDENT]: 'for students',
+        [USER_GUEST]: t('price.guests'),
+        [USER_EMPLOYEE]: t('price.employees'),
+        [USER_STUDENT]: t('price.students'),
     }
     return labels[userKind]
 }

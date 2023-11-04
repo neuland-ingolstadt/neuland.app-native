@@ -7,17 +7,19 @@ import { type FormListSections } from '@customTypes/components'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 export default function FoodPreferences(): JSX.Element {
+    const { t } = useTranslation('food')
     const locations = {
-        mensa: { de: 'Mensa', en: 'Mensa' },
-        reimanns: { de: 'Reimanns', en: 'Reimanns' },
-        canisius: { de: 'Canisius Konvikt', en: 'Canisius Konvikt' },
+        mensa: t('cards.titles.mensa', { ns: 'navigation' }),
+        reimanns: t('cards.titles.reimanns', { ns: 'navigation' }),
+        canisius: t('cards.titles.canisius', { ns: 'navigation' }),
     }
     const elemtents = Object.entries(locations).map(([key, value]) => ({
         key,
-        title: value.en,
+        title: value,
     }))
     const colors = useTheme().colors as Colors
     const router = useRouter()
@@ -31,10 +33,10 @@ export default function FoodPreferences(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: 'Allergens',
+            header: t('preferences.formlist.allergens'),
             items: [
                 {
-                    title: 'Allergens',
+                    title: t('preferences.formlist.allergens'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(food)/allergens')
@@ -43,10 +45,10 @@ export default function FoodPreferences(): JSX.Element {
             ],
         },
         {
-            header: 'Flags',
+            header: t('preferences.formlist.flags'),
             items: [
                 {
-                    title: 'Flags',
+                    title: t('preferences.formlist.flags'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(food)/flags')
@@ -119,10 +121,7 @@ export default function FoodPreferences(): JSX.Element {
                         },
                     ]}
                 >
-                    We are not responsible for the correctness of the data.
-                    Please verify the data with the respective restaurant before
-                    consume anything. You can also check the data source of each
-                    meal in the details view.
+                    {t('preferences.footer')}
                 </Text>
             </View>
         </>

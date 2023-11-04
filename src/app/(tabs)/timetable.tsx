@@ -8,7 +8,7 @@ import { Text } from 'react-native'
 
 export default function TimetableScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation(['navigation'])
+    const { t } = useTranslation('navigation')
     return (
         <>
             <Head>

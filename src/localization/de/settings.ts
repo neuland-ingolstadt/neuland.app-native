@@ -67,7 +67,7 @@ export default {
     },
     theme: {
         accent: {
-            title: 'Akzentfarbe',
+            title: 'Design',
         },
         exclusive: {
             title: 'Exklusive Designs',

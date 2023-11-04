@@ -6,6 +6,7 @@ import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, Text, View } from 'react-native'
 import Onboarding from 'react-native-onboarding-swiper'
 
@@ -15,6 +16,7 @@ export default function OnboardingScreen(): JSX.Element {
     const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
 
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation('flow')
 
     return (
         <Onboarding
@@ -25,6 +27,8 @@ export default function OnboardingScreen(): JSX.Element {
                     ?.goToPage(3, false)
             }
             showDone={false}
+            nextLabel={t('onboarding.navigation.next')}
+            skipLabel={t('onboarding.navigation.skip')}
             pages={[
                 {
                     backgroundColor: colors.background,
@@ -43,7 +47,7 @@ export default function OnboardingScreen(): JSX.Element {
                                     },
                                 ]}
                             >
-                                Welcome to{'\n'}Neuland Next
+                                {t('onboarding.page1.title')}
                             </Text>
 
                             <View style={styles.secondaryContainer}>
@@ -55,7 +59,7 @@ export default function OnboardingScreen(): JSX.Element {
                                         },
                                     ]}
                                 >
-                                    Swipe to learn more
+                                    {t('onboarding.page1.subtitle')}
                                 </Text>
                                 <View style={styles.linkContainer}>
                                     <Text
@@ -69,7 +73,7 @@ export default function OnboardingScreen(): JSX.Element {
                                             void Linking.openURL(PRIVACY_URL)
                                         }}
                                     >
-                                        Privacy Policy
+                                        {t('onboarding.links.privacy')}
                                     </Text>
                                     <Text
                                         style={[
@@ -93,7 +97,7 @@ export default function OnboardingScreen(): JSX.Element {
                                             void Linking.openURL(IMPRINT_URL)
                                         }}
                                     >
-                                        Imprint
+                                        {t('onboarding.links.imprint')}
                                     </Text>
                                 </View>
                             </View>
@@ -120,16 +124,10 @@ export default function OnboardingScreen(): JSX.Element {
                                     },
                                 ]}
                             >
-                                Everything in one place
+                                {t('onboarding.page2.title')}
                             </Text>
 
-                            <OnboardingBox
-                                title={
-                                    `Neuland Next combines all important information about your studies in one app.\n\n` +
-                                    `Customize your dashboard to your needs and get a quick overview of your schedule, grades, and more.\n\n` +
-                                    `The interactive map shows you all important locations on campus.`
-                                }
-                            />
+                            <OnboardingBox title={t('onboarding.page2.text')} />
 
                             <Text
                                 style={{
@@ -156,17 +154,10 @@ export default function OnboardingScreen(): JSX.Element {
                                     },
                                 ]}
                             >
-                                Data Security
+                                {t('onboarding.page3.title')}
                             </Text>
 
-                            <OnboardingBox
-                                title={
-                                    `Neuland Next is an open source project and developed by students for students.\n\n` +
-                                    `As an alternative to the official THI app, we strictly protect your data. ` +
-                                    `The app only uses the official and encrypted API provided by the THI.\n\n` +
-                                    `Your password and data is therefore never accessible to us or third parties.`
-                                }
-                            />
+                            <OnboardingBox title={t('onboarding.page3.text')} />
 
                             <Text
                                 style={[
@@ -177,7 +168,7 @@ export default function OnboardingScreen(): JSX.Element {
                                     void Linking.openURL(PRIVACY_URL)
                                 }}
                             >
-                                Privacy Policy
+                                {t('onboarding.links.privacy')}
                             </Text>
                         </View>
                     ),

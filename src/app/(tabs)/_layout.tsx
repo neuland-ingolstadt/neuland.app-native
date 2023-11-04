@@ -17,7 +17,7 @@ export default function HomeLayout(): JSX.Element {
     const router = useRouter()
     const colors = theme.colors as Colors
     const flow = React.useContext(FlowContext)
-    const { t } = useTranslation(['navigation'])
+    const { t } = useTranslation('navigation')
 
     if (flow.isOnboarded === false) {
         console.log('redirecting to onboard')

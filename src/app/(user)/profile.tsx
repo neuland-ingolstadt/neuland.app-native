@@ -27,7 +27,7 @@ export default function Profile(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { toggleUserKind } = React.useContext(UserKindContext)
-    const { t } = useTranslation(['settings', 'common'])
+    const { t } = useTranslation('settings')
     const logout = async (): Promise<void> => {
         try {
             toggleUserKind(undefined)
@@ -67,7 +67,7 @@ export default function Profile(): JSX.Element {
             Toast.hide(toast)
         }
 
-        toast = Toast.show(t('banner.clipboard'), {
+        toast = Toast.show(t('toast.clipboard', { ns: 'common' }), {
             duration: Toast.durations.SHORT,
             position: 50,
             shadow: false,

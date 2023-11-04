@@ -1,5 +1,5 @@
 export default {
-    banner: {
+    toast: {
         clipboard: 'copied to clipboard',
     },
 }
