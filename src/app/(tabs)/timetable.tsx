@@ -9,14 +9,19 @@ import { type Calendar } from '@customTypes/data'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
+import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { type FC, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
 
+const NUMBER_OF_DAYS = 3
+
 export default function TimetableScreen(): JSX.Element {
     const weekViewRef = useRef<typeof WeekView>()
+
+    const navigation = useNavigation()
 
     const theme = useTheme()
     const colors = theme.colors as Colors
@@ -43,18 +48,79 @@ export default function TimetableScreen(): JSX.Element {
         async function load(): Promise<void> {
             try {
                 const timetable = await getFriendlyTimetable(new Date())
-
                 const timetableEntries = timetableToWeekViewEvents(timetable)
                 const calendarEntries = calendarToWeekViewEvents(calendar)
+                const allEvents = [...timetableEntries, ...calendarEntries]
 
                 /**
                  * TODO:
                  * - Exams
                  * - Holidays
                  * - Maybe Events from student clubs
+                 * - FIX CALENDER CORRECTLY!!!
                  */
 
-                setTimetable([...timetableEntries, ...calendarEntries])
+                const allDayEvents = allEvents.filter(
+                    (event) => event.allDay ?? false
+                )
+                const today = new Date()
+                const splitEvents = allDayEvents.flatMap((event) => {
+                    const dayDelta = Math.floor(
+                        (event.endDate.getTime() - event.startDate.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                    )
+                    const todayDelta = Math.floor(
+                        (event.startDate.getTime() - today.getTime()) /
+                            (1000 * 60 * 60 * 24)
+                    )
+                    const offset =
+                        NUMBER_OF_DAYS - ((todayDelta % NUMBER_OF_DAYS) + 1)
+                    const splits = Math.ceil(
+                        (dayDelta - offset) / NUMBER_OF_DAYS
+                    )
+
+                    console.log(
+                        event.title,
+                        dayDelta,
+                        todayDelta,
+                        offset,
+                        splits
+                    )
+
+                    const splitEvents = []
+                    if (offset > 0) {
+                        const endDate = new Date(
+                            event.startDate.getTime() +
+                                1000 * 60 * 60 * 24 * (offset - 1)
+                        )
+                        const splitEvent = { ...event, endDate, id: event.id }
+                        splitEvents.push(splitEvent)
+                    }
+                    for (let i = 0; i < splits; i++) {
+                        const startDate = new Date(
+                            event.startDate.getTime() +
+                                (i * NUMBER_OF_DAYS + offset) *
+                                    (1000 * 60 * 60 * 24)
+                        )
+                        const endDate = new Date(
+                            startDate.getTime() +
+                                1000 * 60 * 60 * 24 * (NUMBER_OF_DAYS - 1)
+                        )
+                        const splitEvent = {
+                            ...event,
+                            startDate,
+                            endDate,
+                            originalStartDate: startDate,
+                            id: event.id + i,
+                        }
+                        splitEvents.push(splitEvent)
+                    }
+                    return splitEvents
+                })
+                setTimetable([
+                    ...allEvents.filter((event) => !(event.allDay ?? false)),
+                    ...splitEvents,
+                ])
             } catch (e) {
                 console.error(e)
             }
@@ -62,6 +128,23 @@ export default function TimetableScreen(): JSX.Element {
 
         load().catch(console.error)
     }, [colors.primary])
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() => {
+                        weekViewRef.current?.goToDate(new Date())
+                        weekViewRef.current?.scrollToTime(
+                            (new Date().getHours() - 1) * 60
+                        )
+                    }}
+                >
+                    <Ionicons name="today" size={22} color={colors.primary} />
+                </TouchableOpacity>
+            ),
+        })
+    }, [navigation])
 
     function timetableToWeekViewEvents(
         entries: FriendlyTimetableEntry[]
@@ -217,7 +300,7 @@ export default function TimetableScreen(): JSX.Element {
                     ref={weekViewRef}
                     events={timetable}
                     selectedDate={selectedDate}
-                    numberOfDays={3}
+                    numberOfDays={NUMBER_OF_DAYS}
                     timesColumnWidth={50}
                     showTitle={false}
                     beginAgendaAt={8 * 60}
