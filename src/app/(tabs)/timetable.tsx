@@ -79,14 +79,6 @@ export default function TimetableScreen(): JSX.Element {
                         (dayDelta - offset) / NUMBER_OF_DAYS
                     )
 
-                    console.log(
-                        event.title,
-                        dayDelta,
-                        todayDelta,
-                        offset,
-                        splits
-                    )
-
                     const splitEvents = []
                     if (offset > 0) {
                         const endDate = new Date(
