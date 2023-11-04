@@ -3,7 +3,7 @@ export default {
         formlist: {
             preferences: {
                 title: 'Einstellungen',
-                theme: 'Aussehen',
+                theme: 'Design',
                 food: 'Essen',
                 language: 'Sprache',
             },

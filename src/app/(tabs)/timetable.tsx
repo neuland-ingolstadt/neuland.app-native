@@ -3,10 +3,12 @@ import { useTheme } from '@react-navigation/native'
 import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text } from 'react-native'
 
 export default function TimetableScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation(['navigation'])
     return (
         <>
             <Head>
@@ -17,7 +19,7 @@ export default function TimetableScreen(): JSX.Element {
             </Head>
             <Stack.Screen
                 options={{
-                    title: 'Timetable',
+                    title: t('navigation.timetable'),
                 }}
             />
             <Text

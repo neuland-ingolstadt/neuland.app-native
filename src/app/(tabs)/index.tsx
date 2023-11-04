@@ -41,7 +41,6 @@ export default function Screen(): JSX.Element {
                                 onPress={() => {
                                     router.push('(user)/settings')
                                 }}
-                                style={{ paddingRight: 16 }}
                             >
                                 <View>
                                     <Ionicons

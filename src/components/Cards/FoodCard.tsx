@@ -72,7 +72,7 @@ const EventsCard = (): JSX.Element => {
         }
 
         if (restaurants.length !== 1) {
-            setFoodCardTitle('Food')
+            setFoodCardTitle('food')
         } else {
             switch (restaurants[0]) {
                 case 'mensa':
@@ -85,7 +85,7 @@ const EventsCard = (): JSX.Element => {
                     setFoodCardTitle('canisius')
                     break
                 default:
-                    setFoodCardTitle(t('food'))
+                    setFoodCardTitle('food')
                     break
             }
         }
