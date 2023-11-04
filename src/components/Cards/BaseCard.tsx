@@ -3,6 +3,7 @@ import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 interface BaseCardProps {
@@ -19,7 +20,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     children,
 }) => {
     const colors = useTheme().colors as Colors
-
+    const { t } = useTranslation(['navigation'])
     return (
         <TouchableOpacity onPress={onPress} style={styles.touchable}>
             <View
@@ -34,7 +35,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                 <View style={styles.titleView}>
                     <Ionicons name={icon} size={20} color={colors.primary} />
                     <Text style={[styles.title, { color: colors.text }]}>
-                        {title}
+                        {t('cards.titles.' + title)}
                     </Text>
                     <Ionicons
                         name="chevron-forward-outline"

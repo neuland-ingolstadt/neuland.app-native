@@ -7,6 +7,7 @@ import { type Meal } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
@@ -19,6 +20,7 @@ const EventsCard = (): JSX.Element => {
         REFRESHING,
     }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const { t } = useTranslation(['navigation'])
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
@@ -74,16 +76,16 @@ const EventsCard = (): JSX.Element => {
         } else {
             switch (restaurants[0]) {
                 case 'mensa':
-                    setFoodCardTitle('Mensa')
+                    setFoodCardTitle('mensa')
                     break
                 case 'reimanns':
-                    setFoodCardTitle('Reimanns')
+                    setFoodCardTitle('reimanns')
                     break
                 case 'canisius':
-                    setFoodCardTitle('Canisius')
+                    setFoodCardTitle('canisius')
                     break
                 default:
-                    setFoodCardTitle('Food')
+                    setFoodCardTitle(t('food'))
                     break
             }
         }
@@ -120,8 +122,10 @@ const EventsCard = (): JSX.Element => {
                               {
                                   name:
                                       hiddenEntriesCount === 1
-                                          ? 'and 1 more item'
-                                          : `and ${hiddenEntriesCount} more items`,
+                                          ? t('cards.food.oneMore')
+                                          : t('cards.food.more', {
+                                                count: hiddenEntriesCount,
+                                            }),
                                   price: null,
                               },
                           ]

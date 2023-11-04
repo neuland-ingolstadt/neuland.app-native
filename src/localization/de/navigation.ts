@@ -21,4 +21,31 @@ export default {
         lecturer: 'Dozentendetails',
         mobility: 'Mobilität',
     },
+    cards: {
+        titles: {
+            timetable: 'Stundenplan',
+            mobility: 'Mobilität',
+            calendar: 'Kalender',
+            rooms: 'Räume',
+            lecturers: 'Dozenten',
+            news: 'Nachrichten',
+            library: 'Bibliothek',
+            events: 'Veranstaltungen',
+            reimanns: 'Reimanns',
+            canisius: 'Canisius',
+            mensa: 'Mensa',
+            food: 'Essen',
+        },
+        food: {
+            oneMore: 'und ein weiteres Gericht',
+            manyMore: 'und {{count}} weitere Gerichte',
+        },
+        events: {
+            by: 'von {{name}}',
+        },
+        calendar: {
+            exam: 'Prüfung {{name}}',
+            ends: 'endet ',
+        },
+    },
 }

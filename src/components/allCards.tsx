@@ -12,13 +12,12 @@ const router = useRouter()
 
 export const AllCards: Card[] = [
     {
-        text: 'Timetable',
         key: 'timetable',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
         card: () => (
             <BaseCard
-                title="Timetable"
+                title="timetable"
                 icon="time"
                 onPress={() => {
                     router.push('timetable')
@@ -27,20 +26,18 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Food',
-        key: 'mensa',
+        key: 'food',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <FoodCard />,
     },
     {
-        text: 'Mobility',
         key: 'mobility',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => (
             <BaseCard
-                title="Mobility"
+                title="mobility"
                 icon="bus"
                 onPress={() => {
                     router.push('mobility')
@@ -49,27 +46,24 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Calendar',
         key: 'calendar',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <CalendarCard />,
     },
     {
-        text: 'Campus Life Events',
         key: 'events',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <EventsCard />,
     },
     {
-        text: 'Rooms',
         key: 'rooms',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => (
             <BaseCard
-                title="Rooms"
+                title="rooms"
                 icon="location"
                 onPress={() => {
                     router.push('rooms')
@@ -78,13 +72,12 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Lecturers',
         key: 'lecturers',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
         card: () => (
             <BaseCard
-                title="Lecturers"
+                title="lecturers"
                 icon="people"
                 onPress={() => {
                     router.push('lecturers')
@@ -93,13 +86,12 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'News',
         key: 'news',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => (
             <BaseCard
-                title="News"
+                title="news"
                 icon="newspaper"
                 onPress={() => {
                     router.push('news')
@@ -108,13 +100,12 @@ export const AllCards: Card[] = [
         ),
     },
     {
-        text: 'Library',
         key: 'library',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
         card: () => (
             <BaseCard
-                title="Library"
+                title="library"
                 icon="book"
                 onPress={() => {
                     router.push('library')
@@ -126,8 +117,11 @@ export const AllCards: Card[] = [
 
 export interface Card {
     key: string
-    text: string
     removable: boolean
     default: string[]
     card: () => JSX.Element
+}
+
+export interface ExtendedCard extends Card {
+    text: string
 }

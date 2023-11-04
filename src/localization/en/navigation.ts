@@ -21,4 +21,31 @@ export default {
         lecturer: 'Lecturer Details',
         mobility: 'Mobility',
     },
+    cards: {
+        titles: {
+            timetable: 'Timetable',
+            mobility: 'Mobility',
+            calendar: 'Calendar',
+            rooms: 'Rooms',
+            lecturers: 'Lecturers',
+            news: 'News',
+            library: 'Library',
+            events: 'Events',
+            reimanns: 'Reimanns',
+            canisius: 'Canisius',
+            mensa: 'Canteen',
+            food: 'Food',
+        },
+        food: {
+            oneMore: 'and one more meal',
+            manyMore: 'and {{count}} more meals',
+        },
+        events: {
+            by: 'by {{name}}',
+        },
+        calendar: {
+            exam: 'exam {{name}}',
+            ends: 'ends ',
+        },
+    },
 }

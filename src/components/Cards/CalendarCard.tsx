@@ -7,6 +7,7 @@ import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
@@ -16,6 +17,7 @@ const CalendarCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const time = new Date()
+    const { t } = useTranslation(['navigation'])
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
     enum LoadingState {
         LOADING,
@@ -44,7 +46,7 @@ const CalendarCard = (): JSX.Element => {
         let exams: CardExams[] = []
         try {
             exams = (await loadExamList()).map((x) => ({
-                name: `Prüfung ${x.name}`,
+                name: t('cards.calendar.exam', { name: x.name }),
                 begin: x.date,
             }))
         } catch (e) {
@@ -67,7 +69,7 @@ const CalendarCard = (): JSX.Element => {
 
     return (
         <BaseCard
-            title="Calendar"
+            title="calendar"
             icon="calendar"
             onPress={() => {
                 router.push('calendar')
@@ -100,7 +102,7 @@ const CalendarCard = (): JSX.Element => {
                                     numberOfLines={1}
                                 >
                                     {event.end != null && event.begin < time
-                                        ? 'ends ' +
+                                        ? t('cards.calendar.ends') +
                                           formatFriendlyRelativeTime(event.end)
                                         : formatFriendlyRelativeTime(
                                               event.begin
