@@ -1,4 +1,5 @@
 import { type Colors } from '@/stores/colors'
+import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
 import { getDateRange, isSameDay } from '@/utils/date-utils'
 import {
@@ -30,7 +31,7 @@ export default function TimetableScreen(): JSX.Element {
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
-
+    const { userKind } = React.useContext(UserKindContext)
     const timetableTextColor =
         textColor.contrast(primaryColor) > 5
             ? textColor.hex()
@@ -119,7 +120,7 @@ export default function TimetableScreen(): JSX.Element {
         }
 
         load().catch(console.error)
-    }, [colors.primary])
+    }, [colors.primary, userKind])
 
     useEffect(() => {
         navigation.setOptions({
