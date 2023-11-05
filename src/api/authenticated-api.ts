@@ -5,6 +5,7 @@ import {
     type Lecturers,
     type PersData,
     type Rooms,
+    type TimetableResponse,
 } from '@/stores/types/thi-api'
 
 import { APIError, AnonymousAPIClient } from './anonymous-api'
@@ -138,7 +139,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return extractSpoFromPersonalData(data)
     }
 
-    async getTimetable(date: Date, detailed = false): Promise<object> {
+    async getTimetable(
+        date: Date,
+        detailed = false
+    ): Promise<TimetableResponse> {
         try {
             const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${
                 detailed ? 'true' : 'false'
@@ -149,7 +153,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
                 format: 'json',
                 day: date.getDate(),
                 month: date.getMonth() + 1,
-                year: 1900 + date.getFullYear(),
+                year: date.getFullYear(),
                 details: detailed ? 1 : 0,
             })
 
@@ -163,6 +167,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
             if (e.data === 'Query not possible') {
                 return {
                     timetable: [],
+                    holidays: [],
+                    semester: [],
                 }
             } else {
                 throw e

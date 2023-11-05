@@ -1,6 +1,8 @@
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SecureStore from 'expo-secure-store'
 
+import packageInfo from '../../package.json'
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
@@ -64,6 +66,10 @@ export async function createSession(
 export async function createGuestSession(): Promise<void> {
     await forgetSession()
     await save('session', 'guest')
+    await AsyncStorage.setItem('isOnboarded', 'true')
+    await AsyncStorage.getItem(
+        `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`
+    )
 }
 
 /**
