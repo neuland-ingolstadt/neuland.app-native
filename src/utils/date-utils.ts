@@ -375,3 +375,30 @@ export function isSameDay(a: Date, b: Date): boolean {
         a.getDate() === b.getDate()
     )
 }
+
+/**
+ * Combines the date from one Date object and the time from another Date object
+ * @param {Date} date
+ * @param {Date} time
+ * @returns {Date}
+ */
+export function combineDateTime(date: Date, time: Date): Date {
+    date = new Date(date)
+    time = new Date(time)
+    date.setHours(time.getHours())
+    date.setMinutes(time.getMinutes())
+    date.setSeconds(time.getSeconds())
+    date.setMilliseconds(time.getMilliseconds())
+    return date
+}
+
+export function getDateRange(startDate: Date, delta: number): Date[] {
+    const dates = []
+    let currentDate = startDate
+    for (let i = 0; i < delta; i++) {
+        dates.push(currentDate)
+        currentDate = new Date(currentDate)
+        currentDate.setDate(currentDate.getDate() + 1)
+    }
+    return dates
+}

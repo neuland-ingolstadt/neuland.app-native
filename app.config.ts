@@ -35,7 +35,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 31,
+            versionCode: 34,
         },
         extra: {
             eas: {

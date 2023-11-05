@@ -1,14 +1,19 @@
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/stores/data/calendar.json'
+import { type Calendar } from '@customTypes/data'
 import { type Exams } from '@customTypes/thi-api'
 
 export const compileTime = new Date()
-export const calendar = rawCalendar
-    .map((x) => ({
-        ...x,
-        begin: new Date(x.begin),
-        end: x.end != null ? new Date(x.end) : null,
-    }))
+export const calendar: Calendar[] = rawCalendar
+    .map((x) => {
+        const event: Calendar = {
+            ...x,
+            begin: new Date(x.begin),
+            end: x.end != null ? new Date(x.end) : undefined,
+        }
+
+        return event
+    })
     .filter(
         (x) => (x.end != null && x.end > compileTime) || x.begin > compileTime
     )
