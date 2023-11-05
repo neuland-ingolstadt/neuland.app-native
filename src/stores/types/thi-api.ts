@@ -187,6 +187,12 @@ export interface ThiWebinfo {
     data: Array<string[] | number>
 }
 
+export interface TimetableResponse {
+    semester: any[] // TODO: Add type
+    holidays: any[] // TODO: Add type
+    timetable: Timetable[]
+}
+
 export interface Timetable {
     date: Date
     hours: Hours
