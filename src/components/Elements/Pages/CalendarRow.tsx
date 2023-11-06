@@ -11,7 +11,7 @@ import { Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
 
-const EventRow = ({
+const CalendarRow = ({
     event,
     colors,
 }: {
@@ -61,6 +61,7 @@ const EventRow = ({
                     </Text>
                 </View>
             }
+            maxTitleWidth={'60%'}
         />
     )
 }
@@ -132,4 +133,4 @@ const ExamRow = ({
     )
 }
 
-export { EventRow, ExamRow }
+export { CalendarRow, ExamRow }

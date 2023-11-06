@@ -152,8 +152,7 @@ export default function LecturersCard(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        An error occurred while loading the data.{'\n'}Pull down
-                        to refresh.
+                        {t('error.refresh')}{' '}
                     </Text>
                 </View>
             )}

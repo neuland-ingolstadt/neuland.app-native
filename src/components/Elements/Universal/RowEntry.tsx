@@ -1,6 +1,12 @@
 import { type Colors } from '@/stores/colors'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    type DimensionValue,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 const RowEntry = ({
     title,
@@ -8,6 +14,7 @@ const RowEntry = ({
     leftChildren,
     rightChildren,
     onPress,
+    maxTitleWidth,
 }: {
     title: string
     colors: Colors
@@ -15,11 +22,17 @@ const RowEntry = ({
     rightChildren: JSX.Element
     onPress?: () => void
     isExamCard?: boolean
+    maxTitleWidth?: DimensionValue
 }): JSX.Element => {
     return (
         <Pressable onPress={onPress}>
             <View style={styles.eventContainer}>
-                <View style={styles.detailsContainer}>
+                <View
+                    style={[
+                        styles.detailsContainer,
+                        { maxWidth: maxTitleWidth },
+                    ]}
+                >
                     <Text
                         style={{
                             fontSize: 16,

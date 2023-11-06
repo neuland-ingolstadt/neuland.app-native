@@ -318,8 +318,7 @@ export default function AdvancedSearch(): JSX.Element {
                                         { color: colors.text },
                                     ]}
                                 >
-                                    An error occurred while loading the data.
-                                    {'\n'}Pull down to refresh.
+                                    {t('error.refresh')}{' '}
                                 </Text>
                             </View>
                         )}

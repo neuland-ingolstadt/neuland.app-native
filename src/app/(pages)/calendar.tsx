@@ -1,5 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import { EventRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
+import { CalendarRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/stores/colors'
@@ -110,7 +110,7 @@ export default function CalendarPage(): JSX.Element {
                         data.map((item, index) => (
                             <React.Fragment key={index}>
                                 {selectedData === 'Events' ? (
-                                    <EventRow event={item} colors={colors} />
+                                    <CalendarRow event={item} colors={colors} />
                                 ) : (
                                     <>
                                         {loadingState ===
@@ -178,9 +178,7 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                An error occurred while loading
-                                                the data.{'\n'}Pull down to
-                                                refresh.
+                                                {t('error.refresh')}{' '}
                                             </Text>
                                         </View>
                                     )}
@@ -192,7 +190,9 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                No data found
+                                                {t(
+                                                    'pages.calendar.calendar.noData.title'
+                                                )}
                                             </Text>
                                             <Text
                                                 style={[
@@ -200,7 +200,9 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                Please try again later.
+                                                {t(
+                                                    'pages.calendar.calendar.noData.subtitle'
+                                                )}
                                             </Text>
                                         </View>
                                     )}

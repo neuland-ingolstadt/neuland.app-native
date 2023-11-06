@@ -23,12 +23,15 @@ export function formatFriendlyDate(datetime: Date | string): string {
     } else if (datetime.toDateString() === tomorrow.toDateString()) {
         return t('dates.tomorrow')
     } else {
-        return datetime.toLocaleString(undefined, {
+        const weekday = new Intl.DateTimeFormat(i18n.language, {
             weekday: 'short',
+        }).format(datetime)
+        const day = new Intl.DateTimeFormat('de', {
             day: 'numeric',
             month: '2-digit',
             year: 'numeric',
-        })
+        }).format(datetime)
+        return `${weekday}, ${day}`
     }
 }
 
@@ -88,10 +91,7 @@ export function formatFriendlyDateTimeRange(
             str += ' – ' + formatFriendlyTime(end)
         } else {
             str +=
-                ' –\n' +
-                formatFriendlyDate(end) +
-                ', ' +
-                formatFriendlyTime(end)
+                ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
         }
     }
     return str
@@ -148,26 +148,22 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-    const rtl = new Intl.RelativeTimeFormat('en', {
+    const rtl = new Intl.RelativeTimeFormat(i18n.language, {
         numeric: 'auto',
         style: 'long',
     })
-
     const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
     if (Math.abs(weeks) > 0) {
         return rtl.format(weeks, 'week')
     }
-
     const days = (delta / (24 * 60 * 60 * 1000)) | 0
     if (Math.abs(days) > 0) {
         return rtl.format(days, 'day')
     }
-
     const hours = (delta / (60 * 60 * 1000)) | 0
     if (Math.abs(hours) > 0) {
         return rtl.format(hours, 'hour')
     }
-
     const minutes = (delta / (60 * 1000)) | 0
     return rtl.format(minutes, 'minute')
 }

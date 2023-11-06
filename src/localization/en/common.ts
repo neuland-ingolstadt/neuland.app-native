@@ -2,6 +2,10 @@ export default {
     toast: {
         clipboard: 'copied to clipboard',
     },
+    error: {
+        refresh:
+            'An error occurred while loading the data.\nPull down to refresh.',
+    },
     dates: {
         until: 'until',
         ends: 'ends',
@@ -19,6 +23,10 @@ export default {
             },
             calendar: {
                 link: 'https://www.thi.de/en/international/studies/examination/semester-dates/',
+                noData: {
+                    title: 'No data found',
+                    subtitle: 'Please try again later.',
+                },
             },
             footer: {
                 part1: 'All information without guarantee. Binding information is only available directly on the ',

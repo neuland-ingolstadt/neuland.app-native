@@ -6,6 +6,7 @@ import { MobilityContext } from '@/stores/provider'
 import { type CLEvents } from '@/stores/types/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     ScrollView,
@@ -27,6 +28,8 @@ export default function Mobility(): JSX.Element {
     const [error, setError] = useState<Error | null>(null)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const { mobilityKind, mobilityStation } = React.useContext(MobilityContext)
+    const { t } = useTranslation('common')
+
     useEffect(() => {
         void loadEvents()
             .then(() => {
@@ -84,8 +87,7 @@ export default function Mobility(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        An error occurred while loading the data.{'\n'}Pull down
-                        to refresh.
+                        {t('error.refresh')}{' '}
                     </Text>
                 </View>
             )}

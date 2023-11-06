@@ -2,6 +2,11 @@ export default {
     toast: {
         clipboard: 'in Zwischenablage kopiert',
     },
+    error: {
+        refresh:
+            'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
+    },
+
     dates: {
         until: 'bis',
         ends: 'endet',
@@ -19,6 +24,10 @@ export default {
             },
             calendar: {
                 link: 'https://www.thi.de/studium/pruefung/semestertermine/',
+                noData: {
+                    title: 'Keine Daten gefunden',
+                    subtitle: 'Bitte versuche es später erneut.',
+                },
             },
             footer: {
                 part1: 'Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt verfügbar auf der ',
