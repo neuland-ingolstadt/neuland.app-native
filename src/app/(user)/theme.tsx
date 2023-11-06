@@ -22,7 +22,6 @@ export default function Theme(): JSX.Element {
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
-        name: string
         light: string
         dark: string
     }

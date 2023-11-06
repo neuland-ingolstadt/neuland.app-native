@@ -45,7 +45,7 @@ export const accentColors: AccentColors = {
     },
     pink: {
         light: '#ea1a78',
-        dark: '#f22a88',
+        dark: '#f8277b',
     },
     purple: {
         light: '#74209e',

@@ -60,7 +60,7 @@ export const AllCards: Card[] = [
     {
         key: 'rooms',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        default: [],
         card: () => (
             <BaseCard
                 title="rooms"
@@ -88,7 +88,7 @@ export const AllCards: Card[] = [
     {
         key: 'news',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        default: [],
         card: () => (
             <BaseCard
                 title="news"
@@ -102,7 +102,7 @@ export const AllCards: Card[] = [
     {
         key: 'library',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
+        default: [],
         card: () => (
             <BaseCard
                 title="library"

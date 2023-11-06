@@ -87,7 +87,7 @@ export default {
             blue: 'Blau',
             contrast: 'Contrast',
             pink: 'Pink',
-            red: 'Rot',
+            red: 'Red',
             purple: 'Purple',
             yellow: 'Yellow',
             orange: 'Orange',
