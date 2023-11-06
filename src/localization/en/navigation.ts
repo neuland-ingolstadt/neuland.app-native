@@ -2,6 +2,7 @@ export default {
     navigation: {
         timetable: 'Timetable',
         map: 'Map',
+        campusMap: 'Campus Map',
         food: 'Food',
         settings: 'Settings',
         preferences: 'Preferences',

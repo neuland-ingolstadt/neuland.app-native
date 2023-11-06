@@ -3,6 +3,7 @@ export default {
         timetable: 'Stundenplan',
         map: 'Karte',
         food: 'Essen',
+        campusMap: 'Campus Karte',
         settings: 'Einstellungen',
         preferences: 'Präferenzen',
         flags: 'Kennzeichnungen',

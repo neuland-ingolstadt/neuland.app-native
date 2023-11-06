@@ -112,10 +112,9 @@ export default function Screen(): JSX.Element {
 }
 
 export const MapScreen = (): JSX.Element => {
-    const { t } = useTranslation('common')
     const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
     const FLOOR_SUBSTITUTES: Record<string, string> = {
-        0: t('pages.map.gf'),
+        0: 'EG',
         0.5: '1.5',
         1: '1',
         2: '2',
@@ -330,6 +329,7 @@ export const MapScreen = (): JSX.Element => {
     const FloorPicker = (floors: { floors: string[] }): JSX.Element => {
         const isEmpty = floors.floors.length === 0
         const colors = useTheme().colors as Colors
+        const { t } = useTranslation('common')
         return (
             <View
                 style={[
@@ -385,7 +385,9 @@ export const MapScreen = (): JSX.Element => {
                                             },
                                         ]}
                                     >
-                                        {floor}
+                                        {floor === 'EG'
+                                            ? t('pages.map.gf')
+                                            : floor}
                                     </Text>
                                 </View>
                             </Pressable>
