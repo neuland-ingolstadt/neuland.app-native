@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Linking,
+    Platform,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -100,7 +101,11 @@ export default function Settings(): JSX.Element {
                     icon: 'language-outline',
 
                     onPress: async () => {
-                        await Linking.openSettings()
+                        if (Platform.OS === 'ios') {
+                            await Linking.openSettings()
+                        } else {
+                            alert('Not available yet')
+                        }
                     },
                 },
             ],
