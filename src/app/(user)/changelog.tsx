@@ -1,5 +1,5 @@
-import changelogData from '@/assets/data/changelog.json'
 import FormList from '@/components/Elements/Universal/FormList'
+import changelogData from '@/data/changelog.json'
 import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@customTypes/components'
 import { type Changelog } from '@customTypes/data'

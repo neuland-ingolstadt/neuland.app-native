@@ -1,6 +1,6 @@
 import NeulandAPI from '@/api/neuland-api'
-import allergenMap from '@/assets/data/allergens.json'
-import flapMap from '@/assets/data/mensa-flags.json'
+import allergenMap from '@/data/allergens.json'
+import flapMap from '@/data/mensa-flags.json'
 import {
     USER_EMPLOYEE,
     USER_GUEST,

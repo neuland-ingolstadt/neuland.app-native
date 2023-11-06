@@ -1,5 +1,5 @@
-import flapMap from '@/assets/data/mensa-flags.json'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
+import flapMap from '@/data/mensa-flags.json'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { getStatusBarStyle } from '@/utils/ui-utils'

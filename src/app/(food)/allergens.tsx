@@ -1,5 +1,5 @@
-import allergenMap from '@/assets/data/allergens.json'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
+import allergenMap from '@/data/allergens.json'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { getStatusBarStyle } from '@/utils/ui-utils'

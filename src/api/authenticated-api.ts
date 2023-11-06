@@ -1,4 +1,4 @@
-import courseShortNames from '@/assets/data/course-short-names.json'
+import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/stores/types/data'
 import {
     type Grades,

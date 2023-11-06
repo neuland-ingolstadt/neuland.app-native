@@ -1,4 +1,4 @@
-import changelog from '@/assets/data/changelog.json'
+import changelog from '@/data/changelog.json'
 import { type Colors } from '@/stores/colors'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'

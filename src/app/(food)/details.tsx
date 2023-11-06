@@ -1,6 +1,6 @@
-import allergenMap from '@/assets/data/allergens.json'
-import flagMap from '@/assets/data/mensa-flags.json'
 import FormList from '@/components/Elements/Universal/FormList'
+import allergenMap from '@/data/allergens.json'
+import flagMap from '@/data/mensa-flags.json'
 import { type Colors } from '@/stores/colors'
 import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'

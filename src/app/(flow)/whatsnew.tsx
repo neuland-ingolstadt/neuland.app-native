@@ -1,5 +1,5 @@
-import changelogData from '@/assets/data/changelog.json'
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
+import changelogData from '@/data/changelog.json'
 import { type Colors } from '@/stores/colors'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
