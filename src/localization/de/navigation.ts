@@ -11,7 +11,7 @@ export default {
         allergensSearch: 'Suche Allergene',
         allergens: 'Allergene',
         details: 'Details',
-        theme: 'Akzentfarbe',
+        theme: 'Design',
         profile: 'Profil',
         about: 'Über',
         advancedSearch: 'Erweiterte Suche',
