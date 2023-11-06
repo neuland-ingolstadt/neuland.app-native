@@ -22,7 +22,7 @@ export default {
             },
             footer: {
                 part1: 'Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt verfügbar auf der ',
-                part2: 'Universitätswebsite.',
+                part2: 'Universitätswebsite',
             },
         },
         lecturers: {

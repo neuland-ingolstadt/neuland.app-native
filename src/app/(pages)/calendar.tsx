@@ -39,7 +39,7 @@ export default function CalendarPage(): JSX.Element {
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? t('common.calendar') : primussUrl
+            selectedData === 'Events' ? t('pages.calendar.link') : primussUrl
         )
     }
     useEffect(() => {

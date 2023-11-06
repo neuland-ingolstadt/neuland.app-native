@@ -22,7 +22,7 @@ export default {
             },
             footer: {
                 part1: 'All information without guarantee. Binding information is only available directly on the ',
-                part2: 'university website.',
+                part2: 'university website',
             },
         },
         lecturers: {
