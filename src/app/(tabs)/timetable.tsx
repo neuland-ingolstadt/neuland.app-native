@@ -135,7 +135,7 @@ export default function TimetableScreen(): JSX.Element {
                             (new Date().getHours() - 1) * 60
                         )
                     }}
-                    style={{ marginRight: 12 }}
+                    style={styles.headerIcon}
                 >
                     <Ionicons name="today" size={22} color={colors.primary} />
                 </TouchableOpacity>
@@ -408,5 +408,8 @@ const styles = StyleSheet.create({
     },
     allDayEventTitle: {
         fontSize: 12,
+    },
+    headerIcon: {
+        marginRight: 12,
     },
 })
