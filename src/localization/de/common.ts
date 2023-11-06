@@ -9,6 +9,7 @@ export default {
 
     dates: {
         until: 'bis',
+        notYet: 'Termin noch nicht bekannt',
         ends: 'endet',
         today: 'Heute',
         tomorrow: 'Morgen',
@@ -54,7 +55,7 @@ export default {
         },
         exam: {
             details: {
-                data: 'Datum',
+                date: 'Datum',
                 room: 'Raum',
                 seat: 'Platz',
                 tools: 'Hilfsmittel',

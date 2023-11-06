@@ -2251,64 +2251,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/intl-enumerator@npm:1.4.0":
-  version: 1.4.0
-  resolution: "@formatjs/intl-enumerator@npm:1.4.0"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: fc414bad96106b4de6102ecc3ae35608cd5f359e365598ca73979f4a4b7aca94a104e5433cf1f29ff58ee826a06f6d12ac3c3eef18a687f2e1d73de6f8fba94d
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-getcanonicallocales@npm:2.3.0, @formatjs/intl-getcanonicallocales@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@formatjs/intl-getcanonicallocales@npm:2.3.0"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: c948ccd5cc13cee9bd42f15bf7797753b4fcf1c814105b876bb49b80168bbd4921876b0b4b3c076839c6d8c35d158f5f41584b02c55fea7582e0ee74a9dbc5df
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-locale@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "@formatjs/intl-locale@npm:3.4.0"
-  dependencies:
-    "@formatjs/ecma402-abstract": "npm:1.17.2"
-    "@formatjs/intl-enumerator": "npm:1.4.0"
-    "@formatjs/intl-getcanonicallocales": "npm:2.3.0"
-    tslib: "npm:^2.4.0"
-  checksum: 09e0d43e986c046a65a063712116e67ffa7a06e496d20d75f594d17a76b0a58809c54a0ec80a5accced96bbccf76c8aa5c3147c5084fbe99acc38e25202ecb9a
-  languageName: node
-  linkType: hard
-
 "@formatjs/intl-localematcher@npm:0.4.2":
   version: 0.4.2
   resolution: "@formatjs/intl-localematcher@npm:0.4.2"
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: 2521fa48a95a80e3bedc0d444fb2ef67e1215e0bf9e6d16020c4a22af6973849a71c7a29a10cb74fc67b818967e9f8672062760e808e70873132277830e0ec67
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-pluralrules@npm:^5.2.7":
-  version: 5.2.7
-  resolution: "@formatjs/intl-pluralrules@npm:5.2.7"
-  dependencies:
-    "@formatjs/ecma402-abstract": "npm:1.17.2"
-    "@formatjs/intl-localematcher": "npm:0.4.2"
-    tslib: "npm:^2.4.0"
-  checksum: 6f4fe3ee8242907704e038953b8476c958d1d968a5e218541b4b6c937e01b3c1b824e51982b3d1af00606ced75f285db4479c51ee2d97eb102517dc7b4f1dfb5
-  languageName: node
-  linkType: hard
-
-"@formatjs/intl-relativetimeformat@npm:^11.2.7":
-  version: 11.2.7
-  resolution: "@formatjs/intl-relativetimeformat@npm:11.2.7"
-  dependencies:
-    "@formatjs/ecma402-abstract": "npm:1.17.2"
-    "@formatjs/intl-localematcher": "npm:0.4.2"
-    tslib: "npm:^2.4.0"
-  checksum: f61d0368614735a5e3d98042310081a1a5208d134efaaf62856faafa234d09d3e81b0dd6a3c1d1da175e5a7fc20074bb9e090759a81b4ed8dd9787844da34453
   languageName: node
   linkType: hard
 
@@ -9060,7 +9008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.19.3":
+"moment@npm:^2.19.3, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 844c6f3ce42862ac9467c8ca4f5e48a00750078682cc5bda1bc0e50cc7ca88e2115a0f932d65a06e4a90e26cb78892be9b3ca3dd6546ca2c4d994cebb787fc2b
@@ -9169,10 +9117,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@expo/vector-icons": "npm:^13.0.0"
-    "@formatjs/intl-getcanonicallocales": "npm:^2.3.0"
-    "@formatjs/intl-locale": "npm:^3.4.0"
-    "@formatjs/intl-pluralrules": "npm:^5.2.7"
-    "@formatjs/intl-relativetimeformat": "npm:^11.2.7"
     "@react-native-async-storage/async-storage": "npm:1.18.2"
     "@react-native-community/datetimepicker": "npm:7.2.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.1.1"
@@ -9204,6 +9148,7 @@ __metadata:
     husky: "npm:^8.0.0"
     i18next: "npm:^23.6.0"
     lint-staged: "npm:>=10"
+    moment: "npm:^2.29.4"
     prettier: "npm:3.0.0"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"

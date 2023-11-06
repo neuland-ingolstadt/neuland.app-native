@@ -7,6 +7,7 @@ export default {
         formlist: {
             allergens: 'Allergens',
             flags: 'Flags',
+            static: 'Static meals',
         },
         footer: 'We are not responsible for the correctness and accuracy of the data. Please verify the data at the restaurant before consuming. You can also check the data source of each meal in the detail view.',
     },

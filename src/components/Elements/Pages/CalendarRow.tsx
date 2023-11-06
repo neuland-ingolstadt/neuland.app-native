@@ -1,9 +1,11 @@
 import { type Colors } from '@/stores/colors'
 import {
+    formatFriendlyDateRange,
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
+import { type Calendar } from '@customTypes/data'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +17,7 @@ const CalendarRow = ({
     event,
     colors,
 }: {
-    event: any
+    event: Calendar
     colors: Colors
 }): JSX.Element => {
     const { t, i18n } = useTranslation('common')
@@ -32,10 +34,12 @@ const CalendarRow = ({
                     }}
                     numberOfLines={2}
                 >
-                    {formatFriendlyDateTimeRange(
-                        event.begin,
-                        event.end ?? null
-                    )}
+                    {event.hasHours === true
+                        ? formatFriendlyDateTimeRange(
+                              event.begin,
+                              event.end ?? null
+                          )
+                        : formatFriendlyDateRange(event.begin, event.end)}
                 </Text>
             }
             rightChildren={
@@ -79,6 +83,7 @@ const ExamRow = ({
             params: { examEntry: JSON.stringify(event) },
         })
     }
+    const { t } = useTranslation('common')
 
     return (
         <RowEntry
@@ -102,7 +107,9 @@ const ExamRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        Room: {event.rooms}
+                        {`${t('pages.exam.details.room')}: ${
+                            event.room !== undefined ? event.room : 'n/a'
+                        }`}
                     </Text>
                     <Text
                         style={{
@@ -111,7 +118,9 @@ const ExamRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        Seat: {event.seat}
+                        {`${t('pages.exam.details.seat')}: ${
+                            event.seat !== null ? event.seat : 'n/a'
+                        }`}
                     </Text>
                 </>
             }
@@ -129,6 +138,7 @@ const ExamRow = ({
                 </View>
             }
             onPress={navigateToPage}
+            maxTitleWidth={'70%'}
         />
     )
 }

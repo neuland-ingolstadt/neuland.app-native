@@ -1,4 +1,6 @@
 import i18n from '@/localization/i18n'
+import moment from 'moment'
+import 'moment/locale/de'
 
 function t(...args: any): any {
     return i18n.t(args, { ns: 'common' })
@@ -10,42 +12,27 @@ function t(...args: any): any {
  * @returns {string}
  */
 export function formatFriendlyDate(datetime: Date | string): string {
-    if (typeof datetime === 'string') {
-        datetime = new Date(datetime)
-    }
+    const date = moment(datetime)
+    const today = moment()
+    const tomorrow = moment().add(1, 'days')
 
-    const today = new Date()
-    const tomorrow = new Date()
-    tomorrow.setDate(today.getDate() + 1)
-
-    if (datetime.toDateString() === today.toDateString()) {
+    if (date.isSame(today, 'day')) {
         return t('dates.today')
-    } else if (datetime.toDateString() === tomorrow.toDateString()) {
+    } else if (date.isSame(tomorrow, 'day')) {
         return t('dates.tomorrow')
     } else {
-        const weekday = new Intl.DateTimeFormat(i18n.language, {
-            weekday: 'short',
-        }).format(datetime)
-        const day = new Intl.DateTimeFormat('de', {
-            day: 'numeric',
-            month: '2-digit',
-            year: 'numeric',
-        }).format(datetime)
-        return `${weekday}, ${day}`
+        const weekday = date.format('dd')
+        const dayMonthYear = date.locale('de').format('D.M.YYYY')
+        return `${weekday}, ${dayMonthYear}`
     }
 }
-
 /**
  * Formats a date range like "Mo., 1.10.2021 - Di., 2.10.2021"
  * @param {Date} begin
  * @param {Date} end
  * @returns {string}
  */
-export function formatFriendlyDateRange(
-    lang: string,
-    begin: Date,
-    end?: Date
-): string {
+export function formatFriendlyDateRange(begin: Date, end?: Date): string {
     let str = formatFriendlyDate(begin)
     if (end != null && begin.toDateString() !== end.toDateString()) {
         str += ' – ' + formatFriendlyDate(end)
@@ -59,19 +46,11 @@ export function formatFriendlyDateRange(
  * @returns {string}
  */
 export function formatFriendlyTime(datetime?: Date | string): string {
-    if (datetime == null) {
+    if (datetime == null || isNaN(new Date(datetime).getTime())) {
         return ''
     }
-    if (typeof datetime === 'string') {
-        datetime = new Date(datetime)
-    }
-
-    return datetime.toLocaleTimeString('de', {
-        hour: 'numeric',
-        minute: '2-digit',
-    })
+    return moment(datetime).locale('de').format('HH:mm')
 }
-
 /**
  * Formats a date range like "Mo., 1.10.2021 08:00 – 12:00" or "Mo., 1.10.2021 08:00 – Do., 2.10.2021 08:00"
  * @param {Date} begin
@@ -102,12 +81,13 @@ export function formatFriendlyDateTimeRange(
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime(
-    lang: string,
-    datetime?: Date | string
-): string {
+export function formatFriendlyDateTime(datetime?: Date | string): string {
     if (datetime == null || isNaN(new Date(datetime).getTime())) {
         return 'No date available'
+    }
+    // if year is 1970, it's probably not yet available
+    if (new Date(datetime).getFullYear() === 1970) {
+        return t('dates.notYet')
     }
     const date = formatFriendlyDate(datetime)
     const time = formatFriendlyTime(datetime)
@@ -121,24 +101,16 @@ export function formatFriendlyDateTime(
  * @returns {string}
  */
 export function formatNearDate(datetime: Date | string): string {
-    if (typeof datetime === 'string') {
-        datetime = new Date(datetime)
-    }
+    const date = moment(datetime)
+    const today = moment()
+    const tomorrow = moment().add(1, 'days')
 
-    const today = new Date()
-    const tomorrow = new Date()
-    tomorrow.setDate(today.getDate() + 1)
-
-    if (datetime.toDateString() === today.toDateString()) {
+    if (date.isSame(today, 'day')) {
         return t('dates.today')
-    } else if (datetime.toDateString() === tomorrow.toDateString()) {
+    } else if (date.isSame(tomorrow, 'day')) {
         return t('dates.tomorrow')
     } else {
-        return datetime.toLocaleString('de', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'numeric',
-        })
+        return date.locale('de').format('dddd, D.M.')
     }
 }
 
@@ -148,24 +120,12 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-    const rtl = new Intl.RelativeTimeFormat(i18n.language, {
-        numeric: 'auto',
-        style: 'long',
-    })
-    const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
-    if (Math.abs(weeks) > 0) {
-        return rtl.format(weeks, 'week')
-    }
-    const days = (delta / (24 * 60 * 60 * 1000)) | 0
-    if (Math.abs(days) > 0) {
-        return rtl.format(days, 'day')
-    }
-    const hours = (delta / (60 * 60 * 1000)) | 0
-    if (Math.abs(hours) > 0) {
-        return rtl.format(hours, 'hour')
-    }
-    const minutes = (delta / (60 * 1000)) | 0
-    return rtl.format(minutes, 'minute')
+    moment.relativeTimeThreshold('d', 13)
+    moment.relativeTimeThreshold('w', 4)
+    moment.locale(i18n.language)
+    const duration = moment.duration(delta)
+    const relative = moment().add(duration)
+    return relative.fromNow()
 }
 
 /**
@@ -174,27 +134,18 @@ function formatFriendlyTimeDelta(delta: number): string {
  * @returns {string}
  */
 export function formatFriendlyRelativeTime(date: Date): string {
-    if (date == null || isNaN(new Date(date).getTime())) {
+    // if date is 1.1.1970, it's probably null
+    if (date.getFullYear() === 1970) {
         return ''
     }
-    const startOfDay = new Date()
-    startOfDay.setHours(0)
-    startOfDay.setMinutes(0)
-    startOfDay.setSeconds(0)
-    startOfDay.setMilliseconds(0)
 
-    const deltaFromNow = date.getTime() - Date.now()
-    const deltaFromStartOfDay = date.getTime() - startOfDay.getTime()
-
-    // when the event is more than 24h away, use the start of the day as a reference
-    // (because that is how humans measure time, apparently)
-    if (Math.abs(deltaFromNow) < 86400000) {
-        return formatFriendlyTimeDelta(deltaFromNow)
-    } else if (deltaFromNow > 0) {
-        return formatFriendlyTimeDelta(deltaFromStartOfDay)
-    } else {
-        return formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000)
+    if (isNaN(date.getTime())) {
+        return ''
     }
+
+    const deltaFromNow = moment(date).diff(moment())
+
+    return formatFriendlyTimeDelta(deltaFromNow)
 }
 
 /**

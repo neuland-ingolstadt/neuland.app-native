@@ -56,7 +56,7 @@ export default function RootLayout(): JSX.Element {
                         options={{
                             title: t('navigation.flags'),
                             headerSearchBarOptions: {
-                                placeholder: 'Search flags',
+                                placeholder: t('navigation.flagsSearch'),
                                 ...Platform.select({
                                     android: {
                                         headerIconColor: colorText,
@@ -88,7 +88,7 @@ export default function RootLayout(): JSX.Element {
                             title: t('navigation.allergens'),
 
                             headerSearchBarOptions: {
-                                placeholder: 'Search allergens',
+                                placeholder: t('navigation.allergensSearch'),
                                 ...Platform.select({
                                     android: {
                                         headerIconColor: colorText,

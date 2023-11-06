@@ -7,6 +7,7 @@ export default {
         formlist: {
             allergens: 'Allergene',
             flags: 'Kennzeichnungen',
+            static: 'Dauerhaufte Gerichte',
         },
         footer: 'Wir übernehmen keine Verantwortung für die Korrektheit und Genauigkeit der Daten. Bitte überprüfe die Daten im Restaurant vor dem Verzehr. Du kannst auch die Datenquelle jeder Mahlzeit in der Detailansicht überprüfen.',
     },

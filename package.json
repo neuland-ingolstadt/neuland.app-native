@@ -20,10 +20,6 @@
     },
     "dependencies": {
         "@expo/vector-icons": "^13.0.0",
-        "@formatjs/intl-getcanonicallocales": "^2.3.0",
-        "@formatjs/intl-locale": "^3.4.0",
-        "@formatjs/intl-pluralrules": "^5.2.7",
-        "@formatjs/intl-relativetimeformat": "^11.2.7",
         "@react-native-async-storage/async-storage": "1.18.2",
         "@react-native-community/datetimepicker": "7.2.0",
         "@types/color": "^3.0.5",
@@ -41,6 +37,7 @@
         "expo-status-bar": "^1.6.0",
         "expo-updates": "~0.18.17",
         "i18next": "^23.6.0",
+        "moment": "^2.29.4",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-i18next": "^13.3.1",

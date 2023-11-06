@@ -10,6 +10,7 @@ export default {
         until: 'until',
         ends: 'ends',
         today: 'Today',
+        notYet: 'Date not yet available',
         tomorrow: 'Tomorrow',
         thisWeek: 'This Week',
         nextWeek: 'Next Week',
@@ -53,7 +54,7 @@ export default {
         },
         exam: {
             details: {
-                data: 'Date',
+                date: 'Date',
                 room: 'Room',
                 seat: 'Seat',
                 tools: 'Tools',
@@ -63,7 +64,7 @@ export default {
                 type: 'Type',
                 examiner: 'Examiner',
                 registration: 'Registered',
-                notes: '    Notes',
+                notes: 'Notes',
             },
         },
         map: {

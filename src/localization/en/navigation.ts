@@ -6,6 +6,8 @@ export default {
         settings: 'Settings',
         preferences: 'Preferences',
         flags: 'Flags',
+        flagsSearch: 'Search flags',
+        allergensSearch: 'Search allergens',
         allergens: 'Allergens',
         details: 'Details',
         theme: 'Accent Color',

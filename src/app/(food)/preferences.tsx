@@ -103,7 +103,7 @@ export default function FoodPreferences(): JSX.Element {
                 </SectionView>
                 <SectionView title={'Filter'}>
                     <SingleSectionPicker
-                        title={'Show fixed meals'}
+                        title={t('preferences.formlist.static')}
                         selectedItem={showStatic}
                         action={toggleShowStatic}
                     />

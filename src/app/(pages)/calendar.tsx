@@ -5,6 +5,7 @@ import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type Exam, calendar, loadExamList } from '@/utils/calendar-utils'
+import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -110,7 +111,10 @@ export default function CalendarPage(): JSX.Element {
                         data.map((item, index) => (
                             <React.Fragment key={index}>
                                 {selectedData === 'Events' ? (
-                                    <CalendarRow event={item} colors={colors} />
+                                    <CalendarRow
+                                        event={item as Calendar}
+                                        colors={colors}
+                                    />
                                 ) : (
                                     <>
                                         {loadingState ===
