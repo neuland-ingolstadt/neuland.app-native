@@ -1,5 +1,6 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
@@ -92,7 +93,7 @@ const CalendarCard = (): JSX.Element => {
                                     {/* Always use .de or .en? */}
                                     {typeof event.name === 'object'
                                         ? event.name[
-                                              i18n.language as 'en' | 'de'
+                                              i18n.language as LanguageKey
                                           ]
                                         : event.name}
                                 </Text>

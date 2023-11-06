@@ -1,5 +1,6 @@
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import allergenMap from '@/data/allergens.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { getStatusBarStyle } from '@/utils/ui-utils'
@@ -19,7 +20,7 @@ export default function FoodPreferences(): JSX.Element {
         .filter(([key]) => key !== '_source')
         .map(([key, value]) => ({
             key,
-            title: value[i18n.language as 'en' | 'de'],
+            title: value[i18n.language as LanguageKey],
         }))
 
     if (q != null) {

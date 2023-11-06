@@ -1,5 +1,6 @@
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import changelogData from '@/data/changelog.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
@@ -61,14 +62,14 @@ export default function OnboardingScreen(): JSX.Element {
                                 ({ title, description, icon }) => (
                                     <WhatsNewBox
                                         key={
-                                            title[i18n.language as 'en' | 'de']
+                                            title[i18n.language as LanguageKey]
                                         }
                                         title={
-                                            title[i18n.language as 'en' | 'de']
+                                            title[i18n.language as LanguageKey]
                                         }
                                         description={
                                             description[
-                                                i18n.language as 'en' | 'de'
+                                                i18n.language as LanguageKey
                                             ]
                                         }
                                         icon={icon}

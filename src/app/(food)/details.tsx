@@ -1,6 +1,7 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
@@ -72,7 +73,7 @@ export default function FoodDetail(): JSX.Element {
                 meal?.flags?.map((flag: string) => ({
                     title:
                         flagMap[flag as keyof typeof flagMap]?.[
-                            i18n.language as 'en' | 'de'
+                            i18n.language as LanguageKey
                         ] ?? flag,
                     disabled: true,
                     icon: preferencesSelection.includes(flag)
@@ -91,7 +92,7 @@ export default function FoodDetail(): JSX.Element {
                     .map((allergen: string) => ({
                         title:
                             allergenMap[allergen as keyof typeof allergenMap]?.[
-                                i18n.language as 'en' | 'de'
+                                i18n.language as LanguageKey
                             ] ?? allergen,
                         disabled: true,
                         icon: allergenSelection.includes(allergen)
@@ -190,7 +191,7 @@ export default function FoodDetail(): JSX.Element {
             header: t('details.formlist.variations'),
             items:
                 meal?.variations?.map((variant) => ({
-                    title: variant.name[i18n.language as 'en' | 'de'],
+                    title: variant.name[i18n.language as LanguageKey],
                     value:
                         (variant.additional ? '+ ' : '') +
                         formatPrice(variant.prices[userKind]),
@@ -243,7 +244,7 @@ export default function FoodDetail(): JSX.Element {
                             void Share.share({
                                 message: t('details.share.message', {
                                     meal: meal?.name[
-                                        i18n.language as 'en' | 'de'
+                                        i18n.language as LanguageKey
                                     ],
                                     price: formatPrice(meal?.prices[userKind]),
                                     location: meal?.restaurant,

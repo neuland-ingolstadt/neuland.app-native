@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import {
     formatFriendlyDateRange,
@@ -24,7 +25,7 @@ const CalendarRow = ({
 
     return (
         <RowEntry
-            title={event.name[i18n.language as 'en' | 'de']}
+            title={event.name[i18n.language as LanguageKey]}
             colors={colors}
             leftChildren={
                 <Text

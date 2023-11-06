@@ -1,4 +1,5 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { formatISODate } from '@/utils/date-utils'
@@ -120,7 +121,7 @@ const EventsCard = (): JSX.Element => {
                     todayEntries.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
-                        name: x.name[i18n.language as 'en' | 'de'],
+                        name: x.name[i18n.language as LanguageKey],
                         price: getUserSpecificPrice(x, userKind),
                     })),
                     ...(hiddenEntriesCount > 0

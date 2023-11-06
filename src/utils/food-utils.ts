@@ -1,6 +1,7 @@
 import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
+import { type LanguageKey } from '@/localization/i18n'
 import {
     USER_EMPLOYEE,
     USER_GUEST,
@@ -131,7 +132,7 @@ export function convertRelevantFlags(
 ): string[] {
     const relevantFlags = flags?.filter((flag) => selectedFlags?.includes(flag))
     const convertedFlags = relevantFlags?.map(
-        (flag) => flapMap[flag as keyof typeof flapMap][language as 'de' | 'en']
+        (flag) => flapMap[flag as keyof typeof flapMap][language as LanguageKey]
     )
     return convertedFlags
 }

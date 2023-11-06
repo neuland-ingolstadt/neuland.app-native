@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
@@ -167,7 +168,7 @@ export default function TimetableScreen(): JSX.Element {
                 id: index,
                 startDate: entry.begin,
                 endDate: entry.end ?? entry.begin,
-                title: entry.name[i18n.language as 'en' | 'de'],
+                title: entry.name[i18n.language as LanguageKey],
                 color: calendarColor.hex(),
                 description: '',
                 eventKind: 'standard' as 'standard' | 'block',

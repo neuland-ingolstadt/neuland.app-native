@@ -10,6 +10,8 @@ const resources = {
     de,
 }
 
+export type LanguageKey = keyof typeof resources
+
 void i18n.use(initReactI18next).init({
     fallbackLng: 'en',
     lng: getLocales()[0].languageCode,

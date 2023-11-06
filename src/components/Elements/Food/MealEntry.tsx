@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import {
@@ -72,7 +73,7 @@ export const MealEntry = ({
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
                 >
-                    {meal.name[i18n.language as 'de' | 'en']}
+                    {meal.name[i18n.language as LanguageKey]}
                 </Text>
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailsColumns}>
