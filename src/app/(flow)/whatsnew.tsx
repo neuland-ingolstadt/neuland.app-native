@@ -3,10 +3,11 @@ import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/stores/colors'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, getStatusBarStyle } from '@/utils/ui-utils'
 import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
@@ -21,6 +22,7 @@ export default function OnboardingScreen(): JSX.Element {
 
     return (
         <View style={styles.page}>
+            <StatusBar style={getStatusBarStyle()} />
             <View style={styles.titleBox}>
                 <Text
                     style={[

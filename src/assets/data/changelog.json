@@ -35,6 +35,41 @@
                 },
                 "icon": "newspaper-outline"
             }
+        ],
+        "0.3": [
+            {
+                "title": {
+                    "de": "Lokalisierung (DE / EN)",
+                    "en": "Localization (DE / EN)"
+                },
+                "description": {
+                    "de": "Die App ist nun in zwei Sprachen verfügbar: Deutsch und Englisch. Die Sprache kann in den Einstellungen geändert werden.",
+                    "en": "The app is now available in two languages: German and English. The language can be changed in the settings."
+                },
+                "icon": "language-outline"
+            },
+            {
+                "title": {
+                    "de": "Studenplan",
+                    "en": "Timetable"
+                },
+                "description": {
+                    "de": "Dein Stundenplan ist nun für angemeldete Nutzer verfügbar. Er zeigt zudem wichtige Kalendar Termine und Fristen an.",
+                    "en": "Your timetable is now available for logged in users. It also shows important calendar dates and deadlines."
+                },
+                "icon": "calendar-outline"
+            },
+            {
+                "title": {
+                    "de": "Essens Variationen",
+                    "en": "Food Variations"
+                },
+                "description": {
+                    "de": "Verfügbare Variationen werden nun in den Detaisl angezeigt. Außerdem kann nach dauerhaft verfügbaren Gerichten gefiltert werden.",
+                    "en": "Available variations are now displayed in the details. In addition, you can filter by permanently available dishes."
+                },
+                "icon": "fast-food-outline"
+            }
         ]
     }
 }
