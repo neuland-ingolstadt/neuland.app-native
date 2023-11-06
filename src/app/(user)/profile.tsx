@@ -10,6 +10,7 @@ import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Alert,
     Linking,
@@ -26,6 +27,7 @@ export default function Profile(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { toggleUserKind } = React.useContext(UserKindContext)
+    const { t } = useTranslation('settings')
     const logout = async (): Promise<void> => {
         try {
             toggleUserKind(undefined)
@@ -65,7 +67,7 @@ export default function Profile(): JSX.Element {
             Toast.hide(toast)
         }
 
-        toast = Toast.show('copied to clipboard', {
+        toast = Toast.show(t('toast.clipboard', { ns: 'common' }), {
             duration: Toast.durations.SHORT,
             position: 50,
             shadow: false,
@@ -77,15 +79,15 @@ export default function Profile(): JSX.Element {
 
     const logoutAlert = (): void => {
         Alert.alert(
-            'Confirm',
-            'This will log you out of the app and clear all your data.',
+            t('profile.logout.alert.title'),
+            t('profile.logout.alert.message'),
             [
                 {
-                    text: 'Cancel',
+                    text: t('profile.logout.alert.cancel'),
                     style: 'cancel',
                 },
                 {
-                    text: 'Logout',
+                    text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
                         logout().catch((e) => {
@@ -103,7 +105,7 @@ export default function Profile(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: 'User',
+            header: t('profile.formlist.user.title'),
             items: [
                 {
                     title: 'Name',
@@ -111,21 +113,21 @@ export default function Profile(): JSX.Element {
                     disabled: true,
                 },
                 {
-                    title: 'Matriculation Number',
+                    title: t('profile.formlist.user.matrical'),
                     value: userData.mtknr,
                     onPress: async () => {
                         await copyToClipboard(userData.mtknr)
                     },
                 },
                 {
-                    title: 'Library Number',
+                    title: t('profile.formlist.user.library'),
                     value: userData.bibnr,
                     onPress: async () => {
                         await copyToClipboard(userData.bibnr)
                     },
                 },
                 {
-                    title: 'Printer Credits',
+                    title: t('profile.formlist.user.printer'),
                     value: userData.pcounter,
                     disabled: true,
                 },
@@ -133,15 +135,15 @@ export default function Profile(): JSX.Element {
         },
 
         {
-            header: 'Study',
+            header: t('profile.formlist.study.title'),
             items: [
                 {
-                    title: 'Degree',
+                    title: t('profile.formlist.study.degree'),
                     value: userData.fachrich + ' (' + userData.stg + ')',
                     disabled: true,
                 },
                 {
-                    title: 'Exam Regulations',
+                    title: t('profile.formlist.study.spo'),
                     value: userData.pvers,
                     onPress: async () => {
                         if (userData.po_url.length > 0) {
@@ -150,14 +152,14 @@ export default function Profile(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Study Group',
+                    title: t('profile.formlist.study.group'),
                     value: userData.stgru,
                     disabled: true,
                 },
             ],
         },
         {
-            header: 'Contact',
+            header: t('profile.formlist.contact.title'),
             items: [
                 {
                     title: 'THI Email',
@@ -174,19 +176,19 @@ export default function Profile(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Phone',
+                    title: t('profile.formlist.contact.phone'),
                     value: userData.telefon,
                     onPress: async () => {
                         await copyToClipboard(userData.telefon)
                     },
                 },
                 {
-                    title: 'Street',
+                    title: t('profile.formlist.contact.street'),
                     value: userData.str,
                     disabled: true,
                 },
                 {
-                    title: 'City',
+                    title: t('profile.formlist.contact.city'),
                     value: userData.plz + ' ' + userData.ort,
                     disabled: true,
                 },

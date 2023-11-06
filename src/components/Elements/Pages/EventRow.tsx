@@ -1,11 +1,12 @@
+import clubs from '@/data/clubs.json'
 import { type Colors } from '@/stores/colors'
-import clubs from '@/stores/data/clubs.json'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
@@ -19,6 +20,7 @@ const CLEventRow = ({
     event: any
 }): JSX.Element => {
     const club = clubs.find((club) => club.club === event.organizer)
+    const { t } = useTranslation('common')
     return (
         <RowEntry
             title={event.title}
@@ -98,7 +100,9 @@ const CLEventRow = ({
                                 <>
                                     {event.end != null &&
                                     event.begin < new Date()
-                                        ? `bis ${formatFriendlyRelativeTime(
+                                        ? `${t(
+                                              'dates.until'
+                                          )} ${formatFriendlyRelativeTime(
                                               event.end
                                           )}`
                                         : formatFriendlyRelativeTime(
@@ -110,6 +114,7 @@ const CLEventRow = ({
                     </View>
                 </>
             }
+            maxTitleWidth={'75%'}
         />
     )
 }

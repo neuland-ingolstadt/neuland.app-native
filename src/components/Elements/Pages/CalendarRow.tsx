@@ -1,25 +1,31 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import {
+    formatFriendlyDateRange,
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
+import { type Calendar } from '@customTypes/data'
 import { router } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
 
-const EventRow = ({
+const CalendarRow = ({
     event,
     colors,
 }: {
-    event: any
+    event: Calendar
     colors: Colors
 }): JSX.Element => {
+    const { t, i18n } = useTranslation('common')
+
     return (
         <RowEntry
-            title={event.name.en}
+            title={event.name[i18n.language as LanguageKey]}
             colors={colors}
             leftChildren={
                 <Text
@@ -29,10 +35,12 @@ const EventRow = ({
                     }}
                     numberOfLines={2}
                 >
-                    {formatFriendlyDateTimeRange(
-                        event.begin,
-                        event.end ?? null
-                    )}
+                    {event.hasHours === true
+                        ? formatFriendlyDateTimeRange(
+                              event.begin,
+                              event.end ?? null
+                          )
+                        : formatFriendlyDateRange(event.begin, event.end)}
                 </Text>
             }
             rightChildren={
@@ -47,7 +55,9 @@ const EventRow = ({
                         {event.begin != null && (
                             <>
                                 {event.end != null && event.begin < new Date()
-                                    ? `ends ${formatFriendlyRelativeTime(
+                                    ? `${t(
+                                          'dates.ends'
+                                      )} ${formatFriendlyRelativeTime(
                                           event.end
                                       )}`
                                     : formatFriendlyRelativeTime(event.begin)}
@@ -56,6 +66,7 @@ const EventRow = ({
                     </Text>
                 </View>
             }
+            maxTitleWidth={'60%'}
         />
     )
 }
@@ -73,6 +84,7 @@ const ExamRow = ({
             params: { examEntry: JSON.stringify(event) },
         })
     }
+    const { t } = useTranslation('common')
 
     return (
         <RowEntry
@@ -96,7 +108,9 @@ const ExamRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        Room: {event.rooms}
+                        {`${t('pages.exam.details.room')}: ${
+                            event.room !== undefined ? event.room : 'n/a'
+                        }`}
                     </Text>
                     <Text
                         style={{
@@ -105,7 +119,9 @@ const ExamRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        Seat: {event.seat}
+                        {`${t('pages.exam.details.seat')}: ${
+                            event.seat !== null ? event.seat : 'n/a'
+                        }`}
                     </Text>
                 </>
             }
@@ -123,8 +139,9 @@ const ExamRow = ({
                 </View>
             }
             onPress={navigateToPage}
+            maxTitleWidth={'70%'}
         />
     )
 }
 
-export { EventRow, ExamRow }
+export { CalendarRow, ExamRow }

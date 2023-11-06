@@ -1,12 +1,27 @@
+import i18n from '@/localization/i18n'
 import Provider from '@/stores/provider'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
+    const { t } = useTranslation('navigation')
+
+    useEffect(() => {
+        const loadLanguage = async (): Promise<void> => {
+            const savedLanguage = await AsyncStorage.getItem('language')
+            if (savedLanguage !== null) {
+                await i18n.changeLanguage(savedLanguage)
+            }
+        }
+
+        void loadLanguage()
+    }, [])
     return (
         <>
             <Provider>
@@ -28,7 +43,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/settings"
                         options={{
-                            title: 'Settings',
+                            title: t('navigation.settings'),
                             animation: 'slide_from_right',
                         }}
                     />
@@ -42,7 +57,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/preferences"
                         options={{
-                            title: 'Preferences',
+                            title: t('navigation.preferences'),
                             animation: 'slide_from_right',
                         }}
                     />
@@ -50,9 +65,9 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/flags"
                         options={{
-                            title: 'Flags',
+                            title: t('navigation.flags'),
                             headerSearchBarOptions: {
-                                placeholder: 'Search flags',
+                                placeholder: t('navigation.flagsSearch'),
                                 ...Platform.select({
                                     android: {
                                         headerIconColor: colorText,
@@ -81,10 +96,10 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/allergens"
                         options={{
-                            title: 'Allergens',
+                            title: t('navigation.allergens'),
 
                             headerSearchBarOptions: {
-                                placeholder: 'Search allergens',
+                                placeholder: t('navigation.allergensSearch'),
                                 ...Platform.select({
                                     android: {
                                         headerIconColor: colorText,
@@ -114,7 +129,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/details"
                         options={{
-                            title: 'Details',
+                            title: t('navigation.details'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -128,21 +143,21 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/theme"
                         options={{
-                            title: 'Accent Color',
+                            title: t('navigation.theme'),
                             animation: 'slide_from_right',
                         }}
                     />
                     <Stack.Screen
                         name="(user)/profile"
                         options={{
-                            title: 'Profile',
+                            title: t('navigation.profile'),
                             animation: 'slide_from_right',
                         }}
                     />
                     <Stack.Screen
                         name="(user)/about"
                         options={{
-                            title: 'About',
+                            title: t('navigation.about'),
                             animation: 'slide_from_right',
                         }}
                     />
@@ -156,7 +171,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(map)/advanced"
                         options={{
-                            title: 'Advanced Search',
+                            title: t('navigation.advancedSearch'),
                             animation: 'slide_from_right',
                         }}
                     />
@@ -174,7 +189,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(pages)/calendar"
                         options={{
-                            title: 'Calendar',
+                            title: t('navigation.calendar'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -185,7 +200,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(pages)/exam"
                         options={{
-                            title: 'Exam Details',
+                            title: t('navigation.examDetails'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -199,14 +214,14 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(pages)/lecturers"
                         options={{
-                            title: 'Lecturers',
+                            title: t('navigation.lecturers.title'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
                                 },
                             }),
                             headerSearchBarOptions: {
-                                placeholder: 'Search all lecturers',
+                                placeholder: t('navigation.lecturers.search'),
                                 ...Platform.select({
                                     android: {
                                         headerIconColor: colorText,
@@ -228,7 +243,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(pages)/lecturer"
                         options={{
-                            title: 'Lecturer Details',
+                            title: t('navigation.lecturer'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -242,7 +257,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(pages)/mobility"
                         options={{
-                            title: 'Mobility',
+                            title: t('navigation.mobility'),
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',

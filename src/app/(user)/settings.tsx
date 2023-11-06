@@ -6,12 +6,16 @@ import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Alert,
     Linking,
+    Platform,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -37,6 +41,30 @@ export default function Settings(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const nameColor = getNameColor(fullName)
+    const { t, i18n } = useTranslation(['settings'])
+
+    const languageAlert = (): void => {
+        const newLocale = i18n.language === 'en' ? 'de' : 'en'
+
+        Alert.alert(
+            t('menu.formlist.language.title'),
+            t('menu.formlist.language.message'),
+            [
+                {
+                    text: t('profile.logout.alert.cancel'),
+                    style: 'default',
+                },
+                {
+                    text: t('menu.formlist.language.confirm'),
+                    style: 'destructive',
+                    onPress: () => {
+                        void AsyncStorage.setItem('language', newLocale)
+                        void i18n.changeLanguage(newLocale)
+                    },
+                },
+            ]
+        )
+    }
 
     const loadData = async (): Promise<void> => {
         try {
@@ -70,10 +98,10 @@ export default function Settings(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: 'Preferences',
+            header: t('menu.formlist.preferences.title'),
             items: [
                 {
-                    title: 'Appearance',
+                    title: t('menu.formlist.preferences.theme'),
                     icon: 'color-palette-outline',
                     onPress: () => {
                         router.push('(user)/theme')
@@ -87,20 +115,24 @@ export default function Settings(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Food',
+                    title: t('menu.formlist.preferences.food'),
                     icon: 'restaurant-outline',
                     onPress: () => {
                         router.push('(food)/preferences')
                     },
                 },
-                // {
-                //     title: 'Language',
-                //     icon: 'language-outline',
+                {
+                    title: t('menu.formlist.preferences.language'),
+                    icon: 'language-outline',
 
-                //     onPress: async () => {
-                //         await Linking.openSettings()
-                //     },
-                // },
+                    onPress: async () => {
+                        if (Platform.OS === 'ios') {
+                            await Linking.openSettings()
+                        } else {
+                            languageAlert()
+                        }
+                    },
+                },
             ],
         },
         {
@@ -129,17 +161,17 @@ export default function Settings(): JSX.Element {
             ],
         },
         {
-            header: 'Legal',
+            header: t('menu.formlist.legal.title'),
             items: [
                 {
-                    title: 'About',
+                    title: t('menu.formlist.legal.about'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(user)/about')
                     },
                 },
                 {
-                    title: 'Rate the app',
+                    title: t('menu.formlist.legal.rate'),
                     icon: 'star-outline',
                     onPress: () => {
                         alert('Not available yet')
@@ -207,9 +239,8 @@ export default function Settings(): JSX.Element {
                             ) : isLoaded === LoadingState.GUEST ? (
                                 <>
                                     <NameBox
-                                        title="Sign in"
-                                        subTitle1="Sign in to unlock all features of
-                                        the app"
+                                        title={t('menu.guest.title')}
+                                        subTitle1={t('menu.guest.subtitle')}
                                         subTitle2={''}
                                     >
                                         <Avatar
@@ -273,7 +304,7 @@ export default function Settings(): JSX.Element {
                     { color: colors.labelSecondaryColor },
                 ]}
             >
-                {`© ${new Date().getFullYear()} by Neuland Ingolstadt e.V.`}
+                {t('menu.copyright', { year: new Date().getFullYear() })}
             </Text>
         </ScrollView>
     )

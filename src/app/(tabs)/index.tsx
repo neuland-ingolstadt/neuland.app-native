@@ -33,7 +33,7 @@ export default function Screen(): JSX.Element {
                 <Stack2.Screen
                     name="Home"
                     options={{
-                        title: 'Neuland App',
+                        title: 'Neuland Next',
                         headerShown: true,
                         headerLargeTitle: true,
                         headerRight: () => (

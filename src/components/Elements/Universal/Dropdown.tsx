@@ -53,12 +53,12 @@ const Dropdown: React.FC<Props> = ({
             }}
             rowTextStyle={{
                 color: colors.text,
-                fontSize: 17,
+                fontSize: 15,
             }}
             rowStyle={{
                 backgroundColor: colors.datePickerBackground,
                 borderBottomColor: colors.labelTertiaryColor,
-                height: 45,
+                height: 38,
             }}
             dropdownStyle={{
                 borderRadius: 8,

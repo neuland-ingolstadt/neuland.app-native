@@ -1,5 +1,5 @@
+import changelog from '@/data/changelog.json'
 import { type Colors } from '@/stores/colors'
-import changelog from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
@@ -7,6 +7,7 @@ import { type Theme, useTheme } from '@react-navigation/native'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { TouchableOpacity } from 'react-native'
 
 import packageInfo from '../../../package.json'
@@ -16,6 +17,7 @@ export default function HomeLayout(): JSX.Element {
     const router = useRouter()
     const colors = theme.colors as Colors
     const flow = React.useContext(FlowContext)
+    const { t } = useTranslation('navigation')
 
     if (flow.isOnboarded === false) {
         console.log('redirecting to onboard')
@@ -61,7 +63,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="timetable"
                     options={{
-                        title: 'Timetable',
+                        title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="time" size={size} color={color} />
                         ),
@@ -71,7 +73,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="map"
                     options={{
-                        title: 'Map',
+                        title: t('navigation.map'),
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="map" size={size} color={color} />
                         ),
@@ -81,7 +83,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="food"
                     options={{
-                        title: 'Food',
+                        title: t('navigation.food'),
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons
                                 name="restaurant-sharp"

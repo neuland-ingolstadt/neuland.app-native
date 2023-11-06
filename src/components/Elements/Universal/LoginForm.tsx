@@ -9,6 +9,7 @@ import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Dimensions,
@@ -27,7 +28,6 @@ import Toast from 'react-native-root-toast'
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
     const [floating, setFloating] = useState(false)
-
     useEffect(() => {
         const onKeyboardWillChangeFrame = (event: any): void => {
             setFloating(event.endCoordinates.width !== windowWidth)
@@ -46,6 +46,9 @@ const useIsFloatingKeyboard = (): boolean => {
 }
 
 const LoginForm = (): JSX.Element => {
+    const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+    const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
+    const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [infoMsg, setInfoMsg] = useState('')
@@ -55,7 +58,7 @@ const LoginForm = (): JSX.Element => {
     const { toggleOnboarded, toggleUpdated } = React.useContext(FlowContext)
     const { toggleUserKind } = React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
-
+    const { t } = useTranslation('flow')
     const floatingKeyboard = useIsFloatingKeyboard()
 
     const resetInfo = (): void => {
@@ -74,7 +77,7 @@ const LoginForm = (): JSX.Element => {
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
 
-            Toast.show('Login successful', {
+            Toast.show(t('login.toast'), {
                 duration: Toast.durations.LONG,
                 position: 50,
                 shadow: false,
@@ -86,8 +89,18 @@ const LoginForm = (): JSX.Element => {
         } catch (e: any) {
             const message = trimErrorMsg(e.message)
             setLoading(false)
-            setNotice('Login failed')
-            setInfoMsg(message)
+            setNotice(t('login.alert.error.title'))
+            if (message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
+                setInfoMsg(t('login.alert.error.wrongCredentials'))
+            } else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
+                setInfoMsg(t('login.alert.error.noConnection'))
+            } else if (
+                KNOWN_BACKEND_ERRORS.some((error) => e.message.includes(error))
+            ) {
+                setInfoMsg(t('login.alert.error.backend'))
+            } else {
+                setInfoMsg(t('login.alert.error.generic'))
+            }
         }
     }
 
@@ -109,15 +122,12 @@ const LoginForm = (): JSX.Element => {
         if (Platform.OS === 'ios') {
             const loadSavedData = async (): Promise<void> => {
                 const savedUsername = await load('username')
-                console.log(savedUsername)
                 const savedPassword = await load('password')
                 if (savedUsername !== null && savedPassword !== null) {
                     setUsername(savedUsername)
                     setPassword(savedPassword)
-                    setNotice('Credentials restored')
-                    setInfoMsg(
-                        'Previous login data was found in the iOS keychain.'
-                    )
+                    setNotice(t('login.alert.restored.title'))
+                    setInfoMsg(t('login.alert.restored.message'))
                 }
             }
 
@@ -145,7 +155,7 @@ const LoginForm = (): JSX.Element => {
                                 adjustsFontSizeToFit={true}
                                 numberOfLines={1}
                             >
-                                Sign in with your THI account
+                                {t('login.title')}
                             </Text>
 
                             {infoMsg !== '' ? (
@@ -162,7 +172,7 @@ const LoginForm = (): JSX.Element => {
                                         color: colors.labelColor,
                                     }}
                                 >
-                                    THI Username
+                                    {t('login.username')}
                                 </Text>
                                 <View
                                     style={[
@@ -198,7 +208,7 @@ const LoginForm = (): JSX.Element => {
                                         color: colors.labelColor,
                                     }}
                                 >
-                                    Password
+                                    {t('login.password')}
                                 </Text>
                                 <View
                                     style={[
@@ -215,7 +225,7 @@ const LoginForm = (): JSX.Element => {
                                             { color: colors.text },
                                         ]}
                                         placeholderTextColor={colors.labelColor}
-                                        placeholder="Password"
+                                        placeholder={t('login.password')}
                                         defaultValue={password}
                                         returnKeyType="done"
                                         onChangeText={(text) => {
@@ -266,7 +276,7 @@ const LoginForm = (): JSX.Element => {
                                             ),
                                         }}
                                     >
-                                        Sign in
+                                        {t('login.button')}
                                     </Text>
                                 )}
                             </TouchableOpacity>
@@ -287,7 +297,7 @@ const LoginForm = (): JSX.Element => {
                                         ]}
                                         allowFontScaling={true}
                                     >
-                                        or continue as guest
+                                        {t('login.guest')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -354,14 +364,6 @@ const styles = StyleSheet.create({
     guestText: {
         fontSize: 14,
         marginTop: 10,
-    },
-    checkboxChecked: {
-        backgroundColor: 'blue',
-        borderColor: 'blue',
-    },
-    checkboxUnchecked: {
-        backgroundColor: 'white',
-        borderColor: 'black',
     },
 })
 

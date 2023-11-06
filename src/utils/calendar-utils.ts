@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import rawCalendar from '@/stores/data/calendar.json'
+import rawCalendar from '@/data/calendar.json'
 import { type Calendar } from '@customTypes/data'
 import { type Exams } from '@customTypes/thi-api'
 

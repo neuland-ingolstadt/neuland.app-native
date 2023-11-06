@@ -1,16 +1,17 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import changelogData from '@/data/changelog.json'
 import { type Colors } from '@/stores/colors'
-import changelogData from '@/stores/data/changelog.json'
 import { type FormListSections } from '@customTypes/components'
 import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const changelog: Changelog = changelogData
-
+    const { t } = useTranslation(['settings'])
     const sorted = {
         version: Object.keys(changelog.version)
             .sort((a, b) => Number(b) - Number(a))
@@ -46,7 +47,7 @@ export default function Theme(): JSX.Element {
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}
                     >
-                        To see the full changelog, check out the commits on{' '}
+                        {t('changelog.footer')}
                         <Text
                             style={{ color: colors.primary }}
                             onPress={() => {

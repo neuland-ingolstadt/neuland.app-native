@@ -5,6 +5,7 @@ import { type CLEvents } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
@@ -12,7 +13,7 @@ import BaseCard from './BaseCard'
 const EventsCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
-
+    const { t } = useTranslation('navigation')
     const [events, setEvents] = useState<CLEvents[]>([])
     enum LoadingState {
         LOADING,
@@ -35,17 +36,19 @@ const EventsCard = (): JSX.Element => {
         const campusLifeEvents =
             (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
 
-        const newEvents = campusLifeEvents.map((x) => ({
-            ...x,
-            begin: x.begin !== null ? new Date(x.begin) : null,
-            end: x.end !== null ? new Date(x.end) : null,
-        }))
+        const newEvents = campusLifeEvents
+            .map((x) => ({
+                ...x,
+                begin: x.begin !== null ? new Date(x.begin) : null,
+                end: x.end !== null ? new Date(x.end) : null,
+            }))
+            .filter((x) => x.end === null || x.end > new Date())
         setEvents(newEvents.slice(0, 2))
     }
 
     return (
         <BaseCard
-            title="Events"
+            title="events"
             icon="bonfire"
             onPress={() => {
                 router.push('events')
@@ -75,7 +78,9 @@ const EventsCard = (): JSX.Element => {
                                         ]}
                                         numberOfLines={1}
                                     >
-                                        by {event.organizer}
+                                        {t('cards.events.by', {
+                                            name: event.organizer,
+                                        })}
                                     </Text>
                                 </View>
                             </View>

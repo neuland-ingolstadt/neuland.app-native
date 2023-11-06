@@ -1,12 +1,15 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import { EventRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
+import { CalendarRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type Exam, calendar, loadExamList } from '@/utils/calendar-utils'
+import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
+import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Linking,
@@ -18,10 +21,14 @@ import {
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function CalendarPage(): JSX.Element {
+    const router = useRouter()
+
     const { userKind } = React.useContext(UserKindContext)
     const [exams, setExams] = useState<Exam[]>([])
     const colors = useTheme().colors as Colors
-    const displayTypes = ['Events', 'Exams']
+    const { t } = useTranslation('common')
+
+    const displayTypes = ['Events', t('pages.calendar.exams.title')]
 
     const [selectedData, setSelectedData] = useState<string>('Events')
 
@@ -34,11 +41,9 @@ export default function CalendarPage(): JSX.Element {
     const [error, setError] = useState<Error | null>(null)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
-    const calendarUrl =
-        'https://www.thi.de/en/international/studies/examination/semester-dates/'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? calendarUrl : primussUrl
+            selectedData === 'Events' ? t('pages.calendar.link') : primussUrl
         )
     }
     useEffect(() => {
@@ -49,16 +54,16 @@ export default function CalendarPage(): JSX.Element {
                 })
                 .catch((e) => {
                     if (e instanceof NoSessionError) {
-                        // router.replace('login')
+                        router.push('(user)/login')
                     } else {
-                        console.error(e)
+                        console.log(e)
                     }
 
                     setError(e)
                     setLoadingState(LoadingState.ERROR)
                 })
         } else {
-            setError(new Error('Not a student'))
+            setError(new Error(t('pages.calendar.exams.error')))
             setLoadingState(LoadingState.LOADED)
         }
     }, [userKind])
@@ -109,7 +114,10 @@ export default function CalendarPage(): JSX.Element {
                         data.map((item, index) => (
                             <React.Fragment key={index}>
                                 {selectedData === 'Events' ? (
-                                    <EventRow event={item} colors={colors} />
+                                    <CalendarRow
+                                        event={item as Calendar}
+                                        colors={colors}
+                                    />
                                 ) : (
                                     <>
                                         {loadingState ===
@@ -154,7 +162,9 @@ export default function CalendarPage(): JSX.Element {
                                             { color: colors.text },
                                         ]}
                                     >
-                                        Sign in to see your exams.
+                                        {t(
+                                            'pages.calendar.exams.errorSubtitle'
+                                        )}
                                     </Text>
                                 </View>
                             ) : (
@@ -175,9 +185,7 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                An error occurred while loading
-                                                the data.{'\n'}Pull down to
-                                                refresh.
+                                                {t('error.refresh')}{' '}
                                             </Text>
                                         </View>
                                     )}
@@ -189,7 +197,9 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                No data found
+                                                {t(
+                                                    'pages.calendar.calendar.noData.title'
+                                                )}
                                             </Text>
                                             <Text
                                                 style={[
@@ -197,7 +207,9 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                Please try again later.
+                                                {t(
+                                                    'pages.calendar.calendar.noData.subtitle'
+                                                )}
                                             </Text>
                                         </View>
                                     )}
@@ -222,8 +234,7 @@ export default function CalendarPage(): JSX.Element {
                             textAlign: 'justify',
                         }}
                     >
-                        All information without guarantee. Binding information
-                        is only available directly on the{' '}
+                        {t('pages.calendar.footer.part1')}
                         <Text
                             style={{
                                 color: colors.text,
@@ -231,7 +242,7 @@ export default function CalendarPage(): JSX.Element {
                             }}
                             onPress={handleLinkPress}
                         >
-                            university website
+                            {t('pages.calendar.footer.part2')}
                         </Text>
                         .
                     </Text>

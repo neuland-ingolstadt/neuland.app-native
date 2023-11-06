@@ -30,12 +30,15 @@ module.exports = {
             },
             infoPlist: {
                 RCTAsyncStorageExcludeFromBackup: false,
+                CFBundleAllowMixedLocalizations: true,
+                CFBundleLocalizations: ['en', 'de'],
+                CFBundleDevelopmentRegion: 'en',
             },
         },
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 34,
+            versionCode: 35,
         },
         extra: {
             eas: {
@@ -59,6 +62,7 @@ module.exports = {
                     origin: 'https://neuland.app',
                 },
             ],
+            ['expo-localization'],
         ],
     },
 }
