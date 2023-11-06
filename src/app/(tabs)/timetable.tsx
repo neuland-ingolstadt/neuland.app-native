@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
@@ -13,6 +14,7 @@ import Color from 'color'
 import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { type FC, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
@@ -28,6 +30,7 @@ export default function TimetableScreen(): JSX.Element {
     const colors = theme.colors as Colors
 
     const [selectedDate, setSelectedDate] = useState(new Date())
+    const { i18n } = useTranslation()
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
@@ -115,7 +118,7 @@ export default function TimetableScreen(): JSX.Element {
                     ...splitEvents,
                 ])
             } catch (e) {
-                console.error(e)
+                console.log(e)
             }
         }
 
@@ -127,11 +130,14 @@ export default function TimetableScreen(): JSX.Element {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
+                        // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.goToDate(new Date())
+                        // @ts-expect-error Property 'scrollToTime' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.scrollToTime(
                             (new Date().getHours() - 1) * 60
                         )
                     }}
+                    style={styles.headerIcon}
                 >
                     <Ionicons name="today" size={22} color={colors.primary} />
                 </TouchableOpacity>
@@ -165,7 +171,7 @@ export default function TimetableScreen(): JSX.Element {
                 id: index,
                 startDate: entry.begin,
                 endDate: entry.end ?? entry.begin,
-                title: entry.name.en,
+                title: entry.name[i18n.language as LanguageKey],
                 color: calendarColor.hex(),
                 description: '',
                 eventKind: 'standard' as 'standard' | 'block',
@@ -247,6 +253,7 @@ export default function TimetableScreen(): JSX.Element {
         return (
             <TouchableOpacity
                 onPress={() => {
+                    // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
                     weekViewRef.current?.goToDate(date)
                 }}
             >
@@ -290,6 +297,7 @@ export default function TimetableScreen(): JSX.Element {
 
             <View style={styles.wrapper}>
                 <WeekView
+                    // @ts-expect-error Property 'ref' does not exist on type 'IntrinsicAttributes & WeekViewProps
                     ref={weekViewRef}
                     events={timetable}
                     selectedDate={selectedDate}
@@ -325,21 +333,20 @@ export default function TimetableScreen(): JSX.Element {
                     hourTextStyle={{
                         color: colors.text,
                     }}
-                    headerStyle={[
-                        styles.headerStyle,
-                        {
-                            backgroundColor: colors.card,
-                        },
-                    ]}
-                    gridRowStyle={[
-                        styles.gridRowStyle,
-                        { borderColor: colors.border },
-                    ]}
+                    headerStyle={{
+                        ...styles.headerStyle,
+
+                        backgroundColor: colors.card,
+                    }}
+                    gridRowStyle={{
+                        ...styles.gridRowStyle,
+                        borderColor: colors.border,
+                    }}
                     gridColumnStyle={styles.gridColumnStyle}
-                    headerTextStyle={[
-                        styles.headerTextStyle,
-                        { color: colors.text },
-                    ]}
+                    headerTextStyle={{
+                        ...styles.headerTextStyle,
+                        color: colors.text,
+                    }}
                 />
             </View>
         </>
@@ -404,5 +411,8 @@ const styles = StyleSheet.create({
     },
     allDayEventTitle: {
         fontSize: 12,
+    },
+    headerIcon: {
+        marginRight: 12,
     },
 })

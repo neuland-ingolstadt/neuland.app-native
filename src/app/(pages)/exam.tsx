@@ -7,6 +7,7 @@ import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function ExamDetail(): JSX.Element {
@@ -14,54 +15,59 @@ export default function ExamDetail(): JSX.Element {
     const { examEntry } = useLocalSearchParams<{ examEntry: string }>()
     const exam: Exam | undefined =
         examEntry != null ? JSON.parse(examEntry) : undefined
+    const { t } = useTranslation('common')
 
     const sections: FormListSections[] = [
         {
             header: 'Details',
             items: [
                 {
-                    title: 'Date',
-                    value: formatFriendlyDateTime(exam?.date),
+                    title: t('pages.exam.details.date'),
+                    value: formatFriendlyDateTime(
+                        exam?.date as unknown as string
+                    ),
                     disabled: true,
                 },
 
                 {
-                    title: 'Room',
+                    title: t('pages.exam.details.room'),
                     value: exam?.rooms,
                     disabled: true,
                 },
                 {
-                    title: 'Seat',
+                    title: t('pages.exam.details.seat'),
                     value: exam?.seat,
                     disabled: true,
                 },
                 {
-                    title: 'Tools',
+                    title: t('pages.exam.details.tools'),
                     value: exam?.aids?.join(', '),
                     disabled: true,
                 },
             ],
         },
         {
-            header: 'About',
+            header: t('pages.exam.about.title'),
             items: [
                 {
-                    title: 'Type',
+                    title: t('pages.exam.about.type'),
                     value: exam?.type,
                     disabled: true,
                 },
                 {
-                    title: 'Examiner',
+                    title: t('pages.exam.about.examiner'),
                     value: exam?.examiners?.join(', '),
                     disabled: true,
                 },
                 {
-                    title: 'Registered',
-                    value: formatFriendlyDateTime(exam?.enrollment),
+                    title: t('pages.exam.about.registration'),
+                    value: formatFriendlyDateTime(
+                        exam?.enrollment as unknown as string
+                    ),
                     disabled: true,
                 },
                 {
-                    title: 'Notes',
+                    title: t('pages.exam.about.notes'),
                     value: exam?.notes,
                     disabled: true,
                 },

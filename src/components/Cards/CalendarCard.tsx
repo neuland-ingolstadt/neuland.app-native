@@ -1,5 +1,6 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
@@ -7,6 +8,7 @@ import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
@@ -16,6 +18,7 @@ const CalendarCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const time = new Date()
+    const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
     enum LoadingState {
         LOADING,
@@ -44,16 +47,16 @@ const CalendarCard = (): JSX.Element => {
         let exams: CardExams[] = []
         try {
             exams = (await loadExamList()).map((x) => ({
-                name: `Prüfung ${x.name}`,
+                name: t('cards.calendar.exam', { name: x.name }),
                 begin: x.date,
             }))
         } catch (e) {
             if (e instanceof NoSessionError) {
-                // router.replace('/login')
+                router.push('(user)/login')
             } else if ((e as Error).message === 'Query not possible') {
                 // ignore, leaving examList empty
             } else {
-                console.error(e as Error)
+                console.log(e as Error)
             }
         }
 
@@ -67,7 +70,7 @@ const CalendarCard = (): JSX.Element => {
 
     return (
         <BaseCard
-            title="Calendar"
+            title="calendar"
             icon="calendar"
             onPress={() => {
                 router.push('calendar')
@@ -89,7 +92,9 @@ const CalendarCard = (): JSX.Element => {
                                 >
                                     {/* Always use .de or .en? */}
                                     {typeof event.name === 'object'
-                                        ? event.name.en
+                                        ? event.name[
+                                              i18n.language as LanguageKey
+                                          ]
                                         : event.name}
                                 </Text>
                                 <Text
@@ -100,7 +105,7 @@ const CalendarCard = (): JSX.Element => {
                                     numberOfLines={1}
                                 >
                                     {event.end != null && event.begin < time
-                                        ? 'ends ' +
+                                        ? t('cards.calendar.ends') +
                                           formatFriendlyRelativeTime(event.end)
                                         : formatFriendlyRelativeTime(
                                               event.begin

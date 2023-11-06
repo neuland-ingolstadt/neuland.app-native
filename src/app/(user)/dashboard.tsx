@@ -1,10 +1,11 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Card } from '@/components/allCards'
+import { type Card, type ExtendedCard } from '@/components/allCards'
 import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     LayoutAnimation,
     Pressable,
@@ -31,7 +32,14 @@ export default function DashboardEdit(): JSX.Element {
     const colors = useTheme().colors as Colors
     const itemRefs = useRef(new Map())
     const [refresh, setRefresh] = useState(false)
-
+    const { t } = useTranslation(['settings'])
+    // add translation to shownDashboardEntries with new key transText
+    const transShownDashboardEntries = shownDashboardEntries.map((item) => {
+        return {
+            ...item,
+            text: t('cards.titles.' + item.key, { ns: 'navigation' }),
+        }
+    })
     // update view if shownDashboardEntries changes
     useEffect(() => {
         itemRefs.current = new Map()
@@ -42,7 +50,9 @@ export default function DashboardEdit(): JSX.Element {
         refresh,
     ])
 
-    const renderItem = (params: RenderItemParams<Card>): JSX.Element => {
+    const renderItem = (
+        params: RenderItemParams<ExtendedCard>
+    ): JSX.Element => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             hideDashboardEntry(params.item.key)
@@ -87,7 +97,7 @@ export default function DashboardEdit(): JSX.Element {
                                 { color: colors.labelSecondaryColor },
                             ]}
                         >
-                            Shown Cards
+                            {t('dashboard.shown')}
                         </Text>
                         <View
                             style={[
@@ -99,7 +109,7 @@ export default function DashboardEdit(): JSX.Element {
                         >
                             <DraggableFlatList
                                 keyExtractor={(item) => item.key}
-                                data={shownDashboardEntries}
+                                data={transShownDashboardEntries}
                                 renderItem={renderItem}
                                 onDragEnd={({ data }) => {
                                     updateDashboardOrder(data)
@@ -119,7 +129,7 @@ export default function DashboardEdit(): JSX.Element {
                                     { color: colors.labelSecondaryColor },
                                 ]}
                             >
-                                Hidden Cards
+                                {t('dashboard.hidden')}
                             </Text>
                         )}
                         <View
@@ -149,7 +159,11 @@ export default function DashboardEdit(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                {item.text}
+                                                {t(
+                                                    'cards.titles.' +
+                                                        t(item.key),
+                                                    { ns: 'navigation' }
+                                                )}
                                             </Text>
                                             <Ionicons
                                                 name="add-circle"
@@ -182,15 +196,13 @@ export default function DashboardEdit(): JSX.Element {
                                     },
                                 ]}
                             >
-                                Reset Order
+                                {t('dashboard.reset')}
                             </Text>
                         </Pressable>
                     </View>
 
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
-                        Customize your dashboard by dragging and dropping the
-                        cards to your preferred order. Hide cards by pressing on
-                        the remove icon.
+                        {t('dashboard.footer')}
                     </Text>
                 </View>
             </ScrollView>
@@ -199,7 +211,7 @@ export default function DashboardEdit(): JSX.Element {
 }
 
 interface RowItemProps {
-    item: Card
+    item: ExtendedCard
     drag: () => void
     onPressDelete: () => void
     itemRefs: React.MutableRefObject<Map<any, any>>

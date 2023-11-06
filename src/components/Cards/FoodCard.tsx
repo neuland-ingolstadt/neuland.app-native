@@ -1,4 +1,5 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { formatISODate } from '@/utils/date-utils'
@@ -7,6 +8,7 @@ import { type Meal } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
@@ -19,6 +21,7 @@ const EventsCard = (): JSX.Element => {
         REFRESHING,
     }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const { t, i18n } = useTranslation('food')
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
@@ -31,7 +34,13 @@ const EventsCard = (): JSX.Element => {
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
     useEffect(() => {
         void loadData()
-    }, [selectedRestaurants, allergenSelection, preferencesSelection, userKind])
+    }, [
+        selectedRestaurants,
+        allergenSelection,
+        preferencesSelection,
+        userKind,
+        i18n.language,
+    ])
 
     const loadData = async (): Promise<void> => {
         const restaurants =
@@ -70,20 +79,20 @@ const EventsCard = (): JSX.Element => {
         }
 
         if (restaurants.length !== 1) {
-            setFoodCardTitle('Food')
+            setFoodCardTitle('food')
         } else {
             switch (restaurants[0]) {
                 case 'mensa':
-                    setFoodCardTitle('Mensa')
+                    setFoodCardTitle('mensa')
                     break
                 case 'reimanns':
-                    setFoodCardTitle('Reimanns')
+                    setFoodCardTitle('reimanns')
                     break
                 case 'canisius':
-                    setFoodCardTitle('Canisius')
+                    setFoodCardTitle('canisius')
                     break
                 default:
-                    setFoodCardTitle('Food')
+                    setFoodCardTitle('food')
                     break
             }
         }
@@ -112,7 +121,7 @@ const EventsCard = (): JSX.Element => {
                     todayEntries.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
-                        name: x.name.en,
+                        name: x.name[i18n.language as LanguageKey],
                         price: getUserSpecificPrice(x, userKind),
                     })),
                     ...(hiddenEntriesCount > 0
@@ -120,8 +129,10 @@ const EventsCard = (): JSX.Element => {
                               {
                                   name:
                                       hiddenEntriesCount === 1
-                                          ? 'and 1 more item'
-                                          : `and ${hiddenEntriesCount} more items`,
+                                          ? t('dashboard.oneMore')
+                                          : t('dashboard.manyMore', {
+                                                count: hiddenEntriesCount,
+                                            }),
                                   price: null,
                               },
                           ]
@@ -151,7 +162,7 @@ const EventsCard = (): JSX.Element => {
                                 { color: colors.labelColor },
                             ]}
                         >
-                            Today&rsquo;s menu is empty.
+                            {t('dashboard.empty')}
                         </Text>
                     )}
                     {foodEntries.map((meal, index) => (

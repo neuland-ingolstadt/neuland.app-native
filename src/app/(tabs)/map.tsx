@@ -26,6 +26,7 @@ import * as Haptics from 'expo-haptics'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Platform,
@@ -40,6 +41,8 @@ const Stack2 = createNativeStackNavigator()
 export default function Screen(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation('common')
+
     return (
         <>
             <Head>
@@ -64,7 +67,7 @@ export default function Screen(): JSX.Element {
                         headerLargeTitle: false,
 
                         headerSearchBarOptions: {
-                            placeholder: 'Search for: G, W003, Toilette, ...',
+                            placeholder: t('pages.map.search'),
                             hideWhenScrolling: false,
                             hideNavigationBar: true,
                             onChangeText: (event) => {
@@ -326,6 +329,7 @@ export const MapScreen = (): JSX.Element => {
     const FloorPicker = (floors: { floors: string[] }): JSX.Element => {
         const isEmpty = floors.floors.length === 0
         const colors = useTheme().colors as Colors
+        const { t } = useTranslation('common')
         return (
             <View
                 style={[
@@ -381,7 +385,9 @@ export const MapScreen = (): JSX.Element => {
                                             },
                                         ]}
                                     >
-                                        {floor}
+                                        {floor === 'EG'
+                                            ? t('pages.map.gf')
+                                            : floor}
                                     </Text>
                                 </View>
                             </Pressable>

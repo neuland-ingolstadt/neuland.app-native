@@ -1,13 +1,16 @@
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
+import changelogData from '@/data/changelog.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
-import changelogData from '@/stores/data/changelog.json'
 import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, getStatusBarStyle } from '@/utils/ui-utils'
 import { type Changelog } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import packageInfo from '../../../package.json'
@@ -16,9 +19,11 @@ export default function OnboardingScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData
+    const { t, i18n } = useTranslation('flow')
 
     return (
         <View style={styles.page}>
+            <StatusBar style={getStatusBarStyle()} />
             <View style={styles.titleBox}>
                 <Text
                     style={[
@@ -28,7 +33,7 @@ export default function OnboardingScreen(): JSX.Element {
                         },
                     ]}
                 >
-                    What&apos;s new
+                    {t('whatsnew.title')}
                 </Text>
                 <Text
                     style={[
@@ -38,7 +43,9 @@ export default function OnboardingScreen(): JSX.Element {
                         },
                     ]}
                 >
-                    in version {convertToMajorMinorPatch(packageInfo.version)}
+                    {t('whatsnew.version', {
+                        version: convertToMajorMinorPatch(packageInfo.version),
+                    })}
                 </Text>
             </View>
 
@@ -54,9 +61,17 @@ export default function OnboardingScreen(): JSX.Element {
                             {changelog.version[key].map(
                                 ({ title, description, icon }) => (
                                     <WhatsNewBox
-                                        key={title.en}
-                                        title={title.en}
-                                        description={description.en}
+                                        key={
+                                            title[i18n.language as LanguageKey]
+                                        }
+                                        title={
+                                            title[i18n.language as LanguageKey]
+                                        }
+                                        description={
+                                            description[
+                                                i18n.language as LanguageKey
+                                            ]
+                                        }
                                         icon={icon}
                                     />
                                 )
@@ -84,7 +99,7 @@ export default function OnboardingScreen(): JSX.Element {
                             styles.buttonText,
                         ]}
                     >
-                        Continue
+                        {t('whatsnew.continue')}
                     </Text>
                 </Pressable>
             </View>

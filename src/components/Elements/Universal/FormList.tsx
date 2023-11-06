@@ -126,13 +126,12 @@ const styles = StyleSheet.create({
     },
     blockCard: {
         borderRadius: 8,
-        paddingVertical: 12,
-        gap: 12,
     },
     cardRow: {
         flexDirection: 'row',
-        gap: 12,
+        alignItems: 'center',
         paddingHorizontal: 15,
+        marginVertical: 12,
     },
     blockFooter: {
         fontSize: 12,
@@ -145,6 +144,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     rowDetails: {
+        textAlign: 'right',
+        maxWidth: '65%',
         fontSize: 16,
     },
 })

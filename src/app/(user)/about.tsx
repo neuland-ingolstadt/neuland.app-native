@@ -5,6 +5,7 @@ import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Image,
     Linking,
@@ -22,31 +23,32 @@ export default function About(): JSX.Element {
     const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation(['settings'])
     const sections: FormListSections[] = [
         {
-            header: 'Legal',
+            header: t('about.formlist.legal.title'),
             items: [
                 {
-                    title: 'Privacy Policy',
+                    title: t('about.formlist.legal.privacy'),
                     icon: 'shield',
                     onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },
                 {
-                    title: 'Imprint',
+                    title: t('about.formlist.legal.imprint'),
                     icon: 'information-circle',
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
             ],
         },
         {
-            header: 'About us',
+            header: t('about.formlist.about.title'),
             items: [
                 {
                     title: 'Feedback',
                     icon: 'chatbox-ellipses-outline',
                     onPress: async () =>
                         await Linking.openURL(
-                            'mailto:info@neuland-ingolstadt.de?subject=Feedback%20Neuland-App-Native'
+                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
                         ),
                 },
                 {
@@ -129,7 +131,7 @@ export default function About(): JSX.Element {
                                         styles.header,
                                     ]}
                                 >
-                                    Neuland App
+                                    Neuland Next
                                 </Text>
                                 <Text
                                     style={[
@@ -147,7 +149,7 @@ export default function About(): JSX.Element {
                                         styles.subHeader,
                                     ]}
                                 >
-                                    Developed by
+                                    {t('about.header.developed')}
                                 </Text>
                                 <Text
                                     style={[

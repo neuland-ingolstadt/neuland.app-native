@@ -6,6 +6,7 @@ import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function LecturerDetail(): JSX.Element {
@@ -13,6 +14,7 @@ export default function LecturerDetail(): JSX.Element {
     const { lecturerEntry } = useLocalSearchParams<{ lecturerEntry: string }>()
     const lecturer: NormalizedLecturer | undefined =
         lecturerEntry != null ? JSON.parse(lecturerEntry) : undefined
+    const { t } = useTranslation('common')
 
     const sections: FormListSections[] = [
         {
@@ -24,28 +26,28 @@ export default function LecturerDetail(): JSX.Element {
                     disabled: true,
                 },
                 {
-                    title: 'Title',
+                    title: t('pages.lecturer.details.title'),
                     value: lecturer?.titel,
                     disabled: true,
                 },
                 {
-                    title: 'Organization',
+                    title: t('pages.lecturer.details.organization'),
                     value: lecturer?.organisation,
                     disabled: true,
                 },
 
                 {
-                    title: 'Function',
+                    title: t('pages.lecturer.details.function'),
                     value: lecturer?.funktion,
                     disabled: true,
                 },
             ],
         },
         {
-            header: 'Contact',
+            header: t('pages.lecturer.contact.title'),
             items: [
                 {
-                    title: 'Room',
+                    title: t('pages.lecturer.contact.room'),
                     value: lecturer?.room_short,
                     disabled: lecturer?.room_short === '',
                     iconColor: colors.primary,
@@ -72,7 +74,7 @@ export default function LecturerDetail(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Phone',
+                    title: t('pages.lecturer.contact.phone'),
                     value: lecturer?.tel_dienst,
                     disabled: lecturer?.tel_dienst === '',
                     iconColor: colors.primary,
@@ -85,12 +87,12 @@ export default function LecturerDetail(): JSX.Element {
                     },
                 },
                 {
-                    title: 'Office Hours',
+                    title: t('pages.lecturer.contact.office'),
                     value: lecturer?.sprechstunde,
                     disabled: true,
                 },
                 {
-                    title: 'Exam Insigths',
+                    title: t('pages.lecturer.contact.exam'),
                     value: lecturer?.einsichtnahme,
                     disabled: true,
                 },

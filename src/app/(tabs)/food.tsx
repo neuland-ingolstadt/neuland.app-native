@@ -7,6 +7,7 @@ import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import Head from 'expo-router/head'
 import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Platform,
@@ -34,7 +35,7 @@ export default function FoodScreen(): JSX.Element {
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const { selectedRestaurants, showStatic } = useContext(FoodFilterContext)
     const [error, setError] = useState<Error | null>(null)
-
+    const { t, i18n } = useTranslation('common')
     const loadData = (): void => {
         loadFoodEntries(selectedRestaurants, showStatic)
             .then((loadedDays: Food[]) => {
@@ -129,7 +130,7 @@ export default function FoodScreen(): JSX.Element {
                             numberOfLines={1}
                         >
                             {date
-                                .toLocaleDateString('de-DE', {
+                                .toLocaleDateString(i18n.language, {
                                     weekday: 'short',
                                 })
                                 .slice(0, 2)}
@@ -200,8 +201,7 @@ export default function FoodScreen(): JSX.Element {
                         <Text
                             style={[styles.errorInfo, { color: colors.text }]}
                         >
-                            An error occurred while loading the data.{'\n'}Pull
-                            down to refresh.
+                            {t('error.refresh')}{' '}
                         </Text>
                     </View>
                 )}
