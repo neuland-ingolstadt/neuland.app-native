@@ -56,7 +56,7 @@ export const MealEntry = ({
                     params: { foodEntry: JSON.stringify(meal) },
                 })
             }}
-            style={{ marginTop: 8 }}
+            style={styles.pressable}
         >
             <View
                 key={index}
@@ -77,12 +77,12 @@ export const MealEntry = ({
                 </Text>
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailsColumns}>
-                        <View style={styles.falgs}>
+                        <View style={styles.flags}>
                             {userFlags?.map((flag: string, index: number) => (
                                 <View
                                     key={index}
                                     style={[
-                                        styles.falgsBox,
+                                        styles.flagsBox,
                                         {
                                             backgroundColor:
                                                 colors.labelBackground,
@@ -91,7 +91,7 @@ export const MealEntry = ({
                                 >
                                     <Text
                                         style={[
-                                            styles.falgsText,
+                                            styles.flagsText,
                                             {
                                                 color: colors.text,
                                             },
@@ -107,18 +107,17 @@ export const MealEntry = ({
                                 <Ionicons
                                     name={'warning-outline'}
                                     size={16}
-                                    style={{
-                                        marginRight: 4,
-                                        alignSelf: 'center',
-                                    }}
+                                    style={styles.icon}
                                     color={colors.notification}
                                 />
 
                                 <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: colors.labelColor,
-                                    }}
+                                    style={[
+                                        styles.allergene,
+                                        {
+                                            color: colors.labelColor,
+                                        },
+                                    ]}
                                     numberOfLines={3}
                                 >
                                     {userAllergens}
@@ -174,12 +173,12 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 2,
     },
-    falgs: {
+    flags: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignContent: 'center',
     },
-    falgsBox: {
+    flagsBox: {
         flexDirection: 'row',
         alignContent: 'center',
         alignItems: 'center',
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         marginRight: 4,
         marginBottom: 2,
     },
-    falgsText: {
+    flagsText: {
         fontSize: 12,
         paddingHorizontal: 4,
         paddingVertical: 2,
@@ -216,5 +215,15 @@ const styles = StyleSheet.create({
     priceLabel: {
         fontSize: 12,
         alignSelf: 'flex-end',
+    },
+    pressable: {
+        marginTop: 8,
+    },
+    icon: {
+        marginRight: 4,
+        alignSelf: 'center',
+    },
+    allergene: {
+        fontSize: 12,
     },
 })
