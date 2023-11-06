@@ -8,7 +8,6 @@ import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
-import { getLocales } from 'expo-localization'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,16 +44,7 @@ export default function Settings(): JSX.Element {
     const { t, i18n } = useTranslation(['settings'])
 
     const languageAlert = (): void => {
-        const osLocale = getLocales()[0].languageCode
         const newLocale = i18n.language === 'en' ? 'de' : 'en'
-
-        const isOsLang = (): boolean => {
-            if (osLocale === newLocale) {
-                return true
-            } else {
-                return false
-            }
-        }
 
         Alert.alert(
             t('menu.formlist.language.title'),
@@ -68,12 +58,7 @@ export default function Settings(): JSX.Element {
                     text: t('menu.formlist.language.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        if (isOsLang()) {
-                            void AsyncStorage.removeItem('language')
-                        } else {
-                            void AsyncStorage.setItem('language', newLocale)
-                        }
-
+                        void AsyncStorage.setItem('language', newLocale)
                         void i18n.changeLanguage(newLocale)
                     },
                 },

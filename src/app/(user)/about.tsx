@@ -48,7 +48,7 @@ export default function About(): JSX.Element {
                     icon: 'chatbox-ellipses-outline',
                     onPress: async () =>
                         await Linking.openURL(
-                            'mailto:info@neuland-ingolstadt.de?subject=Feedback%20Neuland-App-Native'
+                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
                         ),
                 },
                 {
