@@ -7,6 +7,7 @@ import { UserKindContext } from '@/stores/provider'
 import { type Exam, calendar, loadExamList } from '@/utils/calendar-utils'
 import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
+import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -20,6 +21,8 @@ import {
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function CalendarPage(): JSX.Element {
+    const router = useRouter()
+
     const { userKind } = React.useContext(UserKindContext)
     const [exams, setExams] = useState<Exam[]>([])
     const colors = useTheme().colors as Colors
@@ -51,7 +54,7 @@ export default function CalendarPage(): JSX.Element {
                 })
                 .catch((e) => {
                     if (e instanceof NoSessionError) {
-                        // router.replace('login')
+                        router.push('(user)/login')
                     } else {
                         console.log(e)
                     }

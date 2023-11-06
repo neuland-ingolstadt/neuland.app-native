@@ -11,7 +11,7 @@ import {
     normalizeLecturers,
 } from '@/utils/lecturers-utils'
 import { useTheme } from '@react-navigation/native'
-import { useGlobalSearchParams } from 'expo-router'
+import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -24,6 +24,8 @@ import {
 } from 'react-native'
 
 export default function LecturersCard(): JSX.Element {
+    const router = useRouter()
+
     enum LoadingState {
         LOADING,
         LOADED,
@@ -58,7 +60,7 @@ export default function LecturersCard(): JSX.Element {
                 e instanceof NoSessionError ||
                 e instanceof UnavailableSessionError
             ) {
-                // router.replace('(user)/login')
+                router.push('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setError(e as Error)
@@ -98,7 +100,7 @@ export default function LecturersCard(): JSX.Element {
                     return
                 } catch (e) {
                     if (e instanceof NoSessionError) {
-                        // router.replace('(user)/login')
+                        router.push('(user)/login')
                     } else {
                         setError(e as Error)
                     }
