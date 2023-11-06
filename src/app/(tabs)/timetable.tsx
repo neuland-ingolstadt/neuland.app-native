@@ -130,7 +130,9 @@ export default function TimetableScreen(): JSX.Element {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
+                        // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.goToDate(new Date())
+                        // @ts-expect-error Property 'scrollToTime' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.scrollToTime(
                             (new Date().getHours() - 1) * 60
                         )
@@ -251,6 +253,7 @@ export default function TimetableScreen(): JSX.Element {
         return (
             <TouchableOpacity
                 onPress={() => {
+                    // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
                     weekViewRef.current?.goToDate(date)
                 }}
             >
@@ -294,6 +297,7 @@ export default function TimetableScreen(): JSX.Element {
 
             <View style={styles.wrapper}>
                 <WeekView
+                    // @ts-expect-error Property 'ref' does not exist on type 'IntrinsicAttributes & WeekViewProps
                     ref={weekViewRef}
                     events={timetable}
                     selectedDate={selectedDate}
