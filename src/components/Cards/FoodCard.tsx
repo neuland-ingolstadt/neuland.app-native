@@ -33,7 +33,13 @@ const EventsCard = (): JSX.Element => {
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
     useEffect(() => {
         void loadData()
-    }, [selectedRestaurants, allergenSelection, preferencesSelection, userKind])
+    }, [
+        selectedRestaurants,
+        allergenSelection,
+        preferencesSelection,
+        userKind,
+        i18n.language,
+    ])
 
     const loadData = async (): Promise<void> => {
         const restaurants =

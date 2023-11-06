@@ -11,6 +11,11 @@ export default {
                 food: 'Food',
                 language: 'Language',
             },
+            language: {
+                title: 'Change language',
+                message: 'Confirm to change the app language to German.',
+                confirm: 'Confirm',
+            },
             legal: {
                 title: 'Legal',
                 about: 'About',

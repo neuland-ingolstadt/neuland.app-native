@@ -13,6 +13,7 @@ import Color from 'color'
 import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { type FC, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
@@ -28,6 +29,7 @@ export default function TimetableScreen(): JSX.Element {
     const colors = theme.colors as Colors
 
     const [selectedDate, setSelectedDate] = useState(new Date())
+    const { i18n } = useTranslation()
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
@@ -165,7 +167,7 @@ export default function TimetableScreen(): JSX.Element {
                 id: index,
                 startDate: entry.begin,
                 endDate: entry.end ?? entry.begin,
-                title: entry.name.en,
+                title: entry.name[i18n.language as 'en' | 'de'],
                 color: calendarColor.hex(),
                 description: '',
                 eventKind: 'standard' as 'standard' | 'block',

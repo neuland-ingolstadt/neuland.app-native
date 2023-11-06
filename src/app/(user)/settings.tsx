@@ -6,12 +6,15 @@ import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
+import { getLocales } from 'expo-localization'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Alert,
     Linking,
     Platform,
     Pressable,
@@ -39,7 +42,44 @@ export default function Settings(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const nameColor = getNameColor(fullName)
-    const { t } = useTranslation(['settings'])
+    const { t, i18n } = useTranslation(['settings'])
+
+    const languageAlert = (): void => {
+        const osLocale = getLocales()[0].languageCode
+        const newLocale = i18n.language === 'en' ? 'de' : 'en'
+
+        const isOsLang = (): boolean => {
+            if (osLocale === newLocale) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        Alert.alert(
+            t('menu.formlist.language.title'),
+            t('menu.formlist.language.message'),
+            [
+                {
+                    text: t('profile.logout.alert.cancel'),
+                    style: 'default',
+                },
+                {
+                    text: t('menu.formlist.language.confirm'),
+                    style: 'destructive',
+                    onPress: () => {
+                        if (isOsLang()) {
+                            void AsyncStorage.removeItem('language')
+                        } else {
+                            void AsyncStorage.setItem('language', newLocale)
+                        }
+
+                        void i18n.changeLanguage(newLocale)
+                    },
+                },
+            ]
+        )
+    }
 
     const loadData = async (): Promise<void> => {
         try {
@@ -104,7 +144,7 @@ export default function Settings(): JSX.Element {
                         if (Platform.OS === 'ios') {
                             await Linking.openSettings()
                         } else {
-                            alert('Not available yet')
+                            languageAlert()
                         }
                     },
                 },

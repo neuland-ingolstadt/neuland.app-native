@@ -1,7 +1,8 @@
-import '@/localization/i18n'
+import i18n from '@/localization/i18n'
 import Provider from '@/stores/provider'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, useColorScheme } from 'react-native'
 
@@ -11,6 +12,16 @@ export default function RootLayout(): JSX.Element {
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
     const { t } = useTranslation('navigation')
 
+    useEffect(() => {
+        const loadLanguage = async (): Promise<void> => {
+            const savedLanguage = await AsyncStorage.getItem('language')
+            if (savedLanguage !== null) {
+                await i18n.changeLanguage(savedLanguage)
+            }
+        }
+
+        void loadLanguage()
+    }, [])
     return (
         <>
             <Provider>

@@ -12,6 +12,12 @@ export default {
                 food: 'Essen',
                 language: 'Sprache',
             },
+            language: {
+                title: 'Sprache wechseln',
+                message:
+                    'Bestätige, um die Sprache der App auf Englisch zu ändern.',
+                confirm: 'Bestätigen',
+            },
             legal: {
                 title: 'Rechtliches',
                 about: 'Über',
