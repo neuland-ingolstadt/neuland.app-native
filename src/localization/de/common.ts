@@ -2,4 +2,75 @@ export default {
     toast: {
         clipboard: 'in Zwischenablage kopiert',
     },
+    dates: {
+        until: 'bis',
+        ends: 'endet',
+        today: 'Heute',
+        tomorrow: 'Morgen',
+        thisWeek: 'Diese Woche',
+        nextWeek: 'Nächste Woche',
+    },
+    pages: {
+        calendar: {
+            exams: {
+                title: 'Prüfungen',
+                error: 'Kein Studierender',
+                errorSubtitle: 'Melde dich an, um deine Prüfungen zu sehen.',
+            },
+            calendar: {
+                link: 'https://www.thi.de/studium/pruefung/semestertermine/',
+            },
+            footer: {
+                part1: 'Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt verfügbar auf der ',
+                part2: 'Universitätswebsite.',
+            },
+        },
+        lecturers: {
+            results: 'Suchergebnisse',
+            personal: 'Persönliche Dozenten',
+        },
+        lecturer: {
+            details: {
+                title: 'Titel',
+                organization: 'Organisation',
+                function: 'Funktion',
+            },
+            contact: {
+                room: 'Raum',
+                title: 'Kontakt',
+                phone: 'Telefon',
+                office: 'Sprechstunde',
+                exam: 'Einsichtnahme',
+            },
+        },
+        exam: {
+            details: {
+                data: 'Datum',
+                room: 'Raum',
+                seat: 'Platz',
+                tools: 'Hilfsmittel',
+            },
+            about: {
+                title: 'Über',
+                type: 'Art',
+                examiner: 'Prüfer:in',
+                registration: 'Angemeldet',
+                notes: 'Notizen',
+            },
+        },
+        map: {
+            search: 'Suche nach G, W003, Toilette ...',
+            gf: 'EG',
+        },
+        rooms: {
+            options: {
+                title: 'Such Optionen',
+                building: 'Gebäude',
+                date: 'Datum',
+                time: 'Zeit',
+                duration: 'Dauer',
+            },
+            results: 'Verfügbare Räume',
+        },
+    },
 }

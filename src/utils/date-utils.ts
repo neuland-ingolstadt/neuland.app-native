@@ -1,9 +1,8 @@
-const WORD_TODAY = 'Heute'
-const WORD_TOMORROW = 'Morgen'
-export const WORD_THIS_WEEK = 'Diese Woche'
-export const WORD_NEXT_WEEK = 'Nächste Woche'
+import i18n from '@/localization/i18n'
 
-export const DATE_LOCALE = 'de-DE'
+function t(...args: any): any {
+    return i18n.t(args, { ns: 'common' })
+}
 
 /**
  * Formats a date like "Mo., 1.10.2020"
@@ -20,11 +19,11 @@ export function formatFriendlyDate(datetime: Date | string): string {
     tomorrow.setDate(today.getDate() + 1)
 
     if (datetime.toDateString() === today.toDateString()) {
-        return WORD_TODAY
+        return t('dates.today')
     } else if (datetime.toDateString() === tomorrow.toDateString()) {
-        return WORD_TOMORROW
+        return t('dates.tomorrow')
     } else {
-        return datetime.toLocaleString(DATE_LOCALE, {
+        return datetime.toLocaleString(undefined, {
             weekday: 'short',
             day: 'numeric',
             month: '2-digit',
@@ -39,7 +38,11 @@ export function formatFriendlyDate(datetime: Date | string): string {
  * @param {Date} end
  * @returns {string}
  */
-export function formatFriendlyDateRange(begin: Date, end?: Date): string {
+export function formatFriendlyDateRange(
+    lang: string,
+    begin: Date,
+    end?: Date
+): string {
     let str = formatFriendlyDate(begin)
     if (end != null && begin.toDateString() !== end.toDateString()) {
         str += ' – ' + formatFriendlyDate(end)
@@ -60,7 +63,7 @@ export function formatFriendlyTime(datetime?: Date | string): string {
         datetime = new Date(datetime)
     }
 
-    return datetime.toLocaleTimeString(DATE_LOCALE, {
+    return datetime.toLocaleTimeString('de', {
         hour: 'numeric',
         minute: '2-digit',
     })
@@ -99,7 +102,10 @@ export function formatFriendlyDateTimeRange(
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime(datetime?: Date | string): string {
+export function formatFriendlyDateTime(
+    lang: string,
+    datetime?: Date | string
+): string {
     if (datetime == null || isNaN(new Date(datetime).getTime())) {
         return 'No date available'
     }
@@ -124,11 +130,11 @@ export function formatNearDate(datetime: Date | string): string {
     tomorrow.setDate(today.getDate() + 1)
 
     if (datetime.toDateString() === today.toDateString()) {
-        return WORD_TODAY
+        return t('dates.today')
     } else if (datetime.toDateString() === tomorrow.toDateString()) {
-        return WORD_TOMORROW
+        return t('dates.tomorrow')
     } else {
-        return datetime.toLocaleString(DATE_LOCALE, {
+        return datetime.toLocaleString('de', {
             weekday: 'long',
             day: 'numeric',
             month: 'numeric',
@@ -142,54 +148,28 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-    const isPast = delta < 0
-    delta = Math.abs(delta)
+    const rtl = new Intl.RelativeTimeFormat('en', {
+        numeric: 'auto',
+        style: 'long',
+    })
 
     const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
     if (Math.abs(weeks) > 0) {
-        return `${
-            isPast
-                ? weeks.toString() + ' weeks ago'
-                : 'in ' +
-                  weeks.toString() +
-                  ' week' +
-                  (Math.abs(weeks) !== 1 ? 's' : '')
-        }`
+        return rtl.format(weeks, 'week')
     }
 
     const days = (delta / (24 * 60 * 60 * 1000)) | 0
     if (Math.abs(days) > 0) {
-        return `${
-            isPast
-                ? days.toString() + ' days ago'
-                : 'in ' +
-                  days.toString() +
-                  ' day' +
-                  (Math.abs(days) !== 1 ? 's' : '')
-        }`
+        return rtl.format(days, 'day')
     }
 
     const hours = (delta / (60 * 60 * 1000)) | 0
     if (Math.abs(hours) > 0) {
-        return `${
-            isPast
-                ? hours.toString() + ' hours ago'
-                : 'in ' +
-                  hours.toString() +
-                  ' hour' +
-                  (Math.abs(hours) !== 1 ? 's' : '')
-        }`
+        return rtl.format(hours, 'hour')
     }
 
     const minutes = (delta / (60 * 1000)) | 0
-    return `${
-        isPast
-            ? minutes.toString() + ' minutes ago'
-            : 'in ' +
-              minutes.toString() +
-              ' minute' +
-              (Math.abs(minutes) !== 1 ? 's' : '')
-    }`
+    return rtl.format(minutes, 'minute')
 }
 
 /**
@@ -315,25 +295,25 @@ export function addWeek(date: Date, delta: number): Date {
  * @param {Date} date
  * @returns {string}
  */
-export function getFriendlyWeek(date: Date): string {
+export function getFriendlyWeek(date: Date, lang: string): string {
     const [currStart, currEnd] = getWeek(new Date())
     const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
     if (date >= currStart && date < currEnd) {
-        return WORD_THIS_WEEK
+        return t('dates.thisWeek')
     } else if (date >= nextStart && date < nextEnd) {
-        return WORD_NEXT_WEEK
+        return t('dates.nextWeek')
     } else {
         const monday = getMonday(date)
         const sunday = new Date(monday)
         sunday.setDate(sunday.getDate() + 6)
 
         return (
-            monday.toLocaleString(DATE_LOCALE, {
+            monday.toLocaleString(lang, {
                 day: 'numeric',
                 month: 'numeric',
             }) +
             ' – ' +
-            sunday.toLocaleString(DATE_LOCALE, {
+            sunday.toLocaleString(lang, {
                 day: 'numeric',
                 month: 'numeric',
             })

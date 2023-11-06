@@ -1,5 +1,10 @@
 export default {
     menu: {
+        guest: {
+            title: 'Anmelden',
+            subtitle:
+                'Melde dich an, um alle Funktionen der App freizuschalten.',
+        },
         formlist: {
             preferences: {
                 title: 'Einstellungen',

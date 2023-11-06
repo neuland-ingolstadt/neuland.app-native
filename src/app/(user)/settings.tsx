@@ -209,9 +209,8 @@ export default function Settings(): JSX.Element {
                             ) : isLoaded === LoadingState.GUEST ? (
                                 <>
                                     <NameBox
-                                        title="Sign in"
-                                        subTitle1="Sign in to unlock all features of
-                                        the app"
+                                        title={t('menu.guest.title')}
+                                        subTitle1={t('menu.guest.subtitle')}
                                         subTitle2={''}
                                     >
                                         <Avatar

@@ -17,7 +17,7 @@ const CalendarCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const time = new Date()
-    const { t } = useTranslation('navigation')
+    const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
     enum LoadingState {
         LOADING,
@@ -91,7 +91,9 @@ const CalendarCard = (): JSX.Element => {
                                 >
                                     {/* Always use .de or .en? */}
                                     {typeof event.name === 'object'
-                                        ? event.name.en
+                                        ? event.name[
+                                              i18n.language as 'en' | 'de'
+                                          ]
                                         : event.name}
                                 </Text>
                                 <Text

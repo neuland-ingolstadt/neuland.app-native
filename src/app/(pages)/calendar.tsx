@@ -7,6 +7,7 @@ import { UserKindContext } from '@/stores/provider'
 import { type Exam, calendar, loadExamList } from '@/utils/calendar-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Linking,
@@ -21,7 +22,9 @@ export default function CalendarPage(): JSX.Element {
     const { userKind } = React.useContext(UserKindContext)
     const [exams, setExams] = useState<Exam[]>([])
     const colors = useTheme().colors as Colors
-    const displayTypes = ['Events', 'Exams']
+    const { t } = useTranslation('common')
+
+    const displayTypes = ['Events', t('pages.calendar.exams.title')]
 
     const [selectedData, setSelectedData] = useState<string>('Events')
 
@@ -34,11 +37,9 @@ export default function CalendarPage(): JSX.Element {
     const [error, setError] = useState<Error | null>(null)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
-    const calendarUrl =
-        'https://www.thi.de/en/international/studies/examination/semester-dates/'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? calendarUrl : primussUrl
+            selectedData === 'Events' ? t('common.calendar') : primussUrl
         )
     }
     useEffect(() => {
@@ -58,7 +59,7 @@ export default function CalendarPage(): JSX.Element {
                     setLoadingState(LoadingState.ERROR)
                 })
         } else {
-            setError(new Error('Not a student'))
+            setError(new Error(t('pages.calendar.exams.error')))
             setLoadingState(LoadingState.LOADED)
         }
     }, [userKind])
@@ -154,7 +155,9 @@ export default function CalendarPage(): JSX.Element {
                                             { color: colors.text },
                                         ]}
                                     >
-                                        Sign in to see your exams.
+                                        {t(
+                                            'pages.calendar.exams.errorSubtitle'
+                                        )}
                                     </Text>
                                 </View>
                             ) : (
@@ -222,8 +225,7 @@ export default function CalendarPage(): JSX.Element {
                             textAlign: 'justify',
                         }}
                     >
-                        All information without guarantee. Binding information
-                        is only available directly on the{' '}
+                        {t('pages.calendar.footer.part1')}
                         <Text
                             style={{
                                 color: colors.text,
@@ -231,7 +233,7 @@ export default function CalendarPage(): JSX.Element {
                             }}
                             onPress={handleLinkPress}
                         >
-                            university website
+                            {t('pages.calendar.footer.part2')}
                         </Text>
                         .
                     </Text>

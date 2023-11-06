@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     rowDetails: {
+        maxWidth: '65%',
         fontSize: 16,
     },
 })

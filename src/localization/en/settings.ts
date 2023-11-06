@@ -1,5 +1,9 @@
 export default {
     menu: {
+        guest: {
+            title: 'Sign in',
+            subtitle: 'Sign in to unlock all features of the app',
+        },
         formlist: {
             preferences: {
                 title: 'Preferences',

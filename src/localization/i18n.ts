@@ -1,4 +1,3 @@
-import { getLocales } from 'expo-localization'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
@@ -12,7 +11,7 @@ const resources = {
 
 void i18n.use(initReactI18next).init({
     fallbackLng: 'en',
-    lng: getLocales()[0].languageCode,
+    lng: 'de',
 
     compatibilityJSON: 'v3',
     resources,

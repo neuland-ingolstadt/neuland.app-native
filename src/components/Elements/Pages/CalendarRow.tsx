@@ -6,6 +6,7 @@ import {
 } from '@/utils/date-utils'
 import { router } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
@@ -17,9 +18,11 @@ const EventRow = ({
     event: any
     colors: Colors
 }): JSX.Element => {
+    const { t, i18n } = useTranslation('common')
+
     return (
         <RowEntry
-            title={event.name.en}
+            title={event.name[i18n.language as 'en' | 'de']}
             colors={colors}
             leftChildren={
                 <Text
@@ -47,7 +50,9 @@ const EventRow = ({
                         {event.begin != null && (
                             <>
                                 {event.end != null && event.begin < new Date()
-                                    ? `ends ${formatFriendlyRelativeTime(
+                                    ? `${t(
+                                          'dates.ends'
+                                      )} ${formatFriendlyRelativeTime(
                                           event.end
                                       )}`
                                     : formatFriendlyRelativeTime(event.begin)}

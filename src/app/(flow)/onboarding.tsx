@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         minHeight: 320,
+        minWidth: 320,
         marginBottom: 60,
     },
 })

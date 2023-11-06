@@ -122,8 +122,8 @@ const EventsCard = (): JSX.Element => {
                               {
                                   name:
                                       hiddenEntriesCount === 1
-                                          ? t('dashboard.food.oneMore')
-                                          : t('dashboard.food.more', {
+                                          ? t('dashboard.oneMore')
+                                          : t('dashboard.manyMore', {
                                                 count: hiddenEntriesCount,
                                             }),
                                   price: null,

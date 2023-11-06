@@ -13,6 +13,7 @@ import {
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     RefreshControl,
@@ -44,6 +45,8 @@ export default function LecturersCard(): JSX.Element {
     const { q } = useGlobalSearchParams<{ q: string }>()
     const [allLecturers, setAllLecturers] = useState<NormalizedLecturer[]>([])
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation('common')
+
     async function load(): Promise<void> {
         try {
             const rawData = await API.getPersonalLecturers()
@@ -163,7 +166,9 @@ export default function LecturersCard(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        {q != null ? 'Suchergebnisse' : 'Persönliche Dozenten'}
+                        {q != null
+                            ? t('pages.lecturers.results')
+                            : t('pages.lecturers.personal')}
                     </Text>
                     <View
                         style={[

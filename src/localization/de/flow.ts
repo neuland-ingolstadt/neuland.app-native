@@ -34,7 +34,7 @@ export default {
         },
     },
     login: {
-        title: 'Melde dich mit deinem THI-Konto an',
+        title: 'Anmelden mit THI-Account',
         toast: 'Anmeldung erfolgreich',
         alert: {
             error: {

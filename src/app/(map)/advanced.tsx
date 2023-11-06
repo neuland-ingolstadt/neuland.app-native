@@ -21,6 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Platform,
@@ -63,6 +64,8 @@ const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 export default function AdvancedSearch(): JSX.Element {
     const colors = useTheme().colors as Colors
     const router = useRouter()
+    const { t } = useTranslation('common')
+
     const startDate = getNextValidDate()
     const [building, setBuilding] = useState(BUILDINGS_ALL)
     const [date, setDate] = useState(formatISODate(startDate))
@@ -153,7 +156,7 @@ export default function AdvancedSearch(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        Search options
+                        {t('pages.rooms.options.title')}
                     </Text>
                     <View
                         style={[
@@ -170,7 +173,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     { color: colors.text },
                                 ]}
                             >
-                                Date
+                                {t('pages.rooms.options.date')}
                             </Text>
 
                             {Platform.OS === 'android' && (
@@ -212,7 +215,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     { color: colors.text },
                                 ]}
                             >
-                                Time
+                                {t('pages.rooms.options.time')}
                             </Text>
 
                             {Platform.OS === 'android' && (
@@ -248,7 +251,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     { color: colors.text },
                                 ]}
                             >
-                                Duration
+                                {t('pages.rooms.options.duration')}
                             </Text>
                             <Dropdown
                                 data={DURATIONS}
@@ -266,7 +269,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     { color: colors.text },
                                 ]}
                             >
-                                Building
+                                {t('pages.rooms.options.building')}
                             </Text>
                             <Dropdown
                                 data={ALL_BUILDINGS}
@@ -283,7 +286,7 @@ export default function AdvancedSearch(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        Available free rooms
+                        {t('pages.rooms.results')}
                     </Text>
                     <View
                         style={[
