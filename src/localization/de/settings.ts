@@ -42,7 +42,7 @@ export default {
         },
     },
     changelog: {
-        footer: 'Um alle detailierten Änderungen zu sehen, öffne die Commits auf ',
+        footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
     },
     profile: {
         formlist: {

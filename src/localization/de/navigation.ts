@@ -21,7 +21,7 @@ export default {
             title: 'Dozenten',
             search: 'Suche alle Dozenten',
         },
-        lecturer: 'Dozentendetails',
+        lecturer: 'Dozenten-Details',
         mobility: 'Mobilität',
     },
     cards: {
