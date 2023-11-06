@@ -135,6 +135,7 @@ export default function TimetableScreen(): JSX.Element {
                             (new Date().getHours() - 1) * 60
                         )
                     }}
+                    style={{ marginRight: 12 }}
                 >
                     <Ionicons name="today" size={22} color={colors.primary} />
                 </TouchableOpacity>
