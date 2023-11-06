@@ -53,7 +53,7 @@ export default function CalendarPage(): JSX.Element {
                     if (e instanceof NoSessionError) {
                         // router.replace('login')
                     } else {
-                        console.error(e)
+                        console.log(e)
                     }
 
                     setError(e)

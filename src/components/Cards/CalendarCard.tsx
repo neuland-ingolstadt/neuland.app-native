@@ -52,11 +52,11 @@ const CalendarCard = (): JSX.Element => {
             }))
         } catch (e) {
             if (e instanceof NoSessionError) {
-                // router.replace('/login')
+                router.push('(user)/login')
             } else if ((e as Error).message === 'Query not possible') {
                 // ignore, leaving examList empty
             } else {
-                console.error(e as Error)
+                console.log(e as Error)
             }
         }
 

@@ -118,7 +118,7 @@ export default function TimetableScreen(): JSX.Element {
                     ...splitEvents,
                 ])
             } catch (e) {
-                console.error(e)
+                console.log(e)
             }
         }
 
@@ -329,21 +329,20 @@ export default function TimetableScreen(): JSX.Element {
                     hourTextStyle={{
                         color: colors.text,
                     }}
-                    headerStyle={[
-                        styles.headerStyle,
-                        {
-                            backgroundColor: colors.card,
-                        },
-                    ]}
-                    gridRowStyle={[
-                        styles.gridRowStyle,
-                        { borderColor: colors.border },
-                    ]}
+                    headerStyle={{
+                        ...styles.headerStyle,
+
+                        backgroundColor: colors.card,
+                    }}
+                    gridRowStyle={{
+                        ...styles.gridRowStyle,
+                        borderColor: colors.border,
+                    }}
                     gridColumnStyle={styles.gridColumnStyle}
-                    headerTextStyle={[
-                        styles.headerTextStyle,
-                        { color: colors.text },
-                    ]}
+                    headerTextStyle={{
+                        ...styles.headerTextStyle,
+                        color: colors.text,
+                    }}
                 />
             </View>
         </>
