@@ -80,7 +80,7 @@ export default function Theme(): JSX.Element {
                         paddingTop: 4,
                     }}
                 >
-                    {color.name}
+                    {t(`theme.colors.${code}`)}
                 </Text>
             </View>
         )

@@ -84,6 +84,17 @@ export default {
             title: 'Exklusive Designs',
             description: 'Demnächst verfügbar',
         },
+        colors: {
+            teal: 'Türkis',
+            blue: 'Blau',
+            contrast: 'Kontrast',
+            pink: 'Pink',
+            red: 'Rot',
+            purple: 'Lila',
+            yellow: 'Gelb',
+            orange: 'Orange',
+            green: 'Grün',
+        },
         footer: 'Ändere die Akzentfarbe, um deinen Stil zu entsprechen. Das ändert die Farbe der Symbole und Schaltflächen in der App.',
     },
     dashboard: {

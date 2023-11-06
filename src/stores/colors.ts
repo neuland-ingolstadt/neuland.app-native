@@ -3,7 +3,6 @@ import { type Theme } from '@react-navigation/native'
 type AccentColors = Record<
     string,
     {
-        name: string
         light: string
         dark: string
     }
@@ -33,49 +32,40 @@ export interface AppTheme extends Theme {
 
 export const accentColors: AccentColors = {
     teal: {
-        name: 'Default',
         light: '#2aa2ba',
         dark: '#37bdd8',
     },
-    thi: {
-        name: 'THI',
-        light: '#0b468a',
-        dark: '#115db3',
+    blue: {
+        light: '#0e4b95',
+        dark: '#0c61b7',
     },
     contrast: {
-        name: 'Contrast',
         light: '#000000',
         dark: '#ffffff',
     },
     pink: {
-        name: 'Pink',
         light: '#ea1a78',
         dark: '#f22a88',
     },
-    magenta: {
-        name: 'Magenta',
-        light: '#ba2a8a',
-        dark: '#d8379b',
-    },
     purple: {
-        name: 'Purple',
         light: '#74209e',
         dark: '#9b37d8',
     },
+    green: {
+        light: '#1fa91f',
+        dark: '#37d837',
+    },
     yellow: {
-        name: 'Yellow',
         light: '#d8c412',
         dark: '#e6d81f',
     },
     orange: {
-        name: 'Orange',
         light: '#e3661d',
         dark: '#f1932e',
     },
-    green: {
-        name: 'Green',
-        light: '#1fa31f',
-        dark: '#37d837',
+    red: {
+        light: '#cf2121',
+        dark: '#e42e2e',
     },
 }
 

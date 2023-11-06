@@ -82,6 +82,17 @@ export default {
             title: 'Exclusive designs',
             description: 'Coming soon',
         },
+        colors: {
+            teal: 'Teal',
+            blue: 'Blau',
+            contrast: 'Contrast',
+            pink: 'Pink',
+            red: 'Rot',
+            purple: 'Purple',
+            yellow: 'Yellow',
+            orange: 'Orange',
+            green: 'Green',
+        },
         footer: 'Change the accent color to match your style. This changes the color of the icons and buttons in the app.',
     },
     dashboard: {
