@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     },
     cardRow: {
         flexDirection: 'row',
+        alignItems: 'center',
         paddingHorizontal: 15,
         marginVertical: 12,
     },
