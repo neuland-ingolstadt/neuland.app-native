@@ -3,6 +3,7 @@ import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
+import { useUserKind } from '@/stores/hooks'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
@@ -11,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -30,7 +32,6 @@ enum LoadingState {
     LOADING,
     REFRESHING,
     LOADED,
-    GUEST,
     ERROR,
 }
 
@@ -44,6 +45,8 @@ export default function Settings(): JSX.Element {
     const colors = useTheme().colors as Colors
     const nameColor = getNameColor(fullName)
     const { t, i18n } = useTranslation(['settings'])
+
+    const { userKind } = useUserKind()
 
     const languageAlert = (): void => {
         const newLocale = i18n.language === 'en' ? 'de' : 'en'
@@ -92,28 +95,31 @@ export default function Settings(): JSX.Element {
 
     const loadData = async (): Promise<void> => {
         try {
-            const response = await API.getPersonalData()
-            const data = response.persdata
-            data.pcounter = response.pcounter
-            setIsLoaded(LoadingState.LOADED)
-            setUserdata(data)
-            setFullName(data.vname + ' ' + data.name)
-        } catch (e: any) {
-            if (
-                e.toString() === 'Error: User is logged in as guest' ||
-                e.toString() === 'Error: User is not logged in'
-            ) {
-                setIsLoaded(LoadingState.GUEST)
-            } else {
-                setIsLoaded(LoadingState.ERROR)
-                setErrorMsg(e.toString().split(':')[1].trim())
+            setIsLoaded(LoadingState.LOADING)
+            if (userKind === 'student') {
+                const response = await API.getPersonalData()
+                const data = response.persdata
+                data.pcounter = response.pcounter
+                setUserdata(data)
+                setFullName(data.vname + ' ' + data.name)
+                setIsLoaded(LoadingState.LOADED)
+            } else if (userKind === 'employee') {
+                setFullName(
+                    (await SecureStore.getItemAsync('username')) ?? 'unknown'
+                )
+                setIsLoaded(LoadingState.LOADED)
+            } else if (userKind === 'guest') {
+                setIsLoaded(LoadingState.LOADED)
             }
+        } catch (e: any) {
+            setIsLoaded(LoadingState.ERROR)
+            setErrorMsg(e.toString().split(':')[1].trim())
         }
     }
 
     useEffect(() => {
         void loadData()
-    }, [])
+    }, [userKind])
 
     const handleRefresh = (): void => {
         setIsLoaded(LoadingState.LOADING)
@@ -220,8 +226,7 @@ export default function Settings(): JSX.Element {
     return (
         <ScrollView
             refreshControl={
-                isLoaded !== LoadingState.LOADED &&
-                isLoaded !== LoadingState.GUEST ? (
+                isLoaded !== LoadingState.LOADED && userKind === 'student' ? (
                     <RefreshControl
                         refreshing={isLoaded === LoadingState.REFRESHING}
                         onRefresh={handleRefresh}
@@ -232,11 +237,11 @@ export default function Settings(): JSX.Element {
             <View style={styles.wrapper}>
                 <Pressable
                     onPress={() => {
-                        if (isLoaded === LoadingState.LOADED) {
+                        if (userKind === 'student') {
                             router.push('(user)/profile')
-                        } else if (isLoaded === LoadingState.GUEST) {
+                        } else if (userKind === 'guest') {
                             router.push('(user)/login')
-                        } else if (isLoaded === LoadingState.ERROR) {
+                        } else {
                             logoutAlert()
                         }
                     }}
@@ -249,53 +254,8 @@ export default function Settings(): JSX.Element {
                         ]}
                     >
                         <View style={styles.nameBox}>
-                            {isLoaded === LoadingState.LOADING ? (
-                                <>
-                                    <View style={styles.loading}>
-                                        <ActivityIndicator />
-                                    </View>
-                                </>
-                            ) : isLoaded === LoadingState.ERROR ? (
-                                <>
-                                    <NameBox
-                                        title="Error"
-                                        subTitle1={errorMsg}
-                                        subTitle2={t('menu.error.subtitle2')}
-                                    >
-                                        <Avatar
-                                            background={
-                                                colors.labelTertiaryColor
-                                            }
-                                        >
-                                            <Ionicons
-                                                name="alert"
-                                                size={20}
-                                                color={colors.background}
-                                            />
-                                        </Avatar>
-                                    </NameBox>
-                                </>
-                            ) : isLoaded === LoadingState.GUEST ? (
-                                <>
-                                    <NameBox
-                                        title={t('menu.guest.title')}
-                                        subTitle1={t('menu.guest.subtitle')}
-                                        subTitle2={''}
-                                    >
-                                        <Avatar
-                                            background={
-                                                colors.labelTertiaryColor
-                                            }
-                                        >
-                                            <Ionicons
-                                                name="person"
-                                                size={20}
-                                                color={colors.background}
-                                            />
-                                        </Avatar>
-                                    </NameBox>
-                                </>
-                            ) : (
+                            {isLoaded === LoadingState.LOADED &&
+                            userKind === 'student' ? (
                                 <>
                                     <NameBox
                                         title={fullName}
@@ -320,10 +280,82 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                 </>
+                            ) : isLoaded === LoadingState.LOADED &&
+                              userKind === 'employee' ? (
+                                <>
+                                    <NameBox
+                                        title={fullName}
+                                        subTitle1={t('menu.employee.subtitle')}
+                                        subTitle2={''}
+                                    >
+                                        <Avatar background={nameColor}>
+                                            <Text
+                                                style={{
+                                                    color: getContrastColor(
+                                                        nameColor
+                                                    ),
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold',
+                                                }}
+                                            >
+                                                {getInitials(fullName)}
+                                            </Text>
+                                        </Avatar>
+                                    </NameBox>
+                                </>
+                            ) : isLoaded === LoadingState.LOADED &&
+                              userKind === 'guest' ? (
+                                <>
+                                    <NameBox
+                                        title={t('menu.guest.title')}
+                                        subTitle1={t('menu.guest.subtitle')}
+                                        subTitle2={''}
+                                    >
+                                        <Avatar
+                                            background={
+                                                colors.labelTertiaryColor
+                                            }
+                                        >
+                                            <Ionicons
+                                                name="person"
+                                                size={20}
+                                                color={colors.background}
+                                            />
+                                        </Avatar>
+                                    </NameBox>
+                                </>
+                            ) : isLoaded === LoadingState.ERROR ? (
+                                <>
+                                    <NameBox
+                                        title="Error"
+                                        subTitle1={errorMsg}
+                                        subTitle2={t('menu.error.subtitle2')}
+                                    >
+                                        <Avatar
+                                            background={
+                                                colors.labelTertiaryColor
+                                            }
+                                        >
+                                            <Ionicons
+                                                name="alert"
+                                                size={20}
+                                                color={colors.background}
+                                            />
+                                        </Avatar>
+                                    </NameBox>
+                                </>
+                            ) : isLoaded === LoadingState.LOADING ? (
+                                <>
+                                    <View style={styles.loading}>
+                                        <ActivityIndicator />
+                                    </View>
+                                </>
+                            ) : (
+                                <></>
                             )}
 
-                            {isLoaded === LoadingState.LOADED ||
-                            isLoaded === LoadingState.GUEST ? (
+                            {isLoaded === LoadingState.LOADED &&
+                            userKind === 'student' ? (
                                 <Ionicons
                                     name="chevron-forward-outline"
                                     size={24}
