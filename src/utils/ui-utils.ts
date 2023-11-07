@@ -10,13 +10,13 @@ import { Platform } from 'react-native'
  */
 export function getInitials(name: string): string {
     const names = name.split(' ')
-    const firstName = names[0] ?? ''
-    const lastName = names[names.length - 1] ?? ''
-
-    let initials = (firstName.charAt(0) ?? '') + (lastName.charAt(0) ?? '')
-    initials = initials.toUpperCase()
-
-    return initials
+    if (names.length < 2) {
+        return names[0].charAt(0).toUpperCase()
+    } else {
+        return (
+            names[0].charAt(0) + names[names.length - 1].charAt(0)
+        ).toUpperCase()
+    }
 }
 
 /**
