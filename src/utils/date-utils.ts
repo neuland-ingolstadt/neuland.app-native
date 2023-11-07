@@ -329,3 +329,16 @@ export function getDateRange(startDate: Date, delta: number): Date[] {
     }
     return dates
 }
+
+/**
+ * Returns the date without the time
+ * @param date
+ * @returns Date with time set to 00:00:00
+ * @example
+ * ignoreTime(new Date('2021-01-01T12:00:00')) // => new Date('2021-01-01T00:00:00')
+ */
+export function ignoreTime(date: Date): Date {
+    date = new Date(date)
+    date.setHours(0, 0, 0, 0)
+    return date
+}
