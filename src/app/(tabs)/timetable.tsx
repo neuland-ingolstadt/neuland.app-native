@@ -2,7 +2,13 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
-import { getDateRange, isSameDay } from '@/utils/date-utils'
+import {
+    addDays,
+    getDateRange,
+    getDayDelta,
+    ignoreTime,
+    isSameDay,
+} from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
@@ -20,6 +26,7 @@ import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
 
 const NUMBER_OF_DAYS = 3
+const TODAY = new Date()
 
 export default function TimetableScreen(): JSX.Element {
     const weekViewRef = useRef<typeof WeekView>()
@@ -29,7 +36,7 @@ export default function TimetableScreen(): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
 
-    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [selectedDate, setSelectedDate] = useState(TODAY)
     const { i18n } = useTranslation()
 
     const textColor = Color(colors.text)
@@ -51,7 +58,7 @@ export default function TimetableScreen(): JSX.Element {
     useEffect(() => {
         async function load(): Promise<void> {
             try {
-                const timetable = await getFriendlyTimetable(new Date())
+                const timetable = await getFriendlyTimetable(TODAY)
                 const timetableEntries = timetableToWeekViewEvents(timetable)
                 const calendarEntries = calendarToWeekViewEvents(calendar)
                 const allEvents = [...timetableEntries, ...calendarEntries]
@@ -67,50 +74,57 @@ export default function TimetableScreen(): JSX.Element {
                 const allDayEvents = allEvents.filter(
                     (event) => event.allDay ?? false
                 )
-                const today = new Date()
+                const today = ignoreTime(TODAY)
                 const splitEvents = allDayEvents.flatMap((event) => {
-                    const dayDelta = Math.floor(
-                        (event.endDate.getTime() - event.startDate.getTime()) /
-                            (1000 * 60 * 60 * 24)
-                    )
-                    const todayDelta = Math.floor(
-                        (event.startDate.getTime() - today.getTime()) /
-                            (1000 * 60 * 60 * 24)
-                    )
-                    const offset =
-                        NUMBER_OF_DAYS - ((todayDelta % NUMBER_OF_DAYS) + 1)
-                    const splits = Math.ceil(
-                        (dayDelta - offset) / NUMBER_OF_DAYS
+                    const splitEvents = []
+
+                    const todayDelta = getDayDelta(event.startDate, today)
+
+                    // add initial event (event till first calendar split)
+                    const initialEndDate = addDays(
+                        event.startDate,
+                        (todayDelta < 0
+                            ? Math.abs(todayDelta) - 1
+                            : NUMBER_OF_DAYS - 1 - todayDelta) % NUMBER_OF_DAYS
                     )
 
-                    const splitEvents = []
-                    if (offset > 0) {
-                        const endDate = new Date(
-                            event.startDate.getTime() +
-                                1000 * 60 * 60 * 24 * (offset - 1)
-                        )
-                        const splitEvent = { ...event, endDate, id: event.id }
-                        splitEvents.push(splitEvent)
+                    const initialEvent = {
+                        ...event,
+                        startDate: event.startDate,
+                        endDate: initialEndDate,
+                        id: event.id,
                     }
+
+                    splitEvents.push(initialEvent)
+
+                    // add all calendar splits
+                    const splits = Math.ceil(
+                        getDayDelta(event.endDate, initialEndDate) /
+                            NUMBER_OF_DAYS
+                    )
+
                     for (let i = 0; i < splits; i++) {
-                        const startDate = new Date(
-                            event.startDate.getTime() +
-                                (i * NUMBER_OF_DAYS + offset) *
-                                    (1000 * 60 * 60 * 24)
+                        const startDate = addDays(
+                            initialEndDate,
+                            i * NUMBER_OF_DAYS + 1
                         )
-                        const endDate = new Date(
-                            startDate.getTime() +
-                                1000 * 60 * 60 * 24 * (NUMBER_OF_DAYS - 1)
-                        )
+                        const endDate = addDays(startDate, NUMBER_OF_DAYS - 1)
+
+                        // if endDate is after event.endDate, set endDate to event.endDate
+                        if (endDate.getTime() > event.endDate.getTime()) {
+                            endDate.setTime(event.endDate.getTime())
+                        }
+
                         const splitEvent = {
                             ...event,
                             startDate,
                             endDate,
-                            originalStartDate: startDate,
                             id: event.id + i,
                         }
+
                         splitEvents.push(splitEvent)
                     }
+
                     return splitEvents
                 })
                 setTimetable([
@@ -131,10 +145,10 @@ export default function TimetableScreen(): JSX.Element {
                 <TouchableOpacity
                     onPress={() => {
                         // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
-                        weekViewRef.current?.goToDate(new Date())
+                        weekViewRef.current?.goToDate(TODAY)
                         // @ts-expect-error Property 'scrollToTime' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.scrollToTime(
-                            (new Date().getHours() - 1) * 60
+                            (TODAY.getHours() - 1) * 60
                         )
                     }}
                     style={styles.headerIcon}
@@ -249,7 +263,7 @@ export default function TimetableScreen(): JSX.Element {
         date,
         formattedDate,
     }) => {
-        const today = isSameDay(new Date(date), new Date())
+        const today = isSameDay(new Date(date), TODAY)
         return (
             <TouchableOpacity
                 onPress={() => {

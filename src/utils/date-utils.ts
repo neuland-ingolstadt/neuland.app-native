@@ -329,3 +329,45 @@ export function getDateRange(startDate: Date, delta: number): Date[] {
     }
     return dates
 }
+
+/**
+ * Returns the date without the time
+ * @param date
+ * @returns Date with time set to 00:00:00
+ * @example
+ * ignoreTime(new Date('2021-01-01T12:00:00')) // => new Date('2021-01-01T00:00:00')
+ */
+export function ignoreTime(date: Date): Date {
+    date = new Date(date)
+    date.setHours(0, 0, 0, 0)
+    return date
+}
+
+/**
+ * Adds days to a date
+ * @param date Original date
+ * @param days Days to add
+ * @returns Date with added days
+ * @example
+ * addDays(new Date('2021-01-01T12:00:00'), 1) // => new Date('2021-01-02T12:00:00')
+ */
+export function addDays(date: Date, days: number): Date {
+    const result = new Date(date)
+    result.setDate(result.getDate() + days)
+    return result
+}
+
+/**
+ * Returns the number of days between two dates
+ * @param a Date a
+ * @param b Date b
+ * @returns Number of days between a and b
+ * @example
+ * getDayDelta(new Date('2021-01-01T12:00:00'), new Date('2021-01-02T12:00:00')) // => 1
+ */
+export function getDayDelta(a: Date, b: Date): number {
+    // 86400000 = 1000 * 60 * 60 * 24
+    return Math.round(
+        (ignoreTime(a).getTime() - ignoreTime(b).getTime()) / 86400000
+    )
+}
