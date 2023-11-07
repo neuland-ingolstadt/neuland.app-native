@@ -42,12 +42,12 @@ export default {
             details: {
                 title: 'Title',
                 organization: 'Organization',
-                functions: 'Function',
+                function: 'Function',
             },
             contact: {
                 room: 'Room',
                 title: 'Contact',
-                phone: '    Phone',
+                phone: 'Phone',
                 office: 'Office hours',
                 exam: 'Exam insights',
             },

@@ -1,5 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import changelogData from '@/data/changelog.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@customTypes/components'
 import { type Changelog } from '@customTypes/data'
@@ -11,7 +12,7 @@ import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const changelog: Changelog = changelogData
-    const { t } = useTranslation(['settings'])
+    const { t, i18n } = useTranslation(['settings'])
     const sorted = {
         version: Object.keys(changelog.version)
             .sort((a, b) => Number(b) - Number(a))
@@ -31,7 +32,7 @@ export default function Theme(): JSX.Element {
         ...Object.keys(sorted.version).map((key) => ({
             header: `Version ${key}`,
             items: sorted.version[key].map((item) => ({
-                title: item.title.en,
+                title: item.title[i18n.language as LanguageKey],
                 disabled: true,
                 icon: item.icon,
             })),

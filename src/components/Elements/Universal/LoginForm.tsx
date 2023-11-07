@@ -195,9 +195,11 @@ const LoginForm = (): JSX.Element => {
                                         onChangeText={(text) => {
                                             setUsername(text)
                                         }}
+                                        clearButtonMode="while-editing"
                                         selectionColor={colors.primary}
                                         autoCapitalize="none"
                                         autoComplete="username"
+                                        textContentType="username"
                                     />
                                 </View>
                             </View>
@@ -246,6 +248,7 @@ const LoginForm = (): JSX.Element => {
                                         secureTextEntry={true}
                                         clearButtonMode="while-editing"
                                         autoComplete="current-password"
+                                        textContentType="password"
                                     />
                                 </View>
                             </View>

@@ -1,7 +1,9 @@
 import API from '@/api/authenticated-api'
+import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
+import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
 import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
@@ -36,7 +38,7 @@ export default function Settings(): JSX.Element {
     const [userdata, setUserdata] = useState<PersDataDetails | null>(null)
     const [fullName, setFullName] = useState('')
     const [isLoaded, setIsLoaded] = useState(LoadingState.LOADING)
-    const [errorMsg, setErrorMsg] = useState('')
+    const [errorMsg, setErrorMsg] = useState('Unknown error')
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
@@ -60,6 +62,28 @@ export default function Settings(): JSX.Element {
                     onPress: () => {
                         void AsyncStorage.setItem('language', newLocale)
                         void i18n.changeLanguage(newLocale)
+                    },
+                },
+            ]
+        )
+    }
+
+    const logoutAlert = (): void => {
+        Alert.alert(
+            t('profile.logout.alert.title'),
+            t('profile.logout.alert.message'),
+            [
+                {
+                    text: t('profile.logout.alert.cancel'),
+                    style: 'cancel',
+                },
+                {
+                    text: t('profile.logout.alert.confirm'),
+                    style: 'destructive',
+                    onPress: () => {
+                        logout().catch((e) => {
+                            console.log(e)
+                        })
                     },
                 },
             ]
@@ -94,6 +118,18 @@ export default function Settings(): JSX.Element {
     const handleRefresh = (): void => {
         setIsLoaded(LoadingState.LOADING)
         void loadData()
+    }
+
+    const { toggleUserKind } = React.useContext(UserKindContext)
+
+    const logout = async (): Promise<void> => {
+        try {
+            toggleUserKind(undefined)
+            await createGuestSession()
+            router.push('(user)/login')
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     const sections: FormListSections[] = [
@@ -200,12 +236,11 @@ export default function Settings(): JSX.Element {
                             router.push('(user)/profile')
                         } else if (isLoaded === LoadingState.GUEST) {
                             router.push('(user)/login')
+                        } else if (isLoaded === LoadingState.ERROR) {
+                            logoutAlert()
                         }
                     }}
-                    disabled={
-                        isLoaded === LoadingState.LOADING ||
-                        isLoaded === LoadingState.ERROR
-                    }
+                    disabled={isLoaded === LoadingState.LOADING}
                 >
                     <View
                         style={[
@@ -222,7 +257,11 @@ export default function Settings(): JSX.Element {
                                 </>
                             ) : isLoaded === LoadingState.ERROR ? (
                                 <>
-                                    <NameBox title="Error" subTitle1={errorMsg}>
+                                    <NameBox
+                                        title="Error"
+                                        subTitle1={errorMsg}
+                                        subTitle2={t('menu.error.subtitle2')}
+                                    >
                                         <Avatar
                                             background={
                                                 colors.labelTertiaryColor

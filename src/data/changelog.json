@@ -43,8 +43,8 @@
                     "en": "Localization (DE / EN)"
                 },
                 "description": {
-                    "de": "Die App ist nun in zwei Sprachen verfügbar: Deutsch und Englisch. Die Sprache kann in den Einstellungen geändert werden.",
-                    "en": "The app is now available in two languages: German and English. The language can be changed in the settings."
+                    "de": "Die App ist nun in zwei Sprachen verfügbar. Die Sprache kann in den Einstellungen geändert werden.",
+                    "en": "The app is now available in two languages. The language can be changed in the settings."
                 },
                 "icon": "language-outline"
             },

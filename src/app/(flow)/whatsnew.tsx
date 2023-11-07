@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
         gap: 12,
     },
     title: {
-        fontSize: 28,
+        fontSize: 32,
+        paddingBottom: 10,
         fontWeight: 'bold',
         textAlign: 'center',
     },
