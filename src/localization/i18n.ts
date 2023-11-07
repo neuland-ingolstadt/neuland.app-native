@@ -12,13 +12,18 @@ const resources = {
 
 export type LanguageKey = keyof typeof resources
 
+const languageCode = getLocales()[0].languageCode
+const fallbackLanguage = 'en'
+const language = Object.keys(resources).includes(languageCode)
+    ? languageCode
+    : fallbackLanguage
+
 void i18n.use(initReactI18next).init({
-    fallbackLng: 'en',
-    lng: getLocales()[0].languageCode,
+    fallbackLng: fallbackLanguage,
+    lng: language,
     compatibilityJSON: 'v3',
     resources,
     debug: false,
-
     interpolation: {
         escapeValue: false,
     },
