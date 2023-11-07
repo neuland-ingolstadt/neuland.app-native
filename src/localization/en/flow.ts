@@ -1,6 +1,6 @@
 export default {
     whatsnew: {
-        title: "What's new",
+        title: "What's new?",
         version: 'in version {{version}}',
         continue: 'Continue',
     },

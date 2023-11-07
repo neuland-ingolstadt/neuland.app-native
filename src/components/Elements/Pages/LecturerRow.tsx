@@ -91,6 +91,7 @@ const LecturerRow = ({
                 </>
             }
             onPress={onPressRow}
+            maxTitleWidth={'75%'}
         />
     )
 }

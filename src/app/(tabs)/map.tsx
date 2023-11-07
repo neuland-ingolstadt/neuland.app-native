@@ -62,7 +62,7 @@ export default function Screen(): JSX.Element {
                 <Stack2.Screen
                     name="Map"
                     options={{
-                        title: 'Campus Map',
+                        title: t('navigation.campusMap', { ns: 'navigation' }),
                         headerShown: true,
                         headerLargeTitle: false,
 

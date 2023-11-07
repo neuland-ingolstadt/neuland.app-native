@@ -5,6 +5,9 @@ export default {
             subtitle:
                 'Melde dich an, um alle Funktionen der App freizuschalten.',
         },
+        error: {
+            subtitle2: 'Ziehe zum Aktualisieren oder tippe zum Abmelden',
+        },
         formlist: {
             preferences: {
                 title: 'Einstellungen',

@@ -1,6 +1,6 @@
 export default {
     whatsnew: {
-        title: 'Was ist neu',
+        title: 'Was ist neu?',
         version: 'in Version {{version}}',
         continue: 'Weiter',
     },

@@ -114,7 +114,7 @@ const CLEventRow = ({
                     </View>
                 </>
             }
-            maxTitleWidth={'75%'}
+            maxTitleWidth={'65%'}
         />
     )
 }
