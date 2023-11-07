@@ -87,7 +87,7 @@ export default {
         },
         colors: {
             teal: 'Teal',
-            blue: 'Blau',
+            blue: 'Blue',
             contrast: 'Contrast',
             pink: 'Pink',
             red: 'Red',
