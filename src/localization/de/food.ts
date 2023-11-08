@@ -28,6 +28,12 @@ export default {
         manyMore: 'und {{count}} weitere Gerichte',
         empty: 'Die Speisekarte für heute ist leer.',
     },
+    categories: {
+        Suppe: 'Suppe',
+        Salat: 'Salat',
+        Essen: 'Essen',
+        Aktion: 'Aktion',
+    },
     details: {
         footer: 'Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
         formlist: {

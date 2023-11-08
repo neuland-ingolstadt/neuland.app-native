@@ -289,42 +289,48 @@ export default function AdvancedSearch(): JSX.Element {
                         {t('pages.rooms.results')}
                     </Text>
                     <View
-                        style={[
-                            styles.section,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
+                        style={{
+                            paddingBottom: 20,
+                        }}
                     >
-                        {loadingState === LoadingState.LOADING && (
-                            <ActivityIndicator
-                                color={colors.primary}
-                                style={styles.loadingIndicator}
-                            />
-                        )}
-                        {loadingState === LoadingState.ERROR && (
-                            <View style={styles.errorSection}>
-                                <Text
-                                    style={[
-                                        styles.errorMessage,
-                                        { color: colors.text },
-                                    ]}
-                                >
-                                    {error?.message}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.errorInfo,
-                                        { color: colors.text },
-                                    ]}
-                                >
-                                    {t('error.refresh')}{' '}
-                                </Text>
-                            </View>
-                        )}
-                        {loadingState === LoadingState.LOADED && (
-                            <FreeRoomsList rooms={filterResults} />
-                        )}
+                        <View
+                            style={[
+                                styles.section,
+                                {
+                                    backgroundColor: colors.card,
+                                },
+                            ]}
+                        >
+                            {loadingState === LoadingState.LOADING && (
+                                <ActivityIndicator
+                                    color={colors.primary}
+                                    style={styles.loadingIndicator}
+                                />
+                            )}
+                            {loadingState === LoadingState.ERROR && (
+                                <View style={styles.errorSection}>
+                                    <Text
+                                        style={[
+                                            styles.errorMessage,
+                                            { color: colors.text },
+                                        ]}
+                                    >
+                                        {error?.message}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.errorInfo,
+                                            { color: colors.text },
+                                        ]}
+                                    >
+                                        {t('error.refresh')}{' '}
+                                    </Text>
+                                </View>
+                            )}
+                            {loadingState === LoadingState.LOADED && (
+                                <FreeRoomsList rooms={filterResults} />
+                            )}
+                        </View>
                     </View>
                 </View>
             </ScrollView>

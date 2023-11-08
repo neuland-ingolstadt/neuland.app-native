@@ -3,6 +3,7 @@ import { type Meal } from '@/stores/types/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 
@@ -48,6 +49,8 @@ const MealCategory = ({
     const toggleCollapsed = (): void => {
         setCollapsed(!collapsed)
     }
+    const { t } = useTranslation('food')
+
     const colors = useTheme().colors as Colors
     return (
         <>
@@ -65,7 +68,7 @@ const MealCategory = ({
                                 { color: colors.labelColor },
                             ]}
                         >
-                            {category}
+                            {t(`categories.${category}`, category)}
                         </Text>
                         <Ionicons
                             name={
@@ -222,13 +225,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         paddingTop: 5,
-        paddingBottom: 5,
+        paddingBottom: 3,
     },
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 2,
+        paddingTop: 4,
         paddingBottom: 4,
     },
     toogleIcon: {

@@ -28,6 +28,12 @@ export default {
         manyMore: 'and {{count}} more meals',
         empty: "Today's menu is empty.",
     },
+    categories: {
+        Suppe: 'Soup',
+        Salat: 'Salad',
+        Essen: 'Food',
+        Aktion: 'Special',
+    },
     details: {
         footer: 'This meal has been automatically translated. We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
         formlist: {
