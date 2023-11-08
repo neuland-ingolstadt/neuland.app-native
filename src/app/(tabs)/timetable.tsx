@@ -157,11 +157,11 @@ export default function TimetableScreen(): JSX.Element {
                     }}
                     style={styles.headerIcon}
                 >
-                    <Ionicons name="today" size={22} color={colors.primary} />
+                    <Ionicons name="today" size={22} color={colors.text} />
                 </TouchableOpacity>
             ),
         })
-    }, [navigation])
+    }, [navigation, colors])
 
     function timetableToWeekViewEvents(
         entries: FriendlyTimetableEntry[]
@@ -175,8 +175,8 @@ export default function TimetableScreen(): JSX.Element {
                 color: colors.primary,
                 description: entry.shortName,
                 location: entry.rooms.join(', '),
-                eventKind: 'standard' as 'standard' | 'block',
-                resolveOverlap: 'stack' as 'stack' | 'lane',
+                eventKind: 'standard',
+                resolveOverlap: 'lane',
                 stackKey: index.toString(),
                 type: 'timetable',
             }
@@ -192,8 +192,8 @@ export default function TimetableScreen(): JSX.Element {
                 title: entry.name[i18n.language as LanguageKey],
                 color: calendarColor.hex(),
                 description: '',
-                eventKind: 'standard' as 'standard' | 'block',
-                resolveOverlap: 'stack' as 'stack' | 'lane',
+                eventKind: 'standard',
+                resolveOverlap: 'lane',
                 stackKey: index.toString(),
                 allDay: entry.hasHours === false || !entry.hasHours,
                 type: 'calendar',
@@ -337,7 +337,6 @@ export default function TimetableScreen(): JSX.Element {
                     onSwipePrev={(date) => {
                         setSelectedDate(date)
                     }}
-                    enableVerticalPinch={true}
                     formatDateHeader="ddd D"
                     EventComponent={
                         TimetableEntry as FC<{ event: WeekViewEvent }>
