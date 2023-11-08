@@ -36,7 +36,7 @@ export default {
             events: 'Events',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
-            mensa: 'Canteen',
+            mensa: 'Mensa',
             food: 'Food',
         },
         events: {

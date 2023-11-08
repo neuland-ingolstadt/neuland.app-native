@@ -3,6 +3,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
 import {
     _addRoom,
     _removeAllGeoJson,
@@ -20,10 +21,9 @@ import {
 } from '@/utils/room-utils'
 import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,12 +37,7 @@ import {
 } from 'react-native'
 import { WebView } from 'react-native-webview'
 
-const Stack2 = createNativeStackNavigator()
 export default function Screen(): JSX.Element {
-    const router = useRouter()
-    const colors = useTheme().colors as Colors
-    const { t } = useTranslation('common')
-
     return (
         <>
             <Head>
@@ -51,62 +46,12 @@ export default function Screen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <Stack.Screen
-                options={{
-                    headerShown: false,
-                    headerBackButtonMenuEnabled: false,
-                }}
+            <WorkaroundStack
+                name={'Map'}
+                titleKey={'navigation.campusMap'}
+                component={MapScreen}
+                transparent={true}
             />
-
-            <Stack2.Navigator>
-                <Stack2.Screen
-                    name="Map"
-                    options={{
-                        title: t('navigation.campusMap', { ns: 'navigation' }),
-                        headerShown: true,
-                        headerLargeTitle: false,
-
-                        headerSearchBarOptions: {
-                            placeholder: t('pages.map.search'),
-                            hideWhenScrolling: false,
-                            hideNavigationBar: true,
-                            onChangeText: (event) => {
-                                router.setParams({
-                                    q: event.nativeEvent.text,
-                                })
-                            },
-                            ...Platform.select({
-                                android: {
-                                    headerIconColor: colors.text,
-                                    textColor: colors.text,
-                                    hintTextColor: colors.text,
-                                    tintColor: colors.text,
-                                },
-                            }),
-                        },
-                        ...Platform.select({
-                            ios: {
-                                headerTransparent: true,
-                                headerBlurEffect: 'regular',
-                            },
-                        }),
-                        headerRight: () => (
-                            <Pressable
-                                onPress={() => {
-                                    router.push('(map)/advanced')
-                                }}
-                            >
-                                <Ionicons
-                                    name="options-outline"
-                                    size={24}
-                                    color={colors.primary}
-                                />
-                            </Pressable>
-                        ),
-                    }}
-                    component={MapScreen}
-                />
-            </Stack2.Navigator>
         </>
     )
 }
@@ -144,6 +89,72 @@ export const MapScreen = (): JSX.Element => {
 
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
+    const navigation = useNavigation()
+    const { t } = useTranslation('common')
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Pressable
+                    onPress={() => {
+                        router.push('(map)/advanced')
+                    }}
+                >
+                    <Ionicons
+                        name="options-outline"
+                        size={24}
+                        color={colors.text}
+                    />
+                </Pressable>
+            ),
+            headerSearchBarOptions: {
+                placeholder: t('pages.map.search'),
+                shouldShowHintSearchIcon: false,
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    router.setParams({
+                        q: event.nativeEvent.text,
+                    })
+                },
+                // if open hide the headerRight button
+                onFocus: () => {
+                    if (Platform.OS === 'android') {
+                        navigation.setOptions({
+                            headerRight: () => null,
+                        })
+                    }
+                },
+                // if closed show the headerRight button
+                onClose: () => {
+                    // android only anyway so no need to check
+                    const advancedButton = (
+                        <Pressable
+                            onPress={() => {
+                                router.push('(map)/advanced')
+                            }}
+                        >
+                            <Ionicons
+                                name="options-outline"
+                                size={24}
+                                color={colors.text}
+                            />
+                        </Pressable>
+                    )
+                    navigation.setOptions({
+                        headerRight: () => advancedButton,
+                    })
+                },
+
+                ...Platform.select({
+                    android: {
+                        headerIconColor: colors.text,
+                        textColor: colors.text,
+                        hintTextColor: colors.text,
+                        tintColor: colors.text,
+                    },
+                }),
+            },
+        })
+    }, [navigation, colors.text])
 
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })
@@ -454,24 +465,14 @@ export const MapScreen = (): JSX.Element => {
                 {loadingState === LoadingState.ERROR && (
                     <View
                         style={{
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 3,
                             backgroundColor: colors.background,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            ...styles.errorContainer,
                         }}
                     >
                         <Text
                             style={{
-                                fontSize: 16,
-                                marginBottom: 10,
-                                textAlign: 'center',
-                                fontWeight: 'bold',
                                 color: colors.text,
+                                ...styles.errorTitle,
                             }}
                         >
                             {errorMsg === 'noInternetConnection' &&
@@ -482,10 +483,8 @@ export const MapScreen = (): JSX.Element => {
                         </Text>
                         <Text
                             style={{
-                                fontSize: 16,
-                                marginBottom: 20,
-                                textAlign: 'center',
                                 color: colors.text,
+                                ...styles.errorText,
                             }}
                         >
                             There was a problem loading the map.
@@ -499,9 +498,8 @@ export const MapScreen = (): JSX.Element => {
                                 setLoadingState(LoadingState.LOADING)
                             }}
                             style={{
+                                ...styles.errorButton,
                                 backgroundColor: colors.datePickerBackground,
-                                padding: 10,
-                                borderRadius: 5,
                             }}
                         >
                             <Text style={{ color: colors.text }}> Reload </Text>
@@ -527,24 +525,12 @@ export const MapScreen = (): JSX.Element => {
                         renderLoading={() => (
                             <View
                                 style={{
+                                    ...styles.loadingContainer,
                                     backgroundColor: colors.background,
-                                    top: 0,
-                                    bottom: 0,
-                                    left: 0,
-                                    position: 'absolute',
-                                    right: 0,
-                                    zIndex: 2,
                                 }}
                             >
                                 <ActivityIndicator
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        zIndex: 3,
-                                    }}
+                                    style={styles.loadingIndicator}
                                 />
                             </View>
                         )}
@@ -603,5 +589,46 @@ const styles = StyleSheet.create({
     ButtonText: {
         fontWeight: '500',
         fontSize: 14,
+    },
+    errorContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorTitle: {
+        fontSize: 16,
+        marginBottom: 10,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    errorText: {
+        fontSize: 16,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    errorButton: {
+        padding: 10,
+        borderRadius: 5,
+    },
+    loadingContainer: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        zIndex: 2,
+    },
+    loadingIndicator: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 3,
     },
 })

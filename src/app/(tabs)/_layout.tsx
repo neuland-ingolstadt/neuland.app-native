@@ -4,11 +4,12 @@ import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
+import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { TouchableOpacity } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -38,6 +39,15 @@ export default function HomeLayout(): JSX.Element {
     SplashScreen.hideAsync().catch(() => {
         /* reloading the app might make this fail, so ignore */
     })
+
+    const BlurTab = (): JSX.Element => (
+        <BlurView
+            tint={theme.dark ? 'dark' : 'light'}
+            intensity={64}
+            style={styles.blurTab}
+        />
+    )
+
     return (
         <>
             <Tabs
@@ -54,9 +64,13 @@ export default function HomeLayout(): JSX.Element {
                     name="index"
                     options={{
                         title: 'Home',
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="home" size={size} color={color} />
                         ),
+                        tabBarStyle: { position: 'absolute' },
+                        tabBarBackground: () =>
+                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
 
@@ -74,6 +88,7 @@ export default function HomeLayout(): JSX.Element {
                     name="map"
                     options={{
                         title: t('navigation.map'),
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="map" size={size} color={color} />
                         ),
@@ -91,15 +106,15 @@ export default function HomeLayout(): JSX.Element {
                                 color={color}
                             />
                         ),
+                        tabBarStyle: { position: 'absolute' },
+                        tabBarBackground: () =>
+                            Platform.OS === 'ios' ? <BlurTab /> : null,
                         headerRight: () => (
                             <TouchableOpacity
                                 onPress={() => {
                                     router.push('(food)/preferences')
                                 }}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    padding: 10,
-                                }}
+                                style={styles.headerButton}
                             >
                                 <Ionicons
                                     name="filter"
@@ -114,3 +129,17 @@ export default function HomeLayout(): JSX.Element {
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    headerButton: {
+        backgroundColor: 'transparent',
+        paddingRight: 10,
+    },
+    blurTab: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+})

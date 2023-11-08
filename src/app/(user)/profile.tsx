@@ -16,6 +16,7 @@ import {
     Linking,
     Platform,
     ScrollView,
+    StyleSheet,
     Text,
     TouchableOpacity,
     View,
@@ -198,34 +199,19 @@ export default function Profile(): JSX.Element {
 
     return (
         <ScrollView>
-            <View
-                style={{
-                    paddingHorizontal: 16,
-                    width: '100%',
-                    alignSelf: 'center',
-                }}
-            >
+            <View style={styles.container}>
                 <FormList sections={sections} />
             </View>
             <View
                 style={{
                     backgroundColor: colors.card,
-                    borderRadius: 10,
-
-                    marginTop: 14,
-                    alignItems: 'center',
-                    alignSelf: 'center',
+                    ...styles.logoutContainer,
                 }}
             >
                 <TouchableOpacity
                     onPress={logoutAlert}
                     activeOpacity={0.5}
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        paddingVertical: 10,
-                        paddingHorizontal: 40,
-                    }}
+                    style={styles.logoutButton}
                 >
                     <Ionicons
                         name="log-out-outline"
@@ -239,3 +225,24 @@ export default function Profile(): JSX.Element {
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 16,
+        width: '100%',
+        alignSelf: 'center',
+    },
+    logoutContainer: {
+        borderRadius: 10,
+        marginBottom: 30,
+        marginTop: 10,
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    logoutButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 40,
+    },
+})
