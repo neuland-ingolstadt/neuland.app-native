@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     notesBox: {
         width: '92%',
         alignSelf: 'center',
-        paddingBottom: 20,
+        paddingBottom: 40,
     },
     notesText: {
         fontSize: 12,

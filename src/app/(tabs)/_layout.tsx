@@ -9,7 +9,7 @@ import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Platform, TouchableOpacity } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -113,6 +113,23 @@ export default function HomeLayout(): JSX.Element {
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
+                        headerRight: () => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    router.push('(food)/preferences')
+                                }}
+                                style={{
+                                    backgroundColor: 'transparent',
+                                    paddingRight: 10,
+                                }}
+                            >
+                                <Ionicons
+                                    name="filter"
+                                    size={24}
+                                    color={colors.text}
+                                />
+                            </TouchableOpacity>
+                        ),
                     }}
                 />
             </Tabs>

@@ -138,12 +138,15 @@ export const MapScreen = (): JSX.Element => {
                 },
                 // if open hide the headerRight button
                 onFocus: () => {
-                    navigation.setOptions({
-                        headerRight: () => null,
-                    })
+                    if (Platform.OS === 'android') {
+                        navigation.setOptions({
+                            headerRight: () => null,
+                        })
+                    }
                 },
                 // if closed show the headerRight button
-                onBlur: () => {
+                onClose: () => {
+                    // android only anyway so no need to check
                     const advancedButton = (
                         <Pressable
                             onPress={() => {
@@ -161,6 +164,7 @@ export const MapScreen = (): JSX.Element => {
                         headerRight: () => advancedButton,
                     })
                 },
+
                 ...Platform.select({
                     android: {
                         headerIconColor: colors.text,
@@ -482,24 +486,14 @@ export const MapScreen = (): JSX.Element => {
                 {loadingState === LoadingState.ERROR && (
                     <View
                         style={{
-                            position: 'absolute',
-                            top: 0,
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            zIndex: 3,
                             backgroundColor: colors.background,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            ...styles.errorContainer,
                         }}
                     >
                         <Text
                             style={{
-                                fontSize: 16,
-                                marginBottom: 10,
-                                textAlign: 'center',
-                                fontWeight: 'bold',
                                 color: colors.text,
+                                ...styles.errorTitle,
                             }}
                         >
                             {errorMsg === 'noInternetConnection' &&
@@ -510,10 +504,8 @@ export const MapScreen = (): JSX.Element => {
                         </Text>
                         <Text
                             style={{
-                                fontSize: 16,
-                                marginBottom: 20,
-                                textAlign: 'center',
                                 color: colors.text,
+                                ...styles.errorText,
                             }}
                         >
                             There was a problem loading the map.
@@ -527,9 +519,8 @@ export const MapScreen = (): JSX.Element => {
                                 setLoadingState(LoadingState.LOADING)
                             }}
                             style={{
+                                ...styles.errorButton,
                                 backgroundColor: colors.datePickerBackground,
-                                padding: 10,
-                                borderRadius: 5,
                             }}
                         >
                             <Text style={{ color: colors.text }}> Reload </Text>
@@ -555,24 +546,12 @@ export const MapScreen = (): JSX.Element => {
                         renderLoading={() => (
                             <View
                                 style={{
+                                    ...styles.loadingContainer,
                                     backgroundColor: colors.background,
-                                    top: 0,
-                                    bottom: 0,
-                                    left: 0,
-                                    position: 'absolute',
-                                    right: 0,
-                                    zIndex: 2,
                                 }}
                             >
                                 <ActivityIndicator
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        zIndex: 3,
-                                    }}
+                                    style={styles.loadingIndicator}
                                 />
                             </View>
                         )}
@@ -631,5 +610,46 @@ const styles = StyleSheet.create({
     ButtonText: {
         fontWeight: '500',
         fontSize: 14,
+    },
+    errorContainer: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorTitle: {
+        fontSize: 16,
+        marginBottom: 10,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    errorText: {
+        fontSize: 16,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    errorButton: {
+        padding: 10,
+        borderRadius: 5,
+    },
+    loadingContainer: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        zIndex: 2,
+    },
+    loadingIndicator: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 3,
     },
 })
