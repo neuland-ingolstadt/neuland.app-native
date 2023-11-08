@@ -2,13 +2,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
-import {
-    addDays,
-    getDateRange,
-    getDayDelta,
-    ignoreTime,
-    isSameDay,
-} from '@/utils/date-utils'
+import { addDays, getDayDelta, ignoreTime, isSameDay } from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
@@ -26,9 +20,12 @@ import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
 
 const NUMBER_OF_DAYS = 3
+const MAX_WEEKS = 3
 
 export default function TimetableScreen(): JSX.Element {
     const today = new Date()
+    const maxFutureDate = ignoreTime(addDays(today, MAX_WEEKS * 7 - 1))
+    const maxPastDate = ignoreTime(addDays(today, -1 * MAX_WEEKS * 7 - 1))
 
     const weekViewRef = useRef<typeof WeekView>()
 
@@ -56,11 +53,22 @@ export default function TimetableScreen(): JSX.Element {
 
     const [timetable, setTimetable] = useState<TimetableEvent[]>([])
 
+    function limitEntries(entries: TimetableEvent[]): TimetableEvent[] {
+        return entries.filter((entry) => {
+            return (
+                entry.startDate.getTime() >= maxPastDate.getTime() &&
+                entry.endDate.getTime() <= maxFutureDate.getTime()
+            )
+        })
+    }
+
     useEffect(() => {
         async function load(): Promise<void> {
             try {
                 const timetable = await getFriendlyTimetable(today)
-                const timetableEntries = timetableToWeekViewEvents(timetable)
+                const timetableEntries = limitEntries(
+                    timetableToWeekViewEvents(timetable)
+                )
                 const calendarEntries = calendarToWeekViewEvents(calendar)
                 const allEvents = [...timetableEntries, ...calendarEntries]
 
@@ -77,7 +85,7 @@ export default function TimetableScreen(): JSX.Element {
                 )
                 const timelessToday = ignoreTime(today)
                 const splitEvents = allDayEvents.flatMap((event) => {
-                    const splitEvents = []
+                    const splitEvents: TimetableEvent[] = []
 
                     const todayDelta = getDayDelta(
                         event.startDate,
@@ -92,18 +100,25 @@ export default function TimetableScreen(): JSX.Element {
                             : NUMBER_OF_DAYS - 1 - todayDelta) % NUMBER_OF_DAYS
                     )
 
-                    const initialEvent = {
+                    const initialEvent: TimetableEvent = {
                         ...event,
                         startDate: event.startDate,
                         endDate: initialEndDate,
                         id: event.id,
+                        originalStartDate: event.startDate,
+                        originalEndDate: event.endDate,
                     }
 
                     splitEvents.push(initialEvent)
 
+                    const usedEndDate =
+                        event.endDate.getTime() > maxFutureDate.getTime()
+                            ? maxFutureDate
+                            : event.endDate
+
                     // add all calendar splits
                     const splits = Math.ceil(
-                        getDayDelta(event.endDate, initialEndDate) /
+                        getDayDelta(usedEndDate, initialEndDate) /
                             NUMBER_OF_DAYS
                     )
 
@@ -119,11 +134,13 @@ export default function TimetableScreen(): JSX.Element {
                             endDate.setTime(event.endDate.getTime())
                         }
 
-                        const splitEvent = {
+                        const splitEvent: TimetableEvent = {
                             ...event,
                             startDate,
                             endDate,
                             id: event.id + i,
+                            originalStartDate: event.startDate,
+                            originalEndDate: event.endDate,
                         }
 
                         splitEvents.push(splitEvent)
@@ -247,19 +264,45 @@ export default function TimetableScreen(): JSX.Element {
     }
 
     const AllDayEntry: FC<{ event: TimetableEvent }> = ({ event }) => {
+        const expandRight =
+            event.originalEndDate != null &&
+            event.originalEndDate.getTime() > event.endDate.getTime()
+
+        const expandLeft =
+            event.originalStartDate != null &&
+            event.originalStartDate.getTime() < event.startDate.getTime()
+
         return (
-            <Text
-                lineBreakMode="tail"
-                numberOfLines={1}
-                style={[
-                    styles.allDayEventTitle,
-                    {
-                        color: getEntryTextColor(event),
-                    },
-                ]}
-            >
-                {event.title}
-            </Text>
+            <>
+                {expandRight && (
+                    <View
+                        style={{
+                            backgroundColor: event.color,
+                            width: expandLeft && expandRight ? '120%' : '110%',
+                            height: 16.3,
+                            position: 'absolute',
+                            transform: [
+                                {
+                                    translateX:
+                                        expandLeft && expandRight ? -20 : 8,
+                                },
+                            ],
+                        }}
+                    />
+                )}
+                <Text
+                    lineBreakMode="tail"
+                    numberOfLines={1}
+                    style={[
+                        styles.allDayEventTitle,
+                        {
+                            color: getEntryTextColor(event),
+                        },
+                    ]}
+                >
+                    {event.title}
+                </Text>
+            </>
         )
     }
 
@@ -291,19 +334,6 @@ export default function TimetableScreen(): JSX.Element {
         )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function getTimetable(): TimetableEvent[] {
-        const calendarRange = getDateRange(selectedDate, 3)
-
-        const filteredTimetable = timetable.filter((entry) => {
-            return calendarRange.some((date) => {
-                return isSameDay(date, entry.startDate)
-            })
-        })
-
-        return filteredTimetable
-    }
-
     return (
         <>
             <Head>
@@ -328,14 +358,33 @@ export default function TimetableScreen(): JSX.Element {
                     hoursInDisplay={17}
                     showNowLine={true}
                     nowLineColor={colors.labelColor}
+                    windowSize={MAX_WEEKS}
+                    initialNumToRender={MAX_WEEKS}
+                    maxToRenderPerBatch={1}
+                    runOnJS={true}
+                    updateCellsBatchingPeriod={0}
                     onEventPress={(event) => {
                         console.log(event)
                     }}
                     onSwipeNext={(date) => {
-                        setSelectedDate(date)
+                        const setDate =
+                            date.getTime() > maxFutureDate.getTime()
+                                ? maxFutureDate
+                                : date
+
+                        setSelectedDate(setDate)
+                        // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
+                        weekViewRef.current?.goToDate(setDate)
                     }}
                     onSwipePrev={(date) => {
-                        setSelectedDate(date)
+                        const setDate =
+                            date.getTime() < maxPastDate.getTime()
+                                ? maxPastDate
+                                : date
+
+                        setSelectedDate(setDate)
+                        // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
+                        weekViewRef.current?.goToDate(setDate)
                     }}
                     formatDateHeader="ddd D"
                     EventComponent={
@@ -376,6 +425,8 @@ interface TimetableEvent extends WeekViewEvent {
     title: string
     allDay?: boolean
     type: 'calendar' | 'timetable'
+    originalStartDate?: Date
+    originalEndDate?: Date
 }
 
 const styles = StyleSheet.create({
