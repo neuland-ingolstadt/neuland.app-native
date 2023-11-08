@@ -20,7 +20,7 @@ import {
 } from '@/utils/room-utils'
 import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as Haptics from 'expo-haptics'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
@@ -39,8 +39,6 @@ import { WebView } from 'react-native-webview'
 
 const Stack2 = createNativeStackNavigator()
 export default function Screen(): JSX.Element {
-    const router = useRouter()
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
 
     return (
@@ -65,44 +63,12 @@ export default function Screen(): JSX.Element {
                         title: t('navigation.campusMap', { ns: 'navigation' }),
                         headerShown: true,
                         headerLargeTitle: false,
-
-                        headerSearchBarOptions: {
-                            placeholder: t('pages.map.search'),
-                            hideWhenScrolling: false,
-                            hideNavigationBar: true,
-                            onChangeText: (event) => {
-                                router.setParams({
-                                    q: event.nativeEvent.text,
-                                })
-                            },
-                            ...Platform.select({
-                                android: {
-                                    headerIconColor: colors.text,
-                                    textColor: colors.text,
-                                    hintTextColor: colors.text,
-                                    tintColor: colors.text,
-                                },
-                            }),
-                        },
                         ...Platform.select({
                             ios: {
                                 headerTransparent: true,
                                 headerBlurEffect: 'regular',
                             },
                         }),
-                        headerRight: () => (
-                            <Pressable
-                                onPress={() => {
-                                    router.push('(map)/advanced')
-                                }}
-                            >
-                                <Ionicons
-                                    name="options-outline"
-                                    size={24}
-                                    color={colors.primary}
-                                />
-                            </Pressable>
-                        ),
                     }}
                     component={MapScreen}
                 />
@@ -144,6 +110,68 @@ export const MapScreen = (): JSX.Element => {
 
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
+    const navigation = useNavigation()
+    const { t } = useTranslation('common')
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Pressable
+                    onPress={() => {
+                        router.push('(map)/advanced')
+                    }}
+                >
+                    <Ionicons
+                        name="options-outline"
+                        size={24}
+                        color={colors.text}
+                    />
+                </Pressable>
+            ),
+            headerSearchBarOptions: {
+                placeholder: t('pages.map.search'),
+                shouldShowHintSearchIcon: false,
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    router.setParams({
+                        q: event.nativeEvent.text,
+                    })
+                },
+                // if open hide the headerRight button
+                onFocus: () => {
+                    navigation.setOptions({
+                        headerRight: () => null,
+                    })
+                },
+                // if closed show the headerRight button
+                onBlur: () => {
+                    const advancedButton = (
+                        <Pressable
+                            onPress={() => {
+                                router.push('(map)/advanced')
+                            }}
+                        >
+                            <Ionicons
+                                name="options-outline"
+                                size={24}
+                                color={colors.text}
+                            />
+                        </Pressable>
+                    )
+                    navigation.setOptions({
+                        headerRight: () => advancedButton,
+                    })
+                },
+                ...Platform.select({
+                    android: {
+                        headerIconColor: colors.text,
+                        textColor: colors.text,
+                        hintTextColor: colors.text,
+                        tintColor: colors.text,
+                    },
+                }),
+            },
+        })
+    }, [navigation, colors.text])
 
     const handleDismissModal = (): void => {
         router.setParams({ h: '' })

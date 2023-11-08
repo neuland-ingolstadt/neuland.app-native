@@ -211,8 +211,8 @@ export default function Profile(): JSX.Element {
                 style={{
                     backgroundColor: colors.card,
                     borderRadius: 10,
-
-                    marginTop: 14,
+                    marginBottom: 30,
+                    marginTop: 10,
                     alignItems: 'center',
                     alignSelf: 'center',
                 }}

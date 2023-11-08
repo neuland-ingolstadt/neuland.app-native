@@ -4,11 +4,12 @@ import { FlowContext } from '@/stores/provider'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { type Theme, useTheme } from '@react-navigation/native'
+import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { TouchableOpacity } from 'react-native'
+import { Platform, TouchableOpacity } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -57,6 +58,21 @@ export default function HomeLayout(): JSX.Element {
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="home" size={size} color={color} />
                         ),
+                        tabBarStyle: { position: 'absolute' },
+                        tabBarBackground: () =>
+                            Platform.OS === 'ios' ? (
+                                <BlurView
+                                    tint={theme.dark ? 'dark' : 'light'}
+                                    intensity={63}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                    }}
+                                />
+                            ) : null,
                     }}
                 />
 

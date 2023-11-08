@@ -5,14 +5,43 @@ import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { useGlobalSearchParams } from 'expo-router'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 
-export default function FoodPreferences(): JSX.Element {
-    const { q } = useGlobalSearchParams<{ q: string }>()
+export default function Screen(): JSX.Element {
+    const { t } = useTranslation('navigation')
+    const Stack = createNativeStackNavigator()
+
+    return (
+        <>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Allergens"
+                    options={{
+                        title: t('navigation.allergens'),
+                        headerShown: true,
+                        headerLargeTitle: false,
+
+                        ...Platform.select({
+                            ios: {
+                                headerTransparent: true,
+                                headerBlurEffect: 'regular',
+                            },
+                        }),
+                    }}
+                    component={FoodAllergens}
+                />
+            </Stack.Navigator>
+        </>
+    )
+}
+
+function FoodAllergens(): JSX.Element {
+    const { q } = useLocalSearchParams<{ q: string }>()
     const colors = useTheme().colors as Colors
     const { t, i18n } = useTranslation('food')
 
@@ -33,10 +62,43 @@ export default function FoodPreferences(): JSX.Element {
         useContext(FoodFilterContext)
     filteredAllergens.sort((a, b) => a.title.localeCompare(b.title))
 
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: t('navigation.allergensSearch', {
+                    ns: 'navigation',
+                }),
+
+                ...Platform.select({
+                    android: {
+                        headerIconColor: colors.text,
+                        textColor: colors.text,
+                        hintTextColor: colors.text,
+                    },
+                }),
+                shouldShowHintSearchIcon: false,
+                hideWhenScrolling: false,
+
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    router.setParams({
+                        q: event.nativeEvent.text,
+                    })
+                },
+            },
+        })
+    }, [navigation, colors.text])
+
     return (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
             <StatusBar style={getStatusBarStyle()} />
-            <View style={[styles.container, { backgroundColor: colors.card }]}>
+            <View
+                style={[
+                    styles.container,
+                    { backgroundColor: colors.background },
+                ]}
+            >
                 <MultiSectionPicker
                     elements={filteredAllergens}
                     selectedItems={allergenSelection}

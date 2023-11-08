@@ -222,13 +222,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         paddingTop: 5,
-        paddingBottom: 5,
+        paddingBottom: 3,
     },
     categoryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 2,
+        paddingTop: 4,
         paddingBottom: 4,
     },
     toogleIcon: {

@@ -65,24 +65,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/flags"
                         options={{
-                            title: t('navigation.flags'),
-                            headerSearchBarOptions: {
-                                placeholder: t('navigation.flagsSearch'),
-                                ...Platform.select({
-                                    android: {
-                                        headerIconColor: colorText,
-                                        textColor: colorText,
-                                        hintTextColor: colorText,
-                                        tintColor: colorText,
-                                    },
-                                }),
-                                hideWhenScrolling: false,
-                                onChangeText: (event) => {
-                                    router.setParams({
-                                        q: event.nativeEvent.text,
-                                    })
-                                },
-                            },
+                            headerShown: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -96,26 +79,8 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(food)/allergens"
                         options={{
-                            title: t('navigation.allergens'),
+                            headerShown: false,
 
-                            headerSearchBarOptions: {
-                                placeholder: t('navigation.allergensSearch'),
-                                ...Platform.select({
-                                    android: {
-                                        headerIconColor: colorText,
-                                        textColor: colorText,
-                                        hintTextColor: colorText,
-                                        tintColor: colorText,
-                                    },
-                                }),
-                                hideWhenScrolling: false,
-                                onChangeText: (event) => {
-                                    router.setParams({
-                                        q: event.nativeEvent.text,
-                                    })
-                                },
-                                shouldShowHintSearchIcon: false,
-                            },
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
