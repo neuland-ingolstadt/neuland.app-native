@@ -179,55 +179,64 @@ export default function FoodScreen(): JSX.Element {
                         />
                     ) : undefined
                 }
+                contentInsetAdjustmentBehavior="always"
             >
-                {loadingState === LoadingState.LOADING && (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
-                    </View>
-                )}
-                {loadingState === LoadingState.ERROR && (
-                    <View>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {error?.message}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refresh')}{' '}
-                        </Text>
-                    </View>
-                )}
-
-                {loadingState === LoadingState.LOADED && (
-                    <>
-                        <View style={styles.loadedContainer}>
-                            {days
-                                .slice(0, 5)
-                                .map((day: Food, index: number) => (
-                                    <DayButton
-                                        day={day}
-                                        index={index}
-                                        key={index}
-                                    />
-                                ))}
+                <View style={styles.container}>
+                    {loadingState === LoadingState.LOADING && (
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator
+                                size="small"
+                                color={colors.primary}
+                            />
                         </View>
-                        {MealDay(days[selectedDay], selectedDay, colors)}
-                    </>
-                )}
+                    )}
+                    {loadingState === LoadingState.ERROR && (
+                        <View>
+                            <Text
+                                style={[
+                                    styles.errorMessage,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                {error?.message}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.errorInfo,
+                                    { color: colors.text },
+                                ]}
+                            >
+                                {t('error.refresh')}{' '}
+                            </Text>
+                        </View>
+                    )}
+
+                    {loadingState === LoadingState.LOADED && (
+                        <>
+                            <View style={styles.loadedContainer}>
+                                {days
+                                    .slice(0, 5)
+                                    .map((day: Food, index: number) => (
+                                        <DayButton
+                                            day={day}
+                                            index={index}
+                                            key={index}
+                                        />
+                                    ))}
+                            </View>
+                            {MealDay(days[selectedDay], selectedDay, colors)}
+                        </>
+                    )}
+                </View>
             </ScrollView>
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingBottom: 45,
+    },
     dayRestaurantContainer: {
         width: '92%',
         alignSelf: 'center',

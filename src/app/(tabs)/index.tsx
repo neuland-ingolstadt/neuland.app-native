@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
         width: '94%',
         alignSelf: 'center',
         paddingTop: 5,
+        paddingBottom: 45,
     },
     heading: {
         fontSize: 32,
