@@ -9,7 +9,7 @@ import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, TouchableOpacity } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -44,13 +44,7 @@ export default function HomeLayout(): JSX.Element {
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
             intensity={64}
-            style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-            }}
+            style={styles.blurTab}
         />
     )
 
@@ -120,10 +114,7 @@ export default function HomeLayout(): JSX.Element {
                                 onPress={() => {
                                     router.push('(food)/preferences')
                                 }}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    paddingRight: 10,
-                                }}
+                                style={styles.headerButton}
                             >
                                 <Ionicons
                                     name="filter"
@@ -138,3 +129,17 @@ export default function HomeLayout(): JSX.Element {
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    headerButton: {
+        backgroundColor: 'transparent',
+        paddingRight: 10,
+    },
+    blurTab: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+})
