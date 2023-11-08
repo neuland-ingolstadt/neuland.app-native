@@ -119,9 +119,7 @@ export default function FoodPreferences(): JSX.Element {
                         action={toggleShowStatic}
                     />
                 </SectionView>
-                <View
-                    style={{ ...styles.sectionContainer, marginVertical: 16 }}
-                >
+                <View style={{ ...styles.sectionContainer, marginTop: 16 }}>
                     <FormList sections={sections} />
                 </View>
                 <SectionView title={t('preferences.formlist.language')}>

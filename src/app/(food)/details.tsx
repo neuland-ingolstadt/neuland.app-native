@@ -200,6 +200,14 @@ export default function FoodDetail(): JSX.Element {
         },
     ]
 
+    const isGerman = (): boolean => {
+        if (foodLanguage !== 'default') {
+            return foodLanguage === 'de'
+        } else {
+            return i18n.language === 'de'
+        }
+    }
+
     const sections: FormListSections[] =
         meal?.restaurant === 'Mensa'
             ? [
@@ -279,7 +287,7 @@ export default function FoodDetail(): JSX.Element {
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}
                     >
-                        {t('details.footer')}
+                        {t(isGerman() ? 'details.footerOrg' : 'details.footer')}
                     </Text>
                 </View>
             </ScrollView>
