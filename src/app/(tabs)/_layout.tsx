@@ -9,7 +9,7 @@ import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, TouchableOpacity } from 'react-native'
+import { Platform } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -39,6 +39,21 @@ export default function HomeLayout(): JSX.Element {
     SplashScreen.hideAsync().catch(() => {
         /* reloading the app might make this fail, so ignore */
     })
+
+    const BlurTab = (): JSX.Element => (
+        <BlurView
+            tint={theme.dark ? 'dark' : 'light'}
+            intensity={64}
+            style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+            }}
+        />
+    )
+
     return (
         <>
             <Tabs
@@ -60,19 +75,7 @@ export default function HomeLayout(): JSX.Element {
                         ),
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
-                            Platform.OS === 'ios' ? (
-                                <BlurView
-                                    tint={theme.dark ? 'dark' : 'light'}
-                                    intensity={63}
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                    }}
-                                />
-                            ) : null,
+                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
 
@@ -107,23 +110,9 @@ export default function HomeLayout(): JSX.Element {
                                 color={color}
                             />
                         ),
-                        headerRight: () => (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    router.push('(food)/preferences')
-                                }}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    padding: 10,
-                                }}
-                            >
-                                <Ionicons
-                                    name="filter"
-                                    size={24}
-                                    color={colors.text}
-                                />
-                            </TouchableOpacity>
-                        ),
+                        tabBarStyle: { position: 'absolute' },
+                        tabBarBackground: () =>
+                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
             </Tabs>

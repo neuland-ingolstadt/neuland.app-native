@@ -3263,7 +3263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trivago/prettier-plugin-sort-imports@npm:^4.1.1":
+"@trivago/prettier-plugin-sort-imports@npm:^4.2.1":
   version: 4.2.1
   resolution: "@trivago/prettier-plugin-sort-imports@npm:4.2.1"
   dependencies:
@@ -9421,7 +9421,7 @@ __metadata:
     "@react-native-community/datetimepicker": "npm:7.2.0"
     "@react-navigation/bottom-tabs": "npm:^6.5.11"
     "@react-navigation/native-stack": "npm:6.9.13"
-    "@trivago/prettier-plugin-sort-imports": "npm:^4.1.1"
+    "@trivago/prettier-plugin-sort-imports": "npm:^4.2.1"
     "@types/color": "npm:^3.0.5"
     "@types/react": "npm:~18.2.14"
     "@typescript-eslint/eslint-plugin": "npm:^6.6.0"

@@ -67,8 +67,9 @@ export async function createGuestSession(): Promise<void> {
     await forgetSession()
     await save('session', 'guest')
     await AsyncStorage.setItem('isOnboarded', 'true')
-    await AsyncStorage.getItem(
-        `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`
+    await AsyncStorage.setItem(
+        `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`,
+        'true'
     )
 }
 
