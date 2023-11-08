@@ -8,8 +8,14 @@ export default {
             allergens: 'Allergene',
             flags: 'Kennzeichnungen',
             static: 'Dauerhafte Gerichte',
+            language: 'Essenssprache',
         },
         footer: 'Wir übernehmen keine Verantwortung für die Korrektheit und Genauigkeit der Daten. Bitte überprüfe die Daten im Restaurant vor dem Verzehr. Du kannst auch die Datenquelle jeder Mahlzeit in der Detailansicht überprüfen.',
+        languages: {
+            de: 'Deutsch',
+            en: 'Englisch',
+            auto: 'Default',
+        },
     },
     price: {
         guests: 'für Gäste',

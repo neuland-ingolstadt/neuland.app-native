@@ -7,7 +7,7 @@ import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
-import { formatPrice } from '@/utils/food-utils'
+import { formatPrice, mealName } from '@/utils/food-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -30,7 +30,7 @@ export default function FoodDetail(): JSX.Element {
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
         foodEntry != null ? JSON.parse(foodEntry) : undefined
-    const { preferencesSelection, allergenSelection } =
+    const { preferencesSelection, allergenSelection, foodLanguage } =
         useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
     const { userKind } = useContext<UserKindContextType>(UserKindContext)
@@ -226,7 +226,12 @@ export default function FoodDetail(): JSX.Element {
                         numberOfLines={2}
                         selectable={true}
                     >
-                        {meal?.name.en}
+                        {meal != null &&
+                            mealName(
+                                meal.name,
+                                foodLanguage,
+                                i18n.language as LanguageKey
+                            )}
                     </Text>
                 </View>
                 <View style={styles.formList}>
@@ -284,6 +289,7 @@ export default function FoodDetail(): JSX.Element {
 
 const styles = StyleSheet.create({
     formList: {
+        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
         paddingHorizontal: 16,

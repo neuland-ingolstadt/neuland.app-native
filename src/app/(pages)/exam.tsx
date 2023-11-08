@@ -108,6 +108,7 @@ export default function ExamDetail(): JSX.Element {
 
 const styles = StyleSheet.create({
     formList: {
+        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
         paddingHorizontal: 16,

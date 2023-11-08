@@ -8,8 +8,14 @@ export default {
             allergens: 'Allergens',
             flags: 'Flags',
             static: 'Static meals',
+            language: 'Food language',
         },
         footer: 'We are not responsible for the correctness and accuracy of the data. Please verify the data at the restaurant before consuming. You can also check the data source of each meal in the detail view.',
+        languages: {
+            de: 'German',
+            en: 'English',
+            auto: 'Default',
+        },
     },
     price: {
         guests: 'for guests',

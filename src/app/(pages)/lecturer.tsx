@@ -129,6 +129,7 @@ export default function LecturerDetail(): JSX.Element {
 
 const styles = StyleSheet.create({
     formList: {
+        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
         paddingHorizontal: 16,

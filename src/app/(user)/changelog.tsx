@@ -69,6 +69,7 @@ export default function Theme(): JSX.Element {
 
 const styles = StyleSheet.create({
     wrapper: {
+        marginVertical: 16,
         alignSelf: 'center',
         width: '92%',
     },

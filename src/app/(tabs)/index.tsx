@@ -41,6 +41,10 @@ export default function Screen(): JSX.Element {
                                 onPress={() => {
                                     router.push('(user)/settings')
                                 }}
+                                style={{
+                                    marginRight: 16,
+                                    alignSelf: 'center',
+                                }}
                             >
                                 <View>
                                     <Ionicons

@@ -1,15 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
+export type FoodLanguage = 'en' | 'de' | 'default'
+
 export interface FoodFilter {
     selectedRestaurants: string[]
     preferencesSelection: string[]
     allergenSelection: string[]
     showStatic: boolean
+    foodLanguage: FoodLanguage
     toggleSelectedRestaurant: (name: string) => void
     toggleSelectedAllergens: (name: string) => void
     toggleSelectedPreferences: (name: string) => void
     toggleShowStatic: () => void
+    toggleFoodLanguage: (language: FoodLanguage) => void
 }
 
 export function useFoodFilter(): FoodFilter {
@@ -23,6 +27,7 @@ export function useFoodFilter(): FoodFilter {
     ])
     const [allergenSelection, setAllergenSelection] = useState<string[]>([])
     const [showStatic, setShowStatic] = useState<boolean>(false)
+    const [foodLanguage, setFoodLanguage] = useState<FoodLanguage>('default')
 
     useEffect(() => {
         void AsyncStorage.getItem('selectedAllergens').then((data) => {
@@ -43,6 +48,14 @@ export function useFoodFilter(): FoodFilter {
         void AsyncStorage.getItem('showStatic').then((data) => {
             if (data != null) {
                 setShowStatic(JSON.parse(data))
+            }
+        })
+
+        void AsyncStorage.getItem('foodLanguage').then((data) => {
+            if (data != null) {
+                setFoodLanguage(JSON.parse(data))
+            } else {
+                setFoodLanguage('default')
             }
         })
     }, [])
@@ -110,14 +123,27 @@ export function useFoodFilter(): FoodFilter {
         void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
     }
 
+    /**
+     * Updates the language used for the food.
+     * @param {LanguageKey} language
+     * @returns {void}
+     * @memberof FoodFilter
+     */
+    function toggleFoodLanguage(language: 'en' | 'de' | 'default'): void {
+        setFoodLanguage(language)
+        void AsyncStorage.setItem('foodLanguage', JSON.stringify(language))
+    }
+
     return {
         selectedRestaurants,
         preferencesSelection,
         allergenSelection,
         showStatic,
+        foodLanguage,
         toggleSelectedRestaurant,
         toggleSelectedAllergens,
         toggleSelectedPreferences,
         toggleShowStatic,
+        toggleFoodLanguage,
     }
 }

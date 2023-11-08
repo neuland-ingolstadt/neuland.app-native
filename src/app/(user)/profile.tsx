@@ -200,6 +200,7 @@ export default function Profile(): JSX.Element {
         <ScrollView>
             <View
                 style={{
+                    marginVertical: 16,
                     paddingHorizontal: 16,
                     width: '100%',
                     alignSelf: 'center',
