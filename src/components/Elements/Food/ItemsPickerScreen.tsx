@@ -15,6 +15,7 @@ import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 /*
  * Screen for selecting allergens or preferences
  * @param type - type of the screen, either allergens or flags
+ * @returns JSX.Element
  */
 const ItemsPickerScreen = (params: {
     route: { params: { type: string } }

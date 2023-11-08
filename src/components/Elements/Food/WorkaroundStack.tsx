@@ -25,6 +25,7 @@ export interface WorkaroundStackProps {
  * @param largeTitle - whether the header should be large
  * @param headerRightElement - element to render on the right side of the header
  * @param params - params to pass to the component
+ * @returns JSX.Element
  */
 function WorkaroundStack({
     name,
