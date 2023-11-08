@@ -26,9 +26,10 @@ import WeekView from 'react-native-week-view'
 import { type WeekViewEvent } from 'react-native-week-view'
 
 const NUMBER_OF_DAYS = 3
-const TODAY = new Date()
 
 export default function TimetableScreen(): JSX.Element {
+    const today = new Date()
+
     const weekViewRef = useRef<typeof WeekView>()
 
     const navigation = useNavigation()
@@ -36,7 +37,7 @@ export default function TimetableScreen(): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
 
-    const [selectedDate, setSelectedDate] = useState(TODAY)
+    const [selectedDate, setSelectedDate] = useState(today)
     const { i18n } = useTranslation()
 
     const textColor = Color(colors.text)
@@ -58,7 +59,7 @@ export default function TimetableScreen(): JSX.Element {
     useEffect(() => {
         async function load(): Promise<void> {
             try {
-                const timetable = await getFriendlyTimetable(TODAY)
+                const timetable = await getFriendlyTimetable(today)
                 const timetableEntries = timetableToWeekViewEvents(timetable)
                 const calendarEntries = calendarToWeekViewEvents(calendar)
                 const allEvents = [...timetableEntries, ...calendarEntries]
@@ -74,11 +75,14 @@ export default function TimetableScreen(): JSX.Element {
                 const allDayEvents = allEvents.filter(
                     (event) => event.allDay ?? false
                 )
-                const today = ignoreTime(TODAY)
+                const timelessToday = ignoreTime(today)
                 const splitEvents = allDayEvents.flatMap((event) => {
                     const splitEvents = []
 
-                    const todayDelta = getDayDelta(event.startDate, today)
+                    const todayDelta = getDayDelta(
+                        event.startDate,
+                        timelessToday
+                    )
 
                     // add initial event (event till first calendar split)
                     const initialEndDate = addDays(
@@ -145,10 +149,10 @@ export default function TimetableScreen(): JSX.Element {
                 <TouchableOpacity
                     onPress={() => {
                         // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
-                        weekViewRef.current?.goToDate(TODAY)
+                        weekViewRef.current?.goToDate(today)
                         // @ts-expect-error Property 'scrollToTime' does not exist on type 'ComponentType<WeekViewProps>'.
                         weekViewRef.current?.scrollToTime(
-                            (TODAY.getHours() - 1) * 60
+                            (today.getHours() - 1) * 60
                         )
                     }}
                     style={styles.headerIcon}
@@ -263,7 +267,7 @@ export default function TimetableScreen(): JSX.Element {
         date,
         formattedDate,
     }) => {
-        const today = isSameDay(new Date(date), TODAY)
+        const isToday = isSameDay(new Date(date), today)
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -275,7 +279,7 @@ export default function TimetableScreen(): JSX.Element {
                     style={[
                         styles.dateHeader,
                         {
-                            backgroundColor: today
+                            backgroundColor: isToday
                                 ? colors.labelBackground
                                 : colors.card,
                         },
