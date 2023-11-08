@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
+import { type HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
+import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 
@@ -8,6 +9,8 @@ export interface WorkaroundStackProps {
     titleKey: string
     component: any
     transparent?: boolean
+    largeTitle?: boolean
+    headerRightElement?: ((props: HeaderButtonProps) => ReactNode) | undefined
     params?: any
 }
 
@@ -19,6 +22,8 @@ export interface WorkaroundStackProps {
  * @param titleKey - translation key for the title
  * @param component - component to render
  * @param transparent - whether the header should be transparent
+ * @param largeTitle - whether the header should be large
+ * @param headerRightElement - element to render on the right side of the header
  * @param params - params to pass to the component
  */
 function WorkaroundStack({
@@ -26,6 +31,8 @@ function WorkaroundStack({
     titleKey,
     component,
     transparent = false,
+    largeTitle = false,
+    headerRightElement = undefined,
     params = {},
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
@@ -39,7 +46,8 @@ function WorkaroundStack({
                     options={{
                         title: t(titleKey),
                         headerShown: true,
-                        headerLargeTitle: false,
+                        headerLargeTitle: largeTitle,
+                        headerRight: headerRightElement,
                         ...(Platform.OS === 'ios' && transparent
                             ? {
                                   headerTransparent: true,
