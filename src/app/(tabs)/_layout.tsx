@@ -93,6 +93,7 @@ export default function HomeLayout(): JSX.Element {
                     name="map"
                     options={{
                         title: t('navigation.map'),
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="map" size={size} color={color} />
                         ),

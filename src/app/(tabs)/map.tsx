@@ -3,6 +3,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
 import {
     _addRoom,
     _removeAllGeoJson,
@@ -21,9 +22,8 @@ import {
 import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation, useTheme } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as Haptics from 'expo-haptics'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -37,10 +37,7 @@ import {
 } from 'react-native'
 import { WebView } from 'react-native-webview'
 
-const Stack2 = createNativeStackNavigator()
 export default function Screen(): JSX.Element {
-    const { t } = useTranslation('common')
-
     return (
         <>
             <Head>
@@ -49,30 +46,12 @@ export default function Screen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <Stack.Screen
-                options={{
-                    headerShown: false,
-                    headerBackButtonMenuEnabled: false,
-                }}
+            <WorkaroundStack
+                name={'Map'}
+                titleKey={'navigation.campusMap'}
+                component={MapScreen}
+                transparent={true}
             />
-
-            <Stack2.Navigator>
-                <Stack2.Screen
-                    name="Map"
-                    options={{
-                        title: t('navigation.campusMap', { ns: 'navigation' }),
-                        headerShown: true,
-                        headerLargeTitle: false,
-                        ...Platform.select({
-                            ios: {
-                                headerTransparent: true,
-                                headerBlurEffect: 'regular',
-                            },
-                        }),
-                    }}
-                    component={MapScreen}
-                />
-            </Stack2.Navigator>
         </>
     )
 }

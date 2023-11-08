@@ -12,7 +12,7 @@ export interface WorkaroundStackProps {
 }
 
 /*
- * This is a generic stack used as workaround missing feature in expo-router
+ * This is a generic stack used as workaround for missing or broken features in expo-router
  * We create a second (react-navigation) stack and nest it into the first (expo-router) hidden stack
  * This is needed to have a large title on iOS, search bar and other features
  * @param name - name of the stack
