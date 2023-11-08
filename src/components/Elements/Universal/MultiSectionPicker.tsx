@@ -75,11 +75,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 5,
+        paddingHorizontal: 6,
         paddingVertical: 4,
     },
     text: {
-        marginLeft: 8,
         fontSize: 16,
         paddingVertical: 1,
     },

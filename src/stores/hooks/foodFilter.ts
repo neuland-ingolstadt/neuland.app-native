@@ -30,34 +30,39 @@ export function useFoodFilter(): FoodFilter {
     const [foodLanguage, setFoodLanguage] = useState<FoodLanguage>('default')
 
     useEffect(() => {
-        void AsyncStorage.getItem('selectedAllergens').then((data) => {
-            if (data != null) {
-                setAllergenSelection(JSON.parse(data))
+        void Promise.all([
+            AsyncStorage.getItem('selectedAllergens'),
+            AsyncStorage.getItem('selectedPreferences'),
+            AsyncStorage.getItem('selectedRestaurants'),
+            AsyncStorage.getItem('showStatic'),
+            AsyncStorage.getItem('foodLanguage'),
+        ]).then(
+            ([
+                allergensData,
+                preferencesData,
+                restaurantsData,
+                showStaticData,
+                foodLanguageData,
+            ]) => {
+                if (allergensData != null) {
+                    setAllergenSelection(JSON.parse(allergensData))
+                }
+                if (preferencesData != null) {
+                    setPreferencesSelection(JSON.parse(preferencesData))
+                }
+                if (restaurantsData != null) {
+                    setSelectedRestaurants(JSON.parse(restaurantsData))
+                }
+                if (showStaticData != null) {
+                    setShowStatic(JSON.parse(showStaticData))
+                }
+                if (foodLanguageData != null) {
+                    setFoodLanguage(JSON.parse(foodLanguageData))
+                } else {
+                    setFoodLanguage('default')
+                }
             }
-        })
-        void AsyncStorage.getItem('selectedPreferences').then((data) => {
-            if (data != null) {
-                setPreferencesSelection(JSON.parse(data))
-            }
-        })
-        void AsyncStorage.getItem('selectedRestaurants').then((data) => {
-            if (data != null) {
-                setSelectedRestaurants(JSON.parse(data))
-            }
-        })
-        void AsyncStorage.getItem('showStatic').then((data) => {
-            if (data != null) {
-                setShowStatic(JSON.parse(data))
-            }
-        })
-
-        void AsyncStorage.getItem('foodLanguage').then((data) => {
-            if (data != null) {
-                setFoodLanguage(JSON.parse(data))
-            } else {
-                setFoodLanguage('default')
-            }
-        })
+        )
     }, [])
 
     /**
@@ -119,8 +124,10 @@ export function useFoodFilter(): FoodFilter {
      */
     function toggleShowStatic(): void {
         const newSelection = !showStatic
+        console.log(newSelection)
         setShowStatic(newSelection)
-        void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
+        // void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
+        console.log(showStatic)
     }
 
     /**
