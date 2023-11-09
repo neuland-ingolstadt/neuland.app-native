@@ -129,6 +129,7 @@ export default function LecturerDetail(): JSX.Element {
 
 const styles = StyleSheet.create({
     formList: {
+        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
         paddingHorizontal: 16,
@@ -151,9 +152,5 @@ const styles = StyleSheet.create({
         width: '92%',
         marginTop: 20,
         marginBottom: 40,
-    },
-    notesText: {
-        textAlign: 'justify',
-        fontSize: 13,
     },
 })

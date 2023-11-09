@@ -189,6 +189,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     formlistContainer: {
+        marginTop: 10,
+        maringBottom: 16,
         paddingHorizontal: 16,
         width: '100%',
         alignSelf: 'center',

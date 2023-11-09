@@ -1,15 +1,19 @@
+import { type LanguageKey } from '@/localization/i18n'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
+export type FoodLanguage = LanguageKey | 'default'
 export interface FoodFilter {
     selectedRestaurants: string[]
     preferencesSelection: string[]
     allergenSelection: string[]
     showStatic: boolean
+    foodLanguage: FoodLanguage
     toggleSelectedRestaurant: (name: string) => void
     toggleSelectedAllergens: (name: string) => void
     toggleSelectedPreferences: (name: string) => void
     toggleShowStatic: () => void
+    toggleFoodLanguage: (language: FoodLanguage) => void
 }
 
 export function useFoodFilter(): FoodFilter {
@@ -23,28 +27,42 @@ export function useFoodFilter(): FoodFilter {
     ])
     const [allergenSelection, setAllergenSelection] = useState<string[]>([])
     const [showStatic, setShowStatic] = useState<boolean>(false)
+    const [foodLanguage, setFoodLanguage] = useState<FoodLanguage>('default')
 
     useEffect(() => {
-        void AsyncStorage.getItem('selectedAllergens').then((data) => {
-            if (data != null) {
-                setAllergenSelection(JSON.parse(data))
+        void Promise.all([
+            AsyncStorage.getItem('selectedAllergens'),
+            AsyncStorage.getItem('selectedPreferences'),
+            AsyncStorage.getItem('selectedRestaurants'),
+            AsyncStorage.getItem('showStatic'),
+            AsyncStorage.getItem('foodLanguage'),
+        ]).then(
+            ([
+                allergensData,
+                preferencesData,
+                restaurantsData,
+                showStaticData,
+                foodLanguageData,
+            ]) => {
+                if (allergensData != null) {
+                    setAllergenSelection(JSON.parse(allergensData))
+                }
+                if (preferencesData != null) {
+                    setPreferencesSelection(JSON.parse(preferencesData))
+                }
+                if (restaurantsData != null) {
+                    setSelectedRestaurants(JSON.parse(restaurantsData))
+                }
+                if (showStaticData != null) {
+                    setShowStatic(JSON.parse(showStaticData))
+                }
+                if (foodLanguageData != null) {
+                    setFoodLanguage(JSON.parse(foodLanguageData))
+                } else {
+                    setFoodLanguage('default')
+                }
             }
-        })
-        void AsyncStorage.getItem('selectedPreferences').then((data) => {
-            if (data != null) {
-                setPreferencesSelection(JSON.parse(data))
-            }
-        })
-        void AsyncStorage.getItem('selectedRestaurants').then((data) => {
-            if (data != null) {
-                setSelectedRestaurants(JSON.parse(data))
-            }
-        })
-        void AsyncStorage.getItem('showStatic').then((data) => {
-            if (data != null) {
-                setShowStatic(JSON.parse(data))
-            }
-        })
+        )
     }, [])
 
     /**
@@ -110,14 +128,27 @@ export function useFoodFilter(): FoodFilter {
         void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
     }
 
+    /**
+     * Updates the language used for the food.
+     * @param {FoodLanguage} language
+     * @returns {void}
+     * @memberof FoodFilter
+     */
+    function toggleFoodLanguage(language: FoodLanguage): void {
+        setFoodLanguage(language)
+        void AsyncStorage.setItem('foodLanguage', JSON.stringify(language))
+    }
+
     return {
         selectedRestaurants,
         preferencesSelection,
         allergenSelection,
         showStatic,
+        foodLanguage,
         toggleSelectedRestaurant,
         toggleSelectedAllergens,
         toggleSelectedPreferences,
         toggleShowStatic,
+        toggleFoodLanguage,
     }
 }

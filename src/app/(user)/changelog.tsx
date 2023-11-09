@@ -69,6 +69,7 @@ export default function Theme(): JSX.Element {
 
 const styles = StyleSheet.create({
     wrapper: {
+        marginVertical: 16,
         alignSelf: 'center',
         width: '92%',
     },
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     notesText: {
-        textAlign: 'justify',
+        textAlign: 'left',
         fontSize: 13,
     },
 })

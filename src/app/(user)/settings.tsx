@@ -365,8 +365,9 @@ export default function Settings(): JSX.Element {
                         </View>
                     </View>
                 </Pressable>
-
-                <FormList sections={sections} />
+                <View style={{ marginVertical: 16 }}>
+                    <FormList sections={sections} />
+                </View>
             </View>
 
             <Text

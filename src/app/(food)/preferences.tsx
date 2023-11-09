@@ -1,3 +1,6 @@
+import MultiSectionRadio, {
+    type FoodLanguageElement,
+} from '@/components/Elements/Food/FoodLanguageSection'
 import FormList from '@/components/Elements/Universal/FormList'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
@@ -8,19 +11,30 @@ import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function FoodPreferences(): JSX.Element {
     const { t } = useTranslation('food')
-    const locations = {
-        mensa: t('cards.titles.mensa', { ns: 'navigation' }),
-        reimanns: t('cards.titles.reimanns', { ns: 'navigation' }),
-        canisius: t('cards.titles.canisius', { ns: 'navigation' }),
-    }
-    const elemtents = Object.entries(locations).map(([key, value]) => ({
-        key,
-        title: value,
-    }))
+    const elemtents = [
+        { key: 'mensa', title: t('cards.titles.mensa', { ns: 'navigation' }) },
+        {
+            key: 'reimanns',
+            title: t('cards.titles.reimanns', { ns: 'navigation' }),
+        },
+        {
+            key: 'canisius',
+            title: t('cards.titles.canisius', { ns: 'navigation' }),
+        },
+    ]
+
+    const languages: FoodLanguageElement[] = [
+        {
+            key: 'default',
+            title: t('preferences.languages.auto'),
+        },
+        { key: 'de', title: t('preferences.languages.de') },
+        { key: 'en', title: t('preferences.languages.en') },
+    ]
     const colors = useTheme().colors as Colors
     const router = useRouter()
 
@@ -29,11 +43,13 @@ export default function FoodPreferences(): JSX.Element {
         toggleSelectedRestaurant,
         showStatic,
         toggleShowStatic,
+        foodLanguage,
+        toggleFoodLanguage,
     } = useContext(FoodFilterContext)
 
     const sections: FormListSections[] = [
         {
-            header: t('preferences.formlist.allergens'),
+            header: 'Labels',
             items: [
                 {
                     title: t('preferences.formlist.allergens'),
@@ -42,11 +58,6 @@ export default function FoodPreferences(): JSX.Element {
                         router.push('(food)/allergens')
                     },
                 },
-            ],
-        },
-        {
-            header: t('preferences.formlist.flags'),
-            items: [
                 {
                     title: t('preferences.formlist.flags'),
                     icon: 'chevron-forward-outline',
@@ -66,7 +77,7 @@ export default function FoodPreferences(): JSX.Element {
         children: JSX.Element
     }): JSX.Element => {
         return (
-            <View style={[styles.sectionContainer, { marginTop: 18 }]}>
+            <View style={[styles.sectionContainer, { marginTop: 16 }]}>
                 <Text
                     style={[
                         styles.labelText,
@@ -92,7 +103,7 @@ export default function FoodPreferences(): JSX.Element {
     }
 
     return (
-        <>
+        <ScrollView>
             <View style={{ flex: 1 }}>
                 <SectionView title={'Restaurants'}>
                     <MultiSectionPicker
@@ -108,9 +119,16 @@ export default function FoodPreferences(): JSX.Element {
                         action={toggleShowStatic}
                     />
                 </SectionView>
-                <View style={styles.sectionContainer}>
+                <View style={{ ...styles.sectionContainer, marginTop: 16 }}>
                     <FormList sections={sections} />
                 </View>
+                <SectionView title={t('preferences.formlist.language')}>
+                    <MultiSectionRadio
+                        elements={languages}
+                        selectedItem={foodLanguage}
+                        action={toggleFoodLanguage}
+                    />
+                </SectionView>
             </View>
             <View style={styles.notesBox}>
                 <Text
@@ -124,7 +142,7 @@ export default function FoodPreferences(): JSX.Element {
                     {t('preferences.footer')}
                 </Text>
             </View>
-        </>
+        </ScrollView>
     )
 }
 
@@ -150,12 +168,12 @@ const styles = StyleSheet.create({
     notesBox: {
         width: '92%',
         alignSelf: 'center',
-        paddingBottom: 40,
+        paddingBottom: 32,
     },
     notesText: {
-        fontSize: 12,
+        fontSize: 11,
         fontWeight: 'normal',
         paddingTop: 8,
-        textAlign: 'justify',
+        textAlign: 'left',
     },
 })
