@@ -174,6 +174,6 @@ const styles = StyleSheet.create({
         fontSize: 11,
         fontWeight: 'normal',
         paddingTop: 8,
-        textAlign: 'justify',
+        textAlign: 'left',
     },
 })

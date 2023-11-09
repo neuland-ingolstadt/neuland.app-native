@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     notesText: {
-        textAlign: 'justify',
+        textAlign: 'left',
         fontSize: 13,
     },
 })

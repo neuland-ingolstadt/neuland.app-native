@@ -153,8 +153,4 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 40,
     },
-    notesText: {
-        textAlign: 'justify',
-        fontSize: 13,
-    },
 })
