@@ -35,10 +35,8 @@ export default {
         Aktion: 'Special',
     },
     details: {
-        footer: 'This meal has been automatically translated. We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
-        footerOrg:
-            'We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
-
+        footer: 'We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
+        translated: 'This meal has been automatically translated. ',
         formlist: {
             prices: {
                 title: 'Prices',

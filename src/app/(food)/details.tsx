@@ -200,7 +200,7 @@ export default function FoodDetail(): JSX.Element {
         },
     ]
 
-    const isGerman = (): boolean => {
+    const isTranslated = (): boolean => {
         if (foodLanguage !== 'default') {
             return foodLanguage === 'de'
         } else {
@@ -287,7 +287,8 @@ export default function FoodDetail(): JSX.Element {
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}
                     >
-                        {t(isGerman() ? 'details.footerOrg' : 'details.footer')}
+                        {!isTranslated() ? t('details.translated') : ''}
+                        {t('details.footer')}
                     </Text>
                 </View>
             </ScrollView>

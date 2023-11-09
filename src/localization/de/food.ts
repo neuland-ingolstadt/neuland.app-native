@@ -35,9 +35,8 @@ export default {
         Aktion: 'Aktion',
     },
     details: {
-        footerOrg:
-            'Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
-        footer: 'Dieses Gericht wurde automatisch übersetzt. Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
+        footer: 'Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
+        translated: 'Dieses Gericht wurde automatisch übersetzt. ',
 
         formlist: {
             prices: {
