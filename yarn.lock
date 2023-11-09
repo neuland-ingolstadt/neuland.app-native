@@ -4683,6 +4683,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"calendarize@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "calendarize@npm:1.1.1"
+  checksum: b2ab535961843321e63ca51a6b0baf55b8dd739272b5de84c5e1c0f2c7f9fb72be6768f8ea8fcce0356e955f57188c9719b2f3d4934a4a76b096487c6eb2a17d
+  languageName: node
+  linkType: hard
+
 "call-bind@npm:^1.0.0, call-bind@npm:^1.0.2, call-bind@npm:^1.0.4, call-bind@npm:^1.0.5":
   version: 1.0.5
   resolution: "call-bind@npm:1.0.5"
@@ -5259,7 +5266,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.8.15":
+"dayjs@npm:^1.11.10, dayjs@npm:^1.8.15":
   version: 1.11.10
   resolution: "dayjs@npm:1.11.10"
   checksum: 4de9af50639d47df87f2e15fa36bb07e0f9ed1e9c52c6caa1482788ee9a384d668f1dbd00c54f82aaab163db07d61d2899384b8254da3a9184fc6deca080e2fe
@@ -8725,7 +8732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoize-one@npm:^5.0.0, memoize-one@npm:^5.1.1":
+"memoize-one@npm:^5.0.0":
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: fd22dbe9a978a2b4f30d6a491fc02fb90792432ad0dab840dc96c1734d2bd7c9cdeb6a26130ec60507eb43230559523615873168bcbe8fafab221c30b11d54c1
@@ -9302,7 +9309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.19.3, moment@npm:^2.29.4":
+"moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 844c6f3ce42862ac9467c8ca4f5e48a00750078682cc5bda1bc0e50cc7ca88e2115a0f932d65a06e4a90e26cb78892be9b3ca3dd6546ca2c4d994cebb787fc2b
@@ -9457,6 +9464,7 @@ __metadata:
     react-dom: "npm:18.2.0"
     react-i18next: "npm:^13.3.1"
     react-native: "npm:0.72.6"
+    react-native-big-calendar: "npm:^4.7.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-gesture-handler: "npm:~2.12.0"
@@ -9469,7 +9477,6 @@ __metadata:
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-svg: "npm:^13.14.0"
     react-native-webview: "npm:13.2.2"
-    react-native-week-view: "npm:^0.30.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -10510,6 +10517,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-big-calendar@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "react-native-big-calendar@npm:4.7.0"
+  dependencies:
+    calendarize: "npm:^1.1.1"
+    dayjs: "npm:^1.11.10"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: c9febd9b744bf87b734ea223f331aacb1ac5184a22a649bbcc71bf875a3c41852045ed744a775b2eb03e692af71f0fe653e8fe8d61a155b85c5aaa9b49ee6c6f
+  languageName: node
+  linkType: hard
+
 "react-native-collapsible@npm:^1.6.1":
   version: 1.6.1
   resolution: "react-native-collapsible@npm:1.6.1"
@@ -10672,22 +10692,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: b0af1dafd8ea4e84c46c5d40efa307f8eea38687283e23df08eadc3fc9e6ecb498c4ddb529795a161911a43d91dcda3d49fb763f16fa05efb8d899ad8feccb06
-  languageName: node
-  linkType: hard
-
-"react-native-week-view@npm:^0.30.0":
-  version: 0.30.0
-  resolution: "react-native-week-view@npm:0.30.0"
-  dependencies:
-    memoize-one: "npm:^5.1.1"
-    moment: "npm:^2.19.3"
-    prop-types: "npm:^15.7.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: ^2.3.2
-    react-native-reanimated: ^2.4.1
-  checksum: 5a624b6f71f0a13892c8b0b7c856cf5d011d8739c66da351f6a30b893f91cba8bf678a1a8190ef625a7063afdec867ed3c9289c6639864eb39946501314e2cb7
   languageName: node
   linkType: hard
 
