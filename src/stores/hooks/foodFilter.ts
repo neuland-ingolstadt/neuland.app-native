@@ -130,11 +130,11 @@ export function useFoodFilter(): FoodFilter {
 
     /**
      * Updates the language used for the food.
-     * @param {LanguageKey} language
+     * @param {FoodLanguage} language
      * @returns {void}
      * @memberof FoodFilter
      */
-    function toggleFoodLanguage(language: 'en' | 'de' | 'default'): void {
+    function toggleFoodLanguage(language: FoodLanguage): void {
         setFoodLanguage(language)
         void AsyncStorage.setItem('foodLanguage', JSON.stringify(language))
     }
