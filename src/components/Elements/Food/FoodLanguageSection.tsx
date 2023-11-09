@@ -1,35 +1,37 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
+import { type FoodLanguage } from '@/stores/hooks/foodFilter'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
-interface Element {
+export interface FoodLanguageElement {
     title: string
-    key: string
-}
-
-interface SectionPickerProps {
-    elements: Element[]
-    selectedItems: string[]
-    action: (item: string) => void
+    key: FoodLanguage
 }
 
 /**
  * A component that renders a list of selectable items with a title and a checkmark icon.
- * @param {Element[]} elements - The list of selectable items.
+ * @param {FoodLanguageElement[]} elements - The list of selectable items.
  * @param {string[]} selectedItems - The list of selected items.
- * @param {(item: string) => void} action - The function to be called when an item is selected.
+ * @param {(item: FoodLanguage) => void} action - The function to be called when an item is selected.
  * @returns {JSX.Element} - The MultiSectionPicker component.
  */
-const MultiSectionPicker: React.FC<SectionPickerProps> = ({
+export interface FoodLanguagePickerProps {
+    elements: FoodLanguageElement[]
+    selectedItem: string
+    action: (item: FoodLanguage) => void
+}
+
+// ...
+
+const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
     elements,
-    selectedItems,
+    selectedItem,
     action,
 }) => {
     const colors = useTheme().colors as Colors
-
     return (
         <>
             {elements.map((item, index) => (
@@ -47,7 +49,8 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                             <Text style={[styles.text, { color: colors.text }]}>
                                 {item.title}
                             </Text>
-                            {selectedItems.includes(item.key) ? (
+
+                            {selectedItem === item.key ? (
                                 <Ionicons
                                     name={'checkmark-sharp'}
                                     size={18}
@@ -70,7 +73,6 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
         </>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
@@ -84,4 +86,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default MultiSectionPicker
+export default MultiSectionRadio

@@ -43,7 +43,7 @@ export default function HomeLayout(): JSX.Element {
     const BlurTab = (): JSX.Element => (
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
-            intensity={64}
+            intensity={75}
             style={styles.blurTab}
         />
     )

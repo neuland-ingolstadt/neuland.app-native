@@ -113,7 +113,6 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
 const styles = StyleSheet.create({
     wrapper: {
         width: '100%',
-        paddingVertical: 16,
         gap: 16,
     },
     block: {

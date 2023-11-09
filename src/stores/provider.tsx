@@ -29,10 +29,12 @@ export const FoodFilterContext = createContext<FoodFilter>({
     preferencesSelection: [],
     selectedRestaurants: [],
     showStatic: false,
+    foodLanguage: 'default',
     toggleSelectedAllergens: () => {},
     toggleSelectedPreferences: () => {},
     toggleSelectedRestaurant: () => {},
     toggleShowStatic: () => {},
+    toggleFoodLanguage: () => {},
 })
 
 export const UserKindContext = createContext<any>({

@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     footer: {
         fontSize: 11,
         fontWeight: 'normal',
-        textAlign: 'justify',
+        textAlign: 'left',
     },
     reset: {
         fontSize: 16,
