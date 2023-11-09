@@ -124,10 +124,8 @@ export function useFoodFilter(): FoodFilter {
      */
     function toggleShowStatic(): void {
         const newSelection = !showStatic
-        console.log(newSelection)
         setShowStatic(newSelection)
-        // void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
-        console.log(showStatic)
+        void AsyncStorage.setItem('showStatic', JSON.stringify(newSelection))
     }
 
     /**
