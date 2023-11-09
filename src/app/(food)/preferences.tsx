@@ -148,7 +148,7 @@ export default function FoodPreferences(): JSX.Element {
 
 const styles = StyleSheet.create({
     labelText: {
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
         marginBottom: 4,
@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     notesBox: {
         width: '92%',
         alignSelf: 'center',
+        paddingTop: 16,
         paddingBottom: 32,
     },
     notesText: {
