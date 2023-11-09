@@ -1,8 +1,8 @@
+import { type LanguageKey } from '@/localization/i18n'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
-export type FoodLanguage = 'en' | 'de' | 'default'
-
+export type FoodLanguage = LanguageKey | 'default'
 export interface FoodFilter {
     selectedRestaurants: string[]
     preferencesSelection: string[]
