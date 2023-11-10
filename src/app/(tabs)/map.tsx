@@ -11,7 +11,7 @@ import {
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import { type Colors } from '@/stores/colors'
-import { UserKindContext } from '@/stores/provider'
+import { RouteParamsContext, UserKindContext } from '@/stores/provider'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     type AvailableRoom,
@@ -23,7 +23,7 @@ import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,6 +31,7 @@ import {
     ActivityIndicator,
     Platform,
     Pressable,
+    Share,
     StyleSheet,
     Text,
     View,
@@ -61,9 +62,6 @@ export const MapScreen = (): JSX.Element => {
     const FLOOR_SUBSTITUTES: Record<string, string> = {
         0: 'EG',
         0.5: '1.5',
-        1: '1',
-        2: '2',
-        3: '3',
     }
 
     enum LoadingState {
@@ -74,8 +72,8 @@ export const MapScreen = (): JSX.Element => {
     const [errorMsg, setErrorMsg] = useState('')
     const colors = useTheme().colors as Colors
     const { userKind, userFaculty } = React.useContext(UserKindContext)
-    const { q } = useLocalSearchParams<{ q: string }>()
-    const { h } = useLocalSearchParams<{ h: string }>()
+    const { routeParams, updateRouteParams } =
+        React.useContext(RouteParamsContext)
     const [webViewKey, setWebViewKey] = useState(0)
     const [showDismissModal, setShowDismissModal] = useState(false)
     const [currentFloor, setCurrentFloor] = useState('EG')
@@ -92,7 +90,15 @@ export const MapScreen = (): JSX.Element => {
     const navigation = useNavigation()
     const { t } = useTranslation('common')
 
+    const [localSearch, setLocalSearch] = useState('')
+
+    // update the local search state if the routeParams change
     useEffect(() => {
+        setLocalSearch(routeParams)
+    }, [routeParams])
+
+    useEffect(() => {
+        console.log('MapScreen useEffect')
         navigation.setOptions({
             headerRight: () => (
                 <Pressable
@@ -107,13 +113,14 @@ export const MapScreen = (): JSX.Element => {
                     />
                 </Pressable>
             ),
+            // enable the search bar
+            headerSearchBar: true,
+
             headerSearchBarOptions: {
                 placeholder: t('pages.map.search'),
                 shouldShowHintSearchIcon: false,
                 onChangeText: (event: { nativeEvent: { text: string } }) => {
-                    router.setParams({
-                        q: event.nativeEvent.text,
-                    })
+                    setLocalSearch(event.nativeEvent.text)
                 },
                 // if open hide the headerRight button
                 onFocus: () => {
@@ -154,13 +161,20 @@ export const MapScreen = (): JSX.Element => {
                 }),
             },
         })
-    }, [navigation, colors.text])
+    }, [navigation])
 
     const handleDismissModal = (): void => {
-        router.setParams({ h: '' })
         router.setParams({ q: '' })
+        updateRouteParams('')
         _setView(mapCenter, mapRef)
         setShowDismissModal(false)
+    }
+
+    const handleShareModal = (): void => {
+        const room = filteredRooms[0].properties.Raum
+        void Share.share({
+            url: 'https://neuland.app/rooms/?highlight=' + room,
+        })
     }
 
     useEffect(() => {
@@ -173,18 +187,18 @@ export const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         // if the user was redirected to the map screen, show the dismiss modal
-        if (h !== '' && h !== undefined) {
+        if (routeParams !== '') {
             setShowDismissModal(true)
         }
-    }, [h])
+    }, [routeParams])
 
     useEffect(() => {
         // if the user starts a new search, reset the dismiss modal button
-        if (q?.length === 1) {
+        if (localSearch?.length === 1) {
             setShowDismissModal(false)
-            router.setParams({ h: '' })
+            updateRouteParams('')
         }
-    }, [q])
+    }, [localSearch])
 
     useEffect(() => {
         async function load(): Promise<void> {
@@ -255,11 +269,11 @@ export const MapScreen = (): JSX.Element => {
 
     const [filteredRooms, center] = useMemo(() => {
         // logic for filtering the map overlay data
-        if (q == null) {
+        if (localSearch == null) {
             return [allRooms, mapCenter]
         }
 
-        const cleanedText = q.toUpperCase().trim()
+        const cleanedText = localSearch.toUpperCase().trim()
 
         const getProp = (
             room: { properties: { [x: string]: string; Funktion: string } },
@@ -304,7 +318,7 @@ export const MapScreen = (): JSX.Element => {
         const filteredCenter =
             count > 0 ? [lat / count, lon / count] : mapCenter
         return [filtered, filteredCenter]
-    }, [q, allRooms, userKind])
+    }, [localSearch, allRooms, userKind])
 
     const uniqueEtages = Array.from(
         new Set(
@@ -319,8 +333,8 @@ export const MapScreen = (): JSX.Element => {
             ? 'EG'
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
-        _setView(q !== '' ? center : mapCenter, mapRef)
-    }, [filteredRooms])
+        _setView(localSearch !== '' ? center : mapCenter, mapRef)
+    }, [filteredRooms, routeParams])
 
     useEffect(() => {
         // Only execute if the map is already loaded
@@ -411,8 +425,6 @@ export const MapScreen = (): JSX.Element => {
                             styles.ButtonAreaSection,
                             {
                                 borderColor: colors.border,
-                                borderWidth: 1,
-                                marginTop: 10,
                             },
                         ]}
                     >
@@ -436,6 +448,38 @@ export const MapScreen = (): JSX.Element => {
                                     name="close"
                                     size={24}
                                     color={colors.text}
+                                />
+                            </View>
+                        </Pressable>
+                    </View>
+                )}
+                {filteredRooms.length === 1 && (
+                    <View
+                        style={[
+                            styles.ButtonAreaSection,
+                            {
+                                borderColor: colors.border,
+                            },
+                        ]}
+                    >
+                        <Pressable
+                            onPress={() => {
+                                handleShareModal()
+                            }}
+                        >
+                            <View
+                                style={[
+                                    styles.Button,
+                                    {
+                                        backgroundColor: colors.card,
+                                    },
+                                ]}
+                            >
+                                <Ionicons
+                                    name="share-outline"
+                                    size={22}
+                                    color={colors.text}
+                                    style={{ marginLeft: 1 }}
                                 />
                             </View>
                         </Pressable>
@@ -577,6 +621,8 @@ const styles = StyleSheet.create({
     ButtonAreaSection: {
         borderRadius: 7,
         overflow: 'hidden',
+        borderWidth: 1,
+        marginTop: 10,
     },
 
     Button: {
@@ -585,6 +631,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
     },
     ButtonText: {
         fontWeight: '500',

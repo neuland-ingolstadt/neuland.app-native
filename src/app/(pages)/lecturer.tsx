@@ -1,11 +1,12 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
+import { RouteParamsContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type NormalizedLecturer } from '@/utils/lecturers-utils'
 import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -15,6 +16,7 @@ export default function LecturerDetail(): JSX.Element {
     const lecturer: NormalizedLecturer | undefined =
         lecturerEntry != null ? JSON.parse(lecturerEntry) : undefined
     const { t } = useTranslation('common')
+    const { updateRouteParams } = useContext(RouteParamsContext)
 
     const sections: FormListSections[] = [
         {
@@ -63,11 +65,8 @@ export default function LecturerDetail(): JSX.Element {
                     disabled: lecturer?.room_short === '',
                     iconColor: colors.primary,
                     onPress: () => {
+                        updateRouteParams(lecturer?.room_short ?? '')
                         router.push('(tabs)/map')
-                        router.setParams({
-                            q: lecturer?.room_short ?? '',
-                            h: 'true',
-                        })
                     },
                 },
                 {

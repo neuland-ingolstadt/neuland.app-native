@@ -9,7 +9,7 @@ import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
@@ -91,14 +91,13 @@ export default function HomeLayout(): JSX.Element {
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="map" size={size} color={color} />
                         ),
-                        lazy: false, // needed for room link to work
                     }}
                 />
 
                 <Tabs.Screen
                     name="food"
                     options={{
-                        title: t('navigation.food'),
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons
                                 name="restaurant-sharp"
@@ -109,20 +108,6 @@ export default function HomeLayout(): JSX.Element {
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
-                        headerRight: () => (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    router.push('(food)/preferences')
-                                }}
-                                style={styles.headerButton}
-                            >
-                                <Ionicons
-                                    name="filter"
-                                    size={24}
-                                    color={colors.text}
-                                />
-                            </TouchableOpacity>
-                        ),
                     }}
                 />
             </Tabs>
@@ -131,10 +116,6 @@ export default function HomeLayout(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    headerButton: {
-        backgroundColor: 'transparent',
-        paddingRight: 10,
-    },
     blurTab: {
         position: 'absolute',
         top: 0,

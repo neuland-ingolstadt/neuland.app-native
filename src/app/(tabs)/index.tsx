@@ -26,6 +26,7 @@ export default function Screen(): JSX.Element {
                 titleKey={'Neuland Next'}
                 component={HomeScreen}
                 largeTitle={true}
+                transparent={true}
                 headerRightElement={() => (
                     <TouchableOpacity
                         onPress={() => {

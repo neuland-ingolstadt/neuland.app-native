@@ -1,7 +1,8 @@
 import { type Colors } from '@/stores/colors'
+import { RouteParamsContext } from '@/stores/provider'
 import { type NormalizedLecturer } from '@/utils/lecturers-utils'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -15,12 +16,11 @@ const LecturerRow = ({
 
     item: NormalizedLecturer
 }): JSX.Element => {
+    const { updateRouteParams } = useContext(RouteParamsContext)
+
     const onPressRoom = (): void => {
         router.push('(tabs)/map')
-        router.setParams({
-            q: item.room_short,
-            h: 'true',
-        })
+        updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {
         router.push({
