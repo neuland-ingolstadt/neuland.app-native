@@ -43,7 +43,7 @@ export default function HomeLayout(): JSX.Element {
     const BlurTab = (): JSX.Element => (
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
-            intensity={64}
+            intensity={75}
             style={styles.blurTab}
         />
     )
@@ -57,7 +57,6 @@ export default function HomeLayout(): JSX.Element {
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
-                    lazy: false,
                 }}
             >
                 <Tabs.Screen

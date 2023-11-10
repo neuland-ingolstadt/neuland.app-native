@@ -2,12 +2,13 @@ import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
+import { type FoodLanguage } from '@/stores/hooks/foodFilter'
 import {
     USER_EMPLOYEE,
     USER_GUEST,
     USER_STUDENT,
 } from '@/stores/hooks/userKind'
-import { type Food, type Meal } from '@/stores/types/neuland-api'
+import { type Food, type Meal, type Name } from '@/stores/types/neuland-api'
 import { type TFunction } from 'i18next'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
@@ -186,4 +187,23 @@ export function getUserSpecificLabel(userKind: string, t: TFunction): string {
         [USER_STUDENT]: t('price.students'),
     }
     return labels[userKind]
+}
+
+/**
+ * Returns the name of a meal in the correct language.
+ * @param mealName Array with the name of the meal in different languages (de, en)
+ * @param {FoodLanguage} foodLang Food language set by the user (de, en, default)
+ * @param {LanguageKey} i18nLang Language set by the user (de, en)
+ * @returns
+ */
+export function mealName(
+    mealName: Name,
+    foodLang: FoodLanguage,
+    i18nLang: LanguageKey
+): string {
+    if (foodLang !== 'default') {
+        return mealName[foodLang as LanguageKey]
+    } else {
+        return mealName[i18nLang as LanguageKey]
+    }
 }

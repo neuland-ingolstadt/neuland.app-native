@@ -6,6 +6,7 @@ import {
     convertRelevantFlags,
     getUserSpecificLabel,
     getUserSpecificPrice,
+    mealName,
 } from '@/utils/food-utils'
 import { type Meal } from '@customTypes/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
@@ -28,7 +29,7 @@ export const MealEntry = ({
     meal: Meal
     index: number
 }): JSX.Element => {
-    const { preferencesSelection, allergenSelection } =
+    const { preferencesSelection, allergenSelection, foodLanguage } =
         useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
     const userAllergens = convertRelevantAllergens(
@@ -73,7 +74,11 @@ export const MealEntry = ({
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
                 >
-                    {meal.name[i18n.language as LanguageKey]}
+                    {mealName(
+                        meal.name,
+                        foodLanguage,
+                        i18n.language as LanguageKey
+                    )}
                 </Text>
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailsColumns}>
@@ -183,7 +188,6 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-
         marginRight: 4,
         marginBottom: 2,
     },

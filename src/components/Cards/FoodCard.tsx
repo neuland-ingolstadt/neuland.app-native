@@ -3,7 +3,11 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext, UserKindContext } from '@/stores/provider'
 import { formatISODate } from '@/utils/date-utils'
-import { getUserSpecificPrice, loadFoodEntries } from '@/utils/food-utils'
+import {
+    getUserSpecificPrice,
+    loadFoodEntries,
+    mealName,
+} from '@/utils/food-utils'
 import { type Meal } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -25,8 +29,12 @@ const EventsCard = (): JSX.Element => {
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { selectedRestaurants, allergenSelection, preferencesSelection } =
-        useContext(FoodFilterContext)
+    const {
+        selectedRestaurants,
+        allergenSelection,
+        preferencesSelection,
+        foodLanguage,
+    } = useContext(FoodFilterContext)
     const { userKind } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>
@@ -40,6 +48,7 @@ const EventsCard = (): JSX.Element => {
         preferencesSelection,
         userKind,
         i18n.language,
+        foodLanguage,
     ])
 
     const loadData = async (): Promise<void> => {
@@ -121,7 +130,11 @@ const EventsCard = (): JSX.Element => {
                     todayEntries.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
-                        name: x.name[i18n.language as LanguageKey],
+                        name: mealName(
+                            x.name,
+                            foodLanguage,
+                            i18n.language as LanguageKey
+                        ),
                         price: getUserSpecificPrice(x, userKind),
                     })),
                     ...(hiddenEntriesCount > 0
