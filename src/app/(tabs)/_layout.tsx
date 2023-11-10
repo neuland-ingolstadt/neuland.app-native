@@ -91,6 +91,7 @@ export default function HomeLayout(): JSX.Element {
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="map" size={size} color={color} />
                         ),
+                        lazy: false, // needed for room link to work
                     }}
                 />
 

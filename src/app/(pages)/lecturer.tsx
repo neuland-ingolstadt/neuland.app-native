@@ -32,13 +32,24 @@ export default function LecturerDetail(): JSX.Element {
                 },
                 {
                     title: t('pages.lecturer.details.organization'),
-                    value: lecturer?.organisation,
+                    value: t(
+                        `lecturerOrganizations.${lecturer?.organisation}`,
+                        {
+                            defaultValue: lecturer?.organisation,
+                            ns: 'api',
+                            fallbackLng: 'de',
+                        }
+                    ),
                     disabled: true,
                 },
 
                 {
                     title: t('pages.lecturer.details.function'),
-                    value: lecturer?.funktion,
+                    value: t(`lecturerFunctions.${lecturer?.funktion}`, {
+                        defaultValue: lecturer?.funktion,
+                        ns: 'api',
+                        fallbackLng: 'de',
+                    }),
                     disabled: true,
                 },
             ],

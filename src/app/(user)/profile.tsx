@@ -228,6 +228,7 @@ export default function Profile(): JSX.Element {
 
 const styles = StyleSheet.create({
     container: {
+        paddingVertical: 16,
         paddingHorizontal: 16,
         width: '100%',
         alignSelf: 'center',
