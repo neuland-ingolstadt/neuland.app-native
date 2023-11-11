@@ -21,6 +21,8 @@ export default function ExamDetail(): JSX.Element {
         exam?.type !== undefined ? exam.type.split('-').slice(-1)[0].trim() : ''
     const type = `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
 
+    const examAids = exam?.aids ?? []
+
     const sections: FormListSections[] = [
         {
             header: 'Details',
@@ -42,8 +44,13 @@ export default function ExamDetail(): JSX.Element {
                 },
                 {
                     title: t('pages.exam.details.tools'),
-                    value: exam?.aids?.join(', '),
-                    layout: 'column',
+                    value: (examAids.length > 1
+                        ? examAids.map((aid) => {
+                              return `- ${aid}`
+                          })
+                        : examAids
+                    ).join('\n'),
+                    layout: (exam?.aids?.length ?? 0) <= 1 ? 'row' : 'column',
                 },
             ],
         },

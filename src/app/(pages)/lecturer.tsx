@@ -98,12 +98,18 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: t('pages.lecturer.contact.office'),
                     value: lecturer?.sprechstunde,
-                    layout: 'column',
+                    layout:
+                        (lecturer?.sprechstunde?.length ?? 0) <= 20
+                            ? 'row'
+                            : 'column',
                 },
                 {
                     title: t('pages.lecturer.contact.exam'),
                     value: lecturer?.einsichtnahme,
-                    layout: 'column',
+                    layout:
+                        (lecturer?.einsichtnahme?.length ?? 0) <= 20
+                            ? 'row'
+                            : 'column',
                 },
             ],
         },
