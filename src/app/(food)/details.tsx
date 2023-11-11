@@ -17,6 +17,7 @@ import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Linking,
+    Platform,
     Pressable,
     ScrollView,
     Share,
@@ -267,7 +268,11 @@ export default function FoodDetail(): JSX.Element {
                     >
                         <View style={styles.shareContent}>
                             <Ionicons
-                                name="share-outline"
+                                name={
+                                    Platform.OS === 'ios'
+                                        ? 'share-outline'
+                                        : 'share-social-outline'
+                                }
                                 size={18}
                                 color={colors.primary}
                             />
@@ -328,8 +333,8 @@ const styles = StyleSheet.create({
     },
     shareButton: {
         alignSelf: 'center',
-        paddingHorizontal: 35,
-        paddingVertical: 9,
+        paddingHorizontal: 45,
+        paddingVertical: 12,
         borderRadius: 6,
         marginTop: 5,
     },
@@ -338,5 +343,5 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         gap: 10,
     },
-    shareText: { fontSize: 16 },
+    shareText: { fontSize: 17 },
 })

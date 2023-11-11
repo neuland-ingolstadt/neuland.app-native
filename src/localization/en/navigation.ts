@@ -23,6 +23,7 @@ export default {
         },
         lecturer: 'Lecturer Details',
         mobility: 'Mobility',
+        grades: 'Grades',
     },
     cards: {
         titles: {

@@ -41,7 +41,7 @@ export interface Exams {
     ancode: string
 }
 
-export interface Grades {
+export interface Grade {
     stg: string
     kztn: string
     pon: string

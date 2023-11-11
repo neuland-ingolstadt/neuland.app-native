@@ -1,3 +1,4 @@
+import API from '@/api/authenticated-api'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { LoginAlert } from '@/components/Elements/Settings'
 import { type Colors } from '@/stores/colors'
@@ -56,7 +57,8 @@ const LoginForm = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { toggleOnboarded, toggleUpdated } = React.useContext(FlowContext)
-    const { toggleUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind, updateUserFullName } =
+        React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
     const { t } = useTranslation('flow')
     const floatingKeyboard = useIsFloatingKeyboard()
@@ -70,7 +72,9 @@ const LoginForm = (): JSX.Element => {
         try {
             setLoading(true)
             const userKind = await createSession(username, password, true)
+            const userFullName = await API.getFullName()
             toggleUserKind(userKind)
+            updateUserFullName(userFullName)
             toggleUpdated()
             toggleOnboarded()
             Haptics.notificationAsync(
@@ -325,10 +329,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         maxWidth: 400,
-
         paddingHorizontal: 25,
         paddingVertical: 20,
-
         justifyContent: 'center',
     },
     header: {

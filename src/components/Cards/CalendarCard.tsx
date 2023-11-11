@@ -2,12 +2,13 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
+import { FlowContext } from '@/stores/provider'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 import { type Calendar } from '@customTypes/data'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -26,6 +27,7 @@ const CalendarCard = (): JSX.Element => {
         ERROR,
         REFRESHING,
     }
+    const flow = useContext(FlowContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
 
     interface CardExams {
@@ -52,7 +54,9 @@ const CalendarCard = (): JSX.Element => {
             }))
         } catch (e) {
             if (e instanceof NoSessionError) {
-                router.push('(user)/login')
+                if (flow.isOnboarded === true) {
+                    router.push('(user)/login')
+                }
             } else if ((e as Error).message === 'Query not possible') {
                 // ignore, leaving examList empty
             } else {

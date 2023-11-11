@@ -14,15 +14,22 @@ import {
     useFlow,
     useFoodFilter,
     useMobility,
+    useRouteParams,
     useTheme,
     useUserKind,
 } from './hooks'
 import { type Dashboard } from './hooks/dashboard'
 import { type FoodFilter } from './hooks/foodFilter'
+import { type RouteParams } from './hooks/routing'
 
 interface ProviderProps {
     children: React.ReactNode
 }
+
+export const RouteParamsContext = createContext<RouteParams>({
+    routeParams: '',
+    updateRouteParams: () => {},
+})
 
 export const FoodFilterContext = createContext<FoodFilter>({
     allergenSelection: [],
@@ -40,7 +47,9 @@ export const FoodFilterContext = createContext<FoodFilter>({
 export const UserKindContext = createContext<any>({
     userKind: 'student',
     userFaculty: 'unknown',
+    userFullName: '',
     toggleUserKind: () => {},
+    updateUserFullName: () => {},
 })
 
 export const ThemeContext = createContext<any>({
@@ -93,6 +102,7 @@ export default function Provider({
     const mobility = useMobility()
     const colorScheme = useColorScheme()
     const flow = useFlow()
+    const routeParams = useRouteParams()
 
     /**
      * Returns the primary color for a given color scheme.
@@ -137,9 +147,13 @@ export default function Provider({
                             <DashboardContext.Provider value={dashboard}>
                                 <FoodFilterContext.Provider value={foodFilter}>
                                     <MobilityContext.Provider value={mobility}>
-                                        <RootSiblingParent>
-                                            {children}
-                                        </RootSiblingParent>
+                                        <RouteParamsContext.Provider
+                                            value={routeParams}
+                                        >
+                                            <RootSiblingParent>
+                                                {children}
+                                            </RootSiblingParent>
+                                        </RouteParamsContext.Provider>
                                     </MobilityContext.Provider>
                                 </FoodFilterContext.Provider>
                             </DashboardContext.Provider>

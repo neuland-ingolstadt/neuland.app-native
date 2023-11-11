@@ -10,7 +10,7 @@ import { type Calendar } from '@customTypes/data'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
 
@@ -30,7 +30,7 @@ const CalendarRow = ({
             leftChildren={
                 <Text
                     style={{
-                        fontSize: 13,
+                        ...styles.leftText,
                         color: colors.labelColor,
                     }}
                     numberOfLines={2}
@@ -47,8 +47,7 @@ const CalendarRow = ({
                 <View style={{ justifyContent: 'flex-end', padding: 5 }}>
                     <Text
                         style={{
-                            fontSize: 14,
-                            fontWeight: '400',
+                            ...styles.rightText,
                             color: colors.labelColor,
                         }}
                     >
@@ -143,5 +142,15 @@ const ExamRow = ({
         />
     )
 }
+
+const styles = StyleSheet.create({
+    leftText: {
+        fontSize: 13,
+    },
+    rightText: {
+        fontSize: 14,
+        fontWeight: '400',
+    },
+})
 
 export { CalendarRow, ExamRow }

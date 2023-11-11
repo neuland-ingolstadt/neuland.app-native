@@ -1,3 +1,4 @@
+import api from './api'
 import common from './common'
 import flow from './flow'
 import food from './food'
@@ -10,4 +11,5 @@ export default {
     navigation,
     food,
     flow,
+    api,
 }

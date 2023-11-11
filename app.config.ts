@@ -3,7 +3,7 @@ import packageInfo from './package.json'
 module.exports = {
     expo: {
         name: 'Neuland Next',
-        slug: 'neuland-app-native',
+        slug: 'neuland-next',
         scheme: 'neuland',
         owner: 'neuland-ingolstadt',
         version: packageInfo.version,
@@ -38,7 +38,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 40,
+            versionCode: 43,
         },
         extra: {
             eas: {
@@ -63,6 +63,12 @@ module.exports = {
                 },
             ],
             ['expo-localization'],
+            [
+                'expo-local-authentication',
+                {
+                    faceIDPermission: 'Allow $(PRODUCT_NAME) to use Face ID.',
+                },
+            ],
         ],
     },
 }

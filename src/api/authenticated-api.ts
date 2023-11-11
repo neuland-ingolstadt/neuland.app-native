@@ -1,7 +1,7 @@
 import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/stores/types/data'
 import {
-    type Grades,
+    type Grade,
     type Lecturers,
     type PersData,
     type Rooms,
@@ -139,6 +139,12 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return extractSpoFromPersonalData(data)
     }
 
+    async getFullName(): Promise<string | null> {
+        const data = await this.getPersonalData()
+        const fullName = data?.persdata?.vname + ' ' + data?.persdata?.name
+        return fullName
+    }
+
     async getTimetable(
         date: Date,
         detailed = false
@@ -203,7 +209,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         }
     }
 
-    async getGrades(): Promise<Grades> {
+    async getGrades(): Promise<Grade[]> {
         const res = await this.requestCached(KEY_GET_GRADES, {
             service: 'thiapp',
             method: 'grades',

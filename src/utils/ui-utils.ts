@@ -1,3 +1,4 @@
+import Color from 'color'
 import { Platform } from 'react-native'
 
 /**
@@ -37,6 +38,22 @@ export function getNameColor(name: string): string {
         const value = (hash >> (i * 8)) & 0xff
         color += ('00' + value.toString(16)).substr(-2)
     }
+    const lightness = Color(color).lightness()
+
+    if (lightness < 50) {
+        color = Color(color).lighten(0.3).saturate(0.5).hex()
+        if (lightness < 28) {
+            color = Color(color).lighten(0.3).saturate(0.5).hex()
+        }
+        if (lightness < 15) {
+            color = Color(color).lighten(1).saturate(0.5).hex()
+        }
+    }
+
+    if (lightness > 65) {
+        color = Color(color).darken(0.3).saturate(0.3).hex()
+    }
+
     return color
 }
 

@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start',
-
         paddingTop: 4,
     },
     detailsColumns: {
@@ -208,8 +207,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         alignSelf: 'flex-end',
-        paddingRight: 4,
-        marginRight: 4,
     },
     price: {
         fontSize: 14,

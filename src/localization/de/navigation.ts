@@ -23,6 +23,7 @@ export default {
         },
         lecturer: 'Dozenten-Details',
         mobility: 'Mobilität',
+        grades: 'Noten',
     },
     cards: {
         titles: {
