@@ -1,3 +1,7 @@
+import DetailsBody from '@/components/Elements/Timetable/DetailsBody'
+import DetailsRow from '@/components/Elements/Timetable/DetailsRow'
+import DetailsSymbol from '@/components/Elements/Timetable/DetailsSymbol'
+import Separator from '@/components/Elements/Timetable/Separator'
 import FormList from '@/components/Elements/Universal/FormList'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/stores/colors'
@@ -274,35 +278,6 @@ export default function TimetableDetails(): JSX.Element {
     )
 }
 
-function DetailsRow({ children }: { children: JSX.Element[] }): JSX.Element {
-    return <View style={styles.detailsRow}>{children}</View>
-}
-
-function DetailsSymbol({ children }: { children: JSX.Element }): JSX.Element {
-    return <View style={styles.detailsSymbol}>{children}</View>
-}
-
-function DetailsBody({
-    children,
-}: {
-    children: JSX.Element | JSX.Element[]
-}): JSX.Element {
-    return <View style={styles.detailsBody}>{children}</View>
-}
-
-function Separator(): JSX.Element {
-    const colors = useTheme().colors as Colors
-
-    return (
-        <View
-            style={{
-                ...styles.separator,
-                backgroundColor: colors.border,
-            }}
-        />
-    )
-}
-
 const styles = StyleSheet.create({
     page: {
         display: 'flex',
@@ -335,30 +310,5 @@ const styles = StyleSheet.create({
     formListContainer: {
         marginTop: 24,
         gap: 12,
-    },
-    detailsRow: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 12,
-    },
-    detailsSymbol: {
-        display: 'flex',
-        flexDirection: 'row',
-        width: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    detailsBody: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        flexShrink: 1,
-        gap: 4,
-    },
-    separator: {
-        marginLeft: 50 + 12,
-        height: 1,
-        marginVertical: 12,
     },
 })
