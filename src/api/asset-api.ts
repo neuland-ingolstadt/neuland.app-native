@@ -65,7 +65,7 @@ class AssetAPIClient {
     async getMapOverlay(): Promise<any> {
         return await this.requestCached(
             `map-overlay-${packageInfo.version}`,
-            `${ENDPOINT}rooms_neuland_v2.3.geojson`
+            `${ENDPOINT}rooms_neuland_v2.4.geojson`
         )
     }
 
