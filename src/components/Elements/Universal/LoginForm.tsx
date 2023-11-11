@@ -73,13 +73,10 @@ const LoginForm = (): JSX.Element => {
             setLoading(true)
             const userKind = await createSession(username, password, true)
             const userFullName = await API.getFullName()
-            console.log(userFullName)
-            console.log(userKind)
             toggleUserKind(userKind)
             updateUserFullName(userFullName)
             toggleUpdated()
             toggleOnboarded()
-            console.log(userKind)
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
