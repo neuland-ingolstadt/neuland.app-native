@@ -8,26 +8,41 @@ function t(...args: any): any {
     return i18n.t(args, { ns: 'common' })
 }
 
+interface FriendlyDateOptions {
+    weekday?: 'short' | 'long'
+    relative?: boolean
+}
+
 /**
  * Formats a date like "Mo., 1.10.2020"
  * @param {Date|string} datetime
+ * @param {FriendlyDateOptions} options
  * @returns {string}
  */
-export function formatFriendlyDate(datetime: Date | string): string {
+export function formatFriendlyDate(
+    datetime: Date | string,
+    options: FriendlyDateOptions = {
+        weekday: 'short',
+        relative: true,
+    }
+): string {
     const date = moment(datetime)
     const today = moment()
     const tomorrow = moment().add(1, 'days')
 
-    if (date.isSame(today, 'day')) {
+    if (date.isSame(today, 'day') && options.relative !== false) {
         return t('dates.today')
-    } else if (date.isSame(tomorrow, 'day')) {
+    } else if (date.isSame(tomorrow, 'day') && options.relative !== false) {
         return t('dates.tomorrow')
     } else {
-        const weekday = date.format('dd')
+        const weekday = date.format(
+            options.weekday === 'short' ? 'ddd' : 'dddd'
+        )
         const dayMonthYear = date.locale('de').format('D.M.YYYY')
         return `${weekday}, ${dayMonthYear}`
     }
 }
+
 /**
  * Formats a date range like "Mo., 1.10.2021 - Di., 2.10.2021"
  * @param {Date} begin

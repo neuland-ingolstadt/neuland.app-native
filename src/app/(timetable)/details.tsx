@@ -1,5 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
+import { formatFriendlyDate } from '@/utils/date-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { type FormListSections } from '@customTypes/components'
@@ -10,7 +11,7 @@ import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
@@ -33,41 +34,46 @@ export default function TimetableDetails(): JSX.Element {
 
     const detailsList: FormListSections[] = [
         {
-            header: t('details.title'),
+            header: t('overview.title'),
             items: [
                 {
-                    title: t('notes.goal'),
+                    title: t('overview.goal'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(timetable)/notes')
                         router.setParams({
-                            title: t('notes.goal'),
+                            title: t('overview.goal'),
                             html: event.goal ?? '',
                         })
                     },
                 },
                 {
-                    title: t('notes.content'),
+                    title: t('overview.content'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(timetable)/notes')
                         router.setParams({
-                            title: t('notes.content'),
+                            title: t('overview.content'),
                             html: event.contents ?? '',
                         })
                     },
                 },
                 {
-                    title: t('notes.literature'),
+                    title: t('overview.literature'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
                         router.push('(timetable)/notes')
                         router.setParams({
-                            title: t('notes.literature'),
+                            title: t('overview.literature'),
                             html: event.literature ?? '',
                         })
                     },
                 },
+            ],
+        },
+        {
+            header: t('details.title'),
+            items: [
                 {
                     title: t('details.exam'),
                     value: exam,
@@ -93,19 +99,12 @@ export default function TimetableDetails(): JSX.Element {
         <>
             <StatusBar style={getStatusBarStyle()} />
             <ScrollView>
-                <View
-                    style={{
-                        display: 'flex',
-                        padding: 12,
-                    }}
-                >
+                <View style={styles.page}>
                     <DetailsRow>
                         <DetailsSymbol>
                             <View
                                 style={{
-                                    width: 15,
-                                    aspectRatio: 1,
-                                    borderRadius: 9999,
+                                    ...styles.eventColorCircle,
                                     backgroundColor: colors.primary,
                                 }}
                             />
@@ -114,9 +113,8 @@ export default function TimetableDetails(): JSX.Element {
                         <DetailsBody>
                             <Text
                                 style={{
+                                    ...styles.eventName,
                                     color: colors.text,
-                                    fontSize: 24,
-                                    fontWeight: 'bold',
                                 }}
                             >
                                 {event.name}
@@ -124,8 +122,8 @@ export default function TimetableDetails(): JSX.Element {
 
                             <Text
                                 style={{
+                                    ...styles.eventShortName,
                                     color: colors.labelColor,
-                                    fontSize: 14,
                                 }}
                             >
                                 {event.shortName}
@@ -147,27 +145,21 @@ export default function TimetableDetails(): JSX.Element {
                         <DetailsBody>
                             <Text
                                 style={{
+                                    ...styles.text1,
                                     color: colors.text,
-                                    fontSize: 18,
                                 }}
                             >
-                                {startDate.toLocaleDateString(i18n.language, {
+                                {formatFriendlyDate(startDate, {
                                     weekday: 'long',
+                                    relative: false,
                                 })}
                             </Text>
 
-                            <View
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    gap: 4,
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <View style={styles.detailsContainer}>
                                 <Text
                                     style={{
+                                        ...styles.text2,
                                         color: colors.text,
-                                        fontSize: 14,
                                     }}
                                 >
                                     {startDate.toLocaleTimeString(
@@ -187,8 +179,8 @@ export default function TimetableDetails(): JSX.Element {
 
                                 <Text
                                     style={{
+                                        ...styles.text2,
                                         color: colors.text,
-                                        fontSize: 14,
                                     }}
                                 >
                                     {endDate.toLocaleTimeString(i18n.language, {
@@ -199,8 +191,8 @@ export default function TimetableDetails(): JSX.Element {
 
                                 <Text
                                     style={{
+                                        ...styles.text2,
                                         color: colors.labelColor,
-                                        fontSize: 14,
                                     }}
                                 >
                                     {`(${moment(endDate).diff(
@@ -237,8 +229,8 @@ export default function TimetableDetails(): JSX.Element {
                                 >
                                     <Text
                                         style={{
+                                            ...styles.text1,
                                             color: colors.primary,
-                                            fontSize: 18,
                                         }}
                                     >
                                         {room}
@@ -262,19 +254,15 @@ export default function TimetableDetails(): JSX.Element {
                         <DetailsBody>
                             <Text
                                 style={{
+                                    ...styles.text1,
                                     color: colors.text,
-                                    fontSize: 18,
                                 }}
                             >
                                 {event.lecturer}
                             </Text>
                         </DetailsBody>
                     </DetailsRow>
-                    <View
-                        style={{
-                            marginTop: 24,
-                        }}
-                    >
+                    <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
                     </View>
                 </View>
@@ -284,33 +272,11 @@ export default function TimetableDetails(): JSX.Element {
 }
 
 function DetailsRow({ children }: { children: JSX.Element[] }): JSX.Element {
-    return (
-        <View
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 12,
-            }}
-        >
-            {children}
-        </View>
-    )
+    return <View style={styles.detailsRow}>{children}</View>
 }
 
 function DetailsSymbol({ children }: { children: JSX.Element }): JSX.Element {
-    return (
-        <View
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                width: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-        >
-            {children}
-        </View>
-    )
+    return <View style={styles.detailsSymbol}>{children}</View>
 }
 
 function DetailsBody({
@@ -318,32 +284,77 @@ function DetailsBody({
 }: {
     children: JSX.Element | JSX.Element[]
 }): JSX.Element {
-    return (
-        <View
-            style={{
-                display: 'flex',
-                flexGrow: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                gap: 4,
-            }}
-        >
-            {children}
-        </View>
-    )
+    return <View style={styles.detailsBody}>{children}</View>
 }
+
 function Separator(): JSX.Element {
     const colors = useTheme().colors as Colors
 
     return (
         <View
             style={{
-                marginLeft: 50 + 12,
-                height: 1,
+                ...styles.separator,
                 backgroundColor: colors.border,
-                marginVertical: 12,
             }}
         />
     )
 }
+
+const styles = StyleSheet.create({
+    page: {
+        display: 'flex',
+        padding: 12,
+    },
+    eventColorCircle: {
+        width: 15,
+        aspectRatio: 1,
+        borderRadius: 9999,
+    },
+    eventName: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    eventShortName: {
+        fontSize: 14,
+    },
+    text1: {
+        fontSize: 18,
+    },
+    text2: {
+        fontSize: 14,
+    },
+    detailsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
+    },
+    formListContainer: {
+        marginTop: 24,
+    },
+    detailsRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 12,
+    },
+    detailsSymbol: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    detailsBody: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        flexShrink: 1,
+        gap: 4,
+    },
+    separator: {
+        marginLeft: 50 + 12,
+        height: 1,
+        marginVertical: 12,
+    },
+})

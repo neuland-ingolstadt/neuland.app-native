@@ -5,7 +5,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, ScrollView } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
 
@@ -14,7 +14,6 @@ const PADDING = 12
 export default function NotesDetails(): JSX.Element {
     const navigation = useNavigation()
     const windowWidth = Dimensions.get('window').width
-    const windowHeight = Dimensions.get('window').height
 
     const colors = useTheme().colors as Colors
     const { title, html } = useLocalSearchParams<{
@@ -47,21 +46,25 @@ export default function NotesDetails(): JSX.Element {
     return (
         <>
             <StatusBar style={getStatusBarStyle()} />
-            <ScrollView>
-                <WebView
-                    style={{
-                        height: windowHeight - 200,
-                        width: windowWidth - PADDING * 2,
-                        backgroundColor: colors.background,
-                        color: colors.text,
-                        padding: PADDING,
-                        alignSelf: 'center',
-                    }}
-                    originWhitelist={['*']}
-                    source={{ html: styledHtml }}
-                    scalesPageToFit
-                />
-            </ScrollView>
+            <WebView
+                style={{
+                    ...styles.webView,
+                    width: windowWidth - PADDING * 2,
+                    backgroundColor: colors.background,
+                    color: colors.text,
+                }}
+                originWhitelist={['*']}
+                source={{ html: styledHtml }}
+                scalesPageToFit
+            />
         </>
     )
 }
+
+const styles = StyleSheet.create({
+    webView: {
+        height: '100%',
+        padding: PADDING,
+        alignSelf: 'center',
+    },
+})

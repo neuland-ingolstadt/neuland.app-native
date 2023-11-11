@@ -1,19 +1,16 @@
 export default {
     details: {
-        title: 'Details',
+        title: 'Course details',
         weeklySemesterHours: 'SWS',
         exam: 'Exam',
         studyGroup: 'Study group',
         courseOfStudies: 'Course of studies',
     },
-    notes: {
-        title: 'Notes',
+    overview: {
+        title: 'Overview',
         goal: 'Goal',
-        noGoal: 'No goal',
         content: 'Content',
-        noContent: 'No content',
         literature: 'Literature',
-        noLiterature: 'No literature',
     },
     time: {
         minutes: 'minutes',

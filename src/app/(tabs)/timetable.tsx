@@ -26,10 +26,14 @@ import {
 import {
     Calendar,
     type CalendarTouchableOpacityProps,
+    HOUR_GUIDE_WIDTH,
     type HeaderRenderer,
     type ICalendarEventBase,
     type Mode,
 } from 'react-native-big-calendar'
+
+const HOUR_WIDTH = HOUR_GUIDE_WIDTH + 1
+const MARGIN = 4
 
 interface CalendarEvent extends ICalendarEventBase {
     textColor: string
@@ -43,7 +47,7 @@ export default function TimetableScreen(): JSX.Element {
 
     const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
     const [calendarDate, setCalendarDate] = useState<Date>(new Date())
-    const [mode, setMode] = useState<Mode>('3days')
+    const [mode] = useState<Mode>('3days')
 
     const today = new Date()
 
@@ -118,14 +122,8 @@ export default function TimetableScreen(): JSX.Element {
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <View
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        gap: 4,
-                    }}
-                >
-                    <TouchableOpacity
+                <View style={styles.navRight}>
+                    {/* <TouchableOpacity
                         onPress={() => {
                             setMode((oldMode) => {
                                 return oldMode === '3days'
@@ -133,15 +131,13 @@ export default function TimetableScreen(): JSX.Element {
                                     : '3days'
                             })
                         }}
-                        style={styles.headerIcon}
                     >
                         <Ionicons name="list" size={22} color={colors.text} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         onPress={() => {
                             setCalendarDate(new Date())
                         }}
-                        style={styles.headerIcon}
                     >
                         <Ionicons name="today" size={22} color={colors.text} />
                     </TouchableOpacity>
@@ -186,9 +182,6 @@ export default function TimetableScreen(): JSX.Element {
     }
 
     const renderHeader: HeaderRenderer<CalendarEvent> = (header) => {
-        const HOUR_WIDTH = 51
-        const MARGIN = 4
-
         const windowWidth = Dimensions.get('window').width
 
         const rangeLength = (() => {
@@ -223,34 +216,19 @@ export default function TimetableScreen(): JSX.Element {
         return (
             <View
                 style={{
-                    display: 'flex',
-                    flexDirection: 'row',
+                    ...styles.headerWrapper,
                     borderBottomColor: colors.border,
-                    borderBottomWidth: 1,
                 }}
             >
                 <View
                     style={{
-                        width: HOUR_WIDTH,
+                        ...styles.headerHourSpacer,
                         borderRightColor: colors.border,
-                        borderRightWidth: 1,
                     }}
                 />
-                <View
-                    style={{
-                        flexGrow: 1,
-                        justifyContent: 'center',
-                        paddingBottom: MARGIN,
-                    }}
-                >
+                <View style={styles.headerMainContainer}>
                     {/* dates */}
-                    <View
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                        }}
-                    >
+                    <View style={styles.headerDateContainer}>
                         {dates.map((date, i) => {
                             return (
                                 <TouchableOpacity
@@ -261,18 +239,13 @@ export default function TimetableScreen(): JSX.Element {
                                 >
                                     <View
                                         style={{
+                                            ...styles.headerDate,
                                             backgroundColor: date.isSame(
                                                 today,
                                                 'day'
                                             )
                                                 ? colors.labelBackground
-                                                : Color(colors.labelBackground)
-                                                      .darken(0.5)
-                                                      .hex(),
-                                            paddingVertical: 4,
-                                            paddingHorizontal: 16,
-                                            borderRadius: 9999,
-                                            marginVertical: 6,
+                                                : undefined,
                                         }}
                                     >
                                         <Text
@@ -280,7 +253,7 @@ export default function TimetableScreen(): JSX.Element {
                                                 color: colors.text,
                                             }}
                                         >
-                                            {date.format('DD')}
+                                            {date.format('ddd DD')}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -289,12 +262,7 @@ export default function TimetableScreen(): JSX.Element {
                     </View>
 
                     {/* all day events */}
-                    <View
-                        style={{
-                            display: 'flex',
-                            gap: 3,
-                        }}
-                    >
+                    <View style={styles.headerEventsContainer}>
                         {allDayEvents.map((event, i) => {
                             const eventStartDate = dayjs(event.start)
                             const eventEndDate = dayjs(event.end)
@@ -329,11 +297,10 @@ export default function TimetableScreen(): JSX.Element {
                                 >
                                     <View
                                         style={{
+                                            ...styles.allDayEvent,
                                             backgroundColor: event.color,
-                                            paddingVertical: 1,
                                             paddingLeft: extendsLeft ? 4 : 8,
                                             paddingRight: extendsRight ? 4 : 8,
-                                            marginHorizontal: MARGIN,
                                             borderTopStartRadius: extendsLeft
                                                 ? 0
                                                 : 4,
@@ -358,7 +325,6 @@ export default function TimetableScreen(): JSX.Element {
                                             borderRightColor: Color(event.color)
                                                 .darken(0.2)
                                                 .hex(),
-                                            justifyContent: 'center',
                                             width:
                                                 ((windowWidth - HOUR_WIDTH) *
                                                     eventLength) /
@@ -378,8 +344,8 @@ export default function TimetableScreen(): JSX.Element {
                                         <Text
                                             numberOfLines={1}
                                             style={{
+                                                ...styles.allDayEventText,
                                                 color: event.textColor,
-                                                fontSize: 12,
                                             }}
                                         >
                                             {event.title}
@@ -455,86 +421,80 @@ export default function TimetableScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
 
-            <View style={styles.wrapper}>
-                <Calendar
-                    date={calendarDate}
-                    onChangeDate={(range) => {
-                        setCalendarDate(range[0])
-                    }}
-                    mode={mode}
-                    events={timetable}
-                    height={-1}
-                    showAllDayEventCell={true}
-                    renderEvent={renderEvent}
-                    renderHeader={renderHeader}
-                    onPressEvent={showEventDetails}
-                    dayHeaderStyle={{
-                        backgroundColor: 'transparent',
-                        paddingBottom: 5,
-                    }}
-                    dayHeaderHighlightColor={colors.primary}
-                    theme={calendarTheme}
-                    scrollOffsetMinutes={480}
-                    weekStartsOn={1}
-                    weekEndsOn={6}
-                />
-            </View>
+            <Calendar
+                date={calendarDate}
+                onChangeDate={(range) => {
+                    setCalendarDate(range[0])
+                }}
+                mode={mode}
+                events={timetable}
+                height={-1}
+                showAllDayEventCell={true}
+                renderEvent={renderEvent}
+                renderHeader={renderHeader}
+                onPressEvent={showEventDetails}
+                dayHeaderStyle={{
+                    backgroundColor: 'transparent',
+                    paddingBottom: 5,
+                }}
+                dayHeaderHighlightColor={colors.primary}
+                theme={calendarTheme}
+                scrollOffsetMinutes={480}
+                weekStartsOn={1}
+                weekEndsOn={6}
+            />
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    headerStyle: {
-        borderBottomWidth: 0,
-        borderLeftWidth: 0,
-    },
-    gridRowStyle: {
-        borderTopWidth: 1,
-    },
-    gridColumnStyle: {
-        borderLeftWidth: 0,
-    },
-    headerTextStyle: {
-        borderRightWidth: 0,
-    },
-    eventStyle: {
-        borderRadius: 6,
-        elevation: 1,
-        alignItems: 'flex-start',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        minHeight: 43,
+    navRight: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 16,
+        marginRight: 12,
     },
     eventLocation: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 2,
     },
-    locationText: {
-        fontSize: 12,
+    headerWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        borderBottomWidth: 1,
     },
-    todayDateHeader: {
-        borderRadius: 9999,
+    headerHourSpacer: {
+        width: HOUR_WIDTH,
+        borderRightWidth: 1,
+    },
+    headerMainContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingBottom: MARGIN,
+    },
+    headerDateContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    headerDate: {
         paddingVertical: 4,
-        paddingHorizontal: 12,
-    },
-    dateHeader: {
+        paddingHorizontal: 16,
         borderRadius: 9999,
-        paddingVertical: 4,
-        paddingHorizontal: 12,
+        marginVertical: 6,
     },
-    allDayEventContainer: {
-        borderRadius: 6,
-        paddingHorizontal: 8,
+    headerEventsContainer: {
+        display: 'flex',
+        gap: 3,
+    },
+    allDayEvent: {
         paddingVertical: 1,
+        marginHorizontal: MARGIN,
+        borderRadius: 4,
+        justifyContent: 'center',
     },
-    wrapper: {
-        height: '100%',
-    },
-    allDayEventTitle: {
+    allDayEventText: {
         fontSize: 12,
-    },
-    headerIcon: {
-        marginRight: 12,
     },
 })
