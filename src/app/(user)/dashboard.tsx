@@ -87,7 +87,7 @@ export default function DashboardEdit(): JSX.Element {
         <View>
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
-                style={styles.page}
+                contentContainerStyle={styles.page}
             >
                 <View style={styles.wrapper}>
                     <View style={styles.block}>

@@ -1,8 +1,10 @@
 import { type Colors } from '@/stores/colors'
+import { RouteParamsContext } from '@/stores/provider'
 import { type NormalizedLecturer } from '@/utils/lecturers-utils'
 import { router } from 'expo-router'
-import React from 'react'
-import { Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { StyleSheet, Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
 
@@ -14,12 +16,11 @@ const LecturerRow = ({
 
     item: NormalizedLecturer
 }): JSX.Element => {
+    const { updateRouteParams } = useContext(RouteParamsContext)
+
     const onPressRoom = (): void => {
         router.push('(tabs)/map')
-        router.setParams({
-            q: item.room_short,
-            h: 'true',
-        })
+        updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {
         router.push({
@@ -27,6 +28,7 @@ const LecturerRow = ({
             params: { lecturerEntry: JSON.stringify(item) },
         })
     }
+    const { t } = useTranslation('api')
     return (
         <RowEntry
             title={`${[item.titel, item.vorname, item.name].join(' ').trim()}`}
@@ -35,41 +37,38 @@ const LecturerRow = ({
                 <>
                     <Text
                         style={{
-                            fontSize: 15,
                             color: colors.labelColor,
-                            fontWeight: '500',
-                            marginBottom: 4,
+                            ...styles.leftText1,
                         }}
                         numberOfLines={2}
                     >
-                        {item.funktion}
+                        {t(`lecturerFunctions.${item?.funktion}`, {
+                            defaultValue: item?.funktion,
+                            fallbackLng: 'de',
+                        })}
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.leftText2,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
                     >
-                        {item.organisation}
+                        {t(`lecturerOrganizations.${item?.organisation}`, {
+                            defaultValue: item?.organisation,
+                            fallbackLng: 'de',
+                        })}
                     </Text>
                 </>
             }
             rightChildren={
                 <>
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            justifyContent: 'flex-end',
-                            padding: 5,
-                        }}
-                    >
+                    <View style={styles.rightContainer}>
                         {item.raum !== null && item.raum !== '' && (
                             <View style={{ flexDirection: 'row' }}>
                                 <Text
                                     style={{
-                                        fontSize: 14,
-                                        fontWeight: '400',
+                                        ...styles.rightText1,
                                         color: colors.labelColor,
                                     }}
                                 >
@@ -77,8 +76,7 @@ const LecturerRow = ({
                                 </Text>
                                 <Text
                                     style={{
-                                        fontSize: 14,
-                                        fontWeight: '400',
+                                        ...styles.rightText2,
                                         color: colors.primary,
                                     }}
                                     onPress={onPressRoom}
@@ -95,5 +93,30 @@ const LecturerRow = ({
         />
     )
 }
+
+const styles = StyleSheet.create({
+    leftText1: {
+        fontSize: 15,
+
+        fontWeight: '500',
+        marginBottom: 4,
+    },
+    leftText2: {
+        fontSize: 13,
+    },
+    rightContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        padding: 5,
+    },
+    rightText1: {
+        fontSize: 14,
+        fontWeight: '400',
+    },
+    rightText2: {
+        fontSize: 14,
+        fontWeight: '400',
+    },
+})
 
 export default LecturerRow

@@ -1,9 +1,10 @@
 import { type Colors } from '@/stores/colors'
+import { RouteParamsContext } from '@/stores/provider'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { type AvailableRoom } from '@/utils/room-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import Divider from '../Universal/Divider'
@@ -15,6 +16,8 @@ interface FreeRoomsListProps {
 export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     const colors = useTheme().colors as Colors
     const router = useRouter()
+    const { updateRouteParams } = useContext(RouteParamsContext)
+
     return rooms !== null && rooms.length > 0 ? (
         rooms.map((room, index) => (
             <View key={index}>
@@ -23,10 +26,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                         <Pressable
                             onPress={() => {
                                 router.push('(tabs)/map')
-                                router.setParams({
-                                    q: room.room,
-                                    h: 'true',
-                                })
+                                updateRouteParams(room.room)
                             }}
                         >
                             <Text

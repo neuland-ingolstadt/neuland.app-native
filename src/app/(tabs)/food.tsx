@@ -1,10 +1,13 @@
 import { MealDay } from '@/components/Elements/Food'
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
+import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +19,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
 } from 'react-native'
 
@@ -26,7 +30,7 @@ enum LoadingState {
     REFRESHING,
 }
 
-export default function FoodScreen(): JSX.Element {
+function FoodScreen(): JSX.Element {
     const [days, setDays] = useState<any>([])
     const colors = useTheme().colors as Colors
     const [loadingState, setLoadingState] = useState<LoadingState>(
@@ -160,6 +164,53 @@ export default function FoodScreen(): JSX.Element {
     }
 
     return (
+        <ScrollView
+            refreshControl={
+                loadingState !== LoadingState.LOADING &&
+                loadingState !== LoadingState.LOADED ? (
+                    <RefreshControl
+                        refreshing={loadingState === LoadingState.REFRESHING}
+                        onRefresh={onRefresh}
+                    />
+                ) : undefined
+            }
+            contentInsetAdjustmentBehavior="always"
+            contentContainerStyle={styles.container}
+            showsVerticalScrollIndicator={false}
+        >
+            {loadingState === LoadingState.LOADING && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+            )}
+            {loadingState === LoadingState.ERROR && (
+                <View>
+                    <Text style={[styles.errorMessage, { color: colors.text }]}>
+                        {error?.message}
+                    </Text>
+                    <Text style={[styles.errorInfo, { color: colors.text }]}>
+                        {t('error.refresh')}{' '}
+                    </Text>
+                </View>
+            )}
+
+            {loadingState === LoadingState.LOADED && (
+                <>
+                    <View style={styles.loadedContainer}>
+                        {days.slice(0, 5).map((day: Food, index: number) => (
+                            <DayButton day={day} index={index} key={index} />
+                        ))}
+                    </View>
+                    {MealDay(days[selectedDay], selectedDay, colors)}
+                </>
+            )}
+        </ScrollView>
+    )
+}
+
+export default function Screen(): JSX.Element {
+    const colors = useTheme().colors as Colors
+    return (
         <>
             <Head>
                 <title>Food</title>
@@ -167,75 +218,32 @@ export default function FoodScreen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <ScrollView
-                refreshControl={
-                    loadingState !== LoadingState.LOADING &&
-                    loadingState !== LoadingState.LOADED ? (
-                        <RefreshControl
-                            refreshing={
-                                loadingState === LoadingState.REFRESHING
-                            }
-                            onRefresh={onRefresh}
-                        />
-                    ) : undefined
-                }
-                contentInsetAdjustmentBehavior="always"
-            >
-                <View style={styles.container}>
-                    {loadingState === LoadingState.LOADING && (
-                        <View style={styles.loadingContainer}>
-                            <ActivityIndicator
-                                size="small"
-                                color={colors.primary}
-                            />
-                        </View>
-                    )}
-                    {loadingState === LoadingState.ERROR && (
-                        <View>
-                            <Text
-                                style={[
-                                    styles.errorMessage,
-                                    { color: colors.text },
-                                ]}
-                            >
-                                {error?.message}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.errorInfo,
-                                    { color: colors.text },
-                                ]}
-                            >
-                                {t('error.refresh')}{' '}
-                            </Text>
-                        </View>
-                    )}
-
-                    {loadingState === LoadingState.LOADED && (
-                        <>
-                            <View style={styles.loadedContainer}>
-                                {days
-                                    .slice(0, 5)
-                                    .map((day: Food, index: number) => (
-                                        <DayButton
-                                            day={day}
-                                            index={index}
-                                            key={index}
-                                        />
-                                    ))}
-                            </View>
-                            {MealDay(days[selectedDay], selectedDay, colors)}
-                        </>
-                    )}
-                </View>
-            </ScrollView>
+            <WorkaroundStack
+                name={'Food'}
+                titleKey={'navigation.food'}
+                component={FoodScreen}
+                largeTitle={false}
+                headerRightElement={() => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.push('(food)/preferences')
+                        }}
+                    >
+                        <Ionicons name="filter" size={24} color={colors.text} />
+                    </TouchableOpacity>
+                )}
+            />
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    headerButton: {
+        backgroundColor: 'transparent',
+        paddingRight: 10,
+    },
     container: {
-        paddingBottom: 45,
+        paddingBottom: 50,
     },
     dayRestaurantContainer: {
         width: '92%',

@@ -40,9 +40,8 @@ export function useDashboard(): Dashboard {
 
     useEffect(() => {
         async function load(): Promise<void> {
-            const personalDashboard = await AsyncStorage.getItem(
-                'personalDashboard'
-            )
+            const personalDashboard =
+                await AsyncStorage.getItem('personalDashboard')
             const personalDashboardHidden = await AsyncStorage.getItem(
                 'personalDashboardHidden'
             )

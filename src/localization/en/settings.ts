@@ -5,7 +5,8 @@ export default {
             subtitle: 'Sign in to unlock all features of the app',
         },
         employee: {
-            subtitle: 'Tap to logout',
+            subtitle1: 'Employee account',
+            subtitle2: 'Tap to logout',
         },
         error: {
             subtitle2: 'Pull to refresh or tap to logout',
@@ -50,6 +51,10 @@ export default {
     },
     profile: {
         formlist: {
+            grades: {
+                title: 'Grades',
+                button: 'Grades and subjects',
+            },
             user: {
                 title: 'User',
                 matrical: 'Matriculation number',
@@ -106,5 +111,14 @@ export default {
         hidden: 'Hidden cards',
         reset: 'Reset order',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
+    },
+    grades: {
+        grade: 'Grade',
+        none: '(none)',
+        finished: 'Grades',
+        open: 'Open',
+        average: 'Average',
+        temporarilyUnavailable: 'Grades are temporarily unavailable.',
+        footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
     },
 }
