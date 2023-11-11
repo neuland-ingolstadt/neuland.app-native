@@ -10,6 +10,7 @@ import {
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
+import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext, UserKindContext } from '@/stores/provider'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -102,7 +103,6 @@ export const MapScreen = (): JSX.Element => {
     }, [routeParams])
 
     useEffect(() => {
-        console.log('MapScreen useEffect')
         navigation.setOptions({
             headerRight: () => (
                 <Pressable
@@ -280,16 +280,26 @@ export const MapScreen = (): JSX.Element => {
         const cleanedText = localSearch.toUpperCase().trim()
 
         const getProp = (
-            room: { properties: { [x: string]: string; Funktion: string } },
+            room: {
+                properties: {
+                    [x: string]: string
+                    Funktion_de: string
+                    Funktion_en: string
+                }
+            },
             prop: string
         ): string => {
-            if (prop === 'Funktion') {
-                return room?.properties?.Funktion
+            if (prop.includes('Funktion')) {
+                return room?.properties[prop]
             }
 
             return room.properties[prop]?.toUpperCase()
         }
-        const searchProps = ['Gebaeude', 'Raum', 'Funktion']
+        const searchProps = [
+            'Gebaeude',
+            'Raum',
+            i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en',
+        ]
         const fullTextSearcher = (room: any): boolean =>
             searchProps.some(
                 (x) => getProp(room, x)?.toUpperCase().includes(cleanedText)
@@ -305,7 +315,7 @@ export const MapScreen = (): JSX.Element => {
         // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
         const showNeuburg =
             userFaculty === 'Nachhaltige Infrastruktur' ||
-            cleanedText.includes('N')
+            cleanedText.substring(0, 2).includes('N')
         const campusRooms = filtered.filter(
             (x) => x.properties.Raum.includes('N') === showNeuburg
         )
@@ -504,7 +514,13 @@ export const MapScreen = (): JSX.Element => {
     const _addGeoJson = (): void => {
         const filteredFeatures = filterEtage(currentFloor)
         filteredFeatures.forEach((feature) => {
-            _addRoom(feature, availableRooms, mapRef, colors)
+            _addRoom(
+                feature,
+                availableRooms,
+                mapRef,
+                colors,
+                i18n.language as LanguageKey
+            )
         })
     }
 

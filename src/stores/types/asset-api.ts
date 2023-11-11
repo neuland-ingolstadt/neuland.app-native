@@ -40,7 +40,8 @@ export interface FeatureProperties {
     Etage: string
     Ebene: string
     Raum: string
-    Funktion: string
+    Funktion_de: string
+    Funktion_en: string
 }
 
 export enum Gebaeude {
