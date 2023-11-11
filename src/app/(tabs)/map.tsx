@@ -116,6 +116,7 @@ export const MapScreen = (): JSX.Element => {
             headerSearchBarOptions: {
                 placeholder: t('pages.map.search'),
                 shouldShowHintSearchIcon: false,
+                hideWhenScrolling: false,
                 onChangeText: (event: { nativeEvent: { text: string } }) => {
                     setLocalSearch(event.nativeEvent.text)
                 },
