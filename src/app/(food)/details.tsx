@@ -49,17 +49,14 @@ export default function FoodDetail(): JSX.Element {
                           {
                               title: t('details.formlist.prices.student'),
                               value: formatPrice(meal.prices?.student),
-                              disabled: true,
                           },
                           {
                               title: t('details.formlist.prices.employee'),
                               value: formatPrice(meal.prices?.employee),
-                              disabled: true,
                           },
                           {
                               title: t('details.formlist.prices.guest'),
                               value: formatPrice(meal.prices?.guest),
-                              disabled: true,
                           },
                       ],
                   },
@@ -75,7 +72,6 @@ export default function FoodDetail(): JSX.Element {
                         flagMap[flag as keyof typeof flagMap]?.[
                             i18n.language as LanguageKey
                         ] ?? flag,
-                    disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
                         : undefined,
@@ -94,7 +90,6 @@ export default function FoodDetail(): JSX.Element {
                             allergenMap[allergen as keyof typeof allergenMap]?.[
                                 i18n.language as LanguageKey
                             ] ?? allergen,
-                        disabled: true,
                         icon: allergenSelection.includes(allergen)
                             ? 'warning-outline'
                             : undefined,
@@ -112,46 +107,38 @@ export default function FoodDetail(): JSX.Element {
                         ' kJ / ' +
                         (meal?.nutrition?.kcal ?? 'n/a').toString() +
                         ' kcal',
-                    disabled: true,
                 },
 
                 {
                     title: t('details.formlist.nutrition.fat'),
                     value: (meal?.nutrition?.fat ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.saturated'),
                     value:
                         (meal?.nutrition?.fatSaturated ?? 'n/a').toString() +
                         ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.carbs'),
                     value: (meal?.nutrition?.carbs ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.sugar'),
                     value: (meal?.nutrition?.sugar ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.fiber'),
                     value: (meal?.nutrition?.fiber ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.protein'),
                     value:
                         (meal?.nutrition?.protein ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.salt'),
                     value: (meal?.nutrition?.salt ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
             ],
         },
@@ -164,12 +151,10 @@ export default function FoodDetail(): JSX.Element {
                 {
                     title: 'Restaurant',
                     value: meal?.restaurant,
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.about.category'),
                     value: meal?.category,
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.about.source'),
@@ -195,7 +180,6 @@ export default function FoodDetail(): JSX.Element {
                     value:
                         (variant.additional ? '+ ' : '') +
                         formatPrice(variant.prices[userKind]),
-                    disabled: true,
                 })) ?? [],
         },
     ]

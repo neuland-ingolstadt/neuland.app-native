@@ -3,6 +3,7 @@ import flow from './flow'
 import food from './food'
 import navigation from './navigation'
 import settings from './settings'
+import timetable from './timetable'
 
 export default {
     common,
@@ -10,4 +11,5 @@ export default {
     navigation,
     food,
     flow,
+    timetable,
 }

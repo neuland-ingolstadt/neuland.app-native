@@ -106,6 +106,34 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(timetable)/details"
+                        options={{
+                            title: t('navigation.details'),
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(timetable)/notes"
+                        options={{
+                            title: t('navigation.details'),
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
                         name="(user)/theme"
                         options={{
                             title: t('navigation.theme'),

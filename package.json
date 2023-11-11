@@ -57,7 +57,8 @@
         "react-native-screens": "~3.22.0",
         "react-native-select-dropdown": "^3.3.4",
         "react-native-svg": "^13.14.0",
-        "react-native-webview": "13.2.2"
+        "react-native-webview": "13.2.2",
+        "sanitize-html": "^2.11.0"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0-0",
@@ -69,6 +70,7 @@
         "@expo/ngrok": "^4.1.0",
         "@trivago/prettier-plugin-sort-imports": "^4.2.1",
         "@types/react": "~18.2.14",
+        "@types/sanitize-html": "^2",
         "@typescript-eslint/eslint-plugin": "^6.6.0",
         "@typescript-eslint/parser": "^6.10.0",
         "babel-plugin-formatjs": "^10.5.7",
