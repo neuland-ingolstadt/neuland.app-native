@@ -5,7 +5,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import { Dimensions, Platform, StyleSheet, View } from 'react-native'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
 
@@ -46,7 +46,9 @@ export default function NotesDetails(): JSX.Element {
     }, [navigation])
 
     async function setDelayedIsLoaded(): Promise<void> {
-        await new Promise((resolve) => setTimeout(resolve, 50))
+        const delay = Platform.OS === 'ios' ? 100 : 0
+
+        await new Promise((resolve) => setTimeout(resolve, delay))
         setIsLoaded(true)
     }
 
