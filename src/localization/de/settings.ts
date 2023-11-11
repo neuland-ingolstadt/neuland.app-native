@@ -6,7 +6,8 @@ export default {
                 'Melde dich an, um alle Funktionen der App freizuschalten.',
         },
         employee: {
-            subtitle: 'Tippe zum Abmelden',
+            subtitle: 'Mitarbeitenden Account',
+            subtitle2: 'Tippe zum Abmelden',
         },
         error: {
             subtitle2: 'Ziehe zum Aktualisieren oder tippe zum Abmelden',
@@ -52,6 +53,10 @@ export default {
     },
     profile: {
         formlist: {
+            grades: {
+                title: 'Noten',
+                button: 'Noten und Fächer',
+            },
             user: {
                 title: 'Benutzer',
                 matrical: 'Matrikelnummer',
@@ -108,5 +113,14 @@ export default {
         hidden: 'Ausgeblendete Karten',
         reset: 'Reihenfolge zurücksetzen',
         footer: 'Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.',
+    },
+    grades: {
+        grade: 'Note',
+        none: '(keine)',
+        finished: 'Noten',
+        open: 'Offen',
+        average: 'Durchschnitt',
+        temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
+        footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
     },
 }

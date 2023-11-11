@@ -44,7 +44,6 @@ class AssetAPIClient {
      * @param {string} cacheKey Unique key that identifies this request
      * @param {string} url The URL to perform the request against
      * @returns {Promise<any>} A promise that resolves with the response data
-
      */
     async requestCached(cacheKey: string, url: string): Promise<any> {
         const cached = await this.cache.get(cacheKey)
@@ -63,11 +62,21 @@ class AssetAPIClient {
      * Gets the map overlay
      * @returns {Promise<any>} A promise that resolves with the map overlay data
      */
-
     async getMapOverlay(): Promise<any> {
         return await this.requestCached(
             `map-overlay-${packageInfo.version}`,
             `${ENDPOINT}rooms_neuland_v2.3.geojson`
+        )
+    }
+
+    /**
+     * Gets the course SPOs
+     * @returns {Promise<any>} A promise that resolves with the course spo data
+     */
+    async getCourseSPO(): Promise<any> {
+        return await this.requestCached(
+            `course-spo-${packageInfo.version}`,
+            `${ENDPOINT}spo_weigths.json`
         )
     }
 }

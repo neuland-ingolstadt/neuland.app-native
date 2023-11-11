@@ -282,17 +282,4 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontSize: 12,
     },
-    shareButton: {
-        alignSelf: 'center',
-        paddingHorizontal: 35,
-        paddingVertical: 9,
-        borderRadius: 6,
-        marginTop: 5,
-    },
-    shareContent: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        gap: 10,
-    },
-    shareText: { fontSize: 16 },
 })

@@ -7,7 +7,7 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View } from 'react-native'
 
 import RowEntry from '../Universal/RowEntry'
 
@@ -29,10 +29,8 @@ const CLEventRow = ({
                 <>
                     <Text
                         style={{
-                            fontSize: 15,
                             color: colors.labelColor,
-                            fontWeight: '500',
-                            marginBottom: 4,
+                            ...styles.leftText1,
                         }}
                         numberOfLines={2}
                     >
@@ -40,7 +38,7 @@ const CLEventRow = ({
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.leftText2,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
@@ -51,26 +49,15 @@ const CLEventRow = ({
             }
             rightChildren={
                 <>
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            padding: 5,
-                        }}
-                    >
+                    <View style={styles.rightContainer}>
                         {club !== undefined && (
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
+                            <View style={styles.clubContainer}>
                                 {club.website !== undefined && (
                                     <Ionicons
                                         name="globe"
                                         size={19}
                                         color={colors.labelSecondaryColor}
-                                        style={{ marginRight: 7 }}
+                                        style={styles.websiteIcon}
                                         onPress={() => {
                                             void Linking.openURL(club.website)
                                         }}
@@ -91,8 +78,7 @@ const CLEventRow = ({
 
                         <Text
                             style={{
-                                fontSize: 14,
-                                fontWeight: '400',
+                                ...styles.rightText,
                                 color: colors.labelColor,
                             }}
                         >
@@ -118,5 +104,30 @@ const CLEventRow = ({
         />
     )
 }
+
+const styles = StyleSheet.create({
+    leftText1: {
+        fontSize: 15,
+        fontWeight: '500',
+        marginBottom: 4,
+    },
+    leftText2: {
+        fontSize: 13,
+    },
+    rightContainer: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 5,
+    },
+    clubContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    },
+    websiteIcon: { marginRight: 7 },
+    rightText: {
+        fontSize: 14,
+        fontWeight: '400',
+    },
+})
 
 export default CLEventRow

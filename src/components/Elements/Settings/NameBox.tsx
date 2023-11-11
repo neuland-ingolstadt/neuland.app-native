@@ -1,11 +1,15 @@
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
 import React, { type ReactNode } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 
 interface NameBoxProps {
     children: ReactNode
     title: string
+    loaded: boolean
     subTitle1: string
     subTitle2?: string
 }
@@ -23,60 +27,97 @@ interface NameBoxProps {
 const NameBox = ({
     children,
     title,
+    loaded,
     subTitle1,
     subTitle2,
 }: NameBoxProps): JSX.Element => {
     const colors = useTheme().colors as Colors
+    const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
+    const shimmerColor = [
+        Color(colors.labelTertiaryColor).lighten(0.4).hex(),
+        Color(colors.labelTertiaryColor).lighten(0.5).hex(),
+        Color(colors.labelTertiaryColor).lighten(0.4).hex(),
+    ]
+
     return (
         <>
             {children}
-            <View
-                style={{
-                    maxWidth: '92%',
-                    alignItems: 'flex-start',
-                    flex: 1,
-                    marginLeft: 12,
-                }}
-            >
+            <View style={styles.container}>
                 <Text
                     style={{
-                        marginLeft: 4,
-                        fontWeight: 'bold',
-                        fontSize: 18,
-                        overflow: 'hidden',
+                        ...styles.title,
                         color: colors.text,
                     }}
                     numberOfLines={1}
                 >
                     {title}
                 </Text>
-                <Text
+                <ShimmerPlaceholder
+                    visible={loaded}
                     style={{
-                        marginLeft: 4,
-                        fontSize: 12,
-                        overflow: 'hidden',
-                        lineHeight: 14,
-                        color: colors.text,
+                        width: !loaded ? 100 : undefined,
+                        height: !loaded ? 11 : undefined,
                     }}
-                    numberOfLines={2}
-                    allowFontScaling={true}
+                    shimmerStyle={styles.shimmer}
+                    shimmerColors={shimmerColor}
                 >
-                    {subTitle1}
-                </Text>
-                {subTitle2 !== '' && (
                     <Text
                         style={{
-                            marginLeft: 4,
-                            fontSize: 12,
+                            ...styles.subtitle,
                             color: colors.text,
                         }}
+                        numberOfLines={2}
+                        allowFontScaling={true}
                     >
-                        {subTitle2}
+                        {subTitle1}
                     </Text>
-                )}
+                </ShimmerPlaceholder>
+                <ShimmerPlaceholder
+                    visible={loaded}
+                    style={{
+                        width: !loaded ? 130 : undefined,
+                        height: !loaded ? 11 : undefined,
+                        marginTop: !loaded ? 3 : undefined,
+                    }}
+                    shimmerStyle={styles.shimmer}
+                    shimmerColors={shimmerColor}
+                >
+                    {subTitle2 !== '' && (
+                        <Text
+                            style={{
+                                ...styles.subtitle,
+                                color: colors.text,
+                            }}
+                        >
+                            {subTitle2}
+                        </Text>
+                    )}
+                </ShimmerPlaceholder>
             </View>
         </>
     )
 }
 
 export default NameBox
+
+const styles = StyleSheet.create({
+    shimmer: {
+        borderRadius: 3,
+    },
+    subtitle: {
+        fontSize: 12,
+        overflow: 'hidden',
+        lineHeight: 14,
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        overflow: 'hidden',
+    },
+    container: {
+        maxWidth: '92%',
+        alignItems: 'flex-start',
+        flex: 1,
+        marginLeft: 16,
+    },
+})

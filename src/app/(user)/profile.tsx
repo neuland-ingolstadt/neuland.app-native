@@ -5,16 +5,21 @@ import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
+import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    ActivityIndicator,
     Alert,
     Linking,
     Platform,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -39,20 +44,58 @@ export default function Profile(): JSX.Element {
         }
     }
 
-    useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                const response = await API.getPersonalData()
-                const data: PersDataDetails = response.persdata
-                data.pcounter = response.pcounter
-                setUserData(data)
-            } catch (e) {
-                console.log(e)
-            }
-        }
+    const [errorMsg, setErrorMsg] = useState('')
 
+    enum LoadingState {
+        LOADING,
+        LOADED,
+        ERROR,
+        REFRESHING,
+    }
+
+    const [loadingState, setLoadingState] = useState<LoadingState>(
+        LoadingState.LOADING
+    )
+
+    async function load(): Promise<void> {
+        try {
+            const response = await API.getPersonalData()
+            const data: PersDataDetails = response.persdata
+            data.pcounter = response.pcounter
+            setUserData(data)
+            setLoadingState(LoadingState.LOADED)
+        } catch (e: any) {
+            setLoadingState(LoadingState.ERROR)
+            setErrorMsg(e.message)
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
         void load()
     }, [])
+
+    const onRefresh: () => void = () => {
+        void load()
+    }
+
+    const handleBiometricAuth = async (): Promise<void> => {
+        const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
+        if (securityLevel === 0) {
+            // no passcode or biometric auth set up
+            router.push('(user)/grades')
+            return
+        }
+
+        const biometricAuth = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Verify your identity to show your grades',
+            fallbackLabel: 'Enter Passcode',
+        })
+
+        if (biometricAuth.success) {
+            router.push('(user)/grades')
+        }
+    }
 
     let toast: any = null
     const copyToClipboard = async (text: string): Promise<void> => {
@@ -105,6 +148,18 @@ export default function Profile(): JSX.Element {
     }
 
     const sections: FormListSections[] = [
+        {
+            header: t('profile.formlist.grades.title'),
+            items: [
+                {
+                    title: t('profile.formlist.grades.button'),
+                    icon: 'chevron-forward-outline',
+                    onPress: async () => {
+                        await handleBiometricAuth()
+                    },
+                },
+            ],
+        },
         {
             header: t('profile.formlist.user.title'),
             items: [
@@ -192,39 +247,88 @@ export default function Profile(): JSX.Element {
     ]
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <FormList sections={sections} />
-            </View>
-            <View
-                style={{
-                    backgroundColor: colors.card,
-                    ...styles.logoutContainer,
-                }}
+        <>
+            <StatusBar style={getStatusBarStyle()} />
+            <ScrollView
+                contentContainerStyle={{ paddingBottom: 32 }}
+                refreshControl={
+                    loadingState !== LoadingState.LOADING &&
+                    loadingState !== LoadingState.LOADED ? (
+                        <RefreshControl
+                            refreshing={
+                                loadingState === LoadingState.REFRESHING
+                            }
+                            onRefresh={onRefresh}
+                        />
+                    ) : undefined
+                }
             >
-                <TouchableOpacity
-                    onPress={logoutAlert}
-                    activeOpacity={0.5}
-                    style={styles.logoutButton}
+                {loadingState === LoadingState.LOADING && (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                            size="small"
+                            color={colors.primary}
+                        />
+                    </View>
+                )}
+                {loadingState === LoadingState.ERROR && (
+                    <View style={styles.errorContainer}>
+                        <Text
+                            style={[
+                                styles.errorMessage,
+                                { color: colors.text },
+                            ]}
+                        >
+                            {errorMsg}
+                        </Text>
+                        <Text
+                            style={[styles.errorInfo, { color: colors.text }]}
+                        >
+                            {t('error.refresh', { ns: 'common' })}{' '}
+                        </Text>
+                    </View>
+                )}
+                {loadingState === LoadingState.LOADED && (
+                    <View style={styles.container}>
+                        <FormList sections={sections} />
+                    </View>
+                )}
+                <View
+                    style={{
+                        backgroundColor: colors.card,
+                        ...styles.logoutContainer,
+                    }}
                 >
-                    <Ionicons
-                        name="log-out-outline"
-                        size={24}
-                        color={colors.notification}
-                        style={{ marginRight: 10 }}
-                    />
-                    <Text style={{ color: colors.notification }}>Logout</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                    <TouchableOpacity
+                        onPress={logoutAlert}
+                        activeOpacity={0.5}
+                        style={styles.logoutButton}
+                    >
+                        <Ionicons
+                            name="log-out-outline"
+                            size={24}
+                            color={colors.notification}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ color: colors.notification }}>
+                            Logout
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        paddingVertical: 16,
         paddingHorizontal: 16,
         width: '100%',
         alignSelf: 'center',
+    },
+    errorContainer: {
+        paddingBottom: 64,
     },
     logoutContainer: {
         borderRadius: 10,
@@ -238,5 +342,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 40,
+    },
+    errorMessage: {
+        paddingTop: 100,
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    errorInfo: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    loadingContainer: {
+        paddingVertical: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

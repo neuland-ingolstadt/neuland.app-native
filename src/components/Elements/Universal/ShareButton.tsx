@@ -47,8 +47,8 @@ export default function ShareButton({
 const styles = StyleSheet.create({
     shareButton: {
         alignSelf: 'center',
-        paddingHorizontal: 35,
-        paddingVertical: 9,
+        paddingHorizontal: 45,
+        paddingVertical: 12,
         borderRadius: 6,
         marginTop: 5,
     },
@@ -57,5 +57,5 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         gap: 10,
     },
-    shareText: { fontSize: 16 },
+    shareText: { fontSize: 17 },
 })
