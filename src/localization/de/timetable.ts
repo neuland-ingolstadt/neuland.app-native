@@ -1,7 +1,16 @@
 export default {
     details: {
-        room: 'Raum',
-        rooms: 'Räume',
+        title: 'Kursdetails',
+        weeklySemesterHours: 'SWS',
+        exam: 'Prüfung',
+        studyGroup: 'Lerngruppe',
+        courseOfStudies: 'Studiengang',
+    },
+    overview: {
+        title: 'Übersicht',
+        goal: 'Ziel',
+        content: 'Inhalt',
+        literature: 'Literatur',
     },
     time: {
         minutes: 'Minuten',

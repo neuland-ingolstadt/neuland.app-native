@@ -1,4 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import ShareButton from '@/components/Elements/Universal/ShareButton'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
@@ -9,21 +10,12 @@ import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    Pressable,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -229,44 +221,13 @@ export default function FoodDetail(): JSX.Element {
                 <View style={styles.formList}>
                     <FormList sections={sections} />
                 </View>
-                <View>
-                    <Pressable
-                        style={[
-                            {
-                                backgroundColor: colors.card,
-                            },
-                            styles.shareButton,
-                        ]}
-                        onPress={() => {
-                            void Share.share({
-                                message: t('details.share.message', {
-                                    meal: meal?.name[
-                                        i18n.language as LanguageKey
-                                    ],
-                                    price: formatPrice(meal?.prices[userKind]),
-                                    location: meal?.restaurant,
-                                }),
-                            })
-                        }}
-                    >
-                        <View style={styles.shareContent}>
-                            <Ionicons
-                                name="share-outline"
-                                size={18}
-                                color={colors.primary}
-                            />
-
-                            <Text
-                                style={[
-                                    { color: colors.primary },
-                                    styles.shareText,
-                                ]}
-                            >
-                                {t('details.share.button')}
-                            </Text>
-                        </View>
-                    </Pressable>
-                </View>
+                <ShareButton
+                    message={t('details.share.message', {
+                        meal: meal?.name[i18n.language as LanguageKey],
+                        price: formatPrice(meal?.prices[userKind]),
+                        location: meal?.restaurant,
+                    })}
+                />
                 <View style={styles.notesContainer}>
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}

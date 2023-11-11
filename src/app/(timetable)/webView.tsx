@@ -5,13 +5,15 @@ import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
 
 const PADDING = 12
 
 export default function NotesDetails(): JSX.Element {
+    const [isLoaded, setIsLoaded] = React.useState(false)
+
     const navigation = useNavigation()
     const windowWidth = Dimensions.get('window').width
 
@@ -43,10 +45,18 @@ export default function NotesDetails(): JSX.Element {
         })
     }, [navigation])
 
+    async function setDelayedIsLoaded(): Promise<void> {
+        await new Promise((resolve) => setTimeout(resolve, 50))
+        setIsLoaded(true)
+    }
+
     return (
         <>
             <StatusBar style={getStatusBarStyle()} />
             <WebView
+                onLoadEnd={() => {
+                    void setDelayedIsLoaded()
+                }}
                 style={{
                     ...styles.webView,
                     width: windowWidth - PADDING * 2,
@@ -57,6 +67,19 @@ export default function NotesDetails(): JSX.Element {
                 source={{ html: styledHtml }}
                 scalesPageToFit
             />
+
+            {/* prevent flickering on load on iOS */}
+            {isLoaded ? null : (
+                <View
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        position: 'absolute',
+                        justifyContent: 'center',
+                        backgroundColor: colors.background,
+                    }}
+                />
+            )}
         </>
     )
 }

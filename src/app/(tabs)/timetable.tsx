@@ -291,6 +291,7 @@ export default function TimetableScreen(): JSX.Element {
                             return (
                                 <TouchableOpacity
                                     key={i}
+                                    disabled={event.entry == null}
                                     onPress={() => {
                                         showEventDetails(event)
                                     }}

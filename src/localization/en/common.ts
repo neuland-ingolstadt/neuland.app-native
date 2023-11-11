@@ -15,6 +15,9 @@ export default {
         thisWeek: 'This Week',
         nextWeek: 'Next Week',
     },
+    misc: {
+        share: 'Share',
+    },
     pages: {
         calendar: {
             exams: {

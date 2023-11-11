@@ -1,4 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/stores/colors'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
@@ -40,7 +41,7 @@ export default function TimetableDetails(): JSX.Element {
                     title: t('overview.goal'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
-                        router.push('(timetable)/notes')
+                        router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.goal'),
                             html: event.goal ?? '',
@@ -51,7 +52,7 @@ export default function TimetableDetails(): JSX.Element {
                     title: t('overview.content'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
-                        router.push('(timetable)/notes')
+                        router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.content'),
                             html: event.contents ?? '',
@@ -62,7 +63,7 @@ export default function TimetableDetails(): JSX.Element {
                     title: t('overview.literature'),
                     icon: 'chevron-forward-outline',
                     onPress: () => {
-                        router.push('(timetable)/notes')
+                        router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.literature'),
                             html: event.literature ?? '',
@@ -264,6 +265,8 @@ export default function TimetableDetails(): JSX.Element {
                     </DetailsRow>
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
+
+                        <ShareButton message="test" />
                     </View>
                 </View>
             </ScrollView>
@@ -331,6 +334,7 @@ const styles = StyleSheet.create({
     },
     formListContainer: {
         marginTop: 24,
+        gap: 12,
     },
     detailsRow: {
         display: 'flex',

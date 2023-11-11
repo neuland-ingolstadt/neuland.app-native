@@ -120,7 +120,7 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(timetable)/notes"
+                        name="(timetable)/webView"
                         options={{
                             title: t('navigation.details'),
                             ...Platform.select({

@@ -66,7 +66,6 @@ export default {
         share: {
             message:
                 'Checkout "{{meal}}" ({{price}}) at {{location}}.\nhttps://neuland.app/food/',
-            button: 'Share',
         },
     },
 }
