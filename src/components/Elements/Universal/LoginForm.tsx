@@ -325,10 +325,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         maxWidth: 400,
-
         paddingHorizontal: 25,
         paddingVertical: 20,
-
         justifyContent: 'center',
     },
     header: {

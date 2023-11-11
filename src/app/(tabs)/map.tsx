@@ -113,9 +113,7 @@ export const MapScreen = (): JSX.Element => {
                     />
                 </Pressable>
             ),
-            // enable the search bar
             headerSearchBar: true,
-
             headerSearchBarOptions: {
                 placeholder: t('pages.map.search'),
                 shouldShowHintSearchIcon: false,
@@ -172,9 +170,11 @@ export const MapScreen = (): JSX.Element => {
 
     const handleShareModal = (): void => {
         const room = filteredRooms[0].properties.Raum
-        void Share.share({
-            url: 'https://neuland.app/rooms/?highlight=' + room,
-        })
+        const payload = 'https://neuland.app/rooms/?highlight=' + room
+
+        void Share.share(
+            Platform.OS === 'android' ? { message: payload } : { url: payload }
+        )
     }
 
     useEffect(() => {

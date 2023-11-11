@@ -8,6 +8,7 @@ import { type PersDataDetails } from '@/stores/types/thi-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
+import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -53,6 +54,24 @@ export default function Profile(): JSX.Element {
 
         void load()
     }, [])
+
+    const handleBiometricAuth = async (): Promise<void> => {
+        const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
+        if (securityLevel === 0) {
+            // no passcode or biometric auth set up
+            router.push('(user)/grades')
+            return
+        }
+
+        const biometricAuth = await LocalAuthentication.authenticateAsync({
+            promptMessage: 'Verify your identity to show your grades',
+            fallbackLabel: 'Enter Passcode',
+        })
+
+        if (biometricAuth.success) {
+            router.push('(user)/grades')
+        }
+    }
 
     let toast: any = null
     const copyToClipboard = async (text: string): Promise<void> => {
@@ -105,6 +124,18 @@ export default function Profile(): JSX.Element {
     }
 
     const sections: FormListSections[] = [
+        {
+            header: t('profile.formlist.grades.title'),
+            items: [
+                {
+                    title: t('profile.formlist.grades.button'),
+                    icon: 'chevron-forward-outline',
+                    onPress: async () => {
+                        await handleBiometricAuth()
+                    },
+                },
+            ],
+        },
         {
             header: t('profile.formlist.user.title'),
             items: [
@@ -202,6 +233,7 @@ export default function Profile(): JSX.Element {
             <View style={styles.container}>
                 <FormList sections={sections} />
             </View>
+
             <View
                 style={{
                     backgroundColor: colors.card,

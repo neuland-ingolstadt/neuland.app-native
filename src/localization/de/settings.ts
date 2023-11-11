@@ -52,6 +52,10 @@ export default {
     },
     profile: {
         formlist: {
+            grades: {
+                title: 'Noten',
+                button: 'Noten und Fächer',
+            },
             user: {
                 title: 'Benutzer',
                 matrical: 'Matrikelnummer',

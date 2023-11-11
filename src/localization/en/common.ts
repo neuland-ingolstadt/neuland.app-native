@@ -81,5 +81,13 @@ export default {
             },
             results: 'Available rooms',
         },
+        grades: {
+            grade: 'Grade',
+            finished: 'Grades',
+            open: 'Open',
+
+            temporarilyUnavailable: 'Grades are temporarily unavailable.',
+            footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
+        },
     },
 }

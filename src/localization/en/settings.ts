@@ -50,6 +50,10 @@ export default {
     },
     profile: {
         formlist: {
+            grades: {
+                title: 'Grades',
+                button: 'Grades and subjects',
+            },
             user: {
                 title: 'User',
                 matrical: 'Matriculation number',

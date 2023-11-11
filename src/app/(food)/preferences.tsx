@@ -3,6 +3,7 @@ import MultiSectionRadio, {
 } from '@/components/Elements/Food/FoodLanguageSection'
 import FormList from '@/components/Elements/Universal/FormList'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
+import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
@@ -68,39 +69,6 @@ export default function FoodPreferences(): JSX.Element {
             ],
         },
     ]
-
-    const SectionView = ({
-        title,
-        children,
-    }: {
-        title: string
-        children: JSX.Element
-    }): JSX.Element => {
-        return (
-            <View style={[styles.sectionContainer, { marginTop: 16 }]}>
-                <Text
-                    style={[
-                        styles.labelText,
-                        {
-                            color: colors.labelSecondaryColor,
-                        },
-                    ]}
-                >
-                    {title}
-                </Text>
-                <View
-                    style={[
-                        styles.sectionBox,
-                        {
-                            backgroundColor: colors.card,
-                        },
-                    ]}
-                >
-                    {children}
-                </View>
-            </View>
-        )
-    }
 
     return (
         <ScrollView>

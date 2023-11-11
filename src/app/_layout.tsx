@@ -44,6 +44,7 @@ export default function RootLayout(): JSX.Element {
                         name="(user)/settings"
                         options={{
                             title: t('navigation.settings'),
+                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -58,6 +59,7 @@ export default function RootLayout(): JSX.Element {
                         name="(food)/preferences"
                         options={{
                             title: t('navigation.preferences'),
+                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -134,9 +136,17 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(user)/grades"
+                        options={{
+                            title: t('navigation.grades'),
+                            animation: 'slide_from_right',
+                        }}
+                    />
+                    <Stack.Screen
                         name="(map)/advanced"
                         options={{
                             title: t('navigation.advancedSearch'),
+                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />

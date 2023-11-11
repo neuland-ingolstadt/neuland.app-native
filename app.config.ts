@@ -38,7 +38,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 40,
+            versionCode: 42,
         },
         extra: {
             eas: {
@@ -63,6 +63,12 @@ module.exports = {
                 },
             ],
             ['expo-localization'],
+            [
+                'expo-local-authentication',
+                {
+                    faceIDPermission: 'Allow $(PRODUCT_NAME) to use Face ID.',
+                },
+            ],
         ],
     },
 }
