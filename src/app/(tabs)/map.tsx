@@ -475,10 +475,18 @@ export const MapScreen = (): JSX.Element => {
                                 ]}
                             >
                                 <Ionicons
-                                    name="share-outline"
+                                    name={
+                                        Platform.OS !== 'ios'
+                                            ? 'share-outline'
+                                            : 'share-social-outline'
+                                    }
                                     size={22}
                                     color={colors.text}
-                                    style={{ marginLeft: 1 }}
+                                    // the iOS share icon is slightly off center
+                                    style={{
+                                        marginLeft:
+                                            Platform.OS === 'ios' ? 1 : 0,
+                                    }}
                                 />
                             </View>
                         </Pressable>
