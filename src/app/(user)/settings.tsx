@@ -361,9 +361,7 @@ export default function Settings(): JSX.Element {
                                 <></>
                             )}
 
-                            {(isLoaded === LoadingState.LOADED ||
-                                isLoaded === LoadingState.LOADING) &&
-                            userKind === 'student' ? (
+                            {isLoaded !== LoadingState.ERROR ? (
                                 <Ionicons
                                     name="chevron-forward-outline"
                                     size={24}

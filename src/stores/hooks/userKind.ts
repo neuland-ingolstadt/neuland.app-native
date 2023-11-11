@@ -41,7 +41,7 @@ export function useUserKind(): {
             const userType = await SecureStore.getItemAsync('userType')
             const userFullName = await SecureStore.getItemAsync('userFullName')
             if (userType != null) {
-                setUserKind(USER_GUEST)
+                setUserKind(userType)
             }
 
             if (userType === USER_STUDENT) {

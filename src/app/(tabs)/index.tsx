@@ -1,5 +1,5 @@
-import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
 import { Avatar } from '@/components/Elements/Settings'
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { DashboardContext, UserKindContext } from '@/stores/provider'
@@ -16,7 +16,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
@@ -83,17 +82,16 @@ function HomeScreen(): JSX.Element {
     const { shownDashboardEntries } = React.useContext(DashboardContext)
 
     return (
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <View style={styles.container}>
-                <FlatList
-                    data={shownDashboardEntries}
-                    renderItem={({ item }) => item.card()}
-                    keyExtractor={(item) => item.key}
-                    numColumns={1}
-                    contentContainerStyle={styles.container}
-                />
-            </View>
-        </ScrollView>
+        <FlatList
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+            data={shownDashboardEntries}
+            renderItem={({ item }) => item.card()}
+            keyExtractor={(item) => item.key}
+            numColumns={1}
+            contentContainerStyle={styles.container}
+        />
     )
 }
 
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
         paddingTop: 5,
-        paddingBottom: 45,
+        paddingBottom: 30,
     },
     heading: {
         fontSize: 32,

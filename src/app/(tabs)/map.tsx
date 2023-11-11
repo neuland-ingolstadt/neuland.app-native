@@ -3,13 +3,13 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
 import {
     _addRoom,
     _removeAllGeoJson,
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext, UserKindContext } from '@/stores/provider'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -333,7 +333,7 @@ export const MapScreen = (): JSX.Element => {
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
         _setView(localSearch !== '' ? center : mapCenter, mapRef)
-    }, [filteredRooms, routeParams])
+    }, [filteredRooms, localSearch])
 
     useEffect(() => {
         // Only execute if the map is already loaded
@@ -560,7 +560,10 @@ export const MapScreen = (): JSX.Element => {
                         onLoadEnd={() => {
                             if (loadingState === LoadingState.LOADING) {
                                 setLoadingState(LoadingState.LOADED)
-                                _setView(mapCenter, mapRef)
+                                _setView(
+                                    localSearch !== '' ? center : mapCenter,
+                                    mapRef
+                                )
                                 _addGeoJson()
                             }
                         }}

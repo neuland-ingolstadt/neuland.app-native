@@ -30,7 +30,6 @@
         "expo-blur": "~12.4.1",
         "expo-clipboard": "~4.3.0",
         "expo-constants": "~14.4.2",
-        "expo-dev-client": "~2.4.12",
         "expo-haptics": "~12.4.0",
         "expo-linear-gradient": "~12.3.0",
         "expo-linking": "~5.0.2",

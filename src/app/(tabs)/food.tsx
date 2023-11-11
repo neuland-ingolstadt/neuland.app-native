@@ -1,5 +1,5 @@
 import { MealDay } from '@/components/Elements/Food'
-import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { FoodFilterContext } from '@/stores/provider'
 import { type Food } from '@/stores/types/neuland-api'
@@ -175,51 +175,35 @@ function FoodScreen(): JSX.Element {
                 ) : undefined
             }
             contentInsetAdjustmentBehavior="always"
+            contentContainerStyle={styles.container}
+            showsVerticalScrollIndicator={false}
         >
-            <View style={styles.container}>
-                {loadingState === LoadingState.LOADING && (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
-                    </View>
-                )}
-                {loadingState === LoadingState.ERROR && (
-                    <View>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {error?.message}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refresh')}{' '}
-                        </Text>
-                    </View>
-                )}
+            {loadingState === LoadingState.LOADING && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+            )}
+            {loadingState === LoadingState.ERROR && (
+                <View>
+                    <Text style={[styles.errorMessage, { color: colors.text }]}>
+                        {error?.message}
+                    </Text>
+                    <Text style={[styles.errorInfo, { color: colors.text }]}>
+                        {t('error.refresh')}{' '}
+                    </Text>
+                </View>
+            )}
 
-                {loadingState === LoadingState.LOADED && (
-                    <>
-                        <View style={styles.loadedContainer}>
-                            {days
-                                .slice(0, 5)
-                                .map((day: Food, index: number) => (
-                                    <DayButton
-                                        day={day}
-                                        index={index}
-                                        key={index}
-                                    />
-                                ))}
-                        </View>
-                        {MealDay(days[selectedDay], selectedDay, colors)}
-                    </>
-                )}
-            </View>
+            {loadingState === LoadingState.LOADED && (
+                <>
+                    <View style={styles.loadedContainer}>
+                        {days.slice(0, 5).map((day: Food, index: number) => (
+                            <DayButton day={day} index={index} key={index} />
+                        ))}
+                    </View>
+                    {MealDay(days[selectedDay], selectedDay, colors)}
+                </>
+            )}
         </ScrollView>
     )
 }
@@ -239,7 +223,6 @@ export default function Screen(): JSX.Element {
                 titleKey={'navigation.food'}
                 component={FoodScreen}
                 largeTitle={false}
-                transparent={true}
                 headerRightElement={() => (
                     <TouchableOpacity
                         onPress={() => {
@@ -260,7 +243,7 @@ const styles = StyleSheet.create({
         paddingRight: 10,
     },
     container: {
-        paddingBottom: 0,
+        paddingBottom: 50,
     },
     dayRestaurantContainer: {
         width: '92%',

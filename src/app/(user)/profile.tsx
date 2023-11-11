@@ -5,11 +5,13 @@ import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -41,7 +43,6 @@ export default function Profile(): JSX.Element {
             console.log(e)
         }
     }
-    console.log(colors.card)
 
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -252,59 +253,76 @@ export default function Profile(): JSX.Element {
     ]
 
     return (
-        <ScrollView
-            contentContainerStyle={{ paddingBottom: 32 }}
-            refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
-                    <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
-                    />
-                ) : undefined
-            }
-        >
-            {loadingState === LoadingState.LOADING && (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
-                </View>
-            )}
-            {loadingState === LoadingState.ERROR && (
-                <View style={styles.errorContainer}>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {errorMsg}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh', { ns: 'common' })}{' '}
-                    </Text>
-                </View>
-            )}
-            {loadingState === LoadingState.LOADED && (
-                <View style={styles.container}>
-                    <FormList sections={sections} />
-                </View>
-            )}
-            <View
-                style={{
-                    backgroundColor: colors.card,
-                    ...styles.logoutContainer,
-                }}
+        <>
+            <StatusBar style={getStatusBarStyle()} />
+            <ScrollView
+                contentContainerStyle={{ paddingBottom: 32 }}
+                refreshControl={
+                    loadingState !== LoadingState.LOADING &&
+                    loadingState !== LoadingState.LOADED ? (
+                        <RefreshControl
+                            refreshing={
+                                loadingState === LoadingState.REFRESHING
+                            }
+                            onRefresh={onRefresh}
+                        />
+                    ) : undefined
+                }
             >
-                <TouchableOpacity
-                    onPress={logoutAlert}
-                    activeOpacity={0.5}
-                    style={styles.logoutButton}
+                {loadingState === LoadingState.LOADING && (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                            size="small"
+                            color={colors.primary}
+                        />
+                    </View>
+                )}
+                {loadingState === LoadingState.ERROR && (
+                    <View style={styles.errorContainer}>
+                        <Text
+                            style={[
+                                styles.errorMessage,
+                                { color: colors.text },
+                            ]}
+                        >
+                            {errorMsg}
+                        </Text>
+                        <Text
+                            style={[styles.errorInfo, { color: colors.text }]}
+                        >
+                            {t('error.refresh', { ns: 'common' })}{' '}
+                        </Text>
+                    </View>
+                )}
+                {loadingState === LoadingState.LOADED && (
+                    <View style={styles.container}>
+                        <FormList sections={sections} />
+                    </View>
+                )}
+                <View
+                    style={{
+                        backgroundColor: colors.card,
+                        ...styles.logoutContainer,
+                    }}
                 >
-                    <Ionicons
-                        name="log-out-outline"
-                        size={24}
-                        color={colors.notification}
-                        style={{ marginRight: 10 }}
-                    />
-                    <Text style={{ color: colors.notification }}>Logout</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                    <TouchableOpacity
+                        onPress={logoutAlert}
+                        activeOpacity={0.5}
+                        style={styles.logoutButton}
+                    >
+                        <Ionicons
+                            name="log-out-outline"
+                            size={24}
+                            color={colors.notification}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ color: colors.notification }}>
+                            Logout
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </>
     )
 }
 
