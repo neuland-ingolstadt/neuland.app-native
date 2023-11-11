@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
         paddingTop: 5,
-        paddingBottom: 30,
+        paddingBottom: 50,
     },
     heading: {
         fontSize: 32,

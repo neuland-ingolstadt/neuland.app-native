@@ -116,6 +116,7 @@ export default {
     },
     grades: {
         grade: 'Note',
+        none: '(keine)',
         finished: 'Noten',
         open: 'Offen',
         average: 'Durchschnitt',

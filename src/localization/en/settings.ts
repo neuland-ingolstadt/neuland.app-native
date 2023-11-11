@@ -114,6 +114,7 @@ export default {
     },
     grades: {
         grade: 'Grade',
+        none: '(none)',
         finished: 'Grades',
         open: 'Open',
         average: 'Average',

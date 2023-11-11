@@ -14,7 +14,11 @@ const GradesRow = ({
 
     item: Grade
 }): JSX.Element => {
-    const { t } = useTranslation('common')
+    const { t } = useTranslation('settings')
+    if (item.titel === null || item.titel === '') {
+        return <></>
+    }
+
     return (
         <RowEntry
             title={item.titel}
@@ -51,7 +55,7 @@ const GradesRow = ({
                                         color: colors.labelSecondaryColor,
                                     }}
                                 >
-                                    {t('pages.grades.grade')}
+                                    {t('grades.grade')}
                                 </Text>
                             </View>
                         )}
@@ -67,7 +71,6 @@ const styles = StyleSheet.create({
     leftContainer: { paddingTop: 3 },
     leftText1: {
         fontSize: 15,
-
         fontWeight: '500',
         marginBottom: 4,
     },
