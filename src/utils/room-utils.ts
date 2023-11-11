@@ -187,7 +187,8 @@ export interface RoomEntry {
 interface Properties {
     Ebene: string
     Etage: string
-    Funktion: string
+    Funktion_de: string
+    Funktion_en: string
     Gebaeude: string
     Raum: string
     Standort: string

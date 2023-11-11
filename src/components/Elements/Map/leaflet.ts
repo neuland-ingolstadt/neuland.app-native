@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { type AvailableRoom, type RoomEntry } from '@/utils/room-utils'
@@ -10,17 +11,20 @@ import type WebView from 'react-native-webview'
  * @param availableRooms - An array of available rooms.
  * @param mapRef - A reference to the Leaflet map.
  * @param colors - An object containing color values.
+ * @param language - The current language.
  * @returns void
  */
 export const _addRoom = (
     room: RoomEntry,
     availableRooms: AvailableRoom[],
     mapRef: React.RefObject<WebView>,
-    colors: Colors
+    colors: Colors,
+    language: LanguageKey
 ): void => {
     const coordinates = [[...room.coordinates]]
     const name = room?.properties?.Raum
-    const functionType = room?.properties?.Funktion
+    const functionType =
+        room?.properties[language === 'en' ? 'Funktion_en' : 'Funktion_de']
     const avail = availableRooms?.find((x) => x.room === name)
 
     const color = avail != null ? colors.primary : 'grey'
