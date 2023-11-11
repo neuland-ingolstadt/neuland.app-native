@@ -1,11 +1,15 @@
 import { type Colors } from '@/stores/colors'
 import { useTheme } from '@react-navigation/native'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
 import React, { type ReactNode } from 'react'
 import { Text, View } from 'react-native'
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 
 interface NameBoxProps {
     children: ReactNode
     title: string
+    loaded: boolean
     subTitle1: string
     subTitle2?: string
 }
@@ -23,10 +27,18 @@ interface NameBoxProps {
 const NameBox = ({
     children,
     title,
+    loaded,
     subTitle1,
     subTitle2,
 }: NameBoxProps): JSX.Element => {
     const colors = useTheme().colors as Colors
+    const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
+    const shimmerColor = [
+        Color(colors.labelTertiaryColor).lighten(0.3).hex(),
+        Color(colors.labelTertiaryColor).lighten(0.45).hex(),
+        Color(colors.labelTertiaryColor).lighten(0.3).hex(),
+    ]
+
     return (
         <>
             {children}
@@ -35,12 +47,11 @@ const NameBox = ({
                     maxWidth: '92%',
                     alignItems: 'flex-start',
                     flex: 1,
-                    marginLeft: 12,
+                    marginLeft: 16,
                 }}
             >
                 <Text
                     style={{
-                        marginLeft: 4,
                         fontWeight: 'bold',
                         fontSize: 18,
                         overflow: 'hidden',
@@ -50,30 +61,46 @@ const NameBox = ({
                 >
                     {title}
                 </Text>
-                <Text
-                    style={{
-                        marginLeft: 4,
-                        fontSize: 12,
-                        overflow: 'hidden',
-                        lineHeight: 14,
-                        color: colors.text,
-                    }}
-                    numberOfLines={2}
-                    allowFontScaling={true}
+                <ShimmerPlaceholder
+                    visible={loaded}
+                    style={{ width: !loaded ? 100 : undefined, height: 14 }}
+                    shimmerStyle={{ borderRadius: 4 }}
+                    shimmerColors={shimmerColor}
                 >
-                    {subTitle1}
-                </Text>
-                {subTitle2 !== '' && (
                     <Text
                         style={{
-                            marginLeft: 4,
                             fontSize: 12,
+                            overflow: 'hidden',
+                            lineHeight: 14,
                             color: colors.text,
                         }}
+                        numberOfLines={2}
+                        allowFontScaling={true}
                     >
-                        {subTitle2}
+                        {subTitle1}
                     </Text>
-                )}
+                </ShimmerPlaceholder>
+                <ShimmerPlaceholder
+                    visible={loaded}
+                    style={{
+                        width: !loaded ? 150 : undefined,
+                        height: 14,
+                        marginTop: 1,
+                    }}
+                    shimmerStyle={{ borderRadius: 4 }}
+                    shimmerColors={shimmerColor}
+                >
+                    {subTitle2 !== '' && (
+                        <Text
+                            style={{
+                                fontSize: 12,
+                                color: colors.text,
+                            }}
+                        >
+                            {subTitle2}
+                        </Text>
+                    )}
+                </ShimmerPlaceholder>
             </View>
         </>
     )

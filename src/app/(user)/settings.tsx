@@ -3,7 +3,7 @@ import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/stores/colors'
-import { useUserKind } from '@/stores/hooks'
+import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
@@ -12,8 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -36,17 +35,17 @@ enum LoadingState {
 }
 
 export default function Settings(): JSX.Element {
+    const { userKind, userFullName, updateUserFullName } =
+        useContext<UserKindContextType>(UserKindContext)
+
     const [userdata, setUserdata] = useState<PersDataDetails | null>(null)
-    const [fullName, setFullName] = useState('')
     const [isLoaded, setIsLoaded] = useState(LoadingState.LOADING)
     const [errorMsg, setErrorMsg] = useState('Unknown error')
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const nameColor = getNameColor(fullName)
+    const nameColor = getNameColor(userFullName)
     const { t, i18n } = useTranslation(['settings'])
-
-    const { userKind } = useUserKind()
 
     const languageAlert = (): void => {
         const newLocale = i18n.language === 'en' ? 'de' : 'en'
@@ -101,12 +100,9 @@ export default function Settings(): JSX.Element {
                 const data = response.persdata
                 data.pcounter = response.pcounter
                 setUserdata(data)
-                setFullName(data.vname + ' ' + data.name)
+                updateUserFullName(data.vname + ' ' + data.name)
                 setIsLoaded(LoadingState.LOADED)
             } else if (userKind === 'employee') {
-                setFullName(
-                    (await SecureStore.getItemAsync('username')) ?? 'unknown'
-                )
                 setIsLoaded(LoadingState.LOADED)
             } else if (userKind === 'guest') {
                 setIsLoaded(LoadingState.LOADED)
@@ -237,15 +233,19 @@ export default function Settings(): JSX.Element {
             <View style={styles.wrapper}>
                 <Pressable
                     onPress={() => {
-                        if (userKind === 'student') {
-                            router.push('(user)/profile')
-                        } else if (userKind === 'guest') {
-                            router.push('(user)/login')
-                        } else {
+                        if (
+                            isLoaded === LoadingState.ERROR ||
+                            userKind === 'employee'
+                        ) {
                             logoutAlert()
+                        } else {
+                            if (userKind === 'student') {
+                                router.push('(user)/profile')
+                            } else if (userKind === 'guest') {
+                                router.push('(user)/login')
+                            }
                         }
                     }}
-                    disabled={isLoaded === LoadingState.LOADING}
                 >
                     <View
                         style={[
@@ -254,16 +254,20 @@ export default function Settings(): JSX.Element {
                         ]}
                     >
                         <View style={styles.nameBox}>
-                            {isLoaded === LoadingState.LOADED &&
+                            {(isLoaded === LoadingState.LOADING ||
+                                isLoaded === LoadingState.LOADED) &&
                             userKind === 'student' ? (
                                 <>
                                     <NameBox
-                                        title={fullName}
+                                        title={userFullName}
                                         subTitle1={
                                             (userdata?.stgru ?? '') +
                                             '. Semester'
                                         }
                                         subTitle2={userdata?.fachrich ?? ''}
+                                        loaded={
+                                            isLoaded === LoadingState.LOADED
+                                        }
                                     >
                                         <Avatar background={nameColor}>
                                             <Text
@@ -275,7 +279,7 @@ export default function Settings(): JSX.Element {
                                                     fontWeight: 'bold',
                                                 }}
                                             >
-                                                {getInitials(fullName)}
+                                                {getInitials(userFullName)}
                                             </Text>
                                         </Avatar>
                                     </NameBox>
@@ -284,9 +288,10 @@ export default function Settings(): JSX.Element {
                               userKind === 'employee' ? (
                                 <>
                                     <NameBox
-                                        title={fullName}
-                                        subTitle1={t('menu.employee.subtitle')}
-                                        subTitle2={''}
+                                        title={userFullName}
+                                        subTitle1={t('menu.employee.subtitle1')}
+                                        subTitle2={t('menu.employee.subtitle2')}
+                                        loaded={true}
                                     >
                                         <Avatar background={nameColor}>
                                             <Text
@@ -298,7 +303,7 @@ export default function Settings(): JSX.Element {
                                                     fontWeight: 'bold',
                                                 }}
                                             >
-                                                {getInitials(fullName)}
+                                                {getInitials(userFullName)}
                                             </Text>
                                         </Avatar>
                                     </NameBox>
@@ -310,6 +315,7 @@ export default function Settings(): JSX.Element {
                                         title={t('menu.guest.title')}
                                         subTitle1={t('menu.guest.subtitle')}
                                         subTitle2={''}
+                                        loaded={true}
                                     >
                                         <Avatar
                                             background={
@@ -330,6 +336,7 @@ export default function Settings(): JSX.Element {
                                         title="Error"
                                         subTitle1={errorMsg}
                                         subTitle2={t('menu.error.subtitle2')}
+                                        loaded={true}
                                     >
                                         <Avatar
                                             background={
@@ -354,7 +361,8 @@ export default function Settings(): JSX.Element {
                                 <></>
                             )}
 
-                            {isLoaded === LoadingState.LOADED &&
+                            {(isLoaded === LoadingState.LOADED ||
+                                isLoaded === LoadingState.LOADING) &&
                             userKind === 'student' ? (
                                 <Ionicons
                                     name="chevron-forward-outline"

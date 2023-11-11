@@ -23,13 +23,6 @@ async function getGradeList(): Promise<Grade[]> {
             x.note = 'E'
         }
     })
-    // if (true) {
-    //   gradeList.forEach(x => {
-    //     if (parseFloat(x.note)) {
-    //       x.note = '1.0'
-    //     }
-    //   })
-    // }
 
     return gradeList
 }
@@ -105,10 +98,11 @@ export async function calculateECTS(): Promise<number> {
  * Calculates the approximate grade average based on automatically extracted SPO data
  * @returns {object}
  */
-// export async function loadGradeAverage () : Promise<object> {
+// export async function loadGradeAverage () : Promise<object | undefined> {
 //   const gradeList = await getGradeList()
 //   const spoName = await API.getSpoName()
-//   if (!spoName || !courseSPOs[spoName]) {
+//   if ((spoName == null) || !courseSPOs[spoName]) {
+//     console.warn('No SPO data available')
 //     return
 //   }
 
@@ -120,7 +114,7 @@ export async function calculateECTS(): Promise<number> {
 
 //   gradeList.forEach(x => {
 //     const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
-//     if (grade && spoName && courseSPOs[spoName]) {
+//     if ((grade != null) && spoName && courseSPOs[spoName]) {
 //       const spo = courseSPOs[spoName]
 //       const name = simplifyName(x.titel)
 //       const spoEntries = spo.filter(y => simplifyName(y.name) === name)

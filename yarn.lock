@@ -9551,8 +9551,9 @@ __metadata:
     react-native-reanimated: "npm:3.3.0"
     react-native-root-toast: "npm:^3.4.1"
     react-native-safe-area-context: "npm:4.6.3"
-    react-native-screens: "npm:~3.27.0"
+    react-native-screens: "npm:~3.22.0"
     react-native-select-dropdown: "npm:^3.3.4"
+    react-native-shimmer-placeholder: "npm:^2.0.9"
     react-native-svg: "npm:^13.14.0"
     react-native-webview: "npm:13.2.2"
     react-native-week-view: "npm:^0.30.0"
@@ -10715,16 +10716,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:~3.27.0":
-  version: 3.27.0
-  resolution: "react-native-screens@npm:3.27.0"
+"react-native-screens@npm:~3.22.0":
+  version: 3.22.1
+  resolution: "react-native-screens@npm:3.22.1"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 30d0275d1a41915e3b2ca151854ca41ceed0bbdc6baf782e5e886a5842b92e003bb2183e4017bd6b03ee7000ec6312a6570a02901c1a990d0fefcdcf511f1e06
+  checksum: 03d3c2fcccd6afe4b25c35396eb0280997724add60e4c2074572106237c5e299895ec8aa399ce23ba8c800663389a7dde8c6033b8c9f49064651298ead23c3ca
   languageName: node
   linkType: hard
 
@@ -10732,6 +10733,16 @@ __metadata:
   version: 3.4.0
   resolution: "react-native-select-dropdown@npm:3.4.0"
   checksum: 50e4415f7a34916068cad5b14462f6a46455174cd82ee0b3584d55c2aa10d9f182ad1ff21dd8881ec70e71c6b33218ecee8818947717ab0de2ffadec8d52edb8
+  languageName: node
+  linkType: hard
+
+"react-native-shimmer-placeholder@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "react-native-shimmer-placeholder@npm:2.0.9"
+  peerDependencies:
+    prop-types: ">=15.6.0"
+    react-native-linear-gradient: ">=2.4.0"
+  checksum: cae3ff3027d89b1967ba591ebbc1c2dc1fe88638379db4ce8d97ccd5f1071bf8157cd0c6ebeaf2841a7d6420153888e0127e591ca6959e39e9e28cb270b352a7
   languageName: node
   linkType: hard
 

@@ -13,9 +13,11 @@ import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    ActivityIndicator,
     Alert,
     Linking,
     Platform,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -39,21 +41,42 @@ export default function Profile(): JSX.Element {
             console.log(e)
         }
     }
+    console.log(colors.card)
+
+    const [errorMsg, setErrorMsg] = useState('')
+
+    enum LoadingState {
+        LOADING,
+        LOADED,
+        ERROR,
+        REFRESHING,
+    }
+
+    const [loadingState, setLoadingState] = useState<LoadingState>(
+        LoadingState.LOADING
+    )
+
+    async function load(): Promise<void> {
+        try {
+            const response = await API.getPersonalData()
+            const data: PersDataDetails = response.persdata
+            data.pcounter = response.pcounter
+            setUserData(data)
+            setLoadingState(LoadingState.LOADED)
+        } catch (e: any) {
+            setLoadingState(LoadingState.ERROR)
+            setErrorMsg(e.message)
+            console.log(e)
+        }
+    }
 
     useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                const response = await API.getPersonalData()
-                const data: PersDataDetails = response.persdata
-                data.pcounter = response.pcounter
-                setUserData(data)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-
         void load()
     }, [])
+
+    const onRefresh: () => void = () => {
+        void load()
+    }
 
     const handleBiometricAuth = async (): Promise<void> => {
         const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
@@ -229,11 +252,38 @@ export default function Profile(): JSX.Element {
     ]
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <FormList sections={sections} />
-            </View>
-
+        <ScrollView
+            contentContainerStyle={{ paddingBottom: 32 }}
+            refreshControl={
+                loadingState !== LoadingState.LOADING &&
+                loadingState !== LoadingState.LOADED ? (
+                    <RefreshControl
+                        refreshing={loadingState === LoadingState.REFRESHING}
+                        onRefresh={onRefresh}
+                    />
+                ) : undefined
+            }
+        >
+            {loadingState === LoadingState.LOADING && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+            )}
+            {loadingState === LoadingState.ERROR && (
+                <View style={styles.errorContainer}>
+                    <Text style={[styles.errorMessage, { color: colors.text }]}>
+                        {errorMsg}
+                    </Text>
+                    <Text style={[styles.errorInfo, { color: colors.text }]}>
+                        {t('error.refresh', { ns: 'common' })}{' '}
+                    </Text>
+                </View>
+            )}
+            {loadingState === LoadingState.LOADED && (
+                <View style={styles.container}>
+                    <FormList sections={sections} />
+                </View>
+            )}
             <View
                 style={{
                     backgroundColor: colors.card,
@@ -265,6 +315,9 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
+    errorContainer: {
+        paddingBottom: 64,
+    },
     logoutContainer: {
         borderRadius: 10,
         marginBottom: 30,
@@ -277,5 +330,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 40,
+    },
+    errorMessage: {
+        paddingTop: 100,
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    errorInfo: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    loadingContainer: {
+        paddingVertical: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })

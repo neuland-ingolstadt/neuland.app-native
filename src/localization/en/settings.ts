@@ -5,7 +5,8 @@ export default {
             subtitle: 'Sign in to unlock all features of the app',
         },
         employee: {
-            subtitle: 'Tap to logout',
+            subtitle1: 'Employee account',
+            subtitle2: 'Tap to logout',
         },
         error: {
             subtitle2: 'Pull to refresh or tap to logout',

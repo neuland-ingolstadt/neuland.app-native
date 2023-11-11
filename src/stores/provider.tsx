@@ -47,7 +47,9 @@ export const FoodFilterContext = createContext<FoodFilter>({
 export const UserKindContext = createContext<any>({
     userKind: 'student',
     userFaculty: 'unknown',
+    userFullName: '',
     toggleUserKind: () => {},
+    updateUserFullName: () => {},
 })
 
 export const ThemeContext = createContext<any>({

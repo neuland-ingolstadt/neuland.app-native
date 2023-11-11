@@ -9,6 +9,10 @@ export const USER_GUEST = 'guest'
 
 export interface UserKindContextType {
     userKind: 'guest' | 'student' | 'employee'
+    userFullName: string
+    userFaculty: string
+    toggleUserKind: (userKind: boolean) => void
+    updateUserFullName: (userName: string) => void
 }
 /**
  * Custom hook that returns the user kind and a function to toggle it.
@@ -17,11 +21,14 @@ export interface UserKindContextType {
  */
 export function useUserKind(): {
     userKind: string
+    userFullName: string
     userFaculty: string
     toggleUserKind: (userKind: boolean) => void
+    updateUserFullName: (userName: string) => void
 } {
     const [userKind, setUserKind] = useState(USER_GUEST)
     const [userFaculty, setUserFaculty] = useState('')
+    const [userFullName, setUserFullName] = useState('')
 
     // Load user kind from SecureStore on mount.
     // Using SecureStore instead of AsyncStorage because it is temporary workaround for the session handler.
@@ -32,8 +39,9 @@ export function useUserKind(): {
 
         const loadData = async (): Promise<void> => {
             const userType = await SecureStore.getItemAsync('userType')
+            const userFullName = await SecureStore.getItemAsync('userFullName')
             if (userType != null) {
-                setUserKind(userType)
+                setUserKind(USER_GUEST)
             }
 
             if (userType === USER_STUDENT) {
@@ -41,6 +49,10 @@ export function useUserKind(): {
                 if (userFaculty != null) {
                     setUserFaculty(userFaculty)
                 }
+            }
+
+            if (userFullName != null) {
+                setUserFullName(userFullName)
             }
         }
 
@@ -67,9 +79,16 @@ export function useUserKind(): {
         void SecureStore.setItemAsync('userType', userType)
     }
 
+    function updateUserFullName(value: string): void {
+        setUserFullName(value)
+        void SecureStore.setItemAsync('userFullName', value)
+    }
+
     return {
         userKind,
+        userFullName,
         userFaculty,
         toggleUserKind,
+        updateUserFullName,
     }
 }

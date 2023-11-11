@@ -26,7 +26,7 @@ export default function GradesSCreen(): JSX.Element {
     const { t } = useTranslation('common')
     const [grades, setGrades] = useState<Grade[] | null>(null)
     const [missingGrades, setMissingGrades] = useState<Grade[] | null>(null)
-    // const [gradeAverage, setGradeAverage] = useState(null)
+    // const [gradeAverage, setGradeAverage] = useState('')
     const [errorMsg, setErrorMsg] = useState('')
 
     enum LoadingState {
@@ -47,7 +47,11 @@ export default function GradesSCreen(): JSX.Element {
             setMissingGrades(missing)
             setLoadingState(LoadingState.LOADED)
             // const average = await loadGradeAverage()
-            // setGradeAverage(average)
+            // if (average !== undefined && average !== null) {
+            //     setGradeAverage(average)
+            // } else {
+            //     setGradeAverage('Average grade not available currently')
+            // }
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
             console.log(e)
@@ -105,6 +109,18 @@ export default function GradesSCreen(): JSX.Element {
             )}
             {loadingState === LoadingState.LOADED && (
                 <>
+                    <SectionView title={t('pages.grades.average')}>
+                        <View style={styles.loadedContainer}>
+                            <Text
+                                style={{
+                                    color: colors.labelColor,
+                                    ...styles.averageText,
+                                }}
+                            >
+                                {'coming soon'}
+                            </Text>
+                        </View>
+                    </SectionView>
                     <SectionView title={t('pages.grades.finished')}>
                         <React.Fragment>
                             {grades?.map((grade, index) => (
@@ -155,9 +171,8 @@ const styles = StyleSheet.create({
     loadedContainer: {
         alignSelf: 'center',
         borderRadius: 8,
-        width: '95%',
-        marginTop: 14,
-        marginBottom: 24,
+        width: '100%',
+        marginVertical: 16,
         justifyContent: 'center',
     },
     notesBox: {
@@ -187,5 +202,10 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    averageText: {
+        fontSize: 24,
+        fontWeight: '300',
+        textAlign: 'center',
     },
 })

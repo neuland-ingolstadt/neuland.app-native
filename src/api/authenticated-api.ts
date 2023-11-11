@@ -139,6 +139,12 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return extractSpoFromPersonalData(data)
     }
 
+    async getFullName(): Promise<string | null> {
+        const data = await this.getPersonalData()
+        const fullName = data?.persdata?.vname + ' ' + data?.persdata?.name
+        return fullName
+    }
+
     async getTimetable(
         date: Date,
         detailed = false

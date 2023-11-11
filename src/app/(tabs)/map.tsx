@@ -113,7 +113,6 @@ export const MapScreen = (): JSX.Element => {
                     />
                 </Pressable>
             ),
-            headerSearchBar: true,
             headerSearchBarOptions: {
                 placeholder: t('pages.map.search'),
                 shouldShowHintSearchIcon: false,

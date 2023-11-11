@@ -1,17 +1,30 @@
 import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
+import { Avatar } from '@/components/Elements/Settings'
 import { type Colors } from '@/stores/colors'
-import { DashboardContext } from '@/stores/provider'
+import { type UserKindContextType } from '@/stores/hooks/userKind'
+import { DashboardContext, UserKindContext } from '@/stores/provider'
+import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import React from 'react'
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useContext } from 'react'
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const { userFullName, userKind } =
+        useContext<UserKindContextType>(UserKindContext)
+    const nameColor = getNameColor(userFullName)
+
     return (
         <>
             <Head>
@@ -26,20 +39,39 @@ export default function Screen(): JSX.Element {
                 titleKey={'Neuland Next'}
                 component={HomeScreen}
                 largeTitle={true}
-                transparent={true}
+                transparent={false}
                 headerRightElement={() => (
                     <TouchableOpacity
                         onPress={() => {
                             router.push('(user)/settings')
                         }}
                     >
-                        <View>
-                            <Ionicons
-                                name="person-circle-outline"
-                                size={29}
-                                color={colors.text}
-                            />
-                        </View>
+                        {userFullName !== '' && userKind !== 'guest' ? (
+                            <View>
+                                <Avatar
+                                    size={29}
+                                    background={nameColor}
+                                    shadow={false}
+                                >
+                                    <Text
+                                        style={{
+                                            color: getContrastColor(nameColor),
+                                            ...styles.iconText,
+                                        }}
+                                    >
+                                        {getInitials(userFullName)}
+                                    </Text>
+                                </Avatar>
+                            </View>
+                        ) : (
+                            <View>
+                                <Ionicons
+                                    name="person-circle-outline"
+                                    size={28}
+                                    color={colors.text}
+                                />
+                            </View>
+                        )}
                     </TouchableOpacity>
                 )}
             />
@@ -77,5 +109,9 @@ const styles = StyleSheet.create({
         fontSize: 32,
         textAlign: 'center',
         paddingTop: 16,
+    },
+    iconText: {
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 })

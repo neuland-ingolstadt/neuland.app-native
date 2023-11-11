@@ -76,7 +76,7 @@ class AssetAPIClient {
     async getCourseSPO(): Promise<any> {
         return await this.requestCached(
             `course-spo-${packageInfo.version}`,
-            `${ENDPOINT}rooms_neuland_v2.3.geojson`
+            `${ENDPOINT}spo_weigths.json`
         )
     }
 }
