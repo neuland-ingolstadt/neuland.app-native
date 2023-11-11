@@ -86,7 +86,7 @@ export default {
             grade: 'Note',
             finished: 'Noten',
             open: 'Offen',
-
+            average: 'Durchschnitt',
             temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
             footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
         },

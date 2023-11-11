@@ -1,6 +1,8 @@
 import WorkaroundStack from '@/components/Elements/Food/WorkaroundStack'
+import { type Colors } from '@/stores/colors'
 import { DashboardContext } from '@/stores/provider'
 import { Ionicons } from '@expo/vector-icons'
+import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React from 'react'
@@ -9,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
-
+    const colors = useTheme().colors as Colors
     return (
         <>
             <Head>
@@ -35,7 +37,7 @@ export default function Screen(): JSX.Element {
                             <Ionicons
                                 name="person-circle-outline"
                                 size={29}
-                                color={'white'}
+                                color={colors.text}
                             />
                         </View>
                     </TouchableOpacity>

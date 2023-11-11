@@ -54,7 +54,7 @@ const GradesRow = ({
                                 <Text
                                     style={{
                                         ...styles.rightText2,
-                                        color: colors.labelTertiaryColor,
+                                        color: colors.labelSecondaryColor,
                                     }}
                                 >
                                     {t('pages.grades.grade')}
