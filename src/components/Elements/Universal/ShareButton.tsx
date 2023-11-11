@@ -3,21 +3,14 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Platform,
-    Pressable,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface ShareButtonProps {
-    message: string
+    onPress?: () => void | Promise<void>
 }
 
 export default function ShareButton({
-    message,
+    onPress,
 }: ShareButtonProps): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
@@ -30,11 +23,7 @@ export default function ShareButton({
                 },
                 styles.shareButton,
             ]}
-            onPress={() => {
-                void Share.share({
-                    message,
-                })
-            }}
+            onPress={onPress}
         >
             <View style={styles.shareContent}>
                 <Ionicons

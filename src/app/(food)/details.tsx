@@ -15,7 +15,14 @@ import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    ScrollView,
+    Share,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -222,11 +229,15 @@ export default function FoodDetail(): JSX.Element {
                     <FormList sections={sections} />
                 </View>
                 <ShareButton
-                    message={t('details.share.message', {
-                        meal: meal?.name[i18n.language as LanguageKey],
-                        price: formatPrice(meal?.prices[userKind]),
-                        location: meal?.restaurant,
-                    })}
+                    onPress={async () => {
+                        await Share.share({
+                            message: t('details.share.message', {
+                                meal: meal?.name[i18n.language as LanguageKey],
+                                price: formatPrice(meal?.prices[userKind]),
+                                location: meal?.restaurant,
+                            }),
+                        })
+                    }}
                 />
                 <View style={styles.notesContainer}>
                     <Text

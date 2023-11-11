@@ -37,6 +37,7 @@
         "expo-localization": "~14.3.0",
         "expo-router": "^3.1.2",
         "expo-secure-store": "~12.3.1",
+        "expo-sharing": "11.7.0",
         "expo-splash-screen": "~0.20.5",
         "expo-status-bar": "^1.6.0",
         "i18next": "^23.6.0",
@@ -57,6 +58,7 @@
         "react-native-screens": "~3.22.0",
         "react-native-select-dropdown": "^3.3.4",
         "react-native-svg": "^13.14.0",
+        "react-native-view-shot": "^3.8.0",
         "react-native-webview": "13.2.2",
         "sanitize-html": "^2.11.0"
     },

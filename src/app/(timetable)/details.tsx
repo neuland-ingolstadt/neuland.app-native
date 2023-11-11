@@ -2,21 +2,24 @@ import DetailsBody from '@/components/Elements/Timetable/DetailsBody'
 import DetailsRow from '@/components/Elements/Timetable/DetailsRow'
 import DetailsSymbol from '@/components/Elements/Timetable/DetailsSymbol'
 import Separator from '@/components/Elements/Timetable/Separator'
+import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/stores/colors'
-import { formatFriendlyDate } from '@/utils/date-utils'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { type FormListSections } from '@customTypes/components'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
@@ -25,7 +28,7 @@ export default function TimetableDetails(): JSX.Element {
     const { eventParam } = useLocalSearchParams<{ eventParam: string }>()
     const event: FriendlyTimetableEntry | undefined =
         eventParam != null ? JSON.parse(eventParam) : undefined
-    const { t, i18n } = useTranslation('timetable')
+    const { t } = useTranslation('timetable')
 
     if (event == null) {
         throw new Error('Event is undefined')
@@ -36,6 +39,24 @@ export default function TimetableDetails(): JSX.Element {
 
     const examSplit = event.exam.split('-').slice(-1)[0].trim()
     const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
+
+    const shareRef = React.useRef<ViewShot>(null)
+
+    async function shareEvent(): Promise<void> {
+        try {
+            const uri = await captureRef(shareRef, {
+                format: 'png',
+                quality: 1,
+            })
+
+            await Sharing.shareAsync(uri, {
+                mimeType: 'image/png',
+                dialogTitle: t('misc.share'),
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     const detailsList: FormListSections[] = [
         {
@@ -167,13 +188,7 @@ export default function TimetableDetails(): JSX.Element {
                                         color: colors.text,
                                     }}
                                 >
-                                    {startDate.toLocaleTimeString(
-                                        i18n.language,
-                                        {
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                        }
-                                    )}
+                                    {formatFriendlyTime(startDate)}
                                 </Text>
 
                                 <Ionicons
@@ -188,10 +203,7 @@ export default function TimetableDetails(): JSX.Element {
                                         color: colors.text,
                                     }}
                                 >
-                                    {endDate.toLocaleTimeString(i18n.language, {
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                    })}
+                                    {formatFriendlyTime(endDate)}
                                 </Text>
 
                                 <Text
@@ -221,27 +233,29 @@ export default function TimetableDetails(): JSX.Element {
                         </DetailsSymbol>
 
                         <DetailsBody>
-                            {event.rooms.map((room, i) => (
-                                <Pressable
-                                    key={i}
-                                    onPress={() => {
-                                        router.push('(tabs)/map')
-                                        router.setParams({
-                                            q: room,
-                                            h: 'true',
-                                        })
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            ...styles.text1,
-                                            color: colors.primary,
+                            <View style={styles.roomContainer}>
+                                {event.rooms.map((room, i) => (
+                                    <Pressable
+                                        key={i}
+                                        onPress={() => {
+                                            router.push('(tabs)/map')
+                                            router.setParams({
+                                                q: room,
+                                                h: 'true',
+                                            })
                                         }}
                                     >
-                                        {room}
-                                    </Text>
-                                </Pressable>
-                            ))}
+                                        <Text
+                                            style={{
+                                                ...styles.text1,
+                                                color: colors.primary,
+                                            }}
+                                        >
+                                            {room}
+                                        </Text>
+                                    </Pressable>
+                                ))}
+                            </View>
                         </DetailsBody>
                     </DetailsRow>
 
@@ -270,8 +284,16 @@ export default function TimetableDetails(): JSX.Element {
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
 
-                        <ShareButton message="test" />
+                        <ShareButton
+                            onPress={async () => {
+                                await shareEvent()
+                            }}
+                        />
                     </View>
+
+                    <ViewShot ref={shareRef} style={styles.viewShot}>
+                        <ShareCard event={event} />
+                    </ViewShot>
                 </View>
             </ScrollView>
         </>
@@ -310,5 +332,15 @@ const styles = StyleSheet.create({
     formListContainer: {
         marginTop: 24,
         gap: 12,
+    },
+    roomContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 4,
+    },
+    viewShot: {
+        zIndex: -1,
+        position: 'absolute',
+        transform: [{ translateX: -1000 }],
     },
 })
