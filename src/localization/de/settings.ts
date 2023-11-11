@@ -114,4 +114,12 @@ export default {
         reset: 'Reihenfolge zurücksetzen',
         footer: 'Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.',
     },
+    grades: {
+        grade: 'Note',
+        finished: 'Noten',
+        open: 'Offen',
+        average: 'Durchschnitt',
+        temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
+        footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
+    },
 }

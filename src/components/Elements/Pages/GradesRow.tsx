@@ -20,7 +20,7 @@ const GradesRow = ({
             title={item.titel}
             colors={colors}
             leftChildren={
-                <View style={{ paddingTop: 3 }}>
+                <View style={styles.leftContainer}>
                     <Text
                         style={{
                             color: colors.labelColor,
@@ -36,13 +36,7 @@ const GradesRow = ({
                 <>
                     <View style={styles.rightContainer}>
                         {item.note !== null && item.note !== '' && (
-                            <View
-                                style={{
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-end',
-                                    gap: 5,
-                                }}
-                            >
+                            <View style={styles.rightInnerContainer}>
                                 <Text
                                     style={{
                                         ...styles.rightText1,
@@ -70,6 +64,7 @@ const GradesRow = ({
 }
 
 const styles = StyleSheet.create({
+    leftContainer: { paddingTop: 3 },
     leftText1: {
         fontSize: 15,
 
@@ -83,6 +78,11 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-end',
         padding: 5,
+    },
+    rightInnerContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        gap: 5,
     },
     rightText1: {
         fontSize: 20,

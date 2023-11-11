@@ -112,4 +112,12 @@ export default {
         reset: 'Reset order',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
     },
+    grades: {
+        grade: 'Grade',
+        finished: 'Grades',
+        open: 'Open',
+        average: 'Average',
+        temporarilyUnavailable: 'Grades are temporarily unavailable.',
+        footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
+    },
 }

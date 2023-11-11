@@ -23,7 +23,7 @@ import {
 
 export default function GradesSCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation('common')
+    const { t } = useTranslation('settings')
     const [grades, setGrades] = useState<Grade[] | null>(null)
     const [missingGrades, setMissingGrades] = useState<Grade[] | null>(null)
     // const [gradeAverage, setGradeAverage] = useState('')
@@ -64,7 +64,7 @@ export default function GradesSCreen(): JSX.Element {
                 // according to the original developers,
                 // { status: -102, data: "Query not possible" }
                 // means that the transcripts are currently being updated
-                setErrorMsg(t('pages.grades.temporarilyUnavailable'))
+                setErrorMsg(t('grades.temporarilyUnavailable'))
             } else {
                 setErrorMsg(e.message)
             }
@@ -103,13 +103,13 @@ export default function GradesSCreen(): JSX.Element {
                         {errorMsg}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
+                        {t('error.refresh', { ns: 'common' })}{' '}
                     </Text>
                 </View>
             )}
             {loadingState === LoadingState.LOADED && (
                 <>
-                    <SectionView title={t('pages.grades.average')}>
+                    <SectionView title={t('grades.average')}>
                         <View style={styles.loadedContainer}>
                             <Text
                                 style={{
@@ -117,11 +117,11 @@ export default function GradesSCreen(): JSX.Element {
                                     ...styles.averageText,
                                 }}
                             >
-                                {'coming soon'}
+                                {t('theme.exclusive.description')}
                             </Text>
                         </View>
                     </SectionView>
-                    <SectionView title={t('pages.grades.finished')}>
+                    <SectionView title={t('grades.finished')}>
                         <React.Fragment>
                             {grades?.map((grade, index) => (
                                 <React.Fragment key={index}>
@@ -135,7 +135,7 @@ export default function GradesSCreen(): JSX.Element {
                             ))}
                         </React.Fragment>
                     </SectionView>
-                    <SectionView title={t('pages.grades.open')}>
+                    <SectionView title={t('grades.open')}>
                         <React.Fragment>
                             {missingGrades?.map((grade, index) => (
                                 <React.Fragment key={index}>
@@ -158,7 +158,7 @@ export default function GradesSCreen(): JSX.Element {
                                 },
                             ]}
                         >
-                            {t('pages.grades.footer')}
+                            {t('grades.footer')}
                         </Text>
                     </View>
                 </>
