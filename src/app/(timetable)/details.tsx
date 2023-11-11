@@ -6,6 +6,7 @@ import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/stores/colors'
+import { RouteParamsContext } from '@/stores/provider'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
@@ -16,13 +17,14 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
+    const { updateRouteParams } = useContext(RouteParamsContext)
 
     const colors = useTheme().colors as Colors
     const { eventParam } = useLocalSearchParams<{ eventParam: string }>()
@@ -239,10 +241,7 @@ export default function TimetableDetails(): JSX.Element {
                                         key={i}
                                         onPress={() => {
                                             router.push('(tabs)/map')
-                                            router.setParams({
-                                                q: room,
-                                                h: 'true',
-                                            })
+                                            updateRouteParams(room)
                                         }}
                                     >
                                         <Text
