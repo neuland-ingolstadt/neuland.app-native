@@ -3,7 +3,7 @@ import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { DashboardContext, UserKindContext } from '@/stores/provider'
-import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
+import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -22,7 +22,6 @@ export default function Screen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { userFullName, userKind } =
         useContext<UserKindContextType>(UserKindContext)
-    const nameColor = getNameColor(userFullName)
 
     return (
         <>
@@ -49,12 +48,14 @@ export default function Screen(): JSX.Element {
                             <View>
                                 <Avatar
                                     size={29}
-                                    background={nameColor}
+                                    background={colors.primary}
                                     shadow={false}
                                 >
                                     <Text
                                         style={{
-                                            color: getContrastColor(nameColor),
+                                            color: getContrastColor(
+                                                colors.primary
+                                            ),
                                             ...styles.iconText,
                                         }}
                                     >
@@ -67,7 +68,7 @@ export default function Screen(): JSX.Element {
                                 <Ionicons
                                     name="person-circle-outline"
                                     size={28}
-                                    color={colors.text}
+                                    color={colors.primary}
                                 />
                             </View>
                         )}

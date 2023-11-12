@@ -7,7 +7,7 @@ import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { UserKindContext } from '@/stores/provider'
 import { type FormListSections } from '@/stores/types/components'
 import { type PersDataDetails } from '@/stores/types/thi-api'
-import { getContrastColor, getInitials, getNameColor } from '@/utils/ui-utils'
+import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
@@ -44,7 +44,6 @@ export default function Settings(): JSX.Element {
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const nameColor = getNameColor(userFullName)
     const { t, i18n } = useTranslation(['settings'])
 
     const languageAlert = (): void => {
@@ -269,11 +268,11 @@ export default function Settings(): JSX.Element {
                                             isLoaded === LoadingState.LOADED
                                         }
                                     >
-                                        <Avatar background={nameColor}>
+                                        <Avatar background={colors.primary}>
                                             <Text
                                                 style={{
                                                     color: getContrastColor(
-                                                        nameColor
+                                                        colors.primary
                                                     ),
                                                     fontSize: 20,
                                                     fontWeight: 'bold',
@@ -293,11 +292,11 @@ export default function Settings(): JSX.Element {
                                         subTitle2={t('menu.employee.subtitle2')}
                                         loaded={true}
                                     >
-                                        <Avatar background={nameColor}>
+                                        <Avatar background={colors.primary}>
                                             <Text
                                                 style={{
                                                     color: getContrastColor(
-                                                        nameColor
+                                                        colors.primary
                                                     ),
                                                     fontSize: 20,
                                                     fontWeight: 'bold',
