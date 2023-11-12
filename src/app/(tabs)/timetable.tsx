@@ -1,3 +1,4 @@
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
@@ -12,8 +13,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import dayjs from 'dayjs'
-import { useNavigation, useRouter } from 'expo-router'
-import Head from 'expo-router/head'
+import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -45,18 +45,16 @@ interface CalendarEvent extends ICalendarEventBase {
 export default function TimetableScreen(): JSX.Element {
     const router = useRouter()
 
+    const { t, i18n } = useTranslation('navigation')
+
     const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
     const [calendarDate, setCalendarDate] = useState<Date>(new Date())
     const [mode] = useState<Mode>('3days')
 
     const today = new Date()
 
-    const navigation = useNavigation()
-
     const theme = useTheme()
     const colors = theme.colors as Colors
-
-    const { i18n } = useTranslation()
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
@@ -118,33 +116,6 @@ export default function TimetableScreen(): JSX.Element {
 
         setCalendarTheme(theme)
     }, [colors])
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <View style={styles.navRight}>
-                    {/* <TouchableOpacity
-                        onPress={() => {
-                            setMode((oldMode) => {
-                                return oldMode === '3days'
-                                    ? 'schedule'
-                                    : '3days'
-                            })
-                        }}
-                    >
-                        <Ionicons name="list" size={22} color={colors.text} />
-                    </TouchableOpacity> */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            setCalendarDate(new Date())
-                        }}
-                    >
-                        <Ionicons name="today" size={22} color={colors.text} />
-                    </TouchableOpacity>
-                </View>
-            ),
-        })
-    }, [navigation, colors])
 
     function timetableToWeekViewEvents(
         entries: FriendlyTimetableEntry[]
@@ -413,15 +384,8 @@ export default function TimetableScreen(): JSX.Element {
         })
     }
 
-    return (
-        <>
-            <Head>
-                <title>Timetable</title>
-                <meta name="Timetable" content="Personal Timetable" />
-                <meta property="expo:handoff" content="true" />
-                <meta property="expo:spotlight" content="true" />
-            </Head>
-
+    function Timetable(): JSX.Element {
+        return (
             <Calendar
                 date={calendarDate}
                 onChangeDate={(range) => {
@@ -434,17 +398,30 @@ export default function TimetableScreen(): JSX.Element {
                 renderEvent={renderEvent}
                 renderHeader={renderHeader}
                 onPressEvent={showEventDetails}
-                dayHeaderStyle={{
-                    backgroundColor: 'transparent',
-                    paddingBottom: 5,
-                }}
                 dayHeaderHighlightColor={colors.primary}
                 theme={calendarTheme}
                 scrollOffsetMinutes={480}
                 weekStartsOn={1}
                 weekEndsOn={6}
             />
-        </>
+        )
+    }
+
+    return (
+        <WorkaroundStack
+            name={t('navigation.timetable')}
+            titleKey={t('navigation.timetable')}
+            component={Timetable}
+            headerRightElement={() => (
+                <TouchableOpacity
+                    onPress={() => {
+                        setCalendarDate(new Date())
+                    }}
+                >
+                    <Ionicons name="today" size={24} color={colors.text} />
+                </TouchableOpacity>
+            )}
+        />
     )
 }
 

@@ -70,6 +70,41 @@
                 },
                 "icon": "fast-food-outline"
             }
+        ],
+        "0.4": [
+            {
+                "title": {
+                    "de": "Studenplan",
+                    "en": "Timetable"
+                },
+                "description": {
+                    "de": "Der Studenplan wurde von Grund auf überarbeitet. Du siehst nun alle nötigen Informationen auf einen Blick und kannst bei Bedarf mehr Details anzeigen lassen.",
+                    "en": "The study plan has been completely revised. You can now see all the necessary information at a glance and can display more details if needed."
+                },
+                "icon": "calendar"
+            },
+            {
+                "title": {
+                    "de": "Notenübersicht",
+                    "en": "Grades overview"
+                },
+                "description": {
+                    "de": "Nun kannst du deine Notenübersicht einsehen. Diese findest du in deinem Profil.",
+                    "en": "You can now view your grades overview. These can be found in your profile."
+                },
+                "icon": "list"
+            },
+            {
+                "title": {
+                    "de": "Erweiterte Lokalisierung",
+                    "en": "Extended localization"
+                },
+                "description": {
+                    "de": "Die bisherigen Lokalisierungen wurden überarbeitet und erweitert. Dazu zählen unter anderem die Professoren und Raum-Details.",
+                    "en": "The previous localizations have been revised and expanded. These include the professors and room details."
+                },
+                "icon": "language-outline"
+            }
         ]
     }
 }
