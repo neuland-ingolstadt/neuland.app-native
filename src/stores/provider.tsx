@@ -3,8 +3,8 @@ import {
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
-import React, { createContext } from 'react'
-import { useColorScheme } from 'react-native'
+import React, { createContext, useEffect, useRef, useState } from 'react'
+import { Platform, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
@@ -104,6 +104,22 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
 
+    // iOS workaround to prevent change of the color scheme while the app is in the background
+    // https://github.com/facebook/react-native/issues/35972
+    // https://github.com/facebook/react-native/pull/39439 (should be fixed in v0.73)
+    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
+    const onColorSchemeChange = useRef<NodeJS.Timeout>()
+
+    useEffect(() => {
+        if (colorScheme !== currentColorScheme) {
+            onColorSchemeChange.current = setTimeout(() => {
+                setCurrentColorScheme(colorScheme)
+            }, 1000)
+        } else if (onColorSchemeChange.current != null) {
+            clearTimeout(onColorSchemeChange.current)
+        }
+    }, [colorScheme])
+
     /**
      * Returns the primary color for a given color scheme.
      * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
@@ -139,7 +155,13 @@ export default function Provider({
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider
-                value={colorScheme === 'dark' ? darkTheme : lightTheme}
+                value={
+                    (Platform.OS === 'android'
+                        ? colorScheme
+                        : currentColorScheme) === 'light'
+                        ? lightTheme
+                        : darkTheme
+                }
             >
                 <ThemeContext.Provider value={themeHook}>
                     <FlowContext.Provider value={flow}>
