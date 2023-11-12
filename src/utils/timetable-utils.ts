@@ -48,7 +48,7 @@ export async function getFriendlyTimetable(
                 studyGroup: lecture.details.stgru,
                 sws: lecture.details.sws,
                 ects: lecture.details.ectspoints,
-                objective: lecture.details.ziel,
+                goal: lecture.details.ziel,
                 contents: lecture.details.inhalt,
                 literature: lecture.details.literatur,
             }
@@ -68,7 +68,7 @@ export interface FriendlyTimetableEntry {
     studyGroup: string
     sws: string
     ects: string
-    objective: string | null
+    goal: string | null
     contents: string | null
     literature: string | null
 }

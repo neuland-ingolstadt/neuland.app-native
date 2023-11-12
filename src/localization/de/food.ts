@@ -67,7 +67,6 @@ export default {
         share: {
             message:
                 'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://neuland.app/food/',
-            button: 'Teilen',
         },
     },
 }

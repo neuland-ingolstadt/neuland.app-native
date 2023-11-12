@@ -18,6 +18,9 @@ export default function LecturerDetail(): JSX.Element {
     const { t } = useTranslation('common')
     const { updateRouteParams } = useContext(RouteParamsContext)
 
+    const validEmail =
+        lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false)
+
     const sections: FormListSections[] = [
         {
             header: 'Details',
@@ -25,12 +28,10 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: 'Name',
                     value: `${lecturer?.vorname ?? ''} ${lecturer?.name ?? ''}`,
-                    disabled: true,
                 },
                 {
                     title: t('pages.lecturer.details.title'),
                     value: lecturer?.titel,
-                    disabled: true,
                 },
                 {
                     title: t('pages.lecturer.details.organization'),
@@ -42,7 +43,6 @@ export default function LecturerDetail(): JSX.Element {
                             fallbackLng: 'de',
                         }
                     ),
-                    disabled: true,
                 },
 
                 {
@@ -52,7 +52,6 @@ export default function LecturerDetail(): JSX.Element {
                         ns: 'api',
                         fallbackLng: 'de',
                     }),
-                    disabled: true,
                 },
             ],
         },
@@ -70,20 +69,6 @@ export default function LecturerDetail(): JSX.Element {
                     },
                 },
                 {
-                    title: 'E-Mail',
-                    value: lecturer?.email,
-                    disabled:
-                        lecturer?.email === '' ||
-                        !(lecturer?.email.includes('@') ?? false),
-                    iconColor:
-                        lecturer?.email.includes('@') ?? false
-                            ? colors.primary
-                            : undefined,
-                    onPress: () => {
-                        void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
-                    },
-                },
-                {
                     title: t('pages.lecturer.contact.phone'),
                     value: lecturer?.tel_dienst,
                     disabled: lecturer?.tel_dienst === '',
@@ -97,14 +82,34 @@ export default function LecturerDetail(): JSX.Element {
                     },
                 },
                 {
+                    title: 'E-Mail',
+                    value: lecturer?.email,
+                    disabled: validEmail,
+                    layout: validEmail ? 'column' : 'row',
+                    iconColor:
+                        lecturer?.email.includes('@') ?? false
+                            ? colors.primary
+                            : undefined,
+                    onPress: () => {
+                        void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
+                    },
+                },
+
+                {
                     title: t('pages.lecturer.contact.office'),
                     value: lecturer?.sprechstunde,
-                    disabled: true,
+                    layout:
+                        (lecturer?.sprechstunde?.length ?? 0) <= 20
+                            ? 'row'
+                            : 'column',
                 },
                 {
                     title: t('pages.lecturer.contact.exam'),
                     value: lecturer?.einsichtnahme,
-                    disabled: true,
+                    layout:
+                        (lecturer?.einsichtnahme?.length ?? 0) <= 20
+                            ? 'row'
+                            : 'column',
                 },
             ],
         },

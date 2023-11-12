@@ -166,7 +166,6 @@ export default function Profile(): JSX.Element {
                 {
                     title: 'Name',
                     value: userData.vname + ' ' + userData.name,
-                    disabled: true,
                 },
                 {
                     title: t('profile.formlist.user.matrical'),
@@ -185,7 +184,6 @@ export default function Profile(): JSX.Element {
                 {
                     title: t('profile.formlist.user.printer'),
                     value: userData.pcounter,
-                    disabled: true,
                 },
             ],
         },
@@ -196,7 +194,6 @@ export default function Profile(): JSX.Element {
                 {
                     title: t('profile.formlist.study.degree'),
                     value: userData.fachrich + ' (' + userData.stg + ')',
-                    disabled: true,
                 },
                 {
                     title: t('profile.formlist.study.spo'),
@@ -210,7 +207,6 @@ export default function Profile(): JSX.Element {
                 {
                     title: t('profile.formlist.study.group'),
                     value: userData.stgru,
-                    disabled: true,
                 },
             ],
         },
@@ -241,12 +237,10 @@ export default function Profile(): JSX.Element {
                 {
                     title: t('profile.formlist.contact.street'),
                     value: userData.str,
-                    disabled: true,
                 },
                 {
                     title: t('profile.formlist.contact.city'),
                     value: userData.plz + ' ' + userData.ort,
-                    disabled: true,
                 },
             ],
         },

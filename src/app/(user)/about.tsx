@@ -73,7 +73,6 @@ export default function About(): JSX.Element {
                 {
                     title: 'Version',
                     value: version,
-                    disabled: true,
                 },
                 {
                     title: 'Changelog',

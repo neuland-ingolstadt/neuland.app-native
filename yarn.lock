@@ -3503,6 +3503,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/sanitize-html@npm:^2":
+  version: 2.9.4
+  resolution: "@types/sanitize-html@npm:2.9.4"
+  dependencies:
+    htmlparser2: "npm:^8.0.0"
+  checksum: 9d030dd2cacf5fe921ac1bfd055795b79c91370cd5a9b6cb49158276ff34676625f24be440c82b40049f0b5b8bf0edc999d7ddbfd2d2310178e371ff035bcfb3
+  languageName: node
+  linkType: hard
+
 "@types/scheduler@npm:*":
   version: 0.16.5
   resolution: "@types/scheduler@npm:0.16.5"
@@ -4398,6 +4407,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64-arraybuffer@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "base64-arraybuffer@npm:1.0.2"
+  checksum: 3acac95c70f9406e87a41073558ba85b6be9dbffb013a3d2a710e3f2d534d506c911847d5d9be4de458af6362c676de0a5c4c2d7bdf4def502d00b313368e72f
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.1.2, base64-js@npm:^1.2.3, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -4680,6 +4696,13 @@ __metadata:
     normalize-url: "npm:^6.0.1"
     responselike: "npm:^2.0.0"
   checksum: 0834a7d17ae71a177bc34eab06de112a43f9b5ad05ebe929bec983d890a7d9f2bc5f1aa8bb67ea2b65e07a3bc74bea35fa62dd36dbac52876afe36fdcf83da41
+  languageName: node
+  linkType: hard
+
+"calendarize@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "calendarize@npm:1.1.1"
+  checksum: b2ab535961843321e63ca51a6b0baf55b8dd739272b5de84c5e1c0f2c7f9fb72be6768f8ea8fcce0356e955f57188c9719b2f3d4934a4a76b096487c6eb2a17d
   languageName: node
   linkType: hard
 
@@ -5208,6 +5231,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-line-break@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "css-line-break@npm:2.1.0"
+  dependencies:
+    utrie: "npm:^1.0.2"
+  checksum: b2222d99d5daf7861ecddc050244fdce296fad74b000dcff6bdfb1eb16dc2ef0b9ffe2c1c965e3239bd05ebe9eadb6d5438a91592fa8648d27a338e827cf9048
+  languageName: node
+  linkType: hard
+
 "css-select@npm:^5.1.0":
   version: 5.1.0
   resolution: "css-select@npm:5.1.0"
@@ -5259,7 +5291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.8.15":
+"dayjs@npm:^1.11.10, dayjs@npm:^1.8.15":
   version: 1.11.10
   resolution: "dayjs@npm:1.11.10"
   checksum: 4de9af50639d47df87f2e15fa36bb07e0f9ed1e9c52c6caa1482788ee9a384d668f1dbd00c54f82aaab163db07d61d2899384b8254da3a9184fc6deca080e2fe
@@ -5333,7 +5365,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.3.0":
+"deepmerge@npm:^4.2.2, deepmerge@npm:^4.3.0":
   version: 4.3.1
   resolution: "deepmerge@npm:4.3.1"
   checksum: e53481aaf1aa2c4082b5342be6b6d8ad9dfe387bc92ce197a66dea08bd4265904a087e75e464f14d1347cf2ac8afe1e4c16b266e0561cc5df29382d3c5f80044
@@ -5609,7 +5641,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^4.2.0":
+"entities@npm:^4.2.0, entities@npm:^4.4.0":
   version: 4.5.0
   resolution: "entities@npm:4.5.0"
   checksum: 5b039739f7621f5d1ad996715e53d964035f75ad3b9a4d38c6b3804bb226e282ffeae2443624d8fdd9c47d8e926ae9ac009c54671243f0c3294c26af7cc85250
@@ -6391,6 +6423,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: e21025de7a2aa45acb64fab8c71fe0cce55943799be6f0a40bbca4e4f99a3fbb5deed0849198f5d51bad70315265835bdcfcc7fd7cfa323b59c652e67b10971c
+  languageName: node
+  linkType: hard
+
+"expo-sharing@npm:11.7.0":
+  version: 11.7.0
+  resolution: "expo-sharing@npm:11.7.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 23d5515effe622db2d211cce1a9a61fd15f9c0ebb52c2e035ea95af9fa3ab1601092e9c49eda95ffe87c967e997a4129326bffc96880567b5ed5af4d08a520e8
   languageName: node
   linkType: hard
 
@@ -7246,6 +7287,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html2canvas@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "html2canvas@npm:1.4.1"
+  dependencies:
+    css-line-break: "npm:^2.1.0"
+    text-segmentation: "npm:^1.0.3"
+  checksum: 6de86f75762b00948edf2ea559f16da0a1ec3facc4a8a7d3f35fcec59bb0c5970463478988ae3d9082152e0173690d46ebf4082e7ac803dd4817bae1d355c0db
+  languageName: node
+  linkType: hard
+
+"htmlparser2@npm:^8.0.0":
+  version: 8.0.2
+  resolution: "htmlparser2@npm:8.0.2"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.3"
+    domutils: "npm:^3.0.1"
+    entities: "npm:^4.4.0"
+  checksum: 609cca85886d0bf2c9a5db8c6926a89f3764596877492e2caa7a25a789af4065bc6ee2cdc81807fe6b1d03a87bf8a373b5a754528a4cc05146b713c20575aab4
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.0.0, http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
@@ -7766,6 +7829,13 @@ __metadata:
   dependencies:
     isobject: "npm:^3.0.1"
   checksum: f050fdd5203d9c81e8c4df1b3ff461c4bc64e8b5ca383bcdde46131361d0a678e80bcf00b5257646f6c636197629644d53bd8e2375aea633de09a82d57e942f4
+  languageName: node
+  linkType: hard
+
+"is-plain-object@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "is-plain-object@npm:5.0.0"
+  checksum: 893e42bad832aae3511c71fd61c0bf61aa3a6d853061c62a307261842727d0d25f761ce9379f7ba7226d6179db2a3157efa918e7fe26360f3bf0842d9f28942c
   languageName: node
   linkType: hard
 
@@ -8736,7 +8806,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoize-one@npm:^5.0.0, memoize-one@npm:^5.1.1":
+"memoize-one@npm:^5.0.0":
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: fd22dbe9a978a2b4f30d6a491fc02fb90792432ad0dab840dc96c1734d2bd7c9cdeb6a26130ec60507eb43230559523615873168bcbe8fafab221c30b11d54c1
@@ -9313,7 +9383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.19.3, moment@npm:^2.29.4":
+"moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 844c6f3ce42862ac9467c8ca4f5e48a00750078682cc5bda1bc0e50cc7ca88e2115a0f932d65a06e4a90e26cb78892be9b3ca3dd6546ca2c4d994cebb787fc2b
@@ -9434,6 +9504,7 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": "npm:^4.2.1"
     "@types/color": "npm:^3.0.5"
     "@types/react": "npm:~18.2.14"
+    "@types/sanitize-html": "npm:^2"
     "@typescript-eslint/eslint-plugin": "npm:^6.6.0"
     "@typescript-eslint/parser": "npm:^6.10.0"
     babel-plugin-formatjs: "npm:^10.5.7"
@@ -9457,6 +9528,7 @@ __metadata:
     expo-localization: "npm:~14.3.0"
     expo-router: "npm:^3.1.2"
     expo-secure-store: "npm:~12.3.1"
+    expo-sharing: "npm:11.7.0"
     expo-splash-screen: "npm:~0.20.5"
     expo-status-bar: "npm:^1.6.0"
     husky: "npm:^8.0.3"
@@ -9468,6 +9540,7 @@ __metadata:
     react-dom: "npm:18.2.0"
     react-i18next: "npm:^13.3.1"
     react-native: "npm:0.72.6"
+    react-native-big-calendar: "npm:^4.7.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-gesture-handler: "npm:~2.12.0"
@@ -9480,8 +9553,9 @@ __metadata:
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-shimmer-placeholder: "npm:^2.0.9"
     react-native-svg: "npm:^13.14.0"
+    react-native-view-shot: "npm:^3.8.0"
     react-native-webview: "npm:13.2.2"
-    react-native-week-view: "npm:^0.30.0"
+    sanitize-html: "npm:^2.11.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -10006,6 +10080,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"parse-srcset@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "parse-srcset@npm:1.0.2"
+  checksum: 2f268e3d110d4c53d06ed2a8e8ee61a7da0cee13bf150819a6da066a8ca9b8d15b5600d6e6cae8be940e2edc50ee7c1e1052934d6ec858324065ecef848f0497
+  languageName: node
+  linkType: hard
+
 "parseurl@npm:~1.3.3":
   version: 1.3.3
   resolution: "parseurl@npm:1.3.3"
@@ -10169,7 +10250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:~8.4.21":
+"postcss@npm:^8.3.11, postcss@npm:~8.4.21":
   version: 8.4.31
   resolution: "postcss@npm:8.4.31"
   dependencies:
@@ -10522,6 +10603,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-big-calendar@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "react-native-big-calendar@npm:4.7.0"
+  dependencies:
+    calendarize: "npm:^1.1.1"
+    dayjs: "npm:^1.11.10"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: c9febd9b744bf87b734ea223f331aacb1ac5184a22a649bbcc71bf875a3c41852045ed744a775b2eb03e692af71f0fe653e8fe8d61a155b85c5aaa9b49ee6c6f
+  languageName: node
+  linkType: hard
+
 "react-native-collapsible@npm:^1.6.1":
   version: 1.6.1
   resolution: "react-native-collapsible@npm:1.6.1"
@@ -10586,7 +10680,7 @@ __metadata:
     prop-types: "*"
     react: "*"
     react-native: "*"
-  checksum: cb81a1eb47fb8431a298974e310096f1d16112f7de5c901ad3f1603cd1a2657aeacbbaeec8ebf63b242cce5b103d780e4d3cc61a4105266168589cb77f785f07
+  checksum: 1176e28f118875027d96a751157ef5b6b5bdb827f6aae41a45d9482bbdddb4206bec10ba945f3e0ec3d0bac502185417d8fe00cbcd0b28e8354eb543c61c7555
   languageName: node
   linkType: hard
 
@@ -10684,6 +10778,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-view-shot@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "react-native-view-shot@npm:3.8.0"
+  dependencies:
+    html2canvas: "npm:^1.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 769f2a9e769d7feab94589f8818a87aaee7eff9934fa105c40965294feca79ec4462dd3b762a220ad959d14272077c2ab83521d953b20c652f22231a2008e465
+  languageName: node
+  linkType: hard
+
 "react-native-webview@npm:13.2.2":
   version: 13.2.2
   resolution: "react-native-webview@npm:13.2.2"
@@ -10694,22 +10800,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: b0af1dafd8ea4e84c46c5d40efa307f8eea38687283e23df08eadc3fc9e6ecb498c4ddb529795a161911a43d91dcda3d49fb763f16fa05efb8d899ad8feccb06
-  languageName: node
-  linkType: hard
-
-"react-native-week-view@npm:^0.30.0":
-  version: 0.30.0
-  resolution: "react-native-week-view@npm:0.30.0"
-  dependencies:
-    memoize-one: "npm:^5.1.1"
-    moment: "npm:^2.19.3"
-    prop-types: "npm:^15.7.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-gesture-handler: ^2.3.2
-    react-native-reanimated: ^2.4.1
-  checksum: 5a624b6f71f0a13892c8b0b7c856cf5d011d8739c66da351f6a30b893f91cba8bf678a1a8190ef625a7063afdec867ed3c9289c6639864eb39946501314e2cb7
   languageName: node
   linkType: hard
 
@@ -11249,6 +11339,20 @@ __metadata:
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
   checksum: 7e3c8b2e88a1841c9671094bbaeebd94448111dd90a81a1f606f3f67708a6ec57763b3b47f06da09fc6054193e0e6709e77325415dc8422b04497a8070fa02d4
+  languageName: node
+  linkType: hard
+
+"sanitize-html@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "sanitize-html@npm:2.11.0"
+  dependencies:
+    deepmerge: "npm:^4.2.2"
+    escape-string-regexp: "npm:^4.0.0"
+    htmlparser2: "npm:^8.0.0"
+    is-plain-object: "npm:^5.0.0"
+    parse-srcset: "npm:^1.0.2"
+    postcss: "npm:^8.3.11"
+  checksum: 863dcce83c4631fcb5519fd0739ed9e93adcce8dd89e5a738823c309c68686048b0f4e30e07bae0de67ea72b567ee9c908af756ba22fcfcb8fd1fa2c69ca3e0d
   languageName: node
   linkType: hard
 
@@ -12095,6 +12199,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"text-segmentation@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "text-segmentation@npm:1.0.3"
+  dependencies:
+    utrie: "npm:^1.0.2"
+  checksum: 8b9ae8524e3a332371060d0ca62f10ad49a13e954719ea689a6c3a8b8c15c8a56365ede2bb91c322fb0d44b6533785f0da603e066b7554d052999967fb72d600
+  languageName: node
+  linkType: hard
+
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -12624,6 +12737,15 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 02ba649de1b7ca8854bfe20a82f1dfbdda3fb57a22ab4a8972a63a34553cf7aa51bc9081cf7e001b035b88186d23689d69e71b510e610a09a4c66f68aa95b672
+  languageName: node
+  linkType: hard
+
+"utrie@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "utrie@npm:1.0.2"
+  dependencies:
+    base64-arraybuffer: "npm:^1.0.2"
+  checksum: eaffe645bd81a39e4bc3abb23df5895e9961dbdd49748ef3b173529e8b06ce9dd1163e9705d5309a1c61ee41ffcb825e2043bc0fd1659845ffbdf4b1515dfdb4
   languageName: node
   linkType: hard
 

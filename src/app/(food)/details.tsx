@@ -1,4 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import ShareButton from '@/components/Elements/Universal/ShareButton'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
@@ -9,7 +10,6 @@ import { type FormListSections } from '@/stores/types/components'
 import { type Meal } from '@/stores/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -17,8 +17,6 @@ import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Linking,
-    Platform,
-    Pressable,
     ScrollView,
     Share,
     StyleSheet,
@@ -50,17 +48,14 @@ export default function FoodDetail(): JSX.Element {
                           {
                               title: t('details.formlist.prices.student'),
                               value: formatPrice(meal.prices?.student),
-                              disabled: true,
                           },
                           {
                               title: t('details.formlist.prices.employee'),
                               value: formatPrice(meal.prices?.employee),
-                              disabled: true,
                           },
                           {
                               title: t('details.formlist.prices.guest'),
                               value: formatPrice(meal.prices?.guest),
-                              disabled: true,
                           },
                       ],
                   },
@@ -76,7 +71,6 @@ export default function FoodDetail(): JSX.Element {
                         flagMap[flag as keyof typeof flagMap]?.[
                             i18n.language as LanguageKey
                         ] ?? flag,
-                    disabled: true,
                     icon: preferencesSelection.includes(flag)
                         ? 'shield-checkmark-outline'
                         : undefined,
@@ -95,7 +89,6 @@ export default function FoodDetail(): JSX.Element {
                             allergenMap[allergen as keyof typeof allergenMap]?.[
                                 i18n.language as LanguageKey
                             ] ?? allergen,
-                        disabled: true,
                         icon: allergenSelection.includes(allergen)
                             ? 'warning-outline'
                             : undefined,
@@ -113,46 +106,38 @@ export default function FoodDetail(): JSX.Element {
                         ' kJ / ' +
                         (meal?.nutrition?.kcal ?? 'n/a').toString() +
                         ' kcal',
-                    disabled: true,
                 },
 
                 {
                     title: t('details.formlist.nutrition.fat'),
                     value: (meal?.nutrition?.fat ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.saturated'),
                     value:
                         (meal?.nutrition?.fatSaturated ?? 'n/a').toString() +
                         ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.carbs'),
                     value: (meal?.nutrition?.carbs ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.sugar'),
                     value: (meal?.nutrition?.sugar ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.fiber'),
                     value: (meal?.nutrition?.fiber ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.protein'),
                     value:
                         (meal?.nutrition?.protein ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.nutrition.salt'),
                     value: (meal?.nutrition?.salt ?? 'n/a').toString() + ' g',
-                    disabled: true,
                 },
             ],
         },
@@ -165,12 +150,10 @@ export default function FoodDetail(): JSX.Element {
                 {
                     title: 'Restaurant',
                     value: meal?.restaurant,
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.about.category'),
                     value: meal?.category,
-                    disabled: true,
                 },
                 {
                     title: t('details.formlist.about.source'),
@@ -196,7 +179,6 @@ export default function FoodDetail(): JSX.Element {
                     value:
                         (variant.additional ? '+ ' : '') +
                         formatPrice(variant.prices[userKind]),
-                    disabled: true,
                 })) ?? [],
         },
     ]
@@ -246,48 +228,17 @@ export default function FoodDetail(): JSX.Element {
                 <View style={styles.formList}>
                     <FormList sections={sections} />
                 </View>
-                <View>
-                    <Pressable
-                        style={[
-                            {
-                                backgroundColor: colors.card,
-                            },
-                            styles.shareButton,
-                        ]}
-                        onPress={() => {
-                            void Share.share({
-                                message: t('details.share.message', {
-                                    meal: meal?.name[
-                                        i18n.language as LanguageKey
-                                    ],
-                                    price: formatPrice(meal?.prices[userKind]),
-                                    location: meal?.restaurant,
-                                }),
-                            })
-                        }}
-                    >
-                        <View style={styles.shareContent}>
-                            <Ionicons
-                                name={
-                                    Platform.OS === 'ios'
-                                        ? 'share-outline'
-                                        : 'share-social-outline'
-                                }
-                                size={18}
-                                color={colors.primary}
-                            />
-
-                            <Text
-                                style={[
-                                    { color: colors.primary },
-                                    styles.shareText,
-                                ]}
-                            >
-                                {t('details.share.button')}
-                            </Text>
-                        </View>
-                    </Pressable>
-                </View>
+                <ShareButton
+                    onPress={async () => {
+                        await Share.share({
+                            message: t('details.share.message', {
+                                meal: meal?.name[i18n.language as LanguageKey],
+                                price: formatPrice(meal?.prices[userKind]),
+                                location: meal?.restaurant,
+                            }),
+                        })
+                    }}
+                />
                 <View style={styles.notesContainer}>
                     <Text
                         style={[styles.notesText, { color: colors.labelColor }]}
@@ -331,17 +282,4 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontSize: 12,
     },
-    shareButton: {
-        alignSelf: 'center',
-        paddingHorizontal: 45,
-        paddingVertical: 12,
-        borderRadius: 6,
-        marginTop: 5,
-    },
-    shareContent: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        gap: 10,
-    },
-    shareText: { fontSize: 17 },
 })

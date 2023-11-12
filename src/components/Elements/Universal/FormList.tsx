@@ -47,9 +47,18 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 opacity: pressed ? 0.5 : 1,
                                             },
                                         ]}
-                                        disabled={item.disabled ?? false}
+                                        disabled={
+                                            item.disabled ??
+                                            item.onPress === undefined
+                                        }
                                     >
-                                        <View style={styles.cardRow}>
+                                        <View
+                                            style={
+                                                item.layout === 'column'
+                                                    ? styles.cardColumn
+                                                    : styles.cardRow
+                                            }
+                                        >
                                             <Text
                                                 style={[
                                                     styles.rowTitle,
@@ -61,7 +70,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                             {item.value != null && (
                                                 <Text
                                                     style={[
-                                                        styles.rowDetails,
+                                                        item.layout === 'column'
+                                                            ? styles.columnDetails
+                                                            : styles.rowDetails,
                                                         {
                                                             color:
                                                                 item.iconColor ??
@@ -132,6 +143,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginVertical: 12,
     },
+    cardColumn: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        paddingHorizontal: 15,
+        marginVertical: 12,
+    },
     blockFooter: {
         fontSize: 12,
         fontWeight: '400',
@@ -145,6 +162,10 @@ const styles = StyleSheet.create({
     rowDetails: {
         textAlign: 'right',
         maxWidth: '65%',
+        fontSize: 16,
+    },
+    columnDetails: {
+        textAlign: 'left',
         fontSize: 16,
     },
 })

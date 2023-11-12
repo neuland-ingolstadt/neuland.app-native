@@ -16,6 +16,9 @@ export default {
         thisWeek: 'Diese Woche',
         nextWeek: 'Nächste Woche',
     },
+    misc: {
+        share: 'Teilen',
+    },
     pages: {
         calendar: {
             exams: {

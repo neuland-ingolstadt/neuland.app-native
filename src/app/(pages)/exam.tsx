@@ -17,6 +17,12 @@ export default function ExamDetail(): JSX.Element {
         examEntry != null ? JSON.parse(examEntry) : undefined
     const { t } = useTranslation('common')
 
+    const typeSplit =
+        exam?.type !== undefined ? exam.type.split('-').slice(-1)[0].trim() : ''
+    const type = `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
+
+    const examAids = exam?.aids ?? []
+
     const sections: FormListSections[] = [
         {
             header: 'Details',
@@ -26,23 +32,25 @@ export default function ExamDetail(): JSX.Element {
                     value: formatFriendlyDateTime(
                         exam?.date as unknown as string
                     ),
-                    disabled: true,
                 },
 
                 {
                     title: t('pages.exam.details.room'),
                     value: exam?.rooms,
-                    disabled: true,
                 },
                 {
                     title: t('pages.exam.details.seat'),
                     value: exam?.seat,
-                    disabled: true,
                 },
                 {
                     title: t('pages.exam.details.tools'),
-                    value: exam?.aids?.join(', '),
-                    disabled: true,
+                    value: (examAids.length > 1
+                        ? examAids.map((aid) => {
+                              return `- ${aid}`
+                          })
+                        : examAids
+                    ).join('\n'),
+                    layout: (exam?.aids?.length ?? 0) <= 1 ? 'row' : 'column',
                 },
             ],
         },
@@ -51,25 +59,21 @@ export default function ExamDetail(): JSX.Element {
             items: [
                 {
                     title: t('pages.exam.about.type'),
-                    value: exam?.type,
-                    disabled: true,
+                    value: type,
                 },
                 {
                     title: t('pages.exam.about.examiner'),
                     value: exam?.examiners?.join(', '),
-                    disabled: true,
                 },
                 {
                     title: t('pages.exam.about.registration'),
                     value: formatFriendlyDateTime(
                         exam?.enrollment as unknown as string
                     ),
-                    disabled: true,
                 },
                 {
                     title: t('pages.exam.about.notes'),
                     value: exam?.notes,
-                    disabled: true,
                 },
             ],
         },

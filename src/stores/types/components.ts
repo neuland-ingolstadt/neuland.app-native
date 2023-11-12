@@ -7,6 +7,7 @@ export interface SectionGroup {
     disabled?: boolean
     onPress?: () => Promise<void> | void
     iconColor?: ColorValue
+    layout?: 'row' | 'column'
 }
 
 export interface FormListSections {

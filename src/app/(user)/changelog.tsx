@@ -33,7 +33,6 @@ export default function Theme(): JSX.Element {
             header: `Version ${key}`,
             items: sorted.version[key].map((item) => ({
                 title: item.title[i18n.language as LanguageKey],
-                disabled: true,
                 icon: item.icon,
             })),
         })),
