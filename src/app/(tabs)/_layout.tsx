@@ -76,6 +76,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="timetable"
                     options={{
+                        headerShown: false,
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <Ionicons name="time" size={size} color={color} />

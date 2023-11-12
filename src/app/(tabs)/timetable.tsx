@@ -1,136 +1,95 @@
+import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
-import {
-    addDays,
-    getDateRange,
-    getDayDelta,
-    ignoreTime,
-    isSameDay,
-} from '@/utils/date-utils'
+import { ignoreTime } from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
 } from '@/utils/timetable-utils'
-import { type Calendar } from '@customTypes/data'
+import { type Calendar as CalendarType } from '@customTypes/data'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
-import { useNavigation } from 'expo-router'
-import Head from 'expo-router/head'
-import React, { type FC, useEffect, useRef, useState } from 'react'
+import dayjs from 'dayjs'
+import { useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import WeekView from 'react-native-week-view'
-import { type WeekViewEvent } from 'react-native-week-view'
+import {
+    Dimensions,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
+import {
+    Calendar,
+    type CalendarTouchableOpacityProps,
+    HOUR_GUIDE_WIDTH,
+    type HeaderRenderer,
+    type ICalendarEventBase,
+    type Mode,
+} from 'react-native-big-calendar'
 
-const NUMBER_OF_DAYS = 3
-const TODAY = new Date()
+const HOUR_WIDTH = HOUR_GUIDE_WIDTH + 1
+const MARGIN = 4
+
+interface CalendarEvent extends ICalendarEventBase {
+    textColor: string
+    color: string
+    location?: string
+    entry?: FriendlyTimetableEntry
+}
 
 export default function TimetableScreen(): JSX.Element {
-    const weekViewRef = useRef<typeof WeekView>()
+    const router = useRouter()
 
-    const navigation = useNavigation()
+    const { t, i18n } = useTranslation('navigation')
+
+    const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
+    const [calendarDate, setCalendarDate] = useState<Date>(new Date())
+    const [mode] = useState<Mode>('3days')
+
+    const today = new Date()
 
     const theme = useTheme()
     const colors = theme.colors as Colors
 
-    const [selectedDate, setSelectedDate] = useState(TODAY)
-    const { i18n } = useTranslation()
-
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
     const { userKind } = React.useContext(UserKindContext)
+
     const timetableTextColor =
-        textColor.contrast(primaryColor) > 5
-            ? textColor.hex()
-            : textColor.negate().hex()
+        textColor.contrast(primaryColor) > 5 ? textColor : textColor.negate()
 
     const calendarColor = Color(colors.primary).rotate(-100)
     const calendarTextColor =
-        textColor.contrast(calendarColor) > 5
-            ? textColor.hex()
-            : textColor.negate().hex()
+        textColor.contrast(calendarColor) > 5 ? textColor : textColor.negate()
 
-    const [timetable, setTimetable] = useState<TimetableEvent[]>([])
+    const [timetable, setTimetable] = useState<CalendarEvent[]>([])
 
     useEffect(() => {
         async function load(): Promise<void> {
             try {
-                const timetable = await getFriendlyTimetable(TODAY)
+                // timetable
+                const timetable = await getFriendlyTimetable(today, true)
                 const timetableEntries = timetableToWeekViewEvents(timetable)
+
+                // university calendar
                 const calendarEntries = calendarToWeekViewEvents(calendar)
+
+                // combine all events
                 const allEvents = [...timetableEntries, ...calendarEntries]
 
                 /**
                  * TODO:
                  * - Exams
-                 * - Holidays
+                 * - Holidays (not just the ones from the university calendar)
                  * - Maybe Events from student clubs
-                 * - FIX CALENDER CORRECTLY!!!
                  */
 
-                const allDayEvents = allEvents.filter(
-                    (event) => event.allDay ?? false
-                )
-                const today = ignoreTime(TODAY)
-                const splitEvents = allDayEvents.flatMap((event) => {
-                    const splitEvents = []
-
-                    const todayDelta = getDayDelta(event.startDate, today)
-
-                    // add initial event (event till first calendar split)
-                    const initialEndDate = addDays(
-                        event.startDate,
-                        (todayDelta < 0
-                            ? Math.abs(todayDelta) - 1
-                            : NUMBER_OF_DAYS - 1 - todayDelta) % NUMBER_OF_DAYS
-                    )
-
-                    const initialEvent = {
-                        ...event,
-                        startDate: event.startDate,
-                        endDate: initialEndDate,
-                        id: event.id,
-                    }
-
-                    splitEvents.push(initialEvent)
-
-                    // add all calendar splits
-                    const splits = Math.ceil(
-                        getDayDelta(event.endDate, initialEndDate) /
-                            NUMBER_OF_DAYS
-                    )
-
-                    for (let i = 0; i < splits; i++) {
-                        const startDate = addDays(
-                            initialEndDate,
-                            i * NUMBER_OF_DAYS + 1
-                        )
-                        const endDate = addDays(startDate, NUMBER_OF_DAYS - 1)
-
-                        // if endDate is after event.endDate, set endDate to event.endDate
-                        if (endDate.getTime() > event.endDate.getTime()) {
-                            endDate.setTime(event.endDate.getTime())
-                        }
-
-                        const splitEvent = {
-                            ...event,
-                            startDate,
-                            endDate,
-                            id: event.id + i,
-                        }
-
-                        splitEvents.push(splitEvent)
-                    }
-
-                    return splitEvents
-                })
-                setTimetable([
-                    ...allEvents.filter((event) => !(event.allDay ?? false)),
-                    ...splitEvents,
-                ])
+                setTimetable(allEvents)
             } catch (e) {
                 console.log(e)
             }
@@ -140,81 +99,256 @@ export default function TimetableScreen(): JSX.Element {
     }, [colors.primary, userKind])
 
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity
-                    onPress={() => {
-                        // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
-                        weekViewRef.current?.goToDate(TODAY)
-                        // @ts-expect-error Property 'scrollToTime' does not exist on type 'ComponentType<WeekViewProps>'.
-                        weekViewRef.current?.scrollToTime(
-                            (TODAY.getHours() - 1) * 60
-                        )
-                    }}
-                    style={styles.headerIcon}
-                >
-                    <Ionicons name="today" size={22} color={colors.primary} />
-                </TouchableOpacity>
-            ),
-        })
-    }, [navigation])
+        const theme = {
+            palette: {
+                nowIndicator: colors.labelColor,
+                primary: {
+                    main: colors.primary,
+                    contrastText: colors.text,
+                },
+                gray: {
+                    '200': colors.border, // grid line color
+                    '500': colors.labelColor, // time and date day header text color
+                    '800': colors.text, // header date number color
+                },
+            },
+        }
+
+        setCalendarTheme(theme)
+    }, [colors])
 
     function timetableToWeekViewEvents(
         entries: FriendlyTimetableEntry[]
-    ): TimetableEvent[] {
+    ): CalendarEvent[] {
         return entries.map((entry, index) => {
             return {
-                id: index,
-                startDate: entry.startDate,
-                endDate: entry.endDate,
+                start: entry.startDate,
+                end: entry.endDate,
                 title: entry.shortName,
                 color: colors.primary,
-                description: entry.shortName,
-                location: entry.rooms.join(', '),
-                eventKind: 'standard' as 'standard' | 'block',
-                resolveOverlap: 'stack' as 'stack' | 'lane',
-                stackKey: index.toString(),
-                type: 'timetable',
+                textColor: timetableTextColor.hex(),
+                location: entry.rooms.length > 0 ? entry.rooms[0] : undefined,
+                entry,
             }
         })
     }
 
-    function calendarToWeekViewEvents(entries: Calendar[]): TimetableEvent[] {
-        return entries.map((entry, index) => {
+    function calendarToWeekViewEvents(
+        entries: CalendarType[]
+    ): CalendarEvent[] {
+        return entries.map((entry) => {
+            const allDay = entry.hasHours === false || !entry.hasHours
+            const endDate = entry.end ?? entry.begin
+
             return {
-                id: index,
-                startDate: entry.begin,
-                endDate: entry.end ?? entry.begin,
+                start: allDay
+                    ? ignoreTime(dayjs(entry.begin)).toDate()
+                    : entry.begin,
+                end: allDay ? ignoreTime(dayjs(endDate)).toDate() : endDate,
                 title: entry.name[i18n.language as LanguageKey],
                 color: calendarColor.hex(),
-                description: '',
-                eventKind: 'standard' as 'standard' | 'block',
-                resolveOverlap: 'stack' as 'stack' | 'lane',
-                stackKey: index.toString(),
-                allDay: entry.hasHours === false || !entry.hasHours,
-                type: 'calendar',
+                textColor: calendarTextColor.hex(),
             }
         })
     }
 
-    function getEntryTextColor(event: TimetableEvent): string {
-        if (event.type === 'calendar') {
-            return calendarTextColor
-        }
+    const renderHeader: HeaderRenderer<CalendarEvent> = (header) => {
+        const windowWidth = Dimensions.get('window').width
 
-        return timetableTextColor
-    }
+        const rangeLength = (() => {
+            switch (header.mode) {
+                case 'week':
+                    return 7
+                case 'day':
+                    return 1
+                case '3days':
+                    return 3
+                default:
+                    throw new Error('Invalid mode')
+            }
+        })()
 
-    const TimetableEntry: FC<{ event: TimetableEvent }> = ({ event }) => {
-        const hasLocation = event.location !== undefined
-        const shortEvent = event.startDate.getTime() === event.endDate.getTime()
+        const headerStartDate = ignoreTime(header.dateRange[0])
+        const headerEndDate = ignoreTime(header.dateRange[1]).add(
+            rangeLength - 2,
+            'd'
+        )
+
+        const allDayEvents = header.allDayEvents.filter(
+            (event) =>
+                event.start.getTime() <= headerEndDate.toDate().getTime() &&
+                event.end.getTime() >= headerStartDate.toDate().getTime()
+        )
+
+        const dates = Array.from({ length: rangeLength }, (_, i) =>
+            headerStartDate.add(i, 'd')
+        )
 
         return (
-            <>
-                <Text
-                    numberOfLines={shortEvent && hasLocation ? 1 : 2}
+            <View
+                style={{
+                    ...styles.headerWrapper,
+                    borderBottomColor: colors.border,
+                }}
+            >
+                <View
                     style={{
-                        color: getEntryTextColor(event),
+                        ...styles.headerHourSpacer,
+                        borderRightColor: colors.border,
+                    }}
+                />
+                <View style={styles.headerMainContainer}>
+                    {/* dates */}
+                    <View style={styles.headerDateContainer}>
+                        {dates.map((date, i) => {
+                            return (
+                                <TouchableOpacity
+                                    key={i}
+                                    onPress={() => {
+                                        setCalendarDate(date.toDate())
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            ...styles.headerDate,
+                                            backgroundColor: date.isSame(
+                                                today,
+                                                'day'
+                                            )
+                                                ? colors.labelBackground
+                                                : undefined,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: colors.text,
+                                            }}
+                                        >
+                                            {date.format('ddd DD')}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+
+                    {/* all day events */}
+                    <View style={styles.headerEventsContainer}>
+                        {allDayEvents.map((event, i) => {
+                            const eventStartDate = dayjs(event.start)
+                            const eventEndDate = dayjs(event.end)
+
+                            const eventStart =
+                                eventStartDate < headerStartDate
+                                    ? headerStartDate
+                                    : eventStartDate
+                            const eventEnd = (
+                                eventEndDate > headerEndDate
+                                    ? headerEndDate
+                                    : eventEndDate
+                            ).add(1, 'd')
+
+                            const eventLength = eventEnd.diff(eventStart, 'd')
+
+                            const startOffset = eventStart.diff(
+                                headerStartDate,
+                                'd',
+                                true
+                            )
+
+                            const extendsLeft = eventStartDate < headerStartDate
+                            const extendsRight = eventEndDate > headerEndDate
+
+                            return (
+                                <TouchableOpacity
+                                    key={i}
+                                    disabled={event.entry == null}
+                                    onPress={() => {
+                                        showEventDetails(event)
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            ...styles.allDayEvent,
+                                            backgroundColor: event.color,
+                                            paddingLeft: extendsLeft ? 4 : 8,
+                                            paddingRight: extendsRight ? 4 : 8,
+                                            borderTopStartRadius: extendsLeft
+                                                ? 0
+                                                : 4,
+                                            borderBottomStartRadius: extendsLeft
+                                                ? 0
+                                                : 4,
+                                            borderTopEndRadius: extendsRight
+                                                ? 0
+                                                : 4,
+                                            borderBottomEndRadius: extendsRight
+                                                ? 0
+                                                : 4,
+                                            borderLeftWidth: extendsLeft
+                                                ? 4
+                                                : 0,
+                                            borderRightWidth: extendsRight
+                                                ? 4
+                                                : 0,
+                                            borderLeftColor: Color(event.color)
+                                                .darken(0.2)
+                                                .hex(),
+                                            borderRightColor: Color(event.color)
+                                                .darken(0.2)
+                                                .hex(),
+                                            width:
+                                                ((windowWidth - HOUR_WIDTH) *
+                                                    eventLength) /
+                                                    rangeLength -
+                                                2 * MARGIN,
+                                            transform: [
+                                                {
+                                                    translateX:
+                                                        ((windowWidth -
+                                                            HOUR_WIDTH) *
+                                                            startOffset) /
+                                                        rangeLength,
+                                                },
+                                            ],
+                                        }}
+                                    >
+                                        <Text
+                                            numberOfLines={1}
+                                            style={{
+                                                ...styles.allDayEventText,
+                                                color: event.textColor,
+                                            }}
+                                        >
+                                            {event.title}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    function renderEvent(
+        event: CalendarEvent,
+        touchableOpacityProps: CalendarTouchableOpacityProps
+    ): JSX.Element {
+        touchableOpacityProps.style = [
+            touchableOpacityProps.style,
+            {
+                backgroundColor: event.color,
+            },
+        ]
+
+        const hasLocation = event.location !== undefined
+        return (
+            <TouchableOpacity {...touchableOpacityProps}>
+                <Text
+                    style={{
+                        color: event.textColor,
                     }}
                 >
                     {event.title}
@@ -224,209 +358,121 @@ export default function TimetableScreen(): JSX.Element {
                         <Ionicons
                             name="location-outline"
                             size={12}
-                            color={getEntryTextColor(event)}
+                            color={event.textColor}
                         />
                         <Text
-                            style={[
-                                styles.locationText,
-                                {
-                                    color: getEntryTextColor(event),
-                                },
-                            ]}
+                            style={{
+                                color: event.textColor,
+                            }}
                         >
                             {event.location}
                         </Text>
                     </View>
                 )}
-            </>
-        )
-    }
-
-    const AllDayEntry: FC<{ event: TimetableEvent }> = ({ event }) => {
-        return (
-            <Text
-                lineBreakMode="tail"
-                numberOfLines={1}
-                style={[
-                    styles.allDayEventTitle,
-                    {
-                        color: getEntryTextColor(event),
-                    },
-                ]}
-            >
-                {event.title}
-            </Text>
-        )
-    }
-
-    const DayHeaderComponent: FC<{ date: any; formattedDate: string }> = ({
-        date,
-        formattedDate,
-    }) => {
-        const today = isSameDay(new Date(date), TODAY)
-        return (
-            <TouchableOpacity
-                onPress={() => {
-                    // @ts-expect-error Property 'goToDate' does not exist on type 'ComponentType<WeekViewProps>'.
-                    weekViewRef.current?.goToDate(date)
-                }}
-            >
-                <View
-                    style={[
-                        styles.dateHeader,
-                        {
-                            backgroundColor: today
-                                ? colors.labelBackground
-                                : colors.card,
-                        },
-                    ]}
-                >
-                    <Text style={{ color: colors.text }}>{formattedDate}</Text>
-                </View>
             </TouchableOpacity>
         )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function getTimetable(): TimetableEvent[] {
-        const calendarRange = getDateRange(selectedDate, 3)
+    function showEventDetails(event: CalendarEvent): void {
+        if (event.entry == null) {
+            return
+        }
 
-        const filteredTimetable = timetable.filter((entry) => {
-            return calendarRange.some((date) => {
-                return isSameDay(date, entry.startDate)
-            })
+        router.push({
+            pathname: '(timetable)/details',
+            params: { eventParam: JSON.stringify(event.entry) },
         })
+    }
 
-        return filteredTimetable
+    function Timetable(): JSX.Element {
+        return (
+            <Calendar
+                date={calendarDate}
+                onChangeDate={(range) => {
+                    setCalendarDate(range[0])
+                }}
+                mode={mode}
+                events={timetable}
+                height={-1}
+                showAllDayEventCell={true}
+                renderEvent={renderEvent}
+                renderHeader={renderHeader}
+                onPressEvent={showEventDetails}
+                dayHeaderHighlightColor={colors.primary}
+                theme={calendarTheme}
+                scrollOffsetMinutes={480}
+                weekStartsOn={1}
+                weekEndsOn={6}
+            />
+        )
     }
 
     return (
-        <>
-            <Head>
-                <title>Timetable</title>
-                <meta name="Timetable" content="Personal Timetable" />
-                <meta property="expo:handoff" content="true" />
-                <meta property="expo:spotlight" content="true" />
-            </Head>
-
-            <View style={styles.wrapper}>
-                <WeekView
-                    // @ts-expect-error Property 'ref' does not exist on type 'IntrinsicAttributes & WeekViewProps
-                    ref={weekViewRef}
-                    events={timetable}
-                    selectedDate={selectedDate}
-                    numberOfDays={NUMBER_OF_DAYS}
-                    timesColumnWidth={50}
-                    showTitle={false}
-                    beginAgendaAt={8 * 60}
-                    startHour={9}
-                    endAgendaAt={21 * 60}
-                    hoursInDisplay={17}
-                    showNowLine={true}
-                    nowLineColor={colors.labelColor}
-                    onEventPress={(event) => {
-                        console.log(event)
+        <WorkaroundStack
+            name={t('navigation.timetable')}
+            titleKey={t('navigation.timetable')}
+            component={Timetable}
+            headerRightElement={() => (
+                <TouchableOpacity
+                    onPress={() => {
+                        setCalendarDate(new Date())
                     }}
-                    onSwipeNext={(date) => {
-                        setSelectedDate(date)
-                    }}
-                    onSwipePrev={(date) => {
-                        setSelectedDate(date)
-                    }}
-                    enableVerticalPinch={true}
-                    formatDateHeader="ddd D"
-                    EventComponent={
-                        TimetableEntry as FC<{ event: WeekViewEvent }>
-                    }
-                    AllDayEventComponent={
-                        AllDayEntry as FC<{ event: WeekViewEvent }>
-                    }
-                    DayHeaderComponent={DayHeaderComponent}
-                    allDayEventContainerStyle={styles.allDayEventContainer}
-                    eventContainerStyle={styles.eventStyle}
-                    hourTextStyle={{
-                        color: colors.text,
-                    }}
-                    headerStyle={{
-                        ...styles.headerStyle,
-
-                        backgroundColor: colors.card,
-                    }}
-                    gridRowStyle={{
-                        ...styles.gridRowStyle,
-                        borderColor: colors.border,
-                    }}
-                    gridColumnStyle={styles.gridColumnStyle}
-                    headerTextStyle={{
-                        ...styles.headerTextStyle,
-                        color: colors.text,
-                    }}
-                />
-            </View>
-        </>
+                >
+                    <Ionicons name="today" size={24} color={colors.text} />
+                </TouchableOpacity>
+            )}
+        />
     )
 }
 
-interface TimetableEvent extends WeekViewEvent {
-    eventKind: 'standard' | 'block'
-    location?: string
-    title: string
-    allDay?: boolean
-    type: 'calendar' | 'timetable'
-}
-
 const styles = StyleSheet.create({
-    headerStyle: {
-        borderBottomWidth: 0,
-        borderLeftWidth: 0,
-    },
-    gridRowStyle: {
-        borderTopWidth: 1,
-    },
-    gridColumnStyle: {
-        borderLeftWidth: 0,
-    },
-    headerTextStyle: {
-        borderRightWidth: 0,
-    },
-    eventStyle: {
-        borderRadius: 6,
-        elevation: 1,
-        alignItems: 'flex-start',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        minHeight: 43,
+    navRight: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 16,
+        marginRight: 12,
     },
     eventLocation: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 2,
     },
-    locationText: {
-        fontSize: 12,
+    headerWrapper: {
+        display: 'flex',
+        flexDirection: 'row',
+        borderBottomWidth: 1,
     },
-    todayDateHeader: {
-        borderRadius: 9999,
+    headerHourSpacer: {
+        width: HOUR_WIDTH,
+        borderRightWidth: 1,
+    },
+    headerMainContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingBottom: MARGIN,
+    },
+    headerDateContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    headerDate: {
         paddingVertical: 4,
-        paddingHorizontal: 12,
-    },
-    dateHeader: {
+        paddingHorizontal: 16,
         borderRadius: 9999,
-        paddingVertical: 4,
-        paddingHorizontal: 12,
+        marginVertical: 6,
     },
-    allDayEventContainer: {
-        borderRadius: 6,
-        paddingHorizontal: 8,
+    headerEventsContainer: {
+        display: 'flex',
+        gap: 3,
+    },
+    allDayEvent: {
         paddingVertical: 1,
+        marginHorizontal: MARGIN,
+        borderRadius: 4,
+        justifyContent: 'center',
     },
-    wrapper: {
-        height: '100%',
-    },
-    allDayEventTitle: {
+    allDayEventText: {
         fontSize: 12,
-    },
-    headerIcon: {
-        marginRight: 12,
     },
 })

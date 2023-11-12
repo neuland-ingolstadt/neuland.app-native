@@ -1,4 +1,6 @@
 import i18n from '@/localization/i18n'
+import type dayjs from 'dayjs'
+// required by react-native-big-calendar (thats why we have moment and dayjs)
 import moment from 'moment'
 import 'moment/locale/de'
 
@@ -6,26 +8,41 @@ function t(...args: any): any {
     return i18n.t(args, { ns: 'common' })
 }
 
+interface FriendlyDateOptions {
+    weekday?: 'short' | 'long'
+    relative?: boolean
+}
+
 /**
  * Formats a date like "Mo., 1.10.2020"
  * @param {Date|string} datetime
+ * @param {FriendlyDateOptions} options
  * @returns {string}
  */
-export function formatFriendlyDate(datetime: Date | string): string {
+export function formatFriendlyDate(
+    datetime: Date | string,
+    options: FriendlyDateOptions = {
+        weekday: 'short',
+        relative: true,
+    }
+): string {
     const date = moment(datetime)
     const today = moment()
     const tomorrow = moment().add(1, 'days')
 
-    if (date.isSame(today, 'day')) {
+    if (date.isSame(today, 'day') && options.relative !== false) {
         return t('dates.today')
-    } else if (date.isSame(tomorrow, 'day')) {
+    } else if (date.isSame(tomorrow, 'day') && options.relative !== false) {
         return t('dates.tomorrow')
     } else {
-        const weekday = date.format('dd')
+        const weekday = date.format(
+            options.weekday === 'short' ? 'ddd' : 'dddd'
+        )
         const dayMonthYear = date.locale('de').format('D.M.YYYY')
         return `${weekday}, ${dayMonthYear}`
     }
 }
+
 /**
  * Formats a date range like "Mo., 1.10.2021 - Di., 2.10.2021"
  * @param {Date} begin
@@ -337,37 +354,10 @@ export function getDateRange(startDate: Date, delta: number): Date[] {
  * @example
  * ignoreTime(new Date('2021-01-01T12:00:00')) // => new Date('2021-01-01T00:00:00')
  */
-export function ignoreTime(date: Date): Date {
-    date = new Date(date)
-    date.setHours(0, 0, 0, 0)
+export function ignoreTime(date: dayjs.Dayjs): dayjs.Dayjs {
     return date
-}
-
-/**
- * Adds days to a date
- * @param date Original date
- * @param days Days to add
- * @returns Date with added days
- * @example
- * addDays(new Date('2021-01-01T12:00:00'), 1) // => new Date('2021-01-02T12:00:00')
- */
-export function addDays(date: Date, days: number): Date {
-    const result = new Date(date)
-    result.setDate(result.getDate() + days)
-    return result
-}
-
-/**
- * Returns the number of days between two dates
- * @param a Date a
- * @param b Date b
- * @returns Number of days between a and b
- * @example
- * getDayDelta(new Date('2021-01-01T12:00:00'), new Date('2021-01-02T12:00:00')) // => 1
- */
-export function getDayDelta(a: Date, b: Date): number {
-    // 86400000 = 1000 * 60 * 60 * 24
-    return Math.round(
-        (ignoreTime(a).getTime() - ignoreTime(b).getTime()) / 86400000
-    )
+        .set('hour', 0)
+        .set('minute', 0)
+        .set('second', 0)
+        .set('millisecond', 0)
 }

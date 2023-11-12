@@ -3,7 +3,7 @@ import packageInfo from './package.json'
 module.exports = {
     expo: {
         name: 'Neuland Next',
-        slug: 'neuland-next',
+        slug: 'neuland-app-native',
         scheme: 'neuland',
         owner: 'neuland-ingolstadt',
         version: packageInfo.version,
