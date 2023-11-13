@@ -1,4 +1,5 @@
 import { type Theme } from '@react-navigation/native'
+import { type ColorValue } from 'react-native'
 
 type AccentColors = Record<
     string,
@@ -9,12 +10,13 @@ type AccentColors = Record<
 >
 
 interface StaticThemeColors {
-    labelTertiaryColor: string
-    labelSecondaryColor: string
-    labelColor: string
-    labelBackground: string
-    success: string
-    datePickerBackground: string
+    labelTertiaryColor: ColorValue
+    labelSecondaryColor: ColorValue
+    labelColor: ColorValue
+    labelBackground: ColorValue
+    success: ColorValue
+    datePickerBackground: ColorValue
+    card: ColorValue
 }
 
 export interface Colors extends StaticThemeColors {
@@ -76,6 +78,7 @@ export const lightColors: StaticThemeColors = {
     labelBackground: '#d4d2d2',
     success: '#1fa31f',
     datePickerBackground: '#ebebec',
+    card: '#ffffff',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -85,4 +88,5 @@ export const darkColors: StaticThemeColors = {
     labelBackground: '#4a4a4a',
     success: '#37d837',
     datePickerBackground: '#2a2a2c',
+    card: '#1c1c1d',
 }
