@@ -17,6 +17,7 @@ import {
     FlatList,
     Image,
     Linking,
+    Platform,
     Pressable,
     RefreshControl,
     StyleSheet,
@@ -73,110 +74,121 @@ export default function newsSCreen(): JSX.Element {
     }
 
     return (
-        <View>
-            {loadingState === LoadingState.LOADING && (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
-                </View>
-            )}
-            {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {errorMsg}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
-                    </Text>
-                </View>
-            )}
-            {loadingState === LoadingState.LOADED && (
-                <FlatList
-                    data={news}
-                    keyExtractor={(item) => item.href}
-                    contentContainerStyle={{ paddingBottom: 32 }}
-                    refreshControl={
-                        loadingState !== LoadingState.LOADED ? (
-                            <RefreshControl
-                                refreshing={
-                                    loadingState === LoadingState.REFRESHING
-                                }
-                                onRefresh={onRefresh}
-                            />
-                        ) : undefined
-                    }
-                    renderItem={({ item }) => (
-                        <View
+        <View style={Platform.OS === 'ios' ? styles.safeArea : {}}>
+            <View>
+                {loadingState === LoadingState.LOADING && (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                            size="small"
+                            color={colors.primary}
+                        />
+                    </View>
+                )}
+                {loadingState === LoadingState.ERROR && (
+                    <View>
+                        <Text
                             style={[
-                                styles.sectionContainer,
-                                { marginVertical: 12 },
+                                styles.errorMessage,
+                                { color: colors.text },
                             ]}
-                            key={item.title}
                         >
-                            <Text
-                                style={[
-                                    styles.labelText,
-                                    {
-                                        color: colors.labelSecondaryColor,
-                                    },
-                                ]}
+                            {errorMsg}
+                        </Text>
+                        <Text
+                            style={[styles.errorInfo, { color: colors.text }]}
+                        >
+                            {t('error.refresh')}{' '}
+                        </Text>
+                    </View>
+                )}
+                {loadingState === LoadingState.LOADED && (
+                    <FlatList
+                        data={news}
+                        keyExtractor={(item) => item.href}
+                        contentContainerStyle={styles.contentContainer}
+                        refreshControl={
+                            loadingState !== LoadingState.LOADED ? (
+                                <RefreshControl
+                                    refreshing={
+                                        loadingState === LoadingState.REFRESHING
+                                    }
+                                    onRefresh={onRefresh}
+                                />
+                            ) : undefined
+                        }
+                        renderItem={({ item }) => (
+                            <View
+                                style={styles.sectionContainer}
+                                key={item.title}
                             >
-                                {formatFriendlyDate(item.date)}
-                            </Text>
-                            <Pressable
-                                style={[
-                                    styles.sectionBox,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                                onPress={() => {
-                                    void Linking.openURL(item.href)
-                                }}
-                            >
-                                <View>
-                                    <Image
-                                        style={styles.imageContainer}
-                                        source={{
-                                            uri: item.img,
-                                        }}
-                                    />
-                                    <View style={styles.titleContainer}>
-                                        <Text
-                                            style={[
-                                                styles.titleText,
-                                                { color: colors.text },
-                                            ]}
-                                            numberOfLines={2}
-                                        >
-                                            {item.title}
-                                        </Text>
-                                        <Ionicons
-                                            name="chevron-forward-outline"
-                                            size={24}
-                                            color={colors.labelColor}
-                                            style={{}}
-                                        />
-                                    </View>
-                                </View>
-                                <Divider width={'100%'} />
                                 <Text
                                     style={[
-                                        styles.teaserText,
-                                        { color: colors.text },
+                                        styles.labelText,
+                                        {
+                                            color: colors.labelSecondaryColor,
+                                        },
                                     ]}
                                 >
-                                    {item.teaser}
+                                    {formatFriendlyDate(item.date)}
                                 </Text>
-                            </Pressable>
-                        </View>
-                    )}
-                />
-            )}
+                                <Pressable
+                                    style={[
+                                        styles.sectionBox,
+                                        {
+                                            backgroundColor: colors.card,
+                                        },
+                                    ]}
+                                    onPress={() => {
+                                        void Linking.openURL(item.href)
+                                    }}
+                                >
+                                    <View>
+                                        <Image
+                                            style={styles.imageContainer}
+                                            source={{
+                                                uri: item.img,
+                                            }}
+                                        />
+                                        <View style={styles.titleContainer}>
+                                            <Text
+                                                style={[
+                                                    styles.titleText,
+                                                    { color: colors.text },
+                                                ]}
+                                                numberOfLines={2}
+                                            >
+                                                {item.title}
+                                            </Text>
+                                            <Ionicons
+                                                name="chevron-forward-outline"
+                                                size={24}
+                                                color={colors.labelColor}
+                                                style={{}}
+                                            />
+                                        </View>
+                                    </View>
+                                    <Divider width={'100%'} />
+                                    <Text
+                                        style={[
+                                            styles.teaserText,
+                                            { color: colors.text },
+                                        ]}
+                                    >
+                                        {item.teaser}
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        )}
+                    />
+                )}
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    safeArea: { flex: 1, marginTop: 100 },
+    contentContainer: { paddingBottom: 32 },
     labelText: {
         fontSize: 13,
         fontWeight: 'normal',
@@ -228,6 +240,7 @@ const styles = StyleSheet.create({
     },
     sectionContainer: {
         paddingHorizontal: 16,
+        paddingVertical: 10,
         width: '100%',
         alignSelf: 'center',
     },

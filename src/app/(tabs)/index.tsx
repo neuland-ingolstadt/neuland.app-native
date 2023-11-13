@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
         paddingTop: 5,
-        paddingBottom: 50,
+        paddingBottom: 60,
     },
     heading: {
         fontSize: 32,
