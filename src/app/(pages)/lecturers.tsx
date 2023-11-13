@@ -6,10 +6,8 @@ import {
 import LecturerRow from '@/components/Elements/Pages/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/stores/colors'
-import {
-    type NormalizedLecturer,
-    normalizeLecturers,
-} from '@/utils/lecturers-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
+import { type NormalizedLecturer } from '@customTypes/utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'

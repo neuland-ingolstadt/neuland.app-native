@@ -1,6 +1,7 @@
 import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/stores/types/data'
 import {
+    type Exams,
     type Grade,
     type Lecturers,
     type PersData,
@@ -119,6 +120,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return resp
     }
 
+    /**
+     * Fetches the personal data of the user
+     * @returns {Promise<object>} Promise that resolves with the personal data
+     */
     async getPersonalData(): Promise<PersData> {
         const res = await this.requestCached(KEY_GET_PERSONAL_DATA, {
             service: 'thiapp',
@@ -129,22 +134,40 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return res
     }
 
+    /**
+     * Extracts the faculty from the personal data
+     * @returns {Promise<string | null>} Promise that resolves with the faculty of the user
+     */
     async getFaculty(): Promise<string | null> {
         const data = await this.getPersonalData()
         return extractFacultyFromPersonalData(data)
     }
 
+    /**
+     * Extracts the SPO version from the personal data
+     * @returns {Promise<string | null>} Promise that resolves with the SPO version of the user
+     */
     async getSpoName(): Promise<string | null> {
         const data = await this.getPersonalData()
         return extractSpoFromPersonalData(data)
     }
 
+    /**
+     * Extracts the full name from the personal data
+     * @returns {Promise<string | null>} Promise that resolves with the full name of the user
+     */
     async getFullName(): Promise<string | null> {
         const data = await this.getPersonalData()
         const fullName = data?.persdata?.vname + ' ' + data?.persdata?.name
         return fullName
     }
 
+    /**
+     * Fetches the timetable for a specific date
+     * @param {Date} date Date to fetch the timetable for
+     * @param {boolean} detailed Whether to include detailed information about the lectures
+     * @returns {Promise<TimetableResponse>} Promise that resolves with the timetable
+     */
     async getTimetable(
         date: Date,
         detailed = false
@@ -182,7 +205,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         }
     }
 
-    async getExams(): Promise<object[]> {
+    /**
+     * Fetches the exams for the current semester
+     * @returns {Promise<Exams[]>} Promise that resolves with the exams
+     */
+    async getExams(): Promise<Exams[]> {
         try {
             const res = await this.requestCached(KEY_GET_EXAMS, {
                 service: 'thiapp',
@@ -209,6 +236,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         }
     }
 
+    /**
+     * Fetches the users grades
+     * @returns {Promise<Grade[]>} Promise that resolves with the grades
+     */
     async getGrades(): Promise<Grade[]> {
         const res = await this.requestCached(KEY_GET_GRADES, {
             service: 'thiapp',
@@ -220,6 +251,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
 
     /**
+     * Fetches the free rooms for a specific date
      * @param {Date} date Date to fetch the room availability for
      */
     async getFreeRooms(date: Date): Promise<Rooms[]> {
@@ -236,6 +268,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return res
     }
 
+    /**
+     * Fetches the lecturers for the current semester
+     * @returns {Promise<Lecturers[]>} Promise that resolves with the lecturers
+     */
     async getPersonalLecturers(): Promise<Lecturers[]> {
         const res = await this.requestCached(KEY_GET_PERSONAL_LECTURERS, {
             service: 'thiapp',
@@ -247,6 +283,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
 
     /**
+     * Fetches the lecturers for a specific range of characters
      * @param {string} from Single character indicating where to start listing the lecturers
      * @param {string} to Single character indicating where to end listing the lecturers
      */
@@ -263,6 +300,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return res
     }
 
+    /**
+     * Fetches the library reservations
+     * @returns {Promise<object[]>} Promise that resolves with the reservations
+     */
     async getLibraryReservations(): Promise<object[]> {
         try {
             const res = await this.requestAuthenticated({
@@ -288,6 +329,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         }
     }
 
+    /**
+     * Fetches the available library seats
+     * @returns {Promise<object[]>} Promise that resolves with the available seats
+     */
     async getAvailableLibrarySeats(): Promise<object[]> {
         try {
             const res = await this.requestAuthenticated({
@@ -348,6 +393,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
 
     /**
+     * Removes a library reservation
      * @param {string} reservationId Reservation ID returned by `getLibraryReservations`
      */
     async removeLibraryReservation(reservationId: string): Promise<boolean> {
@@ -375,6 +421,20 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
                 throw e
             }
         }
+    }
+
+    /**
+     * Fetches the latest thi news
+     * @returns {Promise<object[]>} Promise that resolves with the news
+     */
+    async getThiNews(): Promise<object[]> {
+        const res = await this.requestAuthenticated({
+            service: 'thiapp',
+            method: 'thinews',
+            format: 'json',
+        })
+
+        return res[1]
     }
 }
 

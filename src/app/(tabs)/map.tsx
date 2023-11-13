@@ -14,13 +14,9 @@ import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext, UserKindContext } from '@/stores/provider'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
-import {
-    type AvailableRoom,
-    type RoomEntry,
-    filterRooms,
-    getNextValidDate,
-} from '@/utils/room-utils'
+import { filterRooms, getNextValidDate } from '@/utils/room-utils'
 import { type RoomsOverlay } from '@customTypes/asset-api'
+import { type AvailableRoom, type RoomEntry } from '@customTypes/utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
