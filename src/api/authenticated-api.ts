@@ -5,6 +5,7 @@ import {
     type Lecturers,
     type PersData,
     type Rooms,
+    type ThiNews,
     type TimetableResponse,
 } from '@/stores/types/thi-api'
 
@@ -375,6 +376,20 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
                 throw e
             }
         }
+    }
+
+    /**
+     * Fetches the latest thi news
+     * @returns {Promise<object[]>} Promise that resolves with the news
+     */
+    async getThiNews(): Promise<ThiNews[]> {
+        const res = await this.requestAuthenticated({
+            service: 'thiapp',
+            method: 'thinews',
+            format: 'json',
+        })
+
+        return res
     }
 }
 

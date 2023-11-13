@@ -273,6 +273,23 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(pages)/news"
+                        options={{
+                            title: t('navigation.news'),
+                            headerBackTitleVisible: false,
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    // blurry header
+                                    headerTranslucent: true,
+                                    headerBlurEffect: 'regular',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
                         name="(flow)/onboarding"
                         options={{
                             headerShown: false,

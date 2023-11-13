@@ -88,7 +88,7 @@ export const AllCards: Card[] = [
     {
         key: 'news',
         removable: true,
-        default: [],
+        default: [USER_STUDENT, USER_EMPLOYEE],
         card: () => (
             <BaseCard
                 title="news"

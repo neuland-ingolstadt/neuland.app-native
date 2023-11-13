@@ -24,6 +24,7 @@ export default {
         lecturer: 'Dozenten-Details',
         mobility: 'Mobilität',
         grades: 'Noten',
+        news: 'THI Neuigkeiten',
     },
     cards: {
         titles: {
@@ -32,7 +33,7 @@ export default {
             calendar: 'Kalender',
             rooms: 'Räume',
             lecturers: 'Dozenten',
-            news: 'Nachrichten',
+            news: 'THI Neuigkeiten',
             library: 'Bibliothek',
             events: 'Veranstaltungen',
             reimanns: 'Reimanns',
