@@ -1,5 +1,6 @@
 import API from '@/api/authenticated-api'
 import { type Rooms } from '@customTypes/thi-api'
+import { type AvailableRoom } from '@customTypes/utils'
 
 import { formatISODate } from './date-utils'
 
@@ -170,28 +171,6 @@ export function getNextValidDate(): Date {
     }
 
     return startDate
-}
-export interface AvailableRoom {
-    from: Date
-    until: Date
-    room: string
-    type: string
-}
-
-export interface RoomEntry {
-    coordinates: number[][]
-    options?: string[] | object
-    properties: Properties
-}
-
-interface Properties {
-    Ebene: string
-    Etage: string
-    Funktion_de: string
-    Funktion_en: string
-    Gebaeude: string
-    Raum: string
-    Standort: string
 }
 
 /**

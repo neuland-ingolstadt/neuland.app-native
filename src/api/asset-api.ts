@@ -1,4 +1,5 @@
 import LocalStorageCache from '@/api/cache'
+import { type SpoWeights } from '@customTypes/asset-api'
 
 import packageInfo from '../../package.json'
 
@@ -70,13 +71,24 @@ class AssetAPIClient {
     }
 
     /**
-     * Gets the course SPOs
+     * Gets the course spo data (grade weights)
      * @returns {Promise<any>} A promise that resolves with the course spo data
      */
-    async getCourseSPO(): Promise<any> {
+    async getSpoWeights(): Promise<SpoWeights> {
         return await this.requestCached(
-            `course-spo-${packageInfo.version}`,
-            `${ENDPOINT}spo_weigths.json`
+            `spo-weights-${packageInfo.version}`,
+            `${ENDPOINT}/generated/spo-grade-weights.json`
+        )
+    }
+
+    /**
+     * Gets the room distance data
+     * @returns {Promise<any>} A promise that resolves with the room distance data
+     */
+    async getRoomDistances(): Promise<any> {
+        return await this.requestCached(
+            `room-distances-${packageInfo.version}`,
+            `${ENDPOINT}/generated/room-distances.json`
         )
     }
 }

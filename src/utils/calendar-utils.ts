@@ -2,6 +2,7 @@ import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
 import { type Calendar } from '@customTypes/data'
 import { type Exams } from '@customTypes/thi-api'
+import { type Exam } from '@customTypes/utils'
 
 export const compileTime = new Date()
 export const calendar: Calendar[] = rawCalendar
@@ -49,16 +50,4 @@ export async function loadExamList(): Promise<Exam[]> {
             // sort list in chronologically order
             .sort((a, b) => a.date.getTime() - b.date.getTime())
     )
-}
-
-export interface Exam {
-    name: string
-    type: string
-    rooms: string
-    seat: string
-    notes: string
-    examiners: string[]
-    date: Date
-    enrollment: Date
-    aids: string[]
 }
