@@ -25,7 +25,7 @@ import {
     View,
 } from 'react-native'
 
-export default function newsSCreen(): JSX.Element {
+export default function NewsScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const [news, setNews] = useState<ThiNews[] | null>(null)
