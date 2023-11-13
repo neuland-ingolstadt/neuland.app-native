@@ -166,7 +166,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * Fetches the timetable for a specific date
      * @param {Date} date Date to fetch the timetable for
      * @param {boolean} detailed Whether to include detailed information about the lectures
-     * @returns {Promise<object>} Promise that resolves with the timetable
+     * @returns {Promise<TimetableResponse>} Promise that resolves with the timetable
      */
     async getTimetable(
         date: Date,

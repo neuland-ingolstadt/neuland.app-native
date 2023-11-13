@@ -79,3 +79,5 @@ interface Course {
 }
 
 export type SpoWeights = Record<string, Course[]>
+
+export type RoomDistances = Record<string, Record<string, number>>

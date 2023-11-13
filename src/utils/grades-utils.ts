@@ -98,7 +98,7 @@ export async function calculateECTS(): Promise<number> {
 
 /**
  * Calculates the approximate grade average based on automatically extracted SPO data
- * @returns {Promise<object>} - { result: number, resultMin: number, resultMax: number, missingWeight: number, entries: Array<{ simpleName: string, name: string, weight: number | null, grade: number | null }> }
+ * @returns {Promise<GradeAverage>} - grade average data object
  * @throws {Error} - if the grade average is not available
  */
 export async function loadGradeAverage(): Promise<GradeAverage> {
@@ -110,10 +110,10 @@ export async function loadGradeAverage(): Promise<GradeAverage> {
         throw new Error('Failed to load data')
     }
 
-    const average = {
+    const average: GradeAverage = {
         result: -1,
         missingWeight: 0,
-        entries: [] as GradeAverage['entries'],
+        entries: [],
         resultMin: -1,
         resultMax: -1,
     }
