@@ -71,6 +71,7 @@ export default function newsSCreen(): JSX.Element {
     const onRefresh: () => void = () => {
         void loadNews()
     }
+
     return (
         <View>
             {loadingState === LoadingState.LOADING && (

@@ -282,8 +282,7 @@ export default function RootLayout(): JSX.Element {
                                     animation: 'slide_from_right',
                                 },
                                 ios: {
-                                    // blurry header
-                                    headerTranslucent: true,
+                                    headerTransparent: true,
                                     headerBlurEffect: 'regular',
                                 },
                             }),
