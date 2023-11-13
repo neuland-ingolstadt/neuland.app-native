@@ -1,4 +1,5 @@
 import { type Lecturers } from '@customTypes/thi-api'
+import { type NormalizedLecturer } from '@customTypes/utils'
 
 /**
  * Normalizes lecturer data.
@@ -25,8 +26,4 @@ export function normalizeLecturers(entries: Lecturers[]): NormalizedLecturer[] {
             ])[0].replace(/\s+/g, ''),
         }))
         .sort((a, b) => a.name.localeCompare(b.name))
-}
-
-export interface NormalizedLecturer extends Lecturers {
-    room_short: string
 }

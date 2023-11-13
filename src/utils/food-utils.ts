@@ -9,6 +9,7 @@ import {
     USER_STUDENT,
 } from '@/stores/hooks/userKind'
 import { type Food, type Meal, type Name } from '@/stores/types/neuland-api'
+import { type Labels, type Prices } from '@customTypes/utils'
 import { type TFunction } from 'i18next'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
@@ -147,12 +148,6 @@ export function formatPrice(price?: number): string {
     return price != null ? price.toFixed(2) + ' €' : ''
 }
 
-interface Prices {
-    [key: string]: number
-    guest: number
-    employee: number
-    student: number
-}
 /**
  * Formats a price according to the users group (student, employee or guest).
  * @param {object} meal Parsed meal object
@@ -168,12 +163,6 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
     return formatPrice(prices[userKind])
 }
 
-interface Labels {
-    [key: string]: string
-    guest: string
-    employee: string
-    student: string
-}
 /**
  * Returns a label according to the users group (student, employee or guest).
  * @param {string} userKind User group (student, employee or guest)

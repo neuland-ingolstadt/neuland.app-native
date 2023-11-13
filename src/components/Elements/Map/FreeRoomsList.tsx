@@ -1,7 +1,7 @@
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext } from '@/stores/provider'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { type AvailableRoom } from '@/utils/room-utils'
+import { type AvailableRoom } from '@customTypes/utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'

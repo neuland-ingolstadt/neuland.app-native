@@ -69,3 +69,15 @@ export enum Gebaeude {
 export enum FeatureType {
     Feature = 'Feature',
 }
+
+interface Course {
+    apo_number: string
+    name: string
+    weekly_workload: number | null
+    weight: number | { type: string; weight: number } | null
+    ects: number | null
+}
+
+export type SpoWeights = Record<string, Course[]>
+
+export type RoomDistances = Record<string, Record<string, number>>

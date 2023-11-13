@@ -6,8 +6,9 @@ import GradesRow from '@/components/Elements/Pages/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/stores/colors'
-import { loadGrades } from '@/utils/grades-utils'
+import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { type Grade } from '@customTypes/thi-api'
+import { type GradeAverage } from '@customTypes/utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -26,7 +27,7 @@ export default function GradesSCreen(): JSX.Element {
     const { t } = useTranslation('settings')
     const [grades, setGrades] = useState<Grade[] | null>(null)
     const [missingGrades, setMissingGrades] = useState<Grade[] | null>(null)
-    // const [gradeAverage, setGradeAverage] = useState('')
+    const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
     const [errorMsg, setErrorMsg] = useState('')
 
     enum LoadingState {
@@ -40,21 +41,21 @@ export default function GradesSCreen(): JSX.Element {
         LoadingState.LOADING
     )
 
-    async function load(): Promise<void> {
+    const [averageLoadingState, setAverageLoadingState] =
+        useState<LoadingState>(LoadingState.LOADING)
+
+    /**
+     * Loads all grades from the API and sets the state accordingly.
+     * @returns {Promise<void>} A promise that resolves when all grades have been loaded.
+     */
+    async function loadAllGrades(): Promise<void> {
         try {
             const { finished, missing } = await loadGrades()
             setGrades(finished)
             setMissingGrades(missing)
             setLoadingState(LoadingState.LOADED)
-            // const average = await loadGradeAverage()
-            // if (average !== undefined && average !== null) {
-            //     setGradeAverage(average)
-            // } else {
-            //     setGradeAverage('Average grade not available currently')
-            // }
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
-            console.log(e)
             if (
                 e instanceof NoSessionError ||
                 e instanceof UnavailableSessionError
@@ -67,16 +68,36 @@ export default function GradesSCreen(): JSX.Element {
                 setErrorMsg(t('grades.temporarilyUnavailable'))
             } else {
                 setErrorMsg(e.message)
+                console.error(e)
             }
         }
     }
 
+    /**
+     * Loads the average grade from the API and sets the state accordingly.
+     * @returns {Promise<void>} A promise that resolves when the average grade has been loaded.
+     */
+    async function loadAverageGrade(): Promise<void> {
+        try {
+            const average = await loadGradeAverage()
+            if (average.result !== undefined && average.result !== null) {
+                setGradeAverage(average)
+                setAverageLoadingState(LoadingState.LOADED)
+            } else {
+                throw new Error('Average grade is undefined or null')
+            }
+        } catch (e: any) {
+            setAverageLoadingState(LoadingState.ERROR)
+            console.error(e)
+        }
+    }
+
     useEffect(() => {
-        void load()
+        void Promise.all([loadAllGrades(), loadAverageGrade()])
     }, [])
 
     const onRefresh: () => void = () => {
-        void load()
+        void Promise.all([loadAllGrades(), loadAverageGrade()])
     }
 
     return (
@@ -111,14 +132,56 @@ export default function GradesSCreen(): JSX.Element {
                 <>
                     <SectionView title={t('grades.average')}>
                         <View style={styles.loadedContainer}>
-                            <Text
-                                style={{
-                                    color: colors.labelColor,
-                                    ...styles.averageText,
-                                }}
-                            >
-                                {t('theme.exclusive.description')}
-                            </Text>
+                            {averageLoadingState === LoadingState.LOADING && (
+                                <ActivityIndicator
+                                    size="small"
+                                    color={colors.primary}
+                                />
+                            )}
+                            {averageLoadingState === LoadingState.ERROR && (
+                                <Text
+                                    style={[
+                                        styles.averageErrorText,
+                                        { color: colors.text },
+                                    ]}
+                                >
+                                    {t('grades.averageError')}
+                                </Text>
+                            )}
+                            {averageLoadingState === LoadingState.LOADED &&
+                                gradeAverage !== undefined &&
+                                gradeAverage !== null && (
+                                    <View style={styles.averageContainer}>
+                                        <Text
+                                            style={[
+                                                styles.averageText,
+                                                { color: colors.text },
+                                            ]}
+                                        >
+                                            {gradeAverage.resultMin !==
+                                                gradeAverage.resultMax && '~ '}
+                                            {gradeAverage.result}
+                                        </Text>
+
+                                        <Text
+                                            style={[
+                                                styles.averageNote,
+                                                { color: colors.labelColor },
+                                            ]}
+                                        >
+                                            {gradeAverage.resultMin ===
+                                            gradeAverage.resultMax
+                                                ? t('grades.exactAverage', {
+                                                      number: gradeAverage
+                                                          .entries.length,
+                                                  })
+                                                : t('grades.missingAverage', {
+                                                      min: gradeAverage.resultMin,
+                                                      max: gradeAverage.resultMax,
+                                                  })}
+                                        </Text>
+                                    </View>
+                                )}
                         </View>
                     </SectionView>
                     <SectionView title={t('grades.finished')}>
@@ -172,7 +235,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 8,
         width: '100%',
+        minHeight: 70,
         marginVertical: 16,
+        marginHorizontal: 16,
         justifyContent: 'center',
     },
     notesBox: {
@@ -203,9 +268,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    averageContainer: {
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginHorizontal: 16,
+    },
     averageText: {
-        fontSize: 24,
-        fontWeight: '300',
+        fontSize: 25,
+        marginBottom: 5,
+        fontWeight: '700',
+        textAlign: 'center',
+    },
+    averageNote: {
+        fontSize: 14,
+        textAlign: 'left',
+    },
+    averageErrorText: {
+        fontSize: 15,
         textAlign: 'center',
     },
 })

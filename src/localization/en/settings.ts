@@ -118,6 +118,10 @@ export default {
         finished: 'Grades',
         open: 'Open',
         average: 'Average',
+        averageError: 'Average grade is currently not available.',
+        missingAverage:
+            'The exact average cannot be calculated and ranges between {{min}} and {{max}}.',
+        exactAverage: 'Based on {{number}} weighted grades.',
         temporarilyUnavailable: 'Grades are temporarily unavailable.',
         footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
     },

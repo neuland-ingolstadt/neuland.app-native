@@ -1,4 +1,5 @@
 import API from '@/api/authenticated-api'
+import { type FriendlyTimetableEntry } from '@customTypes/utils'
 
 import { combineDateTime } from './date-utils'
 
@@ -53,22 +54,4 @@ export async function getFriendlyTimetable(
                 literature: lecture.details.literatur,
             }
         })
-}
-
-export interface FriendlyTimetableEntry {
-    date: Date
-    startDate: Date
-    endDate: Date
-    name: string
-    shortName: string
-    rooms: string[]
-    lecturer: string
-    exam: string
-    course: string
-    studyGroup: string
-    sws: string
-    ects: string
-    goal: string | null
-    contents: string | null
-    literature: string | null
 }

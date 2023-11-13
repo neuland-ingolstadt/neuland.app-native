@@ -1,5 +1,6 @@
 import React, { type FC } from 'react'
 import {
+    type ColorValue,
     type DimensionValue,
     type FlexAlignType,
     Platform,
@@ -9,7 +10,7 @@ import {
 
 interface DividerProps {
     width?: DimensionValue
-    color?: string
+    color?: ColorValue
     position?: FlexAlignType
 }
 

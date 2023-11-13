@@ -68,7 +68,7 @@ export default function Screen(): JSX.Element {
                                 <Ionicons
                                     name="person-circle-outline"
                                     size={28}
-                                    color={colors.primary}
+                                    color={colors.text}
                                 />
                             </View>
                         )}

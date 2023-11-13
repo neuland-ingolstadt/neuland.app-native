@@ -10,13 +10,13 @@ import Dropdown, {
 import { type Colors } from '@/stores/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
-    type AvailableRoom,
     BUILDINGS,
     BUILDINGS_ALL,
     DURATION_PRESET,
     filterRooms,
     getNextValidDate,
 } from '@/utils/room-utils'
+import { type AvailableRoom } from '@customTypes/utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'

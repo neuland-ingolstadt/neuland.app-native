@@ -120,6 +120,10 @@ export default {
         finished: 'Noten',
         open: 'Offen',
         average: 'Durchschnitt',
+        exactAverage: 'Basierend auf {{number}} gewichteten Noten.',
+        missingAverage:
+            'Der genaue Durchschnitt kann nicht berechnet werden und liegt zwischen {{min}} und {{max}}.',
+        averageError: 'Noten-Durchschnitt ist derzeit nicht verfügbar.',
         temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
         footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
     },

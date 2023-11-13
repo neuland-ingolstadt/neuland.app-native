@@ -1,4 +1,5 @@
 import i18n from '@/localization/i18n'
+import { type FriendlyDateOptions } from '@customTypes/utils'
 import type dayjs from 'dayjs'
 // required by react-native-big-calendar (thats why we have moment and dayjs)
 import moment from 'moment'
@@ -6,11 +7,6 @@ import 'moment/locale/de'
 
 function t(...args: any): any {
     return i18n.t(args, { ns: 'common' })
-}
-
-interface FriendlyDateOptions {
-    weekday?: 'short' | 'long'
-    relative?: boolean
 }
 
 /**

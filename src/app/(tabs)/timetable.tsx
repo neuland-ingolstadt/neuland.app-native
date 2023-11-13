@@ -4,11 +4,9 @@ import { type Colors } from '@/stores/colors'
 import { UserKindContext } from '@/stores/provider'
 import { calendar } from '@/utils/calendar-utils'
 import { ignoreTime } from '@/utils/date-utils'
-import {
-    type FriendlyTimetableEntry,
-    getFriendlyTimetable,
-} from '@/utils/timetable-utils'
+import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { type Calendar as CalendarType } from '@customTypes/data'
+import { type FriendlyTimetableEntry } from '@customTypes/utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
