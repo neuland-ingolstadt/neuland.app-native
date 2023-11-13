@@ -1,7 +1,6 @@
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
 import { type Calendar } from '@customTypes/data'
-import { type Exams } from '@customTypes/thi-api'
 import { type Exam } from '@customTypes/utils'
 
 export const compileTime = new Date()
@@ -26,7 +25,7 @@ export const calendar: Calendar[] = rawCalendar
  * @returns {object[]}
  */
 export async function loadExamList(): Promise<Exam[]> {
-    const examList = (await API.getExams()) as Exams[]
+    const examList = await API.getExams()
     if (examList.length === 0) {
         return []
     }
