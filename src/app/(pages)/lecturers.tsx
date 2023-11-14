@@ -5,9 +5,10 @@ import {
 } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Pages/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
+import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { type NormalizedLecturer } from '@customTypes/utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -130,6 +131,8 @@ export default function LecturersCard(): JSX.Element {
 
     return (
         <ScrollView
+            // style={styles.page}
+            contentContainerStyle={styles.page}
             contentInsetAdjustmentBehavior="automatic"
             refreshControl={
                 loadingState !== LoadingState.LOADING &&
@@ -158,7 +161,7 @@ export default function LecturersCard(): JSX.Element {
             )}
 
             {loadingState === LoadingState.LOADED && (
-                <View style={styles.loadedContainer}>
+                <View>
                     <Text
                         style={[
                             styles.sectionHeader,
@@ -193,11 +196,11 @@ export default function LecturersCard(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    loadedContainer: {
-        alignSelf: 'center',
-        width: '95%',
-        marginTop: 14,
-        marginBottom: 24,
+    page: {
+        padding: PAGE_PADDING,
+    },
+    container: {
+        marginBottom: MODAL_BOTTOM_MARGIN,
     },
     loadedRows: {
         borderRadius: 8,

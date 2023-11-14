@@ -1,5 +1,5 @@
+import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import Provider from '@/stores/provider'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
@@ -268,6 +268,22 @@ export default function RootLayout(): JSX.Element {
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/news"
+                        options={{
+                            title: t('navigation.news'),
+                            headerBackTitleVisible: false,
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    headerTransparent: true,
+                                    headerBlurEffect: 'regular',
                                 },
                             }),
                         }}

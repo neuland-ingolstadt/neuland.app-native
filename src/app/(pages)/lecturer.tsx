@@ -1,8 +1,9 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/stores/colors'
-import { RouteParamsContext } from '@/stores/provider'
-import { type FormListSections } from '@/stores/types/components'
-import { type NormalizedLecturer } from '@customTypes/utils'
+import { type Colors } from '@/components/colors'
+import { RouteParamsContext } from '@/components/provider'
+import { type FormListSections } from '@/types/components'
+import { type NormalizedLecturer } from '@/types/utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -116,7 +117,7 @@ export default function LecturerDetail(): JSX.Element {
     ]
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.page}>
             <StatusBar style="light" animated={true} hidden={false} />
             <View
                 style={[
@@ -143,16 +144,17 @@ export default function LecturerDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        padding: PAGE_PADDING,
+    },
     formList: {
-        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
-        paddingHorizontal: 16,
     },
     titleContainer: {
+        marginBottom: 20,
         alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
+        width: '100%',
         paddingHorizontal: 5,
         paddingVertical: 10,
         borderRadius: 8,

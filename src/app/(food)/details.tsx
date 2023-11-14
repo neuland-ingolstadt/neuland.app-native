@@ -1,14 +1,15 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
+import { type Colors } from '@/components/colors'
+import { FoodFilterContext, UserKindContext } from '@/components/provider'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
+import { type UserKindContextType } from '@/hooks/userKind'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
-import { type UserKindContextType } from '@/stores/hooks/userKind'
-import { FoodFilterContext, UserKindContext } from '@/stores/provider'
-import { type FormListSections } from '@/stores/types/components'
-import { type Meal } from '@/stores/types/neuland-api'
+import { type FormListSections } from '@/types/components'
+import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
         marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
     },
     titleContainer: {
         alignSelf: 'center',

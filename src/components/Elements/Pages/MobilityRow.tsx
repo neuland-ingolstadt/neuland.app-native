@@ -1,5 +1,6 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { formatFriendlyTime, formatRelativeMinutes } from '@/utils/date-utils'
+import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
@@ -63,7 +64,7 @@ const MobilityRow = ({
                             style={{
                                 backgroundColor: colors.labelBackground,
                                 borderRadius: 5,
-                                padding: 5,
+                                padding: ROW_PADDING,
                                 marginRight: 10,
                             }}
                         >
@@ -96,7 +97,7 @@ const MobilityRow = ({
                             flexDirection: 'column',
                             alignItems: 'flex-end',
                             justifyContent: 'center',
-                            padding: 5,
+                            padding: ROW_PADDING,
                         }}
                     >
                         <Text

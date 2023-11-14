@@ -1,6 +1,7 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/stores/colors'
-import { type FormListSections } from '@/stores/types/components'
+import { type Colors } from '@/components/colors'
+import { type FormListSections } from '@/types/components'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     formlistContainer: {
         marginTop: 10,
         maringBottom: 16,
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

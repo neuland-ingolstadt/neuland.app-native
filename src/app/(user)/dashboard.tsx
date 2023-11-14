@@ -1,7 +1,8 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Card, type ExtendedCard } from '@/components/allCards'
-import { type Colors } from '@/stores/colors'
-import { DashboardContext } from '@/stores/provider'
+import { type Colors } from '@/components/colors'
+import { DashboardContext } from '@/components/provider'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -262,7 +263,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
 
 const styles = StyleSheet.create({
     page: {
-        padding: 16,
+        padding: PAGE_PADDING,
     },
     wrapper: {
         gap: 16,

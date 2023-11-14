@@ -1,8 +1,8 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { LoginAlert } from '@/components/Elements/Settings'
-import { type Colors } from '@/stores/colors'
-import { FlowContext, UserKindContext } from '@/stores/provider'
+import { type Colors } from '@/components/colors'
+import { FlowContext, UserKindContext } from '@/components/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -72,9 +72,12 @@ const LoginForm = (): JSX.Element => {
         try {
             setLoading(true)
             const userKind = await createSession(username, password, true)
-            const userFullName = await API.getFullName()
+            if (userKind) {
+                updateUserFullName(await API.getFullName())
+            } else {
+                updateUserFullName(username)
+            }
             toggleUserKind(userKind)
-            updateUserFullName(userFullName)
             toggleUpdated()
             toggleOnboarded()
             Haptics.notificationAsync(

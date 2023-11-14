@@ -1,12 +1,13 @@
+import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
+import { type Calendar } from '@/types/data'
 import {
     formatFriendlyDateRange,
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
-import { type Calendar } from '@customTypes/data'
+import { ROW_PADDING } from '@/utils/style-utils'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -44,7 +45,9 @@ const CalendarRow = ({
                 </Text>
             }
             rightChildren={
-                <View style={{ justifyContent: 'flex-end', padding: 5 }}>
+                <View
+                    style={{ justifyContent: 'flex-end', padding: ROW_PADDING }}
+                >
                     <Text
                         style={{
                             ...styles.rightText,

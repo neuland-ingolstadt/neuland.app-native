@@ -2,11 +2,12 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import { CalendarRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
-import { type Colors } from '@/stores/colors'
-import { UserKindContext } from '@/stores/provider'
+import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/provider'
+import { type Calendar } from '@/types/data'
+import { type Exam } from '@/types/utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import { type Calendar } from '@customTypes/data'
-import { type Exam } from '@customTypes/utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -88,6 +89,8 @@ export default function CalendarPage(): JSX.Element {
     const data = selectedData === 'Events' ? calendar : exams
     return (
         <ScrollView
+            style={styles.page}
+            contentContainerStyle={styles.scrollViewContainer}
             refreshControl={
                 loadingState !== LoadingState.LOADING &&
                 loadingState !== LoadingState.LOADED ? (
@@ -219,13 +222,7 @@ export default function CalendarPage(): JSX.Element {
                         </>
                     )}
                 </View>
-                <View
-                    style={{
-                        width: '92%',
-                        alignSelf: 'center',
-                        paddingBottom: 50,
-                    }}
-                >
+                <View>
                     <Text
                         style={{
                             fontSize: 12,
@@ -254,6 +251,13 @@ export default function CalendarPage(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        padding: PAGE_PADDING,
+    },
+    scrollViewContainer: {
+        gap: PAGE_PADDING,
+        paddingBottom: MODAL_BOTTOM_MARGIN,
+    },
     errorMessage: {
         paddingTop: 20,
         fontWeight: '600',
@@ -275,9 +279,7 @@ const styles = StyleSheet.create({
     itemsContainer: {
         alignSelf: 'center',
         borderRadius: 8,
-        width: '95%',
-        marginTop: 14,
-        marginBottom: 20,
+        width: '100%',
         justifyContent: 'center',
     },
 })

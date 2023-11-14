@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'

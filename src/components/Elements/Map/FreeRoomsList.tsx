@@ -1,10 +1,11 @@
-import { type Colors } from '@/stores/colors'
-import { RouteParamsContext } from '@/stores/provider'
+import { type Colors } from '@/components/colors'
+import { RouteParamsContext } from '@/components/provider'
+import { type AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { type AvailableRoom } from '@customTypes/utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import Divider from '../Universal/Divider'
@@ -17,7 +18,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     const colors = useTheme().colors as Colors
     const router = useRouter()
     const { updateRouteParams } = useContext(RouteParamsContext)
-
+    const { t } = useTranslation('common')
     return rooms !== null && rooms.length > 0 ? (
         rooms.map((room, index) => (
             <View key={index}>
@@ -45,7 +46,13 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             ]}
                             numberOfLines={1}
                         >
-                            {room.type}
+                            {`${t('roomTypes.' + room.type, {
+                                defaultValue: room.type,
+                                ns: 'api',
+                                fallbackLng: 'de',
+                            })} (${room.capacity} ${t(
+                                'pages.rooms.options.seats'
+                            )})`}
                         </Text>
                     </View>
 

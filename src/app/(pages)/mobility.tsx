@@ -1,9 +1,10 @@
 import NeulandAPI from '@/api/neuland-api'
 import MobilityRow from '@/components/Elements/Pages/MobilityRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/stores/colors'
-import { MobilityContext } from '@/stores/provider'
-import { type CLEvents } from '@/stores/types/neuland-api'
+import { type Colors } from '@/components/colors'
+import { MobilityContext } from '@/components/provider'
+import { type CLEvents } from '@/types/neuland-api'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -67,6 +68,7 @@ export default function Mobility(): JSX.Element {
 
     return (
         <ScrollView
+            style={styles.page}
             refreshControl={
                 loadingState !== LoadingState.LOADING ? (
                     <RefreshControl
@@ -122,6 +124,9 @@ export default function Mobility(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        padding: PAGE_PADDING,
+    },
     errorMessage: {
         paddingTop: 100,
         fontWeight: '600',
@@ -141,9 +146,8 @@ const styles = StyleSheet.create({
     loadedContainer: {
         alignSelf: 'center',
         borderRadius: 8,
-        width: '95%',
-        marginTop: 14,
-        marginBottom: 24,
+        width: '100%',
         justifyContent: 'center',
+        marginBottom: MODAL_BOTTOM_MARGIN,
     },
 })

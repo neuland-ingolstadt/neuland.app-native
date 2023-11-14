@@ -1,4 +1,5 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
+import { CARD_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
@@ -32,7 +33,7 @@ const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 8,
-        padding: 16,
+        padding: CARD_PADDING,
         maxWidth: 600,
     },
     text: {

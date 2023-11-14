@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
-import { type Rooms } from '@customTypes/thi-api'
-import { type AvailableRoom } from '@customTypes/utils'
+import { type Rooms } from '@/types/thi-api'
+import { type AvailableRoom } from '@/types/utils'
 
 import { formatISODate } from './date-utils'
 
@@ -90,6 +90,7 @@ type RoomOpenings = Record<
         type: string
         from: Date
         until: Date
+        capacity: number
     }>
 >
 
@@ -116,16 +117,19 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
         )
         // flatten room list
         .flatMap((stunde: any) =>
-            stunde.raeume.map(([, , room]: [string, string, number]) => ({
-                // 0 indicates that every room is free
-                room: room === 0 ? ROOMS_ALL : room.toString(),
-                type: stunde.type,
-                from: new Date(stunde.von),
-                until: new Date(stunde.bis),
-            }))
+            stunde.raeume.map(
+                ([, , room, capacity]: [string, string, number, number]) => ({
+                    // 0 indicates that every room is free
+                    room: room === 0 ? ROOMS_ALL : room.toString(),
+                    type: stunde.type.replace(/ \(.*\)$/, '').trim() ?? '',
+                    from: new Date(stunde.von),
+                    until: new Date(stunde.bis),
+                    capacity,
+                })
+            )
         )
         // iterate over every room
-        .forEach(({ room, type, from, until }) => {
+        .forEach(({ room, type, from, until, capacity }) => {
             // initialize room
             const roomOpenings = openings[room] ?? (openings[room] = [])
             // find overlapping opening
@@ -141,7 +145,7 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
                 opening.until = maxDate(until, opening.until)
             } else {
                 // create new opening
-                roomOpenings.push({ type, from, until })
+                roomOpenings.push({ type, from, until, capacity })
             }
         })
     return openings
@@ -201,7 +205,6 @@ export async function filterRooms(
         beginDate.getSeconds(),
         beginDate.getMilliseconds()
     )
-
     return await searchRooms(beginDate, endDate, building)
 }
 
@@ -226,6 +229,7 @@ export async function searchRooms(
                 type: opening.type,
                 from: opening.from,
                 until: opening.until,
+                capacity: opening.capacity,
             }))
         )
         .filter(

@@ -1,10 +1,11 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/stores/colors'
-import { UserKindContext } from '@/stores/provider'
-import { type FormListSections } from '@/stores/types/components'
-import { type PersDataDetails } from '@/stores/types/thi-api'
+import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/provider'
+import { type FormListSections } from '@/types/components'
+import { type PersDataDetails } from '@/types/thi-api'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -323,7 +324,7 @@ export default function Profile(): JSX.Element {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 16,
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

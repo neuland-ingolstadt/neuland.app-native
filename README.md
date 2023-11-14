@@ -2,7 +2,7 @@
 [![CI](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml)
 [![update](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/update.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/update.yml)
 
-# neuland.app - native
+# Neuland Next - native version of neuland.app
 
 An open source, mobile app developed using React Native and Expo, serving as a replacement for the official Technische Hochschule Ingolstadt (THI) app.
 It features a modern user interface and utilizes the Expo framework for easy development and deployment.
