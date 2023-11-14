@@ -1,6 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/stores/colors'
-import { type FormListSections } from '@/stores/types/components'
+import { type Colors } from '@/components/colors'
+import { type FormListSections } from '@/types/components'
 import { type Exam } from '@/utils/calendar-utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/stlye-utils'

@@ -10,9 +10,10 @@ import {
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
+import { type Colors } from '@/components/colors'
+import { RouteParamsContext, UserKindContext } from '@/components/provider'
 import i18n, { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
-import { RouteParamsContext, UserKindContext } from '@/stores/provider'
+import { type RoomsOverlay } from '@/types/asset-api'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     type AvailableRoom,
@@ -20,7 +21,6 @@ import {
     filterRooms,
     getNextValidDate,
 } from '@/utils/room-utils'
-import { type RoomsOverlay } from '@customTypes/asset-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'

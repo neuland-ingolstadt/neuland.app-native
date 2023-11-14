@@ -7,7 +7,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     type AvailableRoom,

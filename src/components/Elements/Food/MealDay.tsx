@@ -1,5 +1,5 @@
-import { type Colors } from '@/stores/colors'
-import { type Meal } from '@/stores/types/neuland-api'
+import { type Colors } from '@/components/colors'
+import { type Meal } from '@/types/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'

@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
 import { Ionicons } from '@expo/vector-icons'

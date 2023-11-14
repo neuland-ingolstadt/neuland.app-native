@@ -1,5 +1,5 @@
+import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { type AvailableRoom, type RoomEntry } from '@/utils/room-utils'
 import type WebView from 'react-native-webview'

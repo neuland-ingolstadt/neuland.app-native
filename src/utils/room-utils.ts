@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import { type Rooms } from '@customTypes/thi-api'
+import { type Rooms } from '@/types/thi-api'
 
 import { formatISODate } from './date-utils'
 

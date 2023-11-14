@@ -1,4 +1,4 @@
-import { type Lecturers } from '@customTypes/thi-api'
+import { type Lecturers } from '@/types/thi-api'
 
 /**
  * Normalizes lecturer data.

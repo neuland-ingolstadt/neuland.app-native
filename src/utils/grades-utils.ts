@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import { type Grade } from '@customTypes/thi-api'
+import { type Grade } from '@/types/thi-api'
 
 // function simplifyName (x: string) : string {
 //   return x.replace(/\W|und|u\./g, '').toLowerCase()

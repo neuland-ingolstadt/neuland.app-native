@@ -1,14 +1,14 @@
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
+import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
-import { UserKindContext } from '@/stores/provider'
+import { type Calendar as CalendarType } from '@/types/data'
 import { calendar } from '@/utils/calendar-utils'
 import { ignoreTime } from '@/utils/date-utils'
 import {
     type FriendlyTimetableEntry,
     getFriendlyTimetable,
 } from '@/utils/timetable-utils'
-import { type Calendar as CalendarType } from '@customTypes/data'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
