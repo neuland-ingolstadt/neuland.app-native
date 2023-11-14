@@ -6,6 +6,7 @@ import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
+import { ROW_PADDING } from '@/utils/stlye-utils'
 import { type Calendar } from '@customTypes/data'
 import { router } from 'expo-router'
 import React from 'react'
@@ -44,7 +45,9 @@ const CalendarRow = ({
                 </Text>
             }
             rightChildren={
-                <View style={{ justifyContent: 'flex-end', padding: 5 }}>
+                <View
+                    style={{ justifyContent: 'flex-end', padding: ROW_PADDING }}
+                >
                     <Text
                         style={{
                             ...styles.rightText,

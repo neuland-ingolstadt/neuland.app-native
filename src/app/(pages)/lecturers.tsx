@@ -10,6 +10,7 @@ import {
     type NormalizedLecturer,
     normalizeLecturers,
 } from '@/utils/lecturers-utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -132,6 +133,8 @@ export default function LecturersCard(): JSX.Element {
 
     return (
         <ScrollView
+            // style={styles.page}
+            contentContainerStyle={styles.page}
             contentInsetAdjustmentBehavior="automatic"
             refreshControl={
                 loadingState !== LoadingState.LOADING &&
@@ -160,7 +163,7 @@ export default function LecturersCard(): JSX.Element {
             )}
 
             {loadingState === LoadingState.LOADED && (
-                <View style={styles.loadedContainer}>
+                <View>
                     <Text
                         style={[
                             styles.sectionHeader,
@@ -195,11 +198,11 @@ export default function LecturersCard(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    loadedContainer: {
-        alignSelf: 'center',
-        width: '95%',
-        marginTop: 14,
-        marginBottom: 24,
+    page: {
+        padding: PAGE_PADDING,
+    },
+    container: {
+        marginBottom: MODAL_BOTTOM_MARGIN,
     },
     loadedRows: {
         borderRadius: 8,

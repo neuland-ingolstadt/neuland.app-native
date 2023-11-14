@@ -1,6 +1,7 @@
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext } from '@/stores/provider'
 import { type NormalizedLecturer } from '@/utils/lecturers-utils'
+import { ROW_PADDING } from '@/utils/stlye-utils'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: 5,
+        padding: ROW_PADDING,
     },
     rightText1: {
         fontSize: 14,

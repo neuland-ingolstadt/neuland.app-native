@@ -8,6 +8,7 @@ import {
     getUserSpecificPrice,
     mealName,
 } from '@/utils/food-utils'
+import { CARD_PADDING } from '@/utils/stlye-utils'
 import { type Meal } from '@customTypes/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -151,7 +152,7 @@ export const MealEntry = ({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        padding: CARD_PADDING,
         width: '100%',
         alignSelf: 'center',
         borderRadius: 8,

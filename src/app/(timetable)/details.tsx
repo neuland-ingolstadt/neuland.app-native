@@ -8,6 +8,7 @@ import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/stores/colors'
 import { RouteParamsContext } from '@/stores/provider'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { type FriendlyTimetableEntry } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { type FormListSections } from '@customTypes/components'
@@ -302,7 +303,7 @@ export default function TimetableDetails(): JSX.Element {
 const styles = StyleSheet.create({
     page: {
         display: 'flex',
-        padding: 12,
+        padding: PAGE_PADDING,
     },
     eventColorCircle: {
         width: 15,

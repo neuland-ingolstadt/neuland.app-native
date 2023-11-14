@@ -3,6 +3,7 @@ import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/stores/colors'
 import { type UserKindContextType } from '@/stores/hooks/userKind'
 import { DashboardContext, UserKindContext } from '@/stores/provider'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/stlye-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -85,7 +86,7 @@ function HomeScreen(): JSX.Element {
     return (
         <FlatList
             contentInsetAdjustmentBehavior="automatic"
-            style={styles.container}
+            style={styles.page}
             showsVerticalScrollIndicator={false}
             data={shownDashboardEntries}
             renderItem={({ item }) => item.card()}
@@ -97,17 +98,12 @@ function HomeScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 6,
-        width: '100%',
-        alignSelf: 'center',
-        paddingTop: 5,
-        paddingBottom: 60,
+    page: {
+        padding: PAGE_PADDING,
     },
-    heading: {
-        fontSize: 32,
-        textAlign: 'center',
-        paddingTop: 16,
+    container: {
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        gap: 16,
     },
     iconText: {
         fontSize: 14,

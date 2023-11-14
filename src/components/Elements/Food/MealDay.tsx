@@ -77,7 +77,7 @@ const MealCategory = ({
                                     : 'chevron-up-outline'
                             }
                             size={16}
-                            style={styles.toogleIcon}
+                            style={styles.toggleIcon}
                             color={colors.primary}
                         />
                     </View>
@@ -99,11 +99,15 @@ const MealCategory = ({
  * @param colors - An object containing color values.
  * @returns A JSX element representing the day's meals.
  */
-export const MealDay = (
-    day: any,
-    index: number,
+export const MealDay = ({
+    day,
+    index,
+    colors,
+}: {
+    day: any
+    index: number
     colors: Colors
-): JSX.Element => {
+}): JSX.Element => {
     /**
      * Filters an array of meals by restaurant name.
      * @param meals - An array of meals.
@@ -142,7 +146,7 @@ export const MealDay = (
     const reimannsGrouped = groupMealsByCategory(reimanns)
     const canisiusGrouped = groupMealsByCategory(canisius)
 
-    const isEmpy =
+    const isEmpty =
         mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
     interface RestaurantProps {
@@ -181,7 +185,7 @@ export const MealDay = (
         return null
     }
 
-    return isEmpy ? (
+    return isEmpty ? (
         <>
             <View
                 style={{
@@ -217,8 +221,6 @@ export const MealDay = (
 
 const styles = StyleSheet.create({
     dayRestaurantContainer: {
-        width: '92%',
-        alignSelf: 'center',
         marginTop: 10,
     },
     dayRestaurantTitle: {
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
         paddingTop: 4,
         paddingBottom: 4,
     },
-    toogleIcon: {
+    toggleIcon: {
         marginRight: 4,
         alignSelf: 'center',
     },

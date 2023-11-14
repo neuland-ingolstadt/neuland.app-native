@@ -1,5 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { type Colors } from '@/stores/colors'
+import { CARD_PADDING } from '@/utils/stlye-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
@@ -22,7 +23,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
     return (
-        <TouchableOpacity onPress={onPress} style={styles.touchable}>
+        <TouchableOpacity onPress={onPress}>
             <View
                 style={[
                     styles.card,
@@ -43,18 +44,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         color={colors.labelColor}
                     />
                 </View>
-                {children != null && (
-                    <View style={styles.children}>{children}</View>
-                )}
+                {children != null && <>{children}</>}
             </View>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
-    touchable: {
-        marginVertical: 8,
-    },
     title: {
         fontSize: 16,
         fontWeight: '500',
@@ -67,11 +63,8 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 8,
-        padding: 16,
+        padding: CARD_PADDING,
         gap: 12,
-    },
-    children: {
-        marginHorizontal: 2,
     },
 })
 

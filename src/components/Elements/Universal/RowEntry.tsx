@@ -1,4 +1,5 @@
 import { type Colors } from '@/stores/colors'
+import { ROW_PADDING } from '@/utils/stlye-utils'
 import React from 'react'
 import {
     type DimensionValue,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
 
         alignItems: 'flex-start',
-        padding: 5,
+        padding: ROW_PADDING,
         maxWidth: '70%',
     },
 })

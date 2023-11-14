@@ -232,7 +232,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     titleText: {
-        width: '94%',
         paddingVertical: 14,
         fontSize: 15,
         fontWeight: '700',

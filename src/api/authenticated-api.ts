@@ -380,7 +380,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 
     /**
      * Fetches the latest thi news
-     * @returns {Promise<object[]>} Promise that resolves with the news
+     * @returns {Promise<ThiNews[]>} Promise that resolves with the news
      */
     async getThiNews(): Promise<ThiNews[]> {
         const res = await this.requestAuthenticated({

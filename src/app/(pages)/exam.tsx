@@ -3,6 +3,7 @@ import { type Colors } from '@/stores/colors'
 import { type FormListSections } from '@/stores/types/components'
 import { type Exam } from '@/utils/calendar-utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -80,7 +81,10 @@ export default function ExamDetail(): JSX.Element {
     ]
 
     return (
-        <ScrollView>
+        <ScrollView
+            style={styles.page}
+            contentContainerStyle={styles.container}
+        >
             <StatusBar style="light" animated={true} hidden={false} />
             <View
                 style={[
@@ -100,7 +104,7 @@ export default function ExamDetail(): JSX.Element {
             <View style={[styles.formList]}>
                 <FormList sections={sections} />
             </View>
-            <View style={styles.notesContainer}>
+            <View>
                 <Text style={[styles.notesText, { color: colors.labelColor }]}>
                     All information without guarantee. Binding information is
                     only available directly from the THI.
@@ -111,16 +115,20 @@ export default function ExamDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        padding: PAGE_PADDING,
+    },
+    container: {
+        marginBottom: MODAL_BOTTOM_MARGIN,
+        gap: 12,
+    },
     formList: {
-        marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
-        paddingHorizontal: 16,
     },
     titleContainer: {
         alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
+        width: '100%',
         paddingHorizontal: 5,
         paddingVertical: 10,
         borderRadius: 8,
@@ -129,12 +137,6 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 18,
         textAlign: 'center',
-    },
-    notesContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        marginBottom: 40,
     },
     notesText: {
         textAlign: 'left',
