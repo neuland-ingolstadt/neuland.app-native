@@ -103,7 +103,6 @@ type RoomOpenings = Record<
 export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
     const isoDate = formatISODate(date)
     const openings: RoomOpenings = {}
-    console.log(rooms)
     // get todays rooms
     rooms
         .filter((room) => room.datum.startsWith(isoDate))
