@@ -1,4 +1,5 @@
 import { type Colors } from '@/components/colors'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         alignItems: 'center',
 
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         paddingVertical: 10,
     },
 })

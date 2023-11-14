@@ -9,6 +9,7 @@ import { type Colors } from '@/components/colors'
 import { type Grade } from '@/types/thi-api'
 import { type GradeAverage } from '@/types/utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -237,11 +238,11 @@ const styles = StyleSheet.create({
         width: '100%',
         minHeight: 70,
         marginVertical: 16,
-        marginHorizontal: 16,
+        marginHorizontal: PAGE_PADDING,
         justifyContent: 'center',
     },
     notesBox: {
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         alignSelf: 'flex-start',
         paddingTop: 16,
         paddingBottom: 32,
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
     averageContainer: {
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginHorizontal: 16,
+        marginHorizontal: PAGE_PADDING,
     },
     averageText: {
         fontSize: 25,

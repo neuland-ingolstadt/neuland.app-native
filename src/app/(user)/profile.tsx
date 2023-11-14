@@ -5,6 +5,7 @@ import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -323,7 +324,7 @@ export default function Profile(): JSX.Element {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 16,
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

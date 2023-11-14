@@ -1,4 +1,5 @@
 import { type Colors } from '@/components/colors'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     sectionContainer: {
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

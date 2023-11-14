@@ -8,6 +8,7 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     sectionContainer: {
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

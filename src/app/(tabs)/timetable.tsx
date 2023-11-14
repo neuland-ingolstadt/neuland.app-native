@@ -6,6 +6,7 @@ import { type Calendar as CalendarType } from '@/types/data'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
 import { ignoreTime } from '@/utils/date-utils'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     },
     headerDate: {
         paddingVertical: 4,
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         borderRadius: 9999,
         marginVertical: 6,
     },

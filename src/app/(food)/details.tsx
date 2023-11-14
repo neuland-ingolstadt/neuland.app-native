@@ -9,6 +9,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
         marginVertical: 16,
         width: '100%',
         alignSelf: 'center',
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
     },
     titleContainer: {
         alignSelf: 'center',
