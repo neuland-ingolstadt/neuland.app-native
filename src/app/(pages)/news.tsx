@@ -7,6 +7,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
+import { PAGE_PADDING } from '@/utils/stlye-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -123,7 +124,7 @@ export default function NewsScreen(): JSX.Element {
                             >
                                 <Text
                                     style={[
-                                        styles.labelText,
+                                        styles.dateText,
                                         {
                                             color: colors.labelSecondaryColor,
                                         },
@@ -163,7 +164,6 @@ export default function NewsScreen(): JSX.Element {
                                                 name="chevron-forward-outline"
                                                 size={24}
                                                 color={colors.labelColor}
-                                                style={{}}
                                             />
                                         </View>
                                     </View>
@@ -189,7 +189,7 @@ export default function NewsScreen(): JSX.Element {
 const styles = StyleSheet.create({
     safeArea: { flex: 1, marginTop: 100 },
     contentContainer: { paddingBottom: 32 },
-    labelText: {
+    dateText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
@@ -229,16 +229,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 10,
+        marginHorizontal: 10,
     },
     titleText: {
         paddingVertical: 14,
         fontSize: 15,
+        flexShrink: 1,
         fontWeight: '700',
         textAlign: 'left',
     },
     sectionContainer: {
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         paddingVertical: 10,
         width: '100%',
         alignSelf: 'center',

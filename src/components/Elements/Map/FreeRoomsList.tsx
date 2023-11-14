@@ -5,6 +5,7 @@ import { formatFriendlyTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import Divider from '../Universal/Divider'
@@ -17,7 +18,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     const colors = useTheme().colors as Colors
     const router = useRouter()
     const { updateRouteParams } = useContext(RouteParamsContext)
-
+    const { t } = useTranslation('common')
     return rooms !== null && rooms.length > 0 ? (
         rooms.map((room, index) => (
             <View key={index}>
@@ -45,7 +46,9 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             ]}
                             numberOfLines={1}
                         >
-                            {room.type}
+                            {`${room.type} (${room.capacity} ${t(
+                                'pages.rooms.options.seats'
+                            )})`}
                         </Text>
                     </View>
 
