@@ -121,7 +121,7 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
                 ([, , room, capacity]: [string, string, number, number]) => ({
                     // 0 indicates that every room is free
                     room: room === 0 ? ROOMS_ALL : room.toString(),
-                    type: stunde.type.replace(/ \(.*\)$/, ''),
+                    type: stunde.type.replace(/ \(.*\)$/, '').trim() ?? '',
                     from: new Date(stunde.von),
                     until: new Date(stunde.bis),
                     capacity,

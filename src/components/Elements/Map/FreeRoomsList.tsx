@@ -46,7 +46,11 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             ]}
                             numberOfLines={1}
                         >
-                            {`${room.type} (${room.capacity} ${t(
+                            {`${t('roomTypes.' + room.type, {
+                                defaultValue: room.type,
+                                ns: 'api',
+                                fallbackLng: 'de',
+                            })} (${room.capacity} ${t(
                                 'pages.rooms.options.seats'
                             )})`}
                         </Text>
