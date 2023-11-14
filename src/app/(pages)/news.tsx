@@ -4,9 +4,9 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
-import { type ThiNews } from '@/types/thi-api'
+import { type Colors } from '@/stores/colors'
 import { formatFriendlyDate } from '@/utils/date-utils'
+import { type ThiNews } from '@customTypes/thi-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'

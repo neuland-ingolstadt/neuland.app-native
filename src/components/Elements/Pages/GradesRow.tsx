@@ -1,6 +1,6 @@
-import { type Colors } from '@/components/colors'
-import { type Grade } from '@/types/thi-api'
+import { type Colors } from '@/stores/colors'
 import { ROW_PADDING } from '@/utils/stlye-utils'
+import { type Grade } from '@customTypes/thi-api'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'

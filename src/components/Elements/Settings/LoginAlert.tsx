@@ -4,7 +4,7 @@
  * @param {function} resetAlert - A function to reset the login failure state.
  * @returns {JSX.Element} - A JSX element that displays the login failure alert.
  */
-import { type Colors } from '@/components/colors'
+import { type Colors } from '@/stores/colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'

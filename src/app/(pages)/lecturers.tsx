@@ -5,7 +5,7 @@ import {
 } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Pages/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import { type Colors } from '@/stores/colors'
 import {
     type NormalizedLecturer,
     normalizeLecturers,

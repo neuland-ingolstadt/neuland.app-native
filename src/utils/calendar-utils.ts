@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
-import { type Calendar } from '@/types/data'
-import { type Exams } from '@/types/thi-api'
+import { type Calendar } from '@customTypes/data'
+import { type Exams } from '@customTypes/thi-api'
 
 export const compileTime = new Date()
 export const calendar: Calendar[] = rawCalendar

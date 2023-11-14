@@ -1,5 +1,5 @@
-import { type Colors, accentColors } from '@/components/colors'
-import { ThemeContext } from '@/components/provider'
+import { type Colors, accentColors } from '@/stores/colors'
+import { ThemeContext } from '@/stores/provider'
 import { getContrastColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'

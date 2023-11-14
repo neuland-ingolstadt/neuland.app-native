@@ -8,6 +8,7 @@ import { Platform, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
+import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 import {
     useDashboard,
     useFlow,
@@ -16,11 +17,10 @@ import {
     useRouteParams,
     useTheme,
     useUserKind,
-} from '../hooks'
-import { type Dashboard } from '../hooks/dashboard'
-import { type FoodFilter } from '../hooks/foodFilter'
-import { type RouteParams } from '../hooks/routing'
-import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
+} from './hooks'
+import { type Dashboard } from './hooks/dashboard'
+import { type FoodFilter } from './hooks/foodFilter'
+import { type RouteParams } from './hooks/routing'
 
 interface ProviderProps {
     children: React.ReactNode

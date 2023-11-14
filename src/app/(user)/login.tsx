@@ -1,5 +1,5 @@
 import LoginForm from '@/components/Elements/Universal/LoginForm'
-import { type Colors } from '@/components/colors'
+import { type Colors } from '@/stores/colors'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'

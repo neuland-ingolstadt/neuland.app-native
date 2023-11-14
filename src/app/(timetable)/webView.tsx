@@ -1,4 +1,4 @@
-import { type Colors } from '@/components/colors'
+import { type Colors } from '@/stores/colors'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'

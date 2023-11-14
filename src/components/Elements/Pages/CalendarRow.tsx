@@ -1,6 +1,5 @@
-import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Calendar } from '@/types/data'
+import { type Colors } from '@/stores/colors'
 import {
     formatFriendlyDateRange,
     formatFriendlyDateTime,
@@ -8,6 +7,7 @@ import {
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/stlye-utils'
+import { type Calendar } from '@customTypes/data'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

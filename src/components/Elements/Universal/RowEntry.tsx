@@ -1,4 +1,4 @@
-import { type Colors } from '@/components/colors'
+import { type Colors } from '@/stores/colors'
 import { ROW_PADDING } from '@/utils/stlye-utils'
 import React from 'react'
 import {

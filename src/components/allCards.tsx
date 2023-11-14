@@ -1,4 +1,8 @@
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/hooks/userKind'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/stores/hooks/userKind'
 import { useRouter } from 'expo-router'
 import React from 'react'
 

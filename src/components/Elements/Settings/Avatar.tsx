@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-    type ColorValue,
-    type StyleProp,
-    View,
-    type ViewStyle,
-} from 'react-native'
+import { type StyleProp, View, type ViewStyle } from 'react-native'
 
 /**
  * Avatar component that displays a circular image or icon with optional shadow and background color.
@@ -21,7 +16,7 @@ const Avatar = ({
     children,
 }: {
     size?: number
-    background: ColorValue
+    background: string
     shadow?: boolean
     children: JSX.Element
 }): JSX.Element => {
