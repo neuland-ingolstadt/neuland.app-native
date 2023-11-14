@@ -53,6 +53,7 @@ export interface AvailableRoom {
     until: Date
     room: string
     type: string
+    capacity: number
 }
 
 export interface RoomEntry {

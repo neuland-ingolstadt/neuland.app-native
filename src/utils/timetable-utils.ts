@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import { type FriendlyTimetableEntry } from '@customTypes/utils'
+import { type FriendlyTimetableEntry } from '@/types/utils'
 
 import { combineDateTime } from './date-utils'
 

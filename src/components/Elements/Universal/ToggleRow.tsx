@@ -1,4 +1,5 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
@@ -13,21 +14,12 @@ const ToggleRow = ({
     setSelectedElement: (element: string) => void
 }): JSX.Element => {
     const colors = useTheme().colors as Colors // Make sure to replace `Colors` with the actual type of your colors
-    const itemCnt = items.length
 
     return (
         <View style={styles.buttonRow}>
             {items.map((item, index) => {
-                const isFirstDay = index === 0
-                const isLastDay = index === itemCnt - 1
-                const buttonStyle = [
-                    { flex: 1, marginHorizontal: 4 },
-                    isFirstDay ? { marginLeft: 0 } : null,
-                    isLastDay ? { marginRight: 0 } : null,
-                ]
-
                 return (
-                    <View style={buttonStyle} key={index}>
+                    <View key={index} style={styles.buttonView}>
                         <Pressable
                             onPress={() => {
                                 setSelectedElement(item as 'Events' | 'Exams')
@@ -70,10 +62,12 @@ const styles = StyleSheet.create({
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '95%',
+        width: '100%',
         alignSelf: 'center',
-        paddingTop: 16,
-        paddingBottom: 6,
+        gap: 12,
+    },
+    buttonView: {
+        flex: 1,
     },
     buttonContainer: {
         width: '100%',
@@ -87,7 +81,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
         alignItems: 'center',
 
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         paddingVertical: 10,
     },
 })

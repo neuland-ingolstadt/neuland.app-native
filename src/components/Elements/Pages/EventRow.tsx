@@ -1,9 +1,10 @@
+import { type Colors } from '@/components/colors'
 import clubs from '@/data/clubs.json'
-import { type Colors } from '@/stores/colors'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
+import { ROW_PADDING } from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 5,
+        padding: ROW_PADDING,
     },
     clubContainer: {
         flexDirection: 'row',

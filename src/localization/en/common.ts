@@ -81,6 +81,7 @@ export default {
                 date: 'Date',
                 time: 'Time',
                 duration: 'Duration',
+                seats: 'seats',
             },
             results: 'Available rooms',
         },

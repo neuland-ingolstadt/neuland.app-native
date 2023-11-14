@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'

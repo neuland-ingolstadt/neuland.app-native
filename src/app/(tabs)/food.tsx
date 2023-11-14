@@ -1,9 +1,10 @@
 import { MealDay } from '@/components/Elements/Food'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
-import { type Colors } from '@/stores/colors'
-import { FoodFilterContext } from '@/stores/provider'
-import { type Food } from '@/stores/types/neuland-api'
+import { type Colors } from '@/components/colors'
+import { FoodFilterContext } from '@/components/provider'
+import { type Food } from '@/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -174,6 +175,7 @@ function FoodScreen(): JSX.Element {
                     />
                 ) : undefined
             }
+            style={styles.page}
             contentInsetAdjustmentBehavior="always"
             contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
@@ -201,7 +203,11 @@ function FoodScreen(): JSX.Element {
                             <DayButton day={day} index={index} key={index} />
                         ))}
                     </View>
-                    {MealDay(days[selectedDay], selectedDay, colors)}
+                    <MealDay
+                        day={days[selectedDay]}
+                        index={selectedDay}
+                        colors={colors}
+                    />
                 </>
             )}
         </ScrollView>
@@ -238,12 +244,15 @@ export default function Screen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        padding: PAGE_PADDING,
+    },
     headerButton: {
         backgroundColor: 'transparent',
         paddingRight: 10,
     },
     container: {
-        paddingBottom: 50,
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
     },
     dayRestaurantContainer: {
         width: '92%',
@@ -270,9 +279,6 @@ const styles = StyleSheet.create({
     loadedContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '92%',
-        alignSelf: 'center',
-        paddingTop: 16,
     },
     loadingContainer: {
         paddingTop: 40,

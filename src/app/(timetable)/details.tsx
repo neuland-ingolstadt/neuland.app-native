@@ -5,12 +5,13 @@ import Separator from '@/components/Elements/Timetable/Separator'
 import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
-import { type Colors } from '@/stores/colors'
-import { RouteParamsContext } from '@/stores/provider'
+import { type Colors } from '@/components/colors'
+import { RouteParamsContext } from '@/components/provider'
+import { type FormListSections } from '@/types/components'
+import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { type FormListSections } from '@customTypes/components'
-import { type FriendlyTimetableEntry } from '@customTypes/utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -302,7 +303,7 @@ export default function TimetableDetails(): JSX.Element {
 const styles = StyleSheet.create({
     page: {
         display: 'flex',
-        padding: 12,
+        padding: PAGE_PADDING,
     },
     eventColorCircle: {
         width: 15,

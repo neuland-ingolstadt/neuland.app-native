@@ -5,9 +5,10 @@ import FormList from '@/components/Elements/Universal/FormList'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
-import { type Colors } from '@/stores/colors'
-import { FoodFilterContext } from '@/stores/provider'
-import { type FormListSections } from '@customTypes/components'
+import { type Colors } from '@/components/colors'
+import { FoodFilterContext } from '@/components/provider'
+import { type FormListSections } from '@/types/components'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     sectionContainer: {
-        paddingHorizontal: 16,
+        paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
     },

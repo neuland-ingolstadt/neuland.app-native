@@ -1,5 +1,6 @@
-import { type Colors } from '@/stores/colors'
-import { type Grade } from '@customTypes/thi-api'
+import { type Colors } from '@/components/colors'
+import { type Grade } from '@/types/thi-api'
+import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: 5,
+        padding: ROW_PADDING,
     },
     rightInnerContainer: {
         flexDirection: 'column',

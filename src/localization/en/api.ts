@@ -23,4 +23,11 @@ export default {
         Verwaltung: 'Management',
         'Zentrum für Angewandte Forschung': 'Center for Applied Research',
     },
+    roomTypes: {
+        'PC-Pool': 'PC-Pool',
+        Seminarraum: 'Seminar room',
+        Labor: 'Laboratory',
+        'Kleiner Hörsaal': 'Small lecture hall',
+        'Großer Hörsaal': 'Large Llecture hall',
+    },
 }

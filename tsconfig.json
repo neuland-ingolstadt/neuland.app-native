@@ -3,7 +3,6 @@
     "baseUrl": ".",
     "compilerOptions": {
         "paths": {
-            "@customTypes/*": ["./src/stores/types/*"],
             "@/*": ["./src/*"]
         },
 

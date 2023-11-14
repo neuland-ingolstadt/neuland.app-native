@@ -1,6 +1,6 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/stores/colors'
-import { type FoodLanguage } from '@/stores/hooks/foodFilter'
+import { type Colors } from '@/components/colors'
+import { type FoodLanguage } from '@/hooks/foodFilter'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'

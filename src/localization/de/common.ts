@@ -82,6 +82,7 @@ export default {
                 date: 'Datum',
                 time: 'Zeit',
                 duration: 'Dauer',
+                seats: 'Plätze',
             },
             results: 'Verfügbare Räume',
         },

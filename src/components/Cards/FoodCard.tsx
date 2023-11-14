@@ -1,14 +1,14 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import { type Colors } from '@/components/colors'
+import { FoodFilterContext, UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
-import { FoodFilterContext, UserKindContext } from '@/stores/provider'
+import { type Meal } from '@/types/neuland-api'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
     loadFoodEntries,
     mealName,
 } from '@/utils/food-utils'
-import { type Meal } from '@customTypes/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'

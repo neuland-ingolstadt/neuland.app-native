@@ -6,7 +6,7 @@ export default {
                 'Melde dich an, um alle Funktionen der App freizuschalten.',
         },
         employee: {
-            subtitle: 'Mitarbeitenden Account',
+            subtitle1: 'Mitarbeitenden Account',
             subtitle2: 'Tippe zum Abmelden',
         },
         error: {

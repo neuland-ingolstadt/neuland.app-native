@@ -1,13 +1,14 @@
 import courseShortNames from '@/data/course-short-names.json'
-import { type CourseShortNames } from '@/stores/types/data'
+import { type CourseShortNames } from '@/types/data'
 import {
     type Exams,
     type Grade,
     type Lecturers,
     type PersData,
     type Rooms,
+    type ThiNews,
     type TimetableResponse,
-} from '@/stores/types/thi-api'
+} from '@/types/thi-api'
 
 import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
@@ -425,16 +426,16 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 
     /**
      * Fetches the latest thi news
-     * @returns {Promise<object[]>} Promise that resolves with the news
+     * @returns {Promise<ThiNews[]>} Promise that resolves with the news
      */
-    async getThiNews(): Promise<object[]> {
+    async getThiNews(): Promise<ThiNews[]> {
         const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'thinews',
             format: 'json',
         })
 
-        return res[1]
+        return res
     }
 }
 
