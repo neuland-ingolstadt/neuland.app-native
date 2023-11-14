@@ -1,6 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/stores/colors'
-import { type FormListSections } from '@/stores/types/components'
+import { type Colors } from '@/components/colors'
+import { type FormListSections } from '@/types/components'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'

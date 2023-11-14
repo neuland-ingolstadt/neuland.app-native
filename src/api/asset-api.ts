@@ -1,5 +1,5 @@
 import LocalStorageCache from '@/api/cache'
-import { type RoomDistances, type SpoWeights } from '@customTypes/asset-api'
+import { type RoomDistances, type SpoWeights } from '@/types/asset-api'
 
 import packageInfo from '../../package.json'
 

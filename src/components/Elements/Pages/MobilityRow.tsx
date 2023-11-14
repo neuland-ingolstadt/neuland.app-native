@@ -1,4 +1,4 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
 import { formatFriendlyTime, formatRelativeMinutes } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/stlye-utils'
 import React from 'react'

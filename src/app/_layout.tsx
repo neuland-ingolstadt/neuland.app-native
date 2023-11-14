@@ -1,5 +1,5 @@
+import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import Provider from '@/stores/provider'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'

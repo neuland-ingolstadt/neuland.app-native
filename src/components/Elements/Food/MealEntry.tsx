@@ -1,6 +1,7 @@
+import { type Colors } from '@/components/colors'
+import { FoodFilterContext, UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Colors } from '@/stores/colors'
-import { FoodFilterContext, UserKindContext } from '@/stores/provider'
+import { type Meal } from '@/types/neuland-api'
 import {
     convertRelevantAllergens,
     convertRelevantFlags,
@@ -9,7 +10,6 @@ import {
     mealName,
 } from '@/utils/food-utils'
 import { CARD_PADDING } from '@/utils/stlye-utils'
-import { type Meal } from '@customTypes/neuland-api'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'

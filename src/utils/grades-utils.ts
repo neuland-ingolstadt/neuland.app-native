@@ -1,7 +1,7 @@
 import AssetAPI from '@/api/asset-api'
 import API from '@/api/authenticated-api'
-import { type Grade } from '@customTypes/thi-api'
-import { type GradeAverage } from '@customTypes/utils'
+import { type Grade } from '@/types/thi-api'
+import { type GradeAverage } from '@/types/utils'
 
 function simplifyName(x: string): string {
     return x.replace(/\W|und|u\./g, '').toLowerCase()

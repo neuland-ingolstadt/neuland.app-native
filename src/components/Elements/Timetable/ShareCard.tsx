@@ -1,6 +1,6 @@
-import { type Colors } from '@/stores/colors'
+import { type Colors } from '@/components/colors'
+import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { type FriendlyTimetableEntry } from '@customTypes/utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import moment from 'moment'

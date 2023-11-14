@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
-import { type Rooms } from '@customTypes/thi-api'
-import { type AvailableRoom } from '@customTypes/utils'
+import { type Rooms } from '@/types/thi-api'
+import { type AvailableRoom } from '@/types/utils'
 
 import { formatISODate } from './date-utils'
 
