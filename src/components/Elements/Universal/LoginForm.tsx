@@ -72,9 +72,12 @@ const LoginForm = (): JSX.Element => {
         try {
             setLoading(true)
             const userKind = await createSession(username, password, true)
-            const userFullName = await API.getFullName()
+            if (userKind) {
+                updateUserFullName(await API.getFullName())
+            } else {
+                updateUserFullName(username)
+            }
             toggleUserKind(userKind)
-            updateUserFullName(userFullName)
             toggleUpdated()
             toggleOnboarded()
             Haptics.notificationAsync(
