@@ -8,7 +8,7 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/stlye-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'

@@ -7,7 +7,11 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { PAGE_PADDING } from '@/utils/stlye-utils'
+import {
+    CARD_PADDING,
+    MODAL_BOTTOM_MARGIN,
+    PAGE_PADDING,
+} from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -76,127 +80,122 @@ export default function NewsScreen(): JSX.Element {
 
     return (
         <View style={Platform.OS === 'ios' ? styles.safeArea : {}}>
-            <View>
-                {loadingState === LoadingState.LOADING && (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
-                    </View>
-                )}
-                {loadingState === LoadingState.ERROR && (
-                    <View>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {errorMsg}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refresh')}{' '}
-                        </Text>
-                    </View>
-                )}
-                {loadingState === LoadingState.LOADED && (
-                    <FlatList
-                        data={news}
-                        keyExtractor={(item) => item.href}
-                        contentContainerStyle={styles.contentContainer}
-                        refreshControl={
-                            loadingState !== LoadingState.LOADED ? (
-                                <RefreshControl
-                                    refreshing={
-                                        loadingState === LoadingState.REFRESHING
-                                    }
-                                    onRefresh={onRefresh}
-                                />
-                            ) : undefined
-                        }
-                        renderItem={({ item }) => (
-                            <View
-                                style={styles.sectionContainer}
-                                key={item.title}
+            {loadingState === LoadingState.LOADING && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="small" color={colors.primary} />
+                </View>
+            )}
+            {loadingState === LoadingState.ERROR && (
+                <View>
+                    <Text style={[styles.errorMessage, { color: colors.text }]}>
+                        {errorMsg}
+                    </Text>
+                    <Text style={[styles.errorInfo, { color: colors.text }]}>
+                        {t('error.refresh')}{' '}
+                    </Text>
+                </View>
+            )}
+            {loadingState === LoadingState.LOADED && (
+                <FlatList
+                    data={news}
+                    keyExtractor={(item) => item.href}
+                    contentContainerStyle={styles.contentContainer}
+                    refreshControl={
+                        loadingState !== LoadingState.LOADED ? (
+                            <RefreshControl
+                                refreshing={
+                                    loadingState === LoadingState.REFRESHING
+                                }
+                                onRefresh={onRefresh}
+                            />
+                        ) : undefined
+                    }
+                    renderItem={({ item }) => (
+                        <View style={styles.sectionContainer} key={item.title}>
+                            <Text
+                                style={[
+                                    styles.dateText,
+                                    {
+                                        color: colors.labelSecondaryColor,
+                                    },
+                                ]}
                             >
-                                <Text
-                                    style={[
-                                        styles.dateText,
-                                        {
-                                            color: colors.labelSecondaryColor,
-                                        },
-                                    ]}
-                                >
-                                    {formatFriendlyDate(item.date)}
-                                </Text>
-                                <Pressable
-                                    style={[
-                                        styles.sectionBox,
-                                        {
-                                            backgroundColor: colors.card,
-                                        },
-                                    ]}
-                                    onPress={() => {
-                                        void Linking.openURL(item.href)
+                                {formatFriendlyDate(item.date)}
+                            </Text>
+                            <Pressable
+                                style={[
+                                    styles.sectionBox,
+                                    {
+                                        backgroundColor: colors.card,
+                                    },
+                                ]}
+                                onPress={() => {
+                                    void Linking.openURL(item.href)
+                                }}
+                            >
+                                <Image
+                                    style={styles.imageContainer}
+                                    source={{
+                                        uri: item.img,
                                     }}
-                                >
-                                    <View>
-                                        <Image
-                                            style={styles.imageContainer}
-                                            source={{
-                                                uri: item.img,
-                                            }}
-                                        />
-                                        <View style={styles.titleContainer}>
-                                            <Text
-                                                style={[
-                                                    styles.titleText,
-                                                    { color: colors.text },
-                                                ]}
-                                                numberOfLines={2}
-                                            >
-                                                {item.title}
-                                            </Text>
-                                            <Ionicons
-                                                name="chevron-forward-outline"
-                                                size={24}
-                                                color={colors.labelColor}
-                                            />
-                                        </View>
-                                    </View>
-                                    <Divider width={'100%'} />
+                                />
+
+                                <View style={styles.titleContainer}>
                                     <Text
                                         style={[
-                                            styles.teaserText,
+                                            styles.titleText,
                                             { color: colors.text },
                                         ]}
+                                        numberOfLines={2}
                                     >
-                                        {item.teaser}
+                                        {item.title}
                                     </Text>
-                                </Pressable>
-                            </View>
-                        )}
-                    />
-                )}
-            </View>
+                                    <Ionicons
+                                        name="chevron-forward-outline"
+                                        size={24}
+                                        color={colors.labelColor}
+                                    />
+                                </View>
+                                <Divider width={'100%'} />
+                                <Text
+                                    style={[
+                                        styles.teaserText,
+                                        { color: colors.text },
+                                    ]}
+                                >
+                                    {item.teaser}
+                                </Text>
+                            </Pressable>
+                        </View>
+                    )}
+                />
+            )}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, marginTop: 100 },
-    contentContainer: { paddingBottom: 32 },
+    page: {
+        padding: PAGE_PADDING,
+    },
+    safeArea: {
+        flex: 1,
+        marginTop: 100,
+    },
     dateText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
-        marginBottom: 4,
+        marginBottom: 6,
+    },
+    contentContainer: {
+        gap: 12,
+        padding: PAGE_PADDING,
+        paddingBottom: MODAL_BOTTOM_MARGIN,
     },
     imageContainer: {
-        width: '100%',
+        marginHorizontal: -CARD_PADDING,
+        marginTop: -CARD_PADDING,
         height: 200,
         objectFit: 'cover',
         borderTopRightRadius: 8,
@@ -205,10 +204,32 @@ const styles = StyleSheet.create({
     teaserText: {
         fontSize: 13,
         fontWeight: 'normal',
-        marginHorizontal: 10,
-        textAlign: 'justify',
-        paddingVertical: 10,
     },
+    titleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    titleText: {
+        fontSize: 15,
+        flexShrink: 1,
+        fontWeight: '700',
+        textAlign: 'left',
+        flex: 1,
+    },
+    sectionContainer: {
+        width: '100%',
+        alignSelf: 'center',
+    },
+    sectionBox: {
+        alignSelf: 'center',
+        borderRadius: 8,
+        padding: CARD_PADDING,
+        gap: 6,
+        width: '100%',
+        justifyContent: 'center',
+    },
+    // OTHER VIEWS
     errorMessage: {
         paddingTop: 100,
         fontWeight: '600',
@@ -224,31 +245,5 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginHorizontal: 10,
-    },
-    titleText: {
-        paddingVertical: 14,
-        fontSize: 15,
-        flexShrink: 1,
-        fontWeight: '700',
-        textAlign: 'left',
-    },
-    sectionContainer: {
-        paddingHorizontal: PAGE_PADDING,
-        paddingVertical: 10,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        marginTop: 2,
-        justifyContent: 'center',
     },
 })

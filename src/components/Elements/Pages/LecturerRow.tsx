@@ -1,7 +1,7 @@
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext } from '@/components/provider'
 import { type NormalizedLecturer } from '@/types/utils'
-import { ROW_PADDING } from '@/utils/stlye-utils'
+import { ROW_PADDING } from '@/utils/style-utils'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'

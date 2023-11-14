@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { PAGE_PADDING } from '@/utils/stlye-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'

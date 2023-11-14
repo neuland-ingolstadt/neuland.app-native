@@ -7,7 +7,7 @@ import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
-import { ROW_PADDING } from '@/utils/stlye-utils'
+import { ROW_PADDING } from '@/utils/style-utils'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

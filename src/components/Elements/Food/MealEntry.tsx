@@ -9,7 +9,7 @@ import {
     getUserSpecificPrice,
     mealName,
 } from '@/utils/food-utils'
-import { CARD_PADDING } from '@/utils/stlye-utils'
+import { CARD_PADDING } from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'

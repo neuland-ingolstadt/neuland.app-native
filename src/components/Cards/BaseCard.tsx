@@ -1,6 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { type Colors } from '@/components/colors'
-import { CARD_PADDING } from '@/utils/stlye-utils'
+import { CARD_PADDING } from '@/utils/style-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'

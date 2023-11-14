@@ -1,7 +1,7 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/stlye-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
