@@ -6,7 +6,7 @@ import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
+import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
@@ -46,13 +46,6 @@ export default function Profile(): JSX.Element {
     }
 
     const [errorMsg, setErrorMsg] = useState('')
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
 
     const [loadingState, setLoadingState] = useState<LoadingState>(
         LoadingState.LOADING

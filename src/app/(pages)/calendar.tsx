@@ -8,6 +8,7 @@ import { type Calendar } from '@/types/data'
 import { type Exam } from '@/types/utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -34,12 +35,6 @@ export default function CalendarPage(): JSX.Element {
 
     const [selectedData, setSelectedData] = useState<string>('Events')
 
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const [error, setError] = useState<Error | null>(null)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'

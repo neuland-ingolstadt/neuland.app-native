@@ -5,6 +5,7 @@ import { FoodFilterContext } from '@/components/provider'
 import { type Food } from '@/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -23,13 +24,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-
-enum LoadingState {
-    LOADING,
-    LOADED,
-    ERROR,
-    REFRESHING,
-}
 
 function FoodScreen(): JSX.Element {
     const [days, setDays] = useState<any>([])

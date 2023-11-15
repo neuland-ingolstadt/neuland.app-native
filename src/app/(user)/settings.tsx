@@ -7,7 +7,7 @@ import { UserKindContext } from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/userKind'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
-import { getContrastColor, getInitials } from '@/utils/ui-utils'
+import { LoadingState, getContrastColor, getInitials } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
@@ -26,13 +26,6 @@ import {
     Text,
     View,
 } from 'react-native'
-
-enum LoadingState {
-    LOADING,
-    REFRESHING,
-    LOADED,
-    ERROR,
-}
 
 export default function Settings(): JSX.Element {
     const { userKind, userFullName, updateUserFullName } =
