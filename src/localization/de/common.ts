@@ -3,6 +3,8 @@ export default {
         clipboard: 'in Zwischenablage kopiert',
     },
     error: {
+        title: 'Ein Fehler ist aufgetreten',
+        description: 'Ziehe zum Aktualisieren nach unten.',
         refresh:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
     },

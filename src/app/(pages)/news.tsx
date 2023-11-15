@@ -12,6 +12,7 @@ import {
     MODAL_BOTTOM_MARGIN,
     PAGE_PADDING,
 } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -36,13 +37,6 @@ export default function NewsScreen(): JSX.Element {
     const { t } = useTranslation('common')
     const [news, setNews] = useState<ThiNews[] | null>(null)
     const [errorMsg, setErrorMsg] = useState('')
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
 
     const [loadingState, setLoadingState] = useState<LoadingState>(
         LoadingState.LOADING

@@ -9,6 +9,7 @@ import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -24,13 +25,6 @@ import {
 
 export default function LecturersCard(): JSX.Element {
     const router = useRouter()
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
 
     const [personalLecturers, setPersonalLecturers] = useState<
         NormalizedLecturer[]

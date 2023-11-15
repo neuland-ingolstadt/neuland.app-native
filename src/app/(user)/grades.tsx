@@ -10,6 +10,7 @@ import { type Grade } from '@/types/thi-api'
 import { type GradeAverage } from '@/types/utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -30,13 +31,6 @@ export default function GradesSCreen(): JSX.Element {
     const [missingGrades, setMissingGrades] = useState<Grade[] | null>(null)
     const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
     const [errorMsg, setErrorMsg] = useState('')
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
 
     const [loadingState, setLoadingState] = useState<LoadingState>(
         LoadingState.LOADING

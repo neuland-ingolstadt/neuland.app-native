@@ -4,6 +4,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,12 +20,6 @@ import { RefreshControl } from 'react-native-gesture-handler'
 export default function Events(): JSX.Element {
     const [events, setEvents] = useState<CLEvents[]>([])
     const colors = useTheme().colors as Colors
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const [error, setError] = useState<Error | null>(null)
     const { t } = useTranslation('common')
 

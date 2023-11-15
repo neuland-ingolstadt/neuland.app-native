@@ -3,6 +3,8 @@ export default {
         clipboard: 'copied to clipboard',
     },
     error: {
+        title: 'An error occurred',
+        description: 'Pull down to refresh.',
         refresh:
             'An error occurred while loading the data.\nPull down to refresh.',
     },

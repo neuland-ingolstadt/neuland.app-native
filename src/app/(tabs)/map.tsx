@@ -17,6 +17,7 @@ import { type RoomsOverlay } from '@/types/asset-api'
 import { type AvailableRoom, type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { filterRooms, getNextValidDate } from '@/utils/room-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -65,11 +66,6 @@ export const MapScreen = (): JSX.Element => {
         4: '4',
     }
 
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-    }
     const [errorMsg, setErrorMsg] = useState('')
     const colors = useTheme().colors as Colors
     const { userKind, userFaculty } = React.useContext(UserKindContext)

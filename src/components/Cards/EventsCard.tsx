@@ -2,6 +2,7 @@ import NeulandAPI from '@/api/neuland-api'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -15,12 +16,6 @@ const EventsCard = (): JSX.Element => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
     const [events, setEvents] = useState<CLEvents[]>([])
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     useEffect(() => {
         void loadEvents()
