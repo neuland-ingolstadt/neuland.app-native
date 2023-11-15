@@ -406,7 +406,7 @@ export default function TimetableScreen(): JSX.Element {
     function LoadingView(): JSX.Element {
         return (
             <View style={styles.loadingView}>
-                <ActivityIndicator size="large" color={colors.primary} />
+                <ActivityIndicator size="small" color={colors.primary} />
             </View>
         )
     }
