@@ -15,4 +15,7 @@ export default {
     time: {
         minutes: 'Minuten',
     },
+    error: {
+        unknown: 'Ein unbekannter Fehler ist aufgetreten.',
+    },
 }

@@ -1,6 +1,13 @@
 import Color from 'color'
 import { Platform } from 'react-native'
 
+export enum LoadingState {
+    LOADING,
+    LOADED,
+    ERROR,
+    REFRESHING,
+}
+
 /**
  * Generates the initials of a given name.
  * @param name The name to generate the initials from.

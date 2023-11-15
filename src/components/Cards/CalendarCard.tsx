@@ -6,6 +6,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -21,12 +22,6 @@ const CalendarCard = (): JSX.Element => {
     const time = new Date()
     const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const flow = useContext(FlowContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
 

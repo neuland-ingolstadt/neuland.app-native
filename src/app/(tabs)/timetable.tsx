@@ -1,6 +1,6 @@
+import ErrorPage from '@/components/Elements/Universal/ErrorPage'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar as CalendarType } from '@/types/data'
 import { type FriendlyTimetableEntry } from '@/types/utils'
@@ -8,6 +8,7 @@ import { calendar } from '@/utils/calendar-utils'
 import { ignoreTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
@@ -16,6 +17,7 @@ import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    ActivityIndicator,
     Dimensions,
     StyleSheet,
     Text,
@@ -44,7 +46,7 @@ interface CalendarEvent extends ICalendarEventBase {
 export default function TimetableScreen(): JSX.Element {
     const router = useRouter()
 
-    const { t, i18n } = useTranslation('navigation')
+    const { t, i18n } = useTranslation(['navigation', 'timetable'])
 
     const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
     const [calendarDate, setCalendarDate] = useState<Date>(new Date())
@@ -57,7 +59,6 @@ export default function TimetableScreen(): JSX.Element {
 
     const textColor = Color(colors.text)
     const primaryColor = Color(colors.primary)
-    const { userKind } = React.useContext(UserKindContext)
 
     const timetableTextColor =
         textColor.contrast(primaryColor) > 5 ? textColor : textColor.negate()
@@ -66,36 +67,50 @@ export default function TimetableScreen(): JSX.Element {
     const calendarTextColor =
         textColor.contrast(calendarColor) > 5 ? textColor : textColor.negate()
 
+    const [rawTimetable, setRawTimetable] = useState<FriendlyTimetableEntry[]>(
+        []
+    )
     const [timetable, setTimetable] = useState<CalendarEvent[]>([])
 
+    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+
+    async function load(): Promise<void> {
+        try {
+            const timetable = await getFriendlyTimetable(today, true)
+            setRawTimetable(timetable)
+            setLoadingState(LoadingState.LOADED)
+        } catch (e) {
+            setLoadingState(LoadingState.ERROR)
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        async function load(): Promise<void> {
-            try {
-                // timetable
-                const timetable = await getFriendlyTimetable(today, true)
-                const timetableEntries = timetableToWeekViewEvents(timetable)
+        void load()
+    }, [])
 
-                // university calendar
-                const calendarEntries = calendarToWeekViewEvents(calendar)
+    useEffect(() => {
+        function fillTimetable(): void {
+            const timetableEntries = timetableToWeekViewEvents(rawTimetable)
 
-                // combine all events
-                const allEvents = [...timetableEntries, ...calendarEntries]
+            // university calendar
+            const calendarEntries = calendarToWeekViewEvents(calendar)
 
-                /**
-                 * TODO:
-                 * - Exams
-                 * - Holidays (not just the ones from the university calendar)
-                 * - Maybe Events from student clubs
-                 */
+            // combine all events
+            const allEvents = [...timetableEntries, ...calendarEntries]
 
-                setTimetable(allEvents)
-            } catch (e) {
-                console.log(e)
-            }
+            /**
+             * TODO:
+             * - Exams
+             * - Holidays (not just the ones from the university calendar)
+             * - Maybe Events from student clubs
+             */
+
+            setTimetable(allEvents)
         }
 
-        load().catch(console.error)
-    }, [colors.primary, userKind])
+        fillTimetable()
+    }, [rawTimetable, colors])
 
     useEffect(() => {
         const theme = {
@@ -115,6 +130,11 @@ export default function TimetableScreen(): JSX.Element {
 
         setCalendarTheme(theme)
     }, [colors])
+
+    function onRefresh(): void {
+        setLoadingState(LoadingState.REFRESHING)
+        void load()
+    }
 
     function timetableToWeekViewEvents(
         entries: FriendlyTimetableEntry[]
@@ -383,27 +403,53 @@ export default function TimetableScreen(): JSX.Element {
         })
     }
 
-    function Timetable(): JSX.Element {
+    function LoadingView(): JSX.Element {
         return (
-            <Calendar
-                date={calendarDate}
-                onChangeDate={(range) => {
-                    setCalendarDate(range[0])
-                }}
-                mode={mode}
-                events={timetable}
-                height={-1}
-                showAllDayEventCell={true}
-                renderEvent={renderEvent}
-                renderHeader={renderHeader}
-                onPressEvent={showEventDetails}
-                dayHeaderHighlightColor={colors.primary}
-                theme={calendarTheme}
-                scrollOffsetMinutes={480}
-                weekStartsOn={1}
-                weekEndsOn={6}
-            />
+            <View style={styles.loadingView}>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>
         )
+    }
+    function Timetable(): JSX.Element {
+        if (loadingState === LoadingState.LOADING) {
+            return <LoadingView />
+        } else if (
+            loadingState === LoadingState.ERROR ||
+            loadingState === LoadingState.REFRESHING
+        ) {
+            return (
+                <ErrorPage
+                    onRefresh={onRefresh}
+                    message={t('error.unknown', {
+                        ns: 'timetable',
+                    })}
+                    refreshing={loadingState === LoadingState.REFRESHING}
+                />
+            )
+        } else if (loadingState === LoadingState.LOADED) {
+            return (
+                <Calendar
+                    date={calendarDate}
+                    onChangeDate={(range) => {
+                        setCalendarDate(range[0])
+                    }}
+                    mode={mode}
+                    events={timetable}
+                    height={-1}
+                    showAllDayEventCell={true}
+                    renderEvent={renderEvent}
+                    renderHeader={renderHeader}
+                    onPressEvent={showEventDetails}
+                    dayHeaderHighlightColor={colors.primary}
+                    theme={calendarTheme}
+                    scrollOffsetMinutes={480}
+                    weekStartsOn={1}
+                    weekEndsOn={6}
+                />
+            )
+        } else {
+            return <></>
+        }
     }
 
     return (
@@ -425,6 +471,12 @@ export default function TimetableScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    loadingView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorView: {},
     navRight: {
         display: 'flex',
         flexDirection: 'row',

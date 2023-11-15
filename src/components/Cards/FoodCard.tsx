@@ -9,6 +9,7 @@ import {
     loadFoodEntries,
     mealName,
 } from '@/utils/food-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -18,12 +19,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const { t, i18n } = useTranslation('food')
 
