@@ -5,8 +5,11 @@ export default {
     error: {
         title: 'Ein Fehler ist aufgetreten',
         description: 'Ziehe zum Aktualisieren nach unten.',
-        refresh:
+        refreshPull:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
+        refreshButton:
+            'Ein Fehler ist beim Laden der Daten aufgetreten.\nKlicke zum Aktualisieren.',
+        button: 'Erneut versuchen',
     },
 
     dates: {
@@ -20,6 +23,8 @@ export default {
     },
     misc: {
         share: 'Teilen',
+        cancel: 'Abbrechen',
+        delete: 'Löschen',
     },
     pages: {
         calendar: {
@@ -87,6 +92,31 @@ export default {
                 seats: 'Plätze',
             },
             results: 'Verfügbare Räume',
+        },
+        library: {
+            reservations: {
+                title: 'Reservierungen',
+                seat: 'Platz',
+                id: 'Reservierungsnummer',
+                alert: {
+                    title: 'Reservierung löschen',
+                    message: 'Möchtest du diese Reservierung wirklich löschen?',
+                },
+            },
+            available: {
+                title: 'Verfügbare Plätze',
+                reserve: 'Reservieren',
+                seatsAvailable: '{{available}} / {{total}} verfügbar',
+                ratelimit: 'Du kannst keine weiteren Plätze reservieren.',
+                noSeats: 'Keine weiteren Plätze verfügbar.',
+                footer: 'Bis zu 5 aktive Reservierungen innerhalb von sieben Tagen erlaubt. Stornierung ist vor Beginn der Reservierung möglich.',
+                book: 'Platz buchen',
+                room: 'Raum',
+            },
+            code: {
+                number: 'Nummer',
+                footer: 'Verwende diesen Barcode zum anmelden an den Bibliotheksterminals, um Bücher auszuleihen.',
+            },
         },
     },
 }

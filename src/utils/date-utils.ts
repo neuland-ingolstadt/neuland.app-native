@@ -47,6 +47,8 @@ export function formatFriendlyDate(
  */
 export function formatFriendlyDateRange(begin: Date, end?: Date): string {
     let str = formatFriendlyDate(begin)
+    console.warn(end)
+    console.warn(begin)
     if (end != null && begin.toDateString() !== end.toDateString()) {
         str += ' – ' + formatFriendlyDate(end)
     }
@@ -114,7 +116,10 @@ export function formatFriendlyDateTime(datetime?: Date | string): string {
  * @returns {string}
  */
 export function formatNearDate(datetime: Date | string): string {
+    console.debug(datetime)
     const date = moment(datetime)
+
+    console.debug(date)
     const today = moment()
     const tomorrow = moment().add(1, 'days')
 
@@ -123,6 +128,7 @@ export function formatNearDate(datetime: Date | string): string {
     } else if (date.isSame(tomorrow, 'day')) {
         return t('dates.tomorrow')
     } else {
+        console.debug(date.locale('de').format('dddd, D.M.'))
         return date.locale('de').format('dddd, D.M.')
     }
 }
@@ -322,7 +328,10 @@ export function isSameDay(a: Date, b: Date): boolean {
  * @param {Date} time
  * @returns {Date}
  */
-export function combineDateTime(date: Date, time: Date): Date {
+export function combineDateTime(
+    date: Date | string,
+    time: Date | string
+): Date {
     date = new Date(date)
     time = new Date(time)
     date.setHours(time.getHours())

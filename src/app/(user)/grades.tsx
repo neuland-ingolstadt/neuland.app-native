@@ -119,7 +119,7 @@ export default function GradesSCreen(): JSX.Element {
                         {errorMsg}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh', { ns: 'common' })}{' '}
+                        {t('error.refreshPull', { ns: 'common' })}{' '}
                     </Text>
                 </View>
             )}

@@ -102,7 +102,7 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="library"
-                icon="book"
+                icon="library"
                 onPress={() => {
                     router.push('library')
                 }}

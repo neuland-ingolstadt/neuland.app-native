@@ -1,10 +1,12 @@
 import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/types/data'
 import {
+    type AvailableLibrarySeats,
     type Exams,
     type Grade,
     type Lecturers,
     type PersData,
+    type Reservation,
     type Rooms,
     type ThiNews,
     type TimetableResponse,
@@ -110,12 +112,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     async requestCached(cacheKey: string, params: object): Promise<any> {
         const cached = await this.cache.get(cacheKey)
         if (cached !== undefined) {
-            console.log('Using cached value for', cacheKey)
             return cached
         }
-        console.log('Requesting fron API', cacheKey)
         const resp = await this.requestAuthenticated(params)
-        console.log('Caching', cacheKey)
         await this.cache.set(cacheKey, resp)
 
         return resp
@@ -161,6 +160,15 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         const data = await this.getPersonalData()
         const fullName = data?.persdata?.vname + ' ' + data?.persdata?.name
         return fullName
+    }
+
+    /**
+     * Extracts the bib number from the personal data
+     * @returns {Promise<string | null>} Promise that resolves with the bib number of the user
+     */
+    async getLibraryNumber(): Promise<string | null> {
+        const data = await this.getPersonalData()
+        return data?.persdata?.bibnr
     }
 
     /**
@@ -301,11 +309,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         return res
     }
 
-    /**
-     * Fetches the library reservations
-     * @returns {Promise<object[]>} Promise that resolves with the reservations
-     */
-    async getLibraryReservations(): Promise<object[]> {
+    async getLibraryReservations(): Promise<Reservation[]> {
         try {
             const res = await this.requestAuthenticated({
                 service: 'thiapp',
@@ -330,11 +334,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         }
     }
 
-    /**
-     * Fetches the available library seats
-     * @returns {Promise<object[]>} Promise that resolves with the available seats
-     */
-    async getAvailableLibrarySeats(): Promise<object[]> {
+    async getAvailableLibrarySeats(): Promise<AvailableLibrarySeats[]> {
         try {
             const res = await this.requestAuthenticated({
                 service: 'thiapp',

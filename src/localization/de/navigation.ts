@@ -25,6 +25,8 @@ export default {
         mobility: 'Mobilität',
         grades: 'Noten',
         news: 'THI Neuigkeiten',
+        library: 'Bibliothek',
+        libraryCode: 'Bibliotheks Code',
     },
     cards: {
         titles: {

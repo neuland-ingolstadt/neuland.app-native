@@ -84,7 +84,7 @@ export default function Mobility(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
+                        {t('error.refreshPull')}{' '}
                     </Text>
                 </View>
             )}
