@@ -3,8 +3,8 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import LibraryBookingRow from '@/components/Elements/Pages/LibraryBookingRow'
 import LibraryReservationRow from '@/components/Elements/Pages/LibraryReservationRow'
-import LibrarySeatRow from '@/components/Elements/Pages/LibrarySeatRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
@@ -36,7 +36,6 @@ export default function newsSCreen(): JSX.Element {
         REFRESHING,
     }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-
     const [reservations, setReservations] = useState<Reservation[]>([])
     const [available, setAvailable] = useState<AvailableLibrarySeats[]>([])
 
@@ -133,7 +132,6 @@ export default function newsSCreen(): JSX.Element {
 
     const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
-    // Callback function to toggle expanded row
     const toggleRow = (value: string): void => {
         setExpandedRow(value === expandedRow ? null : value)
     }
@@ -221,7 +219,7 @@ export default function newsSCreen(): JSX.Element {
                                                         <React.Fragment
                                                             key={time.from.toString()}
                                                         >
-                                                            <LibrarySeatRow
+                                                            <LibraryBookingRow
                                                                 item={time}
                                                                 colors={colors}
                                                                 addReservation={

@@ -11,7 +11,7 @@ import Collapsible from 'react-native-collapsible'
 
 import Divider from '../Universal/Divider'
 
-const LibrarySeatRow = ({
+const LibraryBookingRow = ({
     colors,
     item,
     addReservation,
@@ -281,4 +281,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default LibrarySeatRow
+export default LibraryBookingRow
