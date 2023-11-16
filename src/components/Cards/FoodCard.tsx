@@ -211,6 +211,7 @@ const EventsCard = (): JSX.Element => {
 const styles = StyleSheet.create({
     listView: {
         gap: 12,
+        paddingTop: 10,
     },
     mealTitle: {
         fontWeight: '500',
