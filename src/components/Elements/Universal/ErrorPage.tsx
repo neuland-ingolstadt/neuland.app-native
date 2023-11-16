@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
-export default function ErrorPage({
+function ErrorPage({
     message,
     refreshing,
     onRefresh,
@@ -16,7 +16,6 @@ export default function ErrorPage({
     refreshing: boolean
     onRefresh: () => void
 }): JSX.Element {
-    const { t } = useTranslation('common')
     const colors = useTheme().colors as Colors
 
     return (
@@ -30,6 +29,17 @@ export default function ErrorPage({
             }
             contentContainerStyle={styles.container}
         >
+            <ErrorView message={message} />
+        </ScrollView>
+    )
+}
+
+function ErrorView({ message }: { message?: string }): JSX.Element {
+    const { t } = useTranslation('common')
+    const colors = useTheme().colors as Colors
+
+    return (
+        <View style={styles.innerContainer}>
             <Ionicons name={'alert-circle-outline'} size={48} color={'red'} />
             <Text
                 style={{
@@ -52,19 +62,23 @@ export default function ErrorPage({
                     {t('error.description')}
                 </Text>
             </View>
-        </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    innerContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 12,
+        paddingTop: 150,
+    },
     container: {
         zIndex: 9999,
         position: 'absolute',
         width: '100%',
         height: '100%',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         gap: 12,
         padding: PAGE_PADDING,
     },
@@ -83,3 +97,5 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
 })
+
+export { ErrorPage, ErrorView }

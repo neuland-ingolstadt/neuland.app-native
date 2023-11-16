@@ -6,11 +6,14 @@ import {
 import LibraryBookingRow from '@/components/Elements/Pages/LibraryBookingRow'
 import LibraryReservationRow from '@/components/Elements/Pages/LibraryReservationRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import { ErrorView } from '@/components/Elements/Universal/ErrorPage'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type AvailableLibrarySeats, type Reservation } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { getFriendlyAvailableLibrarySeats } from '@/utils/library-utils'
+import { CARD_PADDING } from '@/utils/style-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -28,23 +31,17 @@ export default function newsSCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const [errorMsg, setErrorMsg] = useState('')
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [reservations, setReservations] = useState<Reservation[]>([])
     const [available, setAvailable] = useState<AvailableLibrarySeats[]>([])
+    const [expandedRow, setExpandedRow] = useState<string | null>(null)
+
+    const toggleRow = (value: string): void => {
+        setExpandedRow(value === expandedRow ? null : value)
+    }
 
     /**
-     * Loads all news from the API and sets the state accordingly.
-     * @returns {Promise<void>} A promise that resolves when all news have been loaded.
-     */
-    /**
-     * Fetches and displays the reservation data.
+     * Loads the reservations and available seats from the API.
      */
     async function loadData(): Promise<void> {
         try {
@@ -54,7 +51,6 @@ export default function newsSCreen(): JSX.Element {
                 x.start = new Date(x.reservation_begin.replace(' ', 'T'))
                 x.end = new Date(x.reservation_end.replace(' ', 'T'))
             })
-            console.log(JSON.stringify(available))
             const filteredAvailable = available.map((day) => {
                 return {
                     ...day,
@@ -63,14 +59,12 @@ export default function newsSCreen(): JSX.Element {
                             (reservation) => timeSlot.hasReservation
                         )
                     }),
-                    reservationCount: 0, // Add this line
+                    reservationCount: 0,
                 }
             })
 
             setAvailable(filteredAvailable)
             setReservations(response)
-
-            setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
             if (
@@ -85,25 +79,12 @@ export default function newsSCreen(): JSX.Element {
         }
     }
 
-    useEffect(() => {
-        void loadData()
-    }, [])
-
-    const onRefresh: () => void = () => {
-        void loadData()
-    }
-
-    /**
-     * Cancels a reservation.
-     * @param {string} id Reservation ID
-     */
-    async function deleteReservation(id: string): Promise<void> {
-        await API.removeLibraryReservation(id)
-        await loadData()
-    }
-
     /**
      * Creates a new reservation.
+     * @param {string} reservationRoom Room ID
+     * @param {object} reservationTime Reservation time
+     * @param {string} reservationSeat Seat ID
+     * @returns {Promise<void>}
      */
     async function addReservation(
         reservationRoom: string,
@@ -112,13 +93,11 @@ export default function newsSCreen(): JSX.Element {
     ): Promise<void> {
         await API.addLibraryReservation(
             reservationRoom,
-            // bring the date into the correct format using reservationTime.from
             reservationTime.from.toLocaleDateString('de-DE', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
             }),
-            // this needs to be de-DE regardless of the users locale
             reservationTime.from.toLocaleTimeString('de-DE', {
                 timeStyle: 'short',
             }),
@@ -130,11 +109,22 @@ export default function newsSCreen(): JSX.Element {
         await loadData()
     }
 
-    const [expandedRow, setExpandedRow] = useState<string | null>(null)
-
-    const toggleRow = (value: string): void => {
-        setExpandedRow(value === expandedRow ? null : value)
+    /**
+     * Cancels a reservation.
+     * @param {string} id Reservation ID
+     */
+    async function deleteReservation(id: string): Promise<void> {
+        await API.removeLibraryReservation(id)
+        await loadData()
     }
+
+    const onRefresh: () => void = () => {
+        void loadData()
+    }
+
+    useEffect(() => {
+        void loadData()
+    }, [])
 
     return (
         <ScrollView
@@ -159,21 +149,7 @@ export default function newsSCreen(): JSX.Element {
                     </View>
                 )}
                 {loadingState === LoadingState.ERROR && (
-                    <View>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {errorMsg}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refreshPull')}{' '}
-                        </Text>
-                    </View>
+                    <ErrorView message={errorMsg} />
                 )}
                 {loadingState === LoadingState.LOADED && (
                     <>
@@ -287,6 +263,15 @@ export default function newsSCreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     contentContainer: { paddingBottom: 32 },
+    messageContainer: {
+        padding: CARD_PADDING,
+        borderRadius: 8,
+        width: '100%',
+        maxWidth: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 6,
+    },
     labelText: {
         fontSize: 13,
         fontWeight: 'normal',
@@ -347,5 +332,10 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 2,
         justifyContent: 'center',
+    },
+    errorTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
     },
 })

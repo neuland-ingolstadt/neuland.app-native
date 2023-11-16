@@ -1,4 +1,4 @@
-import ErrorPage from '@/components/Elements/Universal/ErrorPage'
+import { ErrorPage } from '@/components/Elements/Universal/ErrorPage'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
@@ -78,7 +78,8 @@ export default function TimetableScreen(): JSX.Element {
         try {
             const timetable = await getFriendlyTimetable(today, true)
             setRawTimetable(timetable)
-            setLoadingState(LoadingState.LOADED)
+
+            setLoadingState(LoadingState.ERROR)
         } catch (e) {
             setLoadingState(LoadingState.ERROR)
             console.log(e)
@@ -403,14 +404,14 @@ export default function TimetableScreen(): JSX.Element {
         })
     }
 
-    function LoadingView(): JSX.Element {
+    const LoadingView = (): JSX.Element => {
         return (
             <View style={styles.loadingView}>
                 <ActivityIndicator size="small" color={colors.primary} />
             </View>
         )
     }
-    function Timetable(): JSX.Element {
+    const Timetable = (): JSX.Element => {
         if (loadingState === LoadingState.LOADING) {
             return <LoadingView />
         } else if (
