@@ -11,6 +11,8 @@ jobs:
                   node-version: 18
                   cache: yarn
                   cache-dependency-path: './yarn.lock'
+            - name: Enable Corepack
+              run: npx corepack enable
             - name: Install modules
               run: yarn install
             - name: Run ESLint
