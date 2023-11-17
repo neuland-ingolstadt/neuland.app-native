@@ -37,6 +37,7 @@ const LibraryReservationRow = ({
             ]
         )
     }
+
     return (
         <RowEntry
             title={reservation.rcategory}
@@ -111,14 +112,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 5,
-    },
-    clubContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-    },
-    rightText: {
-        fontSize: 14,
-        fontWeight: '400',
     },
 })
 

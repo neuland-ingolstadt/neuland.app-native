@@ -6,7 +6,13 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    ActivityIndicator,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import Collapsible from 'react-native-collapsible'
 
 import Divider from '../Universal/Divider'
@@ -52,6 +58,7 @@ const LibraryBookingRow = ({
         Array.isArray(rooms[0][1].seats) ? rooms[0][1].seats[0] : ''
     )
     const [seats, setSeats] = useState<string[]>([])
+    const [reserve, setReserve] = useState(false)
 
     useEffect(() => {
         setCollapsed(!isExpanded)
@@ -88,7 +95,6 @@ const LibraryBookingRow = ({
                             color: colors.text,
                         }}
                         numberOfLines={2}
-                        textBreakStrategy="highQuality"
                     >
                         {`${formatFriendlyTime(
                             item.from
@@ -189,16 +195,24 @@ const LibraryBookingRow = ({
                                     },
                                     seats[0]
                                 )
+                                setReserve(true)
                             }}
+                            disabled={reserve}
                         >
-                            <Text
-                                style={{
-                                    ...styles.leftText2,
-                                    color: getContrastColor(colors.labelColor),
-                                }}
-                            >
-                                {t('pages.library.available.book')}
-                            </Text>
+                            {reserve ? (
+                                <ActivityIndicator color={'white'} />
+                            ) : (
+                                <Text
+                                    style={{
+                                        ...styles.leftText2,
+                                        color: getContrastColor(
+                                            colors.labelColor
+                                        ),
+                                    }}
+                                >
+                                    {t('pages.library.available.book')}
+                                </Text>
+                            )}
                         </Pressable>
                     </View>
                     <Text

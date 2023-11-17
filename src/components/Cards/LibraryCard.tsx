@@ -5,7 +5,7 @@ import {
 } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
-import { FlowContext } from '@/components/provider'
+import { FlowContext, UserKindContext } from '@/components/provider'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -20,23 +20,24 @@ const LibraryCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const flow = useContext(FlowContext)
+    const { userKind } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [reservations, setReservations] = useState<Reservation[]>([])
 
     useEffect(() => {
         void loadData()
-    }, [])
+    }, [userKind])
 
     async function loadData(): Promise<void> {
         try {
             const response = await API.getLibraryReservations()
-            response.forEach((x) => {
+            const firstTwoReservations = response.slice(0, 2).map((x) => {
                 x.start = new Date(x.reservation_begin.replace(' ', 'T'))
                 x.end = new Date(x.reservation_end.replace(' ', 'T'))
+                return x
             })
 
-            setReservations(response)
-
+            setReservations(firstTwoReservations)
             setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
