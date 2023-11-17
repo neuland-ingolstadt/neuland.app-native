@@ -3,7 +3,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import LecturerRow from '@/components/Elements/Pages/LecturerRow'
+import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'

@@ -3,8 +3,8 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import LibraryBookingRow from '@/components/Elements/Pages/LibraryBookingRow'
-import LibraryReservationRow from '@/components/Elements/Pages/LibraryReservationRow'
+import LibraryBookingRow from '@/components/Elements/Rows/LibraryBookingRow'
+import LibraryReservationRow from '@/components/Elements/Rows/LibraryReservationRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { ErrorView } from '@/components/Elements/Universal/ErrorPage'
 import SectionView from '@/components/Elements/Universal/SectionsView'
