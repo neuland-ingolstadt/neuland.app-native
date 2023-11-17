@@ -55,9 +55,7 @@ export default function newsSCreen(): JSX.Element {
                 return {
                     ...day,
                     resource: day.resource.filter((timeSlot) => {
-                        return !response.some(
-                            (reservation) => timeSlot.hasReservation
-                        )
+                        return !response.some(() => timeSlot.hasReservation)
                     }),
                     reservationCount: 0,
                 }
@@ -65,6 +63,7 @@ export default function newsSCreen(): JSX.Element {
 
             setAvailable(filteredAvailable)
             setReservations(response)
+            setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
             if (
@@ -157,7 +156,7 @@ export default function newsSCreen(): JSX.Element {
                             <SectionView
                                 title={t('pages.library.reservations.title')}
                             >
-                                <React.Fragment>
+                                <>
                                     {reservations?.map((reservation, index) => (
                                         <React.Fragment key={index}>
                                             <LibraryReservationRow
@@ -175,12 +174,12 @@ export default function newsSCreen(): JSX.Element {
                                             )}
                                         </React.Fragment>
                                     ))}
-                                </React.Fragment>
+                                </>
                             </SectionView>
                         )}
 
                         {available.length > 0 ? (
-                            <React.Fragment>
+                            <>
                                 {available?.map((day, i) => (
                                     <SectionView
                                         title={formatFriendlyDate(day.date, {
@@ -239,7 +238,7 @@ export default function newsSCreen(): JSX.Element {
                                         </View>
                                     </SectionView>
                                 ))}
-                            </React.Fragment>
+                            </>
                         ) : (
                             <SectionView
                                 title={t('pages.library.available.title')}

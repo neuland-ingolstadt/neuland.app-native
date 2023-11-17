@@ -3,11 +3,12 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import { ErrorButtonView } from '@/components/Elements/Universal/ErrorPage'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
+import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useTheme } from '@react-navigation/native'
 import * as Brightness from 'expo-brightness'
@@ -26,20 +27,15 @@ import {
 
 export default function LibraryCode(): JSX.Element {
     const colors = useTheme().colors as Colors
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
-
+    const { t } = useTranslation('common')
+    const [errorMsg, setErrorMsg] = useState<string>('')
+    const [libraryCode, setLibraryCode] = useState<string>('')
     const [loadingState, setLoadingState] = useState<LoadingState>(
         LoadingState.LOADING
     )
-    const [errorMsg, setErrorMsg] = useState<string>('')
+    const [brightness, setBrightness] = useState<number>(0)
+    const brightnessRef = useRef<number>(0)
 
-    const { t } = useTranslation('common')
-    const [libraryCode, setLibraryCode] = useState<string>('')
     async function load(): Promise<void> {
         try {
             setLibraryCode((await API.getLibraryNumber()) ?? '')
@@ -56,6 +52,7 @@ export default function LibraryCode(): JSX.Element {
             }
         }
     }
+
     useEffect(() => {
         void load()
     }, [])
@@ -64,10 +61,6 @@ export default function LibraryCode(): JSX.Element {
         setLoadingState(LoadingState.LOADING)
         void load()
     }
-
-    const [brightness, setBrightness] = useState<number>(0)
-
-    const brightnessRef = useRef<number>(0)
 
     useEffect(() => {
         brightnessRef.current = brightness
@@ -121,33 +114,7 @@ export default function LibraryCode(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View style={styles.errorContainer}>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {errorMsg}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull', { ns: 'common' })}{' '}
-                    </Text>
-                    <Pressable
-                        style={[
-                            styles.logoutContainer,
-                            { backgroundColor: colors.card },
-                        ]}
-                        onPress={onRefresh}
-                    >
-                        <View style={styles.logoutButton}>
-                            <Text
-                                style={{
-                                    color: colors.primary,
-                                    fontSize: 16,
-                                    fontWeight: '600',
-                                }}
-                            >
-                                {t('error.button')}
-                            </Text>
-                        </View>
-                    </Pressable>
-                </View>
+                <ErrorButtonView message={errorMsg} onRefresh={onRefresh} />
             )}
             {loadingState === LoadingState.LOADED && (
                 <View style={styles.container}>
@@ -208,39 +175,11 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
-
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
-    },
-    errorContainer: {
-        paddingBottom: 64,
-    },
-    logoutContainer: {
-        borderRadius: 10,
-        marginBottom: 30,
-        marginTop: 30,
-        alignItems: 'center',
-        alignSelf: 'center',
-    },
-    logoutButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 40,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingVertical: 40,

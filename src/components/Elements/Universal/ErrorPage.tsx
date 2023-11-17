@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, StyleSheet, Text, View } from 'react-native'
+import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 function ErrorPage({
@@ -66,6 +66,62 @@ function ErrorView({ message }: { message?: string }): JSX.Element {
     )
 }
 
+function ErrorButtonView({
+    message,
+    onRefresh,
+}: {
+    message?: string
+    onRefresh: () => void
+}): JSX.Element {
+    const { t } = useTranslation('common')
+    const colors = useTheme().colors as Colors
+
+    return (
+        <View style={styles.innerContainer}>
+            <View style={styles.errorContainer}>
+                <Ionicons
+                    name={'alert-circle-outline'}
+                    size={48}
+                    color={'red'}
+                />
+                <Text
+                    style={{
+                        ...styles.errorTitle,
+                        color: colors.text,
+                    }}
+                >
+                    {t('error.title')}
+                </Text>
+                <Text style={[styles.errorMessage, { color: colors.text }]}>
+                    {message}
+                </Text>
+                <Text style={[styles.errorInfo, { color: colors.text }]}>
+                    {t('error.refreshPull', { ns: 'common' })}
+                </Text>
+                <Pressable
+                    style={[
+                        styles.logoutContainer,
+                        { backgroundColor: colors.card },
+                    ]}
+                    onPress={onRefresh}
+                >
+                    <View style={styles.refreshButton}>
+                        <Text
+                            style={{
+                                color: colors.primary,
+                                fontSize: 16,
+                                fontWeight: '600',
+                            }}
+                        >
+                            {t('error.button')}
+                        </Text>
+                    </View>
+                </Pressable>
+            </View>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     innerContainer: {
         justifyContent: 'center',
@@ -96,6 +152,34 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 8,
     },
+    logoutContainer: {
+        borderRadius: 10,
+        marginBottom: 30,
+        marginTop: 30,
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    refreshButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 40,
+    },
+    errorMessage: {
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    errorInfo: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    errorContainer: {
+        paddingBottom: 64,
+        gap: 12,
+        alignItems: 'center',
+    },
 })
 
-export { ErrorPage, ErrorView }
+export { ErrorPage, ErrorView, ErrorButtonView }
