@@ -10,6 +10,7 @@ export default {
         refreshButton:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nKlicke zum Aktualisieren.',
         button: 'Erneut versuchen',
+        noSession: 'Nicht angemeldet.',
     },
 
     dates: {

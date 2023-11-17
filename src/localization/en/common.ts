@@ -10,6 +10,7 @@ export default {
         refreshButton:
             'An error occurred while loading the data.\nClick to refresh.',
         button: 'Retry',
+        noSession: 'Not signed in.',
     },
     dates: {
         until: 'until',

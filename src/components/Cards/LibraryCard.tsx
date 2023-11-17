@@ -25,7 +25,9 @@ const LibraryCard = (): JSX.Element => {
     const [reservations, setReservations] = useState<Reservation[]>([])
 
     useEffect(() => {
-        void loadData()
+        if (userKind !== 'guest') {
+            void loadData()
+        }
     }, [userKind])
 
     async function loadData(): Promise<void> {

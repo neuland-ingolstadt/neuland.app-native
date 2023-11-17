@@ -70,6 +70,7 @@ export default function newsSCreen(): JSX.Element {
                 e instanceof NoSessionError ||
                 e instanceof UnavailableSessionError
             ) {
+                setErrorMsg(t('error.noSession'))
                 router.push('(user)/login')
             } else {
                 setErrorMsg(e.message)
