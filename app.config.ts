@@ -69,6 +69,14 @@ module.exports = {
                     faceIDPermission: 'Allow $(PRODUCT_NAME) to use Face ID.',
                 },
             ],
+            [
+                'expo-build-properties',
+                {
+                    ios: {
+                        deploymentTarget: '15.0',
+                    },
+                },
+            ],
         ],
     },
 }
