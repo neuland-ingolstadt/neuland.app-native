@@ -22,8 +22,6 @@
 .expo/
 
 # builds
-/ios
-/android
 /dist
 *.aab
 
