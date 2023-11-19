@@ -1,7 +1,7 @@
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors, accentColors } from '@/components/colors'
 import { ThemeContext } from '@/components/provider'
 import { getContrastColor } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React from 'react'
@@ -64,10 +64,16 @@ export default function Theme(): JSX.Element {
                         ]}
                     >
                         {accentColor === code && (
-                            <Ionicons
-                                name={'checkmark-sharp'}
-                                size={24}
+                            <PlatformIcon
                                 color={getContrastColor(themeAccentColor)}
+                                ios={{
+                                    name: 'checkmark',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: 'check',
+                                    size: 24,
+                                }}
                             />
                         )}
                     </View>

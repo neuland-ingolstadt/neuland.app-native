@@ -1,10 +1,11 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from './Icon'
 
 interface FormListProps {
     sections: FormListSections[]
@@ -84,13 +85,28 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                 </Text>
                                             )}
                                             {item.icon != null && (
-                                                <Ionicons
-                                                    name={item.icon as any}
-                                                    size={18}
+                                                <PlatformIcon
                                                     color={
                                                         item.iconColor ??
                                                         colors.labelSecondaryColor
                                                     }
+                                                    ios={{
+                                                        name: item.icon.ios,
+                                                        fallback:
+                                                            item.icon
+                                                                .iosFallback,
+
+                                                        size:
+                                                            item.icon
+                                                                .iosFallback ??
+                                                            false
+                                                                ? 20
+                                                                : 16,
+                                                    }}
+                                                    android={{
+                                                        name: item.icon.android,
+                                                        size: 18,
+                                                    }}
                                                 />
                                             )}
                                         </View>

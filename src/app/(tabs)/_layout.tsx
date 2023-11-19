@@ -1,15 +1,17 @@
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { FlowContext } from '@/components/provider'
+import { FlowContext, FoodFilterContext } from '@/components/provider'
 import changelog from '@/data/changelog.json'
-import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import { Ionicons } from '@expo/vector-icons'
+import { convertToMajorMinorPatch, processShortcut } from '@/utils/app-utils'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, StyleSheet } from 'react-native'
+// @ts-expect-error Mssing types for rn-quick-actions
+import Shortcuts from 'rn-quick-actions'
 
 import packageInfo from '../../../package.json'
 
@@ -19,7 +21,7 @@ export default function HomeLayout(): JSX.Element {
     const colors = theme.colors as Colors
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
-
+    const { selectedRestaurants } = useContext(FoodFilterContext)
     if (flow.isOnboarded === false) {
         console.log('redirecting to onboard')
         router.push('(flow)/onboarding')
@@ -47,6 +49,45 @@ export default function HomeLayout(): JSX.Element {
             style={styles.blurTab}
         />
     )
+    const restaurant =
+        selectedRestaurants.length !== 1 ? 'food' : selectedRestaurants[0]
+
+    const shortcuts = [
+        {
+            id: 'timetable',
+            title: t('navigation.timetable'),
+            subtitle: t('shortcuts.timetableDescription'),
+            symbolName: 'calendar',
+            iconName: 'clock',
+            data: {
+                path: '(tabs)/timetable',
+            },
+        },
+        {
+            id: 'map',
+            title: t('navigation.map'),
+            data: {
+                path: '(tabs)/map',
+            },
+            symbolName: 'map',
+            iconName: 'map',
+        },
+        {
+            id: 'food',
+            title: t('cards.titles.' + restaurant),
+            data: {
+                path: '(tabs)/food',
+            },
+            symbolName: 'fork.knife',
+            iconName: 'silverware_fork_knife',
+        },
+    ]
+
+    useEffect(() => {
+        Shortcuts.setShortcuts(shortcuts)
+        const sub = Shortcuts.onShortcutPressed(processShortcut)
+        sub.remove()
+    }, [selectedRestaurants])
 
     return (
         <>
@@ -65,7 +106,18 @@ export default function HomeLayout(): JSX.Element {
                         title: 'Home',
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
-                            <Ionicons name="home" size={size} color={color} />
+                            <PlatformIcon
+                                color={color}
+                                ios={{
+                                    name: 'house',
+                                    variant: 'fill',
+                                    size: size - 2,
+                                }}
+                                android={{
+                                    name: 'home',
+                                    size,
+                                }}
+                            />
                         ),
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
@@ -79,7 +131,18 @@ export default function HomeLayout(): JSX.Element {
                         headerShown: false,
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
-                            <Ionicons name="time" size={size} color={color} />
+                            <PlatformIcon
+                                color={color}
+                                ios={{
+                                    name: 'clock',
+                                    variant: 'fill',
+                                    size: size - 2,
+                                }}
+                                android={{
+                                    name: 'clock',
+                                    size,
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -91,7 +154,18 @@ export default function HomeLayout(): JSX.Element {
                         headerShown: false,
                         tabBarHideOnKeyboard: true,
                         tabBarIcon: ({ color, size }) => (
-                            <Ionicons name="map" size={size} color={color} />
+                            <PlatformIcon
+                                color={color}
+                                ios={{
+                                    name: 'map',
+                                    variant: 'fill',
+                                    size: size - 2,
+                                }}
+                                android={{
+                                    name: 'map',
+                                    size,
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -101,10 +175,16 @@ export default function HomeLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
-                            <Ionicons
-                                name="restaurant-sharp"
-                                size={size}
+                            <PlatformIcon
                                 color={color}
+                                ios={{
+                                    name: 'fork.knife',
+                                    size: size - 2,
+                                }}
+                                android={{
+                                    name: 'silverware-fork-knife',
+                                    size,
+                                }}
                             />
                         ),
                         tabBarStyle: { position: 'absolute' },

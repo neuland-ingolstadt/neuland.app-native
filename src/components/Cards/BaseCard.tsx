@@ -1,23 +1,27 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { type Colors } from '@/components/colors'
 import { CARD_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
+import { type MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
+import PlatformIcon from '../Elements/Universal/Icon'
+
 interface BaseCardProps {
     title: string
     onPress: () => void
-    icon: typeof Ionicons.defaultProps.name
+    androidIcon: typeof MaterialCommunityIcons.defaultProps.name
+    iosIcon: string
     children?: React.ReactNode
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
     title,
     onPress,
-    icon,
+    androidIcon,
+    iosIcon,
     children,
 }) => {
     const colors = useTheme().colors as Colors
@@ -34,14 +38,31 @@ const BaseCard: React.FC<BaseCardProps> = ({
                 ]}
             >
                 <View style={styles.titleView}>
-                    <Ionicons name={icon} size={20} color={colors.primary} />
+                    <PlatformIcon
+                        color={colors.primary}
+                        ios={{
+                            name: iosIcon,
+                            size: 20,
+                        }}
+                        android={{
+                            name: androidIcon,
+                            size: 24,
+                        }}
+                    />
                     <Text style={[styles.title, { color: colors.text }]}>
                         {t('cards.titles.' + title)}
                     </Text>
-                    <Ionicons
-                        name="chevron-forward-outline"
-                        size={20}
+
+                    <PlatformIcon
                         color={colors.labelColor}
+                        ios={{
+                            name: 'chevron.forward',
+                            size: 20,
+                        }}
+                        android={{
+                            name: 'chevron-right',
+                            size: 26,
+                        }}
                     />
                 </View>
                 {children != null && <>{children}</>}

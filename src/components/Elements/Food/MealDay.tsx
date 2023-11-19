@@ -1,12 +1,12 @@
 import { type Colors } from '@/components/colors'
 import { type Meal } from '@/types/neuland-api'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 
+import PlatformIcon from '../Universal/Icon'
 import { MealEntry } from './MealEntry'
 
 /**
@@ -70,15 +70,17 @@ const MealCategory = ({
                         >
                             {t(`categories.${category}`, category)}
                         </Text>
-                        <Ionicons
-                            name={
-                                collapsed
-                                    ? 'chevron-down-outline'
-                                    : 'chevron-up-outline'
-                            }
-                            size={16}
-                            style={styles.toggleIcon}
+                        <PlatformIcon
                             color={colors.primary}
+                            ios={{
+                                name: collapsed ? 'chevron.down' : 'chevron.up',
+                                size: 12,
+                            }}
+                            android={{
+                                name: collapsed ? 'chevron-down' : 'chevron-up',
+                                size: 20,
+                            }}
+                            style={styles.toggleIcon}
                         />
                     </View>
                 </Pressable>

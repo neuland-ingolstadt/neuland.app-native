@@ -1,11 +1,12 @@
 import { type Colors } from '@/components/colors'
 import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+
+import PlatformIcon from './Icon'
 
 export default function ErrorPage({
     message,
@@ -30,7 +31,20 @@ export default function ErrorPage({
             }
             contentContainerStyle={styles.container}
         >
-            <Ionicons name={'alert-circle-outline'} size={48} color={'red'} />
+            <PlatformIcon
+                color={colors.primary}
+                ios={{
+                    name: 'square.stack.3d.up.trianglebadge.exclamationmark',
+                    variant: 'fill',
+                    variableValue: 0.5,
+                    renderMode: 'multicolor',
+                    size: 44,
+                }}
+                android={{
+                    name: 'alert-circle-outline',
+                    size: 48,
+                }}
+            />
             <Text
                 style={{
                     ...styles.errorTitle,

@@ -1,4 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
@@ -31,12 +32,18 @@ export default function About(): JSX.Element {
             items: [
                 {
                     title: t('about.formlist.legal.privacy'),
-                    icon: 'shield',
+                    icon: {
+                        ios: 'hand.raised',
+                        android: 'lock-check-outline',
+                    },
                     onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },
                 {
                     title: t('about.formlist.legal.imprint'),
-                    icon: 'information-circle',
+                    icon: {
+                        ios: 'person.text.rectangle',
+                        android: 'newspaper',
+                    },
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
             ],
@@ -46,7 +53,10 @@ export default function About(): JSX.Element {
             items: [
                 {
                     title: 'Feedback',
-                    icon: 'chatbox-ellipses-outline',
+                    icon: {
+                        ios: 'envelope',
+                        android: 'email-outline',
+                    },
                     onPress: async () =>
                         await Linking.openURL(
                             'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
@@ -54,7 +64,12 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Github',
-                    icon: 'logo-github',
+                    icon: {
+                        ios: 'logo-github',
+                        android: 'github',
+                        iosFallback: true,
+                    },
+
                     onPress: async () =>
                         await Linking.openURL(
                             'https://github.com/neuland-ingolstadt/neuland.app-native'
@@ -62,7 +77,7 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Website',
-                    icon: 'globe',
+                    icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('https://neuland-ingolstadt.de/'),
                 },
@@ -77,7 +92,7 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Changelog',
-                    icon: 'newspaper-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(user)/changelog')
                     },

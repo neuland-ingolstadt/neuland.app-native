@@ -22,6 +22,7 @@ export default function RootLayout(): JSX.Element {
 
         void loadLanguage()
     }, [])
+
     return (
         <>
             <Provider>

@@ -48,7 +48,7 @@ const EventsCard = (): JSX.Element => {
 
     const loadData = async (): Promise<void> => {
         const restaurants =
-            selectedRestaurants.length === 0 ? ['mensa'] : selectedRestaurants
+            selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
 
         function userMealRating(meal: Meal): number {
             if (
@@ -156,7 +156,8 @@ const EventsCard = (): JSX.Element => {
     return (
         <BaseCard
             title={foodCardTitle}
-            icon="restaurant"
+            iosIcon="fork.knife"
+            androidIcon="silverware-fork-knife"
             onPress={() => {
                 router.replace('food')
             }}

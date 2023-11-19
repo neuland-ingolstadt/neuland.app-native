@@ -1,9 +1,9 @@
 import Divider from '@/components/Elements/Universal/Divider'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Card, type ExtendedCard } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
 import { DashboardContext } from '@/components/provider'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -166,10 +166,18 @@ export default function DashboardEdit(): JSX.Element {
                                                     { ns: 'navigation' }
                                                 )}
                                             </Text>
-                                            <Ionicons
-                                                name="add-circle"
-                                                size={24}
+
+                                            <PlatformIcon
                                                 color={colors.primary}
+                                                ios={{
+                                                    name: 'plus.circle',
+                                                    variant: 'fill',
+                                                    size: 20,
+                                                }}
+                                                android={{
+                                                    name: 'plus-circle',
+                                                    size: 24,
+                                                }}
                                             />
                                         </View>
                                     </Pressable>
@@ -235,21 +243,32 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                     },
                 ]}
             >
-                <Ionicons
-                    name="reorder-three-outline"
-                    size={24}
+                <PlatformIcon
                     color={colors.labelTertiaryColor}
+                    ios={{
+                        name: 'line.3.horizontal',
+                        size: 20,
+                    }}
+                    android={{
+                        name: 'drag-horizontal-variant',
+                        size: 22,
+                    }}
                 />
 
                 <Text style={[styles.text, { color: colors.text }]}>
                     {item.text}
                 </Text>
 
-                <Ionicons
-                    name="remove-circle-outline"
-                    size={24}
+                <PlatformIcon
                     color={colors.labelSecondaryColor}
-                    onPress={onPressDelete}
+                    ios={{
+                        name: 'minus.circle',
+                        size: 20,
+                    }}
+                    android={{
+                        name: 'minus-circle',
+                        size: 24,
+                    }}
                 />
             </TouchableOpacity>
 
@@ -280,7 +299,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 6,
+        gap: 8,
         paddingVertical: 9,
     },
     text: {

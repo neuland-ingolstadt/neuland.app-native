@@ -1,13 +1,13 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import FormList from '@/components/Elements/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
@@ -147,7 +147,7 @@ export default function Profile(): JSX.Element {
             items: [
                 {
                     title: t('profile.formlist.grades.button'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: async () => {
                         await handleBiometricAuth()
                     },
@@ -298,11 +298,16 @@ export default function Profile(): JSX.Element {
                         activeOpacity={0.5}
                         style={styles.logoutButton}
                     >
-                        <Ionicons
-                            name="log-out-outline"
-                            size={24}
+                        <PlatformIcon
                             color={colors.notification}
-                            style={{ marginRight: 10 }}
+                            ios={{
+                                name: 'rectangle.portrait.and.arrow.right',
+                                size: 18,
+                            }}
+                            android={{
+                                name: 'logout-variant',
+                                size: 22,
+                            }}
                         />
                         <Text style={{ color: colors.notification }}>
                             Logout
@@ -336,6 +341,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 40,
+        gap: 10,
     },
     errorMessage: {
         paddingTop: 100,

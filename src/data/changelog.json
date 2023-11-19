@@ -11,7 +11,10 @@
                     "de": "Hinzugefügt: Anpassbares Dashboard. Gehe zur Einstellungsseite, um es anzupassen.",
                     "en": "Added a customizable dashboard. Go to the settings page to customize it."
                 },
-                "icon": "grid-outline"
+                "icon": {
+                    "ios": "rectangle.3.group",
+                    "android": "view-dashboard-variant"
+                }
             },
             {
                 "title": {
@@ -22,7 +25,10 @@
                     "de": "Wähle aus 9 verschiedenen Akzentfarben, um deine Erfahrung zu personalisieren.",
                     "en": "Choose from 9 different accent colors to personalize your experience."
                 },
-                "icon": "color-palette-outline"
+                "icon": {
+                    "ios": "paintpalette",
+                    "android": "palette-outline"
+                }
             },
             {
                 "title": {
@@ -33,7 +39,10 @@
                     "de": "Diese neue Übersicht zeigt die wichtigsten Änderungen nach einem Update. Neue Nutzern wird außerdem ein Onboarding angezeigt.",
                     "en": "This new overview shows the most important changes after an update. New users also see an onboarding."
                 },
-                "icon": "newspaper-outline"
+                "icon": {
+                    "ios": "newspaper",
+                    "android": "newspaper"
+                }
             }
         ],
         "0.3": [
@@ -46,18 +55,10 @@
                     "de": "Die App ist nun in zwei Sprachen verfügbar. Die Sprache kann in den Einstellungen geändert werden.",
                     "en": "The app is now available in two languages. The language can be changed in the settings."
                 },
-                "icon": "language-outline"
-            },
-            {
-                "title": {
-                    "de": "Studenplan",
-                    "en": "Timetable"
-                },
-                "description": {
-                    "de": "Dein Stundenplan ist nun für angemeldete Nutzer verfügbar. Er zeigt zudem wichtige Kalendar Termine und Fristen an.",
-                    "en": "Your timetable is now available for logged in users. It also shows important calendar dates and deadlines."
-                },
-                "icon": "calendar-outline"
+                "icon": {
+                    "ios": "globe",
+                    "android": "earth"
+                }
             },
             {
                 "title": {
@@ -68,7 +69,10 @@
                     "de": "Verfügbare Variationen werden nun in den Detaisl angezeigt. Außerdem kann nach dauerhaft verfügbaren Gerichten gefiltert werden.",
                     "en": "Available variations are now displayed in the details. In addition, you can filter by permanently available dishes."
                 },
-                "icon": "fast-food-outline"
+                "icon": {
+                    "ios": "carrot",
+                    "android": "food-apple-outline"
+                }
             }
         ],
         "0.4": [
@@ -81,7 +85,10 @@
                     "de": "Der Studenplan wurde von Grund auf überarbeitet. Du siehst nun alle nötigen Informationen auf einen Blick und kannst bei Bedarf mehr Details anzeigen lassen.",
                     "en": "The study plan has been completely revised. You can now see all the necessary information at a glance and can display more details if needed."
                 },
-                "icon": "calendar"
+                "icon": {
+                    "ios": "calendar",
+                    "android": "calendar-outline"
+                }
             },
             {
                 "title": {
@@ -92,18 +99,10 @@
                     "de": "Nun kannst du deine Notenübersicht einsehen. Diese findest du in deinem Profil.",
                     "en": "You can now view your grades overview. These can be found in your profile."
                 },
-                "icon": "list"
-            },
-            {
-                "title": {
-                    "de": "Erweiterte Lokalisierung",
-                    "en": "Extended localization"
-                },
-                "description": {
-                    "de": "Die bisherigen Lokalisierungen wurden überarbeitet und erweitert. Dazu zählen unter anderem die Professoren und Raum-Details.",
-                    "en": "The previous localizations have been revised and expanded. These include the professors and room details."
-                },
-                "icon": "language-outline"
+                "icon": {
+                    "ios": "book",
+                    "android": "book-outline"
+                }
             }
         ]
     }

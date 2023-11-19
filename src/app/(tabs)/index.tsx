@@ -1,11 +1,11 @@
 import { Avatar } from '@/components/Elements/Settings'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/userKind'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
@@ -66,10 +66,16 @@ export default function Screen(): JSX.Element {
                             </View>
                         ) : (
                             <View>
-                                <Ionicons
-                                    name="person-circle-outline"
-                                    size={28}
+                                <PlatformIcon
                                     color={colors.text}
+                                    ios={{
+                                        name: 'person.crop.circle',
+                                        size: 22,
+                                    }}
+                                    android={{
+                                        name: 'account-circle',
+                                        size: 24,
+                                    }}
                                 />
                             </View>
                         )}

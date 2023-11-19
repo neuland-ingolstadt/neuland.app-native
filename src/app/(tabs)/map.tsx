@@ -9,6 +9,7 @@ import {
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/provider'
@@ -18,7 +19,6 @@ import { type AvailableRoom, type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { filterRooms, getNextValidDate } from '@/utils/room-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
@@ -102,10 +102,16 @@ export const MapScreen = (): JSX.Element => {
                         router.push('(map)/advanced')
                     }}
                 >
-                    <Ionicons
-                        name="options-outline"
-                        size={24}
+                    <PlatformIcon
                         color={colors.text}
+                        ios={{
+                            name: 'text.magnifyingglass',
+                            size: 22,
+                        }}
+                        android={{
+                            name: 'format-list-group',
+                            size: 24,
+                        }}
                     />
                 </Pressable>
             ),
@@ -133,10 +139,16 @@ export const MapScreen = (): JSX.Element => {
                                 router.push('(map)/advanced')
                             }}
                         >
-                            <Ionicons
-                                name="options-outline"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.text}
+                                ios={{
+                                    name: 'text.magnifyingglass',
+                                    size: 22,
+                                }}
+                                android={{
+                                    name: 'format-list-group',
+                                    size: 24,
+                                }}
                             />
                         </Pressable>
                     )
@@ -450,10 +462,16 @@ export const MapScreen = (): JSX.Element => {
                                     },
                                 ]}
                             >
-                                <Ionicons
-                                    name="close"
-                                    size={24}
+                                <PlatformIcon
                                     color={colors.text}
+                                    ios={{
+                                        name: 'xmark',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'close',
+                                        size: 22,
+                                    }}
                                 />
                             </View>
                         </Pressable>
@@ -481,18 +499,15 @@ export const MapScreen = (): JSX.Element => {
                                     },
                                 ]}
                             >
-                                <Ionicons
-                                    name={
-                                        Platform.OS !== 'ios'
-                                            ? 'share-outline'
-                                            : 'share-social-outline'
-                                    }
-                                    size={22}
+                                <PlatformIcon
                                     color={colors.text}
-                                    // the iOS share icon is slightly off center
-                                    style={{
-                                        marginLeft:
-                                            Platform.OS === 'ios' ? 1 : 0,
+                                    ios={{
+                                        name: 'square.and.arrow.up',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'share-variant',
+                                        size: 22,
                                     }}
                                 />
                             </View>

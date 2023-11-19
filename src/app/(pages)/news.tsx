@@ -4,6 +4,7 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -13,7 +14,6 @@ import {
     PAGE_PADDING,
 } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -144,10 +144,16 @@ export default function NewsScreen(): JSX.Element {
                                     >
                                         {item.title}
                                     </Text>
-                                    <Ionicons
-                                        name="chevron-forward-outline"
-                                        size={24}
+                                    <PlatformIcon
                                         color={colors.labelColor}
+                                        ios={{
+                                            name: 'chevron.forward',
+                                            size: 20,
+                                        }}
+                                        android={{
+                                            name: 'chevron-right',
+                                            size: 16,
+                                        }}
                                     />
                                 </View>
                                 <Divider width={'100%'} />
@@ -185,7 +191,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingTop: Platform.OS === 'ios' ? 105 : 5,
-        gap: 12,
+        gap: 18,
         padding: PAGE_PADDING,
         paddingBottom: MODAL_BOTTOM_MARGIN,
     },
@@ -205,6 +211,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
+        paddingVertical: 4,
     },
     titleText: {
         fontSize: 15,

@@ -14,7 +14,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="timetable"
-                icon="time"
+                iosIcon="clock.fill"
+                androidIcon="clock"
                 onPress={() => {
                     router.push('timetable')
                 }}
@@ -34,7 +35,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="mobility"
-                icon="bus"
+                iosIcon="tram"
+                androidIcon="bus"
                 onPress={() => {
                     router.push('mobility')
                 }}
@@ -60,7 +62,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="rooms"
-                icon="location"
+                iosIcon="rectangle.grid.2x2.fill"
+                androidIcon="view-grid"
                 onPress={() => {
                     router.push('rooms')
                 }}
@@ -74,7 +77,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="lecturers"
-                icon="people"
+                iosIcon="person.2.fill"
+                androidIcon="account-multiple"
                 onPress={() => {
                     router.push('lecturers')
                 }}
@@ -88,7 +92,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="news"
-                icon="newspaper"
+                iosIcon="newspaper.fill"
+                androidIcon="newspaper"
                 onPress={() => {
                     router.push('news')
                 }}
@@ -102,7 +107,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="library"
-                icon="book"
+                iosIcon="books.vertical.fill"
+                androidIcon="book-open-variant"
                 onPress={() => {
                     router.push('library')
                 }}

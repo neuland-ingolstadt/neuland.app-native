@@ -3,7 +3,7 @@ import { type ColorValue } from 'react-native'
 export interface SectionGroup {
     title: string
     value?: string
-    icon?: string
+    icon?: { ios: string; android: string; iosFallback?: boolean }
     disabled?: boolean
     onPress?: () => Promise<void> | void
     iconColor?: ColorValue

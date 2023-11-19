@@ -2,13 +2,13 @@ import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/userKind'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { LoadingState, getContrastColor, getInitials } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -94,9 +94,7 @@ export default function Settings(): JSX.Element {
                 setUserdata(data)
                 updateUserFullName(data.vname + ' ' + data.name)
                 setIsLoaded(LoadingState.LOADED)
-            } else if (userKind === 'employee') {
-                setIsLoaded(LoadingState.LOADED)
-            } else if (userKind === 'guest') {
+            } else if (userKind === 'employee' || userKind === 'guest') {
                 setIsLoaded(LoadingState.LOADED)
             }
         } catch (e: any) {
@@ -132,28 +130,41 @@ export default function Settings(): JSX.Element {
             items: [
                 {
                     title: t('menu.formlist.preferences.theme'),
-                    icon: 'color-palette-outline',
+                    icon: {
+                        ios: 'paintpalette',
+                        android: 'palette-outline',
+                    },
                     onPress: () => {
                         router.push('(user)/theme')
                     },
                 },
                 {
                     title: 'Dashboard',
-                    icon: 'apps-outline',
+                    icon: {
+                        ios: 'rectangle.stack',
+                        android: 'view-dashboard-edit-outline',
+                    },
+
                     onPress: () => {
                         router.push('(user)/dashboard')
                     },
                 },
                 {
                     title: t('menu.formlist.preferences.food'),
-                    icon: 'restaurant-outline',
+                    icon: {
+                        android: 'silverware-fork-knife',
+                        ios: 'fork.knife',
+                    },
                     onPress: () => {
                         router.push('(food)/preferences')
                     },
                 },
                 {
                     title: t('menu.formlist.preferences.language'),
-                    icon: 'language-outline',
+                    icon: {
+                        ios: 'globe',
+                        android: 'earth',
+                    },
 
                     onPress: async () => {
                         if (Platform.OS === 'ios') {
@@ -170,7 +181,7 @@ export default function Settings(): JSX.Element {
             items: [
                 {
                     title: 'Primuss',
-                    icon: 'compass-outline',
+                    icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL(
                             'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
@@ -178,13 +189,13 @@ export default function Settings(): JSX.Element {
                 },
                 {
                     title: 'Moodle',
-                    icon: 'compass-outline',
+                    icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('https://moodle.thi.de/'),
                 },
                 {
                     title: 'Webmail',
-                    icon: 'compass-outline',
+                    icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('http://outlook.thi.de/'),
                 },
@@ -195,14 +206,20 @@ export default function Settings(): JSX.Element {
             items: [
                 {
                     title: t('menu.formlist.legal.about'),
-                    icon: 'chevron-forward-outline',
+                    icon: {
+                        ios: 'chevron.forward',
+                        android: 'chevron-right',
+                    },
                     onPress: () => {
                         router.push('(user)/about')
                     },
                 },
                 {
                     title: t('menu.formlist.legal.rate'),
-                    icon: 'star-outline',
+                    icon: {
+                        ios: 'star',
+                        android: 'star',
+                    },
                     onPress: () => {
                         alert('Not available yet')
                     },
@@ -314,10 +331,17 @@ export default function Settings(): JSX.Element {
                                                 colors.labelTertiaryColor
                                             }
                                         >
-                                            <Ionicons
-                                                name="person"
-                                                size={20}
+                                            <PlatformIcon
                                                 color={colors.background}
+                                                ios={{
+                                                    name: 'person',
+                                                    variant: 'fill',
+                                                    size: 26,
+                                                }}
+                                                android={{
+                                                    name: 'account',
+                                                    size: 32,
+                                                }}
                                             />
                                         </Avatar>
                                     </NameBox>
@@ -335,10 +359,17 @@ export default function Settings(): JSX.Element {
                                                 colors.labelTertiaryColor
                                             }
                                         >
-                                            <Ionicons
-                                                name="alert"
-                                                size={20}
+                                            <PlatformIcon
                                                 color={colors.background}
+                                                ios={{
+                                                    name: 'exclamationmark.triangle',
+                                                    variant: 'fill',
+                                                    size: 26,
+                                                }}
+                                                android={{
+                                                    name: 'alert',
+                                                    size: 28,
+                                                }}
                                             />
                                         </Avatar>
                                     </NameBox>
@@ -354,10 +385,17 @@ export default function Settings(): JSX.Element {
                             )}
 
                             {isLoaded !== LoadingState.ERROR ? (
-                                <Ionicons
-                                    name="chevron-forward-outline"
-                                    size={24}
+                                <PlatformIcon
                                     color={colors.labelSecondaryColor}
+                                    ios={{
+                                        name: 'chevron.forward',
+
+                                        size: 16,
+                                    }}
+                                    android={{
+                                        name: 'chevron-right',
+                                        size: 26,
+                                    }}
                                 />
                             ) : null}
                         </View>

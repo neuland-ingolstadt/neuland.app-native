@@ -10,12 +10,13 @@ import {
     mealName,
 } from '@/utils/food-utils'
 import { CARD_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from '../Universal/Icon'
 
 /**
  * Renders a single meal entry in the food menu.
@@ -110,13 +111,18 @@ export const MealEntry = ({
                         </View>
                         {userAllergens?.length > 0 && (
                             <View style={styles.allergensContainer}>
-                                <Ionicons
-                                    name={'warning-outline'}
-                                    size={16}
+                                <PlatformIcon
+                                    ios={{
+                                        name: 'allergens',
+                                        size: 13,
+                                    }}
+                                    android={{
+                                        name: 'allergy',
+                                        size: 16,
+                                    }}
                                     style={styles.icon}
                                     color={colors.notification}
                                 />
-
                                 <Text
                                     style={[
                                         styles.allergene,

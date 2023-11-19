@@ -5,11 +5,11 @@ import {
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 
+import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
 
 const CLEventRow = ({
@@ -54,25 +54,44 @@ const CLEventRow = ({
                         {club !== undefined && (
                             <View style={styles.clubContainer}>
                                 {club.website !== undefined && (
-                                    <Ionicons
-                                        name="globe"
-                                        size={19}
-                                        color={colors.labelSecondaryColor}
-                                        style={styles.websiteIcon}
+                                    <Pressable
                                         onPress={() => {
                                             void Linking.openURL(club.website)
                                         }}
-                                    />
+                                        style={styles.websiteIcon}
+                                    >
+                                        <PlatformIcon
+                                            color={colors.labelSecondaryColor}
+                                            ios={{
+                                                name: 'link',
+                                                size: 16,
+                                            }}
+                                            android={{
+                                                name: 'link',
+                                                size: 19,
+                                            }}
+                                        />
+                                    </Pressable>
                                 )}
                                 {club.instagram !== undefined && (
-                                    <Ionicons
-                                        name="logo-instagram"
-                                        size={19}
-                                        color={colors.labelSecondaryColor}
+                                    <Pressable
                                         onPress={() => {
-                                            void Linking.openURL(club.instagram)
+                                            void Linking.openURL(club.website)
                                         }}
-                                    />
+                                    >
+                                        <PlatformIcon
+                                            color={colors.labelSecondaryColor}
+                                            ios={{
+                                                name: 'ios-logo-instagram',
+                                                size: 18,
+                                                fallback: true,
+                                            }}
+                                            android={{
+                                                name: 'instagram',
+                                                size: 19,
+                                            }}
+                                        />
+                                    </Pressable>
                                 )}
                             </View>
                         )}
@@ -123,6 +142,7 @@ const styles = StyleSheet.create({
     clubContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     websiteIcon: { marginRight: 7 },
     rightText: {

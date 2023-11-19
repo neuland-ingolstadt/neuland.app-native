@@ -135,7 +135,7 @@ export interface Changelog {
 export interface Version {
     title: Description
     description: Description
-    icon: string
+    icon: { ios: string; android: string }
 }
 
 export interface Description {

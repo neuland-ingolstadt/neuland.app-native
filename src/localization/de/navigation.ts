@@ -49,4 +49,7 @@ export default {
             ends: 'endet ',
         },
     },
+    shortcuts: {
+        timetableDescription: 'Vorlesungen, Events etc.',
+    },
 }
