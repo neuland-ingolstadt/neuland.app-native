@@ -26,7 +26,7 @@ export default {
         grades: 'Grades',
         news: 'THI News',
         library: 'Library',
-        libraryCode: 'Library Code',
+        libraryCode: 'Library Number',
     },
     cards: {
         titles: {

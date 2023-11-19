@@ -78,8 +78,7 @@ export default function TimetableScreen(): JSX.Element {
         try {
             const timetable = await getFriendlyTimetable(today, true)
             setRawTimetable(timetable)
-
-            setLoadingState(LoadingState.ERROR)
+            setLoadingState(LoadingState.LOADED)
         } catch (e) {
             setLoadingState(LoadingState.ERROR)
             console.log(e)
