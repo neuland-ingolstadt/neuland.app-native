@@ -9706,6 +9706,7 @@ __metadata:
     react-i18next: "npm:^13.3.1"
     react-native: "npm:0.72.6"
     react-native-big-calendar: "npm:^4.7.0"
+    react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
@@ -10782,6 +10783,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: c9febd9b744bf87b734ea223f331aacb1ac5184a22a649bbcc71bf875a3c41852045ed744a775b2eb03e692af71f0fe653e8fe8d61a155b85c5aaa9b49ee6c6f
+  languageName: node
+  linkType: hard
+
+"react-native-change-icon@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "react-native-change-icon@npm:5.0.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: bef7f6f10125977fc85cfedd5f570109c97b4fe32c7eaf84ee10e99e740159ac2b4894315e22bad5aaacb61778febbdf30e487bc985ad4e7c8335c4df1399f17
   languageName: node
   linkType: hard
 
