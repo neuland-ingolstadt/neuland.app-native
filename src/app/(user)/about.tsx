@@ -40,10 +40,7 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: t('about.formlist.legal.imprint'),
-                    icon: {
-                        ios: 'person.text.rectangle',
-                        android: 'newspaper',
-                    },
+                    icon: linkIcon,
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
             ],

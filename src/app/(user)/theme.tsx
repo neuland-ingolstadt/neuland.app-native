@@ -215,7 +215,7 @@ export default function Theme(): JSX.Element {
                                     height: 80,
                                     alignSelf: 'center',
                                     justifyContent: 'center',
-                                    borderRadius: 10,
+                                    borderRadius: 16,
                                     borderColor: colors.border,
                                     borderWidth: 1,
                                 }}

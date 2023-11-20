@@ -58,15 +58,9 @@ export default function AppIcon(): JSX.Element {
                                     height: 90,
                                     alignSelf: 'center',
                                     justifyContent: 'center',
-                                    borderRadius: 10,
-
-                                    shadowColor: colors.border,
-                                    shadowOpacity: 0.1,
-                                    shadowRadius: 1,
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 1,
-                                    },
+                                    borderRadius: 16,
+                                    borderColor: colors.border,
+                                    borderWidth: 1,
                                 }}
                             />
                             <Text
