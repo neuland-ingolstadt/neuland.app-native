@@ -57,7 +57,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         color={colors.labelColor}
                         ios={{
                             name: 'chevron.forward',
-                            size: 20,
+                            size: 16,
                         }}
                         android={{
                             name: 'chevron-right',

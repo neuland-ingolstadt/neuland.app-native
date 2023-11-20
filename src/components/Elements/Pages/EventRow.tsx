@@ -63,7 +63,7 @@ const CLEventRow = ({
                                         <PlatformIcon
                                             color={colors.labelSecondaryColor}
                                             ios={{
-                                                name: 'link',
+                                                name: 'safari',
                                                 size: 16,
                                             }}
                                             android={{

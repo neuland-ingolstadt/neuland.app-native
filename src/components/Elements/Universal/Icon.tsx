@@ -28,7 +28,7 @@ interface PlatformIconProps {
     style?: any
 }
 export const linkIcon = {
-    ios: 'link',
+    ios: 'safari',
     android: 'link-variant',
 }
 

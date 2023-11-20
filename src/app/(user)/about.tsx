@@ -65,7 +65,7 @@ export default function About(): JSX.Element {
                 {
                     title: 'Github',
                     icon: {
-                        ios: 'link',
+                        ios: 'safari',
                         android: 'github',
                     },
 

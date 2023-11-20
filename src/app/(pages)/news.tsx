@@ -200,15 +200,14 @@ const styles = StyleSheet.create({
     teaserText: {
         fontSize: 14,
         marginHorizontal: 12,
-        marginVertical: 8,
-        marginBottom: 12,
+        marginVertical: 6,
     },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 4,
         marginHorizontal: 12,
         gap: 10,
+        minHeight: 40,
     },
     titleText: {
         fontSize: 16,
@@ -216,6 +215,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         textAlign: 'left',
         flex: 1,
+        marginVertical: 8,
     },
     sectionContainer: {
         width: '100%',
@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
     sectionBox: {
         alignSelf: 'center',
         borderRadius: 8,
-        gap: 6,
         width: '100%',
         justifyContent: 'center',
     },

@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 6,
         width: '80%',
+        gap: 2,
     },
     priceContainer: {
         flexDirection: 'column',
