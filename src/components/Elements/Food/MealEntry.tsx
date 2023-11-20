@@ -113,7 +113,7 @@ export const MealEntry = ({
                             <View style={styles.allergensContainer}>
                                 <PlatformIcon
                                     ios={{
-                                        name: 'allergens',
+                                        name: 'exclamationmark.triangle',
                                         size: 13,
                                     }}
                                     android={{

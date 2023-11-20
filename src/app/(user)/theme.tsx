@@ -209,7 +209,7 @@ export default function Theme(): JSX.Element {
                     >
                         <View style={{ flexDirection: 'row', gap: 20 }}>
                             <Image
-                                source={require('../../assets/icon.png')}
+                                source={require('../../assets/default.png')}
                                 style={{
                                     width: 80,
                                     height: 80,

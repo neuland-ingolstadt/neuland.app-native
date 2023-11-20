@@ -10,7 +10,7 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        icon: './src/assets/icon.png',
+        icon: './src/assets/default.png',
         splash: {
             image: './src/assets/splash.png',
             resizeMode: 'contain',

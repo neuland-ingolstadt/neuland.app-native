@@ -52,7 +52,7 @@ export default function AppIcon(): JSX.Element {
                     >
                         <View style={{ flexDirection: 'row', gap: 32 }}>
                             <Image
-                                source={require('../../assets/icon.png')}
+                                source={require('../../assets/default.png')}
                                 style={{
                                     width: 90,
                                     height: 90,
