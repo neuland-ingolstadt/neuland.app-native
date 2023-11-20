@@ -16,6 +16,7 @@ interface StaticThemeColors {
     success: string
     datePickerBackground: string
     card: string
+    notification: string
 }
 
 export interface Colors extends StaticThemeColors {
@@ -78,6 +79,7 @@ export const lightColors: StaticThemeColors = {
     success: '#1fa31f',
     datePickerBackground: '#ebebec',
     card: '#ffffff',
+    notification: '#f20000',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -88,4 +90,5 @@ export const darkColors: StaticThemeColors = {
     success: '#37d837',
     datePickerBackground: '#2a2a2c',
     card: '#1c1c1d',
+    notification: '#ff0000',
 }

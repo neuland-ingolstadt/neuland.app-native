@@ -121,7 +121,7 @@ export const MealEntry = ({
                                         size: 16,
                                     }}
                                     style={styles.icon}
-                                    color={'red'} // colors.notification doesn't work somehow here
+                                    color={colors.notification}
                                 />
                                 <Text
                                     style={[

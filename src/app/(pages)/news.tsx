@@ -8,11 +8,7 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import {
-    CARD_PADDING,
-    MODAL_BOTTOM_MARGIN,
-    PAGE_PADDING,
-} from '@/utils/style-utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -148,7 +144,7 @@ export default function NewsScreen(): JSX.Element {
                                         color={colors.labelColor}
                                         ios={{
                                             name: 'chevron.forward',
-                                            size: 20,
+                                            size: 15,
                                         }}
                                         android={{
                                             name: 'chevron-right',
@@ -196,8 +192,6 @@ const styles = StyleSheet.create({
         paddingBottom: MODAL_BOTTOM_MARGIN,
     },
     imageContainer: {
-        marginHorizontal: -CARD_PADDING,
-        marginTop: -CARD_PADDING,
         height: 200,
         objectFit: 'cover',
         borderTopRightRadius: 8,
@@ -205,13 +199,16 @@ const styles = StyleSheet.create({
     },
     teaserText: {
         fontSize: 14,
-        fontWeight: 'normal',
+        marginHorizontal: 12,
+        marginVertical: 8,
+        marginBottom: 12,
     },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 12,
         paddingVertical: 4,
+        marginHorizontal: 12,
+        gap: 10,
     },
     titleText: {
         fontSize: 16,
@@ -227,7 +224,6 @@ const styles = StyleSheet.create({
     sectionBox: {
         alignSelf: 'center',
         borderRadius: 8,
-        padding: CARD_PADDING,
         gap: 6,
         width: '100%',
         justifyContent: 'center',

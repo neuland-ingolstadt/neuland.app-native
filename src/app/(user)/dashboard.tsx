@@ -150,6 +150,8 @@ export default function DashboardEdit(): JSX.Element {
                                         style={({ pressed }) => [
                                             {
                                                 opacity: pressed ? 0.5 : 1,
+                                                minHeight: 44,
+                                                justifyContent: 'center',
                                             },
                                         ]}
                                     >
@@ -196,7 +198,14 @@ export default function DashboardEdit(): JSX.Element {
                     <View
                         style={[styles.card, { backgroundColor: colors.card }]}
                     >
-                        <Pressable onPress={handleReset}>
+                        <Pressable
+                            onPress={handleReset}
+                            style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.5 : 1,
+                                },
+                            ]}
+                        >
                             <Text
                                 style={[
                                     styles.reset,
@@ -258,18 +267,26 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                 <Text style={[styles.text, { color: colors.text }]}>
                     {item.text}
                 </Text>
-
-                <PlatformIcon
-                    color={colors.labelSecondaryColor}
-                    ios={{
-                        name: 'minus.circle',
-                        size: 20,
-                    }}
-                    android={{
-                        name: 'minus-circle',
-                        size: 24,
-                    }}
-                />
+                <Pressable
+                    onPress={onPressDelete}
+                    style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.5 : 1,
+                        },
+                    ]}
+                >
+                    <PlatformIcon
+                        color={colors.labelSecondaryColor}
+                        ios={{
+                            name: 'minus.circle',
+                            size: 20,
+                        }}
+                        android={{
+                            name: 'minus-circle',
+                            size: 24,
+                        }}
+                    />
+                </Pressable>
             </TouchableOpacity>
 
             {shownDashboardEntries.findIndex((i) => i.key === item.key) <
@@ -301,6 +318,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 8,
         paddingVertical: 9,
+        minHeight: 44,
+        justifyContent: 'center',
     },
     text: {
         fontSize: 16,
