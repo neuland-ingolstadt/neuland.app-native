@@ -207,7 +207,7 @@ export default function Theme(): JSX.Element {
                             router.push('(user)/appicon')
                         }}
                     >
-                        <View style={{ flexDirection: 'row', gap: 26 }}>
+                        <View style={{ flexDirection: 'row', gap: 20 }}>
                             <Image
                                 source={require('../../assets/icon.png')}
                                 style={{
@@ -216,13 +216,8 @@ export default function Theme(): JSX.Element {
                                     alignSelf: 'center',
                                     justifyContent: 'center',
                                     borderRadius: 10,
-                                    shadowColor: colors.border,
-                                    shadowOpacity: 0.3,
-                                    shadowRadius: 1,
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 1,
-                                    },
+                                    borderColor: colors.border,
+                                    borderWidth: 1,
                                 }}
                             />
                             <Text
@@ -230,7 +225,6 @@ export default function Theme(): JSX.Element {
                                     color: colors.text,
                                     textAlign: 'center',
                                     fontSize: 18,
-                                    fontWeight: '500',
                                     alignSelf: 'center',
                                     justifyContent: 'center',
                                 }}
@@ -239,7 +233,7 @@ export default function Theme(): JSX.Element {
                             </Text>
                         </View>
                         <PlatformIcon
-                            color={colors.primary}
+                            color={colors.labelSecondaryColor}
                             ios={{
                                 name: 'chevron.forward',
                                 size: 20,
