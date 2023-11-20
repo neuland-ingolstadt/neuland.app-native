@@ -34,10 +34,8 @@ export default function ErrorPage({
             <PlatformIcon
                 color={colors.primary}
                 ios={{
-                    name: 'square.stack.3d.up.trianglebadge.exclamationmark',
+                    name: 'exclamationmark.triangle',
                     variant: 'fill',
-                    variableValue: 0.5,
-                    renderMode: 'multicolor',
                     size: 44,
                 }}
                 android={{

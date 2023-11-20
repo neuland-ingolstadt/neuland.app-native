@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    websiteIcon: { marginRight: 7 },
+    websiteIcon: { marginRight: 8 },
     rightText: {
         fontSize: 14,
         fontWeight: '400',

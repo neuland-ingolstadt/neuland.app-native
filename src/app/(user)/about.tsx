@@ -65,9 +65,8 @@ export default function About(): JSX.Element {
                 {
                     title: 'Github',
                     icon: {
-                        ios: 'logo-github',
+                        ios: 'link',
                         android: 'github',
-                        iosFallback: true,
                     },
 
                     onPress: async () =>

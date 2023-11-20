@@ -121,13 +121,13 @@ export const MealEntry = ({
                                         size: 16,
                                     }}
                                     style={styles.icon}
-                                    color={colors.notification}
+                                    color={'red'} // colors.notification doesn't work somehow here
                                 />
                                 <Text
                                     style={[
                                         styles.allergene,
                                         {
-                                            color: colors.labelColor,
+                                            color: colors.notification,
                                         },
                                     ]}
                                     numberOfLines={3}

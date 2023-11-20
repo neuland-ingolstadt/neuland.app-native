@@ -63,9 +63,6 @@ const PlatformIcon = ({
                             : []),
                     ]}
                     style={{
-                        width: ios.size,
-
-                        height: ios.size,
                         ...style,
                     }}
                     variant={ios.variant as any}

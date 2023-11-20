@@ -4,9 +4,11 @@ import { ThemeContext } from '@/components/provider'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Image,
     Platform,
     Pressable,
     ScrollView,
@@ -162,8 +164,16 @@ export default function Theme(): JSX.Element {
                             <ColorBoxMatrix colors={rowColors} key={index} />
                         ))}
                     </View>
+                    <Text
+                        style={{
+                            color: colors.labelSecondaryColor,
+                            marginTop: 6,
+                            fontSize: 12,
+                        }}
+                    >
+                        {t('theme.footer')}
+                    </Text>
                 </View>
-
                 <View
                     style={{
                         alignSelf: 'center',
@@ -177,41 +187,69 @@ export default function Theme(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        {t('theme.exclusive.title')}
+                        {' App Icon'}
                     </Text>
-                    <View
+                    <Pressable
                         style={[
                             styles.sectionContainer,
                             {
                                 backgroundColor: colors.card,
-                                flexDirection: 'column',
+                                flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                paddingVertical: 36,
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingStart: 12,
+                                paddingEnd: 18,
+                                paddingVertical: 12,
                             },
                         ]}
-                    >
-                        <Text
-                            style={{
-                                color: colors.labelSecondaryColor,
-                                textAlign: 'center',
-                                fontSize: 16,
-                                alignSelf: 'center',
-                                justifyContent: 'center',
-                                letterSpacing: 1.5,
-                            }}
-                        >
-                            {t('theme.exclusive.description')}
-                        </Text>
-                    </View>
-                    <Text
-                        style={{
-                            color: colors.labelSecondaryColor,
-                            marginTop: 14,
-                            fontSize: 12,
+                        onPress={() => {
+                            router.push('(user)/appicon')
                         }}
                     >
-                        {t('theme.footer')}
-                    </Text>
+                        <View style={{ flexDirection: 'row', gap: 26 }}>
+                            <Image
+                                source={require('../../assets/icon.png')}
+                                style={{
+                                    width: 80,
+                                    height: 80,
+                                    alignSelf: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: 10,
+                                    shadowColor: colors.border,
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 1,
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 1,
+                                    },
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    textAlign: 'center',
+                                    fontSize: 18,
+                                    fontWeight: '500',
+                                    alignSelf: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                {'Neuland Next Default'}
+                            </Text>
+                        </View>
+                        <PlatformIcon
+                            color={colors.primary}
+                            ios={{
+                                name: 'chevron.forward',
+                                size: 20,
+                            }}
+                            android={{
+                                name: 'chevron-right',
+                                size: 26,
+                            }}
+                        />
+                    </Pressable>
                 </View>
             </ScrollView>
         </>

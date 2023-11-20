@@ -11,7 +11,7 @@ export default {
         allergensSearch: 'Search allergens',
         allergens: 'Allergens',
         details: 'Details',
-        theme: 'Theme',
+        theme: 'Appearance',
         profile: 'Profile',
         about: 'About',
         advancedSearch: 'Advanced Search',

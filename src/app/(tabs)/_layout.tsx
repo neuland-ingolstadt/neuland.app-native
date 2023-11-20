@@ -55,6 +55,7 @@ export default function HomeLayout(): JSX.Element {
     const shortcuts = [
         {
             id: 'timetable',
+            type: 'timetable',
             title: t('navigation.timetable'),
             subtitle: t('shortcuts.timetableDescription'),
             symbolName: 'calendar',
@@ -65,6 +66,7 @@ export default function HomeLayout(): JSX.Element {
         },
         {
             id: 'map',
+            type: 'map',
             title: t('navigation.map'),
             data: {
                 path: '(tabs)/map',
@@ -74,6 +76,7 @@ export default function HomeLayout(): JSX.Element {
         },
         {
             id: 'food',
+            type: 'food',
             title: t('cards.titles.' + restaurant),
             data: {
                 path: '(tabs)/food',

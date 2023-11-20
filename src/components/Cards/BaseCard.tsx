@@ -42,7 +42,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         color={colors.primary}
                         ios={{
                             name: iosIcon,
-                            size: 20,
+                            size: 18,
                         }}
                         android={{
                             name: androidIcon,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     titleView: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 12,
+        gap: 10,
     },
     card: {
         borderRadius: 8,

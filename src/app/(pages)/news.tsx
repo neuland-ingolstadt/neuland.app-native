@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 8,
     },
     teaserText: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: 'normal',
     },
     titleContainer: {
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
     },
     titleText: {
-        fontSize: 15,
+        fontSize: 16,
         flexShrink: 1,
         fontWeight: '700',
         textAlign: 'left',
