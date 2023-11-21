@@ -1,5 +1,5 @@
 import NeulandAPI from '@/api/neuland-api'
-import MobilityRow from '@/components/Elements/Pages/MobilityRow'
+import MobilityRow from '@/components/Elements/Rows/MobilityRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { MobilityContext } from '@/components/provider'
@@ -84,7 +84,7 @@ export default function Mobility(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
+                        {t('error.refreshPull')}{' '}
                     </Text>
                 </View>
             )}
