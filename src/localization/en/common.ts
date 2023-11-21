@@ -101,7 +101,6 @@ export default {
                 alert: {
                     title: 'Delete reservation',
                     message: 'Do you really want to delete this reservation?',
-                    confirm: 'Delete',
                 },
             },
             available: {
