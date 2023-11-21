@@ -1,3 +1,4 @@
+import { type AppIconHook } from '@/hooks/appIcon'
 import {
     DarkTheme,
     DefaultTheme,
@@ -58,7 +59,7 @@ export const ThemeContext = createContext<any>({
     toggleAccentColor: () => {},
 })
 
-export const AppIconContext = createContext<any>({
+export const AppIconContext = createContext<AppIconHook>({
     appIcon: 'default',
     unlockedAppIcons: [],
     toggleAppIcon: () => {},

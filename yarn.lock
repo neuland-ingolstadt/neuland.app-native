@@ -2743,6 +2743,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/art@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@react-native-community/art@npm:1.2.0"
+  dependencies:
+    art: "npm:^0.10.3"
+    invariant: "npm:^2.2.4"
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 09e2eb2d961f8df723b5beb5b484e1d1d71dc06041eb0485b889b1c99266dde794ad2d4a30c723c78615e6bf0cc805eb920fc0fd4715cf7c27684eb155d085e8
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:11.3.7":
   version: 11.3.7
   resolution: "@react-native-community/cli-clean@npm:11.3.7"
@@ -4181,6 +4195,13 @@ __metadata:
     is-array-buffer: "npm:^3.0.2"
     is-shared-array-buffer: "npm:^1.0.2"
   checksum: 96b6e40e439678ffb7fa266398510074d33c3980fbb475490b69980cca60adec3b0777047ef377068a29862157f83edef42efc64ce48ce38977d04d68de5b7fb
+  languageName: node
+  linkType: hard
+
+"art@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "art@npm:0.10.3"
+  checksum: cf800e832f3d816ebda6bd6c0b486cfcd2f499dc5980f2721229e009bc012ee9fc25f19fe3864144e0d456bcc27cd1cc0a75366b2daafe44bbbb33db1b4a9974
   languageName: node
   linkType: hard
 
@@ -9705,12 +9726,12 @@ __metadata:
     react-dom: "npm:18.2.0"
     react-i18next: "npm:^13.3.1"
     react-native: "npm:0.72.6"
+    react-native-barcode-builder: "npm:^2.0.0"
     react-native-big-calendar: "npm:^4.7.0"
     react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
-    react-native-dynamic-app-icon: "npm:^1.1.0"
     react-native-gesture-handler: "npm:~2.12.0"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.7.1"
@@ -10775,6 +10796,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-barcode-builder@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "react-native-barcode-builder@npm:2.0.0"
+  dependencies:
+    "@react-native-community/art": "npm:^1.2.0"
+    jsbarcode: "npm:^3.8.0"
+  peerDependencies:
+    prop-types: ^15.5.0
+  checksum: 6a980315c4f031273e41616c578788b26efb1cdb317aa2e61908ae6bb8865263bde42cf5d8d3732b5f16a702ac744ceb1c4640a192ec0acb7c25ff3a007d8cac
+  languageName: node
+  linkType: hard
+
 "react-native-big-calendar@npm:^4.7.0":
   version: 4.7.0
   resolution: "react-native-big-calendar@npm:4.7.0"
@@ -10824,15 +10857,6 @@ __metadata:
   version: 2.0.5
   resolution: "react-native-dropdown-select-list@npm:2.0.5"
   checksum: ca3d885efde0628d40956af2c08dcc92599963b5d0eb4bdcbef7e991d91dc5cb61739c85ad39c8dc2c5ec389a0532a394ec3bb97dbd6a95d6d900468a2d67781
-  languageName: node
-  linkType: hard
-
-"react-native-dynamic-app-icon@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "react-native-dynamic-app-icon@npm:1.1.0"
-  peerDependencies:
-    react-native: ">=0.41.2"
-  checksum: 39fc3141fdeb1b332ca0b452a2c801e440abbb6acaa1dbfb69d501ae702cda53233da14fda879f771b5bafad3c8cc47be4a570d826def0da58e4eab0b3a79e50
   languageName: node
   linkType: hard
 

@@ -1,6 +1,6 @@
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
@@ -297,10 +297,16 @@ export default function RootLayout(): JSX.Element {
                                         router.push('(pages)/libraryCode')
                                     }}
                                 >
-                                    <MaterialCommunityIcons
-                                        name="barcode-scan"
-                                        size={28}
+                                    <PlatformIcon
                                         color={colorText}
+                                        ios={{
+                                            name: 'barcode',
+                                            size: 22,
+                                        }}
+                                        android={{
+                                            name: 'barcode-scan',
+                                            size: 24,
+                                        }}
                                     />
                                 </TouchableOpacity>
                             ),

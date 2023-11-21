@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 
 export interface AppIconHook {
     appIcon: string
-    unlockedThemes: string[]
+    unlockedAppIcons: string[]
     toggleAppIcon: (name: string) => void
-    addUnlockedTheme: (name: string) => void
+    addUnlockedAppIcon: (name: string) => void
 }
 
 /**
@@ -15,7 +15,7 @@ export interface AppIconHook {
  */
 export function useAppIcon(): AppIconHook {
     const [appIcon, setAppIcon] = useState<string>('default')
-    const [unlockedThemes, setUnlockedThemes] = useState<string[]>([])
+    const [unlockedAppIcons, setUnlockedAppIcons] = useState<string[]>([])
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
@@ -24,10 +24,10 @@ export function useAppIcon(): AppIconHook {
                 if (icon != null) {
                     setAppIcon(icon)
                 }
-                const unlockedThemes =
-                    await AsyncStorage.getItem('unlockedThemes')
-                if (unlockedThemes != null) {
-                    setUnlockedThemes(JSON.parse(unlockedThemes))
+                const unlockedAppIcons =
+                    await AsyncStorage.getItem('unlockedAppIcons')
+                if (unlockedAppIcons != null) {
+                    setUnlockedAppIcons(JSON.parse(unlockedAppIcons))
                 }
             } catch (error) {
                 console.error(
@@ -52,18 +52,18 @@ export function useAppIcon(): AppIconHook {
      * Function to add a new unlocked theme.
      * @param name - The name of the new unlocked theme.
      */
-    function addUnlockedTheme(name: string): void {
-        setUnlockedThemes([...unlockedThemes, name])
+    function addUnlockedAppIcon(name: string): void {
+        setUnlockedAppIcons([...unlockedAppIcons, name])
         void AsyncStorage.setItem(
-            'unlockedThemes',
-            JSON.stringify([...unlockedThemes, name])
+            'unlockedAppIcons',
+            JSON.stringify([...unlockedAppIcons, name])
         )
     }
 
     return {
         appIcon,
-        unlockedThemes,
+        unlockedAppIcons,
         toggleAppIcon,
-        addUnlockedTheme,
+        addUnlockedAppIcon,
     }
 }

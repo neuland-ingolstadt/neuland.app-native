@@ -435,6 +435,8 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
+  - react-native-barcode-creator (0.1.5):
+    - React-Core
   - react-native-change-icon (5.0.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -568,8 +570,6 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.2.0):
     - React-Core
-  - RNDynamicAppIcon (1.1.0):
-    - React
   - RNGestureHandler (2.12.1):
     - React-Core
   - RNReanimated (3.3.0):
@@ -665,6 +665,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-barcode-creator (from `../node_modules/react-native-barcode-creator`)
   - react-native-change-icon (from `../node_modules/react-native-change-icon`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -691,7 +692,6 @@ DEPENDENCIES:
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
-  - RNDynamicAppIcon (from `../node_modules/react-native-dynamic-app-icon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -811,6 +811,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-barcode-creator:
+    :path: "../node_modules/react-native-barcode-creator"
   react-native-change-icon:
     :path: "../node_modules/react-native-change-icon"
   react-native-maps:
@@ -863,8 +865,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
-  RNDynamicAppIcon:
-    :path: "../node_modules/react-native-dynamic-app-icon"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -934,6 +934,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
+  react-native-barcode-creator: e07e38f66af843a549a151cd83c9ab7431d6d7cf
   react-native-change-icon: 2022b0d00d6d9fe42ddf73a410e89114a67f3c0b
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
@@ -960,7 +961,6 @@ SPEC CHECKSUMS:
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNDateTimePicker: 3942382593f104af226ad9c56e16166960c7ae30
-  RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3

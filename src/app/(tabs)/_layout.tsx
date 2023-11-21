@@ -2,16 +2,16 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { FlowContext, FoodFilterContext } from '@/components/provider'
 import changelog from '@/data/changelog.json'
-import { convertToMajorMinorPatch, processShortcut } from '@/utils/app-utils'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, StyleSheet } from 'react-native'
-// @ts-expect-error Mssing types for rn-quick-actions
-import Shortcuts from 'rn-quick-actions'
+import { Platform, StyleSheet } from 'react-native'
+// @ts-expect-error no types
+import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import packageInfo from '../../../package.json'
 
@@ -22,7 +22,6 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
-    const [appState, setAppState] = useState(AppState.currentState)
 
     if (flow.isOnboarded === false) {
         router.push('(flow)/onboarding')
@@ -86,35 +85,15 @@ export default function HomeLayout(): JSX.Element {
         },
     ]
 
-    useEffect(() => {
-        const subscription = AppState.addEventListener(
-            'change',
-            handleAppStateChange
-        )
-
-        return () => {
-            subscription.remove()
-        }
-    }, [])
-
-    useEffect(() => {
-        if (appState === 'active') {
-            Shortcuts.setShortcuts(shortcuts)
-            const sub = Shortcuts.onShortcutPressed(processShortcut)
-            sub.remove()
-        }
-    }, [appState, selectedRestaurants])
-
-    const handleAppStateChange = (
-        nextAppState:
-            | 'active'
-            | 'background'
-            | 'inactive'
-            | 'unknown'
-            | 'extension'
-    ): void => {
-        setAppState(nextAppState)
+    function processShortcut(item: ShortcutItem): void {
+        router.push(item.data.path)
+        if (shortcutSubscription != null) shortcutSubscription.remove()
     }
+    const shortcutSubscription = Shortcuts.onShortcutPressed(processShortcut)
+
+    useEffect(() => {
+        Shortcuts.setShortcuts(shortcuts)
+    }, [selectedRestaurants])
 
     return (
         <>

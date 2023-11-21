@@ -16,7 +16,7 @@ import {
     Text,
     View,
 } from 'react-native'
-import { changeIcon } from 'rn-dynamic-app-icon'
+import { changeIcon } from 'react-native-change-icon'
 
 const iconImages: Record<string, ImageProps> = {
     default: require('@/assets/appIcons/default.png'),
@@ -35,7 +35,9 @@ const iconImages: Record<string, ImageProps> = {
 
 export default function AppIconPicker(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { appIcon, toggleAppIcon } = useContext(AppIconContext)
+    const { appIcon, toggleAppIcon, unlockedAppIcons } =
+        useContext(AppIconContext)
+    const { t } = useTranslation(['settings'])
 
     const categories = {
         exclusive: ['default'],
@@ -49,18 +51,13 @@ export default function AppIconPicker(): JSX.Element {
         ],
     }
 
-    const unlockedItems = ['ctf'] as string[]
-    const { t } = useTranslation(['settings'])
-    // filter the exclusive category and show only the unlocked items
     categories.exclusive = categories.exclusive.filter((icon) => {
-        if (unlockedItems.includes(icon)) {
+        if (unlockedAppIcons?.includes(icon)) {
             return true
         } else {
             return false
         }
     })
-
-    // make the fist letter uppercase to match the category name
 
     return (
         <>
@@ -211,13 +208,10 @@ export default function AppIconPicker(): JSX.Element {
                                                     )}
                                                 </Pressable>
 
-                                                {
-                                                    // show divider if not last item
-                                                    value.indexOf(icon) !==
-                                                        value.length - 1 && (
-                                                        <Divider />
-                                                    )
-                                                }
+                                                {value.indexOf(icon) !==
+                                                    value.length - 1 && (
+                                                    <Divider />
+                                                )}
                                             </>
                                         )
                                     })}
