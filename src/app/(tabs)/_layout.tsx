@@ -7,9 +7,9 @@ import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet } from 'react-native'
+import { AppState, Platform, StyleSheet } from 'react-native'
 // @ts-expect-error Mssing types for rn-quick-actions
 import Shortcuts from 'rn-quick-actions'
 
@@ -22,6 +22,8 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
+    const [appState, setAppState] = useState(AppState.currentState)
+
     if (flow.isOnboarded === false) {
         console.log('redirecting to onboard')
         router.push('(flow)/onboarding')
@@ -87,10 +89,34 @@ export default function HomeLayout(): JSX.Element {
     ]
 
     useEffect(() => {
-        Shortcuts.setShortcuts(shortcuts)
-        const sub = Shortcuts.onShortcutPressed(processShortcut)
-        sub.remove()
-    }, [selectedRestaurants])
+        const subscription = AppState.addEventListener(
+            'change',
+            handleAppStateChange
+        )
+
+        return () => {
+            subscription.remove()
+        }
+    }, [])
+
+    useEffect(() => {
+        if (appState === 'active') {
+            Shortcuts.setShortcuts(shortcuts)
+            const sub = Shortcuts.onShortcutPressed(processShortcut)
+            sub.remove()
+        }
+    }, [appState, selectedRestaurants])
+
+    const handleAppStateChange = (
+        nextAppState:
+            | 'active'
+            | 'background'
+            | 'inactive'
+            | 'unknown'
+            | 'extension'
+    ): void => {
+        setAppState(nextAppState)
+    }
 
     return (
         <>

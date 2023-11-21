@@ -138,7 +138,7 @@ export default {
             moonRainbowDark: 'Mond Regenbogen Dunkel',
             rainbowLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
-            lightNeon: 'Neon Weiß',
+            whiteNeon: 'Neon Weiß',
             greenkNeon: 'Neon Grün',
             rainbowNeon: 'Regenbogen Neon',
         },

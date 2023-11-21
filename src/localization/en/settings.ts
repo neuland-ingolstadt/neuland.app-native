@@ -136,7 +136,7 @@ export default {
             moonRainbowDark: 'Moon Rainbow Dark',
             rainbowLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
-            lightNeon: 'White Neon',
+            whiteNeon: 'White Neon',
             greenNeon: 'Green Neon',
             rainbowNeon: 'Rainbow Neon',
         },

@@ -24,7 +24,7 @@ const iconImages: Record<string, ImageProps> = {
     light: require('@/assets/appIcons/light.png'),
     green: require('@/assets/appIcons/green.png'),
     greenNeon: require('@/assets/appIcons/greenNeon.png'),
-    lightNeon: require('@/assets/appIcons/lightNeon.png'),
+    whiteNeon: require('@/assets/appIcons/whiteNeon.png'),
     rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowLight: require('@/assets/appIcons/rainbowLight.png'),
     rainbowDark: require('@/assets/appIcons/rainbowDark.png'),

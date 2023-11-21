@@ -61,11 +61,11 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>LightNeon</key>
+        <key>WhiteNeon</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>LightNeon</string>
+            <string>WhiteNeon</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
@@ -182,6 +182,8 @@
     <string>Allow $(PRODUCT_NAME) to use Face ID.</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

@@ -16,6 +16,7 @@ export const convertToMajorMinorPatch = (version: string): string => {
  * @param item - The shortcut item to process.
  */
 export function processShortcut(item: ShortcutItem): void {
+    console.log('Processing shortcut', item)
     router.replace(item.data.path)
 }
 
