@@ -27,6 +27,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Linking,
     Platform,
     Pressable,
     Share,
@@ -631,6 +632,13 @@ export const MapScreen = (): JSX.Element => {
                         }}
                         style={{
                             backgroundColor: colors.background,
+                        }}
+                        onShouldStartLoadWithRequest={(event) => {
+                            if (event.url !== 'about:blank') {
+                                void Linking.openURL(event.url)
+                                return false
+                            }
+                            return true
                         }}
                     />
                 </View>

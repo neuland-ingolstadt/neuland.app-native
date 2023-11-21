@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router'
 import React from 'react'
 
 import { BaseCard, CalendarCard, EventsCard, FoodCard } from './Cards'
+import LibraryCard from './Cards/LibraryCard'
 
 const router = useRouter()
 
@@ -104,16 +105,7 @@ export const AllCards: Card[] = [
         key: 'library',
         removable: true,
         default: [],
-        card: () => (
-            <BaseCard
-                title="library"
-                iosIcon="books.vertical.fill"
-                androidIcon="book-open-variant"
-                onPress={() => {
-                    router.push('library')
-                }}
-            />
-        ),
+        card: () => <LibraryCard />,
     },
 ]
 

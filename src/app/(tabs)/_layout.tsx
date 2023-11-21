@@ -25,7 +25,6 @@ export default function HomeLayout(): JSX.Element {
     const [appState, setAppState] = useState(AppState.currentState)
 
     if (flow.isOnboarded === false) {
-        console.log('redirecting to onboard')
         router.push('(flow)/onboarding')
     }
 
@@ -37,7 +36,6 @@ export default function HomeLayout(): JSX.Element {
         isChangelogAvailable &&
         flow.isOnboarded !== false
     ) {
-        console.log('redirecting to whatsnew')
         router.push('(flow)/whatsnew')
     }
     SplashScreen.hideAsync().catch(() => {

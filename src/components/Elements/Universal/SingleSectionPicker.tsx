@@ -22,7 +22,7 @@ interface SectionPickerProps {
  *      title={'Title'}
  *      selectedItem={selected}
  *      action={() => {
- *      console.log('Action')
+ *         setSelected(!selected)
  *    }}
  * />
  */

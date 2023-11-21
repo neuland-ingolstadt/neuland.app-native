@@ -5,8 +5,12 @@ export default {
     error: {
         title: 'An error occurred',
         description: 'Pull down to refresh.',
-        refresh:
+        refreshPull:
             'An error occurred while loading the data.\nPull down to refresh.',
+        refreshButton:
+            'An error occurred while loading the data.\nClick to refresh.',
+        button: 'Retry',
+        noSession: 'Not signed in.',
     },
     dates: {
         until: 'until',
@@ -19,6 +23,8 @@ export default {
     },
     misc: {
         share: 'Share',
+        cancel: 'Cancel',
+        delete: 'Delete',
     },
     pages: {
         calendar: {
@@ -86,6 +92,31 @@ export default {
                 seats: 'seats',
             },
             results: 'Available rooms',
+        },
+        library: {
+            reservations: {
+                title: 'Reservations',
+                seat: 'Seat',
+                id: 'Reservation code',
+                alert: {
+                    title: 'Delete reservation',
+                    message: 'Do you really want to delete this reservation?',
+                },
+            },
+            available: {
+                title: 'Available seats',
+                reserve: 'Reserve',
+                seatsAvailable: '{{available}} / {{total}} available',
+                ratelimit: 'You can not reserve more seats.',
+                noSeats: 'No more seats available.',
+                footer: 'Up to 5 active reservations are allowed per seven days. Cancelation is possible before the reservation starts.',
+                book: 'Book seat',
+                room: 'Room',
+            },
+            code: {
+                number: 'Number',
+                footer: 'Use this barcode to sign in at the library terminals to borrow books.',
+            },
         },
     },
 }

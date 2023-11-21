@@ -3,12 +3,12 @@ import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, StyleSheet, Text, View } from 'react-native'
+import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 import PlatformIcon from './Icon'
 
-export default function ErrorPage({
+function ErrorPage({
     message,
     refreshing,
     onRefresh,
@@ -17,7 +17,6 @@ export default function ErrorPage({
     refreshing: boolean
     onRefresh: () => void
 }): JSX.Element {
-    const { t } = useTranslation('common')
     const colors = useTheme().colors as Colors
 
     return (
@@ -31,6 +30,17 @@ export default function ErrorPage({
             }
             contentContainerStyle={styles.container}
         >
+            <ErrorView message={message} />
+        </ScrollView>
+    )
+}
+
+function ErrorView({ message }: { message?: string }): JSX.Element {
+    const { t } = useTranslation('common')
+    const colors = useTheme().colors as Colors
+
+    return (
+        <View style={styles.innerContainer}>
             <PlatformIcon
                 color={colors.primary}
                 ios={{
@@ -64,19 +74,86 @@ export default function ErrorPage({
                     {t('error.description')}
                 </Text>
             </View>
-        </ScrollView>
+        </View>
+    )
+}
+
+function ErrorButtonView({
+    message,
+    onRefresh,
+}: {
+    message?: string
+    onRefresh: () => void
+}): JSX.Element {
+    const { t } = useTranslation('common')
+    const colors = useTheme().colors as Colors
+
+    return (
+        <View style={styles.innerContainer}>
+            <View style={styles.errorContainer}>
+                <PlatformIcon
+                    color={colors.primary}
+                    ios={{
+                        name: 'exclamationmark.triangle',
+                        variant: 'fill',
+                        size: 44,
+                    }}
+                    android={{
+                        name: 'alert-circle-outline',
+                        size: 48,
+                    }}
+                />
+                <Text
+                    style={{
+                        ...styles.errorTitle,
+                        color: colors.text,
+                    }}
+                >
+                    {t('error.title')}
+                </Text>
+                <Text style={[styles.errorMessage, { color: colors.text }]}>
+                    {message}
+                </Text>
+                <Text style={[styles.errorInfo, { color: colors.text }]}>
+                    {t('error.refreshPull', { ns: 'common' })}
+                </Text>
+                <Pressable
+                    style={[
+                        styles.logoutContainer,
+                        { backgroundColor: colors.card },
+                    ]}
+                    onPress={onRefresh}
+                >
+                    <View style={styles.refreshButton}>
+                        <Text
+                            style={{
+                                color: colors.primary,
+                                fontSize: 16,
+                                fontWeight: '600',
+                            }}
+                        >
+                            {t('error.button')}
+                        </Text>
+                    </View>
+                </Pressable>
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    innerContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 12,
+        paddingTop: 150,
+    },
     container: {
         zIndex: 9999,
         position: 'absolute',
         width: '100%',
         height: '100%',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         gap: 12,
         padding: PAGE_PADDING,
     },
@@ -94,4 +171,34 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 8,
     },
+    logoutContainer: {
+        borderRadius: 10,
+        marginBottom: 30,
+        marginTop: 30,
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    refreshButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 40,
+    },
+    errorMessage: {
+        fontWeight: '600',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    errorInfo: {
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    errorContainer: {
+        paddingBottom: 64,
+        gap: 12,
+        alignItems: 'center',
+    },
 })
+
+export { ErrorPage, ErrorView, ErrorButtonView }

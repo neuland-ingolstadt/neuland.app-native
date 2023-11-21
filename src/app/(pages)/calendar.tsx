@@ -1,5 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import { CalendarRow, ExamRow } from '@/components/Elements/Pages/CalendarRow'
+import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
@@ -184,7 +184,7 @@ export default function CalendarPage(): JSX.Element {
                                                     { color: colors.text },
                                                 ]}
                                             >
-                                                {t('error.refresh')}{' '}
+                                                {t('error.refreshPull')}{' '}
                                             </Text>
                                         </View>
                                     )}

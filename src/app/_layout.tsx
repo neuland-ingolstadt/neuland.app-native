@@ -1,10 +1,11 @@
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, useColorScheme } from 'react-native'
+import { Platform, TouchableOpacity, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
@@ -276,6 +277,46 @@ export default function RootLayout(): JSX.Element {
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/library"
+                        options={{
+                            title: t('navigation.library'),
+                            headerBackTitleVisible: false,
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                            }),
+                            headerRight: () => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        router.push('(pages)/libraryCode')
+                                    }}
+                                >
+                                    <MaterialCommunityIcons
+                                        name="barcode-scan"
+                                        size={28}
+                                        color={colorText}
+                                    />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(pages)/libraryCode"
+                        options={{
+                            title: t('navigation.libraryCode'),
+                            headerBackTitleVisible: false,
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
                                 },
                             }),
                         }}

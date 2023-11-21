@@ -409,14 +409,14 @@ export default function TimetableScreen(): JSX.Element {
         })
     }
 
-    function LoadingView(): JSX.Element {
+    const LoadingView = (): JSX.Element => {
         return (
             <View style={styles.loadingView}>
                 <ActivityIndicator size="small" color={colors.primary} />
             </View>
         )
     }
-    function Timetable(): JSX.Element {
+    const Timetable = (): JSX.Element => {
         if (loadingState === LoadingState.LOADING) {
             return <LoadingView />
         } else if (

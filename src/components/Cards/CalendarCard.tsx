@@ -77,7 +77,12 @@ const CalendarCard = (): JSX.Element => {
             }}
         >
             {loadingState === LoadingState.LOADED && (
-                <View style={styles.calendarView}>
+                <View
+                    style={{
+                        ...styles.calendarView,
+                        paddingTop: mixedCalendar.length > 0 ? 10 : 0,
+                    }}
+                >
                     {mixedCalendar.map((event, index) => (
                         <React.Fragment key={index}>
                             <View>
