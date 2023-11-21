@@ -9745,7 +9745,6 @@ __metadata:
     react-native-svg: "npm:^14.0.0"
     react-native-view-shot: "npm:^3.8.0"
     react-native-webview: "npm:13.2.2"
-    rn-dynamic-app-icon: "npm:^0.6.1"
     rn-quick-actions: "npm:^0.0.3"
     sanitize-html: "npm:^2.11.0"
     sweet-sfsymbols: "npm:^0.1.0"
@@ -11503,16 +11502,6 @@ __metadata:
   bin:
     rimraf: ./bin.js
   checksum: f1e646f8c567795f2916aef7aadf685b543da6b9a53e482bb04b07472c7eef2b476045ba1e29f401c301c66b630b22b815ab31fdd60c5e1ae6566ff523debf45
-  languageName: node
-  linkType: hard
-
-"rn-dynamic-app-icon@npm:^0.6.1":
-  version: 0.6.1
-  resolution: "rn-dynamic-app-icon@npm:0.6.1"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: b188090c4694e5f00ebdecb6ac23796480d757083235d870d7437368ec5d1ef35ccda87867604fb59276b5c4b524beef033e3d8025bef12cf29b7163d4a88dbc
   languageName: node
   linkType: hard
 

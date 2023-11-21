@@ -1,4 +1,5 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
 import { AppIconContext, ThemeContext } from '@/components/provider'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -18,19 +19,23 @@ import {
     View,
 } from 'react-native'
 
-const iconImages: Record<string, ImageProps> = {
-    default: require('@/assets/appIcons/default.png'),
-    dark: require('@/assets/appIcons/dark.png'),
-    light: require('@/assets/appIcons/light.png'),
-    green: require('@/assets/appIcons/green.png'),
-    greenNeon: require('@/assets/appIcons/greenNeon.png'),
-    whiteNeon: require('@/assets/appIcons/whiteNeon.png'),
-    rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
-    rainbowLight: require('@/assets/appIcons/rainbowLight.png'),
-    rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
-    moonRainbowLight: require('@/assets/appIcons/moonRainbowLight.png'),
-    moonRainbowDark: require('@/assets/appIcons/moonRainbowDark.png'),
-    water: require('@/assets/appIcons/water.png'),
+let iconImages: Record<string, ImageProps> = {}
+
+if (Platform.OS === 'ios') {
+    iconImages = {
+        default: require('ios/Default.appiconset/default.png'),
+        dark: require('ios/Dark.appiconset/dark.png'),
+        light: require('ios/Light.appiconset/light.png'),
+        green: require('ios/Green.appiconset/green.png'),
+        greenNeon: require('ios/GreenNeon.appiconset/greenNeon.png'),
+        whiteNeon: require('ios/WhiteNeon.appiconset/whiteNeon.png'),
+        rainbowNeon: require('ios/RainbowNeon.appiconset/rainbowNeon.png'),
+        rainbowLight: require('ios/RainbowLight.appiconset/rainbowLight.png'),
+        rainbowDark: require('ios/RainbowDark.appiconset/rainbowDark.png'),
+        moonRainbowLight: require('ios/MoonRainbowLight.appiconset/moonRainbowLight.png'),
+        moonRainbowDark: require('ios/MoonRainbowDark.appiconset/moonRainbowDark.png'),
+        water: require('ios/Water.appiconset/water.png'),
+    }
 }
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -149,30 +154,15 @@ export default function Theme(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '92%',
-                        marginTop: 18,
-                    }}
+                <SectionView
+                    title={t('theme.accent.title')}
+                    footer={t('theme.footer')}
                 >
-                    <Text
-                        style={[
-                            styles.sectionHeaderText,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
-                        {t('theme.accent.title')}
-                    </Text>
-
                     <View
                         style={[
                             styles.sectionContainer,
                             {
                                 backgroundColor: colors.card,
-                                flexDirection: 'column',
-                                flexWrap: 'wrap',
-                                paddingVertical: 18,
                             },
                         ]}
                     >
@@ -180,103 +170,71 @@ export default function Theme(): JSX.Element {
                             <ColorBoxMatrix colors={rowColors} key={index} />
                         ))}
                     </View>
-                    <Text
-                        style={{
-                            color: colors.labelSecondaryColor,
-                            marginTop: 6,
-                            fontSize: 12,
-                        }}
-                    >
-                        {t('theme.footer')}
-                    </Text>
-                </View>
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '92%',
-                        marginTop: 18,
-                    }}
-                >
-                    <Text
-                        style={[
-                            styles.sectionHeaderText,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
-                        {'App Icon'}
-                    </Text>
-                    <Pressable
-                        style={[
-                            styles.sectionContainer,
-                            {
-                                backgroundColor: colors.card,
-                                flexDirection: 'row',
-                                flexWrap: 'wrap',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingStart: 12,
-                                paddingEnd: 18,
-                                paddingVertical: 12,
-                            },
-                        ]}
-                        onPress={() => {
-                            router.push('(user)/appicon')
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row', gap: 20 }}>
-                            <Image
-                                source={iconImages[appIcon]}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    alignSelf: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: 16,
-                                    borderColor: colors.border,
-                                    borderWidth: 1,
+                </SectionView>
+
+                {Platform.OS === 'ios' && (
+                    <SectionView title="App Icon">
+                        <Pressable
+                            style={[
+                                styles.sectionContainer,
+                                styles.iconPressable,
+                                {
+                                    backgroundColor: colors.card,
+                                },
+                            ]}
+                            onPress={() => {
+                                router.push('(user)/appicon')
+                            }}
+                        >
+                            <View style={styles.iconInnerContainer}>
+                                <Image
+                                    source={iconImages[appIcon]}
+                                    style={{
+                                        ...styles.iconContainer,
+                                        borderColor: colors.border,
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.iconText,
+                                    }}
+                                >
+                                    {t(`appIcon.names.${appIcon}`)}
+                                </Text>
+                            </View>
+                            <PlatformIcon
+                                color={colors.labelSecondaryColor}
+                                ios={{
+                                    name: 'chevron.forward',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: 'chevron-right',
+                                    size: 26,
                                 }}
                             />
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    textAlign: 'center',
-                                    fontSize: 18,
-                                    alignSelf: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {t(`appIcon.names.${appIcon}`)}
-                            </Text>
-                        </View>
-                        <PlatformIcon
-                            color={colors.labelSecondaryColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 20,
-                            }}
-                            android={{
-                                name: 'chevron-right',
-                                size: 26,
-                            }}
-                        />
-                    </Pressable>
-                </View>
+                        </Pressable>
+                    </SectionView>
+                )}
             </ScrollView>
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    footerText: {
+        marginTop: 6,
+        fontSize: 12,
+    },
     colorBox: {
         width: 60,
         height: 60,
         borderRadius: 4,
-
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',
         flexDirection: 'row',
-
         borderWidth: 2,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -293,5 +251,28 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignContent: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        paddingVertical: 18,
+    },
+    iconText: {
+        fontSize: 18,
+        alignSelf: 'center',
+    },
+    iconPressable: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingStart: 12,
+        paddingEnd: 18,
+        paddingVertical: 12,
+    },
+    iconInnerContainer: { flexDirection: 'row', gap: 20 },
+    iconContainer: {
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        borderRadius: 18,
+        borderWidth: 1,
     },
 })

@@ -435,8 +435,6 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
-  - react-native-barcode-creator (0.1.5):
-    - React-Core
   - react-native-change-icon (5.0.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -562,8 +560,6 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
-  - rn-dynamic-app-icon (0.6.1):
-    - React-Core
   - rn-quick-actions (0.0.3):
     - React
   - RNCAsyncStorage (1.18.2):
@@ -665,7 +661,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-barcode-creator (from `../node_modules/react-native-barcode-creator`)
   - react-native-change-icon (from `../node_modules/react-native-change-icon`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -688,7 +683,6 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - rn-dynamic-app-icon (from `../node_modules/rn-dynamic-app-icon`)
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
@@ -811,8 +805,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-barcode-creator:
-    :path: "../node_modules/react-native-barcode-creator"
   react-native-change-icon:
     :path: "../node_modules/react-native-change-icon"
   react-native-maps:
@@ -857,8 +849,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  rn-dynamic-app-icon:
-    :path: "../node_modules/rn-dynamic-app-icon"
   rn-quick-actions:
     :path: "../node_modules/rn-quick-actions"
   RNCAsyncStorage:
@@ -934,7 +924,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
-  react-native-barcode-creator: e07e38f66af843a549a151cd83c9ab7431d6d7cf
   react-native-change-icon: 2022b0d00d6d9fe42ddf73a410e89114a67f3c0b
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
@@ -957,7 +946,6 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
-  rn-dynamic-app-icon: da5e280603dfb56872991937d04d5656cbfd7ae1
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNDateTimePicker: 3942382593f104af226ad9c56e16166960c7ae30

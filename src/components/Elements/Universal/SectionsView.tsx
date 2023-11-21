@@ -6,40 +6,59 @@ import { StyleSheet, Text, View } from 'react-native'
 
 const SectionView = ({
     title,
+    footer,
     children,
 }: {
     title: string
+    footer?: string
     children: JSX.Element
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
 
     return (
-        <View style={[styles.sectionContainer, { marginTop: 16 }]}>
-            <Text
-                style={[
-                    styles.labelText,
-                    {
-                        color: colors.labelSecondaryColor,
-                    },
-                ]}
-            >
-                {title}
-            </Text>
-            <View
-                style={[
-                    styles.sectionBox,
-                    {
-                        backgroundColor: colors.card,
-                    },
-                ]}
-            >
-                {children}
+        <>
+            <View style={[styles.sectionContainer, { marginTop: 16 }]}>
+                <Text
+                    style={[
+                        styles.labelText,
+                        {
+                            color: colors.labelSecondaryColor,
+                        },
+                    ]}
+                >
+                    {title}
+                </Text>
+                <View
+                    style={[
+                        styles.sectionBox,
+                        {
+                            backgroundColor: colors.card,
+                        },
+                    ]}
+                >
+                    {children}
+                </View>
             </View>
-        </View>
+            {footer != null && (
+                <Text
+                    style={[
+                        styles.footerText,
+                        { color: colors.labelSecondaryColor },
+                    ]}
+                >
+                    {footer}
+                </Text>
+            )}
+        </>
     )
 }
 
 const styles = StyleSheet.create({
+    footerText: {
+        marginTop: 6,
+        fontSize: 12,
+        paddingHorizontal: PAGE_PADDING,
+    },
     labelText: {
         fontSize: 13,
         fontWeight: 'normal',

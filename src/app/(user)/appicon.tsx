@@ -8,8 +8,10 @@ import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Dimensions,
     Image,
     type ImageProps,
+    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -18,19 +20,23 @@ import {
 } from 'react-native'
 import { changeIcon } from 'react-native-change-icon'
 
-const iconImages: Record<string, ImageProps> = {
-    default: require('@/assets/appIcons/default.png'),
-    dark: require('@/assets/appIcons/dark.png'),
-    light: require('@/assets/appIcons/light.png'),
-    green: require('@/assets/appIcons/green.png'),
-    greenNeon: require('@/assets/appIcons/greenNeon.png'),
-    whiteNeon: require('@/assets/appIcons/whiteNeon.png'),
-    rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
-    rainbowLight: require('@/assets/appIcons/rainbowLight.png'),
-    rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
-    moonRainbowLight: require('@/assets/appIcons/moonRainbowLight.png'),
-    moonRainbowDark: require('@/assets/appIcons/moonRainbowDark.png'),
-    water: require('@/assets/appIcons/water.png'),
+let iconImages: Record<string, ImageProps> = {}
+
+if (Platform.OS === 'ios') {
+    iconImages = {
+        default: require('ios/Default.appiconset/default.png'),
+        dark: require('ios/Dark.appiconset/dark.png'),
+        light: require('ios/Light.appiconset/light.png'),
+        green: require('ios/Green.appiconset/green.png'),
+        greenNeon: require('ios/GreenNeon.appiconset/greenNeon.png'),
+        whiteNeon: require('ios/WhiteNeon.appiconset/whiteNeon.png'),
+        rainbowNeon: require('ios/RainbowNeon.appiconset/rainbowNeon.png'),
+        rainbowLight: require('ios/RainbowLight.appiconset/rainbowLight.png'),
+        rainbowDark: require('ios/RainbowDark.appiconset/rainbowDark.png'),
+        moonRainbowLight: require('ios/MoonRainbowLight.appiconset/moonRainbowLight.png'),
+        moonRainbowDark: require('ios/MoonRainbowDark.appiconset/moonRainbowDark.png'),
+        water: require('ios/Water.appiconset/water.png'),
+    }
 }
 
 export default function AppIconPicker(): JSX.Element {
@@ -73,7 +79,7 @@ export default function AppIconPicker(): JSX.Element {
                         return (
                             <SectionView
                                 title={t(`appIcon.categories.${key}`)}
-                                key={key}
+                                key={key + 'section'}
                             >
                                 <View
                                     style={[
@@ -84,25 +90,15 @@ export default function AppIconPicker(): JSX.Element {
                                     {key === 'exclusive' &&
                                         categories.exclusive.length === 0 && (
                                             <View
-                                                style={[
-                                                    {
-                                                        justifyContent:
-                                                            'center',
-                                                        paddingVertical: 20,
-                                                        paddingHorizontal: 20,
-                                                        minHeight: 85,
-                                                        alignContent: 'center',
-                                                        alignItems: 'center',
-                                                    },
-                                                ]}
+                                                style={
+                                                    styles.exclusiveContainer
+                                                }
                                             >
                                                 <Text
                                                     style={[
                                                         {
                                                             color: colors.text,
-                                                            textAlign: 'center',
-                                                            fontSize: 17,
-                                                            fontWeight: '500',
+                                                            ...styles.exclusiveText,
                                                         },
                                                     ]}
                                                 >
@@ -115,20 +111,7 @@ export default function AppIconPicker(): JSX.Element {
                                             <>
                                                 <Pressable
                                                     key={icon}
-                                                    style={[
-                                                        {
-                                                            flexDirection:
-                                                                'row',
-                                                            flexWrap: 'wrap',
-                                                            alignItems:
-                                                                'center',
-                                                            justifyContent:
-                                                                'space-between',
-                                                            paddingStart: 12,
-                                                            paddingEnd: 20,
-                                                            paddingVertical: 12,
-                                                        },
-                                                    ]}
+                                                    style={styles.rowContainer}
                                                     onPress={() => {
                                                         changeIcon(
                                                             // this is needed to match naming convention of the icons
@@ -149,41 +132,24 @@ export default function AppIconPicker(): JSX.Element {
                                                     }}
                                                 >
                                                     <View
-                                                        style={{
-                                                            flexDirection:
-                                                                'row',
-                                                            gap: 32,
-                                                        }}
+                                                        style={
+                                                            styles.rowInnerContainer
+                                                        }
                                                     >
                                                         <Image
                                                             source={
                                                                 iconImages[icon]
                                                             }
                                                             style={{
-                                                                width: 80,
-                                                                height: 80,
-                                                                alignSelf:
-                                                                    'center',
-                                                                justifyContent:
-                                                                    'center',
-                                                                borderRadius: 16,
                                                                 borderColor:
                                                                     colors.border,
-                                                                borderWidth: 1,
+                                                                ...styles.imageContainer,
                                                             }}
                                                         />
                                                         <Text
                                                             style={{
                                                                 color: colors.text,
-                                                                textAlign:
-                                                                    'center',
-                                                                fontSize: 18,
-                                                                fontWeight:
-                                                                    '500',
-                                                                alignSelf:
-                                                                    'center',
-                                                                justifyContent:
-                                                                    'center',
+                                                                ...styles.iconText,
                                                             }}
                                                         >
                                                             {t(
@@ -210,7 +176,13 @@ export default function AppIconPicker(): JSX.Element {
 
                                                 {value.indexOf(icon) !==
                                                     value.length - 1 && (
-                                                    <Divider />
+                                                    <Divider
+                                                        width={
+                                                            Dimensions.get(
+                                                                'window'
+                                                            ).width - 140
+                                                        }
+                                                    />
                                                 )}
                                             </>
                                         )
@@ -252,5 +224,41 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignContent: 'center',
         justifyContent: 'center',
+    },
+    exclusiveContainer: {
+        justifyContent: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        minHeight: 90,
+    },
+    exclusiveText: {
+        textAlign: 'center',
+        fontSize: 17,
+        fontWeight: '500',
+    },
+    rowContainer: {
+        flexDirection: 'row',
+
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingStart: 12,
+        paddingEnd: 20,
+        paddingVertical: 12,
+    },
+    rowInnerContainer: {
+        flexDirection: 'row',
+        gap: 32,
+    },
+    imageContainer: {
+        width: 80,
+        height: 80,
+        borderRadius: 18,
+        borderWidth: 1,
+    },
+    iconText: {
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '500',
+        alignSelf: 'center',
     },
 })
