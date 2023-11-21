@@ -4,7 +4,6 @@
   "main": "expo-router/entry",
   "homepage": "https://github.com/neuland-ingolstadt/neuland.app-native",
   "private": true,
-  "packageManager": "yarn@4.0.1",
   "scripts": {
     "start": "expo start -c",
     "tunnel": "expo start -c --tunnel",
