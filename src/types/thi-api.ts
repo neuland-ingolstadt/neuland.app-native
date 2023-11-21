@@ -221,3 +221,44 @@ export interface Details {
     inhalt: null | string
     literatur: null | string
 }
+
+export interface AvailableLibrarySeats {
+    date: string
+    reservationCount?: number
+    resource: AvailableRoomItem[]
+}
+
+export interface AvailableRoomItem {
+    hasReservation: boolean
+    from: Date
+    to: Date
+    resources: Record<string, AvailableRoom>
+}
+
+export interface AvailableRoom {
+    room_name: string
+    seats: string[] | Record<string, string>
+    num_seats: number
+    maxnum_seats: number
+}
+
+export enum RoomName {
+    LesesaalGalerie = 'Lesesaal Galerie',
+    LesesaalNordAlteBibliothek = 'Lesesaal Nord (alte Bibliothek)',
+    LesesaalSüdNeueBibliothek = 'Lesesaal Süd (neue Bibliothek)',
+}
+
+export interface Reservation {
+    deleted: string
+    end: Date
+    rcategory: string
+    reservation_begin: string
+    reservation_end: string
+    reservation_id: string
+    reserved_at: string
+    reserved_by: string
+    resource: string
+    resource_id: string
+    rsubtype: string
+    start: Date
+}

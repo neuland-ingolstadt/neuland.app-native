@@ -322,7 +322,10 @@ export function isSameDay(a: Date, b: Date): boolean {
  * @param {Date} time
  * @returns {Date}
  */
-export function combineDateTime(date: Date, time: Date): Date {
+export function combineDateTime(
+    date: Date | string,
+    time: Date | string
+): Date {
     date = new Date(date)
     time = new Date(time)
     date.setHours(time.getHours())

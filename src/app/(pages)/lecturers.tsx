@@ -3,7 +3,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import LecturerRow from '@/components/Elements/Pages/LecturerRow'
+import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
@@ -149,7 +149,7 @@ export default function LecturersCard(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
+                        {t('error.refreshPull')}{' '}
                     </Text>
                 </View>
             )}

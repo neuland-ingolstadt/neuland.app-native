@@ -278,7 +278,7 @@ export default function Profile(): JSX.Element {
                         <Text
                             style={[styles.errorInfo, { color: colors.text }]}
                         >
-                            {t('error.refresh', { ns: 'common' })}{' '}
+                            {t('error.refreshPull', { ns: 'common' })}{' '}
                         </Text>
                     </View>
                 )}

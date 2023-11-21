@@ -95,7 +95,7 @@ export default function NewsScreen(): JSX.Element {
                         {errorMsg}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}
+                        {t('error.refreshPull')}
                     </Text>
                 </ScrollView>
             )}

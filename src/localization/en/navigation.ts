@@ -25,6 +25,8 @@ export default {
         mobility: 'Mobility',
         grades: 'Grades',
         news: 'THI News',
+        library: 'Library',
+        libraryCode: 'Library Number',
     },
     cards: {
         titles: {

@@ -50,7 +50,12 @@ const EventsCard = (): JSX.Element => {
             }}
         >
             {loadingState === LoadingState.LOADED && (
-                <View style={styles.calendarView}>
+                <View
+                    style={{
+                        ...styles.calendarView,
+                        paddingTop: events.length > 0 ? 10 : 0,
+                    }}
+                >
                     {events.map((event, index) => (
                         <React.Fragment key={index}>
                             <View>
@@ -94,6 +99,7 @@ const EventsCard = (): JSX.Element => {
 const styles = StyleSheet.create({
     calendarView: {
         gap: 12,
+        paddingTop: 10,
     },
     eventTitle: {
         fontWeight: '500',

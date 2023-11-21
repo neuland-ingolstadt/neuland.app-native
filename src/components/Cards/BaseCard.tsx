@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 8,
         padding: CARD_PADDING,
-        gap: 12,
     },
 })
 

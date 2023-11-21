@@ -27,7 +27,6 @@ class NeulandAPIClient {
      * @throws {Error} If the API returns an error
      */
     async performRequest(url: string): Promise<any> {
-        console.log('Requesting', url)
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,
@@ -51,10 +50,8 @@ class NeulandAPIClient {
     async requestCached(cacheKey: string, url: string): Promise<any> {
         const cached = await this.cache.get(cacheKey)
         if (cached !== undefined) {
-            console.log('Using cached value for', cacheKey)
             return cached
         }
-        console.log('Requesting', cacheKey)
         const resp = await this.performRequest(url)
         await this.cache.set(cacheKey, resp)
 

@@ -11,6 +11,7 @@ interface Props {
     defaultText: string
     onSelect: (selectedItem: string) => void
     selected: string
+    width?: number
 }
 
 /**
@@ -21,6 +22,7 @@ interface Props {
  * @param defaultText - The default text of the dropdown.
  * @param onSelect - A function that is called when an option is selected.
  * @param selected - The currently selected option.
+ * @param width - The width of the dropdown.
  */
 const Dropdown: React.FC<Props> = ({
     data,
@@ -28,6 +30,7 @@ const Dropdown: React.FC<Props> = ({
     defaultText,
     onSelect,
     selected,
+    width = 100,
 }) => {
     const colors = useTheme().colors as Colors
     return (
@@ -45,6 +48,7 @@ const Dropdown: React.FC<Props> = ({
                 styles.dropdownButton,
                 {
                     backgroundColor: colors.datePickerBackground,
+                    width,
                 },
             ]}
             buttonTextStyle={{
@@ -82,7 +86,6 @@ const Dropdown: React.FC<Props> = ({
 const styles = StyleSheet.create({
     dropdownButton: {
         borderRadius: 8,
-        width: 100,
         height: 32,
         justifyContent: 'center',
         alignItems: 'center',

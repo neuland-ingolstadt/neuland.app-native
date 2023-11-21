@@ -1,5 +1,5 @@
 import NeulandAPI from '@/api/neuland-api'
-import CLEventRow from '@/components/Elements/Pages/EventRow'
+import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
@@ -85,7 +85,7 @@ export default function Events(): JSX.Element {
                         {error?.message}
                     </Text>
                     <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refresh')}{' '}
+                        {t('error.refreshPull')}{' '}
                     </Text>
                 </View>
             )}
