@@ -9710,6 +9710,7 @@ __metadata:
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
+    react-native-dynamic-app-icon: "npm:^1.1.0"
     react-native-gesture-handler: "npm:~2.12.0"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.7.1"
@@ -9723,6 +9724,7 @@ __metadata:
     react-native-svg: "npm:^14.0.0"
     react-native-view-shot: "npm:^3.8.0"
     react-native-webview: "npm:13.2.2"
+    rn-dynamic-app-icon: "npm:^0.6.1"
     rn-quick-actions: "npm:^0.0.3"
     sanitize-html: "npm:^2.11.0"
     sweet-sfsymbols: "npm:^0.1.0"
@@ -10825,6 +10827,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-dynamic-app-icon@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-native-dynamic-app-icon@npm:1.1.0"
+  peerDependencies:
+    react-native: ">=0.41.2"
+  checksum: 39fc3141fdeb1b332ca0b452a2c801e440abbb6acaa1dbfb69d501ae702cda53233da14fda879f771b5bafad3c8cc47be4a570d826def0da58e4eab0b3a79e50
+  languageName: node
+  linkType: hard
+
 "react-native-gesture-handler@npm:~2.12.0":
   version: 2.12.1
   resolution: "react-native-gesture-handler@npm:2.12.1"
@@ -11468,6 +11479,16 @@ __metadata:
   bin:
     rimraf: ./bin.js
   checksum: f1e646f8c567795f2916aef7aadf685b543da6b9a53e482bb04b07472c7eef2b476045ba1e29f401c301c66b630b22b815ab31fdd60c5e1ae6566ff523debf45
+  languageName: node
+  linkType: hard
+
+"rn-dynamic-app-icon@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "rn-dynamic-app-icon@npm:0.6.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: b188090c4694e5f00ebdecb6ac23796480d757083235d870d7437368ec5d1ef35ccda87867604fb59276b5c4b524beef033e3d8025bef12cf29b7163d4a88dbc
   languageName: node
   linkType: hard
 

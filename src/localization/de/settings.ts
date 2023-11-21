@@ -127,4 +127,28 @@ export default {
         temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
         footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
     },
+    appIcon: {
+        names: {
+            default: 'Neuland Next',
+            water: 'Wasser',
+            dark: 'Modern Dunkel',
+            light: 'Modern Hell',
+            green: 'Modern Grün',
+            moonRainbowLight: 'Mond Regenbogen Hell',
+            moonRainbowDark: 'Mond Regenbogen Dunkel',
+            rainbowLight: 'Regenbogen Hell',
+            rainbowDark: 'Regenbogen Dunkel',
+            lightNeon: 'Neon Weiß',
+            greenkNeon: 'Neon Grün',
+            rainbowNeon: 'Regenbogen Neon',
+        },
+        categories: {
+            default: 'Standard',
+            neon: 'Neon',
+            rainbow: 'Regenbogen',
+            exclusive: 'Exklusiv',
+        },
+        exclusive:
+            'Besuche unsere Veranstaltungen, um exklusive App-Icons freizuschalten.',
+    },
 }

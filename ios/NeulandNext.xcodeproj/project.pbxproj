@@ -50,7 +50,6 @@
 		13B07FAE1A68108700A75B9A /* NeulandNext */ = {
 			isa = PBXGroup;
 			children = (
-				B7BB43BA2B0999A9009407C2 /* AppIcons */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -109,13 +108,6 @@
 				FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */,
 			);
 			name = NeulandNext;
-			sourceTree = "<group>";
-		};
-		B7BB43BA2B0999A9009407C2 /* AppIcons */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AppIcons;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -355,6 +347,7 @@
 			baseConfigurationReference = 6C2E3173556A471DD304B334 /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
@@ -394,6 +387,7 @@
 			baseConfigurationReference = 7A4D352CD337FB3A3BF06240 /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
 				CURRENT_PROJECT_VERSION = 1;

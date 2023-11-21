@@ -58,6 +58,7 @@
     "react-native-collapsible": "^1.6.1",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-dropdown-select-list": "^2.0.5",
+    "react-native-dynamic-app-icon": "^1.1.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "1.7.1",
@@ -71,6 +72,7 @@
     "react-native-svg": "^14.0.0",
     "react-native-view-shot": "^3.8.0",
     "react-native-webview": "13.2.2",
+    "rn-dynamic-app-icon": "^0.6.1",
     "rn-quick-actions": "^0.0.3",
     "sanitize-html": "^2.11.0",
     "sweet-sfsymbols": "^0.1.0"

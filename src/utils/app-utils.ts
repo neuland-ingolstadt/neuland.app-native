@@ -18,3 +18,12 @@ export const convertToMajorMinorPatch = (version: string): string => {
 export function processShortcut(item: ShortcutItem): void {
     router.replace(item.data.path)
 }
+
+/**
+ * Capitalizes the first letter of a string.
+ * @param string - The string to capitalize.
+ * @returns The capitalized string.
+ */
+export function capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}

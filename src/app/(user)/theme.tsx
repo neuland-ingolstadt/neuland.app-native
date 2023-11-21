@@ -1,14 +1,15 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors, accentColors } from '@/components/colors'
-import { ThemeContext } from '@/components/provider'
+import { AppIconContext, ThemeContext } from '@/components/provider'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Image,
+    type ImageProps,
     Platform,
     Pressable,
     ScrollView,
@@ -17,10 +18,25 @@ import {
     View,
 } from 'react-native'
 
+const iconImages: Record<string, ImageProps> = {
+    default: require('@/assets/appIcons/default.png'),
+    dark: require('@/assets/appIcons/dark.png'),
+    light: require('@/assets/appIcons/light.png'),
+    green: require('@/assets/appIcons/green.png'),
+    greenNeon: require('@/assets/appIcons/greenNeon.png'),
+    lightNeon: require('@/assets/appIcons/lightNeon.png'),
+    rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
+    rainbowLight: require('@/assets/appIcons/rainbowLight.png'),
+    rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+    moonRainbowLight: require('@/assets/appIcons/moonRainbowLight.png'),
+    moonRainbowDark: require('@/assets/appIcons/moonRainbowDark.png'),
+    water: require('@/assets/appIcons/water.png'),
+}
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, toggleAccentColor } = React.useContext(ThemeContext)
+    const { accentColor, toggleAccentColor } = useContext(ThemeContext)
+    const { appIcon } = useContext(AppIconContext)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
@@ -187,7 +203,7 @@ export default function Theme(): JSX.Element {
                             { color: colors.labelSecondaryColor },
                         ]}
                     >
-                        {' App Icon'}
+                        {'App Icon'}
                     </Text>
                     <Pressable
                         style={[
@@ -209,7 +225,7 @@ export default function Theme(): JSX.Element {
                     >
                         <View style={{ flexDirection: 'row', gap: 20 }}>
                             <Image
-                                source={require('../../assets/default.png')}
+                                source={iconImages[appIcon]}
                                 style={{
                                     width: 80,
                                     height: 80,
@@ -229,7 +245,7 @@ export default function Theme(): JSX.Element {
                                     justifyContent: 'center',
                                 }}
                             >
-                                {'Neuland Next Default'}
+                                {t(`appIcon.names.${appIcon}`)}
                             </Text>
                         </View>
                         <PlatformIcon

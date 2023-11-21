@@ -125,4 +125,27 @@ export default {
         temporarilyUnavailable: 'Grades are temporarily unavailable.',
         footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
     },
+    appIcon: {
+        names: {
+            default: 'Neuland Next',
+            water: 'Water',
+            dark: 'Modern Dark',
+            light: 'Modern Light',
+            green: 'Modern Green',
+            moonRainbowLight: 'Moon Rainbow Light',
+            moonRainbowDark: 'Moon Rainbow Dark',
+            rainbowLight: 'Rainbow Light',
+            rainbowDark: 'Rainbow Dark',
+            lightNeon: 'White Neon',
+            greenNeon: 'Green Neon',
+            rainbowNeon: 'Rainbow Neon',
+        },
+        categories: {
+            default: 'Default',
+            neon: 'Neon',
+            rainbow: 'Rainbow',
+            exclusive: 'Exclusive',
+        },
+        exclusive: 'Attend to our events to unlock exclusive app icons.',
+    },
 }

@@ -560,12 +560,16 @@ PODS:
     - React-jsi (= 0.72.6)
     - React-logger (= 0.72.6)
     - React-perflogger (= 0.72.6)
+  - rn-dynamic-app-icon (0.6.1):
+    - React-Core
   - rn-quick-actions (0.0.3):
     - React
   - RNCAsyncStorage (1.18.2):
     - React-Core
   - RNDateTimePicker (7.2.0):
     - React-Core
+  - RNDynamicAppIcon (1.1.0):
+    - React
   - RNGestureHandler (2.12.1):
     - React-Core
   - RNReanimated (3.3.0):
@@ -683,9 +687,11 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-dynamic-app-icon (from `../node_modules/rn-dynamic-app-icon`)
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDynamicAppIcon (from `../node_modules/react-native-dynamic-app-icon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -849,12 +855,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-dynamic-app-icon:
+    :path: "../node_modules/rn-dynamic-app-icon"
   rn-quick-actions:
     :path: "../node_modules/rn-quick-actions"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDynamicAppIcon:
+    :path: "../node_modules/react-native-dynamic-app-icon"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -946,9 +956,11 @@ SPEC CHECKSUMS:
   React-runtimescheduler: f23e337008403341177fc52ee4ca94e442c17ede
   React-utils: fa59c9a3375fb6f4aeb66714fd3f7f76b43a9f16
   ReactCommon: dd03c17275c200496f346af93a7b94c53f3093a4
+  rn-dynamic-app-icon: da5e280603dfb56872991937d04d5656cbfd7ae1
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNDateTimePicker: 3942382593f104af226ad9c56e16166960c7ae30
+  RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3

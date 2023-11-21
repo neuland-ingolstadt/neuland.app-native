@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import {
+    useAppIcon,
     useDashboard,
     useFlow,
     useFoodFilter,
@@ -57,6 +58,13 @@ export const ThemeContext = createContext<any>({
     toggleAccentColor: () => {},
 })
 
+export const AppIconContext = createContext<any>({
+    appIcon: 'default',
+    unlockedAppIcons: [],
+    toggleAppIcon: () => {},
+    addUnlockedAppIcon: () => {},
+})
+
 export const DashboardContext = createContext<Dashboard>({
     shownDashboardEntries: [],
     hiddenDashboardEntries: [],
@@ -103,6 +111,7 @@ export default function Provider({
     const colorScheme = useColorScheme()
     const flow = useFlow()
     const routeParams = useRouteParams()
+    const appIcon = useAppIcon()
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -164,23 +173,29 @@ export default function Provider({
                 }
             >
                 <ThemeContext.Provider value={themeHook}>
-                    <FlowContext.Provider value={flow}>
-                        <UserKindContext.Provider value={userKind}>
-                            <DashboardContext.Provider value={dashboard}>
-                                <FoodFilterContext.Provider value={foodFilter}>
-                                    <MobilityContext.Provider value={mobility}>
-                                        <RouteParamsContext.Provider
-                                            value={routeParams}
+                    <AppIconContext.Provider value={appIcon}>
+                        <FlowContext.Provider value={flow}>
+                            <UserKindContext.Provider value={userKind}>
+                                <DashboardContext.Provider value={dashboard}>
+                                    <FoodFilterContext.Provider
+                                        value={foodFilter}
+                                    >
+                                        <MobilityContext.Provider
+                                            value={mobility}
                                         >
-                                            <RootSiblingParent>
-                                                {children}
-                                            </RootSiblingParent>
-                                        </RouteParamsContext.Provider>
-                                    </MobilityContext.Provider>
-                                </FoodFilterContext.Provider>
-                            </DashboardContext.Provider>
-                        </UserKindContext.Provider>
-                    </FlowContext.Provider>
+                                            <RouteParamsContext.Provider
+                                                value={routeParams}
+                                            >
+                                                <RootSiblingParent>
+                                                    {children}
+                                                </RootSiblingParent>
+                                            </RouteParamsContext.Provider>
+                                        </MobilityContext.Provider>
+                                    </FoodFilterContext.Provider>
+                                </DashboardContext.Provider>
+                            </UserKindContext.Provider>
+                        </FlowContext.Provider>
+                    </AppIconContext.Provider>
                 </ThemeContext.Provider>
             </ThemeProvider>
         </GestureHandlerRootView>

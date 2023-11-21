@@ -1,0 +1,22 @@
+{
+    "basic": {
+        "default": {},
+        "water": {},
+        "see": {},
+        "light": {},
+        "dark": {},
+        "green": {}
+    },
+    "rainbow": {
+        "moonRainbowLight": {},
+        "moonRainbowDark": {},
+        "rainbowLight": {},
+        "rainbowDark": {}
+    },
+    "neon": {
+        "lightNeon": {},
+        "greenNeon": {},
+
+        "rainbowNeon": {}
+    }
+}

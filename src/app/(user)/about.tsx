@@ -127,7 +127,7 @@ export default function About(): JSX.Element {
                                 ]}
                             >
                                 <Image
-                                    source={require('@/assets/default.png')}
+                                    source={require('@/assets/appIcons/default.png')}
                                     alt="Neuland Next Logo"
                                     style={styles.logoImage}
                                 />

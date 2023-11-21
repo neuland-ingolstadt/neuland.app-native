@@ -1,3 +1,4 @@
+import { useAppIcon } from './appIcon'
 import { useDashboard } from './dashboard'
 import { useFlow } from './flow'
 import { useFoodFilter } from './foodFilter'
@@ -14,4 +15,5 @@ export {
     useMobility,
     useFlow,
     useRouteParams,
+    useAppIcon,
 }
