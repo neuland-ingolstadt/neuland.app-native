@@ -1,4 +1,4 @@
-import ErrorPage from '@/components/Elements/Universal/ErrorPage'
+import { ErrorPage } from '@/components/Elements/Universal/ErrorPage'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
