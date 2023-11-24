@@ -1684,6 +1684,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dominicstop/ts-event-emitter@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@dominicstop/ts-event-emitter@npm:1.1.0"
+  checksum: fe16c03132736a0a798c232636ab6b127fd8063509511ccafbd99405c224a106cfb7a8d4af13c4f6f412ec0ea3baae3678aa2c8c09d81c9985c423d476404e1a
+  languageName: node
+  linkType: hard
+
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -9705,6 +9712,8 @@ __metadata:
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
     react-native-gesture-handler: "npm:~2.12.0"
+    react-native-ios-context-menu: "npm:^2.3.0"
+    react-native-ios-utilities: "npm:^4.2.2"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.7.1"
     react-native-onboarding-swiper: "https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git"
@@ -10844,6 +10853,31 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 4d4271d26d8a9f799987c05652793baf3e57cf71debb3940e8f37d84f026ee38b7d0d3a3d26774b9f111d033ffedc8db4303c6b1f52155b6bee33774e83592f1
+  languageName: node
+  linkType: hard
+
+"react-native-ios-context-menu@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "react-native-ios-context-menu@npm:2.3.0"
+  dependencies:
+    "@dominicstop/ts-event-emitter": "npm:^1.1.0"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+    react-native-ios-utilities: 4.2.x
+  checksum: 82eb831d44d012cb5d8da88ae8d2246dbb20a0f1815d9a6bf12625957a47d20c5096dc492af1c507c0a4a382620c0f385512e243419eaf40faa4c9975cf5272d
+  languageName: node
+  linkType: hard
+
+"react-native-ios-utilities@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "react-native-ios-utilities@npm:4.2.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 68cb4f84720353148ee986fe67c68185af8647144804551b111970258d42bf0fe8dee4930a3c4485a3d103dc6fcb32e90f2a9a593a3b7a312962590e4fa15a3b
   languageName: node
   linkType: hard
 
