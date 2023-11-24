@@ -23,7 +23,13 @@ import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -95,7 +101,7 @@ export const MapScreen = (): JSX.Element => {
         setLocalSearch(routeParams)
     }, [routeParams])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <Pressable

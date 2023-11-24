@@ -85,15 +85,20 @@ export default function HomeLayout(): JSX.Element {
         },
     ]
 
-    function processShortcut(item: ShortcutItem): void {
-        router.push(item.data.path)
-        if (shortcutSubscription != null) shortcutSubscription.remove()
-    }
-    const shortcutSubscription = Shortcuts.onShortcutPressed(processShortcut)
-
     useEffect(() => {
+        function processShortcut(item: ShortcutItem): void {
+            router.push(item.data.path)
+        }
+
+        const shortcutSubscription =
+            Shortcuts.onShortcutPressed(processShortcut)
+
         Shortcuts.setShortcuts(shortcuts)
-    }, [selectedRestaurants])
+
+        return () => {
+            if (shortcutSubscription != null) shortcutSubscription.remove()
+        }
+    }, [selectedRestaurants, router, shortcuts])
 
     return (
         <>

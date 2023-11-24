@@ -34,40 +34,36 @@ export interface AppTheme extends Theme {
 
 export const accentColors: AccentColors = {
     teal: {
-        light: '#2aa2ba',
-        dark: '#37bdd8',
+        light: '#73c3e1',
+        dark: '#73c3e1',
     },
     blue: {
-        light: '#0e4b95',
-        dark: '#0c61b7',
+        light: '#1d4aee',
+        dark: '#1d4aee',
     },
     contrast: {
         light: '#000000',
         dark: '#ffffff',
     },
     pink: {
-        light: '#ea1a78',
-        dark: '#f8277b',
+        light: '#d438ac',
+        dark: '#d438ac',
     },
     purple: {
-        light: '#74209e',
-        dark: '#9b37d8',
+        light: '#a052f6',
+        dark: '#a052f6',
     },
     green: {
-        light: '#1fa91f',
-        dark: '#37d837',
+        light: '#357a32',
+        dark: '#75fb4c',
     },
     yellow: {
-        light: '#d8c412',
-        dark: '#e6d81f',
+        light: '#f7d046',
+        dark: '#f7d046',
     },
     orange: {
-        light: '#e3661d',
-        dark: '#f1932e',
-    },
-    red: {
-        light: '#cf2121',
-        dark: '#e42e2e',
+        light: '#e78431',
+        dark: '#e78431',
     },
 }
 

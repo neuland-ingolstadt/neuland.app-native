@@ -3069,7 +3069,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native-stack@npm:^6.9.17, @react-navigation/native-stack@npm:~6.9.12":
+"@react-navigation/native-stack@npm:~6.9.12":
   version: 6.9.17
   resolution: "@react-navigation/native-stack@npm:6.9.17"
   dependencies:
@@ -3085,7 +3085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/native@npm:^6.1.9, @react-navigation/native@npm:~6.1.6":
+"@react-navigation/native@npm:~6.1.6":
   version: 6.1.9
   resolution: "@react-navigation/native@npm:6.1.9"
   dependencies:
@@ -6366,10 +6366,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-eas-client@npm:~0.6.0":
-  version: 0.6.0
-  resolution: "expo-eas-client@npm:0.6.0"
-  checksum: 74251254f3ee8f1b291b26a7e7c4f30fa89b7425d150a4c980860ab5b96eedd85b474d6860b0024c6e02d9dc8aa7c5740602548f8506b352d9becb38dcdc2b55
+"expo-dynamic-app-icon@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "expo-dynamic-app-icon@npm:1.2.0"
+  peerDependencies:
+    expo: ">=49"
+    react: "*"
+    react-native: "*"
+  checksum: c810a54a02f0fcaa512bda9f40f1b5f89a1524475aaebc133d6d874811c753a65e858f05b6fd81450fc8bd8f5b975a5192d6c81b116452ac77f7a2b14b353711
   languageName: node
   linkType: hard
 
@@ -6582,13 +6586,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-structured-headers@npm:~3.3.0":
-  version: 3.3.0
-  resolution: "expo-structured-headers@npm:3.3.0"
-  checksum: a03193cb1ed48ec63a3ac95052ab9512d5e61bad9aed3efc9d0af1d631b264a92d6ed69c8ead580fc03d9db2f95d93ef846510b25a34ca2d3b74077f1c919a38
-  languageName: node
-  linkType: hard
-
 "expo-system-ui@npm:~2.4.0":
   version: 2.4.0
   resolution: "expo-system-ui@npm:2.4.0"
@@ -6607,29 +6604,6 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: ddf0292a5c25d5e235240a6a1342dcfc3b31a3f4940e3e984c16e261049d56e64e284496e46427a8c538df7a5588e245fc87ab9eb76c2f70519875c8e5da0b7d
-  languageName: node
-  linkType: hard
-
-"expo-updates@npm:~0.18.17":
-  version: 0.18.17
-  resolution: "expo-updates@npm:0.18.17"
-  dependencies:
-    "@expo/code-signing-certificates": "npm:0.0.5"
-    "@expo/config": "npm:~8.1.0"
-    "@expo/config-plugins": "npm:~7.2.0"
-    arg: "npm:4.1.0"
-    chalk: "npm:^4.1.2"
-    expo-eas-client: "npm:~0.6.0"
-    expo-manifests: "npm:~0.7.0"
-    expo-structured-headers: "npm:~3.3.0"
-    expo-updates-interface: "npm:~0.10.0"
-    fbemitter: "npm:^3.0.0"
-    resolve-from: "npm:^5.0.0"
-  peerDependencies:
-    expo: "*"
-  bin:
-    expo-updates: bin/cli.js
-  checksum: c89636a93b1771fbd38988464c5c45ab5001490482305664385737304c5454c87fcab13cebae5fbe05ca47447089ed8a58c8fb3b9f9926136691ee65f99f44b5
   languageName: node
   linkType: hard
 
@@ -9677,8 +9651,6 @@ __metadata:
     "@kichiyaki/react-native-barcode-generator": "npm:^0.6.7"
     "@react-native-async-storage/async-storage": "npm:1.18.2"
     "@react-native-community/datetimepicker": "npm:7.2.0"
-    "@react-navigation/native": "npm:^6.1.9"
-    "@react-navigation/native-stack": "npm:^6.9.17"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.2.1"
     "@types/color": "npm:^3.0.5"
     "@types/prop-types": "npm:^15"
@@ -9703,6 +9675,7 @@ __metadata:
     expo-clipboard: "npm:~4.3.0"
     expo-constants: "npm:~14.4.2"
     expo-dev-client: "npm:^2.4.12"
+    expo-dynamic-app-icon: "npm:^1.2.0"
     expo-haptics: "npm:~12.4.0"
     expo-linear-gradient: "npm:~12.3.0"
     expo-linking: "npm:~5.0.2"
@@ -9714,7 +9687,6 @@ __metadata:
     expo-splash-screen: "npm:~0.20.5"
     expo-status-bar: "npm:^1.6.0"
     expo-system-ui: "npm:~2.4.0"
-    expo-updates: "npm:~0.18.17"
     husky: "npm:^8.0.3"
     i18next: "npm:^23.6.0"
     lint-staged: "npm:>=15"
@@ -9728,7 +9700,6 @@ __metadata:
     react-native: "npm:0.72.6"
     react-native-barcode-builder: "npm:^2.0.0"
     react-native-big-calendar: "npm:^4.7.0"
-    react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
@@ -9739,7 +9710,7 @@ __metadata:
     react-native-reanimated: "npm:3.3.0"
     react-native-root-toast: "npm:^3.4.1"
     react-native-safe-area-context: "npm:4.6.3"
-    react-native-screens: "npm:~3.22.0"
+    react-native-screens: "npm:~3.27.0"
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-shimmer-placeholder: "npm:^2.0.9"
     react-native-svg: "npm:^14.0.0"
@@ -10820,15 +10791,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-change-icon@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "react-native-change-icon@npm:5.0.0"
-  peerDependencies:
-    react-native: "*"
-  checksum: bef7f6f10125977fc85cfedd5f570109c97b4fe32c7eaf84ee10e99e740159ac2b4894315e22bad5aaacb61778febbdf30e487bc985ad4e7c8335c4df1399f17
-  languageName: node
-  linkType: hard
-
 "react-native-collapsible@npm:^1.6.1":
   version: 1.6.1
   resolution: "react-native-collapsible@npm:1.6.1"
@@ -10965,16 +10927,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:~3.22.0":
-  version: 3.22.1
-  resolution: "react-native-screens@npm:3.22.1"
+"react-native-screens@npm:~3.27.0":
+  version: 3.27.0
+  resolution: "react-native-screens@npm:3.27.0"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 03d3c2fcccd6afe4b25c35396eb0280997724add60e4c2074572106237c5e299895ec8aa399ce23ba8c800663389a7dde8c6033b8c9f49064651298ead23c3ca
+  checksum: 30d0275d1a41915e3b2ca151854ca41ceed0bbdc6baf782e5e886a5842b92e003bb2183e4017bd6b03ee7000ec6312a6570a02901c1a990d0fefcdcf511f1e06
   languageName: node
   linkType: hard
 

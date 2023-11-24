@@ -139,6 +139,7 @@ export default {
             whiteNeon: 'White Neon',
             greenNeon: 'Green Neon',
             rainbowNeon: 'Rainbow Neon',
+            liquidNeon: 'Liquid Neon',
         },
         categories: {
             default: 'Default',

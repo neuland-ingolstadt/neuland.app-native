@@ -5,6 +5,7 @@ import { type Colors } from '@/components/colors'
 import { AppIconContext } from '@/components/provider'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
 import { useTheme } from '@react-navigation/native'
+import { setAppIcon } from 'expo-dynamic-app-icon'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -18,7 +19,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import { changeIcon } from 'react-native-change-icon'
 
 let iconImages: Record<string, ImageProps> = {}
 
@@ -48,7 +48,7 @@ export default function AppIconPicker(): JSX.Element {
     const categories = {
         exclusive: ['default'],
         default: ['default', 'water', 'light', 'dark', 'green'],
-        neon: ['whiteNeon', 'greenNeon', 'rainbowNeon'],
+        neon: ['liquidNeon', 'whiteNeon', 'greenNeon', 'rainbowNeon'],
         rainbow: [
             'moonRainbowLight',
             'moonRainbowDark',
@@ -113,21 +113,12 @@ export default function AppIconPicker(): JSX.Element {
                                                     key={icon}
                                                     style={styles.rowContainer}
                                                     onPress={() => {
-                                                        changeIcon(
+                                                        setAppIcon(
                                                             // this is needed to match naming convention of the icons
                                                             capitalizeFirstLetter(
                                                                 icon
                                                             )
                                                         )
-                                                            .then(() => {
-                                                                toggleAppIcon(
-                                                                    icon
-                                                                )
-                                                            })
-                                                            .catch((err) => {
-                                                                console.log(err)
-                                                            })
-
                                                         toggleAppIcon(icon)
                                                     }}
                                                 >

@@ -10,7 +10,6 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        icon: './src/assets/default.png',
         splash: {
             image: './src/assets/splash.png',
             resizeMode: 'contain',
@@ -34,6 +33,7 @@ module.exports = {
                 CFBundleLocalizations: ['en', 'de'],
                 CFBundleDevelopmentRegion: 'en',
             },
+            icon: './src/assets/icons/default.png',
         },
         android: {
             package: 'app.neuland',

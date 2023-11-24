@@ -172,51 +172,49 @@ export default function Theme(): JSX.Element {
                     </View>
                 </SectionView>
 
-                {Platform.OS === 'ios' && (
-                    <SectionView title="App Icon">
-                        <Pressable
-                            style={[
-                                styles.sectionContainer,
-                                styles.iconPressable,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                            onPress={() => {
-                                router.push('(user)/appicon')
-                            }}
-                        >
-                            <View style={styles.iconInnerContainer}>
-                                <Image
-                                    source={iconImages[appIcon]}
-                                    style={{
-                                        ...styles.iconContainer,
-                                        borderColor: colors.border,
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.iconText,
-                                    }}
-                                >
-                                    {t(`appIcon.names.${appIcon}`)}
-                                </Text>
-                            </View>
-                            <PlatformIcon
-                                color={colors.labelSecondaryColor}
-                                ios={{
-                                    name: 'chevron.forward',
-                                    size: 20,
-                                }}
-                                android={{
-                                    name: 'chevron-right',
-                                    size: 26,
+                <SectionView title="App Icon">
+                    <Pressable
+                        style={[
+                            styles.sectionContainer,
+                            styles.iconPressable,
+                            {
+                                backgroundColor: colors.card,
+                            },
+                        ]}
+                        onPress={() => {
+                            router.push('(user)/appicon')
+                        }}
+                    >
+                        <View style={styles.iconInnerContainer}>
+                            <Image
+                                source={iconImages[appIcon]}
+                                style={{
+                                    ...styles.iconContainer,
+                                    borderColor: colors.border,
                                 }}
                             />
-                        </Pressable>
-                    </SectionView>
-                )}
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.iconText,
+                                }}
+                            >
+                                {t(`appIcon.names.${appIcon}`)}
+                            </Text>
+                        </View>
+                        <PlatformIcon
+                            color={colors.labelSecondaryColor}
+                            ios={{
+                                name: 'chevron.forward',
+                                size: 20,
+                            }}
+                            android={{
+                                name: 'chevron-right',
+                                size: 26,
+                            }}
+                        />
+                    </Pressable>
+                </SectionView>
             </ScrollView>
         </>
     )
