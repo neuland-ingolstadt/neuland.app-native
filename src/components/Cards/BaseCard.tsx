@@ -6,7 +6,7 @@ import { CARD_PADDING } from '@/utils/style-utils'
 import { type MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
@@ -30,20 +30,16 @@ const BaseCard: React.FC<BaseCardProps> = ({
 }) => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
-    const [contextMenuVisible, setContextMenuVisible] = useState(false)
 
     const { hideDashboardEntry, resetOrder } =
         React.useContext(DashboardContext)
     return (
         <TouchableOpacity
             onPress={() => {
-                if (!contextMenuVisible) {
-                    onPress()
-                }
+                onPress()
             }}
-            onLongPress={() => {
-                setContextMenuVisible(true)
-            }}
+            delayLongPress={100}
+            onLongPress={() => {}}
         >
             <ContextMenuView
                 style={styles.container}
@@ -93,12 +89,6 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             router.push('(user)/dashboard/')
                             break
                     }
-                }}
-                onMenuWillShow={() => {
-                    setContextMenuVisible(true)
-                }}
-                onMenuDidHide={() => {
-                    setContextMenuVisible(false)
                 }}
                 onPressMenuPreview={() => {
                     onPress()
