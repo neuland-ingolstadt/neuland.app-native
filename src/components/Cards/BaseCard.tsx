@@ -35,70 +35,73 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const { hideDashboardEntry, resetOrder } =
         React.useContext(DashboardContext)
     return (
-        <ContextMenuView
-            style={styles.container}
-            menuConfig={{
-                menuTitle: t('cards.titles.' + title),
-                menuItems: [
-                    {
-                        actionKey: 'settings',
-                        actionTitle: t('contextMenu.settings'),
-                        icon: {
-                            iconType: 'SYSTEM',
-                            iconValue: 'rectangle.stack',
-                        },
-                    },
-                    {
-                        actionKey: 'hide',
-                        actionTitle: t('contextMenu.hide'),
-                        icon: {
-                            iconType: 'SYSTEM',
-                            iconValue: 'trash',
-                        },
-                    },
-                    {
-                        actionKey: 'reset',
-                        actionTitle: t('contextMenu.reset'),
-                        icon: {
-                            iconType: 'SYSTEM',
-                            iconValue: 'arrow.clockwise',
-                        },
-                        menuAttributes: ['destructive'],
-                    },
-                ],
-            }}
-            onPressMenuItem={({
-                nativeEvent,
-            }: {
-                nativeEvent: { actionKey: string }
-            }) => {
-                switch (nativeEvent.actionKey) {
-                    case 'hide':
-                        hideDashboardEntry(title)
-                        break
-                    case 'reset':
-                        resetOrder()
-                        break
-                    case 'settings':
-                        router.push('(user)/dashboard/')
-                        break
+        <TouchableOpacity
+            onPress={() => {
+                if (!contextMenuVisible) {
+                    onPress()
                 }
             }}
-            onMenuWillShow={() => {
+            onLongPress={() => {
                 setContextMenuVisible(true)
             }}
-            onMenuDidHide={() => {
-                setContextMenuVisible(false)
-            }}
-            onPressMenuPreview={() => {
-                onPress()
-            }}
         >
-            <TouchableOpacity
-                onPress={() => {
-                    if (!contextMenuVisible) {
-                        onPress()
+            <ContextMenuView
+                style={styles.container}
+                menuConfig={{
+                    menuTitle: t('cards.titles.' + title),
+                    menuItems: [
+                        {
+                            actionKey: 'settings',
+                            actionTitle: t('contextMenu.settings'),
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'rectangle.stack',
+                            },
+                        },
+                        {
+                            actionKey: 'hide',
+                            actionTitle: t('contextMenu.hide'),
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'trash',
+                            },
+                        },
+                        {
+                            actionKey: 'reset',
+                            actionTitle: t('contextMenu.reset'),
+                            icon: {
+                                iconType: 'SYSTEM',
+                                iconValue: 'arrow.clockwise',
+                            },
+                            menuAttributes: ['destructive'],
+                        },
+                    ],
+                }}
+                onPressMenuItem={({
+                    nativeEvent,
+                }: {
+                    nativeEvent: { actionKey: string }
+                }) => {
+                    switch (nativeEvent.actionKey) {
+                        case 'hide':
+                            hideDashboardEntry(title)
+                            break
+                        case 'reset':
+                            resetOrder()
+                            break
+                        case 'settings':
+                            router.push('(user)/dashboard/')
+                            break
                     }
+                }}
+                onMenuWillShow={() => {
+                    setContextMenuVisible(true)
+                }}
+                onMenuDidHide={() => {
+                    setContextMenuVisible(false)
+                }}
+                onPressMenuPreview={() => {
+                    onPress()
                 }}
             >
                 <View
@@ -140,8 +143,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     </View>
                     {children != null && <>{children}</>}
                 </View>
-            </TouchableOpacity>
-        </ContextMenuView>
+            </ContextMenuView>
+        </TouchableOpacity>
     )
 }
 
