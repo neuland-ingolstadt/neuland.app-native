@@ -24,7 +24,7 @@
     "@react-native-community/datetimepicker": "7.2.0",
     "@types/color": "^3.0.5",
     "color": "^4.2.3",
-    "expo": "^49.0.16",
+    "expo": "^49.0.21",
     "expo-blur": "~12.4.1",
     "expo-brightness": "~11.4.1",
     "expo-build-properties": "~0.8.3",
