@@ -38,7 +38,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
             onPress={() => {
                 onPress()
             }}
-            delayLongPress={100}
+            delayLongPress={400}
             onLongPress={() => {}}
         >
             <ContextMenuView
