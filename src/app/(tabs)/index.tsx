@@ -74,7 +74,7 @@ export default function Screen(): JSX.Element {
                                     }}
                                     android={{
                                         name: 'account-circle',
-                                        size: 24,
+                                        size: 26,
                                     }}
                                 />
                             </View>

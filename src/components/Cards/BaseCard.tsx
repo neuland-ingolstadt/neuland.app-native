@@ -6,7 +6,7 @@ import { CARD_PADDING } from '@/utils/style-utils'
 import { type MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
@@ -30,10 +30,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
 }) => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
+    const [contextMenuVisible, setContextMenuVisible] = useState(false)
+
     const { hideDashboardEntry, resetOrder } =
         React.useContext(DashboardContext)
     return (
         <ContextMenuView
+            style={styles.container}
             menuConfig={{
                 menuTitle: t('cards.titles.' + title),
                 menuItems: [
@@ -81,8 +84,23 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         break
                 }
             }}
+            onMenuWillShow={() => {
+                setContextMenuVisible(true)
+            }}
+            onMenuDidHide={() => {
+                setContextMenuVisible(false)
+            }}
+            onPressMenuPreview={() => {
+                onPress()
+            }}
         >
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity
+                onPress={() => {
+                    if (!contextMenuVisible) {
+                        onPress()
+                    }
+                }}
+            >
                 <View
                     style={[
                         styles.card,
@@ -141,6 +159,9 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 8,
         padding: CARD_PADDING,
+    },
+    container: {
+        borderRadius: 8,
     },
 })
 
