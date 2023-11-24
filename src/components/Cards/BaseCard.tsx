@@ -1,13 +1,17 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
+// @ts-expect-error - types for react-native-context-menu-view are not available
+import { ContextMenuView } from '@/components/Elements/Universal/ContextMenuView'
 import { type Colors } from '@/components/colors'
 import { CARD_PADDING } from '@/utils/style-utils'
 import { type MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
+import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import PlatformIcon from '../Elements/Universal/Icon'
+import { DashboardContext } from '../provider'
 
 interface BaseCardProps {
     title: string
@@ -26,48 +30,100 @@ const BaseCard: React.FC<BaseCardProps> = ({
 }) => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
+    const { hideDashboardEntry, resetOrder } =
+        React.useContext(DashboardContext)
     return (
-        <TouchableOpacity onPress={onPress}>
-            <View
-                style={[
-                    styles.card,
+        <ContextMenuView
+            menuConfig={{
+                menuTitle: t('cards.titles.' + title),
+                menuItems: [
                     {
-                        borderColor: colors.border,
-                        backgroundColor: colors.card,
+                        actionKey: 'settings',
+                        actionTitle: t('contextMenu.settings'),
+                        icon: {
+                            iconType: 'SYSTEM',
+                            iconValue: 'rectangle.stack',
+                        },
                     },
-                ]}
-            >
-                <View style={styles.titleView}>
-                    <PlatformIcon
-                        color={colors.primary}
-                        ios={{
-                            name: iosIcon,
-                            size: 18,
-                        }}
-                        android={{
-                            name: androidIcon,
-                            size: 24,
-                        }}
-                    />
-                    <Text style={[styles.title, { color: colors.text }]}>
-                        {t('cards.titles.' + title)}
-                    </Text>
+                    {
+                        actionKey: 'hide',
+                        actionTitle: t('contextMenu.hide'),
+                        icon: {
+                            iconType: 'SYSTEM',
+                            iconValue: 'trash',
+                        },
+                    },
+                    {
+                        actionKey: 'reset',
+                        actionTitle: t('contextMenu.reset'),
+                        icon: {
+                            iconType: 'SYSTEM',
+                            iconValue: 'arrow.clockwise',
+                        },
+                        menuAttributes: ['destructive'],
+                    },
+                ],
+            }}
+            onPressMenuItem={({
+                nativeEvent,
+            }: {
+                nativeEvent: { actionKey: string }
+            }) => {
+                switch (nativeEvent.actionKey) {
+                    case 'hide':
+                        hideDashboardEntry(title)
+                        break
+                    case 'reset':
+                        resetOrder()
+                        break
+                    case 'settings':
+                        router.push('(user)/dashboard/')
+                        break
+                }
+            }}
+        >
+            <TouchableOpacity onPress={onPress}>
+                <View
+                    style={[
+                        styles.card,
+                        {
+                            borderColor: colors.border,
+                            backgroundColor: colors.card,
+                        },
+                    ]}
+                >
+                    <View style={styles.titleView}>
+                        <PlatformIcon
+                            color={colors.primary}
+                            ios={{
+                                name: iosIcon,
+                                size: 18,
+                            }}
+                            android={{
+                                name: androidIcon,
+                                size: 24,
+                            }}
+                        />
+                        <Text style={[styles.title, { color: colors.text }]}>
+                            {t('cards.titles.' + title)}
+                        </Text>
 
-                    <PlatformIcon
-                        color={colors.labelColor}
-                        ios={{
-                            name: 'chevron.forward',
-                            size: 16,
-                        }}
-                        android={{
-                            name: 'chevron-right',
-                            size: 26,
-                        }}
-                    />
+                        <PlatformIcon
+                            color={colors.labelColor}
+                            ios={{
+                                name: 'chevron.forward',
+                                size: 16,
+                            }}
+                            android={{
+                                name: 'chevron-right',
+                                size: 26,
+                            }}
+                        />
+                    </View>
+                    {children != null && <>{children}</>}
                 </View>
-                {children != null && <>{children}</>}
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </ContextMenuView>
     )
 }
 

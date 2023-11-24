@@ -54,4 +54,9 @@ export default {
     shortcuts: {
         timetableDescription: 'Lectures, events etc.',
     },
+    contextMenu: {
+        reset: 'Reset cards',
+        hide: 'Hide card',
+        settings: 'Dashboard settings',
+    },
 }

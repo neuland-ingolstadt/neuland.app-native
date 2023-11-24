@@ -54,4 +54,9 @@ export default {
     shortcuts: {
         timetableDescription: 'Vorlesungen, Events etc.',
     },
+    contextMenu: {
+        reset: 'Karten zurücksetzen',
+        hide: 'Karte ausblenden',
+        settings: 'Dashboard Einstellungen',
+    },
 }

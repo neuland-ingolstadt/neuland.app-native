@@ -168,6 +168,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/dashboard"
                         options={{
+                            headerBackTitleVisible: false,
                             title: 'Dashboard',
                             animation: 'slide_from_right',
                         }}
