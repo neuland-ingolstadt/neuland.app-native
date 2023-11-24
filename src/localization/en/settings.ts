@@ -128,18 +128,11 @@ export default {
     appIcon: {
         names: {
             default: 'Neuland Next',
-            water: 'Water',
-            dark: 'Modern Dark',
-            light: 'Modern Light',
-            green: 'Modern Green',
-            moonRainbowLight: 'Moon Rainbow Light',
-            moonRainbowDark: 'Moon Rainbow Dark',
-            rainbowLight: 'Rainbow Light',
+            modernDark: 'Modern Dark',
+            modernLight: 'Modern Light',
+            modernGreen: 'Modern Green',
+            rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
-            whiteNeon: 'White Neon',
-            greenNeon: 'Green Neon',
-            rainbowNeon: 'Rainbow Neon',
-            liquidNeon: 'Liquid Neon',
         },
         categories: {
             default: 'Default',

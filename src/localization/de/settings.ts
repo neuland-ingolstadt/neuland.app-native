@@ -130,18 +130,11 @@ export default {
     appIcon: {
         names: {
             default: 'Neuland Next',
-            water: 'Wasser',
-            dark: 'Modern Dunkel',
-            light: 'Modern Hell',
-            green: 'Modern Grün',
-            moonRainbowLight: 'Mond Regenbogen Hell',
-            moonRainbowDark: 'Mond Regenbogen Dunkel',
-            rainbowLight: 'Regenbogen Hell',
+            modernDark: 'Modern Dunkel',
+            modernLight: 'Modern Hell',
+            modernGreen: 'Modern Grün',
+            rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
-            whiteNeon: 'Neon Weiß',
-            greenkNeon: 'Neon Grün',
-            rainbowNeon: 'Regenbogen Neon',
-            liquidNeon: 'Neon Flüssig',
         },
         categories: {
             default: 'Standard',

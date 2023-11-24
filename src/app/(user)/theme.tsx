@@ -23,20 +23,15 @@ let iconImages: Record<string, ImageProps> = {}
 
 if (Platform.OS === 'ios') {
     iconImages = {
-        default: require('ios/Default.appiconset/default.png'),
-        dark: require('ios/Dark.appiconset/dark.png'),
-        light: require('ios/Light.appiconset/light.png'),
-        green: require('ios/Green.appiconset/green.png'),
-        greenNeon: require('ios/GreenNeon.appiconset/greenNeon.png'),
-        whiteNeon: require('ios/WhiteNeon.appiconset/whiteNeon.png'),
-        rainbowNeon: require('ios/RainbowNeon.appiconset/rainbowNeon.png'),
-        rainbowLight: require('ios/RainbowLight.appiconset/rainbowLight.png'),
-        rainbowDark: require('ios/RainbowDark.appiconset/rainbowDark.png'),
-        moonRainbowLight: require('ios/MoonRainbowLight.appiconset/moonRainbowLight.png'),
-        moonRainbowDark: require('ios/MoonRainbowDark.appiconset/moonRainbowDark.png'),
-        water: require('ios/Water.appiconset/water.png'),
+        default: require('@/assets/appIcons/default.png'),
+        dark: require('@/assets/appIcons/modernDark.png'),
+        light: require('@/assets/appIcons/modernLight.png'),
+        green: require('@/assets/appIcons/modernGreen.png'),
+        rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+        moonRainbowLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     }
 }
+
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
@@ -171,50 +166,51 @@ export default function Theme(): JSX.Element {
                         ))}
                     </View>
                 </SectionView>
-
-                <SectionView title="App Icon">
-                    <Pressable
-                        style={[
-                            styles.sectionContainer,
-                            styles.iconPressable,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
-                        onPress={() => {
-                            router.push('(user)/appicon')
-                        }}
-                    >
-                        <View style={styles.iconInnerContainer}>
-                            <Image
-                                source={iconImages[appIcon]}
-                                style={{
-                                    ...styles.iconContainer,
-                                    borderColor: colors.border,
+                {Platform.OS === 'ios' && (
+                    <SectionView title="App Icon">
+                        <Pressable
+                            style={[
+                                styles.sectionContainer,
+                                styles.iconPressable,
+                                {
+                                    backgroundColor: colors.card,
+                                },
+                            ]}
+                            onPress={() => {
+                                router.push('(user)/appicon')
+                            }}
+                        >
+                            <View style={styles.iconInnerContainer}>
+                                <Image
+                                    source={iconImages[appIcon]}
+                                    style={{
+                                        ...styles.iconContainer,
+                                        borderColor: colors.border,
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.iconText,
+                                    }}
+                                >
+                                    {t(`appIcon.names.${appIcon}`)}
+                                </Text>
+                            </View>
+                            <PlatformIcon
+                                color={colors.labelSecondaryColor}
+                                ios={{
+                                    name: 'chevron.forward',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: 'chevron-right',
+                                    size: 26,
                                 }}
                             />
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.iconText,
-                                }}
-                            >
-                                {t(`appIcon.names.${appIcon}`)}
-                            </Text>
-                        </View>
-                        <PlatformIcon
-                            color={colors.labelSecondaryColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 20,
-                            }}
-                            android={{
-                                name: 'chevron-right',
-                                size: 26,
-                            }}
-                        />
-                    </Pressable>
-                </SectionView>
+                        </Pressable>
+                    </SectionView>
+                )}
             </ScrollView>
         </>
     )

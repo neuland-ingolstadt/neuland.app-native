@@ -24,18 +24,12 @@ let iconImages: Record<string, ImageProps> = {}
 
 if (Platform.OS === 'ios') {
     iconImages = {
-        default: require('ios/Default.appiconset/default.png'),
-        dark: require('ios/Dark.appiconset/dark.png'),
-        light: require('ios/Light.appiconset/light.png'),
-        green: require('ios/Green.appiconset/green.png'),
-        greenNeon: require('ios/GreenNeon.appiconset/greenNeon.png'),
-        whiteNeon: require('ios/WhiteNeon.appiconset/whiteNeon.png'),
-        rainbowNeon: require('ios/RainbowNeon.appiconset/rainbowNeon.png'),
-        rainbowLight: require('ios/RainbowLight.appiconset/rainbowLight.png'),
-        rainbowDark: require('ios/RainbowDark.appiconset/rainbowDark.png'),
-        moonRainbowLight: require('ios/MoonRainbowLight.appiconset/moonRainbowLight.png'),
-        moonRainbowDark: require('ios/MoonRainbowDark.appiconset/moonRainbowDark.png'),
-        water: require('ios/Water.appiconset/water.png'),
+        default: require('@/assets/appIcons/default.png'),
+        modernDark: require('@/assets/appIcons/modernDark.png'),
+        modernLight: require('@/assets/appIcons/modernLight.png'),
+        modernGreen: require('@/assets/appIcons/modernGreen.png'),
+        rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+        rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     }
 }
 
@@ -44,17 +38,10 @@ export default function AppIconPicker(): JSX.Element {
     const { appIcon, toggleAppIcon, unlockedAppIcons } =
         useContext(AppIconContext)
     const { t } = useTranslation(['settings'])
-
-    const categories = {
-        exclusive: ['default'],
-        default: ['default', 'water', 'light', 'dark', 'green'],
-        neon: ['liquidNeon', 'whiteNeon', 'greenNeon', 'rainbowNeon'],
-        rainbow: [
-            'moonRainbowLight',
-            'moonRainbowDark',
-            'rainbowLight',
-            'rainbowDark',
-        ],
+    const categories: Record<string, string[]> = {
+        default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
+        rainbow: ['rainbowMoonLight', 'rainbowDark'],
+        exclusive: [],
     }
 
     categories.exclusive = categories.exclusive.filter((icon) => {
@@ -113,13 +100,16 @@ export default function AppIconPicker(): JSX.Element {
                                                     key={icon}
                                                     style={styles.rowContainer}
                                                     onPress={() => {
-                                                        setAppIcon(
-                                                            // this is needed to match naming convention of the icons
-                                                            capitalizeFirstLetter(
-                                                                icon
+                                                        try {
+                                                            setAppIcon(
+                                                                capitalizeFirstLetter(
+                                                                    icon
+                                                                )
                                                             )
-                                                        )
-                                                        toggleAppIcon(icon)
+                                                            toggleAppIcon(icon)
+                                                        } catch (e) {
+                                                            console.log(e)
+                                                        }
                                                     }}
                                                 >
                                                     <View

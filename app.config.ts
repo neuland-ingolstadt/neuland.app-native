@@ -10,11 +10,6 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        splash: {
-            image: './src/assets/splash.png',
-            resizeMode: 'contain',
-            backgroundColor: '#ffffff',
-        },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
             buildNumber: '1',
@@ -33,12 +28,27 @@ module.exports = {
                 CFBundleLocalizations: ['en', 'de'],
                 CFBundleDevelopmentRegion: 'en',
             },
-            icon: './src/assets/icons/default.png',
+            splash: {
+                image: './src/assets/splash.png',
+                resizeMode: 'contain',
+                backgroundColor: '#ffffff',
+                dark: {
+                    backgroundColor: '#000000',
+                },
+            },
         },
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
             versionCode: 46,
+            splash: {
+                image: './src/assets/splash.png',
+                resizeMode: 'contain',
+                backgroundColor: '#ffffff',
+                dark: {
+                    backgroundColor: '#000000',
+                },
+            },
         },
         extra: {
             eas: {

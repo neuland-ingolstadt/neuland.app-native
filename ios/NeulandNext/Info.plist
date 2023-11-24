@@ -25,74 +25,29 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>Dark</key>
+        <key>ModernDark</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>Dark</string>
+            <string>ModernDark</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>Green</key>
+        <key>ModernGreen</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>Green</string>
+            <string>ModernGreen</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>GreenNeon</key>
+        <key>ModernLight</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>GreenNeon</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>RainbowLight</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>RainbowLight</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>WhiteNeon</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>WhiteNeon</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>RainbowNeon</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>RainbowNeon</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>Light</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>Light</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>Water</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>Water</string>
+            <string>ModernLight</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
@@ -106,20 +61,11 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>MoonRainbowDark</key>
+        <key>RainbowMoonLight</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>MoonRainbowDark</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>MoonRainbowLight</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>MoonRainbowLight</string>
+            <string>RainbowMoonLight</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
@@ -182,6 +128,7 @@
     <string>Allow $(PRODUCT_NAME) to use Face ID.</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
