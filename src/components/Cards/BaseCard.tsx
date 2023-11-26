@@ -8,7 +8,13 @@ import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 
 import PlatformIcon from '../Elements/Universal/Icon'
 import { DashboardContext } from '../provider'
@@ -35,11 +41,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
         React.useContext(DashboardContext)
     return (
         <TouchableOpacity
-            onPress={() => {
-                onPress()
-            }}
-            delayLongPress={400}
-            onLongPress={() => {}}
+            onPress={onPress}
+            {...Platform.select({
+                ios: {
+                    delayLongPress: 400,
+                    onLongPress: () => {},
+                },
+            })}
         >
             <ContextMenuView
                 style={styles.container}
