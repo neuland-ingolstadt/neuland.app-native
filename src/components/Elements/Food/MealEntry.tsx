@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: 4,
+        paddingTop: 3,
     },
     detailsColumns: {
         flexDirection: 'column',
