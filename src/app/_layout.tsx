@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, TouchableOpacity, useColorScheme } from 'react-native'
+import { Platform, Pressable, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
@@ -281,7 +281,7 @@ export default function RootLayout(): JSX.Element {
                                 },
                             }),
                             headerRight: () => (
-                                <TouchableOpacity
+                                <Pressable
                                     onPress={() => {
                                         router.push('(pages)/libraryCode')
                                     }}
@@ -297,7 +297,7 @@ export default function RootLayout(): JSX.Element {
                                             size: 24,
                                         }}
                                     />
-                                </TouchableOpacity>
+                                </Pressable>
                             ),
                         }}
                     />

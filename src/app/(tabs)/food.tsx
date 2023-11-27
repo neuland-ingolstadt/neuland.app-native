@@ -21,7 +21,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 
@@ -224,10 +223,11 @@ export default function Screen(): JSX.Element {
                 component={FoodScreen}
                 largeTitle={false}
                 headerRightElement={() => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => {
                             router.push('(food)/preferences')
                         }}
+                        hitSlop={10}
                     >
                         <View>
                             <PlatformIcon
@@ -242,7 +242,7 @@ export default function Screen(): JSX.Element {
                                 }}
                             />
                         </View>
-                    </TouchableOpacity>
+                    </Pressable>
                 )}
             />
         </>

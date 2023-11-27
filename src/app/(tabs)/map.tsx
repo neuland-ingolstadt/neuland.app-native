@@ -108,6 +108,7 @@ export const MapScreen = (): JSX.Element => {
                     onPress={() => {
                         router.push('(map)/advanced')
                     }}
+                    hitSlop={10}
                 >
                     <PlatformIcon
                         color={colors.text}

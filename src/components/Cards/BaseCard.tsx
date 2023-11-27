@@ -8,13 +8,7 @@ import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Platform,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Elements/Universal/Icon'
 import { DashboardContext } from '../provider'
@@ -40,7 +34,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const { hideDashboardEntry, resetOrder } =
         React.useContext(DashboardContext)
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={onPress}
             {...Platform.select({
                 ios: {
@@ -142,7 +136,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     {children != null && <>{children}</>}
                 </View>
             </ContextMenuView>
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 

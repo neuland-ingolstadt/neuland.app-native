@@ -7,7 +7,7 @@
 import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -47,10 +47,7 @@ const LoginAlert = ({
                             {errorTitle ?? 'Login failed'}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        onPress={resetAlert}
-                        style={styles.resetButtom}
-                    >
+                    <Pressable onPress={resetAlert} style={styles.resetButtom}>
                         <PlatformIcon
                             ios={{
                                 name: 'xmark',
@@ -62,7 +59,7 @@ const LoginAlert = ({
                             }}
                             color={colors.text}
                         />
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <View style={styles.errorText}>
                     <Text

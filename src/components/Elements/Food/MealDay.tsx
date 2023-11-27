@@ -54,12 +54,13 @@ const MealCategory = ({
     const colors = useTheme().colors as Colors
     return (
         <>
-            <View key={category} style={{ paddingBottom: 10 }}>
+            <View key={category} style={{ paddingBottom: 8 }}>
                 <Pressable
                     onPress={() => {
                         toggleCollapsed()
                     }}
                     style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+                    hitSlop={{ top: 6, bottom: 6 }}
                 >
                     <View style={styles.categoryContainer}>
                         <Text
@@ -235,8 +236,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 4,
-        paddingBottom: 4,
+        paddingTop: 3,
+        paddingBottom: 3,
     },
     toggleIcon: {
         marginRight: 4,

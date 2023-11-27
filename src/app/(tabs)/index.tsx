@@ -10,13 +10,7 @@ import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useContext } from 'react'
-import {
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
@@ -40,10 +34,11 @@ export default function Screen(): JSX.Element {
                 largeTitle={true}
                 transparent={false}
                 headerRightElement={() => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => {
                             router.push('(user)/settings')
                         }}
+                        hitSlop={10}
                     >
                         {userFullName !== '' && userKind !== 'guest' ? (
                             <View>
@@ -79,7 +74,7 @@ export default function Screen(): JSX.Element {
                                 />
                             </View>
                         )}
-                    </TouchableOpacity>
+                    </Pressable>
                 )}
             />
         </>

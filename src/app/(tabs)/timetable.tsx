@@ -468,6 +468,7 @@ export default function TimetableScreen(): JSX.Element {
                     onPress={() => {
                         setCalendarDate(new Date())
                     }}
+                    hitSlop={10}
                 >
                     <PlatformIcon
                         color={colors.text}
