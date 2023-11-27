@@ -187,6 +187,7 @@ export default function GradesSCreen(): JSX.Element {
                                     {index !== grades.length - 1 && (
                                         <Divider
                                             color={colors.labelTertiaryColor}
+                                            iosPaddingLeft={16}
                                         />
                                     )}
                                 </React.Fragment>
@@ -201,6 +202,7 @@ export default function GradesSCreen(): JSX.Element {
                                     {index !== missingGrades.length - 1 && (
                                         <Divider
                                             color={colors.labelTertiaryColor}
+                                            iosPaddingLeft={16}
                                         />
                                     )}
                                 </React.Fragment>

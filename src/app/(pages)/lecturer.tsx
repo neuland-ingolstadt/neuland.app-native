@@ -4,6 +4,7 @@ import { RouteParamsContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -118,7 +119,7 @@ export default function LecturerDetail(): JSX.Element {
 
     return (
         <ScrollView style={styles.page}>
-            <StatusBar style="light" animated={true} hidden={false} />
+            <StatusBar style={getStatusBarStyle()} />
             <View
                 style={[
                     styles.titleContainer,

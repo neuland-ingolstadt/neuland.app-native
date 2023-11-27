@@ -104,6 +104,50 @@
                     "android": "book-outline"
                 }
             }
+        ],
+        "0.5": [
+            {
+                "title": {
+                    "de": "Bibliothek",
+                    "en": "Library"
+                },
+                "description": {
+                    "de": "Reserviere Plätze in der Bibliothek und nutze die digitale Bibliothekskarte, um Medien auszuleihen.",
+                    "en": "Reserve seats in the library and use the digital library card to borrow media."
+                },
+                "icon": {
+                    "ios": "books.vertical",
+                    "android": "book-outline"
+                }
+            },
+            {
+                "title": {
+                    "de": "THI-News",
+                    "en": "THI-News"
+                },
+                "description": {
+                    "de": "Rufe die neusten Pressemitteilungen der THI direkt in der App ab.",
+                    "en": "Get the latest press releases from THI directly in the app."
+                },
+                "icon": {
+                    "ios": "newspaper",
+                    "android": "newspaper"
+                }
+            },
+            {
+                "title": {
+                    "de": "Neue Icons und Farben",
+                    "en": "New Icons and Colors"
+                },
+                "description": {
+                    "de": "Die App verwendet nun native Icons. Außerdem wurden die Akzentfarben komplett überarbeitet.",
+                    "en": "The app uses native icons now. In addition, the accent colors have been revised completely."
+                },
+                "icon": {
+                    "ios": "paintpalette",
+                    "android": "palette-outline"
+                }
+            }
         ]
     }
 }

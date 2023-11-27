@@ -63,6 +63,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 iconType: 'SYSTEM',
                                 iconValue: 'trash',
                             },
+                            menuAttributes: ['destructive'],
                         },
                         {
                             actionKey: 'reset',

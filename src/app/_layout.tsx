@@ -146,10 +146,19 @@ export default function RootLayout(): JSX.Element {
                     />
                     <Stack.Screen
                         name="(user)/appicon"
-                        options={{
+                        // @ts-expect-error route params are not typed
+                        options={({
+                            route,
+                        }: {
+                            route: { params: { fromAppShortcut: string } }
+                        }) => ({
                             title: 'App Icon',
                             animation: 'slide_from_right',
-                        }}
+                            presentation:
+                                route.params?.fromAppShortcut === 'true'
+                                    ? 'modal'
+                                    : undefined,
+                        })}
                     />
                     <Stack.Screen
                         name="(user)/profile"

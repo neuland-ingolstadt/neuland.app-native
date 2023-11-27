@@ -115,6 +115,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                     {index < section.items.length - 1 && (
                                         <Divider
                                             color={colors.labelTertiaryColor}
+                                            iosPaddingLeft={16}
                                         />
                                     )}
                                 </React.Fragment>
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     cardRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 15,
+        paddingHorizontal: 16,
         marginVertical: 12,
     },
     cardColumn: {

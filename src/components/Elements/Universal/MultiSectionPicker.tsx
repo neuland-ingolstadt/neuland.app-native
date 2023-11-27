@@ -66,7 +66,10 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                         </View>
                     </Pressable>
                     {index < elements.length - 1 && (
-                        <Divider color={colors.labelTertiaryColor} />
+                        <Divider
+                            color={colors.labelTertiaryColor}
+                            iosPaddingLeft={16}
+                        />
                     )}
                 </React.Fragment>
             ))}

@@ -4,12 +4,14 @@ import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { AppIconContext } from '@/components/provider'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { setAppIcon } from 'expo-dynamic-app-icon'
+import { useLocalSearchParams } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    Dimensions,
     Image,
     type ImageProps,
     Pressable,
@@ -35,6 +37,7 @@ export default function AppIconPicker(): JSX.Element {
     const { appIcon, toggleAppIcon, unlockedAppIcons } =
         useContext(AppIconContext)
     const { t } = useTranslation(['settings'])
+    const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
         default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
         rainbow: ['rainbowMoonLight', 'rainbowDark'],
@@ -52,6 +55,7 @@ export default function AppIconPicker(): JSX.Element {
     return (
         <>
             <ScrollView>
+                <StatusBar style={isModal ? getStatusBarStyle() : 'auto'} />
                 <View
                     style={{
                         alignSelf: 'center',
@@ -155,11 +159,7 @@ export default function AppIconPicker(): JSX.Element {
                                                 {value.indexOf(icon) !==
                                                     value.length - 1 && (
                                                     <Divider
-                                                        width={
-                                                            Dimensions.get(
-                                                                'window'
-                                                            ).width - 140
-                                                        }
+                                                        iosPaddingLeft={110}
                                                     />
                                                 )}
                                             </>

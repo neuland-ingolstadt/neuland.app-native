@@ -1,7 +1,12 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { FlowContext, FoodFilterContext } from '@/components/provider'
+import {
+    AppIconContext,
+    FlowContext,
+    FoodFilterContext,
+} from '@/components/provider'
 import changelog from '@/data/changelog.json'
+import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
@@ -22,6 +27,7 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
+    const { appIcon } = useContext(AppIconContext)
 
     if (flow.isOnboarded === false) {
         router.push('(flow)/onboarding')
@@ -56,7 +62,6 @@ export default function HomeLayout(): JSX.Element {
             id: 'timetable',
             type: 'timetable',
             title: t('navigation.timetable'),
-            subtitle: t('shortcuts.timetableDescription'),
             symbolName: 'calendar',
             iconName: 'clock',
             data: {
@@ -83,11 +88,28 @@ export default function HomeLayout(): JSX.Element {
             symbolName: 'fork.knife',
             iconName: 'silverware_fork_knife',
         },
+        ...(Platform.OS === 'ios'
+            ? [
+                  {
+                      id: 'appIcon',
+                      type: 'appIcon',
+                      title: 'App Icon',
+                      subtitle: t(`appIcon.names.${appIcon}`, {
+                          ns: 'settings',
+                      }),
+                      data: {
+                          path: '(user)/appicon',
+                      },
+                      symbolName: 'paintpalette',
+                  },
+              ]
+            : []),
     ]
 
     useEffect(() => {
         function processShortcut(item: ShortcutItem): void {
             router.push(item.data.path)
+            router.setParams({ fromAppShortcut: 'true' })
         }
 
         const shortcutSubscription =
@@ -98,7 +120,7 @@ export default function HomeLayout(): JSX.Element {
         return () => {
             if (shortcutSubscription != null) shortcutSubscription.remove()
         }
-    }, [selectedRestaurants, router, shortcuts])
+    }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
 
     return (
         <>
@@ -184,6 +206,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="food"
                     options={{
+                        title: t('navigation.food'),
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
