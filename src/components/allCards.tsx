@@ -30,21 +30,6 @@ export const AllCards: Card[] = [
         card: () => <FoodCard />,
     },
     {
-        key: 'mobility',
-        removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="mobility"
-                iosIcon="tram"
-                androidIcon="bus"
-                onPress={() => {
-                    router.push('mobility')
-                }}
-            />
-        ),
-    },
-    {
         key: 'calendar',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],

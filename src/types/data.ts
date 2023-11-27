@@ -90,44 +90,6 @@ export interface CanteenAllergens {
     We: LanguageClass
 }
 
-export interface Mobility {
-    bus: Bus
-    train: Train
-    parking: Parking[]
-    charging: Charging[]
-}
-
-export interface Bus {
-    defaultStation: string
-    stations: BusStation[]
-}
-
-export interface BusStation {
-    id: string
-    name: string
-    url: string
-}
-
-export interface Charging {
-    id: string
-    freeParking: boolean
-}
-
-export interface Parking {
-    name: string
-    priceLevel: number | string
-}
-
-export interface Train {
-    defaultStation: string
-    stations: TrainStation[]
-}
-
-export interface TrainStation {
-    id: string
-    name: string
-}
-
 export interface Changelog {
     version: Record<string, Version[]>
 }

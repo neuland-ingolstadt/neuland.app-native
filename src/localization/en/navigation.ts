@@ -22,7 +22,6 @@ export default {
             search: 'Search all lecturers',
         },
         lecturer: 'Lecturer Details',
-        mobility: 'Mobility',
         grades: 'Grades',
         news: 'THI News',
         library: 'Library',
@@ -31,7 +30,6 @@ export default {
     cards: {
         titles: {
             timetable: 'Timetable',
-            mobility: 'Mobility',
             calendar: 'Calendar',
             rooms: 'Rooms',
             lecturers: 'Lecturers',

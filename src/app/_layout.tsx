@@ -271,18 +271,6 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(pages)/mobility"
-                        options={{
-                            title: t('navigation.mobility'),
-                            headerBackTitleVisible: false,
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
                         name="(pages)/library"
                         options={{
                             title: t('navigation.library'),

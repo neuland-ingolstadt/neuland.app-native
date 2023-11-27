@@ -14,7 +14,6 @@ import {
     useDashboard,
     useFlow,
     useFoodFilter,
-    useMobility,
     useRouteParams,
     useTheme,
     useUserKind,
@@ -75,13 +74,6 @@ export const DashboardContext = createContext<Dashboard>({
     updateDashboardOrder: () => {},
 })
 
-export const MobilityContext = createContext<any>({
-    mobilityKind: 'bus',
-    mobilityStation: 'Hauptbahnhof',
-    toggleMobility: () => {},
-    toggleStation: () => {},
-})
-
 export const FlowContext = createContext<any>({
     isOnboarded: true,
     toggleOnboarded: () => {},
@@ -108,7 +100,6 @@ export default function Provider({
     const userKind = useUserKind()
     const themeHook = useTheme()
     const dashboard = useDashboard()
-    const mobility = useMobility()
     const colorScheme = useColorScheme()
     const flow = useFlow()
     const routeParams = useRouteParams()
@@ -181,17 +172,13 @@ export default function Provider({
                                     <FoodFilterContext.Provider
                                         value={foodFilter}
                                     >
-                                        <MobilityContext.Provider
-                                            value={mobility}
+                                        <RouteParamsContext.Provider
+                                            value={routeParams}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
-                                            >
-                                                <RootSiblingParent>
-                                                    {children}
-                                                </RootSiblingParent>
-                                            </RouteParamsContext.Provider>
-                                        </MobilityContext.Provider>
+                                            <RootSiblingParent>
+                                                {children}
+                                            </RootSiblingParent>
+                                        </RouteParamsContext.Provider>
                                     </FoodFilterContext.Provider>
                                 </DashboardContext.Provider>
                             </UserKindContext.Provider>
