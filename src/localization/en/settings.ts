@@ -133,6 +133,7 @@ export default {
             modernGreen: 'Modern Green',
             rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
+            rainbowNeon: 'Rainbow Neon',
         },
         categories: {
             default: 'Default',

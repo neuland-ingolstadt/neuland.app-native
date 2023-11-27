@@ -135,6 +135,7 @@ export default {
             modernGreen: 'Modern Grün',
             rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
+            rainbowNeon: 'Regenbogen Neon',
         },
         categories: {
             default: 'Standard',

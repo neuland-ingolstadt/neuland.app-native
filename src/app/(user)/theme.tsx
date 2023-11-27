@@ -28,6 +28,7 @@ if (Platform.OS === 'ios') {
         modernLight: require('@/assets/appIcons/modernLight.png'),
         modernGreen: require('@/assets/appIcons/modernGreen.png'),
         rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+        rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
         rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     }
 }

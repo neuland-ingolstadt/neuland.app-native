@@ -31,6 +31,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(tabs)"
                         options={{
+                            title: 'Home',
                             headerShown: false,
                         }}
                     />
@@ -46,7 +47,6 @@ export default function RootLayout(): JSX.Element {
                         name="(user)/settings"
                         options={{
                             title: t('navigation.settings'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -61,7 +61,6 @@ export default function RootLayout(): JSX.Element {
                         name="(food)/preferences"
                         options={{
                             title: t('navigation.preferences'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -177,7 +176,6 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/dashboard"
                         options={{
-                            headerBackTitleVisible: false,
                             title: 'Dashboard',
                             animation: 'slide_from_right',
                         }}
@@ -193,7 +191,6 @@ export default function RootLayout(): JSX.Element {
                         name="(map)/advanced"
                         options={{
                             title: t('navigation.advancedSearch'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -201,7 +198,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/events"
                         options={{
                             title: 'Campus Life Events',
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -213,7 +209,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/calendar"
                         options={{
                             title: t('navigation.calendar'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -239,7 +234,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/lecturers"
                         options={{
                             title: t('navigation.lecturers.title'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -283,7 +277,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/library"
                         options={{
                             title: t('navigation.library'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -314,7 +307,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/libraryCode"
                         options={{
                             title: t('navigation.libraryCode'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -329,7 +321,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/news"
                         options={{
                             title: t('navigation.news'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',

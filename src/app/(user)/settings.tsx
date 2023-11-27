@@ -332,7 +332,7 @@ export default function Settings(): JSX.Element {
                                             }
                                         >
                                             <PlatformIcon
-                                                color={colors.background}
+                                                color={'white'}
                                                 ios={{
                                                     name: 'person',
                                                     variant: 'fill',

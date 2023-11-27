@@ -29,6 +29,7 @@ iconImages = {
     modernLight: require('@/assets/appIcons/modernLight.png'),
     modernGreen: require('@/assets/appIcons/modernGreen.png'),
     rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+    rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
 }
 
@@ -40,7 +41,7 @@ export default function AppIconPicker(): JSX.Element {
     const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
         default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
-        rainbow: ['rainbowMoonLight', 'rainbowDark'],
+        rainbow: ['rainbowNeon', 'rainbowDark', 'rainbowMoonLight'],
         exclusive: [],
     }
 
