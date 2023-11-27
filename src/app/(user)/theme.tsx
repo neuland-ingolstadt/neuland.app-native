@@ -24,11 +24,11 @@ let iconImages: Record<string, ImageProps> = {}
 if (Platform.OS === 'ios') {
     iconImages = {
         default: require('@/assets/appIcons/default.png'),
-        dark: require('@/assets/appIcons/modernDark.png'),
-        light: require('@/assets/appIcons/modernLight.png'),
-        green: require('@/assets/appIcons/modernGreen.png'),
+        modernDark: require('@/assets/appIcons/modernDark.png'),
+        modernLight: require('@/assets/appIcons/modernLight.png'),
+        modernGreen: require('@/assets/appIcons/modernGreen.png'),
         rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
-        moonRainbowLight: require('@/assets/appIcons/rainbowMoonLight.png'),
+        rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     }
 }
 

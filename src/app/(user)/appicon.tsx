@@ -12,7 +12,6 @@ import {
     Dimensions,
     Image,
     type ImageProps,
-    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -22,15 +21,13 @@ import {
 
 let iconImages: Record<string, ImageProps> = {}
 
-if (Platform.OS === 'ios') {
-    iconImages = {
-        default: require('@/assets/appIcons/default.png'),
-        modernDark: require('@/assets/appIcons/modernDark.png'),
-        modernLight: require('@/assets/appIcons/modernLight.png'),
-        modernGreen: require('@/assets/appIcons/modernGreen.png'),
-        rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
-        rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
-    }
+iconImages = {
+    default: require('@/assets/appIcons/default.png'),
+    modernDark: require('@/assets/appIcons/modernDark.png'),
+    modernLight: require('@/assets/appIcons/modernLight.png'),
+    modernGreen: require('@/assets/appIcons/modernGreen.png'),
+    rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+    rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
 }
 
 export default function AppIconPicker(): JSX.Element {
