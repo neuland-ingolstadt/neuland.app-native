@@ -18,7 +18,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
-const EventsCard = (): JSX.Element => {
+const FoodCard = (): JSX.Element => {
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const { t, i18n } = useTranslation('food')
 
@@ -35,52 +35,97 @@ const EventsCard = (): JSX.Element => {
         Array<{ name: string; price: string | null }>
     >([])
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
+    const [todayEntries, setTodayEntries] = useState<Meal[]>([])
+
+    /**
+     * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
+     * @param meal  - The meal to calculate the rating for.
+     * @returns A number representing the rating of the meal.
+     */
+    function userMealRating(meal: Meal): number {
+        if (
+            meal.allergens?.some(
+                (x) => allergenSelection[x as keyof typeof allergenSelection]
+            ) ??
+            false
+        ) {
+            return -1
+        } else if (
+            meal.flags?.some(
+                (x) =>
+                    preferencesSelection[x as keyof typeof preferencesSelection]
+            ) ??
+            false
+        ) {
+            return 2
+        } else if (
+            meal.allergens == null &&
+            Object.keys(allergenSelection).some(
+                (x) => allergenSelection[x as keyof typeof allergenSelection]
+            )
+        ) {
+            return 0
+        } else {
+            return 1
+        }
+    }
+
     useEffect(() => {
         void loadData()
+    }, [selectedRestaurants])
+
+    useEffect(() => {
+        // Calculate userMealRating and update foodEntries
+        const updateFoodEntries = (): void => {
+            if (todayEntries == null) {
+                setFoodEntries([])
+            } else {
+                todayEntries?.sort(
+                    (a, b) => userMealRating(b) - userMealRating(a)
+                )
+                const shownEntries = todayEntries.slice(0, 2)
+                const hiddenEntriesCount =
+                    todayEntries.length - shownEntries.length
+                setFoodEntries([
+                    ...shownEntries.map((x) => ({
+                        name: mealName(
+                            x.name,
+                            foodLanguage,
+                            i18n.language as LanguageKey
+                        ),
+                        price: getUserSpecificPrice(x, userKind),
+                    })),
+                    ...(hiddenEntriesCount > 0
+                        ? [
+                              {
+                                  name:
+                                      hiddenEntriesCount === 1
+                                          ? t('dashboard.oneMore')
+                                          : t('dashboard.manyMore', {
+                                                count: hiddenEntriesCount,
+                                            }),
+                                  price: null,
+                              },
+                          ]
+                        : []),
+                ])
+            }
+            setLoadingState(LoadingState.LOADED)
+        }
+
+        updateFoodEntries()
     }, [
-        selectedRestaurants,
         allergenSelection,
         preferencesSelection,
-        userKind,
-        i18n.language,
+        todayEntries,
         foodLanguage,
+        i18n.language,
+        userKind,
     ])
 
     const loadData = async (): Promise<void> => {
         const restaurants =
             selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
-
-        function userMealRating(meal: Meal): number {
-            if (
-                meal.allergens?.some(
-                    (x) =>
-                        allergenSelection[x as keyof typeof allergenSelection]
-                ) ??
-                false
-            ) {
-                return -1
-            } else if (
-                meal.flags?.some(
-                    (x) =>
-                        preferencesSelection[
-                            x as keyof typeof preferencesSelection
-                        ]
-                ) ??
-                false
-            ) {
-                return 2
-            } else if (
-                meal.allergens == null &&
-                Object.keys(allergenSelection).some(
-                    (x) =>
-                        allergenSelection[x as keyof typeof allergenSelection]
-                )
-            ) {
-                return 0
-            } else {
-                return 1
-            }
-        }
 
         if (restaurants.length !== 1) {
             setFoodCardTitle('food')
@@ -114,40 +159,7 @@ const EventsCard = (): JSX.Element => {
                         x.restaurant != null &&
                         selectedRestaurants.includes(x.restaurant.toLowerCase())
                 )
-
-            todayEntries?.sort((a, b) => userMealRating(b) - userMealRating(a))
-
-            if (todayEntries == null) {
-                setFoodEntries([])
-            } else {
-                const shownEntries = todayEntries.slice(0, 2)
-                const hiddenEntriesCount =
-                    todayEntries.length - shownEntries.length
-                setFoodEntries([
-                    ...shownEntries.map((x) => ({
-                        name: mealName(
-                            x.name,
-                            foodLanguage,
-                            i18n.language as LanguageKey
-                        ),
-                        price: getUserSpecificPrice(x, userKind),
-                    })),
-                    ...(hiddenEntriesCount > 0
-                        ? [
-                              {
-                                  name:
-                                      hiddenEntriesCount === 1
-                                          ? t('dashboard.oneMore')
-                                          : t('dashboard.manyMore', {
-                                                count: hiddenEntriesCount,
-                                            }),
-                                  price: null,
-                              },
-                          ]
-                        : []),
-                ])
-            }
-            setLoadingState(LoadingState.LOADED)
+            setTodayEntries(todayEntries ?? [])
         } catch (e) {
             console.error(e)
         }
@@ -233,4 +245,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default EventsCard
+export default FoodCard
