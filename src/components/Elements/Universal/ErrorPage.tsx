@@ -115,7 +115,7 @@ function ErrorButtonView({
                     {message}
                 </Text>
                 <Text style={[styles.errorInfo, { color: colors.text }]}>
-                    {t('error.refreshPull', { ns: 'common' })}
+                    {t('error.refreshButton', { ns: 'common' })}
                 </Text>
                 <Pressable
                     style={[
