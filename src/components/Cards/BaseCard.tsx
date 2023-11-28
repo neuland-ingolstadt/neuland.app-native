@@ -38,7 +38,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
             onPress={onPress}
             {...Platform.select({
                 ios: {
-                    delayLongPress: 400,
+                    delayLongPress: 300,
                     onLongPress: () => {},
                 },
             })}

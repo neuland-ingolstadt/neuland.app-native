@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import {
     Alert,
     FlatList,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -183,8 +184,12 @@ export default function Screen(): JSX.Element {
                             onPress={() => {
                                 router.push('(user)/settings')
                             }}
-                            onLongPress={() => {}}
-                            delayLongPress={400}
+                            {...Platform.select({
+                                ios: {
+                                    delayLongPress: 300,
+                                    onLongPress: () => {},
+                                },
+                            })}
                             hitSlop={10}
                         >
                             {userFullName !== '' && userKind !== 'guest' ? (
