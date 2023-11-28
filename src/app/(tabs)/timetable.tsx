@@ -63,7 +63,7 @@ export default function TimetableScreen(): JSX.Element {
     const timetableTextColor =
         textColor.contrast(primaryColor) > 5 ? textColor : textColor.negate()
 
-    const calendarColor = Color(colors.primary).rotate(-100)
+    const calendarColor = Color(colors.labelSecondaryColor)
     const calendarTextColor =
         textColor.contrast(calendarColor) > 5 ? textColor : textColor.negate()
 

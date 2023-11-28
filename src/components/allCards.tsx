@@ -57,6 +57,12 @@ export const AllCards: Card[] = [
         ),
     },
     {
+        key: 'library',
+        removable: true,
+        default: [USER_STUDENT, USER_EMPLOYEE],
+        card: () => <LibraryCard />,
+    },
+    {
         key: 'lecturers',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
@@ -85,12 +91,6 @@ export const AllCards: Card[] = [
                 }}
             />
         ),
-    },
-    {
-        key: 'library',
-        removable: true,
-        default: [],
-        card: () => <LibraryCard />,
     },
 ]
 
