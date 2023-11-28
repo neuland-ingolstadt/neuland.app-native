@@ -10,13 +10,14 @@ import { type UserKindContextType } from '@/hooks/userKind'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { MasonryFlashList } from '@shopify/flash-list'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Alert,
-    FlatList,
+    Dimensions,
     Platform,
     Pressable,
     StyleSheet,
@@ -236,28 +237,68 @@ export default function Screen(): JSX.Element {
 
 function HomeScreen(): JSX.Element {
     const { shownDashboardEntries } = React.useContext(DashboardContext)
+    const [orientation, setOrientation] = useState(
+        Dimensions.get('window').width
+    )
+    console.log(Dimensions.get('window').width)
+    const [colums, setColums] = useState(
+        Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
+    )
+
+    useEffect(() => {
+        const handleOrientationChange = (): void => {
+            setOrientation(Dimensions.get('window').width)
+            setColums(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2))
+        }
+
+        const subscription = Dimensions.addEventListener(
+            'change',
+            handleOrientationChange
+        )
+
+        return () => {
+            subscription.remove()
+        }
+    }, [])
 
     return (
-        <FlatList
+        <MasonryFlashList
+            key={orientation}
             contentInsetAdjustmentBehavior="automatic"
-            style={styles.page}
+            contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
             data={shownDashboardEntries}
-            renderItem={({ item }) => item.card()}
+            renderItem={({ item, index }) => {
+                let paddingStyle = {}
+
+                if (colums !== 1) {
+                    paddingStyle =
+                        index % 2 === 0
+                            ? { paddingRight: PAGE_PADDING / 2 }
+                            : { paddingLeft: PAGE_PADDING / 2 }
+                }
+
+                return (
+                    <View style={[styles.item, paddingStyle]}>
+                        {item.card()}
+                    </View>
+                )
+            }}
             keyExtractor={(item) => item.key}
-            numColumns={1}
-            contentContainerStyle={styles.container}
+            numColumns={colums}
+            estimatedItemSize={100}
         />
     )
 }
 
 const styles = StyleSheet.create({
-    page: {
-        padding: PAGE_PADDING,
+    item: {
+        marginVertical: 6,
     },
     container: {
         paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-        gap: 16,
+        paddingTop: 6,
+        paddingHorizontal: PAGE_PADDING,
     },
     iconText: {
         fontSize: 14,

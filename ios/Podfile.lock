@@ -17,7 +17,7 @@ PODS:
   - EXJSONUtils (0.7.1)
   - EXManifests (0.7.2):
     - ExpoModulesCore
-  - Expo (49.0.16):
+  - Expo (49.0.21):
     - ExpoModulesCore
   - expo-dev-client (2.4.12):
     - EXManifests
@@ -94,7 +94,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (14.3.0):
     - ExpoModulesCore
-  - ExpoModulesCore (1.5.11):
+  - ExpoModulesCore (1.5.12):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-NativeModulesApple
@@ -564,6 +564,8 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.2.0):
     - React-Core
+  - RNFlashList (1.6.3):
+    - React-Core
   - RNGestureHandler (2.12.1):
     - React-Core
   - RNReanimated (3.3.0):
@@ -684,6 +686,7 @@ DEPENDENCIES:
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -853,6 +856,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNFlashList:
+    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -878,7 +883,7 @@ SPEC CHECKSUMS:
   EXFont: 738c44c390953ebcbab075a4848bfbef025fd9ee
   EXJSONUtils: 6802be4282d42b97c51682468ddc1026a06f8276
   EXManifests: cf66451b11b2c2f6464917528d792759f7fd6ce0
-  Expo: fcfd60c1ed6806dee5103b210335ae0c72f675ed
+  Expo: 61a8e1aa94311557c137c0a4dfd4fe78281cfbb4
   expo-dev-client: 1e20e0d67534fd63da37604747a60e7d69fc46f5
   expo-dev-launcher: e9411e0c91abaa448682d0fa688957e7dbff356e
   expo-dev-menu: f7036f78c69f0f6ecb386f5543a06266dde64bf5
@@ -893,7 +898,7 @@ SPEC CHECKSUMS:
   ExpoLinearGradient: 5966dd5d49872cc9c104fedc8bbc298b6049b2e8
   ExpoLocalAuthentication: bd9d9037a96a11ccc456e327ddb404df02da10ca
   ExpoLocalization: be37fdd0b5930c6a49cd307b4542f4b426d6134c
-  ExpoModulesCore: 51cb2e7ab4c8da14be3f40b66d54c1781002e99d
+  ExpoModulesCore: c480fd4e3c7c8e81f0a6ba3a7c56869f25fe016d
   ExpoSecureStore: 57db3b6da8b59046e2057e95bf7738a8027b47c3
   ExpoSharing: 5366dab0e9a270a6da3acbb1e3471d5522044baf
   ExpoSystemUI: fa4854e3226e87f86d3383570264c6e4e90bc782
@@ -947,6 +952,7 @@ SPEC CHECKSUMS:
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
   RNDateTimePicker: 3942382593f104af226ad9c56e16166960c7ae30
+  RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
