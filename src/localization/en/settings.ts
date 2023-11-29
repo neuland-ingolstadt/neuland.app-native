@@ -47,7 +47,7 @@ export default {
         },
         easterEgg: {
             title: 'Easter Egg',
-            message: 'You unlocked the exclusive app icon "Cat"! 😻',
+            message: 'You unlocked the exclusive app icon "Paradise Cat"! 😻',
             messageAndroid: 'You found an easter egg! 🐣',
             confirm: 'Nice!',
         },
@@ -109,7 +109,6 @@ export default {
             yellow: 'Yellow',
             orange: 'Orange',
             green: 'Neuland',
-            cat: 'Cat',
         },
         footer: 'Change the accent color to match your style. This changes the color of the icons and buttons in the app.',
     },
@@ -141,6 +140,7 @@ export default {
             rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
             rainbowNeon: 'Rainbow Neon',
+            cat: 'Pradise Cat',
         },
         categories: {
             default: 'Default',

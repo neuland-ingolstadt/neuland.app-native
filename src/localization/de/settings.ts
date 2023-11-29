@@ -50,7 +50,7 @@ export default {
         easterEgg: {
             title: 'Easter Egg',
             message:
-                'Du hast das exklusive App-Icon "Katze" freigeschaltet! 😻',
+                'Du hast das exklusive App-Icon "Paradies Katze" freigeschaltet! 😻',
             messageAndroid: 'Du hast ein Easter Egg gefunden! 🐣',
             confirm: 'Nice!',
         },
@@ -143,7 +143,7 @@ export default {
             rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
             rainbowNeon: 'Regenbogen Neon',
-            cat: 'Katze',
+            cat: 'Paradies Katze',
         },
         categories: {
             default: 'Standard',

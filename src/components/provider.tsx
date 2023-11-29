@@ -54,7 +54,7 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'teal',
+    accentColor: 'green',
     toggleAccentColor: () => {},
 })
 
