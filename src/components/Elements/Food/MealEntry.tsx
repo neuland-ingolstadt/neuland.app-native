@@ -117,7 +117,7 @@ export const MealEntry = ({
                                         size: 13,
                                     }}
                                     android={{
-                                        name: 'allergy',
+                                        name: 'warning',
                                         size: 16,
                                     }}
                                     style={styles.icon}

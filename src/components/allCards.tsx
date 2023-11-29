@@ -16,7 +16,7 @@ export const AllCards: Card[] = [
             <BaseCard
                 title="timetable"
                 iosIcon="clock.fill"
-                androidIcon="clock"
+                androidIcon="calendar-month"
                 onPress={() => {
                     router.push('timetable')
                 }}
@@ -49,7 +49,7 @@ export const AllCards: Card[] = [
             <BaseCard
                 title="rooms"
                 iosIcon="rectangle.grid.2x2.fill"
-                androidIcon="view-grid"
+                androidIcon="list"
                 onPress={() => {
                     router.push('rooms')
                 }}
@@ -70,7 +70,7 @@ export const AllCards: Card[] = [
             <BaseCard
                 title="lecturers"
                 iosIcon="person.2.fill"
-                androidIcon="account-multiple"
+                androidIcon="group"
                 onPress={() => {
                     router.push('lecturers')
                 }}

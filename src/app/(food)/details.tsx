@@ -75,7 +75,7 @@ export default function FoodDetail(): JSX.Element {
                         ] ?? flag,
                     icon: preferencesSelection.includes(flag)
                         ? {
-                              android: 'checkmark-circle-outline',
+                              android: 'check-circle',
                               ios: 'checkmark.seal',
                           }
                         : undefined,
@@ -96,7 +96,7 @@ export default function FoodDetail(): JSX.Element {
                             ] ?? allergen,
                         icon: allergenSelection.includes(allergen)
                             ? {
-                                  android: 'allergy',
+                                  android: 'warning',
                                   ios: 'exclamationmark.triangle',
                               }
                             : undefined,

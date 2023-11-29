@@ -76,7 +76,7 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                             size: 21,
                         }}
                         android={{
-                            name: 'clock-outline',
+                            name: 'calendar-month',
                             size: 24,
                         }}
                     />
@@ -152,7 +152,7 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                             size: 21,
                         }}
                         android={{
-                            name: 'map-marker-outline',
+                            name: 'place',
                             size: 24,
                         }}
                     />
@@ -186,7 +186,7 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                             size: 21,
                         }}
                         android={{
-                            name: 'account-outline',
+                            name: 'person',
                             size: 24,
                         }}
                     />

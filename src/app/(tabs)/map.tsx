@@ -117,7 +117,7 @@ export const MapScreen = (): JSX.Element => {
                             size: 22,
                         }}
                         android={{
-                            name: 'format-list-group',
+                            name: 'manage-search',
                             size: 24,
                         }}
                     />
@@ -154,7 +154,7 @@ export const MapScreen = (): JSX.Element => {
                                     size: 22,
                                 }}
                                 android={{
-                                    name: 'format-list-group',
+                                    name: 'manage-search',
                                     size: 24,
                                 }}
                             />
@@ -514,7 +514,7 @@ export const MapScreen = (): JSX.Element => {
                                         size: 18,
                                     }}
                                     android={{
-                                        name: 'share-variant',
+                                        name: 'share',
                                         size: 22,
                                     }}
                                 />

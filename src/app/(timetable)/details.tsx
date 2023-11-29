@@ -171,7 +171,7 @@ export default function TimetableDetails(): JSX.Element {
                                     size: 21,
                                 }}
                                 android={{
-                                    name: 'clock-outline',
+                                    name: 'calendar-month',
                                     size: 24,
                                 }}
                             />
@@ -247,7 +247,7 @@ export default function TimetableDetails(): JSX.Element {
                                     size: 21,
                                 }}
                                 android={{
-                                    name: 'map-marker-outline',
+                                    name: 'place',
                                     size: 24,
                                 }}
                             />
@@ -288,7 +288,7 @@ export default function TimetableDetails(): JSX.Element {
                                     size: 21,
                                 }}
                                 android={{
-                                    name: 'account-outline',
+                                    name: 'person',
                                     size: 24,
                                 }}
                             />
@@ -305,6 +305,28 @@ export default function TimetableDetails(): JSX.Element {
                             </Text>
                         </DetailsBody>
                     </DetailsRow>
+                    <View
+                        style={{
+                            aspectRatio: 1,
+                            width: 32,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'red',
+                        }}
+                    >
+                        <PlatformIcon
+                            color={colors.labelColor}
+                            ios={{
+                                name: 'chevron.forward',
+                                size: 12,
+                            }}
+                            android={{
+                                name: 'person',
+                                size: 32,
+                            }}
+                        />
+                    </View>
+
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
 

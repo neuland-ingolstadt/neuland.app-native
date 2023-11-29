@@ -295,7 +295,7 @@ export default function RootLayout(): JSX.Element {
                                             size: 22,
                                         }}
                                         android={{
-                                            name: 'barcode-scan',
+                                            name: 'barcode-scanner',
                                             size: 24,
                                         }}
                                     />

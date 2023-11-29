@@ -49,7 +49,7 @@ function ErrorView({ message }: { message?: string }): JSX.Element {
                     size: 44,
                 }}
                 android={{
-                    name: 'alert-circle-outline',
+                    name: 'error',
                     size: 48,
                 }}
             />
@@ -99,7 +99,7 @@ function ErrorButtonView({
                         size: 44,
                     }}
                     android={{
-                        name: 'alert-circle-outline',
+                        name: 'error',
                         size: 48,
                     }}
                 />

@@ -76,7 +76,7 @@ const CLEventRow = ({
                                 {club.instagram !== undefined && (
                                     <Pressable
                                         onPress={() => {
-                                            void Linking.openURL(club.website)
+                                            void Linking.openURL(club.instagram)
                                         }}
                                     >
                                         <PlatformIcon
@@ -144,7 +144,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    websiteIcon: { marginRight: 6 },
+    websiteIcon: {
+        marginRight: 6,
+    },
     rightText: {
         fontSize: 14,
         fontWeight: '400',

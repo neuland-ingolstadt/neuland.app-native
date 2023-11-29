@@ -132,7 +132,7 @@ export default function Settings(): JSX.Element {
                     title: t('menu.formlist.preferences.theme'),
                     icon: {
                         ios: 'paintpalette',
-                        android: 'palette-outline',
+                        android: 'palette',
                     },
                     onPress: () => {
                         router.push('(user)/theme')
@@ -142,7 +142,7 @@ export default function Settings(): JSX.Element {
                     title: 'Dashboard',
                     icon: {
                         ios: 'rectangle.stack',
-                        android: 'view-dashboard-edit-outline',
+                        android: 'dashboard-customize',
                     },
 
                     onPress: () => {
@@ -152,7 +152,7 @@ export default function Settings(): JSX.Element {
                 {
                     title: t('menu.formlist.preferences.food'),
                     icon: {
-                        android: 'silverware-fork-knife',
+                        android: 'restaurant',
                         ios: 'fork.knife',
                     },
                     onPress: () => {
@@ -163,7 +163,7 @@ export default function Settings(): JSX.Element {
                     title: t('menu.formlist.preferences.language'),
                     icon: {
                         ios: 'globe',
-                        android: 'earth',
+                        android: 'language',
                     },
 
                     onPress: async () => {
@@ -339,7 +339,7 @@ export default function Settings(): JSX.Element {
                                                     size: 26,
                                                 }}
                                                 android={{
-                                                    name: 'account',
+                                                    name: 'account-circle',
                                                     size: 32,
                                                 }}
                                             />
@@ -367,7 +367,7 @@ export default function Settings(): JSX.Element {
                                                     size: 26,
                                                 }}
                                                 android={{
-                                                    name: 'alert',
+                                                    name: 'warning',
                                                     size: 28,
                                                 }}
                                             />

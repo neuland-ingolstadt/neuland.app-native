@@ -63,7 +63,7 @@ export default function HomeLayout(): JSX.Element {
             type: 'timetable',
             title: t('navigation.timetable'),
             symbolName: 'calendar',
-            iconName: 'clock',
+            iconName: 'calendar-month',
             data: {
                 path: '(tabs)/timetable',
             },
@@ -172,7 +172,7 @@ export default function HomeLayout(): JSX.Element {
                                     size: size - 2,
                                 }}
                                 android={{
-                                    name: 'clock',
+                                    name: 'calendar-month',
                                     size,
                                 }}
                             />
@@ -216,7 +216,7 @@ export default function HomeLayout(): JSX.Element {
                                     size: size - 2,
                                 }}
                                 android={{
-                                    name: 'silverware-fork-knife',
+                                    name: 'restaurant',
                                     size,
                                 }}
                             />

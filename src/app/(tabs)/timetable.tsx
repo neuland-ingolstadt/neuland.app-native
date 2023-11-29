@@ -381,7 +381,7 @@ export default function TimetableScreen(): JSX.Element {
                                 size: 10,
                             }}
                             android={{
-                                name: 'map-marker-outline',
+                                name: 'place',
                                 size: 12,
                             }}
                         />

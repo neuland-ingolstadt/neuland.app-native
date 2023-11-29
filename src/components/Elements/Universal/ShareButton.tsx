@@ -33,7 +33,7 @@ export default function ShareButton({
                         size: 15,
                     }}
                     android={{
-                        name: 'share-variant',
+                        name: 'share',
                         size: 18,
                     }}
                     color={colors.primary}

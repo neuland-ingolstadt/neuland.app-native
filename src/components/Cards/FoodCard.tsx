@@ -169,7 +169,7 @@ const FoodCard = (): JSX.Element => {
         <BaseCard
             title={foodCardTitle}
             iosIcon="fork.knife"
-            androidIcon="silverware-fork-knife"
+            androidIcon="restaurant"
             onPress={() => {
                 router.replace('food')
             }}

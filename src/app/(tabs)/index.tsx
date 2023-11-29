@@ -243,14 +243,14 @@ function HomeScreen(): JSX.Element {
     const [orientation, setOrientation] = useState(
         Dimensions.get('window').width
     )
-    const [colums, setColums] = useState(
+    const [columns, setColumns] = useState(
         Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )
 
     useEffect(() => {
         const handleOrientationChange = (): void => {
             setOrientation(Dimensions.get('window').width)
-            setColums(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2))
+            setColumns(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2))
         }
 
         const subscription = Dimensions.addEventListener(
@@ -273,7 +273,7 @@ function HomeScreen(): JSX.Element {
             renderItem={({ item, index }) => {
                 let paddingStyle = {}
 
-                if (colums !== 1) {
+                if (columns !== 1) {
                     paddingStyle =
                         index % 2 === 0
                             ? { paddingRight: PAGE_PADDING / 2 }
@@ -287,7 +287,7 @@ function HomeScreen(): JSX.Element {
                 )
             }}
             keyExtractor={(item) => item.key}
-            numColumns={colums}
+            numColumns={columns}
             estimatedItemSize={100}
         />
     )

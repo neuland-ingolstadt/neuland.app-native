@@ -93,7 +93,7 @@ const LibraryReservationRow = ({
                                     size: 18,
                                 }}
                                 android={{
-                                    name: 'trash-can-outline',
+                                    name: 'delete',
                                     size: 24,
                                 }}
                             />
