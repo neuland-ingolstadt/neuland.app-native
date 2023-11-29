@@ -107,7 +107,7 @@ export default {
             blue: 'Blau',
             contrast: 'Kontrast',
             pink: 'Pink',
-            dirt: 'Dreck',
+            brown: 'Braun',
             purple: 'Lila',
             yellow: 'Gelb',
             orange: 'Orange',

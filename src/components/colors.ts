@@ -66,7 +66,7 @@ export const accentColors: AccentColors = {
         light: '#e3661d',
         dark: '#f1932e',
     },
-    dirt: {
+    brown: {
         light: '#9b7d5c',
         dark: '#a58463',
     },
