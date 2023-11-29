@@ -1,13 +1,14 @@
 import { type Colors } from '@/components/colors'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { type FC } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
+import PlatformIcon from '../Universal/Icon'
+
 interface WhatsNewBoxProps {
     title: string
     description: string
-    icon?: string
+    icon: { ios: string; android: string }
 }
 
 /**
@@ -23,11 +24,16 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
     const colors = useTheme().colors as Colors
     return (
         <View style={[{ backgroundColor: colors.card }, styles.container]}>
-            <Ionicons
-                name={(icon as any) ?? 'chevron-forward-circle'}
-                size={26}
+            <PlatformIcon
                 color={colors.primary}
-                style={styles.icon}
+                ios={{
+                    name: icon.ios,
+                    size: 26,
+                }}
+                android={{
+                    name: icon.android,
+                    size: 28,
+                }}
             />
             <View style={styles.textContainer}>
                 <Text
@@ -65,6 +71,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '100%',
+        gap: 20,
     },
     textContainer: {
         flexDirection: 'column',
@@ -78,9 +85,6 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 14,
         textAlign: 'left',
-    },
-    icon: {
-        paddingRight: 20,
     },
 })
 

@@ -37,12 +37,25 @@ export function useUserKind(): {
             return (await API.getFaculty()) as string
         }
 
-        const loadData = async (): Promise<void> => {
-            const userType = await SecureStore.getItemAsync('userType')
-            const userFullName = await SecureStore.getItemAsync('userFullName')
+        const loadUserTypeAndName = async (): Promise<[string | null]> => {
+            const [userType, userFullName] = await Promise.all([
+                SecureStore.getItemAsync('userType'),
+                SecureStore.getItemAsync('userFullName'),
+            ])
+
             if (userType != null) {
                 setUserKind(userType)
             }
+
+            if (userFullName != null) {
+                setUserFullName(userFullName)
+            }
+
+            return [userType]
+        }
+
+        const loadData = async (): Promise<void> => {
+            const [userType] = await loadUserTypeAndName()
 
             if (userType === USER_STUDENT) {
                 const userFaculty = await loadFaculty()
@@ -50,14 +63,11 @@ export function useUserKind(): {
                     setUserFaculty(userFaculty)
                 }
             }
-
-            if (userFullName != null) {
-                setUserFullName(userFullName)
-            }
         }
 
         void loadData()
     }, [])
+
     /**
      * Function to toggle the user kind.
      * @param value A boolean indicating whether the user is a student (true) or an employee (false).

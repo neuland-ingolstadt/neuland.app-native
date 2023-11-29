@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Dimensions,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -68,22 +69,28 @@ export default function LibraryCode(): JSX.Element {
 
     useFocusEffect(
         React.useCallback(() => {
-            return () => {
-                void Brightness.setSystemBrightnessAsync(brightnessRef.current)
+            if (Platform.OS === 'ios') {
+                return () => {
+                    void Brightness.setSystemBrightnessAsync(
+                        brightnessRef.current
+                    )
+                }
             }
         }, [])
     )
 
     useEffect(() => {
-        void (async () => {
-            const { status } = await Brightness.requestPermissionsAsync()
-            if (status === 'granted') {
-                const value = await Brightness.getSystemBrightnessAsync()
-                setBrightness(value)
+        if (Platform.OS === 'ios') {
+            void (async () => {
+                const { status } = await Brightness.requestPermissionsAsync()
+                if (status === 'granted') {
+                    const value = await Brightness.getSystemBrightnessAsync()
+                    setBrightness(value)
 
-                void Brightness.setSystemBrightnessAsync(1)
-            }
-        })()
+                    void Brightness.setSystemBrightnessAsync(1)
+                }
+            })()
+        }
     }, [])
 
     const sections: FormListSections[] = [
@@ -99,6 +106,9 @@ export default function LibraryCode(): JSX.Element {
     ]
 
     const toggleBrightness = async (): Promise<void> => {
+        if (Platform.OS !== 'ios') {
+            return
+        }
         if ((await Brightness.getSystemBrightnessAsync()) === 1) {
             void Brightness.setSystemBrightnessAsync(brightness)
         } else {

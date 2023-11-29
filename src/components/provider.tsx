@@ -1,3 +1,4 @@
+import { type AppIconHook } from '@/hooks/appIcon'
 import {
     DarkTheme,
     DefaultTheme,
@@ -9,10 +10,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
 import {
+    useAppIcon,
     useDashboard,
     useFlow,
     useFoodFilter,
-    useMobility,
     useRouteParams,
     useTheme,
     useUserKind,
@@ -53,8 +54,15 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'teal',
+    accentColor: 'green',
     toggleAccentColor: () => {},
+})
+
+export const AppIconContext = createContext<AppIconHook>({
+    appIcon: 'default',
+    unlockedAppIcons: [],
+    toggleAppIcon: () => {},
+    addUnlockedAppIcon: () => {},
 })
 
 export const DashboardContext = createContext<Dashboard>({
@@ -64,13 +72,6 @@ export const DashboardContext = createContext<Dashboard>({
     bringBackDashboardEntry: () => {},
     resetOrder: () => {},
     updateDashboardOrder: () => {},
-})
-
-export const MobilityContext = createContext<any>({
-    mobilityKind: 'bus',
-    mobilityStation: 'Hauptbahnhof',
-    toggleMobility: () => {},
-    toggleStation: () => {},
 })
 
 export const FlowContext = createContext<any>({
@@ -99,10 +100,10 @@ export default function Provider({
     const userKind = useUserKind()
     const themeHook = useTheme()
     const dashboard = useDashboard()
-    const mobility = useMobility()
     const colorScheme = useColorScheme()
     const flow = useFlow()
     const routeParams = useRouteParams()
+    const appIcon = useAppIcon()
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -164,11 +165,13 @@ export default function Provider({
                 }
             >
                 <ThemeContext.Provider value={themeHook}>
-                    <FlowContext.Provider value={flow}>
-                        <UserKindContext.Provider value={userKind}>
-                            <DashboardContext.Provider value={dashboard}>
-                                <FoodFilterContext.Provider value={foodFilter}>
-                                    <MobilityContext.Provider value={mobility}>
+                    <AppIconContext.Provider value={appIcon}>
+                        <FlowContext.Provider value={flow}>
+                            <UserKindContext.Provider value={userKind}>
+                                <DashboardContext.Provider value={dashboard}>
+                                    <FoodFilterContext.Provider
+                                        value={foodFilter}
+                                    >
                                         <RouteParamsContext.Provider
                                             value={routeParams}
                                         >
@@ -176,11 +179,11 @@ export default function Provider({
                                                 {children}
                                             </RootSiblingParent>
                                         </RouteParamsContext.Provider>
-                                    </MobilityContext.Provider>
-                                </FoodFilterContext.Provider>
-                            </DashboardContext.Provider>
-                        </UserKindContext.Provider>
-                    </FlowContext.Provider>
+                                    </FoodFilterContext.Provider>
+                                </DashboardContext.Provider>
+                            </UserKindContext.Provider>
+                        </FlowContext.Provider>
+                    </AppIconContext.Provider>
                 </ThemeContext.Provider>
             </ThemeProvider>
         </GestureHandlerRootView>

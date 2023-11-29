@@ -3,7 +3,6 @@ import { type Colors } from '@/components/colors'
 import { type AvailableRoom, type AvailableRoomItem } from '@/types/thi-api'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -16,6 +15,7 @@ import {
 import Collapsible from 'react-native-collapsible'
 
 import Divider from '../Universal/Divider'
+import PlatformIcon from '../Universal/Icon'
 
 const LibraryBookingRow = ({
     colors,
@@ -128,10 +128,20 @@ const LibraryBookingRow = ({
                 {
                     <>
                         <View style={styles.rightContainer}>
-                            <Ionicons
-                                name={collapsed ? 'chevron-up' : 'chevron-down'}
-                                size={28}
+                            <PlatformIcon
                                 color={colors.primary}
+                                ios={{
+                                    name: collapsed
+                                        ? 'chevron.up'
+                                        : 'chevron.down',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: collapsed
+                                        ? 'chevron-up'
+                                        : 'chevron-down',
+                                    size: 26,
+                                }}
                             />
                         </View>
                     </>

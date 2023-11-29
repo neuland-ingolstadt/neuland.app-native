@@ -70,7 +70,9 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                     </Text>
                 </View>
 
-                {index !== rooms.length - 1 ? <Divider /> : null}
+                {index !== rooms.length - 1 ? (
+                    <Divider iosPaddingLeft={16} />
+                ) : null}
             </View>
         ))
     ) : (

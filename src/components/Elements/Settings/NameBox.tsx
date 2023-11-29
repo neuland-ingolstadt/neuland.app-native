@@ -56,7 +56,7 @@ const NameBox = ({
                     visible={loaded}
                     style={{
                         width: !loaded ? 100 : undefined,
-                        height: !loaded ? 11 : undefined,
+                        height: !loaded ? 12.5 : undefined,
                     }}
                     shimmerStyle={styles.shimmer}
                     shimmerColors={shimmerColor}
@@ -76,7 +76,7 @@ const NameBox = ({
                     visible={loaded}
                     style={{
                         width: !loaded ? 130 : undefined,
-                        height: !loaded ? 11 : undefined,
+                        height: !loaded ? 12.5 : undefined,
                         marginTop: !loaded ? 3 : undefined,
                     }}
                     shimmerStyle={styles.shimmer}

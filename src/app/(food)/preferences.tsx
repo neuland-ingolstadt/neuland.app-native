@@ -2,6 +2,7 @@ import MultiSectionRadio, {
     type FoodLanguageElement,
 } from '@/components/Elements/Food/FoodLanguageSection'
 import FormList from '@/components/Elements/Universal/FormList'
+import { chevronIcon } from '@/components/Elements/Universal/Icon'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
@@ -55,14 +56,14 @@ export default function FoodPreferences(): JSX.Element {
             items: [
                 {
                     title: t('preferences.formlist.allergens'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(food)/allergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(food)/flags')
                     },

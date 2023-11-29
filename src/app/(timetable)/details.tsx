@@ -4,6 +4,7 @@ import DetailsSymbol from '@/components/Elements/Timetable/DetailsSymbol'
 import Separator from '@/components/Elements/Timetable/Separator'
 import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext } from '@/components/provider'
@@ -12,7 +13,6 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
@@ -67,7 +67,7 @@ export default function TimetableDetails(): JSX.Element {
             items: [
                 {
                     title: t('overview.goal'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(timetable)/webView')
                         router.setParams({
@@ -78,7 +78,7 @@ export default function TimetableDetails(): JSX.Element {
                 },
                 {
                     title: t('overview.content'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(timetable)/webView')
                         router.setParams({
@@ -89,7 +89,7 @@ export default function TimetableDetails(): JSX.Element {
                 },
                 {
                     title: t('overview.literature'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(timetable)/webView')
                         router.setParams({
@@ -164,10 +164,16 @@ export default function TimetableDetails(): JSX.Element {
 
                     <DetailsRow>
                         <DetailsSymbol>
-                            <Ionicons
-                                name="time-outline"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.labelColor}
+                                ios={{
+                                    name: 'clock',
+                                    size: 21,
+                                }}
+                                android={{
+                                    name: 'calendar-month',
+                                    size: 24,
+                                }}
                             />
                         </DetailsSymbol>
 
@@ -194,10 +200,16 @@ export default function TimetableDetails(): JSX.Element {
                                     {formatFriendlyTime(startDate)}
                                 </Text>
 
-                                <Ionicons
-                                    name="chevron-forward-outline"
-                                    size={16}
+                                <PlatformIcon
                                     color={colors.labelColor}
+                                    ios={{
+                                        name: 'chevron.forward',
+                                        size: 12,
+                                    }}
+                                    android={{
+                                        name: 'chevron-right',
+                                        size: 16,
+                                    }}
                                 />
 
                                 <Text
@@ -228,10 +240,16 @@ export default function TimetableDetails(): JSX.Element {
 
                     <DetailsRow>
                         <DetailsSymbol>
-                            <Ionicons
-                                name="location-outline"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.labelColor}
+                                ios={{
+                                    name: 'mappin.and.ellipse',
+                                    size: 21,
+                                }}
+                                android={{
+                                    name: 'place',
+                                    size: 24,
+                                }}
                             />
                         </DetailsSymbol>
 
@@ -263,10 +281,16 @@ export default function TimetableDetails(): JSX.Element {
 
                     <DetailsRow>
                         <DetailsSymbol>
-                            <Ionicons
-                                name="people-outline"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.labelColor}
+                                ios={{
+                                    name: 'person',
+                                    size: 21,
+                                }}
+                                android={{
+                                    name: 'person',
+                                    size: 24,
+                                }}
                             />
                         </DetailsSymbol>
 

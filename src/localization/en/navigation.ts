@@ -11,7 +11,7 @@ export default {
         allergensSearch: 'Search allergens',
         allergens: 'Allergens',
         details: 'Details',
-        theme: 'Theme',
+        theme: 'Appearance',
         profile: 'Profile',
         about: 'About',
         advancedSearch: 'Advanced Search',
@@ -22,7 +22,6 @@ export default {
             search: 'Search all lecturers',
         },
         lecturer: 'Lecturer Details',
-        mobility: 'Mobility',
         grades: 'Grades',
         news: 'THI News',
         library: 'Library',
@@ -31,7 +30,6 @@ export default {
     cards: {
         titles: {
             timetable: 'Timetable',
-            mobility: 'Mobility',
             calendar: 'Calendar',
             rooms: 'Rooms',
             lecturers: 'Lecturers',
@@ -50,5 +48,10 @@ export default {
             exam: 'exam {{name}}',
             ends: 'ends ',
         },
+    },
+    contextMenu: {
+        reset: 'Reset cards',
+        hide: 'Hide card',
+        settings: 'Dashboard settings',
     },
 }

@@ -15,7 +15,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="timetable"
-                icon="time"
+                iosIcon="clock.fill"
+                androidIcon="calendar-month"
                 onPress={() => {
                     router.push('timetable')
                 }}
@@ -27,20 +28,6 @@ export const AllCards: Card[] = [
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <FoodCard />,
-    },
-    {
-        key: 'mobility',
-        removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => (
-            <BaseCard
-                title="mobility"
-                icon="bus"
-                onPress={() => {
-                    router.push('mobility')
-                }}
-            />
-        ),
     },
     {
         key: 'calendar',
@@ -61,12 +48,19 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="rooms"
-                icon="location"
+                iosIcon="rectangle.grid.2x2.fill"
+                androidIcon="list"
                 onPress={() => {
                     router.push('rooms')
                 }}
             />
         ),
+    },
+    {
+        key: 'library',
+        removable: true,
+        default: [USER_STUDENT, USER_EMPLOYEE],
+        card: () => <LibraryCard />,
     },
     {
         key: 'lecturers',
@@ -75,7 +69,8 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="lecturers"
-                icon="people"
+                iosIcon="person.2.fill"
+                androidIcon="group"
                 onPress={() => {
                     router.push('lecturers')
                 }}
@@ -89,18 +84,13 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="news"
-                icon="newspaper"
+                iosIcon="newspaper.fill"
+                androidIcon="newspaper"
                 onPress={() => {
                     router.push('news')
                 }}
             />
         ),
-    },
-    {
-        key: 'library',
-        removable: true,
-        default: [],
-        card: () => <LibraryCard />,
     },
 ]
 

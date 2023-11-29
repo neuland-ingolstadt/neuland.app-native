@@ -16,12 +16,12 @@ interface StaticThemeColors {
     success: string
     datePickerBackground: string
     card: string
+    notification: string
 }
 
 export interface Colors extends StaticThemeColors {
     text: string
     primary: string
-    notification: string
     card: string
     border: string
     background: string
@@ -32,41 +32,43 @@ export interface AppTheme extends Theme {
 }
 
 export const accentColors: AccentColors = {
+    green: {
+        light: '#00b800',
+        dark: '#41FF00',
+    },
+
     teal: {
         light: '#2aa2ba',
         dark: '#37bdd8',
     },
     blue: {
-        light: '#0e4b95',
-        dark: '#0c61b7',
+        light: '#0079fa',
+        dark: '#0b83ff',
     },
     contrast: {
         light: '#000000',
         dark: '#ffffff',
     },
-    pink: {
-        light: '#ea1a78',
-        dark: '#f8277b',
-    },
     purple: {
         light: '#74209e',
         dark: '#9b37d8',
     },
-    green: {
-        light: '#1fa91f',
-        dark: '#37d837',
+    pink: {
+        light: '#ea1a78',
+        dark: '#f8277b',
     },
+
     yellow: {
-        light: '#d8c412',
-        dark: '#e6d81f',
+        light: '#f8c600',
+        dark: '#fedc00',
     },
     orange: {
         light: '#e3661d',
         dark: '#f1932e',
     },
-    red: {
-        light: '#cf2121',
-        dark: '#e42e2e',
+    brown: {
+        light: '#9b7d5c',
+        dark: '#a58463',
     },
 }
 
@@ -78,6 +80,7 @@ export const lightColors: StaticThemeColors = {
     success: '#1fa31f',
     datePickerBackground: '#ebebec',
     card: '#ffffff',
+    notification: '#ff0000',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -88,4 +91,5 @@ export const darkColors: StaticThemeColors = {
     success: '#37d837',
     datePickerBackground: '#2a2a2c',
     card: '#1c1c1d',
+    notification: '#ff0000',
 }

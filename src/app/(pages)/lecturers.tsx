@@ -178,6 +178,7 @@ export default function LecturersCard(): JSX.Element {
                                 {index !== personalLecturers.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
+                                        iosPaddingLeft={16}
                                     />
                                 )}
                             </React.Fragment>

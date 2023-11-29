@@ -5,10 +5,11 @@
  * @returns {JSX.Element} - A JSX element that displays the login failure alert.
  */
 import { type Colors } from '@/components/colors'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from '../Universal/Icon'
 
 const LoginAlert = ({
     errorMsg,
@@ -46,12 +47,19 @@ const LoginAlert = ({
                             {errorTitle ?? 'Login failed'}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        onPress={resetAlert}
-                        style={styles.resetButtom}
-                    >
-                        <Ionicons name="close" size={16} color={colors.text} />
-                    </TouchableOpacity>
+                    <Pressable onPress={resetAlert} style={styles.resetButtom}>
+                        <PlatformIcon
+                            ios={{
+                                name: 'xmark',
+                                size: 12,
+                            }}
+                            android={{
+                                name: 'close',
+                                size: 16,
+                            }}
+                            color={colors.text}
+                        />
+                    </Pressable>
                 </View>
                 <View style={styles.errorText}>
                     <Text

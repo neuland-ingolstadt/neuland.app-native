@@ -1,10 +1,11 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type FoodLanguage } from '@/hooks/foodFilter'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from '../Universal/Icon'
 
 export interface FoodLanguageElement {
     title: string
@@ -51,14 +52,16 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
                             </Text>
 
                             {selectedItem === item.key ? (
-                                <Ionicons
-                                    name={'checkmark-sharp'}
-                                    size={18}
-                                    style={{
-                                        marginRight: 8,
-                                        alignSelf: 'center',
-                                    }}
+                                <PlatformIcon
                                     color={colors.primary}
+                                    ios={{
+                                        name: 'checkmark',
+                                        size: 15,
+                                    }}
+                                    android={{
+                                        name: 'check',
+                                        size: 18,
+                                    }}
                                 />
                             ) : (
                                 <></>
@@ -66,7 +69,10 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
                         </View>
                     </Pressable>
                     {index < elements.length - 1 && (
-                        <Divider color={colors.labelTertiaryColor} />
+                        <Divider
+                            color={colors.labelTertiaryColor}
+                            iosPaddingLeft={16}
+                        />
                     )}
                 </React.Fragment>
             ))}
@@ -79,6 +85,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 6,
         paddingVertical: 4,
+        marginRight: 8,
+        alignItems: 'center',
     },
     text: {
         fontSize: 16,

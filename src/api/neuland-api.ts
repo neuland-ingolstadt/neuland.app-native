@@ -89,44 +89,6 @@ class NeulandAPIClient {
     }
 
     /**
-     * Gets the bus plan for a given station
-     * @param {string} station The bus station identifier
-     * @returns {Promise<any>} A promise that resolves with the bus plan data
-     */
-    async getBusPlan(station: string): Promise<any> {
-        return await this.performRequest(
-            `${ENDPOINT}/api/bus/${encodeURIComponent(station)}/`
-        )
-    }
-
-    /**
-     * Gets the train plan for a given station
-     * @param {string} station The train station identifier
-     * @returns {Promise<any>} A promise that resolves with the train plan data
-     */
-    async getTrainPlan(station: string): Promise<any> {
-        return await this.performRequest(
-            `${ENDPOINT}/api/train/${encodeURIComponent(station)}/`
-        )
-    }
-
-    /**
-     * Gets the parking data
-     * @returns {Promise<any>} A promise that resolves with the parking data
-     */
-    async getParkingData(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/parking/`)
-    }
-
-    /**
-     * Gets the charging station data
-     * @returns {Promise<any>} A promise that resolves with the charging station data
-     */
-    async getCharingStationData(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/charging-stations/`)
-    }
-
-    /**
      * Gets the campus life events
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */

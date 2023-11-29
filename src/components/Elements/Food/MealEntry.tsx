@@ -10,12 +10,13 @@ import {
     mealName,
 } from '@/utils/food-utils'
 import { CARD_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from '../Universal/Icon'
 
 /**
  * Renders a single meal entry in the food menu.
@@ -110,18 +111,23 @@ export const MealEntry = ({
                         </View>
                         {userAllergens?.length > 0 && (
                             <View style={styles.allergensContainer}>
-                                <Ionicons
-                                    name={'warning-outline'}
-                                    size={16}
+                                <PlatformIcon
+                                    ios={{
+                                        name: 'exclamationmark.triangle',
+                                        size: 13,
+                                    }}
+                                    android={{
+                                        name: 'warning',
+                                        size: 16,
+                                    }}
                                     style={styles.icon}
                                     color={colors.notification}
                                 />
-
                                 <Text
                                     style={[
                                         styles.allergene,
                                         {
-                                            color: colors.labelColor,
+                                            color: colors.notification,
                                         },
                                     ]}
                                     numberOfLines={3}
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: 4,
+        paddingTop: 3,
     },
     detailsColumns: {
         flexDirection: 'column',
@@ -202,6 +208,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 6,
         width: '80%',
+        gap: 2,
     },
     priceContainer: {
         flexDirection: 'column',

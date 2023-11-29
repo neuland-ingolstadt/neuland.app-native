@@ -1,12 +1,12 @@
 import { type Colors } from '@/components/colors'
 import { type Meal } from '@/types/neuland-api'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 
+import PlatformIcon from '../Universal/Icon'
 import { MealEntry } from './MealEntry'
 
 /**
@@ -54,12 +54,13 @@ const MealCategory = ({
     const colors = useTheme().colors as Colors
     return (
         <>
-            <View key={category} style={{ paddingBottom: 10 }}>
+            <View key={category} style={{ paddingBottom: 8 }}>
                 <Pressable
                     onPress={() => {
                         toggleCollapsed()
                     }}
                     style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+                    hitSlop={{ top: 6, bottom: 6 }}
                 >
                     <View style={styles.categoryContainer}>
                         <Text
@@ -70,15 +71,17 @@ const MealCategory = ({
                         >
                             {t(`categories.${category}`, category)}
                         </Text>
-                        <Ionicons
-                            name={
-                                collapsed
-                                    ? 'chevron-down-outline'
-                                    : 'chevron-up-outline'
-                            }
-                            size={16}
-                            style={styles.toggleIcon}
+                        <PlatformIcon
                             color={colors.primary}
+                            ios={{
+                                name: collapsed ? 'chevron.down' : 'chevron.up',
+                                size: 12,
+                            }}
+                            android={{
+                                name: collapsed ? 'chevron-down' : 'chevron-up',
+                                size: 20,
+                            }}
+                            style={styles.toggleIcon}
                         />
                     </View>
                 </Pressable>
@@ -233,8 +236,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 4,
-        paddingBottom: 4,
+        paddingTop: 3,
+        paddingBottom: 3,
     },
     toggleIcon: {
         marginRight: 4,

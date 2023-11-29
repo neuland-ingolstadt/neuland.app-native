@@ -207,7 +207,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 />
                             )}
                         </View>
-                        <Divider />
+                        <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
                             <Text
                                 style={[
@@ -243,7 +243,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 />
                             )}
                         </View>
-                        <Divider />
+                        <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
                             <Text
                                 style={[
@@ -261,7 +261,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 selected={duration}
                             />
                         </View>
-                        <Divider />
+                        <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
                             <Text
                                 style={[

@@ -171,6 +171,7 @@ export default function newsSCreen(): JSX.Element {
                                                 reservations.length - 1 && (
                                                 <Divider
                                                     color={colors.labelColor}
+                                                    iosPaddingLeft={16}
                                                 />
                                             )}
                                         </React.Fragment>
@@ -218,6 +219,9 @@ export default function newsSCreen(): JSX.Element {
                                                                 <Divider
                                                                     color={
                                                                         colors.labelColor
+                                                                    }
+                                                                    iosPaddingLeft={
+                                                                        16
                                                                     }
                                                                 />
                                                             )}

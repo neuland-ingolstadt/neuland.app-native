@@ -131,6 +131,7 @@ export default function CalendarPage(): JSX.Element {
                                 {index !== data.length - 1 && (
                                     <Divider
                                         color={colors.labelTertiaryColor}
+                                        iosPaddingLeft={16}
                                     />
                                 )}
                             </React.Fragment>

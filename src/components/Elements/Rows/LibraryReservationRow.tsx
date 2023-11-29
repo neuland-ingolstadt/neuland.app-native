@@ -1,11 +1,11 @@
 import { type Colors } from '@/components/colors'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 
+import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
 
 const LibraryReservationRow = ({
@@ -85,10 +85,17 @@ const LibraryReservationRow = ({
                                 deleteAlert()
                             }}
                         >
-                            <Ionicons
-                                name="trash-bin"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.notification}
+                                ios={{
+                                    name: 'trash',
+
+                                    size: 18,
+                                }}
+                                android={{
+                                    name: 'delete',
+                                    size: 24,
+                                }}
                             />
                         </Pressable>
                     </View>

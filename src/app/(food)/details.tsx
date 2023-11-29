@@ -1,4 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/provider'
@@ -73,9 +74,12 @@ export default function FoodDetail(): JSX.Element {
                             i18n.language as LanguageKey
                         ] ?? flag,
                     icon: preferencesSelection.includes(flag)
-                        ? 'shield-checkmark-outline'
+                        ? {
+                              android: 'check-circle',
+                              ios: 'checkmark.seal',
+                          }
                         : undefined,
-                    iconColor: colors.primary,
+                    iconColor: colors.success,
                 })) ?? [],
         },
         {
@@ -91,7 +95,10 @@ export default function FoodDetail(): JSX.Element {
                                 i18n.language as LanguageKey
                             ] ?? allergen,
                         icon: allergenSelection.includes(allergen)
-                            ? 'warning-outline'
+                            ? {
+                                  android: 'warning',
+                                  ios: 'exclamationmark.triangle',
+                              }
                             : undefined,
                         iconColor: colors.notification,
                     })) ?? [],
@@ -158,7 +165,7 @@ export default function FoodDetail(): JSX.Element {
                 },
                 {
                     title: t('details.formlist.about.source'),
-                    icon: 'chevron-forward-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         if (meal?.restaurant !== null) {
                             const restaurant =

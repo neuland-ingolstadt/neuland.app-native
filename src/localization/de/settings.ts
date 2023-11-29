@@ -47,6 +47,13 @@ export default {
                 title: 'Über uns',
             },
         },
+        easterEgg: {
+            title: 'Easter Egg',
+            message:
+                'Du hast das exklusive App-Icon "Paradies Katze" freigeschaltet! 😻',
+            messageAndroid: 'Du hast ein Easter Egg gefunden! 🐣',
+            confirm: 'Nice!',
+        },
     },
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
@@ -100,11 +107,11 @@ export default {
             blue: 'Blau',
             contrast: 'Kontrast',
             pink: 'Pink',
-            red: 'Rot',
+            brown: 'Braun',
             purple: 'Lila',
             yellow: 'Gelb',
             orange: 'Orange',
-            green: 'Grün',
+            green: 'Neuland',
         },
         footer: 'Ändere die Akzentfarbe, um deinen Stil zu entsprechen. Das ändert die Farbe der Symbole und Schaltflächen in der App.',
     },
@@ -126,5 +133,25 @@ export default {
         averageError: 'Noten-Durchschnitt ist derzeit nicht verfügbar.',
         temporarilyUnavailable: 'Noten sind vorübergehend nicht verfügbar.',
         footer: 'Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss.',
+    },
+    appIcon: {
+        names: {
+            default: 'Neuland Next',
+            modernDark: 'Modern Dunkel',
+            modernLight: 'Modern Hell',
+            modernGreen: 'Modern Grün',
+            rainbowMoonLight: 'Regenbogen Hell',
+            rainbowDark: 'Regenbogen Dunkel',
+            rainbowNeon: 'Regenbogen Neon',
+            cat: 'Paradies Katze',
+        },
+        categories: {
+            default: 'Standard',
+            neon: 'Neon',
+            rainbow: 'Regenbogen',
+            exclusive: 'Exklusiv',
+        },
+        exclusive:
+            'Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten.',
     },
 }

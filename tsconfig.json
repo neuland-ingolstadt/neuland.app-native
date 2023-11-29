@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "compilerOptions": {
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "ios/*": ["./ios/NeulandNext/Images.xcassets/*"]
         },
 
         "strict": true
