@@ -305,28 +305,6 @@ export default function TimetableDetails(): JSX.Element {
                             </Text>
                         </DetailsBody>
                     </DetailsRow>
-                    <View
-                        style={{
-                            aspectRatio: 1,
-                            width: 32,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'red',
-                        }}
-                    >
-                        <PlatformIcon
-                            color={colors.labelColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 12,
-                            }}
-                            android={{
-                                name: 'person',
-                                size: 32,
-                            }}
-                        />
-                    </View>
-
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
 
