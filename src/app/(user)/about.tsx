@@ -38,7 +38,7 @@ export default function About(): JSX.Element {
                     title: t('about.formlist.legal.privacy'),
                     icon: {
                         ios: 'hand.raised',
-                        android: 'lock-check-outline',
+                        android: 'lock-open',
                     },
                     onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },
@@ -56,7 +56,7 @@ export default function About(): JSX.Element {
                     title: 'Feedback',
                     icon: {
                         ios: 'envelope',
-                        android: 'email-outline',
+                        android: 'mail',
                     },
                     onPress: async () =>
                         await Linking.openURL(

@@ -108,7 +108,7 @@ const PlatformIcon = ({
 
 export default PlatformIcon
 
-const communityIcons: string[] = ['instagram']
+const communityIcons: string[] = ['instagram', 'github']
 
 const ANDROID_ICONS = {
     home: <>&#xE9B2;</>,
@@ -143,6 +143,8 @@ const ANDROID_ICONS = {
     'chevron-down': <>&#xE313;</>,
     delete: <>&#xE872;</>,
     logout: <>&#xE9BA;</>,
+    'lock-open': <>&#xE898;</>,
+    mail: <>&#xE0BE;</>,
     default: <>&#xF56D;</>,
 }
 
@@ -150,7 +152,7 @@ export type AndroidIconName = keyof typeof ANDROID_ICONS
 
 const styles = StyleSheet.create({
     androidIcon: {
-        marginBottom: -3,
+        paddingTop: 3,
         fontFamily: 'Material Symbols Rounded',
     },
     communityIcon: {
