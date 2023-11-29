@@ -30,6 +30,7 @@ if (Platform.OS === 'ios') {
         rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
         rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
         rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
+        cat: require('@/assets/appIcons/cat.png'),
     }
 }
 

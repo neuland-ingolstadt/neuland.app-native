@@ -53,10 +53,11 @@ export function useAppIcon(): AppIconHook {
      * @param name - The name of the new unlocked theme.
      */
     function addUnlockedAppIcon(name: string): void {
-        setUnlockedAppIcons([...unlockedAppIcons, name])
+        const newUnlockedAppIcons = new Set([...unlockedAppIcons, name])
+        setUnlockedAppIcons(Array.from(newUnlockedAppIcons))
         void AsyncStorage.setItem(
             'unlockedAppIcons',
-            JSON.stringify([...unlockedAppIcons, name])
+            JSON.stringify(Array.from(newUnlockedAppIcons))
         )
     }
 

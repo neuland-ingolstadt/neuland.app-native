@@ -31,6 +31,7 @@ iconImages = {
     rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
     rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
+    cat: require('@/assets/appIcons/cat.png'),
 }
 
 export default function AppIconPicker(): JSX.Element {
@@ -40,9 +41,9 @@ export default function AppIconPicker(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
+        exclusive: ['cat'],
         default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
         rainbow: ['rainbowNeon', 'rainbowDark', 'rainbowMoonLight'],
-        exclusive: [],
     }
 
     categories.exclusive = categories.exclusive.filter((icon) => {
@@ -76,25 +77,6 @@ export default function AppIconPicker(): JSX.Element {
                                         { backgroundColor: colors.card },
                                     ]}
                                 >
-                                    {key === 'exclusive' &&
-                                        categories.exclusive.length === 0 && (
-                                            <View
-                                                style={
-                                                    styles.exclusiveContainer
-                                                }
-                                            >
-                                                <Text
-                                                    style={[
-                                                        {
-                                                            color: colors.text,
-                                                            ...styles.exclusiveText,
-                                                        },
-                                                    ]}
-                                                >
-                                                    {t('appIcon.exclusive')}
-                                                </Text>
-                                            </View>
-                                        )}
                                     {value.map((icon) => {
                                         return (
                                             <>
@@ -166,6 +148,25 @@ export default function AppIconPicker(): JSX.Element {
                                             </>
                                         )
                                     })}
+                                    {key === 'exclusive' &&
+                                        categories.exclusive.length === 0 && (
+                                            <View
+                                                style={
+                                                    styles.exclusiveContainer
+                                                }
+                                            >
+                                                <Text
+                                                    style={[
+                                                        {
+                                                            color: colors.text,
+                                                            ...styles.exclusiveText,
+                                                        },
+                                                    ]}
+                                                >
+                                                    {t('appIcon.exclusive')}
+                                                </Text>
+                                            </View>
+                                        )}
                                 </View>
                             </SectionView>
                         )

@@ -45,6 +45,12 @@ export default {
                 title: 'About us',
             },
         },
+        easterEgg: {
+            title: 'Easter Egg',
+            message: 'You unlocked the exclusive app icon "Cat"! 😻',
+            messageAndroid: 'You found an easter egg! 🐣',
+            confirm: 'Nice!',
+        },
     },
     changelog: {
         footer: 'To see the full changelog, check out the commits on ',
@@ -103,6 +109,7 @@ export default {
             yellow: 'Yellow',
             orange: 'Orange',
             green: 'Neuland',
+            cat: 'Cat',
         },
         footer: 'Change the accent color to match your style. This changes the color of the icons and buttons in the app.',
     },
@@ -141,6 +148,7 @@ export default {
             rainbow: 'Rainbow',
             exclusive: 'Exclusive',
         },
-        exclusive: 'Attend to our events to unlock exclusive app icons.',
+        exclusive:
+            'Attend to our events and find easter eggs to unlock exclusive app icons.',
     },
 }

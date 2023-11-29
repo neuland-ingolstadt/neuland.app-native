@@ -47,6 +47,13 @@ export default {
                 title: 'Über uns',
             },
         },
+        easterEgg: {
+            title: 'Easter Egg',
+            message:
+                'Du hast das exklusive App-Icon "Katze" freigeschaltet! 😻',
+            messageAndroid: 'Du hast ein Easter Egg gefunden! 🐣',
+            confirm: 'Nice!',
+        },
     },
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
@@ -136,6 +143,7 @@ export default {
             rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
             rainbowNeon: 'Regenbogen Neon',
+            cat: 'Katze',
         },
         categories: {
             default: 'Standard',
@@ -144,6 +152,6 @@ export default {
             exclusive: 'Exklusiv',
         },
         exclusive:
-            'Besuche unsere Veranstaltungen, um exklusive App-Icons freizuschalten.',
+            'Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten.',
     },
 }
