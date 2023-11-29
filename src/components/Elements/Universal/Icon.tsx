@@ -142,6 +142,7 @@ const ANDROID_ICONS = {
     'chevron-up': <>&#xE316;</>,
     'chevron-down': <>&#xE313;</>,
     delete: <>&#xE872;</>,
+    logout: <>&#xE9BA;</>,
     default: <>&#xF56D;</>,
 }
 

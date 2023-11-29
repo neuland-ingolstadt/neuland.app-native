@@ -305,7 +305,7 @@ export default function Profile(): JSX.Element {
                                 size: 18,
                             }}
                             android={{
-                                name: 'logout-variant',
+                                name: 'logout',
                                 size: 22,
                             }}
                         />
