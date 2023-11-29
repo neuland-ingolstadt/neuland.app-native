@@ -157,6 +157,9 @@ export default function Screen(): JSX.Element {
                                     : []),
                             ],
                         }}
+                        onPressMenuPreview={() => {
+                            router.push('(user)/settings')
+                        }}
                         onPressMenuItem={({
                             nativeEvent,
                         }: {
@@ -240,7 +243,6 @@ function HomeScreen(): JSX.Element {
     const [orientation, setOrientation] = useState(
         Dimensions.get('window').width
     )
-    console.log(Dimensions.get('window').width)
     const [colums, setColums] = useState(
         Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )

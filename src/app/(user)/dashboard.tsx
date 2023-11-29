@@ -57,7 +57,6 @@ export default function DashboardEdit(): JSX.Element {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
             hideDashboardEntry(params.item.key)
-            console.log(params.item.key)
             setRefresh(!refresh)
         }
 
