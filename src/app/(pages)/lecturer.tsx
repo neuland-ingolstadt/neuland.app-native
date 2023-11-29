@@ -96,7 +96,6 @@ export default function LecturerDetail(): JSX.Element {
                         void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
                     },
                 },
-
                 {
                     title: t('pages.lecturer.contact.office'),
                     value: lecturer?.sprechstunde,

@@ -32,9 +32,9 @@ export interface AppTheme extends Theme {
 }
 
 export const accentColors: AccentColors = {
-    teal: {
-        light: '#2aa2ba',
-        dark: '#37bdd8',
+    green: {
+        light: '#00b800',
+        dark: '#41FF00',
     },
     blue: {
         light: '#0079fa',
@@ -44,17 +44,17 @@ export const accentColors: AccentColors = {
         light: '#000000',
         dark: '#ffffff',
     },
-    pink: {
-        light: '#ea1a78',
-        dark: '#f8277b',
-    },
     purple: {
         light: '#74209e',
         dark: '#9b37d8',
     },
-    green: {
-        light: '#1fa91f',
-        dark: '#37d837',
+    pink: {
+        light: '#ea1a78',
+        dark: '#f8277b',
+    },
+    teal: {
+        light: '#2aa2ba',
+        dark: '#37bdd8',
     },
     yellow: {
         light: '#f8c600',
@@ -64,9 +64,9 @@ export const accentColors: AccentColors = {
         light: '#e3661d',
         dark: '#f1932e',
     },
-    red: {
-        light: '#cf2121',
-        dark: '#e42e2e',
+    dirt: {
+        light: '#9b7d5c',
+        dark: '#a58463',
     },
 }
 
