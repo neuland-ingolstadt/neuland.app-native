@@ -1,16 +1,19 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
+import { AppIconContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Alert,
     Image,
     Linking,
+    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -26,6 +29,7 @@ export default function About(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
+    const { addUnlockedAppIcon } = useContext(AppIconContext)
     const sections: FormListSections[] = [
         {
             header: t('about.formlist.legal.title'),
@@ -99,7 +103,22 @@ export default function About(): JSX.Element {
     const handlePress = (): void => {
         setPressCount(pressCount + 1)
         if (pressCount === 7) {
-            alert('You found the easter egg!')
+            Alert.alert(
+                t('about.easterEgg.title'),
+                Platform.OS === 'ios'
+                    ? t('about.easterEgg.message')
+                    : t('about.easterEgg.messageAndroid'),
+                [
+                    {
+                        text: t('about.easterEgg.confirm'),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false }
+            )
+            if (Platform.OS === 'ios') {
+                addUnlockedAppIcon('cat')
+            }
             setPressCount(0)
         }
     }

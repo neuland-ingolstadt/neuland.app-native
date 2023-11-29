@@ -45,6 +45,12 @@ export default {
                 title: 'About us',
             },
         },
+        easterEgg: {
+            title: 'Easter Egg',
+            message: 'You unlocked the exclusive app icon "Paradise Cat"! 😻',
+            messageAndroid: 'You found an easter egg! 🐣',
+            confirm: 'Nice!',
+        },
     },
     changelog: {
         footer: 'To see the full changelog, check out the commits on ',
@@ -134,6 +140,7 @@ export default {
             rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
             rainbowNeon: 'Rainbow Neon',
+            cat: 'Pradise Cat',
         },
         categories: {
             default: 'Default',
@@ -141,6 +148,7 @@ export default {
             rainbow: 'Rainbow',
             exclusive: 'Exclusive',
         },
-        exclusive: 'Attend to our events to unlock exclusive app icons.',
+        exclusive:
+            'Attend to our events and find easter eggs to unlock exclusive app icons.',
     },
 }
