@@ -6,3 +6,12 @@
 export const convertToMajorMinorPatch = (version: string): string => {
     return version.split('.').slice(0, 2).join('.')
 }
+
+/**
+ * Capitalizes the first letter of a string.
+ * @param string - The string to capitalize.
+ * @returns The capitalized string.
+ */
+export function capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}

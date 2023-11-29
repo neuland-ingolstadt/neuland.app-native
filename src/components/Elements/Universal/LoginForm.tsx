@@ -2,14 +2,18 @@ import API from '@/api/authenticated-api'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { LoginAlert } from '@/components/Elements/Settings'
 import { type Colors } from '@/components/colors'
-import { FlowContext, UserKindContext } from '@/components/provider'
+import {
+    DashboardContext,
+    FlowContext,
+    UserKindContext,
+} from '@/components/provider'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -62,7 +66,7 @@ const LoginForm = (): JSX.Element => {
     const [loading, setLoading] = useState(false)
     const { t } = useTranslation('flow')
     const floatingKeyboard = useIsFloatingKeyboard()
-
+    const { resetOrder } = useContext(DashboardContext)
     const resetInfo = (): void => {
         setInfoMsg('')
         setNotice('')
@@ -80,6 +84,7 @@ const LoginForm = (): JSX.Element => {
             toggleUserKind(userKind)
             toggleUpdated()
             toggleOnboarded()
+            resetOrder()
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})

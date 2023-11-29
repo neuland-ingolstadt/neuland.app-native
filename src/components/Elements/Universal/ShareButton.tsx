@@ -1,9 +1,10 @@
 import { type Colors } from '@/components/colors'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import PlatformIcon from './Icon'
 
 interface ShareButtonProps {
     onPress?: () => void | Promise<void>
@@ -26,13 +27,15 @@ export default function ShareButton({
             onPress={onPress}
         >
             <View style={styles.shareContent}>
-                <Ionicons
-                    name={
-                        Platform.OS === 'android'
-                            ? 'share-social-outline'
-                            : 'share-outline'
-                    }
-                    size={18}
+                <PlatformIcon
+                    ios={{
+                        name: 'square.and.arrow.up',
+                        size: 15,
+                    }}
+                    android={{
+                        name: 'share',
+                        size: 18,
+                    }}
                     color={colors.primary}
                 />
 
@@ -54,8 +57,8 @@ const styles = StyleSheet.create({
     },
     shareContent: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         gap: 10,
     },
-    shareText: { fontSize: 17 },
+    shareText: { fontSize: 17, alignItems: 'flex-end' },
 })

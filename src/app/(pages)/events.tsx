@@ -100,7 +100,10 @@ export default function Events(): JSX.Element {
                         <React.Fragment key={index}>
                             <CLEventRow event={event} colors={colors} />
                             {index !== events.length - 1 && (
-                                <Divider color={colors.labelTertiaryColor} />
+                                <Divider
+                                    color={colors.labelTertiaryColor}
+                                    iosPaddingLeft={16}
+                                />
                             )}
                         </React.Fragment>
                     ))}

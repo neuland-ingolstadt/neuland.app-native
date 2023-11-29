@@ -1,12 +1,16 @@
+import PlatformIcon from '@/components/Elements/Universal/Icon'
+import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
-import { ThemeContext } from '@/components/provider'
+import { AppIconContext, ThemeContext } from '@/components/provider'
 import { getContrastColor } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import React from 'react'
+import { router } from 'expo-router'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Image,
+    type ImageProps,
     Platform,
     Pressable,
     ScrollView,
@@ -15,10 +19,26 @@ import {
     View,
 } from 'react-native'
 
+let iconImages: Record<string, ImageProps> = {}
+
+if (Platform.OS === 'ios') {
+    iconImages = {
+        default: require('@/assets/appIcons/default.png'),
+        modernDark: require('@/assets/appIcons/modernDark.png'),
+        modernLight: require('@/assets/appIcons/modernLight.png'),
+        modernGreen: require('@/assets/appIcons/modernGreen.png'),
+        rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
+        rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
+        rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
+        cat: require('@/assets/appIcons/cat.png'),
+    }
+}
+
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, toggleAccentColor } = React.useContext(ThemeContext)
+    const { accentColor, toggleAccentColor } = useContext(ThemeContext)
+    const { appIcon } = useContext(AppIconContext)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
@@ -64,10 +84,16 @@ export default function Theme(): JSX.Element {
                         ]}
                     >
                         {accentColor === code && (
-                            <Ionicons
-                                name={'checkmark-sharp'}
-                                size={24}
+                            <PlatformIcon
                                 color={getContrastColor(themeAccentColor)}
+                                ios={{
+                                    name: 'checkmark',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: 'check',
+                                    size: 24,
+                                }}
                             />
                         )}
                     </View>
@@ -125,30 +151,15 @@ export default function Theme(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '92%',
-                        marginTop: 18,
-                    }}
+                <SectionView
+                    title={t('theme.accent.title')}
+                    footer={t('theme.footer')}
                 >
-                    <Text
-                        style={[
-                            styles.sectionHeaderText,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
-                        {t('theme.accent.title')}
-                    </Text>
-
                     <View
                         style={[
                             styles.sectionContainer,
                             {
                                 backgroundColor: colors.card,
-                                flexDirection: 'column',
-                                flexWrap: 'wrap',
-                                paddingVertical: 18,
                             },
                         ]}
                     >
@@ -156,73 +167,70 @@ export default function Theme(): JSX.Element {
                             <ColorBoxMatrix colors={rowColors} key={index} />
                         ))}
                     </View>
-                </View>
-
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '92%',
-                        marginTop: 18,
-                    }}
-                >
-                    <Text
-                        style={[
-                            styles.sectionHeaderText,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
-                        {t('theme.exclusive.title')}
-                    </Text>
-                    <View
-                        style={[
-                            styles.sectionContainer,
-                            {
-                                backgroundColor: colors.card,
-                                flexDirection: 'column',
-                                flexWrap: 'wrap',
-                                paddingVertical: 36,
-                            },
-                        ]}
-                    >
-                        <Text
-                            style={{
-                                color: colors.labelSecondaryColor,
-                                textAlign: 'center',
-                                fontSize: 16,
-                                alignSelf: 'center',
-                                justifyContent: 'center',
-                                letterSpacing: 1.5,
+                </SectionView>
+                {Platform.OS === 'ios' && (
+                    <SectionView title="App Icon">
+                        <Pressable
+                            style={[
+                                styles.sectionContainer,
+                                styles.iconPressable,
+                                {
+                                    backgroundColor: colors.card,
+                                },
+                            ]}
+                            onPress={() => {
+                                router.push('(user)/appicon')
                             }}
                         >
-                            {t('theme.exclusive.description')}
-                        </Text>
-                    </View>
-                    <Text
-                        style={{
-                            color: colors.labelSecondaryColor,
-                            marginTop: 14,
-                            fontSize: 12,
-                        }}
-                    >
-                        {t('theme.footer')}
-                    </Text>
-                </View>
+                            <View style={styles.iconInnerContainer}>
+                                <Image
+                                    source={iconImages[appIcon]}
+                                    style={{
+                                        ...styles.iconContainer,
+                                        borderColor: colors.border,
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.iconText,
+                                    }}
+                                >
+                                    {t(`appIcon.names.${appIcon}`)}
+                                </Text>
+                            </View>
+                            <PlatformIcon
+                                color={colors.labelSecondaryColor}
+                                ios={{
+                                    name: 'chevron.forward',
+                                    size: 20,
+                                }}
+                                android={{
+                                    name: 'chevron-right',
+                                    size: 26,
+                                }}
+                            />
+                        </Pressable>
+                    </SectionView>
+                )}
             </ScrollView>
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    footerText: {
+        marginTop: 6,
+        fontSize: 12,
+    },
     colorBox: {
         width: 60,
         height: 60,
         borderRadius: 4,
-
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',
         flexDirection: 'row',
-
         borderWidth: 2,
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
@@ -239,5 +247,28 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignContent: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        paddingVertical: 18,
+    },
+    iconText: {
+        fontSize: 18,
+        alignSelf: 'center',
+    },
+    iconPressable: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingStart: 12,
+        paddingEnd: 18,
+        paddingVertical: 12,
+    },
+    iconInnerContainer: { flexDirection: 'row', gap: 20 },
+    iconContainer: {
+        width: 80,
+        height: 80,
+        justifyContent: 'center',
+        borderRadius: 18,
+        borderWidth: 1,
     },
 })

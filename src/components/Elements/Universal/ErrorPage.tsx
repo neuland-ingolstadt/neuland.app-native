@@ -1,11 +1,12 @@
 import { type Colors } from '@/components/colors'
 import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+
+import PlatformIcon from './Icon'
 
 function ErrorPage({
     message,
@@ -40,7 +41,18 @@ function ErrorView({ message }: { message?: string }): JSX.Element {
 
     return (
         <View style={styles.innerContainer}>
-            <Ionicons name={'alert-circle-outline'} size={48} color={'red'} />
+            <PlatformIcon
+                color={colors.primary}
+                ios={{
+                    name: 'exclamationmark.triangle',
+                    variant: 'fill',
+                    size: 44,
+                }}
+                android={{
+                    name: 'error',
+                    size: 48,
+                }}
+            />
             <Text
                 style={{
                     ...styles.errorTitle,
@@ -79,10 +91,17 @@ function ErrorButtonView({
     return (
         <View style={styles.innerContainer}>
             <View style={styles.errorContainer}>
-                <Ionicons
-                    name={'alert-circle-outline'}
-                    size={48}
-                    color={'red'}
+                <PlatformIcon
+                    color={colors.primary}
+                    ios={{
+                        name: 'exclamationmark.triangle',
+                        variant: 'fill',
+                        size: 44,
+                    }}
+                    android={{
+                        name: 'error',
+                        size: 48,
+                    }}
                 />
                 <Text
                     style={{
@@ -96,7 +115,7 @@ function ErrorButtonView({
                     {message}
                 </Text>
                 <Text style={[styles.errorInfo, { color: colors.text }]}>
-                    {t('error.refreshPull', { ns: 'common' })}
+                    {t('error.refreshButton', { ns: 'common' })}
                 </Text>
                 <Pressable
                     style={[

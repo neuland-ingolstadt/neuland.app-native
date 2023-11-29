@@ -10,12 +10,6 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        icon: './src/assets/icon.png',
-        splash: {
-            image: './src/assets/splash.png',
-            resizeMode: 'contain',
-            backgroundColor: '#ffffff',
-        },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
             buildNumber: '1',
@@ -34,11 +28,27 @@ module.exports = {
                 CFBundleLocalizations: ['en', 'de'],
                 CFBundleDevelopmentRegion: 'en',
             },
+            splash: {
+                image: './src/assets/splash.png',
+                resizeMode: 'contain',
+                backgroundColor: '#ffffff',
+                dark: {
+                    backgroundColor: '#000000',
+                },
+            },
         },
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
             versionCode: 46,
+            splash: {
+                image: './src/assets/splash.png',
+                resizeMode: 'contain',
+                backgroundColor: '#ffffff',
+                dark: {
+                    backgroundColor: '#000000',
+                },
+            },
         },
         extra: {
             eas: {
@@ -67,6 +77,14 @@ module.exports = {
                 'expo-local-authentication',
                 {
                     faceIDPermission: 'Allow $(PRODUCT_NAME) to use Face ID.',
+                },
+            ],
+            [
+                'expo-build-properties',
+                {
+                    ios: {
+                        deploymentTarget: '15.0',
+                    },
                 },
             ],
         ],

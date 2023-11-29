@@ -1,7 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import moment from 'moment'
 import React from 'react'
@@ -9,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
 import LogoSVG from '../Flow/svgs/logo'
+import PlatformIcon from '../Universal/Icon'
 import DetailsBody from './DetailsBody'
 import DetailsRow from './DetailsRow'
 import DetailsSymbol from './DetailsSymbol'
@@ -69,10 +69,16 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
 
             <DetailsRow>
                 <DetailsSymbol>
-                    <Ionicons
-                        name="time-outline"
-                        size={24}
+                    <PlatformIcon
                         color={colors.labelColor}
+                        ios={{
+                            name: 'clock',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'calendar-month',
+                            size: 24,
+                        }}
                     />
                 </DetailsSymbol>
 
@@ -99,10 +105,16 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                             {formatFriendlyTime(startDate)}
                         </Text>
 
-                        <Ionicons
-                            name="chevron-forward-outline"
-                            size={16}
+                        <PlatformIcon
                             color={colors.labelColor}
+                            ios={{
+                                name: 'chevron.forward',
+                                size: 12,
+                            }}
+                            android={{
+                                name: 'chevron-right',
+                                size: 16,
+                            }}
                         />
 
                         <Text
@@ -133,10 +145,16 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
 
             <DetailsRow>
                 <DetailsSymbol>
-                    <Ionicons
-                        name="location-outline"
-                        size={24}
+                    <PlatformIcon
                         color={colors.labelColor}
+                        ios={{
+                            name: 'mappin.and.ellipse',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'place',
+                            size: 24,
+                        }}
                     />
                 </DetailsSymbol>
 
@@ -161,10 +179,16 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
 
             <DetailsRow>
                 <DetailsSymbol>
-                    <Ionicons
-                        name="people-outline"
-                        size={24}
+                    <PlatformIcon
                         color={colors.labelColor}
+                        ios={{
+                            name: 'person',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'person',
+                            size: 24,
+                        }}
                     />
                 </DetailsSymbol>
 

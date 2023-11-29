@@ -22,7 +22,6 @@ export default {
             search: 'Suche alle Dozenten',
         },
         lecturer: 'Dozenten-Details',
-        mobility: 'Mobilität',
         grades: 'Noten',
         news: 'THI Neuigkeiten',
         library: 'Bibliothek',
@@ -31,7 +30,6 @@ export default {
     cards: {
         titles: {
             timetable: 'Stundenplan',
-            mobility: 'Mobilität',
             calendar: 'Kalender',
             rooms: 'Räume',
             lecturers: 'Dozenten',
@@ -50,5 +48,10 @@ export default {
             exam: 'Prüfung {{name}}',
             ends: 'endet ',
         },
+    },
+    contextMenu: {
+        reset: 'Karten zurücksetzen',
+        hide: 'Karte ausblenden',
+        settings: 'Dashboard Einstellungen',
     },
 }

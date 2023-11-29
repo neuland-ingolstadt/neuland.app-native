@@ -140,8 +140,6 @@ export const htmlScript = `
             attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(mymap);
         
-        // Initial check for internet connection
-        checkInternetConnection();
     </script>
 </body>
 </html>

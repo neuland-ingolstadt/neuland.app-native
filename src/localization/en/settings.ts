@@ -45,6 +45,12 @@ export default {
                 title: 'About us',
             },
         },
+        easterEgg: {
+            title: 'Easter Egg',
+            message: 'You unlocked the exclusive app icon "Paradise Cat"! 😻',
+            messageAndroid: 'You found an easter egg! 🐣',
+            confirm: 'Nice!',
+        },
     },
     changelog: {
         footer: 'To see the full changelog, check out the commits on ',
@@ -98,11 +104,11 @@ export default {
             blue: 'Blue',
             contrast: 'Contrast',
             pink: 'Pink',
-            red: 'Red',
+            brown: 'Brown',
             purple: 'Purple',
             yellow: 'Yellow',
             orange: 'Orange',
-            green: 'Green',
+            green: 'Neuland',
         },
         footer: 'Change the accent color to match your style. This changes the color of the icons and buttons in the app.',
     },
@@ -124,5 +130,25 @@ export default {
         exactAverage: 'Based on {{number}} weighted grades.',
         temporarilyUnavailable: 'Grades are temporarily unavailable.',
         footer: 'This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information.',
+    },
+    appIcon: {
+        names: {
+            default: 'Neuland Next',
+            modernDark: 'Modern Dark',
+            modernLight: 'Modern Light',
+            modernGreen: 'Modern Green',
+            rainbowMoonLight: 'Rainbow Light',
+            rainbowDark: 'Rainbow Dark',
+            rainbowNeon: 'Rainbow Neon',
+            cat: 'Pradise Cat',
+        },
+        categories: {
+            default: 'Default',
+            neon: 'Neon',
+            rainbow: 'Rainbow',
+            exclusive: 'Exclusive',
+        },
+        exclusive:
+            'Attend to our events and find easter eggs to unlock exclusive app icons.',
     },
 }

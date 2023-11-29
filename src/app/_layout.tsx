@@ -1,11 +1,11 @@
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, TouchableOpacity, useColorScheme } from 'react-native'
+import { Platform, Pressable, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
@@ -23,6 +23,7 @@ export default function RootLayout(): JSX.Element {
 
         void loadLanguage()
     }, [])
+
     return (
         <>
             <Provider>
@@ -30,6 +31,7 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(tabs)"
                         options={{
+                            title: 'Home',
                             headerShown: false,
                         }}
                     />
@@ -45,7 +47,6 @@ export default function RootLayout(): JSX.Element {
                         name="(user)/settings"
                         options={{
                             title: t('navigation.settings'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -60,7 +61,6 @@ export default function RootLayout(): JSX.Element {
                         name="(food)/preferences"
                         options={{
                             title: t('navigation.preferences'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -144,6 +144,22 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(user)/appicon"
+                        // @ts-expect-error route params are not typed
+                        options={({
+                            route,
+                        }: {
+                            route: { params: { fromAppShortcut: string } }
+                        }) => ({
+                            title: 'App Icon',
+                            animation: 'slide_from_right',
+                            presentation:
+                                route.params?.fromAppShortcut === 'true'
+                                    ? 'modal'
+                                    : undefined,
+                        })}
+                    />
+                    <Stack.Screen
                         name="(user)/profile"
                         options={{
                             title: t('navigation.profile'),
@@ -175,7 +191,6 @@ export default function RootLayout(): JSX.Element {
                         name="(map)/advanced"
                         options={{
                             title: t('navigation.advancedSearch'),
-                            headerBackTitleVisible: false,
                             animation: 'slide_from_right',
                         }}
                     />
@@ -183,7 +198,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/events"
                         options={{
                             title: 'Campus Life Events',
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -195,7 +209,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/calendar"
                         options={{
                             title: t('navigation.calendar'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -221,7 +234,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/lecturers"
                         options={{
                             title: t('navigation.lecturers.title'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -262,39 +274,32 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(pages)/mobility"
-                        options={{
-                            title: t('navigation.mobility'),
-                            headerBackTitleVisible: false,
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
                         name="(pages)/library"
                         options={{
                             title: t('navigation.library'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
                                 },
                             }),
                             headerRight: () => (
-                                <TouchableOpacity
+                                <Pressable
                                     onPress={() => {
                                         router.push('(pages)/libraryCode')
                                     }}
                                 >
-                                    <MaterialCommunityIcons
-                                        name="barcode-scan"
-                                        size={28}
+                                    <PlatformIcon
                                         color={colorText}
+                                        ios={{
+                                            name: 'barcode',
+                                            size: 22,
+                                        }}
+                                        android={{
+                                            name: 'barcode-scanner',
+                                            size: 24,
+                                        }}
                                     />
-                                </TouchableOpacity>
+                                </Pressable>
                             ),
                         }}
                     />
@@ -302,7 +307,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/libraryCode"
                         options={{
                             title: t('navigation.libraryCode'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',
@@ -317,7 +321,6 @@ export default function RootLayout(): JSX.Element {
                         name="(pages)/news"
                         options={{
                             title: t('navigation.news'),
-                            headerBackTitleVisible: false,
                             ...Platform.select({
                                 android: {
                                     animation: 'slide_from_right',

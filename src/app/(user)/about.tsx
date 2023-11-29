@@ -1,15 +1,19 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
+import { AppIconContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Alert,
     Image,
     Linking,
+    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -25,18 +29,22 @@ export default function About(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
+    const { addUnlockedAppIcon } = useContext(AppIconContext)
     const sections: FormListSections[] = [
         {
             header: t('about.formlist.legal.title'),
             items: [
                 {
                     title: t('about.formlist.legal.privacy'),
-                    icon: 'shield',
+                    icon: {
+                        ios: 'hand.raised',
+                        android: 'lock-open',
+                    },
                     onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },
                 {
                     title: t('about.formlist.legal.imprint'),
-                    icon: 'information-circle',
+                    icon: linkIcon,
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
             ],
@@ -46,7 +54,10 @@ export default function About(): JSX.Element {
             items: [
                 {
                     title: 'Feedback',
-                    icon: 'chatbox-ellipses-outline',
+                    icon: {
+                        ios: 'envelope',
+                        android: 'mail',
+                    },
                     onPress: async () =>
                         await Linking.openURL(
                             'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
@@ -54,7 +65,11 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Github',
-                    icon: 'logo-github',
+                    icon: {
+                        ios: 'safari',
+                        android: 'github',
+                    },
+
                     onPress: async () =>
                         await Linking.openURL(
                             'https://github.com/neuland-ingolstadt/neuland.app-native'
@@ -62,7 +77,7 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Website',
-                    icon: 'globe',
+                    icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('https://neuland-ingolstadt.de/'),
                 },
@@ -77,7 +92,7 @@ export default function About(): JSX.Element {
                 },
                 {
                     title: 'Changelog',
-                    icon: 'newspaper-outline',
+                    icon: chevronIcon,
                     onPress: () => {
                         router.push('(user)/changelog')
                     },
@@ -88,7 +103,22 @@ export default function About(): JSX.Element {
     const handlePress = (): void => {
         setPressCount(pressCount + 1)
         if (pressCount === 7) {
-            alert('You found the easter egg!')
+            Alert.alert(
+                t('about.easterEgg.title'),
+                Platform.OS === 'ios'
+                    ? t('about.easterEgg.message')
+                    : t('about.easterEgg.messageAndroid'),
+                [
+                    {
+                        text: t('about.easterEgg.confirm'),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false }
+            )
+            if (Platform.OS === 'ios') {
+                addUnlockedAppIcon('cat')
+            }
             setPressCount(0)
         }
     }
@@ -116,7 +146,7 @@ export default function About(): JSX.Element {
                                 ]}
                             >
                                 <Image
-                                    source={require('@/assets/icon.png')}
+                                    source={require('@/assets/appIcons/default.png')}
                                     alt="Neuland Next Logo"
                                     style={styles.logoImage}
                                 />

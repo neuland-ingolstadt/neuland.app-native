@@ -1,4 +1,5 @@
 import { MealDay } from '@/components/Elements/Food'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
@@ -6,7 +7,6 @@ import { type Food } from '@/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -21,7 +21,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 
@@ -224,13 +223,26 @@ export default function Screen(): JSX.Element {
                 component={FoodScreen}
                 largeTitle={false}
                 headerRightElement={() => (
-                    <TouchableOpacity
+                    <Pressable
                         onPress={() => {
                             router.push('(food)/preferences')
                         }}
+                        hitSlop={10}
                     >
-                        <Ionicons name="filter" size={24} color={colors.text} />
-                    </TouchableOpacity>
+                        <View>
+                            <PlatformIcon
+                                color={colors.text}
+                                ios={{
+                                    name: 'line.3.horizontal.decrease',
+                                    size: 22,
+                                }}
+                                android={{
+                                    name: 'filter',
+                                    size: 24,
+                                }}
+                            />
+                        </View>
+                    </Pressable>
                 )}
             />
         </>

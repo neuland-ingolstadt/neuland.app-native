@@ -1,4 +1,5 @@
 import { ErrorPage } from '@/components/Elements/Universal/ErrorPage'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
@@ -9,7 +10,6 @@ import { ignoreTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import dayjs from 'dayjs'
@@ -63,7 +63,7 @@ export default function TimetableScreen(): JSX.Element {
     const timetableTextColor =
         textColor.contrast(primaryColor) > 5 ? textColor : textColor.negate()
 
-    const calendarColor = Color(colors.primary).rotate(-100)
+    const calendarColor = Color(colors.labelSecondaryColor)
     const calendarTextColor =
         textColor.contrast(calendarColor) > 5 ? textColor : textColor.negate()
 
@@ -374,10 +374,16 @@ export default function TimetableScreen(): JSX.Element {
                 </Text>
                 {hasLocation && (
                     <View style={styles.eventLocation}>
-                        <Ionicons
-                            name="location-outline"
-                            size={12}
+                        <PlatformIcon
                             color={event.textColor}
+                            ios={{
+                                name: 'mappin.and.ellipse',
+                                size: 10,
+                            }}
+                            android={{
+                                name: 'place',
+                                size: 12,
+                            }}
                         />
                         <Text
                             style={{
@@ -462,8 +468,19 @@ export default function TimetableScreen(): JSX.Element {
                     onPress={() => {
                         setCalendarDate(new Date())
                     }}
+                    hitSlop={10}
                 >
-                    <Ionicons name="today" size={24} color={colors.text} />
+                    <PlatformIcon
+                        color={colors.text}
+                        ios={{
+                            name: 'arrow.uturn.left',
+                            size: 22,
+                        }}
+                        android={{
+                            name: 'calendar',
+                            size: 24,
+                        }}
+                    />
                 </TouchableOpacity>
             )}
         />
@@ -486,7 +503,7 @@ const styles = StyleSheet.create({
     eventLocation: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 2,
+        gap: 3,
     },
     headerWrapper: {
         display: 'flex',

@@ -9,6 +9,7 @@ import {
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/provider'
@@ -18,12 +19,17 @@ import { type AvailableRoom, type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { filterRooms, getNextValidDate } from '@/utils/room-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -95,18 +101,25 @@ export const MapScreen = (): JSX.Element => {
         setLocalSearch(routeParams)
     }, [routeParams])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <Pressable
                     onPress={() => {
                         router.push('(map)/advanced')
                     }}
+                    hitSlop={10}
                 >
-                    <Ionicons
-                        name="options-outline"
-                        size={24}
+                    <PlatformIcon
                         color={colors.text}
+                        ios={{
+                            name: 'text.magnifyingglass',
+                            size: 22,
+                        }}
+                        android={{
+                            name: 'manage-search',
+                            size: 24,
+                        }}
                     />
                 </Pressable>
             ),
@@ -134,10 +147,16 @@ export const MapScreen = (): JSX.Element => {
                                 router.push('(map)/advanced')
                             }}
                         >
-                            <Ionicons
-                                name="options-outline"
-                                size={24}
+                            <PlatformIcon
                                 color={colors.text}
+                                ios={{
+                                    name: 'text.magnifyingglass',
+                                    size: 22,
+                                }}
+                                android={{
+                                    name: 'manage-search',
+                                    size: 24,
+                                }}
                             />
                         </Pressable>
                     )
@@ -451,10 +470,16 @@ export const MapScreen = (): JSX.Element => {
                                     },
                                 ]}
                             >
-                                <Ionicons
-                                    name="close"
-                                    size={24}
+                                <PlatformIcon
                                     color={colors.text}
+                                    ios={{
+                                        name: 'xmark',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'close',
+                                        size: 22,
+                                    }}
                                 />
                             </View>
                         </Pressable>
@@ -482,18 +507,15 @@ export const MapScreen = (): JSX.Element => {
                                     },
                                 ]}
                             >
-                                <Ionicons
-                                    name={
-                                        Platform.OS !== 'ios'
-                                            ? 'share-outline'
-                                            : 'share-social-outline'
-                                    }
-                                    size={22}
+                                <PlatformIcon
                                     color={colors.text}
-                                    // the iOS share icon is slightly off center
-                                    style={{
-                                        marginLeft:
-                                            Platform.OS === 'ios' ? 1 : 0,
+                                    ios={{
+                                        name: 'square.and.arrow.up',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'share',
+                                        size: 22,
                                     }}
                                 />
                             </View>
