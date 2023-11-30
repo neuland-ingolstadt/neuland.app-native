@@ -40,7 +40,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 46,
+            versionCode: 47,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -49,17 +49,6 @@ module.exports = {
                     backgroundColor: '#000000',
                 },
             },
-        },
-        extra: {
-            eas: {
-                projectId: 'b0ef9e3f-3115-44b0-abc7-99dd75821353',
-            },
-        },
-        runtimeVersion: {
-            policy: 'sdkVersion',
-        },
-        updates: {
-            url: 'https://u.expo.dev/b0ef9e3f-3115-44b0-abc7-99dd75821353',
         },
         sdkVersion: '49.0.0',
         experiments: {
