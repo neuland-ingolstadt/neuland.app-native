@@ -13,7 +13,7 @@
                 },
                 "icon": {
                     "ios": "rectangle.3.group",
-                    "android": "view-dashboard-variant"
+                    "android": "dashboard-customize"
                 }
             },
             {
@@ -27,7 +27,7 @@
                 },
                 "icon": {
                     "ios": "paintpalette",
-                    "android": "palette-outline"
+                    "android": "palette"
                 }
             },
             {
@@ -57,7 +57,7 @@
                 },
                 "icon": {
                     "ios": "globe",
-                    "android": "earth"
+                    "android": "language"
                 }
             },
             {
@@ -71,7 +71,7 @@
                 },
                 "icon": {
                     "ios": "carrot",
-                    "android": "food-apple-outline"
+                    "android": "restaurant"
                 }
             }
         ],
@@ -87,7 +87,7 @@
                 },
                 "icon": {
                     "ios": "calendar",
-                    "android": "calendar-outline"
+                    "android": "calendar"
                 }
             },
             {
@@ -101,7 +101,7 @@
                 },
                 "icon": {
                     "ios": "book",
-                    "android": "book-outline"
+                    "android": "book"
                 }
             }
         ],
@@ -117,7 +117,7 @@
                 },
                 "icon": {
                     "ios": "books.vertical",
-                    "android": "book-outline"
+                    "android": "book"
                 }
             },
             {
@@ -145,7 +145,7 @@
                 },
                 "icon": {
                     "ios": "paintpalette",
-                    "android": "palette-outline"
+                    "android": "palette"
                 }
             }
         ]
