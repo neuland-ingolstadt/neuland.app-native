@@ -114,6 +114,7 @@ export default function Provider({
         isFirstRenderSelectedRestaurants,
         setIsFirstRenderSelectedRestaurants,
     ] = useState(true)
+    const [isFirstRenderAppIcon, setIsFirstRenderAppIcon] = useState(true)
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -177,10 +178,14 @@ export default function Provider({
     }, [themeHook.accentColor])
 
     useEffect(() => {
-        if (Platform.OS === 'ios' && appIcon.appIcon !== 'default') {
-            trackEvent('AppIcon', {
-                appIcon: appIcon.appIcon,
-            })
+        if (Platform.OS === 'ios') {
+            if (!isFirstRenderAppIcon) {
+                trackEvent('AppIcon', {
+                    appIcon: appIcon.appIcon,
+                })
+            } else {
+                setIsFirstRenderAppIcon(false)
+            }
         }
     }, [appIcon.appIcon])
 
