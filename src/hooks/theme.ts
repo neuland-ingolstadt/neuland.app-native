@@ -12,7 +12,7 @@ export interface ThemeHook {
  * @returns ThemeHook object with accentColor and toggleAccentColor properties.
  */
 export function useTheme(): ThemeHook {
-    const [accentColor, setAccentColor] = useState<string>('green')
+    const [accentColor, setAccentColor] = useState<string>('default')
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
@@ -20,6 +20,8 @@ export function useTheme(): ThemeHook {
                 const data = await AsyncStorage.getItem('accentColor')
                 if (data != null) {
                     setAccentColor(data)
+                } else {
+                    setAccentColor('green')
                 }
             } catch (error) {
                 console.error(

@@ -1,9 +1,11 @@
 import { type AppIconHook } from '@/hooks/appIcon'
+import { trackEvent } from '@aptabase/react-native'
 import {
     DarkTheme,
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
+import { usePathname } from 'expo-router'
 import React, { createContext, useEffect, useRef, useState } from 'react'
 import { Platform, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -54,7 +56,7 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'green',
+    accentColor: 'default',
     toggleAccentColor: () => {},
 })
 
@@ -104,13 +106,18 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
     const appIcon = useAppIcon()
+    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
+    const onColorSchemeChange = useRef<NodeJS.Timeout>()
+    const pathname = usePathname()
+    const [isFirstRenderUserKind, setIsFirstRenderUserKind] = useState(true)
+    const [
+        isFirstRenderSelectedRestaurants,
+        setIsFirstRenderSelectedRestaurants,
+    ] = useState(true)
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
     // https://github.com/facebook/react-native/pull/39439 (should be fixed in v0.73)
-    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
-    const onColorSchemeChange = useRef<NodeJS.Timeout>()
-
     useEffect(() => {
         if (colorScheme !== currentColorScheme) {
             onColorSchemeChange.current = setTimeout(() => {
@@ -131,7 +138,7 @@ export default function Provider({
             const primary = accentColors[themeHook.accentColor][scheme]
             return primary
         } catch (e) {
-            return accentColors.teal[scheme]
+            return accentColors.green[scheme]
         }
     }
 
@@ -152,6 +159,67 @@ export default function Provider({
             ...darkColors,
         },
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            trackEvent('Route', {
+                pathname,
+            })
+        }, 0)
+    }, [pathname])
+
+    useEffect(() => {
+        if (themeHook.accentColor !== 'default') {
+            trackEvent('AccentColor', {
+                accentColor: themeHook.accentColor,
+            })
+        }
+    }, [themeHook.accentColor])
+
+    useEffect(() => {
+        if (Platform.OS === 'ios' && appIcon.appIcon !== 'default') {
+            trackEvent('AppIcon', {
+                appIcon: appIcon.appIcon,
+            })
+        }
+    }, [appIcon.appIcon])
+
+    useEffect(() => {
+        if (!isFirstRenderUserKind) {
+            trackEvent('UserKind', {
+                userKind: userKind.userKind,
+            })
+        } else {
+            setIsFirstRenderUserKind(false)
+        }
+    }, [userKind.userKind])
+
+    useEffect(() => {
+        if (!isFirstRenderSelectedRestaurants) {
+            trackEvent('SelectedRestaurants', {
+                selectedRestaurants: foodFilter.selectedRestaurants.join(','),
+            })
+        } else {
+            setIsFirstRenderSelectedRestaurants(false)
+        }
+    }, [foodFilter.selectedRestaurants])
+
+    useEffect(() => {
+        if (dashboard.shownDashboardEntries.length === 0) {
+            return
+        }
+        const shownDashboardEntryTitles = dashboard.shownDashboardEntries.map(
+            (entry) => entry.key
+        )
+        const hiddenDashboardEntryTitles = dashboard.hiddenDashboardEntries.map(
+            (entry) => entry.key
+        )
+
+        trackEvent('DashboardEntries', {
+            shownDashboardEntries: shownDashboardEntryTitles.join(','),
+            hiddenDashboardEntries: hiddenDashboardEntryTitles.join(','),
+        })
+    }, [dashboard.shownDashboardEntries, dashboard.hiddenDashboardEntries])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

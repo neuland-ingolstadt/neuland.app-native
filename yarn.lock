@@ -34,6 +34,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aptabase/react-native@npm:^0.3.9":
+  version: 0.3.9
+  resolution: "@aptabase/react-native@npm:0.3.9"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: f7bb6ecfb134d6d2243b80662c48685ce6ea5923b71ccbd969cdee4acaca5085ccd558132771306cd2800b692bc6e1c6e3b0b379d97f22d157dea540dc641264
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:7.10.4, @babel/code-frame@npm:~7.10.4":
   version: 7.10.4
   resolution: "@babel/code-frame@npm:7.10.4"
@@ -9683,6 +9693,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "neuland@workspace:."
   dependencies:
+    "@aptabase/react-native": "npm:^0.3.9"
     "@babel/core": "npm:^7.0.0-0"
     "@babel/plugin-proposal-nullish-coalescing-operator": "npm:^7.0.0-0"
     "@babel/plugin-proposal-optional-chaining": "npm:^7.0.0-0"

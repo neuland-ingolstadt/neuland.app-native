@@ -1,6 +1,7 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import Aptabase from '@aptabase/react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
@@ -12,6 +13,9 @@ export default function RootLayout(): JSX.Element {
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
     const { t } = useTranslation('navigation')
+
+    // replace with your own Aptabase instance before merging
+    Aptabase.init('A-EU-5008401689')
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
