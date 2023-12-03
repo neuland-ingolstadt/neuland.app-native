@@ -1,9 +1,16 @@
 import { type Colors } from '@/components/colors'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    ActivityIndicator,
+    Alert,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
@@ -18,6 +25,8 @@ const LibraryReservationRow = ({
     deleteReservation: (id: string) => Promise<void>
 }): JSX.Element => {
     const { t } = useTranslation('common')
+    const [deleting, setDeleting] = useState<boolean>(false)
+
     const deleteAlert = (): void => {
         Alert.alert(
             t('pages.library.reservations.alert.title'),
@@ -28,10 +37,16 @@ const LibraryReservationRow = ({
                     style: 'cancel',
                 },
                 {
-                    text: t('misc.delete'),
+                    text: t(deleting ? '' : 'misc.delete'),
                     style: 'destructive',
                     onPress: () => {
-                        void deleteReservation(reservation.reservation_id)
+                        setDeleting(true)
+
+                        void deleteReservation(
+                            reservation.reservation_id
+                        ).finally(() => {
+                            setDeleting(false)
+                        })
                     },
                 },
             ]
@@ -80,24 +95,29 @@ const LibraryReservationRow = ({
             rightChildren={
                 <>
                     <View style={styles.rightContainer}>
-                        <Pressable
-                            onPress={() => {
-                                deleteAlert()
-                            }}
-                        >
-                            <PlatformIcon
-                                color={colors.notification}
-                                ios={{
-                                    name: 'trash',
-
-                                    size: 18,
+                        {!deleting ? (
+                            <Pressable
+                                onPress={() => {
+                                    deleteAlert()
                                 }}
-                                android={{
-                                    name: 'delete',
-                                    size: 24,
-                                }}
+                            >
+                                <PlatformIcon
+                                    color={colors.notification}
+                                    ios={{
+                                        name: 'trash',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'delete',
+                                        size: 24,
+                                    }}
+                                />
+                            </Pressable>
+                        ) : (
+                            <ActivityIndicator
+                                color={colors.labelSecondaryColor}
                             />
-                        </Pressable>
+                        )}
                     </View>
                 </>
             }
