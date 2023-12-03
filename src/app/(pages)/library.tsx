@@ -60,7 +60,6 @@ export default function newsSCreen(): JSX.Element {
                     reservationCount: 0,
                 }
             })
-
             setAvailable(filteredAvailable)
             setReservations(response)
             setLoadingState(LoadingState.LOADED)

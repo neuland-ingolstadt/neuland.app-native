@@ -13,9 +13,13 @@ export default function RootLayout(): JSX.Element {
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
     const { t } = useTranslation('navigation')
+    const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
 
-    // replace with your own Aptabase instance before merging
-    Aptabase.init('A-EU-5008401689')
+    if (aptabaseKey == null) {
+        console.error('No Aptabase key found')
+    } else {
+        Aptabase.init(aptabaseKey)
+    }
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {

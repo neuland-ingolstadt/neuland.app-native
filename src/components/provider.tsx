@@ -56,7 +56,7 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'default',
+    accentColor: 'green',
     toggleAccentColor: () => {},
 })
 
@@ -115,6 +115,7 @@ export default function Provider({
         setIsFirstRenderSelectedRestaurants,
     ] = useState(true)
     const [isFirstRenderAppIcon, setIsFirstRenderAppIcon] = useState(true)
+    const [isFirstRenderColor, setIsFirstRenderColor] = useState(true)
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -170,10 +171,12 @@ export default function Provider({
     }, [pathname])
 
     useEffect(() => {
-        if (themeHook.accentColor !== 'default') {
-            trackEvent('AccentColor', {
-                accentColor: themeHook.accentColor,
+        if (!isFirstRenderColor) {
+            trackEvent('Color', {
+                color: themeHook.accentColor,
             })
+        } else {
+            setIsFirstRenderColor(false)
         }
     }, [themeHook.accentColor])
 
