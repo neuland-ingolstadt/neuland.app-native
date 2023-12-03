@@ -1,4 +1,5 @@
 import { type AppIconHook } from '@/hooks/appIcon'
+import { type FlowHook } from '@/hooks/flow'
 import { trackEvent } from '@aptabase/react-native'
 import {
     DarkTheme,
@@ -76,11 +77,13 @@ export const DashboardContext = createContext<Dashboard>({
     updateDashboardOrder: () => {},
 })
 
-export const FlowContext = createContext<any>({
+export const FlowContext = createContext<FlowHook>({
     isOnboarded: true,
     toggleOnboarded: () => {},
     isUpdated: true,
     toggleUpdated: () => {},
+    analyticsAllowed: false,
+    toggleAnalytics: () => {},
 })
 
 export const ReloadProvider = createContext<any>({

@@ -54,6 +54,12 @@ export default {
             messageAndroid: 'Du hast ein Easter Egg gefunden! 🐣',
             confirm: 'Nice!',
         },
+        analytics: {
+            title: 'Analytik',
+            toggle: 'Anonyme Nutzungsdaten Sammeln',
+            message:
+                'Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich.',
+        },
     },
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
