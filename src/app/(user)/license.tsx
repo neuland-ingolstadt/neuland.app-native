@@ -3,7 +3,7 @@ import { linkIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/style-utils'
+import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
@@ -16,29 +16,27 @@ export default function License(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
 
-    const { license, version, licenseUrl, repository, licenseName } =
+    const { license, version, licenseUrl, repository, name } =
         useGlobalSearchParams<{
             license: string
             version: string
             licenseUrl: string
             repository: string
-            licenseName: string
+            name: string
         }>()
 
-    console.log(license, version, licenseUrl, repository, licenseName)
     const [licenseText, setLicenseText] = useState('')
 
     useEffect(() => {
         fetch(licenseUrl as string)
             .then(async (res) => await res.text())
             .then((text) => {
-                // check if its text or html
+                // sometimes the license is not a text file, but the whole repo page
                 if (text.includes('<!DOCTYPE html>')) {
                     setLicenseText('')
                 } else {
                     setLicenseText(text)
                 }
-                console.log(text)
             })
             .catch((error) => {
                 console.warn('Failed to fetch license text:', error)
@@ -51,8 +49,8 @@ export default function License(): JSX.Element {
             items: [
                 {
                     title: 'Name',
-                    value: licenseName,
-                    layout: (licenseName?.length ?? 0) > 25 ? 'column' : 'row',
+                    value: name,
+                    layout: (name?.length ?? 0) > 25 ? 'column' : 'row',
                 },
                 {
                     title: 'Version',
@@ -77,7 +75,7 @@ export default function License(): JSX.Element {
     ]
     return (
         <>
-            <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+            <ScrollView contentContainerStyle={styles.container}>
                 <StatusBar style={getStatusBarStyle()} />
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
@@ -87,9 +85,8 @@ export default function License(): JSX.Element {
                     <SectionView title={t('licenses.formlist.license')}>
                         <Text
                             style={{
-                                fontSize: 13,
                                 color: colors.text,
-                                padding: 16,
+                                ...styles.text,
                             }}
                         >
                             {licenseText}
@@ -102,21 +99,6 @@ export default function License(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 30,
-        paddingBottom: 20,
-    },
-    logoContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-    },
-    logoTextContainer: {
-        flexDirection: 'column',
-    },
-    appTitleContainer: {
-        marginBottom: 10,
-    },
     formlistContainer: {
         marginTop: 10,
         maringBottom: 16,
@@ -124,28 +106,11 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
-    logoIcon: {
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        borderRadius: 9,
-    },
-    logoImage: {
-        flex: 1,
-        width: 100,
-        height: 100,
-        resizeMode: 'contain',
-        borderRadius: 9,
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    subHeader: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
     text: {
-        fontSize: 16,
+        padding: 16,
+        fontSize: 13,
+    },
+    container: {
+        paddingBottom: MODAL_BOTTOM_MARGIN,
     },
 })
