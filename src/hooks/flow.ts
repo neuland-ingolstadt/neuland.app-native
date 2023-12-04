@@ -29,13 +29,13 @@ export function useFlow(): FlowHook {
             try {
                 const [onboardedKey, updatedKey, analyticsKey] =
                     await Promise.all([
-                        AsyncStorage.getItem('isOnboarkded'),
+                        AsyncStorage.getItem('isOnboarded'),
                         AsyncStorage.getItem(
                             `isUpdated-${convertToMajorMinorPatch(
                                 packageInfo.version
                             )}`
                         ),
-                        AsyncStorage.getItem('analytjics'),
+                        AsyncStorage.getItem('analytics'),
                     ])
 
                 if (onboardedKey === 'true') {
