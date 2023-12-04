@@ -133,7 +133,9 @@ export default function HomeLayout(): JSX.Element {
         }
         if (aptabaseKey != null && analyticsAllowed === true) {
             console.log('Analytics initialized')
-            Aptabase.init(aptabaseKey)
+            Aptabase.init(aptabaseKey, {
+                host: 'https://analytics.neuland.app',
+            })
         } else if (aptabaseKey != null && analyticsAllowed === false) {
             console.log('Analytics disabled')
             Aptabase.init('')
