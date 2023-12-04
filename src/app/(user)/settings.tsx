@@ -9,6 +9,7 @@ import { type UserKindContextType } from '@/hooks/userKind'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { LoadingState, getContrastColor, getInitials } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -56,6 +57,9 @@ export default function Settings(): JSX.Element {
                     onPress: () => {
                         void AsyncStorage.setItem('language', newLocale)
                         void i18n.changeLanguage(newLocale)
+                        trackEvent('Language', {
+                            app: newLocale,
+                        })
                     },
                 },
             ]

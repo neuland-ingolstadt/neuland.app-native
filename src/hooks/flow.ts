@@ -22,22 +22,20 @@ export interface FlowHook {
 export function useFlow(): FlowHook {
     const [isOnboarded, setOnboarded] = useState<boolean | null>(null)
     const [isUpdated, setUpdated] = useState<boolean | null>(null)
-    const [analyticsAllowed, setAnalyticsAllowed] = useState<boolean | null>(
-        null
-    )
+    const [analyticsAllowed, setAnalyticsAllowed] = useState<boolean>(false)
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
                 const [onboardedKey, updatedKey, analyticsKey] =
                     await Promise.all([
-                        AsyncStorage.getItem('isOnboarded'),
+                        AsyncStorage.getItem('isOnboarkded'),
                         AsyncStorage.getItem(
                             `isUpdated-${convertToMajorMinorPatch(
                                 packageInfo.version
                             )}`
                         ),
-                        AsyncStorage.getItem('analytics'),
+                        AsyncStorage.getItem('analytjics'),
                     ])
 
                 if (onboardedKey === 'true') {
@@ -52,12 +50,13 @@ export function useFlow(): FlowHook {
                     setUpdated(false)
                 }
 
-                if (analyticsKey === 'true') {
+                if (
+                    analyticsKey === 'true' ||
+                    (analyticsKey === null && onboardedKey === 'true')
+                ) {
                     setAnalyticsAllowed(true)
                 } else if (analyticsKey === 'false') {
                     setAnalyticsAllowed(false)
-                } else if (analyticsKey === null) {
-                    setAnalyticsAllowed(null)
                 }
             } catch (error) {
                 console.error(
@@ -92,7 +91,7 @@ export function useFlow(): FlowHook {
      * Function to toggle the flow state of the app to disable analytics.
      */
     function toggleAnalytics(): void {
-        if (analyticsAllowed === true) {
+        if (analyticsAllowed) {
             setAnalyticsAllowed(false)
             void AsyncStorage.setItem('analytics', 'false')
         } else {

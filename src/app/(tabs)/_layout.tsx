@@ -31,7 +31,7 @@ export default function HomeLayout(): JSX.Element {
     const { appIcon } = useContext(AppIconContext)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed } = React.useContext(FlowContext)
-
+    const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
         router.push('(flow)/onboarding')
     }
@@ -126,9 +126,16 @@ export default function HomeLayout(): JSX.Element {
     }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
 
     useEffect(() => {
+        if (isFirstRun) {
+            console.log('Analytics not yet initialized')
+            setIsFirstRun(false)
+            return
+        }
         if (aptabaseKey != null && analyticsAllowed === true) {
+            console.log('Analytics initialized')
             Aptabase.init(aptabaseKey)
         } else if (aptabaseKey != null && analyticsAllowed === false) {
+            console.log('Analytics disabled')
             Aptabase.init('')
         } else {
             console.log('Analytics not yet initialized')

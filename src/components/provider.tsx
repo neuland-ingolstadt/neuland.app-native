@@ -119,6 +119,8 @@ export default function Provider({
     ] = useState(true)
     const [isFirstRenderAppIcon, setIsFirstRenderAppIcon] = useState(true)
     const [isFirstRenderColor, setIsFirstRenderColor] = useState(true)
+    const [isFirstRenderFoodLanguage, setIsFirstRenderFoodLanguage] =
+        useState(true)
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -231,6 +233,16 @@ export default function Provider({
             hiddenDashboardEntries: hiddenDashboardEntryTitles.join(','),
         })
     }, [dashboard.shownDashboardEntries, dashboard.hiddenDashboardEntries])
+
+    useEffect((): void => {
+        if (!isFirstRenderFoodLanguage) {
+            trackEvent('Language', {
+                food: foodFilter.foodLanguage,
+            })
+        } else {
+            setIsFirstRenderFoodLanguage(false)
+        }
+    }, [foodFilter.foodLanguage])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

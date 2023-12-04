@@ -20,7 +20,7 @@ export default function OnboardingScreen(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData
     const { t, i18n } = useTranslation('flow')
-
+    const { analyticsAllowed, toggleAnalytics } = React.useContext(FlowContext)
     return (
         <View style={styles.page}>
             <StatusBar style={getStatusBarStyle()} />
@@ -91,6 +91,11 @@ export default function OnboardingScreen(): JSX.Element {
                     onPress={() => {
                         flow.toggleUpdated()
                         router.push('/')
+                        // needed to trigger the analytics toggle for users of the previous version
+                        // can be removed in the future
+                        if (analyticsAllowed === null) {
+                            toggleAnalytics()
+                        }
                     }}
                 >
                     <Text

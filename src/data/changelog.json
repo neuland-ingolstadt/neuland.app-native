@@ -148,6 +148,36 @@
                     "android": "palette"
                 }
             }
+        ],
+        "0.6": [
+            {
+                "title": {
+                    "de": "Kalender Listenansicht",
+                    "en": "Calendar Agenda View"
+                },
+                "description": {
+                    "de": "Wechsle zwischen der normalen Kalenderansicht und einer Listenansicht, um alle Termine auf einen Blick zu sehen.",
+                    "en": "Switch between the normal calendar view and an agenda view to see all appointments at a glance."
+                },
+                "icon": {
+                    "ios": "calendar",
+                    "android": "calendar"
+                }
+            },
+            {
+                "title": {
+                    "de": "Analytik",
+                    "en": "Analytics"
+                },
+                "description": {
+                    "de": "Die App sammelt nun anonyme und nicht personenbezogene Daten, um die App zu verbessern. Deine Privatsphäre bleibt dabei geschützt.",
+                    "en": "The app now collects anonymous and non-personal data to improve the app. Your privacy is protected at all times."
+                },
+                "icon": {
+                    "ios": "chart.pie",
+                    "android": "insert-chart"
+                }
+            }
         ]
     }
 }

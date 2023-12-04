@@ -60,12 +60,8 @@ const LoginForm = (): JSX.Element => {
     const [notice, setNotice] = useState('')
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const {
-        toggleOnboarded,
-        toggleUpdated,
-        toggleAnalytics,
-        analyticsAllowed,
-    } = React.useContext(FlowContext)
+    const { toggleOnboarded, isOnboarded, toggleUpdated, toggleAnalytics } =
+        React.useContext(FlowContext)
     const { toggleUserKind, updateUserFullName } =
         React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
@@ -88,7 +84,7 @@ const LoginForm = (): JSX.Element => {
             }
             toggleUserKind(userKind)
             toggleUpdated()
-            if (analyticsAllowed === null) {
+            if (isOnboarded === false) {
                 toggleAnalytics()
             }
             toggleOnboarded()
@@ -129,7 +125,7 @@ const LoginForm = (): JSX.Element => {
         await createGuestSession()
         toggleUserKind('guest')
         toggleUpdated()
-        if (analyticsAllowed === null) {
+        if (isOnboarded === false) {
             toggleAnalytics()
         }
         toggleOnboarded()
