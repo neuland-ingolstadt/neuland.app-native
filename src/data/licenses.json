@@ -317,7 +317,7 @@
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native@0.72.6": {
+    "react-native@0.72.7": {
         "licenses": "MIT",
         "repository": "github:facebook/react-native",
         "licenseUrl": "github:facebook/react-native",
