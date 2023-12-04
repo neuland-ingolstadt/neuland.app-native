@@ -240,7 +240,7 @@ export default function FoodDetail(): JSX.Element {
                 <ShareButton
                     onPress={async () => {
                         trackEvent('Share', {
-                            content_type: 'meal',
+                            type: 'meal',
                         })
                         await Share.share({
                             message: t('details.share.message', {

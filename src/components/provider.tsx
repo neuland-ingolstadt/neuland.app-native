@@ -177,7 +177,7 @@ export default function Provider({
 
     useEffect(() => {
         if (!isFirstRenderColor) {
-            trackEvent('Color', {
+            trackEvent('AccentColor', {
                 color: themeHook.accentColor,
             })
         } else {

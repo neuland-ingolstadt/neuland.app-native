@@ -8,7 +8,7 @@ import {
 import changelog from '@/data/changelog.json'
 import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import Aptabase, { trackEvent } from '@aptabase/react-native'
+import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
@@ -112,9 +112,6 @@ export default function HomeLayout(): JSX.Element {
     useEffect(() => {
         function processShortcut(item: ShortcutItem): void {
             router.push(item.data.path)
-            trackEvent('Shortcut', {
-                type: Platform.OS === 'ios' ? item.type : item.id,
-            })
             router.setParams({ fromAppShortcut: 'true' })
         }
 

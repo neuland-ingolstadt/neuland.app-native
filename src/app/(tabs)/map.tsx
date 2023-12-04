@@ -189,7 +189,7 @@ export const MapScreen = (): JSX.Element => {
         const room = filteredRooms[0].properties.Raum
         const payload = 'https://neuland.app/rooms/?highlight=' + room
         trackEvent('Share', {
-            content_type: 'room',
+            type: 'room',
         })
         void Share.share(
             Platform.OS === 'android' ? { message: payload } : { url: payload }

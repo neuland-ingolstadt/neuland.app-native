@@ -53,7 +53,7 @@ export default function TimetableDetails(): JSX.Element {
                 quality: 1,
             })
             trackEvent('Share', {
-                content_type: 'lecture',
+                type: 'lecture',
             })
             await Sharing.shareAsync(uri, {
                 mimeType: 'image/png',
