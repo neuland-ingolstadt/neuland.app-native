@@ -19,6 +19,7 @@ import { type AvailableRoom, type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import { filterRooms, getNextValidDate } from '@/utils/room-utils'
 import { LoadingState } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
@@ -187,7 +188,9 @@ export const MapScreen = (): JSX.Element => {
     const handleShareModal = (): void => {
         const room = filteredRooms[0].properties.Raum
         const payload = 'https://neuland.app/rooms/?highlight=' + room
-
+        trackEvent('Share', {
+            content_type: 'room',
+        })
         void Share.share(
             Platform.OS === 'android' ? { message: payload } : { url: payload }
         )

@@ -13,6 +13,7 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
@@ -51,7 +52,9 @@ export default function TimetableDetails(): JSX.Element {
                 format: 'png',
                 quality: 1,
             })
-
+            trackEvent('Share', {
+                content_type: 'lecture',
+            })
             await Sharing.shareAsync(uri, {
                 mimeType: 'image/png',
                 dialogTitle: t('misc.share'),

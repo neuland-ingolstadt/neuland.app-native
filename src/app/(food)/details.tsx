@@ -12,6 +12,7 @@ import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -238,6 +239,9 @@ export default function FoodDetail(): JSX.Element {
                 </View>
                 <ShareButton
                     onPress={async () => {
+                        trackEvent('Share', {
+                            content_type: 'meal',
+                        })
                         await Share.share({
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
