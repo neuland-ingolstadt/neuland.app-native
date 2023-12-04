@@ -55,7 +55,7 @@ export default {
             confirm: 'Nice!',
         },
         analytics: {
-            title: 'Analytik',
+            title: 'Analytics',
             toggle: 'Anonyme Nutzungsdaten Sammeln',
             message:
                 'Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich.',
