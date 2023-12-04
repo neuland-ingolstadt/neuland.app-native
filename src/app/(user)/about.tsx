@@ -47,6 +47,13 @@ export default function About(): JSX.Element {
                     icon: linkIcon,
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
                 },
+                {
+                    title: t('about.formlist.legal.licenses'),
+                    icon: chevronIcon,
+                    onPress: () => {
+                        router.push('(user)/licenses')
+                    },
+                },
             ],
         },
         {

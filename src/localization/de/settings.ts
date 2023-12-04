@@ -42,6 +42,7 @@ export default {
                 title: 'Rechtliches',
                 privacy: 'Datenschutz',
                 imprint: 'Impressum',
+                licenses: 'Lizenzen',
             },
             about: {
                 title: 'Über uns',
@@ -53,6 +54,12 @@ export default {
                 'Du hast das exklusive App-Icon "Paradies Katze" freigeschaltet! 😻',
             messageAndroid: 'Du hast ein Easter Egg gefunden! 🐣',
             confirm: 'Nice!',
+        },
+    },
+    licenses: {
+        formlist: {
+            licenses: 'Lizenzen',
+            license: 'Lizenz',
         },
     },
     changelog: {

@@ -40,6 +40,7 @@ export default {
                 title: 'Legal',
                 privacy: 'Privacy Policy',
                 imprint: 'Imprint',
+                licenses: 'Licenses',
             },
             about: {
                 title: 'About us',
@@ -50,6 +51,12 @@ export default {
             message: 'You unlocked the exclusive app icon "Paradise Cat"! 😻',
             messageAndroid: 'You found an easter egg! 🐣',
             confirm: 'Nice!',
+        },
+    },
+    licenses: {
+        formlist: {
+            licenses: 'Licenses',
+            license: 'License',
         },
     },
     changelog: {
