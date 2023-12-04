@@ -39,7 +39,7 @@ export default function Licenses(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: t('licenses.formlist.licenses'),
+            header: t('navigation.licenses', { ns: 'navigation' }),
             items: [...licensesList],
         },
     ]

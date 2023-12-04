@@ -40,7 +40,6 @@ export default {
                 title: 'Legal',
                 privacy: 'Privacy Policy',
                 imprint: 'Imprint',
-                licenses: 'Licenses',
             },
             about: {
                 title: 'About us',
@@ -55,7 +54,6 @@ export default {
     },
     licenses: {
         formlist: {
-            licenses: 'Licenses',
             license: 'License',
         },
     },

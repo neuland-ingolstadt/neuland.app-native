@@ -42,7 +42,6 @@ export default {
                 title: 'Rechtliches',
                 privacy: 'Datenschutz',
                 imprint: 'Impressum',
-                licenses: 'Lizenzen',
             },
             about: {
                 title: 'Über uns',
@@ -58,7 +57,6 @@ export default {
     },
     licenses: {
         formlist: {
-            licenses: 'Lizenzen',
             license: 'Lizenz',
         },
     },
