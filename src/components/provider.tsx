@@ -215,32 +215,32 @@ export default function Provider({
         if (!flow.analyticsInitialized) {
             return
         }
-        if (dashboard.shownDashboardEntries.length === 0) {
-            return
-        }
-        const shownDashboardEntryTitles = dashboard.shownDashboardEntries.map(
-            (entry) => entry.key
-        )
-        trackEvent('DashboardEntries', {
-            shownDashboardEntries: shownDashboardEntryTitles.join(','),
+
+        const entries: Record<string, string> = {}
+
+        dashboard.shownDashboardEntries.forEach((entry, index) => {
+            entries[entry.key] = `Position ${index + 1}`
         })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
     }, [dashboard.shownDashboardEntries, flow.analyticsInitialized])
 
     useEffect(() => {
         if (!flow.analyticsInitialized) {
             return
         }
-        if (dashboard.hiddenDashboardEntries.length === 0) {
-            return
-        }
 
-        const hiddenDashboardEntryTitles = dashboard.hiddenDashboardEntries.map(
-            (entry) => entry.key
-        )
+        const entries: Record<string, string> = {}
 
-        trackEvent('DashboardEntries', {
-            hiddenDashboardEntries: hiddenDashboardEntryTitles.join(','),
+        dashboard.hiddenDashboardEntries.forEach((entry) => {
+            entries[entry.key] = 'Card hidden'
         })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
     }, [dashboard.hiddenDashboardEntries, flow.analyticsInitialized])
 
     useEffect((): void => {
