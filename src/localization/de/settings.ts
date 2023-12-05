@@ -55,11 +55,6 @@ export default {
             confirm: 'Nice!',
         },
     },
-    licenses: {
-        formlist: {
-            license: 'Lizenz',
-        },
-    },
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
     },

@@ -57,7 +57,7 @@ export default function License(): JSX.Element {
                     value: version,
                 },
                 {
-                    title: t('licenses.formlist.license'),
+                    title: t('navigation.license', { ns: 'navigation' }),
                     value: license,
                     onPress: async () =>
                         await Linking.openURL(licenseUrl as string),
@@ -82,7 +82,9 @@ export default function License(): JSX.Element {
                 </View>
 
                 {licenseText !== '' && (
-                    <SectionView title={t('licenses.formlist.license')}>
+                    <SectionView
+                        title={t('navigation.license', { ns: 'navigation' })}
+                    >
                         <Text
                             style={{
                                 color: colors.text,
