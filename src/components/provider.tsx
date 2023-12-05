@@ -1,5 +1,6 @@
 import { type AppIconHook } from '@/hooks/appIcon'
 import { type FlowHook } from '@/hooks/flow'
+import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import {
     DarkTheme,
@@ -84,6 +85,8 @@ export const FlowContext = createContext<FlowHook>({
     toggleUpdated: () => {},
     analyticsAllowed: false,
     toggleAnalytics: () => {},
+    analyticsInitialized: false,
+    initializeAnalytics: () => {},
 })
 
 export const ReloadProvider = createContext<any>({
@@ -112,15 +115,6 @@ export default function Provider({
     const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
     const onColorSchemeChange = useRef<NodeJS.Timeout>()
     const pathname = usePathname()
-    const [isFirstRenderUserKind, setIsFirstRenderUserKind] = useState(true)
-    const [
-        isFirstRenderSelectedRestaurants,
-        setIsFirstRenderSelectedRestaurants,
-    ] = useState(true)
-    const [isFirstRenderAppIcon, setIsFirstRenderAppIcon] = useState(true)
-    const [isFirstRenderColor, setIsFirstRenderColor] = useState(true)
-    const [isFirstRenderFoodLanguage, setIsFirstRenderFoodLanguage] =
-        useState(true)
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -168,81 +162,103 @@ export default function Provider({
     }
 
     useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
         setTimeout(() => {
             trackEvent('Route', {
                 pathname,
             })
         }, 0)
-    }, [pathname])
+    }, [pathname, flow.analyticsInitialized])
 
     useEffect(() => {
-        if (!isFirstRenderColor) {
-            trackEvent('AccentColor', {
-                color: themeHook.accentColor,
-            })
-        } else {
-            setIsFirstRenderColor(false)
+        if (!flow.analyticsInitialized) {
+            return
         }
-    }, [themeHook.accentColor])
+        trackEvent('AccentColor', {
+            color: themeHook.accentColor,
+        })
+    }, [themeHook.accentColor, flow.analyticsInitialized])
 
     useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
         if (Platform.OS === 'ios') {
-            if (!isFirstRenderAppIcon) {
-                trackEvent('AppIcon', {
-                    appIcon: appIcon.appIcon,
-                })
-            } else {
-                setIsFirstRenderAppIcon(false)
-            }
-        }
-    }, [appIcon.appIcon])
-
-    useEffect(() => {
-        if (!isFirstRenderUserKind) {
-            trackEvent('UserKind', {
-                userKind: userKind.userKind,
+            trackEvent('AppIcon', {
+                appIcon: appIcon.appIcon,
             })
-        } else {
-            setIsFirstRenderUserKind(false)
         }
-    }, [userKind.userKind])
+    }, [appIcon.appIcon, flow.analyticsInitialized])
 
     useEffect(() => {
-        if (!isFirstRenderSelectedRestaurants) {
-            trackEvent('SelectedRestaurants', {
-                selectedRestaurants: foodFilter.selectedRestaurants.join(','),
-            })
-        } else {
-            setIsFirstRenderSelectedRestaurants(false)
+        if (!flow.analyticsInitialized) {
+            return
         }
-    }, [foodFilter.selectedRestaurants])
+        trackEvent('UserKind', {
+            userKind: userKind.userKind,
+        })
+    }, [userKind.userKind, flow.analyticsInitialized])
 
     useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+
+        trackEvent('SelectedRestaurants', {
+            selectedRestaurants: foodFilter.selectedRestaurants.join(','),
+        })
+    }, [foodFilter.selectedRestaurants, flow.analyticsAllowed])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
         if (dashboard.shownDashboardEntries.length === 0) {
             return
         }
         const shownDashboardEntryTitles = dashboard.shownDashboardEntries.map(
             (entry) => entry.key
         )
+        trackEvent('DashboardEntries', {
+            shownDashboardEntries: shownDashboardEntryTitles.join(','),
+        })
+    }, [dashboard.shownDashboardEntries])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        if (dashboard.hiddenDashboardEntries.length === 0) {
+            return
+        }
+
         const hiddenDashboardEntryTitles = dashboard.hiddenDashboardEntries.map(
             (entry) => entry.key
         )
 
         trackEvent('DashboardEntries', {
-            shownDashboardEntries: shownDashboardEntryTitles.join(','),
             hiddenDashboardEntries: hiddenDashboardEntryTitles.join(','),
         })
-    }, [dashboard.shownDashboardEntries, dashboard.hiddenDashboardEntries])
+    }, [dashboard.hiddenDashboardEntries])
+    useEffect((): void => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('Language', {
+            food: foodFilter.foodLanguage,
+        })
+    }, [foodFilter.foodLanguage, flow.analyticsInitialized])
 
     useEffect((): void => {
-        if (!isFirstRenderFoodLanguage) {
-            trackEvent('Language', {
-                food: foodFilter.foodLanguage,
-            })
-        } else {
-            setIsFirstRenderFoodLanguage(false)
+        if (!flow.analyticsInitialized) {
+            return
         }
-    }, [foodFilter.foodLanguage])
+        trackEvent('Language', {
+            app: i18n.language,
+        })
+    }, [i18n.language, flow.analyticsInitialized])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

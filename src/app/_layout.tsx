@@ -1,9 +1,7 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import { trackEvent } from '@aptabase/react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,19 +18,6 @@ export default function RootLayout(): JSX.Element {
             const savedLanguage = await AsyncStorage.getItem('language')
             if (savedLanguage !== null) {
                 await i18n.changeLanguage(savedLanguage)
-            }
-            // track android language here since we have to manually set it
-            if (Platform.OS === 'android') {
-                const languageCode = getLocales()[0].languageCode
-                const validLanguages = ['de', 'en']
-
-                trackEvent('Language', {
-                    app:
-                        savedLanguage ??
-                        (validLanguages.includes(languageCode)
-                            ? languageCode
-                            : 'en'),
-                })
             }
         }
 

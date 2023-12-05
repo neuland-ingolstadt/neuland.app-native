@@ -13,6 +13,9 @@ export interface FlowHook {
 
     analyticsAllowed: boolean | null
     toggleAnalytics: () => void
+
+    analyticsInitialized: boolean
+    initializeAnalytics: () => void
 }
 
 /**
@@ -23,7 +26,8 @@ export function useFlow(): FlowHook {
     const [isOnboarded, setOnboarded] = useState<boolean | null>(null)
     const [isUpdated, setUpdated] = useState<boolean | null>(null)
     const [analyticsAllowed, setAnalyticsAllowed] = useState<boolean>(false)
-
+    const [analyticsInitialized, setAnalyticsInitialized] =
+        useState<boolean>(false)
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
@@ -100,6 +104,16 @@ export function useFlow(): FlowHook {
         }
     }
 
+    /**
+     * Function to initialize analytics.
+     */
+    function initializeAnalytics(): void {
+        if (analyticsAllowed && !analyticsInitialized) {
+            void AsyncStorage.setItem('analytics', 'true')
+            setAnalyticsInitialized(true)
+        }
+    }
+
     return {
         isOnboarded,
         toggleOnboarded,
@@ -107,5 +121,7 @@ export function useFlow(): FlowHook {
         toggleUpdated,
         analyticsAllowed,
         toggleAnalytics,
+        analyticsInitialized,
+        initializeAnalytics,
     }
 }

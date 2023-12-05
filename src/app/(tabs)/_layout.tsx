@@ -30,7 +30,8 @@ export default function HomeLayout(): JSX.Element {
     const { selectedRestaurants } = useContext(FoodFilterContext)
     const { appIcon } = useContext(AppIconContext)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
-    const { analyticsAllowed } = React.useContext(FlowContext)
+    const { analyticsAllowed, initializeAnalytics } =
+        React.useContext(FlowContext)
     const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
         router.push('(flow)/onboarding')
@@ -66,7 +67,7 @@ export default function HomeLayout(): JSX.Element {
             type: 'timetable',
             title: t('navigation.timetable'),
             symbolName: 'calendar',
-            iconName: 'calendar-month',
+            iconName: 'calendar_month',
             data: {
                 path: '(tabs)/timetable',
             },
@@ -127,17 +128,15 @@ export default function HomeLayout(): JSX.Element {
 
     useEffect(() => {
         if (isFirstRun) {
-            console.log('Analytics not yet initialized')
             setIsFirstRun(false)
             return
         }
         if (aptabaseKey != null && analyticsAllowed === true) {
-            console.log('Analytics initialized')
             Aptabase.init(aptabaseKey, {
                 host: 'https://analytics.neuland.app',
             })
+            initializeAnalytics()
         } else if (aptabaseKey != null && analyticsAllowed === false) {
-            console.log('Analytics disabled')
             Aptabase.init('')
         } else {
             console.log('Analytics not yet initialized')
