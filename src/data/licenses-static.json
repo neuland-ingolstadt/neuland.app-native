@@ -7,7 +7,7 @@
         "platform": "android"
     },
     "apple-sf-symbols@5.0": {
-        "licenses": "restricted",
+        "licenses": "Apple",
         "repository": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
         "licenseUrl": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
         "parents": "neuland",
