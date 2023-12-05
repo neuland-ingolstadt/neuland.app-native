@@ -209,7 +209,7 @@ export default function Provider({
         trackEvent('SelectedRestaurants', {
             selectedRestaurants: foodFilter.selectedRestaurants.join(','),
         })
-    }, [foodFilter.selectedRestaurants, flow.analyticsAllowed])
+    }, [foodFilter.selectedRestaurants, flow.analyticsInitialized])
 
     useEffect(() => {
         if (!flow.analyticsInitialized) {
@@ -224,7 +224,7 @@ export default function Provider({
         trackEvent('DashboardEntries', {
             shownDashboardEntries: shownDashboardEntryTitles.join(','),
         })
-    }, [dashboard.shownDashboardEntries])
+    }, [dashboard.shownDashboardEntries, flow.analyticsInitialized])
 
     useEffect(() => {
         if (!flow.analyticsInitialized) {
@@ -241,7 +241,8 @@ export default function Provider({
         trackEvent('DashboardEntries', {
             hiddenDashboardEntries: hiddenDashboardEntryTitles.join(','),
         })
-    }, [dashboard.hiddenDashboardEntries])
+    }, [dashboard.hiddenDashboardEntries, flow.analyticsInitialized])
+
     useEffect((): void => {
         if (!flow.analyticsInitialized) {
             return
