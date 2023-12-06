@@ -8,6 +8,7 @@ import {
 import changelog from '@/data/changelog.json'
 import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs, useRouter } from 'expo-router'
@@ -28,7 +29,10 @@ export default function HomeLayout(): JSX.Element {
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
     const { appIcon } = useContext(AppIconContext)
-
+    const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
+    const { analyticsAllowed, initializeAnalytics } =
+        React.useContext(FlowContext)
+    const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
         router.push('(flow)/onboarding')
     }
@@ -63,7 +67,7 @@ export default function HomeLayout(): JSX.Element {
             type: 'timetable',
             title: t('navigation.timetable'),
             symbolName: 'calendar',
-            iconName: 'calendar-month',
+            iconName: 'calendar_month',
             data: {
                 path: '(tabs)/timetable',
             },
@@ -121,6 +125,23 @@ export default function HomeLayout(): JSX.Element {
             if (shortcutSubscription != null) shortcutSubscription.remove()
         }
     }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
+
+    useEffect(() => {
+        if (isFirstRun) {
+            setIsFirstRun(false)
+            return
+        }
+        if (aptabaseKey != null && analyticsAllowed === true) {
+            Aptabase.init(aptabaseKey, {
+                host: 'https://analytics.neuland.app',
+            })
+            initializeAnalytics()
+        } else if (aptabaseKey != null && analyticsAllowed === false) {
+            Aptabase.init('')
+        } else {
+            console.log('Analytics not yet initialized')
+        }
+    }, [analyticsAllowed])
 
     return (
         <>

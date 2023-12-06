@@ -1,9 +1,13 @@
 import { type AppIconHook } from '@/hooks/appIcon'
+import { type FlowHook } from '@/hooks/flow'
+import i18n from '@/localization/i18n'
+import { trackEvent } from '@aptabase/react-native'
 import {
     DarkTheme,
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
+import { usePathname } from 'expo-router'
 import React, { createContext, useEffect, useRef, useState } from 'react'
 import { Platform, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -54,7 +58,7 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'green',
+    accentColor: 'blue',
     toggleAccentColor: () => {},
 })
 
@@ -74,11 +78,15 @@ export const DashboardContext = createContext<Dashboard>({
     updateDashboardOrder: () => {},
 })
 
-export const FlowContext = createContext<any>({
+export const FlowContext = createContext<FlowHook>({
     isOnboarded: true,
     toggleOnboarded: () => {},
     isUpdated: true,
     toggleUpdated: () => {},
+    analyticsAllowed: false,
+    toggleAnalytics: () => {},
+    analyticsInitialized: false,
+    initializeAnalytics: () => {},
 })
 
 export const ReloadProvider = createContext<any>({
@@ -104,13 +112,13 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
     const appIcon = useAppIcon()
+    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
+    const onColorSchemeChange = useRef<NodeJS.Timeout>()
+    const pathname = usePathname()
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
     // https://github.com/facebook/react-native/pull/39439 (should be fixed in v0.73)
-    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
-    const onColorSchemeChange = useRef<NodeJS.Timeout>()
-
     useEffect(() => {
         if (colorScheme !== currentColorScheme) {
             onColorSchemeChange.current = setTimeout(() => {
@@ -131,7 +139,7 @@ export default function Provider({
             const primary = accentColors[themeHook.accentColor][scheme]
             return primary
         } catch (e) {
-            return accentColors.teal[scheme]
+            return accentColors.blue[scheme]
         }
     }
 
@@ -152,6 +160,106 @@ export default function Provider({
             ...darkColors,
         },
     }
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        setTimeout(() => {
+            trackEvent('Route', {
+                pathname,
+            })
+        }, 0)
+    }, [pathname, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('AccentColor', {
+            color: themeHook.accentColor,
+        })
+    }, [themeHook.accentColor, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        if (Platform.OS === 'ios') {
+            trackEvent('AppIcon', {
+                appIcon: appIcon.appIcon,
+            })
+        }
+    }, [appIcon.appIcon, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('UserKind', {
+            userKind: userKind.userKind,
+        })
+    }, [userKind.userKind, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+
+        trackEvent('SelectedRestaurants', {
+            selectedRestaurants: foodFilter.selectedRestaurants.join(','),
+        })
+    }, [foodFilter.selectedRestaurants, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+
+        const entries: Record<string, string> = {}
+
+        dashboard.shownDashboardEntries.forEach((entry, index) => {
+            entries[entry.key] = `Position ${index + 1}`
+        })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
+    }, [dashboard.shownDashboardEntries, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+
+        const entries: Record<string, string> = {}
+
+        dashboard.hiddenDashboardEntries.forEach((entry) => {
+            entries[entry.key] = 'Card hidden'
+        })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
+    }, [dashboard.hiddenDashboardEntries, flow.analyticsInitialized])
+
+    useEffect((): void => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('Language', {
+            food: foodFilter.foodLanguage,
+        })
+    }, [foodFilter.foodLanguage, flow.analyticsInitialized])
+
+    useEffect((): void => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('Language', {
+            app: i18n.language,
+        })
+    }, [i18n.language, flow.analyticsInitialized])
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
