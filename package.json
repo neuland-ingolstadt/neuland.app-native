@@ -9,12 +9,13 @@
     "tunnel": "expo start -c --tunnel",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "build:android": "eas build --platform android --local",
+    "build:android": "expo prebuild --platform android && eas build --platform android --local",
     "build:ios": "expo prebuild --platform ios && xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext",
     "build:all": "yarn build:ios && yarn build:android",
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
     "postinstall": "husky install"
   },
   "dependencies": {
@@ -51,7 +52,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "^13.3.1",
-    "react-native": "0.72.6",
+    "react-native": "0.72.7",
     "react-native-barcode-builder": "^2.0.0",
     "react-native-big-calendar": "^4.7.0",
     "react-native-change-icon": "^5.0.0",
