@@ -41,6 +41,7 @@ export default function DashboardEdit(): JSX.Element {
             text: t('cards.titles.' + item.key, { ns: 'navigation' }),
         }
     })
+
     // update view if shownDashboardEntries changes
     useEffect(() => {
         itemRefs.current = new Map()

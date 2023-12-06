@@ -11,7 +11,6 @@ const resources = {
 }
 
 export type LanguageKey = keyof typeof resources
-
 const languageCode = getLocales()[0].languageCode
 const fallbackLanguage = 'en'
 const language = Object.keys(resources).includes(languageCode)

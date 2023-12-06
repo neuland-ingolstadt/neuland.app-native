@@ -27,6 +27,8 @@ export default {
         library: 'Bibliothek',
         libraryCode: 'Bibliotheksnummer',
         notifications: 'Benachrichtigungen',
+        licenses: 'Lizenzen',
+        license: 'Lizenz',
     },
     cards: {
         titles: {

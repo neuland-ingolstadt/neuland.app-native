@@ -1,7 +1,9 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
+import SectionView from '@/components/Elements/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/components/colors'
-import { AppIconContext } from '@/components/provider'
+import { AppIconContext, FlowContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
@@ -29,6 +31,7 @@ export default function About(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
+    const { analyticsAllowed, toggleAnalytics } = React.useContext(FlowContext)
     const { addUnlockedAppIcon } = useContext(AppIconContext)
     const sections: FormListSections[] = [
         {
@@ -46,6 +49,13 @@ export default function About(): JSX.Element {
                     title: t('about.formlist.legal.imprint'),
                     icon: linkIcon,
                     onPress: async () => await Linking.openURL(IMPRINT_URL),
+                },
+                {
+                    title: t('navigation.licenses', { ns: 'navigation' }),
+                    icon: chevronIcon,
+                    onPress: () => {
+                        router.push('(user)/licenses')
+                    },
                 },
             ],
         },
@@ -197,6 +207,16 @@ export default function About(): JSX.Element {
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>
+                <SectionView
+                    title={t('about.analytics.title')}
+                    footer={t('about.analytics.message')}
+                >
+                    <SingleSectionPicker
+                        title={t('about.analytics.toggle')}
+                        selectedItem={analyticsAllowed as boolean}
+                        action={toggleAnalytics}
+                    />
+                </SectionView>
             </ScrollView>
         </>
     )
