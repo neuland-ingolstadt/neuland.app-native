@@ -174,6 +174,27 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(user)/licenses"
+                        options={{
+                            title: t('navigation.licenses'),
+                            animation: 'slide_from_right',
+                        }}
+                    />
+                    <Stack.Screen
+                        name="(user)/license"
+                        options={{
+                            title: t('navigation.license'),
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
                         name="(user)/dashboard"
                         options={{
                             title: 'Dashboard',
