@@ -14,6 +14,7 @@ import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import * as Notifications from 'expo-notifications'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
@@ -45,6 +46,17 @@ export default function TimetableDetails(): JSX.Element {
 
     const shareRef = React.useRef<ViewShot>(null)
 
+    async function schedulePushNotification(): Promise<void> {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Web Technologies in G069',
+                body: 'Lecture starts in 15 minutes!',
+                data: { data: 'goes here' },
+            },
+            trigger: { seconds: 5 },
+        })
+    }
+
     async function shareEvent(): Promise<void> {
         try {
             const uri = await captureRef(shareRef, {
@@ -65,6 +77,16 @@ export default function TimetableDetails(): JSX.Element {
         {
             header: t('overview.title'),
             items: [
+                {
+                    title: 'Test Notification',
+                    icon: {
+                        ios: 'bell',
+                        android: 'bell',
+                    },
+                    onPress: () => {
+                        void schedulePushNotification()
+                    },
+                },
                 {
                     title: t('overview.goal'),
                     icon: chevronIcon,
@@ -178,60 +200,94 @@ export default function TimetableDetails(): JSX.Element {
                         </DetailsSymbol>
 
                         <DetailsBody>
-                            <Text
+                            <View
                                 style={{
-                                    ...styles.text1,
-                                    color: colors.text,
+                                    flex: 1,
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    paddingRight: 12,
                                 }}
                             >
-                                {formatFriendlyDate(startDate, {
-                                    weekday: 'long',
-                                    relative: false,
-                                })}
-                            </Text>
+                                <View>
+                                    <Text
+                                        style={{
+                                            ...styles.text1,
+                                            color: colors.text,
+                                        }}
+                                    >
+                                        {formatFriendlyDate(startDate, {
+                                            weekday: 'long',
+                                            relative: false,
+                                        })}
+                                    </Text>
 
-                            <View style={styles.detailsContainer}>
-                                <Text
-                                    style={{
-                                        ...styles.text2,
-                                        color: colors.text,
+                                    <View style={styles.detailsContainer}>
+                                        <Text
+                                            style={{
+                                                ...styles.text2,
+                                                color: colors.text,
+                                            }}
+                                        >
+                                            {formatFriendlyTime(startDate)}
+                                        </Text>
+
+                                        <PlatformIcon
+                                            color={colors.labelColor}
+                                            ios={{
+                                                name: 'chevron.forward',
+                                                size: 12,
+                                            }}
+                                            android={{
+                                                name: 'chevron-right',
+                                                size: 16,
+                                            }}
+                                        />
+
+                                        <Text
+                                            style={{
+                                                ...styles.text2,
+                                                color: colors.text,
+                                            }}
+                                        >
+                                            {formatFriendlyTime(endDate)}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                ...styles.text2,
+                                                color: colors.labelColor,
+                                            }}
+                                        >
+                                            {`(${moment(endDate).diff(
+                                                moment(startDate),
+                                                'minutes'
+                                            )} ${t('time.minutes')})`}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <Pressable
+                                    hitSlop={10}
+                                    onPress={() => {
+                                        router.push('(timetable)/notifications')
+                                        router.setParams({
+                                            title: event.shortName,
+                                        })
                                     }}
                                 >
-                                    {formatFriendlyTime(startDate)}
-                                </Text>
-
-                                <PlatformIcon
-                                    color={colors.labelColor}
-                                    ios={{
-                                        name: 'chevron.forward',
-                                        size: 12,
-                                    }}
-                                    android={{
-                                        name: 'chevron-right',
-                                        size: 16,
-                                    }}
-                                />
-
-                                <Text
-                                    style={{
-                                        ...styles.text2,
-                                        color: colors.text,
-                                    }}
-                                >
-                                    {formatFriendlyTime(endDate)}
-                                </Text>
-
-                                <Text
-                                    style={{
-                                        ...styles.text2,
-                                        color: colors.labelColor,
-                                    }}
-                                >
-                                    {`(${moment(endDate).diff(
-                                        moment(startDate),
-                                        'minutes'
-                                    )} ${t('time.minutes')})`}
-                                </Text>
+                                    <PlatformIcon
+                                        color={colors.primary}
+                                        ios={{
+                                            name: 'bell',
+                                            size: 21,
+                                        }}
+                                        android={{
+                                            name: 'bell',
+                                            size: 24,
+                                        }}
+                                    />
+                                </Pressable>
                             </View>
                         </DetailsBody>
                     </DetailsRow>

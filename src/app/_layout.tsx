@@ -137,6 +137,20 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
+                        name="(timetable)/notifications"
+                        options={{
+                            title: t('navigation.notifications'),
+                            ...Platform.select({
+                                android: {
+                                    animation: 'slide_from_right',
+                                },
+                                ios: {
+                                    presentation: 'modal',
+                                },
+                            }),
+                        }}
+                    />
+                    <Stack.Screen
                         name="(user)/theme"
                         options={{
                             title: t('navigation.theme'),

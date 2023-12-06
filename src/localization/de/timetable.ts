@@ -18,4 +18,14 @@ export default {
     error: {
         unknown: 'Ein unbekannter Fehler ist aufgetreten.',
     },
+    notificatons: {
+        sections: {
+            before: {
+                title: 'Vorher',
+            },
+            duration: {
+                title: 'Dauer',
+            },
+        },
+    },
 }

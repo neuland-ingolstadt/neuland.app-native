@@ -26,6 +26,7 @@ export default {
         news: 'THI Neuigkeiten',
         library: 'Bibliothek',
         libraryCode: 'Bibliotheksnummer',
+        notifications: 'Benachrichtigungen',
     },
     cards: {
         titles: {

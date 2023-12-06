@@ -150,6 +150,16 @@ export default function Settings(): JSX.Element {
                     },
                 },
                 {
+                    title: t('navigation.notifications', { ns: 'navigation' }),
+                    icon: {
+                        ios: 'bell',
+                        android: 'bell',
+                    },
+                    onPress: () => {
+                        router.push('(user)/notifications')
+                    },
+                },
+                {
                     title: t('menu.formlist.preferences.food'),
                     icon: {
                         android: 'restaurant',
