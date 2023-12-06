@@ -58,7 +58,7 @@ export const UserKindContext = createContext<any>({
 })
 
 export const ThemeContext = createContext<any>({
-    accentColor: 'green',
+    accentColor: 'blue',
     toggleAccentColor: () => {},
 })
 
@@ -139,7 +139,7 @@ export default function Provider({
             const primary = accentColors[themeHook.accentColor][scheme]
             return primary
         } catch (e) {
-            return accentColors.green[scheme]
+            return accentColors.blue[scheme]
         }
     }
 
