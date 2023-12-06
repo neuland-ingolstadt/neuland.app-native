@@ -7,12 +7,11 @@ import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -242,7 +241,6 @@ export default function Profile(): JSX.Element {
 
     return (
         <>
-            <StatusBar style={getStatusBarStyle()} />
             <ScrollView
                 contentContainerStyle={{ paddingBottom: 32 }}
                 refreshControl={

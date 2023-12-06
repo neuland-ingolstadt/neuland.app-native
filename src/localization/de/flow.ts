@@ -25,7 +25,7 @@ export default {
             text:
                 `Neuland Next ist ein Open-Source-Projekt und wird von Studenten für Studenten entwickelt.\n\n` +
                 `Als Alternative zur offiziellen THI-App schützen wir deine Daten streng. ` +
-                `Die App verwendet nur die offizielle und verschlüsselte API, die von der THI bereitgestellt wird.\n\n` +
+                `Um deine persönlichen Daten abzurufen, verwenden wir die offizielle und verschlüsselte API der THI.\n\n` +
                 `Dein Passwort und deine Daten sind daher weder für uns noch für Dritte zugänglich.`,
         },
         navigation: {

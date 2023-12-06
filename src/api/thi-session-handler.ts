@@ -226,9 +226,13 @@ export async function forgetSession(): Promise<void> {
         SecureStore.deleteItemAsync('password'),
     ])
 
-    // clear all AsyncStorage data
+    // clear all AsyncStorage data except analytics
     try {
+        const analytics = await AsyncStorage.getItem('analytics')
         await AsyncStorage.clear()
+        if (analytics != null) {
+            await AsyncStorage.setItem('analytics', analytics)
+        }
     } catch (e) {
         console.error(e)
     }

@@ -36,7 +36,6 @@ export const accentColors: AccentColors = {
         light: '#00b800',
         dark: '#41FF00',
     },
-
     teal: {
         light: '#2aa2ba',
         dark: '#37bdd8',
@@ -57,7 +56,6 @@ export const accentColors: AccentColors = {
         light: '#ea1a78',
         dark: '#f8277b',
     },
-
     yellow: {
         light: '#f8c600',
         dark: '#fedc00',
