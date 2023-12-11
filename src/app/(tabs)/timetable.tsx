@@ -50,7 +50,7 @@ export default function TimetableScreen(): JSX.Element {
 
     const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
     const [calendarDate, setCalendarDate] = useState<Date>(new Date())
-    const [mode] = useState<Mode>('3days')
+    const [mode, setMode] = useState<Mode>('3days')
 
     const today = new Date()
 
@@ -411,15 +411,19 @@ export default function TimetableScreen(): JSX.Element {
 
     const LoadingView = (): JSX.Element => {
         return (
-            <View style={styles.loadingView}>
+            <View
+                style={{
+                    backgroundColor: colors.background,
+                    ...styles.loadingView,
+                }}
+            >
                 <ActivityIndicator size="small" color={colors.primary} />
             </View>
         )
     }
+
     const Timetable = (): JSX.Element => {
-        if (loadingState === LoadingState.LOADING) {
-            return <LoadingView />
-        } else if (
+        if (
             loadingState === LoadingState.ERROR ||
             loadingState === LoadingState.REFRESHING
         ) {
@@ -432,29 +436,32 @@ export default function TimetableScreen(): JSX.Element {
                     refreshing={loadingState === LoadingState.REFRESHING}
                 />
             )
-        } else if (loadingState === LoadingState.LOADED) {
-            return (
-                <Calendar
-                    date={calendarDate}
-                    onChangeDate={(range) => {
-                        setCalendarDate(range[0])
-                    }}
-                    mode={mode}
-                    events={timetable}
-                    height={-1}
-                    showAllDayEventCell={true}
-                    renderEvent={renderEvent}
-                    renderHeader={renderHeader}
-                    onPressEvent={showEventDetails}
-                    dayHeaderHighlightColor={colors.primary}
-                    theme={calendarTheme}
-                    scrollOffsetMinutes={480}
-                    weekStartsOn={1}
-                    weekEndsOn={6}
-                />
-            )
         } else {
-            return <></>
+            return (
+                // mount the calendar while data is still loading
+                <>
+                    <Calendar
+                        date={calendarDate}
+                        onChangeDate={(range) => {
+                            setCalendarDate(range[0])
+                        }}
+                        mode={mode}
+                        events={timetable}
+                        height={-1}
+                        showAllDayEventCell={true}
+                        renderEvent={renderEvent}
+                        renderHeader={renderHeader}
+                        onPressEvent={showEventDetails}
+                        dayHeaderHighlightColor={colors.primary}
+                        theme={calendarTheme}
+                        scrollOffsetMinutes={480}
+                        weekStartsOn={1}
+                        weekEndsOn={6}
+                    />
+
+                    {loadingState === LoadingState.LOADING && <LoadingView />}
+                </>
+            )
         }
     }
 
@@ -464,24 +471,62 @@ export default function TimetableScreen(): JSX.Element {
             titleKey={t('navigation.timetable')}
             component={Timetable}
             headerRightElement={() => (
-                <TouchableOpacity
-                    onPress={() => {
-                        setCalendarDate(new Date())
+                <View
+                    style={{
+                        gap: 12,
+                        flexDirection: 'row',
                     }}
-                    hitSlop={10}
                 >
-                    <PlatformIcon
-                        color={colors.text}
-                        ios={{
-                            name: 'arrow.uturn.left',
-                            size: 22,
+                    <TouchableOpacity
+                        onPress={() => {
+                            setMode((mode) => {
+                                switch (mode) {
+                                    case '3days':
+                                        return 'schedule'
+                                    default:
+                                        return '3days'
+                                }
+                            })
                         }}
-                        android={{
-                            name: 'calendar',
-                            size: 24,
+                        hitSlop={10}
+                    >
+                        <PlatformIcon
+                            color={colors.text}
+                            ios={{
+                                name:
+                                    mode === 'schedule'
+                                        ? 'calendar'
+                                        : 'list.bullet',
+                                size: 22,
+                            }}
+                            android={{
+                                name:
+                                    mode === 'schedule'
+                                        ? 'calendar-month'
+                                        : 'list',
+                                size: 24,
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setCalendarDate(new Date())
                         }}
-                    />
-                </TouchableOpacity>
+                        hitSlop={10}
+                    >
+                        <PlatformIcon
+                            color={colors.text}
+                            ios={{
+                                name: 'arrow.uturn.left',
+                                size: 22,
+                            }}
+                            android={{
+                                name: 'calendar',
+                                size: 24,
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
             )}
         />
     )
@@ -489,9 +534,12 @@ export default function TimetableScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     loadingView: {
+        position: 'absolute',
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: '100%',
+        height: '100%',
     },
     errorView: {},
     navRight: {

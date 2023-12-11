@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@aptabase/react-native": "^0.3.9",
+    "@babel/runtime": "^7.23.6",
     "@expo/vector-icons": "^13.0.0",
     "@kichiyaki/react-native-barcode-generator": "^0.6.7",
     "@react-native-async-storage/async-storage": "1.18.2",
