@@ -1,7 +1,5 @@
 import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar } from '@/components/Elements/Settings'
-// @ts-expect-error - types for react-native-context-menu-view are not available
-import { ContextMenuView } from '@/components/Elements/Universal/ContextMenuView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -26,6 +24,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import ContextMenu from 'react-native-context-menu-view'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
@@ -108,17 +107,6 @@ export default function Screen(): JSX.Element {
         }
     }
 
-    async function schedulePushNotification(): Promise<void> {
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                title: 'Web Technologies in G069',
-                body: 'Lecture starts in 15 minutes!',
-                data: { data: 'goes here' },
-            },
-            trigger: { seconds: 5 },
-        })
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [notification, setNotification] = useState<any>(undefined)
     const notificationListener = useRef<any>()
@@ -165,115 +153,85 @@ export default function Screen(): JSX.Element {
                 largeTitle={true}
                 transparent={false}
                 headerRightElement={() => (
-                    <ContextMenuView
-                        style={{
-                            borderRadius: 15,
+                    <Pressable
+                        onPress={() => {
+                            router.push('(user)/settings')
                         }}
-                        menuConfig={{
-                            menuTitle: '',
-                            menuItems: [
+                        delayLongPress={300}
+                        onLongPress={() => {}}
+                        hitSlop={10}
+                    >
+                        <ContextMenu
+                            actions={[
                                 ...(userKind === 'student'
                                     ? [
                                           {
-                                              actionKey: 'personalData',
-                                              actionTitle:
-                                                  t('navigation.profile'),
-                                              actionSubtitle: userFullName,
-                                              icon: {
-                                                  iconType: 'SYSTEM',
-                                                  iconValue:
-                                                      'person.crop.circle',
-                                              },
+                                              title: t('navigation.profile'),
+                                              subtitle: userFullName,
+                                              systemIcon:
+                                                  Platform.OS === 'ios'
+                                                      ? 'person.crop.circle'
+                                                      : undefined,
                                           },
                                       ]
                                     : []),
                                 {
-                                    actionKey: 'theme',
-                                    actionTitle: t('navigation.theme'),
-                                    icon: {
-                                        iconType: 'SYSTEM',
-                                        iconValue: 'paintpalette',
-                                    },
+                                    title: t('navigation.theme'),
+                                    systemIcon:
+                                        Platform.OS === 'ios'
+                                            ? 'paintpalette'
+                                            : undefined,
                                 },
                                 {
-                                    actionKey: 'about',
-                                    actionTitle: t('navigation.about'),
-                                    icon: {
-                                        iconType: 'SYSTEM',
-                                        iconValue: 'info.circle',
-                                    },
+                                    title: t('navigation.about'),
+                                    systemIcon:
+                                        Platform.OS === 'ios'
+                                            ? 'info.circle'
+                                            : undefined,
                                 },
                                 ...(userFullName !== '' && userKind !== 'guest'
                                     ? [
                                           {
-                                              actionKey: 'logout',
-                                              actionTitle: 'Logout',
-                                              icon: {
-                                                  iconType: 'SYSTEM',
-                                                  iconValue:
-                                                      'person.fill.xmark',
-                                              },
-                                              menuAttributes: ['destructive'],
+                                              title: 'Logout',
+                                              systemIcon:
+                                                  Platform.OS === 'ios'
+                                                      ? 'person.fill.xmark'
+                                                      : undefined,
+                                              destructive: true,
                                           },
                                       ]
                                     : []),
                                 ...(userKind === 'guest'
                                     ? [
                                           {
-                                              actionKey: 'login',
-                                              actionTitle: t(
-                                                  'menu.guest.title',
-                                                  { ns: 'settings' }
-                                              ),
-                                              icon: {
-                                                  iconType: 'SYSTEM',
-                                                  iconValue:
-                                                      'person.fill.questionmark',
-                                              },
+                                              title: t('menu.guest.title', {
+                                                  ns: 'settings',
+                                              }),
+                                              systemIcon:
+                                                  Platform.OS === 'ios'
+                                                      ? 'person.fill.questionmark'
+                                                      : undefined,
                                           },
                                       ]
                                     : []),
-                            ],
-                        }}
-                        onPressMenuPreview={() => {
-                            router.push('(user)/settings')
-                        }}
-                        onPressMenuItem={({
-                            nativeEvent,
-                        }: {
-                            nativeEvent: { actionKey: string }
-                        }) => {
-                            switch (nativeEvent.actionKey) {
-                                case 'personalData':
+                            ]}
+                            onPress={(e) => {
+                                e.nativeEvent.name ===
+                                    t('navigation.profile') &&
                                     router.push('profile')
-                                    break
-                                case 'theme':
+                                e.nativeEvent.name === t('navigation.theme') &&
                                     router.push('theme')
-                                    break
-                                case 'about':
-                                    // router.push('about')
-                                    void schedulePushNotification()
-                                    break
-                                case 'logout':
-                                    logoutAlert()
-                                    break
-                                case 'login':
-                                    router.push('login')
-                                    break
-                            }
-                        }}
-                    >
-                        <Pressable
-                            onPress={() => {
+                                e.nativeEvent.name === t('navigation.about') &&
+                                    router.push('about')
+                                e.nativeEvent.name === 'Logout' && logoutAlert()
+                                e.nativeEvent.name ===
+                                    t('menu.guest.title', {
+                                        ns: 'settings',
+                                    }) && router.push('login')
+                            }}
+                            onPreviewPress={() => {
                                 router.push('(user)/settings')
                             }}
-                            {...Platform.select({
-                                ios: {
-                                    delayLongPress: 300,
-                                    onLongPress: () => {},
-                                },
-                            })}
-                            hitSlop={10}
                         >
                             {userFullName !== '' && userKind !== 'guest' ? (
                                 <View>
@@ -289,6 +247,8 @@ export default function Screen(): JSX.Element {
                                                 ),
                                                 ...styles.iconText,
                                             }}
+                                            numberOfLines={1}
+                                            adjustsFontSizeToFit={true}
                                         >
                                             {getInitials(userFullName)}
                                         </Text>
@@ -309,8 +269,8 @@ export default function Screen(): JSX.Element {
                                     />
                                 </View>
                             )}
-                        </Pressable>
-                    </ContextMenuView>
+                        </ContextMenu>
+                    </Pressable>
                 )}
             />
         </>

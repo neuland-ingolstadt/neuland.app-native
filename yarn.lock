@@ -1694,13 +1694,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dominicstop/ts-event-emitter@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@dominicstop/ts-event-emitter@npm:1.1.0"
-  checksum: fe16c03132736a0a798c232636ab6b127fd8063509511ccafbd99405c224a106cfb7a8d4af13c4f6f412ec0ea3baae3678aa2c8c09d81c9985c423d476404e1a
-  languageName: node
-  linkType: hard
-
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -3435,13 +3428,6 @@ __metadata:
   version: 0.4.1
   resolution: "@types/cookie@npm:0.4.1"
   checksum: f96afe12bd51be1ec61410b0641243d93fa3a494702407c787a4c872b5c8bcd39b224471452055e44a9ce42af1a636e87d161994226eaf4c2be9c30f60418409
-  languageName: node
-  linkType: hard
-
-"@types/geojson@npm:^7946.0.10":
-  version: 7946.0.12
-  resolution: "@types/geojson@npm:7946.0.12"
-  checksum: 0c51b93bf6ecd1dc68ab87cfbf5abdb05a46ee92d952514ee31e430842ef2d2e3a31dad213e08bde4661b89077613ff1617c0253c3de254e4d37bea81995f272
   languageName: node
   linkType: hard
 
@@ -9838,13 +9824,11 @@ __metadata:
     react-native-big-calendar: "npm:^4.7.0"
     react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
+    react-native-context-menu-view: "npm:^1.14.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
     react-native-gesture-handler: "npm:~2.12.0"
-    react-native-ios-context-menu: "npm:^2.3.0"
-    react-native-ios-utilities: "npm:^4.2.2"
     react-native-linear-gradient: "npm:^2.8.3"
-    react-native-maps: "npm:1.7.1"
     react-native-onboarding-swiper: "https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git"
     react-native-reanimated: "npm:3.3.0"
     react-native-root-toast: "npm:^3.4.1"
@@ -10960,6 +10944,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-context-menu-view@npm:^1.14.1":
+  version: 1.14.1
+  resolution: "react-native-context-menu-view@npm:1.14.1"
+  peerDependencies:
+    react: ^16.8.1 || ^17.0.0 || ^18.0.0
+    react-native: ">=0.60.0-rc.0 <1.0.x"
+  checksum: 907205c7d5f0c4c758dff9e5adcd1e89403af7cf67510db5923502e8b0283e6098747ff06dfd02cb1cd896baa408d37b8682473e506275a619811e08b7c345b6
+  languageName: node
+  linkType: hard
+
 "react-native-draggable-flatlist@npm:^4.0.1":
   version: 4.0.1
   resolution: "react-native-draggable-flatlist@npm:4.0.1"
@@ -10996,31 +10990,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-ios-context-menu@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "react-native-ios-context-menu@npm:2.3.0"
-  dependencies:
-    "@dominicstop/ts-event-emitter": "npm:^1.1.0"
-  peerDependencies:
-    expo: "*"
-    react: "*"
-    react-native: "*"
-    react-native-ios-utilities: 4.2.x
-  checksum: 82eb831d44d012cb5d8da88ae8d2246dbb20a0f1815d9a6bf12625957a47d20c5096dc492af1c507c0a4a382620c0f385512e243419eaf40faa4c9975cf5272d
-  languageName: node
-  linkType: hard
-
-"react-native-ios-utilities@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "react-native-ios-utilities@npm:4.2.2"
-  peerDependencies:
-    expo: "*"
-    react: "*"
-    react-native: "*"
-  checksum: 68cb4f84720353148ee986fe67c68185af8647144804551b111970258d42bf0fe8dee4930a3c4485a3d103dc6fcb32e90f2a9a593a3b7a312962590e4fa15a3b
-  languageName: node
-  linkType: hard
-
 "react-native-linear-gradient@npm:^2.8.3":
   version: 2.8.3
   resolution: "react-native-linear-gradient@npm:2.8.3"
@@ -11028,22 +10997,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: cd41bf28e9f468173f1e5e768685128ebf8bbf9077710e43b63482c1a76f37bff8ab3d1d6adfd7b4d54e648672356c02bea46c47cdbdb1844ebe5c5caf720114
-  languageName: node
-  linkType: hard
-
-"react-native-maps@npm:1.7.1":
-  version: 1.7.1
-  resolution: "react-native-maps@npm:1.7.1"
-  dependencies:
-    "@types/geojson": "npm:^7946.0.10"
-  peerDependencies:
-    react: ">= 17.0.1"
-    react-native: ">= 0.64.3"
-    react-native-web: ">= 0.11"
-  peerDependenciesMeta:
-    react-native-web:
-      optional: true
-  checksum: 479f528febbcfe64ec3c8ea1bd659f42831168848dbb30685e4987b09d7d280f51d6ef2819a8810ff7e7caa1cf17f6dda1fe18dd0a949aea435cab6fd7b57a56
   languageName: node
   linkType: hard
 

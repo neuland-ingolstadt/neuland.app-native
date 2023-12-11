@@ -1,4 +1,10 @@
 {
+    "@aptabase/react-native@0.3.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/aptabase/aptabase-react-native",
+        "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@13.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -77,6 +83,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "expo-device@5.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "expo-dynamic-app-icon@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/outsung/expo-dynamic-app-icon",
@@ -108,6 +120,12 @@
         "parents": "neuland"
     },
     "expo-localization@14.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
+    "expo-notifications@0.20.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -209,6 +227,12 @@
         "licenseUrl": "https://oblador@github.com/oblador/react-native-collapsible/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-context-menu-view@1.14.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mpiannucci/react-native-context-menu-view",
+        "licenseUrl": "https://github.com/mpiannucci/react-native-context-menu-view/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native-draggable-flatlist@4.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/computerjazz/react-native-draggable-flatlist",
@@ -227,28 +251,10 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-ios-context-menu@2.3.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/dominicstop/react-native-ios-context-menu",
-        "licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-ios-utilities@4.2.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/dominicstop/react-native-ios-utilities",
-        "licenseUrl": "https://github.com/dominicstop/react-native-ios-utilities/raw/master/LICENSE",
-        "parents": "neuland"
-    },
     "react-native-linear-gradient@2.8.3": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-linear-gradient/react-native-linear-gradient",
         "licenseUrl": "https://github.com/react-native-linear-gradient/react-native-linear-gradient/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-maps@1.7.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-native-maps/react-native-maps",
-        "licenseUrl": "https://github.com/react-native-maps/react-native-maps/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-onboarding-swiper@1.2.0": {
