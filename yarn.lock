@@ -10958,7 +10958,7 @@ __metadata:
     prop-types: "*"
     react: "*"
     react-native: "*"
-  checksum: cb81a1eb47fb8431a298974e310096f1d16112f7de5c901ad3f1603cd1a2657aeacbbaeec8ebf63b242cce5b103d780e4d3cc61a4105266168589cb77f785f07
+  checksum: 1176e28f118875027d96a751157ef5b6b5bdb827f6aae41a45d9482bbdddb4206bec10ba945f3e0ec3d0bac502185417d8fe00cbcd0b28e8354eb543c61c7555
   languageName: node
   linkType: hard
 

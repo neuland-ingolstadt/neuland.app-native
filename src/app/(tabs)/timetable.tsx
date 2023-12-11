@@ -34,7 +34,7 @@ import {
 } from 'react-native-big-calendar'
 
 const HOUR_WIDTH = HOUR_GUIDE_WIDTH + 1
-const MARGIN = 4
+const MARGIN = 3
 
 interface CalendarEvent extends ICalendarEventBase {
     textColor: string
