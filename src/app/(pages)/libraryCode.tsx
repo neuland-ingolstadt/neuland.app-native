@@ -146,7 +146,7 @@ export default function LibraryCode(): JSX.Element {
                         }}
                     >
                         <Barcode
-                            format="CODE128B"
+                            format="CODE39"
                             value={libraryCode}
                             maxWidth={Dimensions.get('window').width - 56}
                             width={5}
