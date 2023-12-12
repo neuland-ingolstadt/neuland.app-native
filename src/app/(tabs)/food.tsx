@@ -21,6 +21,7 @@ import {
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
 } from 'react-native'
 
@@ -31,7 +32,12 @@ function FoodScreen(): JSX.Element {
         LoadingState.LOADING
     )
     const [selectedDay, setSelectedDay] = useState<number>(0)
-    const { selectedRestaurants, showStatic } = useContext(FoodFilterContext)
+    const {
+        selectedRestaurants,
+        showStatic,
+        allergenSelection,
+        initAllergenSelection,
+    } = useContext(FoodFilterContext)
     const [error, setError] = useState<Error | null>(null)
     const { t, i18n } = useTranslation('common')
     const loadData = (): void => {
@@ -191,6 +197,74 @@ function FoodScreen(): JSX.Element {
 
             {loadingState === LoadingState.LOADED && (
                 <>
+                    {allergenSelection.length === 1 &&
+                        allergenSelection[0] === 'not-configured' && (
+                            <View
+                                style={{
+                                    backgroundColor: colors.card,
+                                    padding: 10,
+                                    borderRadius: 8,
+                                    marginBottom: 14,
+                                }}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        console.log('pressed')
+                                        initAllergenSelection()
+                                    }}
+                                    hitSlop={6}
+                                    style={{
+                                        position: 'absolute',
+                                        zIndex: 1,
+                                        top: 5,
+                                        right: 5,
+                                        padding: 5,
+                                        borderRadius: 8,
+                                    }}
+                                >
+                                    <PlatformIcon
+                                        ios={{
+                                            name: 'xmark',
+                                            size: 16,
+                                        }}
+                                        android={{
+                                            name: 'close',
+                                            size: 20,
+                                        }}
+                                        color={colors.text}
+                                    />
+                                </TouchableOpacity>
+                                <View>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            router.push('(food)/allergens')
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: colors.text,
+                                                fontSize: 16,
+                                                fontWeight: 'bold',
+                                            }}
+                                        >
+                                            {t('navigation.allergens', {
+                                                ns: 'navigation',
+                                            })}
+                                        </Text>
+
+                                        <Text
+                                            style={{
+                                                color: colors.text,
+                                                marginTop: 5,
+                                                fontSize: 14,
+                                            }}
+                                        >
+                                            {t('empty.config', { ns: 'food' })}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )}
                     <View style={styles.loadedContainer}>
                         {days.slice(0, 5).map((day: Food, index: number) => (
                             <DayButton day={day} index={index} key={index} />

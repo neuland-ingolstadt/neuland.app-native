@@ -43,6 +43,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
     showStatic: false,
     foodLanguage: 'default',
     toggleSelectedAllergens: () => {},
+    initAllergenSelection: () => {},
     toggleSelectedPreferences: () => {},
     toggleSelectedRestaurant: () => {},
     toggleShowStatic: () => {},

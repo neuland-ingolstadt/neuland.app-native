@@ -11,6 +11,7 @@ export interface FoodFilter {
     foodLanguage: FoodLanguage
     toggleSelectedRestaurant: (name: string) => void
     toggleSelectedAllergens: (name: string) => void
+    initAllergenSelection: () => void
     toggleSelectedPreferences: (name: string) => void
     toggleShowStatic: () => void
     toggleFoodLanguage: (language: FoodLanguage) => void
@@ -25,7 +26,9 @@ export function useFoodFilter(): FoodFilter {
         'mensa',
         'reimanns',
     ])
-    const [allergenSelection, setAllergenSelection] = useState<string[]>([])
+    const [allergenSelection, setAllergenSelection] = useState<string[]>([
+        'not-configured',
+    ])
     const [showStatic, setShowStatic] = useState<boolean>(false)
     const [foodLanguage, setFoodLanguage] = useState<FoodLanguage>('default')
 
@@ -46,6 +49,8 @@ export function useFoodFilter(): FoodFilter {
             ]) => {
                 if (allergensData != null) {
                     setAllergenSelection(JSON.parse(allergensData))
+                } else {
+                    setAllergenSelection(['not-configured'])
                 }
                 if (preferencesData != null) {
                     setPreferencesSelection(JSON.parse(preferencesData))
@@ -100,6 +105,15 @@ export function useFoodFilter(): FoodFilter {
             JSON.stringify(newSelection)
         )
     }
+
+    /**
+     * Initializes the allergen selection.
+     */
+
+    function initAllergenSelection(): void {
+        setAllergenSelection([])
+        void AsyncStorage.setItem('selectedAllergens', JSON.stringify([]))
+    }
     /**
      * Enables or disables a preference.
      * @param {string} name Preference name
@@ -147,6 +161,7 @@ export function useFoodFilter(): FoodFilter {
         foodLanguage,
         toggleSelectedRestaurant,
         toggleSelectedAllergens,
+        initAllergenSelection,
         toggleSelectedPreferences,
         toggleShowStatic,
         toggleFoodLanguage,

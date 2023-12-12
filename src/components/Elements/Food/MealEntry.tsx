@@ -51,6 +51,20 @@ export const MealEntry = ({
     const price = getUserSpecificPrice(meal, userKind)
     const label =
         price !== '' ? getUserSpecificLabel(userKind, t) : t('price.unknown')
+
+    const hasUserAllergens =
+        allergenSelection.length !== 0 && userAllergens.length !== 0
+    const hasNoMealAllergens =
+        allergenSelection.length !== 0 && meal.allergens === null
+
+    const iconName = hasUserAllergens
+        ? 'exclamationmark.triangle'
+        : 'info.circle'
+    const androidName = hasUserAllergens ? 'warning' : 'check'
+    const textContent = hasUserAllergens
+        ? userAllergens
+        : t('empty.noAllergens')
+
     return (
         <Pressable
             onPress={() => {
@@ -109,15 +123,15 @@ export const MealEntry = ({
                                 </View>
                             ))}
                         </View>
-                        {userAllergens?.length > 0 && (
+                        {(hasUserAllergens || hasNoMealAllergens) && (
                             <View style={styles.allergensContainer}>
                                 <PlatformIcon
                                     ios={{
-                                        name: 'exclamationmark.triangle',
+                                        name: iconName,
                                         size: 13,
                                     }}
                                     android={{
-                                        name: 'warning',
+                                        name: androidName,
                                         size: 16,
                                     }}
                                     style={styles.icon}
@@ -132,7 +146,7 @@ export const MealEntry = ({
                                     ]}
                                     numberOfLines={3}
                                 >
-                                    {userAllergens}
+                                    {textContent}
                                 </Text>
                             </View>
                         )}

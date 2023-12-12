@@ -1,7 +1,9 @@
 export default {
     empty: {
         allergens: 'No matching allergens found.',
-        flags: ' No matching flags found.',
+        noAllergens: 'Allergens not available',
+        flags: 'No matching flags found.',
+        config: 'No allergens set up yet. Tap to set up your allergies to display not binding information about allergens.',
     },
     preferences: {
         formlist: {

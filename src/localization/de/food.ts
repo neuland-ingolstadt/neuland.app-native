@@ -1,7 +1,9 @@
 export default {
     empty: {
         allergens: 'Keine passenden Allergene gefunden.',
+        noAllergens: 'Allergene nicht verfügbar',
         flags: 'Keine passenden Kennzeichnungen gefunden.',
+        config: 'Keine Allergene konfiguriert. Tippe hier zum Konfigurieren deiner Allergien, um nicht verbindliche Informationen über Allergene anzuzeigen.',
     },
     preferences: {
         formlist: {
