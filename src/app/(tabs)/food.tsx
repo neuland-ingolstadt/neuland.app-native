@@ -6,7 +6,7 @@ import { FoodFilterContext } from '@/components/provider'
 import { type Food } from '@/types/neuland-api'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { LoadingState, getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -163,6 +163,8 @@ function FoodScreen(): JSX.Element {
         )
     }
 
+    const contrastTextColor = getContrastColor(colors.primary)
+
     return (
         <ScrollView
             refreshControl={
@@ -201,26 +203,16 @@ function FoodScreen(): JSX.Element {
                         allergenSelection[0] === 'not-configured' && (
                             <View
                                 style={{
-                                    backgroundColor: colors.card,
-                                    padding: 10,
-                                    borderRadius: 8,
-                                    marginBottom: 14,
+                                    backgroundColor: colors.primary,
+                                    ...styles.bannerContainer,
                                 }}
                             >
                                 <TouchableOpacity
                                     onPress={() => {
-                                        console.log('pressed')
                                         initAllergenSelection()
                                     }}
                                     hitSlop={6}
-                                    style={{
-                                        position: 'absolute',
-                                        zIndex: 1,
-                                        top: 5,
-                                        right: 5,
-                                        padding: 5,
-                                        borderRadius: 8,
-                                    }}
+                                    style={styles.dismissButton}
                                 >
                                     <PlatformIcon
                                         ios={{
@@ -231,7 +223,7 @@ function FoodScreen(): JSX.Element {
                                             name: 'close',
                                             size: 20,
                                         }}
-                                        color={colors.text}
+                                        color={contrastTextColor}
                                     />
                                 </TouchableOpacity>
                                 <View>
@@ -242,9 +234,8 @@ function FoodScreen(): JSX.Element {
                                     >
                                         <Text
                                             style={{
-                                                color: colors.text,
-                                                fontSize: 16,
-                                                fontWeight: 'bold',
+                                                color: contrastTextColor,
+                                                ...styles.bannerTitle,
                                             }}
                                         >
                                             {t('navigation.allergens', {
@@ -254,9 +245,8 @@ function FoodScreen(): JSX.Element {
 
                                         <Text
                                             style={{
-                                                color: colors.text,
-                                                marginTop: 5,
-                                                fontSize: 14,
+                                                color: contrastTextColor,
+                                                ...styles.bannerText,
                                             }}
                                         >
                                             {t('empty.config', { ns: 'food' })}
@@ -380,5 +370,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingVertical: 8,
+    },
+    bannerContainer: {
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 12,
+    },
+    dismissButton: {
+        position: 'absolute',
+        zIndex: 1,
+        top: 5,
+        right: 5,
+        padding: 5,
+        borderRadius: 8,
+    },
+    bannerTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    bannerText: {
+        marginTop: 3,
+        fontSize: 14,
     },
 })

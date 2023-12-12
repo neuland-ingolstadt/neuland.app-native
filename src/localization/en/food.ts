@@ -3,7 +3,7 @@ export default {
         allergens: 'No matching allergens found.',
         noAllergens: 'Allergens not available',
         flags: 'No matching flags found.',
-        config: 'No allergens set up yet. Tap to set up your allergies to display not binding information about allergens.',
+        config: 'No allergens set up yet. Tap to configure your allergies to display not binding information about allergens.',
     },
     preferences: {
         formlist: {
