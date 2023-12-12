@@ -11,7 +11,7 @@ import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -24,6 +24,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
+import InfinitePager from 'react-native-infinite-pager'
 
 function FoodScreen(): JSX.Element {
     const [days, setDays] = useState<any>([])
@@ -74,6 +75,8 @@ function FoodScreen(): JSX.Element {
         loadData()
     }, [selectedRestaurants, showStatic])
 
+    const pagerRef = useRef(null)
+
     /**
      * Renders a button for a specific day's food data.
      * @param {Food} day - The food data for the day.
@@ -99,7 +102,6 @@ function FoodScreen(): JSX.Element {
             isFirstDay ? { marginLeft: 0 } : null,
             isLastDay ? { marginRight: 0 } : null,
         ]
-
         return (
             <View style={buttonStyle} key={index}>
                 <Pressable
@@ -109,6 +111,10 @@ function FoodScreen(): JSX.Element {
                             void Haptics.selectionAsync()
                         }
                         setSelectedDay(index)
+                        // @ts-expect-error - setPage is not defined in the type definition
+                        pagerRef.current?.setPage(index, {
+                            animated: Math.abs(selectedDay - index) === 1,
+                        })
                     }}
                 >
                     <View
@@ -255,16 +261,29 @@ function FoodScreen(): JSX.Element {
                                 </View>
                             </View>
                         )}
+
                     <View style={styles.loadedContainer}>
                         {days.slice(0, 5).map((day: Food, index: number) => (
                             <DayButton day={day} index={index} key={index} />
                         ))}
                     </View>
-                    <MealDay
-                        day={days[selectedDay]}
-                        index={selectedDay}
-                        colors={colors}
-                    />
+                    <InfinitePager
+                        ref={pagerRef}
+                        PageComponent={({ index }) => (
+                            <View style={styles.animatedContainer}>
+                                <MealDay
+                                    index={index}
+                                    day={days[index + 1]}
+                                    colors={colors}
+                                />
+                            </View>
+                        )}
+                        minIndex={0}
+                        maxIndex={Math.min(days.length - 2, 4)}
+                        onPageChange={(index) => {
+                            setSelectedDay(index)
+                        }}
+                    ></InfinitePager>
                 </>
             )}
         </ScrollView>
@@ -315,7 +334,7 @@ export default function Screen(): JSX.Element {
 
 const styles = StyleSheet.create({
     page: {
-        padding: PAGE_PADDING,
+        paddingVertical: PAGE_PADDING,
     },
     headerButton: {
         backgroundColor: 'transparent',
@@ -349,6 +368,7 @@ const styles = StyleSheet.create({
     loadedContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingHorizontal: 12,
     },
     loadingContainer: {
         paddingTop: 40,
@@ -391,5 +411,8 @@ const styles = StyleSheet.create({
     bannerText: {
         marginTop: 3,
         fontSize: 14,
+    },
+    animatedContainer: {
+        paddingHorizontal: 12,
     },
 })
