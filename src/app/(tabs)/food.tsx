@@ -169,7 +169,66 @@ function FoodScreen(): JSX.Element {
         )
     }
 
-    const contrastTextColor = getContrastColor(colors.primary)
+    const AllergensBanner = (): JSX.Element => {
+        const contrastTextColor = getContrastColor(colors.primary)
+        return (
+            <View style={styles.paddingContainer}>
+                <View
+                    style={{
+                        backgroundColor: colors.primary,
+                        ...styles.bannerContainer,
+                    }}
+                >
+                    <TouchableOpacity
+                        onPress={() => {
+                            initAllergenSelection()
+                        }}
+                        hitSlop={6}
+                        style={styles.dismissButton}
+                    >
+                        <PlatformIcon
+                            ios={{
+                                name: 'xmark',
+                                size: 16,
+                            }}
+                            android={{
+                                name: 'close',
+                                size: 20,
+                            }}
+                            color={contrastTextColor}
+                        />
+                    </TouchableOpacity>
+                    <View>
+                        <TouchableOpacity
+                            onPress={() => {
+                                router.push('(food)/allergens')
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: contrastTextColor,
+                                    ...styles.bannerTitle,
+                                }}
+                            >
+                                {t('navigation.allergens', {
+                                    ns: 'navigation',
+                                })}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    color: contrastTextColor,
+                                    ...styles.bannerText,
+                                }}
+                            >
+                                {t('empty.config', { ns: 'food' })}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <ScrollView
@@ -207,59 +266,7 @@ function FoodScreen(): JSX.Element {
                 <>
                     {allergenSelection.length === 1 &&
                         allergenSelection[0] === 'not-configured' && (
-                            <View
-                                style={{
-                                    backgroundColor: colors.primary,
-                                    ...styles.bannerContainer,
-                                }}
-                            >
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        initAllergenSelection()
-                                    }}
-                                    hitSlop={6}
-                                    style={styles.dismissButton}
-                                >
-                                    <PlatformIcon
-                                        ios={{
-                                            name: 'xmark',
-                                            size: 16,
-                                        }}
-                                        android={{
-                                            name: 'close',
-                                            size: 20,
-                                        }}
-                                        color={contrastTextColor}
-                                    />
-                                </TouchableOpacity>
-                                <View>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            router.push('(food)/allergens')
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: contrastTextColor,
-                                                ...styles.bannerTitle,
-                                            }}
-                                        >
-                                            {t('navigation.allergens', {
-                                                ns: 'navigation',
-                                            })}
-                                        </Text>
-
-                                        <Text
-                                            style={{
-                                                color: contrastTextColor,
-                                                ...styles.bannerText,
-                                            }}
-                                        >
-                                            {t('empty.config', { ns: 'food' })}
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                            <AllergensBanner />
                         )}
 
                     <View style={styles.loadedContainer}>
@@ -270,7 +277,7 @@ function FoodScreen(): JSX.Element {
                     <InfinitePager
                         ref={pagerRef}
                         PageComponent={({ index }) => (
-                            <View style={styles.animatedContainer}>
+                            <View style={styles.paddingContainer}>
                                 <MealDay
                                     index={index}
                                     day={days[index + 1]}
@@ -412,7 +419,7 @@ const styles = StyleSheet.create({
         marginTop: 3,
         fontSize: 14,
     },
-    animatedContainer: {
+    paddingContainer: {
         paddingHorizontal: 12,
     },
 })

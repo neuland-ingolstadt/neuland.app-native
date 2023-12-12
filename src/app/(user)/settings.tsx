@@ -177,7 +177,11 @@ export default function Settings(): JSX.Element {
                     },
 
                     onPress: async () => {
-                        if (Platform.OS === 'ios') {
+                        if (
+                            Platform.OS === 'ios' ||
+                            (Platform.OS === 'android' &&
+                                Platform.Version >= 33)
+                        ) {
                             await Linking.openSettings()
                         } else {
                             languageAlert()
