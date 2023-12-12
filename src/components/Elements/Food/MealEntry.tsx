@@ -52,10 +52,12 @@ export const MealEntry = ({
     const label =
         price !== '' ? getUserSpecificLabel(userKind, t) : t('price.unknown')
 
-    const hasUserAllergens =
-        allergenSelection.length !== 0 && userAllergens.length !== 0
-    const hasNoMealAllergens =
-        allergenSelection.length !== 0 && meal.allergens === null
+    const isNotConfigured =
+        allergenSelection.length === 1 &&
+        allergenSelection[0] === 'not-configured'
+
+    const hasUserAllergens = !isNotConfigured && userAllergens.length !== 0
+    const hasNoMealAllergens = !isNotConfigured && meal.allergens === null
 
     const iconName = hasUserAllergens
         ? 'exclamationmark.triangle'
