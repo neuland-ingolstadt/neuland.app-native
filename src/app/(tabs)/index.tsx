@@ -103,7 +103,7 @@ export default function Screen(): JSX.Element {
                 alert('Failed to get push token for push notification!')
             }
         } else {
-            alert('Must use physical device for Push Notifications')
+            // alert('Must use physical device for Push Notifications')
         }
     }
 

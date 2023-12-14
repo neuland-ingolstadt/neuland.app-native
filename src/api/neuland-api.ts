@@ -63,7 +63,10 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the mensa plan data
      */
     async getMensaPlan(): Promise<any> {
-        return await this.requestCached('mensa-plan', `${ENDPOINT}/api/mensa/`)
+        return await this.requestCached(
+            'mensa-plan',
+            `${ENDPOINT}/api/mensa/?version=v2`
+        )
     }
 
     /**
@@ -73,7 +76,7 @@ class NeulandAPIClient {
     async getReimannsPlan(): Promise<any> {
         return await this.requestCached(
             'reimanns-plan',
-            `${ENDPOINT}/api/reimanns/`
+            `${ENDPOINT}/api/reimanns/?version=v2`
         )
     }
 
@@ -84,7 +87,7 @@ class NeulandAPIClient {
     async getCanisiusPlan(): Promise<any> {
         return await this.requestCached(
             'canisius-plan',
-            `${ENDPOINT}/api/canisius/`
+            `${ENDPOINT}/api/canisius/?version=v2`
         )
     }
 

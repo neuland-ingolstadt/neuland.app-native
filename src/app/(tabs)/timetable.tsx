@@ -50,7 +50,7 @@ export default function TimetableScreen(): JSX.Element {
 
     const [calendarTheme, setCalendarTheme] = useState<Record<string, any>>({})
     const [calendarDate, setCalendarDate] = useState<Date>(new Date())
-    const [mode] = useState<Mode>('3days')
+    const [mode] = useState<Mode>('schedule')
 
     const today = new Date()
 
@@ -77,7 +77,6 @@ export default function TimetableScreen(): JSX.Element {
     async function load(): Promise<void> {
         try {
             const timetable = await getFriendlyTimetable(today, true)
-            console.log(JSON.stringify(timetable, null, 4))
             setRawTimetable(timetable)
             setLoadingState(LoadingState.LOADED)
         } catch (e) {
@@ -400,6 +399,7 @@ export default function TimetableScreen(): JSX.Element {
     }
 
     function showEventDetails(event: CalendarEvent): void {
+        console.log('event')
         if (event.entry == null) {
             return
         }

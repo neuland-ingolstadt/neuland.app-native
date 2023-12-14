@@ -31,10 +31,10 @@ export default {
         empty: 'Die Speisekarte für heute ist leer.',
     },
     categories: {
-        Suppe: 'Suppe',
-        Salat: 'Salat',
-        Essen: 'Essen',
-        Aktion: 'Aktion',
+        soup: 'Suppe',
+        salad: 'Salat',
+        main: 'Essen',
+        special: 'Aktion',
     },
     details: {
         footer: 'Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
@@ -64,11 +64,11 @@ export default {
                 category: 'Kategorie',
                 source: 'Datenquelle',
             },
-            variations: 'Varianten',
+            variants: 'Varianten',
         },
         share: {
             message:
-                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://neuland.app/food/',
+                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://dev.neuland.app/food/{{id}}',
         },
     },
 }

@@ -1,4 +1,10 @@
 {
+    "@alessiocancian/react-native-actionsheet@3.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/alessiocancian/react-native-actionsheet",
+        "licenseUrl": "https://github.com/alessiocancian/react-native-actionsheet/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "@aptabase/react-native@0.3.9": {
         "licenses": "MIT",
         "repository": "https://github.com/aptabase/aptabase-react-native",
@@ -263,6 +269,12 @@
         "licenseUrl": "https://github.com/jfilter/react-native-onboarding-swiper/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-pager-view@6.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/callstack/react-native-pager-view",
+        "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native-reanimated@3.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
@@ -323,7 +335,7 @@
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native@0.72.7": {
+    "react-native@0.72.6": {
         "licenses": "MIT",
         "repository": "github:facebook/react-native",
         "licenseUrl": "github:facebook/react-native",

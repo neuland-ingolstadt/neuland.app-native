@@ -162,7 +162,7 @@ export default function FoodDetail(): JSX.Element {
                 },
                 {
                     title: t('details.formlist.about.category'),
-                    value: meal?.category,
+                    value: t(`categories.${meal?.category}`),
                 },
                 {
                     title: t('details.formlist.about.source'),
@@ -181,13 +181,28 @@ export default function FoodDetail(): JSX.Element {
 
     const variantsSection: FormListSections[] = [
         {
-            header: t('details.formlist.variations'),
+            header: t('details.formlist.variants'),
             items:
-                meal?.variations?.map((variant) => ({
+                meal?.variants?.map((variant) => ({
                     title: variant.name[i18n.language as LanguageKey],
                     value:
-                        (variant.additional ? '+ ' : '') +
+                        (variant?.additional ? '+ ' : '') +
                         formatPrice(variant.prices[userKind]),
+                    onPress: () => {
+                        trackEvent('Share', {
+                            type: 'meal-variant',
+                        })
+                        void Share.share({
+                            message: t('details.share.message', {
+                                meal: variant.name[
+                                    i18n.language as LanguageKey
+                                ],
+                                price: formatPrice(variant.prices[userKind]),
+                                location: meal?.restaurant,
+                                id: variant?.id,
+                            }),
+                        })
+                    },
                 })) ?? [],
         },
     ]
@@ -204,8 +219,8 @@ export default function FoodDetail(): JSX.Element {
         meal?.restaurant === 'Mensa'
             ? [
                   ...priceSection,
-                  ...mensaSection,
                   ...variantsSection,
+                  ...mensaSection,
                   ...aboutSection,
               ]
             : [...priceSection, ...variantsSection, ...aboutSection]
@@ -247,6 +262,7 @@ export default function FoodDetail(): JSX.Element {
                                 meal: meal?.name[i18n.language as LanguageKey],
                                 price: formatPrice(meal?.prices[userKind]),
                                 location: meal?.restaurant,
+                                id: meal?.id,
                             }),
                         })
                     }}

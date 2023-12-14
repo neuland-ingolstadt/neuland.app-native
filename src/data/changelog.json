@@ -67,7 +67,7 @@
                 },
                 "description": {
                     "de": "Verfügbare Variationen werden nun in den Detaisl angezeigt. Außerdem kann nach dauerhaft verfügbaren Gerichten gefiltert werden.",
-                    "en": "Available variations are now displayed in the details. In addition, you can filter by permanently available dishes."
+                    "en": "Available variants are now displayed in the details. In addition, you can filter by permanently available dishes."
                 },
                 "icon": {
                     "ios": "carrot",
@@ -166,16 +166,16 @@
             },
             {
                 "title": {
-                    "de": "Analytics",
-                    "en": "Analytics"
+                    "de": "Essens Verbesserungen",
+                    "en": "Food Improvements"
                 },
                 "description": {
-                    "de": "Die App sammelt nun anonyme und nicht personenbezogene Daten, um die App zu verbessern. Deine Privatsphäre bleibt dabei geschützt.",
-                    "en": "The app now collects anonymous and non-personal data to improve the app. Your privacy is protected at all times."
+                    "de": "Die Essensübersicht wurde überarbeitet. Swipen, Variaten, Teilen per Link, verbessertes Design und mehr.",
+                    "en": "The food overview has been revised. Swiping, variations, sharing via link, improved design and more."
                 },
                 "icon": {
-                    "ios": "chart.pie",
-                    "android": "insert-chart"
+                    "ios": "carrot",
+                    "android": "restaurant"
                 }
             }
         ]

@@ -13,6 +13,7 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
+import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import * as Notifications from 'expo-notifications'
@@ -20,7 +21,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ViewShot, { captureRef } from 'react-native-view-shot'
@@ -149,9 +150,31 @@ export default function TimetableDetails(): JSX.Element {
         },
     ]
 
+    const actionSheetRef = useRef()
+
+    const showActionSheet = (): void => {
+        actionSheetRef.current.show()
+    }
     return (
         <>
             <StatusBar style={getStatusBarStyle()} />
+            <ActionSheet
+                ref={actionSheetRef}
+                title={t('notificatons.title')}
+                message={t('notificatons.description')}
+                options={[
+                    t('notificatons.five'),
+                    t('notificatons.fifteen'),
+                    t('notificatons.thirty'),
+                    t('misc.cancel', { ns: 'common' }),
+                ]}
+                cancelButtonIndex={3}
+                onPress={(index) => {
+                    if (index === 0) {
+                        void schedulePushNotification()
+                    }
+                }}
+            />
             <ScrollView>
                 <View style={styles.page}>
                     <DetailsRow>
@@ -271,13 +294,8 @@ export default function TimetableDetails(): JSX.Element {
                                     </View>
                                 </View>
                                 <Pressable
+                                    onPress={showActionSheet}
                                     hitSlop={10}
-                                    onPress={() => {
-                                        router.push('(timetable)/notifications')
-                                        router.setParams({
-                                            title: event.shortName,
-                                        })
-                                    }}
                                 >
                                     <PlatformIcon
                                         color={colors.primary}

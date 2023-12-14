@@ -19,13 +19,11 @@ export default {
         unknown: 'Ein unbekannter Fehler ist aufgetreten.',
     },
     notificatons: {
-        sections: {
-            before: {
-                title: 'Vorher',
-            },
-            duration: {
-                title: 'Dauer',
-            },
-        },
+        title: 'Benachrichtigungen',
+        description:
+            'Erhalte Benachrichtigungen bevor diese Vorlesung beginnt. Diese wiederholen sich bis du sie hier oder in den Einstellungen deaktivierst.',
+        five: '5 Minuten vorher',
+        fifteen: '15 Minuten vorher',
+        thirty: '30 Minuten vorher',
     },
 }

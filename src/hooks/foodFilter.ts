@@ -34,7 +34,7 @@ export function useFoodFilter(): FoodFilter {
 
     useEffect(() => {
         void Promise.all([
-            AsyncStorage.getItem('selectedAllergens'),
+            AsyncStorage.getItem('selectedUserAllergens'),
             AsyncStorage.getItem('selectedPreferences'),
             AsyncStorage.getItem('selectedRestaurants'),
             AsyncStorage.getItem('showStatic'),

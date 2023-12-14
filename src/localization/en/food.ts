@@ -31,10 +31,10 @@ export default {
         empty: "Today's menu is empty.",
     },
     categories: {
-        Suppe: 'Soup',
-        Salat: 'Salad',
-        Essen: 'Food',
-        Aktion: 'Special',
+        soup: 'Soup',
+        salad: 'Salad',
+        main: 'Food',
+        special: 'Special',
     },
     details: {
         footer: 'We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
@@ -63,11 +63,11 @@ export default {
                 category: 'Category',
                 source: 'Data source',
             },
-            variations: 'Variations',
+            variants: 'Variations',
         },
         share: {
             message:
-                'Checkout "{{meal}}" ({{price}}) at {{location}}.\nhttps://neuland.app/food/',
+                'Check out "{{meal}}" ({{price}}) at {{location}}.\nhttps://dev.neuland.app/food/{{id}}',
         },
     },
 }

@@ -19,13 +19,11 @@ export default {
         unknown: 'An unknown error occurred.',
     },
     notificatons: {
-        sections: {
-            before: {
-                title: 'Before',
-            },
-            duration: {
-                title: 'Duration',
-            },
-        },
+        title: 'Notifications',
+        description:
+            'Receive notifications before this lecture starts. These repeat until you deactivate them here or in the settings.',
+        five: '5 minutes before',
+        fifteen: '15 minutes before',
+        thirty: '30 minutes before',
     },
 }

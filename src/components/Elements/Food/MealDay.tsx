@@ -202,7 +202,7 @@ export const MealDay = ({
             </View>
         </>
     ) : (
-        <View key={index} style={styles.dayRestaurantContainer}>
+        <View key={index}>
             {renderRestaurantView({
                 restaurantName: 'Mensa',
                 meals: mensa,
@@ -223,9 +223,6 @@ export const MealDay = ({
 }
 
 const styles = StyleSheet.create({
-    dayRestaurantContainer: {
-        marginTop: 10,
-    },
     dayRestaurantTitle: {
         fontWeight: 'bold',
         fontSize: 18,
