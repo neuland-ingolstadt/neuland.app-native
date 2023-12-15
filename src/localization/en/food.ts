@@ -48,7 +48,7 @@ export default {
             },
             nutrition: {
                 title: 'Nutrition',
-                footer: 'Values are per meal and may vary',
+                footer: 'Values are per meal and may vary.',
                 energy: 'Energy',
                 fat: 'Fat',
                 saturated: 'Saturated Fat',

@@ -34,7 +34,7 @@ export function useFoodFilter(): FoodFilter {
 
     useEffect(() => {
         void Promise.all([
-            AsyncStorage.getItem('selectedUyserAllergens'),
+            AsyncStorage.getItem('selectedUserAllergens'),
             AsyncStorage.getItem('selectedUserPreferences'),
             AsyncStorage.getItem('selectedRestaurants'),
             AsyncStorage.getItem('showStatic'),
@@ -106,7 +106,7 @@ export function useFoodFilter(): FoodFilter {
 
         setAllergenSelection(newSelection)
         void AsyncStorage.setItem(
-            'selectedUyserAllergens',
+            'selectedUserAllergens',
             JSON.stringify(newSelection)
         )
     }
@@ -117,7 +117,7 @@ export function useFoodFilter(): FoodFilter {
 
     function initAllergenSelection(): void {
         setAllergenSelection([])
-        void AsyncStorage.setItem('selectedUyserAllergens', JSON.stringify([]))
+        void AsyncStorage.setItem('selectedUserAllergens', JSON.stringify([]))
     }
     /**
      * Enables or disables a preference.

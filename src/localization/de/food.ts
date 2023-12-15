@@ -49,7 +49,7 @@ export default {
             },
             nutrition: {
                 title: 'Ernährung',
-                footer: 'Werte gelten pro Mahlzeit und können variieren',
+                footer: 'Werte gelten pro Mahlzeit und können variieren.',
                 energy: 'Energie',
                 fat: 'Fett',
                 saturated: 'Gesättigte Fettsäuren',

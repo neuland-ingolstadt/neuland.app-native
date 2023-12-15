@@ -246,7 +246,6 @@ function FoodScreen(): JSX.Element {
     }
     const screenHeight = Dimensions.get('window').height
     const scrollY = new Animated.Value(0)
-    const scrollViewRefs = useRef<ScrollView[]>([])
     const showAllergensBanner =
         allergenSelection.length === 1 &&
         allergenSelection[0] === 'not-configured'
@@ -326,26 +325,13 @@ function FoodScreen(): JSX.Element {
                         onPageSelected={(e) => {
                             const page = e.nativeEvent.position
                             setSelectedDay(page)
-                            scrollViewRefs.current[page]?.scrollTo({
-                                y: 0,
-                                animated: true,
-                            })
-                        }}
-                        onPageScrollStateChanged={(e) => {
-                            if (e.nativeEvent.pageScrollState === 'idle') {
-                                scrollY.setValue(0)
-                            }
                         }}
                         key={days.length}
                         scrollEnabled
                         overdrag
                     >
                         {days.map((_: any, index: number) => (
-                            <Animated.ScrollView
-                                ref={(ref) =>
-                                    // @ts-expect-error ref type error
-                                    (scrollViewRefs.current[index] = ref)
-                                }
+                            <ScrollView
                                 scrollEventThrottle={16}
                                 onScroll={Animated.event(
                                     [
@@ -357,7 +343,6 @@ function FoodScreen(): JSX.Element {
                                     ],
                                     { useNativeDriver: false }
                                 )}
-                                showsVerticalScrollIndicator={false}
                                 key={index}
                                 contentContainerStyle={
                                     styles.innerScrollContainer
@@ -369,7 +354,7 @@ function FoodScreen(): JSX.Element {
                                     colors={colors}
                                     key={index}
                                 />
-                            </Animated.ScrollView>
+                            </ScrollView>
                         ))}
                     </PagerView>
                 </>

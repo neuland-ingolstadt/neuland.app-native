@@ -208,7 +208,7 @@ export const MealEntry = ({
                                             colors={[
                                                 colors.labelBackground,
                                                 Color(colors.labelBackground)
-                                                    .lighten(0.1)
+                                                    .lighten(0.13)
                                                     .hex(),
                                             ]}
                                             start={[0, 0]}
