@@ -24,6 +24,7 @@ export default {
     misc: {
         share: 'Share',
         cancel: 'Cancel',
+        confirm: 'Confirm',
         delete: 'Delete',
     },
     pages: {

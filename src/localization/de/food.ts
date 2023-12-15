@@ -2,13 +2,13 @@ export default {
     empty: {
         allergens: 'Keine passenden Allergene gefunden.',
         noAllergens: 'Allergene nicht verfügbar',
-        flags: 'Keine passenden Kennzeichnungen gefunden.',
+        flags: 'Keine passenden Vorlieben gefunden.',
         config: 'Keine Allergene festgelegt. Tippe hier zum Konfigurieren deiner Allergien, um nicht verbindliche Informationen über Allergene anzuzeigen.',
     },
     preferences: {
         formlist: {
             allergens: 'Allergene',
-            flags: 'Kennzeichnungen',
+            flags: 'Vorlieben',
             static: 'Dauerhafte Gerichte',
             language: 'Essenssprache',
         },
@@ -65,6 +65,22 @@ export default {
                 source: 'Datenquelle',
             },
             variants: 'Varianten',
+            alert: {
+                allergen: {
+                    title: 'Allergene aktualisieren',
+                    message: {
+                        add: 'Möchtest du {{allergen}} zu deinen Allergenen hinzufügen?',
+                        remove: 'Möchtest du {{allergen}} von deinen Allergenen entfernen?',
+                    },
+                },
+                flag: {
+                    title: 'Einstellungen aktualisieren',
+                    message: {
+                        add: 'Möchtest du {{flag}} zu deinen Vorlieben hinzufügen?',
+                        remove: 'Möchtest du {{flag}} von deinen Vorlieben entfernen?',
+                    },
+                },
+            },
         },
         share: {
             message:

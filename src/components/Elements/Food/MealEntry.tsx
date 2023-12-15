@@ -65,11 +65,15 @@ export const MealEntry = ({
     const label =
         price !== '' ? getUserSpecificLabel(userKind, t) : t('price.unknown')
 
-    const isConfigured =
-        allergenSelection.length > 0 &&
-        allergenSelection[0] !== 'not-configured'
-    const hasUserAllergens = isConfigured && userAllergens.length !== 0
-    const hasNoMealAllergens = isConfigured && meal.allergens === null
+    const isNotConfigured =
+        allergenSelection.length === 1 &&
+        allergenSelection[0] === 'not-configured'
+    const hasSelectedAllergens =
+        allergenSelection.length > 0 && !isNotConfigured
+    const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured
+    const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null
+
+    const shouldShowAllergens = hasUserAllergens || hasNoMealAllergens
 
     const iconName = hasUserAllergens
         ? 'exclamationmark.triangle'
@@ -224,7 +228,7 @@ export const MealEntry = ({
                                     )
                                 )}
                             </View>
-                            {(hasUserAllergens || hasNoMealAllergens) && (
+                            {shouldShowAllergens && (
                                 <View style={styles.allergensContainer}>
                                     <PlatformIcon
                                         ios={{

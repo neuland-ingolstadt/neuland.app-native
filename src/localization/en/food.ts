@@ -64,6 +64,22 @@ export default {
                 source: 'Data source',
             },
             variants: 'Variations',
+            alert: {
+                allergen: {
+                    title: 'Update allergens',
+                    message: {
+                        add: 'Do you want to add {{allergen}} to your allergens?',
+                        remove: 'Do you want to remove {{allergen}} from your allergens?',
+                    },
+                },
+                flag: {
+                    title: 'Update preferences',
+                    message: {
+                        add: 'Do you want to add {{flag}} to your preferences?',
+                        remove: 'Do you want to remove {{flag}} from your preferences?',
+                    },
+                },
+            },
         },
         share: {
             message:

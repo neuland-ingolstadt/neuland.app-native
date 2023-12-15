@@ -19,6 +19,7 @@ import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Alert,
     Linking,
     ScrollView,
     Share,
@@ -32,8 +33,13 @@ export default function FoodDetail(): JSX.Element {
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
         foodEntry != null ? JSON.parse(foodEntry) : undefined
-    const { preferencesSelection, allergenSelection, foodLanguage } =
-        useContext(FoodFilterContext)
+    const {
+        preferencesSelection,
+        allergenSelection,
+        foodLanguage,
+        toggleSelectedAllergens,
+        toggleSelectedPreferences,
+    } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
     const { userKind } = useContext<UserKindContextType>(UserKindContext)
 
@@ -42,6 +48,46 @@ export default function FoodDetail(): JSX.Element {
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
+
+    function itemAlert(item: string, itemType: 'allergen' | 'flag'): void {
+        const itemMap = itemType === 'allergen' ? allergenMap : flagMap
+        const friendlyItem =
+            itemMap[item as keyof typeof itemMap]?.[
+                i18n.language as LanguageKey
+            ] ?? item
+        const isItemSelected = (
+            itemType === 'allergen' ? allergenSelection : preferencesSelection
+        ).includes(item)
+
+        Alert.alert(
+            t(`details.formlist.alert.${itemType}.title`),
+            isItemSelected
+                ? t(`details.formlist.alert.${itemType}.message.remove`, {
+                      [itemType]: friendlyItem,
+                  })
+                : t(`details.formlist.alert.${itemType}.message.add`, {
+                      [itemType]: friendlyItem,
+                  }),
+            [
+                {
+                    text: t('misc.confirm', { ns: 'common' }),
+                    onPress: () => {
+                        if (itemType === 'allergen') {
+                            toggleSelectedAllergens(item)
+                        } else if (itemType === 'flag') {
+                            toggleSelectedPreferences(item)
+                        }
+                    },
+                },
+                {
+                    text: t('misc.cancel', { ns: 'common' }),
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+            ]
+        )
+    }
+
     const priceSection: FormListSections[] =
         meal != null
             ? [
@@ -65,45 +111,13 @@ export default function FoodDetail(): JSX.Element {
               ]
             : []
 
-    const mensaSection: FormListSections[] = [
-        {
-            header: t('preferences.formlist.flags'),
-            items:
-                meal?.flags?.map((flag: string) => ({
-                    title:
-                        flagMap[flag as keyof typeof flagMap]?.[
-                            i18n.language as LanguageKey
-                        ] ?? flag,
-                    icon: preferencesSelection.includes(flag)
-                        ? {
-                              android: 'check-circle',
-                              ios: 'checkmark.seal',
-                          }
-                        : undefined,
-                    iconColor: colors.success,
-                })) ?? [],
-        },
-        {
-            header: t('preferences.formlist.allergens'),
-            items:
-                (meal?.allergens ?? [])
-                    .filter((allergen: string) =>
-                        Object.keys(allergenMap).includes(allergen)
-                    )
-                    .map((allergen: string) => ({
-                        title:
-                            allergenMap[allergen as keyof typeof allergenMap]?.[
-                                i18n.language as LanguageKey
-                            ] ?? allergen,
-                        icon: allergenSelection.includes(allergen)
-                            ? {
-                                  android: 'warning',
-                                  ios: 'exclamationmark.triangle',
-                              }
-                            : undefined,
-                        iconColor: colors.notification,
-                    })) ?? [],
-        },
+    const isNutritionAvailable =
+        meal?.nutrition != null &&
+        Object.values(meal.nutrition).every(
+            (value) => value !== '' && value !== 0
+        )
+
+    const nutritionSection: FormListSections[] = [
         {
             header: t('details.formlist.nutrition.title'),
             footer: t('details.formlist.nutrition.footer'),
@@ -150,6 +164,53 @@ export default function FoodDetail(): JSX.Element {
                 },
             ],
         },
+    ]
+    const mensaSection: FormListSections[] = [
+        {
+            header: t('preferences.formlist.flags'),
+            items:
+                meal?.flags?.map((flag: string) => ({
+                    title:
+                        flagMap[flag as keyof typeof flagMap]?.[
+                            i18n.language as LanguageKey
+                        ] ?? flag,
+                    icon: preferencesSelection.includes(flag)
+                        ? {
+                              android: 'check-circle',
+                              ios: 'checkmark.seal',
+                          }
+                        : undefined,
+                    iconColor: colors.success,
+                    onPress: () => {
+                        itemAlert(flag, 'flag')
+                    },
+                })) ?? [],
+        },
+        {
+            header: t('preferences.formlist.allergens'),
+            items:
+                (meal?.allergens ?? [])
+                    .filter((allergen: string) =>
+                        Object.keys(allergenMap).includes(allergen)
+                    )
+                    .map((allergen: string) => ({
+                        title:
+                            allergenMap[allergen as keyof typeof allergenMap]?.[
+                                i18n.language as LanguageKey
+                            ] ?? allergen,
+                        icon: allergenSelection.includes(allergen)
+                            ? {
+                                  android: 'warning',
+                                  ios: 'exclamationmark.triangle',
+                              }
+                            : undefined,
+                        iconColor: colors.notification,
+                        onPress: () => {
+                            itemAlert(allergen, 'allergen')
+                        },
+                    })) ?? [],
+        },
+        ...(isNutritionAvailable ? nutritionSection : []),
     ]
 
     const aboutSection: FormListSections[] = [

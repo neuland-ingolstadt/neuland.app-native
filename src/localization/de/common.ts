@@ -25,6 +25,7 @@ export default {
     misc: {
         share: 'Teilen',
         cancel: 'Abbrechen',
+        confirm: 'Bestätigen',
         delete: 'Löschen',
     },
     pages: {

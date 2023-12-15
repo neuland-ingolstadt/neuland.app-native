@@ -34,8 +34,8 @@ export function useFoodFilter(): FoodFilter {
 
     useEffect(() => {
         void Promise.all([
-            AsyncStorage.getItem('selectedUserAllergens'),
-            AsyncStorage.getItem('selectedPreferences'),
+            AsyncStorage.getItem('selectedUyserAllergens'),
+            AsyncStorage.getItem('selectedUserPreferences'),
             AsyncStorage.getItem('selectedRestaurants'),
             AsyncStorage.getItem('showStatic'),
             AsyncStorage.getItem('foodLanguage'),
@@ -94,14 +94,19 @@ export function useFoodFilter(): FoodFilter {
      */
     function toggleSelectedAllergens(name: string): void {
         const checked = allergenSelection.includes(name)
-        const newSelection = allergenSelection.filter((x) => x !== name)
+        let newSelection = allergenSelection.filter((x) => x !== name)
         if (!checked) {
             newSelection.push(name)
         }
 
+        // If "not-configured" is in the selection, remove it
+        if (newSelection.includes('not-configured')) {
+            newSelection = newSelection.filter((x) => x !== 'not-configured')
+        }
+
         setAllergenSelection(newSelection)
         void AsyncStorage.setItem(
-            'selectedAllergens',
+            'selectedUyserAllergens',
             JSON.stringify(newSelection)
         )
     }
@@ -112,7 +117,7 @@ export function useFoodFilter(): FoodFilter {
 
     function initAllergenSelection(): void {
         setAllergenSelection([])
-        void AsyncStorage.setItem('selectedAllergens', JSON.stringify([]))
+        void AsyncStorage.setItem('selectedUyserAllergens', JSON.stringify([]))
     }
     /**
      * Enables or disables a preference.
@@ -127,7 +132,7 @@ export function useFoodFilter(): FoodFilter {
 
         setPreferencesSelection(newSelection)
         void AsyncStorage.setItem(
-            'selectedPreferences',
+            'selectedUserPreferences',
             JSON.stringify(newSelection)
         )
     }
