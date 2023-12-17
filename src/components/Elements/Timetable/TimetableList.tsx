@@ -196,6 +196,7 @@ export default function TimetableList({
                         itemIndex: 0,
                     })
                 }}
+                stickySectionHeadersEnabled={true}
             />
         </SafeAreaView>
     )
