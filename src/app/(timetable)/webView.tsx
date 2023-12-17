@@ -3,7 +3,7 @@ import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, StyleSheet, View } from 'react-native'
 import WebView from 'react-native-webview'
@@ -39,7 +39,7 @@ export default function NotesDetails(): JSX.Element {
     </style>
     ${sanitizedHtml}`
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({
             title: title ?? t('details.title'),
         })

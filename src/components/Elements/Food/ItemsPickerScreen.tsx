@@ -8,7 +8,7 @@ import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -50,7 +50,7 @@ const ItemsPickerScreen = (params: {
 
     const navigation = useNavigation()
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerSearchBarOptions: {
                 placeholder: t(`navigation.${placeholderKey}`, {
