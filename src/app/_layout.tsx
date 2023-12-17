@@ -66,9 +66,10 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/login"
                         options={{
-                            title: 'Login',
+                            title: 'THI Account',
                             presentation: 'formSheet',
                             gestureEnabled: false,
+                            headerBackButtonMenuEnabled: false,
                         }}
                     />
                     <Stack.Screen
