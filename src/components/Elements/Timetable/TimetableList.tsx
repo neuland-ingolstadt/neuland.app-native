@@ -33,7 +33,7 @@ export default function TimetableList({
     /**
      * Constants
      */
-    const today = new Date('2023-12-15')
+    const today = new Date()
     const timetable = friendlyTimetable
 
     /**
