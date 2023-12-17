@@ -5,7 +5,6 @@ import {
     formatFriendlyDate,
     formatFriendlyTime,
     formatISODate,
-    isSameDay,
 } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
@@ -50,9 +49,10 @@ export default function TimetableList({
                 <HeaderButtons
                     setToday={() => {
                         listRef.current?.scrollToLocation({
-                            animated: true,
-                            sectionIndex: initialScrollIndex,
+                            sectionIndex: 0,
                             itemIndex: 0,
+                            viewOffset: 0,
+                            viewPosition: 0,
                         })
                     }}
                 />
@@ -70,11 +70,8 @@ export default function TimetableList({
      */
 
     const groupedTimetable = getGroupedTimetable(timetable)
-    const nextDate =
-        timetable.find((x) => x.startDate > today)?.startDate ?? today
-
-    const initialScrollIndex = groupedTimetable.findIndex((x) =>
-        isSameDay(x.title, nextDate)
+    const filteredTimetable = groupedTimetable.filter(
+        (section) => section.title >= today
     )
 
     /**
@@ -119,7 +116,7 @@ export default function TimetableList({
     }
 
     function renderItemSeparator(): JSX.Element {
-        return <Divider color={colors.labelTertiaryColor} iosPaddingLeft={16} />
+        return <Divider color={colors.border} iosPaddingLeft={16} />
     }
 
     function renderItem({
@@ -165,21 +162,11 @@ export default function TimetableList({
         )
     }
 
-    async function initialScroll(): Promise<void> {
-        setTimeout(() => {
-            listRef.current?.scrollToLocation({
-                animated: true,
-                sectionIndex: initialScrollIndex,
-                itemIndex: 0,
-            })
-        }, 150)
-    }
-
     return (
         <SafeAreaView style={styles.pageView}>
             <SectionList
                 ref={listRef}
-                sections={groupedTimetable}
+                sections={filteredTimetable}
                 renderItem={renderItem}
                 renderSectionHeader={({ section: { title } }) =>
                     renderSectionHeader(title)
@@ -187,9 +174,6 @@ export default function TimetableList({
                 renderSectionFooter={renderSectionFooter}
                 ItemSeparatorComponent={renderItemSeparator}
                 contentContainerStyle={styles.container}
-                onLayout={() => {
-                    void initialScroll()
-                }}
                 stickySectionHeadersEnabled={true}
                 ListFooterComponent={
                     <View
@@ -198,12 +182,6 @@ export default function TimetableList({
                         }}
                     />
                 }
-                getItemLayout={(_, index) => ({
-                    length: 45,
-                    offset: 47 * index,
-                    index,
-                })}
-                initialNumToRender={initialScrollIndex + 5}
             />
         </SafeAreaView>
     )
@@ -230,7 +208,7 @@ const styles = StyleSheet.create({
     indicator: {
         width: 4,
         borderRadius: 2,
-        height: 45,
+        height: '100%',
     },
     nameView: {
         flexGrow: 1,
