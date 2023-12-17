@@ -1,7 +1,11 @@
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
+import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
-import { type Exam } from '@/types/utils'
+import { type CalendarEvent, type Exam } from '@/types/utils'
+import { type i18n } from 'i18next'
+
+import { ignoreTime } from './date-utils'
 
 export const compileTime = new Date()
 export const calendar: Calendar[] = rawCalendar
@@ -49,4 +53,24 @@ export async function loadExamList(): Promise<Exam[]> {
             // sort list in chronologically order
             .sort((a, b) => a.date.getTime() - b.date.getTime())
     )
+}
+
+export function convertCalendarToWeekViewEvents(
+    entries: Calendar[],
+    i18n: i18n,
+    color: string,
+    textColor: string
+): CalendarEvent[] {
+    return entries.map((entry) => {
+        const allDay = entry.hasHours === false || !entry.hasHours
+        const endDate = entry.end ?? entry.begin
+
+        return {
+            start: allDay ? ignoreTime(entry.begin) : entry.begin,
+            end: allDay ? ignoreTime(endDate) : endDate,
+            title: entry.name[i18n.language as LanguageKey],
+            color,
+            textColor,
+        }
+    })
 }

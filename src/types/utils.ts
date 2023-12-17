@@ -1,3 +1,5 @@
+import { type ICalendarEventBase } from 'react-native-big-calendar'
+
 import { type Lecturers } from './thi-api'
 
 export interface Exam {
@@ -88,4 +90,16 @@ export interface FriendlyTimetableEntry {
     goal: string | null
     contents: string | null
     literature: string | null
+}
+
+export interface TimetableSections {
+    title: Date
+    data: FriendlyTimetableEntry[]
+}
+
+export interface CalendarEvent extends ICalendarEventBase {
+    textColor: string
+    color: string
+    location?: string
+    entry?: FriendlyTimetableEntry
 }
