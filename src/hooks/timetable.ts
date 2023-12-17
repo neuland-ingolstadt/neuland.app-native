@@ -7,13 +7,17 @@ export interface TimetableHook {
     setTimetableMode: (mode: CalendarMode) => void
 }
 
+export const DEFAULT_TIMETABLE_MODE: CalendarMode = 'list'
+
 /**
  * Custom hook that manages the users timetable mode.
  * Uses AsyncStorage to persist the mode across app sessions.
  * @returns TimetableHook object with mode and setMode properties.
  */
 export function useTimetable(): TimetableHook {
-    const [timetableMode, setMode] = useState<CalendarMode>('list')
+    const [timetableMode, setMode] = useState<CalendarMode>(
+        DEFAULT_TIMETABLE_MODE
+    )
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
@@ -24,7 +28,7 @@ export function useTimetable(): TimetableHook {
                 if (data != null) {
                     setTimetableMode(data)
                 } else {
-                    setTimetableMode('list')
+                    setTimetableMode(DEFAULT_TIMETABLE_MODE)
                 }
             } catch (error) {
                 console.error(

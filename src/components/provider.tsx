@@ -1,6 +1,10 @@
 import { type AppIconHook } from '@/hooks/appIcon'
 import { type FlowHook } from '@/hooks/flow'
-import { type TimetableHook, useTimetable } from '@/hooks/timetable'
+import {
+    DEFAULT_TIMETABLE_MODE,
+    type TimetableHook,
+    useTimetable,
+} from '@/hooks/timetable'
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import {
@@ -96,7 +100,7 @@ export const ReloadProvider = createContext<any>({
 })
 
 export const TimetableContext = createContext<TimetableHook>({
-    timetableMode: 'list',
+    timetableMode: DEFAULT_TIMETABLE_MODE,
     setTimetableMode: () => {},
 })
 

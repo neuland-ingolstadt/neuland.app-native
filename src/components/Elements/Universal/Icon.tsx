@@ -146,6 +146,7 @@ const ANDROID_ICONS = {
     'lock-open': <>&#xE898;</>,
     mail: <>&#xE0BE;</>,
     'insert-chart': <>&#xE24B;</>,
+    return: <>&#xE5D9;</>,
     default: <>&#xF56D;</>,
 }
 

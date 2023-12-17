@@ -6,13 +6,19 @@ import {
     formatFriendlyTime,
     formatISODate,
 } from '@/utils/date-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
-import { FlashList } from '@shopify/flash-list'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    SafeAreaView,
+    SectionList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 
 import Divider from '../Universal/Divider'
 import HeaderButtons from './HeaderButtons'
@@ -33,16 +39,17 @@ export default function TimetableList({
     const router = useRouter()
     const theme = useTheme()
     const navigation = useNavigation()
-    const listRef = useRef<FlashList<FlashListItems>>(null)
+    const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <HeaderButtons
                     setToday={() => {
-                        listRef.current?.scrollToIndex({
-                            index: initialScrollIndex,
+                        listRef.current?.scrollToLocation({
                             animated: true,
+                            sectionIndex: initialScrollIndex,
+                            itemIndex: 0,
                         })
                     }}
                 />
@@ -60,22 +67,8 @@ export default function TimetableList({
      */
 
     const groupedTimetable = getGroupedTimetable(timetable)
-    const flatListData = groupedTimetable.flatMap((x) => [
-        x.title,
-        ...x.data.flatMap((x) => [x, 'separator']).slice(0, -1),
-        'footer',
-    ])
-    const headerIndices = flatListData
-        .map((x, i) => {
-            if (x instanceof Date) {
-                return i
-            } else {
-                return null
-            }
-        })
-        .filter((x) => x !== null) as number[]
 
-    const initialScrollIndex = flatListData.findIndex((x) => {
+    const initialScrollIndex = groupedTimetable.findIndex((x) => {
         const dates = timetable.map((x) => x.startDate)
         const today = new Date()
 
@@ -87,11 +80,7 @@ export default function TimetableList({
                 : prev
         )
 
-        if (x instanceof Date) {
-            return formatISODate(x) === formatISODate(nearestDate)
-        }
-
-        return false
+        return formatISODate(x.title) === formatISODate(nearestDate)
     })
 
     /**
@@ -139,21 +128,11 @@ export default function TimetableList({
         return <Divider color={colors.labelTertiaryColor} iosPaddingLeft={16} />
     }
 
-    function renderItem({ item }: { item: FlashListItems }): JSX.Element {
-        if (item instanceof Date) {
-            return renderSectionHeader(item)
-        }
-
-        if (typeof item === 'string') {
-            if (item === 'separator') {
-                return renderItemSeparator()
-            } else if (item === 'footer') {
-                return renderSectionFooter()
-            } else {
-                throw new Error('Invalid item')
-            }
-        }
-
+    function renderItem({
+        item,
+    }: {
+        item: FriendlyTimetableEntry
+    }): JSX.Element {
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -193,24 +172,32 @@ export default function TimetableList({
     }
 
     return (
-        <View style={styles.pageView}>
-            <FlashList
+        <SafeAreaView style={styles.pageView}>
+            <SectionList
                 ref={listRef}
-                data={flatListData}
-                contentContainerStyle={styles.container}
+                sections={groupedTimetable}
                 renderItem={renderItem}
-                getItemType={(item) => {
-                    if (item instanceof Date) {
-                        return 'sectionHeader'
-                    }
-
-                    return 'row'
-                }}
-                estimatedItemSize={40}
-                stickyHeaderIndices={headerIndices}
+                renderSectionHeader={({ section: { title } }) =>
+                    renderSectionHeader(title)
+                }
+                renderSectionFooter={renderSectionFooter}
+                ItemSeparatorComponent={renderItemSeparator}
+                contentContainerStyle={styles.container}
+                getItemLayout={(_, index) => ({
+                    length: 75,
+                    offset: 75 * index,
+                    index,
+                })}
                 initialScrollIndex={initialScrollIndex}
+                onLayout={() => {
+                    listRef.current?.scrollToLocation({
+                        animated: false,
+                        sectionIndex: initialScrollIndex,
+                        itemIndex: 0,
+                    })
+                }}
             />
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -225,8 +212,7 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     pageView: {
-        paddingHorizontal: PAGE_PADDING,
-        height: '100%',
+        flex: 1,
     },
     eventWrapper: {
         display: 'flex',
@@ -250,7 +236,7 @@ const styles = StyleSheet.create({
         height: 24,
     },
     container: {
-        paddingBottom: 5 * PAGE_BOTTOM_SAFE_AREA,
+        paddingHorizontal: PAGE_PADDING,
     },
     pressable: {
         paddingVertical: 8,

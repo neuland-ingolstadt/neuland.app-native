@@ -52,7 +52,7 @@ export default function HeaderButtons({
                         size: 22,
                     }}
                     android={{
-                        name: 'calendar',
+                        name: 'return',
                         size: 24,
                     }}
                 />
