@@ -17,9 +17,6 @@
         "noUnusedLocals": true
     },
     "plugins": ["react", "react-native"],
-    "rules": {
-        "react/prop-types": "off"
-    },
     "settings": {
         "react": {
             "version": "detect"
