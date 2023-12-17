@@ -29,6 +29,8 @@ import {
 } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
+// @ts-expect-error - no types available
+import DragDropView from '../Exclusive/DragView'
 import PlatformIcon from '../Universal/Icon'
 
 /**
@@ -86,195 +88,215 @@ export const MealEntry = ({
     const [key, setKey] = useState(Math.random())
 
     return (
-        <ContextMenu
-            title={meal.restaurant ?? ''}
-            key={key}
-            style={{ zIndex: 3 }}
-            actions={[
-                {
-                    title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
-                    subtitle:
-                        meal.allergens !== null
-                            ? t('preferences.formlist.allergens')
-                            : undefined,
-                    systemIcon:
-                        Platform.OS === 'ios'
-                            ? 'exclamationmark.triangle'
-                            : undefined,
-                    disabled: true,
-                },
-                {
-                    title: t('misc.share', { ns: 'common' }),
-                    systemIcon:
-                        Platform.OS === 'ios'
-                            ? 'square.and.arrow.up'
-                            : undefined,
-                },
-            ]}
-            onPreviewPress={() => {
-                router.push({
-                    pathname: '(food)/details',
-                    params: { foodEntry: JSON.stringify(meal) },
-                })
-            }}
-            onPress={(e) => {
-                if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
-                    trackEvent('Share', {
-                        type: 'meal',
-                    })
-                    void Share.share({
-                        message: t('details.share.message', {
-                            meal: meal?.name[i18n.language as LanguageKey],
-                            price: formatPrice(meal?.prices[userKind]),
-                            location: meal?.restaurant,
-                            id: meal?.id,
-                        }),
-                    })
-                }
-                setKey(Math.random())
-            }}
+        <DragDropView
+            mode="drag"
+            scope="system"
+            dragValue={t('details.share.message', {
+                meal: meal?.name[i18n.language as LanguageKey],
+                price: formatPrice(meal?.prices[userKind]),
+                location: meal?.restaurant,
+                id: meal?.id,
+            })}
         >
-            <Pressable
-                onPress={() => {
+            <ContextMenu
+                title={meal.restaurant ?? ''}
+                key={key}
+                style={{ zIndex: 3 }}
+                actions={[
+                    {
+                        title:
+                            meal.allergens?.join(', ') ??
+                            t('empty.noAllergens'),
+                        subtitle:
+                            meal.allergens !== null
+                                ? t('preferences.formlist.allergens')
+                                : undefined,
+                        systemIcon:
+                            Platform.OS === 'ios'
+                                ? 'exclamationmark.triangle'
+                                : undefined,
+                        disabled: true,
+                    },
+                    {
+                        title: t('misc.share', { ns: 'common' }),
+                        systemIcon:
+                            Platform.OS === 'ios'
+                                ? 'square.and.arrow.up'
+                                : undefined,
+                    },
+                ]}
+                onPreviewPress={() => {
                     router.push({
                         pathname: '(food)/details',
                         params: { foodEntry: JSON.stringify(meal) },
                     })
                 }}
-                delayLongPress={300}
-                onLongPress={() => {}}
-                style={styles.pressable}
+                onPress={(e) => {
+                    if (
+                        e.nativeEvent.name === t('misc.share', { ns: 'common' })
+                    ) {
+                        trackEvent('Share', {
+                            type: 'meal',
+                        })
+                        void Share.share({
+                            message: t('details.share.message', {
+                                meal: meal?.name[i18n.language as LanguageKey],
+                                price: formatPrice(meal?.prices[userKind]),
+                                location: meal?.restaurant,
+                                id: meal?.id,
+                            }),
+                        })
+                    }
+                    setKey(Math.random())
+                }}
             >
-                <View
-                    key={index}
-                    style={[
-                        styles.container,
-                        {
-                            backgroundColor: colors.card,
-                            shadowColor: colors.text,
-                        },
-                    ]}
+                <Pressable
+                    onPress={() => {
+                        router.push({
+                            pathname: '(food)/details',
+                            params: { foodEntry: JSON.stringify(meal) },
+                        })
+                    }}
+                    delayLongPress={300}
+                    onLongPress={() => {}}
+                    style={styles.pressable}
                 >
                     <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-start',
-                            width: '100%',
-                        }}
+                        key={index}
+                        style={[
+                            styles.container,
+                            {
+                                backgroundColor: colors.card,
+                                shadowColor: colors.text,
+                            },
+                        ]}
                     >
-                        <Text
-                            style={[styles.Title, { color: colors.text }]}
-                            adjustsFontSizeToFit={true}
-                            numberOfLines={2}
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-start',
+                                width: '100%',
+                            }}
                         >
-                            {mealName(
-                                meal.name,
-                                foodLanguage,
-                                i18n.language as LanguageKey
-                            )}
-                        </Text>
-                        {meal.variants !== null && (
-                            <LinearGradient
-                                style={styles.variantContainer}
-                                colors={[
-                                    colors.labelBackground,
-                                    Color(colors.labelBackground)
-                                        .lighten(0.15)
-                                        .hex(),
-                                ]}
-                                start={[0, 1]}
-                                end={[1, 0]}
+                            <Text
+                                style={[styles.Title, { color: colors.text }]}
+                                adjustsFontSizeToFit={true}
+                                numberOfLines={2}
                             >
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.variantText,
-                                    }}
+                                {mealName(
+                                    meal.name,
+                                    foodLanguage,
+                                    i18n.language as LanguageKey
+                                )}
+                            </Text>
+                            {meal.variants !== null && (
+                                <LinearGradient
+                                    style={styles.variantContainer}
+                                    colors={[
+                                        colors.labelBackground,
+                                        Color(colors.labelBackground)
+                                            .lighten(0.15)
+                                            .hex(),
+                                    ]}
+                                    start={[0, 1]}
+                                    end={[1, 0]}
                                 >
-                                    {'+ ' + meal.variants.length}
-                                </Text>
-                            </LinearGradient>
-                        )}
-                    </View>
-                    <View style={styles.detailsContainer}>
-                        <View style={styles.detailsColumns}>
-                            <View style={styles.flags}>
-                                {userFlags?.map(
-                                    (flag: string, index: number) => (
-                                        <LinearGradient
-                                            key={index}
-                                            style={styles.flagsBox}
-                                            colors={[
-                                                colors.labelBackground,
-                                                Color(colors.labelBackground)
-                                                    .lighten(0.13)
-                                                    .hex(),
-                                            ]}
-                                            start={[0, 0]}
-                                            end={[1, 0]}
-                                        >
-                                            <Text
-                                                style={[
-                                                    styles.flagsText,
-                                                    {
-                                                        color: colors.text,
-                                                    },
+                                    <Text
+                                        style={{
+                                            color: colors.text,
+                                            ...styles.variantText,
+                                        }}
+                                    >
+                                        {'+ ' + meal.variants.length}
+                                    </Text>
+                                </LinearGradient>
+                            )}
+                        </View>
+                        <View style={styles.detailsContainer}>
+                            <View style={styles.detailsColumns}>
+                                <View style={styles.flags}>
+                                    {userFlags?.map(
+                                        (flag: string, index: number) => (
+                                            <LinearGradient
+                                                key={index}
+                                                style={styles.flagsBox}
+                                                colors={[
+                                                    colors.labelBackground,
+                                                    Color(
+                                                        colors.labelBackground
+                                                    )
+                                                        .lighten(0.13)
+                                                        .hex(),
                                                 ]}
+                                                start={[0, 0]}
+                                                end={[1, 0]}
                                             >
-                                                {flag}
-                                            </Text>
-                                        </LinearGradient>
-                                    )
+                                                <Text
+                                                    style={[
+                                                        styles.flagsText,
+                                                        {
+                                                            color: colors.text,
+                                                        },
+                                                    ]}
+                                                >
+                                                    {flag}
+                                                </Text>
+                                            </LinearGradient>
+                                        )
+                                    )}
+                                </View>
+                                {shouldShowAllergens && (
+                                    <View style={styles.allergensContainer}>
+                                        <PlatformIcon
+                                            ios={{
+                                                name: iconName,
+                                                size: 13,
+                                            }}
+                                            android={{
+                                                name: androidName,
+                                                size: 16,
+                                            }}
+                                            style={styles.icon}
+                                            color={colors.notification}
+                                        />
+                                        <Text
+                                            style={[
+                                                styles.allergene,
+                                                {
+                                                    color: colors.notification,
+                                                },
+                                            ]}
+                                            numberOfLines={3}
+                                        >
+                                            {textContent}
+                                        </Text>
+                                    </View>
                                 )}
                             </View>
-                            {shouldShowAllergens && (
-                                <View style={styles.allergensContainer}>
-                                    <PlatformIcon
-                                        ios={{
-                                            name: iconName,
-                                            size: 13,
-                                        }}
-                                        android={{
-                                            name: androidName,
-                                            size: 16,
-                                        }}
-                                        style={styles.icon}
-                                        color={colors.notification}
-                                    />
-                                    <Text
-                                        style={[
-                                            styles.allergene,
-                                            {
-                                                color: colors.notification,
-                                            },
-                                        ]}
-                                        numberOfLines={3}
-                                    >
-                                        {textContent}
-                                    </Text>
-                                </View>
-                            )}
-                        </View>
-                        <View style={styles.priceContainer}>
-                            <Text
-                                style={[styles.price, { color: colors.text }]}
-                            >
-                                {getUserSpecificPrice(meal, userKind)}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.priceLabel,
-                                    { color: colors.labelColor },
-                                ]}
-                            >
-                                {label}
-                            </Text>
+                            <View style={styles.priceContainer}>
+                                <Text
+                                    style={[
+                                        styles.price,
+                                        { color: colors.text },
+                                    ]}
+                                >
+                                    {getUserSpecificPrice(meal, userKind)}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.priceLabel,
+                                        { color: colors.labelColor },
+                                    ]}
+                                >
+                                    {label}
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </Pressable>
-        </ContextMenu>
+                </Pressable>
+            </ContextMenu>
+        </DragDropView>
     )
 }
 

@@ -9877,6 +9877,7 @@ __metadata:
     react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-context-menu-view: "npm:^1.14.1"
+    react-native-drag-drop-ios: "npm:^0.1.1"
     react-native-draggable-flatlist: "npm:^4.0.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
     react-native-gesture-handler: "npm:~2.12.0"
@@ -11004,6 +11005,16 @@ __metadata:
     react: ^16.8.1 || ^17.0.0 || ^18.0.0
     react-native: ">=0.60.0-rc.0 <1.0.x"
   checksum: 907205c7d5f0c4c758dff9e5adcd1e89403af7cf67510db5923502e8b0283e6098747ff06dfd02cb1cd896baa408d37b8682473e506275a619811e08b7c345b6
+  languageName: node
+  linkType: hard
+
+"react-native-drag-drop-ios@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "react-native-drag-drop-ios@npm:0.1.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 5431ea875469f5f3f15cd5a194d13a603448ca8061275838aa08088f867c090ed14401c24988b9a469ae63c56227347e3e6b11957d1b14d61a998c8b06d8e6e5
   languageName: node
   linkType: hard
 

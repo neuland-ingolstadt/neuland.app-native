@@ -433,6 +433,8 @@ PODS:
     - React-Core
   - react-native-context-menu-view (1.14.1):
     - React
+  - react-native-drag-drop-ios (0.1.1):
+    - React-Core
   - react-native-pager-view (6.2.3):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -665,6 +667,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-change-icon (from `../node_modules/react-native-change-icon`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
+  - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-view-shot (from `../node_modules/react-native-view-shot`)
@@ -814,6 +817,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-change-icon"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
+  react-native-drag-drop-ios:
+    :path: "../node_modules/react-native-drag-drop-ios"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -936,6 +941,7 @@ SPEC CHECKSUMS:
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
   react-native-change-icon: 2022b0d00d6d9fe42ddf73a410e89114a67f3c0b
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
+  react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688

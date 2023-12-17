@@ -41,12 +41,6 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@types/color@3.0.5": {
-        "licenses": "MIT",
-        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
-        "licenseUrl": "https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LICENSE",
-        "parents": "neuland"
-    },
     "color@4.2.3": {
         "licenses": "MIT",
         "repository": "https://github.com/Qix-/color",
@@ -237,6 +231,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/mpiannucci/react-native-context-menu-view",
         "licenseUrl": "https://github.com/mpiannucci/react-native-context-menu-view/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "react-native-drag-drop-ios@0.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jacobp100/react-native-drag-drop-ios",
+        "licenseUrl": "https://github.com/jacobp100/react-native-drag-drop-ios/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-draggable-flatlist@4.0.1": {
