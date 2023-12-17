@@ -6588,8 +6588,8 @@ __metadata:
   linkType: hard
 
 "expo-router@npm:^3.1.2":
-  version: 3.2.0
-  resolution: "expo-router@npm:3.2.0"
+  version: 3.1.2
+  resolution: "expo-router@npm:3.1.2"
   dependencies:
     "@expo/metro-runtime": "npm:3.0.4"
     "@expo/server": "npm:^0.2.0"
@@ -6617,7 +6617,7 @@ __metadata:
       optional: true
     react-native-reanimated:
       optional: true
-  checksum: a6b752bddc0c557ace7b88cbe0eaa099d9f115247781b248425a8f42f7a2e559883f8f3093f26d97283af15f88c93de4e5dfe5da1e147ccb14d2676217f0d4e4
+  checksum: b559f76db53fc75b0c357b7c6b9fe2eb8928dadf73a271cfe0785c7ee8875417a9c05040f0feada66135eb0c48ea5363b7956af2cf9cd69506f5f40ec63fb1b4
   languageName: node
   linkType: hard
 

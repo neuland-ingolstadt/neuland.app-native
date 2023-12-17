@@ -1,6 +1,5 @@
 import i18n from '@/localization/i18n'
 import { type FriendlyDateOptions } from '@/types/utils'
-import type dayjs from 'dayjs'
 // required by react-native-big-calendar (thats why we have moment and dayjs)
 import moment from 'moment'
 import 'moment/locale/de'
@@ -353,10 +352,32 @@ export function getDateRange(startDate: Date, delta: number): Date[] {
  * @example
  * ignoreTime(new Date('2021-01-01T12:00:00')) // => new Date('2021-01-01T00:00:00')
  */
-export function ignoreTime(date: dayjs.Dayjs): dayjs.Dayjs {
-    return date
-        .set('hour', 0)
-        .set('minute', 0)
-        .set('second', 0)
-        .set('millisecond', 0)
+export function ignoreTime(date: Date): Date {
+    const newDate = new Date(date)
+    newDate.setHours(0, 0, 0, 0)
+    return newDate
+}
+
+/**
+ * Add x days to a date
+ * @param date
+ * @param days
+ * @returns Date with x days added
+ */
+export function addDays(date: Date, days: number): Date {
+    const newDate = new Date(date)
+    newDate.setDate(newDate.getDate() + days)
+    return newDate
+}
+
+/**
+ * Format a date to a string like "Mon 01"
+ * @param date
+ * @returns Date as string
+ */
+export function formatDay(date: Date): string {
+    return date.toLocaleString(i18n.language, {
+        weekday: 'short',
+        day: '2-digit',
+    })
 }

@@ -1,5 +1,9 @@
 import API from '@/api/authenticated-api'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+import {
+    type CalendarEvent,
+    type FriendlyTimetableEntry,
+    type TimetableSections,
+} from '@/types/utils'
 
 import { combineDateTime } from './date-utils'
 
@@ -54,4 +58,57 @@ export async function getFriendlyTimetable(
                 literature: lecture.details.literatur,
             }
         })
+}
+
+/**
+ * Groups the given timetable by date.
+ * @param timetable Timetable to group
+ * @returns Timetable grouped by date
+ * @example
+ * const timetable = [
+ *    { date: '2021-01-01', name: 'Lecture 1' },
+ *   { date: '2021-01-01', name: 'Lecture 2' },
+ *   { date: '2021-01-02', name: 'Lecture 3' },
+ * ]
+ * const groupedTimetable = getGroupedTimetable(timetable)
+ * // groupedTimetable = {
+ * //   '2021-01-01': [
+ * //     { date: '2021-01-01', name: 'Lecture 1' },
+ * //     { date: '2021-01-01', name: 'Lecture 2' },
+ * //   ],
+ * //   '2021-01-02': [
+ * //     { date: '2021-01-02', name: 'Lecture 3' },
+ * //   ],
+ * // }
+ **/
+export function getGroupedTimetable(
+    timetable: FriendlyTimetableEntry[]
+): TimetableSections[] {
+    const dates = [...new Set(timetable.map((x) => x.date))]
+
+    // Group lectures by date
+    const groups = dates.map((date) => ({
+        title: new Date(date),
+        data: timetable.filter((x) => x.date === date),
+    }))
+
+    return groups
+}
+
+export function convertTimetableToWeekViewEvents(
+    entries: FriendlyTimetableEntry[],
+    color: string,
+    textColor: string
+): CalendarEvent[] {
+    return entries.map((entry) => {
+        return {
+            start: entry.startDate,
+            end: entry.endDate,
+            title: entry.shortName,
+            color,
+            textColor,
+            location: entry.rooms.length > 0 ? entry.rooms[0] : undefined,
+            entry,
+        }
+    })
 }

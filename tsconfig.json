@@ -6,7 +6,7 @@
             "@/*": ["./src/*"],
             "ios/*": ["./ios/NeulandNext/Images.xcassets/*"]
         },
-
+        "project": "./tsconfig.json",
         "strict": true
     }
 }

@@ -1,5 +1,6 @@
 import { type AppIconHook } from '@/hooks/appIcon'
 import { type FlowHook } from '@/hooks/flow'
+import { type TimetableHook, useTimetable } from '@/hooks/timetable'
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import {
@@ -94,6 +95,11 @@ export const ReloadProvider = createContext<any>({
     toggleReload: () => {},
 })
 
+export const TimetableContext = createContext<TimetableHook>({
+    timetableMode: 'list',
+    setTimetableMode: () => {},
+})
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -115,6 +121,7 @@ export default function Provider({
     const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
     const onColorSchemeChange = useRef<NodeJS.Timeout>()
     const pathname = usePathname()
+    const timetableHook = useTimetable()
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -272,27 +279,31 @@ export default function Provider({
                         : darkTheme
                 }
             >
-                <ThemeContext.Provider value={themeHook}>
-                    <AppIconContext.Provider value={appIcon}>
-                        <FlowContext.Provider value={flow}>
-                            <UserKindContext.Provider value={userKind}>
-                                <DashboardContext.Provider value={dashboard}>
-                                    <FoodFilterContext.Provider
-                                        value={foodFilter}
+                <TimetableContext.Provider value={timetableHook}>
+                    <ThemeContext.Provider value={themeHook}>
+                        <AppIconContext.Provider value={appIcon}>
+                            <FlowContext.Provider value={flow}>
+                                <UserKindContext.Provider value={userKind}>
+                                    <DashboardContext.Provider
+                                        value={dashboard}
                                     >
-                                        <RouteParamsContext.Provider
-                                            value={routeParams}
+                                        <FoodFilterContext.Provider
+                                            value={foodFilter}
                                         >
-                                            <RootSiblingParent>
-                                                {children}
-                                            </RootSiblingParent>
-                                        </RouteParamsContext.Provider>
-                                    </FoodFilterContext.Provider>
-                                </DashboardContext.Provider>
-                            </UserKindContext.Provider>
-                        </FlowContext.Provider>
-                    </AppIconContext.Provider>
-                </ThemeContext.Provider>
+                                            <RouteParamsContext.Provider
+                                                value={routeParams}
+                                            >
+                                                <RootSiblingParent>
+                                                    {children}
+                                                </RootSiblingParent>
+                                            </RouteParamsContext.Provider>
+                                        </FoodFilterContext.Provider>
+                                    </DashboardContext.Provider>
+                                </UserKindContext.Provider>
+                            </FlowContext.Provider>
+                        </AppIconContext.Provider>
+                    </ThemeContext.Provider>
+                </TimetableContext.Provider>
             </ThemeProvider>
         </GestureHandlerRootView>
     )
