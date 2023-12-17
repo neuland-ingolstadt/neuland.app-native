@@ -182,6 +182,7 @@ export default function TimetableList({
                         }}
                     />
                 }
+                initialNumToRender={15}
             />
         </SafeAreaView>
     )
