@@ -5,6 +5,7 @@ import {
     formatFriendlyDate,
     formatFriendlyTime,
     formatISODate,
+    isSameDay,
 } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
@@ -12,6 +13,7 @@ import { useTheme } from '@react-navigation/native'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
 import {
+    Dimensions,
     SafeAreaView,
     SectionList,
     StyleSheet,
@@ -31,6 +33,7 @@ export default function TimetableList({
     /**
      * Constants
      */
+    const today = new Date('2023-12-15')
     const timetable = friendlyTimetable
 
     /**
@@ -67,21 +70,12 @@ export default function TimetableList({
      */
 
     const groupedTimetable = getGroupedTimetable(timetable)
+    const nextDate =
+        timetable.find((x) => x.startDate > today)?.startDate ?? today
 
-    const initialScrollIndex = groupedTimetable.findIndex((x) => {
-        const dates = timetable.map((x) => x.startDate)
-        const today = new Date()
-
-        // find nearest date to today
-        const nearestDate = dates.reduce((prev, curr) =>
-            Math.abs(curr.getTime() - today.getTime()) <
-            Math.abs(prev.getTime() - today.getTime())
-                ? curr
-                : prev
-        )
-
-        return formatISODate(x.title) === formatISODate(nearestDate)
-    })
+    const initialScrollIndex = groupedTimetable.findIndex((x) =>
+        isSameDay(x.title, nextDate)
+    )
 
     /**
      * Functions
@@ -94,7 +88,7 @@ export default function TimetableList({
     }
 
     function renderSectionHeader(title: Date): JSX.Element {
-        const isToday = formatISODate(title) === formatISODate(new Date())
+        const isToday = formatISODate(title) === formatISODate(today)
 
         return (
             <View
@@ -171,6 +165,16 @@ export default function TimetableList({
         )
     }
 
+    async function initialScroll(): Promise<void> {
+        setTimeout(() => {
+            listRef.current?.scrollToLocation({
+                animated: true,
+                sectionIndex: initialScrollIndex,
+                itemIndex: 0,
+            })
+        }, 150)
+    }
+
     return (
         <SafeAreaView style={styles.pageView}>
             <SectionList
@@ -183,20 +187,23 @@ export default function TimetableList({
                 renderSectionFooter={renderSectionFooter}
                 ItemSeparatorComponent={renderItemSeparator}
                 contentContainerStyle={styles.container}
-                getItemLayout={(_, index) => ({
-                    length: 75,
-                    offset: 75 * index,
-                    index,
-                })}
-                initialScrollIndex={initialScrollIndex}
                 onLayout={() => {
-                    listRef.current?.scrollToLocation({
-                        animated: false,
-                        sectionIndex: initialScrollIndex,
-                        itemIndex: 0,
-                    })
+                    void initialScroll()
                 }}
                 stickySectionHeadersEnabled={true}
+                ListFooterComponent={
+                    <View
+                        style={{
+                            height: Dimensions.get('window').height - 230,
+                        }}
+                    />
+                }
+                getItemLayout={(_, index) => ({
+                    length: 45,
+                    offset: 47 * index,
+                    index,
+                })}
+                initialNumToRender={initialScrollIndex + 5}
             />
         </SafeAreaView>
     )
@@ -223,7 +230,7 @@ const styles = StyleSheet.create({
     indicator: {
         width: 4,
         borderRadius: 2,
-        height: '100%',
+        height: 45,
     },
     nameView: {
         flexGrow: 1,
