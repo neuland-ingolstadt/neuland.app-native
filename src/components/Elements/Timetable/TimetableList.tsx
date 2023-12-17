@@ -27,6 +27,7 @@ import HeaderButtons from './HeaderButtons'
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
 export default function TimetableList({
+    // eslint-disable-next-line react/prop-types
     friendlyTimetable,
 }: ITimetableViewProps): JSX.Element {
     /**
