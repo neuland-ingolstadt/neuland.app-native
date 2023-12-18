@@ -3,6 +3,7 @@ import { type Colors } from '@/components/colors'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
+    formatFriendlyDateTime,
     formatFriendlyTime,
     formatISODate,
 } from '@/utils/date-utils'
@@ -20,6 +21,7 @@ import {
     View,
 } from 'react-native'
 
+import DragDropView from '../Exclusive/DragView'
 import Divider from '../Universal/Divider'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
@@ -126,55 +128,68 @@ export default function TimetableList({
         item: FriendlyTimetableEntry
     }): JSX.Element {
         return (
-            <TouchableOpacity
-                onPress={() => {
-                    showEventDetails(item)
-                }}
-                style={styles.pressable}
+            <DragDropView
+                mode="drag"
+                scope="system"
+                dragValue={`${item.name} in ${item.rooms?.join(
+                    ', '
+                )} (${formatFriendlyDateTime(
+                    item.startDate
+                )} - ${formatFriendlyTime(item.endDate)})`}
             >
-                <View style={styles.eventWrapper}>
-                    <View
-                        style={{
-                            backgroundColor: colors.primary,
-                            ...styles.indicator,
-                        }}
-                    />
-                    <View style={styles.nameView}>
-                        <Text
-                            style={{ color: colors.text, ...styles.titleText }}
-                            numberOfLines={1}
-                        >
-                            {item.name}
-                        </Text>
-                        <Text
+                <TouchableOpacity
+                    onPress={() => {
+                        showEventDetails(item)
+                    }}
+                    style={styles.pressable}
+                >
+                    <View style={styles.eventWrapper}>
+                        <View
                             style={{
-                                color: colors.labelColor,
-                                ...styles.descriptionText,
+                                backgroundColor: colors.primary,
+                                ...styles.indicator,
                             }}
-                        >
-                            {item.rooms?.join(', ')}
-                        </Text>
+                        />
+                        <View style={styles.nameView}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.titleText,
+                                }}
+                                numberOfLines={1}
+                            >
+                                {item.name}
+                            </Text>
+                            <Text
+                                style={{
+                                    color: colors.labelColor,
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {item.rooms?.join(', ')}
+                            </Text>
+                        </View>
+                        <View>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {formatFriendlyTime(item.startDate)}
+                            </Text>
+                            <Text
+                                style={{
+                                    color: colors.labelColor,
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {formatFriendlyTime(item.endDate)}
+                            </Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.descriptionText,
-                            }}
-                        >
-                            {formatFriendlyTime(item.startDate)}
-                        </Text>
-                        <Text
-                            style={{
-                                color: colors.labelColor,
-                                ...styles.descriptionText,
-                            }}
-                        >
-                            {formatFriendlyTime(item.endDate)}
-                        </Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </DragDropView>
         )
     }
 
@@ -191,7 +206,7 @@ export default function TimetableList({
                 ItemSeparatorComponent={renderItemSeparator}
                 contentContainerStyle={styles.container}
                 stickySectionHeadersEnabled={true}
-                initialNumToRender={15}
+                initialNumToRender={20}
             />
         </SafeAreaView>
     )
