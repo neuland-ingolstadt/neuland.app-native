@@ -43,7 +43,7 @@
     "expo-local-authentication": "~13.4.1",
     "expo-localization": "~14.3.0",
     "expo-notifications": "~0.20.1",
-    "expo-router": "^3.1.2",
+    "expo-router": "3.1.2",
     "expo-secure-store": "~12.3.1",
     "expo-sharing": "11.7.0",
     "expo-splash-screen": "~0.20.5",

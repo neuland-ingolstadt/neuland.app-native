@@ -7,11 +7,12 @@ import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext } from '@/components/provider'
+import { NotificationContext, RouteParamsContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
+import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
@@ -21,7 +22,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ViewShot, { captureRef } from 'react-native-view-shot'
@@ -29,6 +30,11 @@ import ViewShot, { captureRef } from 'react-native-view-shot'
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
     const { updateRouteParams } = useContext(RouteParamsContext)
+    const {
+        timetableNotifications,
+        updateTimetableNotifications,
+        deleteTimetableNotifications,
+    } = useContext(NotificationContext)
 
     const colors = useTheme().colors as Colors
     const { eventParam } = useLocalSearchParams<{ eventParam: string }>()
@@ -39,6 +45,7 @@ export default function TimetableDetails(): JSX.Element {
     if (event == null) {
         throw new Error('Event is undefined')
     }
+    const today = new Date()
 
     const startDate = new Date(event.startDate)
     const endDate = new Date(event.endDate)
@@ -47,18 +54,63 @@ export default function TimetableDetails(): JSX.Element {
     const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
 
     const shareRef = React.useRef<ViewShot>(null)
+    const [rawTimetable, setRawTimetable] = useState<FriendlyTimetableEntry[]>(
+        []
+    )
 
-    async function schedulePushNotification(): Promise<void> {
-        await Notifications.scheduleNotificationAsync({
+    async function schedulePushNotification(
+        lectureTitle: string,
+        room: string,
+        minsBefore: number,
+        date: Date
+    ): Promise<string> {
+        const id = await Notifications.scheduleNotificationAsync({
             content: {
-                title: 'Web Technologies in G069',
-                body: 'Lecture starts in 15 minutes!',
-                data: { data: 'goes here' },
+                title: lectureTitle,
+                body: `starts in ${minsBefore} minutes at ${room}`,
             },
-            trigger: { seconds: 5 },
+            trigger: date,
         })
+        return id
     }
 
+    async function load(): Promise<void> {
+        try {
+            const timetable = await getFriendlyTimetable(today, true)
+            const filteredTimetable = timetable.filter(
+                (lecture) =>
+                    lecture.shortName === event?.shortName &&
+                    lecture.startDate >= today
+            )
+
+            setRawTimetable(filteredTimetable)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        void load()
+    }, [])
+    async function setupNotifications(mins: number): Promise<void> {
+        if (event?.shortName === undefined) {
+            throw new Error('Event is undefined')
+        }
+        console.log('received timetable', rawTimetable.length)
+        const notificationPromises = rawTimetable.map(async (lecture) => {
+            const startDate = new Date(lecture.startDate)
+            const alertDate = new Date(startDate.getTime() - mins * 60000)
+            return await schedulePushNotification(
+                lecture.name,
+                lecture.rooms[0],
+                mins,
+                alertDate
+            )
+        })
+        const ids = await Promise.all(notificationPromises)
+        console.log('received ids', ids)
+        updateTimetableNotifications({ name: event.shortName, mins, ids })
+    }
     async function shareEvent(): Promise<void> {
         try {
             const uri = await captureRef(shareRef, {
@@ -77,20 +129,15 @@ export default function TimetableDetails(): JSX.Element {
         }
     }
 
+    const notification = timetableNotifications.find(
+        (notification) => notification.name === event.shortName
+    )
+    const minsBefore = notification != null ? notification.mins : undefined
+
     const detailsList: FormListSections[] = [
         {
             header: t('overview.title'),
             items: [
-                {
-                    title: 'Test Notification',
-                    icon: {
-                        ios: 'bell',
-                        android: 'bell',
-                    },
-                    onPress: () => {
-                        void schedulePushNotification()
-                    },
-                },
                 {
                     title: t('overview.goal'),
                     icon: chevronIcon,
@@ -150,11 +197,31 @@ export default function TimetableDetails(): JSX.Element {
         },
     ]
 
-    const actionSheetRef = useRef()
+    const actionSheetRef = useRef<ActionSheet>(null)
 
     const showActionSheet = (): void => {
-        actionSheetRef.current.show()
+        if (actionSheetRef.current != null) {
+            actionSheetRef.current.show()
+        }
     }
+
+    const options = [
+        { value: 5, label: t('notificatons.five') },
+        { value: 15, label: t('notificatons.fifteen') },
+        { value: 30, label: t('notificatons.thirty') },
+    ]
+
+    const filteredOptions = options.filter(
+        (option) => option.value !== minsBefore
+    )
+
+    filteredOptions.push(
+        ...(notification != null
+            ? [{ value: 0, label: t('misc.disable', { ns: 'common' }) }]
+            : []),
+        { value: -1, label: t('misc.cancel', { ns: 'common' }) }
+    )
+
     return (
         <>
             <StatusBar style={getStatusBarStyle()} />
@@ -162,16 +229,18 @@ export default function TimetableDetails(): JSX.Element {
                 ref={actionSheetRef}
                 title={t('notificatons.title')}
                 message={t('notificatons.description')}
-                options={[
-                    t('notificatons.five'),
-                    t('notificatons.fifteen'),
-                    t('notificatons.thirty'),
-                    t('misc.cancel', { ns: 'common' }),
-                ]}
-                cancelButtonIndex={3}
+                options={filteredOptions.map((option) => option.label)}
+                cancelButtonIndex={filteredOptions.length - 1}
+                destructiveButtonIndex={notification != null ? 2 : -1}
                 onPress={(index) => {
-                    if (index === 0) {
-                        void schedulePushNotification()
+                    const selectedValue = filteredOptions[index].value
+                    if (selectedValue > 0) {
+                        console.log('selected', selectedValue)
+                        void setupNotifications(selectedValue)
+                    } else if (selectedValue === 0) {
+                        console.log('selected', selectedValue)
+                        console.log('canceling', notification?.ids)
+                        deleteTimetableNotifications(event.shortName)
                     }
                 }}
             />
@@ -300,7 +369,10 @@ export default function TimetableDetails(): JSX.Element {
                                     <PlatformIcon
                                         color={colors.primary}
                                         ios={{
-                                            name: 'bell',
+                                            name:
+                                                notification != null
+                                                    ? 'bell.fill'
+                                                    : 'bell',
                                             size: 21,
                                         }}
                                         android={{

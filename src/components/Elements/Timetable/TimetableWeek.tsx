@@ -29,7 +29,7 @@ import {
 } from 'react-native-big-calendar'
 
 import PlatformIcon from '../Universal/Icon'
-import HeaderButtons from './HeaderButtons'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 const HOUR_WIDTH = HOUR_GUIDE_WIDTH + 1
 const MARGIN = 3
@@ -56,12 +56,13 @@ export default function TimetableWeek({
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <HeaderButtons
+                <HeaderRight
                     setToday={() => {
                         setCalendarDate(today)
                     }}
                 />
             ),
+            headerLeft: () => <HeaderLeft />,
         })
     }, [navigation])
 

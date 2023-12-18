@@ -29,6 +29,7 @@ import {
 } from '../hooks'
 import { type Dashboard } from '../hooks/dashboard'
 import { type FoodFilter } from '../hooks/foodFilter'
+import { type Notifications, useNotifications } from '../hooks/notifications'
 import { type RouteParams } from '../hooks/routing'
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 
@@ -105,6 +106,12 @@ export const TimetableContext = createContext<TimetableHook>({
     setTimetableMode: () => {},
 })
 
+export const NotificationContext = createContext<Notifications>({
+    timetableNotifications: [],
+    updateTimetableNotifications: () => {},
+    deleteTimetableNotifications: () => {},
+})
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -127,6 +134,7 @@ export default function Provider({
     const onColorSchemeChange = useRef<NodeJS.Timeout>()
     const pathname = usePathname()
     const timetableHook = useTimetable()
+    const notifications = useNotifications()
 
     // iOS workaround to prevent change of the color scheme while the app is in the background
     // https://github.com/facebook/react-native/issues/35972
@@ -285,29 +293,31 @@ export default function Provider({
                 }
             >
                 <TimetableContext.Provider value={timetableHook}>
-                    <ThemeContext.Provider value={themeHook}>
-                        <AppIconContext.Provider value={appIcon}>
-                            <FlowContext.Provider value={flow}>
-                                <UserKindContext.Provider value={userKind}>
-                                    <DashboardContext.Provider
-                                        value={dashboard}
-                                    >
-                                        <FoodFilterContext.Provider
-                                            value={foodFilter}
+                    <NotificationContext.Provider value={notifications}>
+                        <ThemeContext.Provider value={themeHook}>
+                            <AppIconContext.Provider value={appIcon}>
+                                <FlowContext.Provider value={flow}>
+                                    <UserKindContext.Provider value={userKind}>
+                                        <DashboardContext.Provider
+                                            value={dashboard}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
+                                            <FoodFilterContext.Provider
+                                                value={foodFilter}
                                             >
-                                                <RootSiblingParent>
-                                                    {children}
-                                                </RootSiblingParent>
-                                            </RouteParamsContext.Provider>
-                                        </FoodFilterContext.Provider>
-                                    </DashboardContext.Provider>
-                                </UserKindContext.Provider>
-                            </FlowContext.Provider>
-                        </AppIconContext.Provider>
-                    </ThemeContext.Provider>
+                                                <RouteParamsContext.Provider
+                                                    value={routeParams}
+                                                >
+                                                    <RootSiblingParent>
+                                                        {children}
+                                                    </RootSiblingParent>
+                                                </RouteParamsContext.Provider>
+                                            </FoodFilterContext.Provider>
+                                        </DashboardContext.Provider>
+                                    </UserKindContext.Provider>
+                                </FlowContext.Provider>
+                            </AppIconContext.Provider>
+                        </ThemeContext.Provider>
+                    </NotificationContext.Provider>
                 </TimetableContext.Provider>
             </ThemeProvider>
         </GestureHandlerRootView>

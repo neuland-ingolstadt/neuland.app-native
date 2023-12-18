@@ -22,7 +22,7 @@ import {
 } from 'react-native'
 
 import Divider from '../Universal/Divider'
-import HeaderButtons from './HeaderButtons'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
@@ -47,7 +47,7 @@ export default function TimetableList({
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <HeaderButtons
+                <HeaderRight
                     setToday={() => {
                         listRef.current?.scrollToLocation({
                             sectionIndex: 0,
@@ -58,6 +58,7 @@ export default function TimetableList({
                     }}
                 />
             ),
+            headerLeft: () => <HeaderLeft />,
         })
     }, [navigation])
 

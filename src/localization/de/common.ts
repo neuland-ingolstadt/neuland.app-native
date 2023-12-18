@@ -27,6 +27,7 @@ export default {
         cancel: 'Abbrechen',
         confirm: 'Bestätigen',
         delete: 'Löschen',
+        disable: 'Deaktivieren',
     },
     pages: {
         calendar: {
