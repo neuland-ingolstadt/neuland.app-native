@@ -281,6 +281,15 @@ export default function Provider({
         })
     }, [i18n.language, flow.analyticsInitialized])
 
+    useEffect((): void => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('TimetableMode', {
+            timetableMode: timetableHook.timetableMode,
+        })
+    }, [flow.analyticsAllowed, flow.analyticsInitialized])
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider

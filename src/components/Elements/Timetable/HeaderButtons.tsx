@@ -1,5 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { TimetableContext } from '@/components/provider'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { TouchableOpacity } from 'react-native'
@@ -13,7 +14,11 @@ export function HeaderLeft(): JSX.Element {
     return (
         <TouchableOpacity
             onPress={() => {
-                setTimetableMode(timetableMode === 'list' ? '3days' : 'list')
+                const mode = timetableMode === 'list' ? '3days' : 'list'
+                setTimetableMode(mode)
+                trackEvent('TimetableMode', {
+                    mode,
+                })
             }}
             hitSlop={10}
         >
