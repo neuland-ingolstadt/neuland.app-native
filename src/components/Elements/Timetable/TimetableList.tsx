@@ -12,7 +12,6 @@ import { useTheme } from '@react-navigation/native'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
 import {
-    Dimensions,
     SafeAreaView,
     SectionList,
     StyleSheet,
@@ -147,15 +146,30 @@ export default function TimetableList({
                         >
                             {item.name}
                         </Text>
-                        <Text style={{ color: colors.labelColor }}>
+                        <Text
+                            style={{
+                                color: colors.labelColor,
+                                ...styles.descriptionText,
+                            }}
+                        >
                             {item.rooms?.join(', ')}
                         </Text>
                     </View>
                     <View>
-                        <Text style={{ color: colors.text }}>
+                        <Text
+                            style={{
+                                color: colors.text,
+                                ...styles.descriptionText,
+                            }}
+                        >
                             {formatFriendlyTime(item.startDate)}
                         </Text>
-                        <Text style={{ color: colors.labelColor }}>
+                        <Text
+                            style={{
+                                color: colors.labelColor,
+                                ...styles.descriptionText,
+                            }}
+                        >
                             {formatFriendlyTime(item.endDate)}
                         </Text>
                     </View>
@@ -177,13 +191,6 @@ export default function TimetableList({
                 ItemSeparatorComponent={renderItemSeparator}
                 contentContainerStyle={styles.container}
                 stickySectionHeadersEnabled={true}
-                ListFooterComponent={
-                    <View
-                        style={{
-                            height: Dimensions.get('window').height - 230,
-                        }}
-                    />
-                }
                 initialNumToRender={15}
             />
         </SafeAreaView>
@@ -194,9 +201,10 @@ const styles = StyleSheet.create({
     sectionView: {
         paddingTop: PAGE_PADDING,
         marginBottom: 8,
-        gap: 8,
+        gap: 6,
     },
     sectionTitle: {
+        fontSize: 15,
         fontWeight: 'bold',
         textTransform: 'uppercase',
     },
@@ -220,9 +228,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: '500',
+        fontSize: 16,
+    },
+    descriptionText: {
+        fontSize: 14,
     },
     sectionFooter: {
-        height: 24,
+        height: 20,
     },
     container: {
         paddingHorizontal: PAGE_PADDING,

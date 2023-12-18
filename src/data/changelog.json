@@ -166,6 +166,20 @@
             },
             {
                 "title": {
+                    "de": "Benachrichtigungen",
+                    "en": "Notifications"
+                },
+                "description": {
+                    "de": "Aktiviere Benachrichtigungen, um über bevorstehende Vorlesungen informiert zu werden.",
+                    "en": "Enable notifications to be informed about upcoming lectures."
+                },
+                "icon": {
+                    "ios": "bell",
+                    "android": "bell"
+                }
+            },
+            {
+                "title": {
                     "de": "Essens Verbesserungen",
                     "en": "Food Improvements"
                 },
