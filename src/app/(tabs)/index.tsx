@@ -4,12 +4,11 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/provider'
-import { type UserKindContextType } from '@/hooks/userKind'
+import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
-import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import { useRouter } from 'expo-router'
 import Head from 'expo-router/head'
@@ -72,49 +71,12 @@ export default function Screen(): JSX.Element {
         )
     }
 
-    // set up local schedule notification
-    Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-            shouldShowAlert: true,
-            shouldPlaySound: true,
-            shouldSetBadge: true,
-        }),
-    })
-
-    async function registerForPushNotificationsAsync(): Promise<void> {
-        if (Platform.OS === 'android') {
-            await Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            })
-        }
-
-        if (Device.isDevice) {
-            const { status: existingStatus } =
-                await Notifications.getPermissionsAsync()
-            let finalStatus = existingStatus
-            if (existingStatus !== 'granted') {
-                const { status } = await Notifications.requestPermissionsAsync()
-                finalStatus = status
-            }
-            if (finalStatus !== 'granted') {
-                alert('Failed to get push token for push notification!')
-            }
-        } else {
-            // alert('Must use physical device for Push Notifications')
-        }
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [notification, setNotification] = useState<any>(undefined)
     const notificationListener = useRef<any>()
     const responseListener = useRef<any>()
 
     useEffect(() => {
-        void registerForPushNotificationsAsync()
-
         notificationListener.current =
             Notifications.addNotificationReceivedListener((notification) => {
                 setNotification(notification)

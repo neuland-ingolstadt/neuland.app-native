@@ -21,9 +21,11 @@ export default {
     notificatons: {
         title: 'Notifications',
         description:
-            'Receive notifications before this lecture starts. These repeat until you deactivate them here or in the settings.',
+            'Receive notifications before this lecture starts. These repeat until you deactivate them here.',
+        active: 'Notifications enabled. You will be notified {{mins}} minutes before the lecture starts.',
         five: '5 minutes before',
         fifteen: '15 minutes before',
         thirty: '30 minutes before',
+        body: 'starts in {{mins}} minutes in room {{room}}.',
     },
 }

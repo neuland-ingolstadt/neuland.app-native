@@ -1,85 +1,89 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { cancelScheduledNotificationAsync } from 'expo-notifications'
-import { useEffect, useState } from 'react'
+import * as Device from 'expo-device'
+import * as Notifications from 'expo-notifications'
+import {
+    type NotificationContentInput,
+    type NotificationTriggerInput,
+} from 'expo-notifications'
+import { t } from 'i18next'
 
-export interface TimetableEntry {
-    name: string
-    mins: number
-    ids: string[]
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+})
+
+export interface NotificationHook {
+    getScheduled: () => Promise<any>
+    hasPermission: () => Promise<boolean>
+    askForPermission: () => Promise<boolean>
+    schedule: (options: {
+        content?: NotificationContentInput
+        trigger: NotificationTriggerInput
+    }) => Promise<any>
+    cancelAll: () => Promise<void>
 }
 
-export interface Notifications {
-    timetableNotifications: TimetableEntry[]
-    updateTimetableNotifications: (entry: TimetableEntry) => void
-    deleteTimetableNotifications: (name: string) => void
-}
-
-/**
- * Custom hook that manages the route parameters of the app.
- * @returns RouteParamsHook object with routeParams and updateRouteParams properties.
- */
-export function useNotifications(): Notifications {
-    const [timetable, setTimetable] = useState<TimetableEntry[]>([])
-    useEffect(() => {
-        const loadAsyncStorageData = async (): Promise<void> => {
-            try {
-                const data = await AsyncStorage.getItem(
-                    'timetableNotifications'
-                )
-                if (data != null) {
-                    setTimetable(JSON.parse(data))
-                }
-            } catch (error) {
-                console.error(
-                    'Error while retrieving data from AsyncStorage:',
-                    error
-                )
-            }
-        }
-        void loadAsyncStorageData()
-    }, [])
-
-    function updateTimetable({ name, mins, ids }: TimetableEntry): void {
-        console.log('updateTimetable', name, mins, ids)
-        const index = timetable.findIndex((entry) => entry.name === name)
-
-        let newArray
-        if (index !== -1) {
-            newArray = [...timetable]
-            const oldEntry = newArray[index]
-            oldEntry.ids.map(cancelScheduledNotificationAsync)
-            newArray[index] = { name, mins, ids }
-        } else {
-            newArray = [...timetable, { name, mins, ids }]
-        }
-
-        setTimetable(newArray)
-        void AsyncStorage.setItem(
-            'timetableNotifications',
-            JSON.stringify(newArray)
-        )
-        console.log('newArray', newArray)
+const useNotification = (): NotificationHook => {
+    const getScheduled = async (): Promise<any> => {
+        return await Notifications.getAllScheduledNotificationsAsync()
     }
 
-    function deleteTimetableNotifications(name: string): void {
-        const index = timetable.findIndex((entry) => entry.name === name)
-        console.log('deleteTimetableNotifications', name, index)
-        if (index !== -1) {
-            const newArray = [...timetable]
-            const oldEntry = newArray[index]
-            oldEntry.ids.map(cancelScheduledNotificationAsync)
-            newArray.splice(index, 1)
-            setTimetable(newArray)
-            void AsyncStorage.setItem(
-                'timetableNotifications',
-                JSON.stringify(newArray)
-            )
+    const hasPermission = async (): Promise<boolean> => {
+        if (Device.isDevice) {
+            const { status } = await Notifications.getPermissionsAsync()
+            return status === 'granted'
+        } else {
+            alert('Must use physical device for Push Notifications')
         }
+
+        return false
+    }
+
+    const askForPermission = async (): Promise<boolean> => {
+        if (Device.isDevice) {
+            const { status: existingStatus } =
+                await Notifications.getPermissionsAsync()
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync({
+                    ios: {
+                        allowAlert: true,
+                        allowBadge: true,
+                        allowSound: true,
+                        allowAnnouncements: true,
+                    },
+                })
+                return status === 'granted'
+            }
+        }
+        return false
+    }
+
+    const schedule = async (options: {
+        content?: NotificationContentInput
+        trigger: NotificationTriggerInput
+    }): Promise<any> => {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: t('notification_reminder_title'),
+                body: t('notification_reminder_body'),
+            },
+            ...options,
+        })
+    }
+
+    const cancelAll = async (): Promise<void> => {
+        await Notifications.cancelAllScheduledNotificationsAsync()
     }
 
     return {
-        timetableNotifications: timetable,
-        updateTimetableNotifications: updateTimetable,
-        deleteTimetableNotifications,
+        getScheduled,
+        hasPermission,
+        askForPermission,
+        schedule,
+        cancelAll,
     }
 }
+
+export default useNotification

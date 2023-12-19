@@ -1,8 +1,12 @@
 import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
-import { type FoodLanguage } from '@/hooks/foodFilter'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/hooks/userKind'
+import { type FoodLanguage } from '@/hooks/contexts/foodFilter'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'

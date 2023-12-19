@@ -1,10 +1,10 @@
-import { type AppIconHook } from '@/hooks/appIcon'
-import { type FlowHook } from '@/hooks/flow'
+import { type AppIconHook } from '@/hooks/contexts/appIcon'
+import { type FlowHook } from '@/hooks/contexts/flow'
 import {
     DEFAULT_TIMETABLE_MODE,
     type TimetableHook,
     useTimetable,
-} from '@/hooks/timetable'
+} from '@/hooks/contexts/timetable'
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import {
@@ -26,11 +26,14 @@ import {
     useRouteParams,
     useTheme,
     useUserKind,
-} from '../hooks'
-import { type Dashboard } from '../hooks/dashboard'
-import { type FoodFilter } from '../hooks/foodFilter'
-import { type Notifications, useNotifications } from '../hooks/notifications'
-import { type RouteParams } from '../hooks/routing'
+} from '../hooks/contexts'
+import { type Dashboard } from '../hooks/contexts/dashboard'
+import { type FoodFilter } from '../hooks/contexts/foodFilter'
+import {
+    type Notifications,
+    useNotifications,
+} from '../hooks/contexts/notifications'
+import { type RouteParams } from '../hooks/contexts/routing'
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 
 interface ProviderProps {

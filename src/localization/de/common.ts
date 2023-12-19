@@ -122,4 +122,12 @@ export default {
             },
         },
     },
+    notification: {
+        permission: {
+            title: 'Benachrichtigungen',
+            description:
+                'Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.',
+            button: 'Einstellungen',
+        },
+    },
 }

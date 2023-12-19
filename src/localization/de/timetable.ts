@@ -21,9 +21,11 @@ export default {
     notificatons: {
         title: 'Benachrichtigungen',
         description:
-            'Erhalte Benachrichtigungen bevor diese Vorlesung beginnt. Diese wiederholen sich bis du sie hier oder in den Einstellungen deaktivierst.',
+            'Erhalte Benachrichtigungen bevor diese Vorlesung beginnt. Diese wiederholen sich bis du sie hier deaktivierst.',
+        active: 'Benachrichtigungen aktiviert. Du wirst {{mins}} Minuten vor Beginn der Vorlesung benachrichtigt.',
         five: '5 Minuten vorher',
         fifteen: '15 Minuten vorher',
         thirty: '30 Minuten vorher',
+        body: 'beginnt in {{mins}} Minuten in Raum {{room}}.',
     },
 }

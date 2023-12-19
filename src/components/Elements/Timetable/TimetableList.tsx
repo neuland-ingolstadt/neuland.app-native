@@ -1,5 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
+import { NotificationContext } from '@/components/provider'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -11,18 +12,20 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation, useRouter } from 'expo-router'
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useContext, useLayoutEffect, useRef } from 'react'
 import {
+    Pressable,
     SafeAreaView,
     SectionList,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 
+// @ts-expect-error no types
 import DragDropView from '../Exclusive/DragView'
 import Divider from '../Universal/Divider'
+import PlatformIcon from '../Universal/Icon'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
@@ -44,7 +47,7 @@ export default function TimetableList({
     const theme = useTheme()
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
-
+    const { timetableNotifications } = useContext(NotificationContext)
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -137,7 +140,7 @@ export default function TimetableList({
                     item.startDate
                 )} - ${formatFriendlyTime(item.endDate)})`}
             >
-                <TouchableOpacity
+                <Pressable
                     onPress={() => {
                         showEventDetails(item)
                     }}
@@ -160,19 +163,43 @@ export default function TimetableList({
                             >
                                 {item.name}
                             </Text>
-                            <Text
+                            <View
                                 style={{
-                                    color: colors.labelColor,
-                                    ...styles.descriptionText,
+                                    flexDirection: 'row',
+                                    gap: 6,
+                                    alignItems: 'center',
                                 }}
                             >
-                                {item.rooms?.join(', ')}
-                            </Text>
+                                <Text
+                                    style={{
+                                        color: colors.labelColor,
+                                        ...styles.descriptionText,
+                                    }}
+                                >
+                                    {item.rooms?.join(', ')}
+                                </Text>
+                                {/* Display a bell if the lecture has a notification */}
+                                {timetableNotifications[item.shortName] !==
+                                    undefined && (
+                                    <PlatformIcon
+                                        color={colors.labelColor}
+                                        ios={{
+                                            name: 'bell',
+                                            size: 12,
+                                        }}
+                                        android={{
+                                            name: 'bell',
+                                            size: 14,
+                                        }}
+                                    />
+                                )}
+                            </View>
                         </View>
                         <View>
                             <Text
                                 style={{
                                     color: colors.text,
+                                    fontVariant: ['tabular-nums'],
                                     ...styles.descriptionText,
                                 }}
                             >
@@ -181,6 +208,7 @@ export default function TimetableList({
                             <Text
                                 style={{
                                     color: colors.labelColor,
+                                    fontVariant: ['tabular-nums'],
                                     ...styles.descriptionText,
                                 }}
                             >
@@ -188,7 +216,7 @@ export default function TimetableList({
                             </Text>
                         </View>
                     </View>
-                </TouchableOpacity>
+                </Pressable>
             </DragDropView>
         )
     }
@@ -246,7 +274,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     descriptionText: {
-        fontSize: 14,
+        fontSize: 15,
     },
     sectionFooter: {
         height: 20,

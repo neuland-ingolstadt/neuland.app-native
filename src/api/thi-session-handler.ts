@@ -1,3 +1,4 @@
+import useNotification from '@/hooks/notifications'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SecureStore from 'expo-secure-store'
@@ -213,6 +214,7 @@ export async function obtainSession(router: object): Promise<string | null> {
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
+    const { cancelAll } = useNotification()
     try {
         await API.logout(localStorage.session)
     } catch (e) {
@@ -236,6 +238,9 @@ export async function forgetSession(): Promise<void> {
     } catch (e) {
         console.error(e)
     }
+
+    // cancel all scheduled notifications
+    await cancelAll()
 
     // clear memory cache (this is not persistent)
     await API.clearCache()

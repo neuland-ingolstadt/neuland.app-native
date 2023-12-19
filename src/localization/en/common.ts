@@ -121,4 +121,11 @@ export default {
             },
         },
     },
+    notification: {
+        permission: {
+            title: 'Notifications',
+            description: 'Open the system settings to enable notifications.',
+            button: 'Settings',
+        },
+    },
 }

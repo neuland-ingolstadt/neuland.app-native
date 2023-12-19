@@ -1,6 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/provider'
-import { type UserKindContextType } from '@/hooks/userKind'
+import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Meal } from '@/types/neuland-api'
 import {
