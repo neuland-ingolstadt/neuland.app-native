@@ -203,7 +203,7 @@ const LibraryBookingRow = ({
                                         from: item.from,
                                         to: item.to,
                                     },
-                                    seats[0]
+                                    seat
                                 )
                                 setReserve(true)
                             }}
