@@ -24,7 +24,6 @@ export async function loadFoodEntries(
     includeStatic: boolean
 ): Promise<Food[]> {
     const entries: Food[] = []
-
     if (restaurants.includes('mensa')) {
         const data = await NeulandAPI.getMensaPlan()
         data.forEach((day: Food) => {

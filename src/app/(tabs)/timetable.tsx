@@ -1,9 +1,13 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
-import { ErrorView } from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
-import { NotificationContext, TimetableContext } from '@/components/provider'
+import {
+    NotificationContext,
+    TimetableContext,
+    UserKindContext,
+} from '@/components/provider'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
@@ -13,9 +17,9 @@ import {
 } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, Linking, StyleSheet, View } from 'react-native'
 
 export interface ITimetableViewProps {
     friendlyTimetable: FriendlyTimetableEntry[]
@@ -29,24 +33,38 @@ export default function TimetableScreen(): JSX.Element {
 
     const { timetableMode } = useContext(TimetableContext)
 
-    const { t } = useTranslation(['navigation', 'timetable'])
-
+    const { t } = useTranslation(['timetable'])
     const [timetable, setTimetable] = useState<FriendlyTimetableEntry[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const [errorMsg, setErrorMsg] = useState<string>('')
     const {
         timetableNotifications,
         updateTimetableNotifications,
         removeNotification,
     } = useContext(NotificationContext)
-    useEffect(() => {
-        const loadTimetable = async (): Promise<void> => {
+    const { userKind } = useContext(UserKindContext)
+    const loadTimetable = async (): Promise<void> => {
+        try {
             const timetable = await getFriendlyTimetable(new Date(), true)
             setTimetable(timetable)
             setLoadingState(LoadingState.LOADED)
+            setErrorMsg('')
+        } catch (e: any) {
+            setLoadingState(LoadingState.ERROR)
+            setErrorMsg(e.message)
         }
+    }
 
+    const onRefresh: () => void = () => {
+        setLoadingState(LoadingState.REFRESHING)
+        console.log('refreshing')
         void loadTimetable()
-    }, [])
+    }
+    useEffect(() => {
+        setLoadingState(LoadingState.LOADING)
+        void loadTimetable()
+        console.log('userKind:', userKind)
+    }, [userKind])
 
     async function updateAllNotifications(): Promise<void> {
         console.log('updateAllNotifications', timetableNotifications)
@@ -203,16 +221,6 @@ export default function TimetableScreen(): JSX.Element {
         void updateNotifications()
     }, [timetable, i18n.language])
 
-    const initialRender = useRef(true)
-
-    useEffect(() => {
-        if (initialRender.current) {
-            initialRender.current = false
-        } else {
-            console.log('language changed')
-        }
-    }, [i18n.language])
-
     function getMinsBeforeLecture(name: string): number {
         return timetableNotifications[name].mins
     }
@@ -232,13 +240,39 @@ export default function TimetableScreen(): JSX.Element {
 
     const TempList = (): JSX.Element => {
         if (loadingState === LoadingState.LOADING) return <LoadingView />
-
-        if (loadingState === LoadingState.ERROR) return <ErrorView />
-
-        if (timetableMode === 'list') {
-            return <TimetableList friendlyTimetable={timetable} />
+        else if (loadingState === LoadingState.LOADED) {
+            if (timetableMode === 'list') {
+                return <TimetableList friendlyTimetable={timetable} />
+            } else {
+                return <TimetableWeek friendlyTimetable={timetable} />
+            }
         } else {
-            return <TimetableWeek friendlyTimetable={timetable} />
+            if (errorMsg === '"Time table does not exist" (-202)') {
+                return (
+                    <ErrorGuestView
+                        title={t('error.empty.title')}
+                        message={t('error.empty.message')}
+                        buttonText={t('error.empty.button')}
+                        icon={{
+                            ios: 'calendar.badge.exclamationmark',
+                            android: 'calendar',
+                        }}
+                        onButtonPress={() => {
+                            void Linking.openURL('https://hiplan.thi.de/')
+                        }}
+                        refreshing={loadingState === LoadingState.REFRESHING}
+                        onRefresh={onRefresh}
+                    />
+                )
+            } else {
+                return (
+                    <ErrorGuestView
+                        title={errorMsg}
+                        refreshing={loadingState === LoadingState.REFRESHING}
+                        onRefresh={onRefresh}
+                    />
+                )
+            }
         }
     }
 
@@ -250,8 +284,8 @@ export default function TimetableScreen(): JSX.Element {
 
     return (
         <WorkaroundStack
-            name={t('navigation.timetable')}
-            titleKey={t('navigation.timetable')}
+            name={t('navigation.timetable', { ns: 'navigation' })}
+            titleKey={t('navigation.timetable', { ns: 'navigation' })}
             component={isPageOpen ? TempList : () => <></>}
         />
     )
@@ -266,7 +300,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-    errorView: {},
     navRight: {
         display: 'flex',
         flexDirection: 'row',

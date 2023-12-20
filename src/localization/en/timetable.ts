@@ -16,7 +16,12 @@ export default {
         minutes: 'minutes',
     },
     error: {
-        unknown: 'An unknown error occurred.',
+        empty: {
+            title: 'Timetable not configured',
+            message:
+                'To display your timetable, you have to configure it using the THI timetable website.',
+            button: 'Configure now',
+        },
     },
     notificatons: {
         title: 'Notifications',

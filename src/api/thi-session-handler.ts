@@ -228,6 +228,9 @@ export async function forgetSession(): Promise<void> {
         SecureStore.deleteItemAsync('password'),
     ])
 
+    // clear memory cache (this is not persistent)
+    await API.clearCache()
+
     // clear all AsyncStorage data except analytics
     try {
         const analytics = await AsyncStorage.getItem('analytics')
@@ -241,7 +244,4 @@ export async function forgetSession(): Promise<void> {
 
     // cancel all scheduled notifications
     await cancelAll()
-
-    // clear memory cache (this is not persistent)
-    await API.clearCache()
 }

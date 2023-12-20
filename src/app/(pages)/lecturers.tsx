@@ -1,10 +1,8 @@
 import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
@@ -49,13 +47,11 @@ export default function LecturersCard(): JSX.Element {
             setPersonalLecturers(data)
             setLoadingState(LoadingState.LOADED)
         } catch (e) {
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
+            if (e instanceof NoSessionError) {
                 router.push('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
+                console.log('ee')
                 setError(e as Error)
             }
         }
@@ -66,15 +62,13 @@ export default function LecturersCard(): JSX.Element {
 
     const onRefresh: () => void = () => {
         void load()
-        setLoadingState(LoadingState.LOADED)
     }
 
     useEffect(() => {
         async function load(): Promise<void> {
-            setLoadingState(LoadingState.LOADING)
             if (q == null) {
                 setFilteredLecturers(personalLecturers)
-                setLoadingState(LoadingState.LOADED)
+
                 return
             }
 
@@ -101,7 +95,6 @@ export default function LecturersCard(): JSX.Element {
                     return
                 }
             }
-
             const normalizedSearch = q.toLowerCase().trim()
             const checkField = (value: string | null): boolean =>
                 value?.toString().toLowerCase().includes(normalizedSearch) ??
@@ -144,14 +137,11 @@ export default function LecturersCard(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+                <ErrorGuestView
+                    title={error?.message ?? t('error.title')}
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
 
             {loadingState === LoadingState.LOADED && (

@@ -1,9 +1,7 @@
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type Grade } from '@/types/thi-api'
@@ -51,10 +49,7 @@ export default function GradesSCreen(): JSX.Element {
             setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
+            if (e instanceof NoSessionError) {
                 router.push('(user)/login')
             } else if (e.message === 'Query not possible') {
                 // according to the original developers,
@@ -114,14 +109,11 @@ export default function GradesSCreen(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {errorMsg}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull', { ns: 'common' })}{' '}
-                    </Text>
-                </View>
+                <ErrorGuestView
+                    title={errorMsg}
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
             {loadingState === LoadingState.LOADED && (
                 <>

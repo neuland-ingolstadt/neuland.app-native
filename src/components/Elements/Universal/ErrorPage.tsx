@@ -1,105 +1,173 @@
 import { type Colors } from '@/components/colors'
-import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
+import { CARD_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
+import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native'
+import {
+    Platform,
+    Pressable,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 import PlatformIcon from './Icon'
 
-function ErrorPage({
+export default function ErrorGuestView({
+    title,
     message,
-    refreshing,
+    buttonText,
+    icon,
+    onButtonPress,
+    footer,
     onRefresh,
+    refreshing,
+    inModal,
 }: {
+    title: string
     message?: string
-    refreshing: boolean
-    onRefresh: () => void
+
+    icon?: { ios: string; android: string }
+    buttonText?: string
+    onButtonPress?: () => void
+    footer?: string
+    onRefresh?: () => void
+    refreshing?: boolean
+    inModal?: boolean
 }): JSX.Element {
     const colors = useTheme().colors as Colors
+    console.log(title)
+    const { t } = useTranslation('common')
+    const getIcon = (): string => {
+        const ios = Platform.OS === 'ios'
+        switch (title) {
+            case 'Network request failed':
+                return ios ? 'wifi.slash' : 'wifi-slash'
+            case 'User is logged in as guest':
+                return ios ? 'person.crop.circle.badge.questionmark' : 'person'
+            default:
+                return icon !== undefined
+                    ? ios
+                        ? icon.ios
+                        : icon.android
+                    : ios
+                    ? 'exclamationmark.triangle.fill'
+                    : 'error'
+        }
+    }
+
+    const getTitle = (): string => {
+        switch (title) {
+            case 'Network request failed':
+                return t('error.network.title')
+            case 'User is logged in as guest':
+                return t('error.guest.title')
+            default:
+                return title
+        }
+    }
+
+    const getMessage = (): string => {
+        switch (title) {
+            case 'Network request failed':
+                return t('error.network.description')
+            case 'User is logged in as guest':
+                return t('error.guest.description')
+            default:
+                if (message != null) {
+                    return message
+                }
+                return t('error.description')
+        }
+    }
+
+    const ErrorButton = (): JSX.Element => {
+        const buttonAction = (): void => {
+            switch (title) {
+                case 'User is logged in as guest':
+                    router.push('(user)/login')
+                    break
+                default:
+                    if (onButtonPress != null) {
+                        onButtonPress()
+                    }
+                    break
+            }
+        }
+        const buttonProps =
+            title === 'User is logged in as guest'
+                ? {
+                      onPress: () => {
+                          router.push('(user)/login')
+                      },
+                      text: t('error.guest.button'),
+                  }
+                : onButtonPress != null
+                ? { onPress: buttonAction, text: t('error.button') }
+                : null
+
+        return buttonProps != null || title === 'User is logged in as guest' ? (
+            <Pressable
+                style={[
+                    styles.logoutContainer,
+                    {
+                        backgroundColor:
+                            inModal ?? false ? colors.background : colors.card,
+                    },
+                ]}
+                onPress={buttonProps?.onPress}
+            >
+                <View style={styles.refreshButton}>
+                    <Text
+                        style={{
+                            color: colors.primary,
+                            fontSize: 16,
+                            fontWeight: '600',
+                        }}
+                    >
+                        {buttonProps?.text}
+                    </Text>
+                </View>
+            </Pressable>
+        ) : (
+            <></>
+        )
+    }
 
     return (
         <ScrollView
             refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    colors={[colors.primary]}
-                />
+                refreshing != null && title !== 'User is logged in as guest' ? (
+                    <RefreshControl
+                        refreshing={refreshing ?? false}
+                        onRefresh={onRefresh}
+                    />
+                ) : (
+                    <></>
+                )
             }
-            contentContainerStyle={styles.container}
+            contentContainerStyle={{
+                ...styles.innerContainer,
+                paddingTop: inModal ?? false ? 50 : 150,
+            }}
         >
-            <ErrorView message={message} />
-        </ScrollView>
-    )
-}
-
-function ErrorView({ message }: { message?: string }): JSX.Element {
-    const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
-
-    return (
-        <View style={styles.innerContainer}>
-            <PlatformIcon
-                color={colors.primary}
-                ios={{
-                    name: 'exclamationmark.triangle',
-                    variant: 'fill',
-                    size: 44,
-                }}
-                android={{
-                    name: 'error',
-                    size: 48,
-                }}
-            />
-            <Text
-                style={{
-                    ...styles.errorTitle,
-                    color: colors.text,
-                }}
-            >
-                {t('error.title')}
-            </Text>
             <View
                 style={{
-                    ...styles.messageContainer,
-                    backgroundColor: colors.card,
+                    ...styles.errorContainer,
+                    paddingBottom: inModal ?? false ? 30 : 64,
                 }}
             >
-                {message !== null && (
-                    <Text style={{ color: colors.text }}>{message}</Text>
-                )}
-                <Text style={{ color: colors.text }}>
-                    {t('error.description')}
-                </Text>
-            </View>
-        </View>
-    )
-}
-
-function ErrorButtonView({
-    message,
-    onRefresh,
-}: {
-    message?: string
-    onRefresh: () => void
-}): JSX.Element {
-    const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
-
-    return (
-        <View style={styles.innerContainer}>
-            <View style={styles.errorContainer}>
                 <PlatformIcon
                     color={colors.primary}
                     ios={{
-                        name: 'exclamationmark.triangle',
-                        variant: 'fill',
-                        size: 44,
+                        name: getIcon(),
+                        size: 50,
                     }}
                     android={{
-                        name: 'error',
+                        name: getIcon(),
                         size: 48,
                     }}
                 />
@@ -109,35 +177,25 @@ function ErrorButtonView({
                         color: colors.text,
                     }}
                 >
-                    {t('error.title')}
-                </Text>
-                <Text style={[styles.errorMessage, { color: colors.text }]}>
-                    {message}
+                    {getTitle()}
                 </Text>
                 <Text style={[styles.errorInfo, { color: colors.text }]}>
-                    {t('error.refreshButton', { ns: 'common' })}
+                    {getMessage()}
                 </Text>
-                <Pressable
-                    style={[
-                        styles.logoutContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                    onPress={onRefresh}
-                >
-                    <View style={styles.refreshButton}>
+                <ErrorButton />
+                {refreshing != null &&
+                    title !== 'User is logged in as guest' && (
                         <Text
-                            style={{
-                                color: colors.primary,
-                                fontSize: 16,
-                                fontWeight: '600',
-                            }}
+                            style={[
+                                styles.errorFooter,
+                                { color: colors.labelColor },
+                            ]}
                         >
-                            {t('error.button')}
+                            {t('error.pull')}
                         </Text>
-                    </View>
-                </Pressable>
+                    )}
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -146,16 +204,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 12,
-        paddingTop: 150,
-    },
-    container: {
-        zIndex: 9999,
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        flex: 1,
-        gap: 12,
-        padding: PAGE_PADDING,
+        paddingHorizontal: 20,
     },
     messageContainer: {
         padding: CARD_PADDING,
@@ -170,10 +219,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
+        marginTop: 8,
+        textAlign: 'center',
     },
     logoutContainer: {
         borderRadius: 10,
-        marginBottom: 30,
+        marginBottom: 20,
         marginTop: 30,
         alignItems: 'center',
         alignSelf: 'center',
@@ -190,15 +241,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     errorInfo: {
+        fontSize: 16,
+        fontWeight: '500',
+        textAlign: 'center',
+        marginTop: 12,
+    },
+    errorFooter: {
         fontSize: 14,
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: 16,
     },
     errorContainer: {
-        paddingBottom: 64,
         gap: 12,
         alignItems: 'center',
     },
 })
-
-export { ErrorPage, ErrorView, ErrorButtonView }

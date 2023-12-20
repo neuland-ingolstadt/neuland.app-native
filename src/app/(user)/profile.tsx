@@ -1,11 +1,11 @@
 import API from '@/api/authenticated-api'
-import { createGuestSession } from '@/api/thi-session-handler'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
+import { performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -34,15 +34,6 @@ export default function Profile(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { toggleUserKind } = React.useContext(UserKindContext)
     const { t } = useTranslation('settings')
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(tabs)')
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -127,7 +118,7 @@ export default function Profile(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(toggleUserKind).catch((e) => {
                             console.log(e)
                         })
                     },

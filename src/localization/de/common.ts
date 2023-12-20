@@ -4,13 +4,29 @@ export default {
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',
-        description: 'Ziehe zum Aktualisieren nach unten.',
+        description: 'Beim Laden der Daten ist ein Fehler aufgetreten.',
         refreshPull:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
         refreshButton:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nKlicke zum Aktualisieren.',
         button: 'Erneut versuchen',
         noSession: 'Nicht angemeldet.',
+        pull: 'Ziehe zum Aktualisieren nach unten',
+        network: {
+            title: 'Keine Internetverbindung',
+            description: 'Bitte überprüfe deine Internetverbindung.',
+        },
+        guest: {
+            title: 'Anmeldung erforderlich',
+            description:
+                'Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.',
+            button: 'Anmelden',
+        },
+        map: {
+            mapLoadError: 'Fehler beim Laden der Karte',
+            mapOverlay: 'Fehler beim Laden des Overlays',
+        },
+        noMeals: 'Keine Gerichte verfügbar',
     },
 
     dates: {

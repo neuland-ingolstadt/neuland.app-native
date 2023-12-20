@@ -3,7 +3,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import { ErrorButtonView } from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
@@ -124,7 +124,11 @@ export default function LibraryCode(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <ErrorButtonView message={errorMsg} onRefresh={onRefresh} />
+                <ErrorGuestView
+                    title={errorMsg}
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
             {loadingState === LoadingState.LOADED && (
                 <View style={styles.container}>

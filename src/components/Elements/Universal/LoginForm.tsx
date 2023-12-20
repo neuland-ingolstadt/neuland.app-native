@@ -103,7 +103,9 @@ const LoginForm = (): JSX.Element => {
             })
             router.push('/')
         } catch (e: any) {
+            console.log(e.message)
             const message = trimErrorMsg(e.message)
+
             setLoading(false)
             setNotice(t('login.alert.error.title'))
             if (message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {

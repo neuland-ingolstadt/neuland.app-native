@@ -9,6 +9,7 @@ import {
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -552,6 +553,24 @@ export const MapScreen = (): JSX.Element => {
         setWebViewKey((k) => k + 1)
         _addGeoJson()
     }
+
+    /**
+     * Adjusts error message to use it with ErrorView
+     * @param errorMsg Error message
+     * @returns
+     */
+    function adjustErrorTitle(errorMsg: string): string {
+        switch (errorMsg) {
+            case 'noInternetConnection':
+                return 'Network request failed'
+            case 'mapLoadError':
+                return t('error.map.mapLoadError')
+            case 'mapOverlay':
+                return t('error.map.mapOverlay')
+            default:
+                return 'Error'
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={{ flex: 1, position: 'relative' }}>
@@ -565,41 +584,13 @@ export const MapScreen = (): JSX.Element => {
                             ...styles.errorContainer,
                         }}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.errorTitle,
-                            }}
-                        >
-                            {errorMsg === 'noInternetConnection' &&
-                                'Network request failed'}
-                            {errorMsg === 'mapLoadError' && 'Map load error'}
-                            {errorMsg === 'mapOverlay' &&
-                                'Error loading overlay'}
-                        </Text>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.errorText,
-                            }}
-                        >
-                            There was a problem loading the map.
-                            {'\n'}
-                            Please try again.
-                        </Text>
-                        <Pressable
-                            onPress={() => {
-                                // Increment the key to trigger a WebView reload
+                        <ErrorGuestView
+                            title={adjustErrorTitle(errorMsg)}
+                            onButtonPress={() => {
                                 setWebViewKey(webViewKey + 1)
                                 setLoadingState(LoadingState.LOADING)
                             }}
-                            style={{
-                                ...styles.errorButton,
-                                backgroundColor: colors.datePickerBackground,
-                            }}
-                        >
-                            <Text style={{ color: colors.text }}> Reload </Text>
-                        </Pressable>
+                        />
                     </View>
                 )}
 
@@ -706,7 +697,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         zIndex: 3,
-        justifyContent: 'center',
+        paddingTop: 70,
         alignItems: 'center',
     },
     errorTitle: {

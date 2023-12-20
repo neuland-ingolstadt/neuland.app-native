@@ -1,12 +1,10 @@
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import { type Colors } from '@/components/colors'
 import { type AvailableRoom } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -117,15 +115,11 @@ export default function AdvancedSearch(): JSX.Element {
         try {
             await filter()
         } catch (e) {
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
+            if (e instanceof NoSessionError) {
                 router.replace('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setError(e as Error)
-                console.error(e)
             }
         }
     }
@@ -308,24 +302,13 @@ export default function AdvancedSearch(): JSX.Element {
                                 />
                             )}
                             {loadingState === LoadingState.ERROR && (
-                                <View style={styles.errorSection}>
-                                    <Text
-                                        style={[
-                                            styles.errorMessage,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {error?.message}
-                                    </Text>
-                                    <Text
-                                        style={[
-                                            styles.errorInfo,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {t('error.refreshPull')}{' '}
-                                    </Text>
-                                </View>
+                                <ErrorGuestView
+                                    title={error?.message ?? t('error.title')}
+                                    onButtonPress={() => {
+                                        onRefresh()
+                                    }}
+                                    inModal
+                                />
                             )}
                             {loadingState === LoadingState.LOADED && (
                                 <FreeRoomsList rooms={filterResults} />

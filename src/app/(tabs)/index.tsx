@@ -1,10 +1,10 @@
-import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar } from '@/components/Elements/Settings'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
+import { performLogout } from '@/utils/api-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -33,16 +33,6 @@ export default function Screen(): JSX.Element {
     const { t } = useTranslation(['navigation'])
     const { toggleUserKind } = useContext(UserKindContext)
 
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(tabs)')
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
     const logoutAlert = (): void => {
         Alert.alert(
             t('profile.logout.alert.title', {
@@ -62,7 +52,7 @@ export default function Screen(): JSX.Element {
                     text: t('profile.logout.alert.confirm', { ns: 'settings' }),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(toggleUserKind).catch((e) => {
                             console.log(e)
                         })
                     },

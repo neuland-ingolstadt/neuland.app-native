@@ -398,7 +398,7 @@ export default function TimetableDetails(): JSX.Element {
                                         }}
                                         android={{
                                             name: 'bell',
-                                            size: 24,
+                                            size: minsBefore != null ? 20 : 25,
                                         }}
                                     />
                                     {minsBefore != null && (

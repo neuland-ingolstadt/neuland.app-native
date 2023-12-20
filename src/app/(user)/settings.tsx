@@ -1,5 +1,4 @@
 import API from '@/api/authenticated-api'
-import { createGuestSession } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
@@ -8,6 +7,7 @@ import { UserKindContext } from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
+import { performLogout } from '@/utils/api-utils'
 import { LoadingState, getContrastColor, getInitials } from '@/utils/ui-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
@@ -75,7 +75,7 @@ export default function Settings(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(toggleUserKind).catch((e) => {
                             console.log(e)
                         })
                     },
@@ -113,16 +113,6 @@ export default function Settings(): JSX.Element {
     }
 
     const { toggleUserKind } = React.useContext(UserKindContext)
-
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(user)/login')
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     const sections: FormListSections[] = [
         {

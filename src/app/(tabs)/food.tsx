@@ -1,4 +1,5 @@
 import { MealDay } from '@/components/Elements/Food'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -58,7 +59,7 @@ function FoodScreen(): JSX.Element {
                     meals: day.meals,
                 }))
                 if (formattedDays.length === 0) {
-                    setError(new Error('No meals available'))
+                    setError(new Error('noMeals'))
                     setLoadingState(LoadingState.ERROR)
                     return
                 }
@@ -273,14 +274,15 @@ function FoodScreen(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+                <ErrorGuestView
+                    title={
+                        error?.message === 'noMeals'
+                            ? t('error.noMeals')
+                            : error?.message ?? t('error.title')
+                    }
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
 
             {loadingState === LoadingState.LOADED && (

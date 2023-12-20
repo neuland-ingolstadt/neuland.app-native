@@ -16,7 +16,12 @@ export default {
         minutes: 'Minuten',
     },
     error: {
-        unknown: 'Ein unbekannter Fehler ist aufgetreten.',
+        empty: {
+            title: 'Stundenplan nicht konfiguriert',
+            message:
+                'Um deinen Stundenplan anzuzeigen, musst du ihn über die THI Stundenplan Webseite konfigurieren.',
+            button: 'Jetzt konfigurieren',
+        },
     },
     notificatons: {
         title: 'Benachrichtigungen',

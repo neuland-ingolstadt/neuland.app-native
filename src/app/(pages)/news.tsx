@@ -1,9 +1,7 @@
 import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
@@ -13,7 +11,6 @@ import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     FlatList,
@@ -21,8 +18,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    RefreshControl,
-    ScrollView,
     StyleSheet,
     Text,
     View,
@@ -30,7 +25,6 @@ import {
 
 export default function NewsScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation('common')
     const [news, setNews] = useState<ThiNews[] | null>(null)
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -48,10 +42,7 @@ export default function NewsScreen(): JSX.Element {
             setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
+            if (e instanceof NoSessionError) {
                 router.push('(user)/login')
             } else {
                 setErrorMsg(e.message)
@@ -76,24 +67,13 @@ export default function NewsScreen(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <ScrollView
-                    contentContainerStyle={styles.errorContainer}
-                    contentInsetAdjustmentBehavior="automatic"
-                    showsVerticalScrollIndicator={false}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={loadingState !== LoadingState.ERROR}
-                            onRefresh={onRefresh}
-                        />
-                    }
-                >
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {errorMsg}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}
-                    </Text>
-                </ScrollView>
+                <View style={styles.errorContainer}>
+                    <ErrorGuestView
+                        title={errorMsg}
+                        onRefresh={onRefresh}
+                        refreshing={false}
+                    />
+                </View>
             )}
             {loadingState === LoadingState.LOADED && (
                 <FlatList

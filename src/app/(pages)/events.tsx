@@ -1,6 +1,7 @@
 import NeulandAPI from '@/api/neuland-api'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
@@ -8,13 +9,7 @@ import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function Events(): JSX.Element {
@@ -38,7 +33,6 @@ export default function Events(): JSX.Element {
     async function loadEvents(): Promise<void> {
         const campusLifeEvents =
             (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
-
         const newEvents = campusLifeEvents
             .map((x) => ({
                 ...x,
@@ -80,14 +74,11 @@ export default function Events(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+                <ErrorGuestView
+                    title={error?.message ?? t('error.title')}
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
             {loadingState === LoadingState.LOADED && (
                 <View

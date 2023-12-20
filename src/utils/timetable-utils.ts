@@ -50,7 +50,7 @@ export async function getFriendlyTimetable(
                 endDate,
                 name: lecture.details.fach,
                 shortName: lecture.details.veranstaltung.split(' - ')[0],
-                rooms,
+                rooms: rooms.filter((room) => room !== ''),
                 lecturer: lecture.details.dozent,
                 exam: lecture.details.pruefung,
                 course: lecture.details.stg,

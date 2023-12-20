@@ -4,13 +4,24 @@ export default {
     },
     error: {
         title: 'An error occurred',
-        description: 'Pull down to refresh.',
-        refreshPull:
-            'An error occurred while loading the data.\nPull down to refresh.',
+
+        description: 'An error occurred while loading the data.',
         refreshButton:
             'An error occurred while loading the data.\nClick to refresh.',
         button: 'Retry',
         noSession: 'Not signed in.',
+        pull: 'Pull down to refresh',
+        network: {
+            title: 'No internet connection',
+            description: 'Please check your internet connection.',
+        },
+        guest: {
+            title: 'Sign in required',
+            description:
+                'This feature requires you to sign in using your THI account.',
+            button: 'Sign in',
+        },
+        noMeals: 'No meals available',
     },
     dates: {
         until: 'until',

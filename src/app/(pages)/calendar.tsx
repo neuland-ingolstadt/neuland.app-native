@@ -1,6 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
@@ -44,25 +45,20 @@ export default function CalendarPage(): JSX.Element {
         )
     }
     useEffect(() => {
-        if (userKind === 'student') {
-            void loadEvents()
-                .then(() => {
-                    setLoadingState(LoadingState.LOADED)
-                })
-                .catch((e) => {
-                    if (e instanceof NoSessionError) {
-                        router.push('(user)/login')
-                    } else {
-                        console.log(e)
-                    }
+        void loadEvents()
+            .then(() => {
+                setLoadingState(LoadingState.LOADED)
+            })
+            .catch((e) => {
+                if (e instanceof NoSessionError) {
+                    router.push('(user)/login')
+                } else {
+                    console.log(e)
+                }
 
-                    setError(e)
-                    setLoadingState(LoadingState.ERROR)
-                })
-        } else {
-            setError(new Error(t('pages.calendar.exams.error')))
-            setLoadingState(LoadingState.LOADED)
-        }
+                setError(e)
+                setLoadingState(LoadingState.ERROR)
+            })
     }, [userKind])
 
     async function loadEvents(): Promise<void> {
@@ -147,47 +143,26 @@ export default function CalendarPage(): JSX.Element {
                                 </View>
                             )}
                             {userKind !== 'student' ? (
-                                <View>
-                                    <Text
-                                        style={[
-                                            styles.errorMessage,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {error?.message}
-                                    </Text>
-                                    <Text
-                                        style={[
-                                            styles.errorInfo,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {t(
-                                            'pages.calendar.exams.errorSubtitle'
-                                        )}
-                                    </Text>
-                                </View>
+                                <ErrorGuestView
+                                    title={error?.message ?? t('error.title')}
+                                    onButtonPress={() => {
+                                        onRefresh()
+                                    }}
+                                    inModal
+                                />
                             ) : (
                                 <>
                                     {loadingState === LoadingState.ERROR && (
-                                        <View>
-                                            <Text
-                                                style={[
-                                                    styles.errorMessage,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {error?.message}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.errorInfo,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t('error.refreshPull')}{' '}
-                                            </Text>
-                                        </View>
+                                        <ErrorGuestView
+                                            title={
+                                                error?.message ??
+                                                t('error.title')
+                                            }
+                                            onButtonPress={() => {
+                                                onRefresh()
+                                            }}
+                                            inModal
+                                        />
                                     )}
                                     {loadingState === LoadingState.LOADED && (
                                         <View>
