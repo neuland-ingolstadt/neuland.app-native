@@ -26,6 +26,7 @@ export default {
         five: '5 Minuten vorher',
         fifteen: '15 Minuten vorher',
         thirty: '30 Minuten vorher',
+        sixty: '60 Minuten vorher',
         body: 'beginnt in {{mins}} Minuten in Raum {{room}}.',
     },
 }

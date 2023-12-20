@@ -210,6 +210,7 @@ export default function TimetableDetails(): JSX.Element {
         { value: 5, label: t('notificatons.five') },
         { value: 15, label: t('notificatons.fifteen') },
         { value: 30, label: t('notificatons.thirty') },
+        { value: 60, label: t('notificatons.sixty') },
     ]
 
     const filteredOptions = options.filter(
