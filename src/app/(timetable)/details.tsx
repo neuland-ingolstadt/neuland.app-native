@@ -251,7 +251,7 @@ export default function TimetableDetails(): JSX.Element {
                     }
                     trackEvent('Notification', {
                         type: 'lecture',
-                        minsBefore: selectedValue,
+                        minsBefore: selectedValue.toString(),
                     })
                 }}
             />

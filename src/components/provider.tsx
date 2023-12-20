@@ -110,9 +110,10 @@ export const TimetableContext = createContext<TimetableHook>({
 })
 
 export const NotificationContext = createContext<Notifications>({
-    timetableNotifications: [],
+    timetableNotifications: {},
     updateTimetableNotifications: () => {},
     deleteTimetableNotifications: () => {},
+    removeNotification: () => {},
 })
 
 /**

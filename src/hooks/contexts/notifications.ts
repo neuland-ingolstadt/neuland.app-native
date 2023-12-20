@@ -24,12 +24,6 @@ export interface Notifications {
     ) => void
     deleteTimetableNotifications: (name: string) => void
     removeNotification: (id: string, name: string) => void
-    addNotification: (
-        id: string,
-        name: string,
-        startDateTime: Date,
-        room: string
-    ) => void
 }
 
 /**
@@ -41,6 +35,14 @@ export function useNotifications(): Notifications {
         {}
     )
 
+    /**
+     * Updates the timetable object and saves it to AsyncStorage.
+     * @param name Name of the timetable entry
+     * @param elements Array of lecture data
+     * @param mins Minutes before the lecture to send the notification
+     * @param language Language of the timetable entry
+     * @returns void
+     */
     function updateTimetable(
         name: string,
         elements: LectureData[],
@@ -49,7 +51,7 @@ export function useNotifications(): Notifications {
     ): void {
         const timetableObject = { ...timetable }
 
-        // If the namespace already exists, merge the new elements with the existing ones
+        // updates or creates timetable entry depending on whether it already exists
         if (
             timetableObject[name] !== undefined &&
             timetableObject[name].language === language &&
@@ -71,6 +73,11 @@ export function useNotifications(): Notifications {
         console.log('newArray after update', JSON.stringify(timetableObject))
     }
 
+    /**
+     * Deletes a timetable entry from the timetable object and saves it to AsyncStorage.
+     * @param name Name of the timetable entry
+     * @returns void
+     */
     function deleteTimetableNotifications(name: string): void {
         const timetableObject = { ...timetable }
         if (timetableObject[name] !== undefined) {
@@ -84,6 +91,12 @@ export function useNotifications(): Notifications {
         }
     }
 
+    /**
+     * Removes a notification from the timetable object and cancels it.
+     * @param id Id of the notification
+     * @param name Name of the timetable entry
+     * @returns void
+     */
     function removeNotification(id: string, name: string): void {
         void cancelScheduledNotificationAsync(id)
 
@@ -101,29 +114,6 @@ export function useNotifications(): Notifications {
                 'newArray after remove',
                 JSON.stringify(timetableObject)
             )
-            setTimetable(timetableObject)
-            void AsyncStorage.setItem(
-                'timetableNotifications5s',
-                JSON.stringify(timetableObject)
-            )
-        }
-    }
-
-    function addNotification(
-        id: string,
-        name: string,
-        startDateTime: Date,
-        room: string
-    ): void {
-        const timetableObject = { ...timetable }
-        const timetableEntry = timetableObject[name]
-
-        if (timetableEntry !== undefined) {
-            const newElements = timetableEntry.elements.concat([
-                { startDateTime, room, id },
-            ])
-            timetableObject[name] = { ...timetableEntry, elements: newElements }
-            console.log('add', id, name, room, startDateTime)
             setTimetable(timetableObject)
             void AsyncStorage.setItem(
                 'timetableNotifications5s',
@@ -156,6 +146,5 @@ export function useNotifications(): Notifications {
         updateTimetableNotifications: updateTimetable,
         deleteTimetableNotifications,
         removeNotification,
-        addNotification,
     }
 }
