@@ -8,6 +8,7 @@ import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
 import { NotificationContext, RouteParamsContext } from '@/components/provider'
+import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
@@ -20,7 +21,6 @@ import { getStatusBarStyle } from '@/utils/ui-utils'
 import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
-import * as Notifications from 'expo-notifications'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
@@ -96,7 +96,12 @@ export default function TimetableDetails(): JSX.Element {
         const notifications = await Promise.all(notificationPromises)
         const flatNotifications = notifications.flat()
 
-        updateTimetableNotifications(event.shortName, flatNotifications, mins)
+        updateTimetableNotifications(
+            event.shortName,
+            flatNotifications,
+            mins,
+            i18n.language as LanguageKey
+        )
 
         flatNotifications.forEach(({ startDateTime, room, id }) => {
             console.log('startDateTime:', startDateTime)
@@ -122,7 +127,6 @@ export default function TimetableDetails(): JSX.Element {
             console.log(e)
         }
     }
-    console.log('timetableNotifications', timetableNotifications)
 
     const notification = timetableNotifications[event.shortName]
     const minsBefore = notification != null ? notification.mins : undefined
@@ -131,21 +135,6 @@ export default function TimetableDetails(): JSX.Element {
         {
             header: t('overview.title'),
             items: [
-                {
-                    title: 'Test Notification',
-                    icon: chevronIcon,
-                    onPress: () => {
-                        void Notifications.scheduleNotificationAsync({
-                            content: {
-                                title: 'Test',
-                                body: 'Test',
-                            },
-                            trigger: {
-                                seconds: 5,
-                            },
-                        })
-                    },
-                },
                 {
                     title: t('overview.goal'),
                     icon: chevronIcon,
@@ -246,7 +235,11 @@ export default function TimetableDetails(): JSX.Element {
             <ActionSheet
                 ref={actionSheetRef}
                 title={t('notificatons.title')}
-                message={t('notificatons.description')}
+                message={
+                    notification == null
+                        ? t('notificatons.description')
+                        : t('notificatons.active', { mins: minsBefore })
+                }
                 options={filteredOptions.map((option) => option.label)}
                 cancelButtonIndex={filteredOptions.length - 1}
                 destructiveButtonIndex={notification != null ? 2 : -1}
@@ -384,6 +377,11 @@ export default function TimetableDetails(): JSX.Element {
                                             console.error(error)
                                         })
                                     }}
+                                    style={{
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        gap: 4,
+                                    }}
                                     hitSlop={10}
                                 >
                                     <PlatformIcon
@@ -393,13 +391,23 @@ export default function TimetableDetails(): JSX.Element {
                                                 notification != null
                                                     ? 'bell.fill'
                                                     : 'bell',
-                                            size: 21,
+                                            size: minsBefore != null ? 17 : 21,
                                         }}
                                         android={{
                                             name: 'bell',
                                             size: 24,
                                         }}
                                     />
+                                    {minsBefore != null && (
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                color: colors.primary,
+                                            }}
+                                        >
+                                            {notification.mins + ' min'}
+                                        </Text>
+                                    )}
                                 </Pressable>
                             </View>
                         </DetailsBody>

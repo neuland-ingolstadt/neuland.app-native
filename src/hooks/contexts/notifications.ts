@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 export interface TimetableEntry {
     mins: number
+    language: 'de' | 'en'
     elements: LectureData[]
 }
 
@@ -18,7 +19,8 @@ export interface Notifications {
     updateTimetableNotifications: (
         name: string,
         elements: LectureData[],
-        mins: number
+        mins: number,
+        language: 'de' | 'en'
     ) => void
     deleteTimetableNotifications: (name: string) => void
     removeNotification: (id: string, name: string) => void
@@ -42,18 +44,23 @@ export function useNotifications(): Notifications {
     function updateTimetable(
         name: string,
         elements: LectureData[],
-        mins: number
+        mins: number,
+        language: 'de' | 'en'
     ): void {
         const timetableObject = { ...timetable }
 
         // If the namespace already exists, merge the new elements with the existing ones
-        if (timetableObject[name] !== undefined) {
+        if (
+            timetableObject[name] !== undefined &&
+            timetableObject[name].language === language &&
+            timetableObject[name].mins === mins
+        ) {
             timetableObject[name].elements = [
                 ...timetableObject[name].elements,
                 ...elements,
             ]
         } else {
-            timetableObject[name] = { mins, elements }
+            timetableObject[name] = { mins, language, elements }
         }
 
         setTimetable(timetableObject)
