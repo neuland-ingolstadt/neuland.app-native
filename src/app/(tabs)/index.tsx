@@ -99,6 +99,11 @@ export default function Screen(): JSX.Element {
         }
     }, [])
 
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
     return (
         <>
             <Head>
@@ -111,7 +116,7 @@ export default function Screen(): JSX.Element {
             <WorkaroundStack
                 name={'Dashboard'}
                 titleKey={'Neuland Next'}
-                component={HomeScreen}
+                component={isPageOpen ? HomeScreen : () => <></>}
                 largeTitle={true}
                 transparent={false}
                 headerRightElement={() => (

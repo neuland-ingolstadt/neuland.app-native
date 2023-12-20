@@ -365,6 +365,13 @@ function FoodScreen(): JSX.Element {
 
 export default function Screen(): JSX.Element {
     const colors = useTheme().colors as Colors
+
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
+
     return (
         <>
             <Head>
@@ -376,7 +383,7 @@ export default function Screen(): JSX.Element {
             <WorkaroundStack
                 name={'Food'}
                 titleKey={'navigation.food'}
-                component={FoodScreen}
+                component={isPageOpen ? FoodScreen : () => <></>}
                 largeTitle={false}
                 headerRightElement={() => (
                     <Pressable

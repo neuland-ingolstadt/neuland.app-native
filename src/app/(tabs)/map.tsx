@@ -45,6 +45,12 @@ import {
 import { WebView } from 'react-native-webview'
 
 export default function Screen(): JSX.Element {
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
+
     return (
         <>
             <Head>
@@ -56,7 +62,7 @@ export default function Screen(): JSX.Element {
             <WorkaroundStack
                 name={'Map'}
                 titleKey={'navigation.campusMap'}
-                component={MapScreen}
+                component={isPageOpen ? MapScreen : () => <></>}
                 transparent={true}
             />
         </>

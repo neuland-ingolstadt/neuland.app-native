@@ -249,11 +249,17 @@ export default function TimetableScreen(): JSX.Element {
         }
     }
 
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
+
     return (
         <WorkaroundStack
             name={t('navigation.timetable')}
             titleKey={t('navigation.timetable')}
-            component={TempList}
+            component={isPageOpen ? TempList : () => <></>}
         />
     )
 }
