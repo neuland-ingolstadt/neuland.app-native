@@ -8,6 +8,7 @@ import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
 import { NotificationContext, RouteParamsContext } from '@/components/provider'
+import useNotification from '@/hooks/notifications'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
@@ -15,6 +16,7 @@ import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import {
     getFriendlyTimetable,
+    notificationAlert,
     scheduleLectureNotification,
 } from '@/utils/timetable-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
@@ -38,6 +40,8 @@ export default function TimetableDetails(): JSX.Element {
         updateTimetableNotifications,
         deleteTimetableNotifications,
     } = useContext(NotificationContext)
+
+    const { hasPermission, askForPermission } = useNotification()
 
     const colors = useTheme().colors as Colors
     const { eventParam } = useLocalSearchParams<{ eventParam: string }>()
@@ -191,15 +195,15 @@ export default function TimetableDetails(): JSX.Element {
     const actionSheetRef = useRef<ActionSheet>(null)
 
     const showActionSheet = async (): Promise<void> => {
-        // let has = await hasPermission()
-        // if (!has) {
-        //     has = await askForPermission()
-        // }
+        let has = await hasPermission()
+        if (!has) {
+            has = await askForPermission()
+        }
 
-        // if (!has) {
-        //     notificationAlert(t)
-        //     return
-        // }
+        if (!has) {
+            notificationAlert(t)
+            return
+        }
 
         if (actionSheetRef.current != null) {
             actionSheetRef.current.show()
@@ -237,15 +241,18 @@ export default function TimetableDetails(): JSX.Element {
                 }
                 options={filteredOptions.map((option) => option.label)}
                 cancelButtonIndex={filteredOptions.length - 1}
-                destructiveButtonIndex={notification != null ? 2 : -1}
+                destructiveButtonIndex={notification != null ? 3 : -1}
                 onPress={(index) => {
                     const selectedValue = filteredOptions[index].value
                     if (selectedValue > 0) {
                         void setupNotifications(selectedValue)
                     } else if (selectedValue === 0) {
-                        console.log('delete')
                         deleteTimetableNotifications(event.shortName)
                     }
+                    trackEvent('Notification', {
+                        type: 'lecture',
+                        minsBefore: selectedValue,
+                    })
                 }}
             />
             <ScrollView>
