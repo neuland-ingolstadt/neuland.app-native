@@ -170,3 +170,18 @@ export function notificationAlert(t: TFunction): void {
         ]
     )
 }
+
+/**
+ * Generate a key for a lecture to be used for the notification hashmap
+ * @param lectureName
+ * @param startDate
+ * @param room
+ * @returns {string}
+ */
+export function generateKey(
+    lectureName: string,
+    startDate: Date | string,
+    room: string
+): string {
+    return `${lectureName}-${new Date(startDate).getTime()}-${room}`
+}

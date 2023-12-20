@@ -7,6 +7,7 @@ import { NotificationContext, TimetableContext } from '@/components/provider'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
+    generateKey,
     getFriendlyTimetable,
     scheduleLectureNotification,
 } from '@/utils/timetable-utils'
@@ -46,14 +47,6 @@ export default function TimetableScreen(): JSX.Element {
 
         void loadTimetable()
     }, [])
-
-    function generateKey(
-        lectureName: string,
-        startDate: Date | string,
-        room: string
-    ): string {
-        return `${lectureName}-${new Date(startDate).getTime()}-${room}`
-    }
 
     async function updateAllNotifications(): Promise<void> {
         console.log('updateAllNotifications', timetableNotifications)

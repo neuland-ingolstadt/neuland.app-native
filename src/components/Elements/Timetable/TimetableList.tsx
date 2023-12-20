@@ -38,6 +38,7 @@ export default function TimetableList({
      * Constants
      */
     const today = new Date()
+    today.setHours(0, 0, 0, 0)
     const timetable = friendlyTimetable
 
     /**
@@ -166,7 +167,7 @@ export default function TimetableList({
                             <View
                                 style={{
                                     flexDirection: 'row',
-                                    gap: 6,
+                                    gap: 4,
                                     alignItems: 'center',
                                 }}
                             >
@@ -178,7 +179,6 @@ export default function TimetableList({
                                 >
                                     {item.rooms?.join(', ')}
                                 </Text>
-                                {/* Display a bell if the lecture has a notification */}
                                 {timetableNotifications[item.shortName] !==
                                     undefined && (
                                     <PlatformIcon

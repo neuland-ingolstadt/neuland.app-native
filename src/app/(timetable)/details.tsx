@@ -102,12 +102,6 @@ export default function TimetableDetails(): JSX.Element {
             mins,
             i18n.language as LanguageKey
         )
-
-        flatNotifications.forEach(({ startDateTime, room, id }) => {
-            console.log('startDateTime:', startDateTime)
-            console.log('room:', room)
-            console.log('id:', id)
-        })
     }
 
     async function shareEvent(): Promise<void> {
@@ -380,7 +374,8 @@ export default function TimetableDetails(): JSX.Element {
                                     style={{
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        gap: 4,
+                                        gap: 3,
+                                        minWidth: 40,
                                     }}
                                     hitSlop={10}
                                 >
@@ -391,7 +386,7 @@ export default function TimetableDetails(): JSX.Element {
                                                 notification != null
                                                     ? 'bell.fill'
                                                     : 'bell',
-                                            size: minsBefore != null ? 17 : 21,
+                                            size: minsBefore != null ? 18 : 21,
                                         }}
                                         android={{
                                             name: 'bell',
