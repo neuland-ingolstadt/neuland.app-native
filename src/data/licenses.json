@@ -11,6 +11,12 @@
         "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "@babel/runtime@7.23.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@13.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -155,7 +161,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-status-bar@1.7.1": {
+    "expo-status-bar@1.10.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -311,7 +317,7 @@
         "licenseUrl": "https://github.com/tomzaku/react-native-shimmer-placeholder/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-svg@14.0.0": {
+    "react-native-svg@14.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/react-native-svg",
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",

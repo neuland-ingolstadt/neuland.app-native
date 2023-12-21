@@ -1,6 +1,6 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import {
@@ -46,6 +46,9 @@ export default function TimetableScreen(): JSX.Element {
     const loadTimetable = async (): Promise<void> => {
         try {
             const timetable = await getFriendlyTimetable(new Date(), true)
+            if (timetable.length === 0) {
+                throw new Error('Timetable is empty')
+            }
             setTimetable(timetable)
             setLoadingState(LoadingState.LOADED)
             setErrorMsg('')
@@ -63,15 +66,13 @@ export default function TimetableScreen(): JSX.Element {
     useEffect(() => {
         setLoadingState(LoadingState.LOADING)
         void loadTimetable()
-        console.log('userKind:', userKind)
     }, [userKind])
 
     async function updateAllNotifications(): Promise<void> {
-        console.log('updateAllNotifications', timetableNotifications)
+        // console.log('updateAllNotifications', timetableNotifications)
 
         // check if the language has changed
         // if it has, remove all notifications and reschedule them
-
         const setupLectures = Object.keys(timetableNotifications)
         if (setupLectures.length === 0) return
         const configuredLanguage =
@@ -247,10 +248,17 @@ export default function TimetableScreen(): JSX.Element {
                 return <TimetableWeek friendlyTimetable={timetable} />
             }
         } else {
-            if (errorMsg === '"Time table does not exist" (-202)') {
+            if (
+                errorMsg === '"Time table does not exist" (-202)' ||
+                errorMsg === 'Timetable is empty'
+            ) {
                 return (
-                    <ErrorGuestView
-                        title={t('error.empty.title')}
+                    <ErrorView
+                        title={
+                            errorMsg !== 'Timetable is empty'
+                                ? t('error.empty.title')
+                                : t('error.empty.title2')
+                        }
                         message={t('error.empty.message')}
                         buttonText={t('error.empty.button')}
                         icon={{
@@ -266,7 +274,7 @@ export default function TimetableScreen(): JSX.Element {
                 )
             } else {
                 return (
-                    <ErrorGuestView
+                    <ErrorView
                         title={errorMsg}
                         refreshing={loadingState === LoadingState.REFRESHING}
                         onRefresh={onRefresh}

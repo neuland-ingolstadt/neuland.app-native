@@ -62,6 +62,7 @@ export default function AppIconPicker(): JSX.Element {
                     {Object.entries(categories).map(([key, value]) => {
                         return (
                             <SectionView
+                                // @ts-expect-error cannot verify the type of this prop
                                 title={t(`appIcon.categories.${key}`)}
                                 key={key + 'section'}
                             >
@@ -112,6 +113,7 @@ export default function AppIconPicker(): JSX.Element {
                                                             }}
                                                         >
                                                             {t(
+                                                                // @ts-expect-error cannot verify the type of this prop
                                                                 `appIcon.names.${icon}`
                                                             )}
                                                         </Text>

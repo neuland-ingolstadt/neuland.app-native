@@ -6,8 +6,8 @@ export default {
         title: 'An error occurred',
 
         description: 'An error occurred while loading the data.',
-        refreshButton:
-            'An error occurred while loading the data.\nClick to refresh.',
+        refreshPull:
+            'An error occurred while loading the data.\nPull to refresh.',
         button: 'Retry',
         noSession: 'Not signed in.',
         pull: 'Pull down to refresh',
@@ -20,6 +20,10 @@ export default {
             description:
                 'This feature requires you to sign in using your THI account.',
             button: 'Sign in',
+        },
+        map: {
+            mapLoadError: 'Error while loading map',
+            mapOverlay: 'Error while loading overlay',
         },
         noMeals: 'No meals available',
     },

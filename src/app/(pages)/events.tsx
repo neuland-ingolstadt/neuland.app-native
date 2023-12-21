@@ -1,7 +1,7 @@
 import NeulandAPI from '@/api/neuland-api'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
@@ -74,7 +74,7 @@ export default function Events(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <ErrorGuestView
+                <ErrorView
                     title={error?.message ?? t('error.title')}
                     onRefresh={onRefresh}
                     refreshing={false}

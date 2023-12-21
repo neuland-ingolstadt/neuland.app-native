@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
@@ -68,7 +68,7 @@ export default function NewsScreen(): JSX.Element {
             )}
             {loadingState === LoadingState.ERROR && (
                 <View style={styles.errorContainer}>
-                    <ErrorGuestView
+                    <ErrorView
                         title={errorMsg}
                         onRefresh={onRefresh}
                         refreshing={false}

@@ -85,7 +85,10 @@ export default function HomeLayout(): JSX.Element {
         {
             id: 'food',
             type: 'food',
-            title: t('cards.titles.' + restaurant),
+            title: t(
+                // @ts-expect-error no types
+                'cards.titles.' + restaurant
+            ),
             data: {
                 path: '(tabs)/food',
             },
@@ -98,9 +101,13 @@ export default function HomeLayout(): JSX.Element {
                       id: 'appIcon',
                       type: 'appIcon',
                       title: 'App Icon',
-                      subtitle: t(`appIcon.names.${appIcon}`, {
-                          ns: 'settings',
-                      }),
+                      subtitle: t(
+                          // @ts-expect-error no types
+                          `appIcon.names.${appIcon}`,
+                          {
+                              ns: 'settings',
+                          }
+                      ),
                       data: {
                           path: '(user)/appicon',
                       },

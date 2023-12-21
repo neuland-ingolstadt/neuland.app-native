@@ -1,7 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
@@ -41,7 +41,9 @@ export default function CalendarPage(): JSX.Element {
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? t('pages.calendar.link') : primussUrl
+            selectedData === 'Events'
+                ? t('pages.calendar.calendar.link')
+                : primussUrl
         )
     }
     useEffect(() => {
@@ -143,7 +145,7 @@ export default function CalendarPage(): JSX.Element {
                                 </View>
                             )}
                             {userKind !== 'student' ? (
-                                <ErrorGuestView
+                                <ErrorView
                                     title={error?.message ?? t('error.title')}
                                     onButtonPress={() => {
                                         onRefresh()
@@ -153,7 +155,7 @@ export default function CalendarPage(): JSX.Element {
                             ) : (
                                 <>
                                     {loadingState === LoadingState.ERROR && (
-                                        <ErrorGuestView
+                                        <ErrorView
                                             title={
                                                 error?.message ??
                                                 t('error.title')

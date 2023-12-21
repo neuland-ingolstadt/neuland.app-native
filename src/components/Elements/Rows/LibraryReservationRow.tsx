@@ -37,7 +37,7 @@ const LibraryReservationRow = ({
                     style: 'cancel',
                 },
                 {
-                    text: t(deleting ? '' : 'misc.delete'),
+                    text: deleting ? '' : t('misc.delete'),
                     style: 'destructive',
                     onPress: () => {
                         setDeleting(true)

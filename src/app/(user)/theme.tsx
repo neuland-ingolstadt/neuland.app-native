@@ -100,6 +100,7 @@ export default function Theme(): JSX.Element {
                         ...styles.colorBoxText,
                     }}
                 >
+                    {/* @ts-expect-error cannot verify that code is a valid key */}
                     {t(`theme.colors.${code}`)}
                 </Text>
             </View>
@@ -184,6 +185,7 @@ export default function Theme(): JSX.Element {
                                         ...styles.iconText,
                                     }}
                                 >
+                                    {/* @ts-expect-error cannot verify that appIcon is a valid key */}
                                     {t(`appIcon.names.${appIcon}`)}
                                 </Text>
                             </View>

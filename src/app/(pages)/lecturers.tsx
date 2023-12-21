@@ -2,7 +2,7 @@ import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
@@ -136,7 +136,7 @@ export default function LecturersCard(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <ErrorGuestView
+                <ErrorView
                     title={error?.message ?? t('error.title')}
                     onRefresh={onRefresh}
                     refreshing={false}

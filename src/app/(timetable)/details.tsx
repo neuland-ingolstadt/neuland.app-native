@@ -29,7 +29,14 @@ import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
@@ -65,6 +72,8 @@ export default function TimetableDetails(): JSX.Element {
         []
     )
 
+    const [notificationsUpdating, setNotificationsUpdating] = useState(false)
+
     async function load(): Promise<void> {
         try {
             const timetable = await getFriendlyTimetable(today, true)
@@ -87,10 +96,8 @@ export default function TimetableDetails(): JSX.Element {
         if (event?.shortName === undefined) {
             throw new Error('Event is undefined')
         }
-
-        // cancel all notifications for this event first
+        setNotificationsUpdating(true)
         deleteTimetableNotifications(event.shortName)
-
         const notificationPromises = rawTimetable.map(async (lecture) => {
             const startDate = new Date(lecture.startDate)
             return await scheduleLectureNotification(
@@ -110,6 +117,7 @@ export default function TimetableDetails(): JSX.Element {
             mins,
             i18n.language as LanguageKey
         )
+        setNotificationsUpdating(false)
     }
 
     async function shareEvent(): Promise<void> {
@@ -123,7 +131,7 @@ export default function TimetableDetails(): JSX.Element {
             })
             await Sharing.shareAsync(uri, {
                 mimeType: 'image/png',
-                dialogTitle: t('misc.share'),
+                dialogTitle: t('misc.share', { ns: 'common' }),
             })
         } catch (e) {
             console.log(e)
@@ -198,6 +206,10 @@ export default function TimetableDetails(): JSX.Element {
 
     const actionSheetRef = useRef<ActionSheet>(null)
 
+    /**
+     * Shows the action sheet for setting up notifications
+     * @returns {Promise<void>} A promise that resolves when the action sheet has been shown.
+     */
     const showActionSheet = async (): Promise<void> => {
         let has = await hasPermission()
         if (!has) {
@@ -377,20 +389,36 @@ export default function TimetableDetails(): JSX.Element {
                                     style={styles.bellPressable}
                                     hitSlop={10}
                                 >
-                                    <PlatformIcon
-                                        color={colors.primary}
-                                        ios={{
-                                            name:
-                                                notification != null
-                                                    ? 'bell.fill'
-                                                    : 'bell-active',
-                                            size: minsBefore != null ? 18 : 21,
-                                        }}
-                                        android={{
-                                            name: 'bell',
-                                            size: minsBefore != null ? 20 : 25,
-                                        }}
-                                    />
+                                    {!notificationsUpdating ? (
+                                        <PlatformIcon
+                                            color={colors.primary}
+                                            ios={{
+                                                name:
+                                                    notification != null
+                                                        ? 'bell.fill'
+                                                        : 'bell',
+                                                size:
+                                                    minsBefore != null
+                                                        ? 19
+                                                        : 21,
+                                            }}
+                                            android={{
+                                                name:
+                                                    notification != null
+                                                        ? 'bell-active'
+                                                        : 'bell',
+                                                size:
+                                                    minsBefore != null
+                                                        ? 20
+                                                        : 25,
+                                            }}
+                                        />
+                                    ) : (
+                                        <ActivityIndicator
+                                            size="small"
+                                            color={colors.primary}
+                                        />
+                                    )}
                                     {minsBefore != null && (
                                         <Text
                                             style={{
@@ -540,8 +568,9 @@ export const styles = StyleSheet.create({
     bellPressable: {
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 3,
+        justifyContent: 'space-around',
         minWidth: 40,
+        height: '100%',
     },
     bellTime: {
         fontSize: 12,

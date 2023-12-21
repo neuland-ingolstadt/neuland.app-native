@@ -39,6 +39,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
             onLongPress={() => {}}
         >
             <ContextMenu
+                // @ts-expect-error cannot verify that title is a valid key
                 title={t('cards.titles.' + title)}
                 actions={[
                     {
@@ -92,6 +93,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             }}
                         />
                         <Text style={[styles.title, { color: colors.text }]}>
+                            {/* @ts-expect-error cannot verify that title is a valid key */}
                             {t('cards.titles.' + title)}
                         </Text>
 

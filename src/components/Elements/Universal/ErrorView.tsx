@@ -15,7 +15,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 import PlatformIcon from './Icon'
 
-export default function ErrorGuestView({
+export default function ErrorView({
     title,
     message,
     buttonText,

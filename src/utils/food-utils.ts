@@ -10,7 +10,6 @@ import {
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
-import { type TFunction } from 'i18next'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
 
@@ -168,7 +167,7 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
  * @returns {string}
  */
 
-export function getUserSpecificLabel(userKind: string, t: TFunction): string {
+export function getUserSpecificLabel(userKind: string, t: any): string {
     const labels: Labels = {
         [USER_GUEST]: t('price.guests'),
         [USER_EMPLOYEE]: t('price.employees'),

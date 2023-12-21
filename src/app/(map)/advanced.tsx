@@ -4,7 +4,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type AvailableRoom } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
@@ -298,7 +298,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 />
                             )}
                             {loadingState === LoadingState.ERROR && (
-                                <ErrorGuestView
+                                <ErrorView
                                     title={error?.message ?? t('error.title')}
                                     onButtonPress={() => {
                                         onRefresh()

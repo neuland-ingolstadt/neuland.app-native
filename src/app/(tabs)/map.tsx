@@ -9,7 +9,7 @@ import {
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -588,7 +588,7 @@ export const MapScreen = (): JSX.Element => {
                             ...styles.errorContainer,
                         }}
                     >
-                        <ErrorGuestView
+                        <ErrorView
                             title={adjustErrorTitle(errorMsg)}
                             onButtonPress={() => {
                                 setWebViewKey(webViewKey + 1)

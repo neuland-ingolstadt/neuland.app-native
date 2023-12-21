@@ -18,6 +18,7 @@ export default {
     error: {
         empty: {
             title: 'Timetable not configured',
+            title2: 'No lectures found',
             message:
                 'To display your timetable, you have to configure it using the THI timetable website.',
             button: 'Configure now',

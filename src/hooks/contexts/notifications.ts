@@ -81,11 +81,12 @@ export function useNotifications(): Notifications {
     function deleteTimetableNotifications(name: string): void {
         const timetableObject = { ...timetable }
         if (timetableObject[name] !== undefined) {
-            // cancel all notifications of the timetable entry
-            timetableObject[name].elements.forEach((element) => {
-                void cancelScheduledNotificationAsync(element.id)
-                console.log('cancel', element.id)
-            })
+            const cancelPromises = timetableObject[name].elements.map(
+                async (element): Promise<void> => {
+                    await cancelScheduledNotificationAsync(element.id)
+                }
+            )
+            void Promise.all(cancelPromises)
 
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete timetableObject[name]
@@ -105,8 +106,6 @@ export function useNotifications(): Notifications {
      */
     function removeNotification(id: string, name: string): void {
         void cancelScheduledNotificationAsync(id)
-
-        // remove notification from timetable
         const timetableObject = { ...timetable }
         const timetableEntry = timetableObject[name]
         if (timetableEntry !== undefined) {

@@ -1,5 +1,5 @@
 import { MealDay } from '@/components/Elements/Food'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -274,7 +274,7 @@ function FoodScreen(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <ErrorGuestView
+                <ErrorView
                     title={
                         error?.message === 'noMeals'
                             ? t('error.noMeals')

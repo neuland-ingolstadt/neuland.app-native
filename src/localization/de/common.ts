@@ -7,8 +7,6 @@ export default {
         description: 'Beim Laden der Daten ist ein Fehler aufgetreten.',
         refreshPull:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
-        refreshButton:
-            'Ein Fehler ist beim Laden der Daten aufgetreten.\nKlicke zum Aktualisieren.',
         button: 'Erneut versuchen',
         noSession: 'Nicht angemeldet.',
         pull: 'Ziehe zum Aktualisieren nach unten',

@@ -6,7 +6,6 @@ import {
     type TimetableSections,
 } from '@/types/utils'
 import { scheduleNotificationAsync } from 'expo-notifications'
-import { type TFunction } from 'i18next'
 import { Alert, Linking } from 'react-native'
 
 import { combineDateTime } from './date-utils'
@@ -131,7 +130,7 @@ export async function scheduleLectureNotification(
     room: string,
     minsBefore: number,
     date: Date,
-    t: TFunction
+    t: any
 ): Promise<LectureData[]> {
     const alertDate = new Date(date.getTime() - minsBefore * 60000)
     const id = await scheduleNotificationAsync({
@@ -153,7 +152,7 @@ export async function scheduleLectureNotification(
  * @param t Translation function
  * @returns void
  */
-export function notificationAlert(t: TFunction): void {
+export function notificationAlert(t: any): void {
     Alert.alert(
         t('notification.permission.title', { ns: 'common' }),
         t('notification.permission.description', { ns: 'common' }),

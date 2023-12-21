@@ -54,7 +54,7 @@
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-i18next": "^13.3.1",
+    "react-i18next": "^13.5.0",
     "react-native": "0.72.6",
     "react-native-barcode-builder": "^2.0.0",
     "react-native-big-calendar": "4.7.0",

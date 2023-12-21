@@ -18,6 +18,7 @@ export default {
     error: {
         empty: {
             title: 'Stundenplan nicht konfiguriert',
+            title2: 'Keine Vorlesungen gefunden',
             message:
                 'Um deinen Stundenplan anzuzeigen, musst du ihn über die THI Stundenplan Webseite konfigurieren.',
             button: 'Jetzt konfigurieren',

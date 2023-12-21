@@ -38,7 +38,9 @@ export default function DashboardEdit(): JSX.Element {
     const transShownDashboardEntries = shownDashboardEntries.map((item) => {
         return {
             ...item,
-            text: t('cards.titles.' + item.key, { ns: 'navigation' }),
+            // @ts-expect-error cannot verify the type
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            text: t('cards.titles.' + item.key, { ns: 'navigation' }) as string,
         }
     })
 
@@ -164,8 +166,8 @@ export default function DashboardEdit(): JSX.Element {
                                                 ]}
                                             >
                                                 {t(
-                                                    'cards.titles.' +
-                                                        t(item.key),
+                                                    // @ts-expect-error cannot verify the type
+                                                    `'cards.titles.${item.key}')`,
                                                     { ns: 'navigation' }
                                                 )}
                                             </Text>
