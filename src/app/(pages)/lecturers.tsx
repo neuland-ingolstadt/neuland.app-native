@@ -51,7 +51,6 @@ export default function LecturersCard(): JSX.Element {
                 router.push('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
-                console.log('ee')
                 setError(e as Error)
             }
         }

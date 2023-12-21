@@ -67,7 +67,7 @@ const LibraryCard = (): JSX.Element => {
                 <View
                     style={{
                         ...styles.calendarView,
-                        paddingTop: reservations.length > 0 ? 10 : 0,
+                        ...(reservations.length > 0 && styles.cardsFilled),
                     }}
                 >
                     {reservations.map((item, index) => (
@@ -111,6 +111,9 @@ const LibraryCard = (): JSX.Element => {
 const styles = StyleSheet.create({
     calendarView: {
         gap: 12,
+    },
+    cardsFilled: {
+        paddingTop: 10,
     },
     eventTitle: {
         fontWeight: '500',

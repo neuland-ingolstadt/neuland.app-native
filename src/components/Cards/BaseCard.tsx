@@ -129,9 +129,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: CARD_PADDING,
     },
-    container: {
-        borderRadius: 8,
-    },
 })
 
 export default BaseCard

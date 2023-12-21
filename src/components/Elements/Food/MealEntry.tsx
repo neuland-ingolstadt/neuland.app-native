@@ -101,7 +101,7 @@ export const MealEntry = ({
             <ContextMenu
                 title={meal.restaurant ?? ''}
                 key={key}
-                style={{ zIndex: 3 }}
+                style={styles.contextMenu}
                 actions={[
                     {
                         title:
@@ -171,14 +171,7 @@ export const MealEntry = ({
                             },
                         ]}
                     >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'flex-start',
-                                width: '100%',
-                            }}
-                        >
+                        <View style={styles.innerContainer}>
                             <Text
                                 style={[styles.Title, { color: colors.text }]}
                                 adjustsFontSizeToFit={true}
@@ -313,6 +306,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 1,
     },
+    innerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        width: '100%',
+    },
+    contextMenu: { zIndex: 3 },
     Title: {
         fontWeight: '500',
         fontSize: 16,
