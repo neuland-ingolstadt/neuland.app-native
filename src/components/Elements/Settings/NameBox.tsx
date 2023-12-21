@@ -74,7 +74,7 @@ const NameBox = ({
                 <ShimmerPlaceholder
                     visible={loaded}
                     style={{
-                        ...(loaded && styles.shimmerContainer2),
+                        ...(!loaded && styles.shimmerContainer2),
                     }}
                     shimmerStyle={styles.shimmer}
                     shimmerColors={shimmerColor}

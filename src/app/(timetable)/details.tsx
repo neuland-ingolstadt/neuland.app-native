@@ -87,6 +87,10 @@ export default function TimetableDetails(): JSX.Element {
         if (event?.shortName === undefined) {
             throw new Error('Event is undefined')
         }
+
+        // cancel all notifications for this event first
+        deleteTimetableNotifications(event.shortName)
+
         const notificationPromises = rawTimetable.map(async (lecture) => {
             const startDate = new Date(lecture.startDate)
             return await scheduleLectureNotification(

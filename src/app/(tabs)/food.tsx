@@ -134,7 +134,10 @@ function FoodScreen(): JSX.Element {
                     >
                         <Text
                             style={{
-                                color: colors.text,
+                                color:
+                                    selectedDay === index
+                                        ? colors.primary
+                                        : colors.text,
                                 ...(selectedDay === index
                                     ? styles.selectedDayText2
                                     : styles.normalDayText2),
@@ -150,7 +153,10 @@ function FoodScreen(): JSX.Element {
                         </Text>
                         <Text
                             style={{
-                                color: colors.text,
+                                color:
+                                    selectedDay === index
+                                        ? colors.primary
+                                        : colors.text,
                                 ...(selectedDay === index
                                     ? styles.selectedDayText
                                     : styles.normalDayText),
