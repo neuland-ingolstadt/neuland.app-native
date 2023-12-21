@@ -54,7 +54,7 @@ const MealCategory = ({
     const colors = useTheme().colors as Colors
     return (
         <>
-            <View key={category} style={{ paddingBottom: 8 }}>
+            <View key={category} style={styles.categoryContainerCollapsed}>
                 <Pressable
                     onPress={() => {
                         toggleCollapsed()
@@ -190,13 +190,8 @@ export const MealDay = ({
 
     return isEmpty ? (
         <>
-            <View
-                style={{
-                    paddingTop: 40,
-                    alignItems: 'center',
-                }}
-            >
-                <Text style={{ color: colors.text, fontSize: 16 }}>
+            <View style={styles.emptyContainer}>
+                <Text style={{ ...styles.emptyText, color: colors.text }}>
                     No meals found for this day.
                 </Text>
             </View>
@@ -223,6 +218,11 @@ export const MealDay = ({
 }
 
 const styles = StyleSheet.create({
+    emptyContainer: {
+        paddingTop: 40,
+        alignItems: 'center',
+    },
+    emptyText: { fontSize: 16 },
     dayRestaurantTitle: {
         fontWeight: 'bold',
         fontSize: 18,
@@ -244,4 +244,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '500',
     },
+    categoryContainerCollapsed: { paddingBottom: 8 },
 })

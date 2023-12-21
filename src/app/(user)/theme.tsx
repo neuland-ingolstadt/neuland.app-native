@@ -55,11 +55,7 @@ export default function Theme(): JSX.Element {
     }): JSX.Element => {
         const themeAccentColor = deviceTheme.dark ? color.dark : color.light
         return (
-            <View
-                style={{
-                    justifyContent: 'center',
-                }}
-            >
+            <View style={styles.colorBoxContainer}>
                 <Pressable
                     onPress={() => {
                         toggleAccentColor(code)
@@ -101,8 +97,7 @@ export default function Theme(): JSX.Element {
                 <Text
                     style={{
                         color: colors.text,
-                        textAlign: 'center',
-                        paddingTop: 4,
+                        ...styles.colorBoxText,
                     }}
                 >
                     {t(`theme.colors.${code}`)}
@@ -120,14 +115,7 @@ export default function Theme(): JSX.Element {
 
     const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {
         return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginVertical: 2,
-                    paddingVertical: 4,
-                }}
-            >
+            <View style={styles.colorMatrixContainer}>
                 {colors.map((color, index) => (
                     <ColorBox
                         color={color.color}
@@ -219,10 +207,6 @@ export default function Theme(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    footerText: {
-        marginTop: 6,
-        fontSize: 12,
-    },
     colorBox: {
         width: 60,
         height: 60,
@@ -236,12 +220,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
-    },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
     },
     sectionContainer: {
         borderRadius: 8,
@@ -270,5 +248,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 18,
         borderWidth: 1,
+    },
+    colorBoxContainer: {
+        justifyContent: 'center',
+    },
+    colorBoxText: {
+        textAlign: 'center',
+        paddingTop: 4,
+    },
+    colorMatrixContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginVertical: 2,
+        paddingVertical: 4,
     },
 })

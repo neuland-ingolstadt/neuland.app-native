@@ -134,13 +134,10 @@ function FoodScreen(): JSX.Element {
                     >
                         <Text
                             style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                fontWeight:
-                                    selectedDay === index ? '600' : '500',
-                                fontSize: 16,
+                                color: colors.text,
+                                ...(selectedDay === index
+                                    ? styles.selectedDayText2
+                                    : styles.normalDayText2),
                             }}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
@@ -153,13 +150,10 @@ function FoodScreen(): JSX.Element {
                         </Text>
                         <Text
                             style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                fontSize: 15,
-                                fontWeight:
-                                    selectedDay === index ? '500' : 'normal',
+                                color: colors.text,
+                                ...(selectedDay === index
+                                    ? styles.selectedDayText
+                                    : styles.normalDayText),
                             }}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
@@ -288,8 +282,9 @@ function FoodScreen(): JSX.Element {
             {loadingState === LoadingState.LOADED && (
                 <>
                     <Animated.View
+                        // eslint-disable-next-line react-native/no-inline-styles
                         style={{
-                            width: '100%',
+                            ...styles.animtedContainer,
                             borderBottomColor: colors.border,
                             borderBottomWidth: showAllergensBanner
                                 ? 0
@@ -320,7 +315,7 @@ function FoodScreen(): JSX.Element {
                     <PagerView
                         ref={pagerViewRef}
                         style={{
-                            flex: 1,
+                            ...styles.pagerContainer,
                             height: screenHeight,
                         }}
                         initialPage={0}
@@ -377,6 +372,7 @@ export default function Screen(): JSX.Element {
     return (
         <>
             <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text */}
                 <title>Food</title>
                 <meta name="Food" content="Meal plan for the canteens" />
                 <meta property="expo:handoff" content="true" />
@@ -418,34 +414,15 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
     },
-    headerButton: {
-        backgroundColor: 'transparent',
-        paddingRight: 10,
+    pagerContainer: {
+        flex: 1,
     },
     container: {
         paddingBottom: PAGE_BOTTOM_SAFE_AREA,
         flex: 1,
     },
-    dayRestaurantContainer: {
-        width: '92%',
-        alignSelf: 'center',
-        marginBottom: 10,
-    },
-    dayRestaurantTitle: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        paddingBottom: 5,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
+    animtedContainer: {
+        width: '100%',
     },
     loadedContainer: {
         flexDirection: 'row',
@@ -503,5 +480,21 @@ const styles = StyleSheet.create({
     innerScrollContainer: {
         marginHorizontal: 12,
         paddingBottom: 20,
+    },
+    selectedDayText: {
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    normalDayText: {
+        fontSize: 16,
+        fontWeight: 'normal',
+    },
+    selectedDayText2: {
+        fontSize: 15,
+        fontWeight: '500',
+    },
+    normalDayText2: {
+        fontSize: 15,
+        fontWeight: 'normal',
     },
 })

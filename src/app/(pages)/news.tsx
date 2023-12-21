@@ -151,9 +151,6 @@ export default function NewsScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    page: {
-        padding: PAGE_PADDING,
-    },
     errorContainer: {
         paddingTop: Platform.OS === 'ios' ? 0 : 100,
         height: Platform.OS === 'ios' ? '90%' : '100%',
@@ -206,18 +203,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         justifyContent: 'center',
-    },
-    // OTHER VIEWS
-    errorMessage: {
-        paddingTop: Platform.OS === 'ios' ? 200 : 40,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingTop: Platform.OS === 'ios' ? 140 : 40,

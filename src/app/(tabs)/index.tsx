@@ -97,6 +97,7 @@ export default function Screen(): JSX.Element {
     return (
         <>
             <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text */}
                 <title>Dashboard</title>
                 <meta name="Dashboard" content="Customizable Dashboard" />
                 <meta property="expo:handoff" content="true" />

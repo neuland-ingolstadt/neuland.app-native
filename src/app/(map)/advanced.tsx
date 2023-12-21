@@ -282,11 +282,7 @@ export default function AdvancedSearch(): JSX.Element {
                     >
                         {t('pages.rooms.results')}
                     </Text>
-                    <View
-                        style={{
-                            paddingBottom: 20,
-                        }}
-                    >
+                    <View style={styles.sectionContainer}>
                         <View
                             style={[
                                 styles.section,
@@ -322,6 +318,9 @@ export default function AdvancedSearch(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    sectionContainer: {
+        paddingBottom: 20,
+    },
     scrollView: {
         padding: 12,
     },
@@ -341,21 +340,6 @@ const styles = StyleSheet.create({
     },
     loadingIndicator: {
         paddingVertical: 30,
-    },
-    errorSection: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 30,
-    },
-    errorMessage: {
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     optionsRow: {
         flexDirection: 'row',

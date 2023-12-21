@@ -215,16 +215,7 @@ const styles = StyleSheet.create({
     linkText: {
         fontSize: 14,
     },
-    thirdPrivacyText: {
-        fontSize: 14,
-        textAlign: 'center',
-        paddingTop: 20,
-    },
     logo: {
-        height: 200,
-        flexGrow: 1,
-    },
-    image: {
         height: 200,
         flexGrow: 1,
     },

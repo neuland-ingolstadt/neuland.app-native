@@ -1,5 +1,4 @@
 import { type Colors } from '@/components/colors'
-import { CARD_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
@@ -22,18 +21,15 @@ export default function ErrorGuestView({
     buttonText,
     icon,
     onButtonPress,
-    footer,
     onRefresh,
     refreshing,
     inModal,
 }: {
     title: string
     message?: string
-
     icon?: { ios: string; android: string }
     buttonText?: string
     onButtonPress?: () => void
-    footer?: string
     onRefresh?: () => void
     refreshing?: boolean
     inModal?: boolean
@@ -97,17 +93,20 @@ export default function ErrorGuestView({
                     break
             }
         }
-        const buttonProps =
-            title === 'User is logged in as guest'
-                ? {
-                      onPress: () => {
-                          router.push('(user)/login')
-                      },
-                      text: t('error.guest.button'),
-                  }
-                : onButtonPress != null
-                ? { onPress: buttonAction, text: t('error.button') }
-                : null
+        let buttonProps = null
+
+        if (title === 'User is logged in as guest') {
+            buttonProps = {
+                onPress: () => {
+                    router.push('(user)/login')
+                },
+                text: t('error.guest.button'),
+            }
+        } else if (onButtonPress != null && buttonText === undefined) {
+            buttonProps = { onPress: buttonAction, text: t('error.button') }
+        } else if (onButtonPress != null && buttonText !== undefined) {
+            buttonProps = { onPress: buttonAction, text: buttonText }
+        }
 
         return buttonProps != null || title === 'User is logged in as guest' ? (
             <Pressable
@@ -124,8 +123,7 @@ export default function ErrorGuestView({
                     <Text
                         style={{
                             color: colors.primary,
-                            fontSize: 16,
-                            fontWeight: '600',
+                            ...styles.refreshButtonText,
                         }}
                     >
                         {buttonProps?.text}
@@ -149,16 +147,18 @@ export default function ErrorGuestView({
                     <></>
                 )
             }
-            contentContainerStyle={{
-                ...styles.innerContainer,
-                paddingTop: inModal ?? false ? 50 : 150,
-            }}
+            contentContainerStyle={
+                inModal ?? false
+                    ? styles.innerContainerModal
+                    : styles.innerContainer
+            }
         >
             <View
-                style={{
-                    ...styles.errorContainer,
-                    paddingBottom: inModal ?? false ? 30 : 64,
-                }}
+                style={
+                    inModal ?? false
+                        ? styles.errorContainerModal
+                        : styles.errorContainer
+                }
             >
                 <PlatformIcon
                     color={colors.primary}
@@ -199,21 +199,35 @@ export default function ErrorGuestView({
     )
 }
 
-const styles = StyleSheet.create({
-    innerContainer: {
+const baseStyles = StyleSheet.create({
+    baseContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         gap: 12,
         paddingHorizontal: 20,
     },
-    messageContainer: {
-        padding: CARD_PADDING,
-        borderRadius: 8,
-        width: '100%',
-        maxWidth: '80%',
-        justifyContent: 'center',
+    errorContainer: {
+        gap: 12,
         alignItems: 'center',
-        gap: 6,
+    },
+})
+
+const styles = StyleSheet.create({
+    innerContainerModal: {
+        ...baseStyles.baseContainer,
+        paddingTop: 50,
+    },
+    innerContainer: {
+        ...baseStyles.baseContainer,
+        paddingTop: 150,
+    },
+    errorContainer: {
+        ...baseStyles.errorContainer,
+        paddingBottom: 64,
+    },
+    errorContainerModal: {
+        ...baseStyles.errorContainer,
+        paddingBottom: 30,
     },
     errorTitle: {
         fontSize: 18,
@@ -235,13 +249,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 40,
     },
-    errorMessage: {
-        fontWeight: '600',
+    refreshButtonText: {
         fontSize: 16,
-        textAlign: 'center',
+        fontWeight: '600',
     },
     errorInfo: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '500',
         textAlign: 'center',
         marginTop: 12,
@@ -250,9 +263,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         marginTop: 16,
-    },
-    errorContainer: {
-        gap: 12,
-        alignItems: 'center',
     },
 })

@@ -196,18 +196,15 @@ export default function CalendarPage(): JSX.Element {
                 <View>
                     <Text
                         style={{
-                            fontSize: 12,
-                            fontWeight: 'normal',
+                            ...styles.footerText1,
                             color: colors.labelColor,
-                            paddingBottom: 25,
-                            textAlign: 'justify',
                         }}
                     >
                         {t('pages.calendar.footer.part1')}
                         <Text
                             style={{
                                 color: colors.text,
-                                textDecorationLine: 'underline',
+                                ...styles.footerText2,
                             }}
                             onPress={handleLinkPress}
                         >
@@ -252,5 +249,14 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         justifyContent: 'center',
+    },
+    footerText1: {
+        fontSize: 12,
+        fontWeight: 'normal',
+        paddingBottom: 25,
+        textAlign: 'justify',
+    },
+    footerText2: {
+        textDecorationLine: 'underline',
     },
 })

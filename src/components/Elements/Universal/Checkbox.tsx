@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-color-literals */
 import { getContrastColor } from '@/utils/ui-utils'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'

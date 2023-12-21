@@ -92,7 +92,7 @@ export default function GradesSCreen(): JSX.Element {
 
     return (
         <ScrollView
-            contentContainerStyle={{ paddingBottom: 32 }}
+            contentContainerStyle={styles.contentContainer}
             refreshControl={
                 loadingState !== LoadingState.LOADING &&
                 loadingState !== LoadingState.LOADED ? (
@@ -220,6 +220,9 @@ export default function GradesSCreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    contentContainer: {
+        paddingBottom: 32,
+    },
     loadedContainer: {
         alignSelf: 'center',
         borderRadius: 8,
@@ -240,17 +243,6 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         paddingTop: 8,
         textAlign: 'left',
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingTop: 40,

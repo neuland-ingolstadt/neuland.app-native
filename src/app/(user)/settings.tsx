@@ -278,8 +278,7 @@ export default function Settings(): JSX.Element {
                                                     color: getContrastColor(
                                                         colors.primary
                                                     ),
-                                                    fontSize: 20,
-                                                    fontWeight: 'bold',
+                                                    ...styles.avatarText,
                                                 }}
                                             >
                                                 {getInitials(userFullName)}
@@ -302,8 +301,7 @@ export default function Settings(): JSX.Element {
                                                     color: getContrastColor(
                                                         colors.primary
                                                     ),
-                                                    fontSize: 20,
-                                                    fontWeight: 'bold',
+                                                    ...styles.avatarText,
                                                 }}
                                             >
                                                 {getInitials(userFullName)}
@@ -395,7 +393,7 @@ export default function Settings(): JSX.Element {
                         </View>
                     </View>
                 </Pressable>
-                <View style={{ marginVertical: 16 }}>
+                <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>
             </View>
@@ -440,5 +438,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,
+    },
+    formlistContainer: { marginVertical: 16 },
+    avatarText: {
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 })

@@ -47,7 +47,7 @@ export default function Login(): JSX.Element {
             >
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    style={{ flex: 1, justifyContent: 'center' }}
+                    style={styles.container}
                     enabled={!floatingKeyboard}
                 >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -62,7 +62,7 @@ export default function Login(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    container: { flex: 1, justifyContent: 'center' },
     gradient: {
         height: '100%',
         width: '100%',

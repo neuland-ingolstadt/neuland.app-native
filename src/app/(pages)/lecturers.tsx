@@ -6,7 +6,7 @@ import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
@@ -184,22 +184,8 @@ const styles = StyleSheet.create({
     page: {
         padding: PAGE_PADDING,
     },
-    container: {
-        marginBottom: MODAL_BOTTOM_MARGIN,
-    },
     loadedRows: {
         borderRadius: 8,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingTop: 40,

@@ -55,6 +55,7 @@ export default function Screen(): JSX.Element {
     return (
         <>
             <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text */}
                 <title>Map</title>
                 <meta name="Campus Map" content="Interactive Campus Map" />
                 <meta property="expo:handoff" content="true" />
@@ -393,19 +394,21 @@ export const MapScreen = (): JSX.Element => {
         const { t } = useTranslation('common')
         return (
             <View
-                style={[
-                    styles.ButtonArea,
-                    { marginTop: Platform.OS === 'ios' ? 175 : 20 },
-                ]}
+                style={{
+                    ...styles.ButtonArea,
+                    ...(Platform.OS === 'ios'
+                        ? styles.buttonAreaIOS
+                        : styles.buttonAreaAndroid),
+                }}
             >
                 <View
-                    style={[
-                        styles.ButtonAreaSection,
-                        {
-                            borderColor: colors.border,
-                            borderWidth: isEmpty ? 0 : 1,
-                        },
-                    ]}
+                    style={{
+                        ...styles.ButtonAreaSection,
+                        ...(!isEmpty
+                            ? styles.borderWithNormal
+                            : styles.borderWidthEmpty),
+                        borderColor: colors.border,
+                    }}
                 >
                     {floors.floors.map((floor, index) => {
                         const isLastButton =
@@ -422,6 +425,7 @@ export const MapScreen = (): JSX.Element => {
                                 <View
                                     style={[
                                         styles.Button,
+                                        // eslint-disable-next-line react-native/no-inline-styles
                                         {
                                             borderBottomColor: colors.border,
                                             backgroundColor:
@@ -573,7 +577,7 @@ export const MapScreen = (): JSX.Element => {
     }
     return (
         <View style={styles.container}>
-            <View style={{ flex: 1, position: 'relative' }}>
+            <View style={styles.innerContainer}>
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
                 )}
@@ -661,6 +665,7 @@ const styles = StyleSheet.create({
 
         justifyContent: 'flex-end',
     },
+    innerContainer: { flex: 1, position: 'relative' },
     map: {
         flex: 1,
         position: 'relative',
@@ -671,13 +676,24 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 1,
     },
+    buttonAreaAndroid: {
+        marginTop: 20,
+    },
+    buttonAreaIOS: {
+        marginTop: 175,
+    },
     ButtonAreaSection: {
         borderRadius: 7,
         overflow: 'hidden',
         borderWidth: 1,
         marginTop: 10,
     },
-
+    borderWidthEmpty: {
+        borderWidth: 0,
+    },
+    borderWithNormal: {
+        borderWidth: 1,
+    },
     Button: {
         width: 38,
         height: 38,
@@ -699,21 +715,6 @@ const styles = StyleSheet.create({
         zIndex: 3,
         paddingTop: 70,
         alignItems: 'center',
-    },
-    errorTitle: {
-        fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    errorText: {
-        fontSize: 16,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    errorButton: {
-        padding: 10,
-        borderRadius: 5,
     },
     loadingContainer: {
         top: 0,

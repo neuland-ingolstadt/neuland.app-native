@@ -66,7 +66,7 @@ const LecturerRow = ({
                 <>
                     <View style={styles.rightContainer}>
                         {item.raum !== null && item.raum !== '' && (
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.container}>
                                 <Text
                                     style={{
                                         ...styles.rightText1,
@@ -96,6 +96,7 @@ const LecturerRow = ({
 }
 
 const styles = StyleSheet.create({
+    container: { flexDirection: 'row' },
     leftText1: {
         fontSize: 15,
 

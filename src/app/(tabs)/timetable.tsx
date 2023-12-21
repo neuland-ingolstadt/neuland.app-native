@@ -300,10 +300,4 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-    navRight: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 16,
-        marginRight: 12,
-    },
 })

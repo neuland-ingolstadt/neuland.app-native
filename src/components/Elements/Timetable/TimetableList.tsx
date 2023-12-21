@@ -164,13 +164,7 @@ export default function TimetableList({
                             >
                                 {item.name}
                             </Text>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    gap: 4,
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <View style={styles.itemRow}>
                                 <Text
                                     style={{
                                         color: colors.labelColor,
@@ -241,6 +235,11 @@ export default function TimetableList({
 }
 
 const styles = StyleSheet.create({
+    itemRow: {
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
+    },
     sectionView: {
         paddingTop: PAGE_PADDING,
         marginBottom: 8,

@@ -58,13 +58,7 @@ export default function AppIconPicker(): JSX.Element {
         <>
             <ScrollView>
                 <StatusBar style={isModal ? getStatusBarStyle() : 'auto'} />
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '100%',
-                        paddingBottom: 50,
-                    }}
-                >
+                <View style={styles.container}>
                     {Object.entries(categories).map(([key, value]) => {
                         return (
                             <SectionView
@@ -156,12 +150,10 @@ export default function AppIconPicker(): JSX.Element {
                                                 }
                                             >
                                                 <Text
-                                                    style={[
-                                                        {
-                                                            color: colors.text,
-                                                            ...styles.exclusiveText,
-                                                        },
-                                                    ]}
+                                                    style={{
+                                                        color: colors.text,
+                                                        ...styles.exclusiveText,
+                                                    }}
                                                 >
                                                     {t('appIcon.exclusive')}
                                                 </Text>
@@ -178,27 +170,10 @@ export default function AppIconPicker(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    colorBox: {
-        width: 60,
-        height: 60,
-        borderRadius: 4,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignContent: 'center',
-        flexDirection: 'row',
-
-        borderWidth: 2,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
+    container: {
+        alignSelf: 'center',
+        width: '100%',
+        paddingBottom: 50,
     },
     sectionContainer: {
         borderRadius: 8,

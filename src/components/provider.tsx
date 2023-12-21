@@ -14,7 +14,7 @@ import {
 } from '@react-navigation/native'
 import { usePathname } from 'expo-router'
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { Platform, useColorScheme } from 'react-native'
+import { Platform, StyleSheet, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
@@ -295,7 +295,7 @@ export default function Provider({
     }, [flow.analyticsAllowed, flow.analyticsInitialized])
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={styles.container}>
             <ThemeProvider
                 value={
                     (Platform.OS === 'android'
@@ -336,3 +336,9 @@ export default function Provider({
         </GestureHandlerRootView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+})

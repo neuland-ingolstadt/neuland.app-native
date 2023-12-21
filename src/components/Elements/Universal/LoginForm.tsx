@@ -160,7 +160,7 @@ const LoginForm = (): JSX.Element => {
         <>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
+                style={styles.keyboardContainer}
                 enabled={!floatingKeyboard}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -186,10 +186,10 @@ const LoginForm = (): JSX.Element => {
                                     resetAlert={resetInfo}
                                 />
                             ) : null}
-                            <View style={{ paddingTop: 3 }}>
+                            <View style={styles.userNameContainer}>
                                 <Text
                                     style={{
-                                        paddingBottom: 5,
+                                        ...styles.userNameLabel,
                                         color: colors.labelColor,
                                     }}
                                 >
@@ -224,10 +224,10 @@ const LoginForm = (): JSX.Element => {
                                     />
                                 </View>
                             </View>
-                            <View style={{ paddingTop: 15 }}>
+                            <View style={styles.passwordContainer}>
                                 <Text
                                     style={{
-                                        paddingBottom: 5,
+                                        ...styles.userNameLabel,
                                         color: colors.labelColor,
                                     }}
                                 >
@@ -293,8 +293,7 @@ const LoginForm = (): JSX.Element => {
                                 ) : (
                                     <Text
                                         style={{
-                                            fontWeight: 'bold',
-                                            fontSize: 15,
+                                            ...styles.buttonText,
                                             color: getContrastColor(
                                                 colors.primary
                                             ),
@@ -333,10 +332,11 @@ const LoginForm = (): JSX.Element => {
     )
 }
 
+const black = '#000000'
 const styles = StyleSheet.create({
     container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
     loginContainer: {
-        shadowColor: '#00000',
+        shadowColor: black,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -386,6 +386,22 @@ const styles = StyleSheet.create({
     guestText: {
         fontSize: 14,
         marginTop: 10,
+    },
+    keyboardContainer: {
+        flex: 1,
+    },
+    userNameContainer: {
+        paddingTop: 3,
+    },
+    userNameLabel: {
+        paddingBottom: 5,
+    },
+    passwordContainer: {
+        paddingTop: 15,
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        fontSize: 15,
     },
 })
 

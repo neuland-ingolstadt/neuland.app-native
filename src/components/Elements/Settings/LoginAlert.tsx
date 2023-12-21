@@ -30,17 +30,8 @@ const LoginAlert = ({
                     { backgroundColor: colors.labelBackground },
                 ]}
             >
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}
-                >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}
-                    >
+                <View style={styles.outerContainer}>
+                    <View style={styles.innerContainer}>
                         <Text
                             style={[styles.failureText, { color: colors.text }]}
                         >
@@ -64,7 +55,7 @@ const LoginAlert = ({
                 <View style={styles.errorText}>
                     <Text
                         numberOfLines={2}
-                        style={{ marginTop: 4, color: colors.text }}
+                        style={{ ...styles.errorMsg, color: colors.text }}
                     >
                         {errorMsg}
                     </Text>
@@ -98,5 +89,15 @@ const styles = StyleSheet.create({
     errorText: {
         width: '90%',
         alignItems: 'flex-start',
+    },
+    errorMsg: {
+        marginTop: 4,
+    },
+    outerContainer: {
+        flexDirection: 'row',
+    },
+    innerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 })

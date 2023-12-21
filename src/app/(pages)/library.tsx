@@ -12,7 +12,6 @@ import { type Colors } from '@/components/colors'
 import { type AvailableLibrarySeats, type Reservation } from '@/types/thi-api'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { getFriendlyAvailableLibrarySeats } from '@/utils/library-utils'
-import { CARD_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -270,79 +269,15 @@ export default function newsSCreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     contentContainer: { paddingBottom: 32 },
-    messageContainer: {
-        padding: CARD_PADDING,
-        borderRadius: 8,
-        width: '100%',
-        maxWidth: '80%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 6,
-    },
-    labelText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    imageContainer: {
-        width: '100%',
-        height: 200,
-        objectFit: 'cover',
-        borderTopRightRadius: 8,
-        borderTopLeftRadius: 8,
-    },
     teaserText: {
         fontSize: 17,
         marginHorizontal: 10,
         textAlign: 'center',
         marginVertical: 30,
     },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
-    },
     loadingContainer: {
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-    },
-    titleText: {
-        width: '94%',
-        paddingVertical: 14,
-        fontSize: 15,
-        fontWeight: '700',
-        textAlign: 'left',
-    },
-    sectionContainer: {
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        marginTop: 2,
-        justifyContent: 'center',
-    },
-    errorTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
     },
 })

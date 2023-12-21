@@ -37,6 +37,10 @@ export default function LibraryCode(): JSX.Element {
     const [brightness, setBrightness] = useState<number>(0)
     const brightnessRef = useRef<number>(0)
 
+    const staticColors = {
+        white: '#ffffff',
+        // Add other colors as needed
+    }
     async function load(): Promise<void> {
         try {
             setLibraryCode((await API.getLibraryNumber()) ?? '')
@@ -132,18 +136,13 @@ export default function LibraryCode(): JSX.Element {
             )}
             {loadingState === LoadingState.LOADED && (
                 <View style={styles.container}>
-                    <View style={{}}>
+                    <View>
                         <FormList sections={sections} />
                     </View>
                     <Pressable
                         style={{
-                            marginTop: 20,
-                            paddingVertical: 14,
-                            backgroundColor: 'white',
-                            borderRadius: 10,
-                            alignSelf: 'center',
-                            marginHorizontal: PAGE_PADDING,
-                            width: '100%',
+                            ...styles.barcodeContainer,
+                            backgroundColor: staticColors.white,
                         }}
                         onPress={() => {
                             void toggleBrightness()
@@ -154,11 +153,7 @@ export default function LibraryCode(): JSX.Element {
                             value={libraryCode}
                             maxWidth={Dimensions.get('window').width - 56}
                             width={5}
-                            style={{
-                                marginVertical: 6,
-                                paddingHorizontal: 10,
-                                alignSelf: 'center',
-                            }}
+                            style={styles.barcodeStyle}
                         />
                     </Pressable>
                     <View style={styles.notesContainer}>
@@ -178,17 +173,6 @@ export default function LibraryCode(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    barcode: {
-        width: 200,
-        height: 100,
-    },
-    page: {
-        padding: PAGE_PADDING,
-    },
-    formList: {
-        width: '100%',
-        alignSelf: 'center',
-    },
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,
@@ -209,5 +193,18 @@ const styles = StyleSheet.create({
     notesText: {
         textAlign: 'left',
         fontSize: 12,
+    },
+    barcodeContainer: {
+        marginTop: 20,
+        paddingVertical: 14,
+        borderRadius: 10,
+        alignSelf: 'center',
+        marginHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
+    barcodeStyle: {
+        marginVertical: 6,
+        paddingHorizontal: 10,
+        alignSelf: 'center',
     },
 })

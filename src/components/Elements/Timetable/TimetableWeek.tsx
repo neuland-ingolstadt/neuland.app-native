@@ -274,6 +274,7 @@ export default function TimetableWeek({
                                     }}
                                 >
                                     <View
+                                        // eslint-disable-next-line react-native/no-inline-styles
                                         style={{
                                             ...styles.allDayEvent,
                                             backgroundColor: event.color,
@@ -412,20 +413,6 @@ export default function TimetableWeek({
 }
 
 const styles = StyleSheet.create({
-    loadingView: {
-        position: 'absolute',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-    },
-    navRight: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 16,
-        marginRight: 12,
-    },
     eventLocation: {
         flexDirection: 'row',
         alignItems: 'center',

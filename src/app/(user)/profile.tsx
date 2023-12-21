@@ -233,7 +233,7 @@ export default function Profile(): JSX.Element {
     return (
         <>
             <ScrollView
-                contentContainerStyle={{ paddingBottom: 32 }}
+                contentContainerStyle={styles.contentContainer}
                 refreshControl={
                     loadingState !== LoadingState.LOADING &&
                     loadingState !== LoadingState.LOADED ? (
@@ -309,6 +309,7 @@ export default function Profile(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    contentContainer: { paddingBottom: 32 },
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,

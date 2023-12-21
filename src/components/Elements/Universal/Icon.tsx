@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-raw-text */
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'

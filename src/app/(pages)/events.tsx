@@ -108,17 +108,6 @@ const styles = StyleSheet.create({
     page: {
         padding: PAGE_PADDING,
     },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
-    },
     loadingContainer: {
         paddingTop: 40,
         justifyContent: 'center',

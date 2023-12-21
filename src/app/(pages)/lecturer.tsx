@@ -164,10 +164,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
     },
-    notesContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        marginBottom: 40,
-    },
 })

@@ -80,7 +80,7 @@ const LibraryBookingRow = ({
     }
 
     return (
-        <View style={{ flexDirection: 'column' }}>
+        <View style={styles.container}>
             <Pressable
                 onPress={() => {
                     setCollapsed(!collapsed)
@@ -88,7 +88,7 @@ const LibraryBookingRow = ({
                 }}
                 style={styles.eventContainer}
             >
-                <View style={[styles.detailsContainer]}>
+                <View style={styles.detailsContainer}>
                     <Text
                         style={{
                             ...styles.timespanText,
@@ -303,6 +303,7 @@ const styles = StyleSheet.create({
         marginTop: 6,
         width: '100%',
     },
+    container: { flexDirection: 'column' },
 })
 
 export default LibraryBookingRow

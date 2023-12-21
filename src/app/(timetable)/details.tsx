@@ -306,16 +306,7 @@ export default function TimetableDetails(): JSX.Element {
                         </DetailsSymbol>
 
                         <DetailsBody>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    width: '100%',
-                                    paddingRight: 12,
-                                }}
-                            >
+                            <View style={styles.dateRow}>
                                 <View>
                                     <Text
                                         style={{
@@ -379,12 +370,7 @@ export default function TimetableDetails(): JSX.Element {
                                             console.error(error)
                                         })
                                     }}
-                                    style={{
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        gap: 3,
-                                        minWidth: 40,
-                                    }}
+                                    style={styles.bellPressable}
                                     hitSlop={10}
                                 >
                                     <PlatformIcon
@@ -404,7 +390,7 @@ export default function TimetableDetails(): JSX.Element {
                                     {minsBefore != null && (
                                         <Text
                                             style={{
-                                                fontSize: 12,
+                                                ...styles.bellTime,
                                                 color: colors.primary,
                                             }}
                                         >
@@ -546,5 +532,22 @@ export const styles = StyleSheet.create({
         zIndex: -1,
         position: 'absolute',
         transform: [{ translateX: -1000 }],
+    },
+    bellPressable: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 3,
+        minWidth: 40,
+    },
+    bellTime: {
+        fontSize: 12,
+    },
+    dateRow: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        paddingRight: 12,
     },
 })

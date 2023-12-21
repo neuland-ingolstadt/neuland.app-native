@@ -14,7 +14,7 @@ export interface FoodFilter {
     initAllergenSelection: () => void
     toggleSelectedPreferences: (name: string) => void
     toggleShowStatic: () => void
-    toggleFoodLanguage: (language: FoodLanguage) => void
+    toggleFoodLanguage: (language: string) => void
 }
 
 export function useFoodFilter(): FoodFilter {
@@ -153,8 +153,8 @@ export function useFoodFilter(): FoodFilter {
      * @returns {void}
      * @memberof FoodFilter
      */
-    function toggleFoodLanguage(language: FoodLanguage): void {
-        setFoodLanguage(language)
+    function toggleFoodLanguage(language: string): void {
+        setFoodLanguage(language as FoodLanguage)
         void AsyncStorage.setItem('foodLanguage', JSON.stringify(language))
     }
 

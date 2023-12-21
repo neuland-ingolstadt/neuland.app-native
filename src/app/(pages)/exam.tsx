@@ -101,7 +101,7 @@ export default function ExamDetail(): JSX.Element {
                     {exam?.name}
                 </Text>
             </View>
-            <View style={[styles.formList]}>
+            <View style={styles.formList}>
                 <FormList sections={sections} />
             </View>
             <View>
