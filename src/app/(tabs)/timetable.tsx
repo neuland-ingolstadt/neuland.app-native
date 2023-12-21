@@ -60,7 +60,6 @@ export default function TimetableScreen(): JSX.Element {
 
     const onRefresh: () => void = () => {
         setLoadingState(LoadingState.REFRESHING)
-        console.log('refreshing')
         void loadTimetable()
     }
     useEffect(() => {
@@ -69,10 +68,6 @@ export default function TimetableScreen(): JSX.Element {
     }, [userKind])
 
     async function updateAllNotifications(): Promise<void> {
-        // console.log('updateAllNotifications', timetableNotifications)
-
-        // check if the language has changed
-        // if it has, remove all notifications and reschedule them
         const setupLectures = Object.keys(timetableNotifications)
         if (setupLectures.length === 0) return
         const configuredLanguage =
@@ -80,19 +75,16 @@ export default function TimetableScreen(): JSX.Element {
 
         const today = new Date()
 
-        // remove the past events fromt the timetable const
         const filteredTimetable = timetable.filter((lecture) => {
             const lectureDate = new Date(lecture.startDate)
             return lectureDate > today
         })
 
-        // Filter the timetable to only include lectures in setupLectures
         const setupTimetable = filteredTimetable.filter((lecture) =>
             setupLectures.includes(lecture.shortName)
         )
-        //  console.log('setupTimetable:', setupTimetable)
+
         if (configuredLanguage !== i18n.language) {
-            console.log('language changed')
             const promises = setupLectures.map(async (lectureName) => {
                 const mins = getMinsBeforeLecture(lectureName)
                 const notificationPromises = Object.values(setupTimetable)
@@ -134,11 +126,9 @@ export default function TimetableScreen(): JSX.Element {
                 lecture.startDate,
                 lecture.rooms[0]
             )
-            // console.log('new key:', key)
             map[key] = lecture
             return map
         }, {})
-        //  console.log('newLecturesMap:', newLecturesMap)
 
         setupLectures.forEach((lectureName) => {
             const oldLectures = timetableNotifications[lectureName].elements
@@ -149,35 +139,26 @@ export default function TimetableScreen(): JSX.Element {
                     oldLecture.startDateTime,
                     oldLecture.room
                 )
-                // console.log('old key:', key)
                 const matchingNewLecture = newLecturesMap[key]
 
                 if (matchingNewLecture !== undefined) {
                     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                     delete newLecturesMap[key]
                 } else {
-                    console.log(
-                        'No match found for:',
-                        lectureName,
-                        JSON.stringify(oldLecture)
-                    )
                     // Remove the old lecture from the notification
-                    console.log('Deleting:', oldLecture.id)
                     removeNotification(oldLecture.id, lectureName)
                 }
             })
         })
 
-        console.log(
-            'found n new lectures:',
-            Object.values(newLecturesMap).length
-        )
-
         const newLectureGroups = Object.values(newLecturesMap).reduce<
-            Record<string, typeof newLecturesMap>
+            Record<string, typeof filteredTimetable>
         >((map, lecture) => {
             const key = lecture.shortName
-            // @ts-expect-error no types
+            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+            if (!map[key]) {
+                map[key] = []
+            }
             map[key].push(lecture)
             return map
         }, {})
@@ -185,7 +166,6 @@ export default function TimetableScreen(): JSX.Element {
         const promises = Object.entries(newLectureGroups).map(
             async ([lectureName, lectures]) => {
                 const minsBeforeLecture = getMinsBeforeLecture(lectureName)
-                console.log('minsBeforeLecture:', minsBeforeLecture)
                 const notificationPromises = Object.values(lectures).map(
                     async (lecture) => {
                         return await scheduleLectureNotification(

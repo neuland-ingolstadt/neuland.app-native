@@ -143,7 +143,6 @@ export async function scheduleLectureNotification(
         },
         trigger: alertDate,
     })
-    console.log('scheduled notification', id)
     return [{ startDateTime: date, room, id }]
 }
 

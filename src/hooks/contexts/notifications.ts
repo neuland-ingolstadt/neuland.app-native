@@ -70,7 +70,6 @@ export function useNotifications(): Notifications {
             'timetableNotifications5s',
             JSON.stringify(timetableObject)
         )
-        console.log('newArray after update', JSON.stringify(timetableObject))
     }
 
     /**
@@ -109,16 +108,10 @@ export function useNotifications(): Notifications {
         const timetableObject = { ...timetable }
         const timetableEntry = timetableObject[name]
         if (timetableEntry !== undefined) {
-            console.log('timetableEntry', timetableEntry)
             const newElements = timetableEntry.elements.filter(
                 (element) => element.id !== id
             )
-            console.log('remove', id, name)
             timetableObject[name] = { ...timetableEntry, elements: newElements }
-            console.log(
-                'newArray after remove',
-                JSON.stringify(timetableObject)
-            )
             setTimetable(timetableObject)
             void AsyncStorage.setItem(
                 'timetableNotifications5s',
