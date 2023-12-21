@@ -41,9 +41,11 @@ export default function ErrorGuestView({
         const ios = Platform.OS === 'ios'
         switch (title) {
             case 'Network request failed':
-                return ios ? 'wifi.slash' : 'wifi-slash'
+                return ios ? 'wifi.slash' : 'wifi-off'
             case 'User is logged in as guest':
-                return ios ? 'person.crop.circle.badge.questionmark' : 'person'
+                return ios
+                    ? 'person.crop.circle.badge.questionmark'
+                    : 'person-cancel'
             default:
                 return icon !== undefined
                     ? ios
@@ -168,7 +170,7 @@ export default function ErrorGuestView({
                     }}
                     android={{
                         name: getIcon(),
-                        size: 48,
+                        size: 64,
                     }}
                 />
                 <Text

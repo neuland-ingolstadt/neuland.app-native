@@ -4,7 +4,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type AvailableRoom } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'

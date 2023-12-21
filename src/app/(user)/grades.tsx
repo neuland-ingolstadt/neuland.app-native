@@ -1,7 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type Grade } from '@/types/thi-api'

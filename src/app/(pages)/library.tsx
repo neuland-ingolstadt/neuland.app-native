@@ -6,7 +6,7 @@ import {
 import LibraryBookingRow from '@/components/Elements/Rows/LibraryBookingRow'
 import LibraryReservationRow from '@/components/Elements/Rows/LibraryReservationRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type AvailableLibrarySeats, type Reservation } from '@/types/thi-api'

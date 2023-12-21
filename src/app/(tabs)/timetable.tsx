@@ -1,6 +1,6 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
-import ErrorGuestView from '@/components/Elements/Universal/ErrorPage'
+import ErrorGuestView from '@/components/Elements/Universal/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import {
@@ -255,7 +255,7 @@ export default function TimetableScreen(): JSX.Element {
                         buttonText={t('error.empty.button')}
                         icon={{
                             ios: 'calendar.badge.exclamationmark',
-                            android: 'calendar',
+                            android: 'calendar-edit',
                         }}
                         onButtonPress={() => {
                             void Linking.openURL('https://hiplan.thi.de/')

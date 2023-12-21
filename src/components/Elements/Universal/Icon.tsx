@@ -149,6 +149,14 @@ const ANDROID_ICONS = {
     'insert-chart': <>&#xE24B;</>,
     return: <>&#xE5D9;</>,
     default: <>&#xF56D;</>,
+    'wifi-off': <>&#xE648;</>,
+    'person-cancel': <>&#xF567;</>,
+    'calendar-edit': <>&#xE742;</>,
+    'drag-handle': <>&#xE25D;</>,
+    'circle-plus': <>&#xE147;</>,
+    'circle-minus': <>&#xE15D;</>,
+    bell: <>&#xE7F4;</>,
+    'bell-alert': <>&#xE7F5;</>,
 }
 
 export type AndroidIconName = keyof typeof ANDROID_ICONS

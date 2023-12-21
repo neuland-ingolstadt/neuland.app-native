@@ -178,7 +178,7 @@ export default function DashboardEdit(): JSX.Element {
                                                     size: 20,
                                                 }}
                                                 android={{
-                                                    name: 'plus-circle',
+                                                    name: 'circle-plus',
                                                     size: 24,
                                                 }}
                                             />
@@ -260,7 +260,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                         size: 20,
                     }}
                     android={{
-                        name: 'drag-horizontal-variant',
+                        name: 'drag-handle',
                         size: 22,
                     }}
                 />
@@ -283,7 +283,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                             size: 20,
                         }}
                         android={{
-                            name: 'minus-circle',
+                            name: 'circle-minus',
                             size: 24,
                         }}
                     />

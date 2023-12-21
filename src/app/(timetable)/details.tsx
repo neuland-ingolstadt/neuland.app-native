@@ -379,7 +379,7 @@ export default function TimetableDetails(): JSX.Element {
                                             name:
                                                 notification != null
                                                     ? 'bell.fill'
-                                                    : 'bell',
+                                                    : 'bell-active',
                                             size: minsBefore != null ? 18 : 21,
                                         }}
                                         android={{
