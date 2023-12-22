@@ -24,7 +24,13 @@ export async function loadFoodEntries(
 ): Promise<Food[]> {
     const entries: Food[] = []
     if (restaurants.includes('mensa')) {
-        const data = await NeulandAPI.getMensaPlan()
+        let data
+        try {
+            data = await NeulandAPI.getMensaPlan()
+        } catch (e) {
+            console.log(e)
+            data = []
+        }
         data.forEach((day: Food) => {
             day.meals.forEach((entry: any) => {
                 entry.restaurant = 'Mensa'
@@ -34,7 +40,13 @@ export async function loadFoodEntries(
     }
 
     if (restaurants.includes('reimanns')) {
-        const data = await NeulandAPI.getReimannsPlan()
+        let data
+        try {
+            data = await NeulandAPI.getReimannsPlan()
+        } catch (e) {
+            console.log(e)
+            data = []
+        }
 
         const startOfToday = new Date(formatISODate(new Date())).getTime()
         const filteredData = data.filter(
@@ -53,13 +65,19 @@ export async function loadFoodEntries(
     }
 
     if (restaurants.includes('canisius')) {
-        const data = await NeulandAPI.getCanisiusPlan()
+        let data = []
+        try {
+            data = await NeulandAPI.getCanisiusPlan()
+        } catch (e) {
+            console.log(e)
+            data = []
+        }
 
         const startOfToday = new Date(formatISODate(new Date())).getTime()
         const filteredData = data.filter(
             (x: any) => new Date(x.timestamp).getTime() >= startOfToday
         )
-
+        console.log(filteredData)
         filteredData.forEach((day: any) =>
             day.meals.forEach((entry: any) => {
                 entry.restaurant = 'Canisius'

@@ -9880,7 +9880,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
-    react-i18next: "npm:^13.3.1"
+    react-i18next: "npm:^13.5.0"
     react-native: "npm:0.72.6"
     react-native-barcode-builder: "npm:^2.0.0"
     react-native-big-calendar: "npm:4.7.0"
@@ -9897,7 +9897,7 @@ __metadata:
     react-native-reanimated: "npm:3.3.0"
     react-native-root-toast: "npm:^3.4.1"
     react-native-safe-area-context: "npm:4.6.3"
-    react-native-screens: "npm:~3.27.0"
+    react-native-screens: "npm:~3.29.0"
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-shimmer-placeholder: "npm:^2.0.9"
     react-native-svg: "npm:^14.0.0"
@@ -10925,9 +10925,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^13.3.1":
-  version: 13.3.1
-  resolution: "react-i18next@npm:13.3.1"
+"react-i18next@npm:^13.5.0":
+  version: 13.5.0
+  resolution: "react-i18next@npm:13.5.0"
   dependencies:
     "@babel/runtime": "npm:^7.22.5"
     html-parse-stringify: "npm:^3.0.1"
@@ -10939,7 +10939,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: a19701359ac8ae1c75c68012215c024fd6c896c86e2f254c43a135279afb2035ed3b37c9f07ae2662fa1e44e36b3de918287ebecf841dd1bce6ecaba3a055fc4
+  checksum: 955db09fb83bc68aa9fe7ed11c95fb3e9dc5ab95e85854f169c07a9e71f9154d2cc01f46e343801e2478d5de86475e7a19ec677bec532c3870cb7a01246a6a86
   languageName: node
   linkType: hard
 
@@ -11148,16 +11148,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:~3.27.0":
-  version: 3.27.0
-  resolution: "react-native-screens@npm:3.27.0"
+"react-native-screens@npm:~3.29.0":
+  version: 3.29.0
+  resolution: "react-native-screens@npm:3.29.0"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 30d0275d1a41915e3b2ca151854ca41ceed0bbdc6baf782e5e886a5842b92e003bb2183e4017bd6b03ee7000ec6312a6570a02901c1a990d0fefcdcf511f1e06
+  checksum: 90c32eb5452007f64c2f56412c671de98b4b89f09cf09cc7a7dca1cb23b1ac6de9bc726c67e774c7cb68dbd05bb329c053c1c2f071f534ad4e27d9d60be76eb0
   languageName: node
   linkType: hard
 

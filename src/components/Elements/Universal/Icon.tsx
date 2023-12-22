@@ -150,7 +150,7 @@ const ANDROID_ICONS = {
     return: <>&#xE5D9;</>,
     default: <>&#xF56D;</>,
     'wifi-off': <>&#xE648;</>,
-    'person-cancel': <>&#xF567;</>,
+    'person-cancel': <>&#xF02E;</>,
     'calendar-edit': <>&#xE742;</>,
     'drag-handle': <>&#xE25D;</>,
     'circle-plus': <>&#xE147;</>,
