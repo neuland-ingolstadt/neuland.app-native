@@ -21,6 +21,13 @@ export async function getFriendlyTimetable(
     detailed: boolean = false
 ): Promise<FriendlyTimetableEntry[]> {
     const rawTimetable = (await API.getTimetable(date, detailed)).timetable
+    const rawTimetableNextMonth = (
+        await API.getTimetable(
+            new Date(date.getFullYear(), date.getMonth() + 1),
+            detailed
+        )
+    ).timetable
+    rawTimetable.push(...rawTimetableNextMonth)
 
     return rawTimetable
         .flatMap((day) =>

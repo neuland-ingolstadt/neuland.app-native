@@ -35,7 +35,6 @@ export default function ErrorView({
     inModal?: boolean
 }): JSX.Element {
     const colors = useTheme().colors as Colors
-    console.log(title)
     const { t } = useTranslation('common')
     const getIcon = (): string => {
         const ios = Platform.OS === 'ios'

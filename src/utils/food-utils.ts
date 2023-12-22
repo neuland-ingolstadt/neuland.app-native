@@ -77,7 +77,6 @@ export async function loadFoodEntries(
         const filteredData = data.filter(
             (x: any) => new Date(x.timestamp).getTime() >= startOfToday
         )
-        console.log(filteredData)
         filteredData.forEach((day: any) =>
             day.meals.forEach((entry: any) => {
                 entry.restaurant = 'Canisius'
