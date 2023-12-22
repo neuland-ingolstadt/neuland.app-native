@@ -156,8 +156,8 @@
                     "en": "Calendar Agenda View"
                 },
                 "description": {
-                    "de": "Wechsle zwischen der normalen Kalenderansicht und einer Listenansicht, um alle Termine auf einen Blick zu sehen.",
-                    "en": "Switch between the normal calendar view and an agenda view to see all appointments at a glance."
+                    "de": "Der Kalender kann nun in einer Listenansicht angezeigt werden, um alle Termine auf einen Blick zu sehen.",
+                    "en": "The calendar can now be displayed in an agenda view to see all appointments at a glance."
                 },
                 "icon": {
                     "ios": "calendar",
@@ -174,22 +174,22 @@
                     "en": "Enable notifications to be informed about upcoming lectures."
                 },
                 "icon": {
-                    "ios": "bell",
+                    "ios": "bell.and.waves.left.and.right",
                     "android": "bell"
                 }
             },
             {
                 "title": {
-                    "de": "Essens Verbesserungen",
-                    "en": "Food Improvements"
+                    "de": "Anonyme Statistiken",
+                    "en": "Anonymous Analytics"
                 },
                 "description": {
-                    "de": "Die Essensübersicht wurde überarbeitet. Swipen, Variaten, Allergene, Teilen per Link, verbessertes Design und mehr.",
-                    "en": "The food overview has been revised. Swiping, variations, allergens, sharing via link, improved design and more."
+                    "de": "Die App sammelt nun anonyme Nutzungsdaten, um die App zu verbessern. Deine Privatsphäre bleibt dabei zu jeder Zeit geschützt.",
+                    "en": "The app now collects anonymous usage data to improve the app. Your privacy is protected at all times."
                 },
                 "icon": {
-                    "ios": "carrot",
-                    "android": "restaurant"
+                    "ios": "lock.shield",
+                    "android": "chart-pie"
                 }
             }
         ]

@@ -20,6 +20,11 @@ export default {
                 'Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.',
             button: 'Anmelden',
         },
+        permission: {
+            title: 'Funktion nicht verfügbar',
+            description:
+                'Diese Funktion ist für deine Benutzergruppe nicht verfügbar.',
+        },
         map: {
             mapLoadError: 'Fehler beim Laden der Karte',
             mapOverlay: 'Fehler beim Laden des Overlays',

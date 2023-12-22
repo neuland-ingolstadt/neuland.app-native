@@ -36,15 +36,23 @@ export default function ErrorView({
 }): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
+    const networkError = 'Network request failed'
+    const guestError = 'User is logged in as guest'
+    const permissionError = '"Service for user-group not defined" (-120)'
+
     const getIcon = (): string => {
         const ios = Platform.OS === 'ios'
         switch (title) {
-            case 'Network request failed':
+            case networkError:
                 return ios ? 'wifi.slash' : 'wifi-off'
-            case 'User is logged in as guest':
+            case guestError:
                 return ios
                     ? 'person.crop.circle.badge.questionmark'
                     : 'person-cancel'
+            case permissionError:
+                return ios
+                    ? 'person.crop.circle.badge.exclamationmark'
+                    : 'person-slash'
             default:
                 return icon !== undefined
                     ? ios
@@ -58,10 +66,12 @@ export default function ErrorView({
 
     const getTitle = (): string => {
         switch (title) {
-            case 'Network request failed':
+            case networkError:
                 return t('error.network.title')
-            case 'User is logged in as guest':
+            case guestError:
                 return t('error.guest.title')
+            case permissionError:
+                return t('error.permission.title')
             default:
                 return title
         }
@@ -69,10 +79,12 @@ export default function ErrorView({
 
     const getMessage = (): string => {
         switch (title) {
-            case 'Network request failed':
+            case networkError:
                 return t('error.network.description')
-            case 'User is logged in as guest':
+            case guestError:
                 return t('error.guest.description')
+            case permissionError:
+                return t('error.permission.description')
             default:
                 if (message != null) {
                     return message
@@ -84,7 +96,7 @@ export default function ErrorView({
     const ErrorButton = (): JSX.Element => {
         const buttonAction = (): void => {
             switch (title) {
-                case 'User is logged in as guest':
+                case guestError:
                     router.push('(user)/login')
                     break
                 default:
@@ -96,7 +108,7 @@ export default function ErrorView({
         }
         let buttonProps = null
 
-        if (title === 'User is logged in as guest') {
+        if (title === guestError) {
             buttonProps = {
                 onPress: () => {
                     router.push('(user)/login')
@@ -109,7 +121,8 @@ export default function ErrorView({
             buttonProps = { onPress: buttonAction, text: buttonText }
         }
 
-        return buttonProps != null || title === 'User is logged in as guest' ? (
+        return (buttonProps != null || title === guestError) &&
+            title !== permissionError ? (
             <Pressable
                 style={[
                     styles.logoutContainer,
@@ -139,7 +152,7 @@ export default function ErrorView({
     return (
         <ScrollView
             refreshControl={
-                refreshing != null && title !== 'User is logged in as guest' ? (
+                refreshing != null && title !== guestError ? (
                     <RefreshControl
                         refreshing={refreshing ?? false}
                         onRefresh={onRefresh}
@@ -184,17 +197,16 @@ export default function ErrorView({
                     {getMessage()}
                 </Text>
                 <ErrorButton />
-                {refreshing != null &&
-                    title !== 'User is logged in as guest' && (
-                        <Text
-                            style={[
-                                styles.errorFooter,
-                                { color: colors.labelColor },
-                            ]}
-                        >
-                            {t('error.pull')}
-                        </Text>
-                    )}
+                {refreshing != null && title !== guestError && (
+                    <Text
+                        style={[
+                            styles.errorFooter,
+                            { color: colors.labelColor },
+                        ]}
+                    >
+                        {t('error.pull')}
+                    </Text>
+                )}
             </View>
         </ScrollView>
     )

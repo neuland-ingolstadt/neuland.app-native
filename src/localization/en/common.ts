@@ -21,6 +21,10 @@ export default {
                 'This feature requires you to sign in using your THI account.',
             button: 'Sign in',
         },
+        permission: {
+            title: 'Feature not available',
+            description: 'This feature is not available for your user group.',
+        },
         map: {
             mapLoadError: 'Error while loading map',
             mapOverlay: 'Error while loading overlay',

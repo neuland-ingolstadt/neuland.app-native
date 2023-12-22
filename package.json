@@ -48,7 +48,6 @@
     "expo-sharing": "11.7.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "^1.6.0",
-    "expo-system-ui": "~2.4.0",
     "i18next": "^23.6.0",
     "metro": "~0.76.7",
     "moment": "^2.29.4",
@@ -80,7 +79,7 @@
     "react-native-webview": "13.2.2",
     "rn-quick-actions": "^0.0.3",
     "sanitize-html": "^2.11.0",
-    "sweet-sfsymbols": "^0.1.0"
+    "sweet-sfsymbols": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",
