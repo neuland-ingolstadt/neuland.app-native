@@ -77,6 +77,7 @@
     "react-native-vector-icons": "^10.0.2",
     "react-native-view-shot": "^3.8.0",
     "react-native-webview": "13.2.2",
+    "react-native-week-view": "^0.30.0",
     "rn-quick-actions": "^0.0.3",
     "sanitize-html": "^2.11.0",
     "sweet-sfsymbols": "^0.2.0"

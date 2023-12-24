@@ -107,6 +107,8 @@ export const ReloadProvider = createContext<any>({
 export const TimetableContext = createContext<TimetableHook>({
     timetableMode: DEFAULT_TIMETABLE_MODE,
     setTimetableMode: () => {},
+    selectedDate: new Date(),
+    setSelectedDate: () => {},
 })
 
 export const NotificationContext = createContext<Notifications>({

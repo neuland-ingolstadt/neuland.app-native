@@ -6753,18 +6753,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-system-ui@npm:~2.4.0":
-  version: 2.4.0
-  resolution: "expo-system-ui@npm:2.4.0"
-  dependencies:
-    "@react-native/normalize-color": "npm:^2.0.0"
-    debug: "npm:^4.3.2"
-  peerDependencies:
-    expo: "*"
-  checksum: a1530b25bfe1bbe6dd5fb04287d5919102d78a94216d2a8d9c66504e51b65e6dded617889fc834099d535fedf9981eee25250a8d0637a00bcd756d64e1380c47
-  languageName: node
-  linkType: hard
-
 "expo-updates-interface@npm:~0.10.0":
   version: 0.10.1
   resolution: "expo-updates-interface@npm:0.10.1"
@@ -9133,7 +9121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memoize-one@npm:^5.0.0":
+"memoize-one@npm:^5.0.0, memoize-one@npm:^5.1.1":
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: fd22dbe9a978a2b4f30d6a491fc02fb90792432ad0dab840dc96c1734d2bd7c9cdeb6a26130ec60507eb43230559523615873168bcbe8fafab221c30b11d54c1
@@ -9710,7 +9698,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.4":
+"moment@npm:^2.19.3, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 844c6f3ce42862ac9467c8ca4f5e48a00750078682cc5bda1bc0e50cc7ca88e2115a0f932d65a06e4a90e26cb78892be9b3ca3dd6546ca2c4d994cebb787fc2b
@@ -9870,7 +9858,6 @@ __metadata:
     expo-sharing: "npm:11.7.0"
     expo-splash-screen: "npm:~0.20.5"
     expo-status-bar: "npm:^1.6.0"
-    expo-system-ui: "npm:~2.4.0"
     husky: "npm:^8.0.3"
     i18next: "npm:^23.6.0"
     lint-staged: "npm:>=15"
@@ -9904,9 +9891,10 @@ __metadata:
     react-native-vector-icons: "npm:^10.0.2"
     react-native-view-shot: "npm:^3.8.0"
     react-native-webview: "npm:13.2.2"
+    react-native-week-view: "npm:^0.30.0"
     rn-quick-actions: "npm:^0.0.3"
     sanitize-html: "npm:^2.11.0"
-    sweet-sfsymbols: "npm:^0.1.0"
+    sweet-sfsymbols: "npm:^0.2.0"
     typescript: "npm:^5.2.2"
   languageName: unknown
   linkType: soft
@@ -11228,6 +11216,22 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: b0af1dafd8ea4e84c46c5d40efa307f8eea38687283e23df08eadc3fc9e6ecb498c4ddb529795a161911a43d91dcda3d49fb763f16fa05efb8d899ad8feccb06
+  languageName: node
+  linkType: hard
+
+"react-native-week-view@npm:^0.30.0":
+  version: 0.30.0
+  resolution: "react-native-week-view@npm:0.30.0"
+  dependencies:
+    memoize-one: "npm:^5.1.1"
+    moment: "npm:^2.19.3"
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-gesture-handler: ^2.3.2
+    react-native-reanimated: ^2.4.1
+  checksum: 5a624b6f71f0a13892c8b0b7c856cf5d011d8739c66da351f6a30b893f91cba8bf678a1a8190ef625a7063afdec867ed3c9289c6639864eb39946501314e2cb7
   languageName: node
   linkType: hard
 
@@ -12566,14 +12570,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sweet-sfsymbols@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "sweet-sfsymbols@npm:0.1.0"
+"sweet-sfsymbols@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "sweet-sfsymbols@npm:0.2.0"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 394680da0b3eb4e5c84341b8b497823bd8ee3dc199641be0988523a0d3d947cb96fa62ccbf936434d6b1ea9d5290d91842efd1b49ff81043ed4d33d79aa0bdf8
+  checksum: 30555596aa663ce09845d2382485b889494d9766e7cb2ef3a2f6caac46f9dab9c1526e83a2e85ea6f384788de3adfdd212af50080c0e3d24acf919cc5406a29c
   languageName: node
   linkType: hard
 

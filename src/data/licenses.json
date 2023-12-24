@@ -167,12 +167,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-system-ui@2.4.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "neuland"
-    },
     "expo@49.0.21": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -203,7 +197,7 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@13.3.1": {
+    "react-i18next@13.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
@@ -299,7 +293,7 @@
         "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-screens@3.27.0": {
+    "react-native-screens@3.29.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
@@ -341,6 +335,12 @@
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-week-view@0.30.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/hoangnm/react-native-week-view",
+        "licenseUrl": "https://github.com/hoangnm/react-native-week-view/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native@0.72.6": {
         "licenses": "MIT",
         "repository": "github:facebook/react-native",
@@ -365,7 +365,7 @@
         "licenseUrl": "https://github.com/apostrophecms/sanitize-html/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "sweet-sfsymbols@0.1.0": {
+    "sweet-sfsymbols@0.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/andrew-levy/sweet-sfsymbols",
         "licenseUrl": "https://github.com/andrew-levy/sweet-sfsymbols",
