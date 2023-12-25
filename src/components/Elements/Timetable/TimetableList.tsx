@@ -11,6 +11,8 @@ import {
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useContext, useLayoutEffect, useRef } from 'react'
 import {
@@ -80,6 +82,11 @@ export default function TimetableList({
     const filteredTimetable = groupedTimetable.filter(
         (section) => section.title >= today
     )
+    const isDark = theme.dark
+    const lineColor = Color(colors.primary)
+        .darken(isDark ? 0.2 : 0)
+        .lighten(isDark ? 0 : 0.2)
+        .hex()
 
     /**
      * Functions
@@ -148,7 +155,10 @@ export default function TimetableList({
                     style={styles.pressable}
                 >
                     <View style={styles.eventWrapper}>
-                        <View
+                        <LinearGradient
+                            colors={[colors.primary, lineColor]}
+                            start={[0, 0.9]}
+                            end={[0.7, 0.25]}
                             style={{
                                 backgroundColor: colors.primary,
                                 ...styles.indicator,

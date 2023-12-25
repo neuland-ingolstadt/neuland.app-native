@@ -67,6 +67,23 @@ export default function TimetableScreen(): JSX.Element {
         void loadTimetable()
     }, [userKind])
 
+    useEffect(() => {
+        const updateNotifications = async (): Promise<void> => {
+            if (timetable.length === 0) return
+            console.log('Updating notifications')
+            await updateAllNotifications()
+            console.log('Updated notifications')
+        }
+
+        const timeoutId = setTimeout(() => {
+            void updateNotifications()
+        }, 1000) // Delay execution by 1 second
+
+        return () => {
+            clearTimeout(timeoutId)
+        } // Clear the timeout if the component unmounts
+    }, [timetable, i18n.language])
+
     async function updateAllNotifications(): Promise<void> {
         const setupLectures = Object.keys(timetableNotifications)
         if (setupLectures.length === 0) return
@@ -192,15 +209,6 @@ export default function TimetableScreen(): JSX.Element {
 
         await Promise.all(promises)
     }
-
-    useEffect(() => {
-        const updateNotifications = async (): Promise<void> => {
-            if (timetable.length === 0) return
-            await updateAllNotifications()
-        }
-
-        void updateNotifications()
-    }, [timetable, i18n.language])
 
     function getMinsBeforeLecture(name: string): number {
         return timetableNotifications[name].mins

@@ -1,16 +1,24 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/provider'
+import { NotificationContext, TimetableContext } from '@/components/provider'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
-import { useNavigation, useRouter } from 'expo-router'
-import React, { useContext, useEffect, useLayoutEffect } from 'react'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import moment from 'moment'
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import WeekView, { type WeekViewEvent } from 'react-native-week-view'
+import WeekView, {
+    type HeaderComponentProps,
+    type WeekViewEvent,
+} from 'react-native-week-view'
 
+import PlatformIcon from '../Universal/Icon'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
+
+// Import HeaderComponentProps
 
 export default function TimetableWeek({
     // eslint-disable-next-line react/prop-types
@@ -19,13 +27,9 @@ export default function TimetableWeek({
     const theme = useTheme()
     const colors = theme.colors as Colors
     const { selectedDate, setSelectedDate } = useContext(TimetableContext)
-
+    const { timetableNotifications } = useContext(NotificationContext)
     // get the first day of friendlyTimetable that is not in the past
-    // const today = new Date()
-    // const firstDay = friendlyTimetable.find(
-    //     (entry: FriendlyTimetableEntry) =>
-    //         entry.startDate.getTime() >= today.getTime()
-    // )?.startDate
+    const today = new Date()
 
     const friendlyTimetableWithColor = friendlyTimetable.map(
         (entry: FriendlyTimetableEntry, index: number) => ({
@@ -43,7 +47,9 @@ export default function TimetableWeek({
             headerRight: () => (
                 <HeaderRight
                     setToday={() => {
-                        setSelectedDate(new Date())
+                        // @ts-expect-error typescript doesn't know that goToDate exists
+                        weekViewRef.current?.goToDate(today)
+                        setLocalSelectedDate(today)
                     }}
                 />
             ),
@@ -51,6 +57,29 @@ export default function TimetableWeek({
         })
     }, [navigation])
 
+    const isDark = theme.dark
+    const eventBackgroundColor = Color(colors.primary)
+        .alpha(0.73)
+        .lighten(isDark ? 0 : 0.6)
+        .darken(isDark ? 0.65 : 0)
+        .rgb()
+        .string()
+
+    const dayBackgroundColor = Color(colors.card)
+        .darken(isDark ? 0 : 0.13)
+        .lighten(isDark ? 0.23 : 0)
+        .rgb()
+        .string()
+    const dayTextColor = Color(colors.primary)
+        .darken(isDark ? 0 : 0.2)
+        .hex()
+    const textColor = Color(colors.primary)
+        .darken(isDark ? 0 : 0.42)
+        .hex()
+    const lineColor = Color(colors.primary)
+        .darken(isDark ? 0.25 : 0)
+        .lighten(isDark ? 0 : 0.25)
+        .hex()
     const Event = ({
         event,
     }: {
@@ -58,57 +87,84 @@ export default function TimetableWeek({
     }): JSX.Element => {
         const duration = event.endDate.getTime() - event.startDate.getTime()
         const isOverflowing = duration < 1000 * 60 * 60
-
+        const nameParts = event.shortName.split('_').slice(1)
+        const nameToDisplay =
+            event.name.length > 20
+                ? nameParts.join('_') !== ''
+                    ? nameParts.join('_')
+                    : event.shortName
+                : event.name
         return (
             <View
                 style={{
                     ...styles.eventContainer,
-                    backgroundColor: Color(colors.primary)
-                        .alpha(0.5)
-                        .rgb()
-                        .string(),
+                    backgroundColor: eventBackgroundColor,
                 }}
             >
-                <View
+                <LinearGradient
+                    colors={[colors.primary, lineColor]}
+                    start={[0, 0.2]}
+                    end={[1, 0.8]}
                     style={{
                         ...styles.eventLine,
-                        backgroundColor: Color(colors.primary)
-                            .darken(0.1)
-                            .hex(),
+                        // backgroundColor: colors.primary,
                     }}
                 />
                 <View style={styles.eventText}>
-                    <Text
-                        style={{
-                            ...styles.eventTitle,
-                            color: colors.text,
-                        }}
-                    >
-                        {event.shortName}
-                    </Text>
-                    {isOverflowing ? null : (
+                    <View style={{}}>
                         <Text
                             style={{
-                                ...styles.eventTime,
-                                color: colors.text,
+                                ...styles.eventTitle,
+                                color: textColor,
                             }}
+                            numberOfLines={2}
                         >
-                            {formatFriendlyTime(event.startDate)}
+                            {nameToDisplay}
                         </Text>
-                    )}
 
-                    {isOverflowing ? null : (
-                        <Text
-                            numberOfLines={1} // Limiting to 1 line
-                            ellipsizeMode="tail" // Truncate text with '...' at the end
-                            style={{
-                                ...styles.eventLocation,
-                                color: colors.text,
-                            }}
-                        >
-                            {event.rooms.join(', ')}
-                        </Text>
-                    )}
+                        {isOverflowing ? null : (
+                            <Text
+                                style={{
+                                    ...styles.eventTime,
+                                    color: textColor,
+                                    fontVariant: ['tabular-nums'],
+                                }}
+                            >
+                                {formatFriendlyTime(event.startDate) +
+                                    ' - ' +
+                                    formatFriendlyTime(event.endDate)}
+                            </Text>
+                        )}
+                    </View>
+                    <View style={styles.roomRow}>
+                        {isOverflowing ? null : (
+                            <Text
+                                numberOfLines={1} // Limiting to 1 line
+                                ellipsizeMode="tail" // Truncate text with '...' at the end
+                                style={{
+                                    ...styles.eventLocation,
+                                    color: textColor,
+                                }}
+                            >
+                                {event.rooms.join(', ')}
+                            </Text>
+                        )}
+                        {timetableNotifications[event.shortName] !==
+                            undefined &&
+                            !isOverflowing && (
+                                <PlatformIcon
+                                    color={textColor}
+                                    ios={{
+                                        name: 'bell',
+                                        size: 10,
+                                    }}
+                                    android={{
+                                        name: 'bell',
+                                        size: 12,
+                                    }}
+                                />
+                            )}
+                    </View>
                 </View>
             </View>
         )
@@ -117,23 +173,76 @@ export default function TimetableWeek({
     const weekViewRef = React.useRef<typeof WeekView>(null)
     const isMountedRef = React.useRef(false)
 
+    const [localSelectedDate, setLocalSelectedDate] =
+        React.useState(selectedDate)
+
     useEffect(() => {
-        if (isMountedRef.current && weekViewRef.current != null) {
-            // @ts-expect-error missing type
-            weekViewRef.current.goToDate(selectedDate)
+        if (weekViewRef.current != null) {
+            if (
+                selectedDate.getDay() !== today.getDay() &&
+                weekViewRef.current != null &&
+                isMountedRef.current
+            ) {
+                // @ts-expect-error typescript doesn't know that goToDate exists
+                weekViewRef.current.goToDate(selectedDate)
+            }
         } else {
             // This is the first render, update the ref so subsequent renders can lead to `goToDate`
             isMountedRef.current = true
         }
-    }, [])
+    }, [selectedDate])
+    const localSelectedDateRef = useRef(localSelectedDate)
 
+    // Update the ref whenever localSelectedDate changes
+    useEffect(() => {
+        localSelectedDateRef.current = localSelectedDate
+    }, [localSelectedDate])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            // This function runs when the screen comes into focus
+
+            return () => {
+                // This function runs when the screen is exited
+
+                setSelectedDate(localSelectedDateRef.current)
+            }
+        }, []) // No dependencies here
+    )
     /**
      * Functions
      */
+
+    const DayHeaderComponent = ({
+        date,
+        isToday,
+    }: HeaderComponentProps): JSX.Element => {
+        const eventDate = moment(date)
+        return (
+            <View
+                style={{
+                    backgroundColor: dayBackgroundColor,
+                    ...styles.dayCointainer,
+                }}
+            >
+                <Text
+                    style={{
+                        color: isToday ? dayTextColor : colors.text,
+                        ...(isToday
+                            ? styles.dayTextBold
+                            : styles.dayTextNormal),
+                    }}
+                >
+                    {eventDate.format('dd DD.MM')}
+                </Text>
+            </View>
+        )
+    }
+
     function showEventDetails(entry: WeekViewEvent): void {
         router.push({
             pathname: '(timetable)/details',
-            params: { eventParam: JSON.stringify(entry) },
+            params: { eventParam: JSON.stringify(friendlyTimetable[0]) },
         })
     }
 
@@ -141,11 +250,9 @@ export default function TimetableWeek({
         <WeekView
             /// <reference path="" />
             ref={weekViewRef}
-            // @ts-expect-error wrong type
             events={friendlyTimetableWithColor}
             selectedDate={selectedDate}
             numberOfDays={3}
-            allowScrollByDay
             hoursInDisplay={14}
             showNowLine
             showTitle={false}
@@ -155,6 +262,7 @@ export default function TimetableWeek({
             headerStyle={{
                 backgroundColor: colors.background,
                 borderColor: colors.border,
+                ...styles.headerStyle,
             }}
             headerTextStyle={{
                 color: colors.text,
@@ -166,14 +274,18 @@ export default function TimetableWeek({
             // @ts-expect-error wrong type
             EventComponent={Event}
             onEventPress={(event) => {
+                'worklet'
                 showEventDetails(event)
             }}
             onSwipeNext={(event) => {
-                setSelectedDate(new Date(event))
+                setLocalSelectedDate(new Date(event))
+            }}
+            onSwipePrev={(event) => {
+                setLocalSelectedDate(new Date(event))
             }}
             gridRowStyle={{ borderColor: colors.border }}
             gridColumnStyle={{ borderColor: colors.border }}
-            formatDateHeader="dd DD.MM"
+            DayHeaderComponent={DayHeaderComponent}
         />
     )
 }
@@ -197,19 +309,39 @@ const styles = StyleSheet.create({
         paddingLeft: 3,
         paddingRight: 2,
         paddingVertical: 3,
+        justifyContent: 'space-between',
     },
     eventTitle: {
         fontWeight: 'bold',
+        marginBottom: 1,
 
-        fontSize: 14,
-        marginBottom: 3,
+        fontSize: 15,
     },
     eventTime: {
         fontWeight: '500',
         fontSize: 14,
-        marginBottom: 3,
     },
     eventLocation: {
-        fontSize: 15,
+        fontSize: 14,
+    },
+    dayCointainer: {
+        paddingHorizontal: 7,
+        paddingVertical: 4,
+        borderRadius: 8,
+    },
+    dayTextNormal: {
+        fontSize: 14,
+    },
+    dayTextBold: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    headerStyle: {
+        borderBottomWidth: 0.2,
+    },
+    roomRow: {
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
     },
 })

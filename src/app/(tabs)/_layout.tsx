@@ -180,6 +180,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
+
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
