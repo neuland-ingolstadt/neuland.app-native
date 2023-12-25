@@ -61,7 +61,7 @@
     "react-native-collapsible": "^1.6.1",
     "react-native-context-menu-view": "^1.14.1",
     "react-native-drag-drop-ios": "^0.1.1",
-    "react-native-draggable-flatlist": "^4.0.1",
+    "react-native-drag-sort": "^2.4.4",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-linear-gradient": "^2.8.3",

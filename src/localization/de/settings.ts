@@ -124,6 +124,7 @@ export default {
     dashboard: {
         shown: 'Angezeigte Karten',
         hidden: 'Ausgeblendete Karten',
+        noShown: 'Keine Karten angezeigt',
         reset: 'Reihenfolge zurücksetzen',
         footer: 'Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.',
     },

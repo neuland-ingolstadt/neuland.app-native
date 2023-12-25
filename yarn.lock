@@ -10250,7 +10250,9 @@ __metadata:
     react-native-collapsible: "npm:^1.6.1"
     react-native-context-menu-view: "npm:^1.14.1"
     react-native-drag-drop-ios: "npm:^0.1.1"
+    react-native-drag-sort: "npm:^2.4.4"
     react-native-draggable-flatlist: "npm:^4.0.1"
+    react-native-draglist: "npm:^3.5.1"
     react-native-dropdown-select-list: "npm:^2.0.5"
     react-native-gesture-handler: "npm:~2.14.0"
     react-native-linear-gradient: "npm:^2.8.3"
@@ -11348,6 +11350,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-drag-sort@npm:^2.4.4":
+  version: 2.4.4
+  resolution: "react-native-drag-sort@npm:2.4.4"
+  checksum: c21a5885eec16f5f5e2d661663d7ad418bb46a956d014ec1e47469980c398a6fa4895f5839ab64d2fe9dd9ffc3dcd012eaf71087f866c2703f2d21a35b93b89d
+  languageName: node
+  linkType: hard
+
 "react-native-draggable-flatlist@npm:^4.0.1":
   version: 4.0.1
   resolution: "react-native-draggable-flatlist@npm:4.0.1"
@@ -11358,6 +11367,16 @@ __metadata:
     react-native-gesture-handler: ">=2.0.0"
     react-native-reanimated: ">=2.8.0"
   checksum: 914e4c1df1a0fed11da474499b78f6144644ab1e45cf22b8d6c3098f12f732d3f15ad26e932114016a80d99a39e9c16cb37357ea707333065dee9d2067639c0b
+  languageName: node
+  linkType: hard
+
+"react-native-draglist@npm:^3.5.1":
+  version: 3.5.1
+  resolution: "react-native-draglist@npm:3.5.1"
+  peerDependencies:
+    react: ">=17.0.1"
+    react-native: ">=0.64.0"
+  checksum: 14afc9fa1277a6c38432bffc5d13c05107a442a3de113cd86b5f276c43676fee7f4ba4c33eade3cd73ad7575b760ffa60eaae5f5b42835761f17bc92938c40bf
   languageName: node
   linkType: hard
 

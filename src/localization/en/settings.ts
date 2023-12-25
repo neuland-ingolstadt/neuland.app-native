@@ -122,6 +122,7 @@ export default {
         shown: 'Shown cards',
         hidden: 'Hidden cards',
         reset: 'Reset order',
+        noShown: 'No cards shown',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
     },
     grades: {
