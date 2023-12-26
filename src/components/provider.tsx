@@ -13,7 +13,7 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import { usePathname } from 'expo-router'
-import React, { createContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useEffect } from 'react'
 import { Platform, StyleSheet, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
@@ -138,24 +138,9 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
     const appIcon = useAppIcon()
-    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
-    const onColorSchemeChange = useRef<NodeJS.Timeout>()
     const pathname = usePathname()
     const timetableHook = useTimetable()
     const notifications = useNotifications()
-
-    // iOS workaround to prevent change of the color scheme while the app is in the background
-    // https://github.com/facebook/react-native/issues/35972
-    // https://github.com/facebook/react-native/pull/39439 (should be fixed in v0.73)
-    useEffect(() => {
-        if (colorScheme !== currentColorScheme) {
-            onColorSchemeChange.current = setTimeout(() => {
-                setCurrentColorScheme(colorScheme)
-            }, 1000)
-        } else if (onColorSchemeChange.current != null) {
-            clearTimeout(onColorSchemeChange.current)
-        }
-    }, [colorScheme])
 
     /**
      * Returns the primary color for a given color scheme.
@@ -301,13 +286,7 @@ export default function Provider({
     return (
         <GestureHandlerRootView style={styles.container}>
             <ThemeProvider
-                value={
-                    (Platform.OS === 'android'
-                        ? colorScheme
-                        : currentColorScheme) === 'light'
-                        ? lightTheme
-                        : darkTheme
-                }
+                value={colorScheme === 'light' ? lightTheme : darkTheme}
             >
                 <TimetableContext.Provider value={timetableHook}>
                     <NotificationContext.Provider value={notifications}>
