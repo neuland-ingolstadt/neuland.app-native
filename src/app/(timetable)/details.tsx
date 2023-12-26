@@ -3,6 +3,7 @@ import DetailsRow from '@/components/Elements/Timetable/DetailsRow'
 import DetailsSymbol from '@/components/Elements/Timetable/DetailsSymbol'
 import Separator from '@/components/Elements/Timetable/Separator'
 import ShareCard from '@/components/Elements/Timetable/ShareCard'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
@@ -23,7 +24,7 @@ import { getStatusBarStyle } from '@/utils/ui-utils'
 import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
@@ -51,20 +52,19 @@ export default function TimetableDetails(): JSX.Element {
     const { hasPermission, askForPermission } = useNotification()
 
     const colors = useTheme().colors as Colors
-    const { eventParam } = useLocalSearchParams<{ eventParam: string }>()
-    const event: FriendlyTimetableEntry | undefined =
-        eventParam != null ? JSON.parse(eventParam) : undefined
+    const { lecture } = useContext(RouteParamsContext)
+
     const { t } = useTranslation('timetable')
 
-    if (event == null) {
-        throw new Error('Event is undefined')
+    if (lecture === null) {
+        return <ErrorView title="Cannot display lecture" />
     }
     const today = new Date()
 
-    const startDate = new Date(event.startDate)
-    const endDate = new Date(event.endDate)
+    const startDate = new Date(lecture.startDate)
+    const endDate = new Date(lecture.endDate)
 
-    const examSplit = event.exam.split('-').slice(-1)[0].trim()
+    const examSplit = lecture.exam.split('-').slice(-1)[0].trim()
     const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
 
     const shareRef = React.useRef<ViewShot>(null)
@@ -79,7 +79,7 @@ export default function TimetableDetails(): JSX.Element {
             const timetable = await getFriendlyTimetable(today, true)
             const filteredTimetable = timetable.filter(
                 (lecture) =>
-                    lecture.shortName === event?.shortName &&
+                    lecture.shortName === lecture?.shortName &&
                     lecture.startDate >= today
             )
 
@@ -93,11 +93,11 @@ export default function TimetableDetails(): JSX.Element {
         void load()
     }, [])
     async function setupNotifications(mins: number): Promise<void> {
-        if (event?.shortName === undefined) {
+        if (lecture?.shortName === undefined) {
             throw new Error('Event is undefined')
         }
         setNotificationsUpdating(true)
-        deleteTimetableNotifications(event.shortName)
+        deleteTimetableNotifications(lecture.shortName)
         const notificationPromises = rawTimetable.map(async (lecture) => {
             const startDate = new Date(lecture.startDate)
             return await scheduleLectureNotification(
@@ -112,7 +112,7 @@ export default function TimetableDetails(): JSX.Element {
         const flatNotifications = notifications.flat()
 
         updateTimetableNotifications(
-            event.shortName,
+            lecture.shortName,
             flatNotifications,
             mins,
             i18n.language as LanguageKey
@@ -138,7 +138,7 @@ export default function TimetableDetails(): JSX.Element {
         }
     }
 
-    const notification = timetableNotifications[event.shortName]
+    const notification = timetableNotifications[lecture.shortName]
     const minsBefore = notification != null ? notification.mins : undefined
 
     const detailsList: FormListSections[] = [
@@ -152,7 +152,7 @@ export default function TimetableDetails(): JSX.Element {
                         router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.goal'),
-                            html: event.goal ?? '',
+                            html: lecture.goal ?? '',
                         })
                     },
                 },
@@ -163,7 +163,7 @@ export default function TimetableDetails(): JSX.Element {
                         router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.content'),
-                            html: event.contents ?? '',
+                            html: lecture.contents ?? '',
                         })
                     },
                 },
@@ -174,7 +174,7 @@ export default function TimetableDetails(): JSX.Element {
                         router.push('(timetable)/webView')
                         router.setParams({
                             title: t('overview.literature'),
-                            html: event.literature ?? '',
+                            html: lecture.literature ?? '',
                         })
                     },
                 },
@@ -190,15 +190,15 @@ export default function TimetableDetails(): JSX.Element {
                 },
                 {
                     title: t('details.studyGroup'),
-                    value: event.studyGroup,
+                    value: lecture.studyGroup,
                 },
                 {
                     title: t('details.courseOfStudies'),
-                    value: event.course,
+                    value: lecture.course,
                 },
                 {
                     title: t('details.weeklySemesterHours'),
-                    value: event.sws,
+                    value: lecture.sws,
                 },
             ],
         },
@@ -263,7 +263,7 @@ export default function TimetableDetails(): JSX.Element {
                     if (selectedValue > 0) {
                         void setupNotifications(selectedValue)
                     } else if (selectedValue === 0) {
-                        deleteTimetableNotifications(event.shortName)
+                        deleteTimetableNotifications(lecture.shortName)
                     }
                     trackEvent('Notification', {
                         type: 'lecture',
@@ -290,7 +290,7 @@ export default function TimetableDetails(): JSX.Element {
                                     color: colors.text,
                                 }}
                             >
-                                {event.name}
+                                {lecture.name}
                             </Text>
 
                             <Text
@@ -299,7 +299,7 @@ export default function TimetableDetails(): JSX.Element {
                                     color: colors.labelColor,
                                 }}
                             >
-                                {event.shortName}
+                                {lecture.shortName}
                             </Text>
                         </DetailsBody>
                     </DetailsRow>
@@ -453,7 +453,7 @@ export default function TimetableDetails(): JSX.Element {
 
                         <DetailsBody>
                             <View style={styles.roomContainer}>
-                                {event.rooms.map((room, i) => (
+                                {lecture.rooms.map((room, i) => (
                                     <Pressable
                                         key={i}
                                         onPress={() => {
@@ -499,7 +499,7 @@ export default function TimetableDetails(): JSX.Element {
                                     color: colors.text,
                                 }}
                             >
-                                {event.lecturer}
+                                {lecture.lecturer}
                             </Text>
                         </DetailsBody>
                     </DetailsRow>
@@ -514,7 +514,7 @@ export default function TimetableDetails(): JSX.Element {
                     </View>
 
                     <ViewShot ref={shareRef} style={styles.viewShot}>
-                        <ShareCard event={event} />
+                        <ShareCard event={lecture} />
                     </ViewShot>
                 </View>
             </ScrollView>

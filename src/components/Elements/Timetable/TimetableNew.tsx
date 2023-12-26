@@ -1,6 +1,10 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
-import { NotificationContext, TimetableContext } from '@/components/provider'
+import {
+    NotificationContext,
+    RouteParamsContext,
+    TimetableContext,
+} from '@/components/provider'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'
@@ -41,6 +45,7 @@ export default function TimetableWeek({
 
     const router = useRouter()
     const navigation = useNavigation()
+    const { updateLecture } = useContext(RouteParamsContext)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -240,9 +245,9 @@ export default function TimetableWeek({
     }
 
     function showEventDetails(entry: WeekViewEvent): void {
+        updateLecture(entry as unknown as FriendlyTimetableEntry)
         router.push({
             pathname: '(timetable)/details',
-            params: { eventParam: JSON.stringify(friendlyTimetable[0]) },
         })
     }
 
@@ -274,7 +279,6 @@ export default function TimetableWeek({
             // @ts-expect-error wrong type
             EventComponent={Event}
             onEventPress={(event) => {
-                'worklet'
                 showEventDetails(event)
             }}
             onSwipeNext={(event) => {

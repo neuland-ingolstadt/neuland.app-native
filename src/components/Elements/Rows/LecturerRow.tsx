@@ -24,10 +24,8 @@ const LecturerRow = ({
         updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {
-        router.push({
-            pathname: '(pages)/lecturer',
-            params: { lecturerEntry: JSON.stringify(item) },
-        })
+        router.push('(pages)/lecturer')
+        router.setParams({ lecturerEntry: JSON.stringify(item) })
     }
     const { t } = useTranslation('api')
     return (

@@ -1,6 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
-import { NotificationContext } from '@/components/provider'
+import { NotificationContext, RouteParamsContext } from '@/components/provider'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -51,6 +51,7 @@ export default function TimetableList({
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
     const { timetableNotifications } = useContext(NotificationContext)
+    const { updateLecture } = useContext(RouteParamsContext)
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -92,9 +93,9 @@ export default function TimetableList({
      * Functions
      */
     function showEventDetails(entry: FriendlyTimetableEntry): void {
+        updateLecture(entry)
         router.push({
             pathname: '(timetable)/details',
-            params: { eventParam: JSON.stringify(entry) },
         })
     }
 

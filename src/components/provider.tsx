@@ -43,6 +43,8 @@ interface ProviderProps {
 export const RouteParamsContext = createContext<RouteParams>({
     routeParams: '',
     updateRouteParams: () => {},
+    lecture: null,
+    updateLecture: () => {},
 })
 
 export const FoodFilterContext = createContext<FoodFilter>({

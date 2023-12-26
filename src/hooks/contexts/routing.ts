@@ -1,8 +1,11 @@
+import { type FriendlyTimetableEntry } from '@/types/utils'
 import { useState } from 'react'
 
 export interface RouteParams {
     routeParams: string
     updateRouteParams: (params: string) => void
+    lecture: FriendlyTimetableEntry | null
+    updateLecture: (lecture: FriendlyTimetableEntry) => void
 }
 
 /**
@@ -10,18 +13,15 @@ export interface RouteParams {
  * @returns RouteParamsHook object with routeParams and updateRouteParams properties.
  */
 export function useRouteParams(): RouteParams {
-    const [routeParams, setRouteParams] = useState<string>('')
-
-    /**
-     * Function to update the route parameters of the app.
-     * @param params - The new route parameters.
-     */
-    function updateRouteParams(params: string): void {
-        setRouteParams(params)
-    }
+    const [routeParams, updateRouteParams] = useState<string>('')
+    const [lecture, updateLecture] = useState<FriendlyTimetableEntry | null>(
+        null
+    )
 
     return {
         routeParams,
         updateRouteParams,
+        lecture,
+        updateLecture,
     }
 }
