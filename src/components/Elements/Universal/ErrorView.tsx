@@ -27,7 +27,7 @@ export default function ErrorView({
 }: {
     title: string
     message?: string
-    icon?: { ios: string; android: string }
+    icon?: { ios: string; android: string; multiColor?: boolean }
     buttonText?: string
     onButtonPress?: () => void
     onRefresh?: () => void
@@ -179,6 +179,9 @@ export default function ErrorView({
                     ios={{
                         name: getIcon(),
                         size: 50,
+                        ...(icon?.multiColor ?? false
+                            ? { renderMode: 'multicolor', variableValue: 1 }
+                            : {}),
                     }}
                     android={{
                         name: getIcon(),

@@ -62,12 +62,20 @@ export default function FoodDetail(): JSX.Element {
         Alert.alert(
             t(`details.formlist.alert.${itemType}.title`),
             isItemSelected
-                ? t(`details.formlist.alert.${itemType}.message.remove`, {
-                      [itemType]: friendlyItem,
-                  })
-                : t(`details.formlist.alert.${itemType}.message.add`, {
-                      [itemType]: friendlyItem,
-                  }),
+                ? t(
+                      // @ts-expect-error cannot verify the TFunktion type
+                      `details.formlist.alert.${itemType}.message.remove`,
+                      {
+                          [itemType]: friendlyItem,
+                      }
+                  )
+                : t(
+                      // @ts-expect-error cannot verify the TFunktion type
+                      `details.formlist.alert.${itemType}.message.add`,
+                      {
+                          [itemType]: friendlyItem,
+                      }
+                  ),
             [
                 {
                     text: t('misc.confirm', { ns: 'common' }),
@@ -223,7 +231,10 @@ export default function FoodDetail(): JSX.Element {
                 },
                 {
                     title: t('details.formlist.about.category'),
-                    value: t(`categories.${meal?.category}`),
+                    value: t(
+                        // @ts-expect-error cannot verify the TFunktion type
+                        `categories.${meal?.category}`
+                    ),
                 },
                 {
                     title: t('details.formlist.about.source'),

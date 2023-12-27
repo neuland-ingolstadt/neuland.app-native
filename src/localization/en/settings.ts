@@ -122,7 +122,9 @@ export default {
         shown: 'Shown cards',
         hidden: 'Hidden cards',
         reset: 'Reset order',
-        noShown: 'No cards shown',
+        noShown: 'Dashboard is empty',
+        noShownDescription: 'Add some cards to your dashboard to get started.',
+        noShownButton: 'Configure',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
     },
     grades: {

@@ -33,7 +33,8 @@ export default function RootLayout(): JSX.Element {
         const changeLanguage = async (): Promise<void> => {
             const locale = getLocales()[0]
             const language = locale.languageCode
-            await i18n.changeLanguage(language)
+            if (language === 'de' || language === 'en')
+                await i18n.changeLanguage(language)
         }
 
         const handleAppStateChange = (nextAppState: string): void => {

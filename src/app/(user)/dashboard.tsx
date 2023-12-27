@@ -43,7 +43,7 @@ export default function DashboardEdit(): JSX.Element {
 
     const renderItem = (params: ExtendedCard): JSX.Element => {
         const onPressDelete = (): void => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             hideDashboardEntry(params.key)
         }
 
@@ -52,14 +52,14 @@ export default function DashboardEdit(): JSX.Element {
 
     const handleRestore = useCallback(
         (item: Card) => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             bringBackDashboardEntry(item.key)
         },
         [bringBackDashboardEntry]
     )
 
     const handleReset = useCallback(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         resetOrder()
     }, [resetOrder])
 
@@ -93,7 +93,7 @@ export default function DashboardEdit(): JSX.Element {
                             {shownDashboardEntries.length === 0 ? (
                                 <View
                                     style={{
-                                        height: childrenHeight * 2,
+                                        height: childrenHeight * 1.5,
                                         ...styles.emptyContainer,
                                     }}
                                 >
@@ -273,6 +273,7 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
                             opacity: pressed ? 0.5 : 1,
                         },
                     ]}
+                    hitSlop={10}
                 >
                     <PlatformIcon
                         color={colors.labelSecondaryColor}

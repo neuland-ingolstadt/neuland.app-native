@@ -1,4 +1,5 @@
 import { Avatar } from '@/components/Elements/Settings'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -10,7 +11,7 @@ import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
 import * as Notifications from 'expo-notifications'
-import { useRouter } from 'expo-router'
+import { router, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -94,6 +95,9 @@ export default function Screen(): JSX.Element {
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
+
+    console.log('Dashboard')
+
     return (
         <>
             <Head>
@@ -243,6 +247,7 @@ function HomeScreen(): JSX.Element {
     const [columns, setColumns] = useState(
         Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )
+    const { t } = useTranslation(['settings'])
 
     useEffect(() => {
         const handleOrientationChange = (): void => {
@@ -260,7 +265,23 @@ function HomeScreen(): JSX.Element {
         }
     }, [])
 
-    return (
+    return shownDashboardEntries.length === 0 ? (
+        <View style={styles.errorContainer}>
+            <ErrorView
+                title={t('dashboard.noShown')}
+                message={t('dashboard.noShownDescription')}
+                icon={{
+                    ios: 'rainbow',
+                    multiColor: true,
+                    android: 'dashboard-customize',
+                }}
+                buttonText={t('dashboard.noShownButton')}
+                onButtonPress={() => {
+                    router.push('(user)/dashboard')
+                }}
+            />
+        </View>
+    ) : (
         <MasonryFlashList
             key={orientation}
             contentInsetAdjustmentBehavior="automatic"
@@ -291,6 +312,7 @@ function HomeScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    errorContainer: { paddingTop: 110 },
     item: {
         marginVertical: 6,
     },
