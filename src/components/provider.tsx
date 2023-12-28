@@ -231,7 +231,7 @@ export default function Provider({
 
         const entries: Record<string, string> = {}
 
-        dashboard.shownDashboardEntries.forEach((entry, index) => {
+        dashboard.shownDashboardEntries?.forEach((entry, index) => {
             entries[entry.key] = `Position ${index + 1}`
         })
 
@@ -247,7 +247,7 @@ export default function Provider({
 
         const entries: Record<string, string> = {}
 
-        dashboard.hiddenDashboardEntries.forEach((entry) => {
+        dashboard.hiddenDashboardEntries?.forEach((entry) => {
             entries[entry.key] = 'Card hidden'
         })
 
@@ -294,11 +294,11 @@ export default function Provider({
                             <AppIconContext.Provider value={appIcon}>
                                 <FlowContext.Provider value={flow}>
                                     <UserKindContext.Provider value={userKind}>
-                                        <DashboardContext.Provider
-                                            value={dashboard}
+                                        <FoodFilterContext.Provider
+                                            value={foodFilter}
                                         >
-                                            <FoodFilterContext.Provider
-                                                value={foodFilter}
+                                            <DashboardContext.Provider
+                                                value={dashboard}
                                             >
                                                 <RouteParamsContext.Provider
                                                     value={routeParams}
@@ -307,8 +307,8 @@ export default function Provider({
                                                         {children}
                                                     </RootSiblingParent>
                                                 </RouteParamsContext.Provider>
-                                            </FoodFilterContext.Provider>
-                                        </DashboardContext.Provider>
+                                            </DashboardContext.Provider>
+                                        </FoodFilterContext.Provider>
                                     </UserKindContext.Provider>
                                 </FlowContext.Provider>
                             </AppIconContext.Provider>

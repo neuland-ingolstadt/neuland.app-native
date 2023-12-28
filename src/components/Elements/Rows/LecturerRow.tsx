@@ -20,7 +20,7 @@ const LecturerRow = ({
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const onPressRoom = (): void => {
-        router.push('(tabs)/map')
+        router.replace('(tabs)/map')
         updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {

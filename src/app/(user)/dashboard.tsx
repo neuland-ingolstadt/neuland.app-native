@@ -32,7 +32,7 @@ export default function DashboardEdit(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
     // add translation to shownDashboardEntries with new key transText
-    const transShownDashboardEntries = shownDashboardEntries.map((item) => {
+    const transShownDashboardEntries = shownDashboardEntries?.map((item) => {
         return {
             ...item,
             // @ts-expect-error cannot verify the type
@@ -90,7 +90,7 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            {shownDashboardEntries.length === 0 ? (
+                            {shownDashboardEntries?.length === 0 ? (
                                 <View
                                     style={{
                                         height: childrenHeight * 1.5,
@@ -111,7 +111,9 @@ export default function DashboardEdit(): JSX.Element {
                             ) : (
                                 <DragSortableView
                                     keyExtractor={(item) => item.key}
-                                    dataSource={transShownDashboardEntries}
+                                    dataSource={
+                                        transShownDashboardEntries ?? []
+                                    }
                                     childrenWidth={width}
                                     childrenHeight={childrenHeight}
                                     parentWidth={width}
@@ -289,10 +291,11 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
                 </Pressable>
             </View>
 
-            {shownDashboardEntries.findIndex((i) => i.key === item.key) <
-                shownDashboardEntries.length - 1 && (
-                <Divider color={colors.labelTertiaryColor} width={'100%'} />
-            )}
+            {shownDashboardEntries != null &&
+                shownDashboardEntries.findIndex((i) => i.key === item.key) <
+                    shownDashboardEntries.length - 1 && (
+                    <Divider color={colors.labelTertiaryColor} width={'100%'} />
+                )}
         </View>
     )
 }

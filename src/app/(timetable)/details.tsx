@@ -457,7 +457,7 @@ export default function TimetableDetails(): JSX.Element {
                                     <Pressable
                                         key={i}
                                         onPress={() => {
-                                            router.navigate('(tabs)/map')
+                                            router.replace('(tabs)/map')
                                             updateRouteParams(room)
                                         }}
                                     >

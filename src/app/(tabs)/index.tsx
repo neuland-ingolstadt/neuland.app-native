@@ -96,8 +96,6 @@ export default function Screen(): JSX.Element {
         setIsPageOpen(true)
     }, [])
 
-    console.log('Dashboard')
-
     return (
         <>
             <Head>
@@ -264,8 +262,8 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
-    return shownDashboardEntries.length === 0 ? (
+    return shownDashboardEntries === null ||
+        shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>
             <ErrorView
                 title={t('dashboard.noShown')}
