@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-raw-text */
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
@@ -148,6 +149,15 @@ const ANDROID_ICONS = {
     'insert-chart': <>&#xE24B;</>,
     return: <>&#xE5D9;</>,
     default: <>&#xF56D;</>,
+    'wifi-off': <>&#xE648;</>,
+    'person-cancel': <>&#xF02E;</>,
+    'calendar-edit': <>&#xE742;</>,
+    'drag-handle': <>&#xE25D;</>,
+    'circle-plus': <>&#xE147;</>,
+    'circle-minus': <>&#xE15D;</>,
+    bell: <>&#xE7F4;</>,
+    'bell-alert': <>&#xE7F5;</>,
+    'person-slash': <>&#xE510;</>,
 }
 
 export type AndroidIconName = keyof typeof ANDROID_ICONS

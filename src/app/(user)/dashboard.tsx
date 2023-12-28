@@ -5,21 +5,20 @@ import { type Colors } from '@/components/colors'
 import { DashboardContext } from '@/components/provider'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Dimensions,
     LayoutAnimation,
     Pressable,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
-import DraggableFlatList, {
-    type RenderItemParams,
-    ScaleDecorator,
-} from 'react-native-draggable-flatlist'
+import { DragSortableView } from 'react-native-drag-sort'
 import { ScrollView } from 'react-native-gesture-handler'
+
+const { width } = Dimensions.get('window')
 
 export default function DashboardEdit(): JSX.Element {
     const {
@@ -31,65 +30,47 @@ export default function DashboardEdit(): JSX.Element {
         updateDashboardOrder,
     } = React.useContext(DashboardContext)
     const colors = useTheme().colors as Colors
-    const itemRefs = useRef(new Map())
-    const [refresh, setRefresh] = useState(false)
     const { t } = useTranslation(['settings'])
     // add translation to shownDashboardEntries with new key transText
-    const transShownDashboardEntries = shownDashboardEntries.map((item) => {
+    const transShownDashboardEntries = shownDashboardEntries?.map((item) => {
         return {
             ...item,
-            text: t('cards.titles.' + item.key, { ns: 'navigation' }),
+            // @ts-expect-error cannot verify the type
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            text: t('cards.titles.' + item.key, { ns: 'navigation' }) as string,
         }
     })
 
-    // update view if shownDashboardEntries changes
-    useEffect(() => {
-        itemRefs.current = new Map()
-    }, [
-        shownDashboardEntries,
-        bringBackDashboardEntry,
-        hideDashboardEntry,
-        refresh,
-    ])
-
-    const renderItem = (
-        params: RenderItemParams<ExtendedCard>
-    ): JSX.Element => {
+    const renderItem = (params: ExtendedCard): JSX.Element => {
         const onPressDelete = (): void => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-            hideDashboardEntry(params.item.key)
-            setRefresh(!refresh)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+            hideDashboardEntry(params.key)
         }
 
-        return (
-            <RowItem
-                {...params}
-                itemRefs={itemRefs}
-                onPressDelete={onPressDelete}
-            />
-        )
+        return <RowItem item={params} onPressDelete={onPressDelete} />
     }
 
     const handleRestore = useCallback(
         (item: Card) => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             bringBackDashboardEntry(item.key)
-            setRefresh(!refresh)
         },
-        [bringBackDashboardEntry, refresh]
+        [bringBackDashboardEntry]
     )
 
     const handleReset = useCallback(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         resetOrder()
-        setRefresh(!refresh)
-    }, [resetOrder, refresh])
+    }, [resetOrder])
+
+    const childrenHeight = 44
 
     return (
         <View>
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={styles.page}
+                bounces={false}
+                contentInsetAdjustmentBehavior="automatic"
             >
                 <View style={styles.wrapper}>
                     <View style={styles.block}>
@@ -109,17 +90,39 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            <DraggableFlatList
-                                keyExtractor={(item) => item.key}
-                                data={transShownDashboardEntries}
-                                renderItem={renderItem}
-                                onDragEnd={({ data }) => {
-                                    updateDashboardOrder(data)
-                                }}
-                                activationDistance={10}
-                                style={styles.dragList}
-                                scrollEnabled={false}
-                            />
+                            {shownDashboardEntries?.length === 0 ? (
+                                <View
+                                    style={{
+                                        height: childrenHeight * 1.5,
+                                        ...styles.emptyContainer,
+                                    }}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.textEmpty,
+                                            {
+                                                color: colors.text,
+                                            },
+                                        ]}
+                                    >
+                                        {t('dashboard.noShown')}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <DragSortableView
+                                    keyExtractor={(item) => item.key}
+                                    dataSource={
+                                        transShownDashboardEntries ?? []
+                                    }
+                                    childrenWidth={width}
+                                    childrenHeight={childrenHeight}
+                                    parentWidth={width}
+                                    renderItem={renderItem}
+                                    onDataChange={(data) => {
+                                        updateDashboardOrder(data)
+                                    }}
+                                />
+                            )}
                         </View>
                     </View>
 
@@ -164,8 +167,8 @@ export default function DashboardEdit(): JSX.Element {
                                                 ]}
                                             >
                                                 {t(
-                                                    'cards.titles.' +
-                                                        t(item.key),
+                                                    // @ts-expect-error cannot verify the type
+                                                    `cards.titles.${item.key}`,
                                                     { ns: 'navigation' }
                                                 )}
                                             </Text>
@@ -178,7 +181,7 @@ export default function DashboardEdit(): JSX.Element {
                                                     size: 20,
                                                 }}
                                                 android={{
-                                                    name: 'plus-circle',
+                                                    name: 'circle-plus',
                                                     size: 24,
                                                 }}
                                             />
@@ -231,25 +234,22 @@ export default function DashboardEdit(): JSX.Element {
 
 interface RowItemProps {
     item: ExtendedCard
-    drag: () => void
     onPressDelete: () => void
-    itemRefs: React.MutableRefObject<Map<any, any>>
 }
 
-function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
+function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
     const { shownDashboardEntries } = React.useContext(DashboardContext)
 
     return (
-        <ScaleDecorator>
-            <TouchableOpacity
-                activeOpacity={1}
-                onLongPress={drag}
+        <View>
+            <View
                 style={[
                     styles.row,
                     {
                         backgroundColor: colors.card,
+                        width: width - PAGE_PADDING * 4,
                     },
                 ]}
             >
@@ -260,7 +260,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                         size: 20,
                     }}
                     android={{
-                        name: 'drag-horizontal-variant',
+                        name: 'drag-handle',
                         size: 22,
                     }}
                 />
@@ -275,6 +275,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                             opacity: pressed ? 0.5 : 1,
                         },
                     ]}
+                    hitSlop={10}
                 >
                     <PlatformIcon
                         color={colors.labelSecondaryColor}
@@ -283,18 +284,19 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                             size: 20,
                         }}
                         android={{
-                            name: 'minus-circle',
+                            name: 'circle-minus',
                             size: 24,
                         }}
                     />
                 </Pressable>
-            </TouchableOpacity>
+            </View>
 
-            {shownDashboardEntries.findIndex((i) => i.key === item.key) <
-                shownDashboardEntries.length - 1 && (
-                <Divider color={colors.labelTertiaryColor} width={'100%'} />
-            )}
-        </ScaleDecorator>
+            {shownDashboardEntries != null &&
+                shownDashboardEntries.findIndex((i) => i.key === item.key) <
+                    shownDashboardEntries.length - 1 && (
+                    <Divider color={colors.labelTertiaryColor} width={'100%'} />
+                )}
+        </View>
     )
 }
 
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+        gap: 10,
         paddingVertical: 9,
         minHeight: 44,
         justifyContent: 'center',
@@ -327,16 +329,20 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexShrink: 1,
     },
+    textEmpty: {
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    emptyContainer: {
+        justifyContent: 'center',
+    },
     sectionHeaderText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
     },
-    dragList: {
-        overflow: 'hidden',
-    },
     footer: {
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 'normal',
         textAlign: 'left',
     },

@@ -2,7 +2,7 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 
-import packageInfo from '../../package.json'
+import packageInfo from '../../../package.json'
 
 export interface FlowHook {
     isOnboarded: boolean | null

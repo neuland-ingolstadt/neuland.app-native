@@ -20,14 +20,12 @@ const LecturerRow = ({
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const onPressRoom = (): void => {
-        router.push('(tabs)/map')
+        router.navigate('(tabs)/map')
         updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {
-        router.push({
-            pathname: '(pages)/lecturer',
-            params: { lecturerEntry: JSON.stringify(item) },
-        })
+        router.push('(pages)/lecturer')
+        router.setParams({ lecturerEntry: JSON.stringify(item) })
     }
     const { t } = useTranslation('api')
     return (
@@ -66,7 +64,7 @@ const LecturerRow = ({
                 <>
                     <View style={styles.rightContainer}>
                         {item.raum !== null && item.raum !== '' && (
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.container}>
                                 <Text
                                     style={{
                                         ...styles.rightText1,
@@ -96,6 +94,7 @@ const LecturerRow = ({
 }
 
 const styles = StyleSheet.create({
+    container: { flexDirection: 'row' },
     leftText1: {
         fontSize: 15,
 

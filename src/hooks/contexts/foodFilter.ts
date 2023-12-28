@@ -11,9 +11,10 @@ export interface FoodFilter {
     foodLanguage: FoodLanguage
     toggleSelectedRestaurant: (name: string) => void
     toggleSelectedAllergens: (name: string) => void
+    initAllergenSelection: () => void
     toggleSelectedPreferences: (name: string) => void
     toggleShowStatic: () => void
-    toggleFoodLanguage: (language: FoodLanguage) => void
+    toggleFoodLanguage: (language: string) => void
 }
 
 export function useFoodFilter(): FoodFilter {
@@ -25,14 +26,16 @@ export function useFoodFilter(): FoodFilter {
         'mensa',
         'reimanns',
     ])
-    const [allergenSelection, setAllergenSelection] = useState<string[]>([])
+    const [allergenSelection, setAllergenSelection] = useState<string[]>([
+        'not-configured',
+    ])
     const [showStatic, setShowStatic] = useState<boolean>(false)
     const [foodLanguage, setFoodLanguage] = useState<FoodLanguage>('default')
 
     useEffect(() => {
         void Promise.all([
-            AsyncStorage.getItem('selectedAllergens'),
-            AsyncStorage.getItem('selectedPreferences'),
+            AsyncStorage.getItem('selectedUserAllergens'),
+            AsyncStorage.getItem('selectedUserPreferences'),
             AsyncStorage.getItem('selectedRestaurants'),
             AsyncStorage.getItem('showStatic'),
             AsyncStorage.getItem('foodLanguage'),
@@ -46,6 +49,8 @@ export function useFoodFilter(): FoodFilter {
             ]) => {
                 if (allergensData != null) {
                     setAllergenSelection(JSON.parse(allergensData))
+                } else {
+                    setAllergenSelection(['not-configured'])
                 }
                 if (preferencesData != null) {
                     setPreferencesSelection(JSON.parse(preferencesData))
@@ -89,16 +94,30 @@ export function useFoodFilter(): FoodFilter {
      */
     function toggleSelectedAllergens(name: string): void {
         const checked = allergenSelection.includes(name)
-        const newSelection = allergenSelection.filter((x) => x !== name)
+        let newSelection = allergenSelection.filter((x) => x !== name)
         if (!checked) {
             newSelection.push(name)
         }
 
+        // If "not-configured" is in the selection, remove it
+        if (newSelection.includes('not-configured')) {
+            newSelection = newSelection.filter((x) => x !== 'not-configured')
+        }
+
         setAllergenSelection(newSelection)
         void AsyncStorage.setItem(
-            'selectedAllergens',
+            'selectedUserAllergens',
             JSON.stringify(newSelection)
         )
+    }
+
+    /**
+     * Initializes the allergen selection.
+     */
+
+    function initAllergenSelection(): void {
+        setAllergenSelection([])
+        void AsyncStorage.setItem('selectedUserAllergens', JSON.stringify([]))
     }
     /**
      * Enables or disables a preference.
@@ -113,7 +132,7 @@ export function useFoodFilter(): FoodFilter {
 
         setPreferencesSelection(newSelection)
         void AsyncStorage.setItem(
-            'selectedPreferences',
+            'selectedUserPreferences',
             JSON.stringify(newSelection)
         )
     }
@@ -134,8 +153,8 @@ export function useFoodFilter(): FoodFilter {
      * @returns {void}
      * @memberof FoodFilter
      */
-    function toggleFoodLanguage(language: FoodLanguage): void {
-        setFoodLanguage(language)
+    function toggleFoodLanguage(language: string): void {
+        setFoodLanguage(language as FoodLanguage)
         void AsyncStorage.setItem('foodLanguage', JSON.stringify(language))
     }
 
@@ -147,6 +166,7 @@ export function useFoodFilter(): FoodFilter {
         foodLanguage,
         toggleSelectedRestaurant,
         toggleSelectedAllergens,
+        initAllergenSelection,
         toggleSelectedPreferences,
         toggleShowStatic,
         toggleFoodLanguage,

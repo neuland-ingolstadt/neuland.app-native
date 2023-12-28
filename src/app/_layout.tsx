@@ -2,10 +2,11 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, useColorScheme } from 'react-native'
+import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 
 export default function RootLayout(): JSX.Element {
     const router = useRouter()
@@ -16,12 +17,40 @@ export default function RootLayout(): JSX.Element {
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
             const savedLanguage = await AsyncStorage.getItem('language')
-            if (savedLanguage !== null) {
+            if (
+                savedLanguage !== null &&
+                Platform.OS === 'android' &&
+                Platform.Version < 33
+            ) {
                 await i18n.changeLanguage(savedLanguage)
             }
         }
 
         void loadLanguage()
+    }, [])
+
+    useEffect(() => {
+        const changeLanguage = async (): Promise<void> => {
+            const locale = getLocales()[0]
+            const language = locale.languageCode
+            if (language === 'de' || language === 'en')
+                await i18n.changeLanguage(language)
+        }
+
+        const handleAppStateChange = (nextAppState: string): void => {
+            if (nextAppState === 'active') {
+                void changeLanguage()
+            }
+        }
+
+        const subscription = AppState.addEventListener(
+            'change',
+            handleAppStateChange
+        )
+
+        return () => {
+            subscription.remove()
+        }
     }, [])
 
     return (
@@ -38,9 +67,10 @@ export default function RootLayout(): JSX.Element {
                     <Stack.Screen
                         name="(user)/login"
                         options={{
-                            title: 'Login',
+                            title: 'THI Account',
                             presentation: 'formSheet',
                             gestureEnabled: false,
+                            headerBackButtonMenuEnabled: false,
                         }}
                     />
                     <Stack.Screen

@@ -1,6 +1,4 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-// @ts-expect-error - types for react-native-context-menu-view are not available
-import { ContextMenuView } from '@/components/Elements/Universal/ContextMenuView'
 import { type Colors } from '@/components/colors'
 import { CARD_PADDING } from '@/utils/style-utils'
 import { type MaterialCommunityIcons } from '@expo/vector-icons'
@@ -9,6 +7,7 @@ import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import ContextMenu from 'react-native-context-menu-view'
 
 import PlatformIcon from '../Elements/Universal/Icon'
 import { DashboardContext } from '../provider'
@@ -36,66 +35,41 @@ const BaseCard: React.FC<BaseCardProps> = ({
     return (
         <Pressable
             onPress={onPress}
-            {...Platform.select({
-                ios: {
-                    delayLongPress: 300,
-                    onLongPress: () => {},
-                },
-            })}
+            delayLongPress={300}
+            onLongPress={() => {}}
         >
-            <ContextMenuView
-                style={styles.container}
-                menuConfig={{
-                    menuTitle: t('cards.titles.' + title),
-                    menuItems: [
-                        {
-                            actionKey: 'settings',
-                            actionTitle: t('contextMenu.settings'),
-                            icon: {
-                                iconType: 'SYSTEM',
-                                iconValue: 'rectangle.stack',
-                            },
-                        },
-                        {
-                            actionKey: 'hide',
-                            actionTitle: t('contextMenu.hide'),
-                            icon: {
-                                iconType: 'SYSTEM',
-                                iconValue: 'trash',
-                            },
-                            menuAttributes: ['destructive'],
-                        },
-                        {
-                            actionKey: 'reset',
-                            actionTitle: t('contextMenu.reset'),
-                            icon: {
-                                iconType: 'SYSTEM',
-                                iconValue: 'arrow.clockwise',
-                            },
-                            menuAttributes: ['destructive'],
-                        },
-                    ],
+            <ContextMenu
+                // @ts-expect-error cannot verify that title is a valid key
+                title={t('cards.titles.' + title)}
+                actions={[
+                    {
+                        title: t('contextMenu.settings'),
+                        systemIcon: Platform.OS === 'ios' ? 'gear' : undefined,
+                    },
+                    {
+                        title: t('contextMenu.hide'),
+                        systemIcon:
+                            Platform.OS === 'ios' ? 'eye.slash' : undefined,
+                        destructive: true,
+                    },
+                    {
+                        title: t('contextMenu.reset'),
+                        systemIcon:
+                            Platform.OS === 'ios'
+                                ? 'arrow.counterclockwise'
+                                : undefined,
+                        destructive: true,
+                    },
+                ]}
+                onPress={(e) => {
+                    e.nativeEvent.name === t('contextMenu.settings') &&
+                        router.push('(user)/dashboard')
+                    e.nativeEvent.name === t('contextMenu.hide') &&
+                        hideDashboardEntry(title)
+                    e.nativeEvent.name === t('contextMenu.reset') &&
+                        resetOrder()
                 }}
-                onPressMenuItem={({
-                    nativeEvent,
-                }: {
-                    nativeEvent: { actionKey: string }
-                }) => {
-                    switch (nativeEvent.actionKey) {
-                        case 'hide':
-                            hideDashboardEntry(title)
-                            break
-                        case 'reset':
-                            resetOrder()
-                            break
-                        case 'settings':
-                            router.push('(user)/dashboard/')
-                            break
-                    }
-                }}
-                onPressMenuPreview={() => {
-                    onPress()
-                }}
+                onPreviewPress={onPress}
             >
                 <View
                     style={[
@@ -119,6 +93,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             }}
                         />
                         <Text style={[styles.title, { color: colors.text }]}>
+                            {/* @ts-expect-error cannot verify that title is a valid key */}
                             {t('cards.titles.' + title)}
                         </Text>
 
@@ -136,7 +111,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     </View>
                     {children != null && <>{children}</>}
                 </View>
-            </ContextMenuView>
+            </ContextMenu>
         </Pressable>
     )
 }
@@ -155,9 +130,6 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 8,
         padding: CARD_PADDING,
-    },
-    container: {
-        borderRadius: 8,
     },
 })
 

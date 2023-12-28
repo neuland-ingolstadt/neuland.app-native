@@ -2,6 +2,7 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import {
     AppIconContext,
+    DashboardContext,
     FlowContext,
     FoodFilterContext,
 } from '@/components/provider'
@@ -32,25 +33,39 @@ export default function HomeLayout(): JSX.Element {
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed, initializeAnalytics } =
         React.useContext(FlowContext)
+    const { shownDashboardEntries } = React.useContext(DashboardContext)
+    const [run, setRun] = React.useState<boolean>(false)
     const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
-        router.push('(flow)/onboarding')
+        router.navigate('(flow)/onboarding')
     }
 
     const isChangelogAvailable = Object.keys(changelog.version).some(
         (version) => version === convertToMajorMinorPatch(packageInfo.version)
     )
+
+    const { isOnboarded } = React.useContext(FlowContext)
+
     if (
         flow.isUpdated === false &&
         isChangelogAvailable &&
         flow.isOnboarded !== false
     ) {
-        router.push('(flow)/whatsnew')
+        router.navigate('(flow)/whatsnew')
     }
-    SplashScreen.hideAsync().catch(() => {
-        /* reloading the app might make this fail, so ignore */
-    })
 
+    // keep ssplash screen visible until the dashboard and the prior contests are loaded
+    useEffect(() => {
+        if (run) return
+        const prepare = async (): Promise<void> => {
+            await SplashScreen.preventAutoHideAsync()
+            if (shownDashboardEntries !== null) {
+                await SplashScreen.hideAsync()
+                setRun(true)
+            }
+        }
+        void prepare()
+    }, [shownDashboardEntries, isOnboarded])
     const BlurTab = (): JSX.Element => (
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
@@ -85,7 +100,10 @@ export default function HomeLayout(): JSX.Element {
         {
             id: 'food',
             type: 'food',
-            title: t('cards.titles.' + restaurant),
+            title: t(
+                // @ts-expect-error no types
+                'cards.titles.' + restaurant
+            ),
             data: {
                 path: '(tabs)/food',
             },
@@ -98,9 +116,13 @@ export default function HomeLayout(): JSX.Element {
                       id: 'appIcon',
                       type: 'appIcon',
                       title: 'App Icon',
-                      subtitle: t(`appIcon.names.${appIcon}`, {
-                          ns: 'settings',
-                      }),
+                      subtitle: t(
+                          // @ts-expect-error no types
+                          `appIcon.names.${appIcon}`,
+                          {
+                              ns: 'settings',
+                          }
+                      ),
                       data: {
                           path: '(user)/appicon',
                       },
@@ -118,7 +140,6 @@ export default function HomeLayout(): JSX.Element {
 
         const shortcutSubscription =
             Shortcuts.onShortcutPressed(processShortcut)
-
         Shortcuts.setShortcuts(shortcuts)
 
         return () => {
@@ -173,6 +194,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
+
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,

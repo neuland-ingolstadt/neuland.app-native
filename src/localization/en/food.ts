@@ -1,7 +1,9 @@
 export default {
     empty: {
         allergens: 'No matching allergens found.',
-        flags: ' No matching flags found.',
+        noAllergens: 'Allergens not available',
+        flags: 'No matching flags found.',
+        config: 'No allergens set up yet. Tap to configure your allergies to display not binding information about allergens.',
     },
     preferences: {
         formlist: {
@@ -29,10 +31,10 @@ export default {
         empty: "Today's menu is empty.",
     },
     categories: {
-        Suppe: 'Soup',
-        Salat: 'Salad',
-        Essen: 'Food',
-        Aktion: 'Special',
+        soup: 'Soup',
+        salad: 'Salad',
+        main: 'Food',
+        special: 'Special',
     },
     details: {
         footer: 'We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.',
@@ -46,7 +48,7 @@ export default {
             },
             nutrition: {
                 title: 'Nutrition',
-                footer: 'Values are per meal and may vary',
+                footer: 'Values are per meal and may vary.',
                 energy: 'Energy',
                 fat: 'Fat',
                 saturated: 'Saturated Fat',
@@ -61,11 +63,27 @@ export default {
                 category: 'Category',
                 source: 'Data source',
             },
-            variations: 'Variations',
+            variants: 'Variations',
+            alert: {
+                allergen: {
+                    title: 'Update allergens',
+                    message: {
+                        add: 'Do you want to add {{allergen}} to your allergens?',
+                        remove: 'Do you want to remove {{allergen}} from your allergens?',
+                    },
+                },
+                flag: {
+                    title: 'Update preferences',
+                    message: {
+                        add: 'Do you want to add {{flag}} to your preferences?',
+                        remove: 'Do you want to remove {{flag}} from your preferences?',
+                    },
+                },
+            },
         },
         share: {
             message:
-                'Checkout "{{meal}}" ({{price}}) at {{location}}.\nhttps://neuland.app/food/',
+                'Check out "{{meal}}" ({{price}}) at {{location}}.\nhttps://dev.neuland.app/food/{{id}}',
         },
     },
 }

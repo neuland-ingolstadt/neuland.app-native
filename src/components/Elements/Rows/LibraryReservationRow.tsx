@@ -37,7 +37,7 @@ const LibraryReservationRow = ({
                     style: 'cancel',
                 },
                 {
-                    text: t(deleting ? '' : 'misc.delete'),
+                    text: deleting ? '' : t('misc.delete'),
                     style: 'destructive',
                     onPress: () => {
                         setDeleting(true)
@@ -88,7 +88,7 @@ const LibraryReservationRow = ({
                     >
                         {`${t('pages.library.reservations.id')}: ${
                             reservation.reservation_id
-                        } (${reservation.resource_id})`}
+                        }`}
                     </Text>
                 </>
             }
@@ -121,7 +121,7 @@ const LibraryReservationRow = ({
                     </View>
                 </>
             }
-            maxTitleWidth={'65%'}
+            maxTitleWidth={'75%'}
         />
     )
 }

@@ -1,6 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
@@ -40,29 +41,26 @@ export default function CalendarPage(): JSX.Element {
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? t('pages.calendar.link') : primussUrl
+            selectedData === 'Events'
+                ? t('pages.calendar.calendar.link')
+                : primussUrl
         )
     }
     useEffect(() => {
-        if (userKind === 'student') {
-            void loadEvents()
-                .then(() => {
-                    setLoadingState(LoadingState.LOADED)
-                })
-                .catch((e) => {
-                    if (e instanceof NoSessionError) {
-                        router.push('(user)/login')
-                    } else {
-                        console.log(e)
-                    }
+        void loadEvents()
+            .then(() => {
+                setLoadingState(LoadingState.LOADED)
+            })
+            .catch((e) => {
+                if (e instanceof NoSessionError) {
+                    router.push('(user)/login')
+                } else {
+                    console.log(e)
+                }
 
-                    setError(e)
-                    setLoadingState(LoadingState.ERROR)
-                })
-        } else {
-            setError(new Error(t('pages.calendar.exams.error')))
-            setLoadingState(LoadingState.LOADED)
-        }
+                setError(e)
+                setLoadingState(LoadingState.ERROR)
+            })
     }, [userKind])
 
     async function loadEvents(): Promise<void> {
@@ -147,47 +145,26 @@ export default function CalendarPage(): JSX.Element {
                                 </View>
                             )}
                             {userKind !== 'student' ? (
-                                <View>
-                                    <Text
-                                        style={[
-                                            styles.errorMessage,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {error?.message}
-                                    </Text>
-                                    <Text
-                                        style={[
-                                            styles.errorInfo,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {t(
-                                            'pages.calendar.exams.errorSubtitle'
-                                        )}
-                                    </Text>
-                                </View>
+                                <ErrorView
+                                    title={error?.message ?? t('error.title')}
+                                    onButtonPress={() => {
+                                        onRefresh()
+                                    }}
+                                    inModal
+                                />
                             ) : (
                                 <>
                                     {loadingState === LoadingState.ERROR && (
-                                        <View>
-                                            <Text
-                                                style={[
-                                                    styles.errorMessage,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {error?.message}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.errorInfo,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t('error.refreshPull')}{' '}
-                                            </Text>
-                                        </View>
+                                        <ErrorView
+                                            title={
+                                                error?.message ??
+                                                t('error.title')
+                                            }
+                                            onButtonPress={() => {
+                                                onRefresh()
+                                            }}
+                                            inModal
+                                        />
                                     )}
                                     {loadingState === LoadingState.LOADED && (
                                         <View>
@@ -221,18 +198,15 @@ export default function CalendarPage(): JSX.Element {
                 <View>
                     <Text
                         style={{
-                            fontSize: 12,
-                            fontWeight: 'normal',
+                            ...styles.footerText1,
                             color: colors.labelColor,
-                            paddingBottom: 25,
-                            textAlign: 'justify',
                         }}
                     >
                         {t('pages.calendar.footer.part1')}
                         <Text
                             style={{
                                 color: colors.text,
-                                textDecorationLine: 'underline',
+                                ...styles.footerText2,
                             }}
                             onPress={handleLinkPress}
                         >
@@ -277,5 +251,14 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         justifyContent: 'center',
+    },
+    footerText1: {
+        fontSize: 12,
+        fontWeight: 'normal',
+        paddingBottom: 25,
+        textAlign: 'justify',
+    },
+    footerText2: {
+        textDecorationLine: 'underline',
     },
 })

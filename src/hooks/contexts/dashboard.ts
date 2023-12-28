@@ -10,7 +10,7 @@ import { useUserKind } from './userKind'
  * @returns An object containing two arrays of Card objects, one for the cards that should be shown by default and one for the hidden cards.
  */
 function getDefaultDashboardOrder(userKind: string): {
-    shown: Card[]
+    shown: Card[] | null // null is used to identify the loading state to hide splash screen
     hidden: Card[]
 } {
     const filter = (x: Card): boolean => x.default.includes(userKind)
@@ -21,7 +21,7 @@ function getDefaultDashboardOrder(userKind: string): {
 }
 
 export interface Dashboard {
-    shownDashboardEntries: Card[]
+    shownDashboardEntries: Card[] | null
     hiddenDashboardEntries: Card[]
     hideDashboardEntry: (key: string) => void
     bringBackDashboardEntry: (key: string) => void
@@ -30,9 +30,9 @@ export interface Dashboard {
 }
 
 export function useDashboard(): Dashboard {
-    const [shownDashboardEntries, setShownDashboardEntries] = useState<Card[]>(
-        []
-    )
+    const [shownDashboardEntries, setShownDashboardEntries] = useState<
+        Card[] | null
+    >(null)
     const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState<
         Card[]
     >([])
@@ -94,6 +94,9 @@ export function useDashboard(): Dashboard {
 
     function hideDashboardEntry(key: string): void {
         setShownDashboardEntries((prevEntries) => {
+            if (prevEntries == null) {
+                throw new Error('prevEntries is null')
+            }
             const entries = [...prevEntries]
             const hiddenEntries = [...hiddenDashboardEntries]
 
@@ -111,6 +114,9 @@ export function useDashboard(): Dashboard {
 
     function bringBackDashboardEntry(key: string): void {
         setShownDashboardEntries((prevEntries) => {
+            if (prevEntries == null) {
+                throw new Error('prevEntries is null')
+            }
             const entries = [...prevEntries]
             const hiddenEntries = [...hiddenDashboardEntries]
 
@@ -128,6 +134,9 @@ export function useDashboard(): Dashboard {
 
     function resetOrder(): void {
         const defaultEntries = getDefaultDashboardOrder(userKind)
+        if (defaultEntries.shown == null) {
+            throw new Error('defaultEntries.shown is null')
+        }
         changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)
     }
 

@@ -53,28 +53,24 @@ const Dropdown: React.FC<Props> = ({
             ]}
             buttonTextStyle={{
                 color: colors.text,
-                fontSize: 15,
+                ...styles.buttonText,
             }}
             rowTextStyle={{
                 color: colors.text,
-                fontSize: 15,
+                ...styles.buttonText,
             }}
             rowStyle={{
                 backgroundColor: colors.datePickerBackground,
                 borderBottomColor: colors.labelTertiaryColor,
-                height: 38,
+                ...styles.rowHeight,
             }}
-            dropdownStyle={{
-                borderRadius: 8,
-                shadowOpacity: 0.3,
-                shadowOffset: { width: 0.1, height: 0.1 },
-            }}
+            dropdownStyle={styles.dropdown}
             selectedRowStyle={{
                 backgroundColor: colors.primary,
             }}
             selectedRowTextStyle={{
                 color: colors.text,
-                fontWeight: '500',
+                ...styles.selectedText,
             }}
             onSelect={(selectedItem) => {
                 onSelect(selectedItem)
@@ -89,6 +85,20 @@ const styles = StyleSheet.create({
         height: 32,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    buttonText: {
+        fontSize: 15,
+    },
+    rowHeight: {
+        height: 38,
+    },
+    dropdown: {
+        borderRadius: 8,
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 0.1, height: 0.1 },
+    },
+    selectedText: {
+        fontWeight: '500',
     },
 })
 

@@ -1,6 +1,5 @@
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql-analysis.yml)
 [![CI](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml)
-[![update](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/update.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/update.yml)
 
 # Neuland Next - native version of neuland.app
 

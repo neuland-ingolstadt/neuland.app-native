@@ -1,11 +1,12 @@
 import API from '@/api/authenticated-api'
-import { createGuestSession } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
+import { performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -19,11 +20,11 @@ import {
     Alert,
     Linking,
     Platform,
+    Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import Toast from 'react-native-root-toast'
@@ -34,15 +35,6 @@ export default function Profile(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { toggleUserKind } = React.useContext(UserKindContext)
     const { t } = useTranslation('settings')
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(tabs)')
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     const [errorMsg, setErrorMsg] = useState('')
 
@@ -127,7 +119,7 @@ export default function Profile(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(toggleUserKind).catch((e) => {
                             console.log(e)
                         })
                     },
@@ -242,7 +234,7 @@ export default function Profile(): JSX.Element {
     return (
         <>
             <ScrollView
-                contentContainerStyle={{ paddingBottom: 32 }}
+                contentContainerStyle={styles.contentContainer}
                 refreshControl={
                     loadingState !== LoadingState.LOADING &&
                     loadingState !== LoadingState.LOADED ? (
@@ -264,21 +256,11 @@ export default function Profile(): JSX.Element {
                     </View>
                 )}
                 {loadingState === LoadingState.ERROR && (
-                    <View style={styles.errorContainer}>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {errorMsg}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refreshPull', { ns: 'common' })}{' '}
-                        </Text>
-                    </View>
+                    <ErrorView
+                        title={errorMsg}
+                        onRefresh={onRefresh}
+                        refreshing={false}
+                    />
                 )}
                 {loadingState === LoadingState.LOADED && (
                     <View style={styles.container}>
@@ -291,9 +273,8 @@ export default function Profile(): JSX.Element {
                         ...styles.logoutContainer,
                     }}
                 >
-                    <TouchableOpacity
+                    <Pressable
                         onPress={logoutAlert}
-                        activeOpacity={0.5}
                         style={styles.logoutButton}
                     >
                         <PlatformIcon
@@ -310,7 +291,7 @@ export default function Profile(): JSX.Element {
                         <Text style={{ color: colors.notification }}>
                             Logout
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </ScrollView>
         </>
@@ -318,14 +299,12 @@ export default function Profile(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    contentContainer: { paddingBottom: 32 },
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
-    },
-    errorContainer: {
-        paddingBottom: 64,
     },
     logoutContainer: {
         borderRadius: 10,
@@ -337,20 +316,9 @@ const styles = StyleSheet.create({
     logoutButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        paddingVertical: 14,
         paddingHorizontal: 40,
         gap: 10,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingVertical: 40,

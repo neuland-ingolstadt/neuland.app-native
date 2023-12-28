@@ -1,12 +1,15 @@
 import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
-import { type FoodLanguage } from '@/hooks/foodFilter'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/hooks/userKind'
+import { type FoodLanguage } from '@/hooks/contexts/foodFilter'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
-import { type TFunction } from 'i18next'
 
 import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
 
@@ -20,50 +23,61 @@ export async function loadFoodEntries(
     includeStatic: boolean
 ): Promise<Food[]> {
     const entries: Food[] = []
-
     if (restaurants.includes('mensa')) {
-        const data = await NeulandAPI.getMensaPlan()
-        data.forEach((day: Food) => {
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Mensa'
+        try {
+            const data = await NeulandAPI.getMensaPlan()
+            data.forEach((day: Food) => {
+                day.meals.forEach((entry: any) => {
+                    entry.restaurant = 'Mensa'
+                })
             })
-        })
-        entries.push(data)
+
+            entries.push(data)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     if (restaurants.includes('reimanns')) {
-        const data = await NeulandAPI.getReimannsPlan()
-
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-
-        filteredData.forEach((day: any) => {
-            day.meals = day.meals.filter(
-                (entry: any) => entry.static === includeStatic
+        try {
+            const data = await NeulandAPI.getReimannsPlan()
+            const startOfToday = new Date(formatISODate(new Date())).getTime()
+            const filteredData = data.filter(
+                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
             )
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Reimanns'
+
+            filteredData.forEach((day: any) => {
+                day.meals = day.meals.filter(
+                    (entry: any) => entry.static === includeStatic
+                )
+                day.meals.forEach((entry: any) => {
+                    entry.restaurant = 'Reimanns'
+                })
             })
-        })
-        entries.push(filteredData)
+
+            entries.push(filteredData)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     if (restaurants.includes('canisius')) {
-        const data = await NeulandAPI.getCanisiusPlan()
+        try {
+            const data = await NeulandAPI.getCanisiusPlan()
+            const startOfToday = new Date(formatISODate(new Date())).getTime()
+            const filteredData = data.filter(
+                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+            )
+            filteredData.forEach((day: any) =>
+                day.meals.forEach((entry: any) => {
+                    entry.restaurant = 'Canisius'
+                })
+            )
 
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-
-        filteredData.forEach((day: any) =>
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Canisius'
-            })
-        )
-        entries.push(filteredData)
+            entries.push(filteredData)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     // get start of this week (monday) or next monday if isWeekend
@@ -165,7 +179,7 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
  * @returns {string}
  */
 
-export function getUserSpecificLabel(userKind: string, t: TFunction): string {
+export function getUserSpecificLabel(userKind: string, t: any): string {
     const labels: Labels = {
         [USER_GUEST]: t('price.guests'),
         [USER_EMPLOYEE]: t('price.employees'),

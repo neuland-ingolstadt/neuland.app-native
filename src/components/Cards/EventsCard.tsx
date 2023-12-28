@@ -54,7 +54,7 @@ const EventsCard = (): JSX.Element => {
                 <View
                     style={{
                         ...styles.calendarView,
-                        paddingTop: events.length > 0 ? 10 : 0,
+                        ...(events.length > 0 && styles.calendarFilled),
                     }}
                 >
                     {events.map((event, index) => (
@@ -100,6 +100,9 @@ const EventsCard = (): JSX.Element => {
 const styles = StyleSheet.create({
     calendarView: {
         gap: 12,
+        paddingTop: 10,
+    },
+    calendarFilled: {
         paddingTop: 10,
     },
     eventTitle: {

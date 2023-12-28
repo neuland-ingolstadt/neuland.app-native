@@ -35,12 +35,7 @@ const RowEntry = ({
                     ]}
                 >
                     <Text
-                        style={{
-                            fontSize: 16,
-                            fontWeight: '600',
-                            color: colors.text,
-                            marginBottom: 1,
-                        }}
+                        style={{ ...styles.titleText, color: colors.text }}
                         numberOfLines={2}
                         textBreakStrategy="highQuality"
                     >
@@ -56,6 +51,12 @@ const RowEntry = ({
 }
 
 const styles = StyleSheet.create({
+    titleText: {
+        fontSize: 16,
+        fontWeight: '600',
+
+        marginBottom: 1,
+    },
     eventContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

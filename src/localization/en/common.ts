@@ -4,13 +4,32 @@ export default {
     },
     error: {
         title: 'An error occurred',
-        description: 'Pull down to refresh.',
+
+        description: 'An error occurred while loading the data.',
         refreshPull:
-            'An error occurred while loading the data.\nPull down to refresh.',
-        refreshButton:
-            'An error occurred while loading the data.\nClick to refresh.',
+            'An error occurred while loading the data.\nPull to refresh.',
         button: 'Retry',
         noSession: 'Not signed in.',
+        pull: 'Pull down to refresh',
+        network: {
+            title: 'No internet connection',
+            description: 'Please check your internet connection.',
+        },
+        guest: {
+            title: 'Sign in required',
+            description:
+                'This feature requires you to sign in using your THI account.',
+            button: 'Sign in',
+        },
+        permission: {
+            title: 'Feature not available',
+            description: 'This feature is not available for your user group.',
+        },
+        map: {
+            mapLoadError: 'Error while loading map',
+            mapOverlay: 'Error while loading overlay',
+        },
+        noMeals: 'No meals available',
     },
     dates: {
         until: 'until',
@@ -24,7 +43,9 @@ export default {
     misc: {
         share: 'Share',
         cancel: 'Cancel',
+        confirm: 'Confirm',
         delete: 'Delete',
+        disable: 'Disable',
     },
     pages: {
         calendar: {
@@ -117,6 +138,13 @@ export default {
                 number: 'Number',
                 footer: 'Use this barcode to sign in at the library terminals to borrow books.',
             },
+        },
+    },
+    notification: {
+        permission: {
+            title: 'Notifications',
+            description: 'Open the system settings to enable notifications.',
+            button: 'Settings',
         },
     },
 }

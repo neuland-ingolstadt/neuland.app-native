@@ -45,9 +45,7 @@ const CalendarRow = ({
                 </Text>
             }
             rightChildren={
-                <View
-                    style={{ justifyContent: 'flex-end', padding: ROW_PADDING }}
-                >
+                <View style={styles.rightContainer}>
                     <Text
                         style={{
                             ...styles.rightText,
@@ -96,7 +94,7 @@ const ExamRow = ({
                 <>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.text,
                         }}
                         numberOfLines={2}
@@ -105,7 +103,7 @@ const ExamRow = ({
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
@@ -116,7 +114,7 @@ const ExamRow = ({
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
@@ -128,11 +126,10 @@ const ExamRow = ({
                 </>
             }
             rightChildren={
-                <View style={{ justifyContent: 'flex-end', padding: 5 }}>
+                <View style={styles.rightContainerExam}>
                     <Text
                         style={{
-                            fontSize: 14,
-                            fontWeight: '400',
+                            ...styles.rightTextExam,
                             color: colors.labelColor,
                         }}
                     >
@@ -147,12 +144,21 @@ const ExamRow = ({
 }
 
 const styles = StyleSheet.create({
+    rightContainer: { justifyContent: 'flex-end', padding: ROW_PADDING },
+    rightContainerExam: { justifyContent: 'flex-end', padding: 5 },
     leftText: {
         fontSize: 13,
+    },
+    rightTextExam: {
+        fontSize: 14,
+        fontWeight: '400',
     },
     rightText: {
         fontSize: 14,
         fontWeight: '400',
+    },
+    mainText: {
+        fontSize: 13,
     },
 })
 

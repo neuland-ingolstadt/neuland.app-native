@@ -154,8 +154,8 @@ const FoodCard = (): JSX.Element => {
                 .find((x) => x.timestamp === today)
                 ?.meals.filter(
                     (x) =>
-                        x.category !== 'Suppe' &&
-                        x.category !== 'Salat' &&
+                        x.category !== 'soup' &&
+                        x.category !== 'salad' &&
                         x.restaurant != null &&
                         selectedRestaurants.includes(x.restaurant.toLowerCase())
                 )

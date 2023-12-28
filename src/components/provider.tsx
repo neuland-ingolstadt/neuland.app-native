@@ -1,10 +1,10 @@
-import { type AppIconHook } from '@/hooks/appIcon'
-import { type FlowHook } from '@/hooks/flow'
+import { type AppIconHook } from '@/hooks/contexts/appIcon'
+import { type FlowHook } from '@/hooks/contexts/flow'
 import {
     DEFAULT_TIMETABLE_MODE,
     type TimetableHook,
     useTimetable,
-} from '@/hooks/timetable'
+} from '@/hooks/contexts/timetable'
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import {
@@ -13,8 +13,8 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import { usePathname } from 'expo-router'
-import React, { createContext, useEffect, useRef, useState } from 'react'
-import { Platform, useColorScheme } from 'react-native'
+import React, { createContext, useEffect } from 'react'
+import { Platform, StyleSheet, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
@@ -26,10 +26,14 @@ import {
     useRouteParams,
     useTheme,
     useUserKind,
-} from '../hooks'
-import { type Dashboard } from '../hooks/dashboard'
-import { type FoodFilter } from '../hooks/foodFilter'
-import { type RouteParams } from '../hooks/routing'
+} from '../hooks/contexts'
+import { type Dashboard } from '../hooks/contexts/dashboard'
+import { type FoodFilter } from '../hooks/contexts/foodFilter'
+import {
+    type Notifications,
+    useNotifications,
+} from '../hooks/contexts/notifications'
+import { type RouteParams } from '../hooks/contexts/routing'
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 
 interface ProviderProps {
@@ -39,6 +43,8 @@ interface ProviderProps {
 export const RouteParamsContext = createContext<RouteParams>({
     routeParams: '',
     updateRouteParams: () => {},
+    lecture: null,
+    updateLecture: () => {},
 })
 
 export const FoodFilterContext = createContext<FoodFilter>({
@@ -48,6 +54,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
     showStatic: false,
     foodLanguage: 'default',
     toggleSelectedAllergens: () => {},
+    initAllergenSelection: () => {},
     toggleSelectedPreferences: () => {},
     toggleSelectedRestaurant: () => {},
     toggleShowStatic: () => {},
@@ -102,6 +109,15 @@ export const ReloadProvider = createContext<any>({
 export const TimetableContext = createContext<TimetableHook>({
     timetableMode: DEFAULT_TIMETABLE_MODE,
     setTimetableMode: () => {},
+    selectedDate: new Date(),
+    setSelectedDate: () => {},
+})
+
+export const NotificationContext = createContext<Notifications>({
+    timetableNotifications: {},
+    updateTimetableNotifications: () => {},
+    deleteTimetableNotifications: () => {},
+    removeNotification: () => {},
 })
 
 /**
@@ -122,23 +138,9 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
     const appIcon = useAppIcon()
-    const [currentColorScheme, setCurrentColorScheme] = useState(colorScheme)
-    const onColorSchemeChange = useRef<NodeJS.Timeout>()
     const pathname = usePathname()
     const timetableHook = useTimetable()
-
-    // iOS workaround to prevent change of the color scheme while the app is in the background
-    // https://github.com/facebook/react-native/issues/35972
-    // https://github.com/facebook/react-native/pull/39439 (should be fixed in v0.73)
-    useEffect(() => {
-        if (colorScheme !== currentColorScheme) {
-            onColorSchemeChange.current = setTimeout(() => {
-                setCurrentColorScheme(colorScheme)
-            }, 1000)
-        } else if (onColorSchemeChange.current != null) {
-            clearTimeout(onColorSchemeChange.current)
-        }
-    }, [colorScheme])
+    const notifications = useNotifications()
 
     /**
      * Returns the primary color for a given color scheme.
@@ -229,7 +231,7 @@ export default function Provider({
 
         const entries: Record<string, string> = {}
 
-        dashboard.shownDashboardEntries.forEach((entry, index) => {
+        dashboard.shownDashboardEntries?.forEach((entry, index) => {
             entries[entry.key] = `Position ${index + 1}`
         })
 
@@ -245,7 +247,7 @@ export default function Provider({
 
         const entries: Record<string, string> = {}
 
-        dashboard.hiddenDashboardEntries.forEach((entry) => {
+        dashboard.hiddenDashboardEntries?.forEach((entry) => {
             entries[entry.key] = 'Card hidden'
         })
 
@@ -272,43 +274,54 @@ export default function Provider({
         })
     }, [i18n.language, flow.analyticsInitialized])
 
+    useEffect((): void => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
+        trackEvent('TimetableMode', {
+            timetableMode: timetableHook.timetableMode,
+        })
+    }, [flow.analyticsAllowed, flow.analyticsInitialized])
+
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={styles.container}>
             <ThemeProvider
-                value={
-                    (Platform.OS === 'android'
-                        ? colorScheme
-                        : currentColorScheme) === 'light'
-                        ? lightTheme
-                        : darkTheme
-                }
+                value={colorScheme === 'light' ? lightTheme : darkTheme}
             >
                 <TimetableContext.Provider value={timetableHook}>
-                    <ThemeContext.Provider value={themeHook}>
-                        <AppIconContext.Provider value={appIcon}>
-                            <FlowContext.Provider value={flow}>
-                                <UserKindContext.Provider value={userKind}>
-                                    <DashboardContext.Provider
-                                        value={dashboard}
-                                    >
+                    <NotificationContext.Provider value={notifications}>
+                        <ThemeContext.Provider value={themeHook}>
+                            <AppIconContext.Provider value={appIcon}>
+                                <FlowContext.Provider value={flow}>
+                                    <UserKindContext.Provider value={userKind}>
                                         <FoodFilterContext.Provider
                                             value={foodFilter}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
+                                            <DashboardContext.Provider
+                                                value={dashboard}
                                             >
-                                                <RootSiblingParent>
-                                                    {children}
-                                                </RootSiblingParent>
-                                            </RouteParamsContext.Provider>
+                                                <RouteParamsContext.Provider
+                                                    value={routeParams}
+                                                >
+                                                    <RootSiblingParent>
+                                                        {children}
+                                                    </RootSiblingParent>
+                                                </RouteParamsContext.Provider>
+                                            </DashboardContext.Provider>
                                         </FoodFilterContext.Provider>
-                                    </DashboardContext.Provider>
-                                </UserKindContext.Provider>
-                            </FlowContext.Provider>
-                        </AppIconContext.Provider>
-                    </ThemeContext.Provider>
+                                    </UserKindContext.Provider>
+                                </FlowContext.Provider>
+                            </AppIconContext.Provider>
+                        </ThemeContext.Provider>
+                    </NotificationContext.Provider>
                 </TimetableContext.Provider>
             </ThemeProvider>
         </GestureHandlerRootView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+})

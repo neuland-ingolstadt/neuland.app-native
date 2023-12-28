@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const ContextMenuView = ({
+const DragDropView = ({
     children,
 }: {
     children: React.ReactNode
 }): React.ReactElement => {
     return React.createElement(React.Fragment, null, children)
 }
+
+export default DragDropView

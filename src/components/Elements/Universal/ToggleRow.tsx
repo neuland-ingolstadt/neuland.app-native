@@ -40,11 +40,10 @@ const ToggleRow = ({
                                             selectedElement === item
                                                 ? colors.primary
                                                 : colors.text,
-                                        fontSize: 15,
-                                        fontWeight:
-                                            selectedElement === item
-                                                ? '500'
-                                                : 'normal',
+
+                                        ...(selectedElement === item
+                                            ? styles.textSelected
+                                            : styles.textNotSelected),
                                     }}
                                 >
                                     {item}{' '}
@@ -59,6 +58,14 @@ const ToggleRow = ({
 }
 
 const styles = StyleSheet.create({
+    textSelected: {
+        fontWeight: '500',
+        fontSize: 15,
+    },
+    textNotSelected: {
+        fontWeight: 'normal',
+        fontSize: 15,
+    },
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',

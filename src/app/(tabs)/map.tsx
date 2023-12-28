@@ -9,6 +9,7 @@ import {
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
@@ -45,9 +46,16 @@ import {
 import { WebView } from 'react-native-webview'
 
 export default function Screen(): JSX.Element {
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
+
     return (
         <>
             <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text */}
                 <title>Map</title>
                 <meta name="Campus Map" content="Interactive Campus Map" />
                 <meta property="expo:handoff" content="true" />
@@ -56,7 +64,7 @@ export default function Screen(): JSX.Element {
             <WorkaroundStack
                 name={'Map'}
                 titleKey={'navigation.campusMap'}
-                component={MapScreen}
+                component={isPageOpen ? MapScreen : () => <></>}
                 transparent={true}
             />
         </>
@@ -386,19 +394,21 @@ export const MapScreen = (): JSX.Element => {
         const { t } = useTranslation('common')
         return (
             <View
-                style={[
-                    styles.ButtonArea,
-                    { marginTop: Platform.OS === 'ios' ? 175 : 20 },
-                ]}
+                style={{
+                    ...styles.ButtonArea,
+                    ...(Platform.OS === 'ios'
+                        ? styles.buttonAreaIOS
+                        : styles.buttonAreaAndroid),
+                }}
             >
                 <View
-                    style={[
-                        styles.ButtonAreaSection,
-                        {
-                            borderColor: colors.border,
-                            borderWidth: isEmpty ? 0 : 1,
-                        },
-                    ]}
+                    style={{
+                        ...styles.ButtonAreaSection,
+                        ...(!isEmpty
+                            ? styles.borderWithNormal
+                            : styles.borderWidthEmpty),
+                        borderColor: colors.border,
+                    }}
                 >
                     {floors.floors.map((floor, index) => {
                         const isLastButton =
@@ -415,6 +425,7 @@ export const MapScreen = (): JSX.Element => {
                                 <View
                                     style={[
                                         styles.Button,
+                                        // eslint-disable-next-line react-native/no-inline-styles
                                         {
                                             borderBottomColor: colors.border,
                                             backgroundColor:
@@ -546,9 +557,27 @@ export const MapScreen = (): JSX.Element => {
         setWebViewKey((k) => k + 1)
         _addGeoJson()
     }
+
+    /**
+     * Adjusts error message to use it with ErrorView
+     * @param errorMsg Error message
+     * @returns
+     */
+    function adjustErrorTitle(errorMsg: string): string {
+        switch (errorMsg) {
+            case 'noInternetConnection':
+                return 'Network request failed'
+            case 'mapLoadError':
+                return t('error.map.mapLoadError')
+            case 'mapOverlay':
+                return t('error.map.mapOverlay')
+            default:
+                return 'Error'
+        }
+    }
     return (
         <View style={styles.container}>
-            <View style={{ flex: 1, position: 'relative' }}>
+            <View style={styles.innerContainer}>
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
                 )}
@@ -559,41 +588,13 @@ export const MapScreen = (): JSX.Element => {
                             ...styles.errorContainer,
                         }}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.errorTitle,
-                            }}
-                        >
-                            {errorMsg === 'noInternetConnection' &&
-                                'Network request failed'}
-                            {errorMsg === 'mapLoadError' && 'Map load error'}
-                            {errorMsg === 'mapOverlay' &&
-                                'Error loading overlay'}
-                        </Text>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.errorText,
-                            }}
-                        >
-                            There was a problem loading the map.
-                            {'\n'}
-                            Please try again.
-                        </Text>
-                        <Pressable
-                            onPress={() => {
-                                // Increment the key to trigger a WebView reload
+                        <ErrorView
+                            title={adjustErrorTitle(errorMsg)}
+                            onButtonPress={() => {
                                 setWebViewKey(webViewKey + 1)
                                 setLoadingState(LoadingState.LOADING)
                             }}
-                            style={{
-                                ...styles.errorButton,
-                                backgroundColor: colors.datePickerBackground,
-                            }}
-                        >
-                            <Text style={{ color: colors.text }}> Reload </Text>
-                        </Pressable>
+                        />
                     </View>
                 )}
 
@@ -664,6 +665,7 @@ const styles = StyleSheet.create({
 
         justifyContent: 'flex-end',
     },
+    innerContainer: { flex: 1, position: 'relative' },
     map: {
         flex: 1,
         position: 'relative',
@@ -674,13 +676,24 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 1,
     },
+    buttonAreaAndroid: {
+        marginTop: 20,
+    },
+    buttonAreaIOS: {
+        marginTop: 175,
+    },
     ButtonAreaSection: {
         borderRadius: 7,
         overflow: 'hidden',
         borderWidth: 1,
         marginTop: 10,
     },
-
+    borderWidthEmpty: {
+        borderWidth: 0,
+    },
+    borderWithNormal: {
+        borderWidth: 1,
+    },
     Button: {
         width: 38,
         height: 38,
@@ -700,23 +713,8 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         zIndex: 3,
-        justifyContent: 'center',
+        paddingTop: 70,
         alignItems: 'center',
-    },
-    errorTitle: {
-        fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    errorText: {
-        fontSize: 16,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    errorButton: {
-        padding: 10,
-        borderRadius: 5,
     },
     loadingContainer: {
         top: 0,

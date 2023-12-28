@@ -55,8 +55,7 @@ const NameBox = ({
                 <ShimmerPlaceholder
                     visible={loaded}
                     style={{
-                        width: !loaded ? 100 : undefined,
-                        height: !loaded ? 12.5 : undefined,
+                        ...(!loaded && styles.shimmerContainer1),
                     }}
                     shimmerStyle={styles.shimmer}
                     shimmerColors={shimmerColor}
@@ -75,9 +74,7 @@ const NameBox = ({
                 <ShimmerPlaceholder
                     visible={loaded}
                     style={{
-                        width: !loaded ? 130 : undefined,
-                        height: !loaded ? 12.5 : undefined,
-                        marginTop: !loaded ? 3 : undefined,
+                        ...(!loaded && styles.shimmerContainer2),
                     }}
                     shimmerStyle={styles.shimmer}
                     shimmerColors={shimmerColor}
@@ -101,6 +98,15 @@ const NameBox = ({
 export default NameBox
 
 const styles = StyleSheet.create({
+    shimmerContainer1: {
+        width: 100,
+        height: 12.5,
+    },
+    shimmerContainer2: {
+        width: 130,
+        height: 12.5,
+        marginTop: 3,
+    },
     shimmer: {
         borderRadius: 3,
     },

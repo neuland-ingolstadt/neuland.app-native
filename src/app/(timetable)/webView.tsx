@@ -74,10 +74,7 @@ export default function NotesDetails(): JSX.Element {
             {isLoaded ? null : (
                 <View
                     style={{
-                        height: '100%',
-                        width: '100%',
-                        position: 'absolute',
-                        justifyContent: 'center',
+                        ...styles.iosContainer,
                         backgroundColor: colors.background,
                     }}
                 />
@@ -91,5 +88,11 @@ const styles = StyleSheet.create({
         height: '100%',
         padding: PADDING,
         alignSelf: 'center',
+    },
+    iosContainer: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        justifyContent: 'center',
     },
 })

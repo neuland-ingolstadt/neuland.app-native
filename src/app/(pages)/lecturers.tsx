@@ -1,14 +1,12 @@
 import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
@@ -49,10 +47,7 @@ export default function LecturersCard(): JSX.Element {
             setPersonalLecturers(data)
             setLoadingState(LoadingState.LOADED)
         } catch (e) {
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
+            if (e instanceof NoSessionError) {
                 router.push('(user)/login')
             } else {
                 setLoadingState(LoadingState.ERROR)
@@ -66,15 +61,13 @@ export default function LecturersCard(): JSX.Element {
 
     const onRefresh: () => void = () => {
         void load()
-        setLoadingState(LoadingState.LOADED)
     }
 
     useEffect(() => {
         async function load(): Promise<void> {
-            setLoadingState(LoadingState.LOADING)
             if (q == null) {
                 setFilteredLecturers(personalLecturers)
-                setLoadingState(LoadingState.LOADED)
+
                 return
             }
 
@@ -101,7 +94,6 @@ export default function LecturersCard(): JSX.Element {
                     return
                 }
             }
-
             const normalizedSearch = q.toLowerCase().trim()
             const checkField = (value: string | null): boolean =>
                 value?.toString().toLowerCase().includes(normalizedSearch) ??
@@ -144,14 +136,11 @@ export default function LecturersCard(): JSX.Element {
                 </View>
             )}
             {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+                <ErrorView
+                    title={error?.message ?? t('error.title')}
+                    onRefresh={onRefresh}
+                    refreshing={false}
+                />
             )}
 
             {loadingState === LoadingState.LOADED && (
@@ -194,22 +183,8 @@ const styles = StyleSheet.create({
     page: {
         padding: PAGE_PADDING,
     },
-    container: {
-        marginBottom: MODAL_BOTTOM_MARGIN,
-    },
     loadedRows: {
         borderRadius: 8,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingTop: 40,

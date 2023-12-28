@@ -5,14 +5,15 @@ import { initReactI18next } from 'react-i18next'
 import de from './de'
 import en from './en'
 
-const resources = {
+export const resources = {
     en,
     de,
-}
+} as const
 
+export const defaultNS = 'en'
 export type LanguageKey = keyof typeof resources
 const languageCode = getLocales()[0].languageCode
-const fallbackLanguage = 'en'
+const fallbackLanguage = defaultNS
 const language = Object.keys(resources).includes(languageCode)
     ? languageCode
     : fallbackLanguage

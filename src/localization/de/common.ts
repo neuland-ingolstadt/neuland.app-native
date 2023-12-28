@@ -4,13 +4,32 @@ export default {
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',
-        description: 'Ziehe zum Aktualisieren nach unten.',
+        description: 'Beim Laden der Daten ist ein Fehler aufgetreten.',
         refreshPull:
             'Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.',
-        refreshButton:
-            'Ein Fehler ist beim Laden der Daten aufgetreten.\nKlicke zum Aktualisieren.',
         button: 'Erneut versuchen',
         noSession: 'Nicht angemeldet.',
+        pull: 'Ziehe zum Aktualisieren nach unten',
+        network: {
+            title: 'Keine Internetverbindung',
+            description: 'Bitte überprüfe deine Internetverbindung.',
+        },
+        guest: {
+            title: 'Anmeldung erforderlich',
+            description:
+                'Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.',
+            button: 'Anmelden',
+        },
+        permission: {
+            title: 'Funktion nicht verfügbar',
+            description:
+                'Diese Funktion ist für deine Benutzergruppe nicht verfügbar.',
+        },
+        map: {
+            mapLoadError: 'Fehler beim Laden der Karte',
+            mapOverlay: 'Fehler beim Laden des Overlays',
+        },
+        noMeals: 'Keine Gerichte verfügbar',
     },
 
     dates: {
@@ -25,7 +44,9 @@ export default {
     misc: {
         share: 'Teilen',
         cancel: 'Abbrechen',
+        confirm: 'Bestätigen',
         delete: 'Löschen',
+        disable: 'Deaktivieren',
     },
     pages: {
         calendar: {
@@ -118,6 +139,14 @@ export default {
                 number: 'Nummer',
                 footer: 'Verwende diesen Barcode zum anmelden an den Bibliotheksterminals, um Bücher auszuleihen.',
             },
+        },
+    },
+    notification: {
+        permission: {
+            title: 'Benachrichtigungen',
+            description:
+                'Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.',
+            button: 'Einstellungen',
         },
     },
 }

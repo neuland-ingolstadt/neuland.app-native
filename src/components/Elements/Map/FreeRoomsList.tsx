@@ -26,7 +26,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                     <View>
                         <Pressable
                             onPress={() => {
-                                router.push('(tabs)/map')
+                                router.navigate('(tabs)/map')
                                 updateRouteParams(room.room)
                             }}
                         >
@@ -46,11 +46,14 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             ]}
                             numberOfLines={1}
                         >
+                            {/* eslint-disable-next-line
+                            @typescript-eslint/restrict-template-expressions */}
                             {`${t('roomTypes.' + room.type, {
                                 defaultValue: room.type,
                                 ns: 'api',
                                 fallbackLng: 'de',
-                            })} (${room.capacity} ${t(
+                            })}
+                            (${room.capacity} ${t(
                                 'pages.rooms.options.seats'
                             )})`}
                         </Text>
