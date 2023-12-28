@@ -5,6 +5,10 @@ export default {
         exam: 'Prüfung',
         studyGroup: 'Lerngruppe',
         courseOfStudies: 'Studiengang',
+        error: {
+            title: 'Details nicht verfügbar',
+            message: 'Die Details zu dieser Vorlesung sind nicht verfügbar.',
+        },
     },
     overview: {
         title: 'Übersicht',

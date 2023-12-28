@@ -1,4 +1,5 @@
 import API from '@/api/authenticated-api'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
@@ -19,11 +20,11 @@ import {
     Alert,
     Linking,
     Platform,
+    Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import Toast from 'react-native-root-toast'
@@ -255,21 +256,11 @@ export default function Profile(): JSX.Element {
                     </View>
                 )}
                 {loadingState === LoadingState.ERROR && (
-                    <View style={styles.errorContainer}>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {errorMsg}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refreshPull', { ns: 'common' })}{' '}
-                        </Text>
-                    </View>
+                    <ErrorView
+                        title={errorMsg}
+                        onRefresh={onRefresh}
+                        refreshing={false}
+                    />
                 )}
                 {loadingState === LoadingState.LOADED && (
                     <View style={styles.container}>
@@ -282,9 +273,8 @@ export default function Profile(): JSX.Element {
                         ...styles.logoutContainer,
                     }}
                 >
-                    <TouchableOpacity
+                    <Pressable
                         onPress={logoutAlert}
-                        activeOpacity={0.5}
                         style={styles.logoutButton}
                     >
                         <PlatformIcon
@@ -301,7 +291,7 @@ export default function Profile(): JSX.Element {
                         <Text style={{ color: colors.notification }}>
                             Logout
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </ScrollView>
         </>
@@ -316,9 +306,6 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
-    errorContainer: {
-        paddingBottom: 64,
-    },
     logoutContainer: {
         borderRadius: 10,
         marginBottom: 30,
@@ -329,20 +316,9 @@ const styles = StyleSheet.create({
     logoutButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        paddingVertical: 14,
         paddingHorizontal: 40,
         gap: 10,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingVertical: 40,

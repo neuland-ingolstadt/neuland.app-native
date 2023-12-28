@@ -21,7 +21,7 @@ export const performLogout = async (
     try {
         await createGuestSession()
         toggleUser(undefined)
-        router.push('(tabs)')
+        router.navigate('(tabs)')
     } catch (e) {
         console.log(e)
     }

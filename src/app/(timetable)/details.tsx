@@ -11,7 +11,7 @@ import { type Colors } from '@/components/colors'
 import { NotificationContext, RouteParamsContext } from '@/components/provider'
 import useNotification from '@/hooks/notifications'
 import i18n, { type LanguageKey } from '@/localization/i18n'
-import { type FormListSections } from '@/types/components'
+import { type FormListSections, type SectionGroup } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
@@ -141,44 +141,41 @@ export default function TimetableDetails(): JSX.Element {
     const notification = timetableNotifications[lecture.shortName]
     const minsBefore = notification != null ? notification.mins : undefined
 
+    interface HtmlItem {
+        title: 'overview.goal' | 'overview.content' | 'overview.literature'
+        html: string | null
+    }
+
+    const createItem = (
+        titleKey: HtmlItem['title'],
+        html: HtmlItem['html']
+    ): SectionGroup | null => {
+        if (html !== null) {
+            return {
+                title: t(titleKey),
+                icon: chevronIcon,
+                onPress: () => {
+                    router.push('(timetable)/webView')
+                    router.setParams({
+                        title: t(titleKey),
+                        html,
+                    })
+                },
+            }
+        }
+        return null
+    }
+
+    const items = [
+        createItem('overview.goal', lecture.goal),
+        createItem('overview.content', lecture.contents),
+        createItem('overview.literature', lecture.literature),
+    ].filter(Boolean) as SectionGroup[]
+
     const detailsList: FormListSections[] = [
         {
             header: t('overview.title'),
-            items: [
-                {
-                    title: t('overview.goal'),
-                    icon: chevronIcon,
-                    onPress: () => {
-                        router.push('(timetable)/webView')
-                        router.setParams({
-                            title: t('overview.goal'),
-                            html: lecture.goal ?? '',
-                        })
-                    },
-                },
-                {
-                    title: t('overview.content'),
-                    icon: chevronIcon,
-                    onPress: () => {
-                        router.push('(timetable)/webView')
-                        router.setParams({
-                            title: t('overview.content'),
-                            html: lecture.contents ?? '',
-                        })
-                    },
-                },
-                {
-                    title: t('overview.literature'),
-                    icon: chevronIcon,
-                    onPress: () => {
-                        router.push('(timetable)/webView')
-                        router.setParams({
-                            title: t('overview.literature'),
-                            html: lecture.literature ?? '',
-                        })
-                    },
-                },
-            ],
+            items,
         },
         {
             header: t('details.title'),
@@ -457,7 +454,7 @@ export default function TimetableDetails(): JSX.Element {
                                     <Pressable
                                         key={i}
                                         onPress={() => {
-                                            router.replace('(tabs)/map')
+                                            router.navigate('(tabs)/map')
                                             updateRouteParams(room)
                                         }}
                                     >

@@ -93,7 +93,6 @@ export default function TimetableList({
      * Functions
      */
     function showEventDetails(entry: FriendlyTimetableEntry): void {
-        console.log(entry)
         updateLecture(entry)
         router.push({
             pathname: '(timetable)/details',

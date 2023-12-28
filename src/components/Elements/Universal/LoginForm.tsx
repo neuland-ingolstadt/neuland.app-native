@@ -101,7 +101,7 @@ const LoginForm = (): JSX.Element => {
                 hideOnPress: true,
                 delay: 0,
             })
-            router.push('/')
+            router.navigate('(tabs)')
         } catch (e: any) {
             console.log(e.message)
             const message = trimErrorMsg(e.message)
@@ -131,7 +131,7 @@ const LoginForm = (): JSX.Element => {
             toggleAnalytics()
         }
         toggleOnboarded()
-        router.push('/')
+        router.navigate('(tabs)')
     }
 
     async function load(key: string): Promise<string | null> {

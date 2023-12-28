@@ -26,7 +26,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                     <View>
                         <Pressable
                             onPress={() => {
-                                router.replace('(tabs)/map')
+                                router.navigate('(tabs)/map')
                                 updateRouteParams(room.room)
                             }}
                         >

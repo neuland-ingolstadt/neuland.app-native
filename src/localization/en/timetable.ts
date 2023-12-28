@@ -5,6 +5,10 @@ export default {
         exam: 'Exam',
         studyGroup: 'Study group',
         courseOfStudies: 'Course of studies',
+        error: {
+            title: 'Details not available',
+            message: 'The details for this lecture are not available.',
+        },
     },
     overview: {
         title: 'Overview',
