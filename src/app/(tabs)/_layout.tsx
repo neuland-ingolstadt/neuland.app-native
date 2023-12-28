@@ -37,18 +37,21 @@ export default function HomeLayout(): JSX.Element {
     const [run, setRun] = React.useState<boolean>(false)
     const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
-        router.push('(flow)/onboarding')
+        router.navigate('(flow)/onboarding')
     }
 
     const isChangelogAvailable = Object.keys(changelog.version).some(
         (version) => version === convertToMajorMinorPatch(packageInfo.version)
     )
+
+    const { isOnboarded } = React.useContext(FlowContext)
+
     if (
         flow.isUpdated === false &&
         isChangelogAvailable &&
         flow.isOnboarded !== false
     ) {
-        router.push('(flow)/whatsnew')
+        router.navigate('(flow)/whatsnew')
     }
 
     // keep ssplash screen visible until the dashboard and the prior contests are loaded
@@ -62,7 +65,7 @@ export default function HomeLayout(): JSX.Element {
             }
         }
         void prepare()
-    }, [shownDashboardEntries])
+    }, [shownDashboardEntries, isOnboarded])
     const BlurTab = (): JSX.Element => (
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
