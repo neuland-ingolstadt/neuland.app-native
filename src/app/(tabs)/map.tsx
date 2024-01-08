@@ -47,6 +47,7 @@ import { WebView } from 'react-native-webview'
 
 export default function Screen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
+    const { t } = useTranslation('common')
 
     useEffect(() => {
         setIsPageOpen(true)
@@ -66,6 +67,7 @@ export default function Screen(): JSX.Element {
                 titleKey={'navigation.campusMap'}
                 component={isPageOpen ? MapScreen : () => <></>}
                 transparent={true}
+                headerSearchBarOptions={{ placeholder: t('pages.map.search') }}
             />
         </>
     )
@@ -109,8 +111,6 @@ export const MapScreen = (): JSX.Element => {
     useEffect(() => {
         setLocalSearch(routeParams)
     }, [routeParams])
-
-    const [firstRender, setFirstRender] = useState(false)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -186,9 +186,7 @@ export const MapScreen = (): JSX.Element => {
                 }),
             },
         })
-        // as a workaround for the disappearing search bar on initial render we trigger a second render
-        setFirstRender(true)
-    }, [navigation, firstRender])
+    }, [navigation])
 
     const handleDismissModal = (): void => {
         router.setParams({ q: '' })

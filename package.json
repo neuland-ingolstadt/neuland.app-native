@@ -10,7 +10,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "build:android": "expo prebuild --platform android && eas build --platform android --local",
-    "build:ios": "expo prebuild --platform ios && xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext",
+    "build:ios": "xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext",
     "build:all": "yarn licences && yarn build:ios && yarn build:android",
     "format": "prettier --write .",
     "lint": "eslint .",

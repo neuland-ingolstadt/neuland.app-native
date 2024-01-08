@@ -197,7 +197,8 @@ const LibraryBookingRow = ({
                                 ...styles.bookButton,
                             }}
                             onPress={() => {
-                                void addReservation(
+                                setReserve(true)
+                                addReservation(
                                     room.toString(),
                                     {
                                         from: item.from,
@@ -205,7 +206,13 @@ const LibraryBookingRow = ({
                                     },
                                     seat
                                 )
-                                setReserve(true)
+                                    .then(() => {
+                                        onToggle()
+                                    })
+                                    .catch(() => {})
+                                    .finally(() => {
+                                        setReserve(false)
+                                    })
                             }}
                             disabled={reserve}
                         >
