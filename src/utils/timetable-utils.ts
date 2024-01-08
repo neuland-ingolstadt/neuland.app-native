@@ -33,8 +33,8 @@ export async function getFriendlyTimetable(
     const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
 
     rawTimetable.push(...rawTimetableNextMonth)
-
     return rawTimetable
+        .filter((day) => day !== null)
         .flatMap((day) =>
             Object.values(day.hours).flatMap((hours) =>
                 hours.map((hour) => ({
