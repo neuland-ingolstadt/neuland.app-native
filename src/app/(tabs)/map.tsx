@@ -110,6 +110,8 @@ export const MapScreen = (): JSX.Element => {
         setLocalSearch(routeParams)
     }, [routeParams])
 
+    const [firstRender, setFirstRender] = useState(false)
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -184,7 +186,9 @@ export const MapScreen = (): JSX.Element => {
                 }),
             },
         })
-    }, [navigation])
+        // as a workaround for the disappearing search bar on initial render we trigger a second render
+        setFirstRender(true)
+    }, [navigation, firstRender])
 
     const handleDismissModal = (): void => {
         router.setParams({ q: '' })

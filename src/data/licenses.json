@@ -17,7 +17,7 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@expo/vector-icons@13.0.0": {
+    "@expo/vector-icons@14.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
         "licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
@@ -167,7 +167,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@50.0.0-preview.7": {
+    "expo@50.0.0-preview.8": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -207,12 +207,6 @@
         "licenses": "Apache 2.0",
         "repository": "https://github.com/wonsikin/react-native-barcode-builder",
         "licenseUrl": "https://github.com/wonsikin/react-native-barcode-builder/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-big-calendar@4.7.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/acro5piano/react-native-big-calendar",
-        "licenseUrl": "https://github.com/acro5piano/react-native-big-calendar/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-change-icon@5.0.0": {
@@ -293,7 +287,7 @@
         "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-screens@3.27.0": {
+    "react-native-screens@3.29.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",

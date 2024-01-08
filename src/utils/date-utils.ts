@@ -1,6 +1,5 @@
 import i18n from '@/localization/i18n'
 import { type FriendlyDateOptions } from '@/types/utils'
-// required by react-native-big-calendar (thats why we have moment and dayjs)
 import moment from 'moment'
 import 'moment/locale/de'
 

@@ -64,6 +64,9 @@ export default {
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
     },
+    licenses: {
+        footer: 'Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten.',
+    },
     profile: {
         formlist: {
             grades: {

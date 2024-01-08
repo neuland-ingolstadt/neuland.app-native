@@ -5091,13 +5091,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"calendarize@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "calendarize@npm:1.1.1"
-  checksum: b2ab535961843321e63ca51a6b0baf55b8dd739272b5de84c5e1c0f2c7f9fb72be6768f8ea8fcce0356e955f57188c9719b2f3d4934a4a76b096487c6eb2a17d
-  languageName: node
-  linkType: hard
-
 "call-bind@npm:^1.0.0, call-bind@npm:^1.0.2, call-bind@npm:^1.0.4, call-bind@npm:^1.0.5":
   version: 1.0.5
   resolution: "call-bind@npm:1.0.5"
@@ -5708,7 +5701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.10, dayjs@npm:^1.8.15":
+"dayjs@npm:^1.8.15":
   version: 1.11.10
   resolution: "dayjs@npm:1.11.10"
   checksum: 4de9af50639d47df87f2e15fa36bb07e0f9ed1e9c52c6caa1482788ee9a384d668f1dbd00c54f82aaab163db07d61d2899384b8254da3a9184fc6deca080e2fe
@@ -10309,7 +10302,6 @@ __metadata:
     react-i18next: "npm:^13.5.0"
     react-native: "npm:0.73.1"
     react-native-barcode-builder: "npm:^2.0.0"
-    react-native-big-calendar: "npm:4.7.0"
     react-native-change-icon: "npm:^5.0.0"
     react-native-collapsible: "npm:^1.6.1"
     react-native-context-menu-view: "npm:^1.14.1"
@@ -10329,7 +10321,7 @@ __metadata:
     react-native-svg: "npm:14.0.0"
     react-native-vector-icons: "npm:^10.0.2"
     react-native-view-shot: "npm:^3.8.0"
-    react-native-webview: "npm:13.6.3"
+    react-native-webview: "npm:13.6.4"
     react-native-week-view: "https://github.com/neuland-ingolstadt/react-native-week-view.git#0.1"
     rn-quick-actions: "npm:^0.0.3"
     sanitize-html: "npm:^2.11.0"
@@ -11360,19 +11352,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-big-calendar@npm:4.7.0":
-  version: 4.7.0
-  resolution: "react-native-big-calendar@npm:4.7.0"
-  dependencies:
-    calendarize: "npm:^1.1.1"
-    dayjs: "npm:^1.11.10"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: c9febd9b744bf87b734ea223f331aacb1ac5184a22a649bbcc71bf875a3c41852045ed744a775b2eb03e692af71f0fe653e8fe8d61a155b85c5aaa9b49ee6c6f
-  languageName: node
-  linkType: hard
-
 "react-native-change-icon@npm:^5.0.0":
   version: 5.0.0
   resolution: "react-native-change-icon@npm:5.0.0"
@@ -11596,16 +11575,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:13.6.3":
-  version: 13.6.3
-  resolution: "react-native-webview@npm:13.6.3"
+"react-native-webview@npm:13.6.4":
+  version: 13.6.4
+  resolution: "react-native-webview@npm:13.6.4"
   dependencies:
     escape-string-regexp: "npm:2.0.0"
     invariant: "npm:2.2.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 2751f2ac64b97878f1536b91705c9fe61711d15bd8a936cd1d2545b414bfcdf2426227d05709c54a66e9479422f1cbb6e8c86aca196a52416e24820b8ee60e22
+  checksum: 4d0a02d652438aa55d6326cbbcd739ad3b3d7e8485ec8e8b70277d5662cff90795d2c5bcf737e83660e9df6dac8ac87137929144df45fc6a5322817873630a4e
   languageName: node
   linkType: hard
 

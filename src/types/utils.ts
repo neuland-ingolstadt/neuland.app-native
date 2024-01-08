@@ -1,5 +1,3 @@
-import { type ICalendarEventBase } from 'react-native-big-calendar'
-
 import { type Lecturers } from './thi-api'
 
 export interface Exam {

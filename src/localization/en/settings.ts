@@ -61,6 +61,9 @@ export default {
     changelog: {
         footer: 'To see the full changelog, check out the commits on ',
     },
+    licenses: {
+        footer: 'These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build.',
+    },
     profile: {
         formlist: {
             grades: {
