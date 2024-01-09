@@ -424,7 +424,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
         flex: 1,
     },
     animtedContainer: {
@@ -485,7 +484,7 @@ const styles = StyleSheet.create({
     },
     innerScrollContainer: {
         marginHorizontal: 12,
-        paddingBottom: 20,
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
     },
     selectedDayText: {
         fontSize: 16,

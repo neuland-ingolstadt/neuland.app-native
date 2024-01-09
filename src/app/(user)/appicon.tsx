@@ -6,7 +6,6 @@ import { AppIconContext } from '@/components/provider'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { setAppIcon } from 'expo-dynamic-app-icon'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
@@ -20,6 +19,8 @@ import {
     Text,
     View,
 } from 'react-native'
+// @ts-expect-error cannot verify the type of this prop
+import AppIcon from 'react-native-dynamic-app-icon'
 
 let iconImages: Record<string, ImageProps> = {}
 
@@ -80,7 +81,7 @@ export default function AppIconPicker(): JSX.Element {
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
-                                                            setAppIcon(
+                                                            AppIcon.setAppIcon(
                                                                 capitalizeFirstLetter(
                                                                     icon
                                                                 )

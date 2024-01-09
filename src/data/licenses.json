@@ -95,12 +95,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-dynamic-app-icon@1.2.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/outsung/expo-dynamic-app-icon",
-        "licenseUrl": "https://github.com/outsung/expo-dynamic-app-icon",
-        "parents": "neuland"
-    },
     "expo-haptics@12.8.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -162,6 +156,18 @@
         "parents": "neuland"
     },
     "expo-status-bar@1.11.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
+    "expo-system-ui@2.9.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
+    "expo-task-manager@11.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -245,6 +251,12 @@
         "licenseUrl": "https://github.com/danish1658/react-native-dropdown-select-list/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-dynamic-app-icon@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/idearockers/react-native-dynamic-app-icon",
+        "licenseUrl": "https://github.com/idearockers/react-native-dynamic-app-icon/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native-gesture-handler@2.14.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-gesture-handler",
@@ -323,7 +335,7 @@
         "licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-webview@13.6.3": {
+    "react-native-webview@13.6.4": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-webview/react-native-webview",
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",

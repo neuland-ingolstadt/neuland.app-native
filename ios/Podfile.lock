@@ -93,8 +93,6 @@ PODS:
     - ExpoModulesCore
   - ExpoDevice (5.9.1):
     - ExpoModulesCore
-  - ExpoDynamicAppIcon (1.2.0):
-    - ExpoModulesCore
   - ExpoFileSystem (16.0.2):
     - ExpoModulesCore
   - ExpoHaptics (12.8.1):
@@ -119,6 +117,8 @@ PODS:
   - ExpoSecureStore (12.8.1):
     - ExpoModulesCore
   - ExpoSharing (11.10.0):
+    - ExpoModulesCore
+  - ExpoSystemUI (2.9.2):
     - ExpoModulesCore
   - EXSplashScreen (0.26.1):
     - ExpoModulesCore
@@ -1202,6 +1202,8 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.6.1):
     - React-Core
+  - RNDynamicAppIcon (1.1.0):
+    - React
   - RNFlashList (1.6.3):
     - React-Core
   - RNGestureHandler (2.14.0):
@@ -1248,7 +1250,6 @@ DEPENDENCIES:
   - ExpoBrightness (from `../node_modules/expo-brightness/ios`)
   - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
   - ExpoDevice (from `../node_modules/expo-device/ios`)
-  - ExpoDynamicAppIcon (from `../node_modules/expo-dynamic-app-icon/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
@@ -1259,6 +1260,7 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSharing (from `../node_modules/expo-sharing/ios`)
+  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1319,6 +1321,7 @@ DEPENDENCIES:
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDynamicAppIcon (from `../node_modules/react-native-dynamic-app-icon`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1373,8 +1376,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-clipboard/ios"
   ExpoDevice:
     :path: "../node_modules/expo-device/ios"
-  ExpoDynamicAppIcon:
-    :path: "../node_modules/expo-dynamic-app-icon/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoHaptics:
@@ -1395,6 +1396,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-secure-store/ios"
   ExpoSharing:
     :path: "../node_modules/expo-sharing/ios"
+  ExpoSystemUI:
+    :path: "../node_modules/expo-system-ui/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   EXUpdatesInterface:
@@ -1510,6 +1513,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDynamicAppIcon:
+    :path: "../node_modules/react-native-dynamic-app-icon"
   RNFlashList:
     :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
@@ -1547,7 +1552,6 @@ SPEC CHECKSUMS:
   ExpoBrightness: 6d160de5877289d11674aea61aacdb37422774cf
   ExpoClipboard: b597982124f067ff9f5b89093eb3d97898d5d877
   ExpoDevice: 33221bfe3d2551cf0321371d0ee978de4e488956
-  ExpoDynamicAppIcon: b0f96e53d0bf00412bbe97da0cfc15b8c94a54ce
   ExpoFileSystem: fb4c94cc5ec5c50cb2663d2f6d503a1960b95a1d
   ExpoHaptics: 28a771b630353cd6e8dcf1b1e3e693e38ad7c3c3
   ExpoHead: 563d40dcf49c38bb8d98ccc041e89ea9054112fd
@@ -1558,6 +1562,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 01c0abfa6cd9c41c4bd76d8a1a079e6b591db10f
   ExpoSecureStore: c84ae37d1c36f38524d289c67c3a2e3fc56f1108
   ExpoSharing: 752ad6ae2b693de9cd4e7fddb78297bdc658b815
+  ExpoSystemUI: 2fbbcc07e4ed87eb02b83fafce045ff5ca2cd931
   EXSplashScreen: bc4ba80db652d2b97c3f37fb1611de253cacf628
   EXUpdatesInterface: 95d6bc086d7e043c1f33e30762ebc16a5cf4b153
   FBLazyVector: 2296bacb2fa157a43991048b0a9d71c1c8b65083
@@ -1617,6 +1622,7 @@ SPEC CHECKSUMS:
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
+  RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 61bfdfc05db9b79dd61f894dcd29d3dcc6db3c02
   RNReanimated: 57f436e7aa3d277fbfed05e003230b43428157c0

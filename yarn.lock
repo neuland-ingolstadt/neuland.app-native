@@ -6770,17 +6770,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-dynamic-app-icon@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "expo-dynamic-app-icon@npm:1.2.0"
-  peerDependencies:
-    expo: ">=49"
-    react: "*"
-    react-native: "*"
-  checksum: c810a54a02f0fcaa512bda9f40f1b5f89a1524475aaebc133d6d874811c753a65e858f05b6fd81450fc8bd8f5b975a5192d6c81b116452ac77f7a2b14b353711
-  languageName: node
-  linkType: hard
-
 "expo-file-system@npm:~16.0.0, expo-file-system@npm:~16.0.2":
   version: 16.0.2
   resolution: "expo-file-system@npm:16.0.2"
@@ -7000,6 +6989,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 2e931daed08860fc311468915263110f9f6080be12caa737df149bde0341e136a64864197ba5ed1375b08f5aebefc116137a8a3871a54f11b630840e9f07b121
+  languageName: node
+  linkType: hard
+
+"expo-task-manager@npm:11.5.0":
+  version: 11.5.0
+  resolution: "expo-task-manager@npm:11.5.0"
+  dependencies:
+    unimodules-app-loader: "npm:~4.3.0"
+  peerDependencies:
+    expo: "*"
+  checksum: f6b06721b13a235099a89d05d7727aa1113a444302492b6ecf50ad58ff26664793cb0031bbb2e6872d76a26437e7212e6b0ec29147966d641c3fc43b254549ff
   languageName: node
   linkType: hard
 
@@ -10298,7 +10298,6 @@ __metadata:
     expo-constants: "npm:~15.4.2"
     expo-dev-client: "npm:~3.3.4"
     expo-device: "npm:~5.9.1"
-    expo-dynamic-app-icon: "npm:^1.2.0"
     expo-haptics: "npm:~12.8.1"
     expo-linear-gradient: "npm:~12.7.0"
     expo-linking: "npm:~6.2.1"
@@ -10311,6 +10310,7 @@ __metadata:
     expo-splash-screen: "npm:~0.26.1"
     expo-status-bar: "npm:^1.6.0"
     expo-system-ui: "npm:~2.9.2"
+    expo-task-manager: "npm:11.5.0"
     husky: "npm:^8.0.3"
     i18next: "npm:^23.6.0"
     lint-staged: "npm:>=15"
@@ -10329,6 +10329,7 @@ __metadata:
     react-native-drag-drop-ios: "npm:^0.1.1"
     react-native-drag-sort: "npm:^2.4.4"
     react-native-dropdown-select-list: "npm:^2.0.5"
+    react-native-dynamic-app-icon: "npm:^1.1.0"
     react-native-gesture-handler: "npm:~2.14.0"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-onboarding-swiper: "https://github.com/neuland-ingolstadt/react-native-onboarding-swiper.git"
@@ -11423,6 +11424,15 @@ __metadata:
   version: 2.0.5
   resolution: "react-native-dropdown-select-list@npm:2.0.5"
   checksum: ca3d885efde0628d40956af2c08dcc92599963b5d0eb4bdcbef7e991d91dc5cb61739c85ad39c8dc2c5ec389a0532a394ec3bb97dbd6a95d6d900468a2d67781
+  languageName: node
+  linkType: hard
+
+"react-native-dynamic-app-icon@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-native-dynamic-app-icon@npm:1.1.0"
+  peerDependencies:
+    react-native: ">=0.41.2"
+  checksum: 39fc3141fdeb1b332ca0b452a2c801e440abbb6acaa1dbfb69d501ae702cda53233da14fda879f771b5bafad3c8cc47be4a570d826def0da58e4eab0b3a79e50
   languageName: node
   linkType: hard
 
@@ -13433,6 +13443,13 @@ __metadata:
   version: 2.1.0
   resolution: "unicode-property-aliases-ecmascript@npm:2.1.0"
   checksum: 50ded3f8c963c7785e48c510a3b7c6bc4e08a579551489aa0349680a35b1ceceec122e33b2b6c1b579d0be2250f34bb163ac35f5f8695fe10bbc67fb757f0af8
+  languageName: node
+  linkType: hard
+
+"unimodules-app-loader@npm:~4.3.0":
+  version: 4.3.0
+  resolution: "unimodules-app-loader@npm:4.3.0"
+  checksum: be0b3211dc56567034727d37af3c3188ad8c29031992e2294fb64ddf1f14f464fb7bdb0c65a48ab5c3bffd12bc896ed24653bafac183f2b0c800b81092137eb8
   languageName: node
   linkType: hard
 
