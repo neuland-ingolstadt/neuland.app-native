@@ -57,4 +57,12 @@ export default {
         hide: 'Hide card',
         settings: 'Dashboard settings',
     },
+    unmatched: {
+        title: 'Not found',
+        error: {
+            title: 'not found',
+            message: 'The requested page is not available.',
+            button: 'Back',
+        },
+    },
 }

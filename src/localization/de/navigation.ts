@@ -57,4 +57,12 @@ export default {
         hide: 'Karte ausblenden',
         settings: 'Dashboard Einstellungen',
     },
+    unmatched: {
+        title: 'Nicht gefunden',
+        error: {
+            title: 'nicht gefunden',
+            message: 'Die angeforderte Seite ist nicht verfügbar.',
+            button: 'Zurück',
+        },
+    },
 }

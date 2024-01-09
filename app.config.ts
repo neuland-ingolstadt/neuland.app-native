@@ -80,6 +80,10 @@ module.exports = {
                     ios: {
                         deploymentTarget: '15.0',
                     },
+                    android: {
+                        compileSdkVersion: 34,
+                        targetSdkVersion: 34,
+                    },
                 },
             ],
         ],
