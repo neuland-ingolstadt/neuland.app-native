@@ -46,6 +46,11 @@ const LibraryBookingRow = ({
             )
     }
     const rooms = getAvailableRooms()
+    const allRooms = [
+        'Nord (alte Bibliothek)',
+        'Süd (neue Bibliothek)',
+        'Galerie',
+    ]
     const uniqueRoomNames = [
         ...new Set(
             rooms.map((item) => item[1].room_name.replace('Lesesaal ', ''))
@@ -164,7 +169,7 @@ const LibraryBookingRow = ({
                             defaultValue={uniqueRoomNames[0]}
                             defaultText={uniqueRoomNames[0].toString()}
                             onSelect={updateRoom}
-                            selected={uniqueRoomNames[Number(room) - 1]}
+                            selected={allRooms[Number(room) - 1]}
                             width={200}
                         />
                     </View>
