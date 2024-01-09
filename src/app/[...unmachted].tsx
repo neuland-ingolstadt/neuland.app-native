@@ -12,7 +12,7 @@ export default function Unmatched(): JSX.Element {
     const { t } = useTranslation('navigation')
 
     useEffect(() => {
-        trackEvent('unmatched', { pathname })
+        trackEvent('Unmatched', { pathname })
     })
 
     useLayoutEffect(() => {
