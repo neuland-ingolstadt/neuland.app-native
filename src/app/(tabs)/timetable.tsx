@@ -19,7 +19,13 @@ import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Linking, StyleSheet, View } from 'react-native'
+import {
+    ActivityIndicator,
+    InteractionManager,
+    Linking,
+    StyleSheet,
+    View,
+} from 'react-native'
 
 export interface ITimetableViewProps {
     friendlyTimetable: FriendlyTimetableEntry[]
@@ -76,12 +82,14 @@ export default function TimetableScreen(): JSX.Element {
         }
 
         const timeoutId = setTimeout(() => {
-            void updateNotifications()
-        }, 1000) // Delay execution by 1 second
+            void InteractionManager.runAfterInteractions(() => {
+                void updateNotifications()
+            })
+        }, 1000)
 
         return () => {
             clearTimeout(timeoutId)
-        } // Clear the timeout if the component unmounts
+        }
     }, [timetable, i18n.language])
 
     async function updateAllNotifications(): Promise<void> {
@@ -102,35 +110,7 @@ export default function TimetableScreen(): JSX.Element {
         )
 
         if (configuredLanguage !== i18n.language) {
-            const promises = setupLectures.map(async (lectureName) => {
-                const mins = getMinsBeforeLecture(lectureName)
-                const notificationPromises = Object.values(setupTimetable)
-                    .filter((lecture) => lecture.shortName === lectureName)
-                    .map(async (lecture) => {
-                        const startDate = new Date(lecture.startDate)
-                        const alertDate = new Date(
-                            startDate.getTime() - mins * 60000
-                        )
-                        return await scheduleLectureNotification(
-                            lecture.name,
-                            lecture.rooms.join(', '),
-                            mins,
-                            alertDate,
-                            t
-                        )
-                    })
-                const notifications = await Promise.all(notificationPromises)
-                const flatNotifications = notifications.flat()
-
-                updateTimetableNotifications(
-                    lectureName,
-                    flatNotifications,
-                    mins,
-                    i18n.language as LanguageKey
-                )
-            })
-
-            await Promise.all(promises)
+            await updateNotificationLanguage(setupLectures, setupTimetable)
             return
         }
 
@@ -206,6 +186,41 @@ export default function TimetableScreen(): JSX.Element {
                 )
             }
         )
+
+        await Promise.all(promises)
+    }
+
+    async function updateNotificationLanguage(
+        setupLectures: string[],
+        setupTimetable: FriendlyTimetableEntry[]
+    ): Promise<void> {
+        const promises = setupLectures.map(async (lectureName) => {
+            const mins = getMinsBeforeLecture(lectureName)
+            const notificationPromises = Object.values(setupTimetable)
+                .filter((lecture) => lecture.shortName === lectureName)
+                .map(async (lecture) => {
+                    const startDate = new Date(lecture.startDate)
+                    const alertDate = new Date(
+                        startDate.getTime() - mins * 60000
+                    )
+                    return await scheduleLectureNotification(
+                        lecture.name,
+                        lecture.rooms.join(', '),
+                        mins,
+                        alertDate,
+                        t
+                    )
+                })
+            const notifications = await Promise.all(notificationPromises)
+            const flatNotifications = notifications.flat()
+
+            updateTimetableNotifications(
+                lectureName,
+                flatNotifications,
+                mins,
+                i18n.language as LanguageKey
+            )
+        })
 
         await Promise.all(promises)
     }

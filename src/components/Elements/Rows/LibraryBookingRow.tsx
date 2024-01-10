@@ -84,10 +84,15 @@ const LibraryBookingRow = ({
         setRoom(room ?? '')
     }
 
+    const availSeats = Object.values(item.resources).reduce(
+        (acc, room) => acc + room.num_seats,
+        0
+    )
     return (
         <View style={styles.container}>
             <Pressable
                 onPress={() => {
+                    if (availSeats === 0) return
                     setCollapsed(!collapsed)
                     onToggle()
                 }}
@@ -114,12 +119,7 @@ const LibraryBookingRow = ({
                                 }}
                             >
                                 {t('pages.library.available.seatsAvailable', {
-                                    available: Object.values(
-                                        item.resources
-                                    ).reduce(
-                                        (acc, room) => acc + room.num_seats,
-                                        0
-                                    ),
+                                    available: availSeats,
                                     total: Object.values(item.resources).reduce(
                                         (acc, room) => acc + room.maxnum_seats,
                                         0
@@ -133,120 +133,130 @@ const LibraryBookingRow = ({
                 {
                     <>
                         <View style={styles.rightContainer}>
-                            <PlatformIcon
-                                color={colors.primary}
-                                ios={{
-                                    name: collapsed
-                                        ? 'chevron.up'
-                                        : 'chevron.down',
-                                    size: 20,
-                                }}
-                                android={{
-                                    name: collapsed
-                                        ? 'chevron-up'
-                                        : 'chevron-down',
-                                    size: 26,
-                                }}
-                            />
+                            {availSeats !== 0 && (
+                                <PlatformIcon
+                                    color={colors.primary}
+                                    ios={{
+                                        name: collapsed
+                                            ? 'chevron.up'
+                                            : 'chevron.down',
+                                        size: 20,
+                                    }}
+                                    android={{
+                                        name: collapsed
+                                            ? 'chevron-up'
+                                            : 'chevron-down',
+                                        size: 26,
+                                    }}
+                                />
+                            )}
                         </View>
                     </>
                 }
             </Pressable>
-            <Collapsible collapsed={collapsed}>
-                <View style={styles.reserveContainer}>
-                    <View style={styles.dropdownContainer}>
+            {availSeats !== 0 && (
+                <Collapsible collapsed={collapsed}>
+                    <View style={styles.reserveContainer}>
+                        <View style={styles.dropdownContainer}>
+                            <Text
+                                style={{
+                                    ...styles.leftText2,
+                                    color: colors.text,
+                                }}
+                            >
+                                {`${t('pages.library.available.room')}:`}
+                            </Text>
+
+                            <Dropdown
+                                data={uniqueRoomNames}
+                                defaultValue={uniqueRoomNames[0]}
+                                defaultText={uniqueRoomNames[0].toString()}
+                                onSelect={updateRoom}
+                                selected={allRooms[Number(room) - 1]}
+                                width={200}
+                            />
+                        </View>
+                        <Divider
+                            width={'100%'}
+                            color={colors.labelTertiaryColor}
+                        />
+                        <View style={styles.dropdownContainer}>
+                            <Text
+                                style={{
+                                    ...styles.leftText2,
+                                    color: colors.text,
+                                }}
+                            >
+                                {`${t('pages.library.reservations.seat')}:`}
+                            </Text>
+
+                            <Dropdown
+                                data={seats}
+                                defaultValue={seats[0]}
+                                defaultText={seats[0]}
+                                onSelect={setSeat}
+                                selected={seat}
+                                width={200}
+                            />
+                        </View>
+                        <Divider
+                            width={'100%'}
+                            color={colors.labelTertiaryColor}
+                        />
+
+                        <View style={styles.confirmContainer}>
+                            <Pressable
+                                style={{
+                                    backgroundColor: colors.labelColor,
+                                    ...styles.bookButton,
+                                }}
+                                onPress={() => {
+                                    setReserve(true)
+                                    addReservation(
+                                        room.toString(),
+                                        {
+                                            from: item.from,
+                                            to: item.to,
+                                        },
+                                        seat
+                                    )
+                                        .then(() => {
+                                            onToggle()
+                                        })
+                                        .catch(() => {})
+                                        .finally(() => {
+                                            setReserve(false)
+                                        })
+                                }}
+                                disabled={reserve}
+                            >
+                                {reserve ? (
+                                    <ActivityIndicator color={'white'} />
+                                ) : (
+                                    <Text
+                                        style={{
+                                            ...styles.leftText2,
+                                            color: getContrastColor(
+                                                colors.labelColor
+                                            ),
+                                        }}
+                                    >
+                                        {t('pages.library.available.book')}
+                                    </Text>
+                                )}
+                            </Pressable>
+                        </View>
                         <Text
                             style={{
-                                ...styles.leftText2,
-                                color: colors.text,
+                                color: colors.labelColor,
+                                ...styles.footerText,
                             }}
                         >
-                            {`${t('pages.library.available.room')}:`}
+                            {t('pages.library.available.footer')}
                         </Text>
-
-                        <Dropdown
-                            data={uniqueRoomNames}
-                            defaultValue={uniqueRoomNames[0]}
-                            defaultText={uniqueRoomNames[0].toString()}
-                            onSelect={updateRoom}
-                            selected={allRooms[Number(room) - 1]}
-                            width={200}
-                        />
                     </View>
-                    <Divider width={'100%'} color={colors.labelTertiaryColor} />
-                    <View style={styles.dropdownContainer}>
-                        <Text
-                            style={{
-                                ...styles.leftText2,
-                                color: colors.text,
-                            }}
-                        >
-                            {`${t('pages.library.reservations.seat')}:`}
-                        </Text>
-
-                        <Dropdown
-                            data={seats}
-                            defaultValue={seats[0]}
-                            defaultText={seats[0]}
-                            onSelect={setSeat}
-                            selected={seat}
-                            width={200}
-                        />
-                    </View>
-                    <Divider width={'100%'} color={colors.labelTertiaryColor} />
-
-                    <View style={styles.confirmContainer}>
-                        <Pressable
-                            style={{
-                                backgroundColor: colors.labelColor,
-                                ...styles.bookButton,
-                            }}
-                            onPress={() => {
-                                setReserve(true)
-                                addReservation(
-                                    room.toString(),
-                                    {
-                                        from: item.from,
-                                        to: item.to,
-                                    },
-                                    seat
-                                )
-                                    .then(() => {
-                                        onToggle()
-                                    })
-                                    .catch(() => {})
-                                    .finally(() => {
-                                        setReserve(false)
-                                    })
-                            }}
-                            disabled={reserve}
-                        >
-                            {reserve ? (
-                                <ActivityIndicator color={'white'} />
-                            ) : (
-                                <Text
-                                    style={{
-                                        ...styles.leftText2,
-                                        color: getContrastColor(
-                                            colors.labelColor
-                                        ),
-                                    }}
-                                >
-                                    {t('pages.library.available.book')}
-                                </Text>
-                            )}
-                        </Pressable>
-                    </View>
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.footerText,
-                        }}
-                    >
-                        {t('pages.library.available.footer')}
-                    </Text>
-                </View>
-            </Collapsible>
+                </Collapsible>
+            )}
         </View>
     )
 }
