@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    LayoutAnimation,
     RefreshControl,
     StyleSheet,
     Text,
@@ -104,6 +105,7 @@ export default function newsSCreen(): JSX.Element {
             }),
             reservationSeat
         )
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         await loadData()
     }
 
@@ -113,6 +115,7 @@ export default function newsSCreen(): JSX.Element {
      */
     async function deleteReservation(id: string): Promise<void> {
         await API.removeLibraryReservation(id)
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         await loadData()
     }
 

@@ -244,7 +244,7 @@ const LibraryBookingRow = ({
                                 disabled={reserve}
                             >
                                 {reserve ? (
-                                    <ActivityIndicator color={'white'} />
+                                    <ActivityIndicator />
                                 ) : (
                                     <Text
                                         style={{
