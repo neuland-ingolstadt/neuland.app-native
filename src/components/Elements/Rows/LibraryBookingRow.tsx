@@ -58,9 +58,9 @@ const LibraryBookingRow = ({
     ]
     const { t } = useTranslation('common')
     const [collapsed, setCollapsed] = useState(true)
-    const [room, setRoom] = useState<string>(rooms[0][0])
+    const [room, setRoom] = useState<string>(rooms?.[0]?.[0] ?? '')
     const [seat, setSeat] = useState(
-        Array.isArray(rooms[0][1].seats) ? rooms[0][1].seats[0] : ''
+        Array.isArray(rooms?.[0]?.[1]?.seats) ? rooms[0][1].seats[0] : ''
     )
     const [seats, setSeats] = useState<string[]>([])
     const [reserve, setReserve] = useState(false)
@@ -70,9 +70,10 @@ const LibraryBookingRow = ({
     }, [isExpanded])
 
     useEffect(() => {
-        const seatsArray = Object.values(item.resources[room].seats).map(
-            (seat) => seat
-        )
+        const seatsArray =
+            item.resources[room]?.seats != null
+                ? Object.values(item.resources[room].seats).map((seat) => seat)
+                : []
         setSeats(seatsArray)
         setSeat(seatsArray[0])
     }, [room])
@@ -133,7 +134,7 @@ const LibraryBookingRow = ({
                 {
                     <>
                         <View style={styles.rightContainer}>
-                            {availSeats !== 0 && (
+                            {availSeats !== 0 ? (
                                 <PlatformIcon
                                     color={colors.primary}
                                     ios={{
@@ -146,6 +147,18 @@ const LibraryBookingRow = ({
                                         name: collapsed
                                             ? 'chevron-up'
                                             : 'chevron-down',
+                                        size: 26,
+                                    }}
+                                />
+                            ) : (
+                                <PlatformIcon
+                                    color={colors.primary}
+                                    ios={{
+                                        name: 'clock.badge.xmark',
+                                        size: 20,
+                                    }}
+                                    android={{
+                                        name: 'search-off',
                                         size: 26,
                                     }}
                                 />

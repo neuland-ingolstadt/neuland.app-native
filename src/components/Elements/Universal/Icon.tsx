@@ -158,6 +158,7 @@ const ANDROID_ICONS = {
     bell: <>&#xE7F4;</>,
     'bell-alert': <>&#xE7F5;</>,
     'person-slash': <>&#xE510;</>,
+    'search-off': <>&#xEA76;</>,
 }
 
 export type AndroidIconName = keyof typeof ANDROID_ICONS
