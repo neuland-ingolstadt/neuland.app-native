@@ -220,7 +220,7 @@ const LibraryBookingRow = ({
                         <View style={styles.confirmContainer}>
                             <Pressable
                                 style={{
-                                    backgroundColor: colors.labelColor,
+                                    backgroundColor: colors.text,
                                     ...styles.bookButton,
                                 }}
                                 onPress={() => {

@@ -2,7 +2,11 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
-import { FoodFilterContext, UserKindContext } from '@/components/provider'
+import {
+    FoodFilterContext,
+    RouteParamsContext,
+    UserKindContext,
+} from '@/components/provider'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
@@ -14,7 +18,7 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,11 +46,23 @@ export default function FoodDetail(): JSX.Element {
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
     const { userKind } = useContext<UserKindContextType>(UserKindContext)
+    const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {
         Mensa: 'https://www.werkswelt.de/?id=ingo',
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
+    }
+
+    interface Locations {
+        Mensa: string
+        Reimanns: string
+        [key: string]: string
+    }
+
+    const locations: Locations = {
+        Mensa: 'M001',
+        Reimanns: 'F001',
     }
 
     function itemAlert(item: string, itemType: 'allergen' | 'flag'): void {
@@ -221,6 +237,20 @@ export default function FoodDetail(): JSX.Element {
         ...(isNutritionAvailable ? nutritionSection : []),
     ]
 
+    const handlePress = (): void => {
+        const restaurant = meal?.restaurant
+        const location = locations[restaurant as keyof typeof locations]
+
+        if (restaurant != null && location !== '') {
+            router.navigate('(tabs)/map')
+            updateRouteParams(location)
+        }
+    }
+
+    const restaurant = meal?.restaurant
+    const locationExists =
+        restaurant !== undefined && locations[restaurant] !== undefined
+
     const aboutSection: FormListSections[] = [
         {
             header: t('details.formlist.about.title'),
@@ -228,6 +258,9 @@ export default function FoodDetail(): JSX.Element {
                 {
                     title: 'Restaurant',
                     value: meal?.restaurant,
+                    onPress: handlePress,
+                    iconColor: locationExists ? colors.primary : undefined,
+                    disabled: !locationExists,
                 },
                 {
                     title: t('details.formlist.about.category'),
