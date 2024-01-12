@@ -109,7 +109,7 @@ const ExamRow = ({
                         numberOfLines={2}
                     >
                         {`${t('pages.exam.details.room')}: ${
-                            event.room !== undefined ? event.room : 'n/a'
+                            event.room !== undefined ? event.rooms : 'n/a'
                         }`}
                     </Text>
                     <Text

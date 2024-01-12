@@ -95,7 +95,6 @@ const CalendarCard = (): JSX.Element => {
                                     ]}
                                     numberOfLines={2}
                                 >
-                                    {/* Always use .de or .en? */}
                                     {typeof event.name === 'object'
                                         ? event.name[
                                               i18n.language as LanguageKey

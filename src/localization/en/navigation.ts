@@ -48,7 +48,7 @@ export default {
             by: 'by {{name}}',
         },
         calendar: {
-            exam: 'exam {{name}}',
+            exam: 'Exam {{name}}',
             ends: 'ends ',
         },
     },
