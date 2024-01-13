@@ -82,7 +82,7 @@ const CLEventRow = ({
                                         <PlatformIcon
                                             color={colors.labelSecondaryColor}
                                             ios={{
-                                                name: 'ios-logo-instagram',
+                                                name: 'logo-instagram',
                                                 size: 18,
                                                 fallback: true,
                                             }}
