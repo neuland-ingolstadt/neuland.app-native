@@ -152,12 +152,12 @@
         "0.6": [
             {
                 "title": {
-                    "de": "Kalender Listenansicht",
-                    "en": "Calendar Agenda View"
+                    "de": "Kalender Neugestaltung",
+                    "en": "Calendar Redesign"
                 },
                 "description": {
-                    "de": "Der Kalender kann nun in einer Listenansicht angezeigt werden, um alle Termine auf einen Blick zu sehen.",
-                    "en": "The calendar can now be displayed in an agenda view to see all appointments at a glance."
+                    "de": "Der Kalender verfügt nun über eine neue Agenda und Tagesansicht. Außerdem können nun Benachrichtigungen für Vorlesungen aktiviert werden.",
+                    "en": "The calendar now has a new agenda and day view. In addition, notifications for lectures can now be activated."
                 },
                 "icon": {
                     "ios": "calendar",
@@ -166,16 +166,16 @@
             },
             {
                 "title": {
-                    "de": "Benachrichtigungen",
-                    "en": "Notifications"
+                    "de": "Mensa Verbesserungen",
+                    "en": "Food Improvements"
                 },
                 "description": {
-                    "de": "Aktiviere Benachrichtigungen, um über bevorstehende Vorlesungen informiert zu werden.",
-                    "en": "Enable notifications to be informed about upcoming lectures."
+                    "de": "Swipen, Varianten, bessere Allergenanzeige und mehr. Der Essen Tab wurde komplett überarbeitet.",
+                    "en": "Swiping, variants, better allergen display and more. The food tab has been completely revised."
                 },
                 "icon": {
-                    "ios": "bell.and.waves.left.and.right",
-                    "android": "bell"
+                    "ios": "fork.knife",
+                    "android": "restaurant"
                 }
             },
             {

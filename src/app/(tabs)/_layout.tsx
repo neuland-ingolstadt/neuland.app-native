@@ -34,10 +34,10 @@ export default function HomeLayout(): JSX.Element {
     const { analyticsAllowed, initializeAnalytics } =
         React.useContext(FlowContext)
     const { shownDashboardEntries } = React.useContext(DashboardContext)
-    const [run, setRun] = React.useState<boolean>(false)
     const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
         router.navigate('(flow)/onboarding')
+        void SplashScreen.hideAsync()
     }
 
     const isChangelogAvailable = Object.keys(changelog.version).some(
@@ -54,18 +54,18 @@ export default function HomeLayout(): JSX.Element {
         router.navigate('(flow)/whatsnew')
     }
 
-    // keep ssplash screen visible until the dashboard and the prior contests are loaded
     useEffect(() => {
-        if (run) return
         const prepare = async (): Promise<void> => {
             await SplashScreen.preventAutoHideAsync()
-            if (shownDashboardEntries !== null) {
+
+            if (shownDashboardEntries !== null && isOnboarded === true) {
+                console.log('Hiding splash screen')
                 await SplashScreen.hideAsync()
-                setRun(true)
             }
         }
         void prepare()
     }, [shownDashboardEntries, isOnboarded])
+
     const BlurTab = (): JSX.Element => (
         <BlurView
             tint={theme.dark ? 'dark' : 'light'}
@@ -148,6 +148,7 @@ export default function HomeLayout(): JSX.Element {
     }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
 
     useEffect(() => {
+        console.log('Analytics allowed', analyticsAllowed)
         if (isFirstRun) {
             setIsFirstRun(false)
             return
