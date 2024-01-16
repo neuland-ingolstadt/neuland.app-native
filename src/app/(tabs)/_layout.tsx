@@ -147,7 +147,6 @@ export default function HomeLayout(): JSX.Element {
     }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
 
     useEffect(() => {
-        console.log('Analytics allowed', analyticsAllowed)
         if (isFirstRun) {
             setIsFirstRun(false)
             return
