@@ -59,7 +59,6 @@ export default function HomeLayout(): JSX.Element {
             await SplashScreen.preventAutoHideAsync()
 
             if (shownDashboardEntries !== null && isOnboarded === true) {
-                console.log('Hiding splash screen')
                 await SplashScreen.hideAsync()
             }
         }
