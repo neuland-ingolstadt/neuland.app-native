@@ -174,7 +174,7 @@ export default function OnboardingScreen(): JSX.Element {
                                         })
                                     }
                                 >
-                                    {'By continuing you agree to our '}
+                                    {t('onboarding.links.agree1')}
                                 </Text>
                                 <Text
                                     style={[
@@ -201,7 +201,7 @@ export default function OnboardingScreen(): JSX.Element {
                                         })
                                     }
                                 >
-                                    {'.'}
+                                    {t('onboarding.links.agree2')}
                                 </Text>
                             </View>
                         </View>

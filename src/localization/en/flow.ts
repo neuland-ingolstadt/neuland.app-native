@@ -8,6 +8,8 @@ export default {
         links: {
             privacy: 'Privacy Policy',
             imprint: 'Imprint',
+            agree1: 'By continuing, you agree to our',
+            agree2: '.',
         },
         page1: {
             title: 'Welcome to\nNeuland Next',
