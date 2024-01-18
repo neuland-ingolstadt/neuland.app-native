@@ -7,6 +7,7 @@ import {
     FlowContext,
     UserKindContext,
 } from '@/components/provider'
+import { USER_EMPLOYEE, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -88,7 +89,7 @@ const LoginForm = (): JSX.Element => {
                 toggleAnalytics()
             }
             toggleOnboarded()
-            resetOrder()
+            resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
@@ -334,7 +335,7 @@ const LoginForm = (): JSX.Element => {
 
 const black = '#000000'
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    container: { alignItems: 'center', justifyContent: 'center' },
     loginContainer: {
         shadowColor: black,
         shadowOffset: {
@@ -354,8 +355,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 20,
-        marginTop: 20,
-        paddingTop: 15,
+        marginTop: 16,
         alignSelf: 'center',
     },
     loginButton: {
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 20,
         paddingVertical: 10,
-        marginTop: 20,
+        marginTop: 25,
         borderRadius: 5,
         alignItems: 'center',
     },
@@ -379,9 +379,7 @@ const styles = StyleSheet.create({
     guestContainer: {
         paddingTop: 3,
         alignItems: 'center',
-        paddingBottom: 10,
-
-        marginBottom: 15,
+        marginBottom: 16,
     },
     guestText: {
         fontSize: 14,

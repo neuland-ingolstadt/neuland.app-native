@@ -127,7 +127,7 @@ export const MealEntry = ({
                 ]}
                 onPreviewPress={() => {
                     router.push({
-                        pathname: '(food)/details',
+                        pathname: '(food)/meal',
                         params: { foodEntry: JSON.stringify(meal) },
                     })
                 }}
@@ -153,7 +153,7 @@ export const MealEntry = ({
                 <Pressable
                     onPress={() => {
                         router.push({
-                            pathname: '(food)/details',
+                            pathname: '(food)/meal',
                             params: { foodEntry: JSON.stringify(meal) },
                         })
                     }}

@@ -4,6 +4,7 @@ import LogoSVG from '@/components/Elements/Flow/svgs/logo'
 import SecureSVG from '@/components/Elements/Flow/svgs/secure'
 import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/components/colors'
+import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -128,12 +129,6 @@ export default function OnboardingScreen(): JSX.Element {
                             </Text>
 
                             <OnboardingBox title={t('onboarding.page2.text')} />
-
-                            <Text
-                                style={{
-                                    color: colors.background,
-                                }}
-                            />
                         </View>
                     ),
                 },
@@ -158,18 +153,6 @@ export default function OnboardingScreen(): JSX.Element {
                             </Text>
 
                             <OnboardingBox title={t('onboarding.page3.text')} />
-
-                            <Text
-                                style={[
-                                    styles.linkText,
-                                    { color: colors.primary },
-                                ]}
-                                onPress={() => {
-                                    void Linking.openURL(PRIVACY_URL)
-                                }}
-                            >
-                                {t('onboarding.links.privacy')}
-                            </Text>
                         </View>
                     ),
                 },
@@ -179,6 +162,48 @@ export default function OnboardingScreen(): JSX.Element {
                     title: (
                         <View style={styles.loginContainer}>
                             <LoginForm />
+
+                            <View style={styles.privacyRow}>
+                                <Text
+                                    style={
+                                        (styles.linkText3,
+                                        {
+                                            color: getContrastColor(
+                                                colors.primary
+                                            ),
+                                        })
+                                    }
+                                >
+                                    {'By continuing you agree to our '}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.linkPrivacy,
+                                        {
+                                            color: getContrastColor(
+                                                colors.primary
+                                            ),
+                                        },
+                                    ]}
+                                    onPress={() => {
+                                        void Linking.openURL(PRIVACY_URL)
+                                    }}
+                                >
+                                    {t('onboarding.links.privacy')}
+                                </Text>
+                                <Text
+                                    style={
+                                        (styles.linkText3,
+                                        {
+                                            color: getContrastColor(
+                                                colors.primary
+                                            ),
+                                        })
+                                    }
+                                >
+                                    {'.'}
+                                </Text>
+                            </View>
                         </View>
                     ),
                 },
@@ -215,13 +240,26 @@ const styles = StyleSheet.create({
     linkText: {
         fontSize: 14,
     },
+    linkText3: {
+        fontSize: 15,
+    },
+    linkPrivacy: {
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    privacyRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     logo: {
         height: 200,
         flexGrow: 1,
     },
     loginContainer: {
-        minHeight: 320,
-        minWidth: 320,
+        minHeight: 400,
+        minWidth: 350,
         marginBottom: 60,
+        gap: 80,
     },
 })

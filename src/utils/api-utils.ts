@@ -1,4 +1,5 @@
 import { createGuestSession } from '@/api/thi-session-handler'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { router } from 'expo-router'
 
 /**
@@ -16,11 +17,15 @@ export const trimErrorMsg = (str: string): string => {
 }
 
 export const performLogout = async (
-    toggleUser: (user: undefined) => void
+    toggleUser: (user: undefined) => void,
+    toggleAccentColor: (color: string) => void,
+    resetDashboard: (userKind: string) => void
 ): Promise<void> => {
     try {
         await createGuestSession()
         toggleUser(undefined)
+        toggleAccentColor('blue')
+        resetDashboard(USER_GUEST)
         router.navigate('(tabs)')
     } catch (e) {
         console.log(e)

@@ -121,7 +121,7 @@ export function formatNearDate(datetime: Date | string): string {
     } else if (date.isSame(tomorrow, 'day')) {
         return t('dates.tomorrow')
     } else {
-        return date.locale('de').format('dddd, D.M.')
+        return date.format('dddd, D.M.')
     }
 }
 

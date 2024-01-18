@@ -133,6 +133,11 @@ export default {
             'Füge Karten zu deinem Dashboard hinzu, um loszulegen.',
         reset: 'Reihenfolge zurücksetzen',
         footer: 'Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.',
+        unavailable: {
+            title: 'Nicht verfügbare Karten',
+            message:
+                'Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren.',
+        },
     },
     grades: {
         grade: 'Note',

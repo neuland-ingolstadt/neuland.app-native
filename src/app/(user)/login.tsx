@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     loginContainer: {
-        minHeight: 370,
-        paddingHorizontal: 30,
-        paddingBottom: 50,
+        minHeight: 320,
+        marginHorizontal: 30,
+        marginBottom: 60,
     },
 })

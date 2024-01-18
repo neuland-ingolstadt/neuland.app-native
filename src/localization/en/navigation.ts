@@ -43,6 +43,7 @@ export default {
             canisius: 'Canisius Konvikt',
             mensa: 'Mensa',
             food: 'Food',
+            login: 'Sign in',
         },
         events: {
             by: 'by {{name}}',
@@ -50,6 +51,15 @@ export default {
         calendar: {
             exam: 'Exam {{name}}',
             ends: 'ends ',
+        },
+        timetable: {
+            startingSoon: 'starts in {{mins}} mins',
+            ongoing: 'ends at {{time}}',
+            endingSoon: 'ends in {{mins}} mins',
+        },
+        login: {
+            title: 'Timetable, grades, rooms and more',
+            message: 'Sign in to unlock all features.',
         },
     },
     contextMenu: {

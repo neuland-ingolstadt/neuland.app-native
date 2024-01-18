@@ -125,7 +125,7 @@ export default function RootLayout(): JSX.Element {
                         }}
                     />
                     <Stack.Screen
-                        name="(food)/details"
+                        name="(food)/meal"
                         options={{
                             title: t('navigation.details'),
                             ...Platform.select({

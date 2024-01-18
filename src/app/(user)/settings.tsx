@@ -3,7 +3,11 @@ import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
@@ -30,7 +34,8 @@ import {
 export default function Settings(): JSX.Element {
     const { userKind, userFullName, updateUserFullName } =
         useContext<UserKindContextType>(UserKindContext)
-
+    const { toggleAccentColor } = useContext(ThemeContext)
+    const { resetOrder } = useContext(DashboardContext)
     const [userdata, setUserdata] = useState<PersDataDetails | null>(null)
     const [isLoaded, setIsLoaded] = useState(LoadingState.LOADING)
     const [errorMsg, setErrorMsg] = useState('Unknown error')
@@ -75,7 +80,11 @@ export default function Settings(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        performLogout(toggleUserKind).catch((e) => {
+                        performLogout(
+                            toggleUserKind,
+                            toggleAccentColor,
+                            resetOrder
+                        ).catch((e) => {
                             console.log(e)
                         })
                     },

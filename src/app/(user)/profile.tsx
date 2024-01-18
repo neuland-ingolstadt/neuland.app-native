@@ -3,7 +3,11 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
 import { performLogout } from '@/utils/api-utils'
@@ -13,7 +17,7 @@ import { useTheme } from '@react-navigation/native'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -33,7 +37,9 @@ export default function Profile(): JSX.Element {
     const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { toggleUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind } = useContext(UserKindContext)
+    const { toggleAccentColor } = useContext(ThemeContext)
+    const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
 
     const [errorMsg, setErrorMsg] = useState('')
@@ -119,7 +125,11 @@ export default function Profile(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        performLogout(toggleUserKind).catch((e) => {
+                        performLogout(
+                            toggleUserKind,
+                            toggleAccentColor,
+                            resetOrder
+                        ).catch((e) => {
                             console.log(e)
                         })
                     },
@@ -316,7 +326,7 @@ const styles = StyleSheet.create({
     logoutButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 14,
+        paddingVertical: 12,
         paddingHorizontal: 40,
         gap: 10,
     },

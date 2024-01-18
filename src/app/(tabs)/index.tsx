@@ -3,7 +3,11 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
-import { DashboardContext, UserKindContext } from '@/components/provider'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/provider'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { performLogout } from '@/utils/api-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
@@ -33,6 +37,8 @@ export default function Screen(): JSX.Element {
         useContext<UserKindContextType>(UserKindContext)
     const { t } = useTranslation(['navigation'])
     const { toggleUserKind } = useContext(UserKindContext)
+    const { toggleAccentColor } = useContext(ThemeContext)
+    const { resetOrder } = useContext(DashboardContext)
 
     const logoutAlert = (): void => {
         Alert.alert(
@@ -53,7 +59,11 @@ export default function Screen(): JSX.Element {
                     text: t('profile.logout.alert.confirm', { ns: 'settings' }),
                     style: 'destructive',
                     onPress: () => {
-                        performLogout(toggleUserKind).catch((e) => {
+                        performLogout(
+                            toggleUserKind,
+                            toggleAccentColor,
+                            resetOrder
+                        ).catch((e) => {
                             console.log(e)
                         })
                     },

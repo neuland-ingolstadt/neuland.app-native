@@ -129,6 +129,11 @@ export default {
         noShownDescription: 'Add some cards to your dashboard to get started.',
         noShownButton: 'Configure',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
+        unavailable: {
+            title: 'Unavailable cards',
+            message:
+                'To use all features of the app, you need to sign in. Tap to continue with your THI account.',
+        },
     },
     grades: {
         grade: 'Grade',
