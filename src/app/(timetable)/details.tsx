@@ -432,47 +432,51 @@ export default function TimetableDetails(): JSX.Element {
                     </DetailsRow>
 
                     <Separator />
-
-                    <DetailsRow>
-                        <DetailsSymbol>
-                            <PlatformIcon
-                                color={colors.labelColor}
-                                ios={{
-                                    name: 'mappin.and.ellipse',
-                                    size: 21,
-                                }}
-                                android={{
-                                    name: 'place',
-                                    size: 24,
-                                }}
-                            />
-                        </DetailsSymbol>
-
-                        <DetailsBody>
-                            <View style={styles.roomContainer}>
-                                {lecture.rooms.map((room, i) => (
-                                    <Pressable
-                                        key={i}
-                                        onPress={() => {
-                                            router.navigate('(tabs)/map')
-                                            updateRouteParams(room)
+                    {lecture.rooms.length > 0 ? (
+                        <>
+                            <DetailsRow>
+                                <DetailsSymbol>
+                                    <PlatformIcon
+                                        color={colors.labelColor}
+                                        ios={{
+                                            name: 'mappin.and.ellipse',
+                                            size: 21,
                                         }}
-                                    >
-                                        <Text
-                                            style={{
-                                                ...styles.text1,
-                                                color: colors.primary,
-                                            }}
-                                        >
-                                            {room}
-                                        </Text>
-                                    </Pressable>
-                                ))}
-                            </View>
-                        </DetailsBody>
-                    </DetailsRow>
+                                        android={{
+                                            name: 'place',
+                                            size: 24,
+                                        }}
+                                    />
+                                </DetailsSymbol>
 
-                    <Separator />
+                                <DetailsBody>
+                                    <View style={styles.roomContainer}>
+                                        {lecture.rooms.map((room, i) => (
+                                            <Pressable
+                                                key={i}
+                                                onPress={() => {
+                                                    router.navigate(
+                                                        '(tabs)/map'
+                                                    )
+                                                    updateRouteParams(room)
+                                                }}
+                                            >
+                                                <Text
+                                                    style={{
+                                                        ...styles.text1,
+                                                        color: colors.primary,
+                                                    }}
+                                                >
+                                                    {room}
+                                                </Text>
+                                            </Pressable>
+                                        ))}
+                                    </View>
+                                </DetailsBody>
+                            </DetailsRow>
+                            <Separator />
+                        </>
+                    ) : null}
 
                     <DetailsRow>
                         <DetailsSymbol>

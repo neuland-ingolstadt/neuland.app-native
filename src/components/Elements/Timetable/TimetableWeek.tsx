@@ -93,6 +93,7 @@ export default function TimetableWeek({
         const duration = event.endDate.getTime() - event.startDate.getTime()
         const isOverflowing = duration < 1000 * 60 * 60
         const nameParts = event.shortName.split('_').slice(1)
+
         const nameToDisplay =
             event.name.length > 20
                 ? nameParts.join('_') !== ''

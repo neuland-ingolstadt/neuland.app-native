@@ -1,5 +1,5 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
-import TimetableWeek from '@/components/Elements/Timetable/TimetableNew'
+import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'

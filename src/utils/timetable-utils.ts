@@ -48,7 +48,7 @@ export async function getFriendlyTimetable(
             const endDate = combineDateTime(lecture.date, lecture.bis)
 
             let rooms = [] as string[]
-            if (lecture.details.raum !== '') {
+            if (lecture.details.raum !== '' && lecture.details.raum !== null) {
                 rooms = lecture.details.raum
                     .split(', ')
                     .map((room) => room.trim().toUpperCase())
