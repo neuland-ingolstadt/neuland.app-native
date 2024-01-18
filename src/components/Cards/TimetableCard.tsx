@@ -87,7 +87,7 @@ const TimetableCard = (): JSX.Element => {
 
                         if (isSoon) {
                             text = t('cards.timetable.startingSoon', {
-                                mins: Math.ceil(
+                                count: Math.ceil(
                                     (x.startDate.getTime() -
                                         currentTime.getTime()) /
                                         1000 /
@@ -96,7 +96,7 @@ const TimetableCard = (): JSX.Element => {
                             })
                         } else if (isEndingSoon) {
                             text = t('cards.timetable.endingSoon', {
-                                mins: Math.ceil(
+                                count: Math.ceil(
                                     (x.endDate.getTime() -
                                         currentTime.getTime()) /
                                         1000 /

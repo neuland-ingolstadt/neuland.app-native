@@ -53,9 +53,11 @@ export default {
             ends: 'endet ',
         },
         timetable: {
-            startingSoon: 'startet in {{mins}} mins',
+            startingSoon: 'startet in {{count}} min',
+            startingSoon_plural: 'startet in {{count}} mins',
             ongoing: 'endet um {{time}}',
-            endingSoon: 'endet in {{mins}} mins',
+            endingSoon: 'endet in {{count}} min',
+            endingSoon_plural: 'endet in {{count}} mins',
         },
         login: {
             title: 'Stundenplan, Noten, Räume und mehr',

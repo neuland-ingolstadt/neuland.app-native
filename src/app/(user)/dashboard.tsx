@@ -239,6 +239,9 @@ export default function DashboardEdit(): JSX.Element {
                                 (item, index) => (
                                     <React.Fragment key={index}>
                                         <Pressable
+                                            disabled={defaultHiddenKeys.includes(
+                                                item.key
+                                            )}
                                             onPress={() => {
                                                 handleRestore(item)
                                             }}

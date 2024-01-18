@@ -53,9 +53,11 @@ export default {
             ends: 'ends ',
         },
         timetable: {
-            startingSoon: 'starts in {{mins}} mins',
+            startingSoon: 'starts in {{count}} min',
+            startingSoon_plural: 'starts in {{count}} mins',
             ongoing: 'ends at {{time}}',
-            endingSoon: 'ends in {{mins}} mins',
+            endingSoon: 'ends in {{count}} min',
+            endingSoon_plural: 'ends in {{count}} mins',
         },
         login: {
             title: 'Timetable, grades, rooms and more',

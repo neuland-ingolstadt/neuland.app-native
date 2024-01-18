@@ -52,6 +52,7 @@ export default function HomeLayout(): JSX.Element {
         flow.isOnboarded !== false
     ) {
         router.navigate('(flow)/whatsnew')
+        void SplashScreen.hideAsync()
     }
 
     useEffect(() => {
