@@ -144,7 +144,7 @@ const ANDROID_ICONS = {
     'chevron-down': <>&#xE313;</>,
     delete: <>&#xE872;</>,
     logout: <>&#xE9BA;</>,
-    'lock-open': <>&#xE898;</>,
+    'lock-open': <>&#xe925;</>,
     mail: <>&#xE0BE;</>,
     'insert-chart': <>&#xE24B;</>,
     return: <>&#xE5D9;</>,
@@ -159,6 +159,8 @@ const ANDROID_ICONS = {
     'bell-alert': <>&#xE7F5;</>,
     'person-slash': <>&#xE510;</>,
     'search-off': <>&#xEA76;</>,
+    lock: <>&#xE897;</>,
+    'chart-pie': <>&#xF190;</>,
 }
 
 export type AndroidIconName = keyof typeof ANDROID_ICONS

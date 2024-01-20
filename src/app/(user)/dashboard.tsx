@@ -278,7 +278,7 @@ export default function DashboardEdit(): JSX.Element {
                                                             size: 20,
                                                         }}
                                                         android={{
-                                                            name: 'circle-check',
+                                                            name: 'lock',
                                                             size: 24,
                                                         }}
                                                     />
