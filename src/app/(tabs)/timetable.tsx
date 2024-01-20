@@ -10,6 +10,7 @@ import {
 } from '@/components/provider'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FriendlyTimetableEntry } from '@/types/utils'
+import { isKnownError } from '@/utils/api-utils'
 import {
     generateKey,
     getFriendlyTimetable,
@@ -17,6 +18,7 @@ import {
 } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -59,6 +61,9 @@ export default function TimetableScreen(): JSX.Element {
             setLoadingState(LoadingState.LOADED)
             setErrorMsg('')
         } catch (e: any) {
+            if (!isKnownError(e)) {
+                captureException(e)
+            }
             setLoadingState(LoadingState.ERROR)
             setErrorMsg(e.message)
         }

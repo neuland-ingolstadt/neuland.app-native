@@ -4,9 +4,11 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
+import { isKnownError } from '@/utils/api-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native'
@@ -27,6 +29,9 @@ export default function Events(): JSX.Element {
             .catch((e) => {
                 setError(e)
                 setLoadingState(LoadingState.ERROR)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
             })
     }, [])
 

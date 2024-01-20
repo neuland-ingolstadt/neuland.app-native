@@ -7,10 +7,12 @@ import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { type Calendar } from '@/types/data'
 import { type Exam } from '@/types/utils'
+import { isKnownError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -60,6 +62,9 @@ export default function CalendarPage(): JSX.Element {
 
                 setError(e)
                 setLoadingState(LoadingState.ERROR)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
             })
     }, [userKind])
 

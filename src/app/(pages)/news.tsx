@@ -5,10 +5,12 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type ThiNews } from '@/types/thi-api'
+import { isKnownError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
@@ -46,7 +48,9 @@ export default function NewsScreen(): JSX.Element {
                 router.push('(user)/login')
             } else {
                 setErrorMsg(e.message)
-                console.error(e)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
             }
         }
     }

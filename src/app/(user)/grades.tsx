@@ -6,10 +6,12 @@ import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type Grade } from '@/types/thi-api'
 import { type GradeAverage } from '@/types/utils'
+import { isKnownError } from '@/utils/api-utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -58,7 +60,9 @@ export default function GradesSCreen(): JSX.Element {
                 setErrorMsg(t('grades.temporarilyUnavailable'))
             } else {
                 setErrorMsg(e.message)
-                console.error(e)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
             }
         }
     }
@@ -78,7 +82,6 @@ export default function GradesSCreen(): JSX.Element {
             }
         } catch (e: any) {
             setAverageLoadingState(LoadingState.ERROR)
-            console.error(e)
         }
     }
 

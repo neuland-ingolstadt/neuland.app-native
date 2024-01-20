@@ -31,3 +31,21 @@ export const performLogout = async (
         console.log(e)
     }
 }
+
+export const networkError = 'Network request failed'
+export const guestError = 'User is logged in as guest'
+export const permissionError = '"Service for user-group not defined" (-120)'
+
+/**
+ * Checks if the error message is a known error.
+ * @param error The error to be checked.
+ * @returns True if the error is known, false otherwise.
+ */
+export const isKnownError = (error: Error | string): boolean => {
+    const errorString = typeof error === 'string' ? error : error.message
+    return (
+        errorString === networkError ||
+        errorString === guestError ||
+        errorString === permissionError
+    )
+}

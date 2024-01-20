@@ -14,6 +14,7 @@ import { formatFriendlyDate } from '@/utils/date-utils'
 import { getFriendlyAvailableLibrarySeats } from '@/utils/library-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -73,7 +74,7 @@ export default function newsSCreen(): JSX.Element {
                 router.push('(user)/login')
             } else {
                 setErrorMsg(e.message)
-                console.error(e)
+                captureException(e)
             }
         }
     }

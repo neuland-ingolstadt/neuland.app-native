@@ -1,4 +1,5 @@
 import { type Colors } from '@/components/colors'
+import { guestError, networkError, permissionError } from '@/utils/api-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
@@ -36,10 +37,6 @@ export default function ErrorView({
 }): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const networkError = 'Network request failed'
-    const guestError = 'User is logged in as guest'
-    const permissionError = '"Service for user-group not defined" (-120)'
-
     const getIcon = (): string => {
         const ios = Platform.OS === 'ios'
         switch (title) {

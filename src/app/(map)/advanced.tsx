@@ -7,6 +7,7 @@ import Dropdown, {
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type AvailableRoom } from '@/types/utils'
+import { isKnownError } from '@/utils/api-utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     BUILDINGS,
@@ -17,6 +18,7 @@ import {
 } from '@/utils/room-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { useRouter } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -120,6 +122,9 @@ export default function AdvancedSearch(): JSX.Element {
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setError(e as Error)
+                if (!isKnownError(e as Error)) {
+                    captureException(e)
+                }
             }
         }
     }

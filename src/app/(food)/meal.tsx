@@ -1,5 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon } from '@/components/Elements/Universal/Icon'
+import { linkIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
 import {
@@ -271,7 +271,7 @@ export default function FoodDetail(): JSX.Element {
                 },
                 {
                     title: t('details.formlist.about.source'),
-                    icon: chevronIcon,
+                    icon: linkIcon,
                     onPress: () => {
                         if (meal?.restaurant !== null) {
                             const restaurant =

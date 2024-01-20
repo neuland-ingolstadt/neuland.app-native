@@ -45,7 +45,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 55,
+            versionCode: 60,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -84,6 +84,13 @@ module.exports = {
                         compileSdkVersion: 34,
                         targetSdkVersion: 34,
                     },
+                },
+            ],
+            [
+                '@sentry/react-native/expo',
+                {
+                    organization: 'neuland-ingolstadt',
+                    project: 'neuland-next',
                 },
             ],
         ],

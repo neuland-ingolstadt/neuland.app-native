@@ -10,10 +10,11 @@ import {
 } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
 import { type PersDataDetails } from '@/types/thi-api'
-import { performLogout } from '@/utils/api-utils'
+import { isKnownError, performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
@@ -58,7 +59,9 @@ export default function Profile(): JSX.Element {
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
             setErrorMsg(e.message)
-            console.log(e)
+            if (!isKnownError(e)) {
+                captureException(e)
+            }
         }
     }
 

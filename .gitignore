@@ -32,3 +32,4 @@
 .env.production.local
 eas.json
 
+ios/sentry.properties

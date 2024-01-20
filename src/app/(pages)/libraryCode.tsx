@@ -7,10 +7,12 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
+import { isKnownError } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import * as Brightness from 'expo-brightness'
 import { router, useFocusEffect } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -54,6 +56,9 @@ export default function LibraryCode(): JSX.Element {
             } else {
                 setLoadingState(LoadingState.ERROR)
                 setErrorMsg(e.message)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
             }
         }
     }

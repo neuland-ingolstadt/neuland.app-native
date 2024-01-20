@@ -5,10 +5,12 @@ import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
 import { type Food } from '@/types/neuland-api'
+import { isKnownError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
 import { LoadingState, getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
@@ -68,6 +70,9 @@ function FoodScreen(): JSX.Element {
             })
             .catch((e: Error) => {
                 setError(e)
+                if (!isKnownError(e)) {
+                    captureException(e)
+                }
                 setLoadingState(LoadingState.ERROR)
             })
     }

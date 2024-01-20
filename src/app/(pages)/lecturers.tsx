@@ -5,10 +5,12 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { type NormalizedLecturer } from '@/types/utils'
+import { isKnownError } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { useGlobalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -89,6 +91,9 @@ export default function LecturersCard(): JSX.Element {
                         router.push('(user)/login')
                     } else {
                         setError(e as Error)
+                        if (!isKnownError(e as Error)) {
+                            captureException(e)
+                        }
                     }
                     setLoadingState(LoadingState.ERROR)
                     return
