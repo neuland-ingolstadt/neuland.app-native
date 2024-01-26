@@ -17,11 +17,14 @@ export default function ExamDetail(): JSX.Element {
     const exam: Exam | undefined =
         examEntry != null ? JSON.parse(examEntry) : undefined
     const { t } = useTranslation('common')
-
     const typeSplit =
-        exam?.type !== undefined ? exam.type.split('-').slice(-1)[0].trim() : ''
-    const type = `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
-
+        exam?.type !== undefined
+            ? exam?.type.split('-').slice(-1)[0].trim()
+            : ''
+    const type =
+        typeSplit.length > 1
+            ? `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
+            : exam?.type
     const examAids = exam?.aids ?? []
 
     const sections: FormListSections[] = [
