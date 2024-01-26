@@ -4,27 +4,44 @@ import i18n from '@/localization/i18n'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Sentry from '@sentry/react-native'
 import { getLocales } from 'expo-localization'
-import { Stack, useRouter } from 'expo-router'
+import { Stack, useNavigationContainerRef, useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 
 const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
+const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
 
 Sentry.init({
     dsn: sentryDsn,
     enabled: !__DEV__,
+    integrations: [
+        new Sentry.ReactNativeTracing({
+            // Pass instrumentation to be used as `routingInstrumentation`
+            routingInstrumentation,
+            // ...
+        }),
+    ],
     beforeSend(event) {
         delete event.contexts?.app?.device_app_hash
         return event
     },
 })
 
-export default function RootLayout(): JSX.Element {
+function RootLayout(): JSX.Element {
     const router = useRouter()
     const theme = useColorScheme()
     const colorText = theme === 'dark' ? 'white' : 'black' // Use the theme value instead of dark
     const { t } = useTranslation('navigation')
+
+    const ref = useNavigationContainerRef()
+
+    React.useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        if (ref) {
+            routingInstrumentation.registerNavigationContainer(ref)
+        }
+    }, [ref])
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
@@ -429,3 +446,5 @@ export default function RootLayout(): JSX.Element {
         </>
     )
 }
+
+export default Sentry.wrap(RootLayout)
