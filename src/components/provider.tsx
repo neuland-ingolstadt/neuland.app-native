@@ -230,9 +230,10 @@ export default function Provider({
         }
 
         const entries: Record<string, string> = {}
-
         dashboard.shownDashboardEntries?.forEach((entry, index) => {
-            entries[entry.key] = `Position ${index + 1}`
+            if (entry !== undefined) {
+                entries[entry.key] = `Position ${index + 1}`
+            }
         })
 
         if (Object.keys(entries).length > 0) {
@@ -248,7 +249,9 @@ export default function Provider({
         const entries: Record<string, string> = {}
 
         dashboard.hiddenDashboardEntries?.forEach((entry) => {
-            entries[entry.key] = 'Card hidden'
+            if (entry !== undefined) {
+                entries[entry.key] = 'Card hidden'
+            }
         })
 
         if (Object.keys(entries).length > 0) {

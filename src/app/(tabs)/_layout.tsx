@@ -13,7 +13,7 @@ import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import * as NavigationBar from 'expo-navigation-bar'
-import { Tabs, useRouter } from 'expo-router'
+import { Tabs, usePathname, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -67,11 +67,23 @@ export default function HomeLayout(): JSX.Element {
         void prepare()
     }, [shownDashboardEntries, isOnboarded])
 
+    const pathname = usePathname()
+
     useEffect(() => {
+        const prepare = async (): Promise<void> => {
+            const tabsPaths = ['/', '/timetable', '/map', '/food']
+            const isTab = tabsPaths.includes(pathname)
+
+            await NavigationBar.setBackgroundColorAsync(
+                isTab ? colors.card : colors.background
+            )
+            await NavigationBar.setButtonStyleAsync(
+                theme.dark ? 'light' : 'dark'
+            )
+        }
         if (Platform.OS !== 'android') return
-        void NavigationBar.setBackgroundColorAsync(colors.card)
-        void NavigationBar.setButtonStyleAsync(theme.dark ? 'light' : 'dark')
-    }, [theme.dark])
+        void prepare()
+    }, [theme.dark, pathname])
 
     const BlurTab = (): JSX.Element => (
         <BlurView

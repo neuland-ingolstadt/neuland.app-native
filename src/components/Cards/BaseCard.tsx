@@ -113,7 +113,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 size: 16,
                             }}
                             android={{
-                                name: 'chevron-right',
+                                name: 'chevron_right',
                                 size: 26,
                             }}
                         />

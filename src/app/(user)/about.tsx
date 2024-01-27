@@ -41,7 +41,7 @@ export default function About(): JSX.Element {
                     title: t('about.formlist.legal.privacy'),
                     icon: {
                         ios: 'hand.raised',
-                        android: 'lock-open',
+                        android: 'lock_open',
                     },
                     onPress: async () => await Linking.openURL(PRIVACY_URL),
                 },

@@ -141,7 +141,7 @@ export default function Settings(): JSX.Element {
                     title: 'Dashboard',
                     icon: {
                         ios: 'rectangle.stack',
-                        android: 'dashboard-customize',
+                        android: 'dashboard_customize',
                     },
 
                     onPress: () => {
@@ -211,7 +211,7 @@ export default function Settings(): JSX.Element {
                     title: t('menu.formlist.legal.about'),
                     icon: {
                         ios: 'chevron.forward',
-                        android: 'chevron-right',
+                        android: 'chevron_right',
                     },
                     onPress: () => {
                         router.push('(user)/about')
@@ -340,7 +340,7 @@ export default function Settings(): JSX.Element {
                                                     size: 26,
                                                 }}
                                                 android={{
-                                                    name: 'account-circle',
+                                                    name: 'account_circle',
                                                     size: 32,
                                                 }}
                                             />
@@ -394,7 +394,7 @@ export default function Settings(): JSX.Element {
                                         size: 16,
                                     }}
                                     android={{
-                                        name: 'chevron-right',
+                                        name: 'chevron_right',
                                         size: 26,
                                     }}
                                 />

@@ -233,7 +233,7 @@ export default function Screen(): JSX.Element {
                                             size: 22,
                                         }}
                                         android={{
-                                            name: 'account-circle',
+                                            name: 'account_circle',
                                             size: 26,
                                         }}
                                     />
@@ -281,7 +281,7 @@ function HomeScreen(): JSX.Element {
                 icon={{
                     ios: 'rainbow',
                     multiColor: true,
-                    android: 'dashboard-customize',
+                    android: 'dashboard_customize',
                 }}
                 buttonText={t('dashboard.noShownButton')}
                 onButtonPress={() => {

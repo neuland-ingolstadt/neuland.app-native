@@ -145,8 +145,8 @@ const LibraryBookingRow = ({
                                     }}
                                     android={{
                                         name: collapsed
-                                            ? 'chevron-up'
-                                            : 'chevron-down',
+                                            ? 'expand_less'
+                                            : 'expand_more',
                                         size: 26,
                                     }}
                                 />
@@ -158,7 +158,7 @@ const LibraryBookingRow = ({
                                         size: 20,
                                     }}
                                     android={{
-                                        name: 'search-off',
+                                        name: 'search_off',
                                         size: 26,
                                     }}
                                 />

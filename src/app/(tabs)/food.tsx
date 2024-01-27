@@ -380,6 +380,55 @@ export default function Screen(): JSX.Element {
         setIsPageOpen(true)
     }, [])
 
+    const HeaderRight = (): JSX.Element => {
+        return (
+            <View style={styles.headerIcons}>
+                {Platform.OS !== 'web' && (
+                    <Pressable
+                        onPress={() => {
+                            router.push('(food)/card')
+                        }}
+                        hitSlop={10}
+                    >
+                        <View>
+                            <PlatformIcon
+                                color={colors.text}
+                                ios={{
+                                    name: 'wave.3.left',
+                                    size: 22,
+                                }}
+                                android={{
+                                    name: 'local_atm',
+                                    variant: 'outlined',
+                                    size: 24,
+                                }}
+                            />
+                        </View>
+                    </Pressable>
+                )}
+                <Pressable
+                    onPress={() => {
+                        router.push('(food)/preferences')
+                    }}
+                    hitSlop={10}
+                >
+                    <View>
+                        <PlatformIcon
+                            color={colors.text}
+                            ios={{
+                                name: 'line.3.horizontal.decrease',
+                                size: 22,
+                            }}
+                            android={{
+                                name: 'filter_list',
+                                size: 24,
+                            }}
+                        />
+                    </View>
+                </Pressable>
+            </View>
+        )
+    }
     return (
         <>
             <Head>
@@ -394,34 +443,14 @@ export default function Screen(): JSX.Element {
                 titleKey={'navigation.food'}
                 component={isPageOpen ? FoodScreen : () => <></>}
                 largeTitle={false}
-                headerRightElement={() => (
-                    <Pressable
-                        onPress={() => {
-                            router.push('(food)/preferences')
-                        }}
-                        hitSlop={10}
-                    >
-                        <View>
-                            <PlatformIcon
-                                color={colors.text}
-                                ios={{
-                                    name: 'line.3.horizontal.decrease',
-                                    size: 22,
-                                }}
-                                android={{
-                                    name: 'filter',
-                                    size: 24,
-                                }}
-                            />
-                        </View>
-                    </Pressable>
-                )}
+                headerRightElement={() => <HeaderRight />}
             />
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    headerIcons: { flexDirection: 'row', gap: 14 },
     page: {
         flex: 1,
     },

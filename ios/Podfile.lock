@@ -1022,6 +1022,8 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
+  - react-native-nfc-manager (3.14.12):
+    - React-Core
   - react-native-pager-view (6.2.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1231,7 +1233,7 @@ PODS:
     - Sentry/HybridSDK (= 8.17.1)
   - RNSVG (14.1.0):
     - React-Core
-  - RNVectorIcons (10.0.2):
+  - RNVectorIcons (10.0.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1309,6 +1311,7 @@ DEPENDENCIES:
   - react-native-change-icon (from `../node_modules/react-native-change-icon`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
+  - react-native-nfc-manager (from `../node_modules/react-native-nfc-manager`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-view-shot (from `../node_modules/react-native-view-shot`)
@@ -1480,6 +1483,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-drag-drop-ios:
     :path: "../node_modules/react-native-drag-drop-ios"
+  react-native-nfc-manager:
+    :path: "../node_modules/react-native-nfc-manager"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -1621,6 +1626,7 @@ SPEC CHECKSUMS:
   react-native-change-icon: 5181769d44720387190abf831e2451dc31cd64ed
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
+  react-native-nfc-manager: 2a87d561c4fa832e6597a5f2f7c197808c019ab8
   react-native-pager-view: d81ab2060b9caf57ca8c3a0d57467ff407cdb825
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
@@ -1655,7 +1661,7 @@ SPEC CHECKSUMS:
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNSentry: ed42b1443bef1fec1fc9273b5193a79b0cab1a01
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
-  RNVectorIcons: 8cabd5809519015ed2c1cdb4ec83d563296bd5cc
+  RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
   Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
   SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

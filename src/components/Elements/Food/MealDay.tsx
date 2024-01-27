@@ -78,7 +78,7 @@ const MealCategory = ({
                                 size: 12,
                             }}
                             android={{
-                                name: collapsed ? 'chevron-down' : 'chevron-up',
+                                name: collapsed ? 'expand_more' : 'expand_less',
                                 size: 20,
                             }}
                             style={styles.toggleIcon}

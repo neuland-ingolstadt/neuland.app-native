@@ -43,6 +43,7 @@
 		7DBA907ACA72091B5EC120BB /* Pods-NeulandNext.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.debug.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.debug.xcconfig"; sourceTree = "<group>"; };
 		A82CD3424D1F8657D0C460B0 /* libPods-NeulandNext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NeulandNext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = NeulandNext/SplashScreen.storyboard; sourceTree = "<group>"; };
+		B7E1DF402B64ACF4002ACB16 /* NeulandNextRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NeulandNextRelease.entitlements; path = NeulandNext/NeulandNextRelease.entitlements; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-NeulandNext/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
@@ -63,6 +64,7 @@
 		13B07FAE1A68108700A75B9A /* NeulandNext */ = {
 			isa = PBXGroup;
 			children = (
+				B7E1DF402B64ACF4002ACB16 /* NeulandNextRelease.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -436,7 +438,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
+				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNextRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FSXB76X6V2;
 				INFOPLIST_FILE = NeulandNext/Info.plist;

@@ -193,7 +193,7 @@ export default function TimetableList({
                                             size: 12,
                                         }}
                                         android={{
-                                            name: 'bell',
+                                            name: 'notifications',
                                             size: 14,
                                         }}
                                     />

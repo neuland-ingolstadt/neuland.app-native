@@ -52,8 +52,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                                 defaultValue: room.type,
                                 ns: 'api',
                                 fallbackLng: 'de',
-                            })}
-                            (${room.capacity} ${t(
+                            })} (${room.capacity} ${t(
                                 'pages.rooms.options.seats'
                             )})`}
                         </Text>
@@ -95,9 +94,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15,
-        // technically 15, but balance feels better with 20
-        paddingRight: 20,
+        paddingHorizontal: 16,
         paddingVertical: 8,
         gap: 15,
     },

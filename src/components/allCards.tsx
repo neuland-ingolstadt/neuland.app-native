@@ -44,21 +44,6 @@ export const AllCards: Card[] = [
         card: () => <EventsCard />,
     },
     {
-        key: 'rooms',
-        removable: true,
-        default: [],
-        card: () => (
-            <BaseCard
-                title="rooms"
-                iosIcon="rectangle.grid.2x2.fill"
-                androidIcon="list"
-                onPress={() => {
-                    router.push('rooms')
-                }}
-            />
-        ),
-    },
-    {
         key: 'library',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],

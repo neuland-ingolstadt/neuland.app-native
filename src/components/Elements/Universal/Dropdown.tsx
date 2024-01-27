@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         height: 32,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 10,
     },
     buttonText: {
         fontSize: 15,

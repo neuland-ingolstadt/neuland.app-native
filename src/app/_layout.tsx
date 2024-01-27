@@ -124,6 +124,13 @@ function RootLayout(): JSX.Element {
                                 animation: 'slide_from_right',
                             }}
                         />
+                        <Stack.Screen
+                            name="(food)/card"
+                            options={{
+                                title: t('navigation.card'),
+                                animation: 'slide_from_right',
+                            }}
+                        />
 
                         <Stack.Screen
                             name="(food)/flags"
@@ -378,7 +385,7 @@ function RootLayout(): JSX.Element {
                                                 size: 22,
                                             }}
                                             android={{
-                                                name: 'barcode-scanner',
+                                                name: 'barcode_scanner',
                                                 size: 24,
                                             }}
                                         />

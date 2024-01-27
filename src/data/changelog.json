@@ -13,7 +13,7 @@
                 },
                 "icon": {
                     "ios": "rectangle.3.group",
-                    "android": "dashboard-customize"
+                    "android": "dashboard_customize"
                 }
             },
             {
@@ -189,7 +189,7 @@
                 },
                 "icon": {
                     "ios": "lock.shield",
-                    "android": "chart-pie"
+                    "android": "chart_pie"
                 }
             }
         ]

@@ -196,7 +196,7 @@ export default function Theme(): JSX.Element {
                                     size: 20,
                                 }}
                                 android={{
-                                    name: 'chevron-right',
+                                    name: 'chevron_right',
                                     size: 26,
                                 }}
                             />

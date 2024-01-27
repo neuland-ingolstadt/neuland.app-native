@@ -312,7 +312,7 @@ export default function TimetableDetails(): JSX.Element {
                                     size: 21,
                                 }}
                                 android={{
-                                    name: 'calendar-month',
+                                    name: 'calendar_month',
                                     size: 24,
                                 }}
                             />
@@ -350,7 +350,7 @@ export default function TimetableDetails(): JSX.Element {
                                                 size: 12,
                                             }}
                                             android={{
-                                                name: 'chevron-right',
+                                                name: 'chevron_right',
                                                 size: 16,
                                             }}
                                         />
@@ -402,12 +402,13 @@ export default function TimetableDetails(): JSX.Element {
                                             android={{
                                                 name:
                                                     notification != null
-                                                        ? 'bell-active'
-                                                        : 'bell',
+                                                        ? 'notifications_active'
+                                                        : 'notifications',
                                                 size:
                                                     minsBefore != null
                                                         ? 20
                                                         : 25,
+                                                variant: 'outlined',
                                             }}
                                         />
                                     ) : (

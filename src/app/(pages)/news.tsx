@@ -131,7 +131,7 @@ export default function NewsScreen(): JSX.Element {
                                             size: 15,
                                         }}
                                         android={{
-                                            name: 'chevron-right',
+                                            name: 'chevron_right',
                                             size: 16,
                                         }}
                                     />

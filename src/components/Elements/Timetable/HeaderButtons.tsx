@@ -32,7 +32,10 @@ export function HeaderLeft(): JSX.Element {
                     size: 22,
                 }}
                 android={{
-                    name: timetableMode === 'list' ? 'calendar-month' : 'list',
+                    name:
+                        timetableMode === 'list'
+                            ? 'calendar_month'
+                            : 'event_note',
                     size: 24,
                 }}
             />
@@ -56,7 +59,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
                     size: 22,
                 }}
                 android={{
-                    name: 'return',
+                    name: 'keyboard_return',
                     size: 24,
                 }}
             />

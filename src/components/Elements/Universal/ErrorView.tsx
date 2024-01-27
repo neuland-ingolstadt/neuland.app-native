@@ -41,15 +41,15 @@ export default function ErrorView({
         const ios = Platform.OS === 'ios'
         switch (title) {
             case networkError:
-                return ios ? 'wifi.slash' : 'wifi-off'
+                return ios ? 'wifi.slash' : 'wifi_off'
             case guestError:
                 return ios
                     ? 'person.crop.circle.badge.questionmark'
-                    : 'person-cancel'
+                    : 'person_cancel'
             case permissionError:
                 return ios
                     ? 'person.crop.circle.badge.exclamationmark'
-                    : 'person-slash'
+                    : 'person_slash'
             default:
                 return icon !== undefined
                     ? ios

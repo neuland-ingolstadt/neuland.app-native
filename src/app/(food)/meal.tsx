@@ -200,7 +200,7 @@ export default function FoodDetail(): JSX.Element {
                         ] ?? flag,
                     icon: preferencesSelection.includes(flag)
                         ? {
-                              android: 'check-circle',
+                              android: 'check_circle',
                               ios: 'checkmark.seal',
                           }
                         : undefined,

@@ -128,7 +128,8 @@ export const MapScreen = (): JSX.Element => {
                             size: 22,
                         }}
                         android={{
-                            name: 'manage-search',
+                            name: 'overview',
+                            variant: 'outlined',
                             size: 24,
                         }}
                     />
@@ -165,7 +166,7 @@ export const MapScreen = (): JSX.Element => {
                                     size: 22,
                                 }}
                                 android={{
-                                    name: 'manage-search',
+                                    name: 'view_timeline',
                                     size: 24,
                                 }}
                             />

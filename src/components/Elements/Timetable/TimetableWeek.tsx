@@ -165,7 +165,7 @@ export default function TimetableWeek({
                                         size: 10,
                                     }}
                                     android={{
-                                        name: 'bell',
+                                        name: 'notifications',
                                         size: 12,
                                     }}
                                 />
