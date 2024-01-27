@@ -41,7 +41,7 @@
         "licenseUrl": "https://github.com/react-native-community/datetimepicker/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@sentry/react-native@5.16.0": {
+    "@sentry/react-native@5.17.0": {
         "licenses": "MIT",
         "repository": "https://github.com/getsentry/sentry-react-native",
         "licenseUrl": "https://github.com/getsentry/sentry-react-native/raw/master/LICENSE.md",
@@ -89,7 +89,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-dev-client@3.3.6": {
+    "expo-dev-client@3.3.7": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -107,7 +107,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-linear-gradient@12.7.0": {
+    "expo-linear-gradient@12.7.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -131,13 +131,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-notifications@0.27.3": {
+    "expo-notifications@0.27.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-router@3.4.3": {
+    "expo-router@3.4.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -155,7 +155,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@0.26.3": {
+    "expo-splash-screen@0.26.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -173,13 +173,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-task-manager@11.7.0": {
+    "expo-task-manager@11.7.2": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@50.0.1": {
+    "expo@50.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -275,6 +275,12 @@
         "licenseUrl": "https://github.com/react-native-linear-gradient/react-native-linear-gradient/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-nfc-manager@3.14.12": {
+        "licenses": "MIT",
+        "repository": "https://github.com/whitedogg13/react-native-nfc-manager",
+        "licenseUrl": "https://github.com/whitedogg13/react-native-nfc-manager/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native-onboarding-swiper@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jfilter/react-native-onboarding-swiper",
@@ -287,7 +293,7 @@
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-reanimated@3.6.1": {
+    "react-native-reanimated@3.6.2": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
         "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
@@ -329,7 +335,7 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-vector-icons@10.0.2": {
+    "react-native-vector-icons@10.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/oblador/react-native-vector-icons",
         "licenseUrl": "https://github.com/oblador/react-native-vector-icons/raw/master/LICENSE",

@@ -12,6 +12,7 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
+import * as NavigationBar from 'expo-navigation-bar'
 import { Tabs, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
@@ -65,6 +66,12 @@ export default function HomeLayout(): JSX.Element {
         }
         void prepare()
     }, [shownDashboardEntries, isOnboarded])
+
+    useEffect(() => {
+        if (Platform.OS !== 'android') return
+        void NavigationBar.setBackgroundColorAsync(colors.card)
+        void NavigationBar.setButtonStyleAsync(theme.dark ? 'light' : 'dark')
+    }, [theme.dark])
 
     const BlurTab = (): JSX.Element => (
         <BlurView
@@ -215,7 +222,7 @@ export default function HomeLayout(): JSX.Element {
                                     size: size - 2,
                                 }}
                                 android={{
-                                    name: 'calendar-month',
+                                    name: 'calendar_month',
                                     size,
                                 }}
                             />
