@@ -2,6 +2,7 @@ import { useAppIcon } from './appIcon'
 import { useDashboard } from './dashboard'
 import { useFlow } from './flow'
 import { useFoodFilter } from './foodFilter'
+import { useIdCard } from './idCard'
 import { useNotifications } from './notifications'
 import { useRouteParams } from './routing'
 import { useTheme } from './theme'
@@ -18,4 +19,5 @@ export {
     useAppIcon,
     useTimetable,
     useNotifications,
+    useIdCard,
 }

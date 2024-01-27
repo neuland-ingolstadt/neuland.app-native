@@ -383,7 +383,7 @@ export default function Screen(): JSX.Element {
     const HeaderRight = (): JSX.Element => {
         return (
             <View style={styles.headerIcons}>
-                {Platform.OS !== 'web' && (
+                {Platform.OS === 'android' && (
                     <Pressable
                         onPress={() => {
                             router.push('(food)/card')

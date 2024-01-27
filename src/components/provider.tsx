@@ -1,5 +1,6 @@
 import { type AppIconHook } from '@/hooks/contexts/appIcon'
 import { type FlowHook } from '@/hooks/contexts/flow'
+import { type IdCard } from '@/hooks/contexts/idCard'
 import {
     DEFAULT_TIMETABLE_MODE,
     type TimetableHook,
@@ -23,6 +24,7 @@ import {
     useDashboard,
     useFlow,
     useFoodFilter,
+    useIdCard,
     useRouteParams,
     useTheme,
     useUserKind,
@@ -120,6 +122,12 @@ export const NotificationContext = createContext<Notifications>({
     removeNotification: () => {},
 })
 
+export const IdCardContext = createContext<IdCard>({
+    mensaBalance: 0,
+    idLastUpdated: null,
+    updateMensaBalance: () => {},
+})
+
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -141,6 +149,7 @@ export default function Provider({
     const pathname = usePathname()
     const timetableHook = useTimetable()
     const notifications = useNotifications()
+    const idCard = useIdCard()
 
     /**
      * Returns the primary color for a given color scheme.
@@ -300,17 +309,21 @@ export default function Provider({
                                         <FoodFilterContext.Provider
                                             value={foodFilter}
                                         >
-                                            <DashboardContext.Provider
-                                                value={dashboard}
+                                            <IdCardContext.Provider
+                                                value={idCard}
                                             >
-                                                <RouteParamsContext.Provider
-                                                    value={routeParams}
+                                                <DashboardContext.Provider
+                                                    value={dashboard}
                                                 >
-                                                    <RootSiblingParent>
-                                                        {children}
-                                                    </RootSiblingParent>
-                                                </RouteParamsContext.Provider>
-                                            </DashboardContext.Provider>
+                                                    <RouteParamsContext.Provider
+                                                        value={routeParams}
+                                                    >
+                                                        <RootSiblingParent>
+                                                            {children}
+                                                        </RootSiblingParent>
+                                                    </RouteParamsContext.Provider>
+                                                </DashboardContext.Provider>
+                                            </IdCardContext.Provider>
                                         </FoodFilterContext.Provider>
                                     </UserKindContext.Provider>
                                 </FlowContext.Provider>
