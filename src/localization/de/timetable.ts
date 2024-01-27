@@ -27,6 +27,11 @@ export default {
                 'Um deinen Stundenplan anzuzeigen, musst du ihn über die THI Stundenplan Webseite konfigurieren.',
             button: 'Jetzt konfigurieren',
         },
+        filtered: {
+            title: 'Keine Vorlesungen gefunden',
+            message:
+                'Es scheint keine weiteren Vorlesungen in diesem Semester zu geben.',
+        },
     },
     notificatons: {
         title: 'Benachrichtigungen',

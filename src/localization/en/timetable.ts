@@ -27,6 +27,10 @@ export default {
                 'To display your timetable, you have to configure it using the THI timetable website.',
             button: 'Configure now',
         },
+        filtered: {
+            title: 'No future lectures found',
+            message: 'Looks like there are no more lectures this semester.',
+        },
     },
     notificatons: {
         title: 'Notifications',

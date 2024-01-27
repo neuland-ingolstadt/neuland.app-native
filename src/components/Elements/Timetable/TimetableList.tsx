@@ -15,6 +15,7 @@ import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useContext, useLayoutEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
     Pressable,
     SafeAreaView,
@@ -27,6 +28,7 @@ import {
 // @ts-expect-error no types
 import DragDropView from '../Exclusive/DragView'
 import Divider from '../Universal/Divider'
+import ErrorView from '../Universal/ErrorView'
 import PlatformIcon from '../Universal/Icon'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
@@ -52,6 +54,8 @@ export default function TimetableList({
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
     const { timetableNotifications } = useContext(NotificationContext)
     const { updateLecture } = useContext(RouteParamsContext)
+    const { t } = useTranslation('timetable')
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -228,19 +232,30 @@ export default function TimetableList({
 
     return (
         <SafeAreaView style={styles.pageView}>
-            <SectionList
-                ref={listRef}
-                sections={filteredTimetable}
-                renderItem={renderItem}
-                renderSectionHeader={({ section: { title } }) =>
-                    renderSectionHeader(title)
-                }
-                renderSectionFooter={renderSectionFooter}
-                ItemSeparatorComponent={renderItemSeparator}
-                contentContainerStyle={styles.container}
-                stickySectionHeadersEnabled={true}
-                initialNumToRender={20}
-            />
+            {filteredTimetable.length === 0 ? (
+                <ErrorView
+                    title={t('error.filtered.title')}
+                    message={t('error.filtered.message')}
+                    icon={{
+                        ios: 'fireworks',
+                        android: 'celebration',
+                    }}
+                />
+            ) : (
+                <SectionList
+                    ref={listRef}
+                    sections={filteredTimetable}
+                    renderItem={renderItem}
+                    renderSectionHeader={({ section: { title } }) =>
+                        renderSectionHeader(title)
+                    }
+                    renderSectionFooter={renderSectionFooter}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    contentContainerStyle={styles.container}
+                    stickySectionHeadersEnabled={true}
+                    initialNumToRender={20}
+                />
+            )}
         </SafeAreaView>
     )
 }

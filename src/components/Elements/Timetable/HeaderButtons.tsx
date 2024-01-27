@@ -3,7 +3,7 @@ import { TimetableContext } from '@/components/provider'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
-import { TouchableOpacity } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -12,7 +12,7 @@ export function HeaderLeft(): JSX.Element {
     const { timetableMode, setTimetableMode } = useContext(TimetableContext)
 
     return (
-        <TouchableOpacity
+        <Pressable
             onPress={() => {
                 const mode = timetableMode === 'list' ? '3days' : 'list'
                 setTimetableMode(mode)
@@ -21,6 +21,7 @@ export function HeaderLeft(): JSX.Element {
                 })
             }}
             hitSlop={10}
+            style={styles.headerButton}
         >
             <PlatformIcon
                 color={colors.text}
@@ -39,7 +40,7 @@ export function HeaderLeft(): JSX.Element {
                     size: 24,
                 }}
             />
-        </TouchableOpacity>
+        </Pressable>
     )
 }
 
@@ -51,7 +52,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
     return (
-        <TouchableOpacity onPress={setToday} hitSlop={10}>
+        <Pressable onPress={setToday} hitSlop={10}>
             <PlatformIcon
                 color={colors.text}
                 ios={{
@@ -63,6 +64,12 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
                     size: 24,
                 }}
             />
-        </TouchableOpacity>
+        </Pressable>
     )
 }
+
+const styles = StyleSheet.create({
+    headerButton: {
+        marginRight: 14,
+    },
+})
