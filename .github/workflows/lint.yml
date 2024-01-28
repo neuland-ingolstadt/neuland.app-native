@@ -10,7 +10,7 @@ jobs:
               with:
                   node-version: 18
                   cache: yarn
-                  cache-dependency-path: './yarn.lock'
+                  cache-dependency-path: './bun.lockb'
             - name: Install modules
               run: yarn install
             - name: Run ESLint
