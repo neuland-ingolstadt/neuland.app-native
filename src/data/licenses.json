@@ -11,7 +11,7 @@
         "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@babel/runtime@7.23.6": {
+    "@babel/runtime@7.23.9": {
         "licenses": "MIT",
         "repository": "https://github.com/babel/babel",
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
@@ -35,7 +35,7 @@
         "licenseUrl": "https://github.com/react-native-async-storage/async-storage/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-community/datetimepicker@7.6.1": {
+    "@react-native-community/datetimepicker@7.6.2": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/datetimepicker",
         "licenseUrl": "https://github.com/react-native-community/datetimepicker/raw/master/LICENSE.md",
@@ -191,7 +191,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "i18next@23.7.16": {
+    "i18next@23.8.0": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -203,7 +203,7 @@
         "licenseUrl": "https://github.com/facebook/metro",
         "parents": "neuland"
     },
-    "moment@2.29.4": {
+    "moment@2.30.1": {
         "licenses": "MIT",
         "repository": "https://github.com/moment/moment",
         "licenseUrl": "https://github.com/moment/moment/raw/master/LICENSE",
@@ -215,16 +215,10 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@14.0.0": {
+    "react-i18next@14.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-barcode-builder@2.0.0": {
-        "licenses": "Apache 2.0",
-        "repository": "https://github.com/wonsikin/react-native-barcode-builder",
-        "licenseUrl": "https://github.com/wonsikin/react-native-barcode-builder/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-change-icon@5.0.0": {
@@ -269,7 +263,7 @@
         "licenseUrl": "https://github.com/idearockers/react-native-dynamic-app-icon/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-gesture-handler@2.14.0": {
+    "react-native-gesture-handler@2.14.1": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-gesture-handler",
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",

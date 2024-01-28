@@ -154,7 +154,11 @@ export const MealEntry = ({
                     onPress={() => {
                         router.push({
                             pathname: '(food)/meal',
-                            params: { foodEntry: JSON.stringify(meal) },
+                            params: {
+                                foodEntry: encodeURIComponent(
+                                    JSON.stringify(meal)
+                                ),
+                            },
                         })
                     }}
                     delayLongPress={300}

@@ -81,7 +81,7 @@ const ExamRow = ({
     const navigateToPage = (): void => {
         router.push({
             pathname: '(pages)/exam',
-            params: { examEntry: JSON.stringify(event) },
+            params: { examEntry: encodeURIComponent(JSON.stringify(event)) },
         })
     }
     const { t } = useTranslation('common')

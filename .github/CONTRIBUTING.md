@@ -10,13 +10,13 @@ To contribute, please follow these guidelines:
 2. Install the required dependencies:
 
     - [Node.js 18 LTS](https://nodejs.org/en/) or higher
-    - [Yarn 4](https://yarnpkg.com/getting-started/install)
+    - [Bun](https://bun.sh)
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
 3. Install project dependencies by running the following command in the project directory:
 
     ```bash
-    yarn install
+    bun install
     ```
 
 4. Create an Expo account to be able to run the app on your smartphone or simulator. You can create an account [here](https://expo.dev/signup).
@@ -42,7 +42,7 @@ To contribute, please follow these guidelines:
 3. Run the app locally with Expo by running the following command in the project directory:
 
     ```bash
-    yarn start
+    bun start
     ```
 
     > This allows you to test the app either on an installed simulator or with the Expo Go app on your own smartphone.
@@ -88,9 +88,9 @@ To contribute, please follow these guidelines:
 We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
 But you can also run these commands manually:
 
--   `yarn lint` to check for linting errors
--   `yarn lint:fix` to automatically fix linting errors
--   `yarn format` to format the code using Prettier
+-   `bun lint` to check for linting errors
+-   `bun lint:fix` to automatically fix linting errors
+-   `bun format` to format the code using Prettier
 
 ## Issues and Discussions
 
