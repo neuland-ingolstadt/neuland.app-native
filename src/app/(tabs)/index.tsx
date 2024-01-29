@@ -1,4 +1,5 @@
 import { Avatar } from '@/components/Elements/Settings'
+import ContextMenu from '@/components/Elements/Universal/ContextMenu'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
@@ -28,7 +29,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()

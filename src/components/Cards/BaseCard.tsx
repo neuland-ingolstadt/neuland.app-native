@@ -7,8 +7,8 @@ import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
 
+import ContextMenu from '../Elements/Universal/ContextMenu'
 import PlatformIcon from '../Elements/Universal/Icon'
 import { DashboardContext, UserKindContext } from '../provider'
 

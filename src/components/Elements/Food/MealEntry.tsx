@@ -27,10 +27,10 @@ import {
     Text,
     View,
 } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
 
 // @ts-expect-error - no types available
 import DragDropView from '../Exclusive/DragView'
+import ContextMenu from '../Universal/ContextMenu'
 import PlatformIcon from '../Universal/Icon'
 
 /**

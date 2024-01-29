@@ -152,6 +152,10 @@ export default function HomeLayout(): JSX.Element {
     ]
 
     useEffect(() => {
+        if (Platform.OS === 'web') {
+            return
+        }
+
         function processShortcut(item: ShortcutItem): void {
             router.push(item.data.path)
             router.setParams({ fromAppShortcut: 'true' })
