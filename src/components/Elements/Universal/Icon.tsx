@@ -2,8 +2,14 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
-import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
+
+// TODO separate this into Icon.native and Icon.web or just use google font icons everywhere
+let SweetSFSymbol = null
+if (Platform.OS === 'ios') {
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    SweetSFSymbol = require('sweet-sfsymbols').default
+}
 
 interface PlatformIconProps {
     color: string | ColorValue
