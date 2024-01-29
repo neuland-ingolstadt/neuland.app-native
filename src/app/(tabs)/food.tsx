@@ -1,3 +1,4 @@
+import PagerView from '@/components/Elements/Exclusive/PagerView'
 import { MealDay } from '@/components/Elements/Food'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
@@ -29,7 +30,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
 
 function FoodScreen(): JSX.Element {
     const [days, setDays] = useState<any>([])
