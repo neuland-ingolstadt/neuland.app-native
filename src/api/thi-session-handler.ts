@@ -1,9 +1,9 @@
 import useNotification from '@/hooks/notifications'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as SecureStore from 'expo-secure-store'
 
 import packageInfo from '../../package.json'
+import SecureStore from '../utils/SecureStore'
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000

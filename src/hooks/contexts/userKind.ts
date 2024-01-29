@@ -1,5 +1,5 @@
 import API from '@/api/authenticated-api'
-import * as SecureStore from 'expo-secure-store'
+import SecureStore from '@/utils/SecureStore'
 import { useEffect, useState } from 'react'
 
 export const USER_UNKNOWN = 'unknown'

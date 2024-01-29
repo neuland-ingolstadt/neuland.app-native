@@ -8,12 +8,12 @@ import {
     UserKindContext,
 } from '@/components/provider'
 import { USER_EMPLOYEE, USER_STUDENT } from '@/hooks/contexts/userKind'
+import SecureStore from '@/utils/SecureStore'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
