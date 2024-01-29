@@ -110,10 +110,10 @@ const LibraryCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     calendarView: {
-        gap: 12,
+        gap: 8,
     },
     cardsFilled: {
-        paddingTop: 10,
+        paddingTop: 12,
     },
     eventTitle: {
         fontWeight: '500',

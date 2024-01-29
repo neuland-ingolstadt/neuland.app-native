@@ -29,7 +29,6 @@ export default {
         notifications: 'Benachrichtigungen',
         licenses: 'Lizenzen',
         license: 'Lizenz',
-        card: 'Mensa Guthaben',
     },
     cards: {
         titles: {

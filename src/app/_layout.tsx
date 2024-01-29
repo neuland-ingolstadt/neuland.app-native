@@ -125,14 +125,6 @@ function RootLayout(): JSX.Element {
                             }}
                         />
                         <Stack.Screen
-                            name="(food)/card"
-                            options={{
-                                title: t('navigation.card'),
-                                animation: 'slide_from_right',
-                            }}
-                        />
-
-                        <Stack.Screen
                             name="(food)/flags"
                             options={{
                                 headerShown: false,

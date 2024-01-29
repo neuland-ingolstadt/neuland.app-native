@@ -99,8 +99,8 @@ const EventsCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     calendarView: {
-        gap: 12,
-        paddingTop: 10,
+        gap: 8,
+        paddingTop: 12,
     },
     calendarFilled: {
         paddingTop: 10,

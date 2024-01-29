@@ -29,7 +29,6 @@ export default {
         notifications: 'Notifications',
         licenses: 'Licenses',
         license: 'License',
-        card: 'Mensa Credit',
     },
     cards: {
         titles: {

@@ -5,6 +5,7 @@ import { type Exam } from '@/types/utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
+import { Buffer } from 'buffer'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
@@ -15,7 +16,9 @@ export default function ExamDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { examEntry } = useLocalSearchParams<{ examEntry: string }>()
     const exam: Exam | undefined =
-        examEntry != null ? JSON.parse(examEntry) : undefined
+        examEntry != null
+            ? JSON.parse(Buffer.from(examEntry, 'base64').toString())
+            : undefined
     const { t } = useTranslation('common')
     const typeSplit =
         exam?.type !== undefined

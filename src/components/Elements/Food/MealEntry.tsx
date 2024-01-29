@@ -14,6 +14,7 @@ import {
 import { CARD_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
+import { Buffer } from 'buffer'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
@@ -152,12 +153,13 @@ export const MealEntry = ({
             >
                 <Pressable
                     onPress={() => {
+                        const base64Event = Buffer.from(
+                            JSON.stringify(meal)
+                        ).toString('base64')
                         router.push({
                             pathname: '(food)/meal',
                             params: {
-                                foodEntry: encodeURIComponent(
-                                    JSON.stringify(meal)
-                                ),
+                                foodEntry: base64Event,
                             },
                         })
                     }}

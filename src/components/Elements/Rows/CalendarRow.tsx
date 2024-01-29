@@ -8,6 +8,7 @@ import {
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/style-utils'
+import { Buffer } from 'buffer'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -78,12 +79,14 @@ const ExamRow = ({
     event: any
     colors: Colors
 }): JSX.Element => {
+    const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
     const navigateToPage = (): void => {
         router.push({
             pathname: '(pages)/exam',
-            params: { examEntry: encodeURIComponent(JSON.stringify(event)) },
+            params: { examEntry: base64Event },
         })
     }
+
     const { t } = useTranslation('common')
 
     return (

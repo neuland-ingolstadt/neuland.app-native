@@ -8,6 +8,7 @@ import {
     getUserSpecificPrice,
     loadFoodEntries,
     mealName,
+    userMealRating,
 } from '@/utils/food-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -37,39 +38,6 @@ const FoodCard = (): JSX.Element => {
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
     const [todayEntries, setTodayEntries] = useState<Meal[]>([])
 
-    /**
-     * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
-     * @param meal  - The meal to calculate the rating for.
-     * @returns A number representing the rating of the meal.
-     */
-    function userMealRating(meal: Meal): number {
-        if (
-            meal.allergens?.some(
-                (x) => allergenSelection[x as keyof typeof allergenSelection]
-            ) ??
-            false
-        ) {
-            return -1
-        } else if (
-            meal.flags?.some(
-                (x) =>
-                    preferencesSelection[x as keyof typeof preferencesSelection]
-            ) ??
-            false
-        ) {
-            return 2
-        } else if (
-            meal.allergens == null &&
-            Object.keys(allergenSelection).some(
-                (x) => allergenSelection[x as keyof typeof allergenSelection]
-            )
-        ) {
-            return 0
-        } else {
-            return 1
-        }
-    }
-
     useEffect(() => {
         void loadData()
     }, [selectedRestaurants])
@@ -81,7 +49,17 @@ const FoodCard = (): JSX.Element => {
                 setFoodEntries([])
             } else {
                 todayEntries?.sort(
-                    (a, b) => userMealRating(b) - userMealRating(a)
+                    (a, b) =>
+                        userMealRating(
+                            b,
+                            allergenSelection,
+                            preferencesSelection
+                        ) -
+                        userMealRating(
+                            a,
+                            allergenSelection,
+                            preferencesSelection
+                        )
                 )
                 const shownEntries = todayEntries.slice(0, 2)
                 const hiddenEntriesCount =
@@ -149,7 +127,7 @@ const FoodCard = (): JSX.Element => {
         const today = formatISODate(new Date())
 
         try {
-            const entries = await loadFoodEntries(restaurants, false)
+            const entries = await loadFoodEntries(restaurants, true)
             const todayEntries = entries
                 .find((x) => x.timestamp === today)
                 ?.meals.filter(
@@ -223,8 +201,8 @@ const FoodCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     listView: {
-        gap: 12,
-        paddingTop: 10,
+        gap: 8,
+        paddingTop: 12,
     },
     mealTitle: {
         fontWeight: '500',

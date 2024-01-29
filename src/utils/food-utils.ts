@@ -119,8 +119,8 @@ export function convertRelevantAllergens(
     selectedAllergens: string[],
     language: string
 ): string {
-    const relevantAllergens = allergens?.filter(
-        (allergen) => selectedAllergens?.includes(allergen)
+    const relevantAllergens = allergens?.filter((allergen) =>
+        selectedAllergens?.includes(allergen)
     )
     const convertedAllergens = relevantAllergens?.map(
         (allergen) =>
@@ -204,5 +204,29 @@ export function mealName(
         return mealName[foodLang as LanguageKey]
     } else {
         return mealName[i18nLang as LanguageKey]
+    }
+}
+
+/**
+ * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
+ * @param meal  - The meal to calculate the rating for.
+ * @returns A number representing the rating of the meal.
+ */
+export function userMealRating(
+    meal: Meal,
+    allergenSelection: string[],
+    preferencesSelection: string[]
+): number {
+    if (meal.allergens?.some((x) => allergenSelection.includes(x)) ?? false) {
+        return -1
+    } else if (
+        meal.flags?.some((x) => preferencesSelection.includes(x)) ??
+        false
+    ) {
+        return 2
+    } else if (meal.allergens == null && allergenSelection !== null) {
+        return 0
+    } else {
+        return 1
     }
 }

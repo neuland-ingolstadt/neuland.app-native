@@ -382,51 +382,26 @@ export default function Screen(): JSX.Element {
 
     const HeaderRight = (): JSX.Element => {
         return (
-            <View style={styles.headerIcons}>
-                {Platform.OS === 'android' && (
-                    <Pressable
-                        onPress={() => {
-                            router.push('(food)/card')
+            <Pressable
+                onPress={() => {
+                    router.push('(food)/preferences')
+                }}
+                hitSlop={10}
+            >
+                <View>
+                    <PlatformIcon
+                        color={colors.text}
+                        ios={{
+                            name: 'line.3.horizontal.decrease',
+                            size: 22,
                         }}
-                        hitSlop={10}
-                    >
-                        <View>
-                            <PlatformIcon
-                                color={colors.text}
-                                ios={{
-                                    name: 'wave.3.left',
-                                    size: 22,
-                                }}
-                                android={{
-                                    name: 'local_atm',
-                                    variant: 'outlined',
-                                    size: 24,
-                                }}
-                            />
-                        </View>
-                    </Pressable>
-                )}
-                <Pressable
-                    onPress={() => {
-                        router.push('(food)/preferences')
-                    }}
-                    hitSlop={10}
-                >
-                    <View>
-                        <PlatformIcon
-                            color={colors.text}
-                            ios={{
-                                name: 'line.3.horizontal.decrease',
-                                size: 22,
-                            }}
-                            android={{
-                                name: 'filter_list',
-                                size: 24,
-                            }}
-                        />
-                    </View>
-                </Pressable>
-            </View>
+                        android={{
+                            name: 'filter_list',
+                            size: 24,
+                        }}
+                    />
+                </View>
+            </Pressable>
         )
     }
     return (
@@ -450,7 +425,6 @@ export default function Screen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    headerIcons: { flexDirection: 'row', gap: 14 },
     page: {
         flex: 1,
     },
