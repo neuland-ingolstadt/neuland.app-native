@@ -38,7 +38,7 @@ export default {
             lecturers: 'Dozenten',
             news: 'THI Neuigkeiten',
             library: 'Bibliothek',
-            events: 'Veranstaltungen',
+            events: 'Campus Life',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
             mensa: 'Mensa',

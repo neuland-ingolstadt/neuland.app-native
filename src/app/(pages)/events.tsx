@@ -3,39 +3,24 @@ import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
+import { useRefreshByUser } from '@/hooks'
 import { type CLEvents } from '@/types/neuland-api'
-import { isKnownError } from '@/utils/api-utils'
+import { networkError } from '@/utils/api-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function Events(): JSX.Element {
-    const [events, setEvents] = useState<CLEvents[]>([])
     const colors = useTheme().colors as Colors
-    const [error, setError] = useState<Error | null>(null)
+
     const { t } = useTranslation('common')
 
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    useEffect(() => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-            })
-    }, [])
-
-    async function loadEvents(): Promise<void> {
+    async function loadEvents(): Promise<CLEvents[]> {
         const campusLifeEvents =
             (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
         const newEvents = campusLifeEvents
@@ -46,56 +31,68 @@ export default function Events(): JSX.Element {
             }))
             .filter((x) => x.end === null || x.end > new Date())
 
-        setEvents(newEvents)
+        return newEvents
     }
 
-    const onRefresh: () => void = () => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }
+    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
+        useQuery({
+            queryKey: ['campusLifeEvents'],
+            queryFn: loadEvents,
+            staleTime: 1000 * 60 * 5, // 5 minutes
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+
+    useEffect(() => {
+        if (isPaused && data != null) {
+            void showToast(t('toast.paused'))
+        }
+    }, [isPaused])
 
     return (
         <ScrollView
             style={styles.page}
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                !isLoading ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
         >
-            {loadingState === LoadingState.LOADING && (
+            {isLoading && (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
             )}
-            {loadingState === LoadingState.ERROR && (
+            {isError && (
                 <ErrorView
                     title={error?.message ?? t('error.title')}
-                    onRefresh={onRefresh}
+                    onRefresh={refetchByUser}
                     refreshing={false}
                 />
             )}
-            {loadingState === LoadingState.LOADED && (
+            {isPaused && !isSuccess && (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={false}
+                />
+            )}
+            {isSuccess && (
                 <View
                     style={[
                         styles.loadedContainer,
                         { backgroundColor: colors.card },
                     ]}
                 >
-                    {events.map((event, index) => (
+                    {data.map((event, index) => (
                         <React.Fragment key={index}>
                             <CLEventRow event={event} colors={colors} />
-                            {index !== events.length - 1 && (
+                            {index !== data.length - 1 && (
                                 <Divider
                                     color={colors.labelTertiaryColor}
                                     iosPaddingLeft={16}

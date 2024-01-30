@@ -78,7 +78,7 @@ function FoodScreen(): JSX.Element {
         refetch,
         isRefetching,
     } = useQuery({
-        queryKey: ['foond', selectedRestaurants, showStatic],
+        queryKey: ['food', selectedRestaurants, showStatic],
         queryFn: loadData,
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
@@ -292,14 +292,14 @@ function FoodScreen(): JSX.Element {
                             ? t('error.noMeals')
                             : error?.message ?? t('error.title')
                     }
-                    onRefresh={refetch}
+                    onRefresh={refetchByUser}
                     refreshing={false}
                 />
             )}
             {isPaused && !isSuccess && (
                 <ErrorView
                     title={networkError}
-                    onRefresh={refetch}
+                    onRefresh={refetchByUser}
                     refreshing={false}
                 />
             )}

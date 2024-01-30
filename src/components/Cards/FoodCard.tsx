@@ -10,8 +10,8 @@ import {
     mealName,
     userMealRating,
 } from '@/utils/food-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const { t, i18n } = useTranslation('food')
 
     const router = useRouter()
@@ -36,19 +35,14 @@ const FoodCard = (): JSX.Element => {
         Array<{ name: string; price: string | null }>
     >([])
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
-    const [todayEntries, setTodayEntries] = useState<Meal[]>([])
-
-    useEffect(() => {
-        void loadData()
-    }, [selectedRestaurants])
 
     useEffect(() => {
         // Calculate userMealRating and update foodEntries
         const updateFoodEntries = (): void => {
-            if (todayEntries == null) {
+            if (data == null) {
                 setFoodEntries([])
             } else {
-                todayEntries?.sort(
+                data?.sort(
                     (a, b) =>
                         userMealRating(
                             b,
@@ -61,9 +55,8 @@ const FoodCard = (): JSX.Element => {
                             preferencesSelection
                         )
                 )
-                const shownEntries = todayEntries.slice(0, 2)
-                const hiddenEntriesCount =
-                    todayEntries.length - shownEntries.length
+                const shownEntries = data.slice(0, 2)
+                const hiddenEntriesCount = data.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
                         name: mealName(
@@ -88,20 +81,19 @@ const FoodCard = (): JSX.Element => {
                         : []),
                 ])
             }
-            setLoadingState(LoadingState.LOADED)
         }
 
         updateFoodEntries()
     }, [
         allergenSelection,
         preferencesSelection,
-        todayEntries,
+        selectedRestaurants,
         foodLanguage,
         i18n.language,
         userKind,
     ])
 
-    const loadData = async (): Promise<void> => {
+    const loadData = async (): Promise<Meal[]> => {
         const restaurants =
             selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
 
@@ -126,22 +118,23 @@ const FoodCard = (): JSX.Element => {
 
         const today = formatISODate(new Date())
 
-        try {
-            const entries = await loadFoodEntries(restaurants, true)
-            const todayEntries = entries
-                .find((x) => x.timestamp === today)
-                ?.meals.filter(
-                    (x) =>
-                        x.category !== 'soup' &&
-                        x.category !== 'salad' &&
-                        x.restaurant != null &&
-                        selectedRestaurants.includes(x.restaurant.toLowerCase())
-                )
-            setTodayEntries(todayEntries ?? [])
-        } catch (e) {
-            console.error(e)
-        }
+        const entries = await loadFoodEntries(restaurants, true)
+        const todayEntries = entries
+            .find((x) => x.timestamp === today)
+            ?.meals.filter(
+                (x) =>
+                    x.category !== 'soup' &&
+                    x.category !== 'salad' &&
+                    x.restaurant != null &&
+                    selectedRestaurants.includes(x.restaurant.toLowerCase())
+            )
+        return todayEntries ?? []
     }
+
+    const { data, isSuccess } = useQuery({
+        queryKey: ['food', selectedRestaurants, false],
+        queryFn: loadData,
+    })
 
     return (
         <BaseCard
@@ -152,7 +145,7 @@ const FoodCard = (): JSX.Element => {
                 router.replace('food')
             }}
         >
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
                         <Text
