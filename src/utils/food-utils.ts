@@ -23,31 +23,25 @@ export async function loadFoodEntries(
     includeStatic: boolean
 ): Promise<Food[]> {
     const entries: Food[] = []
+    const startOfToday = getAdjustedDay(new Date()).setHours(0, 0, 0, 0)
+    const filterData = (data: any): any => {
+        return data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+    }
     if (restaurants.includes('mensa')) {
         const data = await NeulandAPI.getMensaPlan()
-        data.forEach((day: Food) => {
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Mensa'
-            })
-        })
-
-        entries.push(data)
+        entries.push(filterData(data))
     }
 
     if (restaurants.includes('reimanns')) {
         const data = await NeulandAPI.getReimannsPlan()
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
+        const filteredData = filterData(data)
         if (!includeStatic) {
             filteredData.forEach((day: any) => {
                 day.meals = day.meals.filter(
-                    (entry: any) => entry.static === includeStatic
+                    (entry: any) => entry.static === false
                 )
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Reimanns'
-                })
             })
         }
         entries.push(filteredData)
@@ -55,17 +49,7 @@ export async function loadFoodEntries(
 
     if (restaurants.includes('canisius')) {
         const data = await NeulandAPI.getCanisiusPlan()
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-        filteredData.forEach((day: any) =>
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Canisius'
-            })
-        )
-
-        entries.push(filteredData)
+        entries.push(filterData(data))
     }
 
     // get start of this week (monday) or next monday if isWeekend
@@ -84,7 +68,6 @@ export async function loadFoodEntries(
     // map to ISO date
     const isoDates = days.map((x) => formatISODate(x))
 
-    // map entries to daysTest
     return isoDates.map((day) => {
         const dayEntries: Meal[] = entries.flatMap(
             (r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []

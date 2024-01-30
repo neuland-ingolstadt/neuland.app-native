@@ -1,11 +1,10 @@
-import NeulandAPI from '@/api/neuland-api'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
-import { type CLEvents } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
+import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -20,24 +19,10 @@ export default function Events(): JSX.Element {
 
     const { t } = useTranslation('common')
 
-    async function loadEvents(): Promise<CLEvents[]> {
-        const campusLifeEvents =
-            (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
-        const newEvents = campusLifeEvents
-            .map((x) => ({
-                ...x,
-                begin: x.begin !== null ? new Date(x.begin) : null,
-                end: x.end !== null ? new Date(x.end) : null,
-            }))
-            .filter((x) => x.end === null || x.end > new Date())
-
-        return newEvents
-    }
-
     const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
         useQuery({
             queryKey: ['campusLifeEvents'],
-            queryFn: loadEvents,
+            queryFn: loadCampusLifeEvents,
             staleTime: 1000 * 60 * 5, // 5 minutes
             gcTime: 1000 * 60 * 60 * 24, // 24 hours
         })

@@ -5,16 +5,16 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { type Calendar } from '@/types/data'
-import { type Exam } from '@/types/utils'
-import { isKnownError } from '@/utils/api-utils'
+import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
-import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -27,19 +27,11 @@ import {
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function CalendarPage(): JSX.Element {
-    const router = useRouter()
-
     const { userKind } = React.useContext(UserKindContext)
-    const [exams, setExams] = useState<Exam[]>([])
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-
     const displayTypes = ['Events', t('pages.calendar.exams.title')]
-
     const [selectedData, setSelectedData] = useState<string>('Events')
-
-    const [error, setError] = useState<Error | null>(null)
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
         void Linking.openURL(
@@ -48,53 +40,43 @@ export default function CalendarPage(): JSX.Element {
                 : primussUrl
         )
     }
-    useEffect(() => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                if (e instanceof NoSessionError) {
-                    router.push('(user)/login')
-                } else {
-                    console.log(e)
-                }
 
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-            })
-    }, [userKind])
-
-    async function loadEvents(): Promise<void> {
-        const examList = await loadExamList()
-        setExams(examList)
-    }
-
-    const onRefresh: () => void = () => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }
-
+    const {
+        data: exams,
+        error,
+        isLoading,
+        isError,
+        isPaused,
+        isSuccess,
+        refetch,
+    } = useQuery({
+        queryKey: ['exams'],
+        queryFn: loadExamList,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.push('(user)/login')
+                return false
+            }
+            return failureCount < 3
+        },
+        enabled: userKind !== USER_GUEST,
+    })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     const data = selectedData === 'Events' ? calendar : exams
+
     return (
         <ScrollView
             style={styles.page}
             contentContainerStyle={styles.scrollViewContainer}
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                isSuccess ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
@@ -112,7 +94,7 @@ export default function CalendarPage(): JSX.Element {
                         { backgroundColor: colors.card },
                     ]}
                 >
-                    {data.length > 0 ? (
+                    {data != null && data.length > 0 ? (
                         data.map((item, index) => (
                             <React.Fragment key={index}>
                                 {selectedData === 'Events' ? (
@@ -122,8 +104,7 @@ export default function CalendarPage(): JSX.Element {
                                     />
                                 ) : (
                                     <>
-                                        {loadingState ===
-                                            LoadingState.LOADED && (
+                                        {isSuccess && (
                                             <ExamRow
                                                 event={item}
                                                 colors={colors}
@@ -141,62 +122,49 @@ export default function CalendarPage(): JSX.Element {
                         ))
                     ) : (
                         <>
-                            {loadingState === LoadingState.LOADING && (
+                            {isLoading ? (
                                 <View style={styles.loadingContainer}>
                                     <ActivityIndicator
                                         size="small"
                                         color={colors.primary}
                                     />
                                 </View>
-                            )}
-                            {userKind !== 'student' ? (
+                            ) : isSuccess ? (
+                                <View>
+                                    <Text
+                                        style={[
+                                            styles.errorMessage,
+                                            { color: colors.text },
+                                        ]}
+                                    >
+                                        {t(
+                                            'pages.calendar.calendar.noData.title'
+                                        )}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.errorInfo,
+                                            { color: colors.text },
+                                        ]}
+                                    >
+                                        {t(
+                                            'pages.calendar.calendar.noData.subtitle'
+                                        )}
+                                    </Text>
+                                </View>
+                            ) : isError ? (
                                 <ErrorView
                                     title={error?.message ?? t('error.title')}
                                     onButtonPress={() => {
-                                        onRefresh()
+                                        void refetchByUser()
                                     }}
                                     inModal
                                 />
-                            ) : (
-                                <>
-                                    {loadingState === LoadingState.ERROR && (
-                                        <ErrorView
-                                            title={
-                                                error?.message ??
-                                                t('error.title')
-                                            }
-                                            onButtonPress={() => {
-                                                onRefresh()
-                                            }}
-                                            inModal
-                                        />
-                                    )}
-                                    {loadingState === LoadingState.LOADED && (
-                                        <View>
-                                            <Text
-                                                style={[
-                                                    styles.errorMessage,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t(
-                                                    'pages.calendar.calendar.noData.title'
-                                                )}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.errorInfo,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t(
-                                                    'pages.calendar.calendar.noData.subtitle'
-                                                )}
-                                            </Text>
-                                        </View>
-                                    )}
-                                </>
-                            )}
+                            ) : isPaused && !isSuccess ? (
+                                <ErrorView title={networkError} inModal />
+                            ) : userKind === USER_GUEST ? (
+                                <ErrorView title={guestError} inModal />
+                            ) : null}
                         </>
                     )}
                 </View>

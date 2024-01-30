@@ -35,10 +35,16 @@
         "licenseUrl": "https://github.com/react-native-async-storage/async-storage/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-community/datetimepicker@7.6.2": {
+    "@react-native-community/datetimepicker@7.6.1": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/datetimepicker",
         "licenseUrl": "https://github.com/react-native-community/datetimepicker/raw/master/LICENSE.md",
+        "parents": "neuland"
+    },
+    "@react-native-community/netinfo@11.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-native-netinfo/react-native-netinfo",
+        "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
     "@sentry/react-native@5.17.0": {
@@ -51,6 +57,24 @@
         "licenses": "MIT",
         "repository": "https://github.com/Shopify/flash-list",
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
+        "parents": "neuland"
+    },
+    "@tanstack/query-async-storage-persister@5.18.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TanStack/query",
+        "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "@tanstack/react-query-persist-client@5.18.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TanStack/query",
+        "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "@tanstack/react-query@5.18.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TanStack/query",
+        "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
     "color@4.2.3": {
@@ -191,13 +215,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "i18next@23.8.0": {
+    "i18next@23.8.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "metro@0.76.8": {
+    "metro@0.76.9": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/metro",
         "licenseUrl": "https://github.com/facebook/metro",

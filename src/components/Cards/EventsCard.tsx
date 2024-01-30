@@ -1,7 +1,6 @@
-import NeulandAPI from '@/api/neuland-api'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
-import { type CLEvents } from '@/types/neuland-api'
+import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
@@ -16,24 +15,9 @@ const EventsCard = (): JSX.Element => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
 
-    async function loadEvents(): Promise<CLEvents[]> {
-        const campusLifeEvents =
-            (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
-
-        const newEvents = campusLifeEvents
-            .map((x) => ({
-                ...x,
-                begin: x.begin !== null ? new Date(x.begin) : null,
-                end: x.end !== null ? new Date(x.end) : null,
-            }))
-            .filter((x) => x.end === null || x.end > new Date())
-            .slice(0, 5) // cache only 5 events
-        return newEvents
-    }
-
     const { data, isSuccess } = useQuery({
         queryKey: ['campusLifeEvents'],
-        queryFn: loadEvents,
+        queryFn: loadCampusLifeEvents,
         staleTime: 1000 * 60 * 5, // 5 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })

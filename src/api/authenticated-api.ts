@@ -17,7 +17,6 @@ import { callWithSession } from './thi-session-handler'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
-const KEY_GET_EXAMS = 'getExams'
 const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
@@ -84,6 +83,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @returns {object}
      */
     async requestAuthenticated(params: object): Promise<any> {
+        console.log(params)
         return this.sessionHandler(async (session: any) => {
             const res = await this.request({
                 session,
@@ -220,7 +220,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      */
     async getExams(): Promise<Exams[]> {
         try {
-            const res = await this.requestCached(KEY_GET_EXAMS, {
+            const res = await this.requestAuthenticated({
                 service: 'thiapp',
                 method: 'exams',
                 format: 'json',

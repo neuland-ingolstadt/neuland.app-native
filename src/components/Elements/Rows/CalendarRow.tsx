@@ -24,7 +24,6 @@ const CalendarRow = ({
     colors: Colors
 }): JSX.Element => {
     const { t, i18n } = useTranslation('common')
-
     return (
         <RowEntry
             title={event.name[i18n.language as LanguageKey]}
@@ -88,7 +87,6 @@ const ExamRow = ({
     }
 
     const { t } = useTranslation('common')
-
     return (
         <RowEntry
             title={event.name}
@@ -136,7 +134,7 @@ const ExamRow = ({
                             color: colors.labelColor,
                         }}
                     >
-                        {formatFriendlyRelativeTime(event.date)}
+                        {formatFriendlyRelativeTime(new Date(event.date))}
                     </Text>
                 </View>
             }

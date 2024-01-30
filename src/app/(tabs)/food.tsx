@@ -68,19 +68,13 @@ function FoodScreen(): JSX.Element {
         return formattedDays
     }
 
-    const {
-        data,
-        error,
-        isLoading,
-        isError,
-        isPaused,
-        isSuccess,
-        refetch,
-        isRefetching,
-    } = useQuery({
-        queryKey: ['foohd', selectedRestaurants, showStatic],
-        queryFn: loadData,
-    })
+    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
+        useQuery({
+            queryKey: ['food', selectedRestaurants, showStatic],
+            queryFn: loadData,
+            staleTime: 1000 * 60 * 10, // 10 minutes
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     useEffect(() => {
@@ -254,17 +248,6 @@ function FoodScreen(): JSX.Element {
         )
     }
 
-    const FoodRefreshControl = (): JSX.Element => {
-        return (
-            <RefreshControl
-                refreshing={isRefetchingByUser}
-                onRefresh={() => {
-                    void refetchByUser()
-                }}
-            />
-        )
-    }
-
     const screenHeight = Dimensions.get('window').height
     const scrollY = new Animated.Value(0)
     const showAllergensBanner =
@@ -273,7 +256,16 @@ function FoodScreen(): JSX.Element {
 
     return (
         <ScrollView
-            refreshControl={isError ? <FoodRefreshControl /> : undefined}
+            refreshControl={
+                isError ? (
+                    <RefreshControl
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                    />
+                ) : undefined
+            }
             style={styles.page}
             contentInsetAdjustmentBehavior="always"
             contentContainerStyle={styles.container}
@@ -368,8 +360,13 @@ function FoodScreen(): JSX.Element {
                                     { useNativeDriver: false }
                                 )}
                                 refreshControl={
-                                    !isRefetching && !isLoading ? (
-                                        <FoodRefreshControl />
+                                    isSuccess ? (
+                                        <RefreshControl
+                                            refreshing={isRefetchingByUser}
+                                            onRefresh={() => {
+                                                void refetchByUser()
+                                            }}
+                                        />
                                     ) : undefined
                                 }
                                 key={index}

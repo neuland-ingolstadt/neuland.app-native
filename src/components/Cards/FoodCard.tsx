@@ -33,10 +33,16 @@ const FoodCard = (): JSX.Element => {
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>
     >([])
-    const [foodCardTitle, setFoodCardTitle] = useState('Essen')
-
+    const [foodCardTitle, setFoodCardTitle] = useState('food')
+    const { data, isSuccess } = useQuery({
+        queryKey: ['food', selectedRestaurants, false],
+        queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hourss
+    })
     useEffect(() => {
-        if (data == null) {
+        if (!isSuccess) {
+            // if data is not loaded yet, do nothing
             return
         }
         const today = formatISODate(new Date())
@@ -44,7 +50,7 @@ const FoodCard = (): JSX.Element => {
             .find((x) => x.timestamp === today)
             ?.meals.filter(
                 (x) =>
-                    !x.static &&
+                    x.prices.student != null && // some meals have no price. checking for one price is enough
                     x.category !== 'soup' &&
                     x.category !== 'salad' &&
                     x.restaurant != null &&
@@ -102,7 +108,7 @@ const FoodCard = (): JSX.Element => {
     }, [
         allergenSelection,
         preferencesSelection,
-        selectedRestaurants,
+        data,
         foodLanguage,
         i18n.language,
         userKind,
@@ -131,11 +137,6 @@ const FoodCard = (): JSX.Element => {
             }
         }
     }, [selectedRestaurants])
-
-    const { data, isSuccess } = useQuery({
-        queryKey: ['food', selectedRestaurants, false],
-        queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
-    })
 
     return (
         <BaseCard

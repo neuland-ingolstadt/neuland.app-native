@@ -108,7 +108,6 @@ export async function loadGradeAverage(
     const spoName = await API.getSpoName()
 
     if (spoName == null || courseSPOs?.[spoName] == null) {
-        console.log(spoName)
         throw new Error('Failed to load data')
     }
 

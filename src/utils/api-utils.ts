@@ -1,4 +1,5 @@
 import { createGuestSession } from '@/api/thi-session-handler'
+import { queryClient } from '@/components/provider'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { router } from 'expo-router'
 
@@ -23,6 +24,8 @@ export const performLogout = async (
 ): Promise<void> => {
     try {
         await createGuestSession()
+        await queryClient.invalidateQueries()
+        queryClient.clear()
         toggleUser(undefined)
         toggleAccentColor('blue')
         resetDashboard(USER_GUEST)

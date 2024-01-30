@@ -52,9 +52,9 @@ export default function FoodDetail(): JSX.Element {
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {
-        Mensa: 'https://www.werkswelt.de/?id=ingo',
-        Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
-        Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
+        mensa: 'https://www.werkswelt.de/?id=ingo',
+        reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
+        canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
 
     interface Locations {
@@ -240,17 +240,19 @@ export default function FoodDetail(): JSX.Element {
         ...(isNutritionAvailable ? nutritionSection : []),
     ]
 
+    const restaurant =
+        meal?.restaurant != null
+            ? meal.restaurant.charAt(0).toUpperCase() + meal.restaurant.slice(1)
+            : ''
     const handlePress = (): void => {
-        const restaurant = meal?.restaurant
         const location = locations[restaurant as keyof typeof locations]
 
-        if (restaurant != null && location !== '') {
+        if (restaurant != null && location !== undefined) {
             router.navigate('(tabs)/map')
             updateRouteParams(location)
         }
     }
 
-    const restaurant = meal?.restaurant
     const locationExists =
         restaurant !== undefined && locations[restaurant] !== undefined
 
@@ -260,7 +262,7 @@ export default function FoodDetail(): JSX.Element {
             items: [
                 {
                     title: 'Restaurant',
-                    value: meal?.restaurant,
+                    value: restaurant,
                     onPress: handlePress,
                     iconColor: locationExists ? colors.primary : undefined,
                     disabled: !locationExists,

@@ -1022,7 +1022,7 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
-  - react-native-netinfo (11.2.1):
+  - react-native-netinfo (11.1.0):
     - React-Core
   - react-native-pager-view (6.2.3):
     - glog
@@ -1207,7 +1207,7 @@ PODS:
     - React
   - RNCAsyncStorage (1.21.0):
     - React-Core
-  - RNDateTimePicker (7.6.2):
+  - RNDateTimePicker (7.6.1):
     - React-Core
   - RNDynamicAppIcon (1.1.0):
     - React
@@ -1626,7 +1626,7 @@ SPEC CHECKSUMS:
   react-native-change-icon: 5181769d44720387190abf831e2451dc31cd64ed
   react-native-context-menu-view: ea9e2d0f86859a143f1fd73a96a062ced5159567
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
-  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
+  react-native-netinfo: 3aa5637c18834966e0c932de8ae1ae56fea20a97
   react-native-pager-view: d81ab2060b9caf57ca8c3a0d57467ff407cdb825
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
@@ -1653,7 +1653,7 @@ SPEC CHECKSUMS:
   ReactCommon: 45b5d4f784e869c44a6f5a8fad5b114ca8f78c53
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
-  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
+  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e

@@ -141,9 +141,9 @@ export const MealDay = ({
         }, {})
     }
 
-    const mensa = filterMealsByRestaurant(day.meals, 'Mensa')
-    const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns')
-    const canisius = filterMealsByRestaurant(day.meals, 'Canisius')
+    const mensa = filterMealsByRestaurant(day.meals, 'mensa')
+    const reimanns = filterMealsByRestaurant(day.meals, 'reimanns')
+    const canisius = filterMealsByRestaurant(day.meals, 'canisius')
 
     const mensaGrouped = groupMealsByCategory(mensa)
     const reimannsGrouped = groupMealsByCategory(reimanns)
