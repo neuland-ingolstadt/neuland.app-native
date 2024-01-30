@@ -40,16 +40,16 @@ export async function loadFoodEntries(
         const filteredData = data.filter(
             (x: any) => new Date(x.timestamp).getTime() >= startOfToday
         )
-
-        filteredData.forEach((day: any) => {
-            day.meals = day.meals.filter(
-                (entry: any) => entry.static === includeStatic
-            )
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Reimanns'
+        if (!includeStatic) {
+            filteredData.forEach((day: any) => {
+                day.meals = day.meals.filter(
+                    (entry: any) => entry.static === includeStatic
+                )
+                day.meals.forEach((entry: any) => {
+                    entry.restaurant = 'Reimanns'
+                })
             })
-        })
-
+        }
         entries.push(filteredData)
     }
 

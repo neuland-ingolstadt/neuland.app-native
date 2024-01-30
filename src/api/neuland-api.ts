@@ -1,8 +1,11 @@
+import { type SpoWeights } from '@/types/asset-api'
+
 import packageInfo from '../../package.json'
 
 const ENDPOINT: string =
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     process.env.EXPO_PUBLIC_NEULAND_API_ENDPOINT || 'https://neuland.app'
+const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
@@ -16,7 +19,7 @@ class NeulandAPIClient {
      * @throws {Error} If the API returns an error
      */
     async performRequest(url: string): Promise<any> {
-        console.log(`Performing request against ${url}`)
+        console.log(url)
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,
@@ -60,6 +63,26 @@ class NeulandAPIClient {
      */
     async getCampusLifeEvents(): Promise<any> {
         return await this.performRequest(`${ENDPOINT}/api/cl-events/`)
+    }
+
+    /**
+     * Gets the map overlay
+     * @returns {Promise<any>} A promise that resolves with the map overlay data
+     */
+    async getMapOverlay(): Promise<any> {
+        return await this.performRequest(
+            `${ASSET_ENDPOINT}/rooms_neuland_v2.4.geojson`
+        )
+    }
+
+    /**
+     * Gets the course spo data (grade weights)
+     * @returns {Promise<SpoWeights>} A promise that resolves with the course spo data
+     */
+    async getSpoWeights(): Promise<SpoWeights> {
+        return await this.performRequest(
+            `${ASSET_ENDPOINT}/generated/spo-grade-weights.json`
+        )
     }
 }
 

@@ -78,7 +78,7 @@ function FoodScreen(): JSX.Element {
         refetch,
         isRefetching,
     } = useQuery({
-        queryKey: ['food', selectedRestaurants, showStatic],
+        queryKey: ['foohd', selectedRestaurants, showStatic],
         queryFn: loadData,
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
@@ -304,7 +304,7 @@ function FoodScreen(): JSX.Element {
                 />
             )}
 
-            {isSuccess && (
+            {isSuccess && data.length > 0 && (
                 <>
                     <Animated.View
                         // eslint-disable-next-line react-native/no-inline-styles

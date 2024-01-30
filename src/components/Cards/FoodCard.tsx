@@ -2,7 +2,6 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Meal } from '@/types/neuland-api'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
@@ -37,12 +36,27 @@ const FoodCard = (): JSX.Element => {
     const [foodCardTitle, setFoodCardTitle] = useState('Essen')
 
     useEffect(() => {
+        if (data == null) {
+            return
+        }
+        const today = formatISODate(new Date())
+        const todayEntries = data
+            .find((x) => x.timestamp === today)
+            ?.meals.filter(
+                (x) =>
+                    !x.static &&
+                    x.category !== 'soup' &&
+                    x.category !== 'salad' &&
+                    x.restaurant != null &&
+                    selectedRestaurants.includes(x.restaurant.toLowerCase())
+            )
+
         // Calculate userMealRating and update foodEntries
         const updateFoodEntries = (): void => {
-            if (data == null) {
+            if (todayEntries == null) {
                 setFoodEntries([])
             } else {
-                data?.sort(
+                todayEntries?.sort(
                     (a, b) =>
                         userMealRating(
                             b,
@@ -55,8 +69,9 @@ const FoodCard = (): JSX.Element => {
                             preferencesSelection
                         )
                 )
-                const shownEntries = data.slice(0, 2)
-                const hiddenEntriesCount = data.length - shownEntries.length
+                const shownEntries = todayEntries.slice(0, 2)
+                const hiddenEntriesCount =
+                    todayEntries.length - shownEntries.length
                 setFoodEntries([
                     ...shownEntries.map((x) => ({
                         name: mealName(
@@ -93,7 +108,7 @@ const FoodCard = (): JSX.Element => {
         userKind,
     ])
 
-    const loadData = async (): Promise<Meal[]> => {
+    useEffect(() => {
         const restaurants =
             selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
 
@@ -115,25 +130,11 @@ const FoodCard = (): JSX.Element => {
                     break
             }
         }
-
-        const today = formatISODate(new Date())
-
-        const entries = await loadFoodEntries(restaurants, true)
-        const todayEntries = entries
-            .find((x) => x.timestamp === today)
-            ?.meals.filter(
-                (x) =>
-                    x.category !== 'soup' &&
-                    x.category !== 'salad' &&
-                    x.restaurant != null &&
-                    selectedRestaurants.includes(x.restaurant.toLowerCase())
-            )
-        return todayEntries ?? []
-    }
+    }, [selectedRestaurants])
 
     const { data, isSuccess } = useQuery({
         queryKey: ['food', selectedRestaurants, false],
-        queryFn: loadData,
+        queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
     })
 
     return (
@@ -145,7 +146,7 @@ const FoodCard = (): JSX.Element => {
                 router.replace('food')
             }}
         >
-            {isSuccess && (
+            {isSuccess && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
                         <Text
