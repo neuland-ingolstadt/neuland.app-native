@@ -1,3 +1,4 @@
+// @ts-expect-error Missing types
 import PagerView from '@/components/Elements/Exclusive/PagerView'
 import { MealDay } from '@/components/Elements/Food'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
@@ -344,7 +345,9 @@ function FoodScreen(): JSX.Element {
                             height: screenHeight,
                         }}
                         initialPage={0}
-                        onPageSelected={(e) => {
+                        onPageSelected={(
+                            e = { nativeEvent: { position: 0 } }
+                        ) => {
                             const page = e.nativeEvent.position
                             setSelectedDay(page)
                         }}
