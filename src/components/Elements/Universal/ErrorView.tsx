@@ -31,7 +31,7 @@ export default function ErrorView({
     icon?: { ios: string; android: string; multiColor?: boolean }
     buttonText?: string
     onButtonPress?: () => void
-    onRefresh?: () => void
+    onRefresh?: () => any
     refreshing?: boolean
     inModal?: boolean
 }): JSX.Element {
@@ -56,8 +56,8 @@ export default function ErrorView({
                         ? icon.ios
                         : icon.android
                     : ios
-                    ? 'exclamationmark.triangle.fill'
-                    : 'error'
+                      ? 'exclamationmark.triangle.fill'
+                      : 'error'
         }
     }
 

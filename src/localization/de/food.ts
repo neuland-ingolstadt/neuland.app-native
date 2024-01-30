@@ -28,7 +28,7 @@ export default {
     dashboard: {
         oneMore: 'und eine weitere Mahlzeit',
         manyMore: 'und {{count}} weitere Gerichte',
-        empty: 'Die Speisekarte für heute ist leer.',
+        empty: 'Der Speiseplan für heute ist leer.',
     },
     categories: {
         soup: 'Suppe',

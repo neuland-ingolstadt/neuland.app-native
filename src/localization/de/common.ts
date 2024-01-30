@@ -1,6 +1,7 @@
 export default {
     toast: {
         clipboard: 'in Zwischenablage kopiert',
+        paused: 'Keine Internetverbindung',
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',

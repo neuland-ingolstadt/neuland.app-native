@@ -2,10 +2,10 @@ import NeulandAPI from '@/api/neuland-api'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 
@@ -15,19 +15,8 @@ const EventsCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
-    const [events, setEvents] = useState<CLEvents[]>([])
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    useEffect(() => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setLoadingState(LoadingState.ERROR)
-            })
-    }, [])
 
-    async function loadEvents(): Promise<void> {
+    async function loadEvents(): Promise<CLEvents[]> {
         const campusLifeEvents =
             (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
 
@@ -38,8 +27,16 @@ const EventsCard = (): JSX.Element => {
                 end: x.end !== null ? new Date(x.end) : null,
             }))
             .filter((x) => x.end === null || x.end > new Date())
-        setEvents(newEvents.slice(0, 2))
+            .slice(0, 5) // cache only 5 events
+        return newEvents
     }
+
+    const { data, isSuccess } = useQuery({
+        queryKey: ['campusLifeEvents'],
+        queryFn: loadEvents,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    })
 
     return (
         <BaseCard
@@ -50,14 +47,14 @@ const EventsCard = (): JSX.Element => {
                 router.push('events')
             }}
         >
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && (
                 <View
                     style={{
                         ...styles.calendarView,
-                        ...(events.length > 0 && styles.calendarFilled),
+                        ...(data.length > 0 && styles.calendarFilled),
                     }}
                 >
-                    {events.map((event, index) => (
+                    {data.slice(0, 2).map((event, index) => (
                         <React.Fragment key={index}>
                             <View>
                                 <View>
@@ -86,7 +83,7 @@ const EventsCard = (): JSX.Element => {
                                 </View>
                             </View>
 
-                            {events.length - 1 !== index && (
+                            {data.length - 1 !== index && (
                                 <Divider color={colors.border} width={'100%'} />
                             )}
                         </React.Fragment>
@@ -99,8 +96,8 @@ const EventsCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     calendarView: {
-        gap: 12,
-        paddingTop: 10,
+        gap: 8,
+        paddingTop: 12,
     },
     calendarFilled: {
         paddingTop: 10,

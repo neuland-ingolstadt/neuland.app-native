@@ -29,7 +29,6 @@ export default {
         notifications: 'Notifications',
         licenses: 'Licenses',
         license: 'License',
-        card: 'Mensa Credit',
     },
     cards: {
         titles: {
@@ -39,7 +38,7 @@ export default {
             lecturers: 'Lecturers',
             news: 'THI News',
             library: 'Library',
-            events: 'Events',
+            events: 'Campus Life',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
             mensa: 'Mensa',

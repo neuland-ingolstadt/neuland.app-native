@@ -18,6 +18,7 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
+import { Buffer } from 'buffer'
 import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
@@ -36,7 +37,9 @@ export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
-        foodEntry != null ? JSON.parse(foodEntry) : undefined
+        foodEntry != null
+            ? JSON.parse(Buffer.from(foodEntry, 'base64').toString())
+            : undefined
     const {
         preferencesSelection,
         allergenSelection,

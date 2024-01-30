@@ -1,7 +1,7 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
-import { useInterval } from '@/hooks/interval'
+import { useInterval } from '@/hooks/useInterval'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
@@ -149,10 +149,10 @@ const TimetableCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     calendarView: {
-        gap: 12,
+        gap: 8,
     },
     cardsFilled: {
-        paddingTop: 10,
+        paddingTop: 12,
     },
     eventTitle: {
         fontWeight: '500',

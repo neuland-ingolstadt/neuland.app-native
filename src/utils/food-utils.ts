@@ -24,28 +24,23 @@ export async function loadFoodEntries(
 ): Promise<Food[]> {
     const entries: Food[] = []
     if (restaurants.includes('mensa')) {
-        try {
-            const data = await NeulandAPI.getMensaPlan()
-            data.forEach((day: Food) => {
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Mensa'
-                })
+        const data = await NeulandAPI.getMensaPlan()
+        data.forEach((day: Food) => {
+            day.meals.forEach((entry: any) => {
+                entry.restaurant = 'Mensa'
             })
+        })
 
-            entries.push(data)
-        } catch (e) {
-            console.log(e)
-        }
+        entries.push(data)
     }
 
     if (restaurants.includes('reimanns')) {
-        try {
-            const data = await NeulandAPI.getReimannsPlan()
-            const startOfToday = new Date(formatISODate(new Date())).getTime()
-            const filteredData = data.filter(
-                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-            )
-
+        const data = await NeulandAPI.getReimannsPlan()
+        const startOfToday = new Date(formatISODate(new Date())).getTime()
+        const filteredData = data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+        if (!includeStatic) {
             filteredData.forEach((day: any) => {
                 day.meals = day.meals.filter(
                     (entry: any) => entry.static === includeStatic
@@ -54,30 +49,23 @@ export async function loadFoodEntries(
                     entry.restaurant = 'Reimanns'
                 })
             })
-
-            entries.push(filteredData)
-        } catch (e) {
-            console.log(e)
         }
+        entries.push(filteredData)
     }
 
     if (restaurants.includes('canisius')) {
-        try {
-            const data = await NeulandAPI.getCanisiusPlan()
-            const startOfToday = new Date(formatISODate(new Date())).getTime()
-            const filteredData = data.filter(
-                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-            )
-            filteredData.forEach((day: any) =>
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Canisius'
-                })
-            )
+        const data = await NeulandAPI.getCanisiusPlan()
+        const startOfToday = new Date(formatISODate(new Date())).getTime()
+        const filteredData = data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+        filteredData.forEach((day: any) =>
+            day.meals.forEach((entry: any) => {
+                entry.restaurant = 'Canisius'
+            })
+        )
 
-            entries.push(filteredData)
-        } catch (e) {
-            console.log(e)
-        }
+        entries.push(filteredData)
     }
 
     // get start of this week (monday) or next monday if isWeekend
@@ -119,8 +107,8 @@ export function convertRelevantAllergens(
     selectedAllergens: string[],
     language: string
 ): string {
-    const relevantAllergens = allergens?.filter(
-        (allergen) => selectedAllergens?.includes(allergen)
+    const relevantAllergens = allergens?.filter((allergen) =>
+        selectedAllergens?.includes(allergen)
     )
     const convertedAllergens = relevantAllergens?.map(
         (allergen) =>
@@ -204,5 +192,29 @@ export function mealName(
         return mealName[foodLang as LanguageKey]
     } else {
         return mealName[i18nLang as LanguageKey]
+    }
+}
+
+/**
+ * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
+ * @param meal  - The meal to calculate the rating for.
+ * @returns A number representing the rating of the meal.
+ */
+export function userMealRating(
+    meal: Meal,
+    allergenSelection: string[],
+    preferencesSelection: string[]
+): number {
+    if (meal.allergens?.some((x) => allergenSelection.includes(x)) ?? false) {
+        return -1
+    } else if (
+        meal.flags?.some((x) => preferencesSelection.includes(x)) ??
+        false
+    ) {
+        return 2
+    } else if (meal.allergens == null && allergenSelection !== null) {
+        return 0
+    } else {
+        return 1
     }
 }

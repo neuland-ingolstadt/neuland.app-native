@@ -1,5 +1,4 @@
-import LocalStorageCache from '@/api/cache'
-import { type RoomDistances, type SpoWeights } from '@/types/asset-api'
+import { type SpoWeights } from '@/types/asset-api'
 
 import packageInfo from '../../package.json'
 
@@ -10,15 +9,6 @@ const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.ho
  * Asset API client class for performing requests against the neuland.app asset API
  */
 class AssetAPIClient {
-    protected cache: LocalStorageCache
-
-    constructor() {
-        this.cache = new LocalStorageCache({
-            namespace: 'asset-api-client',
-            ttl: 14 * 24 * 60 * 60 * 1000, // 2 weeks
-        })
-    }
-
     /**
      * Performs a request against the API
      * @param {string} url The URL to perform the request against
@@ -40,29 +30,11 @@ class AssetAPIClient {
     }
 
     /**
-     * Performs an cached request against the API
-     * @param {string} cacheKey Unique key that identifies this request
-     * @param {string} url The URL to perform the request against
-     * @returns {Promise<any>} A promise that resolves with the response data
-     */
-    async requestCached(cacheKey: string, url: string): Promise<any> {
-        const cached = await this.cache.get(cacheKey)
-        if (cached !== undefined) {
-            return cached
-        }
-        const resp = await this.performRequest(url)
-        await this.cache.set(cacheKey, resp)
-
-        return resp
-    }
-
-    /**
      * Gets the map overlay
      * @returns {Promise<any>} A promise that resolves with the map overlay data
      */
     async getMapOverlay(): Promise<any> {
-        return await this.requestCached(
-            `map-overlay-${packageInfo.version}`,
+        return await this.performRequest(
             `${ENDPOINT}rooms_neuland_v2.4.geojson`
         )
     }
@@ -72,20 +44,8 @@ class AssetAPIClient {
      * @returns {Promise<SpoWeights>} A promise that resolves with the course spo data
      */
     async getSpoWeights(): Promise<SpoWeights> {
-        return await this.requestCached(
-            `spo-weights-${packageInfo.version}`,
+        return await this.performRequest(
             `${ENDPOINT}/generated/spo-grade-weights.json`
-        )
-    }
-
-    /**
-     * Gets the room distance data
-     * @returns {Promise<RoomDistances>} A promise that resolves with the room distance data
-     */
-    async getRoomDistances(): Promise<RoomDistances> {
-        return await this.requestCached(
-            `room-distances-${packageInfo.version}`,
-            `${ENDPOINT}/generated/room-distances.json`
         )
     }
 }

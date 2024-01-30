@@ -1,3 +1,4 @@
+import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
@@ -12,6 +13,7 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { captureException } from '@sentry/react-native'
+import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,6 +25,8 @@ import {
     Text,
     View,
 } from 'react-native'
+
+import packageInfo from '../../../package.json'
 
 export default function GradesSCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -73,7 +77,7 @@ export default function GradesSCreen(): JSX.Element {
      */
     async function loadAverageGrade(): Promise<void> {
         try {
-            const average = await loadGradeAverage()
+            const average = await loadGradeAverage(spoWeights)
             if (average.result !== undefined && average.result !== null) {
                 setGradeAverage(average)
                 setAverageLoadingState(LoadingState.LOADED)
@@ -84,6 +88,14 @@ export default function GradesSCreen(): JSX.Element {
             setAverageLoadingState(LoadingState.ERROR)
         }
     }
+
+    // TODO: Just cache the spoWeights for the relevant study program
+    const { data: spoWeights } = useQuery({
+        queryKey: ['spoWeights', packageInfo.version],
+        queryFn: async () => await NeulandAPI.getSpoWeights(),
+        staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+        gcTime: 1000 * 60 * 60 * 24 * 14, // 2 weeks
+    })
 
     useEffect(() => {
         void Promise.all([loadAllGrades(), loadAverageGrade()])

@@ -1,4 +1,4 @@
-import AssetAPI from '@/api/asset-api'
+import NeulandAPI from '@/api/neuland-api'
 import {
     NoSessionError,
     UnavailableSessionError,
@@ -22,6 +22,7 @@ import { filterRooms, getNextValidDate } from '@/utils/room-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
@@ -44,6 +45,8 @@ import {
     View,
 } from 'react-native'
 import { WebView } from 'react-native-webview'
+
+import packageInfo from '../../../package.json'
 
 export default function Screen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
@@ -94,7 +97,6 @@ export const MapScreen = (): JSX.Element => {
     const [currentFloor, setCurrentFloor] = useState('EG')
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const [mapOverlay, setMapOverlay] = useState<RoomsOverlay | null>(null)
 
     const INGOLSTADT_CENTER = [48.76709, 11.4328]
     const NEUBURG_CENTER = [48.73227, 11.17261]
@@ -252,17 +254,22 @@ export const MapScreen = (): JSX.Element => {
         void load()
     }, [userKind, webViewKey])
 
+    const {
+        data: mapOverlay,
+        refetch,
+        error: overlayError,
+    } = useQuery<RoomsOverlay>({
+        queryKey: ['mapOverlay', packageInfo.version],
+        queryFn: async () => await NeulandAPI.getMapOverlay(),
+        staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+        gcTime: 1000 * 60 * 60 * 24 * 14, // 2 weeks,
+        networkMode: 'always',
+    })
+
     useEffect(() => {
-        // load the map overlay from asset api
-        AssetAPI.getMapOverlay()
-            .then((data) => {
-                setMapOverlay(data)
-            })
-            .catch((e) => {
-                console.error(e)
-                setLoadingState(LoadingState.ERROR)
-                setErrorMsg('mapOverlay')
-            })
+        if (overlayError !== null) {
+            void refetch()
+        }
     }, [webViewKey])
 
     const allRooms = useMemo(() => {
@@ -327,8 +334,8 @@ export const MapScreen = (): JSX.Element => {
             i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en',
         ]
         const fullTextSearcher = (room: any): boolean =>
-            searchProps.some(
-                (x) => getProp(room, x)?.toUpperCase().includes(cleanedText)
+            searchProps.some((x) =>
+                getProp(room, x)?.toUpperCase().includes(cleanedText)
             )
         const roomOnlySearcher = (room: any): boolean =>
             getProp(room, 'Raum').startsWith(cleanedText)
@@ -584,22 +591,23 @@ export const MapScreen = (): JSX.Element => {
                 {loadingState === LoadingState.LOADED && (
                     <FloorPicker floors={uniqueEtages} />
                 )}
-                {loadingState === LoadingState.ERROR && (
-                    <View
-                        style={{
-                            backgroundColor: colors.background,
-                            ...styles.errorContainer,
-                        }}
-                    >
-                        <ErrorView
-                            title={adjustErrorTitle(errorMsg)}
-                            onButtonPress={() => {
-                                setWebViewKey(webViewKey + 1)
-                                setLoadingState(LoadingState.LOADING)
+                {loadingState === LoadingState.ERROR ||
+                    (overlayError !== null && (
+                        <View
+                            style={{
+                                backgroundColor: colors.background,
+                                ...styles.errorContainer,
                             }}
-                        />
-                    </View>
-                )}
+                        >
+                            <ErrorView
+                                title={adjustErrorTitle(errorMsg)}
+                                onButtonPress={() => {
+                                    setWebViewKey(webViewKey + 1)
+                                    setLoadingState(LoadingState.LOADING)
+                                }}
+                            />
+                        </View>
+                    ))}
 
                 <View style={styles.map}>
                     <WebView

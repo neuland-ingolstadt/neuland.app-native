@@ -58,9 +58,9 @@ export default function DashboardEdit(): JSX.Element {
 
     useEffect(() => {
         setFilteredHiddenDashboardEntries(
-            hiddenDashboardEntries.filter(
+            hiddenDashboardEntries?.filter(
                 (item) =>
-                    item.exclusive !== true || item.default.includes(userKind)
+                    item?.exclusive !== true || item.default.includes(userKind)
             )
         )
     }, [hiddenDashboardEntries, userKind])
@@ -97,15 +97,20 @@ export default function DashboardEdit(): JSX.Element {
         if (shownDashboardEntries == null) {
             return
         }
-
         setHasUserDefaultOrder(
             arraysEqual(
                 defaultHidden,
-                hiddenDashboardEntries.map((item) => item.key)
+                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+                hiddenDashboardEntries
+                    ?.filter(Boolean)
+                    .map((item) => item.key) || []
             ) &&
                 arraysEqual(
                     defaultShown,
-                    shownDashboardEntries.map((item) => item.key)
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+                    shownDashboardEntries
+                        ?.filter(Boolean)
+                        .map((item) => item.key) || []
                 )
         )
 
@@ -217,7 +222,8 @@ export default function DashboardEdit(): JSX.Element {
                     </View>
 
                     <View style={styles.block}>
-                        {filteredHiddenDashboardEntries.length > 0 && (
+                        {filteredHiddenDashboardEntries.filter(Boolean).length >
+                            0 && (
                             <Text
                                 style={[
                                     styles.sectionHeaderText,
@@ -235,8 +241,9 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            {filteredHiddenDashboardEntries.map(
-                                (item, index) => (
+                            {filteredHiddenDashboardEntries
+                                .filter(Boolean)
+                                .map((item, index) => (
                                     <React.Fragment key={index}>
                                         <Pressable
                                             disabled={defaultHiddenKeys.includes(
@@ -309,8 +316,7 @@ export default function DashboardEdit(): JSX.Element {
                                             />
                                         )}
                                     </React.Fragment>
-                                )
-                            )}
+                                ))}
                         </View>
                     </View>
 
