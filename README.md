@@ -1,7 +1,7 @@
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql-analysis.yml)
 [![CI](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/lint.yml)
 
-# Neuland Next - native version of neuland.app
+# Neuland Next - Native version of neuland.app
 
 An open source, mobile app developed using React Native and Expo, serving as a replacement for the official Technische Hochschule Ingolstadt (THI) app.
 It features a modern user interface and utilizes the Expo framework for easy development and deployment.
@@ -13,14 +13,18 @@ It features a modern user interface and utilizes the Expo framework for easy dev
 The app aims at implementing all important features of the official app as free and open source software with a modern UI and native features.
 To achieve this, the existing React backend is adapted and the API of the neuland.app is used.
 
+### Current State
+
+> [!NOTE] 
+> The app is in development and not yet publicly available.
+> We are currently doing an internal alpha test with the goal of releasing the app for iOS and Android later this year.
+
 ### Contributing
 
 We are always looking for contributors to help us improve the app.
 Check out the [contributing guidelines](.github/CONTRIBUTING.md) to get started.
 
-### Current State
+> [!IMPORTANT]  
+> To use the THI API a valid API key is required, which is not publicly available.
+> Without a valid API key, the app will only work in guest mode.
 
-> **Warning**
-> The app is in early development and not yet publicly available.
-
-We are currently doing an internal alpha test with the goal of releasing the app for iOS and Android later this year.
