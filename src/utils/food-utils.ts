@@ -24,60 +24,48 @@ export async function loadFoodEntries(
 ): Promise<Food[]> {
     const entries: Food[] = []
     if (restaurants.includes('mensa')) {
-        try {
-            const data = await NeulandAPI.getMensaPlan()
-            data.forEach((day: Food) => {
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Mensa'
-                })
+        const data = await NeulandAPI.getMensaPlan()
+        data.forEach((day: Food) => {
+            day.meals.forEach((entry: any) => {
+                entry.restaurant = 'Mensa'
             })
+        })
 
-            entries.push(data)
-        } catch (e) {
-            console.log(e)
-        }
+        entries.push(data)
     }
 
     if (restaurants.includes('reimanns')) {
-        try {
-            const data = await NeulandAPI.getReimannsPlan()
-            const startOfToday = new Date(formatISODate(new Date())).getTime()
-            const filteredData = data.filter(
-                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        const data = await NeulandAPI.getReimannsPlan()
+        const startOfToday = new Date(formatISODate(new Date())).getTime()
+        const filteredData = data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+
+        filteredData.forEach((day: any) => {
+            day.meals = day.meals.filter(
+                (entry: any) => entry.static === includeStatic
             )
-
-            filteredData.forEach((day: any) => {
-                day.meals = day.meals.filter(
-                    (entry: any) => entry.static === includeStatic
-                )
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Reimanns'
-                })
+            day.meals.forEach((entry: any) => {
+                entry.restaurant = 'Reimanns'
             })
+        })
 
-            entries.push(filteredData)
-        } catch (e) {
-            console.log(e)
-        }
+        entries.push(filteredData)
     }
 
     if (restaurants.includes('canisius')) {
-        try {
-            const data = await NeulandAPI.getCanisiusPlan()
-            const startOfToday = new Date(formatISODate(new Date())).getTime()
-            const filteredData = data.filter(
-                (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-            )
-            filteredData.forEach((day: any) =>
-                day.meals.forEach((entry: any) => {
-                    entry.restaurant = 'Canisius'
-                })
-            )
+        const data = await NeulandAPI.getCanisiusPlan()
+        const startOfToday = new Date(formatISODate(new Date())).getTime()
+        const filteredData = data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+        filteredData.forEach((day: any) =>
+            day.meals.forEach((entry: any) => {
+                entry.restaurant = 'Canisius'
+            })
+        )
 
-            entries.push(filteredData)
-        } catch (e) {
-            console.log(e)
-        }
+        entries.push(filteredData)
     }
 
     // get start of this week (monday) or next monday if isWeekend

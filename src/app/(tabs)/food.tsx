@@ -4,13 +4,14 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
-import { type Food } from '@/types/neuland-api'
-import { isKnownError } from '@/utils/api-utils'
+import { useRefreshByUser } from '@/hooks'
+import { type Food, type Meal } from '@/types/neuland-api'
+import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
-import { LoadingState, getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
+import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
@@ -32,11 +33,8 @@ import {
 import PagerView from 'react-native-pager-view'
 
 function FoodScreen(): JSX.Element {
-    const [days, setDays] = useState<any>([])
     const colors = useTheme().colors as Colors
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
+
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const {
         selectedRestaurants,
@@ -44,49 +42,54 @@ function FoodScreen(): JSX.Element {
         allergenSelection,
         initAllergenSelection,
     } = useContext(FoodFilterContext)
-    const [error, setError] = useState<Error | null>(null)
     const { t, i18n } = useTranslation('common')
-    const loadData = (): void => {
-        loadFoodEntries(selectedRestaurants, showStatic)
-            .then((loadedDays: Food[]) => {
-                const filteredDays: Food[] = loadedDays
-                    .filter(
-                        (day: Food) =>
-                            new Date(day.timestamp).getTime() >=
-                            new Date().setHours(0, 0, 0, 0)
-                    )
-                    .slice(0, 5)
-                const formattedDays: Food[] = filteredDays.map((day: Food) => ({
-                    timestamp: day.timestamp,
-                    meals: day.meals,
-                }))
-                if (formattedDays.length === 0) {
-                    setError(new Error('noMeals'))
-                    setLoadingState(LoadingState.ERROR)
-                    return
-                }
-                setDays(formattedDays)
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e: Error) => {
-                setError(e)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-                setLoadingState(LoadingState.ERROR)
-            })
+
+    const loadData = async (): Promise<
+        Array<{ timestamp: string | Date; meals: Meal[] }>
+    > => {
+        const loadedDays = await loadFoodEntries(
+            selectedRestaurants,
+            showStatic
+        )
+        const filteredDays = loadedDays
+            .filter(
+                (day) =>
+                    new Date(day.timestamp).getTime() >=
+                    new Date().setHours(0, 0, 0, 0)
+            )
+            .slice(0, 5)
+        if (filteredDays.length === 0) {
+            throw new Error('noMeals')
+        }
+        const formattedDays = filteredDays.map((day) => ({
+            timestamp: day.timestamp,
+            meals: day.meals,
+        }))
+        return formattedDays
     }
 
-    const onRefresh: () => void = () => {
-        loadData()
-    }
+    const {
+        data,
+        error,
+        isLoading,
+        isError,
+        isPaused,
+        isSuccess,
+        refetch,
+        isRefetching,
+    } = useQuery({
+        queryKey: ['foond', selectedRestaurants, showStatic],
+        queryFn: loadData,
+    })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     useEffect(() => {
-        loadData()
-    }, [selectedRestaurants, showStatic])
+        if (isPaused && data != null) {
+            void showToast(t('toast.paused'))
+        }
+    }, [isPaused])
 
     const pagerViewRef = useRef<PagerView>(null)
-
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
     }
@@ -107,7 +110,7 @@ function FoodScreen(): JSX.Element {
         const date = new Date(day.timestamp)
         const { colors } = useTheme()
 
-        const daysCnt = days.length < 5 ? days.length : 5
+        const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
         const isFirstDay = index === 0
         const isLastDay = index === daysCnt - 1
 
@@ -250,6 +253,18 @@ function FoodScreen(): JSX.Element {
             </Animated.View>
         )
     }
+
+    const FoodRefreshControl = (): JSX.Element => {
+        return (
+            <RefreshControl
+                refreshing={isRefetchingByUser}
+                onRefresh={() => {
+                    void refetchByUser()
+                }}
+            />
+        )
+    }
+
     const screenHeight = Dimensions.get('window').height
     const scrollY = new Animated.Value(0)
     const showAllergensBanner =
@@ -258,39 +273,38 @@ function FoodScreen(): JSX.Element {
 
     return (
         <ScrollView
-            refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
-                    <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
-                    />
-                ) : undefined
-            }
+            refreshControl={isError ? <FoodRefreshControl /> : undefined}
             style={styles.page}
             contentInsetAdjustmentBehavior="always"
             contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
-            scrollEnabled={loadingState !== LoadingState.LOADED}
+            scrollEnabled={!isLoading}
         >
-            {loadingState === LoadingState.LOADING && (
+            {isLoading && (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
             )}
-            {loadingState === LoadingState.ERROR && (
+            {isError && (
                 <ErrorView
                     title={
                         error?.message === 'noMeals'
                             ? t('error.noMeals')
                             : error?.message ?? t('error.title')
                     }
-                    onRefresh={onRefresh}
+                    onRefresh={refetch}
+                    refreshing={false}
+                />
+            )}
+            {isPaused && !isSuccess && (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetch}
                     refreshing={false}
                 />
             )}
 
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && (
                 <>
                     <Animated.View
                         // eslint-disable-next-line react-native/no-inline-styles
@@ -311,7 +325,7 @@ function FoodScreen(): JSX.Element {
                                 ...styles.loadedContainer,
                             }}
                         >
-                            {days
+                            {data
                                 .slice(0, 5)
                                 .map((day: Food, index: number) => (
                                     <DayButton
@@ -334,30 +348,37 @@ function FoodScreen(): JSX.Element {
                             const page = e.nativeEvent.position
                             setSelectedDay(page)
                         }}
-                        key={days.length}
+                        key={data.length}
                         scrollEnabled
                         overdrag
                     >
-                        {days.map((_: any, index: number) => (
+                        {data.map((_: any, index: number) => (
                             <ScrollView
                                 scrollEventThrottle={16}
                                 onScroll={Animated.event(
                                     [
                                         {
                                             nativeEvent: {
-                                                contentOffset: { y: scrollY },
+                                                contentOffset: {
+                                                    y: scrollY,
+                                                },
                                             },
                                         },
                                     ],
                                     { useNativeDriver: false }
                                 )}
+                                refreshControl={
+                                    !isRefetching && !isLoading ? (
+                                        <FoodRefreshControl />
+                                    ) : undefined
+                                }
                                 key={index}
                                 contentContainerStyle={
                                     styles.innerScrollContainer
                                 }
                             >
                                 <MealDay
-                                    day={days[index]}
+                                    day={data[index]}
                                     index={index}
                                     colors={colors}
                                     key={index}

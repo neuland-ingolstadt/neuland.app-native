@@ -1,4 +1,4 @@
-import useNotification from '@/hooks/notifications'
+import { useNotification } from '@/hooks'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as SecureStore from 'expo-secure-store'

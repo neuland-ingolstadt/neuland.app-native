@@ -1,5 +1,6 @@
 import Color from 'color'
 import { Platform } from 'react-native'
+import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
     LOADING,
@@ -118,4 +119,24 @@ export const lighten = (percentage: number, color: string): string => {
  */
 export const getStatusBarStyle = (): 'light' | 'auto' => {
     return Platform.OS === 'ios' ? (Platform.isPad ? 'auto' : 'light') : 'auto'
+}
+
+let toast: any = null
+export const showToast = async (
+    message: string,
+    options?: ToastOptions
+): Promise<void> => {
+    if (toast !== null) {
+        Toast.hide(toast)
+    }
+
+    toast = Toast.show(message, {
+        duration: Toast.durations.SHORT,
+        position: 50,
+        shadow: false,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        ...options,
+    })
 }

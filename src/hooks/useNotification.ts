@@ -25,7 +25,7 @@ export interface NotificationHook {
     cancelAll: () => Promise<void>
 }
 
-const useNotification = (): NotificationHook => {
+export const useNotification = (): NotificationHook => {
     const getScheduled = async (): Promise<any> => {
         return await Notifications.getAllScheduledNotificationsAsync()
     }
@@ -85,5 +85,3 @@ const useNotification = (): NotificationHook => {
         cancelAll,
     }
 }
-
-export default useNotification

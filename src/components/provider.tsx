@@ -1,3 +1,4 @@
+import { useAppState, useOnlineManager } from '@/hooks'
 import { type AppIconHook } from '@/hooks/contexts/appIcon'
 import { type FlowHook } from '@/hooks/contexts/flow'
 import { type IdCard } from '@/hooks/contexts/idCard'
@@ -8,14 +9,23 @@ import {
 } from '@/hooks/contexts/timetable'
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
     DarkTheme,
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { QueryClient, focusManager } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { usePathname } from 'expo-router'
 import React, { createContext, useEffect } from 'react'
-import { Platform, StyleSheet, useColorScheme } from 'react-native'
+import {
+    type AppStateStatus,
+    Platform,
+    StyleSheet,
+    useColorScheme,
+} from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
 
@@ -41,6 +51,25 @@ import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 interface ProviderProps {
     children: React.ReactNode
 }
+
+function onAppStateChange(status: AppStateStatus): void {
+    // React Query already supports in web browser refetch on window focus by default
+    if (Platform.OS !== 'web') {
+        focusManager.setFocused(status === 'active')
+    }
+}
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 2,
+        },
+    },
+})
+
+const asyncStoragePersister = createAsyncStoragePersister({
+    storage: AsyncStorage,
+})
 
 export const RouteParamsContext = createContext<RouteParams>({
     routeParams: '',
@@ -151,6 +180,8 @@ export default function Provider({
     const notifications = useNotifications()
     const idCard = useIdCard()
 
+    useOnlineManager()
+    useAppState(onAppStateChange)
     /**
      * Returns the primary color for a given color scheme.
      * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
@@ -297,41 +328,48 @@ export default function Provider({
 
     return (
         <GestureHandlerRootView style={styles.container}>
-            <ThemeProvider
-                value={colorScheme === 'light' ? lightTheme : darkTheme}
+            <PersistQueryClientProvider
+                client={queryClient}
+                persistOptions={{ persister: asyncStoragePersister }}
             >
-                <TimetableContext.Provider value={timetableHook}>
-                    <NotificationContext.Provider value={notifications}>
-                        <ThemeContext.Provider value={themeHook}>
-                            <AppIconContext.Provider value={appIcon}>
-                                <FlowContext.Provider value={flow}>
-                                    <UserKindContext.Provider value={userKind}>
-                                        <FoodFilterContext.Provider
-                                            value={foodFilter}
+                <ThemeProvider
+                    value={colorScheme === 'light' ? lightTheme : darkTheme}
+                >
+                    <TimetableContext.Provider value={timetableHook}>
+                        <NotificationContext.Provider value={notifications}>
+                            <ThemeContext.Provider value={themeHook}>
+                                <AppIconContext.Provider value={appIcon}>
+                                    <FlowContext.Provider value={flow}>
+                                        <UserKindContext.Provider
+                                            value={userKind}
                                         >
-                                            <IdCardContext.Provider
-                                                value={idCard}
+                                            <FoodFilterContext.Provider
+                                                value={foodFilter}
                                             >
-                                                <DashboardContext.Provider
-                                                    value={dashboard}
+                                                <IdCardContext.Provider
+                                                    value={idCard}
                                                 >
-                                                    <RouteParamsContext.Provider
-                                                        value={routeParams}
+                                                    <DashboardContext.Provider
+                                                        value={dashboard}
                                                     >
-                                                        <RootSiblingParent>
-                                                            {children}
-                                                        </RootSiblingParent>
-                                                    </RouteParamsContext.Provider>
-                                                </DashboardContext.Provider>
-                                            </IdCardContext.Provider>
-                                        </FoodFilterContext.Provider>
-                                    </UserKindContext.Provider>
-                                </FlowContext.Provider>
-                            </AppIconContext.Provider>
-                        </ThemeContext.Provider>
-                    </NotificationContext.Provider>
-                </TimetableContext.Provider>
-            </ThemeProvider>
+                                                        <RouteParamsContext.Provider
+                                                            value={routeParams}
+                                                        >
+                                                            <RootSiblingParent>
+                                                                {children}
+                                                            </RootSiblingParent>
+                                                        </RouteParamsContext.Provider>
+                                                    </DashboardContext.Provider>
+                                                </IdCardContext.Provider>
+                                            </FoodFilterContext.Provider>
+                                        </UserKindContext.Provider>
+                                    </FlowContext.Provider>
+                                </AppIconContext.Provider>
+                            </ThemeContext.Provider>
+                        </NotificationContext.Provider>
+                    </TimetableContext.Provider>
+                </ThemeProvider>
+            </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )
 }
