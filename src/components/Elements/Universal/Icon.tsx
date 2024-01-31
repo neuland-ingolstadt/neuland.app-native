@@ -51,7 +51,7 @@ const PlatformIcon = ({
                 name={ios.name as typeof Ionicons.defaultProps.name}
                 size={ios.size}
                 color={color}
-                style={{ width: ios.size - 1, height: ios.size + 1, ...style }}
+                style={{ width: ios.size - 1, height: ios.size, ...style }}
             />
         ) : (
             <View>

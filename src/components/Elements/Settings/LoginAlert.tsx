@@ -42,11 +42,11 @@ const LoginAlert = ({
                         <PlatformIcon
                             ios={{
                                 name: 'xmark',
-                                size: 12,
+                                size: 15,
                             }}
                             android={{
                                 name: 'close',
-                                size: 16,
+                                size: 17,
                             }}
                             color={colors.text}
                         />

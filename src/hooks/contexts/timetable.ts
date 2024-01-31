@@ -9,7 +9,7 @@ export interface TimetableHook {
     setSelectedDate: (date: Date) => void
 }
 
-export const DEFAULT_TIMETABLE_MODE: CalendarMode = 'list'
+export const DEFAULT_TIMETABLE_MODE: CalendarMode = '3days'
 
 /**
  * Custom hook that manages the users timetable mode.

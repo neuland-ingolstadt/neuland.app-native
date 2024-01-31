@@ -7,8 +7,9 @@ export default {
     onboarding: {
         links: {
             privacy: 'Datenschutz',
-            agree1: 'Durch Fortfahren stimmst du unserer',
-            agree2: 'zu.',
+            privacypolicy: 'Datenschutzerklärung',
+            agree1: 'Durch Fortfahren stimmst du unserer ',
+            agree2: ' zu.',
             imprint: 'Impressum',
         },
         page1: {

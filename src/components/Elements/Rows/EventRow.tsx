@@ -7,7 +7,14 @@ import {
 import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
@@ -89,6 +96,11 @@ const CLEventRow = ({
                                             android={{
                                                 name: 'instagram',
                                                 size: 19,
+                                            }}
+                                            style={{
+                                                ...(Platform.OS !== 'ios'
+                                                    ? { marginBottom: 4 }
+                                                    : {}),
                                             }}
                                         />
                                     </Pressable>

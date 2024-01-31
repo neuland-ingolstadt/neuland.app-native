@@ -354,15 +354,14 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 20,
-        marginTop: 16,
+        marginBottom: 12,
+        marginTop: 25,
         alignSelf: 'center',
     },
     loginButton: {
         height: 40,
         justifyContent: 'center',
         paddingHorizontal: 20,
-        paddingVertical: 10,
         marginTop: 25,
         borderRadius: 5,
         alignItems: 'center',
@@ -384,6 +383,7 @@ const styles = StyleSheet.create({
     guestText: {
         fontSize: 14,
         marginTop: 10,
+        marginBottom: 8,
     },
     keyboardContainer: {
         flex: 1,

@@ -11,7 +11,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
 
-import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
+import { formatISODate, getAdjustedDay } from './date-utils'
 
 /**
  * Fetches and parses the meal plan
@@ -52,12 +52,9 @@ export async function loadFoodEntries(
         entries.push(filterData(data))
     }
 
-    // get start of this week (monday) or next monday if isWeekend
-    const startOfThisWeek = getMonday(getAdjustedDay(new Date()))
-
-    // create day entries for next 12 days (current and next week including the weekend) starting from monday
-    let days: Date[] = Array.from({ length: 12 }, (_, i) => {
-        const date = new Date(startOfThisWeek.getTime())
+    // create day entries for next 7 days (current and next week including the weekend) starting from monday
+    let days: Date[] = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date()
         date.setDate(date.getDate() + i)
         return date
     })

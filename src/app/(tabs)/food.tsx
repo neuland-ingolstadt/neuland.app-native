@@ -5,7 +5,7 @@ import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
-import { type Food, type Meal } from '@/types/neuland-api'
+import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
@@ -44,35 +44,12 @@ function FoodScreen(): JSX.Element {
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('common')
 
-    const loadData = async (): Promise<
-        Array<{ timestamp: string | Date; meals: Meal[] }>
-    > => {
-        const loadedDays = await loadFoodEntries(
-            selectedRestaurants,
-            showStatic
-        )
-        const filteredDays = loadedDays
-            .filter(
-                (day) =>
-                    new Date(day.timestamp).getTime() >=
-                    new Date().setHours(0, 0, 0, 0)
-            )
-            .slice(0, 5)
-        if (filteredDays.length === 0) {
-            throw new Error('noMeals')
-        }
-        const formattedDays = filteredDays.map((day) => ({
-            timestamp: day.timestamp,
-            meals: day.meals,
-        }))
-        return formattedDays
-    }
-
     const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
         useQuery({
             queryKey: ['food', selectedRestaurants, showStatic],
-            queryFn: loadData,
-            staleTime: 1000 * 60 * 10, // 10 minutes
+            queryFn: async () =>
+                await loadFoodEntries(selectedRestaurants, showStatic),
+            staleTime: 1000 * 60 * 15, // 10 minutes
             gcTime: 1000 * 60 * 60 * 24, // 24 hours
         })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)

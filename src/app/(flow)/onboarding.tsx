@@ -165,43 +165,26 @@ export default function OnboardingScreen(): JSX.Element {
 
                             <View style={styles.privacyRow}>
                                 <Text
-                                    style={
-                                        (styles.linkText3,
-                                        {
-                                            color: getContrastColor(
-                                                colors.primary
-                                            ),
-                                        })
-                                    }
-                                >
-                                    {t('onboarding.links.agree1')}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.linkPrivacy,
-                                        {
-                                            color: getContrastColor(
-                                                colors.primary
-                                            ),
-                                        },
-                                    ]}
-                                    onPress={() => {
-                                        void Linking.openURL(PRIVACY_URL)
+                                    style={{
+                                        ...styles.privacyText,
+                                        color: getContrastColor(colors.primary),
                                     }}
+                                    numberOfLines={2}
                                 >
-                                    {t('onboarding.links.privacy')}
-                                </Text>
-                                <Text
-                                    style={
-                                        (styles.linkText3,
-                                        {
-                                            color: getContrastColor(
-                                                colors.primary
-                                            ),
-                                        })
-                                    }
-                                >
-                                    {t('onboarding.links.agree2')}
+                                    <Text style={styles.linkText3}>
+                                        {t('onboarding.links.agree1')}
+                                    </Text>
+                                    <Text
+                                        style={styles.linkPrivacy}
+                                        onPress={() => {
+                                            void Linking.openURL(PRIVACY_URL)
+                                        }}
+                                    >
+                                        {t('onboarding.links.privacypolicy')}
+                                    </Text>
+                                    <Text style={styles.linkText3}>
+                                        {t('onboarding.links.agree2')}
+                                    </Text>
                                 </Text>
                             </View>
                         </View>
@@ -251,6 +234,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    privacyText: {
+        flexWrap: 'wrap',
+        flex: 1,
+        textAlign: 'center',
     },
     logo: {
         height: 200,

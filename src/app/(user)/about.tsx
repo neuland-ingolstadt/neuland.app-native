@@ -5,7 +5,7 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { AppIconContext, FlowContext } from '@/components/provider'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -135,7 +135,9 @@ export default function About(): JSX.Element {
     const [pressCount, setPressCount] = useState(0)
     return (
         <>
-            <ScrollView>
+            <ScrollView
+                contentContainerStyle={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
+            >
                 <View style={styles.container}>
                     <View style={styles.logoContainer}>
                         <Pressable
@@ -240,7 +242,6 @@ const styles = StyleSheet.create({
     },
     formlistContainer: {
         marginTop: 10,
-        marginBottom: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
