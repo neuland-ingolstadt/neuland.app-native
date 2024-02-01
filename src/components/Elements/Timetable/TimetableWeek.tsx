@@ -90,7 +90,9 @@ export default function TimetableWeek({
     }: {
         event: FriendlyTimetableEntry
     }): JSX.Element => {
-        const duration = event.endDate.getTime() - event.startDate.getTime()
+        const begin = new Date(event.startDate)
+        const end = new Date(event.endDate)
+        const duration = end.getTime() - begin.getTime()
         const isOverflowing = duration < 1000 * 60 * 60
         const nameParts = event.shortName.split('_').slice(1)
 
@@ -136,9 +138,9 @@ export default function TimetableWeek({
                                     fontVariant: ['tabular-nums'],
                                 }}
                             >
-                                {formatFriendlyTime(event.startDate) +
+                                {formatFriendlyTime(begin) +
                                     ' - ' +
-                                    formatFriendlyTime(event.endDate)}
+                                    formatFriendlyTime(end)}
                             </Text>
                         )}
                     </View>

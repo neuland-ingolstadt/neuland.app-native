@@ -224,7 +224,13 @@ export default function Settings(): JSX.Element {
                         android: 'star',
                     },
                     onPress: () => {
-                        alert('Not available yet')
+                        if (Platform.OS === 'android') {
+                            void Linking.openURL(
+                                'market://details?id=app.neuland'
+                            )
+                        } else {
+                            alert('Not available yet')
+                        }
                     },
                 },
             ],

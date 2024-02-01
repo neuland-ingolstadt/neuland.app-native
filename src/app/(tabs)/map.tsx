@@ -168,7 +168,7 @@ export const MapScreen = (): JSX.Element => {
                                     size: 22,
                                 }}
                                 android={{
-                                    name: 'view_timeline',
+                                    name: 'overview',
                                     size: 24,
                                 }}
                             />

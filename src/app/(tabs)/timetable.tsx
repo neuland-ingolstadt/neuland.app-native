@@ -8,17 +8,17 @@ import {
     TimetableContext,
     UserKindContext,
 } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FriendlyTimetableEntry } from '@/types/utils'
-import { isKnownError } from '@/utils/api-utils'
+import { networkError } from '@/utils/api-utils'
 import {
     generateKey,
     getFriendlyTimetable,
     scheduleLectureNotification,
 } from '@/utils/timetable-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
+import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -42,45 +42,38 @@ export default function TimetableScreen(): JSX.Element {
     const { timetableMode } = useContext(TimetableContext)
 
     const { t } = useTranslation(['timetable'])
-    const [timetable, setTimetable] = useState<FriendlyTimetableEntry[]>([])
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const [errorMsg, setErrorMsg] = useState<string>('')
+
     const {
         timetableNotifications,
         updateTimetableNotifications,
         removeNotification,
     } = useContext(NotificationContext)
     const { userKind } = useContext(UserKindContext)
-    const loadTimetable = async (): Promise<void> => {
-        try {
-            const timetable = await getFriendlyTimetable(new Date(), true)
-            if (timetable.length === 0) {
-                throw new Error('Timetable is empty')
-            }
-            setTimetable(timetable)
-            setLoadingState(LoadingState.LOADED)
-            setErrorMsg('')
-        } catch (e: any) {
-            if (!isKnownError(e)) {
-                captureException(e)
-            }
-            setLoadingState(LoadingState.ERROR)
-            setErrorMsg(e.message)
+    const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
+        const timetable = await getFriendlyTimetable(new Date(), true)
+        if (timetable.length === 0) {
+            throw new Error('Timetable is empty')
         }
+        return timetable
     }
 
-    const onRefresh: () => void = () => {
-        setLoadingState(LoadingState.REFRESHING)
-        void loadTimetable()
-    }
-    useEffect(() => {
-        setLoadingState(LoadingState.LOADING)
-        void loadTimetable()
-    }, [userKind])
-
+    const {
+        data: timetable,
+        error,
+        isLoading,
+        isPaused,
+        isSuccess,
+        refetch,
+    } = useQuery({
+        queryKey: ['timetable', userKind],
+        queryFn: loadTimetable,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     useEffect(() => {
         const updateNotifications = async (): Promise<void> => {
-            if (timetable.length === 0) return
+            if (timetable === undefined || timetable.length === 0) return
             console.log('Updating notifications')
             await updateAllNotifications()
             console.log('Updated notifications')
@@ -98,6 +91,7 @@ export default function TimetableScreen(): JSX.Element {
     }, [timetable, i18n.language])
 
     async function updateAllNotifications(): Promise<void> {
+        if (timetable === undefined) return
         const setupLectures = Object.keys(timetableNotifications)
         if (setupLectures.length === 0) return
         const configuredLanguage =
@@ -248,22 +242,32 @@ export default function TimetableScreen(): JSX.Element {
     }
 
     const TempList = (): JSX.Element => {
-        if (loadingState === LoadingState.LOADING) return <LoadingView />
-        else if (loadingState === LoadingState.LOADED) {
+        if (isLoading) return <LoadingView />
+        else if (isSuccess && timetable !== undefined) {
             if (timetableMode === 'list') {
                 return <TimetableList friendlyTimetable={timetable} />
             } else {
                 return <TimetableWeek friendlyTimetable={timetable} />
             }
         } else {
-            if (
-                errorMsg === '"Time table does not exist" (-202)' ||
-                errorMsg === 'Timetable is empty'
+            if (isPaused && !isSuccess) {
+                return (
+                    <ErrorView
+                        title={networkError}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                    />
+                )
+            } else if (
+                error?.message === '"Time table does not exist" (-202)' ||
+                error?.message === 'Timetable is empty'
             ) {
                 return (
                     <ErrorView
                         title={
-                            errorMsg !== 'Timetable is empty'
+                            error.message !== 'Timetable is empty'
                                 ? t('error.empty.title')
                                 : t('error.empty.title2')
                         }
@@ -276,16 +280,22 @@ export default function TimetableScreen(): JSX.Element {
                         onButtonPress={() => {
                             void Linking.openURL('https://hiplan.thi.de/')
                         }}
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 )
             } else {
                 return (
                     <ErrorView
-                        title={errorMsg}
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        title={
+                            error?.message ?? t('error.title', { ns: 'common' })
+                        }
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 )
             }

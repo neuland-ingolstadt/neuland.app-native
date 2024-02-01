@@ -326,7 +326,7 @@ export default function FoodDetail(): JSX.Element {
     }
 
     const sections: FormListSections[] =
-        meal?.restaurant === 'Mensa'
+        meal?.restaurant === 'mensa'
             ? [
                   ...priceSection,
                   ...variantsSection,

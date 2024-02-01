@@ -98,6 +98,10 @@ export default function GradesSCreen(): JSX.Element {
     })
 
     useEffect(() => {
+        void loadAverageGrade()
+    }, [spoWeights])
+
+    useEffect(() => {
         void Promise.all([loadAllGrades(), loadAverageGrade()])
     }, [])
 

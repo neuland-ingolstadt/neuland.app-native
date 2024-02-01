@@ -16,7 +16,6 @@ import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
-const KEY_GET_TIMETABLE = 'getTimetable'
 const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
@@ -182,10 +181,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         detailed = false
     ): Promise<TimetableResponse> {
         try {
-            const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${
-                detailed ? 'true' : 'false'
-            }`
-            const res = await this.requestCached(key, {
+            const res = await this.requestAuthenticated({
                 service: 'thiapp',
                 method: 'stpl',
                 format: 'json',

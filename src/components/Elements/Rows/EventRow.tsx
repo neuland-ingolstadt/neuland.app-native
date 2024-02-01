@@ -29,6 +29,8 @@ const CLEventRow = ({
 }): JSX.Element => {
     const club = clubs.find((club) => club.club === event.organizer)
     const { t } = useTranslation('common')
+    const begin = new Date(event.begin)
+    const end = new Date(event.end)
     return (
         <RowEntry
             title={event.title}
@@ -51,7 +53,7 @@ const CLEventRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        {formatFriendlyDateTimeRange(event.begin, event.end)}
+                        {formatFriendlyDateTimeRange(begin, end)}
                     </Text>
                 </>
             }
@@ -120,12 +122,8 @@ const CLEventRow = ({
                                     event.begin < new Date()
                                         ? `${t(
                                               'dates.until'
-                                          )} ${formatFriendlyRelativeTime(
-                                              event.end
-                                          )}`
-                                        : formatFriendlyRelativeTime(
-                                              event.begin
-                                          )}
+                                          )} ${formatFriendlyRelativeTime(end)}`
+                                        : formatFriendlyRelativeTime(begin)}
                                 </>
                             )}
                         </Text>

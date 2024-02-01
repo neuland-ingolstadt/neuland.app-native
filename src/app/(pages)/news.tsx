@@ -1,18 +1,15 @@
 import API from '@/api/authenticated-api'
-import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { type ThiNews } from '@/types/thi-api'
-import { isKnownError } from '@/utils/api-utils'
+import { useRefreshByUser } from '@/hooks'
+import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
-import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
 import {
     ActivityIndicator,
     FlatList,
@@ -20,6 +17,7 @@ import {
     Linking,
     Platform,
     Pressable,
+    RefreshControl,
     StyleSheet,
     Text,
     View,
@@ -27,61 +25,55 @@ import {
 
 export default function NewsScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const [news, setNews] = useState<ThiNews[] | null>(null)
-    const [errorMsg, setErrorMsg] = useState('')
 
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
-    /**
-     * Loads all news from the API and sets the state accordingly.
-     * @returns {Promise<void>} A promise that resolves when all news have been loaded.
-     */
-    async function loadNews(): Promise<void> {
-        try {
-            const news = await API.getThiNews()
-            setNews(news)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            setLoadingState(LoadingState.ERROR)
-            if (e instanceof NoSessionError) {
-                router.push('(user)/login')
-            } else {
-                setErrorMsg(e.message)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-            }
-        }
-    }
-
-    useEffect(() => {
-        void loadNews()
-    }, [])
-
-    const onRefresh: () => void = () => {
-        void loadNews()
-    }
+    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
+        useQuery({
+            queryKey: ['thiNews'],
+            queryFn: async () => await API.getThiNews(),
+            staleTime: 1000 * 60 * 10, // 10 minutes
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     return (
         <View>
-            {loadingState === LoadingState.LOADING && (
+            {isLoading ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
-            )}
-            {loadingState === LoadingState.ERROR && (
+            ) : isError ? (
                 <View style={styles.errorContainer}>
                     <ErrorView
-                        title={errorMsg}
-                        onRefresh={onRefresh}
+                        title={error.message}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                         refreshing={false}
                     />
                 </View>
-            )}
-            {loadingState === LoadingState.LOADED && (
+            ) : isPaused && !isSuccess ? (
+                <View style={styles.errorContainer}>
+                    <ErrorView
+                        title={networkError}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                        refreshing={false}
+                    />
+                </View>
+            ) : isSuccess && data !== null ? (
                 <FlatList
-                    data={news}
+                    data={data}
+                    refreshControl={
+                        isSuccess ? (
+                            <RefreshControl
+                                refreshing={isRefetchingByUser}
+                                onRefresh={() => {
+                                    void refetchByUser()
+                                }}
+                            />
+                        ) : undefined
+                    }
                     keyExtractor={(item) => item.href}
                     contentContainerStyle={styles.contentContainer}
                     renderItem={({ item }) => (
@@ -149,7 +141,7 @@ export default function NewsScreen(): JSX.Element {
                         </View>
                     )}
                 />
-            )}
+            ) : null}
         </View>
     )
 }

@@ -38,7 +38,7 @@ const EventsCard = (): JSX.Element => {
                         ...(data.length > 0 && styles.calendarFilled),
                     }}
                 >
-                    {data.slice(0, 2).map((event, index) => (
+                    {data.slice(0, 2).map((event, index, slicedData) => (
                         <React.Fragment key={index}>
                             <View>
                                 <View>
@@ -67,7 +67,7 @@ const EventsCard = (): JSX.Element => {
                                 </View>
                             </View>
 
-                            {data.length - 1 !== index && (
+                            {slicedData.length - 1 !== index && (
                                 <Divider color={colors.border} width={'100%'} />
                             )}
                         </React.Fragment>

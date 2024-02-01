@@ -42,17 +42,43 @@ function FoodScreen(): JSX.Element {
         allergenSelection,
         initAllergenSelection,
     } = useContext(FoodFilterContext)
+    const [data, setData] = useState<Food[]>([])
     const { t, i18n } = useTranslation('common')
 
-    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
-        useQuery({
-            queryKey: ['food', selectedRestaurants, showStatic],
-            queryFn: async () =>
-                await loadFoodEntries(selectedRestaurants, showStatic),
-            staleTime: 1000 * 60 * 15, // 10 minutes
-            gcTime: 1000 * 60 * 60 * 24, // 24 hours
-        })
+    const {
+        data: foodData,
+        error,
+        isLoading,
+        isError,
+        isPaused,
+        isSuccess,
+        refetch,
+    } = useQuery({
+        queryKey: ['food', selectedRestaurants, showStatic],
+        queryFn: async () =>
+            await loadFoodEntries(selectedRestaurants, showStatic),
+        staleTime: 1000 * 60 * 20, // 20 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+
+    useEffect(() => {
+        if (foodData == null) {
+            return
+        }
+        const filteredDays = foodData
+            .filter(
+                (day) =>
+                    new Date(day.timestamp).getTime() >=
+                    new Date().setHours(0, 0, 0, 0)
+            ) // filter again in case of yesterday's cached data
+            .slice(0, 5)
+        if (filteredDays.length === 0) {
+            throw new Error('noMeals')
+        }
+
+        setData(filteredDays)
+    }, [foodData])
 
     useEffect(() => {
         if (isPaused && data != null) {
