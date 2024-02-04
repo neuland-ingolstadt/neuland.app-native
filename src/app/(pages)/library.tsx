@@ -103,11 +103,14 @@ export default function newsSCreen(): JSX.Element {
             const previousReservations = queryClient.getQueryData(['library'])
 
             // Optimistically update to the new value
-            // Optimistically update to the new value
             queryClient.setQueryData(['library'], (old: any) => {
                 const newReservations = old.reservations.filter(
                     (reservation: any) => reservation.reservation_id !== id
                 )
+                LayoutAnimation.configureNext(
+                    LayoutAnimation.Presets.easeInEaseOut
+                )
+
                 return { ...old, reservations: newReservations }
             })
 
@@ -116,6 +119,9 @@ export default function newsSCreen(): JSX.Element {
         },
         onSettled: () => {
             void refetch()
+        },
+        onSuccess: () => {
+            setExpandedRow(null)
         },
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
@@ -126,36 +132,51 @@ export default function newsSCreen(): JSX.Element {
         },
     })
 
-    /**
-     * Creates a new reservation.
-     * @param {string} reservationRoom Room ID
-     * @param {object} reservationTime Reservation time
-     * @param {string} reservationSeat Seat ID
-     * @returns {Promise<void>}
-     */
-    async function addReservation(
+    const addReservationMutation = useMutation({
+        mutationFn: async ({
+            reservationRoom,
+            reservationTime,
+            reservationSeat,
+        }: {
+            reservationRoom: string
+            reservationTime: { from: Date; to: Date }
+            reservationSeat: string
+        }) => {
+            await API.addLibraryReservation(
+                reservationRoom,
+                reservationTime.from.toLocaleDateString('de-DE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                }),
+                reservationTime.from.toLocaleTimeString('de-DE', {
+                    timeStyle: 'short',
+                }),
+                reservationTime.to.toLocaleTimeString('de-DE', {
+                    timeStyle: 'short',
+                }),
+                reservationSeat
+            )
+            toggleRow(reservationTime.from.toString())
+        },
+        onSettled: () => {
+            void refetch()
+        },
+        onSuccess: () => {},
+    })
+
+    const addReservation = async (
         reservationRoom: string,
         reservationTime: { from: Date; to: Date },
         reservationSeat: string
-    ): Promise<void> {
-        await API.addLibraryReservation(
+    ): Promise<void> => {
+        void addReservationMutation.mutateAsync({
             reservationRoom,
-            reservationTime.from.toLocaleDateString('de-DE', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }),
-            reservationTime.from.toLocaleTimeString('de-DE', {
-                timeStyle: 'short',
-            }),
-            reservationTime.to.toLocaleTimeString('de-DE', {
-                timeStyle: 'short',
-            }),
-            reservationSeat
-        )
-
-        void refetch()
+            reservationTime,
+            reservationSeat,
+        })
     }
+
     /**
      * Cancels a reservation.
      * @param {string} id Reservation ID
@@ -217,7 +238,6 @@ export default function newsSCreen(): JSX.Element {
                                                     deleteReservation={
                                                         deleteReservation
                                                     }
-                                                    isRefetched={isSuccess}
                                                 />
                                                 {index !==
                                                     data.reservations.length -
@@ -262,7 +282,7 @@ export default function newsSCreen(): JSX.Element {
                                                                     expandedRow ===
                                                                     time.from.toString()
                                                                 }
-                                                                onToggle={() => {
+                                                                onExpand={() => {
                                                                     toggleRow(
                                                                         time.from.toString()
                                                                     )

@@ -22,7 +22,7 @@ const LibraryBookingRow = ({
     item,
     addReservation,
     isExpanded,
-    onToggle,
+    onExpand,
 }: {
     colors: Colors
     item: AvailableRoomItem
@@ -32,7 +32,7 @@ const LibraryBookingRow = ({
         reservationSeat: string
     ) => Promise<void>
     isExpanded: boolean
-    onToggle: () => void
+    onExpand: () => void
 }): JSX.Element => {
     function getAvailableRooms(): Array<[string, AvailableRoom, number]> {
         return Object.entries(item.resources)
@@ -95,7 +95,7 @@ const LibraryBookingRow = ({
                 onPress={() => {
                     if (availSeats === 0) return
                     setCollapsed(!collapsed)
-                    onToggle()
+                    onExpand()
                 }}
                 style={styles.eventContainer}
             >
@@ -234,12 +234,9 @@ const LibraryBookingRow = ({
                                         seat
                                     )
                                         .then(() => {
-                                            onToggle()
+                                            setReserve(true)
                                         })
                                         .catch(() => {})
-                                        .finally(() => {
-                                            setReserve(false)
-                                        })
                                 }}
                                 disabled={reserve}
                             >

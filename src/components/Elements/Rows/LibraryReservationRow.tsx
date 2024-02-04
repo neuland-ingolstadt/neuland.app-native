@@ -1,7 +1,7 @@
 import { type Colors } from '@/components/colors'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 
@@ -12,22 +12,12 @@ const LibraryReservationRow = ({
     colors,
     reservation,
     deleteReservation,
-    isRefetched,
 }: {
     colors: Colors
     reservation: Reservation
     deleteReservation: (id: string) => Promise<void>
-    isRefetched: boolean
 }): JSX.Element => {
     const { t } = useTranslation('common')
-    const [deleting, setDeleting] = useState<boolean>(false)
-
-    useEffect(() => {
-        if (isRefetched) {
-            console.log('Refetching reservations')
-            setDeleting(false)
-        }
-    }, [isRefetched])
 
     const deleteAlert = (): void => {
         Alert.alert(
@@ -39,7 +29,7 @@ const LibraryReservationRow = ({
                     style: 'cancel',
                 },
                 {
-                    text: deleting ? '' : t('misc.delete'),
+                    text: t('misc.delete'),
                     style: 'destructive',
                     onPress: () => {
                         void deleteReservation(reservation.reservation_id)
@@ -72,8 +62,8 @@ const LibraryReservationRow = ({
                         }}
                     >
                         {formatFriendlyDateTimeRange(
-                            reservation.start,
-                            reservation.end
+                            new Date(reservation.start),
+                            new Date(reservation.end)
                         )}
                     </Text>
                     <Text
