@@ -68,8 +68,19 @@ export default function TimetableScreen(): JSX.Element {
         queryKey: ['timetable', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10, // 10 minutes
-        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours,
+        retry(failureCount, error) {
+            const ignoreErrors = [
+                '"Time table does not exist" (-202)',
+                'Timetable is empty',
+            ]
+            if (ignoreErrors.includes(error?.message)) {
+                return false
+            }
+            return failureCount < 3
+        },
     })
+
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     useEffect(() => {
         const updateNotifications = async (): Promise<void> => {

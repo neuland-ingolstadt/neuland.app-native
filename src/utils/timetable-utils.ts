@@ -20,19 +20,18 @@ export async function getFriendlyTimetable(
     date: Date,
     detailed: boolean = false
 ): Promise<FriendlyTimetableEntry[]> {
-    const [rawTimetableResponse, rawTimetableNextMonthResponse] =
-        await Promise.all([
-            API.getTimetable(date, detailed),
-            API.getTimetable(
-                new Date(date.getFullYear(), date.getMonth() + 1),
-                detailed
-            ),
-        ])
+    const [rawTimetableResponse] = await Promise.all([
+        API.getTimetable(date, detailed),
+        // API.getTimetable(
+        //     new Date(date.getFullYear(), date.getMonth() + 1),
+        //     detailed
+        // ),
+    ])
 
     const rawTimetable = rawTimetableResponse.timetable
-    const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
+    // const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
 
-    rawTimetable.push(...rawTimetableNextMonth)
+    // rawTimetable.push(...rawTimetableNextMonth)
     return rawTimetable
         .filter((day) => day !== null)
         .flatMap((day) =>

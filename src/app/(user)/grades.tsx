@@ -5,14 +5,13 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
-import { type Grade } from '@/types/thi-api'
+import { useRefreshByUser } from '@/hooks'
 import { type GradeAverage } from '@/types/utils'
-import { isKnownError } from '@/utils/api-utils'
+import { networkError } from '@/utils/api-utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -31,45 +30,10 @@ import packageInfo from '../../../package.json'
 export default function GradesSCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('settings')
-    const [grades, setGrades] = useState<Grade[] | null>(null)
-    const [missingGrades, setMissingGrades] = useState<Grade[] | null>(null)
     const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
-    const [errorMsg, setErrorMsg] = useState('')
-
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
 
     const [averageLoadingState, setAverageLoadingState] =
         useState<LoadingState>(LoadingState.LOADING)
-
-    /**
-     * Loads all grades from the API and sets the state accordingly.
-     * @returns {Promise<void>} A promise that resolves when all grades have been loaded.
-     */
-    async function loadAllGrades(): Promise<void> {
-        try {
-            const { finished, missing } = await loadGrades()
-            setGrades(finished)
-            setMissingGrades(missing)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            setLoadingState(LoadingState.ERROR)
-            if (e instanceof NoSessionError) {
-                router.push('(user)/login')
-            } else if (e.message === 'Query not possible') {
-                // according to the original developers,
-                // { status: -102, data: "Query not possible" }
-                // means that the transcripts are currently being updated
-                setErrorMsg(t('grades.temporarilyUnavailable'))
-            } else {
-                setErrorMsg(e.message)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-            }
-        }
-    }
 
     /**
      * Loads the average grade from the API and sets the state accordingly.
@@ -97,44 +61,66 @@ export default function GradesSCreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24 * 14, // 2 weeks
     })
 
+    const {
+        data: grades,
+        error,
+        isLoading,
+        isPaused,
+        isSuccess,
+        refetch,
+        isError,
+    } = useQuery({
+        queryKey: ['grades'],
+        queryFn: loadGrades,
+        staleTime: 1000 * 60 * 30, // 30 minutes
+        gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.replace('user/login')
+                return false
+            }
+            return failureCount < 3
+        },
+    })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     useEffect(() => {
         void loadAverageGrade()
-    }, [spoWeights])
-
-    useEffect(() => {
-        void Promise.all([loadAllGrades(), loadAverageGrade()])
-    }, [])
-
-    const onRefresh: () => void = () => {
-        void Promise.all([loadAllGrades(), loadAverageGrade()])
-    }
+    }, [spoWeights, grades?.finished])
 
     return (
         <ScrollView
             contentContainerStyle={styles.contentContainer}
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                isSuccess ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
         >
-            {loadingState === LoadingState.LOADING && (
+            {isLoading && (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
             )}
-            {loadingState === LoadingState.ERROR && (
+            {isError && (
                 <ErrorView
-                    title={errorMsg}
-                    onRefresh={onRefresh}
-                    refreshing={false}
+                    title={error.message}
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
                 />
             )}
-            {loadingState === LoadingState.LOADED && (
+            {isPaused && !isSuccess && (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
+                />
+            )}
+            {isSuccess && grades !== null && (
                 <>
                     <SectionView title={t('grades.average')}>
                         <View style={styles.loadedContainer}>
@@ -192,10 +178,10 @@ export default function GradesSCreen(): JSX.Element {
                     </SectionView>
                     <SectionView title={t('grades.finished')}>
                         <React.Fragment>
-                            {grades?.map((grade, index) => (
+                            {grades?.finished?.map((grade, index) => (
                                 <React.Fragment key={index}>
                                     <GradesRow item={grade} colors={colors} />
-                                    {index !== grades.length - 1 && (
+                                    {index !== grades.finished.length - 1 && (
                                         <Divider
                                             color={colors.labelTertiaryColor}
                                             iosPaddingLeft={16}
@@ -207,10 +193,10 @@ export default function GradesSCreen(): JSX.Element {
                     </SectionView>
                     <SectionView title={t('grades.open')}>
                         <React.Fragment>
-                            {missingGrades?.map((grade, index) => (
+                            {grades?.missing?.map((grade, index) => (
                                 <React.Fragment key={index}>
                                     <GradesRow item={grade} colors={colors} />
-                                    {index !== missingGrades.length - 1 && (
+                                    {index !== grades.missing.length - 1 && (
                                         <Divider
                                             color={colors.labelTertiaryColor}
                                             iosPaddingLeft={16}

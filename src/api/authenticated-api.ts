@@ -16,7 +16,6 @@ import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
-const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
 const KEY_GET_LECTURERS = 'getLecturers'
@@ -246,7 +245,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @returns {Promise<Grade[]>} Promise that resolves with the grades
      */
     async getGrades(): Promise<Grade[]> {
-        const res = await this.requestCached(KEY_GET_GRADES, {
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'grades',
             format: 'json',
