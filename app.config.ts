@@ -45,7 +45,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 70,
+            versionCode: 71,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -79,6 +79,7 @@ module.exports = {
                 {
                     ios: {
                         deploymentTarget: '15.0',
+                        newArchEnabled: true,
                     },
                     android: {
                         compileSdkVersion: 34,

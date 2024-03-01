@@ -1,6 +1,8 @@
+import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import { queryClient } from '@/components/provider'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { type PersDataDetails } from '@/types/thi-api'
 import { router } from 'expo-router'
 
 /**
@@ -23,13 +25,12 @@ export const performLogout = async (
     resetDashboard: (userKind: string) => void
 ): Promise<void> => {
     try {
-        await createGuestSession()
-        await queryClient.invalidateQueries()
-        queryClient.clear()
         toggleUser(undefined)
         toggleAccentColor('blue')
         resetDashboard(USER_GUEST)
+        queryClient.clear()
         router.navigate('(tabs)')
+        await createGuestSession()
     } catch (e) {
         console.log(e)
     }
@@ -51,4 +52,11 @@ export const isKnownError = (error: Error | string): boolean => {
         errorString === guestError ||
         errorString === permissionError
     )
+}
+
+export async function getPersonalData(): Promise<PersDataDetails> {
+    const response = await API.getPersonalData()
+    const data: PersDataDetails = response.persdata
+    data.pcounter = response.pcounter
+    return data
 }

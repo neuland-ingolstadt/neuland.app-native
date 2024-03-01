@@ -197,7 +197,8 @@ export default function TimetableList({
                                             size: 12,
                                         }}
                                         android={{
-                                            name: 'notifications',
+                                            name: 'notifications_active',
+                                            variant: 'outlined',
                                             size: 14,
                                         }}
                                     />

@@ -8,15 +8,20 @@ import {
     ThemeContext,
     UserKindContext,
 } from '@/components/provider'
-import { type UserKindContextType } from '@/hooks/contexts/userKind'
-import { performLogout } from '@/utils/api-utils'
+import {
+    USER_EMPLOYEE,
+    type UserKindContextType,
+} from '@/hooks/contexts/userKind'
+import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
+import { useQuery } from '@tanstack/react-query'
 import * as Notifications from 'expo-notifications'
 import { router, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
+import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -39,6 +44,16 @@ export default function Screen(): JSX.Element {
     const { toggleUserKind } = useContext(UserKindContext)
     const { toggleAccentColor } = useContext(ThemeContext)
     const { resetOrder } = useContext(DashboardContext)
+
+    const username = SecureStore.getItem('username') // only for employees and if
+
+    const { data } = useQuery({
+        queryKey: ['personalData'],
+        queryFn: getPersonalData,
+        staleTime: 1000 * 60 * 60 * 12, // 12 hours
+        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+        enabled: userKind === 'student',
+    })
 
     const logoutAlert = (): void => {
         Alert.alert(
@@ -105,6 +120,15 @@ export default function Screen(): JSX.Element {
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
+
+    const [initials, setInitials] = useState('')
+    useEffect(() => {
+        if (data !== undefined) {
+            setInitials(getInitials(data.vname + ' ' + data.name))
+        } else if (userKind === USER_EMPLOYEE && username !== null) {
+            setInitials(getInitials(username))
+        }
+    }, [data, userKind, username])
 
     return (
         <>
@@ -203,7 +227,7 @@ export default function Screen(): JSX.Element {
                                 router.push('(user)/settings')
                             }}
                         >
-                            {userFullName !== '' && userKind !== 'guest' ? (
+                            {initials !== '' ? (
                                 <View>
                                     <Avatar
                                         size={29}
@@ -220,7 +244,7 @@ export default function Screen(): JSX.Element {
                                             numberOfLines={1}
                                             adjustsFontSizeToFit={true}
                                         >
-                                            {getInitials(userFullName)}
+                                            {initials}
                                         </Text>
                                     </Avatar>
                                 </View>

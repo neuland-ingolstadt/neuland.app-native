@@ -286,7 +286,7 @@ export default function TimetableScreen(): JSX.Element {
                         buttonText={t('error.empty.button')}
                         icon={{
                             ios: 'calendar.badge.exclamationmark',
-                            android: 'calendar_edit',
+                            android: 'edit_calendar',
                         }}
                         onButtonPress={() => {
                             void Linking.openURL('https://hiplan.thi.de/')
