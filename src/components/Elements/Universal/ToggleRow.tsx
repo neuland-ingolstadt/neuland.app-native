@@ -10,8 +10,8 @@ const ToggleRow = ({
     setSelectedElement,
 }: {
     items: string[]
-    selectedElement: string
-    setSelectedElement: (element: string) => void
+    selectedElement: number
+    setSelectedElement: (element: number) => void
 }): JSX.Element => {
     const colors = useTheme().colors as Colors // Make sure to replace `Colors` with the actual type of your colors
 
@@ -22,7 +22,7 @@ const ToggleRow = ({
                     <View key={index} style={styles.buttonView}>
                         <Pressable
                             onPress={() => {
-                                setSelectedElement(item as 'Events' | 'Exams')
+                                setSelectedElement(index)
                             }}
                         >
                             <View
@@ -37,14 +37,13 @@ const ToggleRow = ({
                                 <Text
                                     style={{
                                         color:
-                                            selectedElement === item
+                                            selectedElement === index
                                                 ? colors.primary
                                                 : colors.text,
-                                        fontSize: 15,
-                                        fontWeight:
-                                            selectedElement === item
-                                                ? '500'
-                                                : 'normal',
+
+                                        ...(selectedElement === index
+                                            ? styles.textSelected
+                                            : styles.textNotSelected),
                                     }}
                                 >
                                     {item}{' '}
@@ -59,12 +58,21 @@ const ToggleRow = ({
 }
 
 const styles = StyleSheet.create({
+    textSelected: {
+        fontWeight: '500',
+        fontSize: 15,
+    },
+    textNotSelected: {
+        fontWeight: 'normal',
+        fontSize: 15,
+    },
     buttonRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
         alignSelf: 'center',
         gap: 12,
+        paddingHorizontal: PAGE_PADDING,
     },
     buttonView: {
         flex: 1,

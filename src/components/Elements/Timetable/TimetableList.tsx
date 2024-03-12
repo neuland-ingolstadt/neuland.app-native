@@ -1,28 +1,36 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
+import { NotificationContext, RouteParamsContext } from '@/components/provider'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
+    formatFriendlyDateTime,
     formatFriendlyTime,
     formatISODate,
 } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useContext, useLayoutEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
-    Dimensions,
+    Pressable,
     SafeAreaView,
     SectionList,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 
+// @ts-expect-error no types
+import DragDropView from '../Exclusive/DragView'
 import Divider from '../Universal/Divider'
-import HeaderButtons from './HeaderButtons'
+import ErrorView from '../Universal/ErrorView'
+import PlatformIcon from '../Universal/Icon'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
@@ -34,6 +42,7 @@ export default function TimetableList({
      * Constants
      */
     const today = new Date()
+    today.setHours(0, 0, 0, 0)
     const timetable = friendlyTimetable
 
     /**
@@ -43,11 +52,14 @@ export default function TimetableList({
     const theme = useTheme()
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
+    const { timetableNotifications } = useContext(NotificationContext)
+    const { updateLecture } = useContext(RouteParamsContext)
+    const { t } = useTranslation('timetable')
 
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <HeaderButtons
+                <HeaderRight
                     setToday={() => {
                         listRef.current?.scrollToLocation({
                             sectionIndex: 0,
@@ -58,6 +70,7 @@ export default function TimetableList({
                     }}
                 />
             ),
+            headerLeft: () => <HeaderLeft />,
         })
     }, [navigation])
 
@@ -74,14 +87,19 @@ export default function TimetableList({
     const filteredTimetable = groupedTimetable.filter(
         (section) => section.title >= today
     )
+    const isDark = theme.dark
+    const lineColor = Color(colors.primary)
+        .darken(isDark ? 0.2 : 0)
+        .lighten(isDark ? 0 : 0.2)
+        .hex()
 
     /**
      * Functions
      */
     function showEventDetails(entry: FriendlyTimetableEntry): void {
+        updateLecture(entry)
         router.push({
             pathname: '(timetable)/details',
-            params: { eventParam: JSON.stringify(entry) },
         })
     }
 
@@ -126,76 +144,136 @@ export default function TimetableList({
         item: FriendlyTimetableEntry
     }): JSX.Element {
         return (
-            <TouchableOpacity
-                onPress={() => {
-                    showEventDetails(item)
-                }}
-                style={styles.pressable}
+            <DragDropView
+                mode="drag"
+                scope="system"
+                dragValue={`${item.name} in ${item.rooms?.join(
+                    ', '
+                )} (${formatFriendlyDateTime(
+                    item.startDate
+                )} - ${formatFriendlyTime(item.endDate)})`}
             >
-                <View style={styles.eventWrapper}>
-                    <View
-                        style={{
-                            backgroundColor: colors.primary,
-                            ...styles.indicator,
-                        }}
-                    />
-                    <View style={styles.nameView}>
-                        <Text
-                            style={{ color: colors.text, ...styles.titleText }}
-                            numberOfLines={1}
-                        >
-                            {item.name}
-                        </Text>
-                        <Text style={{ color: colors.labelColor }}>
-                            {item.rooms?.join(', ')}
-                        </Text>
+                <Pressable
+                    onPress={() => {
+                        showEventDetails(item)
+                    }}
+                    style={styles.pressable}
+                >
+                    <View style={styles.eventWrapper}>
+                        <LinearGradient
+                            colors={[colors.primary, lineColor]}
+                            start={[0, 0.9]}
+                            end={[0.7, 0.25]}
+                            style={{
+                                backgroundColor: colors.primary,
+                                ...styles.indicator,
+                            }}
+                        />
+                        <View style={styles.nameView}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.titleText,
+                                }}
+                                numberOfLines={1}
+                            >
+                                {item.name}
+                            </Text>
+                            <View style={styles.itemRow}>
+                                <Text
+                                    style={{
+                                        color: colors.labelColor,
+                                        ...styles.descriptionText,
+                                    }}
+                                >
+                                    {item.rooms?.join(', ')}
+                                </Text>
+                                {timetableNotifications[item.shortName] !==
+                                    undefined && (
+                                    <PlatformIcon
+                                        color={colors.labelColor}
+                                        ios={{
+                                            name: 'bell',
+                                            size: 12,
+                                        }}
+                                        android={{
+                                            name: 'notifications_active',
+                                            variant: 'outlined',
+                                            size: 14,
+                                        }}
+                                    />
+                                )}
+                            </View>
+                        </View>
+                        <View>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    fontVariant: ['tabular-nums'],
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {formatFriendlyTime(item.startDate)}
+                            </Text>
+                            <Text
+                                style={{
+                                    color: colors.labelColor,
+                                    fontVariant: ['tabular-nums'],
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {formatFriendlyTime(item.endDate)}
+                            </Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text style={{ color: colors.text }}>
-                            {formatFriendlyTime(item.startDate)}
-                        </Text>
-                        <Text style={{ color: colors.labelColor }}>
-                            {formatFriendlyTime(item.endDate)}
-                        </Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+                </Pressable>
+            </DragDropView>
         )
     }
 
     return (
         <SafeAreaView style={styles.pageView}>
-            <SectionList
-                ref={listRef}
-                sections={filteredTimetable}
-                renderItem={renderItem}
-                renderSectionHeader={({ section: { title } }) =>
-                    renderSectionHeader(title)
-                }
-                renderSectionFooter={renderSectionFooter}
-                ItemSeparatorComponent={renderItemSeparator}
-                contentContainerStyle={styles.container}
-                stickySectionHeadersEnabled={true}
-                ListFooterComponent={
-                    <View
-                        style={{
-                            height: Dimensions.get('window').height - 230,
-                        }}
-                    />
-                }
-                initialNumToRender={15}
-            />
+            {filteredTimetable.length === 0 ? (
+                <ErrorView
+                    title={t('error.filtered.title')}
+                    message={t('error.filtered.message')}
+                    icon={{
+                        ios: 'fireworks',
+                        android: 'celebration',
+                    }}
+                />
+            ) : (
+                <SectionList
+                    ref={listRef}
+                    sections={filteredTimetable}
+                    renderItem={renderItem}
+                    renderSectionHeader={({ section: { title } }) =>
+                        renderSectionHeader(title)
+                    }
+                    renderSectionFooter={renderSectionFooter}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    contentContainerStyle={styles.container}
+                    stickySectionHeadersEnabled={true}
+                    initialNumToRender={20}
+                />
+            )}
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    itemRow: {
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
+    },
     sectionView: {
         paddingTop: PAGE_PADDING,
         marginBottom: 8,
-        gap: 8,
+        gap: 6,
     },
     sectionTitle: {
+        fontSize: 15,
         fontWeight: 'bold',
         textTransform: 'uppercase',
     },
@@ -219,9 +297,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: '500',
+        fontSize: 16,
+    },
+    descriptionText: {
+        fontSize: 15,
     },
     sectionFooter: {
-        height: 24,
+        height: 20,
     },
     container: {
         paddingHorizontal: PAGE_PADDING,

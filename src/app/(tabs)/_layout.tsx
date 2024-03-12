@@ -2,6 +2,7 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import {
     AppIconContext,
+    DashboardContext,
     FlowContext,
     FoodFilterContext,
 } from '@/components/provider'
@@ -11,7 +12,8 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
-import { Tabs, useRouter } from 'expo-router'
+import * as NavigationBar from 'expo-navigation-bar'
+import { Tabs, usePathname, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,24 +34,56 @@ export default function HomeLayout(): JSX.Element {
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed, initializeAnalytics } =
         React.useContext(FlowContext)
+    const { shownDashboardEntries } = React.useContext(DashboardContext)
     const [isFirstRun, setIsFirstRun] = React.useState<boolean>(true)
     if (flow.isOnboarded === false) {
-        router.push('(flow)/onboarding')
+        router.navigate('(flow)/onboarding')
+        void SplashScreen.hideAsync()
     }
 
     const isChangelogAvailable = Object.keys(changelog.version).some(
         (version) => version === convertToMajorMinorPatch(packageInfo.version)
     )
+
+    const { isOnboarded } = React.useContext(FlowContext)
+
     if (
         flow.isUpdated === false &&
         isChangelogAvailable &&
         flow.isOnboarded !== false
     ) {
-        router.push('(flow)/whatsnew')
+        router.navigate('(flow)/whatsnew')
+        void SplashScreen.hideAsync()
     }
-    SplashScreen.hideAsync().catch(() => {
-        /* reloading the app might make this fail, so ignore */
-    })
+
+    useEffect(() => {
+        const prepare = async (): Promise<void> => {
+            await SplashScreen.preventAutoHideAsync()
+
+            if (shownDashboardEntries !== null && isOnboarded === true) {
+                await SplashScreen.hideAsync()
+            }
+        }
+        void prepare()
+    }, [shownDashboardEntries, isOnboarded])
+
+    const pathname = usePathname()
+
+    useEffect(() => {
+        const prepare = async (): Promise<void> => {
+            const tabsPaths = ['/', '/timetable', '/map', '/food']
+            const isTab = tabsPaths.includes(pathname)
+
+            await NavigationBar.setBackgroundColorAsync(
+                isTab ? colors.card : colors.background
+            )
+            await NavigationBar.setButtonStyleAsync(
+                theme.dark ? 'light' : 'dark'
+            )
+        }
+        if (Platform.OS !== 'android') return
+        void prepare()
+    }, [theme.dark, pathname])
 
     const BlurTab = (): JSX.Element => (
         <BlurView
@@ -85,7 +119,10 @@ export default function HomeLayout(): JSX.Element {
         {
             id: 'food',
             type: 'food',
-            title: t('cards.titles.' + restaurant),
+            title: t(
+                // @ts-expect-error no types
+                'cards.titles.' + restaurant
+            ),
             data: {
                 path: '(tabs)/food',
             },
@@ -98,9 +135,13 @@ export default function HomeLayout(): JSX.Element {
                       id: 'appIcon',
                       type: 'appIcon',
                       title: 'App Icon',
-                      subtitle: t(`appIcon.names.${appIcon}`, {
-                          ns: 'settings',
-                      }),
+                      subtitle: t(
+                          // @ts-expect-error no types
+                          `appIcon.names.${appIcon}`,
+                          {
+                              ns: 'settings',
+                          }
+                      ),
                       data: {
                           path: '(user)/appicon',
                       },
@@ -118,7 +159,6 @@ export default function HomeLayout(): JSX.Element {
 
         const shortcutSubscription =
             Shortcuts.onShortcutPressed(processShortcut)
-
         Shortcuts.setShortcuts(shortcuts)
 
         return () => {
@@ -173,6 +213,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
+
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
@@ -193,7 +234,7 @@ export default function HomeLayout(): JSX.Element {
                                     size: size - 2,
                                 }}
                                 android={{
-                                    name: 'calendar-month',
+                                    name: 'calendar_month',
                                     size,
                                 }}
                             />

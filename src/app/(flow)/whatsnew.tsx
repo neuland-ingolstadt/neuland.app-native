@@ -90,7 +90,7 @@ export default function OnboardingScreen(): JSX.Element {
                     ]}
                     onPress={() => {
                         flow.toggleUpdated()
-                        router.push('/')
+                        router.navigate('/')
                         // needed to trigger the analytics toggle for users of the previous version
                         // can be removed in the future
                         if (analyticsAllowed === null) {

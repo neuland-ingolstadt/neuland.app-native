@@ -26,6 +26,7 @@ if (Platform.OS === 'ios') {
         default: require('@/assets/appIcons/default.png'),
         modernDark: require('@/assets/appIcons/modernDark.png'),
         modernLight: require('@/assets/appIcons/modernLight.png'),
+        modernPink: require('@/assets/appIcons/modernPink.png'),
         modernGreen: require('@/assets/appIcons/modernGreen.png'),
         rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
         rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
@@ -55,11 +56,7 @@ export default function Theme(): JSX.Element {
     }): JSX.Element => {
         const themeAccentColor = deviceTheme.dark ? color.dark : color.light
         return (
-            <View
-                style={{
-                    justifyContent: 'center',
-                }}
-            >
+            <View style={styles.colorBoxContainer}>
                 <Pressable
                     onPress={() => {
                         toggleAccentColor(code)
@@ -101,10 +98,10 @@ export default function Theme(): JSX.Element {
                 <Text
                     style={{
                         color: colors.text,
-                        textAlign: 'center',
-                        paddingTop: 4,
+                        ...styles.colorBoxText,
                     }}
                 >
+                    {/* @ts-expect-error cannot verify that code is a valid key */}
                     {t(`theme.colors.${code}`)}
                 </Text>
             </View>
@@ -120,14 +117,7 @@ export default function Theme(): JSX.Element {
 
     const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {
         return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    marginVertical: 2,
-                    paddingVertical: 4,
-                }}
-            >
+            <View style={styles.colorMatrixContainer}>
                 {colors.map((color, index) => (
                     <ColorBox
                         color={color.color}
@@ -196,6 +186,7 @@ export default function Theme(): JSX.Element {
                                         ...styles.iconText,
                                     }}
                                 >
+                                    {/* @ts-expect-error cannot verify that appIcon is a valid key */}
                                     {t(`appIcon.names.${appIcon}`)}
                                 </Text>
                             </View>
@@ -206,7 +197,7 @@ export default function Theme(): JSX.Element {
                                     size: 20,
                                 }}
                                 android={{
-                                    name: 'chevron-right',
+                                    name: 'chevron_right',
                                     size: 26,
                                 }}
                             />
@@ -219,10 +210,6 @@ export default function Theme(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    footerText: {
-        marginTop: 6,
-        fontSize: 12,
-    },
     colorBox: {
         width: 60,
         height: 60,
@@ -236,12 +223,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
-    },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
     },
     sectionContainer: {
         borderRadius: 8,
@@ -270,5 +251,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 18,
         borderWidth: 1,
+    },
+    colorBoxContainer: {
+        justifyContent: 'center',
+    },
+    colorBoxText: {
+        textAlign: 'center',
+        paddingTop: 4,
+    },
+    colorMatrixContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginVertical: 2,
+        paddingVertical: 4,
     },
 })

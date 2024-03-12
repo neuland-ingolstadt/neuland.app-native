@@ -1,8 +1,19 @@
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/hooks/userKind'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { useRouter } from 'expo-router'
 import React from 'react'
 
-import { BaseCard, CalendarCard, EventsCard, FoodCard } from './Cards'
+import {
+    BaseCard,
+    CalendarCard,
+    EventsCard,
+    FoodCard,
+    LoginCard,
+    TimetableCard,
+} from './Cards'
 import LibraryCard from './Cards/LibraryCard'
 
 const router = useRouter()
@@ -12,16 +23,7 @@ export const AllCards: Card[] = [
         key: 'timetable',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => (
-            <BaseCard
-                title="timetable"
-                iosIcon="clock.fill"
-                androidIcon="calendar-month"
-                onPress={() => {
-                    router.push('timetable')
-                }}
-            />
-        ),
+        card: () => <TimetableCard />,
     },
     {
         key: 'food',
@@ -40,21 +42,6 @@ export const AllCards: Card[] = [
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <EventsCard />,
-    },
-    {
-        key: 'rooms',
-        removable: true,
-        default: [],
-        card: () => (
-            <BaseCard
-                title="rooms"
-                iosIcon="rectangle.grid.2x2.fill"
-                androidIcon="list"
-                onPress={() => {
-                    router.push('rooms')
-                }}
-            />
-        ),
     },
     {
         key: 'library',
@@ -92,11 +79,19 @@ export const AllCards: Card[] = [
             />
         ),
     },
+    {
+        key: 'login',
+        removable: false,
+        exclusive: true,
+        default: [USER_GUEST],
+        card: () => <LoginCard />,
+    },
 ]
 
 export interface Card {
     key: string
     removable: boolean
+    exclusive?: boolean
     default: string[]
     card: () => JSX.Element
 }

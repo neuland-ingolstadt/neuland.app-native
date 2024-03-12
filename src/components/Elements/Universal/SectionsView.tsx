@@ -17,7 +17,7 @@ const SectionView = ({
 
     return (
         <>
-            <View style={[styles.sectionContainer, { marginTop: 16 }]}>
+            <View style={styles.sectionContainer}>
                 <Text
                     style={[
                         styles.labelText,
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     sectionContainer: {
+        marginTop: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',

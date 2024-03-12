@@ -8,6 +8,7 @@ import {
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/style-utils'
+import { Buffer } from 'buffer'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +24,6 @@ const CalendarRow = ({
     colors: Colors
 }): JSX.Element => {
     const { t, i18n } = useTranslation('common')
-
     return (
         <RowEntry
             title={event.name[i18n.language as LanguageKey]}
@@ -45,9 +45,7 @@ const CalendarRow = ({
                 </Text>
             }
             rightChildren={
-                <View
-                    style={{ justifyContent: 'flex-end', padding: ROW_PADDING }}
-                >
+                <View style={styles.rightContainer}>
                     <Text
                         style={{
                             ...styles.rightText,
@@ -80,14 +78,15 @@ const ExamRow = ({
     event: any
     colors: Colors
 }): JSX.Element => {
+    const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
     const navigateToPage = (): void => {
         router.push({
             pathname: '(pages)/exam',
-            params: { examEntry: JSON.stringify(event) },
+            params: { examEntry: base64Event },
         })
     }
-    const { t } = useTranslation('common')
 
+    const { t } = useTranslation('common')
     return (
         <RowEntry
             title={event.name}
@@ -96,7 +95,7 @@ const ExamRow = ({
                 <>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.text,
                         }}
                         numberOfLines={2}
@@ -105,18 +104,18 @@ const ExamRow = ({
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
                     >
                         {`${t('pages.exam.details.room')}: ${
-                            event.room !== undefined ? event.room : 'n/a'
+                            event.rooms !== undefined ? event.rooms : 'n/a'
                         }`}
                     </Text>
                     <Text
                         style={{
-                            fontSize: 13,
+                            ...styles.mainText,
                             color: colors.labelColor,
                         }}
                         numberOfLines={2}
@@ -128,15 +127,14 @@ const ExamRow = ({
                 </>
             }
             rightChildren={
-                <View style={{ justifyContent: 'flex-end', padding: 5 }}>
+                <View style={styles.rightContainerExam}>
                     <Text
                         style={{
-                            fontSize: 14,
-                            fontWeight: '400',
+                            ...styles.rightTextExam,
                             color: colors.labelColor,
                         }}
                     >
-                        {formatFriendlyRelativeTime(event.date)}
+                        {formatFriendlyRelativeTime(new Date(event.date))}
                     </Text>
                 </View>
             }
@@ -147,12 +145,21 @@ const ExamRow = ({
 }
 
 const styles = StyleSheet.create({
+    rightContainer: { justifyContent: 'flex-end', padding: ROW_PADDING },
+    rightContainerExam: { justifyContent: 'flex-end', padding: 5 },
     leftText: {
         fontSize: 13,
+    },
+    rightTextExam: {
+        fontSize: 14,
+        fontWeight: '400',
     },
     rightText: {
         fontSize: 14,
         fontWeight: '400',
+    },
+    mainText: {
+        fontSize: 13,
     },
 })
 

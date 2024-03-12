@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-raw-text */
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
@@ -8,8 +9,9 @@ interface PlatformIconProps {
     color: string | ColorValue
 
     android: {
-        name: AndroidIconName | typeof MaterialCommunityIcons.defaultProps.name
+        name: string
         size: number
+        variant?: 'filled' | 'outlined'
     }
     ios: {
         name: string
@@ -29,12 +31,12 @@ interface PlatformIconProps {
 }
 export const linkIcon = {
     ios: 'safari',
-    android: 'link' as AndroidIconName,
+    android: 'link',
 }
 
 export const chevronIcon = {
     ios: 'chevron.forward',
-    android: 'chevron-right' as AndroidIconName,
+    android: 'chevron_right',
 }
 
 const PlatformIcon = ({
@@ -49,7 +51,7 @@ const PlatformIcon = ({
                 name={ios.name as typeof Ionicons.defaultProps.name}
                 size={ios.size}
                 color={color}
-                style={{ width: ios.size - 1, height: ios.size + 1, ...style }}
+                style={{ width: ios.size - 1, height: ios.size, ...style }}
             />
         ) : (
             <View>
@@ -72,18 +74,13 @@ const PlatformIcon = ({
             </View>
         )
     } else {
-        if (
-            ![...Object.keys(ANDROID_ICONS), ...communityIcons].includes(
-                android.name
-            )
-        ) {
-            console.warn(`Android icon ${android.name} not found`)
-        }
-
         return (
             <Text
                 style={{
                     ...styles.androidIcon,
+                    ...(android.variant === 'outlined'
+                        ? styles.androidIconOutlined
+                        : styles.androidIconFilled),
                     color,
                     fontSize: android.size * 1,
                     lineHeight: android.size,
@@ -92,14 +89,13 @@ const PlatformIcon = ({
             >
                 {communityIcons.includes(android.name) ? (
                     <MaterialCommunityIcons
-                        name={android.name}
+                        name={android.name as any}
                         size={android.size}
                         color={color}
                         style={{ ...styles.communityIcon, ...style }}
                     />
                 ) : (
-                    ANDROID_ICONS[android.name as AndroidIconName] ??
-                    ANDROID_ICONS.default
+                    android.name
                 )}
             </Text>
         )
@@ -110,52 +106,15 @@ export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github']
 
-const ANDROID_ICONS = {
-    home: <>&#xE9B2;</>,
-    map: <>&#xE55B;</>,
-    restaurant: <>&#xE56C;</>,
-    'chevron-right': <>&#xE5CC;</>,
-    calendar: <>&#xE935;</>,
-    'calendar-month': <>&#xEBCC;</>,
-    celebration: <>&#xEA65;</>,
-    list: <>&#xE241;</>,
-    book: <>&#xF53E;</>,
-    group: <>&#xE7EF;</>,
-    newspaper: <>&#xEB81;</>,
-    'barcode-scanner': <>&#xE70C;</>,
-    place: <>&#xE0C8;</>,
-    'account-circle': <>&#xE853;</>,
-    warning: <>&#xE002;</>,
-    error: <>&#xE000;</>,
-    check: <>&#xE5CA;</>,
-    'check-circle': <>&#xF0BE;</>,
-    palette: <>&#xE3B7;</>,
-    'dashboard-customize': <>&#xE99B;</>,
-    language: <>&#xE894;</>,
-    link: <>&#xE157;</>,
-    star: <>&#xF0EC;</>,
-    person: <>&#xE7FD;</>,
-    share: <>&#xE80D;</>,
-    'manage-search': <>&#xF02F;</>,
-    close: <>&#xE14C;</>,
-    filter: <>&#xE152;</>,
-    'chevron-up': <>&#xE316;</>,
-    'chevron-down': <>&#xE313;</>,
-    delete: <>&#xE872;</>,
-    logout: <>&#xE9BA;</>,
-    'lock-open': <>&#xE898;</>,
-    mail: <>&#xE0BE;</>,
-    'insert-chart': <>&#xE24B;</>,
-    return: <>&#xE5D9;</>,
-    default: <>&#xF56D;</>,
-}
-
-export type AndroidIconName = keyof typeof ANDROID_ICONS
-
 const styles = StyleSheet.create({
     androidIcon: {
         paddingTop: 3,
-        fontFamily: 'Material Symbols Rounded',
+    },
+    androidIconFilled: {
+        fontFamily: 'MaterialSymbolsRoundedFill',
+    },
+    androidIconOutlined: {
+        fontFamily: 'MaterialSymbolsRoundedOutline',
     },
     communityIcon: {
         paddingTop: 50,

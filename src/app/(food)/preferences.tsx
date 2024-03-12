@@ -74,7 +74,7 @@ export default function FoodPreferences(): JSX.Element {
 
     return (
         <ScrollView>
-            <View style={{ flex: 1 }}>
+            <View style={styles.container}>
                 <SectionView title={'Restaurants'}>
                     <MultiSectionPicker
                         elements={elemtents}
@@ -89,7 +89,7 @@ export default function FoodPreferences(): JSX.Element {
                         action={toggleShowStatic}
                     />
                 </SectionView>
-                <View style={{ ...styles.sectionContainer, marginTop: 16 }}>
+                <View style={{ ...styles.sectionContainer }}>
                     <FormList sections={sections} />
                 </View>
                 <SectionView title={t('preferences.formlist.language')}>
@@ -117,23 +117,12 @@ export default function FoodPreferences(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    labelText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
+    container: { flex: 1 },
     sectionContainer: {
+        marginTop: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        marginTop: 2,
-        justifyContent: 'center',
     },
     notesBox: {
         width: '92%',

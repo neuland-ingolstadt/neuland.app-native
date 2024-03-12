@@ -1,5 +1,5 @@
-import AssetAPI from '@/api/asset-api'
 import API from '@/api/authenticated-api'
+import { type SpoWeights } from '@/types/asset-api'
 import { type Grade } from '@/types/thi-api'
 import { type GradeAverage } from '@/types/utils'
 
@@ -101,10 +101,11 @@ export async function calculateECTS(): Promise<number> {
  * @returns {Promise<GradeAverage>} - grade average data object
  * @throws {Error} - if the grade average is not available
  */
-export async function loadGradeAverage(): Promise<GradeAverage> {
+export async function loadGradeAverage(
+    courseSPOs: SpoWeights | null = null
+): Promise<GradeAverage> {
     const gradeList = await getGradeList()
     const spoName = await API.getSpoName()
-    const courseSPOs = await AssetAPI.getSpoWeights()
 
     if (spoName == null || courseSPOs?.[spoName] == null) {
         throw new Error('Failed to load data')

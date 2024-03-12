@@ -7,6 +7,7 @@ import {
     FlowContext,
     UserKindContext,
 } from '@/components/provider'
+import { USER_EMPLOYEE, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -52,6 +53,7 @@ const useIsFloatingKeyboard = (): boolean => {
 
 const LoginForm = (): JSX.Element => {
     const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+    const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
     const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
     const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
@@ -88,7 +90,7 @@ const LoginForm = (): JSX.Element => {
                 toggleAnalytics()
             }
             toggleOnboarded()
-            resetOrder()
+            resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
             Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
             ).catch(() => {})
@@ -101,15 +103,19 @@ const LoginForm = (): JSX.Element => {
                 hideOnPress: true,
                 delay: 0,
             })
-            router.push('/')
+            router.navigate('(tabs)')
         } catch (e: any) {
+            console.log(e.message)
             const message = trimErrorMsg(e.message)
+
             setLoading(false)
             setNotice(t('login.alert.error.title'))
             if (message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
                 setInfoMsg(t('login.alert.error.wrongCredentials'))
             } else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
                 setInfoMsg(t('login.alert.error.noConnection'))
+            } else if (message.includes(ORGINAL_ERROR_MISSING)) {
+                setInfoMsg(t('login.alert.error.missing'))
             } else if (
                 KNOWN_BACKEND_ERRORS.some((error) => e.message.includes(error))
             ) {
@@ -129,7 +135,7 @@ const LoginForm = (): JSX.Element => {
             toggleAnalytics()
         }
         toggleOnboarded()
-        router.push('/')
+        router.navigate('(tabs)')
     }
 
     async function load(key: string): Promise<string | null> {
@@ -158,7 +164,7 @@ const LoginForm = (): JSX.Element => {
         <>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={{ flex: 1 }}
+                style={styles.keyboardContainer}
                 enabled={!floatingKeyboard}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -184,10 +190,10 @@ const LoginForm = (): JSX.Element => {
                                     resetAlert={resetInfo}
                                 />
                             ) : null}
-                            <View style={{ paddingTop: 3 }}>
+                            <View style={styles.userNameContainer}>
                                 <Text
                                     style={{
-                                        paddingBottom: 5,
+                                        ...styles.userNameLabel,
                                         color: colors.labelColor,
                                     }}
                                 >
@@ -222,10 +228,10 @@ const LoginForm = (): JSX.Element => {
                                     />
                                 </View>
                             </View>
-                            <View style={{ paddingTop: 15 }}>
+                            <View style={styles.passwordContainer}>
                                 <Text
                                     style={{
-                                        paddingBottom: 5,
+                                        ...styles.userNameLabel,
                                         color: colors.labelColor,
                                     }}
                                 >
@@ -291,8 +297,7 @@ const LoginForm = (): JSX.Element => {
                                 ) : (
                                     <Text
                                         style={{
-                                            fontWeight: 'bold',
-                                            fontSize: 15,
+                                            ...styles.buttonText,
                                             color: getContrastColor(
                                                 colors.primary
                                             ),
@@ -331,10 +336,11 @@ const LoginForm = (): JSX.Element => {
     )
 }
 
+const black = '#000000'
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    container: { alignItems: 'center', justifyContent: 'center' },
     loginContainer: {
-        shadowColor: '#00000',
+        shadowColor: black,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -351,17 +357,15 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 20,
-        marginTop: 20,
-        paddingTop: 15,
+        marginBottom: 12,
+        marginTop: 25,
         alignSelf: 'center',
     },
     loginButton: {
         height: 40,
         justifyContent: 'center',
         paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginTop: 20,
+        marginTop: 25,
         borderRadius: 5,
         alignItems: 'center',
     },
@@ -377,13 +381,28 @@ const styles = StyleSheet.create({
     guestContainer: {
         paddingTop: 3,
         alignItems: 'center',
-        paddingBottom: 10,
-
-        marginBottom: 15,
+        marginBottom: 16,
     },
     guestText: {
         fontSize: 14,
         marginTop: 10,
+        marginBottom: 8,
+    },
+    keyboardContainer: {
+        flex: 1,
+    },
+    userNameContainer: {
+        paddingTop: 3,
+    },
+    userNameLabel: {
+        paddingBottom: 5,
+    },
+    passwordContainer: {
+        paddingTop: 15,
+    },
+    buttonText: {
+        fontWeight: 'bold',
+        fontSize: 15,
     },
 })
 

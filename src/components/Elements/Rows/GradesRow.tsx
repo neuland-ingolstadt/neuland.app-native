@@ -75,9 +75,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginBottom: 4,
     },
-    leftText2: {
-        fontSize: 13,
-    },
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',

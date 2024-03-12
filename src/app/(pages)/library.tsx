@@ -1,25 +1,25 @@
 import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import LibraryBookingRow from '@/components/Elements/Rows/LibraryBookingRow'
 import LibraryReservationRow from '@/components/Elements/Rows/LibraryReservationRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import { ErrorView } from '@/components/Elements/Universal/ErrorPage'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
+import { queryClient } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
 import { type AvailableLibrarySeats, type Reservation } from '@/types/thi-api'
+import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { getFriendlyAvailableLibrarySeats } from '@/utils/library-utils'
-import { CARD_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    LayoutAnimation,
     RefreshControl,
     StyleSheet,
     Text,
@@ -30,10 +30,6 @@ import { ScrollView } from 'react-native-gesture-handler'
 export default function newsSCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const [errorMsg, setErrorMsg] = useState('')
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const [reservations, setReservations] = useState<Reservation[]>([])
-    const [available, setAvailable] = useState<AvailableLibrarySeats[]>([])
     const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
     const toggleRow = (value: string): void => {
@@ -43,103 +39,168 @@ export default function newsSCreen(): JSX.Element {
     /**
      * Loads the reservations and available seats from the API.
      */
-    async function loadData(): Promise<void> {
-        try {
-            const available = await getFriendlyAvailableLibrarySeats()
-            const response = await API.getLibraryReservations()
-            response.forEach((x) => {
-                x.start = new Date(x.reservation_begin.replace(' ', 'T'))
-                x.end = new Date(x.reservation_end.replace(' ', 'T'))
-            })
-            const filteredAvailable = available.map((day) => {
-                return {
-                    ...day,
-                    resource: day.resource.filter((timeSlot) => {
-                        return !response.some(() => timeSlot.hasReservation)
-                    }),
-                    reservationCount: 0,
-                }
-            })
-            setAvailable(filteredAvailable)
-            setReservations(response)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            setLoadingState(LoadingState.ERROR)
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
-                setErrorMsg(t('error.noSession'))
-                router.push('(user)/login')
-            } else {
-                setErrorMsg(e.message)
-                console.error(e)
+    async function loadAvailableSeats(): Promise<any> {
+        const available = await getFriendlyAvailableLibrarySeats()
+        const filteredAvailable = available.map((day) => {
+            return {
+                ...day,
+                resource: day.resource.filter((timeSlot) => {
+                    return !timeSlot.hasReservation
+                }),
+                reservationCount: 0,
             }
-        }
+        })
+        return filteredAvailable
     }
 
-    /**
-     * Creates a new reservation.
-     * @param {string} reservationRoom Room ID
-     * @param {object} reservationTime Reservation time
-     * @param {string} reservationSeat Seat ID
-     * @returns {Promise<void>}
-     */
-    async function addReservation(
+    async function loadLibraryReservations(): Promise<any> {
+        const response = await API.getLibraryReservations()
+        response.forEach((x) => {
+            x.start = new Date(x.reservation_begin.replace(' ', 'T'))
+            x.end = new Date(x.reservation_end.replace(' ', 'T'))
+        })
+        return response
+    }
+
+    async function loadLibraryData(): Promise<{
+        reservations: Reservation[]
+        available: AvailableLibrarySeats[]
+    }> {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+
+        const [reservations, available] = await Promise.all([
+            loadLibraryReservations(),
+            loadAvailableSeats(),
+        ])
+        return { reservations, available }
+    }
+
+    const { data, error, isLoading, isPaused, isSuccess, refetch, isError } =
+        useQuery({
+            queryKey: ['library'],
+            queryFn: loadLibraryData,
+            gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+            retry(failureCount, error) {
+                if (error instanceof NoSessionError) {
+                    router.replace('user/login')
+                    return false
+                }
+                return failureCount < 3
+            },
+        })
+
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+
+    const deleteReservationMutation = useMutation({
+        mutationFn: async (id: string) => {
+            await API.removeLibraryReservation(id)
+        },
+        onMutate: async (id: string) => {
+            // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+            await queryClient.cancelQueries({ queryKey: ['library'] })
+
+            // Snapshot the previous value
+            const previousReservations = queryClient.getQueryData(['library'])
+
+            // Optimistically update to the new value
+            queryClient.setQueryData(['library'], (old: any) => {
+                const newReservations = old.reservations.filter(
+                    (reservation: any) => reservation.reservation_id !== id
+                )
+                LayoutAnimation.configureNext(
+                    LayoutAnimation.Presets.easeInEaseOut
+                )
+
+                return { ...old, reservations: newReservations }
+            })
+
+            // Return the snapshotted value
+            return { previousReservations }
+        },
+        onSettled: () => {
+            void refetch()
+        },
+        onSuccess: () => {
+            setExpandedRow(null)
+        },
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.replace('user/login')
+                return false
+            }
+            return failureCount < 3
+        },
+    })
+
+    const addReservationMutation = useMutation({
+        mutationFn: async ({
+            reservationRoom,
+            reservationTime,
+            reservationSeat,
+        }: {
+            reservationRoom: string
+            reservationTime: { from: Date; to: Date }
+            reservationSeat: string
+        }) => {
+            await API.addLibraryReservation(
+                reservationRoom,
+                reservationTime.from.toLocaleDateString('de-DE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                }),
+                reservationTime.from.toLocaleTimeString('de-DE', {
+                    timeStyle: 'short',
+                }),
+                reservationTime.to.toLocaleTimeString('de-DE', {
+                    timeStyle: 'short',
+                }),
+                reservationSeat
+            )
+            toggleRow(reservationTime.from.toString())
+        },
+        onSettled: () => {
+            void refetch()
+        },
+        onSuccess: () => {},
+    })
+
+    const addReservation = async (
         reservationRoom: string,
         reservationTime: { from: Date; to: Date },
         reservationSeat: string
-    ): Promise<void> {
-        await API.addLibraryReservation(
+    ): Promise<void> => {
+        void addReservationMutation.mutateAsync({
             reservationRoom,
-            reservationTime.from.toLocaleDateString('de-DE', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }),
-            reservationTime.from.toLocaleTimeString('de-DE', {
-                timeStyle: 'short',
-            }),
-            reservationTime.to.toLocaleTimeString('de-DE', {
-                timeStyle: 'short',
-            }),
-            reservationSeat
-        )
-        await loadData()
+            reservationTime,
+            reservationSeat,
+        })
     }
 
     /**
      * Cancels a reservation.
      * @param {string} id Reservation ID
      */
-    async function deleteReservation(id: string): Promise<void> {
-        await API.removeLibraryReservation(id)
-        await loadData()
+    const deleteReservation = async (id: string): Promise<void> => {
+        deleteReservationMutation.mutate(id)
     }
-
-    const onRefresh: () => void = () => {
-        void loadData()
-    }
-
-    useEffect(() => {
-        void loadData()
-    }, [])
 
     return (
         <ScrollView
             contentContainerStyle={styles.contentContainer}
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                isSuccess ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
         >
             <View>
-                {loadingState === LoadingState.LOADING && (
+                {isLoading && (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator
                             size="small"
@@ -147,41 +208,57 @@ export default function newsSCreen(): JSX.Element {
                         />
                     </View>
                 )}
-                {loadingState === LoadingState.ERROR && (
-                    <ErrorView message={errorMsg} />
+                {isError && (
+                    <ErrorView
+                        title={error.message}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                    />
                 )}
-                {loadingState === LoadingState.LOADED && (
+                {isPaused && !isSuccess && (
+                    <ErrorView
+                        title={networkError}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                    />
+                )}
+                {isSuccess && data !== undefined && (
                     <>
-                        {reservations.length > 0 && (
+                        {data.reservations.length > 0 && (
                             <SectionView
                                 title={t('pages.library.reservations.title')}
                             >
                                 <>
-                                    {reservations?.map((reservation, index) => (
-                                        <React.Fragment key={index}>
-                                            <LibraryReservationRow
-                                                reservation={reservation}
-                                                colors={colors}
-                                                deleteReservation={
-                                                    deleteReservation
-                                                }
-                                            />
-                                            {index !==
-                                                reservations.length - 1 && (
-                                                <Divider
-                                                    color={colors.labelColor}
-                                                    iosPaddingLeft={16}
+                                    {data.reservations?.map(
+                                        (reservation, index) => (
+                                            <React.Fragment key={index}>
+                                                <LibraryReservationRow
+                                                    reservation={reservation}
+                                                    colors={colors}
+                                                    deleteReservation={
+                                                        deleteReservation
+                                                    }
                                                 />
-                                            )}
-                                        </React.Fragment>
-                                    ))}
+                                                {index !==
+                                                    data.reservations.length -
+                                                        1 && (
+                                                    <Divider
+                                                        color={
+                                                            colors.labelColor
+                                                        }
+                                                        iosPaddingLeft={16}
+                                                    />
+                                                )}
+                                            </React.Fragment>
+                                        )
+                                    )}
                                 </>
                             </SectionView>
                         )}
 
-                        {available.length > 0 ? (
+                        {data.available.length > 0 ? (
                             <>
-                                {available?.map((day, i) => (
+                                {data.available?.map((day, i) => (
                                     <SectionView
                                         title={formatFriendlyDate(day.date, {
                                             weekday: 'long',
@@ -205,7 +282,7 @@ export default function newsSCreen(): JSX.Element {
                                                                     expandedRow ===
                                                                     time.from.toString()
                                                                 }
-                                                                onToggle={() => {
+                                                                onExpand={() => {
                                                                     toggleRow(
                                                                         time.from.toString()
                                                                     )
@@ -235,7 +312,7 @@ export default function newsSCreen(): JSX.Element {
                                                     }}
                                                 >
                                                     {t(
-                                                        'pages.library.available.noMoreSeats'
+                                                        'pages.library.available.noSeats'
                                                     )}
                                                 </Text>
                                             )}
@@ -266,79 +343,15 @@ export default function newsSCreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     contentContainer: { paddingBottom: 32 },
-    messageContainer: {
-        padding: CARD_PADDING,
-        borderRadius: 8,
-        width: '100%',
-        maxWidth: '80%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 6,
-    },
-    labelText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    imageContainer: {
-        width: '100%',
-        height: 200,
-        objectFit: 'cover',
-        borderTopRightRadius: 8,
-        borderTopLeftRadius: 8,
-    },
     teaserText: {
         fontSize: 17,
         marginHorizontal: 10,
         textAlign: 'center',
         marginVertical: 30,
     },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
-    },
     loadingContainer: {
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-    },
-    titleText: {
-        width: '94%',
-        paddingVertical: 14,
-        fontSize: 15,
-        fontWeight: '700',
-        textAlign: 'left',
-    },
-    sectionContainer: {
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        marginTop: 2,
-        justifyContent: 'center',
-    },
-    errorTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
     },
 })

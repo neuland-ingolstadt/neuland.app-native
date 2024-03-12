@@ -61,6 +61,9 @@ export default {
     changelog: {
         footer: 'To see the full changelog, check out the commits on ',
     },
+    licenses: {
+        footer: 'These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build.',
+    },
     profile: {
         formlist: {
             grades: {
@@ -122,7 +125,15 @@ export default {
         shown: 'Shown cards',
         hidden: 'Hidden cards',
         reset: 'Reset order',
+        noShown: 'Dashboard is empty',
+        noShownDescription: 'Add some cards to your dashboard to get started.',
+        noShownButton: 'Configure',
         footer: 'Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.',
+        unavailable: {
+            title: 'Unavailable cards',
+            message:
+                'To use all features of the app, you need to sign in. Tap to continue with your THI account.',
+        },
     },
     grades: {
         grade: 'Grade',
@@ -143,6 +154,7 @@ export default {
             modernDark: 'Modern Dark',
             modernLight: 'Modern Light',
             modernGreen: 'Modern Green',
+            modernPink: 'Modern Pink',
             rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
             rainbowNeon: 'Rainbow Neon',

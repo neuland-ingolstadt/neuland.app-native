@@ -1,16 +1,9 @@
 import { type Colors } from '@/components/colors'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Alert,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
@@ -25,7 +18,6 @@ const LibraryReservationRow = ({
     deleteReservation: (id: string) => Promise<void>
 }): JSX.Element => {
     const { t } = useTranslation('common')
-    const [deleting, setDeleting] = useState<boolean>(false)
 
     const deleteAlert = (): void => {
         Alert.alert(
@@ -37,16 +29,10 @@ const LibraryReservationRow = ({
                     style: 'cancel',
                 },
                 {
-                    text: t(deleting ? '' : 'misc.delete'),
+                    text: t('misc.delete'),
                     style: 'destructive',
                     onPress: () => {
-                        setDeleting(true)
-
-                        void deleteReservation(
-                            reservation.reservation_id
-                        ).finally(() => {
-                            setDeleting(false)
-                        })
+                        void deleteReservation(reservation.reservation_id)
                     },
                 },
             ]
@@ -76,8 +62,8 @@ const LibraryReservationRow = ({
                         }}
                     >
                         {formatFriendlyDateTimeRange(
-                            reservation.start,
-                            reservation.end
+                            new Date(reservation.start),
+                            new Date(reservation.end)
                         )}
                     </Text>
                     <Text
@@ -88,14 +74,14 @@ const LibraryReservationRow = ({
                     >
                         {`${t('pages.library.reservations.id')}: ${
                             reservation.reservation_id
-                        } (${reservation.resource_id})`}
+                        }`}
                     </Text>
                 </>
             }
             rightChildren={
                 <>
                     <View style={styles.rightContainer}>
-                        {!deleting ? (
+                        {
                             <Pressable
                                 onPress={() => {
                                     deleteAlert()
@@ -113,15 +99,11 @@ const LibraryReservationRow = ({
                                     }}
                                 />
                             </Pressable>
-                        ) : (
-                            <ActivityIndicator
-                                color={colors.labelSecondaryColor}
-                            />
-                        )}
+                        }
                     </View>
                 </>
             }
-            maxTitleWidth={'65%'}
+            maxTitleWidth={'75%'}
         />
     )
 }

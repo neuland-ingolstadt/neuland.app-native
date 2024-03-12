@@ -7,6 +7,9 @@ export default {
     onboarding: {
         links: {
             privacy: 'Datenschutz',
+            privacypolicy: 'Datenschutzerklärung',
+            agree1: 'Durch Fortfahren stimmst du unserer ',
+            agree2: ' zu.',
             imprint: 'Impressum',
         },
         page1: {
@@ -40,6 +43,7 @@ export default {
             error: {
                 title: 'Anmeldung fehlgeschlagen',
                 wrongCredentials: 'Deine Anmeldedaten sind falsch.',
+                missing: 'Bitte fülle alle Felder aus.',
                 generic:
                     'Beim Verbinden mit dem Server ist ein Fehler aufgetreten.',
                 backend:

@@ -103,7 +103,7 @@ export default function License(): JSX.Element {
 const styles = StyleSheet.create({
     formlistContainer: {
         marginTop: 10,
-        maringBottom: 16,
+        marginBottom: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',

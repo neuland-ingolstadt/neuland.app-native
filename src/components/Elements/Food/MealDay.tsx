@@ -54,7 +54,7 @@ const MealCategory = ({
     const colors = useTheme().colors as Colors
     return (
         <>
-            <View key={category} style={{ paddingBottom: 8 }}>
+            <View key={category} style={styles.categoryContainerCollapsed}>
                 <Pressable
                     onPress={() => {
                         toggleCollapsed()
@@ -78,7 +78,7 @@ const MealCategory = ({
                                 size: 12,
                             }}
                             android={{
-                                name: collapsed ? 'chevron-down' : 'chevron-up',
+                                name: collapsed ? 'expand_more' : 'expand_less',
                                 size: 20,
                             }}
                             style={styles.toggleIcon}
@@ -141,9 +141,9 @@ export const MealDay = ({
         }, {})
     }
 
-    const mensa = filterMealsByRestaurant(day.meals, 'Mensa')
-    const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns')
-    const canisius = filterMealsByRestaurant(day.meals, 'Canisius')
+    const mensa = filterMealsByRestaurant(day.meals, 'mensa')
+    const reimanns = filterMealsByRestaurant(day.meals, 'reimanns')
+    const canisius = filterMealsByRestaurant(day.meals, 'canisius')
 
     const mensaGrouped = groupMealsByCategory(mensa)
     const reimannsGrouped = groupMealsByCategory(reimanns)
@@ -190,19 +190,14 @@ export const MealDay = ({
 
     return isEmpty ? (
         <>
-            <View
-                style={{
-                    paddingTop: 40,
-                    alignItems: 'center',
-                }}
-            >
-                <Text style={{ color: colors.text, fontSize: 16 }}>
+            <View style={styles.emptyContainer}>
+                <Text style={{ ...styles.emptyText, color: colors.text }}>
                     No meals found for this day.
                 </Text>
             </View>
         </>
     ) : (
-        <View key={index} style={styles.dayRestaurantContainer}>
+        <View key={index}>
             {renderRestaurantView({
                 restaurantName: 'Mensa',
                 meals: mensa,
@@ -223,9 +218,11 @@ export const MealDay = ({
 }
 
 const styles = StyleSheet.create({
-    dayRestaurantContainer: {
-        marginTop: 10,
+    emptyContainer: {
+        paddingTop: 40,
+        alignItems: 'center',
     },
+    emptyText: { fontSize: 16 },
     dayRestaurantTitle: {
         fontWeight: 'bold',
         fontSize: 18,
@@ -247,4 +244,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '500',
     },
+    categoryContainerCollapsed: { paddingBottom: 8 },
 })

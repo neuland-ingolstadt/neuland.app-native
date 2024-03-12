@@ -13,7 +13,7 @@
                 },
                 "icon": {
                     "ios": "rectangle.3.group",
-                    "android": "dashboard-customize"
+                    "android": "dashboard_customize"
                 }
             },
             {
@@ -67,7 +67,7 @@
                 },
                 "description": {
                     "de": "Verfügbare Variationen werden nun in den Detaisl angezeigt. Außerdem kann nach dauerhaft verfügbaren Gerichten gefiltert werden.",
-                    "en": "Available variations are now displayed in the details. In addition, you can filter by permanently available dishes."
+                    "en": "Available variants are now displayed in the details. In addition, you can filter by permanently available dishes."
                 },
                 "icon": {
                     "ios": "carrot",
@@ -152,12 +152,12 @@
         "0.6": [
             {
                 "title": {
-                    "de": "Kalender Listenansicht",
-                    "en": "Calendar Agenda View"
+                    "de": "Kalender Neugestaltung",
+                    "en": "Calendar Redesign"
                 },
                 "description": {
-                    "de": "Wechsle zwischen der normalen Kalenderansicht und einer Listenansicht, um alle Termine auf einen Blick zu sehen.",
-                    "en": "Switch between the normal calendar view and an agenda view to see all appointments at a glance."
+                    "de": "Der Kalender verfügt nun über eine neue Agenda und Tagesansicht. Außerdem können nun Benachrichtigungen für Vorlesungen aktiviert werden.",
+                    "en": "The calendar now has a new agenda and day view. In addition, notifications for lectures can now be activated."
                 },
                 "icon": {
                     "ios": "calendar",
@@ -166,16 +166,30 @@
             },
             {
                 "title": {
-                    "de": "Analytics",
-                    "en": "Analytics"
+                    "de": "Mensa Verbesserungen",
+                    "en": "Food Improvements"
                 },
                 "description": {
-                    "de": "Die App sammelt nun anonyme und nicht personenbezogene Daten, um die App zu verbessern. Deine Privatsphäre bleibt dabei geschützt.",
-                    "en": "The app now collects anonymous and non-personal data to improve the app. Your privacy is protected at all times."
+                    "de": "Swipen, Varianten, bessere Allergenanzeige und mehr. Der Essen Tab wurde komplett überarbeitet.",
+                    "en": "Swiping, variants, better allergen display and more. The food tab has been completely revised."
                 },
                 "icon": {
-                    "ios": "chart.pie",
-                    "android": "insert-chart"
+                    "ios": "fork.knife",
+                    "android": "restaurant"
+                }
+            },
+            {
+                "title": {
+                    "de": "Anonyme Statistiken",
+                    "en": "Anonymous Analytics"
+                },
+                "description": {
+                    "de": "Die App sammelt nun anonyme Nutzungsdaten, um die App zu verbessern. Deine Privatsphäre bleibt dabei zu jeder Zeit geschützt.",
+                    "en": "The app now collects anonymous usage data to improve the app. Your privacy is protected at all times."
+                },
+                "icon": {
+                    "ios": "lock.shield",
+                    "android": "chart_pie"
                 }
             }
         ]

@@ -1,9 +1,12 @@
 import API from '@/api/authenticated-api'
+import { type LectureData } from '@/hooks/contexts/notifications'
 import {
     type CalendarEvent,
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
+import { scheduleNotificationAsync } from 'expo-notifications'
+import { Alert, Linking } from 'react-native'
 
 import { combineDateTime } from './date-utils'
 
@@ -17,9 +20,21 @@ export async function getFriendlyTimetable(
     date: Date,
     detailed: boolean = false
 ): Promise<FriendlyTimetableEntry[]> {
-    const rawTimetable = (await API.getTimetable(date, detailed)).timetable
+    const [rawTimetableResponse, rawTimetableNextMonthResponse] =
+        await Promise.all([
+            API.getTimetable(date, detailed),
+            API.getTimetable(
+                new Date(date.getFullYear(), date.getMonth() + 1),
+                detailed
+            ),
+        ])
 
+    const rawTimetable = rawTimetableResponse.timetable
+    const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
+
+    rawTimetable.push(...rawTimetableNextMonth)
     return rawTimetable
+        .filter((day) => day !== null)
         .flatMap((day) =>
             Object.values(day.hours).flatMap((hours) =>
                 hours.map((hour) => ({
@@ -33,7 +48,7 @@ export async function getFriendlyTimetable(
             const endDate = combineDateTime(lecture.date, lecture.bis)
 
             let rooms = [] as string[]
-            if (lecture.details.raum !== '') {
+            if (lecture.details.raum !== '' && lecture.details.raum !== null) {
                 rooms = lecture.details.raum
                     .split(', ')
                     .map((room) => room.trim().toUpperCase())
@@ -46,7 +61,7 @@ export async function getFriendlyTimetable(
                 endDate,
                 name: lecture.details.fach,
                 shortName: lecture.details.veranstaltung.split(' - ')[0],
-                rooms,
+                rooms: rooms.filter((room) => room !== ''),
                 lecturer: lecture.details.dozent,
                 exam: lecture.details.pruefung,
                 course: lecture.details.stg,
@@ -111,4 +126,72 @@ export function convertTimetableToWeekViewEvents(
             entry,
         }
     })
+}
+
+/**
+ * Schedules a notification for a lecture.
+ * @param lectureTitle Title of the lecture
+ * @param room Room of the lecture
+ * @param minsBefore Minutes before the lecture to send the notification
+ * @param date Date of the lecture
+ * @param t Translation function
+ * @returns Promise with the id of the scheduled notification
+ */
+export async function scheduleLectureNotification(
+    lectureTitle: string,
+    room: string,
+    minsBefore: number,
+    date: Date,
+    t: any
+): Promise<LectureData[]> {
+    const alertDate = new Date(date.getTime() - minsBefore * 60000)
+    const id = await scheduleNotificationAsync({
+        content: {
+            title: lectureTitle,
+            body: `${t('notificatons.body', {
+                mins: minsBefore,
+                room,
+            })}`,
+        },
+        trigger: alertDate,
+    })
+    return [{ startDateTime: date, room, id }]
+}
+
+/**
+ * Shows an alert to the user that they need to enable notifications.
+ * @param t Translation function
+ * @returns void
+ */
+export function notificationAlert(t: any): void {
+    Alert.alert(
+        t('notification.permission.title', { ns: 'common' }),
+        t('notification.permission.description', { ns: 'common' }),
+        [
+            {
+                text: t('misc.cancel', { ns: 'common' }),
+            },
+            {
+                text: t('notification.permission.button', { ns: 'common' }),
+                onPress: () => {
+                    void Linking.openSettings()
+                },
+            },
+        ]
+    )
+}
+
+/**
+ * Generate a key for a lecture to be used for the notification hashmap
+ * @param lectureName
+ * @param startDate
+ * @param room
+ * @returns {string}
+ */
+export function generateKey(
+    lectureName: string,
+    startDate: Date | string,
+    room: string
+): string {
+    return `${lectureName}-${new Date(startDate).getTime()}-${room}`
 }

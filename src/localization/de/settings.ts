@@ -64,6 +64,9 @@ export default {
     changelog: {
         footer: 'Um alle detaillierten Änderungen zu sehen, öffne die Commits auf ',
     },
+    licenses: {
+        footer: 'Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten.',
+    },
     profile: {
         formlist: {
             grades: {
@@ -124,8 +127,17 @@ export default {
     dashboard: {
         shown: 'Angezeigte Karten',
         hidden: 'Ausgeblendete Karten',
+        noShown: 'Dashboard ist leer',
+        noShownButton: 'Konfigurieren',
+        noShownDescription:
+            'Füge Karten zu deinem Dashboard hinzu, um loszulegen.',
         reset: 'Reihenfolge zurücksetzen',
         footer: 'Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.',
+        unavailable: {
+            title: 'Nicht verfügbare Karten',
+            message:
+                'Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren.',
+        },
     },
     grades: {
         grade: 'Note',
@@ -146,6 +158,7 @@ export default {
             modernDark: 'Modern Dunkel',
             modernLight: 'Modern Hell',
             modernGreen: 'Modern Grün',
+            modernPink: 'Modern Pink',
             rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
             rainbowNeon: 'Regenbogen Neon',

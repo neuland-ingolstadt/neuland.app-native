@@ -1,105 +1,83 @@
-import NeulandAPI from '@/api/neuland-api'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
-import { type CLEvents } from '@/types/neuland-api'
+import { useRefreshByUser } from '@/hooks'
+import { networkError } from '@/utils/api-utils'
+import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 
 export default function Events(): JSX.Element {
-    const [events, setEvents] = useState<CLEvents[]>([])
     const colors = useTheme().colors as Colors
-    const [error, setError] = useState<Error | null>(null)
+
     const { t } = useTranslation('common')
 
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
+        useQuery({
+            queryKey: ['campusLifeEvents'],
+            queryFn: loadCampusLifeEvents,
+            staleTime: 1000 * 60 * 60, // 60 minutes
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+
     useEffect(() => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }, [])
-
-    async function loadEvents(): Promise<void> {
-        const campusLifeEvents =
-            (await NeulandAPI.getCampusLifeEvents()) as CLEvents[]
-
-        const newEvents = campusLifeEvents
-            .map((x) => ({
-                ...x,
-                begin: x.begin !== null ? new Date(x.begin) : null,
-                end: x.end !== null ? new Date(x.end) : null,
-            }))
-            .filter((x) => x.end === null || x.end > new Date())
-
-        setEvents(newEvents)
-    }
-
-    const onRefresh: () => void = () => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }
+        if (isPaused && data != null) {
+            void showToast(t('toast.paused'))
+        }
+    }, [isPaused])
 
     return (
         <ScrollView
             style={styles.page}
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                !isLoading ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
         >
-            {loadingState === LoadingState.LOADING && (
+            {isLoading && (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
             )}
-            {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+            {isError && (
+                <ErrorView
+                    title={error?.message ?? t('error.title')}
+                    onRefresh={refetchByUser}
+                    refreshing={false}
+                />
             )}
-            {loadingState === LoadingState.LOADED && (
+            {isPaused && !isSuccess && (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={false}
+                />
+            )}
+            {isSuccess && (
                 <View
                     style={[
                         styles.loadedContainer,
                         { backgroundColor: colors.card },
                     ]}
                 >
-                    {events.map((event, index) => (
+                    {data.map((event, index) => (
                         <React.Fragment key={index}>
                             <CLEventRow event={event} colors={colors} />
-                            {index !== events.length - 1 && (
+                            {index !== data.length - 1 && (
                                 <Divider
                                     color={colors.labelTertiaryColor}
                                     iosPaddingLeft={16}
@@ -116,17 +94,6 @@ export default function Events(): JSX.Element {
 const styles = StyleSheet.create({
     page: {
         padding: PAGE_PADDING,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingTop: 40,

@@ -1,16 +1,36 @@
 export default {
     toast: {
         clipboard: 'copied to clipboard',
+        paused: 'No internet connection',
     },
     error: {
         title: 'An error occurred',
-        description: 'Pull down to refresh.',
+
+        description: 'An error occurred while loading the data.',
         refreshPull:
-            'An error occurred while loading the data.\nPull down to refresh.',
-        refreshButton:
-            'An error occurred while loading the data.\nClick to refresh.',
+            'An error occurred while loading the data.\nPull to refresh.',
         button: 'Retry',
         noSession: 'Not signed in.',
+        pull: 'Pull down to refresh',
+        network: {
+            title: 'No internet connection',
+            description: 'Please check your internet connection.',
+        },
+        guest: {
+            title: 'Sign in required',
+            description:
+                'This feature requires you to sign in using your THI account.',
+            button: 'Sign in',
+        },
+        permission: {
+            title: 'Feature not available',
+            description: 'This feature is not available for your user group.',
+        },
+        map: {
+            mapLoadError: 'Error while loading map',
+            mapOverlay: 'Error while loading overlay',
+        },
+        noMeals: 'No meals available',
     },
     dates: {
         until: 'until',
@@ -24,7 +44,9 @@ export default {
     misc: {
         share: 'Share',
         cancel: 'Cancel',
+        confirm: 'Confirm',
         delete: 'Delete',
+        disable: 'Disable',
     },
     pages: {
         calendar: {
@@ -43,6 +65,7 @@ export default {
             footer: {
                 part1: 'All information without guarantee. Binding information is only available directly on the ',
                 part2: 'university website',
+                part3: '.', // needed for german translation
             },
         },
         lecturers: {
@@ -80,7 +103,12 @@ export default {
         },
         map: {
             search: 'Search for: G, W003, Toilette, ...',
-            gf: 'GF',
+            easterEgg: {
+                title: 'Easter Egg',
+                message:
+                    'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
+                confirm: 'Nice!',
+            },
         },
         rooms: {
             options: {
@@ -117,6 +145,13 @@ export default {
                 number: 'Number',
                 footer: 'Use this barcode to sign in at the library terminals to borrow books.',
             },
+        },
+    },
+    notification: {
+        permission: {
+            title: 'Notifications',
+            description: 'Open the system settings to enable notifications.',
+            button: 'Settings',
         },
     },
 }
