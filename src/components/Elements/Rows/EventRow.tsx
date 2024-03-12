@@ -30,7 +30,8 @@ const CLEventRow = ({
     const club = clubs.find((club) => club.club === event.organizer)
     const { t } = useTranslation('common')
     const begin = new Date(event.begin)
-    const end = new Date(event.end)
+    const end = event.end !== null ? new Date(event.end) : null
+    console.log(event.organizer, event.title, event.begin, event.end)
     return (
         <RowEntry
             title={event.title}
@@ -116,10 +117,9 @@ const CLEventRow = ({
                                 color: colors.labelColor,
                             }}
                         >
-                            {event.begin != null && (
+                            {begin != null && (
                                 <>
-                                    {event.end != null &&
-                                    event.begin < new Date()
+                                    {end != null && begin < new Date()
                                         ? `${t(
                                               'dates.until'
                                           )} ${formatFriendlyRelativeTime(end)}`
