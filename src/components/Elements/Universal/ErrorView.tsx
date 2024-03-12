@@ -158,11 +158,14 @@ export default function ErrorView({
                     <></>
                 )
             }
-            contentContainerStyle={
-                inModal ?? false
+            // eslint-disable-next-line react-native/no-inline-styles
+            contentContainerStyle={{
+                ...(inModal ?? false
                     ? styles.innerContainerModal
-                    : styles.innerContainer
-            }
+                    : styles.innerContainer),
+                backgroundColor: inModal ?? false ? colors.card : undefined,
+                borderRadius: inModal ?? false ? 10 : 0,
+            }}
         >
             <View
                 style={

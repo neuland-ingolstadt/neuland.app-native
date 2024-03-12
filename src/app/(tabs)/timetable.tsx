@@ -9,9 +9,10 @@ import {
     UserKindContext,
 } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type FriendlyTimetableEntry } from '@/types/utils'
-import { networkError } from '@/utils/api-utils'
+import { guestError, networkError } from '@/utils/api-utils'
 import {
     generateKey,
     getFriendlyTimetable,
@@ -79,6 +80,7 @@ export default function TimetableScreen(): JSX.Element {
             }
             return failureCount < 3
         },
+        enabled: userKind !== USER_GUEST,
     })
 
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
@@ -297,6 +299,8 @@ export default function TimetableScreen(): JSX.Element {
                         }}
                     />
                 )
+            } else if (userKind === USER_GUEST) {
+                return <ErrorView title={guestError} />
             } else {
                 return (
                     <ErrorView
