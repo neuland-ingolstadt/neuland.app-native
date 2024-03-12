@@ -76,7 +76,7 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                             size: 21,
                         }}
                         android={{
-                            name: 'calendar-month',
+                            name: 'calendar_month',
                             size: 24,
                         }}
                     />
@@ -112,7 +112,7 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
                                 size: 12,
                             }}
                             android={{
-                                name: 'chevron-right',
+                                name: 'chevron_right',
                                 size: 16,
                             }}
                         />

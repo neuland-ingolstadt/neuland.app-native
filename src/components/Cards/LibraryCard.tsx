@@ -1,8 +1,5 @@
 import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FlowContext, UserKindContext } from '@/components/provider'
@@ -43,11 +40,7 @@ const LibraryCard = (): JSX.Element => {
             setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
-            if (
-                (e instanceof NoSessionError ||
-                    e instanceof UnavailableSessionError) &&
-                flow.isOnboarded === true
-            ) {
+            if (e instanceof NoSessionError && flow.isOnboarded === true) {
                 router.push('(user)/login')
             } else {
                 // ignore
@@ -67,7 +60,7 @@ const LibraryCard = (): JSX.Element => {
                 <View
                     style={{
                         ...styles.calendarView,
-                        paddingTop: reservations.length > 0 ? 10 : 0,
+                        ...(reservations.length > 0 && styles.cardsFilled),
                     }}
                 >
                     {reservations.map((item, index) => (
@@ -110,7 +103,10 @@ const LibraryCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     calendarView: {
-        gap: 12,
+        gap: 8,
+    },
+    cardsFilled: {
+        paddingTop: 12,
     },
     eventTitle: {
         fontWeight: '500',

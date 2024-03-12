@@ -2,26 +2,31 @@ import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Card, type ExtendedCard } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
-import { DashboardContext } from '@/components/provider'
+import { DashboardContext, UserKindContext } from '@/components/provider'
+import { getDefaultDashboardOrder } from '@/hooks/contexts/dashboard'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { arraysEqual } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { router } from 'expo-router'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    Dimensions,
     LayoutAnimation,
     Pressable,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
-import DraggableFlatList, {
-    type RenderItemParams,
-    ScaleDecorator,
-} from 'react-native-draggable-flatlist'
+import { DragSortableView } from 'react-native-drag-sort'
 import { ScrollView } from 'react-native-gesture-handler'
 
+const { width } = Dimensions.get('window')
+
 export default function DashboardEdit(): JSX.Element {
+    const childrenHeight = 44
+
     const {
         shownDashboardEntries,
         hiddenDashboardEntries,
@@ -29,69 +34,140 @@ export default function DashboardEdit(): JSX.Element {
         bringBackDashboardEntry,
         resetOrder,
         updateDashboardOrder,
-    } = React.useContext(DashboardContext)
+    } = useContext(DashboardContext)
+    const { userKind } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
-    const itemRefs = useRef(new Map())
-    const [refresh, setRefresh] = useState(false)
     const { t } = useTranslation(['settings'])
+
+    const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
+    const [defaultHiddenKeys, setDefaultHiddenKeys] = useState<string[]>([])
+    const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
+        useState<Card[]>([])
+
     // add translation to shownDashboardEntries with new key transText
-    const transShownDashboardEntries = shownDashboardEntries.map((item) => {
+    const transShownDashboardEntries = shownDashboardEntries?.map((item) => {
         return {
             ...item,
-            text: t('cards.titles.' + item.key, { ns: 'navigation' }),
+            // @ts-expect-error cannot verify the type
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            text: t('cards.titles.' + item.key, {
+                ns: 'navigation',
+            }) as string,
         }
     })
 
-    // update view if shownDashboardEntries changes
     useEffect(() => {
-        itemRefs.current = new Map()
-    }, [
-        shownDashboardEntries,
-        bringBackDashboardEntry,
-        hideDashboardEntry,
-        refresh,
-    ])
+        setFilteredHiddenDashboardEntries(
+            hiddenDashboardEntries?.filter(
+                (item) =>
+                    item?.exclusive !== true || item.default.includes(userKind)
+            )
+        )
+    }, [hiddenDashboardEntries, userKind])
 
-    const renderItem = (
-        params: RenderItemParams<ExtendedCard>
-    ): JSX.Element => {
+    const renderItem = (params: ExtendedCard): JSX.Element => {
         const onPressDelete = (): void => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-            hideDashboardEntry(params.item.key)
-            setRefresh(!refresh)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+            hideDashboardEntry(params.key)
         }
 
-        return (
-            <RowItem
-                {...params}
-                itemRefs={itemRefs}
-                onPressDelete={onPressDelete}
-            />
-        )
+        return <RowItem item={params} onPressDelete={onPressDelete} />
     }
 
     const handleRestore = useCallback(
         (item: Card) => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             bringBackDashboardEntry(item.key)
-            setRefresh(!refresh)
         },
-        [bringBackDashboardEntry, refresh]
+        [bringBackDashboardEntry]
     )
 
     const handleReset = useCallback(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-        resetOrder()
-        setRefresh(!refresh)
-    }, [resetOrder, refresh])
+        resetOrder(userKind)
+    }, [resetOrder])
+
+    useEffect(() => {
+        const defaultHidden = getDefaultDashboardOrder(userKind).hidden.map(
+            (item) => item.key
+        )
+        const defaultShown =
+            getDefaultDashboardOrder(userKind).shown?.map((item) => item.key) ??
+            []
+
+        if (shownDashboardEntries == null) {
+            return
+        }
+        setHasUserDefaultOrder(
+            arraysEqual(
+                defaultHidden,
+                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+                hiddenDashboardEntries
+                    ?.filter(Boolean)
+                    .map((item) => item.key) || []
+            ) &&
+                arraysEqual(
+                    defaultShown,
+                    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+                    shownDashboardEntries
+                        ?.filter(Boolean)
+                        .map((item) => item.key) || []
+                )
+        )
+
+        setDefaultHiddenKeys(defaultHidden)
+    }, [shownDashboardEntries, hiddenDashboardEntries, userKind])
 
     return (
         <View>
             <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={styles.page}
+                bounces={false}
+                contentInsetAdjustmentBehavior="automatic"
             >
                 <View style={styles.wrapper}>
+                    {userKind === USER_GUEST && (
+                        <Pressable
+                            style={[
+                                styles.card,
+                                styles.noteContainer,
+                                { backgroundColor: colors.card },
+                            ]}
+                            onPress={() => {
+                                router.navigate('login')
+                            }}
+                        >
+                            <View style={styles.noteTextContainer}>
+                                <PlatformIcon
+                                    color={colors.primary}
+                                    ios={{
+                                        name: 'lock',
+                                        size: 20,
+                                    }}
+                                    android={{
+                                        name: 'lock',
+                                        size: 24,
+                                    }}
+                                />
+                                <Text
+                                    style={{
+                                        color: colors.primary,
+                                        ...styles.notesTitle,
+                                    }}
+                                >
+                                    {t('dashboard.unavailable.title')}
+                                </Text>
+                            </View>
+
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.notesMessage,
+                                }}
+                            >
+                                {t('dashboard.unavailable.message')}
+                            </Text>
+                        </Pressable>
+                    )}
                     <View style={styles.block}>
                         <Text
                             style={[
@@ -109,22 +185,45 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            <DraggableFlatList
-                                keyExtractor={(item) => item.key}
-                                data={transShownDashboardEntries}
-                                renderItem={renderItem}
-                                onDragEnd={({ data }) => {
-                                    updateDashboardOrder(data)
-                                }}
-                                activationDistance={10}
-                                style={styles.dragList}
-                                scrollEnabled={false}
-                            />
+                            {shownDashboardEntries?.length === 0 ? (
+                                <View
+                                    style={{
+                                        height: childrenHeight * 1.5,
+                                        ...styles.emptyContainer,
+                                    }}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.textEmpty,
+                                            {
+                                                color: colors.text,
+                                            },
+                                        ]}
+                                    >
+                                        {t('dashboard.noShown')}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <DragSortableView
+                                    keyExtractor={(item) => item.key}
+                                    dataSource={
+                                        transShownDashboardEntries ?? []
+                                    }
+                                    childrenWidth={width}
+                                    childrenHeight={childrenHeight}
+                                    parentWidth={width}
+                                    renderItem={renderItem}
+                                    onDataChange={(data) => {
+                                        updateDashboardOrder(data)
+                                    }}
+                                />
+                            )}
                         </View>
                     </View>
 
                     <View style={styles.block}>
-                        {hiddenDashboardEntries.length > 0 && (
+                        {filteredHiddenDashboardEntries.filter(Boolean).length >
+                            0 && (
                             <Text
                                 style={[
                                     styles.sectionHeaderText,
@@ -142,76 +241,103 @@ export default function DashboardEdit(): JSX.Element {
                                 },
                             ]}
                         >
-                            {hiddenDashboardEntries.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <Pressable
-                                        onPress={() => {
-                                            handleRestore(item)
-                                        }}
-                                        style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.5 : 1,
-                                                minHeight: 44,
-                                                justifyContent: 'center',
-                                            },
-                                        ]}
-                                    >
-                                        <View style={styles.row}>
-                                            <Text
-                                                style={[
-                                                    styles.text,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t(
-                                                    'cards.titles.' +
-                                                        t(item.key),
-                                                    { ns: 'navigation' }
+                            {filteredHiddenDashboardEntries
+                                .filter(Boolean)
+                                .map((item, index) => (
+                                    <React.Fragment key={index}>
+                                        <Pressable
+                                            disabled={defaultHiddenKeys.includes(
+                                                item.key
+                                            )}
+                                            onPress={() => {
+                                                handleRestore(item)
+                                            }}
+                                            style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.5 : 1,
+                                                    minHeight: 44,
+                                                    justifyContent: 'center',
+                                                },
+                                            ]}
+                                        >
+                                            <View style={styles.row}>
+                                                <Text
+                                                    style={[
+                                                        styles.text,
+                                                        { color: colors.text },
+                                                    ]}
+                                                >
+                                                    {t(
+                                                        // @ts-expect-error cannot verify the type
+                                                        `cards.titles.${item.key}`,
+                                                        { ns: 'navigation' }
+                                                    )}
+                                                </Text>
+                                                {defaultHiddenKeys.includes(
+                                                    item.key
+                                                ) ? (
+                                                    <PlatformIcon
+                                                        color={
+                                                            colors.labelColor
+                                                        }
+                                                        ios={{
+                                                            name: 'lock',
+                                                            size: 20,
+                                                        }}
+                                                        android={{
+                                                            name: 'lock',
+                                                            size: 24,
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <PlatformIcon
+                                                        color={colors.primary}
+                                                        ios={{
+                                                            name: 'plus.circle',
+                                                            variant: 'fill',
+                                                            size: 20,
+                                                        }}
+                                                        android={{
+                                                            name: 'add_circle',
+                                                            size: 24,
+                                                        }}
+                                                    />
                                                 )}
-                                            </Text>
-
-                                            <PlatformIcon
-                                                color={colors.primary}
-                                                ios={{
-                                                    name: 'plus.circle',
-                                                    variant: 'fill',
-                                                    size: 20,
-                                                }}
-                                                android={{
-                                                    name: 'plus-circle',
-                                                    size: 24,
-                                                }}
+                                            </View>
+                                        </Pressable>
+                                        {index !==
+                                            filteredHiddenDashboardEntries.length -
+                                                1 && (
+                                            <Divider
+                                                color={
+                                                    colors.labelTertiaryColor
+                                                }
+                                                width={'100%'}
                                             />
-                                        </View>
-                                    </Pressable>
-                                    {index !==
-                                        hiddenDashboardEntries.length - 1 && (
-                                        <Divider
-                                            color={colors.labelTertiaryColor}
-                                            width={'100%'}
-                                        />
-                                    )}
-                                </React.Fragment>
-                            ))}
+                                        )}
+                                    </React.Fragment>
+                                ))}
                         </View>
                     </View>
 
                     <View
-                        style={[styles.card, { backgroundColor: colors.card }]}
+                        style={[
+                            styles.card,
+                            styles.blockContainer,
+                            { backgroundColor: colors.card },
+                        ]}
                     >
                         <Pressable
                             onPress={handleReset}
-                            style={({ pressed }) => [
-                                {
-                                    opacity: pressed ? 0.5 : 1,
-                                },
-                            ]}
+                            disabled={hasUserDefaultOrder}
                         >
                             <Text
                                 style={[
                                     styles.reset,
                                     {
-                                        color: colors.text,
+                                        color: hasUserDefaultOrder
+                                            ? colors.labelColor
+                                            : colors.text,
                                     },
                                 ]}
                             >
@@ -219,7 +345,6 @@ export default function DashboardEdit(): JSX.Element {
                             </Text>
                         </Pressable>
                     </View>
-
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
                         {t('dashboard.footer')}
                     </Text>
@@ -231,25 +356,20 @@ export default function DashboardEdit(): JSX.Element {
 
 interface RowItemProps {
     item: ExtendedCard
-    drag: () => void
     onPressDelete: () => void
-    itemRefs: React.MutableRefObject<Map<any, any>>
 }
 
-function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
+function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
-    const { shownDashboardEntries } = React.useContext(DashboardContext)
-
     return (
-        <ScaleDecorator>
-            <TouchableOpacity
-                activeOpacity={1}
-                onLongPress={drag}
+        <View>
+            <View
                 style={[
                     styles.row,
                     {
                         backgroundColor: colors.card,
+                        width: width - PAGE_PADDING * 4,
                     },
                 ]}
             >
@@ -260,7 +380,7 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                         size: 20,
                     }}
                     android={{
-                        name: 'drag-horizontal-variant',
+                        name: 'drag_handle',
                         size: 22,
                     }}
                 />
@@ -270,31 +390,31 @@ function RowItem({ item, drag, onPressDelete }: RowItemProps): JSX.Element {
                 </Text>
                 <Pressable
                     onPress={onPressDelete}
+                    disabled={!item.removable}
                     style={({ pressed }) => [
                         {
                             opacity: pressed ? 0.5 : 1,
                         },
                     ]}
+                    hitSlop={10}
                 >
-                    <PlatformIcon
-                        color={colors.labelSecondaryColor}
-                        ios={{
-                            name: 'minus.circle',
-                            size: 20,
-                        }}
-                        android={{
-                            name: 'minus-circle',
-                            size: 24,
-                        }}
-                    />
+                    {item.removable && (
+                        <PlatformIcon
+                            color={colors.labelSecondaryColor}
+                            ios={{
+                                name: 'minus.circle',
+                                size: 20,
+                            }}
+                            android={{
+                                name: 'remove_circle',
+                                variant: 'outlined',
+                                size: 24,
+                            }}
+                        />
+                    )}
                 </Pressable>
-            </TouchableOpacity>
-
-            {shownDashboardEntries.findIndex((i) => i.key === item.key) <
-                shownDashboardEntries.length - 1 && (
-                <Divider color={colors.labelTertiaryColor} width={'100%'} />
-            )}
-        </ScaleDecorator>
+            </View>
+        </View>
     )
 }
 
@@ -303,12 +423,36 @@ const styles = StyleSheet.create({
         padding: PAGE_PADDING,
     },
     wrapper: {
-        gap: 16,
+        gap: 14,
     },
     block: {
         width: '100%',
         alignSelf: 'center',
         gap: 6,
+    },
+    blockContainer: {
+        marginTop: 6,
+    },
+    noteContainer: {
+        marginTop: 3,
+    },
+    noteTextContainer: {
+        paddingTop: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        paddingVertical: 9,
+        justifyContent: 'flex-start',
+    },
+    notesTitle: {
+        fontSize: 17,
+        fontWeight: '600',
+        textAlign: 'left',
+    },
+    notesMessage: {
+        fontSize: 15,
+        textAlign: 'left',
+        marginBottom: 12,
     },
     card: {
         borderRadius: 8,
@@ -317,7 +461,7 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+        gap: 10,
         paddingVertical: 9,
         minHeight: 44,
         justifyContent: 'center',
@@ -327,16 +471,20 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         flexShrink: 1,
     },
+    textEmpty: {
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    emptyContainer: {
+        justifyContent: 'center',
+    },
     sectionHeaderText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
     },
-    dragList: {
-        overflow: 'hidden',
-    },
     footer: {
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 'normal',
         textAlign: 'left',
     },

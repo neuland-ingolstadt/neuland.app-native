@@ -1,72 +1,95 @@
 import { MealDay } from '@/components/Elements/Food'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
 import { type Food } from '@/types/neuland-api'
+import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
+import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Animated,
+    Dimensions,
     Platform,
     Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
 } from 'react-native'
+import PagerView from 'react-native-pager-view'
 
 function FoodScreen(): JSX.Element {
-    const [days, setDays] = useState<any>([])
     const colors = useTheme().colors as Colors
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
-    const [selectedDay, setSelectedDay] = useState<number>(0)
-    const { selectedRestaurants, showStatic } = useContext(FoodFilterContext)
-    const [error, setError] = useState<Error | null>(null)
-    const { t, i18n } = useTranslation('common')
-    const loadData = (): void => {
-        loadFoodEntries(selectedRestaurants, showStatic)
-            .then((loadedDays: Food[]) => {
-                const filteredDays: Food[] = loadedDays.filter(
-                    (day: Food) =>
-                        new Date(day.timestamp).getTime() >=
-                        new Date().setHours(0, 0, 0, 0)
-                )
-                const formattedDays: Food[] = filteredDays.map((day: Food) => ({
-                    timestamp: day.timestamp,
-                    meals: day.meals,
-                }))
-                if (formattedDays.length === 0) {
-                    setError(new Error('No meals available'))
-                    setLoadingState(LoadingState.ERROR)
-                    return
-                }
-                setDays(formattedDays)
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e: Error) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }
 
-    const onRefresh: () => void = () => {
-        loadData()
-    }
+    const [selectedDay, setSelectedDay] = useState<number>(0)
+    const {
+        selectedRestaurants,
+        showStatic,
+        allergenSelection,
+        initAllergenSelection,
+    } = useContext(FoodFilterContext)
+    const [data, setData] = useState<Food[]>([])
+    const { t, i18n } = useTranslation('common')
+
+    const {
+        data: foodData,
+        error,
+        isLoading,
+        isError,
+        isPaused,
+        isSuccess,
+        refetch,
+    } = useQuery({
+        queryKey: ['food', selectedRestaurants, showStatic],
+        queryFn: async () =>
+            await loadFoodEntries(selectedRestaurants, showStatic),
+        staleTime: 1000 * 60 * 20, // 20 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     useEffect(() => {
-        loadData()
-    }, [selectedRestaurants, showStatic])
+        if (foodData == null) {
+            return
+        }
+        const filteredDays = foodData
+            .filter(
+                (day) =>
+                    new Date(day.timestamp).getTime() >=
+                    new Date().setHours(0, 0, 0, 0)
+            ) // filter again in case of yesterday's cached data
+            .slice(0, 5)
+        if (filteredDays.length === 0) {
+            throw new Error('noMeals')
+        }
+
+        setData(filteredDays)
+    }, [foodData])
+
+    useEffect(() => {
+        if (isPaused && data != null) {
+            void showToast(t('toast.paused'))
+        }
+    }, [isPaused])
+
+    const pagerViewRef = useRef<PagerView>(null)
+    function setPage(page: number): void {
+        pagerViewRef.current?.setPage(page)
+    }
 
     /**
      * Renders a button for a specific day's food data.
@@ -84,7 +107,7 @@ function FoodScreen(): JSX.Element {
         const date = new Date(day.timestamp)
         const { colors } = useTheme()
 
-        const daysCnt = days.length < 5 ? days.length : 5
+        const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
         const isFirstDay = index === 0
         const isLastDay = index === daysCnt - 1
 
@@ -93,7 +116,6 @@ function FoodScreen(): JSX.Element {
             isFirstDay ? { marginLeft: 0 } : null,
             isLastDay ? { marginRight: 0 } : null,
         ]
-
         return (
             <View style={buttonStyle} key={index}>
                 <Pressable
@@ -103,6 +125,7 @@ function FoodScreen(): JSX.Element {
                             void Haptics.selectionAsync()
                         }
                         setSelectedDay(index)
+                        setPage(index)
                     }}
                 >
                     <View
@@ -120,9 +143,9 @@ function FoodScreen(): JSX.Element {
                                     selectedDay === index
                                         ? colors.primary
                                         : colors.text,
-                                fontWeight:
-                                    selectedDay === index ? '600' : '500',
-                                fontSize: 16,
+                                ...(selectedDay === index
+                                    ? styles.selectedDayText2
+                                    : styles.normalDayText2),
                             }}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
@@ -139,9 +162,9 @@ function FoodScreen(): JSX.Element {
                                     selectedDay === index
                                         ? colors.primary
                                         : colors.text,
-                                fontSize: 15,
-                                fontWeight:
-                                    selectedDay === index ? '500' : 'normal',
+                                ...(selectedDay === index
+                                    ? styles.selectedDayText
+                                    : styles.normalDayText),
                             }}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
@@ -157,14 +180,92 @@ function FoodScreen(): JSX.Element {
         )
     }
 
+    const AllergensBanner = (): JSX.Element => {
+        const contrastTextColor = getContrastColor(colors.primary)
+        return (
+            <Animated.View
+                style={{
+                    ...styles.paddingContainer,
+                    borderBottomColor: colors.border,
+                    borderBottomWidth: scrollY.interpolate({
+                        inputRange: [0, 0, 0],
+                        outputRange: [0, 0, 0.5],
+                        extrapolate: 'clamp',
+                    }),
+                }}
+            >
+                <View
+                    style={{
+                        backgroundColor: colors.primary,
+                        ...styles.bannerContainer,
+                    }}
+                >
+                    <TouchableOpacity
+                        onPress={() => {
+                            initAllergenSelection()
+                        }}
+                        hitSlop={6}
+                        style={styles.dismissButton}
+                    >
+                        <PlatformIcon
+                            ios={{
+                                name: 'xmark',
+                                size: 16,
+                            }}
+                            android={{
+                                name: 'close',
+                                size: 20,
+                            }}
+                            color={contrastTextColor}
+                        />
+                    </TouchableOpacity>
+                    <View>
+                        <TouchableOpacity
+                            onPress={() => {
+                                router.push('(food)/allergens')
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: contrastTextColor,
+                                    ...styles.bannerTitle,
+                                }}
+                            >
+                                {t('navigation.allergens', {
+                                    ns: 'navigation',
+                                })}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    color: contrastTextColor,
+                                    ...styles.bannerText,
+                                }}
+                            >
+                                {t('empty.config', { ns: 'food' })}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Animated.View>
+        )
+    }
+
+    const screenHeight = Dimensions.get('window').height
+    const scrollY = new Animated.Value(0)
+    const showAllergensBanner =
+        allergenSelection.length === 1 &&
+        allergenSelection[0] === 'not-configured'
+
     return (
         <ScrollView
             refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
+                isError ? (
                     <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
@@ -172,35 +273,118 @@ function FoodScreen(): JSX.Element {
             contentInsetAdjustmentBehavior="always"
             contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}
+            scrollEnabled={!isLoading}
         >
-            {loadingState === LoadingState.LOADING && (
+            {isLoading && (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
             )}
-            {loadingState === LoadingState.ERROR && (
-                <View>
-                    <Text style={[styles.errorMessage, { color: colors.text }]}>
-                        {error?.message}
-                    </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {t('error.refreshPull')}{' '}
-                    </Text>
-                </View>
+            {isError && (
+                <ErrorView
+                    title={
+                        error?.message === 'noMeals'
+                            ? t('error.noMeals')
+                            : error?.message ?? t('error.title')
+                    }
+                    onRefresh={refetchByUser}
+                    refreshing={false}
+                />
+            )}
+            {isPaused && !isSuccess && (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={false}
+                />
             )}
 
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && data.length > 0 && (
                 <>
-                    <View style={styles.loadedContainer}>
-                        {days.slice(0, 5).map((day: Food, index: number) => (
-                            <DayButton day={day} index={index} key={index} />
+                    <Animated.View
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{
+                            ...styles.animtedContainer,
+                            borderBottomColor: colors.border,
+                            borderBottomWidth: showAllergensBanner
+                                ? 0
+                                : scrollY.interpolate({
+                                      inputRange: [0, 0, 0],
+                                      outputRange: [0, 0, 0.5],
+                                      extrapolate: 'clamp',
+                                  }),
+                        }}
+                    >
+                        <View
+                            style={{
+                                ...styles.loadedContainer,
+                            }}
+                        >
+                            {data
+                                .slice(0, 5)
+                                .map((day: Food, index: number) => (
+                                    <DayButton
+                                        day={day}
+                                        index={index}
+                                        key={index}
+                                    />
+                                ))}
+                        </View>
+                    </Animated.View>
+                    {showAllergensBanner && <AllergensBanner />}
+                    <PagerView
+                        ref={pagerViewRef}
+                        style={{
+                            ...styles.pagerContainer,
+                            height: screenHeight,
+                        }}
+                        initialPage={0}
+                        onPageSelected={(e) => {
+                            const page = e.nativeEvent.position
+                            setSelectedDay(page)
+                        }}
+                        scrollEnabled
+                        overdrag
+                    >
+                        {data.map((_: any, index: number) => (
+                            <ScrollView
+                                scrollEventThrottle={16}
+                                onScroll={Animated.event(
+                                    [
+                                        {
+                                            nativeEvent: {
+                                                contentOffset: {
+                                                    y: scrollY,
+                                                },
+                                            },
+                                        },
+                                    ],
+                                    { useNativeDriver: false }
+                                )}
+                                refreshControl={
+                                    isSuccess ? (
+                                        <RefreshControl
+                                            refreshing={isRefetchingByUser}
+                                            onRefresh={() => {
+                                                void refetchByUser()
+                                            }}
+                                        />
+                                    ) : undefined
+                                }
+                                key={index}
+                                contentContainerStyle={
+                                    styles.innerScrollContainer
+                                }
+                            >
+                                <MealDay
+                                    day={data[index]}
+                                    index={index}
+                                    colors={colors}
+                                    key={index}
+                                />
+                            </ScrollView>
                         ))}
-                    </View>
-                    <MealDay
-                        day={days[selectedDay]}
-                        index={selectedDay}
-                        colors={colors}
-                    />
+                    </PagerView>
                 </>
             )}
         </ScrollView>
@@ -209,9 +393,41 @@ function FoodScreen(): JSX.Element {
 
 export default function Screen(): JSX.Element {
     const colors = useTheme().colors as Colors
+
+    const [isPageOpen, setIsPageOpen] = useState(false)
+
+    useEffect(() => {
+        setIsPageOpen(true)
+    }, [])
+
+    const HeaderRight = (): JSX.Element => {
+        return (
+            <Pressable
+                onPress={() => {
+                    router.push('(food)/preferences')
+                }}
+                hitSlop={10}
+            >
+                <View>
+                    <PlatformIcon
+                        color={colors.text}
+                        ios={{
+                            name: 'line.3.horizontal.decrease',
+                            size: 22,
+                        }}
+                        android={{
+                            name: 'filter_list',
+                            size: 24,
+                        }}
+                    />
+                </View>
+            </Pressable>
+        )
+    }
     return (
         <>
             <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text */}
                 <title>Food</title>
                 <meta name="Food" content="Meal plan for the canteens" />
                 <meta property="expo:handoff" content="true" />
@@ -220,30 +436,9 @@ export default function Screen(): JSX.Element {
             <WorkaroundStack
                 name={'Food'}
                 titleKey={'navigation.food'}
-                component={FoodScreen}
+                component={isPageOpen ? FoodScreen : () => <></>}
                 largeTitle={false}
-                headerRightElement={() => (
-                    <Pressable
-                        onPress={() => {
-                            router.push('(food)/preferences')
-                        }}
-                        hitSlop={10}
-                    >
-                        <View>
-                            <PlatformIcon
-                                color={colors.text}
-                                ios={{
-                                    name: 'line.3.horizontal.decrease',
-                                    size: 22,
-                                }}
-                                android={{
-                                    name: 'filter',
-                                    size: 24,
-                                }}
-                            />
-                        </View>
-                    </Pressable>
-                )}
+                headerRightElement={() => <HeaderRight />}
             />
         </>
     )
@@ -251,40 +446,22 @@ export default function Screen(): JSX.Element {
 
 const styles = StyleSheet.create({
     page: {
-        padding: PAGE_PADDING,
+        flex: 1,
     },
-    headerButton: {
-        backgroundColor: 'transparent',
-        paddingRight: 10,
+    pagerContainer: {
+        flex: 1,
     },
     container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        flex: 1,
     },
-    dayRestaurantContainer: {
-        width: '92%',
-        alignSelf: 'center',
-        marginTop: 20,
-        marginBottom: 10,
-    },
-    dayRestaurantTitle: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        paddingBottom: 5,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
+    animtedContainer: {
+        width: '100%',
     },
     loadedContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginVertical: 10,
+        marginHorizontal: 12,
     },
     loadingContainer: {
         paddingTop: 40,
@@ -306,5 +483,51 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingVertical: 8,
+    },
+    bannerContainer: {
+        padding: 10,
+        borderRadius: 8,
+        marginTop: 2,
+        marginBottom: 10,
+    },
+    dismissButton: {
+        position: 'absolute',
+        zIndex: 1,
+        top: 5,
+        right: 5,
+        padding: 5,
+        borderRadius: 8,
+    },
+    bannerTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    bannerText: {
+        marginTop: 3,
+        fontSize: 14,
+    },
+    paddingContainer: {
+        paddingHorizontal: 12,
+        borderBottomWidth: 0.5,
+    },
+    innerScrollContainer: {
+        marginHorizontal: 12,
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+    },
+    selectedDayText: {
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    normalDayText: {
+        fontSize: 16,
+        fontWeight: 'normal',
+    },
+    selectedDayText2: {
+        fontSize: 15,
+        fontWeight: '500',
+    },
+    normalDayText2: {
+        fontSize: 15,
+        fontWeight: 'normal',
     },
 })

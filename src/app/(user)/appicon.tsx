@@ -6,7 +6,6 @@ import { AppIconContext } from '@/components/provider'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { setAppIcon } from 'expo-dynamic-app-icon'
 import { useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
@@ -20,6 +19,8 @@ import {
     Text,
     View,
 } from 'react-native'
+// @ts-expect-error cannot verify the type of this prop
+import AppIcon from 'react-native-dynamic-app-icon'
 
 let iconImages: Record<string, ImageProps> = {}
 
@@ -28,6 +29,7 @@ iconImages = {
     modernDark: require('@/assets/appIcons/modernDark.png'),
     modernLight: require('@/assets/appIcons/modernLight.png'),
     modernGreen: require('@/assets/appIcons/modernGreen.png'),
+    modernPink: require('@/assets/appIcons/modernPink.png'),
     rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
     rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
@@ -41,7 +43,7 @@ export default function AppIconPicker(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
-        exclusive: ['cat'],
+        exclusive: ['cat', 'modernPink'],
         default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
         rainbow: ['rainbowNeon', 'rainbowDark', 'rainbowMoonLight'],
     }
@@ -58,16 +60,11 @@ export default function AppIconPicker(): JSX.Element {
         <>
             <ScrollView>
                 <StatusBar style={isModal ? getStatusBarStyle() : 'auto'} />
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        width: '100%',
-                        paddingBottom: 50,
-                    }}
-                >
+                <View style={styles.container}>
                     {Object.entries(categories).map(([key, value]) => {
                         return (
                             <SectionView
+                                // @ts-expect-error cannot verify the type of this prop
                                 title={t(`appIcon.categories.${key}`)}
                                 key={key + 'section'}
                             >
@@ -85,7 +82,7 @@ export default function AppIconPicker(): JSX.Element {
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
-                                                            setAppIcon(
+                                                            AppIcon.setAppIcon(
                                                                 capitalizeFirstLetter(
                                                                     icon
                                                                 )
@@ -118,6 +115,7 @@ export default function AppIconPicker(): JSX.Element {
                                                             }}
                                                         >
                                                             {t(
+                                                                // @ts-expect-error cannot verify the type of this prop
                                                                 `appIcon.names.${icon}`
                                                             )}
                                                         </Text>
@@ -156,12 +154,10 @@ export default function AppIconPicker(): JSX.Element {
                                                 }
                                             >
                                                 <Text
-                                                    style={[
-                                                        {
-                                                            color: colors.text,
-                                                            ...styles.exclusiveText,
-                                                        },
-                                                    ]}
+                                                    style={{
+                                                        color: colors.text,
+                                                        ...styles.exclusiveText,
+                                                    }}
                                                 >
                                                     {t('appIcon.exclusive')}
                                                 </Text>
@@ -178,27 +174,10 @@ export default function AppIconPicker(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    colorBox: {
-        width: 60,
-        height: 60,
-        borderRadius: 4,
-
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignContent: 'center',
-        flexDirection: 'row',
-
-        borderWidth: 2,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
+    container: {
+        alignSelf: 'center',
+        width: '100%',
+        paddingBottom: 50,
     },
     sectionContainer: {
         borderRadius: 8,

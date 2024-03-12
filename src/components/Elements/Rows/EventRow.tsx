@@ -7,7 +7,14 @@ import {
 import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
@@ -22,6 +29,9 @@ const CLEventRow = ({
 }): JSX.Element => {
     const club = clubs.find((club) => club.club === event.organizer)
     const { t } = useTranslation('common')
+    const begin = new Date(event.begin)
+    const end = event.end !== null ? new Date(event.end) : null
+    console.log(event.organizer, event.title, event.begin, event.end)
     return (
         <RowEntry
             title={event.title}
@@ -44,7 +54,7 @@ const CLEventRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        {formatFriendlyDateTimeRange(event.begin, event.end)}
+                        {formatFriendlyDateTimeRange(begin, end)}
                     </Text>
                 </>
             }
@@ -82,13 +92,18 @@ const CLEventRow = ({
                                         <PlatformIcon
                                             color={colors.labelSecondaryColor}
                                             ios={{
-                                                name: 'ios-logo-instagram',
+                                                name: 'logo-instagram',
                                                 size: 18,
                                                 fallback: true,
                                             }}
                                             android={{
                                                 name: 'instagram',
                                                 size: 19,
+                                            }}
+                                            style={{
+                                                ...(Platform.OS !== 'ios'
+                                                    ? { marginBottom: 4 }
+                                                    : {}),
                                             }}
                                         />
                                     </Pressable>
@@ -102,18 +117,13 @@ const CLEventRow = ({
                                 color: colors.labelColor,
                             }}
                         >
-                            {event.begin != null && (
+                            {begin != null && (
                                 <>
-                                    {event.end != null &&
-                                    event.begin < new Date()
+                                    {end != null && begin < new Date()
                                         ? `${t(
                                               'dates.until'
-                                          )} ${formatFriendlyRelativeTime(
-                                              event.end
-                                          )}`
-                                        : formatFriendlyRelativeTime(
-                                              event.begin
-                                          )}
+                                          )} ${formatFriendlyRelativeTime(end)}`
+                                        : formatFriendlyRelativeTime(begin)}
                                 </>
                             )}
                         </Text>

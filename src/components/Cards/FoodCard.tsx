@@ -2,15 +2,15 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/provider'
 import { type LanguageKey } from '@/localization/i18n'
-import { type Meal } from '@/types/neuland-api'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
     loadFoodEntries,
     mealName,
+    userMealRating,
 } from '@/utils/food-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +19,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const { t, i18n } = useTranslation('food')
 
     const router = useRouter()
@@ -34,54 +33,47 @@ const FoodCard = (): JSX.Element => {
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>
     >([])
-    const [foodCardTitle, setFoodCardTitle] = useState('Essen')
-    const [todayEntries, setTodayEntries] = useState<Meal[]>([])
-
-    /**
-     * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
-     * @param meal  - The meal to calculate the rating for.
-     * @returns A number representing the rating of the meal.
-     */
-    function userMealRating(meal: Meal): number {
-        if (
-            meal.allergens?.some(
-                (x) => allergenSelection[x as keyof typeof allergenSelection]
-            ) ??
-            false
-        ) {
-            return -1
-        } else if (
-            meal.flags?.some(
-                (x) =>
-                    preferencesSelection[x as keyof typeof preferencesSelection]
-            ) ??
-            false
-        ) {
-            return 2
-        } else if (
-            meal.allergens == null &&
-            Object.keys(allergenSelection).some(
-                (x) => allergenSelection[x as keyof typeof allergenSelection]
-            )
-        ) {
-            return 0
-        } else {
-            return 1
+    const [foodCardTitle, setFoodCardTitle] = useState('food')
+    const { data, isSuccess } = useQuery({
+        queryKey: ['food', selectedRestaurants, false],
+        queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hourss
+    })
+    useEffect(() => {
+        if (!isSuccess) {
+            // if data is not loaded yet, do nothing
+            return
         }
-    }
+        const today = formatISODate(new Date())
+        const todayEntries = data
+            .find((x) => x.timestamp === today)
+            ?.meals.filter(
+                (x) =>
+                    x.prices.student != null && // some meals have no price. checking for one price is enough
+                    x.category !== 'soup' &&
+                    x.category !== 'salad' &&
+                    x.restaurant != null &&
+                    selectedRestaurants.includes(x.restaurant.toLowerCase())
+            )
 
-    useEffect(() => {
-        void loadData()
-    }, [selectedRestaurants])
-
-    useEffect(() => {
         // Calculate userMealRating and update foodEntries
         const updateFoodEntries = (): void => {
             if (todayEntries == null) {
                 setFoodEntries([])
             } else {
                 todayEntries?.sort(
-                    (a, b) => userMealRating(b) - userMealRating(a)
+                    (a, b) =>
+                        userMealRating(
+                            b,
+                            allergenSelection,
+                            preferencesSelection
+                        ) -
+                        userMealRating(
+                            a,
+                            allergenSelection,
+                            preferencesSelection
+                        )
                 )
                 const shownEntries = todayEntries.slice(0, 2)
                 const hiddenEntriesCount =
@@ -110,20 +102,19 @@ const FoodCard = (): JSX.Element => {
                         : []),
                 ])
             }
-            setLoadingState(LoadingState.LOADED)
         }
 
         updateFoodEntries()
     }, [
         allergenSelection,
         preferencesSelection,
-        todayEntries,
+        data,
         foodLanguage,
         i18n.language,
         userKind,
     ])
 
-    const loadData = async (): Promise<void> => {
+    useEffect(() => {
         const restaurants =
             selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
 
@@ -145,25 +136,7 @@ const FoodCard = (): JSX.Element => {
                     break
             }
         }
-
-        const today = formatISODate(new Date())
-
-        try {
-            const entries = await loadFoodEntries(restaurants, false)
-            const todayEntries = entries
-                .find((x) => x.timestamp === today)
-                ?.meals.filter(
-                    (x) =>
-                        x.category !== 'Suppe' &&
-                        x.category !== 'Salat' &&
-                        x.restaurant != null &&
-                        selectedRestaurants.includes(x.restaurant.toLowerCase())
-                )
-            setTodayEntries(todayEntries ?? [])
-        } catch (e) {
-            console.error(e)
-        }
-    }
+    }, [selectedRestaurants])
 
     return (
         <BaseCard
@@ -174,7 +147,7 @@ const FoodCard = (): JSX.Element => {
                 router.replace('food')
             }}
         >
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
                         <Text
@@ -223,8 +196,8 @@ const FoodCard = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     listView: {
-        gap: 12,
-        paddingTop: 10,
+        gap: 8,
+        paddingTop: 12,
     },
     mealTitle: {
         fontWeight: '500',

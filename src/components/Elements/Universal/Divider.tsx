@@ -36,7 +36,7 @@ const Divider: FC<DividerProps> = ({
             paddingLeft: Platform.OS === 'android' ? 0 : iosPaddingLeft ?? 0,
         },
         line: {
-            width: width ?? (Platform.OS === 'android' ? '92%' : '100%'),
+            width: width ?? '100%',
             borderBottomColor: color ?? 'grey',
             borderBottomWidth: StyleSheet.hairlineWidth,
         },

@@ -26,7 +26,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                     <View>
                         <Pressable
                             onPress={() => {
-                                router.push('(tabs)/map')
+                                router.navigate('(tabs)/map')
                                 updateRouteParams(room.room)
                             }}
                         >
@@ -46,6 +46,8 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                             ]}
                             numberOfLines={1}
                         >
+                            {/* eslint-disable-next-line
+                            @typescript-eslint/restrict-template-expressions */}
                             {`${t('roomTypes.' + room.type, {
                                 defaultValue: room.type,
                                 ns: 'api',
@@ -92,9 +94,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15,
-        // technically 15, but balance feels better with 20
-        paddingRight: 20,
+        paddingHorizontal: 16,
         paddingVertical: 8,
         gap: 15,
     },

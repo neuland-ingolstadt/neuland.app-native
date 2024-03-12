@@ -1,76 +1,63 @@
-import API from '@/api/authenticated-api'
-import { createGuestSession } from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
+import { USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
-import { type PersDataDetails } from '@/types/thi-api'
+import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Alert,
     Linking,
     Platform,
+    Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import Toast from 'react-native-root-toast'
 
 export default function Profile(): JSX.Element {
-    const [userData, setUserData] = useState<PersDataDetails | null>(null)
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { toggleUserKind } = React.useContext(UserKindContext)
+    const { toggleUserKind, userKind } = useContext(UserKindContext)
+    const { toggleAccentColor } = useContext(ThemeContext)
+    const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(tabs)')
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
-    const [errorMsg, setErrorMsg] = useState('')
-
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
-
-    async function load(): Promise<void> {
-        try {
-            const response = await API.getPersonalData()
-            const data: PersDataDetails = response.persdata
-            data.pcounter = response.pcounter
-            setUserData(data)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            setLoadingState(LoadingState.ERROR)
-            setErrorMsg(e.message)
-            console.log(e)
-        }
-    }
-
-    useEffect(() => {
-        void load()
-    }, [])
-
-    const onRefresh: () => void = () => {
-        void load()
-    }
+    const { data, error, isLoading, isPaused, isSuccess, refetch, isError } =
+        useQuery({
+            queryKey: ['personalData'],
+            queryFn: getPersonalData,
+            staleTime: 1000 * 60 * 60 * 12, // 12 hours
+            gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+            enabled: userKind === USER_STUDENT,
+            retry(failureCount, error) {
+                if (error instanceof NoSessionError) {
+                    router.replace('user/login')
+                    return false
+                }
+                return failureCount < 3
+            },
+        })
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     const handleBiometricAuth = async (): Promise<void> => {
         const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
@@ -127,17 +114,17 @@ export default function Profile(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(
+                            toggleUserKind,
+                            toggleAccentColor,
+                            resetOrder
+                        ).catch((e) => {
                             console.log(e)
                         })
                     },
                 },
             ]
         )
-    }
-
-    if (userData == null) {
-        return <></>
     }
 
     const sections: FormListSections[] = [
@@ -158,25 +145,25 @@ export default function Profile(): JSX.Element {
             items: [
                 {
                     title: 'Name',
-                    value: userData.vname + ' ' + userData.name,
+                    value: data?.vname + ' ' + data?.name,
                 },
                 {
                     title: t('profile.formlist.user.matrical'),
-                    value: userData.mtknr,
+                    value: data?.mtknr,
                     onPress: async () => {
-                        await copyToClipboard(userData.mtknr)
+                        await copyToClipboard(data?.mtknr ?? '')
                     },
                 },
                 {
                     title: t('profile.formlist.user.library'),
-                    value: userData.bibnr,
+                    value: data?.bibnr,
                     onPress: async () => {
-                        await copyToClipboard(userData.bibnr)
+                        await copyToClipboard(data?.bibnr ?? '')
                     },
                 },
                 {
                     title: t('profile.formlist.user.printer'),
-                    value: userData.pcounter,
+                    value: data?.pcounter,
                 },
             ],
         },
@@ -186,20 +173,20 @@ export default function Profile(): JSX.Element {
             items: [
                 {
                     title: t('profile.formlist.study.degree'),
-                    value: userData.fachrich + ' (' + userData.stg + ')',
+                    value: data?.fachrich + ' (' + data?.stg + ')',
                 },
                 {
                     title: t('profile.formlist.study.spo'),
-                    value: userData.pvers,
+                    value: data?.pvers,
                     onPress: async () => {
-                        if (userData.po_url.length > 0) {
-                            void Linking.openURL(userData.po_url)
+                        if (data?.po_url !== undefined && data.po_url !== '') {
+                            void Linking.openURL(data.po_url)
                         }
                     },
                 },
                 {
                     title: t('profile.formlist.study.group'),
-                    value: userData.stgru,
+                    value: data?.stgru,
                 },
             ],
         },
@@ -208,32 +195,32 @@ export default function Profile(): JSX.Element {
             items: [
                 {
                     title: 'THI Email',
-                    value: userData.fhmail,
+                    value: data?.fhmail,
                     onPress: async () => {
-                        await copyToClipboard(userData.fhmail)
+                        await copyToClipboard(data?.fhmail ?? '')
                     },
                 },
                 {
                     title: 'Email',
-                    value: userData.email,
+                    value: data?.email,
                     onPress: async () => {
-                        await copyToClipboard(userData.email)
+                        await copyToClipboard(data?.email ?? '')
                     },
                 },
                 {
                     title: t('profile.formlist.contact.phone'),
-                    value: userData.telefon,
+                    value: data?.telefon,
                     onPress: async () => {
-                        await copyToClipboard(userData.telefon)
+                        await copyToClipboard(data?.telefon ?? '')
                     },
                 },
                 {
                     title: t('profile.formlist.contact.street'),
-                    value: userData.str,
+                    value: data?.str,
                 },
                 {
                     title: t('profile.formlist.contact.city'),
-                    value: userData.plz + ' ' + userData.ort,
+                    value: data?.plz + ' ' + data?.ort,
                 },
             ],
         },
@@ -242,20 +229,19 @@ export default function Profile(): JSX.Element {
     return (
         <>
             <ScrollView
-                contentContainerStyle={{ paddingBottom: 32 }}
+                contentContainerStyle={styles.contentContainer}
                 refreshControl={
-                    loadingState !== LoadingState.LOADING &&
-                    loadingState !== LoadingState.LOADED ? (
+                    isSuccess ? (
                         <RefreshControl
-                            refreshing={
-                                loadingState === LoadingState.REFRESHING
-                            }
-                            onRefresh={onRefresh}
+                            refreshing={isRefetchingByUser}
+                            onRefresh={() => {
+                                void refetchByUser()
+                            }}
                         />
                     ) : undefined
                 }
             >
-                {loadingState === LoadingState.LOADING && (
+                {isLoading && (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator
                             size="small"
@@ -263,24 +249,21 @@ export default function Profile(): JSX.Element {
                         />
                     </View>
                 )}
-                {loadingState === LoadingState.ERROR && (
-                    <View style={styles.errorContainer}>
-                        <Text
-                            style={[
-                                styles.errorMessage,
-                                { color: colors.text },
-                            ]}
-                        >
-                            {errorMsg}
-                        </Text>
-                        <Text
-                            style={[styles.errorInfo, { color: colors.text }]}
-                        >
-                            {t('error.refreshPull', { ns: 'common' })}{' '}
-                        </Text>
-                    </View>
+                {isError && (
+                    <ErrorView
+                        title={error.message}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                    />
                 )}
-                {loadingState === LoadingState.LOADED && (
+                {isPaused && (
+                    <ErrorView
+                        title={networkError}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                    />
+                )}
+                {isSuccess && (
                     <View style={styles.container}>
                         <FormList sections={sections} />
                     </View>
@@ -291,9 +274,8 @@ export default function Profile(): JSX.Element {
                         ...styles.logoutContainer,
                     }}
                 >
-                    <TouchableOpacity
+                    <Pressable
                         onPress={logoutAlert}
-                        activeOpacity={0.5}
                         style={styles.logoutButton}
                     >
                         <PlatformIcon
@@ -310,7 +292,7 @@ export default function Profile(): JSX.Element {
                         <Text style={{ color: colors.notification }}>
                             Logout
                         </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </ScrollView>
         </>
@@ -318,14 +300,12 @@ export default function Profile(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    contentContainer: { paddingBottom: 32 },
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
         alignSelf: 'center',
-    },
-    errorContainer: {
-        paddingBottom: 64,
     },
     logoutContainer: {
         borderRadius: 10,
@@ -337,20 +317,9 @@ const styles = StyleSheet.create({
     logoutButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        paddingVertical: 12,
         paddingHorizontal: 40,
         gap: 10,
-    },
-    errorMessage: {
-        paddingTop: 100,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
     },
     loadingContainer: {
         paddingVertical: 40,

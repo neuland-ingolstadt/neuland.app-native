@@ -1,281 +1,290 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
-import { type Calendar } from '@/types/data'
-import { type Exam } from '@/types/utils'
+import { useRefreshByUser } from '@/hooks'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
-import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Animated,
     Linking,
     ScrollView,
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
-import { RefreshControl } from 'react-native-gesture-handler'
+import PagerView from 'react-native-pager-view'
 
 export default function CalendarPage(): JSX.Element {
-    const router = useRouter()
-
     const { userKind } = React.useContext(UserKindContext)
-    const [exams, setExams] = useState<Exam[]>([])
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-
     const displayTypes = ['Events', t('pages.calendar.exams.title')]
-
-    const [selectedData, setSelectedData] = useState<string>('Events')
-
-    const [error, setError] = useState<Error | null>(null)
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
+    const [selectedData, setSelectedData] = useState<number>(0)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
         void Linking.openURL(
-            selectedData === 'Events' ? t('pages.calendar.link') : primussUrl
+            selectedData === 0 ? t('pages.calendar.calendar.link') : primussUrl
         )
     }
-    useEffect(() => {
-        if (userKind === 'student') {
-            void loadEvents()
-                .then(() => {
-                    setLoadingState(LoadingState.LOADED)
-                })
-                .catch((e) => {
-                    if (e instanceof NoSessionError) {
-                        router.push('(user)/login')
-                    } else {
-                        console.log(e)
-                    }
 
-                    setError(e)
-                    setLoadingState(LoadingState.ERROR)
-                })
-        } else {
-            setError(new Error(t('pages.calendar.exams.error')))
-            setLoadingState(LoadingState.LOADED)
-        }
-    }, [userKind])
-
-    async function loadEvents(): Promise<void> {
-        const examList = await loadExamList()
-        setExams(examList)
-    }
-
-    const onRefresh: () => void = () => {
-        void loadEvents()
-            .then(() => {
-                setLoadingState(LoadingState.LOADED)
-            })
-            .catch((e) => {
-                setError(e)
-                setLoadingState(LoadingState.ERROR)
-            })
-    }
-
-    const data = selectedData === 'Events' ? calendar : exams
-    return (
-        <ScrollView
-            style={styles.page}
-            contentContainerStyle={styles.scrollViewContainer}
-            refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
-                    <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
-                    />
-                ) : undefined
+    const {
+        data: exams,
+        error,
+        isLoading,
+        isError,
+        isPaused,
+        isSuccess,
+        refetch,
+    } = useQuery({
+        queryKey: ['exams'],
+        queryFn: loadExamList,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.push('(user)/login')
+                return false
             }
+            return failureCount < 3
+        },
+        enabled: userKind !== USER_GUEST,
+    })
+    const { refetchByUser } = useRefreshByUser(refetch)
+    const screenHeight = useWindowDimensions().height
+    const pagerViewRef = useRef<PagerView>(null)
+    function setPage(page: number): void {
+        pagerViewRef.current?.setPage(page)
+    }
+    const scrollY = new Animated.Value(0)
+
+    const CalendarFooter = (): JSX.Element => {
+        return (
+            <View style={styles.footerContainer}>
+                <Text
+                    style={{
+                        ...styles.footerText1,
+                        color: colors.labelColor,
+                    }}
+                >
+                    {t('pages.calendar.footer.part1')}
+                    <Text
+                        style={{
+                            color: colors.text,
+                            ...styles.footerText2,
+                        }}
+                        onPress={handleLinkPress}
+                    >
+                        {t('pages.calendar.footer.part2')}
+                    </Text>
+                    {t('pages.calendar.footer.part3')}
+                </Text>
+            </View>
+        )
+    }
+
+    return (
+        <View
+            style={{
+                paddingVertical: PAGE_PADDING,
+                ...styles.pagerContainer,
+            }}
         >
-            <>
+            <Animated.View
+                style={{
+                    borderColor: colors.border,
+                    borderBottomWidth: scrollY.interpolate({
+                        inputRange: [0, 0, 1],
+                        outputRange: [0, 0, 0.5],
+                        extrapolate: 'clamp',
+                    }),
+                    ...styles.toggleContainer,
+                }}
+            >
                 <ToggleRow
                     items={displayTypes}
                     selectedElement={selectedData}
-                    setSelectedElement={setSelectedData}
+                    setSelectedElement={setPage}
                 />
+            </Animated.View>
 
-                <View
-                    style={[
-                        styles.itemsContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                >
-                    {data.length > 0 ? (
-                        data.map((item, index) => (
-                            <React.Fragment key={index}>
-                                {selectedData === 'Events' ? (
-                                    <CalendarRow
-                                        event={item as Calendar}
-                                        colors={colors}
-                                    />
-                                ) : (
-                                    <>
-                                        {loadingState ===
-                                            LoadingState.LOADED && (
-                                            <ExamRow
-                                                event={item}
-                                                colors={colors}
+            <PagerView
+                ref={pagerViewRef}
+                style={{
+                    ...styles.pagerContainer,
+                    height: screenHeight,
+                }}
+                initialPage={0}
+                onPageSelected={(e) => {
+                    const page = e.nativeEvent.position
+                    setSelectedData(page)
+                }}
+                scrollEnabled
+                overdrag
+            >
+                {/* Page 1: Events */}
+                <View>
+                    <ScrollView
+                        contentContainerStyle={[styles.itemsContainer]}
+                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        onScroll={
+                            Animated.event(
+                                [
+                                    {
+                                        nativeEvent: {
+                                            contentOffset: { y: scrollY },
+                                        },
+                                    },
+                                ],
+                                { useNativeDriver: false }
+                            ) as any
+                        }
+                        scrollEventThrottle={16}
+                    >
+                        <View
+                            style={{
+                                backgroundColor: colors.card,
+                                ...styles.contentBorder,
+                            }}
+                        >
+                            {calendar?.length > 0 &&
+                                calendar.map((item, index) => (
+                                    <React.Fragment key={`event_${index}`}>
+                                        <CalendarRow
+                                            event={item}
+                                            colors={colors}
+                                        />
+                                        {index !== calendar.length - 1 && (
+                                            <Divider
+                                                color={
+                                                    colors.labelTertiaryColor
+                                                }
+                                                iosPaddingLeft={16}
                                             />
                                         )}
-                                    </>
-                                )}
-                                {index !== data.length - 1 && (
-                                    <Divider
-                                        color={colors.labelTertiaryColor}
-                                        iosPaddingLeft={16}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))
-                    ) : (
-                        <>
-                            {loadingState === LoadingState.LOADING && (
-                                <View style={styles.loadingContainer}>
-                                    <ActivityIndicator
-                                        size="small"
-                                        color={colors.primary}
-                                    />
-                                </View>
-                            )}
-                            {userKind !== 'student' ? (
-                                <View>
-                                    <Text
-                                        style={[
-                                            styles.errorMessage,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {error?.message}
-                                    </Text>
-                                    <Text
-                                        style={[
-                                            styles.errorInfo,
-                                            { color: colors.text },
-                                        ]}
-                                    >
-                                        {t(
-                                            'pages.calendar.exams.errorSubtitle'
-                                        )}
-                                    </Text>
-                                </View>
-                            ) : (
-                                <>
-                                    {loadingState === LoadingState.ERROR && (
-                                        <View>
-                                            <Text
-                                                style={[
-                                                    styles.errorMessage,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {error?.message}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.errorInfo,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t('error.refreshPull')}{' '}
-                                            </Text>
-                                        </View>
-                                    )}
-                                    {loadingState === LoadingState.LOADED && (
-                                        <View>
-                                            <Text
-                                                style={[
-                                                    styles.errorMessage,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t(
-                                                    'pages.calendar.calendar.noData.title'
-                                                )}
-                                            </Text>
-                                            <Text
-                                                style={[
-                                                    styles.errorInfo,
-                                                    { color: colors.text },
-                                                ]}
-                                            >
-                                                {t(
-                                                    'pages.calendar.calendar.noData.subtitle'
-                                                )}
-                                            </Text>
-                                        </View>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    )}
+                                    </React.Fragment>
+                                ))}
+                        </View>
+                        <CalendarFooter />
+                    </ScrollView>
                 </View>
+
+                {/* Page 2: Exams */}
                 <View>
-                    <Text
-                        style={{
-                            fontSize: 12,
-                            fontWeight: 'normal',
-                            color: colors.labelColor,
-                            paddingBottom: 25,
-                            textAlign: 'justify',
-                        }}
+                    <ScrollView
+                        contentContainerStyle={[styles.itemsContainer]}
+                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        onScroll={
+                            Animated.event(
+                                [
+                                    {
+                                        nativeEvent: {
+                                            contentOffset: { y: scrollY },
+                                        },
+                                    },
+                                ],
+                                { useNativeDriver: false }
+                            ) as any
+                        }
+                        scrollEventThrottle={16}
                     >
-                        {t('pages.calendar.footer.part1')}
-                        <Text
-                            style={{
-                                color: colors.text,
-                                textDecorationLine: 'underline',
-                            }}
-                            onPress={handleLinkPress}
-                        >
-                            {t('pages.calendar.footer.part2')}
-                        </Text>
-                        .
-                    </Text>
+                        {isLoading ? (
+                            <ActivityIndicator
+                                size="small"
+                                color={colors.primary}
+                            />
+                        ) : isError ? (
+                            <ErrorView
+                                title={error?.message ?? t('error.title')}
+                                onButtonPress={() => {
+                                    void refetchByUser()
+                                }}
+                                inModal
+                            />
+                        ) : isPaused && !isSuccess ? (
+                            <ErrorView title={networkError} inModal />
+                        ) : userKind === USER_GUEST ? (
+                            <ErrorView title={guestError} inModal />
+                        ) : (
+                            <View>
+                                <View
+                                    style={{
+                                        backgroundColor: colors.card,
+                                        ...styles.contentBorder,
+                                    }}
+                                >
+                                    {exams != null && exams.length > 0 ? (
+                                        <>
+                                            {exams.map((item, index) => (
+                                                <React.Fragment
+                                                    key={`exam_${index}`}
+                                                >
+                                                    <ExamRow
+                                                        event={item}
+                                                        colors={colors}
+                                                    />
+                                                    {index !==
+                                                        exams.length - 1 && (
+                                                        <Divider
+                                                            color={
+                                                                colors.labelTertiaryColor
+                                                            }
+                                                            iosPaddingLeft={16}
+                                                        />
+                                                    )}
+                                                </React.Fragment>
+                                            ))}
+                                        </>
+                                    ) : null}
+                                </View>
+                                <CalendarFooter />
+                            </View>
+                        )}
+                    </ScrollView>
                 </View>
-            </>
-        </ScrollView>
+            </PagerView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    page: {
-        padding: PAGE_PADDING,
-    },
-    scrollViewContainer: {
-        gap: PAGE_PADDING,
-        paddingBottom: MODAL_BOTTOM_MARGIN,
-    },
-    errorMessage: {
-        paddingTop: 20,
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        marginTop: 10,
-        paddingBottom: 20,
-    },
-    loadingContainer: {
-        paddingTop: 40,
-        paddingBottom: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     itemsContainer: {
         alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
         justifyContent: 'center',
+        width: '100%',
+        marginHorizontal: PAGE_PADDING,
+    },
+    footerText1: {
+        fontSize: 12,
+        fontWeight: 'normal',
+        paddingBottom: 25,
+        textAlign: 'justify',
+    },
+    footerText2: {
+        textDecorationLine: 'underline',
+    },
+    pagerContainer: {
+        flex: 1,
+    },
+    footerContainer: {
+        marginVertical: 10,
+    },
+    contentBorder: {
+        borderRadius: 8,
+    },
+    toggleContainer: {
+        paddingBottom: 12,
     },
 })

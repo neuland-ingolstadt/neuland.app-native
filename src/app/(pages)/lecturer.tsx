@@ -38,6 +38,7 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: t('pages.lecturer.details.organization'),
                     value: t(
+                        // @ts-expect-error cannot verify the TFunktion type
                         `lecturerOrganizations.${lecturer?.organisation}`,
                         {
                             defaultValue: lecturer?.organisation,
@@ -49,11 +50,15 @@ export default function LecturerDetail(): JSX.Element {
 
                 {
                     title: t('pages.lecturer.details.function'),
-                    value: t(`lecturerFunctions.${lecturer?.funktion}`, {
-                        defaultValue: lecturer?.funktion,
-                        ns: 'api',
-                        fallbackLng: 'de',
-                    }),
+                    value: t(
+                        // @ts-expect-error cannot verify the TFunktion type
+                        `lecturerFunctions.${lecturer?.funktion}`,
+                        {
+                            defaultValue: lecturer?.funktion,
+                            ns: 'api',
+                            fallbackLng: 'de',
+                        }
+                    ),
                 },
             ],
         },
@@ -67,7 +72,7 @@ export default function LecturerDetail(): JSX.Element {
                     iconColor: colors.primary,
                     onPress: () => {
                         updateRouteParams(lecturer?.room_short ?? '')
-                        router.push('(tabs)/map')
+                        router.navigate('(tabs)/map')
                     },
                 },
                 {
@@ -163,11 +168,5 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 18,
         textAlign: 'center',
-    },
-    notesContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        marginBottom: 40,
     },
 })

@@ -10,6 +10,7 @@ export interface WorkaroundStackProps {
     component: any
     transparent?: boolean
     largeTitle?: boolean
+    headerSearchBarOptions?: any
     headerRightElement?: ((props: HeaderButtonProps) => ReactNode) | undefined
     params?: any
 }
@@ -34,6 +35,7 @@ function WorkaroundStack({
     transparent = false,
     largeTitle = false,
     headerRightElement = undefined,
+    headerSearchBarOptions = undefined,
     params = {},
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
@@ -45,7 +47,10 @@ function WorkaroundStack({
                 <Stack.Screen
                     name={name}
                     options={{
-                        title: t(titleKey),
+                        title: t(
+                            // @ts-expect-error Type not checked
+                            titleKey
+                        ),
                         headerShown: true,
                         headerLargeTitle: largeTitle,
                         headerRight: headerRightElement,
@@ -55,6 +60,7 @@ function WorkaroundStack({
                                   headerBlurEffect: 'regular',
                               }
                             : {}),
+                        headerSearchBarOptions,
                     }}
                     component={component}
                     initialParams={params}

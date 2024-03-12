@@ -1,18 +1,23 @@
-import API from '@/api/authenticated-api'
-import { createGuestSession } from '@/api/thi-session-handler'
+import { NoSessionError } from '@/api/thi-session-handler'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
-import { type UserKindContextType } from '@/hooks/userKind'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
+import { USER_GUEST, type UserKindContextType } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
-import { type PersDataDetails } from '@/types/thi-api'
-import { LoadingState, getContrastColor, getInitials } from '@/utils/ui-utils'
+import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -28,12 +33,10 @@ import {
 } from 'react-native'
 
 export default function Settings(): JSX.Element {
-    const { userKind, userFullName, updateUserFullName } =
+    const { userKind, userFullName } =
         useContext<UserKindContextType>(UserKindContext)
-
-    const [userdata, setUserdata] = useState<PersDataDetails | null>(null)
-    const [isLoaded, setIsLoaded] = useState(LoadingState.LOADING)
-    const [errorMsg, setErrorMsg] = useState('Unknown error')
+    const { toggleAccentColor } = useContext(ThemeContext)
+    const { resetOrder } = useContext(DashboardContext)
 
     const router = useRouter()
     const colors = useTheme().colors as Colors
@@ -75,7 +78,11 @@ export default function Settings(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        logout().catch((e) => {
+                        performLogout(
+                            toggleUserKind,
+                            toggleAccentColor,
+                            resetOrder
+                        ).catch((e) => {
                             console.log(e)
                         })
                     },
@@ -84,45 +91,26 @@ export default function Settings(): JSX.Element {
         )
     }
 
-    const loadData = async (): Promise<void> => {
-        try {
-            setIsLoaded(LoadingState.LOADING)
-            if (userKind === 'student') {
-                const response = await API.getPersonalData()
-                const data = response.persdata
-                data.pcounter = response.pcounter
-                setUserdata(data)
-                updateUserFullName(data.vname + ' ' + data.name)
-                setIsLoaded(LoadingState.LOADED)
-            } else if (userKind === 'employee' || userKind === 'guest') {
-                setIsLoaded(LoadingState.LOADED)
+    const { data, error, isLoading, isSuccess, refetch, isError } = useQuery({
+        queryKey: ['personalData'],
+        queryFn: getPersonalData,
+        staleTime: 1000 * 60 * 60 * 12, // 12 hours
+        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.replace('user/login')
+                return false
+            } else if (userKind !== 'student') {
+                return false
             }
-        } catch (e: any) {
-            setIsLoaded(LoadingState.ERROR)
-            setErrorMsg(e.toString().split(':')[1].trim())
-        }
-    }
+            return failureCount < 3
+        },
+        enabled: userKind === 'student',
+    })
 
-    useEffect(() => {
-        void loadData()
-    }, [userKind])
-
-    const handleRefresh = (): void => {
-        setIsLoaded(LoadingState.LOADING)
-        void loadData()
-    }
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     const { toggleUserKind } = React.useContext(UserKindContext)
-
-    const logout = async (): Promise<void> => {
-        try {
-            toggleUserKind(undefined)
-            await createGuestSession()
-            router.push('(user)/login')
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     const sections: FormListSections[] = [
         {
@@ -142,7 +130,7 @@ export default function Settings(): JSX.Element {
                     title: 'Dashboard',
                     icon: {
                         ios: 'rectangle.stack',
-                        android: 'dashboard-customize',
+                        android: 'dashboard_customize',
                     },
 
                     onPress: () => {
@@ -167,7 +155,11 @@ export default function Settings(): JSX.Element {
                     },
 
                     onPress: async () => {
-                        if (Platform.OS === 'ios') {
+                        if (
+                            Platform.OS === 'ios' ||
+                            (Platform.OS === 'android' &&
+                                Platform.Version >= 33)
+                        ) {
                             await Linking.openSettings()
                         } else {
                             languageAlert()
@@ -208,7 +200,7 @@ export default function Settings(): JSX.Element {
                     title: t('menu.formlist.legal.about'),
                     icon: {
                         ios: 'chevron.forward',
-                        android: 'chevron-right',
+                        android: 'chevron_right',
                     },
                     onPress: () => {
                         router.push('(user)/about')
@@ -221,7 +213,13 @@ export default function Settings(): JSX.Element {
                         android: 'star',
                     },
                     onPress: () => {
-                        alert('Not available yet')
+                        if (Platform.OS === 'android') {
+                            void Linking.openURL(
+                                'market://details?id=app.neuland'
+                            )
+                        } else {
+                            alert('Not available yet')
+                        }
                     },
                 },
             ],
@@ -231,10 +229,12 @@ export default function Settings(): JSX.Element {
     return (
         <ScrollView
             refreshControl={
-                isLoaded !== LoadingState.LOADED && userKind === 'student' ? (
+                isError && userKind === 'student' ? (
                     <RefreshControl
-                        refreshing={isLoaded === LoadingState.REFRESHING}
-                        onRefresh={handleRefresh}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
                     />
                 ) : undefined
             }
@@ -242,10 +242,7 @@ export default function Settings(): JSX.Element {
             <View style={styles.wrapper}>
                 <Pressable
                     onPress={() => {
-                        if (
-                            isLoaded === LoadingState.ERROR ||
-                            userKind === 'employee'
-                        ) {
+                        if (userKind === 'employee') {
                             logoutAlert()
                         } else {
                             if (userKind === 'student') {
@@ -263,20 +260,16 @@ export default function Settings(): JSX.Element {
                         ]}
                     >
                         <View style={styles.nameBox}>
-                            {(isLoaded === LoadingState.LOADING ||
-                                isLoaded === LoadingState.LOADED) &&
+                            {(isLoading || isSuccess) &&
                             userKind === 'student' ? (
                                 <>
                                     <NameBox
-                                        title={userFullName}
+                                        title={data?.vname + ' ' + data?.name}
                                         subTitle1={
-                                            (userdata?.stgru ?? '') +
-                                            '. Semester'
+                                            (data?.stgru ?? '') + '. Semester'
                                         }
-                                        subTitle2={userdata?.fachrich ?? ''}
-                                        loaded={
-                                            isLoaded === LoadingState.LOADED
-                                        }
+                                        subTitle2={data?.fachrich ?? ''}
+                                        loaded={data !== undefined}
                                     >
                                         <Avatar background={colors.primary}>
                                             <Text
@@ -284,8 +277,7 @@ export default function Settings(): JSX.Element {
                                                     color: getContrastColor(
                                                         colors.primary
                                                     ),
-                                                    fontSize: 20,
-                                                    fontWeight: 'bold',
+                                                    ...styles.avatarText,
                                                 }}
                                             >
                                                 {getInitials(userFullName)}
@@ -293,14 +285,13 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                 </>
-                            ) : isLoaded === LoadingState.LOADED &&
-                              userKind === 'employee' ? (
+                            ) : userKind === 'employee' ? (
                                 <>
                                     <NameBox
                                         title={userFullName}
                                         subTitle1={t('menu.employee.subtitle1')}
                                         subTitle2={t('menu.employee.subtitle2')}
-                                        loaded={true}
+                                        loaded={data !== undefined}
                                     >
                                         <Avatar background={colors.primary}>
                                             <Text
@@ -308,8 +299,7 @@ export default function Settings(): JSX.Element {
                                                     color: getContrastColor(
                                                         colors.primary
                                                     ),
-                                                    fontSize: 20,
-                                                    fontWeight: 'bold',
+                                                    ...styles.avatarText,
                                                 }}
                                             >
                                                 {getInitials(userFullName)}
@@ -317,8 +307,7 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                 </>
-                            ) : isLoaded === LoadingState.LOADED &&
-                              userKind === 'guest' ? (
+                            ) : userKind === 'guest' ? (
                                 <>
                                     <NameBox
                                         title={t('menu.guest.title')}
@@ -339,18 +328,20 @@ export default function Settings(): JSX.Element {
                                                     size: 26,
                                                 }}
                                                 android={{
-                                                    name: 'account-circle',
+                                                    name: 'account_circle',
                                                     size: 32,
                                                 }}
                                             />
                                         </Avatar>
                                     </NameBox>
                                 </>
-                            ) : isLoaded === LoadingState.ERROR ? (
+                            ) : isError ? (
                                 <>
                                     <NameBox
                                         title="Error"
-                                        subTitle1={errorMsg}
+                                        subTitle1={
+                                            error?.message ?? 'Unknown error'
+                                        }
                                         subTitle2={t('menu.error.subtitle2')}
                                         loaded={true}
                                     >
@@ -374,7 +365,7 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                 </>
-                            ) : isLoaded === LoadingState.LOADING ? (
+                            ) : isLoading ? (
                                 <>
                                     <View style={styles.loading}>
                                         <ActivityIndicator />
@@ -384,7 +375,7 @@ export default function Settings(): JSX.Element {
                                 <></>
                             )}
 
-                            {isLoaded !== LoadingState.ERROR ? (
+                            {isSuccess || userKind === USER_GUEST ? (
                                 <PlatformIcon
                                     color={colors.labelSecondaryColor}
                                     ios={{
@@ -393,7 +384,7 @@ export default function Settings(): JSX.Element {
                                         size: 16,
                                     }}
                                     android={{
-                                        name: 'chevron-right',
+                                        name: 'chevron_right',
                                         size: 26,
                                     }}
                                 />
@@ -401,7 +392,7 @@ export default function Settings(): JSX.Element {
                         </View>
                     </View>
                 </Pressable>
-                <View style={{ marginVertical: 16 }}>
+                <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>
             </View>
@@ -446,5 +437,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,
+    },
+    formlistContainer: { marginVertical: 16 },
+    avatarText: {
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 })

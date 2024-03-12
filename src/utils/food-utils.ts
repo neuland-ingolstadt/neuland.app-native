@@ -1,14 +1,17 @@
 import NeulandAPI from '@/api/neuland-api'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
-import { type FoodLanguage } from '@/hooks/foodFilter'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/hooks/userKind'
+import { type FoodLanguage } from '@/hooks/contexts/foodFilter'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
-import { type TFunction } from 'i18next'
 
-import { formatISODate, getAdjustedDay, getMonday } from './date-utils'
+import { formatISODate, getAdjustedDay } from './date-utils'
 
 /**
  * Fetches and parses the meal plan
@@ -20,58 +23,38 @@ export async function loadFoodEntries(
     includeStatic: boolean
 ): Promise<Food[]> {
     const entries: Food[] = []
-
+    const startOfToday = getAdjustedDay(new Date()).setHours(0, 0, 0, 0)
+    const filterData = (data: any): any => {
+        return data.filter(
+            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+        )
+    }
     if (restaurants.includes('mensa')) {
         const data = await NeulandAPI.getMensaPlan()
-        data.forEach((day: Food) => {
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Mensa'
-            })
-        })
-        entries.push(data)
+        entries.push(filterData(data))
     }
 
     if (restaurants.includes('reimanns')) {
         const data = await NeulandAPI.getReimannsPlan()
-
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-
-        filteredData.forEach((day: any) => {
-            day.meals = day.meals.filter(
-                (entry: any) => entry.static === includeStatic
-            )
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Reimanns'
+        const filteredData = filterData(data)
+        if (!includeStatic) {
+            filteredData.forEach((day: any) => {
+                day.meals = day.meals.filter(
+                    (entry: any) => entry.static === false
+                )
             })
-        })
+        }
         entries.push(filteredData)
     }
 
     if (restaurants.includes('canisius')) {
         const data = await NeulandAPI.getCanisiusPlan()
-
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-
-        filteredData.forEach((day: any) =>
-            day.meals.forEach((entry: any) => {
-                entry.restaurant = 'Canisius'
-            })
-        )
-        entries.push(filteredData)
+        entries.push(filterData(data))
     }
 
-    // get start of this week (monday) or next monday if isWeekend
-    const startOfThisWeek = getMonday(getAdjustedDay(new Date()))
-
-    // create day entries for next 12 days (current and next week including the weekend) starting from monday
-    let days: Date[] = Array.from({ length: 12 }, (_, i) => {
-        const date = new Date(startOfThisWeek.getTime())
+    // create day entries for next 7 days (current and next week including the weekend) starting from monday
+    let days: Date[] = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date()
         date.setDate(date.getDate() + i)
         return date
     })
@@ -82,7 +65,6 @@ export async function loadFoodEntries(
     // map to ISO date
     const isoDates = days.map((x) => formatISODate(x))
 
-    // map entries to daysTest
     return isoDates.map((day) => {
         const dayEntries: Meal[] = entries.flatMap(
             (r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
@@ -105,8 +87,8 @@ export function convertRelevantAllergens(
     selectedAllergens: string[],
     language: string
 ): string {
-    const relevantAllergens = allergens?.filter(
-        (allergen) => selectedAllergens?.includes(allergen)
+    const relevantAllergens = allergens?.filter((allergen) =>
+        selectedAllergens?.includes(allergen)
     )
     const convertedAllergens = relevantAllergens?.map(
         (allergen) =>
@@ -165,7 +147,7 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
  * @returns {string}
  */
 
-export function getUserSpecificLabel(userKind: string, t: TFunction): string {
+export function getUserSpecificLabel(userKind: string, t: any): string {
     const labels: Labels = {
         [USER_GUEST]: t('price.guests'),
         [USER_EMPLOYEE]: t('price.employees'),
@@ -190,5 +172,29 @@ export function mealName(
         return mealName[foodLang as LanguageKey]
     } else {
         return mealName[i18nLang as LanguageKey]
+    }
+}
+
+/**
+ * Calculates the rating of a meal for the current user. The rating is based on the user's allergen and preference selection.
+ * @param meal  - The meal to calculate the rating for.
+ * @returns A number representing the rating of the meal.
+ */
+export function userMealRating(
+    meal: Meal,
+    allergenSelection: string[],
+    preferencesSelection: string[]
+): number {
+    if (meal.allergens?.some((x) => allergenSelection.includes(x)) ?? false) {
+        return -1
+    } else if (
+        meal.flags?.some((x) => preferencesSelection.includes(x)) ??
+        false
+    ) {
+        return 2
+    } else if (meal.allergens == null && allergenSelection !== null) {
+        return 0
+    } else {
+        return 1
     }
 }

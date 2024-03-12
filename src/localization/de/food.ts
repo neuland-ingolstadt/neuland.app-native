@@ -1,12 +1,14 @@
 export default {
     empty: {
         allergens: 'Keine passenden Allergene gefunden.',
-        flags: 'Keine passenden Kennzeichnungen gefunden.',
+        noAllergens: 'Allergene nicht verfügbar',
+        flags: 'Keine passenden Vorlieben gefunden.',
+        config: 'Keine Allergene festgelegt. Tippe hier zum Konfigurieren deiner Allergien, um nicht verbindliche Informationen über Allergene anzuzeigen.',
     },
     preferences: {
         formlist: {
             allergens: 'Allergene',
-            flags: 'Kennzeichnungen',
+            flags: 'Vorlieben',
             static: 'Dauerhafte Gerichte',
             language: 'Essenssprache',
         },
@@ -26,13 +28,13 @@ export default {
     dashboard: {
         oneMore: 'und eine weitere Mahlzeit',
         manyMore: 'und {{count}} weitere Gerichte',
-        empty: 'Die Speisekarte für heute ist leer.',
+        empty: 'Der Speiseplan für heute ist leer.',
     },
     categories: {
-        Suppe: 'Suppe',
-        Salat: 'Salat',
-        Essen: 'Essen',
-        Aktion: 'Aktion',
+        soup: 'Suppe',
+        salad: 'Salat',
+        main: 'Essen',
+        special: 'Aktion',
     },
     details: {
         footer: 'Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.',
@@ -47,7 +49,7 @@ export default {
             },
             nutrition: {
                 title: 'Ernährung',
-                footer: 'Werte gelten pro Mahlzeit und können variieren',
+                footer: 'Werte gelten pro Mahlzeit und können variieren.',
                 energy: 'Energie',
                 fat: 'Fett',
                 saturated: 'Gesättigte Fettsäuren',
@@ -62,11 +64,27 @@ export default {
                 category: 'Kategorie',
                 source: 'Datenquelle',
             },
-            variations: 'Varianten',
+            variants: 'Varianten',
+            alert: {
+                allergen: {
+                    title: 'Allergene aktualisieren',
+                    message: {
+                        add: 'Möchtest du {{allergen}} zu deinen Allergenen hinzufügen?',
+                        remove: 'Möchtest du {{allergen}} von deinen Allergenen entfernen?',
+                    },
+                },
+                flag: {
+                    title: 'Einstellungen aktualisieren',
+                    message: {
+                        add: 'Möchtest du {{flag}} zu deinen Vorlieben hinzufügen?',
+                        remove: 'Möchtest du {{flag}} von deinen Vorlieben entfernen?',
+                    },
+                },
+            },
         },
         share: {
             message:
-                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://neuland.app/food/',
+                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://dev.neuland.app/food/{{id}}',
         },
     },
 }

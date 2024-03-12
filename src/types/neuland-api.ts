@@ -29,12 +29,13 @@ export interface Food {
 
 export interface Meal {
     name: Name
-    category: Category
+    id: string
+    category: string
     prices: Prices
     allergens: string[] | null
     flags: string[] | null
     nutrition: Nutrition | null
-    variations: Variation[]
+    variants: Variation[]
     originalLanguage: string
     static: boolean
     restaurant?: string
@@ -44,12 +45,7 @@ export interface Variation {
     name: Name
     additional: boolean
     prices: Prices
-}
-
-export enum Category {
-    Essen = 'Essen',
-    Salat = 'Salat',
-    Suppe = 'Suppe',
+    id: string
 }
 
 export interface Name {

@@ -1,6 +1,5 @@
 import i18n from '@/localization/i18n'
 import { type FriendlyDateOptions } from '@/types/utils'
-// required by react-native-big-calendar (thats why we have moment and dayjs)
 import moment from 'moment'
 import 'moment/locale/de'
 
@@ -76,6 +75,7 @@ export function formatFriendlyDateTimeRange(
     if (begin == null) {
         return ''
     }
+    console.log(end)
     let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
     if (end != null) {
         if (begin.toDateString() === end.toDateString()) {
@@ -122,7 +122,7 @@ export function formatNearDate(datetime: Date | string): string {
     } else if (date.isSame(tomorrow, 'day')) {
         return t('dates.tomorrow')
     } else {
-        return date.locale('de').format('dddd, D.M.')
+        return date.format('dddd, D.M.')
     }
 }
 

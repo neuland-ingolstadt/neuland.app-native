@@ -7,7 +7,10 @@ export default {
     onboarding: {
         links: {
             privacy: 'Privacy Policy',
+            privacypolicy: 'Privacy Policy',
             imprint: 'Imprint',
+            agree1: 'By continuing, you agree to our ',
+            agree2: '.',
         },
         page1: {
             title: 'Welcome to\nNeuland Next',
@@ -40,6 +43,7 @@ export default {
             error: {
                 title: 'Login failed',
                 wrongCredentials: 'Your login credentials are incorrect.',
+                missing: 'Please fill in all fields.',
                 generic: 'An error occurred while connecting to the server.',
                 backend:
                     'The THI backend is currently unavailable. Please try again later.',

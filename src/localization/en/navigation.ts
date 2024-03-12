@@ -26,6 +26,7 @@ export default {
         news: 'THI News',
         library: 'Library',
         libraryCode: 'Library Number',
+        notifications: 'Notifications',
         licenses: 'Licenses',
         license: 'License',
     },
@@ -37,23 +38,43 @@ export default {
             lecturers: 'Lecturers',
             news: 'THI News',
             library: 'Library',
-            events: 'Events',
+            events: 'Campus Life',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
             mensa: 'Mensa',
             food: 'Food',
+            login: 'Sign in',
         },
         events: {
             by: 'by {{name}}',
         },
         calendar: {
-            exam: 'exam {{name}}',
+            exam: 'Exam {{name}}',
             ends: 'ends ',
+        },
+        timetable: {
+            startingSoon: 'starts in {{count}} min',
+            startingSoon_plural: 'starts in {{count}} mins',
+            ongoing: 'ends at {{time}}',
+            endingSoon: 'ends in {{count}} min',
+            endingSoon_plural: 'ends in {{count}} mins',
+        },
+        login: {
+            title: 'Timetable, grades, rooms and more',
+            message: 'Sign in to unlock all features.',
         },
     },
     contextMenu: {
         reset: 'Reset cards',
         hide: 'Hide card',
         settings: 'Dashboard settings',
+    },
+    unmatched: {
+        title: 'Not found',
+        error: {
+            title: 'not found',
+            message: 'The requested page is not available.',
+            button: 'Back',
+        },
     },
 }

@@ -26,6 +26,7 @@ export default {
         news: 'THI Neuigkeiten',
         library: 'Bibliothek',
         libraryCode: 'Bibliotheksnummer',
+        notifications: 'Benachrichtigungen',
         licenses: 'Lizenzen',
         license: 'Lizenz',
     },
@@ -37,11 +38,12 @@ export default {
             lecturers: 'Dozenten',
             news: 'THI Neuigkeiten',
             library: 'Bibliothek',
-            events: 'Veranstaltungen',
+            events: 'Campus Life',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
             mensa: 'Mensa',
             food: 'Essen',
+            login: 'Anmelden',
         },
         events: {
             by: 'von {{name}}',
@@ -50,10 +52,29 @@ export default {
             exam: 'Prüfung {{name}}',
             ends: 'endet ',
         },
+        timetable: {
+            startingSoon: 'startet in {{count}} min',
+            startingSoon_plural: 'startet in {{count}} mins',
+            ongoing: 'endet um {{time}}',
+            endingSoon: 'endet in {{count}} min',
+            endingSoon_plural: 'endet in {{count}} mins',
+        },
+        login: {
+            title: 'Stundenplan, Noten, Räume und mehr',
+            message: 'Melde dich an, um alle Funktionen freizuschalten.',
+        },
     },
     contextMenu: {
         reset: 'Karten zurücksetzen',
         hide: 'Karte ausblenden',
         settings: 'Dashboard Einstellungen',
+    },
+    unmatched: {
+        title: 'Nicht gefunden',
+        error: {
+            title: 'nicht gefunden',
+            message: 'Die angeforderte Seite ist nicht verfügbar.',
+            button: 'Zurück',
+        },
     },
 }

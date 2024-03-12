@@ -2,8 +2,13 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/Material Symbols Rounded.ttf",
-      "sha1": "f99551c92a3cf31d95f5c44398edb8d969fcb16e"
+      "path": "assets/fonts/MaterialSymbolsRoudedFill.ttf",
+      "sha1": "42f1654945ed109af7f01a8d045d85440460214b"
+    },
+    {
+      "path": "assets/fonts/MaterialSymbolsRoudedOutline.ttf",
+      "sha1": "0c8982b0308ecfdc0889770378f85c99924213d2"
     }
   ]
 }
+ 

@@ -45,7 +45,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 52,
+            versionCode: 71,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -55,7 +55,7 @@ module.exports = {
                 },
             },
         },
-        sdkVersion: '49.0.0',
+        sdkVersion: '50.0.0',
         experiments: {
             tsconfigPaths: true,
         },
@@ -66,6 +66,7 @@ module.exports = {
                     origin: 'https://neuland.app',
                 },
             ],
+            ['expo-secure-store'],
             ['expo-localization'],
             [
                 'expo-local-authentication',
@@ -74,11 +75,10 @@ module.exports = {
                 },
             ],
             [
-                'expo-build-properties',
+                '@sentry/react-native/expo',
                 {
-                    ios: {
-                        deploymentTarget: '15.0',
-                    },
+                    organization: 'neuland-ingolstadt',
+                    project: 'neuland-next',
                 },
             ],
         ],

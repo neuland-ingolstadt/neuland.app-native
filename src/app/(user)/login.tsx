@@ -2,7 +2,6 @@ import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/components/colors'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import {
@@ -43,15 +42,12 @@ export default function Login(): JSX.Element {
     return (
         <>
             <StatusBar style={getStatusBarStyle()} />
-            <LinearGradient
-                colors={[colors.primary, '#cd148c']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.gradient}
+            <View
+                style={{ ...styles.gradient, backgroundColor: colors.primary }}
             >
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    style={{ flex: 1, justifyContent: 'center' }}
+                    style={styles.container}
                     enabled={!floatingKeyboard}
                 >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -60,20 +56,20 @@ export default function Login(): JSX.Element {
                         </View>
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
-            </LinearGradient>
+            </View>
         </>
     )
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    container: { flex: 1, justifyContent: 'center' },
     gradient: {
         height: '100%',
         width: '100%',
     },
     loginContainer: {
-        minHeight: 370,
-        paddingHorizontal: 30,
-        paddingBottom: 50,
+        minHeight: 320,
+        marginHorizontal: 30,
+        marginBottom: 60,
     },
 })
