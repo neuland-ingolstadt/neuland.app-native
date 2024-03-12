@@ -158,6 +158,7 @@ export default {
             modernDark: 'Modern Dunkel',
             modernLight: 'Modern Hell',
             modernGreen: 'Modern Grün',
+            modernPink: 'Modern Pink',
             rainbowMoonLight: 'Regenbogen Hell',
             rainbowDark: 'Regenbogen Dunkel',
             rainbowNeon: 'Regenbogen Neon',

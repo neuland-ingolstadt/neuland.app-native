@@ -100,7 +100,12 @@ export const MealEntry = ({
             })}
         >
             <ContextMenu
-                title={meal.restaurant ?? ''}
+                title={
+                    meal.restaurant != null
+                        ? meal.restaurant.charAt(0).toUpperCase() +
+                          meal.restaurant.slice(1)
+                        : ''
+                }
                 key={key}
                 style={styles.contextMenu}
                 actions={[

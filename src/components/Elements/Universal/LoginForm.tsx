@@ -53,6 +53,7 @@ const useIsFloatingKeyboard = (): boolean => {
 
 const LoginForm = (): JSX.Element => {
     const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+    const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
     const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
     const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
@@ -113,6 +114,8 @@ const LoginForm = (): JSX.Element => {
                 setInfoMsg(t('login.alert.error.wrongCredentials'))
             } else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
                 setInfoMsg(t('login.alert.error.noConnection'))
+            } else if (message.includes(ORGINAL_ERROR_MISSING)) {
+                setInfoMsg(t('login.alert.error.missing'))
             } else if (
                 KNOWN_BACKEND_ERRORS.some((error) => e.message.includes(error))
             ) {

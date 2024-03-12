@@ -60,12 +60,14 @@ export default function FoodDetail(): JSX.Element {
     interface Locations {
         Mensa: string
         Reimanns: string
+        Canisius: string
         [key: string]: string
     }
 
     const locations: Locations = {
         Mensa: 'M001',
         Reimanns: 'F001',
+        Canisius: 'X001',
     }
 
     function itemAlert(item: string, itemType: 'allergen' | 'flag'): void {

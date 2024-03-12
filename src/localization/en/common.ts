@@ -65,6 +65,7 @@ export default {
             footer: {
                 part1: 'All information without guarantee. Binding information is only available directly on the ',
                 part2: 'university website',
+                part3: '.', // needed for german translation
             },
         },
         lecturers: {
@@ -102,7 +103,12 @@ export default {
         },
         map: {
             search: 'Search for: G, W003, Toilette, ...',
-            gf: 'GF',
+            easterEgg: {
+                title: 'Easter Egg',
+                message:
+                    'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
+                confirm: 'Nice!',
+            },
         },
         rooms: {
             options: {

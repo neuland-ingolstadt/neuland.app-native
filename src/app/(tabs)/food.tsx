@@ -343,7 +343,6 @@ function FoodScreen(): JSX.Element {
                             const page = e.nativeEvent.position
                             setSelectedDay(page)
                         }}
-                        key={data.length}
                         scrollEnabled
                         overdrag
                     >

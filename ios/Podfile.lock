@@ -4,11 +4,6 @@ PODS:
   - boost (1.83.0)
   - BVLinearGradient (2.8.3):
     - React-Core
-  - ComputableLayout (0.7.0):
-    - DGSwiftUtilities (~> 0.11)
-  - ContextMenuAuxiliaryPreview (0.3.1):
-    - DGSwiftUtilities (~> 0.6)
-  - DGSwiftUtilities (0.12.6)
   - DoubleConversion (1.1.6)
   - EXApplication (5.8.3):
     - ExpoModulesCore
@@ -21,7 +16,7 @@ PODS:
     - ExpoModulesCore
   - EXNotifications (0.27.6):
     - ExpoModulesCore
-  - Expo (50.0.8):
+  - Expo (50.0.11):
     - ExpoModulesCore
   - expo-dev-client (3.3.9):
     - EXManifests
@@ -98,7 +93,7 @@ PODS:
     - ExpoModulesCore
   - ExpoDevice (5.9.3):
     - ExpoModulesCore
-  - ExpoFileSystem (16.0.7):
+  - ExpoFileSystem (16.0.8):
     - ExpoModulesCore
   - ExpoHaptics (12.8.1):
     - ExpoModulesCore
@@ -112,7 +107,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (14.8.3):
     - ExpoModulesCore
-  - ExpoModulesCore (1.11.9):
+  - ExpoModulesCore (1.11.10):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -144,9 +139,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.73.4)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - hermes-engine (0.73.2):
-    - hermes-engine/Pre-built (= 0.73.2)
-  - hermes-engine/Pre-built (0.73.2)
+  - hermes-engine (0.73.4):
+    - hermes-engine/Pre-built (= 0.73.4)
+  - hermes-engine/Pre-built (0.73.4)
   - libevent (2.1.12)
   - RCT-Folly (2022.05.16.00):
     - boost
@@ -1210,20 +1205,9 @@ PODS:
     - React-jsi (= 0.73.4)
     - React-logger (= 0.73.4)
     - React-perflogger (= 0.73.4)
-  - ReactNativeIosContextMenu (2.4.3):
-    - ContextMenuAuxiliaryPreview (~> 0.3)
-    - DGSwiftUtilities
-    - ExpoModulesCore
-    - ReactNativeIosUtilities
-  - ReactNativeIosUtilities (4.3.2):
-    - ComputableLayout (~> 0.7)
-    - DGSwiftUtilities (~> 0.12)
-    - ExpoModulesCore
   - rn-quick-actions (0.0.3):
     - React
   - RNCAsyncStorage (1.21.0):
-    - React-Core
-  - RNDateTimePicker (7.6.1):
     - React-Core
   - RNDynamicAppIcon (1.1.0):
     - React
@@ -1353,11 +1337,8 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeIosContextMenu (from `../node_modules/react-native-ios-context-menu`)
-  - ReactNativeIosUtilities (from `../node_modules/react-native-ios-utilities`)
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDynamicAppIcon (from `../node_modules/react-native-dynamic-app-icon`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -1372,9 +1353,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ComputableLayout
-    - ContextMenuAuxiliaryPreview
-    - DGSwiftUtilities
     - fmt
     - libevent
     - Sentry
@@ -1557,16 +1535,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeIosContextMenu:
-    :path: "../node_modules/react-native-ios-context-menu"
-  ReactNativeIosUtilities:
-    :path: "../node_modules/react-native-ios-utilities"
   rn-quick-actions:
     :path: "../node_modules/rn-quick-actions"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNDateTimePicker:
-    :path: "../node_modules/@react-native-community/datetimepicker"
   RNDynamicAppIcon:
     :path: "../node_modules/react-native-dynamic-app-icon"
   RNFlashList:
@@ -1594,9 +1566,6 @@ SPEC CHECKSUMS:
   aptabase-react-native: c47bcbba34f4aa69de24b415150d22d5b52c927a
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
-  ComputableLayout: c50faffac4ed9f8f05b0ce5e6f3a60df1f6042c8
-  ContextMenuAuxiliaryPreview: afc65e70568ed72d98f9e7c96402c28c38e2edea
-  DGSwiftUtilities: 46adca3abbb5b5fc83a785b7d7aeada4a6e38010
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EXApplication: 137189a3f149b4e8e546884629392c3efc94cbd3
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
@@ -1604,7 +1573,7 @@ SPEC CHECKSUMS:
   EXJSONUtils: 5c42959e87be238b045ef37cc5268b16a6c0ad4a
   EXManifests: 5e8c29f36c716af768a4ea47ec05e1b89ab93091
   EXNotifications: e11f0e9a5b657c064a481a5d522f3bc5a07bf7cd
-  Expo: c2d3edc1b1e833e26d837b03aa46d9137ca63302
+  Expo: bbffa600c41f904151a925e5a214d1f4c5a79794
   expo-dev-client: dbc8e8a81d17a9d92e083a2856d056ba9a58984d
   expo-dev-launcher: 3f2a78d97842a3fdc2f0116f775d8dbc32396cbd
   expo-dev-menu: b964921baa1bda2a7ff42a407d1d7698ce215faf
@@ -1613,14 +1582,14 @@ SPEC CHECKSUMS:
   ExpoBrightness: 6d160de5877289d11674aea61aacdb37422774cf
   ExpoClipboard: b597982124f067ff9f5b89093eb3d97898d5d877
   ExpoDevice: d204395e17fffdcefa7470bdef33b07719ac41b1
-  ExpoFileSystem: c7488590959bf85ebc114909eb8186cbd62e3a25
+  ExpoFileSystem: eecaf6796aed0f4dd20042dc2ca2cac6c4bc1185
   ExpoHaptics: 28a771b630353cd6e8dcf1b1e3e693e38ad7c3c3
   ExpoHead: 8224345e80abcf4c97b31c99805dd5a3c8d3404d
   ExpoKeepAwake: 0f5cad99603a3268e50af9a6eb8b76d0d9ac956c
   ExpoLinearGradient: 4ad1449a2408e0435ac959076562b3921f2e32a1
   ExpoLocalAuthentication: c55ffb179683efed04cb144fc80ccf26891f0cb4
   ExpoLocalization: f5f5d71dc0c9514d3d77b2771144f6fed6398d04
-  ExpoModulesCore: 1391529545de72f7f64ecabc7adb912306ab4d34
+  ExpoModulesCore: b2ae7a3fc6193556273c5db90065fbe7e11c7a60
   ExpoSecureStore: c84ae37d1c36f38524d289c67c3a2e3fc56f1108
   ExpoSharing: 752ad6ae2b693de9cd4e7fddb78297bdc658b815
   ExpoSystemUI: 40e222dd9d52222fe1bce389724ac52e662158dc
@@ -1631,7 +1600,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: d0086a479be91c44ce4687a962956a352d2dc697
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
-  hermes-engine: b361c9ef5ef3cda53f66e195599b47e1f84ffa35
+  hermes-engine: b2669ce35fc4ac14f523b307aff8896799829fe2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ab7f915c15569f04a49669e573e6e319a53f9faa
@@ -1683,11 +1652,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ed48e5faac6751e66ee1261c4bd01643b436f112
   React-utils: 6e5ad394416482ae21831050928ae27348f83487
   ReactCommon: 840a955d37b7f3358554d819446bffcf624b2522
-  ReactNativeIosContextMenu: 3fbaca0232e3f4700f8b630eabec1b74473d9e33
-  ReactNativeIosUtilities: 89ba6339063669b7006a5b98adc0681bbc198ef3
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
-  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e

@@ -7,6 +7,7 @@ import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect, useRouter } from 'expo-router'
 import React, { useCallback, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,16 +20,45 @@ const TimetableCard = (): JSX.Element => {
     const colors = useTheme().colors as Colors
     const { userKind } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const [timetable, setTimetable] = useState<FriendlyTimetableEntry[]>([])
+    const [filteredTimetable, setFilteredTimetable] = useState<
+        FriendlyTimetableEntry[]
+    >([])
     const { t } = useTranslation('navigation')
+
+    const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
+        const timetable = await getFriendlyTimetable(new Date(), true)
+        if (timetable.length === 0) {
+            throw new Error('Timetable is empty')
+        }
+        return timetable
+    }
+
+    const { data: timetable } = useQuery({
+        queryKey: ['timetable', userKind],
+        queryFn: loadTimetable,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours,
+        retry(failureCount, error) {
+            const ignoreErrors = [
+                '"Time table does not exist" (-202)',
+                'Timetable is empty',
+            ]
+            if (ignoreErrors.includes(error?.message)) {
+                return false
+            }
+            return failureCount < 3
+        },
+    })
 
     const loadData = useCallback(async () => {
         try {
-            const timetableData = await getFriendlyTimetable(new Date(), false)
-            const filteredTimetable = timetableData
-                .filter((item) => item.endDate > new Date())
+            if (timetable == null || timetable.length === 0) {
+                throw new Error('Timetable is empty')
+            }
+            const filteredTimetable = timetable
+                .filter((item) => new Date(item.endDate) > new Date())
                 .slice(0, 2)
-            setTimetable(filteredTimetable)
+            setFilteredTimetable(filteredTimetable)
             setLoadingState(LoadingState.LOADED)
         } catch (e) {
             setLoadingState(LoadingState.ERROR)
@@ -37,7 +67,7 @@ const TimetableCard = (): JSX.Element => {
 
     const fetchDataEvery60Secs = useCallback(() => {
         void loadData()
-    }, [loadData])
+    }, [loadData, timetable])
 
     useInterval(fetchDataEvery60Secs, 60 * 1000)
 
@@ -68,10 +98,10 @@ const TimetableCard = (): JSX.Element => {
                 <View
                     style={{
                         ...styles.calendarView,
-                        ...(timetable.length > 0 && styles.cardsFilled),
+                        ...(filteredTimetable.length > 0 && styles.cardsFilled),
                     }}
                 >
-                    {timetable.map((x, i) => {
+                    {filteredTimetable.map((x, i) => {
                         const isSoon =
                             x.startDate > currentTime &&
                             new Date(x.startDate) <=
@@ -118,6 +148,7 @@ const TimetableCard = (): JSX.Element => {
                                         ...styles.eventTitle,
                                         color: colors.text,
                                     }}
+                                    numberOfLines={1}
                                 >
                                     {x.name}
                                 </Text>
@@ -129,7 +160,7 @@ const TimetableCard = (): JSX.Element => {
                                 >
                                     {text}
                                 </Text>
-                                {timetable.length - 1 !== i && (
+                                {filteredTimetable.length - 1 !== i && (
                                     <>
                                         <View style={styles.divider} />
                                         <Divider

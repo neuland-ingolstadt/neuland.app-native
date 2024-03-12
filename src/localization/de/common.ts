@@ -64,8 +64,9 @@ export default {
                 },
             },
             footer: {
-                part1: 'Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt verfügbar auf der ',
+                part1: 'Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt auf der ',
                 part2: 'Universitätswebsite',
+                part3: ' verfügbar.',
             },
         },
         lecturers: {
@@ -103,7 +104,12 @@ export default {
         },
         map: {
             search: 'Suche nach G, W003, Toilette ...',
-            gf: 'EG',
+            easterEgg: {
+                title: 'Easter Egg',
+                message:
+                    'Du hast das exklusive App-Icon "Neuland Pink" freigeschaltet! 🩷',
+                confirm: 'Nice!',
+            },
         },
         rooms: {
             options: {

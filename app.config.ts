@@ -75,19 +75,6 @@ module.exports = {
                 },
             ],
             [
-                'expo-build-properties',
-                {
-                    ios: {
-                        deploymentTarget: '15.0',
-                        newArchEnabled: true,
-                    },
-                    android: {
-                        compileSdkVersion: 34,
-                        targetSdkVersion: 34,
-                    },
-                },
-            ],
-            [
                 '@sentry/react-native/expo',
                 {
                     organization: 'neuland-ingolstadt',

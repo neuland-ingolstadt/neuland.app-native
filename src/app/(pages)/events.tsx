@@ -23,7 +23,7 @@ export default function Events(): JSX.Element {
         useQuery({
             queryKey: ['campusLifeEvents'],
             queryFn: loadCampusLifeEvents,
-            staleTime: 1000 * 60 * 5, // 5 minutes
+            staleTime: 1000 * 60 * 60, // 60 minutes
             gcTime: 1000 * 60 * 60 * 24, // 24 hours
         })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)

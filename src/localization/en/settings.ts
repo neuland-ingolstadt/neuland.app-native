@@ -154,6 +154,7 @@ export default {
             modernDark: 'Modern Dark',
             modernLight: 'Modern Light',
             modernGreen: 'Modern Green',
+            modernPink: 'Modern Pink',
             rainbowMoonLight: 'Rainbow Light',
             rainbowDark: 'Rainbow Dark',
             rainbowNeon: 'Rainbow Neon',

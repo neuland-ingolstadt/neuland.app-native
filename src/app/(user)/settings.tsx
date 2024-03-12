@@ -269,7 +269,7 @@ export default function Settings(): JSX.Element {
                                             (data?.stgru ?? '') + '. Semester'
                                         }
                                         subTitle2={data?.fachrich ?? ''}
-                                        loaded={isSuccess}
+                                        loaded={data !== undefined}
                                     >
                                         <Avatar background={colors.primary}>
                                             <Text

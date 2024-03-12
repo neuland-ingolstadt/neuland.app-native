@@ -13,7 +13,11 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext, UserKindContext } from '@/components/provider'
+import {
+    AppIconContext,
+    RouteParamsContext,
+    UserKindContext,
+} from '@/components/provider'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type RoomsOverlay } from '@/types/asset-api'
 import { type AvailableRoom, type RoomEntry } from '@/types/utils'
@@ -27,6 +31,7 @@ import * as Haptics from 'expo-haptics'
 import { useNavigation, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, {
+    useContext,
     useEffect,
     useLayoutEffect,
     useMemo,
@@ -36,6 +41,7 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Alert,
     Linking,
     Platform,
     Pressable,
@@ -89,9 +95,8 @@ export const MapScreen = (): JSX.Element => {
 
     const [errorMsg, setErrorMsg] = useState('')
     const colors = useTheme().colors as Colors
-    const { userKind, userFaculty } = React.useContext(UserKindContext)
-    const { routeParams, updateRouteParams } =
-        React.useContext(RouteParamsContext)
+    const { userKind, userFaculty } = useContext(UserKindContext)
+    const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
     const [webViewKey, setWebViewKey] = useState(0)
     const [showDismissModal, setShowDismissModal] = useState(false)
     const [currentFloor, setCurrentFloor] = useState('EG')
@@ -101,7 +106,7 @@ export const MapScreen = (): JSX.Element => {
     const INGOLSTADT_CENTER = [48.76709, 11.4328]
     const NEUBURG_CENTER = [48.73227, 11.17261]
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
-
+    const { addUnlockedAppIcon, unlockedAppIcons } = useContext(AppIconContext)
     const mapRef = useRef<WebView>(null)
     const router = useRouter()
     const navigation = useNavigation()
@@ -142,7 +147,28 @@ export const MapScreen = (): JSX.Element => {
                 shouldShowHintSearchIcon: false,
                 hideWhenScrolling: false,
                 onChangeText: (event: { nativeEvent: { text: string } }) => {
-                    setLocalSearch(event.nativeEvent.text)
+                    const text = event.nativeEvent.text
+                    if (Platform.OS !== 'ios') return
+                    if (
+                        text === 'Neuland' &&
+                        !unlockedAppIcons.includes('modernPink')
+                    ) {
+                        Alert.alert(
+                            t('pages.map.easterEgg.title'),
+                            t('pages.map.easterEgg.message'),
+                            [
+                                {
+                                    text: t('pages.map.easterEgg.confirm'),
+                                    style: 'cancel',
+                                },
+                            ],
+                            { cancelable: false }
+                        )
+                        if (Platform.OS === 'ios') {
+                            addUnlockedAppIcon('modernPink')
+                        }
+                    }
+                    setLocalSearch(text)
                 },
                 // if open hide the headerRight button
                 onFocus: () => {
@@ -401,7 +427,6 @@ export const MapScreen = (): JSX.Element => {
     const FloorPicker = (floors: { floors: string[] }): JSX.Element => {
         const isEmpty = floors.floors.length === 0
         const colors = useTheme().colors as Colors
-        const { t } = useTranslation('common')
         return (
             <View
                 style={{
@@ -460,9 +485,7 @@ export const MapScreen = (): JSX.Element => {
                                             },
                                         ]}
                                     >
-                                        {floor === 'EG'
-                                            ? t('pages.map.gf')
-                                            : floor}
+                                        {floor === 'EG' ? '0' : floor}
                                     </Text>
                                 </View>
                             </Pressable>

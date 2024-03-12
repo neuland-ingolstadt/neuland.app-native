@@ -43,6 +43,7 @@ export default {
             error: {
                 title: 'Anmeldung fehlgeschlagen',
                 wrongCredentials: 'Deine Anmeldedaten sind falsch.',
+                missing: 'Bitte fülle alle Felder aus.',
                 generic:
                     'Beim Verbinden mit dem Server ist ein Fehler aufgetreten.',
                 backend:
