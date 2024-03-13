@@ -82,8 +82,8 @@ export default function LecturersCard(): JSX.Element {
                     console.log('allLecturers', data)
                     return data
                 },
-                staleTime: 1000 * 60 * 30, // 10 minutes
-                gcTime: 1000 * 60 * 60 * 24, // 24 hours
+                staleTime: 1000 * 60 * 30, // 30 minutes
+                gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
                         router.push('(user)/login')
@@ -94,14 +94,14 @@ export default function LecturersCard(): JSX.Element {
                 enabled: userKind !== USER_GUEST,
             },
             {
-                queryKey: ['personalklLekcturers'],
+                queryKey: ['personalLecturers'],
                 queryFn: async () => {
                     const rawData = await API.getPersonalLecturers()
                     const data = normalizeLecturers(rawData)
                     return data
                 },
-                staleTime: 1000 * 60 * 30, // 10 minutes
-                gcTime: 1000 * 60 * 60 * 24, // 24 hours
+                staleTime: 1000 * 60 * 30, // 30 minutes
+                gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
                         router.push('(user)/login')
@@ -169,7 +169,7 @@ export default function LecturersCard(): JSX.Element {
             setDisplayedProfessors(true)
             setFaculityData(filtered)
         }
-    }, [faculty])
+    }, [faculty, allLecturersResult.data])
 
     const generateSections = (
         lecturers = allLecturersResult.data
@@ -220,7 +220,10 @@ export default function LecturersCard(): JSX.Element {
                 onFocus: () => {
                     setLocalSearchBarFocused(true)
                 },
-                onBlur: () => {
+                onClose: () => {
+                    setLocalSearchBarFocused(false)
+                },
+                onCancelButtonPress: () => {
                     setLocalSearchBarFocused(false)
                 },
             },

@@ -142,7 +142,6 @@ function RootLayout(): JSX.Element {
                             name="(food)/allergens"
                             options={{
                                 headerShown: false,
-
                                 ...Platform.select({
                                     android: {
                                         animation: 'slide_from_right',
