@@ -1,7 +1,9 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import { queryClient } from '@/components/provider'
+import courseShortNames from '@/data/course-short-names.json'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { type CourseShortNames } from '@/types/data'
 import { type PersDataDetails } from '@/types/thi-api'
 import { router } from 'expo-router'
 
@@ -59,4 +61,26 @@ export async function getPersonalData(): Promise<PersDataDetails> {
     const data: PersDataDetails = response.persdata
     data.pcounter = response.pcounter
     return data
+}
+
+/**
+ * Determines the users faculty.
+ * @param {PersonalData} data Personal data
+ * @returns {string} Faculty name (e.g. `Informatik`)
+ */
+export function extractFacultyFromPersonal(
+    data: PersDataDetails
+): string | undefined {
+    if (data?.stg == null) {
+        console.error('No personal data found')
+        return undefined
+    }
+    const shortNames: CourseShortNames = courseShortNames
+    const shortName = data.stg
+    const faculty = Object.keys(shortNames).find((faculty) =>
+        (courseShortNames as Record<string, string[]>)[faculty].includes(
+            shortName
+        )
+    )
+    return faculty as string
 }

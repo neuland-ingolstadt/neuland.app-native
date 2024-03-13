@@ -5,7 +5,6 @@ export default {
     },
     error: {
         title: 'An error occurred',
-
         description: 'An error occurred while loading the data.',
         refreshPull:
             'An error occurred while loading the data.\nPull to refresh.',
@@ -70,7 +69,14 @@ export default {
         },
         lecturers: {
             results: 'Search results',
-            personal: 'Personal lecturers',
+            personal: 'Personal',
+            faculty: 'Faculty',
+            professors: 'Professors',
+            error: {
+                title: 'No lecturers found',
+                subtitle:
+                    'Setup your timetable to view your personal lecturers.',
+            },
         },
         lecturer: {
             details: {

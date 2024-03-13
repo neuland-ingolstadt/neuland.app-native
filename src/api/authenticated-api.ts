@@ -20,7 +20,7 @@ const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
 const KEY_GET_LECTURERS = 'getLecturers'
 
-interface PersonalData {
+export interface PersonalData {
     persdata?: {
         stg?: string
         po_url?: string

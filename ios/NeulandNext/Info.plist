@@ -52,7 +52,7 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-         <key>ModernPink</key>
+        <key>ModernPink</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
@@ -133,6 +133,7 @@
     <string>Allow $(PRODUCT_NAME) to use Face ID.</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

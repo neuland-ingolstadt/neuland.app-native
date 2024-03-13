@@ -63,7 +63,6 @@
     "react-dom": "18.2.0",
     "react-i18next": "^14.0.0",
     "react-native": "0.73.4",
-    "react-native-change-icon": "^5.0.0",
     "react-native-collapsible": "^1.6.1",
     "react-native-context-menu-view": "^1.14.1",
     "react-native-drag-drop-ios": "^0.1.1",

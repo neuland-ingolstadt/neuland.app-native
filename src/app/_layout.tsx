@@ -319,26 +319,6 @@ function RootLayout(): JSX.Element {
                                         animation: 'slide_from_right',
                                     },
                                 }),
-                                headerSearchBarOptions: {
-                                    placeholder: t(
-                                        'navigation.lecturers.search'
-                                    ),
-                                    ...Platform.select({
-                                        android: {
-                                            headerIconColor: colorText,
-                                            textColor: colorText,
-                                            hintTextColor: colorText,
-                                            tintColor: colorText,
-                                        },
-                                    }),
-                                    hideWhenScrolling: false,
-                                    onChangeText: (event) => {
-                                        router.setParams({
-                                            q: event.nativeEvent.text,
-                                        })
-                                    },
-                                    shouldShowHintSearchIcon: false,
-                                },
                             }}
                         />
                         <Stack.Screen
