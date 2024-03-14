@@ -35,6 +35,7 @@ import {
     FlatList,
     Linking,
     Platform,
+    RefreshControl,
     SectionList,
     StyleSheet,
     Text,
@@ -79,7 +80,6 @@ export default function LecturersCard(): JSX.Element {
                 queryFn: async () => {
                     const rawData = await API.getLecturers('0', 'z')
                     const data = normalizeLecturers(rawData)
-                    console.log('allLecturers', data)
                     return data
                 },
                 staleTime: 1000 * 60 * 30, // 30 minutes
@@ -116,9 +116,14 @@ export default function LecturersCard(): JSX.Element {
 
     const allLecturersResult = results[0]
     const personalLecturersResult = results[1]
-    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(
-        personalLecturersResult.refetch
-    )
+    const {
+        isRefetchingByUser: isRefetchingByUserPersonal,
+        refetchByUser: refetchByUserPersonal,
+    } = useRefreshByUser(personalLecturersResult.refetch)
+    const {
+        isRefetchingByUser: isRefetchingByUserAll,
+        refetchByUser: refetchByUserAll,
+    } = useRefreshByUser(allLecturersResult.refetch)
 
     useEffect(() => {
         if (data !== null && data !== undefined) {
@@ -253,9 +258,15 @@ export default function LecturersCard(): JSX.Element {
             >
                 <ErrorView
                     title={networkError}
-                    refreshing={isRefetchingByUser}
+                    refreshing={
+                        isPersonal
+                            ? isRefetchingByUserPersonal
+                            : isRefetchingByUserAll
+                    }
                     onRefresh={() => {
-                        void refetchByUser()
+                        void (isPersonal
+                            ? refetchByUserPersonal()
+                            : refetchByUserAll())
                     }}
                     inModal
                 />
@@ -274,9 +285,15 @@ export default function LecturersCard(): JSX.Element {
             >
                 <ErrorView
                     title={error?.message ?? t('error.title')}
-                    refreshing={isRefetchingByUser}
+                    refreshing={
+                        isPersonal
+                            ? isRefetchingByUserPersonal
+                            : isRefetchingByUserAll
+                    }
                     onRefresh={() => {
-                        void refetchByUser()
+                        void (isPersonal
+                            ? refetchByUserPersonal()
+                            : refetchByUserAll())
                     }}
                     inModal
                 />
@@ -290,6 +307,22 @@ export default function LecturersCard(): JSX.Element {
                     backgroundColor: colors.card,
                     ...styles.loadedRows,
                 }}
+                refreshControl={
+                    !isLoading ? (
+                        <RefreshControl
+                            refreshing={
+                                isPersonal
+                                    ? isRefetchingByUserPersonal
+                                    : allLecturersResult.isRefetching
+                            }
+                            onRefresh={() => {
+                                void (isPersonal
+                                    ? refetchByUserPersonal()
+                                    : refetchByUserAll())
+                            }}
+                        />
+                    ) : undefined
+                }
                 style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
                 renderItem={({ item, index }) => (
                     <React.Fragment key={index}>
@@ -323,18 +356,18 @@ export default function LecturersCard(): JSX.Element {
                         onButtonPress={() => {
                             void Linking.openURL('https://hiplan.thi.de/')
                         }}
-                        refreshing={isRefetchingByUser}
+                        refreshing={isRefetchingByUserPersonal}
                         onRefresh={() => {
-                            void refetchByUser()
+                            void refetchByUserPersonal()
                         }}
                         inModal
                     />
                 ) : (
                     <ErrorView
                         title={t('error.title')}
-                        refreshing={isRefetchingByUser}
+                        refreshing={isRefetchingByUserAll}
                         onRefresh={() => {
-                            void refetchByUser()
+                            void refetchByUserAll()
                         }}
                         inModal
                     />
@@ -359,17 +392,17 @@ export default function LecturersCard(): JSX.Element {
         ) : allLecturersResult.isPaused ? (
             <ErrorView
                 title={networkError}
-                refreshing={isRefetchingByUser}
+                refreshing={isRefetchingByUserAll}
                 onRefresh={() => {
-                    void refetchByUser()
+                    void refetchByUserAll()
                 }}
             />
         ) : allLecturersResult.isError ? (
             <ErrorView
                 title={allLecturersResult.error.message}
-                refreshing={isRefetchingByUser}
+                refreshing={isRefetchingByUserAll}
                 onRefresh={() => {
-                    void refetchByUser()
+                    void refetchByUserAll()
                 }}
             />
         ) : (
