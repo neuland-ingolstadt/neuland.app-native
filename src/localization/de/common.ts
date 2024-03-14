@@ -71,7 +71,14 @@ export default {
         },
         lecturers: {
             results: 'Suchergebnisse',
-            personal: 'Persönliche Dozenten',
+            personal: 'Persönliche',
+            faculty: 'Fakultät',
+            professors: 'Professoren',
+            error: {
+                title: 'Keine Dozenten gefunden',
+                subtitle:
+                    'Konfiguriere deinen Stundenplan, um die persönlichen Dozenten anzuzeigen.',
+            },
         },
         lecturer: {
             details: {

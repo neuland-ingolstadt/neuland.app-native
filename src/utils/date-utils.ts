@@ -75,7 +75,6 @@ export function formatFriendlyDateTimeRange(
     if (begin == null) {
         return ''
     }
-    console.log(end)
     let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
     if (end != null) {
         if (begin.toDateString() === end.toDateString()) {
