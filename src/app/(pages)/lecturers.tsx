@@ -7,7 +7,7 @@ import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
-import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { USER_GUEST, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type Lecturers } from '@/types/thi-api'
 import { type NormalizedLecturer } from '@/types/utils'
 import {
@@ -71,7 +71,7 @@ export default function LecturersCard(): JSX.Element {
         queryFn: getPersonalData,
         staleTime: 1000 * 60 * 60 * 12, // 12 hours
         gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
-        enabled: userKind !== USER_GUEST,
+        enabled: userKind === USER_STUDENT,
     })
 
     const results = useQueries({
@@ -482,7 +482,7 @@ export default function LecturersCard(): JSX.Element {
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
                 ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 0,
+                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 10,
             }}
         >
             {userKind === USER_GUEST ? (

@@ -9,7 +9,11 @@ import {
     UserKindContext,
 } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
-import { USER_GUEST, type UserKindContextType } from '@/hooks/contexts/userKind'
+import {
+    USER_GUEST,
+    USER_STUDENT,
+    type UserKindContextType,
+} from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
@@ -105,7 +109,7 @@ export default function Settings(): JSX.Element {
             }
             return failureCount < 3
         },
-        enabled: userKind === 'student',
+        enabled: userKind === USER_STUDENT,
     })
 
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
