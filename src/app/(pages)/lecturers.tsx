@@ -3,190 +3,539 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
+import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { type Lecturers } from '@/types/thi-api'
 import { type NormalizedLecturer } from '@/types/utils'
-import { isKnownError } from '@/utils/api-utils'
+import {
+    extractFacultyFromPersonal,
+    getPersonalData,
+    guestError,
+    networkError,
+} from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { showToast } from '@/utils/ui-utils'
+import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
-import { useGlobalSearchParams, useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useQueries, useQuery } from '@tanstack/react-query'
+import { useNavigation, useRouter } from 'expo-router'
+import React, {
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    FlatList,
+    Linking,
+    Platform,
     RefreshControl,
-    ScrollView,
+    SectionList,
     StyleSheet,
     Text,
     View,
 } from 'react-native'
+import PagerView from 'react-native-pager-view'
 
 export default function LecturersCard(): JSX.Element {
     const router = useRouter()
-
-    const [personalLecturers, setPersonalLecturers] = useState<
-        NormalizedLecturer[]
-    >([])
     const [filteredLecturers, setFilteredLecturers] = useState<
         NormalizedLecturer[]
     >([])
-    const [didFetch, setDidFetch] = useState(false)
-    const [error, setError] = useState<Error | null>(null)
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
-    const { q } = useGlobalSearchParams<{ q: string }>()
-    const [allLecturers, setAllLecturers] = useState<NormalizedLecturer[]>([])
+    const { userKind } = useContext(UserKindContext)
+    const navigation = useNavigation()
+    const [selectedPage, setSelectedPage] = useState(0)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
+    const pagerViewRef = useRef<PagerView>(null)
+    const [displayesProfessors, setDisplayedProfessors] = useState(false)
+    const [localSearch, setLocalSearch] = useState('')
+    const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
+    const [faculty, setFaculty] = useState<string | null>(null)
+    const [faculityData, setFaculityData] = useState<NormalizedLecturer[]>([])
+    const headerHeight = useHeaderHeight()
 
-    async function load(): Promise<void> {
-        try {
-            const rawData = await API.getPersonalLecturers()
-            const data = normalizeLecturers(rawData)
-            setPersonalLecturers(data)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e) {
-            if (e instanceof NoSessionError) {
-                router.push('(user)/login')
-            } else {
-                setLoadingState(LoadingState.ERROR)
-                setError(e as Error)
-            }
-        }
-    }
-    useEffect(() => {
-        void load()
-    }, [])
-
-    const onRefresh: () => void = () => {
-        void load()
+    function setPage(page: number): void {
+        pagerViewRef.current?.setPage(page)
     }
 
-    useEffect(() => {
-        async function load(): Promise<void> {
-            if (q == null) {
-                setFilteredLecturers(personalLecturers)
+    const { data } = useQuery({
+        queryKey: ['personalData'],
+        queryFn: getPersonalData,
+        staleTime: 1000 * 60 * 60 * 12, // 12 hours
+        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+        enabled: userKind !== USER_GUEST,
+    })
 
-                return
-            }
-
-            if (allLecturers.length === 0) {
-                if (didFetch) {
-                    return
-                }
-
-                setDidFetch(true)
-                setFilteredLecturers([])
-                try {
+    const results = useQueries({
+        queries: [
+            {
+                queryKey: ['allLecturers'],
+                queryFn: async () => {
                     const rawData = await API.getLecturers('0', 'z')
                     const data = normalizeLecturers(rawData)
-                    setAllLecturers(data)
-                    setLoadingState(LoadingState.LOADED)
-                    return
-                } catch (e) {
-                    if (e instanceof NoSessionError) {
+                    return data
+                },
+                staleTime: 1000 * 60 * 30, // 30 minutes
+                gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+                retry(failureCount: number, error: any) {
+                    if (error instanceof NoSessionError) {
                         router.push('(user)/login')
-                    } else {
-                        setError(e as Error)
-                        if (!isKnownError(e as Error)) {
-                            captureException(e)
-                        }
+                        return false
                     }
-                    setLoadingState(LoadingState.ERROR)
-                    return
-                }
-            }
-            const normalizedSearch = q.toLowerCase().trim()
+                    return failureCount < 3
+                },
+                enabled: userKind !== USER_GUEST,
+            },
+            {
+                queryKey: ['personalLecturers'],
+                queryFn: async () => {
+                    const rawData = await API.getPersonalLecturers()
+                    const data = normalizeLecturers(rawData)
+                    return data
+                },
+                staleTime: 1000 * 60 * 30, // 30 minutes
+                gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+                retry(failureCount: number, error: any) {
+                    if (error instanceof NoSessionError) {
+                        router.push('(user)/login')
+                        return false
+                    }
+                    return failureCount < 3
+                },
+                enabled: userKind !== USER_GUEST,
+            },
+        ],
+    })
+
+    const allLecturersResult = results[0]
+    const personalLecturersResult = results[1]
+    const {
+        isRefetchingByUser: isRefetchingByUserPersonal,
+        refetchByUser: refetchByUserPersonal,
+    } = useRefreshByUser(personalLecturersResult.refetch)
+    const {
+        isRefetchingByUser: isRefetchingByUserAll,
+        refetchByUser: refetchByUserAll,
+    } = useRefreshByUser(allLecturersResult.refetch)
+
+    useEffect(() => {
+        if (data !== null && data !== undefined) {
+            const faculty = extractFacultyFromPersonal(data)
+            setFaculty(faculty ?? null)
+        }
+    }, [data])
+
+    useEffect(() => {
+        if (localSearch !== '') {
+            const normalizedSearch = localSearch.toLowerCase().trim()
             const checkField = (value: string | null): boolean =>
                 value?.toString().toLowerCase().includes(normalizedSearch) ??
                 false
-            const filtered = allLecturers
-                .filter(
-                    (x) =>
-                        checkField(x.name) ||
-                        checkField(x.vorname) ||
-                        checkField(x.email) ||
-                        checkField(x.tel_dienst) ||
-                        checkField(x.raum)
-                )
-                .slice(0, 20)
-
-            setFilteredLecturers(filtered)
-            setLoadingState(LoadingState.LOADED)
+            const filtered = allLecturersResult?.data?.filter(
+                (x) =>
+                    checkField(x.name) ||
+                    checkField(x.vorname) ||
+                    checkField(x.tel_dienst) ||
+                    checkField(x.raum)
+            )
+            setFilteredLecturers(filtered ?? [])
         }
-        void load()
-    }, [didFetch, q, personalLecturers, allLecturers])
+    }, [localSearch])
 
-    return (
-        <ScrollView
-            // style={styles.page}
-            contentContainerStyle={styles.page}
-            contentInsetAdjustmentBehavior="automatic"
-            refreshControl={
-                loadingState !== LoadingState.LOADING &&
-                loadingState !== LoadingState.LOADED ? (
-                    <RefreshControl
-                        refreshing={loadingState === LoadingState.REFRESHING}
-                        onRefresh={onRefresh}
-                    />
-                ) : undefined
+    useEffect(() => {
+        let filtered: NormalizedLecturer[] = []
+        if (faculty !== null) {
+            filtered =
+                allLecturersResult?.data?.filter(
+                    (lecturer: Lecturers) =>
+                        lecturer.organisation !== null &&
+                        lecturer.organisation.includes(faculty)
+                ) ?? []
+            setDisplayedProfessors(false)
+            setFaculityData(filtered)
+            return
+        }
+
+        if (faculty === null || filtered.length === 0) {
+            filtered =
+                allLecturersResult?.data?.filter(
+                    (lecturer: Lecturers) =>
+                        lecturer.funktion !== null &&
+                        lecturer.funktion === 'Professor(in)'
+                ) ?? []
+
+            setDisplayedProfessors(true)
+            setFaculityData(filtered)
+        }
+    }, [faculty, allLecturersResult.data])
+
+    const generateSections = (
+        lecturers = allLecturersResult.data
+    ): Array<{
+        title: string
+        data: NormalizedLecturer[]
+    }> => {
+        const sections = [] as Array<{
+            title: string
+            data: NormalizedLecturer[]
+        }>
+        let currentLetter = ''
+
+        lecturers?.forEach((lecturer) => {
+            const firstLetter = lecturer.name.charAt(0).toUpperCase()
+            if (firstLetter !== currentLetter) {
+                currentLetter = firstLetter
+                sections.push({ title: currentLetter, data: [lecturer] })
+            } else {
+                sections[sections.length - 1].data.push(lecturer)
             }
-        >
-            {loadingState === LoadingState.LOADING && (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
-                </View>
-            )}
-            {loadingState === LoadingState.ERROR && (
+        })
+
+        return sections
+    }
+
+    const sections = generateSections(filteredLecturers)
+
+    useEffect(() => {
+        if (localSearch.length === 0 && allLecturersResult.data != null) {
+            setFilteredLecturers(allLecturersResult.data)
+        }
+    }, [localSearch])
+
+    useEffect(() => {
+        if (
+            (allLecturersResult.isPaused && allLecturersResult.data != null) ||
+            (personalLecturersResult.isPaused &&
+                personalLecturersResult.data != null)
+        ) {
+            void showToast(t('toast.paused'))
+        }
+    }, [allLecturersResult.isPaused, personalLecturersResult.isPaused])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: t('navigation.lecturers.search', {
+                    ns: 'navigation',
+                }),
+                shouldShowHintSearchIcon: false,
+                hideWhenScrolling: false,
+                hideNavigationBar: false,
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    const text = event.nativeEvent.text
+                    setLocalSearch(text)
+                },
+                onFocus: () => {
+                    setLocalSearchBarFocused(true)
+                },
+                onClose: () => {
+                    setLocalSearchBarFocused(false)
+                },
+                onCancelButtonPress: () => {
+                    setLocalSearchBarFocused(false)
+                },
+            },
+        })
+    }, [navigation])
+
+    const LecturerList = ({
+        lecturers,
+        isPaused,
+        isError,
+        isSuccess,
+        error,
+        isLoading,
+        isPersonal = false,
+    }: {
+        lecturers: NormalizedLecturer[] | undefined
+        isPaused: boolean
+        isError: boolean
+        isSuccess: boolean
+        error: Error | null
+        isLoading: boolean
+        isPersonal?: boolean
+    }): JSX.Element => {
+        return isPaused && !isSuccess ? (
+            <View
+                style={{
+                    paddingHorizontal: PAGE_PADDING,
+                }}
+            >
+                <ErrorView
+                    title={networkError}
+                    refreshing={
+                        isPersonal
+                            ? isRefetchingByUserPersonal
+                            : isRefetchingByUserAll
+                    }
+                    onRefresh={() => {
+                        void (isPersonal
+                            ? refetchByUserPersonal()
+                            : refetchByUserAll())
+                    }}
+                />
+            </View>
+        ) : isLoading ? (
+            <ActivityIndicator
+                style={styles.loadingContainer}
+                size="small"
+                color={colors.primary}
+            />
+        ) : isError ? (
+            <View
+                style={{
+                    paddingHorizontal: PAGE_PADDING,
+                }}
+            >
                 <ErrorView
                     title={error?.message ?? t('error.title')}
-                    onRefresh={onRefresh}
-                    refreshing={false}
+                    refreshing={
+                        isPersonal
+                            ? isRefetchingByUserPersonal
+                            : isRefetchingByUserAll
+                    }
+                    onRefresh={() => {
+                        void (isPersonal
+                            ? refetchByUserPersonal()
+                            : refetchByUserAll())
+                    }}
                 />
-            )}
+            </View>
+        ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
+            <FlatList
+                data={lecturers}
+                keyExtractor={(_, index) => index.toString()}
+                contentContainerStyle={{
+                    marginHorizontal: PAGE_PADDING,
+                    backgroundColor: colors.card,
+                    ...styles.loadedRows,
+                }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={
+                            isPersonal
+                                ? isRefetchingByUserPersonal
+                                : allLecturersResult.isRefetching
+                        }
+                        onRefresh={() => {
+                            void (isPersonal
+                                ? refetchByUserPersonal()
+                                : refetchByUserAll())
+                        }}
+                    />
+                }
+                style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
+                renderItem={({ item, index }) => (
+                    <React.Fragment key={index}>
+                        <LecturerRow item={item} colors={colors} />
+                        {index !== lecturers.length - 1 && (
+                            <Divider
+                                color={colors.labelTertiaryColor}
+                                iosPaddingLeft={16}
+                            />
+                        )}
+                    </React.Fragment>
+                )}
+            />
+        ) : (
+            <View
+                style={{
+                    paddingHorizontal: PAGE_PADDING,
+                }}
+            >
+                {isPersonal ? (
+                    <ErrorView
+                        title={t('pages.lecturers.error.title')}
+                        message={t('pages.lecturers.error.subtitle')}
+                        icon={{
+                            ios: 'calendar.badge.exclamationmark',
+                            android: 'edit_calendar',
+                        }}
+                        buttonText={t('error.empty.button', {
+                            ns: 'timetable',
+                        })}
+                        onButtonPress={() => {
+                            void Linking.openURL('https://hiplan.thi.de/')
+                        }}
+                        refreshing={isRefetchingByUserPersonal}
+                        onRefresh={() => {
+                            void refetchByUserPersonal()
+                        }}
+                    />
+                ) : (
+                    <ErrorView
+                        title={t('error.title')}
+                        refreshing={isRefetchingByUserAll}
+                        onRefresh={() => {
+                            void refetchByUserAll()
+                        }}
+                    />
+                )}
+            </View>
+        )
+    }
 
-            {loadingState === LoadingState.LOADED && (
-                <View>
+    const FilterSectionList = (): JSX.Element => {
+        return allLecturersResult.isLoading ? (
+            <View
+                style={{
+                    paddingHorizontal: PAGE_PADDING,
+                }}
+            >
+                <ActivityIndicator
+                    style={styles.loadingContainer}
+                    size="small"
+                    color={colors.primary}
+                />
+            </View>
+        ) : allLecturersResult.isPaused ? (
+            <ErrorView
+                title={networkError}
+                refreshing={isRefetchingByUserAll}
+                onRefresh={() => {
+                    void refetchByUserAll()
+                }}
+            />
+        ) : allLecturersResult.isError ? (
+            <ErrorView
+                title={allLecturersResult.error.message}
+                refreshing={isRefetchingByUserAll}
+                onRefresh={() => {
+                    void refetchByUserAll()
+                }}
+            />
+        ) : (
+            <>
+                <View style={styles.resultsCountContainer}>
                     <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
+                        style={{
+                            ...styles.resultsCount,
+                            color: colors.labelColor,
+                        }}
                     >
-                        {q != null
-                            ? t('pages.lecturers.results')
-                            : t('pages.lecturers.personal')}
+                        {filteredLecturers.length}{' '}
+                        {t('pages.lecturers.results')}
                     </Text>
-                    <View
-                        style={[
-                            styles.loadedRows,
-                            { backgroundColor: colors.card },
-                        ]}
-                    >
-                        {filteredLecturers?.map((event, index) => (
-                            <React.Fragment key={index}>
-                                <LecturerRow item={event} colors={colors} />
-                                {index !== personalLecturers.length - 1 && (
-                                    <Divider
-                                        color={colors.labelTertiaryColor}
-                                        iosPaddingLeft={16}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </View>
                 </View>
+                <SectionList
+                    sections={sections}
+                    keyExtractor={(_, index) => index.toString()}
+                    renderItem={({ item, index, section }) => (
+                        <View
+                            key={index}
+                            // eslint-disable-next-line react-native/no-inline-styles
+                            style={{
+                                backgroundColor: colors.card,
+                                borderTopLeftRadius: index === 0 ? 8 : 0,
+                                borderTopRightRadius: index === 0 ? 8 : 0,
+                                borderBottomLeftRadius:
+                                    index === section.data.length - 1 ? 8 : 0,
+                                borderBottomRightRadius:
+                                    index === section.data.length - 1 ? 8 : 0,
+                            }}
+                        >
+                            <LecturerRow item={item} colors={colors} />
+                            {index !== section.data.length - 1 && (
+                                <Divider
+                                    color={colors.labelTertiaryColor}
+                                    iosPaddingLeft={16}
+                                />
+                            )}
+                        </View>
+                    )}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <View
+                            style={{
+                                backgroundColor: colors.background,
+                                ...styles.sectionHeaderContainer,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    ...styles.sectionHeader,
+                                    color: colors.text,
+                                }}
+                            >
+                                {title}
+                            </Text>
+                        </View>
+                    )}
+                    contentContainerStyle={{
+                        marginHorizontal: PAGE_PADDING,
+                        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+                    }}
+                />
+            </>
+        )
+    }
+
+    return (
+        <View
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+                ...styles.page,
+                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 0,
+            }}
+        >
+            {userKind === USER_GUEST ? (
+                <ErrorView title={guestError} />
+            ) : !isSearchBarFocused ? (
+                <View style={styles.searchContainer}>
+                    <ToggleRow
+                        items={[
+                            t('pages.lecturers.personal'),
+                            displayesProfessors
+                                ? t('pages.lecturers.professors')
+                                : t('pages.lecturers.faculty'),
+                        ]}
+                        selectedElement={selectedPage}
+                        setSelectedElement={setPage}
+                    />
+                    <PagerView
+                        style={styles.page}
+                        initialPage={selectedPage}
+                        onPageSelected={(e) => {
+                            setSelectedPage(e.nativeEvent.position)
+                        }}
+                        ref={pagerViewRef}
+                    >
+                        <LecturerList
+                            lecturers={personalLecturersResult.data}
+                            isPaused={personalLecturersResult.isPaused}
+                            isError={personalLecturersResult.isError}
+                            isSuccess={personalLecturersResult.isSuccess}
+                            error={personalLecturersResult.error}
+                            isLoading={personalLecturersResult.isLoading}
+                            isPersonal
+                        />
+                        <LecturerList
+                            lecturers={faculityData}
+                            isPaused={allLecturersResult.isPaused}
+                            isError={allLecturersResult.isError}
+                            isSuccess={allLecturersResult.isSuccess}
+                            error={allLecturersResult.error}
+                            isLoading={allLecturersResult.isLoading}
+                        />
+                    </PagerView>
+                </View>
+            ) : (
+                <FilterSectionList />
             )}
-        </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     page: {
-        padding: PAGE_PADDING,
+        flex: 1,
     },
     loadedRows: {
         borderRadius: 8,
@@ -197,10 +546,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionHeader: {
-        fontSize: 13,
-
-        fontWeight: 'normal',
+        fontSize: 17,
+        fontWeight: 'bold',
         textTransform: 'uppercase',
-        marginBottom: 4,
+    },
+    sectionHeaderContainer: {
+        paddingVertical: 8,
+        paddingHorizontal: 4,
+    },
+    searchContainer: { flex: 1, gap: 10 },
+    resultsCountContainer: {
+        position: 'absolute',
+        right: 0,
+        left: 0,
+        zIndex: 1,
+    },
+    resultsCount: {
+        paddingHorizontal: 12,
+        textAlign: 'right',
+        fontSize: 13,
     },
 })

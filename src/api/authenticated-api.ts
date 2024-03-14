@@ -17,10 +17,8 @@ import { callWithSession } from './thi-session-handler'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
-const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
-const KEY_GET_LECTURERS = 'getLecturers'
 
-interface PersonalData {
+export interface PersonalData {
     persdata?: {
         stg?: string
         po_url?: string
@@ -277,7 +275,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @returns {Promise<Lecturers[]>} Promise that resolves with the lecturers
      */
     async getPersonalLecturers(): Promise<Lecturers[]> {
-        const res = await this.requestCached(KEY_GET_PERSONAL_LECTURERS, {
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'stpllecturers',
             format: 'json',
@@ -292,8 +290,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @param {string} to Single character indicating where to end listing the lecturers
      */
     async getLecturers(from: string, to: string): Promise<Lecturers[]> {
-        const key = `${KEY_GET_LECTURERS}-${from}-${to}`
-        const res = await this.requestCached(key, {
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'lecturers',
             format: 'json',

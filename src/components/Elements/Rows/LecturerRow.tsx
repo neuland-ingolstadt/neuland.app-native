@@ -28,6 +28,7 @@ const LecturerRow = ({
         router.setParams({ lecturerEntry: JSON.stringify(item) })
     }
     const { t } = useTranslation('api')
+
     return (
         <RowEntry
             title={`${[item.titel, item.vorname, item.name].join(' ').trim()}`}
@@ -53,17 +54,18 @@ const LecturerRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        {t(`lecturerOrganizations.${item?.organisation}`, {
-                            defaultValue: item?.organisation,
-                            fallbackLng: 'de',
-                        })}
+                        {item?.organisation !== null &&
+                            t(`lecturerOrganizations.${item?.organisation}`, {
+                                defaultValue: item?.organisation,
+                                fallbackLng: 'de',
+                            })}
                     </Text>
                 </>
             }
             rightChildren={
                 <>
                     <View style={styles.rightContainer}>
-                        {item.raum !== null && item.raum !== '' && (
+                        {item.room_short !== null && item.room_short !== '' && (
                             <View style={styles.container}>
                                 <Text
                                     style={{
