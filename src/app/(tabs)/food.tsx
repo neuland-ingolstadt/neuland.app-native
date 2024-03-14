@@ -288,14 +288,14 @@ function FoodScreen(): JSX.Element {
                             : error?.message ?? t('error.title')
                     }
                     onRefresh={refetchByUser}
-                    refreshing={false}
+                    refreshing={isRefetchingByUser}
                 />
             )}
             {isPaused && !isSuccess && (
                 <ErrorView
                     title={networkError}
                     onRefresh={refetchByUser}
-                    refreshing={false}
+                    refreshing={isRefetchingByUser}
                 />
             )}
 

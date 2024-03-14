@@ -18,6 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -209,6 +210,16 @@ export default function LecturersCard(): JSX.Element {
         }
     }, [localSearch])
 
+    useEffect(() => {
+        if (
+            (allLecturersResult.isPaused && allLecturersResult.data != null) ||
+            (personalLecturersResult.isPaused &&
+                personalLecturersResult.data != null)
+        ) {
+            void showToast(t('toast.paused'))
+        }
+    }, [allLecturersResult.isPaused, personalLecturersResult.isPaused])
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerSearchBarOptions: {
@@ -239,6 +250,7 @@ export default function LecturersCard(): JSX.Element {
         lecturers,
         isPaused,
         isError,
+        isSuccess,
         error,
         isLoading,
         isPersonal = false,
@@ -246,11 +258,12 @@ export default function LecturersCard(): JSX.Element {
         lecturers: NormalizedLecturer[] | undefined
         isPaused: boolean
         isError: boolean
+        isSuccess: boolean
         error: Error | null
         isLoading: boolean
         isPersonal?: boolean
     }): JSX.Element => {
-        return isPaused ? (
+        return isPaused && !isSuccess ? (
             <View
                 style={{
                     paddingHorizontal: PAGE_PADDING,
@@ -268,7 +281,6 @@ export default function LecturersCard(): JSX.Element {
                             ? refetchByUserPersonal()
                             : refetchByUserAll())
                     }}
-                    inModal
                 />
             </View>
         ) : isLoading ? (
@@ -295,10 +307,9 @@ export default function LecturersCard(): JSX.Element {
                             ? refetchByUserPersonal()
                             : refetchByUserAll())
                     }}
-                    inModal
                 />
             </View>
-        ) : lecturers != null && lecturers.length > 0 ? (
+        ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
             <FlatList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
@@ -308,20 +319,18 @@ export default function LecturersCard(): JSX.Element {
                     ...styles.loadedRows,
                 }}
                 refreshControl={
-                    !isLoading ? (
-                        <RefreshControl
-                            refreshing={
-                                isPersonal
-                                    ? isRefetchingByUserPersonal
-                                    : allLecturersResult.isRefetching
-                            }
-                            onRefresh={() => {
-                                void (isPersonal
-                                    ? refetchByUserPersonal()
-                                    : refetchByUserAll())
-                            }}
-                        />
-                    ) : undefined
+                    <RefreshControl
+                        refreshing={
+                            isPersonal
+                                ? isRefetchingByUserPersonal
+                                : allLecturersResult.isRefetching
+                        }
+                        onRefresh={() => {
+                            void (isPersonal
+                                ? refetchByUserPersonal()
+                                : refetchByUserAll())
+                        }}
+                    />
                 }
                 style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
                 renderItem={({ item, index }) => (
@@ -360,7 +369,6 @@ export default function LecturersCard(): JSX.Element {
                         onRefresh={() => {
                             void refetchByUserPersonal()
                         }}
-                        inModal
                     />
                 ) : (
                     <ErrorView
@@ -369,7 +377,6 @@ export default function LecturersCard(): JSX.Element {
                         onRefresh={() => {
                             void refetchByUserAll()
                         }}
-                        inModal
                     />
                 )}
             </View>
@@ -504,6 +511,7 @@ export default function LecturersCard(): JSX.Element {
                             lecturers={personalLecturersResult.data}
                             isPaused={personalLecturersResult.isPaused}
                             isError={personalLecturersResult.isError}
+                            isSuccess={personalLecturersResult.isSuccess}
                             error={personalLecturersResult.error}
                             isLoading={personalLecturersResult.isLoading}
                             isPersonal
@@ -512,6 +520,7 @@ export default function LecturersCard(): JSX.Element {
                             lecturers={faculityData}
                             isPaused={allLecturersResult.isPaused}
                             isError={allLecturersResult.isError}
+                            isSuccess={allLecturersResult.isSuccess}
                             error={allLecturersResult.error}
                             isLoading={allLecturersResult.isLoading}
                         />
