@@ -1,22 +1,29 @@
-import API from '@/api/authenticated-api'
-import {
-    NoSessionError,
-    UnavailableSessionError,
-} from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/provider'
+import { useRefreshByUser } from '@/hooks'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
-import { isKnownError } from '@/utils/api-utils'
+import {
+    getPersonalData,
+    guestError,
+    networkError,
+    permissionError,
+} from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { LoadingState, getStatusBarStyle } from '@/utils/ui-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
+import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
-import { router, useFocusEffect } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -31,46 +38,25 @@ import {
 export default function LibraryCode(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const [errorMsg, setErrorMsg] = useState<string>('')
-    const [libraryCode, setLibraryCode] = useState<string>('')
-    const [loadingState, setLoadingState] = useState<LoadingState>(
-        LoadingState.LOADING
-    )
+    const { userKind } = useContext(UserKindContext)
     const [brightness, setBrightness] = useState<number>(0)
     const brightnessRef = useRef<number>(0)
 
     const staticColors = {
         white: '#ffffff',
-        // Add other colors as needed
-    }
-    async function load(): Promise<void> {
-        try {
-            setLibraryCode((await API.getLibraryNumber()) ?? '')
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            if (
-                e instanceof NoSessionError ||
-                e instanceof UnavailableSessionError
-            ) {
-                router.push('(user)/login')
-            } else {
-                setLoadingState(LoadingState.ERROR)
-                setErrorMsg(e.message)
-                if (!isKnownError(e)) {
-                    captureException(e)
-                }
-            }
-        }
     }
 
-    useEffect(() => {
-        void load()
-    }, [])
+    const { data, isLoading, isError, isPaused, error, isSuccess, refetch } =
+        useQuery({
+            queryKey: ['personalData'],
 
-    const onRefresh: () => void = () => {
-        setLoadingState(LoadingState.LOADING)
-        void load()
-    }
+            queryFn: getPersonalData,
+            staleTime: 1000 * 60 * 60 * 12, // 12 hours
+            gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+            enabled: userKind === USER_STUDENT,
+        })
+
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     useEffect(() => {
         brightnessRef.current = brightness
@@ -108,7 +94,7 @@ export default function LibraryCode(): JSX.Element {
             items: [
                 {
                     title: t('pages.library.code.number'),
-                    value: libraryCode,
+                    value: data?.bibnr ?? '',
                 },
             ],
         },
@@ -127,19 +113,27 @@ export default function LibraryCode(): JSX.Element {
     return (
         <View>
             <StatusBar style={getStatusBarStyle()} />
-            {loadingState === LoadingState.LOADING && (
+            {userKind === USER_GUEST ? (
+                <ErrorView title={guestError} />
+            ) : userKind === USER_EMPLOYEE ? (
+                <ErrorView title={permissionError} />
+            ) : isLoading ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="small" color={colors.primary} />
                 </View>
-            )}
-            {loadingState === LoadingState.ERROR && (
+            ) : isError ? (
                 <ErrorView
-                    title={errorMsg}
-                    onRefresh={onRefresh}
-                    refreshing={false}
+                    title={error?.message ?? t('error.title')}
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
                 />
-            )}
-            {loadingState === LoadingState.LOADED && (
+            ) : isPaused && !isSuccess ? (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
+                />
+            ) : isSuccess && data?.bibnr !== null ? (
                 <View style={styles.container}>
                     <View>
                         <FormList sections={sections} />
@@ -155,7 +149,7 @@ export default function LibraryCode(): JSX.Element {
                     >
                         <Barcode
                             format="CODE39"
-                            value={libraryCode}
+                            value={data?.bibnr ?? ''}
                             maxWidth={Dimensions.get('window').width - 56}
                             width={5}
                             style={styles.barcodeStyle}
@@ -172,6 +166,17 @@ export default function LibraryCode(): JSX.Element {
                         </Text>
                     </View>
                 </View>
+            ) : (
+                <ErrorView
+                    title={
+                        isError
+                            ? // @ts-expect-error error is type never
+                              error?.message ?? t('error.title')
+                            : t('error.title')
+                    }
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
+                />
             )}
         </View>
     )

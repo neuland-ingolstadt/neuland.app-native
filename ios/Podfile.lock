@@ -1222,20 +1222,20 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSentry (5.19.1):
+  - RNSentry (5.19.3):
     - hermes-engine
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.17.1)
+    - Sentry/HybridSDK (= 8.21.0)
   - RNSVG (14.1.0):
     - React-Core
   - RNVectorIcons (10.0.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - Sentry/HybridSDK (8.17.1):
-    - SentryPrivate (= 8.17.1)
-  - SentryPrivate (8.17.1)
+  - Sentry/HybridSDK (8.21.0):
+    - SentryPrivate (= 8.21.0)
+  - SentryPrivate (8.21.0)
   - SocketRocket (0.6.1)
   - SweetSFSymbols (0.5.0):
     - ExpoModulesCore
@@ -1651,11 +1651,11 @@ SPEC CHECKSUMS:
   RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e
   RNReanimated: 6259d9f32f4a54b2f5660bc2c1829215e38ca20f
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
-  RNSentry: 6872121e0af7aa9f3f50643f557d69adc8f7ecdc
+  RNSentry: 73baf47160d2f25b62e31a1850eb788f04c1706f
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
-  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
-  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
+  Sentry: ebc12276bd17613a114ab359074096b6b3725203
+  SentryPrivate: d651efb234cf385ec9a1cdd3eff94b5e78a0e0fe
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SweetSFSymbols: e758921afd1b48cb9d3ebf1528dbf718a88b6ff7
   UMAppLoader: 5df85360d65cabaef544be5424ac64672e648482

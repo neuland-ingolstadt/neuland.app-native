@@ -10,6 +10,7 @@ import {
 } from '@/components/provider'
 import {
     USER_EMPLOYEE,
+    USER_STUDENT,
     type UserKindContextType,
 } from '@/hooks/contexts/userKind'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
@@ -52,7 +53,7 @@ export default function Screen(): JSX.Element {
         queryFn: getPersonalData,
         staleTime: 1000 * 60 * 60 * 12, // 12 hours
         gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
-        enabled: userKind === 'student',
+        enabled: userKind === USER_STUDENT,
     })
 
     const logoutAlert = (): void => {
