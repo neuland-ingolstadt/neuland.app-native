@@ -119,9 +119,6 @@ export const MapScreen = (): JSX.Element => {
 
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-        if (Platform.OS === 'ios') {
-            void Haptics.selectionAsync()
-        }
         setShowAllFloors(!showAllFloors)
     }
 
