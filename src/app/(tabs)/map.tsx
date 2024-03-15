@@ -42,6 +42,7 @@ import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Alert,
+    LayoutAnimation,
     Linking,
     Platform,
     Pressable,
@@ -113,6 +114,16 @@ export const MapScreen = (): JSX.Element => {
     const { t } = useTranslation('common')
 
     const [localSearch, setLocalSearch] = useState('')
+
+    const [showAllFloors, setShowAllFloors] = useState(false)
+
+    const toggleShowAllFloors = (): void => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        if (Platform.OS === 'ios') {
+            void Haptics.selectionAsync()
+        }
+        setShowAllFloors(!showAllFloors)
+    }
 
     // update the local search state if the routeParams change
     useEffect(() => {
@@ -424,8 +435,15 @@ export const MapScreen = (): JSX.Element => {
         return result
     }
 
-    const FloorPicker = (floors: { floors: string[] }): JSX.Element => {
-        const isEmpty = floors.floors.length === 0
+    const FloorPicker = ({
+        floors,
+        showAllFloors,
+        toggleShowAllFloors,
+    }: {
+        floors: string[]
+        showAllFloors: boolean
+        toggleShowAllFloors: () => void
+    }): JSX.Element => {
         const colors = useTheme().colors as Colors
         return (
             <View
@@ -436,21 +454,67 @@ export const MapScreen = (): JSX.Element => {
                         : styles.buttonAreaAndroid),
                 }}
             >
-                <View
-                    style={{
-                        ...styles.ButtonAreaSection,
-                        ...(!isEmpty
-                            ? styles.borderWithNormal
-                            : styles.borderWidthEmpty),
-                        borderColor: colors.border,
-                    }}
-                >
-                    {floors.floors.map((floor, index) => {
-                        const isLastButton =
-                            floors.floors.length === 0 ||
-                            index === floors.floors.length - 1
-
-                        return (
+                {!showAllFloors && (
+                    <Pressable onPress={toggleShowAllFloors}>
+                        <View
+                            style={{
+                                ...styles.ButtonAreaSection,
+                                ...(!showAllFloors
+                                    ? styles.borderWithNormal
+                                    : styles.borderWidthEmpty),
+                                borderColor: colors.border,
+                                backgroundColor: colors.card,
+                            }}
+                        >
+                            <View style={styles.Button}>
+                                <Text
+                                    style={{
+                                        ...styles.ButtonText,
+                                        color: colors.text,
+                                    }}
+                                >
+                                    {currentFloor === 'EG' ? '0' : currentFloor}
+                                </Text>
+                            </View>
+                        </View>
+                    </Pressable>
+                )}
+                {showAllFloors && (
+                    <View style={[]}>
+                        <Pressable
+                            onPress={() => {
+                                if (Platform.OS === 'ios') {
+                                    void Haptics.selectionAsync()
+                                }
+                                toggleShowAllFloors()
+                            }}
+                        >
+                            <View style={styles.Button}>
+                                <PlatformIcon
+                                    color={colors.labelColor}
+                                    ios={{
+                                        name: 'xmark.circle.fill',
+                                        size: 26,
+                                    }}
+                                    android={{
+                                        name: 'close',
+                                        size: 22,
+                                    }}
+                                />
+                            </View>
+                        </Pressable>
+                    </View>
+                )}
+                {showAllFloors && (
+                    <View
+                        style={[
+                            styles.ButtonAreaSection,
+                            {
+                                borderColor: colors.border,
+                            },
+                        ]}
+                    >
+                        {floors.map((floor, index) => (
                             <Pressable
                                 onPress={() => {
                                     setCurrentFloor(floor)
@@ -467,12 +531,12 @@ export const MapScreen = (): JSX.Element => {
                                                 currentFloor === floor
                                                     ? colors.primary
                                                     : colors.card,
-                                            borderBottomWidth: isLastButton
-                                                ? 0
-                                                : 1,
+                                            borderBottomWidth:
+                                                index === floors.length - 1
+                                                    ? 0
+                                                    : 1,
                                         },
                                     ]}
-                                    key={floor}
                                 >
                                     <Text
                                         style={[
@@ -489,9 +553,9 @@ export const MapScreen = (): JSX.Element => {
                                     </Text>
                                 </View>
                             </Pressable>
-                        )
-                    })}
-                </View>
+                        ))}
+                    </View>
+                )}
                 {showDismissModal && (
                     <View
                         style={[
@@ -532,6 +596,34 @@ export const MapScreen = (): JSX.Element => {
                         </Pressable>
                     </View>
                 )}
+                {
+                    <Pressable>
+                        <View
+                            style={{
+                                ...styles.ButtonAreaSection,
+                                ...(!showAllFloors
+                                    ? styles.borderWithNormal
+                                    : styles.borderWidthEmpty),
+                                borderColor: colors.border,
+                                backgroundColor: colors.card,
+                            }}
+                        >
+                            <View style={styles.Button}>
+                                <PlatformIcon
+                                    color={colors.labelColor}
+                                    ios={{
+                                        name: 'location.fill',
+                                        size: 18,
+                                    }}
+                                    android={{
+                                        name: 'close',
+                                        size: 22,
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    </Pressable>
+                }
                 {filteredRooms.length === 1 && (
                     <View
                         style={[
@@ -612,7 +704,11 @@ export const MapScreen = (): JSX.Element => {
         <View style={styles.container}>
             <View style={styles.innerContainer}>
                 {loadingState === LoadingState.LOADED && (
-                    <FloorPicker floors={uniqueEtages} />
+                    <FloorPicker
+                        floors={uniqueEtages}
+                        showAllFloors={showAllFloors}
+                        toggleShowAllFloors={toggleShowAllFloors}
+                    />
                 )}
                 {loadingState === LoadingState.ERROR ||
                     (overlayError !== null && (
@@ -720,7 +816,7 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         overflow: 'hidden',
         borderWidth: 1,
-        marginTop: 10,
+        marginTop: 5,
     },
     borderWidthEmpty: {
         borderWidth: 0,

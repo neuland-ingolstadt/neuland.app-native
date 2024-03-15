@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next'
 import {
     Alert,
     Dimensions,
+    LayoutAnimation,
     Platform,
     Pressable,
     StyleSheet,
@@ -297,6 +298,11 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
+
+    useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+    }, [shownDashboardEntries])
+
     return shownDashboardEntries === null ||
         shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>

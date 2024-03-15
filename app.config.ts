@@ -45,7 +45,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 71,
+            versionCode: 73,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -72,6 +72,13 @@ module.exports = {
                 'expo-local-authentication',
                 {
                     faceIDPermission: 'Allow $(PRODUCT_NAME) to use Face ID.',
+                },
+            ],
+            [
+                'expo-location',
+                {
+                    locationAlwaysAndWhenInUsePermission:
+                        'Allow $(PRODUCT_NAME) to use your location.',
                 },
             ],
             [
