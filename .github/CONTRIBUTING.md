@@ -7,22 +7,32 @@ To contribute, please follow these guidelines:
 ## Getting Started
 
 1. Fork the repository and clone it to your local machine.
-2. Install the required dependencies:
+2. Install the required software:
+
+    - [Visual Studio Code](https://code.visualstudio.com/) 
+    - [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12) (for iOS development, macOS only)
+    - [Android Studio](https://developer.android.com/studio) (for Android development)
+
+3. Install the required dependencies:
 
     - [Node.js 18 LTS](https://nodejs.org/en/) or higher
-    - [Bun](https://bun.sh)
+    - [Bun](https://bun.sh) or simply use npm or yarn
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
-3. Install project dependencies by running the following command in the project directory:
+3. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+
+4. Install project dependencies by running the following command in the project directory:
 
     ```bash
     bun install
     ```
+5. Create a development build for your desired platform. This step is required every time the dependencies are updated.
 
-4. Create an Expo account to be able to run the app on your smartphone or simulator. You can create an account [here](https://expo.dev/signup).
-   To access the Expo neuland.app organization, you need to join our Expo organization. Please contact us to get an invitation.
+    ```bash
+    bun ios
+    bun android
+    ```
 
-5. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
 
 ### Using the Android Emulator (_Windows, macOS, and Linux_)
 

@@ -1,7 +1,6 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
-import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import {
     NotificationContext,
@@ -323,13 +322,7 @@ export default function TimetableScreen(): JSX.Element {
         setIsPageOpen(true)
     }, [])
 
-    return (
-        <WorkaroundStack
-            name={t('navigation.timetable', { ns: 'navigation' })}
-            titleKey={t('navigation.timetable', { ns: 'navigation' })}
-            component={isPageOpen ? TempList : () => <></>}
-        />
-    )
+    return isPageOpen ? <TempList /> : <></>
 }
 
 const styles = StyleSheet.create({

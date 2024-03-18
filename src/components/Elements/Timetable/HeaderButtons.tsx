@@ -52,7 +52,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
     return (
-        <Pressable onPress={setToday} hitSlop={10}>
+        <Pressable onPress={setToday} hitSlop={10} style={styles.headerButton}>
             <PlatformIcon
                 color={colors.text}
                 ios={{
@@ -70,6 +70,6 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 
 const styles = StyleSheet.create({
     headerButton: {
-        marginRight: 14,
+        marginHorizontal: 14,
     },
 })

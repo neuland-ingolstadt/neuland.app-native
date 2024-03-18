@@ -36,6 +36,7 @@ import {
     View,
 } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Screen(): JSX.Element {
     const router = useRouter()
@@ -132,6 +133,10 @@ export default function Screen(): JSX.Element {
         }
     }, [data, userKind, username])
 
+    const safeArea = useSafeAreaInsets()
+    const topInset = safeArea.top
+    const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
+
     return (
         <>
             <Head>
@@ -141,134 +146,149 @@ export default function Screen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-
-            <WorkaroundStack
-                name={'Dashboard'}
-                titleKey={'Neuland Next'}
-                component={isPageOpen ? HomeScreen : () => <></>}
-                largeTitle={true}
-                transparent={false}
-                headerRightElement={() => (
-                    <Pressable
-                        onPress={() => {
-                            router.push('(user)/settings')
-                        }}
-                        delayLongPress={300}
-                        onLongPress={() => {}}
-                        hitSlop={10}
-                    >
-                        <ContextMenu
-                            actions={[
-                                ...(userKind === 'student'
-                                    ? [
-                                          {
-                                              title: t('navigation.profile'),
-                                              subtitle: userFullName,
-                                              systemIcon:
-                                                  Platform.OS === 'ios'
-                                                      ? 'person.crop.circle'
-                                                      : undefined,
-                                          },
-                                      ]
-                                    : []),
-                                {
-                                    title: t('navigation.theme'),
-                                    systemIcon:
-                                        Platform.OS === 'ios'
-                                            ? 'paintpalette'
-                                            : undefined,
-                                },
-                                {
-                                    title: t('navigation.about'),
-                                    systemIcon:
-                                        Platform.OS === 'ios'
-                                            ? 'info.circle'
-                                            : undefined,
-                                },
-                                ...(userFullName !== '' && userKind !== 'guest'
-                                    ? [
-                                          {
-                                              title: 'Logout',
-                                              systemIcon:
-                                                  Platform.OS === 'ios'
-                                                      ? 'person.fill.xmark'
-                                                      : undefined,
-                                              destructive: true,
-                                          },
-                                      ]
-                                    : []),
-                                ...(userKind === 'guest'
-                                    ? [
-                                          {
-                                              title: t('menu.guest.title', {
-                                                  ns: 'settings',
-                                              }),
-                                              systemIcon:
-                                                  Platform.OS === 'ios'
-                                                      ? 'person.fill.questionmark'
-                                                      : undefined,
-                                          },
-                                      ]
-                                    : []),
-                            ]}
-                            onPress={(e) => {
-                                e.nativeEvent.name ===
-                                    t('navigation.profile') &&
-                                    router.push('profile')
-                                e.nativeEvent.name === t('navigation.theme') &&
-                                    router.push('theme')
-                                e.nativeEvent.name === t('navigation.about') &&
-                                    router.push('about')
-                                e.nativeEvent.name === 'Logout' && logoutAlert()
-                                e.nativeEvent.name ===
-                                    t('menu.guest.title', {
-                                        ns: 'settings',
-                                    }) && router.push('login')
-                            }}
-                            onPreviewPress={() => {
+            <View
+                style={{
+                    ...styles.page,
+                    // workaround for status bar overlapping the header on iPhones with dynamic island
+                    ...(hasDynamicIsland
+                        ? { paddingTop: topInset, backgroundColor: colors.card }
+                        : {}),
+                }}
+            >
+                <WorkaroundStack
+                    name={'Dashboard'}
+                    titleKey={'Neuland Next'}
+                    component={isPageOpen ? HomeScreen : () => <></>}
+                    largeTitle={true}
+                    transparent={false}
+                    headerRightElement={() => (
+                        <Pressable
+                            onPress={() => {
                                 router.push('(user)/settings')
                             }}
+                            delayLongPress={300}
+                            onLongPress={() => {}}
+                            hitSlop={10}
                         >
-                            {initials !== '' ? (
-                                <View>
-                                    <Avatar
-                                        size={29}
-                                        background={colors.primary}
-                                        shadow={false}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: getContrastColor(
-                                                    colors.primary
-                                                ),
-                                                ...styles.iconText,
-                                            }}
-                                            numberOfLines={1}
-                                            adjustsFontSizeToFit={true}
+                            <ContextMenu
+                                actions={[
+                                    ...(userKind === 'student'
+                                        ? [
+                                              {
+                                                  title: t(
+                                                      'navigation.profile'
+                                                  ),
+                                                  subtitle: userFullName,
+                                                  systemIcon:
+                                                      Platform.OS === 'ios'
+                                                          ? 'person.crop.circle'
+                                                          : undefined,
+                                              },
+                                          ]
+                                        : []),
+                                    {
+                                        title: t('navigation.theme'),
+                                        systemIcon:
+                                            Platform.OS === 'ios'
+                                                ? 'paintpalette'
+                                                : undefined,
+                                    },
+                                    {
+                                        title: t('navigation.about'),
+                                        systemIcon:
+                                            Platform.OS === 'ios'
+                                                ? 'info.circle'
+                                                : undefined,
+                                    },
+                                    ...(userFullName !== '' &&
+                                    userKind !== 'guest'
+                                        ? [
+                                              {
+                                                  title: 'Logout',
+                                                  systemIcon:
+                                                      Platform.OS === 'ios'
+                                                          ? 'person.fill.xmark'
+                                                          : undefined,
+                                                  destructive: true,
+                                              },
+                                          ]
+                                        : []),
+                                    ...(userKind === 'guest'
+                                        ? [
+                                              {
+                                                  title: t('menu.guest.title', {
+                                                      ns: 'settings',
+                                                  }),
+                                                  systemIcon:
+                                                      Platform.OS === 'ios'
+                                                          ? 'person.fill.questionmark'
+                                                          : undefined,
+                                              },
+                                          ]
+                                        : []),
+                                ]}
+                                onPress={(e) => {
+                                    e.nativeEvent.name ===
+                                        t('navigation.profile') &&
+                                        router.push('profile')
+                                    e.nativeEvent.name ===
+                                        t('navigation.theme') &&
+                                        router.push('theme')
+                                    e.nativeEvent.name ===
+                                        t('navigation.about') &&
+                                        router.push('about')
+                                    e.nativeEvent.name === 'Logout' &&
+                                        logoutAlert()
+                                    e.nativeEvent.name ===
+                                        t('menu.guest.title', {
+                                            ns: 'settings',
+                                        }) && router.push('login')
+                                }}
+                                onPreviewPress={() => {
+                                    router.push('(user)/settings')
+                                }}
+                            >
+                                {initials !== '' ? (
+                                    <View>
+                                        <Avatar
+                                            size={29}
+                                            background={colors.primary}
+                                            shadow={false}
                                         >
-                                            {initials}
-                                        </Text>
-                                    </Avatar>
-                                </View>
-                            ) : (
-                                <View>
-                                    <PlatformIcon
-                                        color={colors.text}
-                                        ios={{
-                                            name: 'person.crop.circle',
-                                            size: 22,
-                                        }}
-                                        android={{
-                                            name: 'account_circle',
-                                            size: 26,
-                                        }}
-                                    />
-                                </View>
-                            )}
-                        </ContextMenu>
-                    </Pressable>
-                )}
-            />
+                                            <Text
+                                                style={{
+                                                    color: getContrastColor(
+                                                        colors.primary
+                                                    ),
+                                                    ...styles.iconText,
+                                                }}
+                                                numberOfLines={1}
+                                                adjustsFontSizeToFit={true}
+                                            >
+                                                {initials}
+                                            </Text>
+                                        </Avatar>
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <PlatformIcon
+                                            color={colors.text}
+                                            ios={{
+                                                name: 'person.crop.circle',
+                                                size: 22,
+                                            }}
+                                            android={{
+                                                name: 'account_circle',
+                                                size: 26,
+                                            }}
+                                        />
+                                    </View>
+                                )}
+                            </ContextMenu>
+                        </Pressable>
+                    )}
+                />
+            </View>
         </>
     )
 }
@@ -351,6 +371,9 @@ function HomeScreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    page: {
+        flex: 1,
+    },
     errorContainer: { paddingTop: 110 },
     item: {
         marginVertical: 6,

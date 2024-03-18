@@ -1,7 +1,6 @@
 import { MealDay } from '@/components/Elements/Food'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
@@ -392,38 +391,12 @@ function FoodScreen(): JSX.Element {
 }
 
 export default function Screen(): JSX.Element {
-    const colors = useTheme().colors as Colors
-
     const [isPageOpen, setIsPageOpen] = useState(false)
 
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
 
-    const HeaderRight = (): JSX.Element => {
-        return (
-            <Pressable
-                onPress={() => {
-                    router.push('(food)/preferences')
-                }}
-                hitSlop={10}
-            >
-                <View>
-                    <PlatformIcon
-                        color={colors.text}
-                        ios={{
-                            name: 'line.3.horizontal.decrease',
-                            size: 22,
-                        }}
-                        android={{
-                            name: 'filter_list',
-                            size: 24,
-                        }}
-                    />
-                </View>
-            </Pressable>
-        )
-    }
     return (
         <>
             <Head>
@@ -433,13 +406,7 @@ export default function Screen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <WorkaroundStack
-                name={'Food'}
-                titleKey={'navigation.food'}
-                component={isPageOpen ? FoodScreen : () => <></>}
-                largeTitle={false}
-                headerRightElement={() => <HeaderRight />}
-            />
+            {isPageOpen ? <FoodScreen /> : <></>}
         </>
     )
 }

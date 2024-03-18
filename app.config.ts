@@ -10,11 +10,6 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        extra: {
-            eas: {
-                projectId: 'b0ef9e3f-3115-44b0-abc7-99dd75821353',
-            },
-        },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
             buildNumber: '1',
