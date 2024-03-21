@@ -46,6 +46,8 @@ export default {
         confirm: 'Confirm',
         delete: 'Delete',
         disable: 'Disable',
+        more: 'more',
+        unknown: 'Unknown',
     },
     pages: {
         calendar: {
@@ -108,14 +110,34 @@ export default {
             },
         },
         map: {
-            search: 'Search for: G, W003, Toilette, ...',
+            search: 'Search for rooons, events, and more',
             easterEgg: {
                 title: 'Easter Egg',
                 message:
                     'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
                 confirm: 'Nice!',
             },
+            details: {
+                room: {
+                    details: 'Room details',
+                    title: 'Room',
+                    capacity: 'Capacity',
+                    availability: 'Availability',
+                    timeLeft: 'Time left',
+                    building: 'Building',
+                    timeSpan: 'Time span',
+                    floor: 'Floor',
+                    type: 'Type',
+                    equipment: 'Equipment',
+                    available: 'Available',
+                    notAvailable: 'Not available',
+                    availableRooms: 'Available rooms',
+                    availableRoomsTitle: 'Available rooms',
+                    availableRoomsSubtitle: 'Rooms with available seats',
+                },
+            },
         },
+
         rooms: {
             options: {
                 title: 'Search options',

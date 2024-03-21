@@ -21,6 +21,7 @@ export const BUILDINGS_IN = [
     'M',
     'P',
     'W',
+    'Y',
     'Z',
 ]
 export const BUILDINGS_ND = ['BN', 'CN']

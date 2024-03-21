@@ -1,7 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { type LanguageKey } from '@/localization/i18n'
 import { type AvailableRoom, type RoomEntry } from '@/types/utils'
-import { formatFriendlyTime } from '@/utils/date-utils'
 import type WebView from 'react-native-webview'
 
 /**
@@ -18,43 +16,48 @@ export const _addRoom = (
     room: RoomEntry,
     availableRooms: AvailableRoom[],
     mapRef: React.RefObject<WebView>,
-    colors: Colors,
-    language: LanguageKey
+    colors: Colors
 ): void => {
-    const coordinates = [[...room.coordinates]]
+    const coordinates = room.coordinates
     const name = room?.properties?.Raum
-    const functionType =
-        room?.properties[language === 'en' ? 'Funktion_en' : 'Funktion_de']
     const avail = availableRooms?.find((x) => x.room === name)
-
     const color = avail != null ? colors.primary : 'grey'
 
-    if (coordinates == null) return
-    mapRef.current?.injectJavaScript(`
-var geojsonFeature = {
-    "type": "Feature",
-    "geometry": {
-        "type": "Polygon",
-        "coordinates": ${JSON.stringify(coordinates)}
-    },
-};
+    const geojsonFeature = {
+        type: 'Feature',
+        geometry: {
+            type: 'Polygon',
+            coordinates: [coordinates],
+        },
+        properties: {
+            room: room?.properties.Raum,
+        },
+    }
 
-L.geoJSON(geojsonFeature, {
-    color: ${JSON.stringify(color)},
-    fillOpacity: 0.2,
-}).addTo(mymap).bringToBack()
-.bindPopup("<b>${name.toString()} </b><br>${
-        functionType != null ? functionType.toString() : ''
-    }<br>${
-        avail != null
-            ? 'Free from ' +
-              formatFriendlyTime(avail.from) +
-              ' to ' +
-              formatFriendlyTime(avail.until)
-            : ''
-    }");
-true
-`)
+    if (mapRef.current == null) return
+    mapRef.current.injectJavaScript(`
+        var geojsonFeature = ${JSON.stringify(geojsonFeature)};
+
+        var layer = L.geoJSON(geojsonFeature, {
+            color: ${JSON.stringify(color)},
+            fillOpacity: 0.2,
+        }).addTo(mymap).bringToBack();
+
+        // Add click event listener to the layer
+        layer.on('click', function(e) {
+            var properties = e.layer.feature.properties;
+
+            // Send data to React Native app
+            sendMessageToRN(JSON.stringify({
+                type: 'roomClick',
+                payload: {
+                    type: 'room',
+                    properties: properties,
+                },
+            }));
+        });
+        true;
+    `)
 }
 
 /**
@@ -88,6 +91,28 @@ export const _setView = (
     if (center == null) return
     mapRef.current?.injectJavaScript(`
 mymap.setView(${JSON.stringify(center)}, 17.5);
+true;
+`)
+}
+
+// inject the current location into the map
+export const _injectCurrentLocation = (
+    mapRef: React.RefObject<WebView>,
+    colors: Colors,
+    accuracy: number,
+    currentLocation: number[]
+): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.currentLocationMarker) {
+    window.currentLocationMarker.remove();
+}
+
+window.currentLocationMarker = L.circle(${JSON.stringify(currentLocation)}, {
+    color: ${JSON.stringify(colors.primary)},
+    fillColor: ${JSON.stringify(colors.primary)},
+    fillOpacity: 0.5,
+    radius: ${accuracy},
+}).addTo(mymap);
 true;
 `)
 }
@@ -128,6 +153,8 @@ export const htmlScript = `
             }
         }
 
+
+        
         // Add event listeners
         window.addEventListener('error', handleLoadError, true);
         window.addEventListener('online', checkInternetConnection);
@@ -140,6 +167,13 @@ export const htmlScript = `
             attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(mymap);
         
+        // send the geojson overlay click event to the react native app
+        mymap.on('popupopen', function (e) {
+            var popup = e.popup.getContent();
+            sendMessageToRN(popup);
+        });
+
+
     </script>
 </body>
 </html>

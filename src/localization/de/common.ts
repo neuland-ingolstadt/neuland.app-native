@@ -48,6 +48,8 @@ export default {
         confirm: 'Bestätigen',
         delete: 'Löschen',
         disable: 'Deaktivieren',
+        more: 'mehr',
+        unknown: 'Unbekannt',
     },
     pages: {
         calendar: {
@@ -110,7 +112,7 @@ export default {
             },
         },
         map: {
-            search: 'Suche nach G, W003, Toilette ...',
+            search: 'Suche nach Räumen, Veranstaltungen, ...',
             easterEgg: {
                 title: 'Easter Egg',
                 message:
