@@ -6,6 +6,7 @@ import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { type CourseShortNames } from '@/types/data'
 import { type PersDataDetails } from '@/types/thi-api'
 import { router } from 'expo-router'
+import { getItemAsync } from 'expo-secure-store'
 
 /**
  * Removes the quotation marks and the error code from the error message.
@@ -19,6 +20,20 @@ export const trimErrorMsg = (str: string): string => {
     } else {
         return str
     }
+}
+
+/**
+ * Gets the username of the user from the secure store.
+ * @returns The username of the user.
+ */
+export async function getUsername(): Promise<string> {
+    let username = ''
+    try {
+        username = (await getItemAsync('username')) ?? ''
+    } catch (e) {
+        console.log(e)
+    }
+    return username
 }
 
 export const performLogout = async (

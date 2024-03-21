@@ -13,7 +13,7 @@ import {
     USER_STUDENT,
     type UserKindContextType,
 } from '@/hooks/contexts/userKind'
-import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -22,7 +22,6 @@ import { useQuery } from '@tanstack/react-query'
 import * as Notifications from 'expo-notifications'
 import { router, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -47,8 +46,13 @@ export default function Screen(): JSX.Element {
     const { toggleUserKind } = useContext(UserKindContext)
     const { toggleAccentColor } = useContext(ThemeContext)
     const { resetOrder } = useContext(DashboardContext)
+    const [username, setUsername] = useState<string>('')
 
-    const username = SecureStore.getItem('username') // only for employees and if
+    useEffect(() => {
+        void getUsername().then((username) => {
+            setUsername(username)
+        })
+    }, [])
 
     const { data } = useQuery({
         queryKey: ['personalData'],
