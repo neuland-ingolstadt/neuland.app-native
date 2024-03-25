@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
 import { type Rooms } from '@/types/thi-api'
-import { type AvailableRoom } from '@/types/utils'
+import { type AvailableRoom, type RoomEntry } from '@/types/utils'
 
 import { formatISODate } from './date-utils'
 
@@ -241,4 +241,32 @@ export async function searchRooms(
                 endDate <= opening.until
         )
         .sort((a, b) => a.room.localeCompare(b.room))
+}
+
+export function getCenter(rooms: RoomEntry[]): number[] {
+    const getCenterPoint = (points: number[][]): number[] => {
+        const x = points.map((point) => point[0])
+        const y = points.map((point) => point[1])
+        const minX = Math.min(...x)
+        const maxX = Math.max(...x)
+        const minY = Math.min(...y)
+        const maxY = Math.max(...y)
+        return [(minX + maxX) / 2, (minY + maxY) / 2]
+    }
+
+    const centerPoints = rooms.reduce(
+        (acc, room) => {
+            const centerPoint = getCenterPoint(room.coordinates)
+            acc.lon += centerPoint[0]
+            acc.lat += centerPoint[1]
+            acc.count += 1
+            return acc
+        },
+        { lon: 0, lat: 0, count: 0 }
+    )
+
+    return [
+        centerPoints.lat / centerPoints.count,
+        centerPoints.lon / centerPoints.count,
+    ]
 }

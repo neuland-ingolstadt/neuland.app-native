@@ -117,6 +117,31 @@ true;
 `)
 }
 
+// inject a marker into the map to show the highlighted room
+export const _injectMarker = (
+    mapRef: React.RefObject<WebView>,
+    coordinates: number[]
+): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.marker) {
+    window.marker.remove();
+}
+
+window.marker = L.marker(${JSON.stringify(coordinates)}).addTo(mymap);
+true;
+`)
+}
+
+// remove the marker from the map
+export const _removeMarker = (mapRef: React.RefObject<WebView>): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.marker) {
+    window.marker.remove();
+}
+true;
+`)
+}
+
 /**
  * A string containing an HTML script that initializes a Leaflet map with OpenStreetMap tiles and event listeners for error and internet connection checking.
  */

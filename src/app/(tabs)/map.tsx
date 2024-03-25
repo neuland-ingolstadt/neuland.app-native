@@ -4,10 +4,13 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import BottomSheetBackground from '@/components/Elements/Map/BottomSheetBackground'
 import {
     _addRoom,
     _injectCurrentLocation,
+    _injectMarker,
     _removeAllGeoJson,
+    _removeMarker,
     _setView,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
@@ -30,6 +33,7 @@ import {
     BUILDINGS_IN,
     BUILDINGS_ND,
     filterRooms,
+    getCenter,
     getNextValidDate,
 } from '@/utils/room-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
@@ -42,7 +46,6 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import BlurView from 'expo-blur/build/BlurView'
 import * as Haptics from 'expo-haptics'
 import * as Location from 'expo-location'
 import { useRouter } from 'expo-router'
@@ -67,8 +70,13 @@ import {
     StyleSheet,
     Text,
     TextInput,
+    TouchableOpacity,
     View,
 } from 'react-native'
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+} from 'react-native-reanimated'
 import { WebView } from 'react-native-webview'
 
 import packageInfo from '../../../package.json'
@@ -120,7 +128,7 @@ export const MapScreen = (): JSX.Element => {
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
 
-    const INGOLSTADT_CENTER = [48.76709, 11.4328]
+    const INGOLSTADT_CENTER = [48.7668, 11.4328]
     const NEUBURG_CENTER = [48.73227, 11.17261]
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
     // const { addUnlockedAppIcon, unlockedAppIcons } = useContext(AppIconContext)
@@ -137,6 +145,20 @@ export const MapScreen = (): JSX.Element => {
         null
     )
 
+    const currentPosition = useSharedValue(0)
+    const currentPositionModal = useSharedValue(0)
+
+    const animatedStyles = useAnimatedStyle(() => {
+        const bottom =
+            clickedElement != null
+                ? currentPositionModal.value
+                : currentPosition.value
+
+        return {
+            transform: [{ translateY: bottom }],
+        }
+    })
+
     const [showAllFloors, setShowAllFloors] = useState(false)
 
     const toggleShowAllFloors = (): void => {
@@ -146,6 +168,7 @@ export const MapScreen = (): JSX.Element => {
 
     interface RoomData {
         title: string
+        subtitle: string
         properties: RoomEntry['properties'] | null
         occupancies: AvailableRoom | null
         type: SEARCH_TYPES
@@ -156,20 +179,13 @@ export const MapScreen = (): JSX.Element => {
         data: string
     }
 
-    const handleSheetChanges = useCallback(
-        (fromIndex: number, toIndex: number) => {
-            console.log('handleSheetChanges', fromIndex, toIndex)
-        },
-        []
-    )
-
     const handleSheetChangesModal = useCallback((index: number) => {
-        console.log('handleSheetChanges', index)
         if (index === -1) {
             setClickedElement(null)
             setLocalSearch('')
             setFilteredRooms(allRooms)
             _setView(mapCenter, mapRef)
+            _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(0)
         }
     }, [])
@@ -214,6 +230,7 @@ export const MapScreen = (): JSX.Element => {
     const handleDismissModal = (): void => {
         router.setParams({ q: '' })
         updateRouteParams('')
+        _removeMarker(mapRef)
         _setView(mapCenter, mapRef)
         setShowDismissModal(false)
     }
@@ -349,19 +366,6 @@ export const MapScreen = (): JSX.Element => {
             return SEARCH_TYPES.LECTURE
         }
 
-        function getCenter(rooms: RoomEntry[]): number[] {
-            let lon = 0
-            let lat = 0
-            let count = 0
-            rooms.forEach((x: any) => {
-                lon += Number(x.coordinates[0][0])
-                lat += Number(x.coordinates[0][1])
-                count += 1
-            })
-            const filteredCenter =
-                count > 0 ? [lat / count, lon / count] : mapCenter
-            return filteredCenter
-        }
         // basend on the type filter the rooms and setthe results
         switch (searchType(localSearch)) {
             case SEARCH_TYPES.BUILDING: {
@@ -519,12 +523,13 @@ export const MapScreen = (): JSX.Element => {
         toggleShowAllFloors: () => void
     }): JSX.Element => {
         const colors = useTheme().colors as Colors
+
         return (
-            <>
-                <View style={styles.ButtonArea}>
+            <View style={styles.ButtonArea}>
+                <View>
                     {!showAllFloors && (
                         <Pressable onPress={toggleShowAllFloors}>
-                            <View
+                            <Animated.View
                                 style={{
                                     ...styles.ButtonAreaSection,
                                     ...(!showAllFloors
@@ -546,7 +551,7 @@ export const MapScreen = (): JSX.Element => {
                                             : currentFloor}
                                     </Text>
                                 </View>
-                            </View>
+                            </Animated.View>
                         </Pressable>
                     )}
                     {showAllFloors && (
@@ -561,7 +566,7 @@ export const MapScreen = (): JSX.Element => {
                             >
                                 <View style={styles.Button}>
                                     <PlatformIcon
-                                        color={colors.labelColor}
+                                        color={'#4a4a4aff'}
                                         ios={{
                                             name: 'xmark.circle.fill',
                                             size: 26,
@@ -753,7 +758,7 @@ export const MapScreen = (): JSX.Element => {
                         </View>
                     )}
                 </View>
-            </>
+            </View>
         )
     }
 
@@ -771,15 +776,38 @@ export const MapScreen = (): JSX.Element => {
 
     const getRoomData = (room: string): any => {
         const occupancies = availableRooms?.find((x) => x.room === room)
+        const properties = filteredRooms.find(
+            (x) => x.properties.Raum === room
+        )?.properties
+
         const roomData = {
             title: room,
-            properties: filteredRooms.find((x) => x.properties.Raum === room)
-                ?.properties,
+            subtitle:
+                properties != null &&
+                (i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en') in
+                    properties
+                    ? properties[
+                          i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
+                      ]
+                    : t('misc.unknown'),
+            properties,
 
             occupancies,
             type: SEARCH_TYPES.ROOM,
         }
         return roomData
+    }
+
+    const getBuildingData = (building: string): any => {
+        const roomNumber = filteredRooms.length
+        const buildingData = {
+            title: building,
+            subtitle: roomNumber + ' Rooms',
+            properties: null,
+            occupancies: null,
+            type: SEARCH_TYPES.BUILDING,
+        }
+        return buildingData
     }
 
     enum Locations {
@@ -795,12 +823,7 @@ export const MapScreen = (): JSX.Element => {
             case SEARCH_TYPES.ROOM:
                 return getRoomData(clickedElement.data)
             case SEARCH_TYPES.BUILDING:
-                return {
-                    title: clickedElement.data,
-                    properties: null,
-                    occupancies: null,
-                    type: SEARCH_TYPES.BUILDING,
-                }
+                return getBuildingData(clickedElement.data)
 
             default:
                 return {
@@ -1022,46 +1045,38 @@ export const MapScreen = (): JSX.Element => {
                         style={{
                             backgroundColor: colors.background,
                         }}
-                        onShouldStartLoadWithRequest={(event) => {
-                            if (event.url !== 'about:blank') {
-                                void Linking.openURL(event.url)
-                                return false
-                            }
-                            return true
-                        }}
                     ></WebView>
                     {loadingState === LoadingState.LOADED && (
-                        <FloorPicker
-                            floors={uniqueEtages}
-                            showAllFloors={showAllFloors}
-                            toggleShowAllFloors={toggleShowAllFloors}
-                        />
+                        <>
+                            <FloorPicker
+                                floors={uniqueEtages}
+                                showAllFloors={showAllFloors}
+                                toggleShowAllFloors={toggleShowAllFloors}
+                            />
+                        </>
                     )}
                 </View>
             </View>
+            <Animated.View style={[styles.osmContainer, animatedStyles]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        void Linking.openURL(
+                            'https://www.openstreetmap.org/copyright'
+                        )
+                    }}
+                    style={styles.osmBackground}
+                >
+                    <Text style={styles.osmAtrribution}>
+                        {'© OpenStreetMap'}
+                    </Text>
+                </TouchableOpacity>
+            </Animated.View>
             <BottomSheet
                 ref={bottomSheetRef}
-                onAnimate={handleSheetChanges}
-                snapPoints={['10%', '55%', '92%']}
-                backgroundComponent={() =>
-                    Platform.OS === 'ios' ? (
-                        <View style={styles.bottomSheet}>
-                            <BlurView
-                                intensity={85}
-                                style={{
-                                    ...StyleSheet.absoluteFillObject,
-                                }}
-                            />
-                        </View>
-                    ) : (
-                        <View
-                            style={{
-                                ...styles.bottomSheetAndroid,
-                                backgroundColor: colors.background,
-                            }}
-                        ></View>
-                    )
-                }
+                index={1}
+                snapPoints={['10%', '30%', '92%']}
+                backgroundComponent={BottomSheetBackground}
+                animatedPosition={currentPosition}
             >
                 <BottomSheetView
                     style={{
@@ -1127,8 +1142,13 @@ export const MapScreen = (): JSX.Element => {
                                                         data: result.title,
                                                         type: result.type,
                                                     })
-                                                    bottomSheetRef.current?.close()
+                                                    bottomSheetRef.current?.forceClose()
                                                     handlePresentModalPress()
+                                                    // print the center of the highlighted room(s) to the console
+                                                    _injectMarker(
+                                                        mapRef,
+                                                        result.center
+                                                    )
                                                 }}
                                             >
                                                 <View
@@ -1309,30 +1329,14 @@ export const MapScreen = (): JSX.Element => {
                     )}
                 </BottomSheetView>
             </BottomSheet>
+
             <BottomSheetModalProvider>
                 <BottomSheetModal
                     ref={bottomSheetModalRef}
                     snapPoints={['30%', '60%']}
                     onChange={handleSheetChangesModal}
-                    backgroundComponent={() =>
-                        Platform.OS === 'ios' ? (
-                            <View style={styles.bottomSheet}>
-                                <BlurView
-                                    intensity={85}
-                                    style={{
-                                        ...StyleSheet.absoluteFillObject,
-                                    }}
-                                />
-                            </View>
-                        ) : (
-                            <View
-                                style={{
-                                    ...styles.bottomSheetAndroid,
-                                    backgroundColor: colors.background,
-                                }}
-                            ></View>
-                        )
-                    }
+                    backgroundComponent={BottomSheetBackground}
+                    animatedPosition={currentPositionModal}
                 >
                     <BottomSheetView style={styles.contentContainer}>
                         <View style={styles.roomSectionHeaderContainer}>
@@ -1381,16 +1385,7 @@ export const MapScreen = (): JSX.Element => {
                                 ...styles.roomSubtitle,
                             }}
                         >
-                            {roomData?.properties != null &&
-                            (i18n.language === 'de'
-                                ? 'Funktion_de'
-                                : 'Funktion_en') in roomData.properties
-                                ? roomData.properties[
-                                      i18n.language === 'de'
-                                          ? 'Funktion_de'
-                                          : 'Funktion_en'
-                                  ]
-                                : t('misc.unknown')}
+                            {roomData.subtitle}
                         </Text>
                         <View style={styles.formList}>
                             <FormList sections={roomSection} />
@@ -1405,11 +1400,8 @@ export const MapScreen = (): JSX.Element => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position: 'relative',
-
-        justifyContent: 'flex-end',
     },
-    innerContainer: { flex: 1, position: 'relative' },
+    innerContainer: { flex: 1 },
     map: {
         flex: 1,
         position: 'relative',
@@ -1479,19 +1471,6 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
     },
-    bottomSheetAndroid: {
-        ...StyleSheet.absoluteFillObject,
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-        overflow: 'hidden',
-    },
-    bottomSheet: {
-        backgroundColor: 'transparent',
-        ...StyleSheet.absoluteFillObject,
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-        overflow: 'hidden',
-    },
     contentContainer: {
         flex: 1,
         paddingHorizontal: PAGE_PADDING,
@@ -1499,8 +1478,8 @@ const styles = StyleSheet.create({
     suggestionSectionHeader: {
         fontWeight: '600',
         fontSize: 22,
-        marginTop: 6,
-        marginBottom: 8,
+        marginTop: 12,
+        marginBottom: 6,
         textAlign: 'left',
     },
     suggestionSectionHeaderContainer: {
@@ -1513,6 +1492,7 @@ const styles = StyleSheet.create({
         marginBottom: -16,
         paddingRight: 10,
         fontSize: 16,
+        fontWeight: '500',
     },
     roomSectionHeader: {
         fontWeight: '600',
@@ -1532,7 +1512,6 @@ const styles = StyleSheet.create({
         height: 40,
         borderRadius: 10,
         paddingHorizontal: 10,
-        marginBottom: 4,
 
         fontSize: 16,
     },
@@ -1589,5 +1568,20 @@ const styles = StyleSheet.create({
         height: 34,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    osmAtrribution: { fontSize: 12 },
+    osmContainer: {
+        height: 30,
+        right: 0,
+        top: -17,
+        marginRight: 4,
+        alignItems: 'flex-end',
+        zIndex: 100,
+        position: 'absolute',
+    },
+    osmBackground: {
+        backgroundColor: 'rgba(222, 221, 203, 0.69)',
+        paddingHorizontal: 4,
+        borderRadius: 4,
     },
 })

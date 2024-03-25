@@ -257,136 +257,141 @@ function FoodScreen(): JSX.Element {
         allergenSelection[0] === 'not-configured'
 
     return (
-        <ScrollView
-            refreshControl={
-                isError ? (
-                    <RefreshControl
+        <>
+            <ScrollView
+                refreshControl={
+                    isError ? (
+                        <RefreshControl
+                            refreshing={isRefetchingByUser}
+                            onRefresh={() => {
+                                void refetchByUser()
+                            }}
+                        />
+                    ) : undefined
+                }
+                style={styles.page}
+                contentInsetAdjustmentBehavior="always"
+                contentContainerStyle={styles.container}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={!isLoading}
+            >
+                {isLoading && (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                            size="small"
+                            color={colors.primary}
+                        />
+                    </View>
+                )}
+                {isError && (
+                    <ErrorView
+                        title={
+                            error?.message === 'noMeals'
+                                ? t('error.noMeals')
+                                : error?.message ?? t('error.title')
+                        }
+                        onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}
-                        onRefresh={() => {
-                            void refetchByUser()
-                        }}
                     />
-                ) : undefined
-            }
-            style={styles.page}
-            contentInsetAdjustmentBehavior="always"
-            contentContainerStyle={styles.container}
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={!isLoading}
-        >
-            {isLoading && (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
-                </View>
-            )}
-            {isError && (
-                <ErrorView
-                    title={
-                        error?.message === 'noMeals'
-                            ? t('error.noMeals')
-                            : error?.message ?? t('error.title')
-                    }
-                    onRefresh={refetchByUser}
-                    refreshing={isRefetchingByUser}
-                />
-            )}
-            {isPaused && !isSuccess && (
-                <ErrorView
-                    title={networkError}
-                    onRefresh={refetchByUser}
-                    refreshing={isRefetchingByUser}
-                />
-            )}
+                )}
+                {isPaused && !isSuccess && (
+                    <ErrorView
+                        title={networkError}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                    />
+                )}
 
-            {isSuccess && data.length > 0 && (
-                <>
-                    <Animated.View
-                        // eslint-disable-next-line react-native/no-inline-styles
-                        style={{
-                            ...styles.animtedContainer,
-                            borderBottomColor: colors.border,
-                            borderBottomWidth: showAllergensBanner
-                                ? 0
-                                : scrollY.interpolate({
-                                      inputRange: [0, 0, 0],
-                                      outputRange: [0, 0, 0.5],
-                                      extrapolate: 'clamp',
-                                  }),
-                        }}
-                    >
-                        <View
+                {isSuccess && data.length > 0 && (
+                    <>
+                        <Animated.View
+                            // eslint-disable-next-line react-native/no-inline-styles
                             style={{
-                                ...styles.loadedContainer,
+                                ...styles.animtedContainer,
+                                borderBottomColor: colors.border,
+                                borderBottomWidth: showAllergensBanner
+                                    ? 0
+                                    : scrollY.interpolate({
+                                          inputRange: [0, 0, 0],
+                                          outputRange: [0, 0, 0.5],
+                                          extrapolate: 'clamp',
+                                      }),
                             }}
                         >
-                            {data
-                                .slice(0, 5)
-                                .map((day: Food, index: number) => (
-                                    <DayButton
-                                        day={day}
-                                        index={index}
-                                        key={index}
-                                    />
-                                ))}
-                        </View>
-                    </Animated.View>
-                    {showAllergensBanner && <AllergensBanner />}
-                    <PagerView
-                        ref={pagerViewRef}
-                        style={{
-                            ...styles.pagerContainer,
-                            height: screenHeight,
-                        }}
-                        initialPage={0}
-                        onPageSelected={(e) => {
-                            const page = e.nativeEvent.position
-                            setSelectedDay(page)
-                        }}
-                        scrollEnabled
-                        overdrag
-                    >
-                        {data.map((_: any, index: number) => (
-                            <ScrollView
-                                scrollEventThrottle={16}
-                                onScroll={Animated.event(
-                                    [
-                                        {
-                                            nativeEvent: {
-                                                contentOffset: {
-                                                    y: scrollY,
+                            <View
+                                style={{
+                                    ...styles.loadedContainer,
+                                }}
+                            >
+                                {data
+                                    .slice(0, 5)
+                                    .map((day: Food, index: number) => (
+                                        <DayButton
+                                            day={day}
+                                            index={index}
+                                            key={index}
+                                        />
+                                    ))}
+                            </View>
+                        </Animated.View>
+                        {showAllergensBanner && <AllergensBanner />}
+                        <PagerView
+                            ref={pagerViewRef}
+                            style={{
+                                ...styles.pagerContainer,
+                                height: screenHeight,
+                            }}
+                            initialPage={0}
+                            onPageSelected={(e) => {
+                                const page = e.nativeEvent.position
+                                setSelectedDay(page)
+                            }}
+                            scrollEnabled
+                            overdrag
+                        >
+                            {data.map((_: any, index: number) => (
+                                <ScrollView
+                                    scrollEventThrottle={16}
+                                    onScroll={Animated.event(
+                                        [
+                                            {
+                                                nativeEvent: {
+                                                    contentOffset: {
+                                                        y: scrollY,
+                                                    },
                                                 },
                                             },
-                                        },
-                                    ],
-                                    { useNativeDriver: false }
-                                )}
-                                refreshControl={
-                                    isSuccess ? (
-                                        <RefreshControl
-                                            refreshing={isRefetchingByUser}
-                                            onRefresh={() => {
-                                                void refetchByUser()
-                                            }}
-                                        />
-                                    ) : undefined
-                                }
-                                key={index}
-                                contentContainerStyle={
-                                    styles.innerScrollContainer
-                                }
-                            >
-                                <MealDay
-                                    day={data[index]}
-                                    index={index}
-                                    colors={colors}
+                                        ],
+                                        { useNativeDriver: false }
+                                    )}
+                                    refreshControl={
+                                        isSuccess ? (
+                                            <RefreshControl
+                                                refreshing={isRefetchingByUser}
+                                                onRefresh={() => {
+                                                    void refetchByUser()
+                                                }}
+                                            />
+                                        ) : undefined
+                                    }
                                     key={index}
-                                />
-                            </ScrollView>
-                        ))}
-                    </PagerView>
-                </>
-            )}
-        </ScrollView>
+                                    contentContainerStyle={
+                                        styles.innerScrollContainer
+                                    }
+                                >
+                                    <MealDay
+                                        day={data[index]}
+                                        index={index}
+                                        colors={colors}
+                                        key={index}
+                                    />
+                                </ScrollView>
+                            ))}
+                        </PagerView>
+                    </>
+                )}
+            </ScrollView>
+        </>
     )
 }
 
