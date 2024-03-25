@@ -9,7 +9,7 @@ const BottomSheetBackground = (): JSX.Element => {
     return Platform.OS === 'ios' ? (
         // eslint-disable-next-line react-native/no-inline-styles, react-native/no-color-literals
         <View style={[styles.bottomSheet, { backgroundColor: 'transparent' }]}>
-            <BlurView intensity={90} style={StyleSheet.absoluteFillObject} />
+            <BlurView intensity={87} style={StyleSheet.absoluteFillObject} />
         </View>
     ) : (
         <View

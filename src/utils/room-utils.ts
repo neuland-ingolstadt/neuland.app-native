@@ -270,3 +270,20 @@ export function getCenter(rooms: RoomEntry[]): number[] {
         centerPoints.lon / centerPoints.count,
     ]
 }
+
+export function getCenterSingle(coordinates: number[][]): number[] {
+    const centerPoints = coordinates.reduce(
+        (acc, coordinate) => {
+            acc.lon += coordinate[0]
+            acc.lat += coordinate[1]
+            acc.count += 1
+            return acc
+        },
+        { lon: 0, lat: 0, count: 0 }
+    )
+
+    return [
+        centerPoints.lat / centerPoints.count,
+        centerPoints.lon / centerPoints.count,
+    ]
+}

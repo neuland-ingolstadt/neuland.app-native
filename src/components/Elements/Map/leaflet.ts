@@ -31,6 +31,7 @@ export const _addRoom = (
         },
         properties: {
             room: room?.properties.Raum,
+            coordinates: room.coordinates,
         },
     }
 
@@ -46,6 +47,7 @@ export const _addRoom = (
         // Add click event listener to the layer
         layer.on('click', function(e) {
             var properties = e.layer.feature.properties;
+           
 
             // Send data to React Native app
             sendMessageToRN(JSON.stringify({
@@ -122,6 +124,7 @@ export const _injectMarker = (
     mapRef: React.RefObject<WebView>,
     coordinates: number[]
 ): void => {
+    console.log(coordinates)
     mapRef.current?.injectJavaScript(`
 if (window.marker) {
     window.marker.remove();
@@ -161,7 +164,6 @@ export const htmlScript = `
     <div id="mapid" style="width: 100%; height: 100vh;"></div>
     <script>
         function sendMessageToRN(message) {
-            // Send message to React Native
             window.ReactNativeWebView.postMessage(message);
         }
 
@@ -192,7 +194,6 @@ export const htmlScript = `
             attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(mymap);
         
-        // send the geojson overlay click event to the react native app
         mymap.on('popupopen', function (e) {
             var popup = e.popup.getContent();
             sendMessageToRN(popup);
