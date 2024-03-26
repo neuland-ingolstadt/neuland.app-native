@@ -12,5 +12,12 @@
         "licenseUrl": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
         "parents": "neuland",
         "platform": "ios"
+    },
+    "leaftlet@1.7.4": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/Leaflet/Leaflet/",
+        "licenseUrl": "https://raw.githubusercontent.com/Leaflet/Leaflet/main/LICENSE",
+        "parents": "neuland",
+        "platform": "all"
     }
 }
