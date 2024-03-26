@@ -4,7 +4,7 @@ import {
     NotificationContext,
     RouteParamsContext,
     TimetableContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'

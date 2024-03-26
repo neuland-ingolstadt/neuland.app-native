@@ -1,7 +1,7 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
-import { AppIconContext, ThemeContext } from '@/components/provider'
+import { AppIconContext, ThemeContext } from '@/components/contexts'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'

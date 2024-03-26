@@ -7,7 +7,7 @@ import {
     DashboardContext,
     ThemeContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'

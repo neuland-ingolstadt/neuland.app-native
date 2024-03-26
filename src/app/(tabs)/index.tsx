@@ -7,7 +7,7 @@ import {
     DashboardContext,
     ThemeContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import {
     USER_EMPLOYEE,
     USER_STUDENT,

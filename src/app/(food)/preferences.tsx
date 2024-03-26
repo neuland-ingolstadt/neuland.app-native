@@ -7,7 +7,7 @@ import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPick
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/components/colors'
-import { FoodFilterContext } from '@/components/provider'
+import { FoodFilterContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'

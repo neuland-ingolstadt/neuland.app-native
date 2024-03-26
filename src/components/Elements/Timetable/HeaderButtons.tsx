@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/provider'
+import { TimetableContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'

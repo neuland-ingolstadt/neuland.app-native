@@ -1,7 +1,7 @@
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
+import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import {
     USER_EMPLOYEE,

@@ -6,7 +6,7 @@ import {
     DashboardContext,
     FlowContext,
     FoodFilterContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import changelog from '@/data/changelog.json'
 import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'

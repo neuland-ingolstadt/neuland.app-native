@@ -19,7 +19,7 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext, UserKindContext } from '@/components/provider'
+import { RouteParamsContext, UserKindContext } from '@/components/contexts'
 import i18n from '@/localization/i18n'
 import { type RoomsOverlay } from '@/types/asset-api'
 import { type FormListSections } from '@/types/components'
@@ -1181,7 +1181,7 @@ export const MapScreen = (): JSX.Element => {
                                         .map((room, key) => (
                                             <>
                                                 <Pressable
-                                                    key={room.room}
+                                                    key={key}
                                                     style={styles.suggestionRow}
                                                     onPress={() => {
                                                         console.log(
@@ -1199,10 +1199,15 @@ export const MapScreen = (): JSX.Element => {
                                                             'room:',
                                                             details
                                                         )
+
                                                         const center =
                                                             getCenterSingle(
                                                                 details?.coordinates
                                                             )
+                                                        console.log(
+                                                            'center:',
+                                                            center
+                                                        )
                                                         const etage =
                                                             details?.properties
                                                                 .Ebene
@@ -1220,13 +1225,13 @@ export const MapScreen = (): JSX.Element => {
                                                             data: room.room,
                                                             type: SEARCH_TYPES.ROOM,
                                                         })
-
-                                                        handlePresentModalPress()
-                                                        bottomSheetRef.current?.forceClose()
                                                         _injectMarker(
                                                             mapRef,
                                                             center
                                                         )
+
+                                                        handlePresentModalPress()
+                                                        bottomSheetRef.current?.forceClose()
                                                     }}
                                                 >
                                                     <View

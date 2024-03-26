@@ -1,6 +1,6 @@
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import { type Colors } from '@/components/colors'
-import { FoodFilterContext } from '@/components/provider'
+import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'

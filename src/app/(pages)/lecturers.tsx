@@ -5,7 +5,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/provider'
+import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_GUEST, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type Lecturers } from '@/types/thi-api'
@@ -212,7 +212,8 @@ export default function LecturersCard(): JSX.Element {
 
     useEffect(() => {
         if (
-            (allLecturersResult.isPaused && allLecturersResult.data != null) ||
+            (allLecturersResult.isPaused &&
+                allLecturersResult.data != null) ||
             (personalLecturersResult.isPaused &&
                 personalLecturersResult.data != null)
         ) {

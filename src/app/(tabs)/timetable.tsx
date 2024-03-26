@@ -6,7 +6,7 @@ import {
     NotificationContext,
     TimetableContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import i18n, { type LanguageKey } from '@/localization/i18n'

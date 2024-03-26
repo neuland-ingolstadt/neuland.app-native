@@ -1,6 +1,6 @@
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/components/colors'
-import { FlowContext } from '@/components/provider'
+import { FlowContext } from '@/components/contexts'
 import changelogData from '@/data/changelog.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Changelog } from '@/types/data'
