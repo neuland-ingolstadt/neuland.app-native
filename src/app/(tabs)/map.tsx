@@ -205,10 +205,12 @@ export const MapScreen = (): JSX.Element => {
             data: routeParams,
             type: SEARCH_TYPES.ROOM,
         })
-        const center = getCenterSingle(
-            allRooms.find((x) => x.properties.Raum === routeParams)?.coordinates
-        )
+
+        const room = allRooms.find((x) => x.properties.Raum === routeParams)
+        const center = getCenterSingle(room?.coordinates)
+        const etage = room?.properties.Ebene
         _setView(center, mapRef)
+        setCurrentFloor(etage ?? 'EG')
         _injectMarker(mapRef, center)
         Keyboard.dismiss()
         bottomSheetRef.current?.close()
@@ -441,74 +443,6 @@ export const MapScreen = (): JSX.Element => {
         }
     }, [localSearch, allRooms])
 
-    // const buildingSearcher = (): boolean =>
-    //     /^[A-Z]{1,2}$/.test(localSearch) && BUILDINGS.includes(cleanedText)
-    // setIsBuildingSearch(buildingSearcher)
-
-    // const center = useMemo(() => {
-    //     // logic for filtering the map overlay data
-    //     if (localSearch == null) {
-    //         return mapCenter
-    //     }
-
-    //     const getProp = (
-    //         room: {
-    //             properties: {
-    //                 [x: string]: string
-    //                 Funktion_de: string
-    //                 Funktion_en: string
-    //             }
-    //         },
-    //         prop: string
-    //     ): string => {
-    //         if (prop.includes('Funktion')) {
-    //             return room?.properties[prop]
-    //         }
-
-    //         return room.properties[prop]?.toUpperCase()
-    //     }
-    //     const searchProps = [
-    //         'Gebaeude',
-    //         'Raum',
-    //         i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en',
-    //     ]
-
-    //     // if user only enters 1-2 letters wihtout numbers that match a building BUILDINGS
-
-    //     const fullTextSearcher = (room: any): boolean =>
-    //         searchProps.some((x) =>
-    //             getProp(room, x)?.toUpperCase().includes(localSearch)
-    //         )
-    //     const roomOnlySearcher = (room: any): boolean =>
-    //         getProp(room, 'Raum').startsWith(localSearch)
-    //     const filtered = allRooms.filter(
-    //         /^[A-Z](G|[0-9E]\.)?\d*$/.test(localSearch)
-    //             ? roomOnlySearcher
-    //             : fullTextSearcher
-    //     )
-
-    //     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
-    //     const showNeuburg =
-    //         userFaculty === 'Nachhaltige Infrastruktur' ||
-    //         localSearch.substring(0, 2).includes('N')
-    //     const campusRooms = filtered.filter(
-    //         (x) => x.properties.Raum.includes('N') === showNeuburg
-    //     )
-    //     const centerRooms = campusRooms.length > 0 ? campusRooms : filtered
-
-    //     let lon = 0
-    //     let lat = 0
-    //     let count = 0
-    //     centerRooms.forEach((x: any) => {
-    //         lon += Number(x.coordinates[0][0])
-    //         lat += Number(x.coordinates[0][1])
-    //         count += 1
-    //     })
-    //     const filteredCenter =
-    //         count > 0 ? [lat / count, lon / count] : mapCenter
-    //     return filteredCenter
-    // }, [localSearch, allRooms, userKind])
-
     const uniqueEtages = Array.from(
         new Set(
             (Array.isArray(filteredRooms)
@@ -532,7 +466,7 @@ export const MapScreen = (): JSX.Element => {
         if (LoadingState.LOADED !== loadingState) return
         _removeAllGeoJson(mapRef)
         _addGeoJson()
-    }, [currentFloor, filteredRooms, colors, availableRooms])
+    }, [currentFloor, filteredRooms, colors, availableRooms, allRooms])
 
     const filterEtage = (etage: string): RoomEntry[] => {
         const result = filteredRooms.filter(
@@ -1136,8 +1070,9 @@ export const MapScreen = (): JSX.Element => {
                                                         data: result.title,
                                                         type: result.type,
                                                     })
-                                                    bottomSheetRef.current?.forceClose()
                                                     handlePresentModalPress()
+                                                    // bottomSheetRef.current?.forceClose()
+
                                                     // print the center of the highlighted room(s) to the console
                                                     _injectMarker(
                                                         mapRef,
@@ -1238,9 +1173,54 @@ export const MapScreen = (): JSX.Element => {
                                         .slice(0, 3)
                                         .map((room, key) => (
                                             <>
-                                                <View
+                                                <Pressable
                                                     key={room.room}
                                                     style={styles.suggestionRow}
+                                                    onPress={() => {
+                                                        console.log(
+                                                            'room:',
+                                                            room
+                                                        )
+                                                        const details =
+                                                            allRooms.find(
+                                                                (x) =>
+                                                                    x.properties
+                                                                        .Raum ===
+                                                                    room.room
+                                                            )
+                                                        console.log(
+                                                            'room:',
+                                                            details
+                                                        )
+                                                        const center =
+                                                            getCenterSingle(
+                                                                details?.coordinates
+                                                            )
+                                                        const etage =
+                                                            details?.properties
+                                                                .Ebene
+
+                                                        _setView(
+                                                            getCenterSingle(
+                                                                details?.coordinates
+                                                            ),
+                                                            mapRef
+                                                        )
+                                                        setCurrentFloor(
+                                                            etage ?? 'EG'
+                                                        )
+                                                        setClickedElement({
+                                                            data: room.room,
+                                                            type: SEARCH_TYPES.ROOM,
+                                                        })
+
+                                                        handlePresentModalPress()
+                                                        bottomSheetRef.current?.forceClose()
+                                                        _injectMarker(
+                                                            mapRef,
+                                                            center
+                                                        )
+                                                    }}
                                                 >
                                                     <View
                                                         style={
@@ -1320,7 +1300,7 @@ export const MapScreen = (): JSX.Element => {
                                                             )}
                                                         </Text>
                                                     </View>
-                                                </View>
+                                                </Pressable>
                                                 {key !== 2 && <Divider />}
                                             </>
                                         ))}
