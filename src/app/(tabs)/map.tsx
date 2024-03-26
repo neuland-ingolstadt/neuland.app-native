@@ -186,7 +186,7 @@ export const MapScreen = (): JSX.Element => {
             setClickedElement(null)
             setLocalSearch('')
             setFilteredRooms(allRooms)
-            _setView(mapCenter, mapRef)
+            // _setView(mapCenter, mapRef)
             _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(1)
         }
@@ -464,6 +464,9 @@ export const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         if (LoadingState.LOADED !== loadingState) return
+        _removeMarker(mapRef)
+        bottomSheetModalRef.current?.close()
+        bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
     }, [currentFloor, filteredRooms, colors, availableRooms, allRooms])
@@ -490,7 +493,14 @@ export const MapScreen = (): JSX.Element => {
             <View style={styles.ButtonArea}>
                 <View>
                     {!showAllFloors && (
-                        <Pressable onPress={toggleShowAllFloors}>
+                        <Pressable
+                            onPress={() => {
+                                toggleShowAllFloors()
+                                if (Platform.OS === 'ios') {
+                                    void Haptics.selectionAsync()
+                                }
+                            }}
+                        >
                             <Animated.View
                                 style={{
                                     ...styles.ButtonAreaSection,
