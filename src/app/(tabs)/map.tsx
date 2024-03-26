@@ -1069,9 +1069,6 @@ export const MapScreen = (): JSX.Element => {
                                                 }
                                                 onPress={() => {
                                                     Keyboard.dismiss()
-                                                    setFilteredRooms(
-                                                        result.highlight
-                                                    )
                                                     _setView(
                                                         result.center,
                                                         mapRef
