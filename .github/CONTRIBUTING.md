@@ -7,33 +7,43 @@ To contribute, please follow these guidelines:
 ## Getting Started
 
 1. Fork the repository and clone it to your local machine.
-2. Install the required dependencies:
+2. Install the required software:
+
+    - [Visual Studio Code](https://code.visualstudio.com/) 
+    - [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12) (for iOS development, macOS only)
+    - [Android Studio](https://developer.android.com/studio) (for Android development)
+
+3. Install the required dependencies:
 
     - [Node.js 18 LTS](https://nodejs.org/en/) or higher
-    - [Bun](https://bun.sh)
+    - [Bun](https://bun.sh) or simply use npm or yarn
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
-3. Install project dependencies by running the following command in the project directory:
+4. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+
+5. Install project dependencies by running the following command in the project directory:
 
     ```bash
     bun install
     ```
 
-4. Create an Expo account to be able to run the app on your smartphone or simulator. You can create an account [here](https://expo.dev/signup).
-   To access the Expo neuland.app organization, you need to join our Expo organization. Please contact us to get an invitation.
+6. Setup the emulator
 
-5. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+    Android (_Windows, macOS, and Linux_):
+    -   Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
+    
+    iOS (_macOS only_):
+    -   Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
 
-### Using the Android Emulator (_Windows, macOS, and Linux_)
 
--   Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
+5. Create a development build for your desired platform. 
 
+    ```bash
+    bun ios
+    bun android
+    ```
 > [!NOTE]  
-> Don't forget to select the right OS for the guide at the top of the page.
-
-### Using the iOS Simulator (_macOS only_)
-
--   Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
+> Step 7 is required every time the dependencies are updated.
 
 ## Development
 
@@ -41,11 +51,11 @@ To contribute, please follow these guidelines:
 2. Make your changes and ensure that the code follows our coding style and conventions.
 3. Run the app locally with Expo by running the following command in the project directory:
 
-    ```bash
+     ```bash
     bun start
     ```
 
-    > This allows you to test the app either on an installed simulator or with the Expo Go app on your own smartphone.
+   This allows you to run the app one the previously created development build. Expo Go is not supported for development.
 
 ## Submitting Changes
 
