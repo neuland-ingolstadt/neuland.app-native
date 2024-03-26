@@ -120,7 +120,7 @@
     "lint-staged": ">=15",
     "prettier": "3.2.4",
     "prop-types": "^15.8.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3"
   },
   "trustedDependencies": ["@sentry/cli"],
   "lint-staged": {

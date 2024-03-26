@@ -111,6 +111,7 @@ export default {
         },
         map: {
             search: 'Search for rooons, events, and more',
+            noResults: 'No results found',
             easterEgg: {
                 title: 'Easter Egg',
                 message:

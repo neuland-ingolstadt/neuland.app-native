@@ -30,6 +30,7 @@ import {
     formatISOTime,
 } from '@/utils/date-utils'
 import {
+    BUILDINGS,
     BUILDINGS_IN,
     BUILDINGS_ND,
     filterRooms,
@@ -182,11 +183,12 @@ export const MapScreen = (): JSX.Element => {
     }
 
     const handleSheetChangesModal = useCallback((index: number) => {
+        console.log('handleSheetChangesModal', index)
         if (index === -1) {
             setClickedElement(null)
             setLocalSearch('')
             setFilteredRooms(allRooms)
-            // _setView(mapCenter, mapRef)
+            _setView(mapCenter, mapRef)
             _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(1)
         }
@@ -304,7 +306,7 @@ export const MapScreen = (): JSX.Element => {
         queryFn: async () => await NeulandAPI.getMapOverlay(),
         staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
         gcTime: 1000 * 60 * 60 * 24 * 14, // 2 weeks,
-        networkMode: 'always',
+        // networkMode: 'always',
     })
 
     useEffect(() => {
@@ -315,9 +317,11 @@ export const MapScreen = (): JSX.Element => {
 
     const allRooms = useMemo(() => {
         // filter and process the map overlay data
+
         if (mapOverlay == null) {
             return []
         }
+
         return mapOverlay.features
             .map((feature) => {
                 const { geometry, properties } = feature
@@ -384,26 +388,32 @@ export const MapScreen = (): JSX.Element => {
         switch (searchType(localSearch)) {
             case SEARCH_TYPES.BUILDING: {
                 // check if building is in BUILDINGS_IN, BUILDINGS_ND and use it for subtitle
+                const isValidBuilding = BUILDINGS.includes(
+                    localSearch.toLocaleUpperCase()
+                )
+
                 const location = BUILDINGS_IN.includes(localSearch)
                     ? 'Ingolstadt'
                     : BUILDINGS_ND.includes(localSearch)
                       ? 'Neuburg'
                       : 'All'
-                // buikding title + 'building'
+
                 const building = localSearch + ' Building'
                 const highlight = allRooms.filter(
                     (room) => room.properties.Gebaeude === localSearch
                 )
                 const center = getCenter(highlight)
-                const result = [
-                    {
-                        type: SEARCH_TYPES.BUILDING,
-                        highlight,
-                        title: building,
-                        subtitle: location,
-                        center,
-                    },
-                ]
+                const result = isValidBuilding
+                    ? [
+                          {
+                              type: SEARCH_TYPES.BUILDING,
+                              highlight,
+                              title: building,
+                              subtitle: location,
+                              center,
+                          },
+                      ]
+                    : []
                 // also add 9 rooms to the searchResults
                 // also add 9 rooms to the searchResults
                 const additionalResults = allRooms
@@ -459,12 +469,11 @@ export const MapScreen = (): JSX.Element => {
             ? 'EG'
             : uniqueEtages[uniqueEtages.length - 1]
         setCurrentFloor(currentFloor)
-        _setView(localSearch !== '' ? center : mapCenter, mapRef)
     }, [filteredRooms, localSearch])
 
     useEffect(() => {
         if (LoadingState.LOADED !== loadingState) return
-        _removeMarker(mapRef)
+        // _removeMarker(mapRef)
         bottomSheetModalRef.current?.close()
         bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
@@ -566,7 +575,7 @@ export const MapScreen = (): JSX.Element => {
                                     onPress={() => {
                                         setCurrentFloor(floor)
                                     }}
-                                    key={floor}
+                                    key={index}
                                 >
                                     <View
                                         style={[
@@ -731,7 +740,10 @@ export const MapScreen = (): JSX.Element => {
     }
 
     const getBuildingData = (building: string): any => {
-        const roomNumber = filteredRooms.length
+        const buildingCode = building.split(' ')[0]
+        const roomNumber = filteredRooms.filter(
+            (x) => x.properties.Gebaeude === buildingCode
+        ).length
         const buildingData = {
             title: building,
             subtitle: roomNumber + ' Rooms',
@@ -921,7 +933,8 @@ export const MapScreen = (): JSX.Element => {
                             html: htmlScript,
                         }}
                         onLoadEnd={() => {
-                            if (loadingState === LoadingState.LOADING) {
+                            if (loadingState !== LoadingState.ERROR) {
+                                console.log('Map loaded')
                                 setLoadingState(LoadingState.LOADED)
                                 _setView(
                                     localSearch !== '' ? center : mapCenter,
@@ -1034,8 +1047,8 @@ export const MapScreen = (): JSX.Element => {
                         placeholder={t('pages.map.search')}
                         placeholderTextColor={colors.labelColor}
                         value={localSearch}
-                        clearTextOnFocus
                         enablesReturnKeyAutomatically
+                        clearButtonMode="always"
                         enterKeyHint="search"
                         onChangeText={(text) => {
                             setLocalSearch(text.toUpperCase().trim())
@@ -1049,93 +1062,108 @@ export const MapScreen = (): JSX.Element => {
                         }}
                     />
                     {localSearch !== '' ? (
-                        <>
-                            <View>
-                                {searchResults.map((result, index) => {
-                                    const icon =
-                                        result.type === SEARCH_TYPES.BUILDING
-                                            ? 'building'
-                                            : result.type === SEARCH_TYPES.ROOM
-                                              ? 'studentdesk'
-                                              : result.type ===
-                                                  SEARCH_TYPES.ROOMTYPE
-                                                ? 'edit'
-                                                : 'lecture'
-                                    return (
-                                        <View key={index}>
-                                            <Pressable
-                                                style={
-                                                    styles.searchRowContainer
-                                                }
-                                                onPress={() => {
-                                                    Keyboard.dismiss()
-                                                    _setView(
-                                                        result.center,
-                                                        mapRef
-                                                    )
-                                                    setClickedElement({
-                                                        data: result.title,
-                                                        type: result.type,
-                                                    })
-                                                    handlePresentModalPress()
-                                                    // bottomSheetRef.current?.forceClose()
+                        searchResults.length > 0 ? (
+                            <>
+                                <View>
+                                    {searchResults.map((result, index) => {
+                                        const icon =
+                                            result.type ===
+                                            SEARCH_TYPES.BUILDING
+                                                ? 'building'
+                                                : result.type ===
+                                                    SEARCH_TYPES.ROOM
+                                                  ? 'studentdesk'
+                                                  : result.type ===
+                                                      SEARCH_TYPES.ROOMTYPE
+                                                    ? 'edit'
+                                                    : 'lecture'
+                                        return (
+                                            <View key={index}>
+                                                <Pressable
+                                                    style={
+                                                        styles.searchRowContainer
+                                                    }
+                                                    onPress={() => {
+                                                        Keyboard.dismiss()
+                                                        _setView(
+                                                            result.center,
+                                                            mapRef
+                                                        )
+                                                        setClickedElement({
+                                                            data: result.title,
+                                                            type: result.type,
+                                                        })
+                                                        handlePresentModalPress()
+                                                        // bottomSheetRef.current?.forceClose()
 
-                                                    // print the center of the highlighted room(s) to the console
-                                                    _injectMarker(
-                                                        mapRef,
-                                                        result.center
-                                                    )
-                                                }}
-                                            >
-                                                <View
-                                                    style={{
-                                                        ...styles.searchIconContainer,
-                                                        backgroundColor:
-                                                            colors.primary,
+                                                        // print the center of the highlighted room(s) to the console
+                                                        _injectMarker(
+                                                            mapRef,
+                                                            result.center
+                                                        )
                                                     }}
                                                 >
-                                                    <PlatformIcon
-                                                        color={
-                                                            colors.background
-                                                        }
-                                                        ios={{
-                                                            name: icon,
-                                                            size: 18,
+                                                    <View
+                                                        style={{
+                                                            ...styles.searchIconContainer,
+                                                            backgroundColor:
+                                                                colors.primary,
                                                         }}
-                                                        android={{
-                                                            name: 'edit',
-                                                            size: 20,
-                                                        }}
-                                                    />
-                                                </View>
+                                                    >
+                                                        <PlatformIcon
+                                                            color={
+                                                                colors.background
+                                                            }
+                                                            ios={{
+                                                                name: icon,
+                                                                size: 18,
+                                                            }}
+                                                            android={{
+                                                                name: 'edit',
+                                                                size: 20,
+                                                            }}
+                                                        />
+                                                    </View>
 
-                                                <View>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionTitle,
-                                                        }}
-                                                    >
-                                                        {result.title}
-                                                    </Text>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionSubtitle,
-                                                        }}
-                                                    >
-                                                        {result.subtitle}
-                                                    </Text>
-                                                </View>
-                                            </Pressable>
-                                            {index !== 9 && (
-                                                <Divider iosPaddingLeft={50} />
-                                            )}
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                        </>
+                                                    <View>
+                                                        <Text
+                                                            style={{
+                                                                color: colors.text,
+                                                                ...styles.suggestionTitle,
+                                                            }}
+                                                        >
+                                                            {result.title}
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                color: colors.text,
+                                                                ...styles.suggestionSubtitle,
+                                                            }}
+                                                        >
+                                                            {result.subtitle}
+                                                        </Text>
+                                                    </View>
+                                                </Pressable>
+                                                {index !== 9 && (
+                                                    <Divider
+                                                        iosPaddingLeft={50}
+                                                    />
+                                                )}
+                                            </View>
+                                        )
+                                    })}
+                                </View>
+                            </>
+                        ) : (
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.noResults,
+                                }}
+                            >
+                                {t('pages.map.noResults')}
+                            </Text>
+                        )
                     ) : (
                         availableRooms.length > 0 && (
                             <>
@@ -1184,10 +1212,6 @@ export const MapScreen = (): JSX.Element => {
                                                     key={key}
                                                     style={styles.suggestionRow}
                                                     onPress={() => {
-                                                        console.log(
-                                                            'room:',
-                                                            room
-                                                        )
                                                         const details =
                                                             allRooms.find(
                                                                 (x) =>
@@ -1195,19 +1219,12 @@ export const MapScreen = (): JSX.Element => {
                                                                         .Raum ===
                                                                     room.room
                                                             )
-                                                        console.log(
-                                                            'room:',
-                                                            details
-                                                        )
 
                                                         const center =
                                                             getCenterSingle(
                                                                 details?.coordinates
                                                             )
-                                                        console.log(
-                                                            'center:',
-                                                            center
-                                                        )
+
                                                         const etage =
                                                             details?.properties
                                                                 .Ebene
@@ -1576,5 +1593,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(222, 221, 203, 0.69)',
         paddingHorizontal: 4,
         borderRadius: 4,
+    },
+
+    noResults: {
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 16,
     },
 })

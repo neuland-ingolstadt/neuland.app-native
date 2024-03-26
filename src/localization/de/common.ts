@@ -113,6 +113,7 @@ export default {
         },
         map: {
             search: 'Suche nach Räumen, Veranstaltungen, ...',
+            noResults: 'Keine Ergebnisse gefunden',
             easterEgg: {
                 title: 'Easter Egg',
                 message:
