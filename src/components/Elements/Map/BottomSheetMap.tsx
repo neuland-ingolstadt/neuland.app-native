@@ -168,7 +168,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     clearButtonMode="always"
                     enterKeyHint="search"
                     onChangeText={(text) => {
-                        setLocalSearch(text.trim())
+                        setLocalSearch(text.trim().toUpperCase())
                     }}
                     onFocus={() => {
                         bottomSheetRef.current?.snapToIndex(2)
@@ -183,11 +183,20 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                         <>
                             <View>
                                 {searchResults.map((result, index) => {
-                                    const icon =
+                                    const iconiOS =
                                         result.type === SEARCH_TYPES.BUILDING
                                             ? 'building'
                                             : result.type === SEARCH_TYPES.ROOM
                                               ? 'studentdesk'
+                                              : result.type ===
+                                                  SEARCH_TYPES.ROOMTYPE
+                                                ? 'edit'
+                                                : 'lecture'
+                                    const iconAndroid =
+                                        result.type === SEARCH_TYPES.BUILDING
+                                            ? 'corporate_fare'
+                                            : result.type === SEARCH_TYPES.ROOM
+                                              ? 'school'
                                               : result.type ===
                                                   SEARCH_TYPES.ROOMTYPE
                                                 ? 'edit'
@@ -231,12 +240,13 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                             colors.background
                                                         }
                                                         ios={{
-                                                            name: icon,
+                                                            name: iconiOS,
                                                             size: 18,
                                                         }}
                                                         android={{
-                                                            name: 'edit',
-                                                            size: 20,
+                                                            name: iconAndroid,
+                                                            variant: 'outlined',
+                                                            size: 21,
                                                         }}
                                                     />
                                                 </View>

@@ -84,8 +84,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                         size: 26,
                                     }}
                                     android={{
-                                        name: 'close',
-                                        size: 22,
+                                        name: 'cancel',
+                                        size: 26,
                                     }}
                                 />
                             </View>

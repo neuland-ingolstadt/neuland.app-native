@@ -61,8 +61,6 @@ export default function Screen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
         enabled: userKind === USER_STUDENT,
     })
-    console.log(data)
-    console.log(userKind)
 
     const logoutAlert = (): void => {
         Alert.alert(
