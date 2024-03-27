@@ -1,6 +1,10 @@
 import API from '@/api/authenticated-api'
+import { SEARCH_TYPES } from '@/types/map'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom, type RoomEntry } from '@/types/utils'
+import { trackEvent } from '@aptabase/react-native'
+import { type TFunction } from 'i18next'
+import { Platform, Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
 
@@ -30,6 +34,15 @@ export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 export const SUGGESTION_DURATION_PRESET = 90
+export const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
+export const FLOOR_SUBSTITUTES: Record<string, string> = {
+    0: 'EG',
+    0.5: '1.5',
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+}
 
 /**
  * Adds minutes to a date object.
@@ -286,4 +299,60 @@ export function getCenterSingle(coordinates: number[][]): number[] {
         centerPoints.lat / centerPoints.count,
         centerPoints.lon / centerPoints.count,
     ]
+}
+
+/**
+ * Opens the share modal with the room link.
+ * @param room Room name
+ */
+export const handleShareModal = (room: string): void => {
+    const payload = 'https://neuland.app/rooms/?highlight=' + room
+    trackEvent('Share', {
+        type: 'room',
+    })
+    void Share.share(
+        Platform.OS === 'android' ? { message: payload } : { url: payload }
+    )
+}
+
+/**
+ * Adjusts error message to use it with ErrorView
+ * @param errorMsg Error message
+ * @returns
+ */
+export function adjustErrorTitle(errorMsg: string, t: TFunction<any>): string {
+    switch (errorMsg) {
+        case 'noInternetConnection':
+            return 'Network request failed'
+        case 'mapLoadError':
+            return t('error.map.mapLoadError')
+        case 'mapOverlay':
+            return t('error.map.mapOverlay')
+        default:
+            return 'Error'
+    }
+}
+
+/**
+ * Determines the type of search based on the search string.
+ * @param search Search string
+ * @returns The search type
+ */
+export const determineSearchType = (search: string): SEARCH_TYPES => {
+    if (
+        (search.length === 1 || search.length === 2) &&
+        isNaN(Number(search[1]))
+    ) {
+        return SEARCH_TYPES.BUILDING
+    }
+
+    if (/^[A-Z](G|[0-9E]\.)?\d*$/.test(search)) {
+        return SEARCH_TYPES.ROOM
+    }
+
+    if (/^[A-Z]+$/.test(search)) {
+        return SEARCH_TYPES.ROOMTYPE
+    }
+
+    return SEARCH_TYPES.LECTURE
 }
