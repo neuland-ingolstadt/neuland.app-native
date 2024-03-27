@@ -35,7 +35,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-async-storage/async-storage@1.21.0": {
+    "@react-native-async-storage/async-storage@1.23.1": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-async-storage/async-storage",
         "licenseUrl": "https://github.com/react-native-async-storage/async-storage/raw/master/LICENSE",
@@ -59,7 +59,7 @@
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@sentry/react-native@5.19.3": {
+    "@sentry/react-native@5.20.0": {
         "licenses": "MIT",
         "repository": "https://github.com/getsentry/sentry-react-native",
         "licenseUrl": "https://github.com/getsentry/sentry-react-native/raw/master/LICENSE.md",
@@ -377,7 +377,7 @@
         "licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-webview@13.6.4": {
+    "react-native-webview@13.8.2": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-webview/react-native-webview",
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",

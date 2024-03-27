@@ -45,7 +45,9 @@ import BottomSheet, {
     BottomSheetModal,
     BottomSheetModalProvider,
     BottomSheetScrollView,
+    BottomSheetTextInput,
     BottomSheetView,
+    TouchableOpacity,
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -73,8 +75,6 @@ import {
     Share,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import Animated, {
@@ -478,7 +478,14 @@ export const MapScreen = (): JSX.Element => {
         bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
-    }, [currentFloor, filteredRooms, colors, availableRooms, allRooms])
+    }, [
+        currentFloor,
+        filteredRooms,
+        colors,
+        availableRooms,
+        allRooms,
+        loadingState,
+    ])
 
     const filterEtage = (etage: string): RoomEntry[] => {
         const result = filteredRooms.filter(
@@ -1009,7 +1016,7 @@ export const MapScreen = (): JSX.Element => {
                 </View>
             </View>
             <Animated.View style={[styles.osmContainer, animatedStyles]}>
-                <TouchableOpacity
+                <Pressable
                     onPress={() => {
                         void Linking.openURL(
                             'https://www.openstreetmap.org/copyright'
@@ -1020,7 +1027,7 @@ export const MapScreen = (): JSX.Element => {
                     <Text style={styles.osmAtrribution}>
                         {'© OpenStreetMap'}
                     </Text>
-                </TouchableOpacity>
+                </Pressable>
             </Animated.View>
             <BottomSheet
                 ref={bottomSheetRef}
@@ -1028,13 +1035,14 @@ export const MapScreen = (): JSX.Element => {
                 snapPoints={['10%', '30%', '92%']}
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPosition}
+                keyboardBehavior="extend"
             >
                 <BottomSheetScrollView
                     style={{
                         paddingHorizontal: PAGE_PADDING,
                     }}
                 >
-                    <TextInput
+                    <BottomSheetTextInput
                         style={{
                             ...styles.textInput,
                             color: colors.text,
@@ -1078,13 +1086,13 @@ export const MapScreen = (): JSX.Element => {
                                                     ? 'edit'
                                                     : 'lecture'
                                         return (
-                                            <View key={index}>
-                                                <Pressable
+                                            <React.Fragment key={index}>
+                                                <TouchableOpacity
                                                     style={
                                                         styles.searchRowContainer
                                                     }
                                                     onPress={() => {
-                                                        Keyboard.dismiss()
+                                                        bottomSheetRef.current?.collapse()
                                                         _setView(
                                                             result.center,
                                                             mapRef
@@ -1143,13 +1151,13 @@ export const MapScreen = (): JSX.Element => {
                                                             {result.subtitle}
                                                         </Text>
                                                     </View>
-                                                </Pressable>
+                                                </TouchableOpacity>
                                                 {index !== 9 && (
                                                     <Divider
                                                         iosPaddingLeft={50}
                                                     />
                                                 )}
-                                            </View>
+                                            </React.Fragment>
                                         )
                                     })}
                                 </View>

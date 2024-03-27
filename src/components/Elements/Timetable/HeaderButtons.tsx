@@ -17,7 +17,7 @@ export function HeaderLeft(): JSX.Element {
                 const mode = timetableMode === 'list' ? '3days' : 'list'
                 setTimetableMode(mode)
                 trackEvent('TimetableMode', {
-                    mode,
+                    timetableMode: mode,
                 })
             }}
             hitSlop={10}
