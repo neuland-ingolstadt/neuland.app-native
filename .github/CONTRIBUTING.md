@@ -19,31 +19,31 @@ To contribute, please follow these guidelines:
     - [Bun](https://bun.sh) or simply use npm or yarn
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
-3. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+4. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
 
-4. Install project dependencies by running the following command in the project directory:
+5. Install project dependencies by running the following command in the project directory:
 
     ```bash
     bun install
     ```
-5. Create a development build for your desired platform. This step is required every time the dependencies are updated.
+
+6. Setup the emulator
+
+    Android (_Windows, macOS, and Linux_):
+    -   Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
+    
+    iOS (_macOS only_):
+    -   Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
+
+
+5. Create a development build for your desired platform. 
 
     ```bash
     bun ios
     bun android
     ```
-
-
-### Using the Android Emulator (_Windows, macOS, and Linux_)
-
--   Follow the [official guide](https://docs.expo.dev/workflow/android-studio-emulator/) to set up the Android emulator.
-
 > [!NOTE]  
-> Don't forget to select the right OS for the guide at the top of the page.
-
-### Using the iOS Simulator (_macOS only_)
-
--   Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
+> Step 7 is required every time the dependencies are updated.
 
 ## Development
 
@@ -51,11 +51,11 @@ To contribute, please follow these guidelines:
 2. Make your changes and ensure that the code follows our coding style and conventions.
 3. Run the app locally with Expo by running the following command in the project directory:
 
-    ```bash
+     ```bash
     bun start
     ```
 
-    > This allows you to test the app either on an installed simulator or with the Expo Go app on your own smartphone.
+   This allows you to run the app one the previously created development build. Expo Go is not supported for development.
 
 ## Submitting Changes
 
