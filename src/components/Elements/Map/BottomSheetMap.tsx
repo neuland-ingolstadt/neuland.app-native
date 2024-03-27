@@ -1,6 +1,8 @@
 /* eslint-disable react-native/no-color-literals */
 import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/hooks/contexts/map'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
 import { type RoomEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
@@ -63,7 +65,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-
+    const { userKind } = useContext(UserKindContext)
     const {
         localSearch,
         setLocalSearch,
@@ -276,166 +278,166 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             {t('pages.map.noResults')}
                         </Text>
                     )
-                ) : (
-                    availableRooms.length > 0 && (
-                        <>
-                            <View
-                                style={styles.suggestionSectionHeaderContainer}
+                ) : userKind === USER_GUEST ? (
+                    <Text
+                        style={{
+                            color: colors.text,
+                            ...styles.noResults,
+                        }}
+                    >
+                        {t('pages.map.details.room.signIn')}
+                    </Text>
+                ) : availableRooms.length > 0 ? (
+                    <>
+                        <View style={styles.suggestionSectionHeaderContainer}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.suggestionSectionHeader,
+                                }}
+                            >
+                                {t('pages.map.details.room.availableRooms')}
+                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    Keyboard.dismiss()
+                                    router.push('(map)/advanced')
+                                }}
                             >
                                 <Text
                                     style={{
-                                        color: colors.text,
-                                        ...styles.suggestionSectionHeader,
+                                        color: colors.primary,
+                                        ...styles.suggestionMoreButtonText,
                                     }}
                                 >
-                                    {t('pages.map.details.room.availableRooms')}
+                                    {t('misc.more')}
                                 </Text>
-                                <Pressable
-                                    onPress={() => {
-                                        Keyboard.dismiss()
-                                        router.push('(map)/advanced')
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            color: colors.primary,
-                                            ...styles.suggestionMoreButtonText,
+                            </Pressable>
+                        </View>
+                        <View
+                            style={{
+                                backgroundColor: colors.card,
+                                ...styles.radius,
+                            }}
+                        >
+                            {availableRooms.slice(0, 3).map((room, key) => (
+                                <>
+                                    <Pressable
+                                        key={key}
+                                        style={styles.suggestionRow}
+                                        onPress={() => {
+                                            const details = allRooms.find(
+                                                (x) =>
+                                                    x.properties.Raum ===
+                                                    room.room
+                                            )
+
+                                            if (
+                                                details?.coordinates !==
+                                                undefined
+                                            ) {
+                                                const center = getCenterSingle(
+                                                    details?.coordinates
+                                                )
+                                                _setView(center, mapRef)
+                                                _injectMarker(mapRef, center)
+                                            }
+
+                                            const etage =
+                                                details?.properties.Ebene
+
+                                            setCurrentFloor(etage ?? 'EG')
+                                            setClickedElement({
+                                                data: room.room,
+                                                type: SEARCH_TYPES.ROOM,
+                                            })
+
+                                            handlePresentModalPress()
+                                            bottomSheetRef.current?.forceClose()
                                         }}
                                     >
-                                        {t('misc.more')}
-                                    </Text>
-                                </Pressable>
-                            </View>
-                            <View
-                                style={{
-                                    backgroundColor: colors.card,
-                                    ...styles.radius,
-                                }}
-                            >
-                                {availableRooms.slice(0, 3).map((room, key) => (
-                                    <>
-                                        <Pressable
-                                            key={key}
-                                            style={styles.suggestionRow}
-                                            onPress={() => {
-                                                const details = allRooms.find(
-                                                    (x) =>
-                                                        x.properties.Raum ===
-                                                        room.room
-                                                )
-
-                                                if (
-                                                    details?.coordinates !==
-                                                    undefined
-                                                ) {
-                                                    const center =
-                                                        getCenterSingle(
-                                                            details?.coordinates
-                                                        )
-                                                    _setView(center, mapRef)
-                                                    _injectMarker(
-                                                        mapRef,
-                                                        center
-                                                    )
-                                                }
-
-                                                const etage =
-                                                    details?.properties.Ebene
-
-                                                setCurrentFloor(etage ?? 'EG')
-                                                setClickedElement({
-                                                    data: room.room,
-                                                    type: SEARCH_TYPES.ROOM,
-                                                })
-
-                                                handlePresentModalPress()
-                                                bottomSheetRef.current?.forceClose()
-                                            }}
-                                        >
+                                        <View style={styles.suggestionInnerRow}>
                                             <View
-                                                style={
-                                                    styles.suggestionInnerRow
-                                                }
+                                                style={{
+                                                    backgroundColor:
+                                                        colors.primary,
+                                                    ...styles.suggestionIconContainer,
+                                                }}
                                             >
-                                                <View
-                                                    style={{
-                                                        backgroundColor:
-                                                            colors.primary,
-                                                        ...styles.suggestionIconContainer,
+                                                <PlatformIcon
+                                                    color={colors.background}
+                                                    ios={{
+                                                        name: 'studentdesk',
+                                                        size: 18,
                                                     }}
-                                                >
-                                                    <PlatformIcon
-                                                        color={
-                                                            colors.background
-                                                        }
-                                                        ios={{
-                                                            name: 'studentdesk',
-                                                            size: 18,
-                                                        }}
-                                                        android={{
-                                                            name: 'edit',
-                                                            size: 20,
-                                                        }}
-                                                    />
-                                                </View>
-
-                                                <View>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionTitle,
-                                                        }}
-                                                    >
-                                                        {room.room}
-                                                    </Text>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionSubtitle,
-                                                        }}
-                                                    >
-                                                        {room.type} (
-                                                        {room.capacity} seats)
-                                                    </Text>
-                                                </View>
+                                                    android={{
+                                                        name: 'edit',
+                                                        size: 20,
+                                                    }}
+                                                />
                                             </View>
-                                            <View
-                                                style={
-                                                    styles.suggestionRightContainer
-                                                }
-                                            >
+
+                                            <View>
                                                 <Text
                                                     style={{
-                                                        color: colors.labelColor,
-                                                        fontVariant: [
-                                                            'tabular-nums',
-                                                        ],
+                                                        color: colors.text,
+                                                        ...styles.suggestionTitle,
                                                     }}
                                                 >
-                                                    {formatFriendlyTime(
-                                                        room.from
-                                                    )}
+                                                    {room.room}
                                                 </Text>
                                                 <Text
                                                     style={{
                                                         color: colors.text,
-                                                        fontVariant: [
-                                                            'tabular-nums',
-                                                        ],
+                                                        ...styles.suggestionSubtitle,
                                                     }}
                                                 >
-                                                    {formatFriendlyTime(
-                                                        room.until
-                                                    )}
+                                                    {room.type} ({room.capacity}{' '}
+                                                    seats)
                                                 </Text>
                                             </View>
-                                        </Pressable>
-                                        {key !== 2 && <Divider />}
-                                    </>
-                                ))}
-                            </View>
-                        </>
-                    )
+                                        </View>
+                                        <View
+                                            style={
+                                                styles.suggestionRightContainer
+                                            }
+                                        >
+                                            <Text
+                                                style={{
+                                                    color: colors.labelColor,
+                                                    fontVariant: [
+                                                        'tabular-nums',
+                                                    ],
+                                                }}
+                                            >
+                                                {formatFriendlyTime(room.from)}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    color: colors.text,
+                                                    fontVariant: [
+                                                        'tabular-nums',
+                                                    ],
+                                                }}
+                                            >
+                                                {formatFriendlyTime(room.until)}
+                                            </Text>
+                                        </View>
+                                    </Pressable>
+                                    {key !== 2 && <Divider />}
+                                </>
+                            ))}
+                        </View>
+                    </>
+                ) : (
+                    <Text
+                        style={{
+                            color: colors.text,
+                            ...styles.noResults,
+                        }}
+                    >
+                        {t('pages.map.noAvailableRooms')}
+                    </Text>
                 )}
             </View>
         </BottomSheet>
@@ -459,7 +461,6 @@ const styles = StyleSheet.create({
     },
     suggestionMoreButtonText: {
         textAlign: 'right',
-        marginBottom: -16,
         paddingRight: 10,
         fontSize: 16,
         fontWeight: '500',

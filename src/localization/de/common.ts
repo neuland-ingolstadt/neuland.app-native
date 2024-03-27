@@ -120,6 +120,27 @@ export default {
                     'Du hast das exklusive App-Icon "Neuland Pink" freigeschaltet! 🩷',
                 confirm: 'Nice!',
             },
+            noAvailableRooms: 'Keine freien Räume verfügbar',
+            details: {
+                room: {
+                    details: 'Raumdetails',
+                    title: 'Raum',
+                    capacity: 'Kapazität',
+                    availability: 'Verfügbarkeit',
+                    timeLeft: 'Verbleibende Zeit',
+                    building: 'Gebäude',
+                    timeSpan: 'Zeitspanne',
+                    floor: 'Etage',
+                    type: 'Typ',
+                    equipment: 'Ausstattung',
+                    available: 'Verfügbar',
+                    notAvailable: 'Nicht verfügbar',
+                    availableRooms: 'Verfügbare Räume',
+                    availableRoomsTitle: 'Verfügbare Räume',
+                    availableRoomsSubtitle: 'Räume mit verfügbaren Plätzen',
+                    signIn: 'Melden Sie sich an, um verfügbare Räume zu sehen',
+                },
+            },
         },
         rooms: {
             options: {

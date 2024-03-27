@@ -76,7 +76,7 @@ const MapScreen = (): JSX.Element => {
     const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
     const [webViewKey, setWebViewKey] = useState(0)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const INGOLSTADT_CENTER = [48.7668, 11.4328]
+    const INGOLSTADT_CENTER = [48.7667, 11.4328]
     const NEUBURG_CENTER = [48.73227, 11.17261]
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
     const { t } = useTranslation('common')
@@ -114,10 +114,8 @@ const MapScreen = (): JSX.Element => {
     })
 
     const handleSheetChangesModal = useCallback((index: number) => {
-        console.log('handleSheetChangesModal', index)
         if (index === -1) {
             setClickedElement(null)
-            // rrsetLocalSearch('')
             _setView(mapCenter, mapRef)
             _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(1)
@@ -141,8 +139,6 @@ const MapScreen = (): JSX.Element => {
     })
 
     const allRooms = useMemo(() => {
-        // filter and process the map overlay data
-
         if (mapOverlay == null) {
             return []
         }

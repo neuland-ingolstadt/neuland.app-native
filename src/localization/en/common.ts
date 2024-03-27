@@ -118,6 +118,7 @@ export default {
                     'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
                 confirm: 'Nice!',
             },
+            noAvailableRooms: 'No free rooms available',
             details: {
                 room: {
                     details: 'Room details',
@@ -135,6 +136,7 @@ export default {
                     availableRooms: 'Available rooms',
                     availableRoomsTitle: 'Available rooms',
                     availableRoomsSubtitle: 'Rooms with available seats',
+                    signIn: 'Sign in to see available rooms',
                 },
             },
         },
