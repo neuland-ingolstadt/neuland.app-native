@@ -44,7 +44,6 @@ import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, {
     BottomSheetModal,
     BottomSheetModalProvider,
-    BottomSheetScrollView,
     BottomSheetTextInput,
     BottomSheetView,
     TouchableOpacity,
@@ -942,6 +941,7 @@ export const MapScreen = (): JSX.Element => {
                         onLoadEnd={() => {
                             if (loadingState !== LoadingState.ERROR) {
                                 console.log('Map loaded')
+                                setFilteredRooms(allRooms)
                                 setLoadingState(LoadingState.LOADED)
                                 _setView(
                                     localSearch !== '' ? center : mapCenter,
@@ -1037,7 +1037,7 @@ export const MapScreen = (): JSX.Element => {
                 animatedPosition={currentPosition}
                 keyboardBehavior="extend"
             >
-                <BottomSheetScrollView
+                <View
                     style={{
                         paddingHorizontal: PAGE_PADDING,
                     }}
@@ -1092,6 +1092,7 @@ export const MapScreen = (): JSX.Element => {
                                                         styles.searchRowContainer
                                                     }
                                                     onPress={() => {
+                                                        Keyboard.dismiss()
                                                         bottomSheetRef.current?.collapse()
                                                         _setView(
                                                             result.center,
@@ -1345,7 +1346,7 @@ export const MapScreen = (): JSX.Element => {
                             </>
                         )
                     )}
-                </BottomSheetScrollView>
+                </View>
             </BottomSheet>
 
             <BottomSheetModalProvider>
