@@ -5,6 +5,7 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import BottomSheetBackground from '@/components/Elements/Map/BottomSheetBackground'
+import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import {
     _addRoom,
     _injectCurrentLocation,
@@ -16,7 +17,6 @@ import {
 } from '@/components/Elements/Map/leaflet'
 import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
-import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
@@ -42,10 +42,8 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, {
-    BottomSheetModal,
-    BottomSheetModalProvider,
+    type BottomSheetModal,
     BottomSheetTextInput,
-    BottomSheetView,
     TouchableOpacity,
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
@@ -1349,69 +1347,14 @@ export const MapScreen = (): JSX.Element => {
                 </View>
             </BottomSheet>
 
-            <BottomSheetModalProvider>
-                <BottomSheetModal
-                    ref={bottomSheetModalRef}
-                    snapPoints={['30%', '47%', '60%']}
-                    onChange={handleSheetChangesModal}
-                    backgroundComponent={BottomSheetBackground}
-                    animatedPosition={currentPositionModal}
-                >
-                    <BottomSheetView style={styles.contentContainer}>
-                        <View style={styles.roomSectionHeaderContainer}>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.roomSectionHeader,
-                                }}
-                            >
-                                {roomData.title}
-                            </Text>
-                            <Pressable
-                                onPress={() => {
-                                    bottomSheetModalRef.current?.close()
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        backgroundColor: colors.card,
-                                        ...styles.roomDismissButton,
-                                    }}
-                                >
-                                    <PlatformIcon
-                                        color={colors.text}
-                                        ios={{
-                                            name: 'chevron.down',
-                                            size: 14,
-                                        }}
-                                        android={{
-                                            name: 'expand_more',
-                                            size: 24,
-                                        }}
-                                        style={Platform.select({
-                                            android: {
-                                                height: 24,
-                                                width: 24,
-                                            },
-                                        })}
-                                    />
-                                </View>
-                            </Pressable>
-                        </View>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.roomSubtitle,
-                            }}
-                        >
-                            {roomData.subtitle}
-                        </Text>
-                        <View style={styles.formList}>
-                            <FormList sections={roomSection} />
-                        </View>
-                    </BottomSheetView>
-                </BottomSheetModal>
-            </BottomSheetModalProvider>
+            <BottomSheetDetailModal
+                bottomSheetModalRef={bottomSheetModalRef}
+                handleSheetChangesModal={handleSheetChangesModal}
+                currentPositionModal={currentPositionModal}
+                colors={colors}
+                roomData={roomData}
+                roomSection={roomSection}
+            />
         </View>
     )
 }
@@ -1430,11 +1373,6 @@ const styles = StyleSheet.create({
         marginTop: 100,
         position: 'absolute',
         right: 0,
-    },
-    formList: {
-        marginVertical: 16,
-        width: '100%',
-        alignSelf: 'center',
     },
 
     ButtonAreaSection: {
@@ -1490,10 +1428,7 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
     },
-    contentContainer: {
-        flex: 1,
-        paddingHorizontal: PAGE_PADDING,
-    },
+
     suggestionSectionHeader: {
         fontWeight: '600',
         fontSize: 22,
@@ -1512,19 +1447,6 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         fontSize: 16,
         fontWeight: '500',
-    },
-    roomSectionHeader: {
-        fontWeight: '600',
-        fontSize: 24,
-        marginBottom: 4,
-        textAlign: 'left',
-    },
-    roomSubtitle: {
-        fontSize: 16,
-    },
-    roomSectionHeaderContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
     },
     textInput: {
         backgroundColor: 'rgba(6, 6, 6, 0.16)',
@@ -1579,14 +1501,6 @@ const styles = StyleSheet.create({
     },
     radius: {
         borderRadius: 14,
-    },
-    roomDismissButton: {
-        borderRadius: 25,
-        padding: 7,
-        width: 34,
-        height: 34,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     osmAtrribution: { fontSize: 12 },
     osmContainer: {

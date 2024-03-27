@@ -434,7 +434,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -472,7 +472,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -631,25 +631,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		9501078BBD71583D0E183E1B /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
-			requirement = {
-				kind = exactVersion;
-				version = 5.13.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C25FD4A3C514E3FB45D9806A /* Mapbox */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9501078BBD71583D0E183E1B /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
-			productName = Mapbox;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
