@@ -23,22 +23,30 @@ import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/hooks/contexts/map'
 import i18n from '@/localization/i18n'
-import { type RoomsOverlay } from '@/types/asset-api'
+import {
+    type FeatureProperties,
+    Gebaeude,
+    type RoomsOverlay,
+} from '@/types/asset-api'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
+    BUILDINGS,
     FLOOR_ORDER,
     FLOOR_SUBSTITUTES,
+    INGOLSTADT_CENTER,
+    NEUBURG_CENTER,
     adjustErrorTitle,
     filterRooms,
+    getCenter,
     getCenterSingle,
     getNextValidDate,
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
+import { useIsFocused, useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Location from 'expo-location'
 import { StatusBar } from 'expo-status-bar'
@@ -69,6 +77,12 @@ import { WebView } from 'react-native-webview'
 
 import packageInfo from '../../../../package.json'
 
+export function FocusAwareStatusBar(props: any): JSX.Element {
+    const isFocused = useIsFocused()
+
+    return isFocused ? <StatusBar {...props} /> : <></>
+}
+
 const MapScreen = (): JSX.Element => {
     const [errorMsg, setErrorMsg] = useState('')
     const colors = useTheme().colors as Colors
@@ -76,8 +90,6 @@ const MapScreen = (): JSX.Element => {
     const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
     const [webViewKey, setWebViewKey] = useState(0)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const INGOLSTADT_CENTER = [48.7667, 11.4328]
-    const NEUBURG_CENTER = [48.73227, 11.17261]
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
     const { t } = useTranslation('common')
     const bottomSheetRef = useRef<BottomSheet>(null)
@@ -143,7 +155,7 @@ const MapScreen = (): JSX.Element => {
             return []
         }
 
-        return mapOverlay.features
+        const rooms = mapOverlay.features
             .map((feature) => {
                 const { geometry, properties } = feature
 
@@ -164,10 +176,40 @@ const MapScreen = (): JSX.Element => {
                 return geometry.coordinates.map((points: any) => ({
                     properties,
                     coordinates: points,
-                    options: {},
+                    options: {
+                        type: SEARCH_TYPES.ROOM,
+                        center: getCenterSingle(points),
+                    },
                 }))
             })
             .flat()
+        const buildings = BUILDINGS.map((building) => {
+            const buildingRooms = rooms.filter(
+                (room) => room.properties.Gebaeude === building
+            )
+            const floorCount = Array.from(
+                new Set(buildingRooms.map((room) => room.properties.Ebene))
+            ).length
+            const location = buildingRooms[0].properties.Standort
+
+            return {
+                properties: {
+                    Raum: building,
+                    Funktion_en: 'Building',
+                    Funktion_de: 'Gebäude',
+                    Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
+                    Ebene: floorCount.toString(),
+                    Etage: floorCount.toString(),
+                    Standort: location,
+                } satisfies FeatureProperties,
+                coordinates: [],
+                options: {
+                    type: SEARCH_TYPES.BUILDING,
+                    center: getCenter(buildingRooms.map((x) => x.coordinates)),
+                },
+            }
+        })
+        return [...rooms, ...buildings]
     }, [mapOverlay])
 
     useEffect(() => {
@@ -180,7 +222,10 @@ const MapScreen = (): JSX.Element => {
         })
 
         const room = allRooms.find((x) => x.properties.Raum === routeParams)
-        const center = getCenterSingle(room?.coordinates)
+        if (room == null) {
+            return
+        }
+        const center = room.options.center
         const etage = room?.properties.Ebene
         _setView(center, mapRef)
         setCurrentFloor(etage ?? 'EG')
@@ -279,7 +324,7 @@ const MapScreen = (): JSX.Element => {
     useEffect(() => {
         if (LoadingState.LOADED !== loadingState) return
         bottomSheetModalRef.current?.close()
-        bottomSheetRef.current?.snapToIndex(1)
+        // bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
@@ -367,7 +412,6 @@ const MapScreen = (): JSX.Element => {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="dark" />
             <View style={styles.innerContainer}>
                 {loadingState === LoadingState.ERROR ||
                     (overlayError !== null && (
@@ -429,21 +473,16 @@ const MapScreen = (): JSX.Element => {
                                 }
                             }
 
-                            if (
-                                // data === 'mapLoadError'
-                                data === 'noInternetConnection'
-                            ) {
+                            if (data === 'noInternetConnection') {
                                 setLoadingState(LoadingState.ERROR)
                                 setErrorMsg(data)
                             } else if (data.type === 'roomClick') {
+                                console.log('Room clicked:', data)
                                 setClickedElement({
                                     data: data.payload.properties.room,
                                     type: SEARCH_TYPES.ROOM,
                                 })
-                                const center = getCenterSingle(
-                                    data.payload.properties.coordinates
-                                )
-
+                                const center = data.payload.properties.center
                                 _injectMarker(mapRef, center)
                                 Keyboard.dismiss()
                                 bottomSheetRef.current?.close()

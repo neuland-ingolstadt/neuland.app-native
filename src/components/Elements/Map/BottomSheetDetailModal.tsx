@@ -9,6 +9,7 @@ import {
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
@@ -154,6 +155,7 @@ export const BottomSheetDetailModal = ({
 
     return (
         <BottomSheetModalProvider>
+            <StatusBar style="dark" />
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 snapPoints={['30%', '47%', '60%']}

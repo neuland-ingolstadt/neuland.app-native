@@ -110,8 +110,15 @@ export default {
             },
         },
         map: {
-            search: 'Search for rooons, events, and more',
-            noResults: 'No results found',
+            search: {
+                placeholder: 'Search for rooms, buildings, ...',
+                recent: 'Recent searches',
+                clear: 'Clear history',
+                noResults: 'No search results',
+                results: 'Exact results',
+                fuzzy: 'Suggestions',
+            },
+
             easterEgg: {
                 title: 'Easter Egg',
                 message:

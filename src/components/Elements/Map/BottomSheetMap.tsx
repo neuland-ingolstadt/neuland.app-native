@@ -6,14 +6,7 @@ import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
 import { type RoomEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import {
-    BUILDINGS,
-    BUILDINGS_IN,
-    BUILDINGS_ND,
-    determineSearchType,
-    getCenter,
-    getCenterSingle,
-} from '@/utils/map-utils'
+import { getCenterSingle } from '@/utils/map-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import BottomSheet, {
     BottomSheetTextInput,
@@ -21,12 +14,15 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import Fuse from 'fuse.js'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Keyboard,
     Platform,
     Pressable,
+    SectionList,
     StyleSheet,
     Text,
     View,
@@ -40,11 +36,10 @@ import BottomSheetBackground from './BottomSheetBackground'
 import { _injectMarker, _setView } from './leaflet'
 
 interface searchResult {
-    type: SEARCH_TYPES
-    highlight: RoomEntry[]
     title: string
     subtitle: string
-    center: number[]
+    isExactMatch?: boolean
+    item: RoomEntry
 }
 
 interface MapBottomSheetProps {
@@ -74,69 +69,114 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         setCurrentFloor,
     } = useContext(MapContext)
 
-    const searchResults: searchResult[] = useMemo(() => {
-        switch (determineSearchType(localSearch)) {
-            case SEARCH_TYPES.BUILDING: {
-                const isValidBuilding = BUILDINGS.includes(
-                    localSearch.toLocaleUpperCase()
-                )
+    const fuse = new Fuse(allRooms, {
+        keys: [
+            'properties.Raum',
+            'properties.Funktion_en',
+            'properties.Gebaeude',
+        ], // Specify which fields to search
+        includeScore: true, // Include search score for ranking
+        threshold: 0.4,
+        useExtendedSearch: true,
+    })
 
-                const location = BUILDINGS_IN.includes(localSearch)
-                    ? 'Ingolstadt'
-                    : BUILDINGS_ND.includes(localSearch)
-                      ? 'Neuburg'
-                      : 'All'
+    const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
+        const results = fuse.search(localSearch.trim().toUpperCase())
+        const roomResults = results.map((result) => ({
+            title: result.item.properties.Raum,
+            subtitle: result.item.properties.Funktion_en,
+            isExactMatch: result.item.properties.Raum.toUpperCase().includes(
+                localSearch.toUpperCase()
+            ),
+            item: result.item,
+        }))
 
-                const building = localSearch + ' Building'
-                const highlight = allRooms.filter(
-                    (room) => room.properties.Gebaeude === localSearch
-                )
-                const center = getCenter(highlight)
-                const result = isValidBuilding
-                    ? [
-                          {
-                              type: SEARCH_TYPES.BUILDING,
-                              highlight,
-                              title: building,
-                              subtitle: location,
-                              center,
-                          },
-                      ]
-                    : []
-                // also add 9 rooms to the searchResults
-                // also add 9 rooms to the searchResults
-                const additionalResults = allRooms
-                    .filter((room) => room.properties.Gebaeude === localSearch)
-                    .map((room) => ({
-                        type: SEARCH_TYPES.ROOM,
-                        highlight: [room], // Wrap room in an array
-                        title: room.properties.Raum,
-                        subtitle: room.properties.Funktion_en,
-                        center: getCenter([room]),
-                    }))
+        const exactMatches = roomResults.filter((result) => result.isExactMatch)
+        const fuzzyMatches = roomResults.filter(
+            (result) => !result.isExactMatch
+        )
 
-                const combined = [...result, ...additionalResults]
-                return combined
-            }
-            case SEARCH_TYPES.ROOM: {
-                const highlight = allRooms.filter((room) =>
-                    room.properties.Raum.startsWith(localSearch)
-                )
-                const result = highlight.map((room) => ({
-                    type: SEARCH_TYPES.ROOM,
-                    highlight: [room], // Wrap room in an array
-                    title: room.properties.Raum,
-                    subtitle: room.properties.Funktion_en,
-                    center: getCenter([room]),
-                }))
-                return result
-            }
-            default: {
-                return []
-            }
-        }
+        return [exactMatches, fuzzyMatches]
     }, [localSearch, allRooms])
 
+    const ResultRow: React.FC<{ result: searchResult; index: number }> = ({
+        result,
+        index,
+    }): JSX.Element => {
+        const type = result.item.options.type
+        const iconiOS =
+            type === SEARCH_TYPES.BUILDING
+                ? 'building'
+                : type === SEARCH_TYPES.ROOM
+                  ? 'studentdesk'
+                  : 'lecture'
+        const iconAndroid =
+            type === SEARCH_TYPES.BUILDING
+                ? 'corporate_fare'
+                : type === SEARCH_TYPES.ROOM
+                  ? 'school'
+                  : 'lecture'
+        return (
+            <React.Fragment key={index}>
+                <TouchableOpacity
+                    style={styles.searchRowContainer}
+                    onPress={() => {
+                        const center = result.item.options.center
+                        Keyboard.dismiss()
+                        bottomSheetRef.current?.collapse()
+                        _setView(center, mapRef)
+                        setClickedElement({
+                            data: result.title,
+                            type: result.item.options.type,
+                        })
+                        handlePresentModalPress()
+                        _injectMarker(mapRef, center)
+                        setLocalSearch('')
+                    }}
+                >
+                    <View
+                        style={{
+                            ...styles.searchIconContainer,
+                            backgroundColor: colors.primary,
+                        }}
+                    >
+                        <PlatformIcon
+                            color={colors.background}
+                            ios={{
+                                name: iconiOS,
+                                size: 18,
+                            }}
+                            android={{
+                                name: iconAndroid,
+                                variant: 'outlined',
+                                size: 21,
+                            }}
+                        />
+                    </View>
+
+                    <View>
+                        <Text
+                            style={{
+                                color: colors.text,
+                                ...styles.suggestionTitle,
+                            }}
+                        >
+                            {result.title}
+                        </Text>
+                        <Text
+                            style={{
+                                color: colors.text,
+                                ...styles.suggestionSubtitle,
+                            }}
+                        >
+                            {result.subtitle}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+                {index !== 9 && <Divider iosPaddingLeft={50} />}
+            </React.Fragment>
+        )
+    }
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -146,6 +186,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             animatedPosition={currentPosition}
             keyboardBehavior="extend"
         >
+            <StatusBar style="dark" />
+
             <View
                 style={{
                     paddingHorizontal: PAGE_PADDING,
@@ -161,14 +203,14 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             },
                         }),
                     }}
-                    placeholder={t('pages.map.search')}
+                    placeholder={t('pages.map.search.placeholder')}
                     placeholderTextColor={colors.labelColor}
                     value={localSearch}
                     enablesReturnKeyAutomatically
                     clearButtonMode="always"
                     enterKeyHint="search"
                     onChangeText={(text) => {
-                        setLocalSearch(text.trim().toUpperCase())
+                        setLocalSearch(text)
                     }}
                     onFocus={() => {
                         bottomSheetRef.current?.snapToIndex(2)
@@ -179,105 +221,47 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     }}
                 />
                 {localSearch !== '' ? (
-                    searchResults.length > 0 ? (
-                        <>
-                            <View>
-                                {searchResults.map((result, index) => {
-                                    const iconiOS =
-                                        result.type === SEARCH_TYPES.BUILDING
-                                            ? 'building'
-                                            : result.type === SEARCH_TYPES.ROOM
-                                              ? 'studentdesk'
-                                              : result.type ===
-                                                  SEARCH_TYPES.ROOMTYPE
-                                                ? 'edit'
-                                                : 'lecture'
-                                    const iconAndroid =
-                                        result.type === SEARCH_TYPES.BUILDING
-                                            ? 'corporate_fare'
-                                            : result.type === SEARCH_TYPES.ROOM
-                                              ? 'school'
-                                              : result.type ===
-                                                  SEARCH_TYPES.ROOMTYPE
-                                                ? 'edit'
-                                                : 'lecture'
-                                    return (
-                                        <React.Fragment key={index}>
-                                            <TouchableOpacity
-                                                style={
-                                                    styles.searchRowContainer
-                                                }
-                                                onPress={() => {
-                                                    Keyboard.dismiss()
-                                                    bottomSheetRef.current?.collapse()
-                                                    _setView(
-                                                        result.center,
-                                                        mapRef
-                                                    )
-                                                    setClickedElement({
-                                                        data: result.title,
-                                                        type: result.type,
-                                                    })
-                                                    handlePresentModalPress()
-                                                    // bottomSheetRef.current?.forceClose()
-                                                    // print the center of the highlighted room(s) to the console
-                                                    _injectMarker(
-                                                        mapRef,
-                                                        result.center
-                                                    )
-                                                    setLocalSearch('')
-                                                }}
-                                            >
-                                                <View
-                                                    style={{
-                                                        ...styles.searchIconContainer,
-                                                        backgroundColor:
-                                                            colors.primary,
-                                                    }}
-                                                >
-                                                    <PlatformIcon
-                                                        color={
-                                                            colors.background
-                                                        }
-                                                        ios={{
-                                                            name: iconiOS,
-                                                            size: 18,
-                                                        }}
-                                                        android={{
-                                                            name: iconAndroid,
-                                                            variant: 'outlined',
-                                                            size: 21,
-                                                        }}
-                                                    />
-                                                </View>
-
-                                                <View>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionTitle,
-                                                        }}
-                                                    >
-                                                        {result.title}
-                                                    </Text>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionSubtitle,
-                                                        }}
-                                                    >
-                                                        {result.subtitle}
-                                                    </Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                            {index !== 9 && (
-                                                <Divider iosPaddingLeft={50} />
-                                            )}
-                                        </React.Fragment>
-                                    )
-                                })}
-                            </View>
-                        </>
+                    searchResultsExact.length > 0 ||
+                    searchResultsFuzzy.length > 0 ? (
+                        <SectionList
+                            keyboardShouldPersistTaps="always"
+                            sections={[
+                                ...(searchResultsExact.length > 0
+                                    ? [
+                                          {
+                                              title: t(
+                                                  'pages.map.search.results'
+                                              ),
+                                              data: searchResultsExact,
+                                          },
+                                      ]
+                                    : []),
+                                ...(searchResultsFuzzy.length > 0
+                                    ? [
+                                          {
+                                              title: t(
+                                                  'pages.map.search.fuzzy'
+                                              ),
+                                              data: searchResultsFuzzy,
+                                          },
+                                      ]
+                                    : []),
+                            ]}
+                            keyExtractor={(item, index) => item.title + index}
+                            renderItem={({ item, index }) => (
+                                <ResultRow result={item} index={index} />
+                            )}
+                            renderSectionHeader={({ section: { title } }) => (
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.header,
+                                    }}
+                                >
+                                    {title}
+                                </Text>
+                            )}
+                        />
                     ) : (
                         <Text
                             style={{
@@ -285,7 +269,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 ...styles.noResults,
                             }}
                         >
-                            {t('pages.map.noResults')}
+                            {t('pages.map.search.noResults')}
                         </Text>
                     )
                 ) : userKind === USER_GUEST ? (
@@ -297,7 +281,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     >
                         {t('pages.map.details.room.signIn')}
                     </Text>
-                ) : availableRooms.length > 0 ? (
+                ) : (
                     <>
                         <View style={styles.suggestionSectionHeaderContainer}>
                             <Text
@@ -330,124 +314,140 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 ...styles.radius,
                             }}
                         >
-                            {availableRooms.slice(0, 3).map((room, key) => (
-                                <>
-                                    <Pressable
-                                        key={key}
-                                        style={styles.suggestionRow}
-                                        onPress={() => {
-                                            const details = allRooms.find(
-                                                (x) =>
-                                                    x.properties.Raum ===
-                                                    room.room
-                                            )
-
-                                            if (
-                                                details?.coordinates !==
-                                                undefined
-                                            ) {
-                                                const center = getCenterSingle(
-                                                    details?.coordinates
+                            {availableRooms.length === 0 ? (
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.noResults,
+                                    }}
+                                >
+                                    {t('pages.map.noAvailableRooms')}
+                                </Text>
+                            ) : (
+                                availableRooms.slice(0, 3).map((room, key) => (
+                                    <>
+                                        <Pressable
+                                            key={key}
+                                            style={styles.suggestionRow}
+                                            onPress={() => {
+                                                const details = allRooms.find(
+                                                    (x) =>
+                                                        x.properties.Raum ===
+                                                        room.room
                                                 )
-                                                _setView(center, mapRef)
-                                                _injectMarker(mapRef, center)
-                                            }
 
-                                            const etage =
-                                                details?.properties.Ebene
+                                                if (
+                                                    details?.coordinates !==
+                                                    undefined
+                                                ) {
+                                                    const center =
+                                                        getCenterSingle(
+                                                            details?.coordinates
+                                                        )
+                                                    _setView(center, mapRef)
+                                                    _injectMarker(
+                                                        mapRef,
+                                                        center
+                                                    )
+                                                }
 
-                                            setCurrentFloor(etage ?? 'EG')
-                                            setClickedElement({
-                                                data: room.room,
-                                                type: SEARCH_TYPES.ROOM,
-                                            })
+                                                const etage =
+                                                    details?.properties.Ebene
 
-                                            handlePresentModalPress()
-                                            bottomSheetRef.current?.forceClose()
-                                        }}
-                                    >
-                                        <View style={styles.suggestionInnerRow}>
-                                            <View
-                                                style={{
-                                                    backgroundColor:
-                                                        colors.primary,
-                                                    ...styles.suggestionIconContainer,
-                                                }}
-                                            >
-                                                <PlatformIcon
-                                                    color={colors.background}
-                                                    ios={{
-                                                        name: 'studentdesk',
-                                                        size: 18,
-                                                    }}
-                                                    android={{
-                                                        name: 'edit',
-                                                        size: 20,
-                                                    }}
-                                                />
-                                            </View>
+                                                setCurrentFloor(etage ?? 'EG')
+                                                setClickedElement({
+                                                    data: room.room,
+                                                    type: SEARCH_TYPES.ROOM,
+                                                })
 
-                                            <View>
-                                                <Text
-                                                    style={{
-                                                        color: colors.text,
-                                                        ...styles.suggestionTitle,
-                                                    }}
-                                                >
-                                                    {room.room}
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        color: colors.text,
-                                                        ...styles.suggestionSubtitle,
-                                                    }}
-                                                >
-                                                    {room.type} ({room.capacity}{' '}
-                                                    seats)
-                                                </Text>
-                                            </View>
-                                        </View>
-                                        <View
-                                            style={
-                                                styles.suggestionRightContainer
-                                            }
+                                                handlePresentModalPress()
+                                                bottomSheetRef.current?.forceClose()
+                                            }}
                                         >
-                                            <Text
-                                                style={{
-                                                    color: colors.labelColor,
-                                                    fontVariant: [
-                                                        'tabular-nums',
-                                                    ],
-                                                }}
+                                            <View
+                                                style={
+                                                    styles.suggestionInnerRow
+                                                }
                                             >
-                                                {formatFriendlyTime(room.from)}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    color: colors.text,
-                                                    fontVariant: [
-                                                        'tabular-nums',
-                                                    ],
-                                                }}
+                                                <View
+                                                    style={{
+                                                        backgroundColor:
+                                                            colors.primary,
+                                                        ...styles.suggestionIconContainer,
+                                                    }}
+                                                >
+                                                    <PlatformIcon
+                                                        color={
+                                                            colors.background
+                                                        }
+                                                        ios={{
+                                                            name: 'studentdesk',
+                                                            size: 18,
+                                                        }}
+                                                        android={{
+                                                            name: 'edit',
+                                                            size: 20,
+                                                        }}
+                                                    />
+                                                </View>
+
+                                                <View>
+                                                    <Text
+                                                        style={{
+                                                            color: colors.text,
+                                                            ...styles.suggestionTitle,
+                                                        }}
+                                                    >
+                                                        {room.room}
+                                                    </Text>
+                                                    <Text
+                                                        style={{
+                                                            color: colors.text,
+                                                            ...styles.suggestionSubtitle,
+                                                        }}
+                                                    >
+                                                        {room.type} (
+                                                        {room.capacity} seats)
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                            <View
+                                                style={
+                                                    styles.suggestionRightContainer
+                                                }
                                             >
-                                                {formatFriendlyTime(room.until)}
-                                            </Text>
-                                        </View>
-                                    </Pressable>
-                                    {key !== 2 && <Divider />}
-                                </>
-                            ))}
+                                                <Text
+                                                    style={{
+                                                        color: colors.labelColor,
+                                                        fontVariant: [
+                                                            'tabular-nums',
+                                                        ],
+                                                    }}
+                                                >
+                                                    {formatFriendlyTime(
+                                                        room.from
+                                                    )}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        color: colors.text,
+                                                        fontVariant: [
+                                                            'tabular-nums',
+                                                        ],
+                                                    }}
+                                                >
+                                                    {formatFriendlyTime(
+                                                        room.until
+                                                    )}
+                                                </Text>
+                                            </View>
+                                        </Pressable>
+                                        {key !== 2 && <Divider />}
+                                    </>
+                                ))
+                            )}
                         </View>
                     </>
-                ) : (
-                    <Text
-                        style={{
-                            color: colors.text,
-                            ...styles.noResults,
-                        }}
-                    >
-                        {t('pages.map.noAvailableRooms')}
-                    </Text>
                 )}
             </View>
         </BottomSheet>
@@ -531,7 +531,13 @@ const styles = StyleSheet.create({
     },
     noResults: {
         textAlign: 'center',
-        marginTop: 20,
+        marginVertical: 20,
         fontSize: 16,
+    },
+    header: {
+        fontSize: 15,
+        marginTop: 6,
+        marginBottom: 6,
+        textAlign: 'left',
     },
 })

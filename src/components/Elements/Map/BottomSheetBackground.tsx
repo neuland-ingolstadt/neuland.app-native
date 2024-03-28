@@ -4,12 +4,19 @@ import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 
 const BottomSheetBackground = (): JSX.Element => {
-    const { colors } = useTheme()
-
+    const { colors, dark } = useTheme()
+    const darkIos = 'rgba(0, 0, 0, 0.4)'
+    const lightIos = 'rgba(255, 255, 255, 0.2)'
     return Platform.OS === 'ios' ? (
-        // eslint-disable-next-line react-native/no-inline-styles, react-native/no-color-literals
-        <View style={[styles.bottomSheet, { backgroundColor: 'transparent' }]}>
-            <BlurView intensity={87} style={StyleSheet.absoluteFillObject} />
+        <View
+            style={[
+                styles.bottomSheet,
+                {
+                    backgroundColor: dark ? darkIos : lightIos,
+                },
+            ]}
+        >
+            <BlurView intensity={80} style={StyleSheet.absoluteFillObject} />
         </View>
     ) : (
         <View

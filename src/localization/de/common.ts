@@ -112,8 +112,15 @@ export default {
             },
         },
         map: {
-            search: 'Suche nach Räumen, Veranstaltungen, ...',
-            noResults: 'Keine Ergebnisse gefunden',
+            search: {
+                placeholder: 'Suche nach Räumen, Gebäuden, ...',
+                recent: 'Kürzlich gesucht',
+                clear: 'Verlauf löschen',
+                noResults: 'Keine Suchergebnisse',
+                results: 'Suchergebnisse',
+                fuzzy: 'Vorschläge',
+            },
+
             easterEgg: {
                 title: 'Easter Egg',
                 message:
@@ -132,7 +139,6 @@ export default {
                     timeSpan: 'Zeitspanne',
                     floor: 'Etage',
                     type: 'Typ',
-                    equipment: 'Ausstattung',
                     available: 'Verfügbar',
                     notAvailable: 'Nicht verfügbar',
                     availableRooms: 'Verfügbare Räume',

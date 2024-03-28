@@ -3,7 +3,6 @@ import { type AvailableRoom, type RoomEntry } from './utils'
 export enum SEARCH_TYPES {
     BUILDING,
     ROOM,
-    ROOMTYPE,
     LECTURE,
 }
 export interface RoomData {

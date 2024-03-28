@@ -31,7 +31,7 @@ export const _addRoom = (
         },
         properties: {
             room: room?.properties.Raum,
-            coordinates: room.coordinates,
+            center: room?.options?.center,
         },
     }
 
@@ -159,6 +159,13 @@ export const htmlScript = `
     <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin=""></script>
+    <style>
+        body {
+            -webkit-user-select: none;
+            /* Other browsers */
+            user-select: none;
+        }
+    </style>
 </head>
 <body style="padding: 0; margin: 0">
     <div id="mapid" style="width: 100%; height: 100vh;"></div>

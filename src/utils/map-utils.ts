@@ -1,7 +1,7 @@
 import API from '@/api/authenticated-api'
 import { SEARCH_TYPES } from '@/types/map'
 import { type Rooms } from '@/types/thi-api'
-import { type AvailableRoom, type RoomEntry } from '@/types/utils'
+import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
 import { type TFunction } from 'i18next'
 import { Platform, Share } from 'react-native'
@@ -25,9 +25,10 @@ export const BUILDINGS_IN = [
     'M',
     'P',
     'W',
-    'Y',
     'Z',
 ]
+export const INGOLSTADT_CENTER = [48.7667, 11.4328]
+export const NEUBURG_CENTER = [48.73227, 11.17261]
 export const BUILDINGS_ND = ['BN', 'CN']
 export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const BUILDINGS_ALL = 'Alle'
@@ -256,7 +257,7 @@ export async function searchRooms(
         .sort((a, b) => a.room.localeCompare(b.room))
 }
 
-export function getCenter(rooms: RoomEntry[]): number[] {
+export function getCenter(rooms: number[][][]): number[] {
     const getCenterPoint = (points: number[][]): number[] => {
         const x = points.map((point) => point[0])
         const y = points.map((point) => point[1])
@@ -269,7 +270,7 @@ export function getCenter(rooms: RoomEntry[]): number[] {
 
     const centerPoints = rooms.reduce(
         (acc, room) => {
-            const centerPoint = getCenterPoint(room.coordinates)
+            const centerPoint = getCenterPoint(room)
             acc.lon += centerPoint[0]
             acc.lat += centerPoint[1]
             acc.count += 1
@@ -284,7 +285,10 @@ export function getCenter(rooms: RoomEntry[]): number[] {
     ]
 }
 
-export function getCenterSingle(coordinates: number[][]): number[] {
+export function getCenterSingle(coordinates: number[][] | undefined): number[] {
+    if (coordinates == null) {
+        return INGOLSTADT_CENTER
+    }
     const centerPoints = coordinates.reduce(
         (acc, coordinate) => {
             acc.lon += coordinate[0]
@@ -343,7 +347,7 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
         (search.length === 1 || search.length === 2) &&
         isNaN(Number(search[1]))
     ) {
-        return SEARCH_TYPES.BUILDING
+        return SEARCH_TYPES.ROOM
     }
 
     if (/^[A-Z](G|[0-9E]\.)?\d*$/.test(search)) {
@@ -351,8 +355,8 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
     }
 
     if (/^[A-Z]+$/.test(search)) {
-        return SEARCH_TYPES.ROOMTYPE
+        return SEARCH_TYPES.ROOM
     }
 
-    return SEARCH_TYPES.LECTURE
+    return SEARCH_TYPES.ROOM
 }
