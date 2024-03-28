@@ -58,6 +58,7 @@
     "expo-status-bar": "^1.6.0",
     "expo-system-ui": "~2.9.3",
     "expo-task-manager": "~11.7.2",
+    "fuse.js": "^7.0.0",
     "i18next": "^23.8.0",
     "metro": "~0.80.4",
     "moment": "^2.29.4",

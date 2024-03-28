@@ -23,6 +23,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
+import Fuse from 'fuse.js'
 import React, {
     useContext,
     useEffect,
@@ -135,21 +136,18 @@ export default function LecturersCard(): JSX.Element {
 
     useEffect(() => {
         if (localSearch !== '') {
-            const normalizedSearch = localSearch.toLowerCase().trim()
-            const checkField = (value: string | null): boolean =>
-                value?.toString().toLowerCase().includes(normalizedSearch) ??
-                false
-            const filtered = allLecturersResult?.data?.filter(
-                (x) =>
-                    checkField(x.name) ||
-                    checkField(x.vorname) ||
-                    checkField(x.tel_dienst) ||
-                    checkField(x.raum)
-            )
-            setFilteredLecturers(filtered ?? [])
+            const options = {
+                keys: ['name', 'vorname', 'tel_dienst', 'raum'],
+                threshold: 0.4,
+            }
+
+            const fuse = new Fuse(allLecturersResult?.data ?? [], options)
+            const result = fuse.search(localSearch)
+            const filtered = result.map((item) => item.item)
+
+            setFilteredLecturers(filtered)
         }
     }, [localSearch])
-
     useEffect(() => {
         let filtered: NormalizedLecturer[] = []
         if (faculty !== null) {
@@ -212,8 +210,7 @@ export default function LecturersCard(): JSX.Element {
 
     useEffect(() => {
         if (
-            (allLecturersResult.isPaused &&
-                allLecturersResult.data != null) ||
+            (allLecturersResult.isPaused && allLecturersResult.data != null) ||
             (personalLecturersResult.isPaused &&
                 personalLecturersResult.data != null)
         ) {
