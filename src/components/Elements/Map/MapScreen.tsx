@@ -4,10 +4,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import {
-    BottomSheetDetailModal,
-    roomSection,
-} from '@/components/Elements/Map/BottomSheetDetailModal'
+import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
 import FloorPicker from '@/components/Elements/Map/FloorPicker'
 import {
@@ -41,6 +38,7 @@ import {
     filterRooms,
     getCenter,
     getCenterSingle,
+    getIcon,
     getNextValidDate,
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -76,6 +74,7 @@ import Animated, {
 import { WebView } from 'react-native-webview'
 
 import packageInfo from '../../../../package.json'
+import { modalSection } from './ModalSections'
 
 export function FocusAwareStatusBar(props: any): JSX.Element {
     const isFocused = useIsFocused()
@@ -179,6 +178,9 @@ const MapScreen = (): JSX.Element => {
                     options: {
                         type: SEARCH_TYPES.ROOM,
                         center: getCenterSingle(points),
+                        icon: getIcon(SEARCH_TYPES.ROOM, {
+                            result: { item: { properties } },
+                        }),
                     },
                 }))
             })
@@ -198,7 +200,7 @@ const MapScreen = (): JSX.Element => {
                     Funktion_en: 'Building',
                     Funktion_de: 'Gebäude',
                     Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
-                    Ebene: floorCount.toString(),
+                    Ebene: '1', // Dummy value to not break the floor picker
                     Etage: floorCount.toString(),
                     Standort: location,
                 } satisfies FeatureProperties,
@@ -206,6 +208,7 @@ const MapScreen = (): JSX.Element => {
                 options: {
                     type: SEARCH_TYPES.BUILDING,
                     center: getCenter(buildingRooms.map((x) => x.coordinates)),
+                    icon: getIcon(SEARCH_TYPES.BUILDING),
                 },
             }
         })
@@ -372,15 +375,27 @@ const MapScreen = (): JSX.Element => {
     }
 
     const getBuildingData = (building: string): any => {
-        const buildingCode = building.split(' ')[0]
-        const roomNumber = allRooms.filter(
-            (x) => x.properties.Gebaeude === buildingCode
+        const buildingDetails = allRooms.find(
+            (x) =>
+                x.properties.Gebaeude === building &&
+                x.options.type === SEARCH_TYPES.BUILDING
+        )
+        const numberOfFreeRooms = availableRooms?.filter(
+            (x) => x.room[0] === building || x.room.slice(0, 1) === building
+        ).length
+        const numberOfRooms = allRooms.filter(
+            (x) =>
+                x.properties.Gebaeude === building &&
+                x.options.type === SEARCH_TYPES.ROOM
         ).length
         const buildingData = {
             title: building,
-            subtitle: roomNumber + ' Rooms',
-            properties: null,
-            occupancies: null,
+            subtitle: t('pages.map.details.room.building'),
+            properties: buildingDetails?.properties,
+            occupancies: {
+                total: numberOfRooms,
+                available: numberOfFreeRooms,
+            },
             type: SEARCH_TYPES.BUILDING,
         }
         return buildingData
@@ -477,7 +492,6 @@ const MapScreen = (): JSX.Element => {
                                 setLoadingState(LoadingState.ERROR)
                                 setErrorMsg(data)
                             } else if (data.type === 'roomClick') {
-                                console.log('Room clicked:', data)
                                 setClickedElement({
                                     data: data.payload.properties.room,
                                     type: SEARCH_TYPES.ROOM,
@@ -534,7 +548,7 @@ const MapScreen = (): JSX.Element => {
                 handleSheetChangesModal={handleSheetChangesModal}
                 currentPositionModal={currentPositionModal}
                 roomData={roomData}
-                roomSection={roomSection(roomData, locations)}
+                modalSection={modalSection(roomData, locations, t)}
             />
         </View>
     )

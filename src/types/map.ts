@@ -9,10 +9,14 @@ export interface RoomData {
     title: string
     subtitle: string
     properties: RoomEntry['properties'] | null
-    occupancies: AvailableRoom | null
+    occupancies: (AvailableRoom | null) | BuildingOccupancy
     type: SEARCH_TYPES
 }
 
+export interface BuildingOccupancy {
+    total: number
+    available: number
+}
 export interface ClickedMapElement {
     type: SEARCH_TYPES
     data: string
@@ -24,4 +28,11 @@ export interface searchResult {
     title: string
     subtitle: string
     center: number[]
+}
+
+export interface SearchResult {
+    title: string
+    subtitle: string
+    isExactMatch?: boolean
+    item: RoomEntry
 }

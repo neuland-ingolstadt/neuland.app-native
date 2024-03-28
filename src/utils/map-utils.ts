@@ -1,4 +1,5 @@
 import API from '@/api/authenticated-api'
+import { type FeatureProperties } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
@@ -359,4 +360,47 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
     }
 
     return SEARCH_TYPES.ROOM
+}
+
+export const getIcon = (
+    type: SEARCH_TYPES,
+    properties?: { result: { item: { properties: FeatureProperties } } }
+): { ios: string; android: string } => {
+    const {
+        Funktion_en: funktionEn,
+        Raum: raum,
+    }: { Funktion_en: string; Raum: string } = properties?.result.item
+        .properties ?? { Funktion_en: '', Raum: '' }
+    const food = ['M001', 'X001', 'F001']
+    switch (type) {
+        case SEARCH_TYPES.BUILDING:
+            return { ios: 'building', android: 'corporate_fare' }
+        case SEARCH_TYPES.ROOM:
+            if (funktionEn.length > 0) {
+                if (funktionEn.includes('PC')) {
+                    return { ios: 'pc', android: 'keyboard' }
+                } else if (funktionEn.includes('Lab')) {
+                    return { ios: 'flask', android: 'science' }
+                } else if (food.includes(raum)) {
+                    return { ios: 'fork.knife', android: 'local_cafe' }
+                } else if (funktionEn.includes('Office')) {
+                    return { ios: 'lamp.desk', android: 'business_center' }
+                } else if (funktionEn.includes('Toilet')) {
+                    return { ios: 'toilet', android: 'wc' }
+                } else if (
+                    funktionEn.includes('Lecture') ||
+                    funktionEn.includes('Seminar')
+                ) {
+                    return { ios: 'studentdesk', android: 'school' }
+                } else if (funktionEn.includes('Corridor')) {
+                    return {
+                        ios: 'arrow.triangle.turn.up.right.diamond',
+                        android: 'directions',
+                    }
+                }
+            }
+            return { ios: 'mappin', android: 'location_on' }
+        default:
+            return { ios: 'mappin', android: 'location_on' }
+    }
 }

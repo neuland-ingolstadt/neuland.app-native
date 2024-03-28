@@ -7,11 +7,8 @@ import { SEARCH_TYPES } from '@/types/map'
 import { type RoomEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getCenterSingle } from '@/utils/map-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import BottomSheet, {
-    BottomSheetTextInput,
-    TouchableOpacity,
-} from '@gorhom/bottom-sheet'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -19,7 +16,6 @@ import Fuse from 'fuse.js'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    Keyboard,
     Platform,
     Pressable,
     SectionList,
@@ -33,14 +29,8 @@ import type WebView from 'react-native-webview'
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 import BottomSheetBackground from './BottomSheetBackground'
+import ResultRow from './SearchResultRow'
 import { _injectMarker, _setView } from './leaflet'
-
-interface searchResult {
-    title: string
-    subtitle: string
-    isExactMatch?: boolean
-    item: RoomEntry
-}
 
 interface MapBottomSheetProps {
     bottomSheetRef: React.RefObject<BottomSheet>
@@ -59,7 +49,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 }) => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const { userKind } = useContext(UserKindContext)
     const {
         localSearch,
@@ -72,10 +62,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     const fuse = new Fuse(allRooms, {
         keys: [
             'properties.Raum',
-            'properties.Funktion_en',
+            i18n.language === 'de'
+                ? 'properties.Funktion_de'
+                : 'properties.Funktion_en',
             'properties.Gebaeude',
-        ], // Specify which fields to search
-        includeScore: true, // Include search score for ranking
+        ],
         threshold: 0.4,
         useExtendedSearch: true,
     })
@@ -99,84 +90,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         return [exactMatches, fuzzyMatches]
     }, [localSearch, allRooms])
 
-    const ResultRow: React.FC<{ result: searchResult; index: number }> = ({
-        result,
-        index,
-    }): JSX.Element => {
-        const type = result.item.options.type
-        const iconiOS =
-            type === SEARCH_TYPES.BUILDING
-                ? 'building'
-                : type === SEARCH_TYPES.ROOM
-                  ? 'studentdesk'
-                  : 'lecture'
-        const iconAndroid =
-            type === SEARCH_TYPES.BUILDING
-                ? 'corporate_fare'
-                : type === SEARCH_TYPES.ROOM
-                  ? 'school'
-                  : 'lecture'
-        return (
-            <React.Fragment key={index}>
-                <TouchableOpacity
-                    style={styles.searchRowContainer}
-                    onPress={() => {
-                        const center = result.item.options.center
-                        Keyboard.dismiss()
-                        bottomSheetRef.current?.collapse()
-                        _setView(center, mapRef)
-                        setClickedElement({
-                            data: result.title,
-                            type: result.item.options.type,
-                        })
-                        handlePresentModalPress()
-                        _injectMarker(mapRef, center)
-                        setLocalSearch('')
-                    }}
-                >
-                    <View
-                        style={{
-                            ...styles.searchIconContainer,
-                            backgroundColor: colors.primary,
-                        }}
-                    >
-                        <PlatformIcon
-                            color={colors.background}
-                            ios={{
-                                name: iconiOS,
-                                size: 18,
-                            }}
-                            android={{
-                                name: iconAndroid,
-                                variant: 'outlined',
-                                size: 21,
-                            }}
-                        />
-                    </View>
-
-                    <View>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.suggestionTitle,
-                            }}
-                        >
-                            {result.title}
-                        </Text>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.suggestionSubtitle,
-                            }}
-                        >
-                            {result.subtitle}
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                {index !== 9 && <Divider iosPaddingLeft={50} />}
-            </React.Fragment>
-        )
-    }
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -195,6 +108,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             >
                 <BottomSheetTextInput
                     style={{
+                        backgroundColor: colors.inputBackground,
                         ...styles.textInput,
                         color: colors.text,
                         ...Platform.select({
@@ -224,6 +138,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     searchResultsExact.length > 0 ||
                     searchResultsFuzzy.length > 0 ? (
                         <SectionList
+                            contentContainerStyle={{
+                                paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+                            }}
                             keyboardShouldPersistTaps="always"
                             sections={[
                                 ...(searchResultsExact.length > 0
@@ -249,8 +166,18 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             ]}
                             keyExtractor={(item, index) => item.title + index}
                             renderItem={({ item, index }) => (
-                                <ResultRow result={item} index={index} />
+                                <ResultRow
+                                    result={item}
+                                    index={index}
+                                    colors={colors}
+                                    mapRef={mapRef}
+                                    handlePresentModalPress={
+                                        handlePresentModalPress
+                                    }
+                                    bottomSheetRef={bottomSheetRef}
+                                />
                             )}
+                            stickySectionHeadersEnabled={false}
                             renderSectionHeader={({ section: { title } }) => (
                                 <Text
                                     style={{
@@ -294,7 +221,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             </Text>
                             <Pressable
                                 onPress={() => {
-                                    Keyboard.dismiss()
                                     router.push('(map)/advanced')
                                 }}
                             >
@@ -476,25 +402,11 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     textInput: {
-        backgroundColor: 'rgba(6, 6, 6, 0.16)',
         height: 40,
         borderRadius: 10,
         paddingHorizontal: 10,
         marginBottom: 10,
-        fontSize: 16,
-    },
-    searchRowContainer: {
-        flexDirection: 'row',
-        paddingVertical: 8,
-    },
-    searchIconContainer: {
-        marginRight: 14,
-
-        width: 40,
-        height: 40,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
+        fontSize: 17,
     },
     suggestionRow: {
         padding: 10,
@@ -531,12 +443,12 @@ const styles = StyleSheet.create({
     },
     noResults: {
         textAlign: 'center',
-        marginVertical: 20,
+        paddingVertical: 30,
         fontSize: 16,
     },
     header: {
         fontSize: 15,
-        marginTop: 6,
+        marginTop: 12,
         marginBottom: 6,
         textAlign: 'left',
     },

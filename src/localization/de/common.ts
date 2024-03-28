@@ -146,6 +146,11 @@ export default {
                     availableRoomsSubtitle: 'Räume mit verfügbaren Plätzen',
                     signIn: 'Melden Sie sich an, um verfügbare Räume zu sehen',
                 },
+                building: {
+                    free: 'Freie Räume',
+                    total: 'Räume insgesamt',
+                    floors: 'Etagen',
+                },
             },
         },
         rooms: {

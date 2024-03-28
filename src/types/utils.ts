@@ -66,6 +66,10 @@ export interface RoomEntry {
 interface RoomOptions {
     center: number[]
     type: SEARCH_TYPES
+    icon: {
+        ios: string
+        android: string
+    }
 }
 
 interface Properties {

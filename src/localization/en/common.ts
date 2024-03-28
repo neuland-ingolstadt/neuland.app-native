@@ -115,7 +115,7 @@ export default {
                 recent: 'Recent searches',
                 clear: 'Clear history',
                 noResults: 'No search results',
-                results: 'Exact results',
+                results: 'Results',
                 fuzzy: 'Suggestions',
             },
 
@@ -144,6 +144,11 @@ export default {
                     availableRoomsTitle: 'Available rooms',
                     availableRoomsSubtitle: 'Rooms with available seats',
                     signIn: 'Sign in to see available rooms',
+                },
+                building: {
+                    free: 'Free rooms',
+                    total: 'Total rooms',
+                    floors: 'Floors',
                 },
             },
         },

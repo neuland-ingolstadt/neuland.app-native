@@ -17,6 +17,7 @@ interface StaticThemeColors {
     datePickerBackground: string
     card: string
     notification: string
+    inputBackground: string
 }
 
 export interface Colors extends StaticThemeColors {
@@ -79,6 +80,7 @@ export const lightColors: StaticThemeColors = {
     datePickerBackground: '#ebebec',
     card: '#ffffff',
     notification: '#ff0000',
+    inputBackground: '#ffffffab',
 }
 
 export const darkColors: StaticThemeColors = {
@@ -90,4 +92,5 @@ export const darkColors: StaticThemeColors = {
     datePickerBackground: '#2a2a2c',
     card: '#1c1c1d',
     notification: '#ff0000',
+    inputBackground: '#7574725f',
 }

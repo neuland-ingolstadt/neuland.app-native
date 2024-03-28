@@ -3,14 +3,7 @@ import { MapContext } from '@/hooks/contexts/map'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React, { useContext } from 'react'
-import {
-    Animated,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { type WebView } from 'react-native-webview'
 
 import PlatformIcon from '../Universal/Icon'
@@ -43,7 +36,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                             }
                         }}
                     >
-                        <Animated.View
+                        <View
                             style={{
                                 ...styles.ButtonAreaSection,
                                 ...(!showAllFloors
@@ -63,7 +56,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     {currentFloor === 'EG' ? '0' : currentFloor}
                                 </Text>
                             </View>
-                        </Animated.View>
+                        </View>
                     </Pressable>
                 )}
                 {showAllFloors && (
@@ -168,9 +161,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         <View
                             style={{
                                 ...styles.ButtonAreaSection,
-                                ...(!showAllFloors
-                                    ? styles.borderWithNormal
-                                    : styles.borderWidthEmpty),
+                                ...styles.borderWithNormal,
                                 borderColor: colors.border,
                                 backgroundColor: colors.card,
                             }}
@@ -191,43 +182,6 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         </View>
                     </Pressable>
                 }
-                {/* {filteredRooms.length === 1 && (
-                    <View
-                        style={[
-                            styles.ButtonAreaSection,
-                            {
-                                borderColor: colors.border,
-                            },
-                        ]}
-                    >
-                        <Pressable
-                            onPress={() => {
-                                handleShareModal()
-                            }}
-                        >
-                            <View
-                                style={[
-                                    styles.Button,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                            >
-                                <PlatformIcon
-                                    color={colors.text}
-                                    ios={{
-                                        name: 'square.and.arrow.up',
-                                        size: 18,
-                                    }}
-                                    android={{
-                                        name: 'share',
-                                        size: 22,
-                                    }}
-                                />
-                            </View>
-                        </Pressable>
-                    </View>
-                )} */}
             </View>
         </View>
     )
@@ -245,8 +199,8 @@ const styles = StyleSheet.create({
     ButtonAreaSection: {
         borderRadius: 7,
         overflow: 'hidden',
-        borderWidth: 1,
         marginTop: 5,
+        borderWidth: 1,
     },
     borderWidthEmpty: {
         borderWidth: 0,
