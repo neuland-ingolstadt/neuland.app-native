@@ -1,3 +1,4 @@
+import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import {
@@ -5,7 +6,7 @@ import {
     DashboardContext,
     FlowContext,
     FoodFilterContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import changelog from '@/data/changelog.json'
 import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
@@ -188,7 +189,6 @@ export default function HomeLayout(): JSX.Element {
             <Tabs
                 screenOptions={{
                     tabBarActiveTintColor: colors.primary,
-
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
@@ -199,6 +199,7 @@ export default function HomeLayout(): JSX.Element {
                     options={{
                         title: 'Home',
                         headerShown: false,
+
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}
@@ -222,7 +223,7 @@ export default function HomeLayout(): JSX.Element {
                 <Tabs.Screen
                     name="timetable"
                     options={{
-                        headerShown: false,
+                        headerShown: true,
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
@@ -268,7 +269,7 @@ export default function HomeLayout(): JSX.Element {
                     name="food"
                     options={{
                         title: t('navigation.food'),
-                        headerShown: false,
+                        headerShown: true,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}
@@ -282,7 +283,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
-                        tabBarStyle: { position: 'absolute' },
+                        headerRight: () => <FoodHeaderRight />,
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}

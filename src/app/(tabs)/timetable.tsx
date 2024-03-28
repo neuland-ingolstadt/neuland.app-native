@@ -1,13 +1,12 @@
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
-import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import {
     NotificationContext,
     TimetableContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import i18n, { type LanguageKey } from '@/localization/i18n'
@@ -69,7 +68,7 @@ export default function TimetableScreen(): JSX.Element {
         queryKey: ['timetable', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10, // 10 minutes
-        gcTime: 1000 * 60 * 60 * 24, // 24 hours,
+        gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
         retry(failureCount, error) {
             const ignoreErrors = [
                 '"Time table does not exist" (-202)',
@@ -323,13 +322,7 @@ export default function TimetableScreen(): JSX.Element {
         setIsPageOpen(true)
     }, [])
 
-    return (
-        <WorkaroundStack
-            name={t('navigation.timetable', { ns: 'navigation' })}
-            titleKey={t('navigation.timetable', { ns: 'navigation' })}
-            component={isPageOpen ? TempList : () => <></>}
-        />
-    )
+    return isPageOpen ? <TempList /> : <></>
 }
 
 const styles = StyleSheet.create({

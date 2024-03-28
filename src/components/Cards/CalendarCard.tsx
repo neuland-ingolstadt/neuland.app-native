@@ -1,7 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
-import { FlowContext, UserKindContext } from '@/components/provider'
+import { FlowContext, UserKindContext } from '@/components/contexts'
 import { USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'

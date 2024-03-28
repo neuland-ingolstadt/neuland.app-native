@@ -92,6 +92,7 @@ function RootLayout(): JSX.Element {
                             options={{
                                 title: 'Home',
                                 headerShown: false,
+                                headerLargeTitle: true,
                             }}
                         />
                         <Stack.Screen
@@ -207,7 +208,9 @@ function RootLayout(): JSX.Element {
                             options={({
                                 route,
                             }: {
-                                route: { params: { fromAppShortcut: string } }
+                                route: {
+                                    params: { fromAppShortcut: string }
+                                }
                             }) => ({
                                 title: 'App Icon',
                                 animation: 'slide_from_right',

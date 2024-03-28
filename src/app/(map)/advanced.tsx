@@ -15,7 +15,7 @@ import {
     DURATION_PRESET,
     filterRooms,
     getNextValidDate,
-} from '@/utils/room-utils'
+} from '@/utils/map-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useTheme } from '@react-navigation/native'
 import { captureException } from '@sentry/react-native'

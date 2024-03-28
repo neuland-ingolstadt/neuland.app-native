@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/provider'
+import { TimetableContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
@@ -17,7 +17,7 @@ export function HeaderLeft(): JSX.Element {
                 const mode = timetableMode === 'list' ? '3days' : 'list'
                 setTimetableMode(mode)
                 trackEvent('TimetableMode', {
-                    mode,
+                    timetableMode: mode,
                 })
             }}
             hitSlop={10}
@@ -52,7 +52,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     const colors = useTheme().colors as Colors
 
     return (
-        <Pressable onPress={setToday} hitSlop={10}>
+        <Pressable onPress={setToday} hitSlop={10} style={styles.headerButton}>
             <PlatformIcon
                 color={colors.text}
                 ios={{
@@ -70,6 +70,6 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 
 const styles = StyleSheet.create({
     headerButton: {
-        marginRight: 14,
+        marginHorizontal: 14,
     },
 })

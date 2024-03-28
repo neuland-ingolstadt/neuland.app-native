@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext } from '@/components/provider'
+import { RouteParamsContext } from '@/components/contexts'
 import { type NormalizedLecturer } from '@/types/utils'
 import { ROW_PADDING } from '@/utils/style-utils'
 import { router } from 'expo-router'

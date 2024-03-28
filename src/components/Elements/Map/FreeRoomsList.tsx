@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext } from '@/components/provider'
+import { RouteParamsContext } from '@/components/contexts'
 import { type AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'

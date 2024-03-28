@@ -1,3 +1,4 @@
+import { type SEARCH_TYPES } from './map'
 import { type Lecturers } from './thi-api'
 
 export interface Exam {
@@ -58,8 +59,13 @@ export interface AvailableRoom {
 
 export interface RoomEntry {
     coordinates: number[][]
-    options?: string[] | object
+    options: RoomOptions
     properties: Properties
+}
+
+interface RoomOptions {
+    center: number[]
+    type: SEARCH_TYPES
 }
 
 interface Properties {
@@ -95,7 +101,7 @@ export interface TimetableSections {
     data: FriendlyTimetableEntry[]
 }
 
-export interface CalendarEvent extends ICalendarEventBase {
+export interface CalendarEvent {
     textColor: string
     color: string
     location?: string

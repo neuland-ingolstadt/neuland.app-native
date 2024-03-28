@@ -1,6 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
 import { type Colors } from '@/components/colors'
-import { NotificationContext, RouteParamsContext } from '@/components/provider'
+import { NotificationContext, RouteParamsContext } from '@/components/contexts'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
