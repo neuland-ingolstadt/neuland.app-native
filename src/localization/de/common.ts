@@ -151,6 +151,11 @@ export default {
                     total: 'Räume insgesamt',
                     floors: 'Etagen',
                 },
+                location: {
+                    title: 'Standort',
+                    alert: 'Um deinen aktuellen Standort anzuzeigen, musst du die Standortberechtigung aktivieren.',
+                    button: 'Einstellungen',
+                },
             },
         },
         rooms: {

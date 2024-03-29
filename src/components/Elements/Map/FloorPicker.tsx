@@ -2,8 +2,19 @@ import { type Colors } from '@/components/colors'
 import { MapContext } from '@/hooks/contexts/map'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
+import { getCurrentPositionAsync } from 'expo-location'
+import * as Location from 'expo-location'
 import React, { useContext } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import {
+    Alert,
+    Linking,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { type WebView } from 'react-native-webview'
 
 import PlatformIcon from '../Universal/Icon'
@@ -23,7 +34,54 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
     mapRef,
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
-    const { currentFloor, setCurrentFloor, location } = useContext(MapContext)
+    const { currentFloor, setCurrentFloor, setLocation } =
+        useContext(MapContext)
+    const { t } = useTranslation('common')
+    const locationAlert = (): void => {
+        Alert.alert(
+            t('pages.map.details.location.title'),
+            t('pages.map.details.location.alert'),
+            [
+                {
+                    text: t('misc.cancel'),
+                    style: 'cancel',
+                },
+                {
+                    text: t('pages.map.details.location.settings'),
+                    onPress: () => {
+                        void Linking.openSettings()
+                    },
+                },
+            ]
+        )
+    }
+
+    async function getCurrentPosition(): Promise<void> {
+        const { status } = await Location.requestForegroundPermissionsAsync()
+        if (status !== 'granted') {
+            setLocation('notGranted')
+            locationAlert()
+        } else {
+            try {
+                const location = await getCurrentPositionAsync({
+                    accuracy: Location.Accuracy.High,
+                })
+                setLocation(location)
+                _injectCurrentLocation(
+                    mapRef,
+                    colors,
+                    Math.min(location.coords.accuracy ?? 5, 80),
+                    [location.coords.latitude, location.coords.longitude]
+                )
+                _setView(
+                    [location.coords.latitude, location.coords.longitude],
+                    mapRef
+                )
+            } catch (e) {
+                console.error(e)
+            }
+        }
+    }
     return (
         <View style={styles.ButtonArea}>
             <View>
@@ -139,23 +197,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 {
                     <Pressable
                         onPress={() => {
-                            if (location === null) return
-                            _injectCurrentLocation(
-                                mapRef,
-                                colors,
-                                location.coords.accuracy ?? 5,
-                                [
-                                    location.coords.latitude,
-                                    location.coords.longitude,
-                                ]
-                            )
-                            _setView(
-                                [
-                                    location.coords.latitude,
-                                    location.coords.longitude,
-                                ],
-                                mapRef
-                            )
+                            void getCurrentPosition()
                         }}
                     >
                         <View

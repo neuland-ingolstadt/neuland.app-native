@@ -150,6 +150,11 @@ export default {
                     total: 'Total rooms',
                     floors: 'Floors',
                 },
+                location: {
+                    title: 'Location',
+                    alert: 'To see your current location, please enable location services.',
+                    settings: 'Settings',
+                },
             },
         },
 

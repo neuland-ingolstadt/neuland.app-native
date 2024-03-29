@@ -112,7 +112,7 @@ if (window.currentLocationMarker) {
 window.currentLocationMarker = L.circle(${JSON.stringify(currentLocation)}, {
     color: ${JSON.stringify(colors.primary)},
     fillColor: ${JSON.stringify(colors.primary)},
-    fillOpacity: 0.5,
+    fillOpacity: 0.6,
     radius: ${accuracy},
 }).addTo(mymap);
 true;

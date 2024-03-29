@@ -12,8 +12,8 @@ interface MapContextType {
     setAvailableRooms: (_: AvailableRoom[]) => void
     currentFloor: string
     setCurrentFloor: (_: string) => void
-    location: LocationObject | null
-    setLocation: (_: LocationObject | null) => void
+    location: LocationObject | null | 'notGranted'
+    setLocation: (_: LocationObject | null | 'notGranted') => void
 }
 
 export const MapContext = createContext<MapContextType>({
@@ -30,5 +30,5 @@ export const MapContext = createContext<MapContextType>({
     setCurrentFloor: (_: string) => {},
 
     location: null,
-    setLocation: (_: LocationObject | null) => {},
+    setLocation: (_: LocationObject | null | 'notGranted') => {},
 })

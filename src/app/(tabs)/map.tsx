@@ -21,9 +21,9 @@ export default function Screen(): JSX.Element {
         useState<ClickedMapElement | null>(null)
     const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
     const [currentFloor, setCurrentFloor] = useState('EG')
-    const [location, setLocation] = useState<Location.LocationObject | null>(
-        null
-    )
+    const [location, setLocation] = useState<
+        Location.LocationObject | null | 'notGranted'
+    >(null)
     const contextValue = {
         localSearch,
         setLocalSearch,

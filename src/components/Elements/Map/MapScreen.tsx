@@ -46,7 +46,6 @@ import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useIsFocused, useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import * as Location from 'expo-location'
 import { StatusBar } from 'expo-status-bar'
 import React, {
     useCallback,
@@ -103,7 +102,6 @@ const MapScreen = (): JSX.Element => {
         availableRooms,
         setAvailableRooms,
         currentFloor,
-        setLocation,
         setCurrentFloor,
     } = useContext(MapContext)
 
@@ -238,34 +236,33 @@ const MapScreen = (): JSX.Element => {
         handlePresentModalPress()
     }, [routeParams])
 
-    useEffect(() => {
-        let locationSubscription: Location.LocationSubscription
-        void (async () => {
-            const { status } =
-                await Location.requestForegroundPermissionsAsync()
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied')
-                return
-            }
+    // useEffect(() => {
+    //     let locationSubscription: Location.LocationSubscription
+    //     void (async () => {
+    //         const { status } =
+    //             await Location.requestForegroundPermissionsAsync()
+    //         if (status !== 'granted') {
+    //             setLocation('notGranted')
+    //         }
 
-            locationSubscription = await Location.watchPositionAsync(
-                {
-                    accuracy: Location.Accuracy.High,
-                    timeInterval: 1000, // Update every 1 second
-                    distanceInterval: 1, // Or every 1 meter
-                },
-                (location) => {
-                    setLocation(location)
-                }
-            )
-        })()
+    //         locationSubscription = await Location.watchPositionAsync(
+    //             {
+    //                 accuracy: Location.Accuracy.High,
+    //                 timeInterval: 1000, // Update every 1 second
+    //                 distanceInterval: 1, // Or every 1 meter
+    //             },
+    //             (location) => {
+    //                 setLocation(location)
+    //             }
+    //         )
+    //     })()
 
-        return () => {
-            if (locationSubscription != null) {
-                locationSubscription.remove()
-            }
-        }
-    }, [])
+    //     return () => {
+    //         if (locationSubscription != null) {
+    //             locationSubscription.remove()
+    //         }
+    //     }
+    // }, [])
 
     useEffect(() => {
         setMapCenter(
