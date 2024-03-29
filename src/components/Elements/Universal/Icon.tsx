@@ -16,6 +16,16 @@ interface PlatformIconProps {
     ios: {
         name: string
         size: number
+        weight?:
+            | 'ultraLight'
+            | 'thin'
+            | 'light'
+            | 'regular'
+            | 'medium'
+            | 'semibold'
+            | 'bold'
+            | 'heavy'
+            | 'black'
         variant?: string
         fallback?: boolean
         renderMode?:
@@ -64,6 +74,7 @@ const PlatformIcon = ({
                             ? [ios.additionalColor]
                             : []),
                     ]}
+                    weight={ios.weight ?? 'regular'}
                     style={{
                         ...style,
                     }}

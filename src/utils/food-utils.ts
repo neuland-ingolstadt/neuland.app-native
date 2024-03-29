@@ -29,27 +29,55 @@ export async function loadFoodEntries(
             (x: any) => new Date(x.timestamp).getTime() >= startOfToday
         )
     }
+
+    async function fetchDataFromAPI(
+        apiCall: () => Promise<any>,
+        entries: any[],
+        includeStatic: boolean = true
+    ): Promise<void> {
+        try {
+            const data = await apiCall()
+            const filteredData = filterData(data)
+            if (!includeStatic) {
+                filteredData.forEach((day: any) => {
+                    day.meals = day.meals.filter(
+                        (entry: any) => entry.static === false
+                    )
+                })
+            }
+            entries.push(filteredData)
+        } catch (error: unknown) {
+            if (
+                error instanceof Error &&
+                error.message.startsWith('API returned an error')
+            ) {
+                console.error(error)
+            } else {
+                throw error
+            }
+        }
+    }
+
     if (restaurants.includes('mensa')) {
-        const data = await NeulandAPI.getMensaPlan()
-        entries.push(filterData(data))
+        await fetchDataFromAPI(
+            NeulandAPI.getMensaPlan.bind(NeulandAPI),
+            entries
+        )
     }
 
     if (restaurants.includes('reimanns')) {
-        const data = await NeulandAPI.getReimannsPlan()
-        const filteredData = filterData(data)
-        if (!includeStatic) {
-            filteredData.forEach((day: any) => {
-                day.meals = day.meals.filter(
-                    (entry: any) => entry.static === false
-                )
-            })
-        }
-        entries.push(filteredData)
+        await fetchDataFromAPI(
+            NeulandAPI.getReimannsPlan.bind(NeulandAPI),
+            entries,
+            includeStatic
+        )
     }
 
     if (restaurants.includes('canisius')) {
-        const data = await NeulandAPI.getCanisiusPlan()
-        entries.push(filterData(data))
+        await fetchDataFromAPI(
+            NeulandAPI.getCanisiusPlan.bind(NeulandAPI),
+            entries
+        )
     }
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday

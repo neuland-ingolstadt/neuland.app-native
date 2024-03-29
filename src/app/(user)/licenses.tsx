@@ -19,13 +19,18 @@ export default function Licenses(): JSX.Element {
     const atRegex = /(?:@)/gi
 
     const licensesStaticFiltered = Object.entries(licensesStatic)
-        .filter(([key, license]) => license.platform.includes(Platform.OS))
+        .filter(
+            ([_, license]) =>
+                license.platform.includes(Platform.OS) ||
+                license.platform.includes('all')
+        )
         .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {})
 
     const licensesCombined = { ...licenses, ...licensesStaticFiltered }
 
-    const licensesList = Object.entries(licensesCombined).map(
-        ([key, value]) => {
+    const licensesList = Object.entries(licensesCombined)
+        .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+        .map(([key, value]) => {
             const version = key.match(numberRegex)
             const nameWithoutVersion = key
                 .replace(atRegex, '')
@@ -45,8 +50,7 @@ export default function Licenses(): JSX.Element {
                     })
                 },
             }
-        }
-    )
+        })
 
     const sections: FormListSections[] = [
         {

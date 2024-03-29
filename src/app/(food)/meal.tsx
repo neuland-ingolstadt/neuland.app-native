@@ -6,7 +6,7 @@ import {
     FoodFilterContext,
     RouteParamsContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'

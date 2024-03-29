@@ -1,6 +1,6 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
-import { FoodFilterContext, UserKindContext } from '@/components/provider'
+import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type LanguageKey } from '@/localization/i18n'
 import { formatISODate } from '@/utils/date-utils'
 import {
@@ -147,7 +147,7 @@ const FoodCard = (): JSX.Element => {
                 router.replace('food')
             }}
         >
-            {isSuccess && data.length > 0 && (
+            {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
                         <Text

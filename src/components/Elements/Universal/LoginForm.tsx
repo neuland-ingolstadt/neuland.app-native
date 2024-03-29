@@ -6,7 +6,7 @@ import {
     DashboardContext,
     FlowContext,
     UserKindContext,
-} from '@/components/provider'
+} from '@/components/contexts'
 import { USER_EMPLOYEE, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'

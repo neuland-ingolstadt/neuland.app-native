@@ -31,7 +31,7 @@ const EventsCard = (): JSX.Element => {
                 router.push('events')
             }}
         >
-            {isSuccess && (
+            {Boolean(isSuccess) && data !== undefined && (
                 <View
                     style={{
                         ...styles.calendarView,

@@ -10,11 +10,6 @@ module.exports = {
         githubUrl: 'https://github.com/neuland-ingolstadt/neuland.app-native/',
         orientation: 'portrait',
         userInterfaceStyle: 'automatic',
-        extra: {
-            eas: {
-                projectId: 'b0ef9e3f-3115-44b0-abc7-99dd75821353',
-            },
-        },
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
             buildNumber: '1',
@@ -45,7 +40,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 71,
+            versionCode: 76,
             splash: {
                 image: './src/assets/splash.png',
                 resizeMode: 'contain',
@@ -75,6 +70,13 @@ module.exports = {
                 },
             ],
             [
+                'expo-location',
+                {
+                    locationAlwaysAndWhenInUsePermission:
+                        'Allow $(PRODUCT_NAME) to use your location.',
+                },
+            ],
+            [
                 '@sentry/react-native/expo',
                 {
                     organization: 'neuland-ingolstadt',
@@ -82,5 +84,10 @@ module.exports = {
                 },
             ],
         ],
+        extra: {
+            eas: {
+                projectId: 'b0ef9e3f-3115-44b0-abc7-99dd75821353',
+            },
+        },
     },
 }

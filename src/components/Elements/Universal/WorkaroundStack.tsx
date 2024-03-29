@@ -3,6 +3,7 @@ import { type HeaderButtonProps } from '@react-navigation/native-stack/lib/types
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export interface WorkaroundStackProps {
     name: string
@@ -43,29 +44,31 @@ function WorkaroundStack({
 
     return (
         <>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name={name}
-                    options={{
-                        title: t(
-                            // @ts-expect-error Type not checked
-                            titleKey
-                        ),
-                        headerShown: true,
-                        headerLargeTitle: largeTitle,
-                        headerRight: headerRightElement,
-                        ...(Platform.OS === 'ios' && transparent
-                            ? {
-                                  headerTransparent: true,
-                                  headerBlurEffect: 'regular',
-                              }
-                            : {}),
-                        headerSearchBarOptions,
-                    }}
-                    component={component}
-                    initialParams={params}
-                />
-            </Stack.Navigator>
+            <SafeAreaProvider>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name={name}
+                        options={{
+                            title: t(
+                                // @ts-expect-error Type not checked
+                                titleKey
+                            ),
+                            headerShown: true,
+                            headerLargeTitle: largeTitle,
+                            headerRight: headerRightElement,
+                            ...(Platform.OS === 'ios' && transparent
+                                ? {
+                                      headerTransparent: true,
+                                      headerBlurEffect: 'regular',
+                                  }
+                                : {}),
+                            headerSearchBarOptions,
+                        }}
+                        component={component}
+                        initialParams={params}
+                    />
+                </Stack.Navigator>
+            </SafeAreaProvider>
         </>
     )
 }
