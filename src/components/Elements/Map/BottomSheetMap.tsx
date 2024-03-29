@@ -223,6 +223,12 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 onPress={() => {
                                     router.push('(map)/advanced')
                                 }}
+                                hitSlop={{
+                                    top: 10,
+                                    right: 10,
+                                    bottom: 10,
+                                    left: 10,
+                                }}
                             >
                                 <Text
                                     style={{
@@ -387,13 +393,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 22,
         marginTop: 6,
-        marginBottom: 6,
+        marginBottom: 4,
         textAlign: 'left',
     },
     suggestionSectionHeaderContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-end',
+        marginBottom: 3,
     },
     suggestionMoreButtonText: {
         textAlign: 'right',
@@ -411,7 +418,6 @@ const styles = StyleSheet.create({
     suggestionRow: {
         padding: 10,
         flexDirection: 'row',
-
         justifyContent: 'space-between',
     },
     suggestionInnerRow: {

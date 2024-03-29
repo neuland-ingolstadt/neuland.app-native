@@ -187,8 +187,7 @@ const styles = StyleSheet.create({
     },
     modalSectionHeader: {
         fontWeight: '600',
-        fontSize: 24,
-        marginBottom: 4,
+        fontSize: 26,
         textAlign: 'left',
     },
     roomSubtitle: {
@@ -197,8 +196,8 @@ const styles = StyleSheet.create({
     modalSectionHeaderContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingBottom: 0,
     },
-
     roomDetailButton: {
         borderRadius: 25,
         padding: 7,
@@ -207,5 +206,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    buttonsContainer: { flexDirection: 'row', gap: 10 },
+    buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
 })

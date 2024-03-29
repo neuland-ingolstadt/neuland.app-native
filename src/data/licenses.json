@@ -233,13 +233,19 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "fuse.js@7.0.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/krisk/Fuse",
+        "licenseUrl": "https://github.com/krisk/Fuse/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "i18next@23.10.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "metro@0.80.7": {
+    "metro@0.80.8": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/metro",
         "licenseUrl": "https://github.com/facebook/metro",

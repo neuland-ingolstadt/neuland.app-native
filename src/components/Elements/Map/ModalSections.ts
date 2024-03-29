@@ -72,12 +72,6 @@ export const modalSection = (
                       {
                           header: t('pages.map.details.room.details'),
                           items: [
-                              {
-                                  title: t('pages.map.details.room.type'),
-                                  value:
-                                      roomData.properties.Funktion_en ??
-                                      t('misc.unknown'),
-                              },
                               ...(occupancies != null
                                   ? [
                                         {
@@ -98,6 +92,12 @@ export const modalSection = (
                                   title: t('pages.map.details.room.floor'),
                                   value:
                                       roomData.properties.Ebene ??
+                                      t('misc.unknown'),
+                              },
+                              {
+                                  title: t('pages.map.details.room.type'),
+                                  value:
+                                      roomData.properties.Funktion_en ??
                                       t('misc.unknown'),
                               },
                               {

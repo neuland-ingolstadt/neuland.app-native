@@ -124,7 +124,6 @@ export const _injectMarker = (
     mapRef: React.RefObject<WebView>,
     coordinates: number[]
 ): void => {
-    console.log(coordinates)
     mapRef.current?.injectJavaScript(`
 if (window.marker) {
     window.marker.remove();
