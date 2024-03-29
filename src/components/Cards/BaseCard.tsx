@@ -10,7 +10,7 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
 import PlatformIcon from '../Elements/Universal/Icon'
-import { DashboardContext, UserKindContext } from '../provider'
+import { DashboardContext, UserKindContext } from '../contexts'
 
 interface BaseCardProps {
     title: string

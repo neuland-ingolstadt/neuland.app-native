@@ -1,7 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { type LanguageKey } from '@/localization/i18n'
 import { type AvailableRoom, type RoomEntry } from '@/types/utils'
-import { formatFriendlyTime } from '@/utils/date-utils'
 import type WebView from 'react-native-webview'
 
 /**
@@ -18,43 +16,50 @@ export const _addRoom = (
     room: RoomEntry,
     availableRooms: AvailableRoom[],
     mapRef: React.RefObject<WebView>,
-    colors: Colors,
-    language: LanguageKey
+    colors: Colors
 ): void => {
-    const coordinates = [[...room.coordinates]]
+    const coordinates = room.coordinates
     const name = room?.properties?.Raum
-    const functionType =
-        room?.properties[language === 'en' ? 'Funktion_en' : 'Funktion_de']
     const avail = availableRooms?.find((x) => x.room === name)
-
     const color = avail != null ? colors.primary : 'grey'
 
-    if (coordinates == null) return
-    mapRef.current?.injectJavaScript(`
-var geojsonFeature = {
-    "type": "Feature",
-    "geometry": {
-        "type": "Polygon",
-        "coordinates": ${JSON.stringify(coordinates)}
-    },
-};
+    const geojsonFeature = {
+        type: 'Feature',
+        geometry: {
+            type: 'Polygon',
+            coordinates: [coordinates],
+        },
+        properties: {
+            room: room?.properties.Raum,
+            center: room?.options?.center,
+        },
+    }
 
-L.geoJSON(geojsonFeature, {
-    color: ${JSON.stringify(color)},
-    fillOpacity: 0.2,
-}).addTo(mymap).bringToBack()
-.bindPopup("<b>${name.toString()} </b><br>${
-        functionType != null ? functionType.toString() : ''
-    }<br>${
-        avail != null
-            ? 'Free from ' +
-              formatFriendlyTime(avail.from) +
-              ' to ' +
-              formatFriendlyTime(avail.until)
-            : ''
-    }");
-true
-`)
+    if (mapRef.current == null) return
+    mapRef.current.injectJavaScript(`
+        var geojsonFeature = ${JSON.stringify(geojsonFeature)};
+
+        var layer = L.geoJSON(geojsonFeature, {
+            color: ${JSON.stringify(color)},
+            fillOpacity: 0.2,
+        }).addTo(mymap).bringToBack();
+
+        // Add click event listener to the layer
+        layer.on('click', function(e) {
+            var properties = e.layer.feature.properties;
+           
+
+            // Send data to React Native app
+            sendMessageToRN(JSON.stringify({
+                type: 'roomClick',
+                payload: {
+                    type: 'room',
+                    properties: properties,
+                },
+            }));
+        });
+        true;
+    `)
 }
 
 /**
@@ -92,6 +97,53 @@ true;
 `)
 }
 
+// inject the current location into the map
+export const _injectCurrentLocation = (
+    mapRef: React.RefObject<WebView>,
+    colors: Colors,
+    accuracy: number,
+    currentLocation: number[]
+): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.currentLocationMarker) {
+    window.currentLocationMarker.remove();
+}
+
+window.currentLocationMarker = L.circle(${JSON.stringify(currentLocation)}, {
+    color: ${JSON.stringify(colors.primary)},
+    fillColor: ${JSON.stringify(colors.primary)},
+    fillOpacity: 0.6,
+    radius: ${accuracy},
+}).addTo(mymap);
+true;
+`)
+}
+
+// inject a marker into the map to show the highlighted room
+export const _injectMarker = (
+    mapRef: React.RefObject<WebView>,
+    coordinates: number[]
+): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.marker) {
+    window.marker.remove();
+}
+
+window.marker = L.marker(${JSON.stringify(coordinates)}).addTo(mymap);
+true;
+`)
+}
+
+// remove the marker from the map
+export const _removeMarker = (mapRef: React.RefObject<WebView>): void => {
+    mapRef.current?.injectJavaScript(`
+if (window.marker) {
+    window.marker.remove();
+}
+true;
+`)
+}
+
 /**
  * A string containing an HTML script that initializes a Leaflet map with OpenStreetMap tiles and event listeners for error and internet connection checking.
  */
@@ -106,12 +158,18 @@ export const htmlScript = `
     <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==" crossorigin="anonymous">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==" crossorigin=""></script>
+    <style>
+        body {
+            -webkit-user-select: none;
+            /* Other browsers */
+            user-select: none;
+        }
+    </style>
 </head>
 <body style="padding: 0; margin: 0">
     <div id="mapid" style="width: 100%; height: 100vh;"></div>
     <script>
         function sendMessageToRN(message) {
-            // Send message to React Native
             window.ReactNativeWebView.postMessage(message);
         }
 
@@ -128,6 +186,8 @@ export const htmlScript = `
             }
         }
 
+
+        
         // Add event listeners
         window.addEventListener('error', handleLoadError, true);
         window.addEventListener('online', checkInternetConnection);
@@ -140,6 +200,12 @@ export const htmlScript = `
             attribution: 'Map data &copy; OpenStreetMap contributors'
         }).addTo(mymap);
         
+        mymap.on('popupopen', function (e) {
+            var popup = e.popup.getContent();
+            sendMessageToRN(popup);
+        });
+
+
     </script>
 </body>
 </html>

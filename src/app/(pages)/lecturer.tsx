@@ -1,6 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext } from '@/components/provider'
+import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
 import { PAGE_PADDING } from '@/utils/style-utils'

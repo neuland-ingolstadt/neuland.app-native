@@ -120,7 +120,9 @@ export function useDashboard(): Dashboard {
             const entries = [...prevEntries]
             const hiddenEntries = [...hiddenDashboardEntries]
 
-            const index = hiddenEntries.findIndex((x) => x.key === key)
+            const index = hiddenEntries.findIndex(
+                (x) => x !== undefined && x.key === key
+            )
             if (index >= 0) {
                 const shownCard = hiddenEntries[index]
                 entries.push(shownCard)

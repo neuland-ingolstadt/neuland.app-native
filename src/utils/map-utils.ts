@@ -1,6 +1,11 @@
 import API from '@/api/authenticated-api'
+import { type FeatureProperties } from '@/types/asset-api'
+import { SEARCH_TYPES } from '@/types/map'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
+import { trackEvent } from '@aptabase/react-native'
+import { type TFunction } from 'i18next'
+import { Platform, Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
 
@@ -23,12 +28,23 @@ export const BUILDINGS_IN = [
     'W',
     'Z',
 ]
+export const INGOLSTADT_CENTER = [48.7667, 11.4328]
+export const NEUBURG_CENTER = [48.73227, 11.17261]
 export const BUILDINGS_ND = ['BN', 'CN']
 export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 export const SUGGESTION_DURATION_PRESET = 90
+export const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
+export const FLOOR_SUBSTITUTES: Record<string, string> = {
+    0: 'EG',
+    0.5: '1.5',
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+}
 
 /**
  * Adds minutes to a date object.
@@ -240,4 +256,151 @@ export async function searchRooms(
                 endDate <= opening.until
         )
         .sort((a, b) => a.room.localeCompare(b.room))
+}
+
+export function getCenter(rooms: number[][][]): number[] {
+    const getCenterPoint = (points: number[][]): number[] => {
+        const x = points.map((point) => point[0])
+        const y = points.map((point) => point[1])
+        const minX = Math.min(...x)
+        const maxX = Math.max(...x)
+        const minY = Math.min(...y)
+        const maxY = Math.max(...y)
+        return [(minX + maxX) / 2, (minY + maxY) / 2]
+    }
+
+    const centerPoints = rooms.reduce(
+        (acc, room) => {
+            const centerPoint = getCenterPoint(room)
+            acc.lon += centerPoint[0]
+            acc.lat += centerPoint[1]
+            acc.count += 1
+            return acc
+        },
+        { lon: 0, lat: 0, count: 0 }
+    )
+
+    return [
+        centerPoints.lat / centerPoints.count,
+        centerPoints.lon / centerPoints.count,
+    ]
+}
+
+export function getCenterSingle(coordinates: number[][] | undefined): number[] {
+    if (coordinates == null) {
+        return INGOLSTADT_CENTER
+    }
+    const centerPoints = coordinates.reduce(
+        (acc, coordinate) => {
+            acc.lon += coordinate[0]
+            acc.lat += coordinate[1]
+            acc.count += 1
+            return acc
+        },
+        { lon: 0, lat: 0, count: 0 }
+    )
+
+    return [
+        centerPoints.lat / centerPoints.count,
+        centerPoints.lon / centerPoints.count,
+    ]
+}
+
+/**
+ * Opens the share modal with the room link.
+ * @param room Room name
+ */
+export const handleShareModal = (room: string): void => {
+    const payload = 'https://neuland.app/rooms/?highlight=' + room
+    trackEvent('Share', {
+        type: 'room',
+    })
+    void Share.share(
+        Platform.OS === 'android' ? { message: payload } : { url: payload }
+    )
+}
+
+/**
+ * Adjusts error message to use it with ErrorView
+ * @param errorMsg Error message
+ * @returns
+ */
+export function adjustErrorTitle(errorMsg: string, t: TFunction<any>): string {
+    switch (errorMsg) {
+        case 'noInternetConnection':
+            return 'Network request failed'
+        case 'mapLoadError':
+            return t('error.map.mapLoadError')
+        case 'mapOverlay':
+            return t('error.map.mapOverlay')
+        default:
+            return 'Error'
+    }
+}
+
+/**
+ * Determines the type of search based on the search string.
+ * @param search Search string
+ * @returns The search type
+ */
+export const determineSearchType = (search: string): SEARCH_TYPES => {
+    if (
+        (search.length === 1 || search.length === 2) &&
+        isNaN(Number(search[1]))
+    ) {
+        return SEARCH_TYPES.ROOM
+    }
+
+    if (/^[A-Z](G|[0-9E]\.)?\d*$/.test(search)) {
+        return SEARCH_TYPES.ROOM
+    }
+
+    if (/^[A-Z]+$/.test(search)) {
+        return SEARCH_TYPES.ROOM
+    }
+
+    return SEARCH_TYPES.ROOM
+}
+
+export const getIcon = (
+    type: SEARCH_TYPES,
+    properties?: { result: { item: { properties: FeatureProperties } } }
+): { ios: string; android: string } => {
+    const {
+        Funktion_en: funktionEn,
+        Raum: raum,
+    }: { Funktion_en: string; Raum: string } = properties?.result.item
+        .properties ?? { Funktion_en: '', Raum: '' }
+    const food = ['M001', 'X001', 'F001']
+    switch (type) {
+        case SEARCH_TYPES.BUILDING:
+            return { ios: 'building', android: 'corporate_fare' }
+        case SEARCH_TYPES.ROOM:
+            if (funktionEn.length > 0) {
+                if (funktionEn.includes('PC')) {
+                    return { ios: 'pc', android: 'keyboard' }
+                } else if (funktionEn.includes('Lab')) {
+                    return { ios: 'flask', android: 'science' }
+                } else if (food.includes(raum)) {
+                    return { ios: 'fork.knife', android: 'local_cafe' }
+                } else if (funktionEn.includes('Office')) {
+                    return { ios: 'lamp.desk', android: 'business_center' }
+                } else if (funktionEn.includes('Toilet')) {
+                    return { ios: 'toilet', android: 'wc' }
+                } else if (
+                    funktionEn.includes('Lecture') ||
+                    funktionEn.includes('Seminar')
+                ) {
+                    return { ios: 'studentdesk', android: 'school' }
+                } else if (funktionEn.includes('Corridor')) {
+                    return {
+                        ios: 'arrow.triangle.turn.up.right.diamond',
+                        android: 'directions',
+                    }
+                }
+            }
+            return { ios: 'mappin', android: 'location_on' }
+        default:
+            return { ios: 'mappin', android: 'location_on' }
+    }
 }

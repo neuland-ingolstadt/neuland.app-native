@@ -46,6 +46,8 @@ export default {
         confirm: 'Confirm',
         delete: 'Delete',
         disable: 'Disable',
+        more: 'more',
+        unknown: 'Unknown',
     },
     pages: {
         calendar: {
@@ -108,14 +110,54 @@ export default {
             },
         },
         map: {
-            search: 'Search for: G, W003, Toilette, ...',
+            search: {
+                placeholder: 'Search for rooms, buildings, ...',
+                recent: 'Recent searches',
+                clear: 'Clear history',
+                noResults: 'No search results',
+                results: 'Results',
+                fuzzy: 'Suggestions',
+            },
+
             easterEgg: {
                 title: 'Easter Egg',
                 message:
                     'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
                 confirm: 'Nice!',
             },
+            noAvailableRooms: 'No free rooms available',
+            details: {
+                room: {
+                    details: 'Room details',
+                    title: 'Room',
+                    capacity: 'Capacity',
+                    availability: 'Availability',
+                    timeLeft: 'Time left',
+                    building: 'Building',
+                    timeSpan: 'Time span',
+                    floor: 'Floor',
+                    type: 'Type',
+                    equipment: 'Equipment',
+                    available: 'Available',
+                    notAvailable: 'Not available',
+                    availableRooms: 'Available rooms',
+                    availableRoomsTitle: 'Available rooms',
+                    availableRoomsSubtitle: 'Rooms with available seats',
+                    signIn: 'Sign in to see available rooms',
+                },
+                building: {
+                    free: 'Free rooms',
+                    total: 'Total rooms',
+                    floors: 'Floors',
+                },
+                location: {
+                    title: 'Location',
+                    alert: 'To see your current location, please enable location services.',
+                    settings: 'Settings',
+                },
+            },
         },
+
         rooms: {
             options: {
                 title: 'Search options',

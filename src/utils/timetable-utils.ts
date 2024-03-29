@@ -31,9 +31,24 @@ export async function getFriendlyTimetable(
 
     const rawTimetable = rawTimetableResponse.timetable
     const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
+    // the reduce is need to merge the two timetables with potentially overlapping dates
+    const mergedTimetable = [...rawTimetable, ...rawTimetableNextMonth].reduce<
+        typeof rawTimetable
+    >((acc, curr) => {
+        const existingIndex = acc.findIndex((item) => item.date === curr.date)
 
-    rawTimetable.push(...rawTimetableNextMonth)
-    return rawTimetable
+        if (existingIndex > -1) {
+            acc[existingIndex].hours = {
+                ...acc[existingIndex].hours,
+                ...curr.hours,
+            }
+        } else {
+            acc.push(curr)
+        }
+
+        return acc
+    }, [])
+    return mergedTimetable
         .filter((day) => day !== null)
         .flatMap((day) =>
             Object.values(day.hours).flatMap((hours) =>

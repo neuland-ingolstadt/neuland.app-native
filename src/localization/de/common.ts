@@ -48,6 +48,8 @@ export default {
         confirm: 'Bestätigen',
         delete: 'Löschen',
         disable: 'Deaktivieren',
+        more: 'mehr',
+        unknown: 'Unbekannt',
     },
     pages: {
         calendar: {
@@ -110,12 +112,50 @@ export default {
             },
         },
         map: {
-            search: 'Suche nach G, W003, Toilette ...',
+            search: {
+                placeholder: 'Suche nach Räumen, Gebäuden, ...',
+                recent: 'Kürzlich gesucht',
+                clear: 'Verlauf löschen',
+                noResults: 'Keine Suchergebnisse',
+                results: 'Suchergebnisse',
+                fuzzy: 'Vorschläge',
+            },
+
             easterEgg: {
                 title: 'Easter Egg',
                 message:
                     'Du hast das exklusive App-Icon "Neuland Pink" freigeschaltet! 🩷',
                 confirm: 'Nice!',
+            },
+            noAvailableRooms: 'Keine freien Räume verfügbar',
+            details: {
+                room: {
+                    details: 'Raumdetails',
+                    title: 'Raum',
+                    capacity: 'Kapazität',
+                    availability: 'Verfügbarkeit',
+                    timeLeft: 'Verbleibende Zeit',
+                    building: 'Gebäude',
+                    timeSpan: 'Zeitspanne',
+                    floor: 'Etage',
+                    type: 'Typ',
+                    available: 'Verfügbar',
+                    notAvailable: 'Nicht verfügbar',
+                    availableRooms: 'Verfügbare Räume',
+                    availableRoomsTitle: 'Verfügbare Räume',
+                    availableRoomsSubtitle: 'Räume mit verfügbaren Plätzen',
+                    signIn: 'Melden Sie sich an, um verfügbare Räume zu sehen',
+                },
+                building: {
+                    free: 'Freie Räume',
+                    total: 'Räume insgesamt',
+                    floors: 'Etagen',
+                },
+                location: {
+                    title: 'Standort',
+                    alert: 'Um deinen aktuellen Standort anzuzeigen, musst du die Standortberechtigung aktivieren.',
+                    button: 'Einstellungen',
+                },
             },
         },
         rooms: {

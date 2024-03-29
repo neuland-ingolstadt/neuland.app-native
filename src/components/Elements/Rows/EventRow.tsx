@@ -31,7 +31,6 @@ const CLEventRow = ({
     const { t } = useTranslation('common')
     const begin = new Date(event.begin)
     const end = event.end !== null ? new Date(event.end) : null
-    console.log(event.organizer, event.title, event.begin, event.end)
     return (
         <RowEntry
             title={event.title}
