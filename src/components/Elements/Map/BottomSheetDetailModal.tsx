@@ -10,7 +10,6 @@ import {
 } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import {
     Platform,
@@ -63,7 +62,6 @@ export const BottomSheetDetailModal = ({
     const colors = useTheme().colors as Colors
     return (
         <BottomSheetModalProvider>
-            <StatusBar style="dark" />
             <BottomSheetModal
                 ref={bottomSheetModalRef}
                 snapPoints={['30%', '47%', '60%']}

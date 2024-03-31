@@ -22,7 +22,9 @@ export const modalSection = (
 ): FormListSections[] => {
     if (
         roomData.type === SEARCH_TYPES.ROOM &&
-        (roomData.occupancies !== null || roomData.properties !== null)
+        ((roomData.occupancies !== null &&
+            roomData.occupancies !== undefined) ||
+            (roomData.properties !== null && roomData.properties !== undefined))
     ) {
         const occupancies = roomData.occupancies as AvailableRoom
         return [
@@ -117,6 +119,7 @@ export const modalSection = (
         roomData.occupancies != null
     ) {
         const occupancies = roomData.occupancies as BuildingOccupancy
+        const properties: RoomData['properties'] = roomData.properties
         return [
             {
                 header: t('pages.map.details.room.details'),
@@ -131,11 +134,11 @@ export const modalSection = (
                     },
                     {
                         title: t('pages.map.details.building.floors'),
-                        value: roomData.properties.Etage,
+                        value: properties?.Etage ?? t('misc.unknown'),
                     },
                     {
                         title: 'Campus',
-                        value: locations[roomData.properties.Standort],
+                        value: locations?.[properties?.Standort],
                     },
                 ],
             },

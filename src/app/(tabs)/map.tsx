@@ -1,7 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
-import MapScreen, {
-    FocusAwareStatusBar,
-} from '@/components/Elements/Map/MapScreen'
+import MapScreen from '@/components/Elements/Map/MapScreen'
 import { MapContext } from '@/hooks/contexts/map'
 import { type ClickedMapElement } from '@/types/map'
 import { type AvailableRoom } from '@/types/utils'
@@ -53,7 +51,6 @@ export default function Screen(): JSX.Element {
             >
                 {isPageOpen ? (
                     <MapContext.Provider value={contextValue}>
-                        <FocusAwareStatusBar style="dark" />
                         <MapScreen />
                     </MapContext.Provider>
                 ) : (

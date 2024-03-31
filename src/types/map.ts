@@ -8,8 +8,8 @@ export enum SEARCH_TYPES {
 export interface RoomData {
     title: string
     subtitle: string
-    properties: RoomEntry['properties'] | null
-    occupancies: (AvailableRoom | null) | BuildingOccupancy
+    properties: RoomEntry['properties']
+    occupancies: AvailableRoom | BuildingOccupancy
     type: SEARCH_TYPES
 }
 

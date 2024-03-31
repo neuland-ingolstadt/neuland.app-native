@@ -132,9 +132,14 @@ export const MealEntry = ({
                     },
                 ]}
                 onPreviewPress={() => {
+                    const base64Event = Buffer.from(
+                        JSON.stringify(meal)
+                    ).toString('base64')
                     router.push({
                         pathname: '(food)/meal',
-                        params: { foodEntry: JSON.stringify(meal) },
+                        params: {
+                            foodEntry: base64Event,
+                        },
                     })
                 }}
                 onPress={(e) => {

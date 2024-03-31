@@ -2,6 +2,7 @@ export default {
     toast: {
         clipboard: 'copied to clipboard',
         paused: 'No internet connection',
+        roomNotFound: 'Room not found',
     },
     error: {
         title: 'An error occurred',

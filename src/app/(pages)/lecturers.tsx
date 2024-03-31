@@ -139,6 +139,7 @@ export default function LecturersCard(): JSX.Element {
             const options = {
                 keys: ['name', 'vorname', 'tel_dienst', 'raum'],
                 threshold: 0.4,
+                useExtendedSearch: true,
             }
 
             const fuse = new Fuse(allLecturersResult?.data ?? [], options)
