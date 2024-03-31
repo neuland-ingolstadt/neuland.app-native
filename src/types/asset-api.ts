@@ -63,6 +63,7 @@ export enum Gebaeude {
     P = 'P',
     S = 'S',
     W = 'W',
+    X = 'X',
     Z = 'Z',
 }
 

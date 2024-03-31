@@ -11,7 +11,6 @@ import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import Fuse from 'fuse.js'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +20,7 @@ import {
     SectionList,
     StyleSheet,
     Text,
+    TextInput,
     View,
 } from 'react-native'
 import { type SharedValue } from 'react-native-reanimated'
@@ -99,41 +99,57 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             animatedPosition={currentPosition}
             keyboardBehavior="extend"
         >
-            <StatusBar style="dark" />
-
             <View
                 style={{
                     paddingHorizontal: PAGE_PADDING,
                 }}
             >
-                <BottomSheetTextInput
-                    style={{
-                        backgroundColor: colors.inputBackground,
-                        ...styles.textInput,
-                        color: colors.text,
-                        ...Platform.select({
-                            android: {
-                                backgroundColor: colors.card,
-                            },
-                        }),
-                    }}
-                    placeholder={t('pages.map.search.placeholder')}
-                    placeholderTextColor={colors.labelColor}
-                    value={localSearch}
-                    enablesReturnKeyAutomatically
-                    clearButtonMode="always"
-                    enterKeyHint="search"
-                    onChangeText={(text) => {
-                        setLocalSearch(text)
-                    }}
-                    onFocus={() => {
-                        bottomSheetRef.current?.snapToIndex(2)
-                    }}
-                    onEndEditing={() => {
-                        // dismiss the keyboard when the user is done typing
-                        bottomSheetRef.current?.collapse()
-                    }}
-                />
+                {Platform.OS === 'ios' ? (
+                    <BottomSheetTextInput
+                        style={{
+                            backgroundColor: colors.inputBackground,
+                            ...styles.textInput,
+                            color: colors.text,
+                        }}
+                        placeholder={t('pages.map.search.placeholder')}
+                        placeholderTextColor={colors.labelColor}
+                        value={localSearch}
+                        enablesReturnKeyAutomatically
+                        clearButtonMode="always"
+                        enterKeyHint="search"
+                        onChangeText={(text) => {
+                            setLocalSearch(text)
+                        }}
+                        onFocus={() => {
+                            bottomSheetRef.current?.snapToIndex(2)
+                        }}
+                        onEndEditing={() => {
+                            bottomSheetRef.current?.collapse()
+                        }}
+                    />
+                ) : (
+                    <TextInput
+                        style={{
+                            backgroundColor: colors.inputBackground,
+                            ...styles.textInput,
+                            color: colors.text,
+                        }}
+                        placeholder={t('pages.map.search.placeholder')}
+                        placeholderTextColor={colors.labelColor}
+                        value={localSearch}
+                        enablesReturnKeyAutomatically
+                        clearButtonMode="always"
+                        onChangeText={(text) => {
+                            setLocalSearch(text)
+                        }}
+                        onFocus={() => {
+                            bottomSheetRef.current?.snapToIndex(2)
+                        }}
+                        onEndEditing={() => {
+                            bottomSheetRef.current?.collapse()
+                        }}
+                    />
+                )}
                 {localSearch !== '' ? (
                     searchResultsExact.length > 0 ||
                     searchResultsFuzzy.length > 0 ? (
@@ -293,7 +309,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                 })
 
                                                 handlePresentModalPress()
-                                                bottomSheetRef.current?.forceClose()
+                                                bottomSheetRef.current?.close()
                                             }}
                                         >
                                             <View

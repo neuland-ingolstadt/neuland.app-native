@@ -26,6 +26,7 @@ export const BUILDINGS_IN = [
     'M',
     'P',
     'W',
+    'X',
     'Z',
 ]
 export const INGOLSTADT_CENTER = [48.7667, 11.4328]

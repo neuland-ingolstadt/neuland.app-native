@@ -2,6 +2,7 @@ export default {
     toast: {
         clipboard: 'in Zwischenablage kopiert',
         paused: 'Keine Internetverbindung',
+        roomNotFound: 'Raum nicht gefunden',
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',

@@ -25,7 +25,8 @@ const ResultRow: React.FC<{
     handlePresentModalPress,
     bottomSheetRef,
 }): JSX.Element => {
-    const { setClickedElement, setLocalSearch } = useContext(MapContext)
+    const { setClickedElement, setLocalSearch, setCurrentFloor } =
+        useContext(MapContext)
     return (
         <React.Fragment key={index}>
             <TouchableOpacity
@@ -39,6 +40,7 @@ const ResultRow: React.FC<{
                         data: result.title,
                         type: result.item.options.type,
                     })
+                    setCurrentFloor(result.item.properties.Ebene)
                     handlePresentModalPress()
                     _injectMarker(mapRef, center)
                     setLocalSearch('')

@@ -41,12 +41,11 @@ import {
     getIcon,
     getNextValidDate,
 } from '@/utils/map-utils'
-import { LoadingState } from '@/utils/ui-utils'
+import { LoadingState, showToast } from '@/utils/ui-utils'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useIsFocused, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { StatusBar } from 'expo-status-bar'
 import React, {
     useCallback,
     useContext,
@@ -74,12 +73,6 @@ import { WebView } from 'react-native-webview'
 
 import packageInfo from '../../../../package.json'
 import { modalSection } from './ModalSections'
-
-export function FocusAwareStatusBar(props: any): JSX.Element {
-    const isFocused = useIsFocused()
-
-    return isFocused ? <StatusBar {...props} /> : <></>
-}
 
 const MapScreen = (): JSX.Element => {
     const [errorMsg, setErrorMsg] = useState('')
@@ -125,6 +118,7 @@ const MapScreen = (): JSX.Element => {
     const handleSheetChangesModal = useCallback((index: number) => {
         if (index === -1) {
             setClickedElement(null)
+            setCurrentFloor('EG')
             _setView(mapCenter, mapRef)
             _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(1)
@@ -132,6 +126,7 @@ const MapScreen = (): JSX.Element => {
     }, [])
 
     const handlePresentModalPress = useCallback(() => {
+        bottomSheetRef.current?.close()
         bottomSheetModalRef.current?.present()
     }, [])
 
@@ -143,7 +138,7 @@ const MapScreen = (): JSX.Element => {
         queryKey: ['mapOverlay', packageInfo.version],
         queryFn: async () => await NeulandAPI.getMapOverlay(),
         staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-        gcTime: 1000 * 60 * 60 * 24 * 14, // 2 weeks,
+        gcTime: 1000 * 60 * 60 * 24 * 90, // 90 days
         networkMode: 'always',
     })
 
@@ -198,7 +193,7 @@ const MapScreen = (): JSX.Element => {
                     Funktion_en: 'Building',
                     Funktion_de: 'Gebäude',
                     Gebaeude: Gebaeude[building as keyof typeof Gebaeude],
-                    Ebene: '1', // Dummy value to not break the floor picker
+                    Ebene: 'EG', // Dummy value to not break the floor picker
                     Etage: floorCount.toString(),
                     Standort: location,
                 } satisfies FeatureProperties,
@@ -224,6 +219,8 @@ const MapScreen = (): JSX.Element => {
 
         const room = allRooms.find((x) => x.properties.Raum === routeParams)
         if (room == null) {
+            void showToast(t('toast.roomNotFound'))
+            updateRouteParams('')
             return
         }
         const center = room.options.center
@@ -231,38 +228,10 @@ const MapScreen = (): JSX.Element => {
         _setView(center, mapRef)
         setCurrentFloor(etage ?? 'EG')
         _injectMarker(mapRef, center)
-        Keyboard.dismiss()
-        bottomSheetRef.current?.close()
         handlePresentModalPress()
+        bottomSheetRef.current?.close()
+        updateRouteParams('')
     }, [routeParams])
-
-    // useEffect(() => {
-    //     let locationSubscription: Location.LocationSubscription
-    //     void (async () => {
-    //         const { status } =
-    //             await Location.requestForegroundPermissionsAsync()
-    //         if (status !== 'granted') {
-    //             setLocation('notGranted')
-    //         }
-
-    //         locationSubscription = await Location.watchPositionAsync(
-    //             {
-    //                 accuracy: Location.Accuracy.High,
-    //                 timeInterval: 1000, // Update every 1 second
-    //                 distanceInterval: 1, // Or every 1 meter
-    //             },
-    //             (location) => {
-    //                 setLocation(location)
-    //             }
-    //         )
-    //     })()
-
-    //     return () => {
-    //         if (locationSubscription != null) {
-    //             locationSubscription.remove()
-    //         }
-    //     }
-    // }, [])
 
     useEffect(() => {
         setMapCenter(
@@ -315,15 +284,7 @@ const MapScreen = (): JSX.Element => {
     ).sort((a, b) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b))
 
     useEffect(() => {
-        const currentFloor = uniqueEtages.includes('EG')
-            ? 'EG'
-            : uniqueEtages[uniqueEtages.length - 1]
-        setCurrentFloor(currentFloor)
-    }, [allRooms, localSearch])
-
-    useEffect(() => {
         if (LoadingState.LOADED !== loadingState) return
-        bottomSheetModalRef.current?.close()
         // bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()

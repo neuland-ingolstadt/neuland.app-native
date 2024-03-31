@@ -5,7 +5,7 @@ import { Platform, StyleSheet, View } from 'react-native'
 
 const BottomSheetBackground = (): JSX.Element => {
     const { colors, dark } = useTheme()
-    const darkIos = 'rgba(0, 0, 0, 0.47)'
+    const darkIos = 'rgba(0, 0, 0, 0.55)'
     const lightIos = 'rgba(255, 255, 255, 0.2)'
     return Platform.OS === 'ios' ? (
         <View

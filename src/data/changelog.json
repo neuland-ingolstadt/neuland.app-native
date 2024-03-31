@@ -192,6 +192,50 @@
                     "android": "chart_pie"
                 }
             }
+        ],
+        "0.7": [
+            {
+                "title": {
+                    "de": "Karten Redesign",
+                    "en": "Map Redesign"
+                },
+                "description": {
+                    "de": "Die Karte wurde komplett überarbeitet und bietet bessere Bedienbarkeit, mehr Informationen und neues Design.",
+                    "en": "The map has been completely redesigned and offers better usability, more information and a new design."
+                },
+                "icon": {
+                    "ios": "map",
+                    "android": "map"
+                }
+            },
+            {
+                "title": {
+                    "de": "KI-gestützte Suche",
+                    "en": "AI-powered Search"
+                },
+                "description": {
+                    "de": "Finde Räume schneller mit KI-gestützten Vorschlägen in der neuen Karten Suche.",
+                    "en": "Discover rooms quicker with AI-powered suggestions in the new map search."
+                },
+                "icon": {
+                    "ios": "sparkle.magnifyingglass",
+                    "android": "search"
+                }
+            },
+            {
+                "title": {
+                    "de": "Fehlerbehebungen & Performance",
+                    "en": "Bug Fixes & Performance"
+                },
+                "description": {
+                    "de": "Viele kleine Details wurden optimiert, um die App noch besser und schneller zu machen.",
+                    "en": "Many small details have been optimized to make the app even better and faster."
+                },
+                "icon": {
+                    "ios": "hammer",
+                    "android": "bug_report"
+                }
+            }
         ]
     }
 }
