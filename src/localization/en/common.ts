@@ -56,6 +56,11 @@ export default {
                 title: 'Exams',
                 error: 'Not a student',
                 errorSubtitle: 'Sign in to see your exams.',
+                noExams: {
+                    title: 'No exams found',
+                    subtitle:
+                        'After registering for exams, they will appear here.',
+                },
             },
             calendar: {
                 link: 'https://www.thi.de/en/international/studies/examination/semester-dates/',
