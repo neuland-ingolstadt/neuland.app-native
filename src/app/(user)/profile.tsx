@@ -263,11 +263,29 @@ export default function Profile(): JSX.Element {
                         refreshing={isRefetchingByUser}
                     />
                 )}
-                {isSuccess && (
-                    <View style={styles.container}>
-                        <FormList sections={sections} />
-                    </View>
-                )}
+                {isSuccess &&
+                    (data?.mtknr !== undefined ? (
+                        <View style={styles.container}>
+                            <FormList sections={sections} />
+                        </View>
+                    ) : (
+                        <ErrorView
+                            title={t('profile.error.title')}
+                            message={t('profile.error.message')}
+                            buttonText="Primuss"
+                            onButtonPress={() => {
+                                void Linking.openURL(
+                                    'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
+                                )
+                            }}
+                            refreshing={isRefetchingByUser}
+                            onRefresh={refetchByUser}
+                            icon={{
+                                ios: 'person.crop.circle.badge.exclamationmark',
+                                android: 'account_circle_off',
+                            }}
+                        />
+                    ))}
                 <View
                     style={{
                         backgroundColor: colors.card,

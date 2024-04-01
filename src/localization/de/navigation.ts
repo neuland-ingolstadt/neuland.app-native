@@ -60,7 +60,7 @@ export default {
             endingSoon_plural: 'endet in {{count}} mins',
         },
         login: {
-            title: 'Stundenplan, Noten, Räume und mehr',
+            title: 'Stundenplan, Noten, Raum-Status und mehr',
             message: 'Melde dich an, um alle Funktionen freizuschalten.',
         },
     },
