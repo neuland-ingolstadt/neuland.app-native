@@ -265,7 +265,8 @@ export default function Settings(): JSX.Element {
                     >
                         <View style={styles.nameBox}>
                             {(isLoading || isSuccess) &&
-                            userKind === 'student' ? (
+                            userKind === 'student' &&
+                            data?.mtknr !== undefined ? (
                                 <>
                                     <NameBox
                                         title={data?.vname + ' ' + data?.name}
@@ -286,6 +287,40 @@ export default function Settings(): JSX.Element {
                                             >
                                                 {getInitials(userFullName)}
                                             </Text>
+                                        </Avatar>
+                                    </NameBox>
+                                </>
+                            ) : isSuccess &&
+                              userKind === 'student' &&
+                              data?.mtknr === undefined ? (
+                                <>
+                                    <NameBox
+                                        title={t('menu.error.noData.title')}
+                                        subTitle1={t(
+                                            'menu.error.noData.subtitle1'
+                                        )}
+                                        subTitle2={t(
+                                            'menu.error.noData.subtitle2'
+                                        )}
+                                        loaded={true}
+                                    >
+                                        <Avatar
+                                            background={
+                                                colors.labelTertiaryColor
+                                            }
+                                        >
+                                            <PlatformIcon
+                                                color={colors.background}
+                                                ios={{
+                                                    name: 'exclamationmark.triangle',
+                                                    variant: 'fill',
+                                                    size: 26,
+                                                }}
+                                                android={{
+                                                    name: 'warning',
+                                                    size: 28,
+                                                }}
+                                            />
                                         </Avatar>
                                     </NameBox>
                                 </>

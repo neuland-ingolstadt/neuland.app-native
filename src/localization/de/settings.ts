@@ -11,6 +11,12 @@ export default {
         },
         error: {
             subtitle2: 'Ziehe zum Aktualisieren oder tippe zum Abmelden',
+            noData: {
+                title: 'Keine Daten vorhanden',
+                subtitle1:
+                    'Es scheint als seist du nicht länger immatrikuliert.',
+                subtitle2: 'Bitte überprüfe deinen Primuss-Account.',
+            },
         },
         formlist: {
             preferences: {
@@ -68,6 +74,11 @@ export default {
         footer: 'Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten.',
     },
     profile: {
+        error: {
+            title: 'Keine Daten vorhanden',
+            message:
+                'Es scheint als seist du nicht länger immatrikuliert. Bitte überprüfe deinen Primuss-Account.',
+        },
         formlist: {
             grades: {
                 title: 'Noten',

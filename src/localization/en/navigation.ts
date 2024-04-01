@@ -60,7 +60,7 @@ export default {
             endingSoon_plural: 'ends in {{count}} mins',
         },
         login: {
-            title: 'Timetable, grades, rooms and more',
+            title: 'Timetable, grades, room status and more',
             message: 'Sign in to unlock all features.',
         },
     },
