@@ -139,32 +139,46 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
                     // 0 indicates that every room is free
                     room: room === 0 ? ROOMS_ALL : room.toString(),
                     type: stunde.type.replace(/ \(.*\)$/, '').trim() ?? '',
-                    from: new Date(stunde.von),
-                    until: new Date(stunde.bis),
+                    from: new Date(stunde.von as string),
+                    until: new Date(stunde.bis as string),
                     capacity,
                 })
             )
         )
         // iterate over every room
-        .forEach(({ room, type, from, until, capacity }) => {
-            // initialize room
-            const roomOpenings = openings[room] ?? (openings[room] = [])
-            // find overlapping opening
-            // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
-            const opening = roomOpenings.find(
-                (opening) =>
-                    from <= addMinutes(opening.until, IGNORE_GAPS) &&
-                    until >= addMinutes(opening.from, -IGNORE_GAPS)
-            )
-            if (opening != null) {
-                // extend existing opening
-                opening.from = minDate(from, opening.from)
-                opening.until = maxDate(until, opening.until)
-            } else {
-                // create new opening
-                roomOpenings.push({ type, from, until, capacity })
+        .forEach(
+            ({
+                room,
+                type,
+                from,
+                until,
+                capacity,
+            }: {
+                room: string
+                type: string
+                from: Date
+                until: Date
+                capacity: number
+            }) => {
+                // initialize room
+                const roomOpenings = openings[room] ?? (openings[room] = [])
+                // find overlapping opening
+                // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
+                const opening = roomOpenings.find(
+                    (opening) =>
+                        from <= addMinutes(opening.until, IGNORE_GAPS) &&
+                        until >= addMinutes(opening.from, -IGNORE_GAPS)
+                )
+                if (opening != null) {
+                    // extend existing opening
+                    opening.from = minDate(from, opening.from)
+                    opening.until = maxDate(until, opening.until)
+                } else {
+                    // create new opening
+                    roomOpenings.push({ type, from, until, capacity })
+                }
             }
-        })
+        )
     return openings
 }
 

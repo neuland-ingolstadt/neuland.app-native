@@ -333,7 +333,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                             size: 18,
                                                         }}
                                                         android={{
-                                                            name: 'edit',
+                                                            name: 'school',
                                                             size: 20,
                                                         }}
                                                     />
