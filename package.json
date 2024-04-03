@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@alessiocancian/react-native-actionsheet": "^3.2.0",
@@ -111,7 +111,7 @@
     "babel-plugin-formatjs": "^10.5.7",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-config-standard-with-typescript": "^43.0.1",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.3.0",
     "eslint-plugin-promise": "^6.1.1",
@@ -119,11 +119,13 @@
     "eslint-plugin-react-native": "^4.1.0",
     "husky": "^9.0.6",
     "lint-staged": ">=15",
-    "prettier": "3.2.4",
+    "prettier": "3.2.5",
     "prop-types": "^15.8.1",
     "typescript": "^5.4.3"
   },
-  "trustedDependencies": ["@sentry/cli"],
+  "trustedDependencies": [
+    "@sentry/cli"
+  ],
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,yml}": [
       "npx prettier --write"
