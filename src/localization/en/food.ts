@@ -65,7 +65,7 @@ export default {
             },
             variants: 'Variations',
             allergenFooter:
-                '{{allergens}} - We cannot guarantee the correctness and completeness of the information.',
+                'We cannot guarantee the correctness and completeness of the information. ({{allergens}})',
             flagsFooter: 'Tap on a flag to quickly update your preferences.',
             alert: {
                 allergen: {

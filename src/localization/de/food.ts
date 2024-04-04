@@ -66,7 +66,7 @@ export default {
             },
             variants: 'Varianten',
             allergenFooter:
-                '{{allergens}} - Wir können die Richtigkeit und Vollständigkeit der Angaben nicht garantieren.',
+                'Wir können die Richtigkeit und Vollständigkeit der Angaben nicht garantieren. ({{allergens}})',
             flagsFooter:
                 'Tippe auf einen Eintrag, um deine Vorlieben zu aktualisieren.',
 
