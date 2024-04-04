@@ -230,8 +230,9 @@ const MapScreen = (): JSX.Element => {
         setCurrentFloor(etage ?? 'EG')
         _injectMarker(mapRef, center)
         handlePresentModalPress()
-        bottomSheetRef.current?.close()
+
         updateRouteParams('')
+        bottomSheetRef.current?.forceClose()
     }, [routeParams])
 
     useEffect(() => {

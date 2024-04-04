@@ -45,6 +45,8 @@ function RootLayout(): JSX.Element {
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
             const savedLanguage = await AsyncStorage.getItem('language')
+            const keys = await AsyncStorage.getAllKeys()
+            console.log(keys)
             if (
                 savedLanguage !== null &&
                 Platform.OS === 'android' &&

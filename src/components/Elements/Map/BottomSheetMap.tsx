@@ -8,6 +8,7 @@ import { type RoomEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getCenterSingle } from '@/utils/map-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -332,9 +333,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     }}
                                                 >
                                                     <PlatformIcon
-                                                        color={
-                                                            colors.background
-                                                        }
+                                                        color={getContrastColor(
+                                                            colors.primary
+                                                        )}
                                                         ios={{
                                                             name: 'studentdesk',
                                                             size: 18,

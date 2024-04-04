@@ -67,7 +67,7 @@ export function useNotifications(): Notifications {
 
         setTimetable(timetableObject)
         void AsyncStorage.setItem(
-            'timetableNotifications5s',
+            'timetableNotifications',
             JSON.stringify(timetableObject)
         )
     }
@@ -91,7 +91,7 @@ export function useNotifications(): Notifications {
             delete timetableObject[name]
             setTimetable(timetableObject)
             void AsyncStorage.setItem(
-                'timetableNotifications5s',
+                'timetableNotifications',
                 JSON.stringify(timetableObject)
             )
         }
