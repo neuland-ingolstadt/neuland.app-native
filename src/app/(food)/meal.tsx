@@ -9,6 +9,11 @@ import {
 } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
@@ -125,14 +130,20 @@ export default function FoodDetail(): JSX.Element {
                           {
                               title: t('details.formlist.prices.student'),
                               value: formatPrice(meal.prices?.student),
+                              fontWeight:
+                                  userKind === USER_STUDENT ? '600' : 'normal',
                           },
                           {
                               title: t('details.formlist.prices.employee'),
                               value: formatPrice(meal.prices?.employee),
+                              fontWeight:
+                                  userKind === USER_EMPLOYEE ? '600' : 'normal',
                           },
                           {
                               title: t('details.formlist.prices.guest'),
                               value: formatPrice(meal.prices?.guest),
+                              fontWeight:
+                                  userKind === USER_GUEST ? '600' : 'normal',
                           },
                       ],
                   },
@@ -213,6 +224,7 @@ export default function FoodDetail(): JSX.Element {
                         itemAlert(flag, 'flag')
                     },
                 })) ?? [],
+            footer: t('details.formlist.flagsFooter'),
         },
         {
             header: t('preferences.formlist.allergens'),
