@@ -65,6 +65,8 @@ export default {
                 source: 'Datenquelle',
             },
             variants: 'Varianten',
+            allergenFooter:
+                '{{allergens}} - Wir können die Richtigkeit und Vollständigkeit der Angaben nicht garantieren.',
             alert: {
                 allergen: {
                     title: 'Allergene aktualisieren',

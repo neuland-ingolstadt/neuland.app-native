@@ -64,6 +64,8 @@ export default {
                 source: 'Data source',
             },
             variants: 'Variations',
+            allergenFooter:
+                '{{allergens}} - We cannot guarantee the correctness and completeness of the information.',
             alert: {
                 allergen: {
                     title: 'Update allergens',

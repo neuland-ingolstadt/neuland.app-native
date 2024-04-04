@@ -237,6 +237,9 @@ export default function FoodDetail(): JSX.Element {
                             itemAlert(allergen, 'allergen')
                         },
                     })) ?? [],
+            footer: t('details.formlist.allergenFooter', {
+                allergens: meal?.allergens?.join(', '),
+            }),
         },
         ...(isNutritionAvailable ? nutritionSection : []),
     ]
