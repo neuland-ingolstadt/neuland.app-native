@@ -1,5 +1,6 @@
 import { type Colors } from '@/components/colors'
 import clubs from '@/data/clubs.json'
+import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
@@ -25,11 +26,14 @@ const CLEventRow = ({
 }: {
     colors: Colors
 
-    event: any
+    event: CLEvents
 }): JSX.Element => {
     const club = clubs.find((club) => club.club === event.organizer)
     const { t } = useTranslation('common')
-    const begin = new Date(event.begin)
+    let begin = null
+    if (event.begin !== null) {
+        begin = new Date(event.begin)
+    }
     const end = event.end !== null ? new Date(event.end) : null
     return (
         <RowEntry

@@ -1,4 +1,5 @@
 import { type SEARCH_TYPES } from './map'
+import { type MaterialIcon } from './material-icons'
 import { type Lecturers } from './thi-api'
 
 export interface Exam {
@@ -68,7 +69,7 @@ interface RoomOptions {
     type: SEARCH_TYPES
     icon: {
         ios: string
-        android: string
+        android: MaterialIcon
     }
 }
 

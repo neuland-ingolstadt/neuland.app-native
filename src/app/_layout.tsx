@@ -19,7 +19,6 @@ Sentry.init({
         new Sentry.ReactNativeTracing({
             // Pass instrumentation to be used as `routingInstrumentation`
             routingInstrumentation,
-            // ...
         }),
     ],
     beforeSend(event) {
@@ -46,6 +45,8 @@ function RootLayout(): JSX.Element {
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
             const savedLanguage = await AsyncStorage.getItem('language')
+            const keys = await AsyncStorage.getAllKeys()
+            console.log(keys)
             if (
                 savedLanguage !== null &&
                 Platform.OS === 'android' &&

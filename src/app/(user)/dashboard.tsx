@@ -213,7 +213,7 @@ export default function DashboardEdit(): JSX.Element {
                                     childrenHeight={childrenHeight}
                                     parentWidth={width}
                                     renderItem={renderItem}
-                                    onDataChange={(data) => {
+                                    onDataChange={(data: Card[]) => {
                                         updateDashboardOrder(data)
                                     }}
                                 />
@@ -406,7 +406,7 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
                                 size: 20,
                             }}
                             android={{
-                                name: 'remove_circle',
+                                name: 'do_not_disturb_on',
                                 variant: 'outlined',
                                 size: 24,
                             }}

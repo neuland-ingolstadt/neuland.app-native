@@ -1,6 +1,7 @@
 import { type Colors } from '@/components/colors'
 import { MapContext } from '@/hooks/contexts/map'
 import { type SearchResult } from '@/types/map'
+import { getContrastColor } from '@/utils/ui-utils'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import React, { useContext } from 'react'
 import { Keyboard, StyleSheet, Text, View } from 'react-native'
@@ -53,7 +54,7 @@ const ResultRow: React.FC<{
                     }}
                 >
                     <PlatformIcon
-                        color={colors.background}
+                        color={getContrastColor(colors.primary)}
                         ios={{
                             name: result.item.options.icon.ios,
                             size: 18,

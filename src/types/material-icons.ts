@@ -84,6 +84,7 @@ export type MaterialIcon =
     | 'add_location_alt'
     | 'wrong_location'
     | 'edit_location_alt'
+    | 'location_on'
     | 'location_off'
     | 'pin_drop'
     | 'move_location'

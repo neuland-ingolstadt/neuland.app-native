@@ -1,6 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
-import { SEARCH_TYPES } from '@/types/map'
+import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import {
@@ -29,7 +29,7 @@ interface BottomSheetDetailModalProps {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>
     handleSheetChangesModal: (index: number) => void
     currentPositionModal: SharedValue<number>
-    roomData: any
+    roomData: RoomData
     modalSection: FormListSections[]
 }
 

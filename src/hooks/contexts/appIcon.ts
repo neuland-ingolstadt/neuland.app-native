@@ -27,11 +27,21 @@ export function useAppIcon(): AppIconHook {
                 const unlockedAppIcons =
                     await AsyncStorage.getItem('unlockedAppIcons')
                 if (unlockedAppIcons != null) {
-                    setUnlockedAppIcons(JSON.parse(unlockedAppIcons))
+                    const parsedIcons = JSON.parse(unlockedAppIcons)
+                    if (
+                        !Array.isArray(parsedIcons) ||
+                        !parsedIcons.every((icon) => typeof icon === 'string')
+                    ) {
+                        console.error(
+                            'Invalid data in unlockedAppIcons, expected array of strings'
+                        )
+                        return
+                    }
+                    setUnlockedAppIcons(parsedIcons)
                 }
             } catch (error) {
                 console.error(
-                    'Error while retrieving data from AsyncStorage:',
+                    'Error while retrieving appIcon data from AsyncStorage:',
                     error
                 )
             }

@@ -114,9 +114,11 @@ export default function Screen(): JSX.Element {
 
         return () => {
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 notificationListener.current
             )
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 responseListener.current
             )
         }
@@ -184,7 +186,10 @@ export default function Screen(): JSX.Element {
                                                   title: t(
                                                       'navigation.profile'
                                                   ),
-                                                  subtitle: userFullName,
+                                                  subtitle:
+                                                      data?.vname +
+                                                      ' ' +
+                                                      data?.name,
                                                   systemIcon:
                                                       Platform.OS === 'ios'
                                                           ? 'person.crop.circle'

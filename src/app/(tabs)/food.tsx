@@ -53,10 +53,10 @@ function FoodScreen(): JSX.Element {
         isSuccess,
         refetch,
     } = useQuery({
-        queryKey: ['food', selectedRestaurants, showStatic],
+        queryKey: ['fnoojrkhmd', selectedRestaurants, showStatic],
         queryFn: async () =>
             await loadFoodEntries(selectedRestaurants, showStatic),
-        staleTime: 1000 * 60 * 20, // 20 minutes
+        staleTime: 1000 * 60 * 15, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)

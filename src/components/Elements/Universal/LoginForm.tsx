@@ -80,7 +80,7 @@ const LoginForm = (): JSX.Element => {
             setLoading(true)
             const userKind = await createSession(username, password, true)
             if (userKind) {
-                updateUserFullName(await API.getFullName())
+                updateUserFullName((await API.getFullName()) ?? username)
             } else {
                 updateUserFullName(username)
             }
@@ -104,9 +104,9 @@ const LoginForm = (): JSX.Element => {
                 delay: 0,
             })
             router.navigate('(tabs)')
-        } catch (e: any) {
-            console.log(e.message)
-            const message = trimErrorMsg(e.message)
+        } catch (e) {
+            const error = e as Error
+            const message = trimErrorMsg(error.message)
 
             setLoading(false)
             setNotice(t('login.alert.error.title'))
@@ -117,7 +117,7 @@ const LoginForm = (): JSX.Element => {
             } else if (message.includes(ORGINAL_ERROR_MISSING)) {
                 setInfoMsg(t('login.alert.error.missing'))
             } else if (
-                KNOWN_BACKEND_ERRORS.some((error) => e.message.includes(error))
+                KNOWN_BACKEND_ERRORS.some((error) => message.includes(error))
             ) {
                 setInfoMsg(t('login.alert.error.backend'))
             } else {
@@ -129,7 +129,7 @@ const LoginForm = (): JSX.Element => {
     async function guestLogin(): Promise<void> {
         setLoading(true)
         await createGuestSession()
-        toggleUserKind('guest')
+        toggleUserKind(undefined)
         toggleUpdated()
         if (isOnboarded === false) {
             toggleAnalytics()

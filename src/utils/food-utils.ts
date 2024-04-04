@@ -22,27 +22,25 @@ export async function loadFoodEntries(
     restaurants: string[],
     includeStatic: boolean
 ): Promise<Food[]> {
-    const entries: Food[] = []
+    const entries: Food[][] = []
     const startOfToday = getAdjustedDay(new Date()).setHours(0, 0, 0, 0)
-    const filterData = (data: any): any => {
+    const filterData = (data: Food[]): Food[] => {
         return data.filter(
-            (x: any) => new Date(x.timestamp).getTime() >= startOfToday
+            (x) => new Date(x.timestamp).getTime() >= startOfToday
         )
     }
 
     async function fetchDataFromAPI(
-        apiCall: () => Promise<any>,
-        entries: any[],
+        apiCall: () => Promise<Food[]>,
+        entries: Food[][],
         includeStatic: boolean = true
     ): Promise<void> {
         try {
             const data = await apiCall()
             const filteredData = filterData(data)
             if (!includeStatic) {
-                filteredData.forEach((day: any) => {
-                    day.meals = day.meals.filter(
-                        (entry: any) => entry.static === false
-                    )
+                filteredData.forEach((day) => {
+                    day.meals = day.meals.filter((entry: Meal) => !entry.static)
                 })
             }
             entries.push(filteredData)

@@ -48,13 +48,15 @@ export function useDashboard(): Dashboard {
             if (personalDashboard != null) {
                 const entries = JSON.parse(personalDashboard)
                     .map((x: string) => AllCards.find((y) => y.key === x))
-                    .filter((x: Record<string, Card>) => x != null)
+                    .filter((x: Record<string, Card>) => x != null) as Card[]
                 setShownDashboardEntries(entries)
 
                 if (personalDashboardHidden != null) {
                     const hiddenEntries = JSON.parse(
                         personalDashboardHidden
-                    ).map((x: string) => AllCards.find((y) => y.key === x))
+                    ).map((x: string) =>
+                        AllCards.find((y) => y.key === x)
+                    ) as Card[]
 
                     setHiddenDashboardEntries(hiddenEntries)
                 }

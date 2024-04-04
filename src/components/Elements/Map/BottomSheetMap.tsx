@@ -8,6 +8,7 @@ import { type RoomEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getCenterSingle } from '@/utils/map-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -15,6 +16,7 @@ import Fuse from 'fuse.js'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    ActivityIndicator,
     Platform,
     Pressable,
     SectionList,
@@ -262,7 +264,13 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 ...styles.radius,
                             }}
                         >
-                            {availableRooms.length === 0 ? (
+                            {availableRooms === null ? (
+                                <ActivityIndicator
+                                    size="small"
+                                    color={colors.primary}
+                                    style={styles.loadingMargin}
+                                />
+                            ) : availableRooms.length === 0 ? (
                                 <Text
                                     style={{
                                         color: colors.text,
@@ -325,9 +333,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     }}
                                                 >
                                                     <PlatformIcon
-                                                        color={
-                                                            colors.background
-                                                        }
+                                                        color={getContrastColor(
+                                                            colors.primary
+                                                        )}
                                                         ios={{
                                                             name: 'studentdesk',
                                                             size: 18,
@@ -473,5 +481,8 @@ const styles = StyleSheet.create({
         marginTop: 12,
         marginBottom: 6,
         textAlign: 'left',
+    },
+    loadingMargin: {
+        marginVertical: 30,
     },
 })

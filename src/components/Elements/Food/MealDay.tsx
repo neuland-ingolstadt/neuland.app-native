@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { type Meal } from '@/types/neuland-api'
+import { type Food, type Meal } from '@/types/neuland-api'
 import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -107,7 +107,7 @@ export const MealDay = ({
     index,
     colors,
 }: {
-    day: any
+    day: Food
     index: number
     colors: Colors
 }): JSX.Element => {
@@ -120,7 +120,7 @@ export const MealDay = ({
     const filterMealsByRestaurant = (
         meals: any[],
         restaurant: string
-    ): any[] => {
+    ): Meal[] => {
         return meals.filter((meal: any) => meal.restaurant === restaurant)
     }
 

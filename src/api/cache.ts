@@ -35,7 +35,11 @@ export default class LocalStorageCache {
             )
 
             for (const key of filteredKeys) {
-                const json = (await AsyncStorage.getItem(key)) as string
+                const item = await AsyncStorage.getItem(key)
+                if (item === null) {
+                    continue
+                }
+                const json = item
                 const expiry = JSON.parse(json).expiry
 
                 if (expiry < Date.now()) {

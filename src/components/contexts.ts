@@ -2,13 +2,14 @@ import { type AppIconHook } from '@/hooks/contexts/appIcon'
 import { type Dashboard } from '@/hooks/contexts/dashboard'
 import { type FlowHook } from '@/hooks/contexts/flow'
 import { type FoodFilter } from '@/hooks/contexts/foodFilter'
-import { type IdCard } from '@/hooks/contexts/idCard'
 import { type Notifications } from '@/hooks/contexts/notifications'
 import { type RouteParams } from '@/hooks/contexts/routing'
+import { type ThemeHook } from '@/hooks/contexts/theme'
 import {
     DEFAULT_TIMETABLE_MODE,
     type TimetableHook,
 } from '@/hooks/contexts/timetable'
+import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { createContext } from 'react'
 
 export const RouteParamsContext = createContext<RouteParams>({
@@ -32,7 +33,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
     toggleFoodLanguage: () => {},
 })
 
-export const UserKindContext = createContext<any>({
+export const UserKindContext = createContext<UserKindContextType>({
     userKind: 'student',
     userFaculty: 'unknown',
     userFullName: '',
@@ -40,7 +41,7 @@ export const UserKindContext = createContext<any>({
     updateUserFullName: () => {},
 })
 
-export const ThemeContext = createContext<any>({
+export const ThemeContext = createContext<ThemeHook>({
     accentColor: 'blue',
     toggleAccentColor: () => {},
 })
@@ -84,10 +85,4 @@ export const NotificationContext = createContext<Notifications>({
     updateTimetableNotifications: () => {},
     deleteTimetableNotifications: () => {},
     removeNotification: () => {},
-})
-
-export const IdCardContext = createContext<IdCard>({
-    mensaBalance: 0,
-    idLastUpdated: null,
-    updateMensaBalance: () => {},
 })

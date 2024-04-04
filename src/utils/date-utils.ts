@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'moment/locale/de'
 
 function t(...args: any): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return i18n.t(args, { ns: 'common' })
 }
 

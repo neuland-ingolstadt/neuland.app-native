@@ -27,7 +27,6 @@ import {
     useDashboard,
     useFlow,
     useFoodFilter,
-    useIdCard,
     useRouteParams,
     useTheme,
     useUserKind,
@@ -39,7 +38,6 @@ import {
     DashboardContext,
     FlowContext,
     FoodFilterContext,
-    IdCardContext,
     NotificationContext,
     RouteParamsContext,
     ThemeContext,
@@ -91,7 +89,6 @@ export default function Provider({
     const pathname = usePathname()
     const timetableHook = useTimetable()
     const notifications = useNotifications()
-    const idCard = useIdCard()
 
     useOnlineManager()
     useAppState(onAppStateChange)
@@ -259,21 +256,17 @@ export default function Provider({
                                             <FoodFilterContext.Provider
                                                 value={foodFilter}
                                             >
-                                                <IdCardContext.Provider
-                                                    value={idCard}
+                                                <DashboardContext.Provider
+                                                    value={dashboard}
                                                 >
-                                                    <DashboardContext.Provider
-                                                        value={dashboard}
+                                                    <RouteParamsContext.Provider
+                                                        value={routeParams}
                                                     >
-                                                        <RouteParamsContext.Provider
-                                                            value={routeParams}
-                                                        >
-                                                            <RootSiblingParent>
-                                                                {children}
-                                                            </RootSiblingParent>
-                                                        </RouteParamsContext.Provider>
-                                                    </DashboardContext.Provider>
-                                                </IdCardContext.Provider>
+                                                        <RootSiblingParent>
+                                                            {children}
+                                                        </RootSiblingParent>
+                                                    </RouteParamsContext.Provider>
+                                                </DashboardContext.Provider>
                                             </FoodFilterContext.Provider>
                                         </UserKindContext.Provider>
                                     </FlowContext.Provider>

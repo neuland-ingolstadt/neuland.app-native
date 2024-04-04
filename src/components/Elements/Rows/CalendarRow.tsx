@@ -1,6 +1,7 @@
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
+import { type Exam } from '@/types/utils'
 import {
     formatFriendlyDateRange,
     formatFriendlyDateTime,
@@ -75,7 +76,7 @@ const ExamRow = ({
     event,
     colors,
 }: {
-    event: any
+    event: Exam
     colors: Colors
 }): JSX.Element => {
     const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
@@ -110,7 +111,7 @@ const ExamRow = ({
                         numberOfLines={2}
                     >
                         {`${t('pages.exam.details.room')}: ${
-                            event.rooms !== undefined ? event.rooms : 'n/a'
+                            event.rooms ?? 'n/a'
                         }`}
                     </Text>
                     <Text
@@ -121,7 +122,7 @@ const ExamRow = ({
                         numberOfLines={2}
                     >
                         {`${t('pages.exam.details.seat')}: ${
-                            event.seat !== null ? event.seat : 'n/a'
+                            event.seat ?? 'n/a'
                         }`}
                     </Text>
                 </>

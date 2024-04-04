@@ -1,4 +1,5 @@
 import { type SpoWeights } from '@/types/asset-api'
+import { type Food } from '@/types/neuland-api'
 
 import packageInfo from '../../package.json'
 
@@ -37,7 +38,7 @@ class NeulandAPIClient {
      * Gets the mensa plan
      * @returns {Promise<any>} A promise that resolves with the mensa plan data
      */
-    async getMensaPlan(): Promise<any> {
+    async getMensaPlan(): Promise<Food[]> {
         return await this.performRequest(`${ENDPOINT}/api/mensa/?version=v2`)
     }
 
@@ -45,7 +46,7 @@ class NeulandAPIClient {
      * Gets the Reimanns plan
      * @returns {Promise<any>} A promise that resolves with the Reimanns plan data
      */
-    async getReimannsPlan(): Promise<any> {
+    async getReimannsPlan(): Promise<Food[]> {
         return await this.performRequest(`${ENDPOINT}/api/reimanns/?version=v2`)
     }
 
@@ -53,7 +54,7 @@ class NeulandAPIClient {
      * Gets the Canisius plan
      * @returns {Promise<any>} A promise that resolves with the Canisius plan data
      */
-    async getCanisiusPlan(): Promise<any> {
+    async getCanisiusPlan(): Promise<Food[]> {
         return await this.performRequest(`${ENDPOINT}/api/canisius/?version=v2`)
     }
 

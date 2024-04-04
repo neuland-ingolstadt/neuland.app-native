@@ -4,6 +4,7 @@ import LogoSVG from '@/components/Elements/Flow/svgs/logo'
 import SecureSVG from '@/components/Elements/Flow/svgs/secure'
 import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/components/colors'
+import { IMPRINT_URL, PRIVACY_URL } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
@@ -13,9 +14,6 @@ import Onboarding from 'react-native-onboarding-swiper'
 
 export default function OnboardingScreen(): JSX.Element {
     const onboardingRef = useRef<Onboarding>(null)
-    const PRIVACY_URL: string = process.env.EXPO_PUBLIC_PRIVACY_URL as string
-    const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
-
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('flow')
 

@@ -247,9 +247,13 @@ export default function TimetableList({
                     ref={listRef}
                     sections={filteredTimetable}
                     renderItem={renderItem}
-                    renderSectionHeader={({ section: { title } }) =>
-                        renderSectionHeader(title)
-                    }
+                    renderSectionHeader={({ section: { title } }) => {
+                        if (!(title instanceof Date)) {
+                            console.error('Invalid section title')
+                            return null
+                        }
+                        return renderSectionHeader(title)
+                    }}
                     renderSectionFooter={renderSectionFooter}
                     ItemSeparatorComponent={renderItemSeparator}
                     contentContainerStyle={styles.container}

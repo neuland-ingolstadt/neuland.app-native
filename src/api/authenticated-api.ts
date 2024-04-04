@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/types/data'
 import {
@@ -14,9 +15,6 @@ import {
 
 import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
-
-const KEY_GET_PERSONAL_DATA = 'getPersonalData'
-const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 
 export interface PersonalData {
     persdata?: {
@@ -42,7 +40,7 @@ function extractFacultyFromPersonalData(data: PersonalData): string | null {
         )
     )
 
-    return faculty as string
+    return faculty ?? null
 }
 
 /**
@@ -85,7 +83,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
                 session,
                 ...params,
             })
-
             // old status format
             if (res.status !== 0) {
                 throw new APIError(res.status, res.data)
@@ -100,28 +97,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     }
 
     /**
-     * Performs an authenticated and cached request against the API
-     * @param {string} cacheKey Unique key that identifies this request
-     * @param {object} params Request data
-     * @returns {object}
-     */
-    async requestCached(cacheKey: string, params: object): Promise<any> {
-        const cached = await this.cache.get(cacheKey)
-        if (cached !== undefined) {
-            return cached
-        }
-        const resp = await this.requestAuthenticated(params)
-        await this.cache.set(cacheKey, resp)
-
-        return resp
-    }
-
-    /**
      * Fetches the personal data of the user
      * @returns {Promise<object>} Promise that resolves with the personal data
      */
     async getPersonalData(): Promise<PersData> {
-        const res = await this.requestCached(KEY_GET_PERSONAL_DATA, {
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'persdata',
             format: 'json',
@@ -257,8 +237,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @param {Date} date Date to fetch the room availability for
      */
     async getFreeRooms(date: Date): Promise<Rooms[]> {
-        const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
-        const res = await this.requestCached(key, {
+        console.log(date)
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'rooms',
             format: 'json',
@@ -266,7 +246,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
             month: date.getMonth() + 1,
             year: date.getFullYear(),
         })
-
+        console.log(res)
         return res
     }
 

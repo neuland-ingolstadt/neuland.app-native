@@ -2,7 +2,6 @@ import API from '@/api/authenticated-api'
 import * as SecureStore from 'expo-secure-store'
 import { useEffect, useState } from 'react'
 
-export const USER_UNKNOWN = 'unknown'
 export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
@@ -11,7 +10,7 @@ export interface UserKindContextType {
     userKind: 'guest' | 'student' | 'employee'
     userFullName: string
     userFaculty: string
-    toggleUserKind: (userKind: boolean) => void
+    toggleUserKind: (userKind: boolean | undefined) => void
     updateUserFullName: (userName: string) => void
 }
 /**
@@ -20,21 +19,23 @@ export interface UserKindContextType {
  * @returns An object with the userKind and toggleUserKind function.
  */
 export function useUserKind(): {
-    userKind: string
+    userKind: 'guest' | 'student' | 'employee'
     userFullName: string
     userFaculty: string
-    toggleUserKind: (userKind: boolean) => void
+    toggleUserKind: (userKind: boolean | undefined) => void
     updateUserFullName: (userName: string) => void
 } {
-    const [userKind, setUserKind] = useState(USER_GUEST)
+    const [userKind, setUserKind] = useState<'guest' | 'student' | 'employee'>(
+        USER_GUEST
+    )
     const [userFaculty, setUserFaculty] = useState('')
     const [userFullName, setUserFullName] = useState('')
 
     // Load user kind from SecureStore on mount.
     // Using SecureStore instead of AsyncStorage because it is temporary workaround for the session handler.
     useEffect(() => {
-        const loadFaculty = async (): Promise<string> => {
-            return (await API.getFaculty()) as string
+        const loadFaculty = async (): Promise<string | null> => {
+            return await API.getFaculty()
         }
 
         const loadUserTypeAndName = async (): Promise<[string | null]> => {
@@ -44,7 +45,7 @@ export function useUserKind(): {
             ])
 
             if (userType != null) {
-                setUserKind(userType)
+                setUserKind(userType as 'student' | 'employee' | 'guest')
             }
 
             if (userFullName != null) {
@@ -72,8 +73,8 @@ export function useUserKind(): {
      * Function to toggle the user kind.
      * @param value A boolean indicating whether the user is a student (true) or an employee (false).
      */
-    function toggleUserKind(value: boolean): void {
-        let userType = userKind
+    function toggleUserKind(value: boolean | undefined): void {
+        let userType = userKind as 'student' | 'employee' | 'guest'
         switch (value) {
             case true:
                 userType = USER_STUDENT

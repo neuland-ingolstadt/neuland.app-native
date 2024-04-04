@@ -1,9 +1,5 @@
-import LocalStorageCache from '@/api/cache'
-
 import packageInfo from '../../package.json'
 
-const CACHE_NAMESPACE = 'thi-api-client'
-const CACHE_TTL = 10 * 60 * 1000
 const ENDPOINT_HOST: string =
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
     process.env.EXPO_PUBLIC_THI_API_ENDPOINT || 'hiplan.thi.de'
@@ -32,15 +28,6 @@ export class APIError extends Error {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AnonymousAPIClient {
-    protected cache: LocalStorageCache
-
-    constructor() {
-        this.cache = new LocalStorageCache({
-            namespace: CACHE_NAMESPACE,
-            ttl: CACHE_TTL,
-        })
-    }
-
     /**
      * Submits an API request to the THI backend using a WebSocket proxy
      */
@@ -72,9 +59,7 @@ export class AnonymousAPIClient {
     async login(
         username: string,
         passwd: string
-    ): Promise<{ session: any; isStudent: boolean }> {
-        await this.clearCache()
-
+    ): Promise<{ session: string; isStudent: boolean }> {
         const res = await this.request({
             service: 'session',
             method: 'open',
@@ -84,6 +69,7 @@ export class AnonymousAPIClient {
         })
 
         if (res.status !== 0) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             throw new APIError(res.status, res.data)
         }
 
@@ -98,7 +84,10 @@ export class AnonymousAPIClient {
      * @param {string} session Session token
      * @returns {boolean} `true` if the session is valid.
      */
-    async isAlive(session: string): Promise<boolean> {
+    async isAlive(session: string | null): Promise<boolean> {
+        if (session == null) {
+            return false
+        }
         const res = await this.request({
             service: 'session',
             method: 'isalive',
@@ -123,19 +112,6 @@ export class AnonymousAPIClient {
         })
 
         return res.data === 'STATUS_OK'
-    }
-
-    /**
-     * Clears the response cache.
-     * Should be called either before login or after logout
-     * to prevent responses from different users from being mixed up.
-     */
-    async clearCache(): Promise<void> {
-        try {
-            await this.cache.flushAll()
-        } catch (e) {
-            console.warn('Failed to clear cache', e)
-        }
     }
 }
 

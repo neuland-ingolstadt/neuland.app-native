@@ -35,7 +35,7 @@ export function useTimetable(): TimetableHook {
                 }
             } catch (error) {
                 console.error(
-                    'Error while retrieving data from AsyncStorage:',
+                    'Error while retrieving timetable data from AsyncStorage:',
                     error
                 )
             }
