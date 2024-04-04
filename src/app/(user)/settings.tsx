@@ -285,7 +285,11 @@ export default function Settings(): JSX.Element {
                                                     ...styles.avatarText,
                                                 }}
                                             >
-                                                {getInitials(userFullName)}
+                                                {getInitials(
+                                                    data?.vname +
+                                                        ' ' +
+                                                        data?.name
+                                                )}
                                             </Text>
                                         </Avatar>
                                     </NameBox>

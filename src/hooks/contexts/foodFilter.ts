@@ -48,21 +48,27 @@ export function useFoodFilter(): FoodFilter {
                 foodLanguageData,
             ]) => {
                 if (allergensData != null) {
-                    setAllergenSelection(JSON.parse(allergensData))
+                    setAllergenSelection(JSON.parse(allergensData) as string[])
                 } else {
                     setAllergenSelection(['not-configured'])
                 }
                 if (preferencesData != null) {
-                    setPreferencesSelection(JSON.parse(preferencesData))
+                    setPreferencesSelection(
+                        JSON.parse(preferencesData) as string[]
+                    )
                 }
                 if (restaurantsData != null) {
-                    setSelectedRestaurants(JSON.parse(restaurantsData))
+                    setSelectedRestaurants(
+                        JSON.parse(restaurantsData) as string[]
+                    )
                 }
                 if (showStaticData != null) {
-                    setShowStatic(JSON.parse(showStaticData))
+                    setShowStatic(JSON.parse(showStaticData) as boolean)
                 }
                 if (foodLanguageData != null) {
-                    setFoodLanguage(JSON.parse(foodLanguageData))
+                    setFoodLanguage(
+                        JSON.parse(foodLanguageData) as FoodLanguage
+                    )
                 } else {
                     setFoodLanguage('default')
                 }

@@ -65,6 +65,11 @@ export default {
                 source: 'Datenquelle',
             },
             variants: 'Varianten',
+            allergenFooter:
+                'Wir können die Richtigkeit und Vollständigkeit der Angaben nicht garantieren. ({{allergens}})',
+            flagsFooter:
+                'Tippe auf einen Eintrag, um deine Vorlieben zu aktualisieren.',
+
             alert: {
                 allergen: {
                     title: 'Allergene aktualisieren',

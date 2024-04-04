@@ -19,6 +19,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     const router = useRouter()
     const { updateRouteParams } = useContext(RouteParamsContext)
     const { t } = useTranslation('common')
+
     return rooms !== null && rooms.length > 0 ? (
         rooms.map((room, index) => (
             <View key={index}>
