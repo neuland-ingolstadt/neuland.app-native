@@ -101,7 +101,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @returns {Promise<object>} Promise that resolves with the personal data
      */
     async getPersonalData(): Promise<PersData> {
-        const res = await this.request({
+        const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'persdata',
             format: 'json',

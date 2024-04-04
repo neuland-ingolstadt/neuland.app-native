@@ -41,7 +41,7 @@ export function useAppIcon(): AppIconHook {
                 }
             } catch (error) {
                 console.error(
-                    'Error while retrieving data from AsyncStorage:',
+                    'Error while retrieving appIcon data from AsyncStorage:',
                     error
                 )
             }

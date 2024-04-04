@@ -25,7 +25,7 @@ export function useTheme(): ThemeHook {
                 }
             } catch (error) {
                 console.error(
-                    'Error while retrieving data from AsyncStorage:',
+                    'Error while retrieving theme data from AsyncStorage:',
                     error
                 )
             }

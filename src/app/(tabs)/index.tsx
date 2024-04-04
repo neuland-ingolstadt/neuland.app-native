@@ -186,7 +186,10 @@ export default function Screen(): JSX.Element {
                                                   title: t(
                                                       'navigation.profile'
                                                   ),
-                                                  subtitle: userFullName,
+                                                  subtitle:
+                                                      data?.vname +
+                                                      ' ' +
+                                                      data?.name,
                                                   systemIcon:
                                                       Platform.OS === 'ios'
                                                           ? 'person.crop.circle'
