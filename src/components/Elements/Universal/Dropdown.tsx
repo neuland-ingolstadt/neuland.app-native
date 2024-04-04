@@ -72,7 +72,7 @@ const Dropdown: React.FC<Props> = ({
                 color: colors.text,
                 ...styles.selectedText,
             }}
-            onSelect={(selectedItem) => {
+            onSelect={(selectedItem: string) => {
                 onSelect(selectedItem)
             }}
         />

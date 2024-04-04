@@ -9,7 +9,7 @@ interface PlatformIconProps {
     color: string | ColorValue
 
     android: {
-        name: MaterialIcon
+        name: MaterialIcon | CommunityIcon
         size: number
         variant?: 'filled' | 'outlined'
     }
@@ -116,6 +116,8 @@ const PlatformIcon = ({
 export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github']
+
+type CommunityIcon = 'instagram' | 'github'
 
 const styles = StyleSheet.create({
     androidIcon: {
