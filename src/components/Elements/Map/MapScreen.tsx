@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
+import API from '@/api/authenticated-api'
 import NeulandAPI from '@/api/neuland-api'
 import {
     NoSessionError,
@@ -165,7 +166,7 @@ const MapScreen = (): JSX.Element => {
                     FLOOR_ORDER.push(properties.Ebene)
                 }
 
-                return geometry.coordinates.map((points: any) => ({
+                return geometry.coordinates.map((points: number[][]) => ({
                     properties,
                     coordinates: points,
                     options: {
@@ -246,14 +247,32 @@ const MapScreen = (): JSX.Element => {
             updateRouteParams('')
         }
     }, [localSearch])
+    const currentDate = new Date()
+
+    const { data: roomStatusData } = useQuery({
+        queryKey: ['fnreeRooms', formatISODate(currentDate)],
+        queryFn: async () => await API.getFreeRooms(currentDate),
+        staleTime: 1000 * 60 * 60, // 60 minutes
+        gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                return false
+            }
+            return failureCount < 3
+        },
+    })
 
     useEffect(() => {
         async function load(): Promise<void> {
+            if (roomStatusData == null) {
+                console.log('No room status data')
+                return
+            }
             try {
                 const dateObj = getNextValidDate()
                 const date = formatISODate(dateObj)
                 const time = formatISOTime(dateObj)
-                const rooms = await filterRooms(date, time)
+                const rooms = await filterRooms(roomStatusData, date, time)
                 setAvailableRooms(rooms)
             } catch (e) {
                 if (
@@ -266,8 +285,9 @@ const MapScreen = (): JSX.Element => {
                 }
             }
         }
+        setAvailableRooms(null)
         void load()
-    }, [userKind, webViewKey])
+    }, [userKind, webViewKey, roomStatusData])
 
     useEffect(() => {
         if (overlayError !== null) {
@@ -281,7 +301,10 @@ const MapScreen = (): JSX.Element => {
                 .map((room: any) => room.properties?.Ebene?.toString())
                 .filter((etage) => etage != null)
         )
-    ).sort((a, b) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b))
+    ).sort(
+        (a: string, b: string) =>
+            FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
+    )
 
     useEffect(() => {
         if (LoadingState.LOADED !== loadingState) return
@@ -291,6 +314,9 @@ const MapScreen = (): JSX.Element => {
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
 
     const _addGeoJson = (): void => {
+        if (availableRooms == null) {
+            return
+        }
         const filterEtage = (etage: string): RoomEntry[] => {
             const result = allRooms.filter(
                 (feature) => feature.properties.Ebene === etage
@@ -448,13 +474,14 @@ const MapScreen = (): JSX.Element => {
 
                             if (data === 'noInternetConnection') {
                                 setLoadingState(LoadingState.ERROR)
-                                setErrorMsg(data)
+                                setErrorMsg(data as string)
                             } else if (data.type === 'roomClick') {
                                 setClickedElement({
                                     data: data.payload.properties.room,
                                     type: SEARCH_TYPES.ROOM,
                                 })
-                                const center = data.payload.properties.center
+                                const center = data.payload.properties
+                                    .center as number[]
                                 _injectMarker(mapRef, center)
                                 Keyboard.dismiss()
                                 bottomSheetRef.current?.close()

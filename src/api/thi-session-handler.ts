@@ -51,6 +51,10 @@ export async function createSession(
     username = username.replace(/\s/g, '')
     const { session, isStudent } = await API.login(username, password)
 
+    if (typeof session !== 'string') {
+        throw new Error('Session is not a string')
+    }
+
     await AsyncStorage.setItem('sessionCreated', Date.now().toString())
 
     await save('session', session)
@@ -97,8 +101,15 @@ export async function callWithSession<T>(
         throw new UnavailableSessionError()
     }
 
-    const username = (await load('username')) as string
-    const password = (await load('password')) as string
+    const username = await load('username')
+    if (username === null) {
+        throw new UnavailableSessionError()
+    }
+
+    const password = await load('password')
+    if (password === null) {
+        throw new UnavailableSessionError()
+    }
     // log in if the session is older than SESSION_EXPIRES
     if (
         sessionCreated + SESSION_EXPIRES < Date.now() &&
@@ -113,7 +124,7 @@ export async function callWithSession<T>(
             )
             session = newSession
 
-            await save('session', session as string)
+            await save('session', session)
             await AsyncStorage.setItem('sessionCreated', Date.now().toString())
             await AsyncStorage.setItem('isStudent', isStudent.toString())
         } catch (e) {
@@ -129,7 +140,7 @@ export async function callWithSession<T>(
         }
     } catch (e: any) {
         // the backend can throw different errors such as 'No Session' or 'Session Is Over'
-        if (/session/i.test(e.message)) {
+        if (/session/i.test(e.message as string)) {
             if (username != null && password != null) {
                 console.log(
                     'seems to have received a session error trying to get a new session!'
@@ -140,7 +151,7 @@ export async function callWithSession<T>(
                         password
                     )
                     session = newSession
-                    await save('session', session as string)
+                    await save('session', session)
                     await AsyncStorage.setItem(
                         'sessionCreated',
                         Date.now().toString()
@@ -153,7 +164,7 @@ export async function callWithSession<T>(
                     throw new NoSessionError()
                 }
 
-                return await method(session as string)
+                return await method(session)
             } else {
                 throw new NoSessionError()
             }
@@ -180,10 +191,7 @@ export async function obtainSession(router: object): Promise<string | null> {
     const password = await load('password')
 
     // invalidate expired session
-    if (
-        age + SESSION_EXPIRES < Date.now() ||
-        !(await API.isAlive(session as string))
-    ) {
+    if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
         console.log('Invalidating session')
 
         session = null
@@ -198,7 +206,7 @@ export async function obtainSession(router: object): Promise<string | null> {
                 password
             )
             session = newSession
-            await save('session', session as string)
+            await save('session', session)
             await AsyncStorage.setItem('sessionCreated', Date.now().toString())
             await AsyncStorage.setItem('isStudent', isStudent.toString())
         } catch (e) {
@@ -215,21 +223,23 @@ export async function obtainSession(router: object): Promise<string | null> {
  */
 export async function forgetSession(): Promise<void> {
     const { cancelAll } = useNotification()
-    try {
-        await API.logout(localStorage.session)
-    } catch (e) {
-        // ignore
+    const session = await load('session')
+    if (session === null) {
+        console.log('No session to forget')
+        return
     }
 
+    try {
+        await API.logout(session)
+    } catch (e) {
+        console.error(e)
+    }
     // clear all AsyncStorage data
     await Promise.all([
         SecureStore.deleteItemAsync('session'),
         SecureStore.deleteItemAsync('username'),
         SecureStore.deleteItemAsync('password'),
     ])
-
-    // clear memory cache (this is not persistent)
-    await API.clearCache()
 
     // clear all AsyncStorage data except analytics
     try {

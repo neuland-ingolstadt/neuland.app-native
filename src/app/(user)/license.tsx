@@ -28,7 +28,10 @@ export default function License(): JSX.Element {
     const [licenseText, setLicenseText] = useState('')
 
     useEffect(() => {
-        fetch(licenseUrl as string)
+        if (licenseUrl === undefined || licenseUrl === '') {
+            return
+        }
+        fetch(licenseUrl)
             .then(async (res) => await res.text())
             .then((text) => {
                 // sometimes the license is not a text file, but the whole repo page
@@ -59,15 +62,21 @@ export default function License(): JSX.Element {
                 {
                     title: t('navigation.license', { ns: 'navigation' }),
                     value: license,
-                    onPress: async () =>
-                        await Linking.openURL(licenseUrl as string),
+                    onPress: async () => {
+                        if (licenseUrl !== undefined) {
+                            await Linking.openURL(licenseUrl)
+                        }
+                    },
                     disabled: licenseUrl === '',
                 },
                 {
                     title: 'Repository',
                     icon: linkIcon,
-                    onPress: async () =>
-                        await Linking.openURL(repository as string),
+                    onPress: async () => {
+                        if (repository !== undefined) {
+                            await Linking.openURL(repository)
+                        }
+                    },
                     disabled: repository === '',
                 },
             ],

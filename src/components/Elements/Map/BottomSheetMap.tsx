@@ -15,6 +15,7 @@ import Fuse from 'fuse.js'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    ActivityIndicator,
     Platform,
     Pressable,
     SectionList,
@@ -262,7 +263,13 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 ...styles.radius,
                             }}
                         >
-                            {availableRooms.length === 0 ? (
+                            {availableRooms === null ? (
+                                <ActivityIndicator
+                                    size="small"
+                                    color={colors.primary}
+                                    style={styles.loadingMargin}
+                                />
+                            ) : availableRooms.length === 0 ? (
                                 <Text
                                     style={{
                                         color: colors.text,
@@ -473,5 +480,8 @@ const styles = StyleSheet.create({
         marginTop: 12,
         marginBottom: 6,
         textAlign: 'left',
+    },
+    loadingMargin: {
+        marginVertical: 30,
     },
 })

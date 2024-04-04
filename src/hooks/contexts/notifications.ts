@@ -114,7 +114,7 @@ export function useNotifications(): Notifications {
             timetableObject[name] = { ...timetableEntry, elements: newElements }
             setTimetable(timetableObject)
             void AsyncStorage.setItem(
-                'timetableNotifications5s',
+                'timetableNotifications',
                 JSON.stringify(timetableObject)
             )
         }
@@ -124,11 +124,16 @@ export function useNotifications(): Notifications {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
                 const data = await AsyncStorage.getItem(
-                    'timetableNotifications5s'
+                    'timetableNotifications'
                 )
-                if (data != null) {
-                    setTimetable(JSON.parse(data))
+                if (data === null) {
+                    throw new Error('Data is null')
                 }
+                const parsedData = JSON.parse(data)
+                if (typeof parsedData !== 'object' || parsedData === null) {
+                    throw new Error('Data is not an object')
+                }
+                setTimetable(parsedData as Record<string, TimetableEntry>)
             } catch (error) {
                 console.error(
                     'Error while retrieving data from AsyncStorage:',

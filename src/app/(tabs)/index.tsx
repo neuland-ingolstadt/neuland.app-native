@@ -114,9 +114,11 @@ export default function Screen(): JSX.Element {
 
         return () => {
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 notificationListener.current
             )
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 responseListener.current
             )
         }

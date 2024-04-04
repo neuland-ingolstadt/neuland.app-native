@@ -9,7 +9,6 @@ import {
 } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
-import { type UserKindContextType } from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
@@ -48,7 +47,7 @@ export default function FoodDetail(): JSX.Element {
         toggleSelectedPreferences,
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
-    const { userKind } = useContext<UserKindContextType>(UserKindContext)
+    const { userKind } = useContext(UserKindContext)
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {

@@ -97,5 +97,5 @@ export function extractFacultyFromPersonal(
             shortName
         )
     )
-    return faculty as string
+    return faculty
 }

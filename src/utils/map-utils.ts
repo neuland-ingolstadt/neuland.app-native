@@ -1,6 +1,6 @@
-import API from '@/api/authenticated-api'
 import { type FeatureProperties } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
+import { type MaterialIcon } from '@/types/material-icons'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -210,6 +210,7 @@ export function getNextValidDate(): Date {
 
 /**
  * Filters suitable room openings.
+ * @param {object[]} data Room data
  * @param {string} date Start date as an ISO string
  * @param {string} time Start time
  * @param {string} [building] Building name
@@ -217,13 +218,13 @@ export function getNextValidDate(): Date {
  * @returns {Promise<object[]>}
  */
 export async function filterRooms(
+    data: Rooms[],
     date: string,
     time: string,
     building: string = BUILDINGS_ALL,
     duration: string = DURATION_PRESET
 ): Promise<AvailableRoom[]> {
     const beginDate = new Date(date + 'T' + time)
-
     const [durationHours, durationMinutes] = duration
         .split(':')
         .map((x) => parseInt(x, 10))
@@ -236,7 +237,7 @@ export async function filterRooms(
         beginDate.getSeconds(),
         beginDate.getMilliseconds()
     )
-    return await searchRooms(beginDate, endDate, building)
+    return await searchRooms(data, beginDate, endDate, building)
 }
 
 /**
@@ -247,11 +248,11 @@ export async function filterRooms(
  * @returns {Promise<object[]>}
  */
 export async function searchRooms(
+    data: Rooms[],
     beginDate: Date,
     endDate: Date,
     building: string = BUILDINGS_ALL
 ): Promise<AvailableRoom[]> {
-    const data = await API.getFreeRooms(beginDate)
     const openings = getRoomOpenings(data, beginDate)
     return Object.keys(openings)
         .flatMap((room) =>
@@ -380,7 +381,7 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
 export const getIcon = (
     type: SEARCH_TYPES,
     properties?: { result: { item: { properties: FeatureProperties } } }
-): { ios: string; android: string } => {
+): { ios: string; android: MaterialIcon } => {
     const {
         Funktion_en: funktionEn,
         Raum: raum,
