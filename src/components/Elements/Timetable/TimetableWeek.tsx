@@ -14,8 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
 import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Platform } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import WeekView, {
     type HeaderComponentProps,
     type WeekViewEvent,
@@ -86,11 +85,19 @@ export default function TimetableWeek({
         .darken(isDark ? 0 : 0.2)
         .hex()
 
-    const textColor = isIOS
+    let textColor = isIOS
         ? Color(colors.primary)
-              .darken(isDark ? 0 : 0.42)
+              .darken(isDark ? 0 : 0.45)
               .hex()
         : getContrastColor(eventBackgroundColor)
+
+    const contrast = Color(eventBackgroundColor).contrast(Color(textColor))
+
+    if (contrast < 3.5 && isIOS) {
+        textColor = Color(eventBackgroundColor).isLight()
+            ? '#000000'
+            : '#FFFFFF'
+    }
 
     const lineColor = isIOS
         ? Color(colors.primary)
