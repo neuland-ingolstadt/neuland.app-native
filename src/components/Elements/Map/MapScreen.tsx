@@ -47,6 +47,7 @@ import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigation } from 'expo-router'
 import React, {
     useCallback,
     useContext,
@@ -208,6 +209,17 @@ const MapScreen = (): JSX.Element => {
         })
         return [...rooms, ...buildings]
     }, [mapOverlay])
+
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        // @ts-expect-error - no types for tabPress
+        const unsubscribe = navigation.addListener('tabPress', (e) => {
+            _setView(mapCenter, mapRef)
+        })
+
+        return unsubscribe
+    }, [navigation])
 
     useEffect(() => {
         if (routeParams === null || routeParams === '') {
