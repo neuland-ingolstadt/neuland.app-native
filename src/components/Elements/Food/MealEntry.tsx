@@ -87,7 +87,10 @@ export const MealEntry = ({
         : t('empty.noAllergens')
 
     const [key, setKey] = useState(Math.random())
-
+    const restaurant =
+        meal.restaurant != null
+            ? meal.restaurant.charAt(0).toUpperCase() + meal.restaurant.slice(1)
+            : ''
     return (
         <DragDropView
             mode="drag"
@@ -95,7 +98,7 @@ export const MealEntry = ({
             dragValue={t('details.share.message', {
                 meal: meal?.name[i18n.language as LanguageKey],
                 price: formatPrice(meal?.prices[userKind]),
-                location: meal?.restaurant,
+                location: restaurant,
                 id: meal?.id,
             })}
         >
@@ -153,7 +156,7 @@ export const MealEntry = ({
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
                                 price: formatPrice(meal?.prices[userKind]),
-                                location: meal?.restaurant,
+                                location: restaurant,
                                 id: meal?.id,
                             }),
                         })

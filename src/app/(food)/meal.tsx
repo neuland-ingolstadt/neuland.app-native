@@ -324,7 +324,7 @@ export default function FoodDetail(): JSX.Element {
                                     i18n.language as LanguageKey
                                 ],
                                 price: formatPrice(variant.prices[userKind]),
-                                location: meal?.restaurant,
+                                location: restaurant,
                                 id: variant?.id,
                             }),
                         })
@@ -387,7 +387,7 @@ export default function FoodDetail(): JSX.Element {
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
                                 price: formatPrice(meal?.prices[userKind]),
-                                location: meal?.restaurant,
+                                location: restaurant,
                                 id: meal?.id,
                             }),
                         })
