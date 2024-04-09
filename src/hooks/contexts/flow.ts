@@ -64,7 +64,7 @@ export function useFlow(): FlowHook {
                 }
             } catch (error) {
                 console.error(
-                    'Error while retrieving data from AsyncStorage:',
+                    'Error while retrieving flow data from AsyncStorage:',
                     error
                 )
             }

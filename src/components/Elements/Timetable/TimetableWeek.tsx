@@ -7,13 +7,14 @@ import {
 } from '@/components/contexts'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
+import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
 import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import WeekView, {
     type HeaderComponentProps,
     type WeekViewEvent,
@@ -63,28 +64,48 @@ export default function TimetableWeek({
     }, [navigation])
 
     const isDark = theme.dark
-    const eventBackgroundColor = Color(colors.primary)
-        .alpha(0.73)
-        .lighten(isDark ? 0 : 0.6)
-        .darken(isDark ? 0.65 : 0)
-        .rgb()
-        .string()
+    const isIOS = Platform.OS === 'ios'
+
+    const eventBackgroundColor = isIOS
+        ? Color(colors.primary)
+              .alpha(0.73)
+              .lighten(isDark ? 0 : 0.6)
+              .darken(isDark ? 0.65 : 0)
+              .rgb()
+              .string()
+        : colors.primary
 
     const dayBackgroundColor = Color(colors.card)
         .darken(isDark ? 0 : 0.13)
         .lighten(isDark ? 0.23 : 0)
         .rgb()
         .string()
+
     const dayTextColor = Color(colors.primary)
         .darken(isDark ? 0 : 0.2)
         .hex()
-    const textColor = Color(colors.primary)
-        .darken(isDark ? 0 : 0.42)
-        .hex()
-    const lineColor = Color(colors.primary)
-        .darken(isDark ? 0.25 : 0)
-        .lighten(isDark ? 0 : 0.25)
-        .hex()
+
+    let textColor = isIOS
+        ? Color(colors.primary)
+              .darken(isDark ? 0 : 0.45)
+              .hex()
+        : getContrastColor(eventBackgroundColor)
+
+    const contrast = Color(eventBackgroundColor).contrast(Color(textColor))
+
+    if (contrast < 3.5 && isIOS) {
+        textColor = Color(eventBackgroundColor).isLight()
+            ? '#000000'
+            : '#FFFFFF'
+    }
+
+    const lineColor = isIOS
+        ? Color(colors.primary)
+              .darken(isDark ? 0.25 : 0)
+              .lighten(isDark ? 0 : 0.25)
+              .hex()
+        : eventBackgroundColor
+
     const Event = ({
         event,
     }: {

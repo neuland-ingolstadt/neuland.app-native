@@ -1,4 +1,4 @@
-/* eslint-disable react-native/no-raw-text */
+import { type MaterialIcon } from '@/types/material-icons'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
@@ -9,7 +9,7 @@ interface PlatformIconProps {
     color: string | ColorValue
 
     android: {
-        name: string
+        name: MaterialIcon | CommunityIcon
         size: number
         variant?: 'filled' | 'outlined'
     }
@@ -116,6 +116,8 @@ const PlatformIcon = ({
 export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github']
+
+type CommunityIcon = 'instagram' | 'github'
 
 const styles = StyleSheet.create({
     androidIcon: {

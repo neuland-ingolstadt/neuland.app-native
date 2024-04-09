@@ -9,7 +9,11 @@ import {
 } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
-import { type UserKindContextType } from '@/hooks/contexts/userKind'
+import {
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
@@ -48,7 +52,7 @@ export default function FoodDetail(): JSX.Element {
         toggleSelectedPreferences,
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
-    const { userKind } = useContext<UserKindContextType>(UserKindContext)
+    const { userKind } = useContext(UserKindContext)
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {
@@ -126,14 +130,20 @@ export default function FoodDetail(): JSX.Element {
                           {
                               title: t('details.formlist.prices.student'),
                               value: formatPrice(meal.prices?.student),
+                              fontWeight:
+                                  userKind === USER_STUDENT ? '600' : 'normal',
                           },
                           {
                               title: t('details.formlist.prices.employee'),
                               value: formatPrice(meal.prices?.employee),
+                              fontWeight:
+                                  userKind === USER_EMPLOYEE ? '600' : 'normal',
                           },
                           {
                               title: t('details.formlist.prices.guest'),
                               value: formatPrice(meal.prices?.guest),
+                              fontWeight:
+                                  userKind === USER_GUEST ? '600' : 'normal',
                           },
                       ],
                   },
@@ -214,6 +224,7 @@ export default function FoodDetail(): JSX.Element {
                         itemAlert(flag, 'flag')
                     },
                 })) ?? [],
+            footer: t('details.formlist.flagsFooter'),
         },
         {
             header: t('preferences.formlist.allergens'),
@@ -238,6 +249,9 @@ export default function FoodDetail(): JSX.Element {
                             itemAlert(allergen, 'allergen')
                         },
                     })) ?? [],
+            footer: t('details.formlist.allergenFooter', {
+                allergens: meal?.allergens?.join(', '),
+            }),
         },
         ...(isNutritionAvailable ? nutritionSection : []),
     ]
@@ -310,7 +324,7 @@ export default function FoodDetail(): JSX.Element {
                                     i18n.language as LanguageKey
                                 ],
                                 price: formatPrice(variant.prices[userKind]),
-                                location: meal?.restaurant,
+                                location: restaurant,
                                 id: variant?.id,
                             }),
                         })
@@ -373,7 +387,7 @@ export default function FoodDetail(): JSX.Element {
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
                                 price: formatPrice(meal?.prices[userKind]),
-                                location: meal?.restaurant,
+                                location: restaurant,
                                 id: meal?.id,
                             }),
                         })

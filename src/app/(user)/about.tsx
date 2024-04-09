@@ -5,6 +5,7 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { AppIconContext, FlowContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
+import { IMPRINT_URL, PRIVACY_URL } from '@/utils/app-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -26,8 +27,6 @@ import {
 import { version } from '../../../package.json'
 
 export default function About(): JSX.Element {
-    const PRIVACY_URL: string = process.env.EXPO_PUBLIC_PRIVACY_URL as string
-    const IMPRINT_URL: string = process.env.EXPO_PUBLIC_IMPRINT_URL as string
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
@@ -215,7 +214,7 @@ export default function About(): JSX.Element {
                 >
                     <SingleSectionPicker
                         title={t('about.analytics.toggle')}
-                        selectedItem={analyticsAllowed as boolean}
+                        selectedItem={analyticsAllowed ?? false}
                         action={toggleAnalytics}
                     />
                 </SectionView>

@@ -247,7 +247,25 @@ export default function CalendarPage(): JSX.Element {
                                                 </React.Fragment>
                                             ))}
                                         </>
-                                    ) : null}
+                                    ) : (
+                                        <ErrorView
+                                            title={t(
+                                                'pages.calendar.exams.noExams.title'
+                                            )}
+                                            message={t(
+                                                'pages.calendar.exams.noExams.subtitle'
+                                            )}
+                                            icon={{
+                                                ios: 'calendar.badge.clock',
+                                                android: 'calendar-clock',
+                                            }}
+                                            buttonText="Primuss"
+                                            onButtonPress={() => {
+                                                void Linking.openURL(primussUrl)
+                                            }}
+                                            inModal
+                                        />
+                                    )}
                                 </View>
                                 <CalendarFooter />
                             </View>

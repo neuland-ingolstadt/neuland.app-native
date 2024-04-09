@@ -8,8 +8,8 @@ interface MapContextType {
     setLocalSearch: (_: string) => void
     clickedElement: ClickedMapElement | null
     setClickedElement: (_: ClickedMapElement | null) => void
-    availableRooms: AvailableRoom[]
-    setAvailableRooms: (_: AvailableRoom[]) => void
+    availableRooms: AvailableRoom[] | null
+    setAvailableRooms: (_: AvailableRoom[] | null) => void
     currentFloor: string
     setCurrentFloor: (_: string) => void
     location: LocationObject | null | 'notGranted'
@@ -23,8 +23,8 @@ export const MapContext = createContext<MapContextType>({
     clickedElement: null,
     setClickedElement: (_: ClickedMapElement | null) => {},
 
-    availableRooms: [],
-    setAvailableRooms: (_: AvailableRoom[]) => {},
+    availableRooms: null,
+    setAvailableRooms: (_: AvailableRoom[] | null) => {},
 
     currentFloor: '',
     setCurrentFloor: (_: string) => {},

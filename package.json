@@ -1,5 +1,5 @@
 {
-  "version": "0.7.0",
+  "version": "0.7.1",
   "name": "neuland",
   "main": "expo-router/entry",
   "homepage": "https://github.com/neuland-ingolstadt/neuland.app-native",
@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@alessiocancian/react-native-actionsheet": "^3.2.0",
@@ -109,17 +109,17 @@
     "@typescript-eslint/parser": "^6.10.0",
     "ajv": "^8.12.0",
     "babel-plugin-formatjs": "^10.5.7",
-    "eslint": "^8.53.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-config-standard-with-typescript": "^43.0.1",
     "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.3.0",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "latest",
     "eslint-plugin-react-native": "^4.1.0",
     "husky": "^9.0.6",
     "lint-staged": ">=15",
-    "prettier": "3.2.4",
+    "prettier": "3.2.5",
     "prop-types": "^15.8.1",
     "typescript": "^5.4.3"
   },

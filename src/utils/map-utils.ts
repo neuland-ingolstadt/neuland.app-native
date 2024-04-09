@@ -1,6 +1,6 @@
-import API from '@/api/authenticated-api'
 import { type FeatureProperties } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
+import { type MaterialIcon } from '@/types/material-icons'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -139,32 +139,46 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
                     // 0 indicates that every room is free
                     room: room === 0 ? ROOMS_ALL : room.toString(),
                     type: stunde.type.replace(/ \(.*\)$/, '').trim() ?? '',
-                    from: new Date(stunde.von),
-                    until: new Date(stunde.bis),
+                    from: new Date(stunde.von as string),
+                    until: new Date(stunde.bis as string),
                     capacity,
                 })
             )
         )
         // iterate over every room
-        .forEach(({ room, type, from, until, capacity }) => {
-            // initialize room
-            const roomOpenings = openings[room] ?? (openings[room] = [])
-            // find overlapping opening
-            // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
-            const opening = roomOpenings.find(
-                (opening) =>
-                    from <= addMinutes(opening.until, IGNORE_GAPS) &&
-                    until >= addMinutes(opening.from, -IGNORE_GAPS)
-            )
-            if (opening != null) {
-                // extend existing opening
-                opening.from = minDate(from, opening.from)
-                opening.until = maxDate(until, opening.until)
-            } else {
-                // create new opening
-                roomOpenings.push({ type, from, until, capacity })
+        .forEach(
+            ({
+                room,
+                type,
+                from,
+                until,
+                capacity,
+            }: {
+                room: string
+                type: string
+                from: Date
+                until: Date
+                capacity: number
+            }) => {
+                // initialize room
+                const roomOpenings = openings[room] ?? (openings[room] = [])
+                // find overlapping opening
+                // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
+                const opening = roomOpenings.find(
+                    (opening) =>
+                        from <= addMinutes(opening.until, IGNORE_GAPS) &&
+                        until >= addMinutes(opening.from, -IGNORE_GAPS)
+                )
+                if (opening != null) {
+                    // extend existing opening
+                    opening.from = minDate(from, opening.from)
+                    opening.until = maxDate(until, opening.until)
+                } else {
+                    // create new opening
+                    roomOpenings.push({ type, from, until, capacity })
+                }
             }
-        })
+        )
     return openings
 }
 
@@ -196,6 +210,7 @@ export function getNextValidDate(): Date {
 
 /**
  * Filters suitable room openings.
+ * @param {object[]} data Room data
  * @param {string} date Start date as an ISO string
  * @param {string} time Start time
  * @param {string} [building] Building name
@@ -203,13 +218,13 @@ export function getNextValidDate(): Date {
  * @returns {Promise<object[]>}
  */
 export async function filterRooms(
+    data: Rooms[],
     date: string,
     time: string,
     building: string = BUILDINGS_ALL,
     duration: string = DURATION_PRESET
 ): Promise<AvailableRoom[]> {
     const beginDate = new Date(date + 'T' + time)
-
     const [durationHours, durationMinutes] = duration
         .split(':')
         .map((x) => parseInt(x, 10))
@@ -222,7 +237,7 @@ export async function filterRooms(
         beginDate.getSeconds(),
         beginDate.getMilliseconds()
     )
-    return await searchRooms(beginDate, endDate, building)
+    return await searchRooms(data, beginDate, endDate, building)
 }
 
 /**
@@ -233,11 +248,11 @@ export async function filterRooms(
  * @returns {Promise<object[]>}
  */
 export async function searchRooms(
+    data: Rooms[],
     beginDate: Date,
     endDate: Date,
     building: string = BUILDINGS_ALL
 ): Promise<AvailableRoom[]> {
-    const data = await API.getFreeRooms(beginDate)
     const openings = getRoomOpenings(data, beginDate)
     return Object.keys(openings)
         .flatMap((room) =>
@@ -366,7 +381,7 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
 export const getIcon = (
     type: SEARCH_TYPES,
     properties?: { result: { item: { properties: FeatureProperties } } }
-): { ios: string; android: string } => {
+): { ios: string; android: MaterialIcon } => {
     const {
         Funktion_en: funktionEn,
         Raum: raum,

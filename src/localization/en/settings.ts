@@ -10,6 +10,11 @@ export default {
         },
         error: {
             subtitle2: 'Pull to refresh or tap to logout',
+            noData: {
+                title: 'No data available',
+                subtitle1: 'Looks like you are no longer enrolled.',
+                subtitle2: 'Please check your Primuss account.',
+            },
         },
         formlist: {
             preferences: {
@@ -65,6 +70,13 @@ export default {
         footer: 'These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build.',
     },
     profile: {
+        error: {
+            title: 'No data available',
+            message:
+                'Looks like you are no longer enrolled. Please check your Primuss account.',
+            button: 'Primuss',
+        },
+
         formlist: {
             grades: {
                 title: 'Grades',

@@ -63,7 +63,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                             <Text
                                                 style={[
                                                     styles.rowTitle,
-                                                    { color: colors.text },
+                                                    {
+                                                        color: colors.text,
+                                                    },
                                                 ]}
                                             >
                                                 {item.title}
@@ -78,6 +80,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                             color:
                                                                 item.iconColor ??
                                                                 colors.labelColor,
+                                                            fontWeight:
+                                                                item.fontWeight ??
+                                                                'normal',
                                                         },
                                                     ]}
                                                 >

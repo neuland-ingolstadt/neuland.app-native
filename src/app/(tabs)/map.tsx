@@ -17,7 +17,9 @@ export default function Screen(): JSX.Element {
     const [localSearch, setLocalSearch] = useState<string>('')
     const [clickedElement, setClickedElement] =
         useState<ClickedMapElement | null>(null)
-    const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([])
+    const [availableRooms, setAvailableRooms] = useState<
+        AvailableRoom[] | null
+    >(null)
     const [currentFloor, setCurrentFloor] = useState('EG')
     const [location, setLocation] = useState<
         Location.LocationObject | null | 'notGranted'

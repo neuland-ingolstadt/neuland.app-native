@@ -58,6 +58,11 @@ export default {
                 title: 'Prüfungen',
                 error: 'Kein Studierender',
                 errorSubtitle: 'Melde dich an, um deine Prüfungen zu sehen.',
+                noExams: {
+                    title: 'Keine Prüfungen gefunden',
+                    subtitle:
+                        'Nach der Anmeldung zu Prüfungen werden sie hier angezeigt.',
+                },
             },
             calendar: {
                 link: 'https://www.thi.de/studium/pruefung/semestertermine/',

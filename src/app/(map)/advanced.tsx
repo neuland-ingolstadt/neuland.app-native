@@ -1,3 +1,4 @@
+import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
@@ -6,8 +7,9 @@ import Dropdown, {
 } from '@/components/Elements/Universal/Dropdown'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
+import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
-import { isKnownError } from '@/utils/api-utils'
+import { networkError } from '@/utils/api-utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     BUILDINGS,
@@ -16,11 +18,12 @@ import {
     filterRooms,
     getNextValidDate,
 } from '@/utils/map-utils'
+import { LoadingState } from '@/utils/ui-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useTheme } from '@react-navigation/native'
-import { captureException } from '@sentry/react-native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -30,7 +33,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import { RefreshControl } from 'react-native-gesture-handler'
 
 const DURATIONS = [
     '00:15',
@@ -74,80 +76,65 @@ export default function AdvancedSearch(): JSX.Element {
 
     const [showDate, setShowDate] = useState(Platform.OS === 'ios')
     const [showTime, setShowTime] = useState(Platform.OS === 'ios')
-
-    const [filterResults, setFilterResults] = useState<AvailableRoom[] | null>(
-        null
-    )
-
-    enum LoadingState {
-        LOADING,
-        LOADED,
-        ERROR,
-        REFRESHING,
-    }
-
-    const [loadingState, setLoadingState] = useState<LoadingState>(
+    const [filterState, setFilterState] = useState<LoadingState>(
         LoadingState.LOADING
     )
-    const [error, setError] = useState<Error | null>(null)
-
-    const filter = useCallback(async () => {
-        // when entering dates on desktop, for a short time the date is invalid (e.g. 2023-07-00) when the user is still typing
-        const validateDate = new Date(date)
-        if (isNaN(validateDate.getTime())) {
-            return
-        }
-
-        setFilterResults(null)
-        const rooms = await filterRooms(date, time, building, duration)
-        if (rooms == null) {
-            throw new Error('Error while filtering rooms')
-        } else {
-            setFilterResults(rooms)
-            setLoadingState(LoadingState.LOADED)
-        }
-    }, [building, date, duration, time])
+    const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
+        queryKey: ['freeRooms', date],
+        queryFn: async () =>
+            await API.getFreeRooms(new Date(date + 'T' + time)),
+        staleTime: 1000 * 60 * 60, // 60 minutes
+        gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.replace('user/login')
+                return false
+            }
+            return failureCount < 3
+        },
+    })
+    const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
 
     useEffect(() => {
-        setLoadingState(LoadingState.LOADING)
-        void loadData()
-    }, [filter, router])
-
-    const loadData = async (): Promise<void> => {
-        try {
-            await filter()
-        } catch (e) {
-            if (e instanceof NoSessionError) {
-                router.replace('(user)/login')
-            } else {
-                setLoadingState(LoadingState.ERROR)
-                setError(e as Error)
-                if (!isKnownError(e as Error)) {
-                    captureException(e)
+        const fetchRooms = async (): Promise<void> => {
+            try {
+                const validateDate = new Date(date)
+                if (isNaN(validateDate.getTime())) {
+                    throw new Error('Invalid date')
                 }
+                if (data === undefined) {
+                    return
+                }
+                const rooms = await filterRooms(
+                    data,
+                    date,
+                    time,
+                    building,
+                    duration
+                )
+                if (rooms == null) {
+                    throw new Error('Error while filtering rooms')
+                } else {
+                    setRooms(rooms)
+                    setFilterState(LoadingState.LOADED)
+                }
+            } catch (error) {
+                setFilterState(LoadingState.ERROR)
+                console.error(error)
             }
         }
-    }
 
-    const onRefresh: () => void = () => {
-        void loadData()
-    }
+        setFilterState(LoadingState.LOADING)
+        setTimeout(() => {
+            void fetchRooms()
+        })
+    }, [date, time, building, duration, data])
+
+    const { refetchByUser } = useRefreshByUser(refetch)
 
     return (
         <>
-            <ScrollView
-                style={styles.scrollView}
-                refreshControl={
-                    loadingState !== LoadingState.LOADED ? (
-                        <RefreshControl
-                            refreshing={
-                                loadingState === LoadingState.REFRESHING
-                            }
-                            onRefresh={onRefresh}
-                        />
-                    ) : undefined
-                }
-            >
+            <ScrollView style={styles.scrollView}>
                 <View>
                     <Text
                         style={[
@@ -296,24 +283,32 @@ export default function AdvancedSearch(): JSX.Element {
                                 },
                             ]}
                         >
-                            {loadingState === LoadingState.LOADING && (
+                            {filterState === LoadingState.LOADING ||
+                            isLoading ? (
                                 <ActivityIndicator
                                     color={colors.primary}
                                     style={styles.loadingIndicator}
                                 />
-                            )}
-                            {loadingState === LoadingState.ERROR && (
+                            ) : isPaused ? (
                                 <ErrorView
-                                    title={error?.message ?? t('error.title')}
+                                    title={networkError}
                                     onButtonPress={() => {
-                                        onRefresh()
+                                        void refetchByUser()
                                     }}
                                     inModal
                                 />
-                            )}
-                            {loadingState === LoadingState.LOADED && (
-                                <FreeRoomsList rooms={filterResults} />
-                            )}
+                            ) : isError ||
+                              filterState === LoadingState.ERROR ? (
+                                <ErrorView
+                                    title={error?.message ?? t('error.title')}
+                                    onButtonPress={() => {
+                                        void refetchByUser()
+                                    }}
+                                    inModal
+                                />
+                            ) : filterState === LoadingState.LOADED ? (
+                                <FreeRoomsList rooms={rooms} />
+                            ) : null}
                         </View>
                     </View>
                 </View>

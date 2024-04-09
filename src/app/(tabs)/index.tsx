@@ -114,9 +114,11 @@ export default function Screen(): JSX.Element {
 
         return () => {
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 notificationListener.current
             )
             Notifications.removeNotificationSubscription(
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 responseListener.current
             )
         }
@@ -184,7 +186,10 @@ export default function Screen(): JSX.Element {
                                                   title: t(
                                                       'navigation.profile'
                                                   ),
-                                                  subtitle: userFullName,
+                                                  subtitle:
+                                                      data?.vname +
+                                                      ' ' +
+                                                      data?.name,
                                                   systemIcon:
                                                       Platform.OS === 'ios'
                                                           ? 'person.crop.circle'
@@ -255,26 +260,43 @@ export default function Screen(): JSX.Element {
                                 }}
                             >
                                 {initials !== '' ? (
-                                    <View>
-                                        <Avatar
-                                            size={29}
-                                            background={colors.primary}
-                                            shadow={false}
-                                        >
-                                            <Text
-                                                style={{
-                                                    color: getContrastColor(
-                                                        colors.primary
-                                                    ),
-                                                    ...styles.iconText,
+                                    userKind === 'student' &&
+                                    data?.mtknr === undefined ? (
+                                        <View>
+                                            <PlatformIcon
+                                                color={colors.text}
+                                                ios={{
+                                                    name: 'person.crop.circle.badge.exclamationmark',
+                                                    size: 22,
                                                 }}
-                                                numberOfLines={1}
-                                                adjustsFontSizeToFit={true}
+                                                android={{
+                                                    name: 'account_circle_off',
+                                                    size: 26,
+                                                }}
+                                            />
+                                        </View>
+                                    ) : (
+                                        <View>
+                                            <Avatar
+                                                size={29}
+                                                background={colors.primary}
+                                                shadow={false}
                                             >
-                                                {initials}
-                                            </Text>
-                                        </Avatar>
-                                    </View>
+                                                <Text
+                                                    style={{
+                                                        color: getContrastColor(
+                                                            colors.primary
+                                                        ),
+                                                        ...styles.iconText,
+                                                    }}
+                                                    numberOfLines={1}
+                                                    adjustsFontSizeToFit={true}
+                                                >
+                                                    {initials}
+                                                </Text>
+                                            </Avatar>
+                                        </View>
+                                    )
                                 ) : (
                                     <View>
                                         <PlatformIcon
