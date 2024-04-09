@@ -123,7 +123,9 @@
     "prop-types": "^15.8.1",
     "typescript": "^5.4.3"
   },
-  "trustedDependencies": ["@sentry/cli"],
+  "trustedDependencies": [
+    "@sentry/cli"
+  ],
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,yml}": [
       "npx prettier --write"

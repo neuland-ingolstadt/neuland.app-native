@@ -227,7 +227,7 @@ const MapScreen = (): JSX.Element => {
         const etage = room?.properties.Ebene
         _setView(center, mapRef)
         setCurrentFloor(etage ?? 'EG')
-        _injectMarker(mapRef, center)
+        _injectMarker(mapRef, center, colors)
         handlePresentModalPress()
         bottomSheetRef.current?.close()
         updateRouteParams('')
@@ -288,6 +288,7 @@ const MapScreen = (): JSX.Element => {
         // bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
+        _injectMarker(mapRef, mapCenter, colors)
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
 
     const _addGeoJson = (): void => {
@@ -455,7 +456,7 @@ const MapScreen = (): JSX.Element => {
                                     type: SEARCH_TYPES.ROOM,
                                 })
                                 const center = data.payload.properties.center
-                                _injectMarker(mapRef, center)
+                                _injectMarker(mapRef, center, colors)
                                 Keyboard.dismiss()
                                 bottomSheetRef.current?.close()
                                 handlePresentModalPress()
