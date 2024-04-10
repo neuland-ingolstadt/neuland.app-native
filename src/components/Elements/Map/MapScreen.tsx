@@ -77,6 +77,8 @@ import packageInfo from '../../../../package.json'
 import { modalSection } from './ModalSections'
 
 const MapScreen = (): JSX.Element => {
+    const navigation = useNavigation()
+    const isFocused = useNavigation().isFocused()
     const [errorMsg, setErrorMsg] = useState('')
     const colors = useTheme().colors as Colors
     const { userKind, userFaculty } = useContext(UserKindContext)
@@ -210,16 +212,16 @@ const MapScreen = (): JSX.Element => {
         return [...rooms, ...buildings]
     }, [mapOverlay])
 
-    const navigation = useNavigation()
-
-    useEffect(() => {
+    React.useEffect(() => {
         // @ts-expect-error - no types for tabPress
         const unsubscribe = navigation.addListener('tabPress', (e) => {
-            _setView(mapCenter, mapRef)
+            // if already on the map screen, reset the map without animation
+            // if not on the map screen, reset the map with animation
+            _setView(mapCenter, mapRef, isFocused)
         })
 
         return unsubscribe
-    }, [navigation])
+    }, [navigation, isFocused])
 
     useEffect(() => {
         if (routeParams === null || routeParams === '') {

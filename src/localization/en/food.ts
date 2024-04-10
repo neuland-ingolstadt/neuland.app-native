@@ -23,7 +23,7 @@ export default {
         guests: 'for guests',
         students: 'for students',
         employees: 'for employees',
-        unknown: 'not available',
+        unknown: 'price not available',
     },
     dashboard: {
         oneMore: 'and one more meal',
