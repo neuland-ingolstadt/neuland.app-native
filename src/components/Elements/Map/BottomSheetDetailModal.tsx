@@ -63,8 +63,9 @@ export const BottomSheetDetailModal = ({
     return (
         <BottomSheetModalProvider>
             <BottomSheetModal
+                index={1}
                 ref={bottomSheetModalRef}
-                snapPoints={['30%', '47%', '60%']}
+                snapPoints={['15%', '30%', '45%', '70%']}
                 onChange={handleSheetChangesModal}
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPositionModal}

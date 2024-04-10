@@ -65,8 +65,7 @@ export const MealEntry = ({
 
     useEffect(() => {}, [userKind])
     const price = getUserSpecificPrice(meal, userKind)
-    const label =
-        price !== '' ? getUserSpecificLabel(userKind, t) : t('price.unknown')
+    const label = price !== '' ? getUserSpecificLabel(userKind, t) : ''
 
     const isNotConfigured =
         allergenSelection.length === 1 &&
@@ -192,7 +191,12 @@ export const MealEntry = ({
                     >
                         <View style={styles.innerContainer}>
                             <Text
-                                style={[styles.Title, { color: colors.text }]}
+                                style={[
+                                    styles.Title,
+                                    {
+                                        color: colors.text,
+                                    },
+                                ]}
                                 adjustsFontSizeToFit={true}
                                 numberOfLines={2}
                             >
@@ -295,14 +299,16 @@ export const MealEntry = ({
                                 >
                                     {getUserSpecificPrice(meal, userKind)}
                                 </Text>
-                                <Text
-                                    style={[
-                                        styles.priceLabel,
-                                        { color: colors.labelColor },
-                                    ]}
-                                >
-                                    {label}
-                                </Text>
+                                {label !== '' && (
+                                    <Text
+                                        style={[
+                                            styles.priceLabel,
+                                            { color: colors.labelColor },
+                                        ]}
+                                    >
+                                        {label}
+                                    </Text>
+                                )}
                             </View>
                         </View>
                     </View>

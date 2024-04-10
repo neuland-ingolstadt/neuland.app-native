@@ -84,15 +84,17 @@ export const _removeAllGeoJson = (mapRef: React.RefObject<WebView>): void => {
  *
  * @param center - The coordinates to center the map on.
  * @param mapRef - A reference to the Leaflet map.
+ * @param animate - Whether to animate the transition.
  * @returns void
  */
 export const _setView = (
     center: number[] | undefined,
-    mapRef: React.RefObject<WebView>
+    mapRef: React.RefObject<WebView>,
+    animate: boolean = true
 ): void => {
     if (center == null) return
     mapRef.current?.injectJavaScript(`
-mymap.setView(${JSON.stringify(center)}, 17.5);
+mymap.setView(${JSON.stringify(center)}, 17.5, { animate: ${animate} });
 true;
 `)
 }
@@ -193,7 +195,7 @@ export const htmlScript = `
         window.addEventListener('online', checkInternetConnection);
         window.addEventListener('offline', checkInternetConnection);
 
-        var mymap = L.map('mapid', { zoomControl: false }).setView([48.76709, 11.4328], 17.5);
+        var mymap = L.map('mapid', { zoomControl: false, minZoom: 16, maxZoom: 20 }).setView([48.76709, 11.4328], 17.5);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 21,

@@ -121,34 +121,38 @@ export default function FoodDetail(): JSX.Element {
         )
     }
 
-    const priceSection: FormListSections[] =
-        meal != null
-            ? [
-                  {
-                      header: t('details.formlist.prices.title'),
-                      items: [
-                          {
-                              title: t('details.formlist.prices.student'),
-                              value: formatPrice(meal.prices?.student),
-                              fontWeight:
-                                  userKind === USER_STUDENT ? '600' : 'normal',
-                          },
-                          {
-                              title: t('details.formlist.prices.employee'),
-                              value: formatPrice(meal.prices?.employee),
-                              fontWeight:
-                                  userKind === USER_EMPLOYEE ? '600' : 'normal',
-                          },
-                          {
-                              title: t('details.formlist.prices.guest'),
-                              value: formatPrice(meal.prices?.guest),
-                              fontWeight:
-                                  userKind === USER_GUEST ? '600' : 'normal',
-                          },
-                      ],
-                  },
-              ]
-            : []
+    const studentPrice = formatPrice(meal?.prices?.student)
+    const employeePrice = formatPrice(meal?.prices?.employee)
+    const guestPrice = formatPrice(meal?.prices?.guest)
+    const isPriceAvailable =
+        studentPrice !== '' && employeePrice !== '' && guestPrice !== ''
+    const priceSection: FormListSections[] = isPriceAvailable
+        ? [
+              {
+                  header: t('details.formlist.prices.title'),
+                  items: [
+                      {
+                          title: t('details.formlist.prices.student'),
+                          value: studentPrice,
+                          fontWeight:
+                              userKind === USER_STUDENT ? '600' : 'normal',
+                      },
+                      {
+                          title: t('details.formlist.prices.employee'),
+                          value: employeePrice,
+                          fontWeight:
+                              userKind === USER_EMPLOYEE ? '600' : 'normal',
+                      },
+                      {
+                          title: t('details.formlist.prices.guest'),
+                          value: guestPrice,
+                          fontWeight:
+                              userKind === USER_GUEST ? '600' : 'normal',
+                      },
+                  ],
+              },
+          ]
+        : []
 
     const isNutritionAvailable =
         meal?.nutrition != null &&
