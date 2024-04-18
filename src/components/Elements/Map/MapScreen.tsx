@@ -14,6 +14,7 @@ import {
     _removeAllGeoJson,
     _removeMarker,
     _setView,
+    _updateMarkerColor,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
@@ -324,7 +325,9 @@ const MapScreen = (): JSX.Element => {
         // bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
-        _injectMarker(mapRef, mapCenter, colors)
+        if (clickedElement != null) {
+            _updateMarkerColor(mapRef, colors.primary)
+        }
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
 
     const _addGeoJson = (): void => {
