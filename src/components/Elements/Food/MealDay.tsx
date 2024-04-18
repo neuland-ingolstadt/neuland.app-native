@@ -121,9 +121,8 @@ export const MealDay = ({
         meals: any[],
         restaurant: string
     ): Meal[] => {
-        return meals.filter((meal: any) => meal.restaurant === restaurant)
+        return meals.filter((meal: Meal) => meal.restaurant === restaurant)
     }
-
     /**
      * Groups an array of meals by category.
      * @param meals - An array of meals.
