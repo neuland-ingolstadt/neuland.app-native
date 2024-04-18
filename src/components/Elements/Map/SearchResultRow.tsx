@@ -43,7 +43,7 @@ const ResultRow: React.FC<{
                     })
                     setCurrentFloor(result.item.properties.Ebene)
                     handlePresentModalPress()
-                    _injectMarker(mapRef, center)
+                    _injectMarker(mapRef, center, colors)
                     setLocalSearch('')
                 }}
             >

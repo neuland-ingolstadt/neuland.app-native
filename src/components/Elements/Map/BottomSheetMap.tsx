@@ -303,7 +303,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     _setView(center, mapRef)
                                                     _injectMarker(
                                                         mapRef,
-                                                        center
+                                                        center,
+                                                        colors
                                                     )
                                                 }
 
