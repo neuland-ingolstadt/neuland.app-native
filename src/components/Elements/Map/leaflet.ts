@@ -127,9 +127,11 @@ export const _injectMarker = (
 ): void => {
     const color = colors.primary
     const svg = `
-<svg width="45px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <path d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z" fill="${color}" stroke="black" stroke-width="40" />
+    <svg viewBox="0 0 824 944"
+    version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z" fill="${color}" stroke="black" stroke-width="35" />
 </svg>
+
 `
     const base64Svg = Buffer.from(svg).toString('base64')
     mapRef.current?.injectJavaScript(`
@@ -140,6 +142,7 @@ if (window.marker) {
 window.marker = L.marker(${JSON.stringify(coordinates)}, {
     icon: L.icon({
         iconUrl: 'data:image/svg+xml;base64,${base64Svg}',
+        iconSize: [45, 45],
         iconAnchor: [24, 42],
     })
 }).addTo(mymap);
@@ -158,12 +161,13 @@ if (window.marker) {
     window.marker.setIcon(L.icon({
         iconUrl: 'data:image/svg+xml;base64,${Buffer.from(
             `
-            <svg width="45px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <path d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z" fill="${color}" stroke="black" stroke-width="40" />
+            <svg viewBox="0 0 824 944" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <path d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z" fill="${color}" stroke="black" stroke-width="35" />
             </svg>
             `
         ).toString('base64')}',
         iconAnchor: [24, 42],
+        iconSize: [45, 45],
     }));
 }
 true;
