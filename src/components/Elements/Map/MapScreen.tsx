@@ -14,6 +14,7 @@ import {
     _removeAllGeoJson,
     _removeMarker,
     _setView,
+    _updateMarkerColor,
     htmlScript,
 } from '@/components/Elements/Map/leaflet'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
@@ -242,7 +243,7 @@ const MapScreen = (): JSX.Element => {
         const etage = room?.properties.Ebene
         _setView(center, mapRef)
         setCurrentFloor(etage ?? 'EG')
-        _injectMarker(mapRef, center)
+        _injectMarker(mapRef, center, colors)
         handlePresentModalPress()
 
         updateRouteParams('')
@@ -326,6 +327,9 @@ const MapScreen = (): JSX.Element => {
         // bottomSheetRef.current?.snapToIndex(1)
         _removeAllGeoJson(mapRef)
         _addGeoJson()
+        if (clickedElement != null) {
+            _updateMarkerColor(mapRef, colors.primary)
+        }
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
 
     const _addGeoJson = (): void => {
@@ -497,7 +501,7 @@ const MapScreen = (): JSX.Element => {
                                 })
                                 const center = data.payload.properties
                                     .center as number[]
-                                _injectMarker(mapRef, center)
+                                _injectMarker(mapRef, center, colors)
                                 Keyboard.dismiss()
                                 bottomSheetRef.current?.close()
                                 handlePresentModalPress()
