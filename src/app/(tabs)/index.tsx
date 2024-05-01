@@ -1,3 +1,5 @@
+import NeulandAPI from '@/api/neuland-api'
+import PopUpCard from '@/components/Cards/PopUpCard'
 import { Avatar } from '@/components/Elements/Settings'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
@@ -329,7 +331,14 @@ function HomeScreen(): JSX.Element {
     const [columns, setColumns] = useState(
         Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )
+
     const { t } = useTranslation(['settings'])
+    const { data } = useQuery({
+        queryKey: ['announcements'],
+        queryFn: async () => await NeulandAPI.getAnnouncements(),
+        staleTime: 1000 * 60 * 30, // 30 minutes
+        gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+    })
 
     useEffect(() => {
         const handleOrientationChange = (): void => {
@@ -369,32 +378,41 @@ function HomeScreen(): JSX.Element {
             />
         </View>
     ) : (
-        <MasonryFlashList
-            key={orientation}
-            contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={styles.container}
-            showsVerticalScrollIndicator={false}
-            data={shownDashboardEntries}
-            renderItem={({ item, index }) => {
-                let paddingStyle = {}
+        <>
+            <MasonryFlashList
+                key={orientation}
+                contentInsetAdjustmentBehavior="automatic"
+                contentContainerStyle={styles.container}
+                showsVerticalScrollIndicator={false}
+                data={shownDashboardEntries}
+                renderItem={({ item, index }) => {
+                    let paddingStyle = {}
 
-                if (columns !== 1) {
-                    paddingStyle =
-                        index % 2 === 0
-                            ? { paddingRight: PAGE_PADDING / 2 }
-                            : { paddingLeft: PAGE_PADDING / 2 }
+                    if (columns !== 1) {
+                        paddingStyle =
+                            index % 2 === 0
+                                ? { paddingRight: PAGE_PADDING / 2 }
+                                : { paddingLeft: PAGE_PADDING / 2 }
+                    }
+
+                    return (
+                        <View style={[styles.item, paddingStyle]}>
+                            {item.card()}
+                        </View>
+                    )
+                }}
+                keyExtractor={(item) => item.key}
+                numColumns={columns}
+                estimatedItemSize={100}
+                ListHeaderComponent={() =>
+                    data !== undefined ? (
+                        <PopUpCard data={data?.announcements} />
+                    ) : (
+                        <></>
+                    )
                 }
-
-                return (
-                    <View style={[styles.item, paddingStyle]}>
-                        {item.card()}
-                    </View>
-                )
-            }}
-            keyExtractor={(item) => item.key}
-            numColumns={columns}
-            estimatedItemSize={100}
-        />
+            />
+        </>
     )
 }
 

@@ -11,7 +11,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
 
-import { formatISODate, getAdjustedDay } from './date-utils'
+import { formatISODate } from './date-utils'
 
 /**
  * Fetches and parses the meal plan
@@ -22,61 +22,7 @@ export async function loadFoodEntries(
     restaurants: string[],
     includeStatic: boolean
 ): Promise<Food[]> {
-    const entries: Food[][] = []
-    const startOfToday = getAdjustedDay(new Date()).setHours(0, 0, 0, 0)
-    const filterData = (data: Food[]): Food[] => {
-        return data.filter(
-            (x) => new Date(x.timestamp).getTime() >= startOfToday
-        )
-    }
-
-    async function fetchDataFromAPI(
-        apiCall: () => Promise<Food[]>,
-        entries: Food[][],
-        includeStatic: boolean = true
-    ): Promise<void> {
-        try {
-            const data = await apiCall()
-            const filteredData = filterData(data)
-            if (!includeStatic) {
-                filteredData.forEach((day) => {
-                    day.meals = day.meals.filter((entry: Meal) => !entry.static)
-                })
-            }
-            entries.push(filteredData)
-        } catch (error: unknown) {
-            if (
-                error instanceof Error &&
-                error.message.startsWith('API returned an error')
-            ) {
-                console.error(error)
-            } else {
-                throw error
-            }
-        }
-    }
-
-    if (restaurants.includes('mensa')) {
-        await fetchDataFromAPI(
-            NeulandAPI.getMensaPlan.bind(NeulandAPI),
-            entries
-        )
-    }
-
-    if (restaurants.includes('reimanns')) {
-        await fetchDataFromAPI(
-            NeulandAPI.getReimannsPlan.bind(NeulandAPI),
-            entries,
-            includeStatic
-        )
-    }
-
-    if (restaurants.includes('canisius')) {
-        await fetchDataFromAPI(
-            NeulandAPI.getCanisiusPlan.bind(NeulandAPI),
-            entries
-        )
-    }
+    const data = [(await NeulandAPI.getFoodPlan(restaurants)).food] as Food[][]
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday
     let days: Date[] = Array.from({ length: 7 }, (_, i) => {
@@ -90,15 +36,19 @@ export async function loadFoodEntries(
 
     // map to ISO date
     const isoDates = days.map((x) => formatISODate(x))
-
     return isoDates.map((day) => {
-        const dayEntries: Meal[] = entries.flatMap(
+        const dayEntries: Meal[] = data.flatMap(
             (r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
         )
-        return {
+        // remove static meals if includeStatic is false. otherwise return all meals
+        const filteredDayEntries = dayEntries.filter(
+            (meal) => includeStatic || !meal.static
+        )
+        const x = {
             timestamp: day,
-            meals: dayEntries,
+            meals: filteredDayEntries,
         }
+        return x
     })
 }
 

@@ -60,6 +60,8 @@ export const DashboardContext = createContext<Dashboard>({
     bringBackDashboardEntry: () => {},
     resetOrder: () => {},
     updateDashboardOrder: () => {},
+    hiddenAnnouncements: [],
+    hideAnnouncement: () => {},
 })
 
 export const FlowContext = createContext<FlowHook>({

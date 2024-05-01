@@ -237,7 +237,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @param {Date} date Date to fetch the room availability for
      */
     async getFreeRooms(date: Date): Promise<Rooms[]> {
-        console.log(date)
         const res = await this.requestAuthenticated({
             service: 'thiapp',
             method: 'rooms',
@@ -246,7 +245,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
             month: date.getMonth() + 1,
             year: date.getFullYear(),
         })
-        console.log(res)
         return res
     }
 

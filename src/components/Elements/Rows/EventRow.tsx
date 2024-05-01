@@ -124,7 +124,7 @@ const CLEventRow = ({
                                 <>
                                     {end != null && begin < new Date()
                                         ? `${t(
-                                              'dates.until'
+                                              'dates.ends'
                                           )} ${formatFriendlyRelativeTime(end)}`
                                         : formatFriendlyRelativeTime(begin)}
                                 </>

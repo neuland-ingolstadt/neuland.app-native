@@ -43,7 +43,6 @@ function FoodScreen(): JSX.Element {
     } = useContext(FoodFilterContext)
     const [data, setData] = useState<Food[]>([])
     const { t, i18n } = useTranslation('common')
-
     const {
         data: foodData,
         error,
@@ -53,10 +52,10 @@ function FoodScreen(): JSX.Element {
         isSuccess,
         refetch,
     } = useQuery({
-        queryKey: ['fnoojrkhmd', selectedRestaurants, showStatic],
+        queryKey: ['meals', selectedRestaurants, showStatic],
         queryFn: async () =>
             await loadFoodEntries(selectedRestaurants, showStatic),
-        staleTime: 1000 * 60 * 15, // 10 minutes
+        staleTime: 1000 * 60 * 0, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)

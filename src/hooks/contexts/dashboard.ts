@@ -23,6 +23,8 @@ export function getDefaultDashboardOrder(userKind: string): {
 export interface Dashboard {
     shownDashboardEntries: Card[] | null
     hiddenDashboardEntries: Card[]
+    hiddenAnnouncements: string[]
+    hideAnnouncement: (id: string) => void
     hideDashboardEntry: (key: string) => void
     bringBackDashboardEntry: (key: string) => void
     resetOrder: (userKind: string) => void
@@ -36,15 +38,25 @@ export function useDashboard(): Dashboard {
     const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState<
         Card[]
     >([])
+    const [hiddenAnnouncements, setHiddenAnnouncements] = useState<string[]>([])
     const { userKind } = useUserKind()
 
     useEffect(() => {
         async function load(): Promise<void> {
-            const personalDashboard =
-                await AsyncStorage.getItem('personalDashboard')
-            const personalDashboardHidden = await AsyncStorage.getItem(
-                'personalDashboardHidden'
-            )
+            const [
+                personalDashboard,
+                personalDashboardHidden,
+                hiddenAnnouncements,
+            ] = await Promise.all([
+                AsyncStorage.getItem('personalDashboard'),
+                AsyncStorage.getItem('personalDashboardHidden'),
+                AsyncStorage.getItem('hiddenAnnouncements'),
+            ])
+            if (hiddenAnnouncements != null) {
+                setHiddenAnnouncements(
+                    JSON.parse(hiddenAnnouncements) as string[]
+                )
+            }
             if (personalDashboard != null) {
                 const entries = JSON.parse(personalDashboard)
                     .map((x: string) => AllCards.find((y) => y.key === x))
@@ -95,6 +107,8 @@ export function useDashboard(): Dashboard {
     }
 
     function hideDashboardEntry(key: string): void {
+        const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
+        const card = foodKeys.includes(key) ? 'food' : key
         setShownDashboardEntries((prevEntries) => {
             if (prevEntries == null) {
                 throw new Error('prevEntries is null')
@@ -102,7 +116,7 @@ export function useDashboard(): Dashboard {
             const entries = [...prevEntries]
             const hiddenEntries = [...hiddenDashboardEntries]
 
-            const index = entries.findIndex((x) => x.key === key)
+            const index = entries.findIndex((x) => x.key === card)
             if (index >= 0) {
                 const hiddenCard = entries[index]
                 hiddenEntries.push(hiddenCard)
@@ -111,6 +125,18 @@ export function useDashboard(): Dashboard {
 
             changeDashboardOrder(entries, hiddenEntries)
             return entries
+        })
+    }
+
+    function hideAnnouncement(id: string): void {
+        setHiddenAnnouncements((prev) => {
+            const newHiddenAnnouncements = [...prev]
+            newHiddenAnnouncements.push(id)
+            void AsyncStorage.setItem(
+                'hiddenAnnouncements',
+                JSON.stringify(newHiddenAnnouncements)
+            )
+            return newHiddenAnnouncements
         })
     }
 
@@ -151,5 +177,7 @@ export function useDashboard(): Dashboard {
         bringBackDashboardEntry,
         resetOrder,
         updateDashboardOrder,
+        hiddenAnnouncements,
+        hideAnnouncement,
     }
 }

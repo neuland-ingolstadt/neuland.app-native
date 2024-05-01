@@ -66,7 +66,7 @@ export default function AppIconPicker(): JSX.Element {
                             <SectionView
                                 // @ts-expect-error cannot verify the type of this prop
                                 title={t(`appIcon.categories.${key}`)}
-                                key={key + 'section'}
+                                key={key}
                             >
                                 <View
                                     style={[
@@ -76,9 +76,8 @@ export default function AppIconPicker(): JSX.Element {
                                 >
                                     {value.map((icon) => {
                                         return (
-                                            <>
+                                            <React.Fragment key={icon}>
                                                 <Pressable
-                                                    key={icon}
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
@@ -143,7 +142,7 @@ export default function AppIconPicker(): JSX.Element {
                                                         iosPaddingLeft={110}
                                                     />
                                                 )}
-                                            </>
+                                            </React.Fragment>
                                         )
                                     })}
                                     {key === 'exclusive' &&

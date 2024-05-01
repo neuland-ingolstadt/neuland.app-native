@@ -140,16 +140,24 @@ export const MealDay = ({
         }, {})
     }
 
-    const mensa = filterMealsByRestaurant(day.meals, 'mensa')
-    const reimanns = filterMealsByRestaurant(day.meals, 'reimanns')
-    const canisius = filterMealsByRestaurant(day.meals, 'canisius')
+    const ingolstadtMensa = filterMealsByRestaurant(
+        day.meals,
+        'IngolstadtMensa'
+    )
+    const neuburgMensa = filterMealsByRestaurant(day.meals, 'NeuburgMensa')
+    const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns')
+    const canisius = filterMealsByRestaurant(day.meals, 'Canisius')
 
-    const mensaGrouped = groupMealsByCategory(mensa)
+    const ingolstadtMensaGrouped = groupMealsByCategory(ingolstadtMensa)
+    const neuburgMensaGrouped = groupMealsByCategory(neuburgMensa)
     const reimannsGrouped = groupMealsByCategory(reimanns)
     const canisiusGrouped = groupMealsByCategory(canisius)
 
     const isEmpty =
-        mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
+        ingolstadtMensa.length === 0 &&
+        reimanns.length === 0 &&
+        canisius.length === 0 &&
+        neuburgMensa.length === 0
 
     interface RestaurantProps {
         restaurantName: string
@@ -198,9 +206,14 @@ export const MealDay = ({
     ) : (
         <View key={index}>
             {renderRestaurantView({
-                restaurantName: 'Mensa',
-                meals: mensa,
-                groupedMeals: mensaGrouped,
+                restaurantName: 'Mensa Ingolstadt',
+                meals: ingolstadtMensa,
+                groupedMeals: ingolstadtMensaGrouped,
+            })}
+            {renderRestaurantView({
+                restaurantName: 'Theke Neuburg',
+                meals: neuburgMensa,
+                groupedMeals: neuburgMensaGrouped,
             })}
             {renderRestaurantView({
                 restaurantName: 'Reimanns',

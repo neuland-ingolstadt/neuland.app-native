@@ -23,8 +23,8 @@ export function useFoodFilter(): FoodFilter {
         'V',
     ])
     const [selectedRestaurants, setSelectedRestaurants] = useState<string[]>([
-        'mensa',
-        'reimanns',
+        'IngolstadtMensa',
+        'Reimanns',
     ])
     const [allergenSelection, setAllergenSelection] = useState<string[]>([
         'not-configured',
@@ -36,7 +36,7 @@ export function useFoodFilter(): FoodFilter {
         void Promise.all([
             AsyncStorage.getItem('selectedUserAllergens'),
             AsyncStorage.getItem('selectedUserPreferences'),
-            AsyncStorage.getItem('selectedRestaurants'),
+            AsyncStorage.getItem('selectedRestaurantLocations'),
             AsyncStorage.getItem('showStatic'),
             AsyncStorage.getItem('foodLanguage'),
         ]).then(
@@ -89,7 +89,7 @@ export function useFoodFilter(): FoodFilter {
 
         setSelectedRestaurants(newSelection)
         void AsyncStorage.setItem(
-            'selectedRestaurants',
+            'selectedRestaurantLocations',
             JSON.stringify(newSelection)
         )
     }
