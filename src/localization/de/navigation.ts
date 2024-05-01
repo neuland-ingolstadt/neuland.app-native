@@ -41,9 +41,13 @@ export default {
             events: 'Campus Life',
             reimanns: 'Reimanns',
             canisius: 'Canisius Konvikt',
-            mensa: 'Mensa',
+            mensa: 'Mensa Ingolstadt',
+            mensaNeuburg: 'Theke Neuburg',
             food: 'Essen',
             login: 'Anmelden',
+        },
+        announcements: {
+            readMore: 'Tippe, um mehr zu erfahren.',
         },
         events: {
             by: 'von {{name}}',

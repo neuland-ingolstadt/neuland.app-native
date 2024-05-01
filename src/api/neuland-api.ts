@@ -1,11 +1,9 @@
 import { type SpoWeights } from '@/types/asset-api'
-import { type Food } from '@/types/neuland-api'
+import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
 
-const ENDPOINT: string =
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    process.env.EXPO_PUBLIC_NEULAND_API_ENDPOINT || 'https://neuland.app'
+const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -20,7 +18,6 @@ class NeulandAPIClient {
      * @throws {Error} If the API returns an error
      */
     async performRequest(url: string): Promise<any> {
-        console.log(url)
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,
@@ -34,28 +31,113 @@ class NeulandAPIClient {
         }
     }
 
-    /**
-     * Gets the mensa plan
-     * @returns {Promise<any>} A promise that resolves with the mensa plan data
-     */
-    async getMensaPlan(): Promise<Food[]> {
-        return await this.performRequest(`${ENDPOINT}/api/mensa/?version=v2`)
+    async performGraphQLQuery(query: string): Promise<any> {
+        try {
+            const data = await request(GRAPHQL_ENDPOINT, query)
+            return data
+        } catch (err: any) {
+            console.error(err)
+            throw new Error('API returned an error: ' + err)
+        }
     }
 
     /**
-     * Gets the Reimanns plan
-     * @returns {Promise<any>} A promise that resolves with the Reimanns plan data
+     * Get the announcement data from the GraphQL API
+     * @returns {Promise<any>} A promise that resolves with the announcement data
      */
-    async getReimannsPlan(): Promise<Food[]> {
-        return await this.performRequest(`${ENDPOINT}/api/reimanns/?version=v2`)
+    async getAnnouncements(): Promise<any> {
+        return await this.performGraphQLQuery(gql`
+            query {
+                announcements {
+                    id
+                    title {
+                        de
+                        en
+                    }
+                    description {
+                        de
+                        en
+                    }
+                    startDateTime
+                    endDateTime
+                    priority
+                    url
+                }
+            }
+        `)
     }
 
-    /**
-     * Gets the Canisius plan
-     * @returns {Promise<any>} A promise that resolves with the Canisius plan data
-     */
-    async getCanisiusPlan(): Promise<Food[]> {
-        return await this.performRequest(`${ENDPOINT}/api/canisius/?version=v2`)
+    async getFoodPlan(locations: string[]): Promise<any> {
+        return await this.performGraphQLQuery(gql`
+            query {
+                food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
+                    timestamp
+                    meals {
+      variants {
+        name {
+          de
+          en
+        }
+        additional
+        prices {
+          student
+          employee
+          guest
+        }
+        id
+        allergens
+        flags
+        nutrition {
+          kj
+          kcal
+          fat
+          fatSaturated
+          carbs
+          sugar
+          fiber
+          protein
+          salt
+        }
+        originalLanguage
+        static
+        restaurant
+        parent {
+          id
+          category
+        }
+        
+      }
+      name {
+        de
+        en
+      }
+      id
+      category
+      prices {
+        student
+        employee
+        guest
+      }
+      allergens
+      flags
+      nutrition {
+        kj
+        kcal
+        fat
+        fatSaturated
+        carbs
+        sugar
+        fiber
+        protein
+        salt
+      }
+      originalLanguage
+      static
+      restaurant
+    }
+                }
+            }
+        `)
     }
 
     /**
@@ -63,7 +145,19 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
     async getCampusLifeEvents(): Promise<any> {
-        return await this.performRequest(`${ENDPOINT}/api/cl-events/`)
+        return await this.performGraphQLQuery(gql`
+            query {
+                clEvents {
+                    id
+                    organizer
+                    title
+                    begin
+                    end
+                    # location
+                    # description
+                }
+            }
+        `)
     }
 
     /**

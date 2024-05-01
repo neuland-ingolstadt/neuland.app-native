@@ -19,14 +19,21 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 export default function FoodPreferences(): JSX.Element {
     const { t } = useTranslation('food')
     const elemtents = [
-        { key: 'mensa', title: t('cards.titles.mensa', { ns: 'navigation' }) },
         {
-            key: 'reimanns',
+            key: 'IngolstadtMensa',
+            title: t('cards.titles.mensa', { ns: 'navigation' }),
+        },
+        {
+            key: 'Reimanns',
             title: t('cards.titles.reimanns', { ns: 'navigation' }),
         },
         {
-            key: 'canisius',
+            key: 'Canisius',
             title: t('cards.titles.canisius', { ns: 'navigation' }),
+        },
+        {
+            key: 'NeuburgMensa',
+            title: t('cards.titles.mensaNeuburg', { ns: 'navigation' }),
         },
     ]
 

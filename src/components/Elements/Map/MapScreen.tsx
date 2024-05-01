@@ -123,7 +123,6 @@ const MapScreen = (): JSX.Element => {
     const handleSheetChangesModal = useCallback((index: number) => {
         if (index === -1) {
             setClickedElement(null)
-            setCurrentFloor('EG')
             _setView(mapCenter, mapRef)
             _removeMarker(mapRef)
             bottomSheetRef.current?.snapToIndex(1)
@@ -213,12 +212,13 @@ const MapScreen = (): JSX.Element => {
         return [...rooms, ...buildings]
     }, [mapOverlay])
 
-    React.useEffect(() => {
+    useEffect(() => {
         // @ts-expect-error - no types for tabPress
         const unsubscribe = navigation.addListener('tabPress', (e) => {
             // if already on the map screen, reset the map without animation
             // if not on the map screen, reset the map with animation
             _setView(mapCenter, mapRef, isFocused)
+            bottomSheetModalRef.current?.close()
         })
 
         return unsubscribe
@@ -310,6 +310,14 @@ const MapScreen = (): JSX.Element => {
             void refetch()
         }
     }, [webViewKey])
+
+    // if current floor changes hide the detail sheet and marker
+    useEffect(() => {
+        if (clickedElement != null) {
+            bottomSheetModalRef.current?.close()
+            bottomSheetRef.current?.snapToIndex(1)
+        }
+    }, [currentFloor])
 
     const uniqueEtages = Array.from(
         new Set(

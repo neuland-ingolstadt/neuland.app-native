@@ -35,7 +35,7 @@ const FoodCard = (): JSX.Element => {
     >([])
     const [foodCardTitle, setFoodCardTitle] = useState('food')
     const { data, isSuccess } = useQuery({
-        queryKey: ['food', selectedRestaurants, false],
+        queryKey: ['meals', selectedRestaurants, false],
         queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
         staleTime: 1000 * 60 * 10, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hourss
@@ -54,7 +54,7 @@ const FoodCard = (): JSX.Element => {
                     x.category !== 'soup' &&
                     x.category !== 'salad' &&
                     x.restaurant != null &&
-                    selectedRestaurants.includes(x.restaurant.toLowerCase())
+                    selectedRestaurants.includes(x.restaurant)
             )
 
         // Calculate userMealRating and update foodEntries
@@ -117,19 +117,21 @@ const FoodCard = (): JSX.Element => {
     useEffect(() => {
         const restaurants =
             selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
-
         if (restaurants.length !== 1) {
             setFoodCardTitle('food')
         } else {
             switch (restaurants[0]) {
-                case 'mensa':
+                case 'IngolstadtMensa':
                     setFoodCardTitle('mensa')
                     break
-                case 'reimanns':
+                case 'Reimanns':
                     setFoodCardTitle('reimanns')
                     break
-                case 'canisius':
+                case 'Canisius':
                     setFoodCardTitle('canisius')
+                    break
+                case 'NeuburgMensa':
+                    setFoodCardTitle('mensaNeuburg')
                     break
                 default:
                     setFoodCardTitle('food')
