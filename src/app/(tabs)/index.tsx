@@ -1,5 +1,6 @@
 import NeulandAPI from '@/api/neuland-api'
 import PopUpCard from '@/components/Cards/PopUpCard'
+import { HomeBottomSheet } from '@/components/Elements/Flow/HomeBottomSheet'
 import { Avatar } from '@/components/Elements/Settings'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
@@ -18,11 +19,16 @@ import {
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
+import {
+    BottomSheetModal,
+    BottomSheetModalProvider,
+    BottomSheetScrollView,
+} from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import * as Notifications from 'expo-notifications'
-import { router, useRouter } from 'expo-router'
+import { router, useNavigation, useRouter } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -146,6 +152,41 @@ export default function Screen(): JSX.Element {
     const safeArea = useSafeAreaInsets()
     const topInset = safeArea.top
     const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
+    const navigation = useNavigation()
+    const isFocused = useNavigation().isFocused()
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+    const BottomSheet = (): JSX.Element => {
+        return (
+            <BottomSheetModal
+                index={0}
+                ref={bottomSheetModalRef}
+                snapPoints={['45%', '70%']}
+                backgroundStyle={{
+                    backgroundColor: colors.background,
+                }}
+                handleIndicatorStyle={{
+                    backgroundColor: colors.labelColor,
+                }}
+            >
+                <BottomSheetScrollView>
+                    <HomeBottomSheet
+                        bottomSheetModalRef={bottomSheetModalRef}
+                    />
+                </BottomSheetScrollView>
+            </BottomSheetModal>
+        )
+    }
+
+    useEffect(() => {
+        // @ts-expect-error - no types for tabPress
+        const unsubscribe = navigation.addListener('tabLongPress', () => {
+            if (isFocused) {
+                bottomSheetModalRef.current?.present()
+            }
+        })
+
+        return unsubscribe
+    }, [navigation, isFocused])
 
     return (
         <>
@@ -156,169 +197,180 @@ export default function Screen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <View
-                style={{
-                    ...styles.page,
-                    // workaround for status bar overlapping the header on iPhones with dynamic island
-                    ...(hasDynamicIsland
-                        ? { paddingTop: topInset, backgroundColor: colors.card }
-                        : {}),
-                }}
-            >
-                <WorkaroundStack
-                    name={'Dashboard'}
-                    titleKey={'Neuland Next'}
-                    component={isPageOpen ? HomeScreen : () => <></>}
-                    largeTitle={true}
-                    transparent={false}
-                    headerRightElement={() => (
-                        <Pressable
-                            onPress={() => {
-                                router.push('(user)/settings')
-                            }}
-                            delayLongPress={300}
-                            onLongPress={() => {}}
-                            hitSlop={10}
-                        >
-                            <ContextMenu
-                                actions={[
-                                    ...(userKind === 'student'
-                                        ? [
-                                              {
-                                                  title: t(
-                                                      'navigation.profile'
-                                                  ),
-                                                  subtitle:
-                                                      data?.vname +
-                                                      ' ' +
-                                                      data?.name,
-                                                  systemIcon:
-                                                      Platform.OS === 'ios'
-                                                          ? 'person.crop.circle'
-                                                          : undefined,
-                                              },
-                                          ]
-                                        : []),
-                                    {
-                                        title: t('navigation.theme'),
-                                        systemIcon:
-                                            Platform.OS === 'ios'
-                                                ? 'paintpalette'
-                                                : undefined,
-                                    },
-                                    {
-                                        title: t('navigation.about'),
-                                        systemIcon:
-                                            Platform.OS === 'ios'
-                                                ? 'info.circle'
-                                                : undefined,
-                                    },
-                                    ...(userFullName !== '' &&
-                                    userKind !== 'guest'
-                                        ? [
-                                              {
-                                                  title: 'Logout',
-                                                  systemIcon:
-                                                      Platform.OS === 'ios'
-                                                          ? 'person.fill.xmark'
-                                                          : undefined,
-                                                  destructive: true,
-                                              },
-                                          ]
-                                        : []),
-                                    ...(userKind === 'guest'
-                                        ? [
-                                              {
-                                                  title: t('menu.guest.title', {
-                                                      ns: 'settings',
-                                                  }),
-                                                  systemIcon:
-                                                      Platform.OS === 'ios'
-                                                          ? 'person.fill.questionmark'
-                                                          : undefined,
-                                              },
-                                          ]
-                                        : []),
-                                ]}
-                                onPress={(e) => {
-                                    e.nativeEvent.name ===
-                                        t('navigation.profile') &&
-                                        router.push('profile')
-                                    e.nativeEvent.name ===
-                                        t('navigation.theme') &&
-                                        router.push('theme')
-                                    e.nativeEvent.name ===
-                                        t('navigation.about') &&
-                                        router.push('about')
-                                    e.nativeEvent.name === 'Logout' &&
-                                        logoutAlert()
-                                    e.nativeEvent.name ===
-                                        t('menu.guest.title', {
-                                            ns: 'settings',
-                                        }) && router.push('login')
-                                }}
-                                onPreviewPress={() => {
+            <BottomSheetModalProvider>
+                <BottomSheet />
+                <View
+                    style={{
+                        ...styles.page,
+                        // workaround for status bar overlapping the header on iPhones with dynamic island
+                        ...(hasDynamicIsland
+                            ? {
+                                  paddingTop: topInset,
+                                  backgroundColor: colors.card,
+                              }
+                            : {}),
+                    }}
+                >
+                    <WorkaroundStack
+                        name={'Dashboard'}
+                        titleKey={'Neuland Next'}
+                        component={isPageOpen ? HomeScreen : () => <></>}
+                        largeTitle={true}
+                        transparent={false}
+                        headerRightElement={() => (
+                            <Pressable
+                                onPress={() => {
                                     router.push('(user)/settings')
                                 }}
+                                delayLongPress={300}
+                                onLongPress={() => {}}
+                                hitSlop={10}
                             >
-                                {initials !== '' ? (
-                                    userKind === 'student' &&
-                                    data?.mtknr === undefined ? (
+                                <ContextMenu
+                                    actions={[
+                                        ...(userKind === 'student'
+                                            ? [
+                                                  {
+                                                      title: t(
+                                                          'navigation.profile'
+                                                      ),
+                                                      subtitle:
+                                                          data?.vname +
+                                                          ' ' +
+                                                          data?.name,
+                                                      systemIcon:
+                                                          Platform.OS === 'ios'
+                                                              ? 'person.crop.circle'
+                                                              : undefined,
+                                                  },
+                                              ]
+                                            : []),
+                                        {
+                                            title: t('navigation.theme'),
+                                            systemIcon:
+                                                Platform.OS === 'ios'
+                                                    ? 'paintpalette'
+                                                    : undefined,
+                                        },
+                                        {
+                                            title: t('navigation.about'),
+                                            systemIcon:
+                                                Platform.OS === 'ios'
+                                                    ? 'info.circle'
+                                                    : undefined,
+                                        },
+                                        ...(userFullName !== '' &&
+                                        userKind !== 'guest'
+                                            ? [
+                                                  {
+                                                      title: 'Logout',
+                                                      systemIcon:
+                                                          Platform.OS === 'ios'
+                                                              ? 'person.fill.xmark'
+                                                              : undefined,
+                                                      destructive: true,
+                                                  },
+                                              ]
+                                            : []),
+                                        ...(userKind === 'guest'
+                                            ? [
+                                                  {
+                                                      title: t(
+                                                          'menu.guest.title',
+                                                          {
+                                                              ns: 'settings',
+                                                          }
+                                                      ),
+                                                      systemIcon:
+                                                          Platform.OS === 'ios'
+                                                              ? 'person.fill.questionmark'
+                                                              : undefined,
+                                                  },
+                                              ]
+                                            : []),
+                                    ]}
+                                    onPress={(e) => {
+                                        e.nativeEvent.name ===
+                                            t('navigation.profile') &&
+                                            router.push('profile')
+                                        e.nativeEvent.name ===
+                                            t('navigation.theme') &&
+                                            router.push('theme')
+                                        e.nativeEvent.name ===
+                                            t('navigation.about') &&
+                                            router.push('about')
+                                        e.nativeEvent.name === 'Logout' &&
+                                            logoutAlert()
+                                        e.nativeEvent.name ===
+                                            t('menu.guest.title', {
+                                                ns: 'settings',
+                                            }) && router.push('login')
+                                    }}
+                                    onPreviewPress={() => {
+                                        router.push('(user)/settings')
+                                    }}
+                                >
+                                    {initials !== '' ? (
+                                        userKind === 'student' &&
+                                        data?.mtknr === undefined ? (
+                                            <View>
+                                                <PlatformIcon
+                                                    color={colors.text}
+                                                    ios={{
+                                                        name: 'person.crop.circle.badge.exclamationmark',
+                                                        size: 22,
+                                                    }}
+                                                    android={{
+                                                        name: 'account_circle_off',
+                                                        size: 26,
+                                                    }}
+                                                />
+                                            </View>
+                                        ) : (
+                                            <View>
+                                                <Avatar
+                                                    size={29}
+                                                    background={colors.primary}
+                                                    shadow={false}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            color: getContrastColor(
+                                                                colors.primary
+                                                            ),
+                                                            ...styles.iconText,
+                                                        }}
+                                                        numberOfLines={1}
+                                                        adjustsFontSizeToFit={
+                                                            true
+                                                        }
+                                                    >
+                                                        {initials}
+                                                    </Text>
+                                                </Avatar>
+                                            </View>
+                                        )
+                                    ) : (
                                         <View>
                                             <PlatformIcon
                                                 color={colors.text}
                                                 ios={{
-                                                    name: 'person.crop.circle.badge.exclamationmark',
+                                                    name: 'person.crop.circle',
                                                     size: 22,
                                                 }}
                                                 android={{
-                                                    name: 'account_circle_off',
+                                                    name: 'account_circle',
                                                     size: 26,
                                                 }}
                                             />
                                         </View>
-                                    ) : (
-                                        <View>
-                                            <Avatar
-                                                size={29}
-                                                background={colors.primary}
-                                                shadow={false}
-                                            >
-                                                <Text
-                                                    style={{
-                                                        color: getContrastColor(
-                                                            colors.primary
-                                                        ),
-                                                        ...styles.iconText,
-                                                    }}
-                                                    numberOfLines={1}
-                                                    adjustsFontSizeToFit={true}
-                                                >
-                                                    {initials}
-                                                </Text>
-                                            </Avatar>
-                                        </View>
-                                    )
-                                ) : (
-                                    <View>
-                                        <PlatformIcon
-                                            color={colors.text}
-                                            ios={{
-                                                name: 'person.crop.circle',
-                                                size: 22,
-                                            }}
-                                            android={{
-                                                name: 'account_circle',
-                                                size: 26,
-                                            }}
-                                        />
-                                    </View>
-                                )}
-                            </ContextMenu>
-                        </Pressable>
-                    )}
-                />
-            </View>
+                                    )}
+                                </ContextMenu>
+                            </Pressable>
+                        )}
+                    />
+                </View>
+            </BottomSheetModalProvider>
         </>
     )
 }

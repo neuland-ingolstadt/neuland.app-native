@@ -50,7 +50,7 @@ module.exports = {
                 },
             },
         },
-        sdkVersion: '50.0.0',
+        sdkVersion: '51.0.0',
         experiments: {
             tsconfigPaths: true,
         },
@@ -83,6 +83,7 @@ module.exports = {
                     project: 'neuland-next',
                 },
             ],
+            ['expo-build-properties'],
         ],
         extra: {
             eas: {
