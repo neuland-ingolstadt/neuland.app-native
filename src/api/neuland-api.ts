@@ -3,7 +3,7 @@ import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -32,13 +32,8 @@ class NeulandAPIClient {
     }
 
     async performGraphQLQuery(query: string): Promise<any> {
-        try {
-            const data = await request(GRAPHQL_ENDPOINT, query)
-            return data
-        } catch (err: any) {
-            console.error(err)
-            throw new Error('API returned an error: ' + err)
-        }
+        const data = await request(GRAPHQL_ENDPOINT, query)
+        return data
     }
 
     /**

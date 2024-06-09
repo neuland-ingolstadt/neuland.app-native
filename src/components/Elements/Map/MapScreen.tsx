@@ -341,9 +341,6 @@ const MapScreen = (): JSX.Element => {
     }, [currentFloor, allRooms, colors, availableRooms, allRooms, loadingState])
 
     const _addGeoJson = (): void => {
-        if (availableRooms == null) {
-            return
-        }
         const filterEtage = (etage: string): RoomEntry[] => {
             const result = allRooms.filter(
                 (feature) => feature.properties.Ebene === etage

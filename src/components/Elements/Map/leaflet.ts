@@ -15,7 +15,7 @@ import type WebView from 'react-native-webview'
  */
 export const _addRoom = (
     room: RoomEntry,
-    availableRooms: AvailableRoom[],
+    availableRooms: AvailableRoom[] | null,
     mapRef: React.RefObject<WebView>,
     colors: Colors
 ): void => {

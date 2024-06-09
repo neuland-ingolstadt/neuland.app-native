@@ -1,4 +1,5 @@
 import { type Colors } from '@/components/colors'
+import { type MaterialIcon } from '@/types/material-icons'
 import { guestError, networkError, permissionError } from '@/utils/api-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
@@ -37,7 +38,7 @@ export default function ErrorView({
 }): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const getIcon = (): string => {
+    const getIcon = (): MaterialIcon | any => {
         const ios = Platform.OS === 'ios'
         switch (title) {
             case networkError:
@@ -193,8 +194,9 @@ export default function ErrorView({
                         ...styles.errorTitle,
                         color: colors.text,
                     }}
+                    selectable
                 >
-                    {getTitle()}
+                    {getTitle().slice(0, 150)}
                 </Text>
                 <Text style={[styles.errorInfo, { color: colors.text }]}>
                     {getMessage()}

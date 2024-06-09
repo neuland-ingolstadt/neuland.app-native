@@ -1,3 +1,4 @@
+import { humanLocations } from '@/app/(food)/meal'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/hooks/contexts/userKind'
@@ -97,16 +98,18 @@ export const MealEntry = ({
             dragValue={t('details.share.message', {
                 meal: meal?.name[i18n.language as LanguageKey],
                 price: formatPrice(meal?.prices[userKind]),
-                location: restaurant,
+                location:
+                    humanLocations[
+                        meal.restaurant as keyof typeof humanLocations
+                    ],
                 id: meal?.id,
             })}
         >
             <ContextMenu
                 title={
-                    meal.restaurant != null
-                        ? meal.restaurant.charAt(0).toUpperCase() +
-                          meal.restaurant.slice(1)
-                        : ''
+                    humanLocations[
+                        meal.restaurant as keyof typeof humanLocations
+                    ]
                 }
                 key={key}
                 style={styles.contextMenu}

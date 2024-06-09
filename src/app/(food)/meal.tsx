@@ -37,6 +37,13 @@ import {
     View,
 } from 'react-native'
 
+export const humanLocations = {
+    IngolstadtMensa: 'Mensa Ingolstadt',
+    NeuburgMensa: 'Mensa Neuburg',
+    Reimanns: 'Reimanns',
+    Canisius: 'Canisius Konvikt',
+}
+
 export default function FoodDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
@@ -56,20 +63,21 @@ export default function FoodDetail(): JSX.Element {
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {
-        mensa: 'https://www.werkswelt.de/?id=ingo',
-        reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
-        canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
+        IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
+        NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
+        Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
+        Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
 
     interface Locations {
-        Mensa: string
+        IngolstadtMensa: string
         Reimanns: string
         Canisius: string
         [key: string]: string
     }
 
     const locations: Locations = {
-        Mensa: 'M001',
+        IngolstadtMensa: 'M001',
         Reimanns: 'F001',
         Canisius: 'X001',
     }
@@ -282,7 +290,9 @@ export default function FoodDetail(): JSX.Element {
             items: [
                 {
                     title: 'Restaurant',
-                    value: restaurant,
+                    value: humanLocations[
+                        restaurant as keyof typeof humanLocations
+                    ],
                     onPress: handlePress,
                     iconColor: locationExists ? colors.primary : undefined,
                     disabled: !locationExists,

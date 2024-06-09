@@ -319,32 +319,33 @@ export default function DashboardEdit(): JSX.Element {
                                 ))}
                         </View>
                     </View>
-
-                    <View
-                        style={[
-                            styles.card,
-                            styles.blockContainer,
-                            { backgroundColor: colors.card },
-                        ]}
-                    >
-                        <Pressable
-                            onPress={handleReset}
-                            disabled={hasUserDefaultOrder}
+                    {!hasUserDefaultOrder && (
+                        <View
+                            style={[
+                                styles.card,
+                                styles.blockContainer,
+                                { backgroundColor: colors.card },
+                            ]}
                         >
-                            <Text
-                                style={[
-                                    styles.reset,
-                                    {
-                                        color: hasUserDefaultOrder
-                                            ? colors.labelColor
-                                            : colors.text,
-                                    },
-                                ]}
+                            <Pressable
+                                onPress={handleReset}
+                                disabled={hasUserDefaultOrder}
                             >
-                                {t('dashboard.reset')}
-                            </Text>
-                        </Pressable>
-                    </View>
+                                <Text
+                                    style={[
+                                        styles.reset,
+                                        {
+                                            color: hasUserDefaultOrder
+                                                ? colors.labelColor
+                                                : colors.text,
+                                        },
+                                    ]}
+                                >
+                                    {t('dashboard.reset')}
+                                </Text>
+                            </Pressable>
+                        </View>
+                    )}
                     <Text style={[styles.footer, { color: colors.labelColor }]}>
                         {t('dashboard.footer')}
                     </Text>
