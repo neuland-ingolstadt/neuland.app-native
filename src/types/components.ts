@@ -4,7 +4,7 @@ import { type ColorValue } from 'react-native'
 import { type MaterialIcon } from './material-icons'
 
 export interface SectionGroup {
-    title: string
+    title?: string
     value?: string
     icon?: {
         ios: string

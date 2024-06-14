@@ -60,16 +60,18 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                     : styles.cardRow
                                             }
                                         >
-                                            <Text
-                                                style={[
-                                                    styles.rowTitle,
-                                                    {
-                                                        color: colors.text,
-                                                    },
-                                                ]}
-                                            >
-                                                {item.title}
-                                            </Text>
+                                            {item.title != null && (
+                                                <Text
+                                                    style={[
+                                                        styles.rowTitle,
+                                                        {
+                                                            color: colors.text,
+                                                        },
+                                                    ]}
+                                                >
+                                                    {item.title}
+                                                </Text>
+                                            )}
                                             {item.value != null && (
                                                 <Text
                                                     style={[

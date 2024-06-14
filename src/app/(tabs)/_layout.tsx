@@ -22,6 +22,7 @@ import { Platform, StyleSheet } from 'react-native'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
+import { humanLocations } from '../(food)/meal'
 import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
@@ -93,8 +94,6 @@ export default function HomeLayout(): JSX.Element {
             style={styles.blurTab}
         />
     )
-    const restaurant =
-        selectedRestaurants.length !== 1 ? 'food' : selectedRestaurants[0]
 
     const shortcuts = [
         {
@@ -120,10 +119,12 @@ export default function HomeLayout(): JSX.Element {
         {
             id: 'food',
             type: 'food',
-            title: t(
-                // @ts-expect-error no types
-                'cards.titles.' + restaurant
-            ),
+            title:
+                selectedRestaurants.length !== 1
+                    ? t('navigation.food')
+                    : humanLocations[
+                          selectedRestaurants[0] as keyof typeof humanLocations
+                      ],
             data: {
                 path: '(tabs)/food',
             },

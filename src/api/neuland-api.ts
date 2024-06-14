@@ -3,7 +3,7 @@ import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -148,8 +148,8 @@ class NeulandAPIClient {
                     title
                     begin
                     end
-                    # location
-                    # description
+                    location
+                    description
                 }
             }
         `)

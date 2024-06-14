@@ -86,7 +86,7 @@ export default {
         },
         share: {
             message:
-                'Check out "{{meal}}" ({{price}}) at {{location}}.\nhttps://dev.neuland.app/food/{{id}}',
+                'Check out "{{meal}}" ({{price}}) at {{location}}.\nhttps://neuland.app/food/{{id}}',
         },
     },
 }

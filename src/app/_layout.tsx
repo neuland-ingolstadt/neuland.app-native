@@ -287,6 +287,20 @@ function RootLayout(): JSX.Element {
                             }}
                         />
                         <Stack.Screen
+                            name="(pages)/event"
+                            options={{
+                                title: 'Event Details',
+                                ...Platform.select({
+                                    android: {
+                                        animation: 'slide_from_right',
+                                    },
+                                    ios: {
+                                        presentation: 'modal',
+                                    },
+                                }),
+                            }}
+                        />
+                        <Stack.Screen
                             name="(pages)/calendar"
                             options={{
                                 title: t('navigation.calendar'),

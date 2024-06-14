@@ -117,6 +117,16 @@ export default {
                 notes: 'Notizen',
             },
         },
+        event: {
+            date: 'Datum',
+            location: 'Ort',
+            organizer: 'Veranstalter',
+            description: 'Beschreibung',
+            begin: 'Beginn',
+            end: 'Ende',
+            shareMessage:
+                'Schau dir dieses Event an: {{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events',
+        },
         map: {
             search: {
                 placeholder: 'Suche nach Räumen, Gebäuden, ...',
