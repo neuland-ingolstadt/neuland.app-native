@@ -115,6 +115,16 @@ export default {
                 notes: 'Notes',
             },
         },
+        event: {
+            date: 'Date',
+            location: 'Location',
+            organizer: 'Organizer',
+            description: 'Description',
+            begin: 'Begin',
+            end: 'End',
+            shareMessage:
+                'Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events',
+        },
         map: {
             search: {
                 placeholder: 'Search for rooms, buildings, ...',

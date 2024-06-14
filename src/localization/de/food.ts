@@ -89,7 +89,7 @@ export default {
         },
         share: {
             message:
-                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://dev.neuland.app/food/{{id}}',
+                'Schau dir "{{meal}}" ({{price}}) bei {{location}} an.\nhttps://neuland.app/food/{{id}}',
         },
     },
 }
