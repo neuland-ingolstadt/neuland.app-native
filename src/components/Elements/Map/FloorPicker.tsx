@@ -93,6 +93,12 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                 void Haptics.selectionAsync()
                             }
                         }}
+                        onLongPress={() => {
+                            setCurrentFloor('EG')
+                            if (Platform.OS === 'ios') {
+                                void Haptics.selectionAsync()
+                            }
+                        }}
                     >
                         <View
                             style={{

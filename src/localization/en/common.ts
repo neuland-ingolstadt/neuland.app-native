@@ -157,6 +157,7 @@ export default {
                     available: 'Available',
                     notAvailable: 'Not available',
                     availableRooms: 'Available rooms',
+                    nextLecture: 'Next lecture',
                     availableRoomsTitle: 'Available rooms',
                     availableRoomsSubtitle: 'Rooms with available seats',
                     signIn: 'Sign in to see available rooms',

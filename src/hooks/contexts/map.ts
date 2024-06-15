@@ -1,5 +1,5 @@
 import { type ClickedMapElement } from '@/types/map'
-import { type AvailableRoom } from '@/types/utils'
+import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
 import { type LocationObject } from 'expo-location'
 import { createContext } from 'react'
 
@@ -10,6 +10,8 @@ interface MapContextType {
     setClickedElement: (_: ClickedMapElement | null) => void
     availableRooms: AvailableRoom[] | null
     setAvailableRooms: (_: AvailableRoom[] | null) => void
+    nextLecture: FriendlyTimetableEntry[] | null
+    setNextLecture: (_: FriendlyTimetableEntry[] | null) => void
     currentFloor: string
     setCurrentFloor: (_: string) => void
     location: LocationObject | null | 'notGranted'
@@ -31,4 +33,7 @@ export const MapContext = createContext<MapContextType>({
 
     location: null,
     setLocation: (_: LocationObject | null | 'notGranted') => {},
+
+    nextLecture: null,
+    setNextLecture: (_: FriendlyTimetableEntry[] | null) => {},
 })

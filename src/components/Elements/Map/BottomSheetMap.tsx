@@ -5,7 +5,7 @@ import { MapContext } from '@/hooks/contexts/map'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
 import { type RoomEntry } from '@/types/utils'
-import { formatFriendlyTime } from '@/utils/date-utils'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { getCenterSingle } from '@/utils/map-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor } from '@/utils/ui-utils'
@@ -58,6 +58,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         setLocalSearch,
         setClickedElement,
         availableRooms,
+        nextLecture,
         setCurrentFloor,
     } = useContext(MapContext)
 
@@ -228,181 +229,365 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     </Text>
                 ) : (
                     <>
-                        <View style={styles.suggestionSectionHeaderContainer}>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.suggestionSectionHeader,
-                                }}
-                            >
-                                {t('pages.map.details.room.availableRooms')}
-                            </Text>
-                            <Pressable
-                                onPress={() => {
-                                    router.push('(map)/advanced')
-                                }}
-                                hitSlop={{
-                                    top: 10,
-                                    right: 10,
-                                    bottom: 10,
-                                    left: 10,
-                                }}
-                            >
-                                <Text
+                        {nextLecture !== null && nextLecture.length > 0 && (
+                            <View style={styles.suggestionContainer}>
+                                <View
+                                    style={
+                                        styles.suggestionSectionHeaderContainer
+                                    }
+                                >
+                                    <Text
+                                        style={{
+                                            color: colors.text,
+                                            ...styles.suggestionSectionHeader,
+                                        }}
+                                    >
+                                        {t(
+                                            'pages.map.details.room.nextLecture'
+                                        )}
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            color: colors.labelColor,
+                                            ...styles.suggestionMoreDateText,
+                                        }}
+                                    >
+                                        {formatFriendlyDate(
+                                            nextLecture[0].date
+                                        )}
+                                    </Text>
+                                </View>
+                                <View
                                     style={{
-                                        color: colors.primary,
-                                        ...styles.suggestionMoreButtonText,
+                                        backgroundColor: colors.card,
+                                        ...styles.radius,
                                     }}
                                 >
-                                    {t('misc.more')}
-                                </Text>
-                            </Pressable>
-                        </View>
-                        <View
-                            style={{
-                                backgroundColor: colors.card,
-                                ...styles.radius,
-                            }}
-                        >
-                            {availableRooms === null ? (
-                                <ActivityIndicator
-                                    size="small"
-                                    color={colors.primary}
-                                    style={styles.loadingMargin}
-                                />
-                            ) : availableRooms.length === 0 ? (
+                                    {nextLecture.map((lecture, key) => (
+                                        <>
+                                            <Pressable
+                                                key={key}
+                                                style={styles.suggestionRow}
+                                                onPress={() => {
+                                                    const details =
+                                                        allRooms.find(
+                                                            (x) =>
+                                                                x.properties
+                                                                    .Raum ===
+                                                                lecture.rooms[0]
+                                                        )
+
+                                                    if (
+                                                        details?.coordinates !==
+                                                        undefined
+                                                    ) {
+                                                        const center =
+                                                            getCenterSingle(
+                                                                details?.coordinates
+                                                            )
+                                                        _setView(center, mapRef)
+                                                        _injectMarker(
+                                                            mapRef,
+                                                            center,
+                                                            colors
+                                                        )
+                                                    }
+
+                                                    const etage =
+                                                        details?.properties
+                                                            .Ebene
+
+                                                    setCurrentFloor(
+                                                        etage ?? 'EG'
+                                                    )
+                                                    setClickedElement({
+                                                        data: lecture.rooms[0],
+                                                        type: SEARCH_TYPES.ROOM,
+                                                    })
+
+                                                    handlePresentModalPress()
+                                                    bottomSheetRef.current?.close()
+                                                }}
+                                            >
+                                                <View
+                                                    style={
+                                                        styles.suggestionInnerRow
+                                                    }
+                                                >
+                                                    <View
+                                                        style={{
+                                                            backgroundColor:
+                                                                colors.primary,
+                                                            ...styles.suggestionIconContainer,
+                                                        }}
+                                                    >
+                                                        <PlatformIcon
+                                                            color={getContrastColor(
+                                                                colors.primary
+                                                            )}
+                                                            ios={{
+                                                                name: 'clock.fill',
+                                                                size: 18,
+                                                            }}
+                                                            android={{
+                                                                name: 'school',
+                                                                size: 20,
+                                                            }}
+                                                        />
+                                                    </View>
+
+                                                    <View>
+                                                        <Text
+                                                            style={{
+                                                                color: colors.text,
+                                                                ...styles.suggestionTitle,
+                                                            }}
+                                                            numberOfLines={2}
+                                                        >
+                                                            {lecture.name}
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                color: colors.text,
+                                                                ...styles.suggestionSubtitle,
+                                                            }}
+                                                        >
+                                                            {lecture.rooms.join(
+                                                                ', '
+                                                            )}
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                                <View
+                                                    style={
+                                                        styles.suggestionRightContainer
+                                                    }
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            color: colors.labelColor,
+                                                            fontVariant: [
+                                                                'tabular-nums',
+                                                            ],
+                                                        }}
+                                                    >
+                                                        {formatFriendlyTime(
+                                                            lecture.startDate
+                                                        )}
+                                                    </Text>
+                                                    <Text
+                                                        style={{
+                                                            color: colors.text,
+                                                            fontVariant: [
+                                                                'tabular-nums',
+                                                            ],
+                                                        }}
+                                                    >
+                                                        {formatFriendlyTime(
+                                                            lecture.endDate
+                                                        )}
+                                                    </Text>
+                                                </View>
+                                            </Pressable>
+                                            {key !== nextLecture.length - 1 && (
+                                                <Divider />
+                                            )}
+                                        </>
+                                    ))}
+                                </View>
+                            </View>
+                        )}
+
+                        <View>
+                            <View
+                                style={styles.suggestionSectionHeaderContainer}
+                            >
                                 <Text
                                     style={{
                                         color: colors.text,
-                                        ...styles.noResults,
+                                        ...styles.suggestionSectionHeader,
                                     }}
                                 >
-                                    {t('pages.map.noAvailableRooms')}
+                                    {t('pages.map.details.room.availableRooms')}
                                 </Text>
-                            ) : (
-                                availableRooms.slice(0, 3).map((room, key) => (
-                                    <>
-                                        <Pressable
-                                            key={key}
-                                            style={styles.suggestionRow}
-                                            onPress={() => {
-                                                const details = allRooms.find(
-                                                    (x) =>
-                                                        x.properties.Raum ===
-                                                        room.room
-                                                )
+                                <Pressable
+                                    onPress={() => {
+                                        router.push('(map)/advanced')
+                                    }}
+                                    hitSlop={{
+                                        top: 10,
+                                        right: 10,
+                                        bottom: 10,
+                                        left: 10,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: colors.primary,
+                                            ...styles.suggestionMoreButtonText,
+                                        }}
+                                    >
+                                        {t('misc.more')}
+                                    </Text>
+                                </Pressable>
+                            </View>
+                            <View
+                                style={{
+                                    backgroundColor: colors.card,
+                                    ...styles.radius,
+                                }}
+                            >
+                                {availableRooms === null ? (
+                                    <ActivityIndicator
+                                        size="small"
+                                        color={colors.primary}
+                                        style={styles.loadingMargin}
+                                    />
+                                ) : availableRooms.length === 0 ? (
+                                    <Text
+                                        style={{
+                                            color: colors.text,
+                                            ...styles.noResults,
+                                        }}
+                                    >
+                                        {t('pages.map.noAvailableRooms')}
+                                    </Text>
+                                ) : (
+                                    availableRooms
+                                        .slice(0, 3)
+                                        .map((room, key) => (
+                                            <>
+                                                <Pressable
+                                                    key={key}
+                                                    style={styles.suggestionRow}
+                                                    onPress={() => {
+                                                        const details =
+                                                            allRooms.find(
+                                                                (x) =>
+                                                                    x.properties
+                                                                        .Raum ===
+                                                                    room.room
+                                                            )
 
-                                                if (
-                                                    details?.coordinates !==
-                                                    undefined
-                                                ) {
-                                                    const center =
-                                                        getCenterSingle(
-                                                            details?.coordinates
+                                                        if (
+                                                            details?.coordinates !==
+                                                            undefined
+                                                        ) {
+                                                            const center =
+                                                                getCenterSingle(
+                                                                    details?.coordinates
+                                                                )
+                                                            _setView(
+                                                                center,
+                                                                mapRef
+                                                            )
+                                                            _injectMarker(
+                                                                mapRef,
+                                                                center,
+                                                                colors
+                                                            )
+                                                        }
+
+                                                        const etage =
+                                                            details?.properties
+                                                                .Ebene
+
+                                                        setCurrentFloor(
+                                                            etage ?? 'EG'
                                                         )
-                                                    _setView(center, mapRef)
-                                                    _injectMarker(
-                                                        mapRef,
-                                                        center,
-                                                        colors
-                                                    )
-                                                }
+                                                        setClickedElement({
+                                                            data: room.room,
+                                                            type: SEARCH_TYPES.ROOM,
+                                                        })
 
-                                                const etage =
-                                                    details?.properties.Ebene
-
-                                                setCurrentFloor(etage ?? 'EG')
-                                                setClickedElement({
-                                                    data: room.room,
-                                                    type: SEARCH_TYPES.ROOM,
-                                                })
-
-                                                handlePresentModalPress()
-                                                bottomSheetRef.current?.close()
-                                            }}
-                                        >
-                                            <View
-                                                style={
-                                                    styles.suggestionInnerRow
-                                                }
-                                            >
-                                                <View
-                                                    style={{
-                                                        backgroundColor:
-                                                            colors.primary,
-                                                        ...styles.suggestionIconContainer,
+                                                        handlePresentModalPress()
+                                                        bottomSheetRef.current?.close()
                                                     }}
                                                 >
-                                                    <PlatformIcon
-                                                        color={getContrastColor(
-                                                            colors.primary
-                                                        )}
-                                                        ios={{
-                                                            name: 'studentdesk',
-                                                            size: 18,
-                                                        }}
-                                                        android={{
-                                                            name: 'school',
-                                                            size: 20,
-                                                        }}
-                                                    />
-                                                </View>
-
-                                                <View>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionTitle,
-                                                        }}
+                                                    <View
+                                                        style={
+                                                            styles.suggestionInnerRow
+                                                        }
                                                     >
-                                                        {room.room}
-                                                    </Text>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            ...styles.suggestionSubtitle,
-                                                        }}
+                                                        <View
+                                                            style={{
+                                                                backgroundColor:
+                                                                    colors.primary,
+                                                                ...styles.suggestionIconContainer,
+                                                            }}
+                                                        >
+                                                            <PlatformIcon
+                                                                color={getContrastColor(
+                                                                    colors.primary
+                                                                )}
+                                                                ios={{
+                                                                    name: 'studentdesk',
+                                                                    size: 18,
+                                                                }}
+                                                                android={{
+                                                                    name: 'school',
+                                                                    size: 20,
+                                                                }}
+                                                            />
+                                                        </View>
+
+                                                        <View>
+                                                            <Text
+                                                                style={{
+                                                                    color: colors.text,
+                                                                    ...styles.suggestionTitle,
+                                                                }}
+                                                            >
+                                                                {room.room}
+                                                            </Text>
+                                                            <Text
+                                                                style={{
+                                                                    color: colors.text,
+                                                                    ...styles.suggestionSubtitle,
+                                                                }}
+                                                            >
+                                                                {room.type} (
+                                                                {room.capacity}{' '}
+                                                                seats)
+                                                            </Text>
+                                                        </View>
+                                                    </View>
+                                                    <View
+                                                        style={
+                                                            styles.suggestionRightContainer
+                                                        }
                                                     >
-                                                        {room.type} (
-                                                        {room.capacity} seats)
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                            <View
-                                                style={
-                                                    styles.suggestionRightContainer
-                                                }
-                                            >
-                                                <Text
-                                                    style={{
-                                                        color: colors.labelColor,
-                                                        fontVariant: [
-                                                            'tabular-nums',
-                                                        ],
-                                                    }}
-                                                >
-                                                    {formatFriendlyTime(
-                                                        room.from
-                                                    )}
-                                                </Text>
-                                                <Text
-                                                    style={{
-                                                        color: colors.text,
-                                                        fontVariant: [
-                                                            'tabular-nums',
-                                                        ],
-                                                    }}
-                                                >
-                                                    {formatFriendlyTime(
-                                                        room.until
-                                                    )}
-                                                </Text>
-                                            </View>
-                                        </Pressable>
-                                        {key !== 2 && <Divider />}
-                                    </>
-                                ))
-                            )}
+                                                        <Text
+                                                            style={{
+                                                                color: colors.labelColor,
+                                                                fontVariant: [
+                                                                    'tabular-nums',
+                                                                ],
+                                                            }}
+                                                        >
+                                                            {formatFriendlyTime(
+                                                                room.from
+                                                            )}
+                                                        </Text>
+                                                        <Text
+                                                            style={{
+                                                                color: colors.text,
+                                                                fontVariant: [
+                                                                    'tabular-nums',
+                                                                ],
+                                                            }}
+                                                        >
+                                                            {formatFriendlyTime(
+                                                                room.until
+                                                            )}
+                                                        </Text>
+                                                    </View>
+                                                </Pressable>
+                                                {key !== 2 && <Divider />}
+                                            </>
+                                        ))
+                                )}
+                            </View>
                         </View>
                     </>
                 )}
@@ -414,23 +599,32 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 export default MapBottomSheet
 
 const styles = StyleSheet.create({
+    suggestionContainer: {
+        marginBottom: 10,
+    },
     suggestionSectionHeader: {
         fontWeight: '600',
-        fontSize: 22,
+        fontSize: 20,
         marginTop: 6,
-        marginBottom: 4,
+        marginBottom: 2,
         textAlign: 'left',
     },
     suggestionSectionHeaderContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        marginBottom: 3,
+        marginBottom: 4,
     },
     suggestionMoreButtonText: {
         textAlign: 'right',
         paddingRight: 10,
         fontSize: 16,
+        fontWeight: '500',
+    },
+    suggestionMoreDateText: {
+        textAlign: 'right',
+        paddingRight: 10,
+        fontSize: 15,
         fontWeight: '500',
     },
     textInput: {
@@ -447,6 +641,7 @@ const styles = StyleSheet.create({
     },
     suggestionInnerRow: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
     suggestionIconContainer: {
         marginRight: 14,
@@ -459,13 +654,14 @@ const styles = StyleSheet.create({
     suggestionTitle: {
         fontWeight: '600',
         fontSize: 16,
+        marginBottom: 1,
+        maxWidth: '90%',
     },
     suggestionSubtitle: {
         fontWeight: '400',
         fontSize: 14,
     },
     suggestionRightContainer: {
-        paddingRight: 10,
         flexDirection: 'column',
         justifyContent: 'center',
     },

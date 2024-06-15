@@ -34,6 +34,13 @@ export interface ITimetableViewProps {
 }
 
 export type CalendarMode = '3days' | 'list'
+export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
+    const timetable = await getFriendlyTimetable(new Date(), true)
+    if (timetable.length === 0) {
+        throw new Error('Timetable is empty')
+    }
+    return timetable
+}
 
 export default function TimetableScreen(): JSX.Element {
     const theme = useTheme()
@@ -49,13 +56,6 @@ export default function TimetableScreen(): JSX.Element {
         removeNotification,
     } = useContext(NotificationContext)
     const { userKind } = useContext(UserKindContext)
-    const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
-        const timetable = await getFriendlyTimetable(new Date(), true)
-        if (timetable.length === 0) {
-            throw new Error('Timetable is empty')
-        }
-        return timetable
-    }
 
     const {
         data: timetable,

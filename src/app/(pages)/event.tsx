@@ -151,6 +151,7 @@ export default function ClEventDetail(): JSX.Element {
             contentContainerStyle={styles.container}
         >
             <StatusBar style="light" animated={true} hidden={false} />
+
             <View
                 style={[
                     styles.titleContainer,
