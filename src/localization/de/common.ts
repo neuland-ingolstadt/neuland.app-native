@@ -158,6 +158,7 @@ export default {
                     available: 'Verfügbar',
                     notAvailable: 'Nicht verfügbar',
                     availableRooms: 'Verfügbare Räume',
+                    nextLecture: 'Nächste Vorlesung',
                     availableRoomsTitle: 'Verfügbare Räume',
                     availableRoomsSubtitle: 'Räume mit verfügbaren Plätzen',
                     signIn: 'Melden Sie sich an, um verfügbare Räume zu sehen',

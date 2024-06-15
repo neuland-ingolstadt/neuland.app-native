@@ -5,6 +5,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
+import { loadTimetable } from '@/app/(tabs)/timetable'
 import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
 import FloorPicker from '@/components/Elements/Map/FloorPicker'
@@ -21,6 +22,7 @@ import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/hooks/contexts/map'
+import { USER_GUEST } from '@/hooks/contexts/userKind'
 import i18n from '@/localization/i18n'
 import {
     type FeatureProperties,
@@ -28,7 +30,7 @@ import {
     type RoomsOverlay,
 } from '@/types/asset-api'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
-import { type RoomEntry } from '@/types/utils'
+import { type FriendlyTimetableEntry, type RoomEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
     BUILDINGS,
@@ -101,6 +103,7 @@ const MapScreen = (): JSX.Element => {
         setAvailableRooms,
         currentFloor,
         setCurrentFloor,
+        setNextLecture,
     } = useContext(MapContext)
 
     const [showAllFloors, setShowAllFloors] = useState(false)
@@ -145,6 +148,66 @@ const MapScreen = (): JSX.Element => {
         gcTime: 1000 * 60 * 60 * 24 * 90, // 90 days
         networkMode: 'always',
     })
+
+    const { data: timetable } = useQuery({
+        queryKey: ['timetable', userKind],
+        queryFn: loadTimetable,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+        retry(failureCount, error) {
+            const ignoreErrors = [
+                '"Time table does not exist" (-202)',
+                'Timetable is empty',
+            ]
+            if (ignoreErrors.includes(error?.message)) {
+                return false
+            }
+            return failureCount < 3
+        },
+        enabled: userKind !== USER_GUEST,
+    })
+
+    const getOngoingOrNextEvent = (
+        timetable: FriendlyTimetableEntry[]
+    ): FriendlyTimetableEntry[] => {
+        const now = new Date()
+
+        // Filter out past events
+        const futureEvents = timetable.filter(
+            (entry) => new Date(entry.endDate) > now
+        )
+
+        // Find currently ongoing events
+        const ongoingEvents = futureEvents.filter(
+            (entry) =>
+                new Date(entry.startDate) <= now &&
+                new Date(entry.endDate) >= now
+        )
+
+        if (ongoingEvents.length > 0) {
+            return ongoingEvents
+        }
+
+        // If no ongoing events, find the next event
+        futureEvents.sort(
+            (a, b) =>
+                new Date(a.startDate).getTime() -
+                new Date(b.startDate).getTime()
+        )
+        const nextEvent = futureEvents.length > 0 ? futureEvents[0] : null
+
+        return nextEvent != null ? [nextEvent] : []
+    }
+
+    useEffect(() => {
+        if (timetable == null) {
+            return
+        }
+        const ongoingOrNextEvent = getOngoingOrNextEvent(timetable)
+        if (ongoingOrNextEvent.length > 0) {
+            setNextLecture(ongoingOrNextEvent)
+        }
+    }, [timetable])
 
     const allRooms = useMemo(() => {
         if (mapOverlay == null) {

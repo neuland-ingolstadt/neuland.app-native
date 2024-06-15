@@ -155,7 +155,7 @@ export default function HomeLayout(): JSX.Element {
 
     useEffect(() => {
         function processShortcut(item: ShortcutItem): void {
-            router.push(item.data.path as string)
+            router.navigate(item.data.path as string)
             router.setParams({ fromAppShortcut: 'true' })
         }
 

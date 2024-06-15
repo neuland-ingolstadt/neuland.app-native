@@ -111,6 +111,7 @@ export default function About(): JSX.Element {
     ]
     const handlePress = (): void => {
         setPressCount(pressCount + 1)
+
         if (pressCount === 7) {
             Alert.alert(
                 t('about.easterEgg.title'),

@@ -330,7 +330,7 @@ export default function FoodDetail(): JSX.Element {
                         formatPrice(variant.prices[userKind]),
                     onPress: () => {
                         trackEvent('Share', {
-                            type: 'meal-variant',
+                            type: 'mealVariant',
                         })
                         void Share.share({
                             message: t('details.share.message', {
@@ -356,7 +356,8 @@ export default function FoodDetail(): JSX.Element {
     }
 
     const sections: FormListSections[] =
-        meal?.restaurant === 'mensa'
+        meal?.restaurant === 'IngolstadtMensa' ||
+        meal?.restaurant === 'NeuburgMensa'
             ? [
                   ...priceSection,
                   ...variantsSection,
