@@ -27,7 +27,7 @@ import BottomSheetBackground from './BottomSheetBackground'
 
 interface BottomSheetDetailModalProps {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>
-    handleSheetChangesModal: (index: number) => void
+    handleSheetChangesModal: () => void
     currentPositionModal: SharedValue<number>
     roomData: RoomData
     modalSection: FormListSections[]
@@ -47,7 +47,6 @@ const handleShareModal = (room: string): void => {
  * BottomSheetDetailModal component for displaying room details
  * @param {React.RefObject<BottomSheetModal>} bottomSheetModalRef - Reference to the bottom sheet modal
  * @param {Function} handleSheetChangesModal - Function to handle changes in the bottom sheet modal
- * @param {SharedValue<number>} currentPositionModal - Current position of the bottom sheet modal
  * @param {any} roomData - Data for the room
  * @param {FormListSections[]} modalSection - Sections for the room
  * @returns {JSX.Element}
@@ -66,7 +65,7 @@ export const BottomSheetDetailModal = ({
                 index={1}
                 ref={bottomSheetModalRef}
                 snapPoints={['15%', '30%', '45%', '70%']}
-                onChange={handleSheetChangesModal}
+                onDismiss={handleSheetChangesModal}
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPositionModal}
             >

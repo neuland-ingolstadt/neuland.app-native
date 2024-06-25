@@ -15,6 +15,7 @@
 		48253CD9557284557A309B5B /* libPods-NeulandNext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE89E54F9B2F4C95465DBC97 /* libPods-NeulandNext.a */; };
 		4DBFAAE1E5644C68B67780C7 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25124D82DC7147C1A383882B /* noop-file.swift */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
+		B77BAE7A2C2AD20500BF7D99 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = 593828D4C3990B605265629B /* MapLibre */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B77BAE7A2C2AD20500BF7D99 /* MapLibre in Frameworks */,
 				48253CD9557284557A309B5B /* libPods-NeulandNext.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -155,12 +157,17 @@
 				7DD2A0B2CBB9482199BAE73B /* Upload Debug Symbols to Sentry */,
 				4DEE41591059C6E17AF12B0C /* [CP] Embed Pods Frameworks */,
 				FC6914C1B30E9D871353D326 /* [CP] Copy Pods Resources */,
+				5521C5867CF044158CA46F7B /* Remove signature files (Xcode 15 workaround) */,
+				DE94DDD297BF42F2B5882A0E /* Remove signature files (Xcode 15 workaround) */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = NeulandNext;
+			packageProductDependencies = (
+				593828D4C3990B605265629B /* MapLibre */,
+			);
 			productName = NeulandNext;
 			productReference = 13B07F961A680F5B00A75B9A /* NeulandNext.app */;
 			productType = "com.apple.product-type.application";
@@ -189,6 +196,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				E90CD075DD22378B5CD3BEC5 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -264,6 +274,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		5521C5867CF044158CA46F7B /* Remove signature files (Xcode 15 workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode 15 workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi";
 		};
 		7DD2A0B2CBB9482199BAE73B /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -383,6 +407,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DE94DDD297BF42F2B5882A0E /* Remove signature files (Xcode 15 workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode 15 workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then
+    echo \"Remove signature files (Xcode 15 workaround)\";
+    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+  fi";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -424,7 +465,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.7.2;
+				MARKETING_VERSION = 0.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -432,7 +473,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -453,6 +494,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FSXB76X6V2;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64";
 				INFOPLIST_FILE = NeulandNext/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -460,7 +502,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.7.2;
+				MARKETING_VERSION = 0.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -468,7 +510,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -535,10 +577,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -596,10 +635,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -629,6 +665,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E90CD075DD22378B5CD3BEC5 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution";
+			requirement = {
+				kind = exactVersion;
+				version = 6.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		593828D4C3990B605265629B /* MapLibre */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E90CD075DD22378B5CD3BEC5 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
+			productName = MapLibre;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

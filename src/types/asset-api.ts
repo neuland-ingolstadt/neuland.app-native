@@ -1,3 +1,5 @@
+import { type MaterialIcon } from './material-icons'
+
 export interface RoomsOverlay {
     type: string
     features: Feature[]
@@ -42,6 +44,9 @@ export interface FeatureProperties {
     Raum: string
     Funktion_de: string
     Funktion_en: string
+    rtype?: number
+    center?: number[]
+    icon?: { ios: string; android: MaterialIcon }
 }
 
 export enum Gebaeude {

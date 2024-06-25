@@ -3,6 +3,7 @@ export default {
         clipboard: 'copied to clipboard',
         paused: 'No internet connection',
         roomNotFound: 'Room not found',
+        mapOverlay: 'Error while loading overlay',
     },
     error: {
         title: 'An error occurred',
@@ -172,6 +173,7 @@ export default {
                     alert: 'To see your current location, please enable location services.',
                     settings: 'Settings',
                 },
+                osm: 'Map data from OpenStreetMap',
             },
         },
 

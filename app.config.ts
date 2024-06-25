@@ -84,6 +84,7 @@ module.exports = {
                 },
             ],
             ['expo-build-properties'],
+            ['@maplibre/maplibre-react-native'],
         ],
         extra: {
             eas: {

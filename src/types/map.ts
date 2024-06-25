@@ -1,4 +1,11 @@
-import { type AvailableRoom, type RoomEntry } from './utils'
+import {
+    type Feature,
+    type GeoJsonProperties,
+    type Geometry,
+    type Position,
+} from 'geojson'
+
+import { type AvailableRoom } from './utils'
 
 export enum SEARCH_TYPES {
     BUILDING,
@@ -8,7 +15,7 @@ export enum SEARCH_TYPES {
 export interface RoomData {
     title: string
     subtitle: string
-    properties: RoomEntry['properties']
+    properties: GeoJsonProperties
     occupancies: AvailableRoom | BuildingOccupancy
     type: SEARCH_TYPES
 }
@@ -20,19 +27,13 @@ export interface BuildingOccupancy {
 export interface ClickedMapElement {
     type: SEARCH_TYPES
     data: string
-}
-
-export interface searchResult {
-    type: SEARCH_TYPES
-    highlight: RoomEntry[]
-    title: string
-    subtitle: string
-    center: number[]
+    center?: Position
+    manual?: boolean
 }
 
 export interface SearchResult {
     title: string
     subtitle: string
     isExactMatch?: boolean
-    item: RoomEntry
+    item: Feature<Geometry, GeoJsonProperties>
 }
