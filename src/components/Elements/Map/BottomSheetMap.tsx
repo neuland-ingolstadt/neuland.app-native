@@ -328,7 +328,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                             />
                                                         </View>
 
-                                                        <View>
+                                                        <View
+                                                            style={
+                                                                styles.suggestionContent
+                                                            }
+                                                        >
                                                             <Text
                                                                 style={{
                                                                     color: colors.text,
@@ -524,7 +528,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                 />
                                                             </View>
 
-                                                            <View>
+                                                            <View
+                                                                style={
+                                                                    styles.suggestionContent
+                                                                }
+                                                            >
                                                                 <Text
                                                                     style={{
                                                                         color: colors.text,
@@ -638,6 +646,10 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         textAlign: 'left',
     },
+    suggestionContent: {
+        flex: 1,
+        paddingRight: 14,
+    },
     suggestionSectionHeaderContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -664,13 +676,15 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     suggestionRow: {
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
         flexDirection: 'row',
-        justifyContent: 'space-between',
     },
     suggestionInnerRow: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
     },
     suggestionIconContainer: {
         marginRight: 14,
@@ -684,7 +698,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 16,
         marginBottom: 1,
-        maxWidth: '90%',
     },
     suggestionSubtitle: {
         fontWeight: '400',

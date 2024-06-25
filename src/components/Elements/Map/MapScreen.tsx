@@ -56,6 +56,7 @@ import {
     ActivityIndicator,
     LayoutAnimation,
     Linking,
+    Platform,
     Pressable,
     StatusBar,
     StyleSheet,
@@ -118,6 +119,8 @@ const MapScreen = (): JSX.Element => {
     const locations: LocationsType = Locations
     const [isVisible, setIsVisible] = useState(true)
     const opacity = useSharedValue(1)
+    void MapLibreGL.setAccessToken(null)
+
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         setShowAllFloors(!showAllFloors)
@@ -694,7 +697,9 @@ const MapScreen = (): JSX.Element => {
                 <View style={styles.map}>
                     <MapLibreGL.MapView
                         style={styles.map}
-                        tintColor={colors.primary}
+                        tintColor={
+                            Platform.OS === 'ios' ? colors.primary : undefined
+                        }
                         logoEnabled={false}
                         styleURL={theme.dark ? darkStyle : lightStyle}
                         attributionEnabled={false}
