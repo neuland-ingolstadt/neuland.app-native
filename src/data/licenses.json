@@ -59,12 +59,6 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-menu/menu@0.9.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/react-native-menu/menu",
-        "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
-        "parents": "neuland"
-    },
     "@sentry/react-native@5.22.3": {
         "licenses": "MIT",
         "repository": "https://github.com/getsentry/sentry-react-native",
