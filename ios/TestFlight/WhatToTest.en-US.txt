@@ -1,0 +1,8 @@
+What's new?
+- new map design with darkmode support
+- next lecture suggestion on map
+- Neuburg canteen meal plan
+- more CL event details
+- new default app icon
+- new easter egg to unlock retro app icon
+- bug fixes and improvements

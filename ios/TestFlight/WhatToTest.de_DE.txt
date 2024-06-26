@@ -1,0 +1,8 @@
+Was ist neu?
+- neues Karten-Design mit Darkmode
+- Vorschlag für die nächste Vorlesung auf der Karte
+- Speiseplan der Mensa Neuburg
+- mehr Details zu CL-Veranstaltungen
+- neues Standard-App-Icon
+- neues Easter Egg zum Freischalten des Retro-App-Icons
+- Fehlerbehebungen und Verbesserungen
