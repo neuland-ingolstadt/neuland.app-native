@@ -1,9 +1,9 @@
-import { type FeatureProperties } from '@/types/asset-api'
 import { SEARCH_TYPES } from '@/types/map'
 import { type MaterialIcon } from '@/types/material-icons'
 import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
+import { type GeoJsonProperties, type Position } from 'geojson'
 import { type TFunction } from 'i18next'
 import { Platform, Share } from 'react-native'
 
@@ -29,8 +29,8 @@ export const BUILDINGS_IN = [
     'X',
     'Z',
 ]
-export const INGOLSTADT_CENTER = [48.7667, 11.4328]
-export const NEUBURG_CENTER = [48.73227, 11.17261]
+export const INGOLSTADT_CENTER = [11.4328, 48.7663]
+export const NEUBURG_CENTER = [11.17261, 48.732]
 export const BUILDINGS_ND = ['BN', 'CN']
 export const BUILDINGS = [...BUILDINGS_IN, ...BUILDINGS_ND]
 export const BUILDINGS_ALL = 'Alle'
@@ -145,7 +145,6 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
                 })
             )
         )
-        // iterate over every room
         .forEach(
             ({
                 room,
@@ -274,20 +273,20 @@ export async function searchRooms(
         .sort((a, b) => a.room.localeCompare(b.room))
 }
 
-export function getCenter(rooms: number[][][]): number[] {
-    const getCenterPoint = (points: number[][]): number[] => {
-        const x = points.map((point) => point[0])
-        const y = points.map((point) => point[1])
-        const minX = Math.min(...x)
-        const maxX = Math.max(...x)
-        const minY = Math.min(...y)
-        const maxY = Math.max(...y)
-        return [(minX + maxX) / 2, (minY + maxY) / 2]
+export function getCenter(rooms: Position[][][]): Position {
+    const getCenterPoint = (points: Position[][]): Position[] => {
+        const x = points[0].map((point: any) => point[0])
+        const y = points[0].map((point: any) => point[1])
+        const minX = Math.min(...(x as number[]))
+        const maxX = Math.max(...(x as number[]))
+        const minY = Math.min(...(y as number[]))
+        const maxY = Math.max(...(y as number[]))
+        return [(minX + maxX) / 2, (minY + maxY) / 2] as unknown as Position[]
     }
 
     const centerPoints = rooms.reduce(
         (acc, room) => {
-            const centerPoint = getCenterPoint(room)
+            const centerPoint = getCenterPoint(room) as unknown as number[]
             acc.lon += centerPoint[0]
             acc.lat += centerPoint[1]
             acc.count += 1
@@ -297,16 +296,18 @@ export function getCenter(rooms: number[][][]): number[] {
     )
 
     return [
-        centerPoints.lat / centerPoints.count,
         centerPoints.lon / centerPoints.count,
+        centerPoints.lat / centerPoints.count,
     ]
 }
 
-export function getCenterSingle(coordinates: number[][] | undefined): number[] {
+export function getCenterSingle(
+    coordinates: number[][][] | undefined
+): number[] {
     if (coordinates == null) {
         return INGOLSTADT_CENTER
     }
-    const centerPoints = coordinates.reduce(
+    const centerPoints = coordinates[0].reduce(
         (acc, coordinate) => {
             acc.lon += coordinate[0]
             acc.lat += coordinate[1]
@@ -317,8 +318,8 @@ export function getCenterSingle(coordinates: number[][] | undefined): number[] {
     )
 
     return [
-        centerPoints.lat / centerPoints.count,
         centerPoints.lon / centerPoints.count,
+        centerPoints.lat / centerPoints.count,
     ]
 }
 
@@ -380,13 +381,16 @@ export const determineSearchType = (search: string): SEARCH_TYPES => {
 
 export const getIcon = (
     type: SEARCH_TYPES,
-    properties?: { result: { item: { properties: FeatureProperties } } }
+    properties?: { result: { item: { properties: GeoJsonProperties } } }
 ): { ios: string; android: MaterialIcon } => {
     const {
         Funktion_en: funktionEn,
         Raum: raum,
-    }: { Funktion_en: string; Raum: string } = properties?.result.item
-        .properties ?? { Funktion_en: '', Raum: '' }
+    }: { Funktion_en: string; Raum: string } = (properties?.result.item
+        .properties as { Funktion_en: string; Raum: string }) ?? {
+        Funktion_en: '',
+        Raum: '',
+    }
     const food = ['M001', 'X001', 'F001']
     switch (type) {
         case SEARCH_TYPES.BUILDING:

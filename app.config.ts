@@ -29,24 +29,27 @@ module.exports = {
                 CFBundleDevelopmentRegion: 'en',
             },
             splash: {
-                image: './src/assets/splash.png',
+                image: './src/assets/splash/splashLight.png',
                 resizeMode: 'contain',
                 backgroundColor: '#ffffff',
                 dark: {
+                    image: './src/assets/splash/splashDark.png',
                     backgroundColor: '#000000',
                 },
             },
+            icon: './src/assets/appIcons/default.png',
         },
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 78,
+            versionCode: 83,
             splash: {
-                image: './src/assets/splash.png',
+                image: './src/assets/splash/splashLight.png',
                 resizeMode: 'contain',
                 backgroundColor: '#ffffff',
                 dark: {
                     backgroundColor: '#000000',
+                    image: './src/assets/splash/splashDark.png',
                 },
             },
         },
@@ -84,6 +87,7 @@ module.exports = {
                 },
             ],
             ['expo-build-properties'],
+            ['@maplibre/maplibre-react-native'],
         ],
         extra: {
             eas: {

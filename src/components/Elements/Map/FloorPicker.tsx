@@ -2,86 +2,29 @@ import { type Colors } from '@/components/colors'
 import { MapContext } from '@/hooks/contexts/map'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import { getCurrentPositionAsync } from 'expo-location'
-import * as Location from 'expo-location'
 import React, { useContext } from 'react'
-import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    Linking,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
-import { type WebView } from 'react-native-webview'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
-import { _injectCurrentLocation, _setView } from './leaflet'
 
 interface FloorPickerProps {
     floors: string[]
     showAllFloors: boolean
     toggleShowAllFloors: () => void
-    mapRef: React.RefObject<WebView>
+    setCameraTriggerKey: React.Dispatch<React.SetStateAction<number>>
 }
 
 const FloorPicker: React.FC<FloorPickerProps> = ({
     floors,
     showAllFloors,
     toggleShowAllFloors,
-    mapRef,
+    setCameraTriggerKey,
 }): JSX.Element => {
-    const colors = useTheme().colors as Colors
-    const { currentFloor, setCurrentFloor, setLocation } =
-        useContext(MapContext)
-    const { t } = useTranslation('common')
-    const locationAlert = (): void => {
-        Alert.alert(
-            t('pages.map.details.location.title'),
-            t('pages.map.details.location.alert'),
-            [
-                {
-                    text: t('misc.cancel'),
-                    style: 'cancel',
-                },
-                {
-                    text: t('pages.map.details.location.settings'),
-                    onPress: () => {
-                        void Linking.openSettings()
-                    },
-                },
-            ]
-        )
-    }
+    const theme = useTheme()
+    const colors = theme.colors as Colors
+    const isDark = theme.dark
+    const { currentFloor, setCurrentFloor } = useContext(MapContext)
 
-    async function getCurrentPosition(): Promise<void> {
-        const { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== 'granted') {
-            setLocation('notGranted')
-            locationAlert()
-        } else {
-            try {
-                const location = await getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.High,
-                })
-                setLocation(location)
-                _injectCurrentLocation(
-                    mapRef,
-                    colors,
-                    Math.min(location.coords.accuracy ?? 5, 80),
-                    [location.coords.latitude, location.coords.longitude]
-                )
-                _setView(
-                    [location.coords.latitude, location.coords.longitude],
-                    mapRef
-                )
-            } catch (e) {
-                console.error(e)
-            }
-        }
-    }
     return (
         <View style={styles.ButtonArea}>
             <View>
@@ -89,14 +32,20 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                     <Pressable
                         onPress={() => {
                             toggleShowAllFloors()
-                            if (Platform.OS === 'ios') {
-                                void Haptics.selectionAsync()
-                            }
                         }}
                         onLongPress={() => {
-                            setCurrentFloor('EG')
-                            if (Platform.OS === 'ios') {
-                                void Haptics.selectionAsync()
+                            if (currentFloor?.floor === 'EG') {
+                                toggleShowAllFloors()
+                            } else {
+                                setCurrentFloor({ floor: 'EG', manual: true })
+                                if (
+                                    Platform.OS === 'ios' &&
+                                    currentFloor?.floor !== 'EG'
+                                ) {
+                                    void Haptics.impactAsync(
+                                        Haptics.ImpactFeedbackStyle.Soft
+                                    )
+                                }
                             }
                         }}
                     >
@@ -117,7 +66,9 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                         color: colors.text,
                                     }}
                                 >
-                                    {currentFloor === 'EG' ? '0' : currentFloor}
+                                    {currentFloor?.floor === 'EG'
+                                        ? '0'
+                                        : currentFloor?.floor}
                                 </Text>
                             </View>
                         </View>
@@ -127,15 +78,12 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                     <View style={[]}>
                         <Pressable
                             onPress={() => {
-                                if (Platform.OS === 'ios') {
-                                    void Haptics.selectionAsync()
-                                }
                                 toggleShowAllFloors()
                             }}
                         >
                             <View style={styles.Button}>
                                 <PlatformIcon
-                                    color={'#4a4a4aff'}
+                                    color={isDark ? '#b6b6b6ff' : '#4a4a4aff'}
                                     ios={{
                                         name: 'xmark.circle.fill',
                                         size: 26,
@@ -161,7 +109,10 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         {floors.map((floor, index) => (
                             <Pressable
                                 onPress={() => {
-                                    setCurrentFloor(floor)
+                                    if (Platform.OS === 'ios') {
+                                        void Haptics.selectionAsync()
+                                    }
+                                    setCurrentFloor({ floor, manual: true })
                                 }}
                                 key={index}
                             >
@@ -172,7 +123,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                         {
                                             borderBottomColor: colors.border,
                                             backgroundColor:
-                                                currentFloor === floor
+                                                currentFloor?.floor === floor
                                                     ? colors.primary
                                                     : colors.card,
                                             borderBottomWidth:
@@ -187,7 +138,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                             styles.ButtonText,
                                             {
                                                 color:
-                                                    currentFloor === floor
+                                                    currentFloor?.floor ===
+                                                    floor
                                                         ? colors.background
                                                         : colors.text,
                                             },
@@ -203,7 +155,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 {
                     <Pressable
                         onPress={() => {
-                            void getCurrentPosition()
+                            setCameraTriggerKey((prev) => prev + 1)
                         }}
                     >
                         <View
@@ -239,8 +191,8 @@ export default FloorPicker
 
 const styles = StyleSheet.create({
     ButtonArea: {
-        marginHorizontal: 10,
-        marginTop: 100,
+        marginHorizontal: 8,
+        marginTop: 110,
         position: 'absolute',
         right: 0,
     },

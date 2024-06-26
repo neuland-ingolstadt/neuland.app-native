@@ -3,6 +3,7 @@ export default {
         clipboard: 'copied to clipboard',
         paused: 'No internet connection',
         roomNotFound: 'Room not found',
+        mapOverlay: 'Error while loading overlay',
     },
     error: {
         title: 'An error occurred',
@@ -138,7 +139,7 @@ export default {
             easterEgg: {
                 title: 'Easter Egg',
                 message:
-                    'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
+                    'You unlocked the exclusive retro app icon "neuland.app"!',
                 confirm: 'Nice!',
             },
             noAvailableRooms: 'No free rooms available',
@@ -172,6 +173,7 @@ export default {
                     alert: 'To see your current location, please enable location services.',
                     settings: 'Settings',
                 },
+                osm: 'Map data from OpenStreetMap',
             },
         },
 

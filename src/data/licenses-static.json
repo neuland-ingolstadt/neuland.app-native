@@ -13,10 +13,10 @@
         "parents": "neuland",
         "platform": "ios"
     },
-    "leaftlet@1.7.4": {
-        "licenses": "BSD-2-Clause",
-        "repository": "https://github.com/Leaflet/Leaflet/",
-        "licenseUrl": "https://raw.githubusercontent.com/Leaflet/Leaflet/main/LICENSE",
+    "OpenStreetMap": {
+        "licenses": "ODbL",
+        "repository": "https://www.openstreetmap.org/",
+        "licenseUrl": "https://www.openstreetmap.org/copyright",
         "parents": "neuland",
         "platform": "all"
     }

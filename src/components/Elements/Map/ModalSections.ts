@@ -87,26 +87,27 @@ export const modalSection = (
                               {
                                   title: t('pages.map.details.room.building'),
                                   value:
-                                      roomData.properties.Gebaeude ??
+                                      roomData?.properties?.Gebaeude ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: t('pages.map.details.room.floor'),
                                   value:
-                                      roomData.properties.Ebene ??
+                                      roomData?.properties?.Ebene ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: t('pages.map.details.room.type'),
                                   value:
-                                      roomData.properties.Funktion_en ??
+                                      roomData?.properties?.Funktion_en ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: 'Campus',
                                   value:
-                                      locations[roomData.properties.Standort] ??
-                                      t('misc.unknown'),
+                                      locations[
+                                          roomData?.properties?.Standort
+                                      ] ?? t('misc.unknown'),
                               },
                           ],
                       },
@@ -126,15 +127,19 @@ export const modalSection = (
                 items: [
                     {
                         title: t('pages.map.details.building.total'),
-                        value: occupancies.total,
+                        value:
+                            occupancies.total.toString() ?? t('misc.unknown'),
                     },
                     {
                         title: t('pages.map.details.building.free'),
-                        value: occupancies.available ?? t('misc.unknown'),
+                        value:
+                            occupancies.available.toString() ??
+                            t('misc.unknown'),
                     },
                     {
                         title: t('pages.map.details.building.floors'),
-                        value: properties?.Etage ?? t('misc.unknown'),
+                        value:
+                            properties?.Etage.toString() ?? t('misc.unknown'),
                     },
                     {
                         title: 'Campus',

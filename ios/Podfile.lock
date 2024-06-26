@@ -313,6 +313,13 @@ PODS:
   - hermes-engine (0.74.2):
     - hermes-engine/Pre-built (= 0.74.2)
   - hermes-engine/Pre-built (0.74.2)
+  - maplibre-react-native (10.0.0-alpha.5):
+    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.5)
+    - React
+    - React-Core
+  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.5):
+    - React
+    - React-Core
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1245,8 +1252,6 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
-  - react-native-menu (0.9.1):
-    - React
   - react-native-netinfo (11.3.1):
     - React-Core
   - react-native-pager-view (6.3.0):
@@ -1673,6 +1678,7 @@ DEPENDENCIES:
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - "maplibre-react-native (from `../node_modules/@maplibre/maplibre-react-native`)"
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1701,7 +1707,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
-  - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1830,6 +1835,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-06-03-RNv0.74.2-bb1e74fe1e95c2b5a2f4f9311152da052badc2bc
+  maplibre-react-native:
+    :path: "../node_modules/@maplibre/maplibre-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1882,8 +1889,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-drag-drop-ios:
     :path: "../node_modules/react-native-drag-drop-ios"
-  react-native-menu:
-    :path: "../node_modules/@react-native-menu/menu"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
@@ -2009,6 +2014,7 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   hermes-engine: 01d3e052018c2a13937aca1860fbedbccd4a41b7
+  maplibre-react-native: bcb8d0ed567f4a67f651e2d1a24521ef273c23de
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
   RCTDeprecation: b03c35057846b685b3ccadc9bfe43e349989cdb2
   RCTRequired: 194626909cfa8d39ca6663138c417bc6c431648c
@@ -2035,7 +2041,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
-  react-native-menu: 9728f90160c36b9a75481fc76e05354b99d54c59
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-pager-view: c1e29e1a6105a02807392ba822ad322447a72f55
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
@@ -2081,6 +2086,6 @@ SPEC CHECKSUMS:
   UMAppLoader: f17a5ee8e85b536ace0fc254b447a37ed198d57e
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
-PODFILE CHECKSUM: 3a09a7a2ba19331e6aa5922ccde95dc10663a4a3
+PODFILE CHECKSUM: a2c2df1b6d6fb8a577a08d33880679b64c476742
 
 COCOAPODS: 1.14.3

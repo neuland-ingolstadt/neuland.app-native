@@ -27,14 +27,15 @@ let iconImages: Record<string, ImageProps> = {}
 iconImages = {
     default: require('@/assets/appIcons/default.png'),
     modernDark: require('@/assets/appIcons/modernDark.png'),
-    modernLight: require('@/assets/appIcons/modernLight.png'),
+    retro: require('@/assets/appIcons/retro.png'),
     modernGreen: require('@/assets/appIcons/modernGreen.png'),
-    modernPink: require('@/assets/appIcons/modernPink.png'),
     rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
     rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     cat: require('@/assets/appIcons/cat.png'),
 }
+
+export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -43,8 +44,8 @@ export default function AppIconPicker(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
-        exclusive: ['cat', 'modernPink'],
-        default: ['default', 'modernLight', 'modernDark', 'modernGreen'],
+        exclusive: ['cat', 'retro'],
+        default: ['default', 'modernDark', 'modernGreen'],
         rainbow: ['rainbowNeon', 'rainbowDark', 'rainbowMoonLight'],
     }
 

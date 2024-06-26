@@ -43,20 +43,11 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>ModernLight</key>
+        <key>Retro</key>
         <dict>
           <key>CFBundleIconFiles</key>
           <array>
-            <string>ModernLight</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
-        <key>ModernPink</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>ModernPink</string>
+            <string>Retro</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
@@ -95,7 +86,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.7.2</string>
+    <string>0.8.1</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -137,6 +128,11 @@
     <string>Allow $(PRODUCT_NAME) to access your location</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>

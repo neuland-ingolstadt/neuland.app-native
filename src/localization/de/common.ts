@@ -3,6 +3,7 @@ export default {
         clipboard: 'in Zwischenablage kopiert',
         paused: 'Keine Internetverbindung',
         roomNotFound: 'Raum nicht gefunden',
+        mapOverlay: 'Fehler beim Laden des Overlays',
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',
@@ -140,7 +141,7 @@ export default {
             easterEgg: {
                 title: 'Easter Egg',
                 message:
-                    'Du hast das exklusive App-Icon "Neuland Pink" freigeschaltet! 🩷',
+                    'Du hast das exklusive retro App-Icon "neuland.app" freigeschaltet!',
                 confirm: 'Nice!',
             },
             noAvailableRooms: 'Keine freien Räume verfügbar',
@@ -173,6 +174,7 @@ export default {
                     alert: 'Um deinen aktuellen Standort anzuzeigen, musst du die Standortberechtigung aktivieren.',
                     button: 'Einstellungen',
                 },
+                osm: 'Karten Daten von OpenStreetMap',
             },
         },
         rooms: {
