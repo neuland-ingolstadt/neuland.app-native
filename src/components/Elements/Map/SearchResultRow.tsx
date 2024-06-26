@@ -5,45 +5,48 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import React, { useContext } from 'react'
 import { Keyboard, StyleSheet, Text, View } from 'react-native'
-import type WebView from 'react-native-webview'
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
-import { _injectMarker, _setView } from './leaflet'
 
 const ResultRow: React.FC<{
     result: SearchResult
     index: number
     colors: Colors
-    mapRef: React.RefObject<WebView>
     handlePresentModalPress: () => void
     bottomSheetRef: React.RefObject<any>
 }> = ({
     result,
     index,
     colors,
-    mapRef,
     handlePresentModalPress,
     bottomSheetRef,
 }): JSX.Element => {
     const { setClickedElement, setLocalSearch, setCurrentFloor } =
         useContext(MapContext)
+    console.log(result)
     return (
         <React.Fragment key={index}>
             <TouchableOpacity
                 style={styles.searchRowContainer}
                 onPress={() => {
-                    const center = result.item.options.center
+                    const center = result.item.properties?.center
                     Keyboard.dismiss()
                     bottomSheetRef.current?.collapse()
-                    _setView(center, mapRef)
+                    //  _setView(center, mapRef)
                     setClickedElement({
                         data: result.title,
-                        type: result.item.options.type,
+                        type: result.item.properties?.rtype,
+                        center,
+                        manual: false,
                     })
-                    setCurrentFloor(result.item.properties.Ebene)
+                    setCurrentFloor({
+                        floor:
+                            (result.item.properties?.Ebene as string) ?? 'EG',
+                        manual: false,
+                    })
                     handlePresentModalPress()
-                    _injectMarker(mapRef, center, colors)
+                    //  _injectMarker(mapRef, center, colors)
                     setLocalSearch('')
                 }}
             >
@@ -56,11 +59,11 @@ const ResultRow: React.FC<{
                     <PlatformIcon
                         color={getContrastColor(colors.primary)}
                         ios={{
-                            name: result.item.options.icon.ios,
+                            name: result.item.properties?.icon.ios,
                             size: 18,
                         }}
                         android={{
-                            name: result.item.options.icon.android,
+                            name: result.item.properties?.icon.android,
                             variant: 'outlined',
                             size: 21,
                         }}

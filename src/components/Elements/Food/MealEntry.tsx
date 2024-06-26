@@ -81,7 +81,7 @@ export const MealEntry = ({
     const iconName = hasUserAllergens
         ? 'exclamationmark.triangle'
         : 'info.circle'
-    const androidName = hasUserAllergens ? 'warning' : 'check'
+    const androidName = hasUserAllergens ? 'warning' : 'info'
     const textContent = hasUserAllergens
         ? userAllergens
         : t('empty.noAllergens')
@@ -275,6 +275,7 @@ export const MealEntry = ({
                                             android={{
                                                 name: androidName,
                                                 size: 16,
+                                                variant: 'outlined',
                                             }}
                                             style={styles.icon}
                                             color={colors.notification}

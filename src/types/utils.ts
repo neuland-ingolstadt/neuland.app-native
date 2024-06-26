@@ -1,5 +1,3 @@
-import { type SEARCH_TYPES } from './map'
-import { type MaterialIcon } from './material-icons'
 import { type Lecturers } from './thi-api'
 
 export interface Exam {
@@ -56,31 +54,6 @@ export interface AvailableRoom {
     room: string
     type: string
     capacity: number
-}
-
-export interface RoomEntry {
-    coordinates: number[][]
-    options: RoomOptions
-    properties: Properties
-}
-
-interface RoomOptions {
-    center: number[]
-    type: SEARCH_TYPES
-    icon: {
-        ios: string
-        android: MaterialIcon
-    }
-}
-
-interface Properties {
-    Ebene: string
-    Etage: string
-    Funktion_de: string
-    Funktion_en: string
-    Gebaeude: string
-    Raum: string
-    Standort: string
 }
 
 export interface FriendlyTimetableEntry {

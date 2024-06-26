@@ -20,7 +20,10 @@ export default function Screen(): JSX.Element {
     const [availableRooms, setAvailableRooms] = useState<
         AvailableRoom[] | null
     >(null)
-    const [currentFloor, setCurrentFloor] = useState('EG')
+    const [currentFloor, setCurrentFloor] = useState({
+        floor: 'EG',
+        manual: false,
+    })
     const [nextLecture, setNextLecture] = useState<
         FriendlyTimetableEntry[] | null
     >(null)

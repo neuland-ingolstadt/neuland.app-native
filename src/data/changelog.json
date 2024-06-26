@@ -236,6 +236,51 @@
                     "android": "bug_report"
                 }
             }
+        ],
+        "0.8": [
+            {
+                "title": {
+                    "de": "Karten Darkmode",
+                    "en": "Map Darkmode"
+                },
+                "description": {
+                    "de": "Aktiviere den Darkmode, um eine dunkle Kartenansicht zu erhalten. Zudem wurde auch die helle Ansicht komplett erneuert und optimiert.",
+                    "en": "Enable dark mode to get a dark map view. In addition, the light view has also been completely renewed and optimized."
+                },
+                "icon": {
+                    "ios": "moon.stars",
+                    "android": "dark_mode"
+                }
+            },
+            {
+                "title": {
+                    "de": "Native Karten",
+                    "en": "Native Map"
+                },
+                "description": {
+                    "de": "Die Karte komplett neu geschrieben und verfügt nun über natives Rendering, Gesten und noch mehr Informationen.",
+                    "en": "The map has been completely rewritten and now has native rendering, gestures and even more information."
+                },
+                "icon": {
+                    "ios": "map",
+                    "android": "map"
+                }
+            },
+
+            {
+                "title": {
+                    "de": "Event Details",
+                    "en": "Event Details"
+                },
+                "description": {
+                    "de": "Tippe auf ein Event, um mehr Informationen zu erhalten, wie zum Ort oder der Beschreibung.",
+                    "en": "Tap on an event to get more information, such as the location or description."
+                },
+                "icon": {
+                    "ios": "party.popper",
+                    "android": "event"
+                }
+            }
         ]
     }
 }

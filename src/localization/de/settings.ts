@@ -167,7 +167,7 @@ export default {
         names: {
             default: 'Neuland Next',
             modernDark: 'Modern Dunkel',
-            modernLight: 'Modern Hell',
+            retro: 'neuland.app',
             modernGreen: 'Modern Grün',
             modernPink: 'Modern Pink',
             rainbowMoonLight: 'Regenbogen Hell',
