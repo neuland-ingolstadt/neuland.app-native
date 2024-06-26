@@ -9,7 +9,7 @@ echo "===== Installing bun ====="
 brew install bun
 
 # Install dependencies
-echo "===== Running yarn install ====="
+echo "===== Running bun install ====="
 bun install
 echo "===== Running pod install ====="
 cd ios
