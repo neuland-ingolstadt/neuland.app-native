@@ -616,7 +616,7 @@ const MapScreen = (): JSX.Element => {
             fillOpacity: 0.1,
         },
         allRoomsOutline: {
-            lineColor: isDark ? '#26292d' : '#979797',
+            lineColor: isDark ? '#2d3035' : '#979797',
             lineWidth: 2.3,
         },
         availableRooms: {
@@ -793,14 +793,14 @@ const MapScreen = (): JSX.Element => {
                                 anchor={{ x: 0.5, y: 1 }}
                             >
                                 <Svg
-                                    width={45}
-                                    height={55}
+                                    width={40}
+                                    height={50}
                                     viewBox="170 0 624 944"
                                     fill="none"
                                 >
                                     <Path
                                         d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z"
-                                        fill={colors.primary}
+                                        fill={colors.text}
                                         strokeWidth="0"
                                     />
                                 </Svg>

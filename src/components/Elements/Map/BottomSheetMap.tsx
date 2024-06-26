@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/contexts'
+import { AppIconContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/hooks/contexts/map'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
@@ -12,10 +12,11 @@ import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import { type FeatureCollection } from 'geojson'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Alert,
     Linking,
     Platform,
     Pressable,
@@ -58,6 +59,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         setCurrentFloor,
     } = useContext(MapContext)
 
+    const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
+
     const fuse = new Fuse(allRooms.features, {
         keys: [
             'properties.Raum',
@@ -90,6 +93,31 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
         return [exactMatches, fuzzyMatches]
     }, [localSearch, allRooms])
+
+    useEffect(() => {
+        if (
+            localSearch.toLocaleLowerCase() === 'neuland' &&
+            Platform.OS === 'ios'
+        ) {
+            if (unlockedAppIcons.includes('retro')) {
+                return
+            }
+            Alert.alert(
+                t('pages.map.easterEgg.title'),
+
+                t('pages.map.easterEgg.message'),
+                [
+                    {
+                        text: t('pages.map.easterEgg.confirm'),
+                        style: 'cancel',
+                    },
+                ],
+                { cancelable: false }
+            )
+
+            addUnlockedAppIcon('retro')
+        }
+    }, [localSearch])
 
     return (
         <BottomSheet

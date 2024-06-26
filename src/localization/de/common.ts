@@ -141,7 +141,7 @@ export default {
             easterEgg: {
                 title: 'Easter Egg',
                 message:
-                    'Du hast das exklusive App-Icon "Neuland Pink" freigeschaltet! 🩷',
+                    'Du hast das exklusive retro App-Icon "neuland.app" freigeschaltet!',
                 confirm: 'Nice!',
             },
             noAvailableRooms: 'Keine freien Räume verfügbar',

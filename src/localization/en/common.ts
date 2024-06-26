@@ -139,7 +139,7 @@ export default {
             easterEgg: {
                 title: 'Easter Egg',
                 message:
-                    'You unlocked the exclusive app icon "Neuland Pink"! 🩷',
+                    'You unlocked the exclusive retro app icon "neuland.app"!',
                 confirm: 'Nice!',
             },
             noAvailableRooms: 'No free rooms available',

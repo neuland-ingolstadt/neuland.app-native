@@ -1252,8 +1252,6 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
-  - react-native-menu (0.9.1):
-    - React
   - react-native-netinfo (11.3.1):
     - React-Core
   - react-native-pager-view (6.3.0):
@@ -1709,7 +1707,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
-  - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1892,8 +1889,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-drag-drop-ios:
     :path: "../node_modules/react-native-drag-drop-ios"
-  react-native-menu:
-    :path: "../node_modules/@react-native-menu/menu"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
@@ -2046,7 +2041,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
-  react-native-menu: 9728f90160c36b9a75481fc76e05354b99d54c59
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-pager-view: c1e29e1a6105a02807392ba822ad322447a72f55
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
