@@ -612,19 +612,19 @@ const MapScreen = (): JSX.Element => {
     const layerStyles = {
         allRooms: {
             fillAntialias: true,
-            fillColor: isDark ? '#848995' : '#a4a4a4',
+            fillColor: isDark ? '#6a7178' : '#a4a4a4',
             fillOpacity: 0.1,
         },
         allRoomsOutline: {
-            lineColor: isDark ? '#9297a3' : '#979797',
-            lineWidth: 2.2,
+            lineColor: isDark ? '#26292d' : '#979797',
+            lineWidth: 2.3,
         },
         availableRooms: {
             fillAntialias: true,
-            fillOpacity: 0.3,
+            fillOpacity: 0.2,
         },
         availableRoomsOutline: {
-            lineWidth: 2.5,
+            lineWidth: 2.3,
         },
         osmBackground: {
             backgroundColor: isDark
