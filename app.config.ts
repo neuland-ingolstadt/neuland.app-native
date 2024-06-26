@@ -42,7 +42,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 83,
+            versionCode: 84,
             splash: {
                 image: './src/assets/splash/splashLight.png',
                 resizeMode: 'contain',

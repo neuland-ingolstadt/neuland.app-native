@@ -36,7 +36,7 @@ import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import MapLibreGL from '@maplibre/maplibre-react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import {
     type Feature,
     type FeatureCollection,
@@ -58,7 +58,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    StatusBar,
     StyleSheet,
     Text,
     View,
@@ -592,13 +591,6 @@ const MapScreen = (): JSX.Element => {
         }
     }, [clickedElement])
 
-    useFocusEffect(() => {
-        StatusBar.setBarStyle(theme.dark ? 'light-content' : 'dark-content')
-        return () => {
-            StatusBar.setBarStyle('default')
-        }
-    })
-
     useEffect(() => {
         setDisableFollowUser(false)
     }, [cameraTriggerKey])
@@ -729,6 +721,7 @@ const MapScreen = (): JSX.Element => {
                                 clickedElement == null &&
                                 !disableFollowUser
                             }
+                            triggerKey={cameraTriggerKey}
                             followUserMode={MapLibreGL.UserTrackingMode.Follow}
                         />
                         <MapLibreGL.UserLocation

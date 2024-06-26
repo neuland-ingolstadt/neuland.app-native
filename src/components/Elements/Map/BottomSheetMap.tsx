@@ -224,6 +224,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                         bottomSheetRef={bottomSheetRef}
                                     />
                                 )}
+                                ItemSeparatorComponent={() => (
+                                    <Divider iosPaddingLeft={50} />
+                                )}
                                 stickySectionHeadersEnabled={false}
                                 renderSectionHeader={({
                                     section: { title },
@@ -623,38 +626,38 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     )}
                                 </View>
                             </View>
+                            <View style={styles.attributionContainer}>
+                                <Pressable
+                                    onPress={() => {
+                                        void Linking.openURL(
+                                            'https://www.openstreetmap.org/copyright'
+                                        )
+                                    }}
+                                    style={styles.attributionLink}
+                                >
+                                    <Text
+                                        style={{
+                                            color: colors.labelColor,
+                                            ...styles.attributionText,
+                                        }}
+                                    >
+                                        {t('pages.map.details.osm')}
+                                    </Text>
+                                    <PlatformIcon
+                                        color={colors.labelColor}
+                                        ios={{
+                                            name: 'chevron.forward',
+                                            size: 11,
+                                        }}
+                                        android={{
+                                            name: 'chevron_right',
+                                            size: 16,
+                                        }}
+                                    />
+                                </Pressable>
+                            </View>
                         </>
                     )}
-                </View>
-                <View style={styles.attributionContainer}>
-                    <Pressable
-                        onPress={() => {
-                            void Linking.openURL(
-                                'https://www.openstreetmap.org/copyright'
-                            )
-                        }}
-                        style={styles.attributionLink}
-                    >
-                        <Text
-                            style={{
-                                color: colors.labelColor,
-                                ...styles.attributionText,
-                            }}
-                        >
-                            {t('pages.map.details.osm')}
-                        </Text>
-                        <PlatformIcon
-                            color={colors.labelColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 11,
-                            }}
-                            android={{
-                                name: 'chevron_right',
-                                size: 16,
-                            }}
-                        />
-                    </Pressable>
                 </View>
             </View>
         </BottomSheet>
@@ -760,6 +763,6 @@ const styles = StyleSheet.create({
     },
     attributionText: {
         fontSize: 15,
-        paddingStart: 12,
+        paddingStart: 4,
     },
 })
