@@ -23,6 +23,7 @@ import { Platform, StyleSheet } from 'react-native'
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { humanLocations } from '../(food)/meal'
+import { appIcons } from '../(user)/appicon'
 import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
@@ -32,7 +33,7 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
-    const { appIcon } = useContext(AppIconContext)
+    const { appIcon, toggleAppIcon } = useContext(AppIconContext)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed, initializeAnalytics } =
         React.useContext(FlowContext)
@@ -184,6 +185,14 @@ export default function HomeLayout(): JSX.Element {
             console.log('Analytics not yet initialized')
         }
     }, [analyticsAllowed])
+
+    useEffect(() => {
+        if (Platform.OS !== 'ios') return
+
+        if (!appIcons.includes(appIcon)) {
+            toggleAppIcon('default')
+        }
+    }, [appIcon])
 
     return (
         <>

@@ -52,15 +52,6 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>ModernPink</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>ModernPink</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
         <key>RainbowDark</key>
         <dict>
           <key>CFBundleIconFiles</key>
@@ -137,6 +128,7 @@
     <string>Allow $(PRODUCT_NAME) to access your location</string>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
