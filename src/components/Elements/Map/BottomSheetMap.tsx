@@ -12,7 +12,7 @@ import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import { type FeatureCollection } from 'geojson'
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -38,6 +38,44 @@ interface MapBottomSheetProps {
     currentPosition: SharedValue<number>
     handlePresentModalPress: () => void
     allRooms: FeatureCollection
+}
+
+const AttributionLink: React.FC = () => {
+    const colors = useTheme().colors as Colors
+    const { t } = useTranslation('common')
+
+    return (
+        <View style={styles.attributionContainer}>
+            <Pressable
+                onPress={() => {
+                    void Linking.openURL(
+                        'https://www.openstreetmap.org/copyright'
+                    )
+                }}
+                style={styles.attributionLink}
+            >
+                <Text
+                    style={{
+                        color: colors.labelColor,
+                        ...styles.attributionText,
+                    }}
+                >
+                    {t('pages.map.details.osm')}
+                </Text>
+                <PlatformIcon
+                    color={colors.labelColor}
+                    ios={{
+                        name: 'chevron.forward',
+                        size: 11,
+                    }}
+                    android={{
+                        name: 'chevron_right',
+                        size: 16,
+                    }}
+                />
+            </Pressable>
+        </View>
+    )
 }
 
 const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
@@ -118,7 +156,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             addUnlockedAppIcon('retro')
         }
     }, [localSearch])
-
+    const textInputRef = useRef<any>(null)
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -127,6 +165,12 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             backgroundComponent={BottomSheetBackground}
             animatedPosition={currentPosition}
             keyboardBehavior="extend"
+            onChange={(index) => {
+                if (index <= 1) {
+                    localSearch !== '' && setLocalSearch('')
+                    textInputRef.current?.blur()
+                }
+            }}
         >
             <View>
                 <View
@@ -136,6 +180,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                 >
                     {Platform.OS === 'ios' ? (
                         <BottomSheetTextInput
+                            ref={textInputRef}
                             style={{
                                 backgroundColor: colors.inputBackground,
                                 ...styles.textInput,
@@ -153,12 +198,10 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             onFocus={() => {
                                 bottomSheetRef.current?.snapToIndex(2)
                             }}
-                            onEndEditing={() => {
-                                bottomSheetRef.current?.collapse()
-                            }}
                         />
                     ) : (
                         <TextInput
+                            ref={textInputRef}
                             style={{
                                 backgroundColor: colors.inputBackground,
                                 ...styles.textInput,
@@ -180,6 +223,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             }}
                         />
                     )}
+
                     {localSearch !== '' ? (
                         searchResultsExact.length > 0 ||
                         searchResultsFuzzy.length > 0 ? (
@@ -224,6 +268,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                         bottomSheetRef={bottomSheetRef}
                                     />
                                 )}
+                                ItemSeparatorComponent={() => (
+                                    <Divider iosPaddingLeft={50} />
+                                )}
                                 stickySectionHeadersEnabled={false}
                                 renderSectionHeader={({
                                     section: { title },
@@ -249,14 +296,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             </Text>
                         )
                     ) : userKind === USER_GUEST ? (
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.noResults,
-                            }}
-                        >
-                            {t('pages.map.details.room.signIn')}
-                        </Text>
+                        <View style={styles.guestContainer}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.noResults,
+                                }}
+                            >
+                                {t('pages.map.details.room.signIn')}
+                            </Text>
+                            <AttributionLink />
+                        </View>
                     ) : (
                         <>
                             {nextLecture !== null && nextLecture.length > 0 && (
@@ -623,38 +673,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     )}
                                 </View>
                             </View>
+                            <AttributionLink />
                         </>
                     )}
-                </View>
-                <View style={styles.attributionContainer}>
-                    <Pressable
-                        onPress={() => {
-                            void Linking.openURL(
-                                'https://www.openstreetmap.org/copyright'
-                            )
-                        }}
-                        style={styles.attributionLink}
-                    >
-                        <Text
-                            style={{
-                                color: colors.labelColor,
-                                ...styles.attributionText,
-                            }}
-                        >
-                            {t('pages.map.details.osm')}
-                        </Text>
-                        <PlatformIcon
-                            color={colors.labelColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 11,
-                            }}
-                            android={{
-                                name: 'chevron_right',
-                                size: 16,
-                            }}
-                        />
-                    </Pressable>
                 </View>
             </View>
         </BottomSheet>
@@ -760,6 +781,10 @@ const styles = StyleSheet.create({
     },
     attributionText: {
         fontSize: 15,
-        paddingStart: 12,
+        paddingStart: 4,
+    },
+    guestContainer: {
+        paddingTop: 15,
+        gap: 35,
     },
 })

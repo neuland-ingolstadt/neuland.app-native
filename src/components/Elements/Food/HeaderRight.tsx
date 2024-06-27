@@ -1,5 +1,4 @@
-import { type Colors } from '@/components/colors'
-import { type Theme, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
@@ -7,8 +6,7 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import PlatformIcon from '../Universal/Icon'
 
 export const FoodHeaderRight = (): JSX.Element => {
-    const theme: Theme = useTheme()
-    const colors = theme.colors as Colors
+    const isDark = useTheme().dark
 
     return (
         <Pressable
@@ -20,7 +18,7 @@ export const FoodHeaderRight = (): JSX.Element => {
         >
             <View>
                 <PlatformIcon
-                    color={colors.text}
+                    color={isDark ? 'white' : 'black'}
                     ios={{
                         name: 'line.3.horizontal.decrease',
                         size: 22,

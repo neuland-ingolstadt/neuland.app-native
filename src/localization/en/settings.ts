@@ -19,9 +19,12 @@ export default {
         formlist: {
             preferences: {
                 title: 'Preferences',
-                theme: 'Appearance',
                 food: 'Food',
                 language: 'Language',
+            },
+            appearance: {
+                title: 'Appearance',
+                theme: 'Design',
             },
             language: {
                 title: 'Change language',
@@ -116,10 +119,6 @@ export default {
         accent: {
             title: 'Accent color',
         },
-        exclusive: {
-            title: 'Exclusive designs',
-            description: 'Coming soon',
-        },
         colors: {
             teal: 'Teal',
             blue: 'Blue',
@@ -131,7 +130,13 @@ export default {
             orange: 'Orange',
             green: 'Neuland',
         },
-        footer: 'Change the accent color to match your style. This changes the color of the icons and buttons in the app.',
+        footer: 'This changes the color of the icons and buttons in the app.',
+        themes: {
+            title: 'Theme',
+            default: 'Automatic',
+            dark: 'Dark',
+            light: 'Light',
+        },
     },
     dashboard: {
         shown: 'Shown cards',

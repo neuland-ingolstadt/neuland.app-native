@@ -4,10 +4,8 @@ import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -85,7 +83,6 @@ export default function License(): JSX.Element {
     return (
         <>
             <ScrollView contentContainerStyle={styles.container}>
-                <StatusBar style={getStatusBarStyle()} />
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>

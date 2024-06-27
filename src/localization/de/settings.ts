@@ -21,9 +21,12 @@ export default {
         formlist: {
             preferences: {
                 title: 'Einstellungen',
-                theme: 'Design',
                 food: 'Essen',
                 language: 'Sprache',
+            },
+            appearance: {
+                title: 'Darstellung',
+                theme: 'Design',
             },
             language: {
                 title: 'Sprache wechseln',
@@ -118,10 +121,6 @@ export default {
         accent: {
             title: 'Akzentfarbe',
         },
-        exclusive: {
-            title: 'Exklusive Designs',
-            description: 'Demnächst verfügbar',
-        },
         colors: {
             teal: 'Türkis',
             blue: 'Blau',
@@ -133,7 +132,13 @@ export default {
             orange: 'Orange',
             green: 'Neuland',
         },
-        footer: 'Ändere die Akzentfarbe, um deinen Stil zu entsprechen. Das ändert die Farbe der Symbole und Schaltflächen in der App.',
+        footer: 'Das ändert die Farbe der Symbole und Schaltflächen in der App.',
+        themes: {
+            title: 'Design',
+            default: 'Automatisch',
+            dark: 'Dunkel',
+            light: 'Hell',
+        },
     },
     dashboard: {
         shown: 'Angezeigte Karten',

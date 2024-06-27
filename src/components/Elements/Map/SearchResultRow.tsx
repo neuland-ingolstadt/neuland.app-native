@@ -6,7 +6,6 @@ import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import React, { useContext } from 'react'
 import { Keyboard, StyleSheet, Text, View } from 'react-native'
 
-import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 
 const ResultRow: React.FC<{
@@ -24,73 +23,69 @@ const ResultRow: React.FC<{
 }): JSX.Element => {
     const { setClickedElement, setLocalSearch, setCurrentFloor } =
         useContext(MapContext)
-    console.log(result)
     return (
-        <React.Fragment key={index}>
-            <TouchableOpacity
-                style={styles.searchRowContainer}
-                onPress={() => {
-                    const center = result.item.properties?.center
-                    Keyboard.dismiss()
-                    bottomSheetRef.current?.collapse()
-                    //  _setView(center, mapRef)
-                    setClickedElement({
-                        data: result.title,
-                        type: result.item.properties?.rtype,
-                        center,
-                        manual: false,
-                    })
-                    setCurrentFloor({
-                        floor:
-                            (result.item.properties?.Ebene as string) ?? 'EG',
-                        manual: false,
-                    })
-                    handlePresentModalPress()
-                    //  _injectMarker(mapRef, center, colors)
-                    setLocalSearch('')
+        <TouchableOpacity
+            key={index}
+            style={styles.searchRowContainer}
+            onPress={() => {
+                const center = result.item.properties?.center
+                Keyboard.dismiss()
+                bottomSheetRef.current?.collapse()
+                //  _setView(center, mapRef)
+                setClickedElement({
+                    data: result.title,
+                    type: result.item.properties?.rtype,
+                    center,
+                    manual: false,
+                })
+                setCurrentFloor({
+                    floor: (result.item.properties?.Ebene as string) ?? 'EG',
+                    manual: false,
+                })
+                handlePresentModalPress()
+                //  _injectMarker(mapRef, center, colors)
+                setLocalSearch('')
+            }}
+        >
+            <View
+                style={{
+                    ...styles.searchIconContainer,
+                    backgroundColor: colors.primary,
                 }}
             >
-                <View
+                <PlatformIcon
+                    color={getContrastColor(colors.primary)}
+                    ios={{
+                        name: result.item.properties?.icon.ios,
+                        size: 18,
+                    }}
+                    android={{
+                        name: result.item.properties?.icon.android,
+                        variant: 'outlined',
+                        size: 21,
+                    }}
+                />
+            </View>
+
+            <View>
+                <Text
                     style={{
-                        ...styles.searchIconContainer,
-                        backgroundColor: colors.primary,
+                        color: colors.text,
+                        ...styles.suggestionTitle,
                     }}
                 >
-                    <PlatformIcon
-                        color={getContrastColor(colors.primary)}
-                        ios={{
-                            name: result.item.properties?.icon.ios,
-                            size: 18,
-                        }}
-                        android={{
-                            name: result.item.properties?.icon.android,
-                            variant: 'outlined',
-                            size: 21,
-                        }}
-                    />
-                </View>
-
-                <View>
-                    <Text
-                        style={{
-                            color: colors.text,
-                            ...styles.suggestionTitle,
-                        }}
-                    >
-                        {result.title}
-                    </Text>
-                    <Text
-                        style={{
-                            color: colors.text,
-                            ...styles.suggestionSubtitle,
-                        }}
-                    >
-                        {result.subtitle}
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            {index !== 9 && <Divider iosPaddingLeft={50} />}
-        </React.Fragment>
+                    {result.title}
+                </Text>
+                <Text
+                    style={{
+                        color: colors.text,
+                        ...styles.suggestionSubtitle,
+                    }}
+                >
+                    {result.subtitle}
+                </Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 

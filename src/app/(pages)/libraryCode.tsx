@@ -16,13 +16,11 @@ import {
     permissionError,
 } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -112,7 +110,6 @@ export default function LibraryCode(): JSX.Element {
     }
     return (
         <View>
-            <StatusBar style={getStatusBarStyle()} />
             {userKind === USER_GUEST ? (
                 <ErrorView title={guestError} />
             ) : userKind === USER_EMPLOYEE ? (

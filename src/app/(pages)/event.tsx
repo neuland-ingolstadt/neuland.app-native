@@ -14,7 +14,6 @@ import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
 import { useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -150,8 +149,6 @@ export default function ClEventDetail(): JSX.Element {
             style={styles.page}
             contentContainerStyle={styles.container}
         >
-            <StatusBar style="light" animated={true} hidden={false} />
-
             <View
                 style={[
                     styles.titleContainer,

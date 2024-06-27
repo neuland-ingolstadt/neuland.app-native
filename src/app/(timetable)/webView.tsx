@@ -1,8 +1,6 @@
 import { type Colors } from '@/components/colors'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, StyleSheet, View } from 'react-native'
@@ -54,7 +52,6 @@ export default function NotesDetails(): JSX.Element {
 
     return (
         <>
-            <StatusBar style={getStatusBarStyle()} />
             <WebView
                 onLoadEnd={() => {
                     void setDelayedIsLoaded()

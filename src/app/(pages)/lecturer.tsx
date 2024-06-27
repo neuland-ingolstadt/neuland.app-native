@@ -4,10 +4,8 @@ import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -123,7 +121,6 @@ export default function LecturerDetail(): JSX.Element {
 
     return (
         <ScrollView style={styles.page}>
-            <StatusBar style={getStatusBarStyle()} />
             <View
                 style={[
                     styles.titleContainer,

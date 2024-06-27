@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react'
 
 export interface ThemeHook {
     accentColor: string
+    theme: 'light' | 'dark' | 'auto'
     toggleAccentColor: (name: string) => void
+    toggleTheme: (theme: 'light' | 'dark' | 'auto') => void
 }
 
 /**
@@ -13,15 +15,26 @@ export interface ThemeHook {
  */
 export function useTheme(): ThemeHook {
     const [accentColor, setAccentColor] = useState<string>('blue')
+    const [theme, setTheme] = useState<'light' | 'dark' | 'auto'>('auto')
 
     useEffect(() => {
         const loadAsyncStorageData = async (): Promise<void> => {
             try {
-                const data = await AsyncStorage.getItem('accentColor')
-                if (data != null) {
-                    setAccentColor(data)
+                const keys = ['accentColor', 'theme']
+                const [accentColorData, themeData] = await Promise.all(
+                    keys.map(async (key) => await AsyncStorage.getItem(key))
+                )
+
+                if (accentColorData != null) {
+                    setAccentColor(accentColorData)
                 } else {
                     setAccentColor('blue')
+                }
+
+                if (themeData != null) {
+                    setTheme(themeData as 'light' | 'dark' | 'auto')
+                } else {
+                    setTheme('auto')
                 }
             } catch (error) {
                 console.error(
@@ -42,8 +55,19 @@ export function useTheme(): ThemeHook {
         void AsyncStorage.setItem('accentColor', name)
     }
 
+    /**
+     * Function to toggle the theme of the app.
+     * @param theme - The new theme to be set.
+     */
+    function toggleTheme(theme: 'light' | 'dark' | 'auto'): void {
+        setTheme(theme)
+        void AsyncStorage.setItem('theme', theme)
+    }
+
     return {
         accentColor,
         toggleAccentColor,
+        theme,
+        toggleTheme,
     }
 }

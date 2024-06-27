@@ -12,6 +12,7 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { usePathname } from 'expo-router'
+import 'expo-status-bar'
 import React, { useEffect } from 'react'
 import {
     type AppStateStatus,
@@ -148,6 +149,15 @@ export default function Provider({
         if (!flow.analyticsInitialized) {
             return
         }
+        trackEvent('Theme', {
+            theme: themeHook.theme,
+        })
+    }, [themeHook.accentColor, flow.analyticsInitialized])
+
+    useEffect(() => {
+        if (!flow.analyticsInitialized) {
+            return
+        }
         if (Platform.OS === 'ios') {
             trackEvent('AppIcon', {
                 appIcon: appIcon.appIcon,
@@ -236,15 +246,20 @@ export default function Provider({
         })
     }, [flow.analyticsAllowed, flow.analyticsInitialized])
 
+    const getTheme = (): AppTheme => {
+        if (themeHook.theme === 'auto') {
+            return colorScheme === 'dark' ? darkTheme : lightTheme
+        }
+        return themeHook.theme === 'dark' ? darkTheme : lightTheme
+    }
+
     return (
         <GestureHandlerRootView style={styles.container}>
             <PersistQueryClientProvider
                 client={queryClient}
                 persistOptions={{ persister: asyncStoragePersister }}
             >
-                <ThemeProvider
-                    value={colorScheme === 'light' ? lightTheme : darkTheme}
-                >
+                <ThemeProvider value={getTheme()}>
                     <TimetableContext.Provider value={timetableHook}>
                         <NotificationContext.Provider value={notifications}>
                             <ThemeContext.Provider value={themeHook}>

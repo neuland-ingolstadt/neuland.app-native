@@ -19,12 +19,10 @@ import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
 import { router, useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -367,7 +365,6 @@ export default function FoodDetail(): JSX.Element {
             : [...priceSection, ...variantsSection, ...aboutSection]
     return (
         <>
-            <StatusBar style={getStatusBarStyle()} />
             <ScrollView>
                 <View
                     style={[

@@ -48,6 +48,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function Screen(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
+    const isDark = useTheme().dark
     const { userFullName, userKind } =
         useContext<UserKindContextType>(UserKindContext)
     const { t } = useTranslation(['navigation'])
@@ -315,7 +316,11 @@ export default function Screen(): JSX.Element {
                                         data?.mtknr === undefined ? (
                                             <View>
                                                 <PlatformIcon
-                                                    color={colors.text}
+                                                    color={
+                                                        isDark
+                                                            ? 'white'
+                                                            : 'black'
+                                                    }
                                                     ios={{
                                                         name: 'person.crop.circle.badge.exclamationmark',
                                                         size: 22,
@@ -353,7 +358,9 @@ export default function Screen(): JSX.Element {
                                     ) : (
                                         <View>
                                             <PlatformIcon
-                                                color={colors.text}
+                                                color={
+                                                    isDark ? 'white' : 'black'
+                                                }
                                                 ios={{
                                                     name: 'person.crop.circle',
                                                     size: 22,
