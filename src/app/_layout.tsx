@@ -2,14 +2,15 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
-import { getStatusBarIconStyle, getStatusBarStyle } from '@/utils/ui-utils'
+import { getStatusBarStyle } from '@/utils/ui-utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useTheme } from '@react-navigation/native'
 import * as Sentry from '@sentry/react-native'
 import { getLocales } from 'expo-localization'
 import { Stack, useNavigationContainerRef, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
+import { AppState, Platform, Pressable } from 'react-native'
 
 const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
@@ -30,7 +31,6 @@ Sentry.init({
 })
 
 function RootLayout(): JSX.Element {
-    const colorScheme = useColorScheme()
     const router = useRouter()
     const { theme: appTheme } = useContext(ThemeContext)
     const { t } = useTranslation('navigation')
@@ -83,12 +83,17 @@ function RootLayout(): JSX.Element {
         }
     }, [])
 
+    const isDark = useTheme().dark
+
     return (
         <>
             <Sentry.TouchEventBoundary>
                 <Stack
                     screenOptions={{
+                        // iOS
                         statusBarStyle: getStatusBarStyle(appTheme),
+                        // Android
+                        statusBarTranslucent: true,
                     }}
                 >
                     <Stack.Screen
@@ -372,10 +377,7 @@ function RootLayout(): JSX.Element {
                                     }}
                                 >
                                     <PlatformIcon
-                                        color={getStatusBarIconStyle(
-                                            appTheme,
-                                            colorScheme
-                                        )}
+                                        color={isDark ? 'white' : 'black'}
                                         ios={{
                                             name: 'barcode',
                                             size: 22,

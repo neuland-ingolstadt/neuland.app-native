@@ -47,6 +47,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -119,7 +120,16 @@ const MapScreen = (): JSX.Element => {
     const locations: LocationsType = Locations
     const [isVisible, setIsVisible] = useState(true)
     const opacity = useSharedValue(1)
+
+    // needed for Android
     void MapLibreGL.setAccessToken(null)
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            statusbarTranslucent: true,
+            statusBarColor: undefined,
+        })
+    }, [navigation])
 
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -720,6 +730,14 @@ const MapScreen = (): JSX.Element => {
                         onRegionIsChanging={() => {
                             setRegionChange(true)
                         }}
+                        compassViewMargins={
+                            Platform.OS === 'android'
+                                ? {
+                                      x: 5,
+                                      y: 70,
+                                  }
+                                : undefined
+                        }
                     >
                         <MapLibreGL.Camera
                             ref={cameraRef}

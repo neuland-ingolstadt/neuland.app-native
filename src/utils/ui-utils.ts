@@ -1,5 +1,4 @@
 import Color from 'color'
-import { type ColorSchemeName } from 'react-native'
 import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
@@ -143,18 +142,19 @@ export const getStatusBarStyle = (
     }
 }
 
-export const getStatusBarIconStyle = (
-    appTheme: 'light' | 'dark' | 'auto',
-    colorScheme: ColorSchemeName
-): 'black' | 'white' => {
-    switch (appTheme) {
-        case 'light':
-            return 'black'
-        case 'dark':
-            return 'white'
-        default: {
-            if (colorScheme === 'dark') return 'black'
-            return 'white'
-        }
+export function getBarTintColor(
+    theme: string,
+    isDark: boolean
+): string | undefined {
+    const darkDarkColor = '#2e2e2e'
+    const darkLightColor = '#8f8f8f'
+    const lightDarkColor = '#999999'
+    const lightLightColor = '#ebebeb'
+    if (theme === 'auto') {
+        return undefined
     }
+    if (theme === 'dark') {
+        return isDark ? darkDarkColor : darkLightColor
+    }
+    return isDark ? lightDarkColor : lightLightColor
 }

@@ -40,6 +40,44 @@ interface MapBottomSheetProps {
     allRooms: FeatureCollection
 }
 
+const AttributionLink: React.FC = () => {
+    const colors = useTheme().colors as Colors
+    const { t } = useTranslation('common')
+
+    return (
+        <View style={styles.attributionContainer}>
+            <Pressable
+                onPress={() => {
+                    void Linking.openURL(
+                        'https://www.openstreetmap.org/copyright'
+                    )
+                }}
+                style={styles.attributionLink}
+            >
+                <Text
+                    style={{
+                        color: colors.labelColor,
+                        ...styles.attributionText,
+                    }}
+                >
+                    {t('pages.map.details.osm')}
+                </Text>
+                <PlatformIcon
+                    color={colors.labelColor}
+                    ios={{
+                        name: 'chevron.forward',
+                        size: 11,
+                    }}
+                    android={{
+                        name: 'chevron_right',
+                        size: 16,
+                    }}
+                />
+            </Pressable>
+        </View>
+    )
+}
+
 const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     bottomSheetRef,
     currentPosition,
@@ -258,14 +296,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             </Text>
                         )
                     ) : userKind === USER_GUEST ? (
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.noResults,
-                            }}
-                        >
-                            {t('pages.map.details.room.signIn')}
-                        </Text>
+                        <View style={styles.guestContainer}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.noResults,
+                                }}
+                            >
+                                {t('pages.map.details.room.signIn')}
+                            </Text>
+                            <AttributionLink />
+                        </View>
                     ) : (
                         <>
                             {nextLecture !== null && nextLecture.length > 0 && (
@@ -632,36 +673,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     )}
                                 </View>
                             </View>
-                            <View style={styles.attributionContainer}>
-                                <Pressable
-                                    onPress={() => {
-                                        void Linking.openURL(
-                                            'https://www.openstreetmap.org/copyright'
-                                        )
-                                    }}
-                                    style={styles.attributionLink}
-                                >
-                                    <Text
-                                        style={{
-                                            color: colors.labelColor,
-                                            ...styles.attributionText,
-                                        }}
-                                    >
-                                        {t('pages.map.details.osm')}
-                                    </Text>
-                                    <PlatformIcon
-                                        color={colors.labelColor}
-                                        ios={{
-                                            name: 'chevron.forward',
-                                            size: 11,
-                                        }}
-                                        android={{
-                                            name: 'chevron_right',
-                                            size: 16,
-                                        }}
-                                    />
-                                </Pressable>
-                            </View>
+                            <AttributionLink />
                         </>
                     )}
                 </View>
@@ -770,5 +782,9 @@ const styles = StyleSheet.create({
     attributionText: {
         fontSize: 15,
         paddingStart: 4,
+    },
+    guestContainer: {
+        paddingTop: 15,
+        gap: 35,
     },
 })

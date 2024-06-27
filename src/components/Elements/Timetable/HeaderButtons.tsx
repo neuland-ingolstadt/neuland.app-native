@@ -1,14 +1,13 @@
-import { ThemeContext, TimetableContext } from '@/components/contexts'
-import { getStatusBarIconStyle } from '@/utils/ui-utils'
+import { TimetableContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
+import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
-import { Pressable, StyleSheet, useColorScheme } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
 export function HeaderLeft(): JSX.Element {
-    const colorScheme = useColorScheme()
-    const { theme } = useContext(ThemeContext)
+    const isDark = useTheme().dark
     const { timetableMode, setTimetableMode } = useContext(TimetableContext)
 
     return (
@@ -24,7 +23,7 @@ export function HeaderLeft(): JSX.Element {
             style={styles.headerButton}
         >
             <PlatformIcon
-                color={getStatusBarIconStyle(theme, colorScheme)}
+                color={isDark ? 'white' : 'black'}
                 ios={{
                     name:
                         timetableMode === 'list'
@@ -49,13 +48,11 @@ interface HeaderRightProps {
 }
 
 export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
-    const colorScheme = useColorScheme()
-    const { theme } = useContext(ThemeContext)
-
+    const isDark = useTheme().dark
     return (
         <Pressable onPress={setToday} hitSlop={10} style={styles.headerButton}>
             <PlatformIcon
-                color={getStatusBarIconStyle(theme, colorScheme)}
+                color={isDark ? 'white' : 'black'}
                 ios={{
                     name: 'arrow.uturn.left',
                     size: 22,

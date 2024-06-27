@@ -43,33 +43,31 @@ function WorkaroundStack({
     const Stack = createNativeStackNavigator()
 
     return (
-        <>
-            <SafeAreaProvider>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name={name}
-                        options={{
-                            title: t(
-                                // @ts-expect-error Type not checked
-                                titleKey
-                            ),
-                            headerShown: true,
-                            headerLargeTitle: largeTitle,
-                            headerRight: headerRightElement,
-                            ...(Platform.OS === 'ios' && transparent
-                                ? {
-                                      headerTransparent: true,
-                                      headerBlurEffect: 'regular',
-                                  }
-                                : {}),
-                            headerSearchBarOptions,
-                        }}
-                        component={component}
-                        initialParams={params}
-                    />
-                </Stack.Navigator>
-            </SafeAreaProvider>
-        </>
+        <SafeAreaProvider>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name={name}
+                    options={{
+                        title: t(
+                            // @ts-expect-error Type not checked
+                            titleKey
+                        ),
+                        headerShown: true,
+                        headerLargeTitle: largeTitle,
+                        headerRight: headerRightElement,
+                        ...(Platform.OS === 'ios' && transparent
+                            ? {
+                                  headerTransparent: true,
+                                  headerBlurEffect: 'regular',
+                              }
+                            : {}),
+                        headerSearchBarOptions,
+                    }}
+                    component={component}
+                    initialParams={params}
+                />
+            </Stack.Navigator>
+        </SafeAreaProvider>
     )
 }
 

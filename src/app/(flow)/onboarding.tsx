@@ -25,6 +25,7 @@ export default function OnboardingScreen(): JSX.Element {
                     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
                     ?.goToPage(3, false)
             }
+            controlStatusBar={false}
             showDone={false}
             nextLabel={t('onboarding.navigation.next')}
             skipLabel={t('onboarding.navigation.skip')}

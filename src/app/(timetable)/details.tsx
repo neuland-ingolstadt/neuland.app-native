@@ -8,46 +8,25 @@ import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareButton from '@/components/Elements/Universal/ShareButton'
 import { type Colors } from '@/components/colors'
-import { NotificationContext, RouteParamsContext } from '@/components/contexts'
-import { useNotification } from '@/hooks'
-import i18n, { type LanguageKey } from '@/localization/i18n'
+import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections, type SectionGroup } from '@/types/components'
-import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import {
-    getFriendlyTimetable,
-    notificationAlert,
-    scheduleLectureNotification,
-} from '@/utils/timetable-utils'
-import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
 import moment from 'moment'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
     const { updateRouteParams } = useContext(RouteParamsContext)
-    const {
-        timetableNotifications,
-        updateTimetableNotifications,
-        deleteTimetableNotifications,
-    } = useContext(NotificationContext)
 
-    const { hasPermission, askForPermission } = useNotification()
+    // const { hasPermission, askForPermission } = useNotification()
 
     const colors = useTheme().colors as Colors
     const { lecture } = useContext(RouteParamsContext)
@@ -57,7 +36,7 @@ export default function TimetableDetails(): JSX.Element {
     if (lecture === null) {
         return <ErrorView title="Cannot display lecture" />
     }
-    const today = new Date()
+    // const today = new Date()
 
     const startDate = new Date(lecture.startDate)
     const endDate = new Date(lecture.endDate)
@@ -66,57 +45,57 @@ export default function TimetableDetails(): JSX.Element {
     const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
 
     const shareRef = React.useRef<ViewShot>(null)
-    const [rawTimetable, setRawTimetable] = useState<FriendlyTimetableEntry[]>(
-        []
-    )
+    // const [rawTimetable, setRawTimetable] = useState<FriendlyTimetableEntry[]>(
+    //     []
+    // )
 
-    const [notificationsUpdating, setNotificationsUpdating] = useState(false)
+    // const [notificationsUpdating, setNotificationsUpdating] = useState(false)
 
-    async function load(): Promise<void> {
-        try {
-            const timetable = await getFriendlyTimetable(today, true)
-            const filteredTimetable = timetable.filter(
-                (lecture) =>
-                    lecture.shortName === lecture?.shortName &&
-                    lecture.startDate >= today
-            )
+    // async function load(): Promise<void> {
+    //     try {
+    //         const timetable = await getFriendlyTimetable(today, true)
+    //         const filteredTimetable = timetable.filter(
+    //             (lecture) =>
+    //                 lecture.shortName === lecture?.shortName &&
+    //                 lecture.startDate >= today
+    //         )
 
-            setRawTimetable(filteredTimetable)
-        } catch (e) {
-            console.log(e)
-        }
-    }
+    //         setRawTimetable(filteredTimetable)
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
 
-    useEffect(() => {
-        void load()
-    }, [])
-    async function setupNotifications(mins: number): Promise<void> {
-        if (lecture?.shortName === undefined) {
-            throw new Error('Event is undefined')
-        }
-        setNotificationsUpdating(true)
-        deleteTimetableNotifications(lecture.shortName)
-        const notificationPromises = rawTimetable.map(async (lecture) => {
-            const startDate = new Date(lecture.startDate)
-            return await scheduleLectureNotification(
-                lecture.name,
-                lecture.rooms.join(', '),
-                mins,
-                startDate,
-                t
-            )
-        })
-        const notifications = await Promise.all(notificationPromises)
-        const flatNotifications = notifications.flat()
+    // useEffect(() => {
+    //     void load()
+    // }, [])
+    // async function setupNotifications(mins: number): Promise<void> {
+    //     if (lecture?.shortName === undefined) {
+    //         throw new Error('Event is undefined')
+    //     }
+    //     setNotificationsUpdating(true)
+    //     deleteTimetableNotifications(lecture.shortName)
+    //     const notificationPromises = rawTimetable.map(async (lecture) => {
+    //         const startDate = new Date(lecture.startDate)
+    //         return await scheduleLectureNotification(
+    //             lecture.name,
+    //             lecture.rooms.join(', '),
+    //             mins,
+    //             startDate,
+    //             t
+    //         )
+    //     })
+    //     const notifications = await Promise.all(notificationPromises)
+    //     const flatNotifications = notifications.flat()
 
-        updateTimetableNotifications(
-            lecture.shortName,
-            flatNotifications,
-            mins,
-            i18n.language as LanguageKey
-        )
-        setNotificationsUpdating(false)
-    }
+    //     updateTimetableNotifications(
+    //         lecture.shortName,
+    //         flatNotifications,
+    //         mins,
+    //         i18n.language as LanguageKey
+    //     )
+    //     setNotificationsUpdating(false)
+    // }
 
     async function shareEvent(): Promise<void> {
         try {
@@ -136,8 +115,8 @@ export default function TimetableDetails(): JSX.Element {
         }
     }
 
-    const notification = timetableNotifications[lecture.shortName]
-    const minsBefore = notification != null ? notification.mins : undefined
+    // const notification = timetableNotifications[lecture.shortName]
+    // const minsBefore = notification != null ? notification.mins : undefined
 
     interface HtmlItem {
         title: 'overview.goal' | 'overview.content' | 'overview.literature'
@@ -199,49 +178,49 @@ export default function TimetableDetails(): JSX.Element {
         },
     ]
 
-    const actionSheetRef = useRef<ActionSheet>(null)
+    // const actionSheetRef = useRef<ActionSheet>(null)
 
-    /**
-     * Shows the action sheet for setting up notifications
-     * @returns {Promise<void>} A promise that resolves when the action sheet has been shown.
-     */
-    const showActionSheet = async (): Promise<void> => {
-        let has = await hasPermission()
-        if (!has) {
-            has = await askForPermission()
-        }
+    // /**
+    //  * Shows the action sheet for setting up notifications
+    //  * @returns {Promise<void>} A promise that resolves when the action sheet has been shown.
+    //  */
+    // const showActionSheet = async (): Promise<void> => {
+    //     let has = await hasPermission()
+    //     if (!has) {
+    //         has = await askForPermission()
+    //     }
 
-        if (!has) {
-            notificationAlert(t)
-            return
-        }
+    //     if (!has) {
+    //         notificationAlert(t)
+    //         return
+    //     }
 
-        if (actionSheetRef.current != null) {
-            actionSheetRef.current.show()
-        }
-    }
+    //     if (actionSheetRef.current != null) {
+    //         actionSheetRef.current.show()
+    //     }
+    // }
 
-    const options = [
-        { value: 5, label: t('notificatons.five') },
-        { value: 15, label: t('notificatons.fifteen') },
-        { value: 30, label: t('notificatons.thirty') },
-        { value: 60, label: t('notificatons.sixty') },
-    ]
+    // const options = [
+    //     { value: 5, label: t('notificatons.five') },
+    //     { value: 15, label: t('notificatons.fifteen') },
+    //     { value: 30, label: t('notificatons.thirty') },
+    //     { value: 60, label: t('notificatons.sixty') },
+    // ]
 
-    const filteredOptions = options.filter(
-        (option) => option.value !== minsBefore
-    )
+    // const filteredOptions = options.filter(
+    //     (option) => option.value !== minsBefore
+    // )
 
-    filteredOptions.push(
-        ...(notification != null
-            ? [{ value: 0, label: t('misc.disable', { ns: 'common' }) }]
-            : []),
-        { value: -1, label: t('misc.cancel', { ns: 'common' }) }
-    )
+    // filteredOptions.push(
+    //     ...(notification != null
+    //         ? [{ value: 0, label: t('misc.disable', { ns: 'common' }) }]
+    //         : []),
+    //     { value: -1, label: t('misc.cancel', { ns: 'common' }) }
+    // )
 
     return (
         <>
-            <ActionSheet
+            {/* <ActionSheet
                 ref={actionSheetRef}
                 title={t('notificatons.title')}
                 message={
@@ -264,7 +243,7 @@ export default function TimetableDetails(): JSX.Element {
                         minsBefore: selectedValue.toString(),
                     })
                 }}
-            />
+            /> */}
             <ScrollView>
                 <View style={styles.page}>
                     <DetailsRow>
@@ -374,7 +353,7 @@ export default function TimetableDetails(): JSX.Element {
                                         </Text>
                                     </View>
                                 </View>
-                                <Pressable
+                                {/* <Pressable
                                     onPress={() => {
                                         showActionSheet().catch((error) => {
                                             console.error(error)
@@ -424,7 +403,7 @@ export default function TimetableDetails(): JSX.Element {
                                             {notification.mins + ' min'}
                                         </Text>
                                     )}
-                                </Pressable>
+                                </Pressable> */}
                             </View>
                         </DetailsBody>
                     </DetailsRow>
@@ -564,16 +543,16 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         transform: [{ translateX: -1000 }],
     },
-    bellPressable: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        minWidth: 40,
-        height: '100%',
-    },
-    bellTime: {
-        fontSize: 12,
-    },
+    // bellPressable: {
+    //     flexDirection: 'column',
+    //     alignItems: 'center',
+    //     justifyContent: 'space-around',
+    //     minWidth: 40,
+    //     height: '100%',
+    // },
+    // bellTime: {
+    //     fontSize: 12,
+    // },
     dateRow: {
         flex: 1,
         flexDirection: 'row',
