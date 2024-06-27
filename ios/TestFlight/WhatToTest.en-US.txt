@@ -1,3 +1,4 @@
 What's new?
 - choose the app design independently of your iOS design (light or dark)
 - bug fixes and improvements to the map
+- performance improvements

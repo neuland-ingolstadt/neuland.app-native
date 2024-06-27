@@ -1,3 +1,4 @@
 Was ist neu?
 - Wähle das App Design unabhängig von deinem iOS Design (hell oder dunkel)
 - Fehlerbehebungen und Verbesserungen der Karte
+- Performance Verbesserungen
