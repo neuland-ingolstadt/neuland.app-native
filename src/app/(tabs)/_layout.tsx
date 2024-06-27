@@ -250,6 +250,9 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
+                        tabBarStyle: { position: 'absolute' },
+                        tabBarBackground: () =>
+                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
 
@@ -296,6 +299,7 @@ export default function HomeLayout(): JSX.Element {
                             />
                         ),
                         headerRight: () => <FoodHeaderRight />,
+                        tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
