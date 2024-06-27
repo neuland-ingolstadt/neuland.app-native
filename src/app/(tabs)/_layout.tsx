@@ -224,6 +224,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
+
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
@@ -257,6 +258,7 @@ export default function HomeLayout(): JSX.Element {
                     options={{
                         title: t('navigation.map'),
                         headerShown: false,
+
                         tabBarHideOnKeyboard: true,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon

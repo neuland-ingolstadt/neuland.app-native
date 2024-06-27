@@ -16,7 +16,11 @@ const BottomSheetBackground = (): JSX.Element => {
                 },
             ]}
         >
-            <BlurView intensity={80} style={StyleSheet.absoluteFillObject} />
+            <BlurView
+                intensity={80}
+                style={StyleSheet.absoluteFillObject}
+                tint={dark ? 'dark' : 'light'}
+            />
         </View>
     ) : (
         <View

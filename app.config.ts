@@ -27,6 +27,7 @@ module.exports = {
                 CFBundleAllowMixedLocalizations: true,
                 CFBundleLocalizations: ['en', 'de'],
                 CFBundleDevelopmentRegion: 'en',
+                UIViewControllerBasedStatusBarAppearance: true,
             },
             splash: {
                 image: './src/assets/splash/splashLight.png',
@@ -42,7 +43,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 83,
+            versionCode: 84,
             splash: {
                 image: './src/assets/splash/splashLight.png',
                 resizeMode: 'contain',

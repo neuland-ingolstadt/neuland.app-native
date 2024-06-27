@@ -110,17 +110,6 @@ export const lighten = (percentage: number, color: string): string => {
     return newColor
 }
 
-/**
- * Returns the appropriate status bar style based on the platform. Used for Status Bar component in modal screens.
- * @returns The appropriate status bar style.
- * @example
- * // Usage
- * <StatusBar barStyle={getStatusBarStyle()} />
- */
-export const getStatusBarStyle = (): 'light' | 'auto' => {
-    return Platform.OS === 'ios' ? (Platform.isPad ? 'auto' : 'light') : 'auto'
-}
-
 let toast: any = null
 export const showToast = async (
     message: string,
@@ -139,4 +128,37 @@ export const showToast = async (
         delay: 0,
         ...options,
     })
+}
+
+export const getStatusBarStyle = (
+    theme: 'light' | 'dark' | 'auto'
+): 'light' | 'dark' | 'auto' => {
+    switch (theme) {
+        case 'light':
+            return 'dark'
+        case 'dark':
+            return 'light'
+        default:
+            return 'auto'
+    }
+}
+
+export function getBarTintColor(
+    theme: string,
+    isDark: boolean
+): string | undefined {
+    if (Platform.OS === 'android') {
+        return undefined
+    }
+    const darkDarkColor = '#2e2e2e'
+    const darkLightColor = '#8f8f8f'
+    const lightDarkColor = '#999999'
+    const lightLightColor = '#ebebeb'
+    if (theme === 'auto') {
+        return undefined
+    }
+    if (theme === 'dark') {
+        return isDark ? darkDarkColor : darkLightColor
+    }
+    return isDark ? lightDarkColor : lightLightColor
 }

@@ -13,7 +13,6 @@ export default function Screen(): JSX.Element {
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
-
     const [localSearch, setLocalSearch] = useState<string>('')
     const [clickedElement, setClickedElement] =
         useState<ClickedMapElement | null>(null)

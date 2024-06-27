@@ -4,10 +4,7 @@ import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { AppIconContext } from '@/components/contexts'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -42,7 +39,6 @@ export default function AppIconPicker(): JSX.Element {
     const { appIcon, toggleAppIcon, unlockedAppIcons } =
         useContext(AppIconContext)
     const { t } = useTranslation(['settings'])
-    const isModal = useLocalSearchParams().fromAppShortcut === 'true'
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],
         default: ['default', 'modernDark', 'modernGreen'],
@@ -60,7 +56,6 @@ export default function AppIconPicker(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <StatusBar style={isModal ? getStatusBarStyle() : 'auto'} />
                 <View style={styles.container}>
                     {Object.entries(categories).map(([key, value]) => {
                         return (

@@ -42,6 +42,8 @@ export const UserKindContext = createContext<UserKindContextType>({
 })
 
 export const ThemeContext = createContext<ThemeHook>({
+    theme: 'auto',
+    toggleTheme: () => {},
     accentColor: 'blue',
     toggleAccentColor: () => {},
 })
