@@ -1,14 +1,19 @@
 import { type Colors } from '@/components/colors'
+import { ThemeContext } from '@/components/contexts'
+import { getStatusBarIconStyle } from '@/utils/ui-utils'
 import { type Theme, useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import React, { useContext } from 'react'
+import { Pressable, StyleSheet, View, useColorScheme } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
 export const FoodHeaderRight = (): JSX.Element => {
     const theme: Theme = useTheme()
+    const colorScheme = useColorScheme()
+    const { theme: appTheme } = useContext(ThemeContext)
     const colors = theme.colors as Colors
+    console.log('FoodHeaderRight', colors.text)
 
     return (
         <Pressable
@@ -20,7 +25,7 @@ export const FoodHeaderRight = (): JSX.Element => {
         >
             <View>
                 <PlatformIcon
-                    color={colors.text}
+                    color={getStatusBarIconStyle(appTheme, colorScheme)}
                     ios={{
                         name: 'line.3.horizontal.decrease',
                         size: 22,

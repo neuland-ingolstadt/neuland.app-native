@@ -1,16 +1,14 @@
+import MultiSectionRadio from '@/components/Elements/Food/FoodLanguageSection'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
-import { AppIconContext, ThemeContext } from '@/components/contexts'
+import { ThemeContext } from '@/components/contexts'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    Image,
-    type ImageProps,
     Platform,
     Pressable,
     ScrollView,
@@ -19,26 +17,11 @@ import {
     View,
 } from 'react-native'
 
-let iconImages: Record<string, ImageProps> = {}
-
-if (Platform.OS === 'ios') {
-    iconImages = {
-        default: require('@/assets/appIcons/default.png'),
-        modernDark: require('@/assets/appIcons/modernDark.png'),
-        retro: require('@/assets/appIcons/retro.png'),
-        modernGreen: require('@/assets/appIcons/modernGreen.png'),
-        rainbowDark: require('@/assets/appIcons/rainbowDark.png'),
-        rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
-        rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
-        cat: require('@/assets/appIcons/cat.png'),
-    }
-}
-
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, toggleAccentColor } = useContext(ThemeContext)
-    const { appIcon } = useContext(AppIconContext)
+    const { accentColor, toggleAccentColor, theme, toggleTheme } =
+        useContext(ThemeContext)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
@@ -137,6 +120,21 @@ export default function Theme(): JSX.Element {
             }))
     )
 
+    const elements = [
+        {
+            key: 'auto',
+            title: t('theme.themes.default'),
+        },
+        {
+            key: 'light',
+            title: t('theme.themes.light'),
+        },
+        {
+            key: 'dark',
+            title: t('theme.themes.dark'),
+        },
+    ]
+
     return (
         <>
             <ScrollView>
@@ -157,52 +155,13 @@ export default function Theme(): JSX.Element {
                         ))}
                     </View>
                 </SectionView>
-                {Platform.OS === 'ios' && (
-                    <SectionView title="App Icon">
-                        <Pressable
-                            style={[
-                                styles.sectionContainer,
-                                styles.iconPressable,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                            onPress={() => {
-                                router.push('(user)/appicon')
-                            }}
-                        >
-                            <View style={styles.iconInnerContainer}>
-                                <Image
-                                    source={iconImages[appIcon]}
-                                    style={{
-                                        ...styles.iconContainer,
-                                        borderColor: colors.border,
-                                    }}
-                                />
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.iconText,
-                                    }}
-                                >
-                                    {/* @ts-expect-error cannot verify that appIcon is a valid key */}
-                                    {t(`appIcon.names.${appIcon}`)}
-                                </Text>
-                            </View>
-                            <PlatformIcon
-                                color={colors.labelSecondaryColor}
-                                ios={{
-                                    name: 'chevron.forward',
-                                    size: 20,
-                                }}
-                                android={{
-                                    name: 'chevron_right',
-                                    size: 26,
-                                }}
-                            />
-                        </Pressable>
-                    </SectionView>
-                )}
+                <SectionView title={t('theme.themes.title')}>
+                    <MultiSectionRadio
+                        elements={elements}
+                        selectedItem={theme}
+                        action={toggleTheme as (item: string) => void}
+                    />
+                </SectionView>
             </ScrollView>
         </>
     )
@@ -230,26 +189,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         flexWrap: 'wrap',
         paddingVertical: 18,
-    },
-    iconText: {
-        fontSize: 18,
-        alignSelf: 'center',
-    },
-    iconPressable: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingStart: 12,
-        paddingEnd: 18,
-        paddingVertical: 12,
-    },
-    iconInnerContainer: { flexDirection: 'row', gap: 20 },
-    iconContainer: {
-        width: 80,
-        height: 80,
-        justifyContent: 'center',
-        borderRadius: 18,
-        borderWidth: 1,
     },
     colorBoxContainer: {
         justifyContent: 'center',

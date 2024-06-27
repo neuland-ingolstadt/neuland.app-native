@@ -1,8 +1,6 @@
 import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/components/colors'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import {
     Dimensions,
@@ -41,7 +39,6 @@ export default function Login(): JSX.Element {
 
     return (
         <>
-            <StatusBar style={getStatusBarStyle()} />
             <View
                 style={{ ...styles.gradient, backgroundColor: colors.primary }}
             >

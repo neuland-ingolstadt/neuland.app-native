@@ -4,10 +4,8 @@ import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -75,7 +73,6 @@ const ItemsPickerScreen = (params: {
 
     return (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <StatusBar style={getStatusBarStyle()} />
             <View style={[styles.container, { backgroundColor: colors.card }]}>
                 <MultiSectionPicker
                     elements={filteredEntries}

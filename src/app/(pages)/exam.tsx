@@ -7,7 +7,6 @@ import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
 import { useLocalSearchParams } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
@@ -91,7 +90,6 @@ export default function ExamDetail(): JSX.Element {
             style={styles.page}
             contentContainerStyle={styles.container}
         >
-            <StatusBar style="light" animated={true} hidden={false} />
             <View
                 style={[
                     styles.titleContainer,

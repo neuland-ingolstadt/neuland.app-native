@@ -20,13 +20,11 @@ import {
     notificationAlert,
     scheduleLectureNotification,
 } from '@/utils/timetable-utils'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import ActionSheet from '@alessiocancian/react-native-actionsheet'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import * as Sharing from 'expo-sharing'
-import { StatusBar } from 'expo-status-bar'
 import moment from 'moment'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -243,7 +241,6 @@ export default function TimetableDetails(): JSX.Element {
 
     return (
         <>
-            <StatusBar style={getStatusBarStyle()} />
             <ActionSheet
                 ref={actionSheetRef}
                 title={t('notificatons.title')}

@@ -12,7 +12,7 @@ import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import { type FeatureCollection } from 'geojson'
-import React, { useContext, useEffect, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -118,7 +118,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             addUnlockedAppIcon('retro')
         }
     }, [localSearch])
-
+    const textInputRef = useRef<any>(null)
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -127,6 +127,12 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             backgroundComponent={BottomSheetBackground}
             animatedPosition={currentPosition}
             keyboardBehavior="extend"
+            onChange={(index) => {
+                if (index <= 1) {
+                    localSearch !== '' && setLocalSearch('')
+                    textInputRef.current?.blur()
+                }
+            }}
         >
             <View>
                 <View
@@ -136,6 +142,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                 >
                     {Platform.OS === 'ios' ? (
                         <BottomSheetTextInput
+                            ref={textInputRef}
                             style={{
                                 backgroundColor: colors.inputBackground,
                                 ...styles.textInput,
@@ -153,12 +160,10 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             onFocus={() => {
                                 bottomSheetRef.current?.snapToIndex(2)
                             }}
-                            onEndEditing={() => {
-                                bottomSheetRef.current?.collapse()
-                            }}
                         />
                     ) : (
                         <TextInput
+                            ref={textInputRef}
                             style={{
                                 backgroundColor: colors.inputBackground,
                                 ...styles.textInput,
@@ -180,6 +185,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             }}
                         />
                     )}
+
                     {localSearch !== '' ? (
                         searchResultsExact.length > 0 ||
                         searchResultsFuzzy.length > 0 ? (

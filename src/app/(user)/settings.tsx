@@ -121,16 +121,6 @@ export default function Settings(): JSX.Element {
             header: t('menu.formlist.preferences.title'),
             items: [
                 {
-                    title: t('menu.formlist.preferences.theme'),
-                    icon: {
-                        ios: 'paintpalette',
-                        android: 'palette',
-                    },
-                    onPress: () => {
-                        router.push('(user)/theme')
-                    },
-                },
-                {
                     title: 'Dashboard',
                     icon: {
                         ios: 'rectangle.stack',
@@ -172,6 +162,36 @@ export default function Settings(): JSX.Element {
                 },
             ],
         },
+        {
+            header: t('menu.formlist.appearance.title'),
+            items: [
+                {
+                    title: t('menu.formlist.appearance.theme'),
+                    icon: {
+                        ios: 'paintpalette',
+                        android: 'palette',
+                    },
+                    onPress: () => {
+                        router.push('(user)/theme')
+                    },
+                },
+                ...(Platform.OS === 'ios'
+                    ? [
+                          {
+                              title: 'App Icon',
+                              icon: {
+                                  ios: 'star.square.on.square',
+                                  android: null,
+                              },
+                              onPress: () => {
+                                  router.push('(user)/appicon')
+                              },
+                          },
+                      ]
+                    : []),
+            ],
+        },
+
         {
             header: 'Quick Links',
             items: [

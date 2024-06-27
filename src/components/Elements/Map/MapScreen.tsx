@@ -54,6 +54,7 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Appearance,
     LayoutAnimation,
     Linking,
     Platform,
@@ -132,6 +133,7 @@ const MapScreen = (): JSX.Element => {
 
         return {
             transform: [{ translateY: bottom }],
+            height: opacity.value === 0 ? 0 : 'auto',
             opacity: opacity.value,
         }
     })
@@ -219,6 +221,16 @@ const MapScreen = (): JSX.Element => {
 
         return nextEvent != null ? [nextEvent] : []
     }
+
+    useEffect(() => {
+        const subscription = Appearance.addChangeListener(() => {
+            bottomSheetModalRef.current?.close()
+        })
+
+        return () => {
+            subscription.remove()
+        }
+    })
 
     useEffect(() => {
         if (timetable == null) {
@@ -608,7 +620,7 @@ const MapScreen = (): JSX.Element => {
             fillOpacity: 0.1,
         },
         allRoomsOutline: {
-            lineColor: isDark ? '#2d3035' : '#979797',
+            lineColor: isDark ? '#2d3035' : '#8e8e8e',
             lineWidth: 2.3,
         },
         availableRooms: {
@@ -616,12 +628,12 @@ const MapScreen = (): JSX.Element => {
             fillOpacity: 0.2,
         },
         availableRoomsOutline: {
-            lineWidth: 2.3,
+            lineWidth: 2.4,
         },
         osmBackground: {
             backgroundColor: isDark
-                ? 'rgba(166, 173, 181, 0.69)'
-                : 'rgba(222, 221, 203, 0.69)',
+                ? 'rgba(166, 173, 181, 0.70)'
+                : 'rgba(218, 218, 218, 0.70)',
             paddingHorizontal: 4,
             borderRadius: 4,
         },

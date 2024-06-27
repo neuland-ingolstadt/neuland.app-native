@@ -1,5 +1,5 @@
 import Color from 'color'
-import { Platform } from 'react-native'
+import { type ColorSchemeName } from 'react-native'
 import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
@@ -110,17 +110,6 @@ export const lighten = (percentage: number, color: string): string => {
     return newColor
 }
 
-/**
- * Returns the appropriate status bar style based on the platform. Used for Status Bar component in modal screens.
- * @returns The appropriate status bar style.
- * @example
- * // Usage
- * <StatusBar barStyle={getStatusBarStyle()} />
- */
-export const getStatusBarStyle = (): 'light' | 'auto' => {
-    return Platform.OS === 'ios' ? (Platform.isPad ? 'auto' : 'light') : 'auto'
-}
-
 let toast: any = null
 export const showToast = async (
     message: string,
@@ -139,4 +128,33 @@ export const showToast = async (
         delay: 0,
         ...options,
     })
+}
+
+export const getStatusBarStyle = (
+    theme: 'light' | 'dark' | 'auto'
+): 'light' | 'dark' | 'auto' => {
+    switch (theme) {
+        case 'light':
+            return 'dark'
+        case 'dark':
+            return 'light'
+        default:
+            return 'auto'
+    }
+}
+
+export const getStatusBarIconStyle = (
+    appTheme: 'light' | 'dark' | 'auto',
+    colorScheme: ColorSchemeName
+): 'black' | 'white' => {
+    switch (appTheme) {
+        case 'light':
+            return 'black'
+        case 'dark':
+            return 'white'
+        default: {
+            if (colorScheme === 'dark') return 'black'
+            return 'white'
+        }
+    }
 }

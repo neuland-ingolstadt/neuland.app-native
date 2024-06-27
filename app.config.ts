@@ -27,6 +27,7 @@ module.exports = {
                 CFBundleAllowMixedLocalizations: true,
                 CFBundleLocalizations: ['en', 'de'],
                 CFBundleDevelopmentRegion: 'en',
+                UIViewControllerBasedStatusBarAppearance: true,
             },
             splash: {
                 image: './src/assets/splash/splashLight.png',
