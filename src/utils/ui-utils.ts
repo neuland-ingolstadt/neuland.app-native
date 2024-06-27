@@ -1,4 +1,5 @@
 import Color from 'color'
+import { Platform } from 'react-native'
 import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
@@ -146,6 +147,9 @@ export function getBarTintColor(
     theme: string,
     isDark: boolean
 ): string | undefined {
+    if (Platform.OS === 'android') {
+        return undefined
+    }
     const darkDarkColor = '#2e2e2e'
     const darkLightColor = '#8f8f8f'
     const lightDarkColor = '#999999'
