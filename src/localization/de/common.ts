@@ -4,6 +4,7 @@ export default {
         paused: 'Keine Internetverbindung',
         roomNotFound: 'Raum nicht gefunden',
         mapOverlay: 'Fehler beim Laden des Overlays',
+        dashboard: 'Drag & Drop zum Sortieren',
     },
     error: {
         title: 'Ein Fehler ist aufgetreten',
@@ -161,8 +162,7 @@ export default {
                     availableRooms: 'Verfügbare Räume',
                     nextLecture: 'Nächste Vorlesung',
                     availableRoomsTitle: 'Verfügbare Räume',
-                    availableRoomsSubtitle: 'Räume mit verfügbaren Plätzen',
-                    signIn: 'Melden Sie sich an, um verfügbare Räume zu sehen',
+                    signIn: 'Melden dich an, um verfügbare Räume anzuzeigen',
                 },
                 building: {
                     free: 'Freie Räume',

@@ -25,8 +25,6 @@ const EventsCard = (): JSX.Element => {
     return (
         <BaseCard
             title="events"
-            iosIcon="party.popper.fill"
-            androidIcon="celebration"
             onPress={() => {
                 router.push('events')
             }}

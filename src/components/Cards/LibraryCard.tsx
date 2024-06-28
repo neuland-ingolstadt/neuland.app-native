@@ -50,8 +50,6 @@ const LibraryCard = (): JSX.Element => {
     return (
         <BaseCard
             title="library"
-            iosIcon="books.vertical.fill"
-            androidIcon="book"
             onPress={() => {
                 router.push('library')
             }}
