@@ -88,8 +88,6 @@ const TimetableCard = (): JSX.Element => {
     return (
         <BaseCard
             title="timetable"
-            iosIcon="clock.fill"
-            androidIcon="calendar_month"
             onPress={() => {
                 router.push('timetable')
             }}
