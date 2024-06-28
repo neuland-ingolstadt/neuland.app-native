@@ -311,14 +311,7 @@ export default function DashboardEdit(): JSX.Element {
                                 {t('dashboard.hidden')}
                             </Text>
                         )}
-                        <View
-                            style={[
-                                styles.card,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                        >
+                        <View style={styles.card}>
                             {filteredHiddenDashboardEntries
                                 .filter(Boolean)
                                 .map((item, index) => {
@@ -342,27 +335,29 @@ export default function DashboardEdit(): JSX.Element {
                                                     },
                                                 ]}
                                             >
-                                                <View style={styles.row}>
+                                                <View
+                                                    style={{
+                                                        ...styles.row,
+                                                        backgroundColor:
+                                                            colors.card,
+                                                    }}
+                                                >
                                                     <PlatformIcon
                                                         color={
                                                             colors.labelSecondaryColor
                                                         }
                                                         ios={{
-                                                            name:
-                                                                cardIcons[
-                                                                    item.key as keyof typeof cardIcons
-                                                                ].ios ??
-                                                                'line.3.horizontal',
+                                                            name: cardIcons[
+                                                                item.key as keyof typeof cardIcons
+                                                            ].ios,
                                                             size: 17,
                                                         }}
                                                         android={{
-                                                            name:
-                                                                (cardIcons[
-                                                                    item.key as keyof typeof cardIcons
-                                                                ]
-                                                                    .android as MaterialIcon) ??
-                                                                'drag_handle',
-                                                            size: 22,
+                                                            name: cardIcons[
+                                                                item.key as keyof typeof cardIcons
+                                                            ]
+                                                                .android as MaterialIcon,
+                                                            size: 21,
                                                         }}
                                                     />
                                                     <Text
@@ -499,16 +494,15 @@ function RowItem({
                     ios={{
                         name: isDragged
                             ? 'line.3.horizontal'
-                            : cardIcons[item.key as keyof typeof cardIcons]
-                                  .ios ?? 'line.3.horizontal',
+                            : cardIcons[item.key as keyof typeof cardIcons].ios,
                         size: 17,
                     }}
                     android={{
                         name: isDragged
                             ? 'drag_handle'
                             : (cardIcons[item.key as keyof typeof cardIcons]
-                                  .android as MaterialIcon) ?? 'drag_handle',
-                        size: 22,
+                                  .android as MaterialIcon),
+                        size: 21,
                     }}
                 />
 
@@ -588,6 +582,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 8,
         paddingHorizontal: 0,
+        overflow: 'hidden',
     },
     row: {
         flexDirection: 'row',
