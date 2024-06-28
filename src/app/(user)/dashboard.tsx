@@ -2,7 +2,11 @@ import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Card, type ExtendedCard, cardIcons } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
-import { DashboardContext, UserKindContext } from '@/components/contexts'
+import {
+    DashboardContext,
+    ThemeContext,
+    UserKindContext,
+} from '@/components/contexts'
 import { getDefaultDashboardOrder } from '@/hooks/contexts/dashboard'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { type MaterialIcon } from '@/types/material-icons'
@@ -40,6 +44,7 @@ export default function DashboardEdit(): JSX.Element {
         resetOrder,
         updateDashboardOrder,
     } = useContext(DashboardContext)
+    const { theme } = useContext(ThemeContext)
     const { userKind } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
@@ -62,7 +67,7 @@ export default function DashboardEdit(): JSX.Element {
         }
     })
 
-    const newHoveredKeyShared = useSharedValue(0)
+    const newHoveredKeyShared = useSharedValue(-1)
 
     // Define a worklet function
 
@@ -70,10 +75,10 @@ export default function DashboardEdit(): JSX.Element {
     const updateHoveredKeyWorklet = (newKey: number): void => {
         'worklet'
         if (newHoveredKeyShared.value !== newKey) {
+            if (Platform.OS === 'ios' && newHoveredKeyShared.value !== -1) {
+                runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
+            }
             newHoveredKeyShared.value = newKey
-            // Update the shared value based on whether the newKey is 0
-
-            runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
         }
     }
 
@@ -117,6 +122,11 @@ export default function DashboardEdit(): JSX.Element {
 
     const handleReset = useCallback(() => {
         resetOrder(userKind)
+        if (Platform.OS === 'ios') {
+            void Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+            )
+        }
     }, [resetOrder])
 
     useEffect(() => {
@@ -324,6 +334,7 @@ export default function DashboardEdit(): JSX.Element {
                                                 onPress={() => {
                                                     handleRestore(item)
                                                 }}
+                                                hitSlop={10}
                                                 style={({ pressed }) => [
                                                     {
                                                         opacity: pressed
@@ -393,7 +404,9 @@ export default function DashboardEdit(): JSX.Element {
                                                     ) : (
                                                         <PlatformIcon
                                                             color={
-                                                                colors.primary
+                                                                theme === 'dark'
+                                                                    ? 'white'
+                                                                    : 'black'
                                                             }
                                                             ios={{
                                                                 name: 'plus.circle',
@@ -470,7 +483,6 @@ function RowItem({
     item,
     onPressDelete,
     isLast,
-
     isDragged,
 }: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -517,6 +529,12 @@ function RowItem({
                             opacity: pressed ? 0.5 : 1,
                         },
                     ]}
+                    hitSlop={{
+                        top: 13,
+                        right: 15,
+                        bottom: 13,
+                        left: 15,
+                    }}
                 >
                     {item.removable && (
                         <PlatformIcon
