@@ -164,8 +164,8 @@ const MapScreen = (): JSX.Element => {
         useQuery<FeatureCollection>({
             queryKey: ['mapOverlay', packageInfo.version],
             queryFn: async () => await NeulandAPI.getMapOverlay(),
-            staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-            gcTime: 1000 * 60 * 60 * 24 * 90, // 90 days
+            staleTime: 1000 * 60 * 60 * 24 * 14, // 2 week
+            gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
             networkMode: 'always',
         })
 

@@ -4,6 +4,7 @@ export default {
         paused: 'No internet connection',
         roomNotFound: 'Room not found',
         mapOverlay: 'Error while loading overlay',
+        dashboard: 'Drag & drop to reorder',
     },
     error: {
         title: 'An error occurred',
@@ -160,7 +161,6 @@ export default {
                     availableRooms: 'Available rooms',
                     nextLecture: 'Next lecture',
                     availableRoomsTitle: 'Available rooms',
-                    availableRoomsSubtitle: 'Rooms with available seats',
                     signIn: 'Sign in to see available rooms',
                 },
                 building: {

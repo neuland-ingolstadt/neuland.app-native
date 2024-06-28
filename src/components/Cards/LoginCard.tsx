@@ -17,8 +17,6 @@ const LoginCard = (): JSX.Element => {
         <BaseCard
             title="login"
             removable={false}
-            iosIcon="person.fill.questionmark"
-            androidIcon="person"
             onPress={() => {
                 router.push('login')
             }}

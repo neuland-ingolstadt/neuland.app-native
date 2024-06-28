@@ -165,13 +165,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,
-        marginVertical: 12,
+        marginVertical: 13,
     },
     cardColumn: {
         flexDirection: 'column',
         alignItems: 'flex-start',
         paddingHorizontal: 15,
-        marginVertical: 12,
+        marginVertical: 23,
     },
     blockFooter: {
         fontSize: 12,

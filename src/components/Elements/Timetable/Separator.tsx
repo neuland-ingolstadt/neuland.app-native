@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     separator: {
         marginLeft: 50 + 12,
         height: 1,
-        marginVertical: 12,
+        marginVertical: 13,
     },
 })

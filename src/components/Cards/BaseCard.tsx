@@ -1,7 +1,7 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { type Colors } from '@/components/colors'
+import { type MaterialIcon } from '@/types/material-icons'
 import { CARD_PADDING } from '@/utils/style-utils'
-import { type MaterialCommunityIcons } from '@expo/vector-icons'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
@@ -10,13 +10,12 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
 import PlatformIcon from '../Elements/Universal/Icon'
+import { cardIcons } from '../allCards'
 import { DashboardContext, UserKindContext } from '../contexts'
 
 interface BaseCardProps {
     title: string
     onPress: () => void
-    androidIcon: typeof MaterialCommunityIcons.defaultProps.name
-    iosIcon: string
     removable?: boolean
     children?: React.ReactNode
 }
@@ -24,8 +23,6 @@ interface BaseCardProps {
 const BaseCard: React.FC<BaseCardProps> = ({
     title,
     onPress,
-    androidIcon,
-    iosIcon,
     children,
     removable = true, // ugly but more efficient than iterating over all cards
 }) => {
@@ -93,11 +90,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         <PlatformIcon
                             color={colors.primary}
                             ios={{
-                                name: iosIcon,
+                                name: cardIcons[title as keyof typeof cardIcons]
+                                    .ios,
                                 size: 18,
                             }}
                             android={{
-                                name: androidIcon,
+                                name: cardIcons[title as keyof typeof cardIcons]
+                                    .android as MaterialIcon,
                                 size: 24,
                             }}
                         />

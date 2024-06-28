@@ -81,8 +81,6 @@ const CalendarCard = (): JSX.Element => {
     return (
         <BaseCard
             title="calendar"
-            iosIcon="calendar"
-            androidIcon="event"
             onPress={() => {
                 router.push('calendar')
             }}

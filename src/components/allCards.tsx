@@ -18,6 +18,40 @@ import LibraryCard from './Cards/LibraryCard'
 
 const router = useRouter()
 
+export const cardIcons = {
+    timetable: {
+        ios: 'clock.fill',
+        android: 'calendar_month',
+    },
+    food: {
+        ios: 'fork.knife',
+        android: 'restaurant',
+    },
+    calendar: {
+        ios: 'calendar',
+        android: 'event',
+    },
+    events: {
+        ios: 'party.popper.fill',
+        android: 'celebration',
+    },
+    library: {
+        ios: 'books.vertical.fill',
+        android: 'book',
+    },
+    lecturers: {
+        ios: 'person.2.fill',
+        android: 'group',
+    },
+    news: {
+        ios: 'newspaper.fill',
+        android: 'newspaper',
+    },
+    login: {
+        ios: 'person.fill.questionmark',
+        android: 'person',
+    },
+}
 export const AllCards: Card[] = [
     {
         key: 'timetable',
@@ -56,8 +90,6 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="lecturers"
-                iosIcon="person.2.fill"
-                androidIcon="group"
                 onPress={() => {
                     router.push('lecturers')
                 }}
@@ -71,8 +103,6 @@ export const AllCards: Card[] = [
         card: () => (
             <BaseCard
                 title="news"
-                iosIcon="newspaper.fill"
-                androidIcon="newspaper"
                 onPress={() => {
                     router.push('news')
                 }}

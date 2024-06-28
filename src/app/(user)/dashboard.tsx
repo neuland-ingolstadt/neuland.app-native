@@ -1,19 +1,23 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Card, type ExtendedCard } from '@/components/allCards'
+import { type Card, type ExtendedCard, cardIcons } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { getDefaultDashboardOrder } from '@/hooks/contexts/dashboard'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
+import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Dimensions,
     LayoutAnimation,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -21,11 +25,12 @@ import {
 } from 'react-native'
 import { DragSortableView } from 'react-native-drag-sort'
 import { ScrollView } from 'react-native-gesture-handler'
+import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated'
 
 const { width } = Dimensions.get('window')
 
 export default function DashboardEdit(): JSX.Element {
-    const childrenHeight = 44
+    const childrenHeight = 48
 
     const {
         shownDashboardEntries,
@@ -35,9 +40,11 @@ export default function DashboardEdit(): JSX.Element {
         resetOrder,
         updateDashboardOrder,
     } = useContext(DashboardContext)
+    const isDark = useTheme().dark
     const { userKind } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
+    const [draggedKey, setDraggedKey] = useState<string | null>(null)
 
     const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
     const [defaultHiddenKeys, setDefaultHiddenKeys] = useState<string[]>([])
@@ -56,6 +63,21 @@ export default function DashboardEdit(): JSX.Element {
         }
     })
 
+    const newHoveredKeyShared = useSharedValue(-1)
+
+    // Define a worklet function
+
+    // Modification in updateHoveredKeyWorklet
+    const updateHoveredKeyWorklet = (newKey: number): void => {
+        'worklet'
+        if (newHoveredKeyShared.value !== newKey) {
+            if (Platform.OS === 'ios' && newHoveredKeyShared.value !== -1) {
+                runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
+            }
+            newHoveredKeyShared.value = newKey
+        }
+    }
+
     useEffect(() => {
         setFilteredHiddenDashboardEntries(
             hiddenDashboardEntries?.filter(
@@ -70,8 +92,20 @@ export default function DashboardEdit(): JSX.Element {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             hideDashboardEntry(params.key)
         }
+        // To call this worklet from React (e.g., in an event handler or useEffect)
 
-        return <RowItem item={params} onPressDelete={onPressDelete} />
+        const isLast =
+            shownDashboardEntries?.[shownDashboardEntries.length - 1].key ===
+            params.key
+
+        return (
+            <RowItem
+                item={params}
+                onPressDelete={onPressDelete}
+                isLast={isLast}
+                isDragged={draggedKey === params.key}
+            />
+        )
     }
 
     const handleRestore = useCallback(
@@ -84,6 +118,11 @@ export default function DashboardEdit(): JSX.Element {
 
     const handleReset = useCallback(() => {
         resetOrder(userKind)
+        if (Platform.OS === 'ios') {
+            void Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Success
+            )
+        }
     }, [resetOrder])
 
     useEffect(() => {
@@ -181,7 +220,7 @@ export default function DashboardEdit(): JSX.Element {
                             style={[
                                 styles.card,
                                 {
-                                    backgroundColor: colors.card,
+                                    backgroundColor: colors.background,
                                 },
                             ]}
                         >
@@ -189,6 +228,8 @@ export default function DashboardEdit(): JSX.Element {
                                 <View
                                     style={{
                                         height: childrenHeight * 1.5,
+                                        backgroundColor: colors.card,
+
                                         ...styles.emptyContainer,
                                     }}
                                 >
@@ -204,19 +245,62 @@ export default function DashboardEdit(): JSX.Element {
                                     </Text>
                                 </View>
                             ) : (
-                                <DragSortableView
-                                    keyExtractor={(item) => item.key}
-                                    dataSource={
-                                        transShownDashboardEntries ?? []
-                                    }
-                                    childrenWidth={width}
-                                    childrenHeight={childrenHeight}
-                                    parentWidth={width}
-                                    renderItem={renderItem}
-                                    onDataChange={(data: Card[]) => {
-                                        updateDashboardOrder(data)
-                                    }}
-                                />
+                                <View style={styles.outer}>
+                                    <DragSortableView
+                                        keyExtractor={(item) => item.key}
+                                        dataSource={
+                                            transShownDashboardEntries ?? []
+                                        }
+                                        childrenWidth={width}
+                                        childrenHeight={childrenHeight}
+                                        parentWidth={width}
+                                        renderItem={renderItem}
+                                        onDataChange={(data: Card[]) => {
+                                            updateDashboardOrder(data)
+                                        }}
+                                        onClickItem={() => {
+                                            void showToast(
+                                                t('toast.dashboard', {
+                                                    ns: 'common',
+                                                })
+                                            )
+                                        }}
+                                        onDragging={(
+                                            _gestureState: any,
+                                            _left: number,
+                                            _top: number,
+                                            moveToIndex: number
+                                        ) => {
+                                            runOnUI(updateHoveredKeyWorklet)(
+                                                moveToIndex
+                                            )
+                                        }}
+                                        onDragStart={(index: number) => {
+                                            setDraggedKey(
+                                                transShownDashboardEntries?.[
+                                                    index
+                                                ].key ?? null
+                                            )
+                                            if (Platform.OS === 'ios') {
+                                                void Haptics.impactAsync(
+                                                    Haptics.ImpactFeedbackStyle
+                                                        .Rigid
+                                                )
+                                            }
+                                        }}
+                                        onDragEnd={() => {
+                                            setDraggedKey(null)
+                                            if (Platform.OS === 'ios') {
+                                                void Haptics.impactAsync(
+                                                    Haptics.ImpactFeedbackStyle
+                                                        .Soft
+                                                )
+                                            }
+                                        }}
+                                        maxScale={1.05}
+                                        delayLongPress={100}
+                                    />
+                                </View>
                             )}
                         </View>
                     </View>
@@ -233,90 +317,119 @@ export default function DashboardEdit(): JSX.Element {
                                 {t('dashboard.hidden')}
                             </Text>
                         )}
-                        <View
-                            style={[
-                                styles.card,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                        >
+                        <View style={styles.card}>
                             {filteredHiddenDashboardEntries
                                 .filter(Boolean)
-                                .map((item, index) => (
-                                    <React.Fragment key={index}>
-                                        <Pressable
-                                            disabled={defaultHiddenKeys.includes(
-                                                item.key
-                                            )}
-                                            onPress={() => {
-                                                handleRestore(item)
-                                            }}
-                                            style={({ pressed }) => [
-                                                {
-                                                    opacity: pressed ? 0.5 : 1,
-                                                    minHeight: 44,
-                                                    justifyContent: 'center',
-                                                },
-                                            ]}
-                                        >
-                                            <View style={styles.row}>
-                                                <Text
-                                                    style={[
-                                                        styles.text,
-                                                        { color: colors.text },
-                                                    ]}
-                                                >
-                                                    {t(
-                                                        // @ts-expect-error cannot verify the type
-                                                        `cards.titles.${item.key}`,
-                                                        { ns: 'navigation' }
-                                                    )}
-                                                </Text>
-                                                {defaultHiddenKeys.includes(
+                                .map((item, index) => {
+                                    return (
+                                        <React.Fragment key={index}>
+                                            <Pressable
+                                                disabled={defaultHiddenKeys.includes(
                                                     item.key
-                                                ) ? (
+                                                )}
+                                                onPress={() => {
+                                                    handleRestore(item)
+                                                }}
+                                                hitSlop={10}
+                                                style={({ pressed }) => [
+                                                    {
+                                                        opacity: pressed
+                                                            ? 0.5
+                                                            : 1,
+                                                        minHeight: 46,
+                                                        justifyContent:
+                                                            'center',
+                                                    },
+                                                ]}
+                                            >
+                                                <View
+                                                    style={{
+                                                        ...styles.row,
+                                                        backgroundColor:
+                                                            colors.card,
+                                                    }}
+                                                >
                                                     <PlatformIcon
                                                         color={
-                                                            colors.labelColor
+                                                            colors.labelSecondaryColor
                                                         }
                                                         ios={{
-                                                            name: 'lock',
-                                                            size: 20,
+                                                            name: cardIcons[
+                                                                item.key as keyof typeof cardIcons
+                                                            ].ios,
+                                                            size: 17,
                                                         }}
                                                         android={{
-                                                            name: 'lock',
-                                                            size: 24,
+                                                            name: cardIcons[
+                                                                item.key as keyof typeof cardIcons
+                                                            ]
+                                                                .android as MaterialIcon,
+                                                            size: 21,
                                                         }}
                                                     />
-                                                ) : (
-                                                    <PlatformIcon
-                                                        color={colors.primary}
-                                                        ios={{
-                                                            name: 'plus.circle',
-                                                            variant: 'fill',
-                                                            size: 20,
-                                                        }}
-                                                        android={{
-                                                            name: 'add_circle',
-                                                            size: 24,
-                                                        }}
-                                                    />
-                                                )}
-                                            </View>
-                                        </Pressable>
-                                        {index !==
-                                            filteredHiddenDashboardEntries.length -
-                                                1 && (
-                                            <Divider
-                                                color={
-                                                    colors.labelTertiaryColor
-                                                }
-                                                width={'100%'}
-                                            />
-                                        )}
-                                    </React.Fragment>
-                                ))}
+                                                    <Text
+                                                        style={[
+                                                            styles.text,
+                                                            {
+                                                                color: colors.text,
+                                                            },
+                                                        ]}
+                                                    >
+                                                        {t(
+                                                            // @ts-expect-error cannot verify the type
+                                                            `cards.titles.${item.key}`,
+                                                            { ns: 'navigation' }
+                                                        )}
+                                                    </Text>
+                                                    {defaultHiddenKeys.includes(
+                                                        item.key
+                                                    ) ? (
+                                                        <PlatformIcon
+                                                            color={
+                                                                colors.labelColor
+                                                            }
+                                                            ios={{
+                                                                name: 'lock',
+                                                                size: 20,
+                                                            }}
+                                                            android={{
+                                                                name: 'lock',
+                                                                size: 24,
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <PlatformIcon
+                                                            color={
+                                                                isDark
+                                                                    ? 'white'
+                                                                    : 'black'
+                                                            }
+                                                            ios={{
+                                                                name: 'plus.circle',
+                                                                variant: 'fill',
+                                                                size: 20,
+                                                            }}
+                                                            android={{
+                                                                name: 'add_circle',
+                                                                size: 24,
+                                                            }}
+                                                        />
+                                                    )}
+                                                </View>
+                                            </Pressable>
+                                            {index !==
+                                                filteredHiddenDashboardEntries.length -
+                                                    1 && (
+                                                <Divider
+                                                    color={
+                                                        colors.labelTertiaryColor
+                                                    }
+                                                    width={'100%'}
+                                                />
+                                            )}
+                                        </React.Fragment>
+                                    )
+                                })}
                         </View>
                     </View>
                     {!hasUserDefaultOrder && (
@@ -358,10 +471,18 @@ export default function DashboardEdit(): JSX.Element {
 interface RowItemProps {
     item: ExtendedCard
     onPressDelete: () => void
+    isLast: boolean
+    isDragged: boolean
 }
 
-function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
+function RowItem({
+    item,
+    onPressDelete,
+    isLast,
+    isDragged,
+}: RowItemProps): JSX.Element {
     const colors = useTheme().colors as Colors
+    const bottomWidth = isLast || isDragged ? 0 : 1
 
     return (
         <View>
@@ -369,20 +490,27 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
                 style={[
                     styles.row,
                     {
+                        borderBottomColor: colors.border,
                         backgroundColor: colors.card,
-                        width: width - PAGE_PADDING * 4,
+                        width: width - PAGE_PADDING * 2,
+                        borderBottomWidth: bottomWidth,
                     },
                 ]}
             >
                 <PlatformIcon
-                    color={colors.labelTertiaryColor}
+                    color={colors.primary}
                     ios={{
-                        name: 'line.3.horizontal',
-                        size: 20,
+                        name: isDragged
+                            ? 'line.3.horizontal'
+                            : cardIcons[item.key as keyof typeof cardIcons].ios,
+                        size: 17,
                     }}
                     android={{
-                        name: 'drag_handle',
-                        size: 22,
+                        name: isDragged
+                            ? 'drag_handle'
+                            : (cardIcons[item.key as keyof typeof cardIcons]
+                                  .android as MaterialIcon),
+                        size: 21,
                     }}
                 />
 
@@ -397,7 +525,12 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
                             opacity: pressed ? 0.5 : 1,
                         },
                     ]}
-                    hitSlop={10}
+                    hitSlop={{
+                        top: 13,
+                        right: 15,
+                        bottom: 13,
+                        left: 15,
+                    }}
                 >
                     {item.removable && (
                         <PlatformIcon
@@ -422,6 +555,11 @@ function RowItem({ item, onPressDelete }: RowItemProps): JSX.Element {
 const styles = StyleSheet.create({
     page: {
         padding: PAGE_PADDING,
+    },
+    outer: {
+        flex: 1,
+        borderRadius: 8,
+        overflow: 'hidden',
     },
     wrapper: {
         gap: 14,
@@ -457,15 +595,17 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 8,
-        paddingHorizontal: 12,
+        paddingHorizontal: 0,
+        overflow: 'hidden',
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10,
-        paddingVertical: 9,
-        minHeight: 44,
+        gap: 14,
+
+        minHeight: 48,
         justifyContent: 'center',
+        paddingHorizontal: 16,
     },
     text: {
         fontSize: 16,
@@ -477,6 +617,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     emptyContainer: {
+        borderRadius: 8,
         justifyContent: 'center',
     },
     sectionHeaderText: {
@@ -491,7 +632,7 @@ const styles = StyleSheet.create({
     },
     reset: {
         fontSize: 16,
-        marginVertical: 12,
+        marginVertical: 13,
         alignSelf: 'center',
     },
 })
