@@ -2,11 +2,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Card, type ExtendedCard, cardIcons } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
-import {
-    DashboardContext,
-    ThemeContext,
-    UserKindContext,
-} from '@/components/contexts'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { getDefaultDashboardOrder } from '@/hooks/contexts/dashboard'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { type MaterialIcon } from '@/types/material-icons'
@@ -44,7 +40,7 @@ export default function DashboardEdit(): JSX.Element {
         resetOrder,
         updateDashboardOrder,
     } = useContext(DashboardContext)
-    const { theme } = useContext(ThemeContext)
+    const isDark = useTheme().dark
     const { userKind } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
@@ -404,7 +400,7 @@ export default function DashboardEdit(): JSX.Element {
                                                     ) : (
                                                         <PlatformIcon
                                                             color={
-                                                                theme === 'dark'
+                                                                isDark
                                                                     ? 'white'
                                                                     : 'black'
                                                             }
