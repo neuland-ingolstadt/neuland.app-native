@@ -8,7 +8,7 @@ import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-export default function Screen(): JSX.Element {
+export default function MapRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)

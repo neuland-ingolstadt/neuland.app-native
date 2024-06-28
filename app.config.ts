@@ -12,7 +12,7 @@ module.exports = {
         userInterfaceStyle: 'automatic',
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
-            buildNumber: '1',
+            buildNumber: '19',
             supportsTablet: true,
             userInterfaceStyle: 'automatic',
             associatedDomains: [

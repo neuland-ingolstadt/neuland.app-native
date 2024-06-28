@@ -45,7 +45,7 @@ import {
 import ContextMenu from 'react-native-context-menu-view'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function Screen(): JSX.Element {
+export default function HomeRootScreen(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const isDark = useTheme().dark
@@ -489,7 +489,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: PAGE_PADDING,
     },
     iconText: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
     },
 })

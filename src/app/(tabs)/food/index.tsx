@@ -1,4 +1,5 @@
 import { MealDay } from '@/components/Elements/Food'
+import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
@@ -12,9 +13,15 @@ import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
-import { router } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, {
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -31,9 +38,9 @@ import {
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
 
-function FoodScreen(): JSX.Element {
+export function FoodScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-
+    const navigation = useNavigation()
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const {
         selectedRestaurants,
@@ -59,6 +66,11 @@ function FoodScreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <FoodHeaderRight />,
+        })
+    }, [navigation])
 
     useEffect(() => {
         if (foodData == null) {
@@ -268,7 +280,7 @@ function FoodScreen(): JSX.Element {
                         />
                     ) : undefined
                 }
-                style={styles.page}
+                style={{ ...styles.page, backgroundColor: colors.background }}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.container}
                 showsVerticalScrollIndicator={false}
@@ -394,7 +406,7 @@ function FoodScreen(): JSX.Element {
     )
 }
 
-export default function Screen(): JSX.Element {
+export default function FoodRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
 
     useEffect(() => {

@@ -25,7 +25,7 @@ export const cardIcons = {
     },
     food: {
         ios: 'fork.knife',
-        android: 'restaurant',
+        android: 'fastfood',
     },
     calendar: {
         ios: 'calendar',

@@ -1,4 +1,5 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import { MaterialBottomTabs } from '@/components/Elements/Universal/MaterialBottomTabs'
 import { type Colors } from '@/components/colors'
 import {
     AppIconContext,
@@ -11,13 +12,13 @@ import i18n from '@/localization/i18n'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
-import { BlurView } from 'expo-blur'
+import Color from 'color'
 import * as NavigationBar from 'expo-navigation-bar'
-import { Tabs, usePathname, useRouter } from 'expo-router'
+import { usePathname, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet } from 'react-native'
+import { Platform } from 'react-native'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
@@ -27,6 +28,7 @@ import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
+    const isDark = theme.dark
     const router = useRouter()
     const colors = theme.colors as Colors
     const flow = React.useContext(FlowContext)
@@ -86,14 +88,6 @@ export default function HomeLayout(): JSX.Element {
         if (Platform.OS !== 'android') return
         void prepare()
     }, [theme.dark, pathname])
-
-    const BlurTab = (): JSX.Element => (
-        <BlurView
-            tint={theme.dark ? 'dark' : 'light'}
-            intensity={75}
-            style={styles.blurTab}
-        />
-    )
 
     const shortcuts = [
         {
@@ -195,125 +189,128 @@ export default function HomeLayout(): JSX.Element {
 
     return (
         <>
-            <Tabs
-                screenOptions={{
-                    tabBarActiveTintColor: colors.primary,
-                    tabBarLabelStyle: {
-                        marginBottom: 2,
-                    },
+            <MaterialBottomTabs
+                activeColor={colors.text}
+                inactiveColor={colors.labelColor}
+                activeIndicatorStyle={{
+                    backgroundColor: isDark
+                        ? Color(colors.card)
+                              .mix(Color(colors.primary), 0.06)
+                              .lighten(1.4)
+                              .saturate(1)
+                              .hex()
+                        : Color(colors.card)
+                              .mix(Color(colors.primary), 0.2)
+                              .darken(0.05)
+                              .saturate(0.2)
+                              .hex(),
+                }}
+                barStyle={{
+                    backgroundColor: colors.card,
                 }}
             >
-                <Tabs.Screen
+                <MaterialBottomTabs.Screen
                     name="index"
                     options={{
-                        title: 'Home',
-                        headerShown: false,
-
-                        tabBarIcon: ({ color, size }) => (
+                        tabBarLabel: 'Home',
+                        tabBarIcon: (props: {
+                            focused: boolean
+                            color: string
+                        }) => (
                             <PlatformIcon
-                                color={color}
-                                ios={{
-                                    name: 'house',
-                                    variant: 'fill',
-                                    size: size - 2,
-                                }}
                                 android={{
                                     name: 'home',
-                                    size,
+                                    size: 20,
+                                    variant: props.focused
+                                        ? 'filled'
+                                        : 'outlined',
                                 }}
+                                ios={{
+                                    name: 'house',
+                                    size: 17,
+                                }}
+                                color={props.color}
                             />
                         ),
-
-                        tabBarStyle: { position: 'absolute' },
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
-
-                <Tabs.Screen
+                <MaterialBottomTabs.Screen
                     name="timetable"
                     options={{
-                        headerShown: true,
-                        title: t('navigation.timetable'),
-                        tabBarIcon: ({ color, size }) => (
+                        title: 'Timetable',
+                        tabBarLabel: t('navigation.timetable'),
+                        tabBarIcon: (props: {
+                            focused: boolean
+                            color: string
+                        }) => (
                             <PlatformIcon
-                                color={color}
-                                ios={{
-                                    name: 'clock',
-                                    variant: 'fill',
-                                    size: size - 2,
-                                }}
                                 android={{
                                     name: 'calendar_month',
-                                    size,
+                                    size: 20,
+                                    variant: props.focused
+                                        ? 'filled'
+                                        : 'outlined',
                                 }}
+                                ios={{
+                                    name: 'calendar',
+                                    size: 17,
+                                }}
+                                color={props.color}
                             />
                         ),
-                        tabBarStyle: { position: 'absolute' },
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
-
-                <Tabs.Screen
+                <MaterialBottomTabs.Screen
                     name="map"
                     options={{
-                        title: t('navigation.map'),
-                        headerShown: false,
-
-                        tabBarHideOnKeyboard: true,
-                        tabBarIcon: ({ color, size }) => (
+                        tabBarLabel: t('navigation.map'),
+                        tabBarIcon: (props: {
+                            focused: boolean
+                            color: string
+                        }) => (
                             <PlatformIcon
-                                color={color}
-                                ios={{
-                                    name: 'map',
-                                    variant: 'fill',
-                                    size: size - 2,
-                                }}
                                 android={{
                                     name: 'map',
-                                    size,
+                                    size: 20,
+                                    variant: props.focused
+                                        ? 'filled'
+                                        : 'outlined',
                                 }}
+                                ios={{
+                                    name: 'map',
+                                    size: 17,
+                                }}
+                                color={props.color}
                             />
                         ),
                     }}
                 />
-
-                <Tabs.Screen
+                <MaterialBottomTabs.Screen
                     name="food"
                     options={{
-                        title: t('navigation.food'),
-                        headerShown: true,
-                        tabBarIcon: ({ color, size }) => (
+                        tabBarLabel: t('navigation.food'),
+                        tabBarIcon: (props: {
+                            focused: boolean
+                            color: string
+                        }) => (
                             <PlatformIcon
-                                color={color}
+                                android={{
+                                    name: 'fastfood',
+                                    size: 20,
+                                    variant: props.focused
+                                        ? 'filled'
+                                        : 'outlined',
+                                }}
                                 ios={{
                                     name: 'fork.knife',
-                                    size: size - 2,
+                                    size: 17,
                                 }}
-                                android={{
-                                    name: 'restaurant',
-                                    size,
-                                }}
+                                color={props.color}
                             />
                         ),
-
-                        tabBarStyle: { position: 'absolute' },
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
                 />
-            </Tabs>
+            </MaterialBottomTabs>
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    blurTab: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-})

@@ -43,7 +43,7 @@ export default {
             error: {
                 title: 'Login failed',
                 wrongCredentials: 'Your login credentials are incorrect.',
-                missing: 'Please fill in all fields.',
+                missing: 'Please fill out all fields.',
                 generic: 'An error occurred while connecting to the server.',
                 backend:
                     'The THI backend is currently unavailable. Please try again later.',

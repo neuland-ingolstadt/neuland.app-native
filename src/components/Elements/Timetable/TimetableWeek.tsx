@@ -1,4 +1,4 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
+import { type ITimetableViewProps } from '@/app/(tabs)/timetable/timetable'
 import { type Colors } from '@/components/colors'
 import {
     NotificationContext,

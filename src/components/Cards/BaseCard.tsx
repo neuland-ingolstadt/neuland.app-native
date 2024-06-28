@@ -98,6 +98,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 name: cardIcons[title as keyof typeof cardIcons]
                                     .android as MaterialIcon,
                                 size: 24,
+                                variant: 'outlined',
                             }}
                         />
                         <Text style={[styles.title, { color: colors.text }]}>

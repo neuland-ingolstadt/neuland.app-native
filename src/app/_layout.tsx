@@ -104,6 +104,7 @@ function RootLayout(): JSX.Element {
                             headerLargeTitle: true,
                         }}
                     />
+
                     <Stack.Screen
                         name="(user)/login"
                         options={{

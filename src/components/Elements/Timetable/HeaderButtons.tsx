@@ -2,7 +2,7 @@ import { TimetableContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Platform, Pressable, StyleSheet } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -20,7 +20,10 @@ export function HeaderLeft(): JSX.Element {
                 })
             }}
             hitSlop={10}
-            style={styles.headerButton}
+            style={
+                (styles.headerButton,
+                { marginRight: Platform.OS === 'ios' ? 0 : 10 })
+            }
         >
             <PlatformIcon
                 color={isDark ? 'white' : 'black'}
@@ -68,6 +71,6 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 
 const styles = StyleSheet.create({
     headerButton: {
-        marginHorizontal: 14,
+        marginHorizontal: Platform.OS === 'ios' ? 14 : 0,
     },
 })

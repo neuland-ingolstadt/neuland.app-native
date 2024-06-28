@@ -162,6 +162,7 @@ export default function DashboardEdit(): JSX.Element {
                 contentContainerStyle={styles.page}
                 bounces={false}
                 contentInsetAdjustmentBehavior="automatic"
+                scrollEnabled={draggedKey === null}
             >
                 <View style={styles.wrapper}>
                     {userKind === USER_GUEST && (
@@ -365,6 +366,7 @@ export default function DashboardEdit(): JSX.Element {
                                                             ]
                                                                 .android as MaterialIcon,
                                                             size: 21,
+                                                            variant: 'outlined',
                                                         }}
                                                     />
                                                     <Text
@@ -511,6 +513,7 @@ function RowItem({
                             : (cardIcons[item.key as keyof typeof cardIcons]
                                   .android as MaterialIcon),
                         size: 21,
+                        variant: 'outlined',
                     }}
                 />
 
@@ -574,6 +577,7 @@ const styles = StyleSheet.create({
     },
     noteContainer: {
         marginTop: 3,
+        paddingHorizontal: 12,
     },
     noteTextContainer: {
         paddingTop: 12,
