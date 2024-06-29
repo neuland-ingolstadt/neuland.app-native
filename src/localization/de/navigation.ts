@@ -76,7 +76,7 @@ export default {
     unmatched: {
         title: 'Nicht gefunden',
         error: {
-            title: 'nicht gefunden',
+            title: 'Nicht gefunden',
             message: 'Die angeforderte Seite ist nicht verfügbar.',
             button: 'Zurück',
         },

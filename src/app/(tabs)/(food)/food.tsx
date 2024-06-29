@@ -40,7 +40,6 @@ import PagerView from 'react-native-pager-view'
 
 export function FoodScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const navigation = useNavigation()
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const {
         selectedRestaurants,
@@ -66,11 +65,6 @@ export function FoodScreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
     })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <FoodHeaderRight />,
-        })
-    }, [navigation])
 
     useEffect(() => {
         if (foodData == null) {
@@ -408,10 +402,16 @@ export function FoodScreen(): JSX.Element {
 
 export default function FoodRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
-
+    const navigation = useNavigation()
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <FoodHeaderRight />,
+        })
+    }, [navigation])
 
     return (
         <>

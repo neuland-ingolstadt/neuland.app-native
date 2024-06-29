@@ -127,7 +127,7 @@ export function useNotifications(): Notifications {
                     'timetableNotifications'
                 )
                 if (data === null) {
-                    throw new Error('Data is null')
+                    return
                 }
                 const parsedData = JSON.parse(data)
                 if (typeof parsedData !== 'object' || parsedData === null) {

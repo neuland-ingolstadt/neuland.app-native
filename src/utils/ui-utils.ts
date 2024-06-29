@@ -1,5 +1,4 @@
 import Color from 'color'
-import { Platform } from 'react-native'
 import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
@@ -131,7 +130,9 @@ export const showToast = async (
 }
 
 export const getStatusBarStyle = (
-    theme: 'light' | 'dark' | 'auto'
+    theme: 'light' | 'dark' | 'auto',
+    isAndroid: boolean,
+    isDark: boolean
 ): 'light' | 'dark' | 'auto' => {
     switch (theme) {
         case 'light':
@@ -139,26 +140,6 @@ export const getStatusBarStyle = (
         case 'dark':
             return 'light'
         default:
-            return 'auto'
+            return isAndroid ? (isDark ? 'light' : 'dark') : 'auto'
     }
-}
-
-export function getBarTintColor(
-    theme: string,
-    isDark: boolean
-): string | undefined {
-    if (Platform.OS === 'android') {
-        return undefined
-    }
-    const darkDarkColor = '#2e2e2e'
-    const darkLightColor = '#8f8f8f'
-    const lightDarkColor = '#999999'
-    const lightLightColor = '#ebebeb'
-    if (theme === 'auto') {
-        return undefined
-    }
-    if (theme === 'dark') {
-        return isDark ? darkDarkColor : darkLightColor
-    }
-    return isDark ? lightDarkColor : lightLightColor
 }

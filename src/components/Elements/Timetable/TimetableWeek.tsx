@@ -1,4 +1,4 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/timetable/timetable'
+import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
 import {
     NotificationContext,
@@ -41,6 +41,8 @@ export default function TimetableWeek({
             ...entry,
             color: colors.background,
             id: index,
+            startDate: new Date(entry.startDate),
+            endDate: new Date(entry.endDate),
         })
     )
 
@@ -283,7 +285,7 @@ export default function TimetableWeek({
             selectedDate={selectedDate}
             numberOfDays={3}
             hoursInDisplay={14}
-            showNowLine
+            showNowLine={true}
             showTitle={false}
             locale="de"
             timesColumnWidth={0.15}

@@ -1,4 +1,5 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import { type Colors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
@@ -10,7 +11,15 @@ import { getLocales } from 'expo-localization'
 import { Stack, useNavigationContainerRef, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable } from 'react-native'
+import {
+    AppState,
+    LogBox,
+    Platform,
+    Pressable,
+    useColorScheme,
+} from 'react-native'
+
+LogBox.ignoreLogs(['new NativeEventEmitter'])
 
 const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
@@ -83,15 +92,18 @@ function RootLayout(): JSX.Element {
         }
     }, [])
 
-    const isDark = useTheme().dark
-
+    const colors = useTheme().colors as Colors
+    const isOsDark = useColorScheme() === 'dark'
     return (
         <>
             <Sentry.TouchEventBoundary>
                 <Stack
                     screenOptions={{
-                        // iOS
-                        statusBarStyle: getStatusBarStyle(appTheme),
+                        statusBarStyle: getStatusBarStyle(
+                            appTheme,
+                            Platform.OS === 'android',
+                            isOsDark
+                        ),
                         // Android
                         statusBarTranslucent: true,
                     }}
@@ -104,7 +116,6 @@ function RootLayout(): JSX.Element {
                             headerLargeTitle: true,
                         }}
                     />
-
                     <Stack.Screen
                         name="(user)/login"
                         options={{
@@ -378,7 +389,7 @@ function RootLayout(): JSX.Element {
                                     }}
                                 >
                                     <PlatformIcon
-                                        color={isDark ? 'white' : 'black'}
+                                        color={colors.text}
                                         ios={{
                                             name: 'barcode',
                                             size: 22,

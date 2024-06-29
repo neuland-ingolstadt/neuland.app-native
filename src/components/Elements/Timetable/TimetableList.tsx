@@ -1,4 +1,4 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/timetable/index'
+import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
 import { NotificationContext, RouteParamsContext } from '@/components/contexts'
 import { type FriendlyTimetableEntry } from '@/types/utils'

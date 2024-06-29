@@ -2,7 +2,6 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { MaterialBottomTabs } from '@/components/Elements/Universal/MaterialBottomTabs'
 import { type Colors } from '@/components/colors'
 import {
-    AppIconContext,
     DashboardContext,
     FlowContext,
     FoodFilterContext,
@@ -18,12 +17,11 @@ import { usePathname, useRouter } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Easing } from 'react-native'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { humanLocations } from '../(food)/meal'
-import { appIcons } from '../(user)/appicon'
 import packageInfo from '../../../package.json'
 
 export default function HomeLayout(): JSX.Element {
@@ -34,7 +32,6 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
-    const { appIcon, toggleAppIcon } = useContext(AppIconContext)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed, initializeAnalytics } =
         React.useContext(FlowContext)
@@ -79,13 +76,21 @@ export default function HomeLayout(): JSX.Element {
             const isTab = tabsPaths.includes(pathname)
 
             await NavigationBar.setBackgroundColorAsync(
-                isTab ? colors.card : colors.background
+                isTab
+                    ? isDark
+                        ? Color(colors.card)
+                              .mix(Color(colors.primary), 0.04)
+                              .hex()
+                        : Color(colors.card)
+                              .mix(Color(colors.primary), 0.1)
+                              .hex()
+                    : colors.background
             )
             await NavigationBar.setButtonStyleAsync(
                 theme.dark ? 'light' : 'dark'
             )
         }
-        if (Platform.OS !== 'android') return
+
         void prepare()
     }, [theme.dark, pathname])
 
@@ -125,26 +130,6 @@ export default function HomeLayout(): JSX.Element {
             symbolName: 'fork.knife',
             iconName: 'silverware_fork_knife',
         },
-        ...(Platform.OS === 'ios'
-            ? [
-                  {
-                      id: 'appIcon',
-                      type: 'appIcon',
-                      title: 'App Icon',
-                      subtitle: t(
-                          // @ts-expect-error no types
-                          `appIcon.names.${appIcon}`,
-                          {
-                              ns: 'settings',
-                          }
-                      ),
-                      data: {
-                          path: '(user)/appicon',
-                      },
-                      symbolName: 'paintpalette',
-                  },
-              ]
-            : []),
     ]
 
     useEffect(() => {
@@ -160,7 +145,7 @@ export default function HomeLayout(): JSX.Element {
         return () => {
             if (shortcutSubscription != null) shortcutSubscription.remove()
         }
-    }, [selectedRestaurants, router, shortcuts, appIcon, i18n.language])
+    }, [selectedRestaurants, router, shortcuts, i18n.language])
 
     useEffect(() => {
         if (isFirstRun) {
@@ -179,138 +164,130 @@ export default function HomeLayout(): JSX.Element {
         }
     }, [analyticsAllowed])
 
-    useEffect(() => {
-        if (Platform.OS !== 'ios') return
-
-        if (!appIcons.includes(appIcon)) {
-            toggleAppIcon('default')
-        }
-    }, [appIcon])
-
     return (
-        <>
-            <MaterialBottomTabs
-                activeColor={colors.text}
-                inactiveColor={colors.labelColor}
-                activeIndicatorStyle={{
-                    backgroundColor: isDark
-                        ? Color(colors.card)
-                              .mix(Color(colors.primary), 0.06)
-                              .lighten(1.4)
-                              .saturate(1)
-                              .hex()
-                        : Color(colors.card)
-                              .mix(Color(colors.primary), 0.2)
-                              .darken(0.05)
-                              .saturate(0.2)
-                              .hex(),
+        <MaterialBottomTabs
+            theme={{
+                animation: {
+                    scale: 0.1,
+                },
+            }}
+            sceneAnimationEasing={Easing.ease}
+            activeColor={colors.text}
+            inactiveColor={colors.labelColor}
+            activeIndicatorStyle={{
+                backgroundColor: isDark
+                    ? Color(colors.card)
+                          .mix(Color(colors.primary), 0.06)
+                          .lighten(1.4)
+                          .saturate(1)
+                          .hex()
+                    : Color(colors.card)
+                          .mix(Color(colors.primary), 0.3)
+                          .darken(0.05)
+                          .saturate(0.1)
+                          .hex(),
+            }}
+            barStyle={{
+                backgroundColor: isDark
+                    ? Color(colors.card).mix(Color(colors.primary), 0.04).hex()
+                    : Color(colors.card).mix(Color(colors.primary), 0.1).hex(),
+            }}
+        >
+            <MaterialBottomTabs.Screen
+                name="(index)"
+                options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: (props: {
+                        focused: boolean
+                        color: string
+                    }) => (
+                        <PlatformIcon
+                            android={{
+                                name: 'home',
+                                size: 20,
+                                variant: props.focused ? 'filled' : 'outlined',
+                            }}
+                            ios={{
+                                name: 'house',
+                                size: 17,
+                            }}
+                            color={props.color}
+                        />
+                    ),
                 }}
-                barStyle={{
-                    backgroundColor: colors.card,
+            />
+
+            <MaterialBottomTabs.Screen
+                name="timetable"
+                options={{
+                    title: 'Timetable',
+                    tabBarLabel: t('navigation.timetable'),
+                    tabBarIcon: (props: {
+                        focused: boolean
+                        color: string
+                    }) => (
+                        <PlatformIcon
+                            android={{
+                                name: 'calendar_month',
+                                size: 20,
+                                variant: props.focused ? 'filled' : 'outlined',
+                            }}
+                            ios={{
+                                name: 'calendar',
+                                size: 17,
+                            }}
+                            color={props.color}
+                        />
+                    ),
                 }}
-            >
-                <MaterialBottomTabs.Screen
-                    name="index"
-                    options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: (props: {
-                            focused: boolean
-                            color: string
-                        }) => (
-                            <PlatformIcon
-                                android={{
-                                    name: 'home',
-                                    size: 20,
-                                    variant: props.focused
-                                        ? 'filled'
-                                        : 'outlined',
-                                }}
-                                ios={{
-                                    name: 'house',
-                                    size: 17,
-                                }}
-                                color={props.color}
-                            />
-                        ),
-                    }}
-                />
-                <MaterialBottomTabs.Screen
-                    name="timetable"
-                    options={{
-                        title: 'Timetable',
-                        tabBarLabel: t('navigation.timetable'),
-                        tabBarIcon: (props: {
-                            focused: boolean
-                            color: string
-                        }) => (
-                            <PlatformIcon
-                                android={{
-                                    name: 'calendar_month',
-                                    size: 20,
-                                    variant: props.focused
-                                        ? 'filled'
-                                        : 'outlined',
-                                }}
-                                ios={{
-                                    name: 'calendar',
-                                    size: 17,
-                                }}
-                                color={props.color}
-                            />
-                        ),
-                    }}
-                />
-                <MaterialBottomTabs.Screen
-                    name="map"
-                    options={{
-                        tabBarLabel: t('navigation.map'),
-                        tabBarIcon: (props: {
-                            focused: boolean
-                            color: string
-                        }) => (
-                            <PlatformIcon
-                                android={{
-                                    name: 'map',
-                                    size: 20,
-                                    variant: props.focused
-                                        ? 'filled'
-                                        : 'outlined',
-                                }}
-                                ios={{
-                                    name: 'map',
-                                    size: 17,
-                                }}
-                                color={props.color}
-                            />
-                        ),
-                    }}
-                />
-                <MaterialBottomTabs.Screen
-                    name="food"
-                    options={{
-                        tabBarLabel: t('navigation.food'),
-                        tabBarIcon: (props: {
-                            focused: boolean
-                            color: string
-                        }) => (
-                            <PlatformIcon
-                                android={{
-                                    name: 'fastfood',
-                                    size: 20,
-                                    variant: props.focused
-                                        ? 'filled'
-                                        : 'outlined',
-                                }}
-                                ios={{
-                                    name: 'fork.knife',
-                                    size: 17,
-                                }}
-                                color={props.color}
-                            />
-                        ),
-                    }}
-                />
-            </MaterialBottomTabs>
-        </>
+            />
+
+            <MaterialBottomTabs.Screen
+                name="map"
+                options={{
+                    tabBarLabel: t('navigation.map'),
+                    tabBarIcon: (props: {
+                        focused: boolean
+                        color: string
+                    }) => (
+                        <PlatformIcon
+                            android={{
+                                name: 'map',
+                                size: 20,
+                                variant: props.focused ? 'filled' : 'outlined',
+                            }}
+                            ios={{
+                                name: 'map',
+                                size: 17,
+                            }}
+                            color={props.color}
+                        />
+                    ),
+                }}
+            />
+            <MaterialBottomTabs.Screen
+                name="food"
+                options={{
+                    tabBarLabel: t('navigation.food'),
+                    tabBarIcon: (props: {
+                        focused: boolean
+                        color: string
+                    }) => (
+                        <PlatformIcon
+                            android={{
+                                name: 'fastfood',
+                                size: 20,
+                                variant: props.focused ? 'filled' : 'outlined',
+                            }}
+                            ios={{
+                                name: 'fork.knife',
+                                size: 17,
+                            }}
+                            color={props.color}
+                        />
+                    ),
+                }}
+            />
+        </MaterialBottomTabs>
     )
 }

@@ -1,14 +1,16 @@
+import { type Colors } from '@/components/colors'
 import { TimetableContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
-import { Platform, Pressable, StyleSheet } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
 export function HeaderLeft(): JSX.Element {
-    const isDark = useTheme().dark
+    const colors = useTheme().colors as Colors
     const { timetableMode, setTimetableMode } = useContext(TimetableContext)
+    const marginRight = Platform.OS === 'ios' ? 0 : 10
 
     return (
         <Pressable
@@ -20,13 +22,10 @@ export function HeaderLeft(): JSX.Element {
                 })
             }}
             hitSlop={10}
-            style={
-                (styles.headerButton,
-                { marginRight: Platform.OS === 'ios' ? 0 : 10 })
-            }
+            style={{ marginRight }}
         >
             <PlatformIcon
-                color={isDark ? 'white' : 'black'}
+                color={colors.text}
                 ios={{
                     name:
                         timetableMode === 'list'
@@ -51,11 +50,11 @@ interface HeaderRightProps {
 }
 
 export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
-    const isDark = useTheme().dark
+    const colors = useTheme().colors as Colors
     return (
-        <Pressable onPress={setToday} hitSlop={10} style={styles.headerButton}>
+        <Pressable onPress={setToday} hitSlop={10}>
             <PlatformIcon
-                color={isDark ? 'white' : 'black'}
+                color={colors.text}
                 ios={{
                     name: 'arrow.uturn.left',
                     size: 22,
@@ -68,9 +67,3 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
         </Pressable>
     )
 }
-
-const styles = StyleSheet.create({
-    headerButton: {
-        marginHorizontal: Platform.OS === 'ios' ? 14 : 0,
-    },
-})

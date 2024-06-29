@@ -1,8 +1,9 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Card, type ExtendedCard, cardIcons } from '@/components/allCards'
+import { type Card, type ExtendedCard } from '@/components/allCards'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { cardIcons } from '@/components/icons'
 import { getDefaultDashboardOrder } from '@/hooks/contexts/dashboard'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { type MaterialIcon } from '@/types/material-icons'
@@ -44,8 +45,7 @@ export default function DashboardEdit(): JSX.Element {
     const { userKind } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
-    const [draggedKey, setDraggedKey] = useState<string | null>(null)
-
+    const [draggedId, setDraggedId] = useState<number | null>(null)
     const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
     const [defaultHiddenKeys, setDefaultHiddenKeys] = useState<string[]>([])
     const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
@@ -65,9 +65,6 @@ export default function DashboardEdit(): JSX.Element {
 
     const newHoveredKeyShared = useSharedValue(-1)
 
-    // Define a worklet function
-
-    // Modification in updateHoveredKeyWorklet
     const updateHoveredKeyWorklet = (newKey: number): void => {
         'worklet'
         if (newHoveredKeyShared.value !== newKey) {
@@ -78,11 +75,16 @@ export default function DashboardEdit(): JSX.Element {
         }
     }
 
+    const resetHoveredKey = (): void => {
+        newHoveredKeyShared.value = -1
+    }
+
     useEffect(() => {
         setFilteredHiddenDashboardEntries(
             hiddenDashboardEntries?.filter(
                 (item) =>
-                    item?.exclusive !== true || item.default.includes(userKind)
+                    item?.exclusive !== true ||
+                    item.default.includes(userKind ?? 'guest')
             )
         )
     }, [hiddenDashboardEntries, userKind])
@@ -103,7 +105,10 @@ export default function DashboardEdit(): JSX.Element {
                 item={params}
                 onPressDelete={onPressDelete}
                 isLast={isLast}
-                isDragged={draggedKey === params.key}
+                isDragged={
+                    draggedId !== null &&
+                    draggedId === transShownDashboardEntries?.indexOf(params)
+                }
             />
         )
     }
@@ -117,7 +122,7 @@ export default function DashboardEdit(): JSX.Element {
     )
 
     const handleReset = useCallback(() => {
-        resetOrder(userKind)
+        resetOrder(userKind ?? 'guest')
         if (Platform.OS === 'ios') {
             void Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
@@ -162,7 +167,7 @@ export default function DashboardEdit(): JSX.Element {
                 contentContainerStyle={styles.page}
                 bounces={false}
                 contentInsetAdjustmentBehavior="automatic"
-                scrollEnabled={draggedKey === null}
+                scrollEnabled={draggedId === null}
             >
                 <View style={styles.wrapper}>
                     {userKind === USER_GUEST && (
@@ -277,11 +282,7 @@ export default function DashboardEdit(): JSX.Element {
                                             )
                                         }}
                                         onDragStart={(index: number) => {
-                                            setDraggedKey(
-                                                transShownDashboardEntries?.[
-                                                    index
-                                                ].key ?? null
-                                            )
+                                            setDraggedId(index)
                                             if (Platform.OS === 'ios') {
                                                 void Haptics.impactAsync(
                                                     Haptics.ImpactFeedbackStyle
@@ -290,7 +291,8 @@ export default function DashboardEdit(): JSX.Element {
                                             }
                                         }}
                                         onDragEnd={() => {
-                                            setDraggedKey(null)
+                                            resetHoveredKey()
+                                            setDraggedId(null)
                                             if (Platform.OS === 'ios') {
                                                 void Haptics.impactAsync(
                                                     Haptics.ImpactFeedbackStyle

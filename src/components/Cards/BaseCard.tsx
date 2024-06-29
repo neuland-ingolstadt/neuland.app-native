@@ -10,8 +10,8 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
 import PlatformIcon from '../Elements/Universal/Icon'
-import { cardIcons } from '../allCards'
 import { DashboardContext, UserKindContext } from '../contexts'
+import { cardIcons } from '../icons'
 
 interface BaseCardProps {
     title: string
@@ -73,7 +73,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     e.nativeEvent.name === t('contextMenu.hide') &&
                         hideDashboardEntry(title)
                     e.nativeEvent.name === t('contextMenu.reset') &&
-                        resetOrder(userKind)
+                        resetOrder(userKind ?? 'guest')
                 }}
                 onPreviewPress={onPress}
             >

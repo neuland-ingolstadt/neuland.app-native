@@ -204,7 +204,7 @@ export default function HomeLayout(): JSX.Element {
                 }}
             >
                 <Tabs.Screen
-                    name="index"
+                    name="(index)"
                     options={{
                         title: 'Home',
                         headerShown: false,
@@ -231,9 +231,9 @@ export default function HomeLayout(): JSX.Element {
                 />
 
                 <Tabs.Screen
-                    name="timetable"
+                    name="(timetable)"
                     options={{
-                        headerShown: true,
+                        headerShown: false,
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
@@ -280,10 +280,10 @@ export default function HomeLayout(): JSX.Element {
                 />
 
                 <Tabs.Screen
-                    name="food"
+                    name="(food)"
                     options={{
                         title: t('navigation.food'),
-                        headerShown: true,
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}
