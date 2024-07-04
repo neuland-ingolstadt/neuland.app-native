@@ -36,7 +36,11 @@ export async function getFriendlyTimetable(
     const mergedTimetable = [...rawTimetable, ...rawTimetableNextMonth].reduce<
         typeof rawTimetable
     >((acc, curr) => {
-        const existingIndex = acc.findIndex((item) => item.date === curr.date)
+        if (curr == null) return acc
+
+        const existingIndex = acc.findIndex(
+            (item) => item != null && item.date === curr.date
+        )
 
         if (existingIndex > -1) {
             acc[existingIndex].hours = {

@@ -2,7 +2,7 @@ import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -35,6 +35,6 @@ export const FoodHeaderRight = (): JSX.Element => {
 
 const styles = StyleSheet.create({
     headerButton: {
-        marginHorizontal: Platform.OS === 'ios' ? 14 : 0,
+        marginHorizontal: 0,
     },
 })

@@ -57,6 +57,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
         destructive: true,
     })
 
+    const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
+    const dynamicTitle = foodKeys.includes(title) ? 'food' : title
+
     return (
         <Pressable
             onPress={onPress}
@@ -90,13 +93,15 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         <PlatformIcon
                             color={colors.primary}
                             ios={{
-                                name: cardIcons[title as keyof typeof cardIcons]
-                                    .ios,
+                                name: cardIcons[
+                                    dynamicTitle as keyof typeof cardIcons
+                                ].ios,
                                 size: 18,
                             }}
                             android={{
-                                name: cardIcons[title as keyof typeof cardIcons]
-                                    .android as MaterialIcon,
+                                name: cardIcons[
+                                    dynamicTitle as keyof typeof cardIcons
+                                ].android as MaterialIcon,
                                 size: 24,
                                 variant: 'outlined',
                             }}

@@ -166,11 +166,6 @@ export default function HomeLayout(): JSX.Element {
 
     return (
         <MaterialBottomTabs
-            theme={{
-                animation: {
-                    scale: 0.1,
-                },
-            }}
             sceneAnimationEasing={Easing.ease}
             activeColor={colors.text}
             inactiveColor={colors.labelColor}
@@ -218,7 +213,7 @@ export default function HomeLayout(): JSX.Element {
             />
 
             <MaterialBottomTabs.Screen
-                name="timetable"
+                name="(timetable)"
                 options={{
                     title: 'Timetable',
                     tabBarLabel: t('navigation.timetable'),
@@ -266,7 +261,7 @@ export default function HomeLayout(): JSX.Element {
                 }}
             />
             <MaterialBottomTabs.Screen
-                name="food"
+                name="(food)"
                 options={{
                     tabBarLabel: t('navigation.food'),
                     tabBarIcon: (props: {

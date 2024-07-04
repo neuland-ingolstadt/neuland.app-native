@@ -6,7 +6,7 @@ import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
@@ -364,7 +364,14 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                     lecture
                                                                         .rooms[0]
                                                             )
-
+                                                        if (details == null) {
+                                                            void showToast(
+                                                                t(
+                                                                    'toast.roomNotFound'
+                                                                )
+                                                            )
+                                                            return
+                                                        }
                                                         const etage =
                                                             details?.properties
                                                                 ?.Ebene
@@ -566,6 +573,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                             ?.Raum ===
                                                                         room.room
                                                                 )
+
+                                                            if (
+                                                                details == null
+                                                            ) {
+                                                                void showToast(
+                                                                    t(
+                                                                        'toast.roomNotFound'
+                                                                    )
+                                                                )
+                                                                return
+                                                            }
 
                                                             const etage =
                                                                 details

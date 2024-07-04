@@ -218,6 +218,6 @@ const styles = StyleSheet.create({
     },
     ButtonText: {
         fontWeight: '500',
-        fontSize: 14,
+        fontSize: 15,
     },
 })
