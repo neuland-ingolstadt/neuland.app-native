@@ -1,5 +1,6 @@
 import NeulandAPI from '@/api/neuland-api'
 import PopUpCard from '@/components/Cards/PopUpCard'
+import { IndexHeaderRight } from '@/components/Elements/Dashboard/HeaderRight'
 import { HomeBottomSheet } from '@/components/Elements/Flow/HomeBottomSheet'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
@@ -27,8 +28,6 @@ import {
     View,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-
-import { IndexHeaderRight } from './_layout'
 
 export default function HomeRootScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -204,7 +203,7 @@ function HomeScreen(): JSX.Element {
             />
         </View>
     ) : (
-        <>
+        <View style={styles.page}>
             <MasonryFlashList
                 key={orientation}
                 contentInsetAdjustmentBehavior="automatic"
@@ -229,7 +228,7 @@ function HomeScreen(): JSX.Element {
                 }}
                 keyExtractor={(item) => item.key}
                 numColumns={columns}
-                estimatedItemSize={100}
+                estimatedItemSize={114}
                 ListHeaderComponent={() =>
                     data !== undefined ? (
                         <PopUpCard data={data?.announcements} />
@@ -238,7 +237,7 @@ function HomeScreen(): JSX.Element {
                     )
                 }
             />
-        </>
+        </View>
     )
 }
 

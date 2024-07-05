@@ -3,6 +3,7 @@ import MapScreen from '@/components/Elements/Map/MapScreen'
 import { MapContext } from '@/hooks/contexts/map'
 import { type ClickedMapElement } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
+import Maplibre from '@maplibre/maplibre-react-native'
 import type * as Location from 'expo-location'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
@@ -44,6 +45,7 @@ export default function MapRootScreen(): JSX.Element {
         setNextLecture,
     }
 
+    void Maplibre.requestAndroidLocationPermissions()
     return (
         <>
             <Head>

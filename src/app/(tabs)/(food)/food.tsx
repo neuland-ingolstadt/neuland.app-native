@@ -1,7 +1,7 @@
 import { MealDay } from '@/components/Elements/Food'
+import { AllergensBanner } from '@/components/Elements/Food/AllergensBanner'
 import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
@@ -9,11 +9,11 @@ import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
-import { getContrastColor, showToast } from '@/utils/ui-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
-import { router, useNavigation } from 'expo-router'
+import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, {
     useContext,
@@ -33,7 +33,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
@@ -41,12 +40,8 @@ import PagerView from 'react-native-pager-view'
 export function FoodScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const [selectedDay, setSelectedDay] = useState<number>(0)
-    const {
-        selectedRestaurants,
-        showStatic,
-        allergenSelection,
-        initAllergenSelection,
-    } = useContext(FoodFilterContext)
+    const { selectedRestaurants, showStatic, allergenSelection } =
+        useContext(FoodFilterContext)
     const [data, setData] = useState<Food[]>([])
     const { t, i18n } = useTranslation('common')
     const {
@@ -184,77 +179,6 @@ export function FoodScreen(): JSX.Element {
         )
     }
 
-    const AllergensBanner = (): JSX.Element => {
-        const contrastTextColor = getContrastColor(colors.primary)
-        return (
-            <Animated.View
-                style={{
-                    ...styles.paddingContainer,
-                    borderBottomColor: colors.border,
-                    borderBottomWidth: scrollY.interpolate({
-                        inputRange: [0, 0, 0],
-                        outputRange: [0, 0, 0.5],
-                        extrapolate: 'clamp',
-                    }),
-                }}
-            >
-                <View
-                    style={{
-                        backgroundColor: colors.primary,
-                        ...styles.bannerContainer,
-                    }}
-                >
-                    <TouchableOpacity
-                        onPress={() => {
-                            initAllergenSelection()
-                        }}
-                        hitSlop={6}
-                        style={styles.dismissButton}
-                    >
-                        <PlatformIcon
-                            ios={{
-                                name: 'xmark',
-                                size: 16,
-                            }}
-                            android={{
-                                name: 'close',
-                                size: 20,
-                            }}
-                            color={contrastTextColor}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                router.push('(food)/allergens')
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: contrastTextColor,
-                                    ...styles.bannerTitle,
-                                }}
-                            >
-                                {t('navigation.allergens', {
-                                    ns: 'navigation',
-                                })}
-                            </Text>
-
-                            <Text
-                                style={{
-                                    color: contrastTextColor,
-                                    ...styles.bannerText,
-                                }}
-                            >
-                                {t('empty.config', { ns: 'food' })}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Animated.View>
-        )
-    }
-
     const screenHeight = Dimensions.get('window').height
     const scrollY = new Animated.Value(0)
     const showAllergensBanner =
@@ -339,7 +263,9 @@ export function FoodScreen(): JSX.Element {
                                     ))}
                             </View>
                         </Animated.View>
-                        {showAllergensBanner && <AllergensBanner />}
+                        {showAllergensBanner && (
+                            <AllergensBanner scrollY={scrollY} />
+                        )}
                         <PagerView
                             ref={pagerViewRef}
                             style={{
@@ -466,32 +392,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingVertical: 8,
-    },
-    bannerContainer: {
-        padding: 10,
-        borderRadius: 8,
-        marginTop: 2,
-        marginBottom: 10,
-    },
-    dismissButton: {
-        position: 'absolute',
-        zIndex: 1,
-        top: 5,
-        right: 5,
-        padding: 5,
-        borderRadius: 8,
-    },
-    bannerTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    bannerText: {
-        marginTop: 3,
-        fontSize: 14,
-    },
-    paddingContainer: {
-        paddingHorizontal: 12,
-        borderBottomWidth: 0.5,
     },
     innerScrollContainer: {
         marginHorizontal: 12,
