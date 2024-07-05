@@ -12,7 +12,7 @@ module.exports = {
         userInterfaceStyle: 'automatic',
         ios: {
             bundleIdentifier: 'de.neuland-ingolstadt.neuland-app',
-            buildNumber: '1',
+            buildNumber: '19',
             supportsTablet: true,
             userInterfaceStyle: 'automatic',
             associatedDomains: [
@@ -43,7 +43,7 @@ module.exports = {
         android: {
             package: 'app.neuland',
             userInterfaceStyle: 'automatic',
-            versionCode: 84,
+            versionCode: 101,
             splash: {
                 image: './src/assets/splash/splashLight.png',
                 resizeMode: 'contain',

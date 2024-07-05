@@ -1,4 +1,3 @@
-import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import {
@@ -205,7 +204,7 @@ export default function HomeLayout(): JSX.Element {
                 }}
             >
                 <Tabs.Screen
-                    name="index"
+                    name="(index)"
                     options={{
                         title: 'Home',
                         headerShown: false,
@@ -232,9 +231,9 @@ export default function HomeLayout(): JSX.Element {
                 />
 
                 <Tabs.Screen
-                    name="timetable"
+                    name="(timetable)"
                     options={{
-                        headerShown: true,
+                        headerShown: false,
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
@@ -281,10 +280,10 @@ export default function HomeLayout(): JSX.Element {
                 />
 
                 <Tabs.Screen
-                    name="food"
+                    name="(food)"
                     options={{
                         title: t('navigation.food'),
-                        headerShown: true,
+                        headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}
@@ -298,7 +297,7 @@ export default function HomeLayout(): JSX.Element {
                                 }}
                             />
                         ),
-                        headerRight: () => <FoodHeaderRight />,
+
                         tabBarStyle: { position: 'absolute' },
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,

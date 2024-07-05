@@ -16,6 +16,7 @@ import 'expo-status-bar'
 import React, { useEffect } from 'react'
 import {
     type AppStateStatus,
+    Appearance,
     Platform,
     StyleSheet,
     useColorScheme,
@@ -166,7 +167,7 @@ export default function Provider({
     }, [appIcon.appIcon, flow.analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!flow.analyticsInitialized || userKind.userKind === undefined) {
             return
         }
         trackEvent('UserKind', {
@@ -246,12 +247,21 @@ export default function Provider({
         })
     }, [flow.analyticsAllowed, flow.analyticsInitialized])
 
-    const getTheme = (): AppTheme => {
-        if (themeHook.theme === 'auto') {
-            return colorScheme === 'dark' ? darkTheme : lightTheme
+    useEffect(() => {
+        const subscription = Appearance.addChangeListener(() => {})
+
+        if (themeHook.theme === 'dark') {
+            Appearance.setColorScheme('dark')
+        } else if (themeHook.theme === 'light') {
+            Appearance.setColorScheme('light')
+        } else {
+            Appearance.setColorScheme(null)
         }
-        return themeHook.theme === 'dark' ? darkTheme : lightTheme
-    }
+
+        return () => {
+            subscription.remove()
+        }
+    }, [themeHook.theme])
 
     return (
         <GestureHandlerRootView style={styles.container}>
@@ -259,7 +269,9 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: asyncStoragePersister }}
             >
-                <ThemeProvider value={getTheme()}>
+                <ThemeProvider
+                    value={colorScheme === 'dark' ? darkTheme : lightTheme}
+                >
                     <TimetableContext.Provider value={timetableHook}>
                         <NotificationContext.Provider value={notifications}>
                             <ThemeContext.Provider value={themeHook}>

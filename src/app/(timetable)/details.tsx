@@ -255,7 +255,6 @@ export default function TimetableDetails(): JSX.Element {
                                 }}
                             />
                         </DetailsSymbol>
-
                         <DetailsBody>
                             <Text
                                 style={{
@@ -265,15 +264,18 @@ export default function TimetableDetails(): JSX.Element {
                             >
                                 {lecture.name}
                             </Text>
-
-                            <Text
-                                style={{
-                                    ...styles.eventShortName,
-                                    color: colors.labelColor,
-                                }}
-                            >
-                                {lecture.shortName}
-                            </Text>
+                            {lecture.shortName.length > 0 ? (
+                                <Text
+                                    style={{
+                                        ...styles.eventShortName,
+                                        color: colors.labelColor,
+                                    }}
+                                >
+                                    {lecture.shortName}
+                                </Text>
+                            ) : (
+                                <></>
+                            )}
                         </DetailsBody>
                     </DetailsRow>
 

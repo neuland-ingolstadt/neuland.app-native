@@ -1,4 +1,2 @@
-- choose the app design independently of your iOS design (light or dark)
-- redesigned dashboard customization via drag & drop
-- bug fixes and improvements to the map
-- performance improvements
+- Displays exam dates in the calendar
+- Performance and design improvements

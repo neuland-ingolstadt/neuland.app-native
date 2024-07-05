@@ -1,14 +1,16 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/timetable'
+import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
+import { RouteParamsContext, TimetableContext } from '@/components/contexts'
 import {
-    NotificationContext,
-    RouteParamsContext,
-    TimetableContext,
-} from '@/components/contexts'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+    type CalendarTimetableEntry,
+    type Exam,
+    type ExamTimetableEntry,
+    type FriendlyTimetableEntry,
+} from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, inverseColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { Buffer } from 'buffer'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
@@ -20,7 +22,6 @@ import WeekView, {
     type WeekViewEvent,
 } from 'react-native-week-view'
 
-import PlatformIcon from '../Universal/Icon'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 // Import HeaderComponentProps
@@ -28,21 +29,36 @@ import { HeaderLeft, HeaderRight } from './HeaderButtons'
 export default function TimetableWeek({
     // eslint-disable-next-line react/prop-types
     friendlyTimetable,
+    // eslint-disable-next-line react/prop-types
+    exams,
 }: ITimetableViewProps): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
     const { selectedDate, setSelectedDate } = useContext(TimetableContext)
-    const { timetableNotifications } = useContext(NotificationContext)
     // get the first day of friendlyTimetable that is not in the past
     const today = new Date()
-
+    const inversePrimary = inverseColor(colors.primary)
     const friendlyTimetableWithColor = friendlyTimetable.map(
         (entry: FriendlyTimetableEntry, index: number) => ({
             ...entry,
-            color: colors.background,
+            eventType: 'lecture',
+            color: colors.primary,
             id: index,
+            startDate: new Date(entry.startDate),
+            endDate: new Date(entry.endDate),
         })
     )
+
+    const examsWithColor = exams.map((exam: Exam, index: number) => ({
+        ...exam,
+        eventType: 'exam',
+        color: inversePrimary,
+        id: friendlyTimetable.length + index, // Ensure unique ID by continuing from the last timetable entry ID
+        startDate: new Date(exam.date),
+        endDate: new Date(new Date(exam.date).getTime() + 1000 * 60 * 60 * 1.5), // Correctly calculate the endDate
+    }))
+
+    const allEvents = [...examsWithColor, ...friendlyTimetableWithColor]
 
     const router = useRouter()
     const navigation = useNavigation()
@@ -66,14 +82,15 @@ export default function TimetableWeek({
     const isDark = theme.dark
     const isIOS = Platform.OS === 'ios'
 
-    const eventBackgroundColor = isIOS
-        ? Color(colors.primary)
-              .alpha(0.73)
-              .lighten(isDark ? 0 : 0.6)
-              .darken(isDark ? 0.65 : 0)
-              .rgb()
-              .string()
-        : colors.primary
+    const eventBackgroundColor = (color: string): string =>
+        isIOS
+            ? Color(color)
+                  .alpha(0.73)
+                  .lighten(isDark ? 0 : 0.6)
+                  .darken(isDark ? 0.65 : 0)
+                  .rgb()
+                  .string()
+            : color
 
     const dayBackgroundColor = Color(colors.card)
         .darken(isDark ? 0 : 0.13)
@@ -85,37 +102,41 @@ export default function TimetableWeek({
         .darken(isDark ? 0 : 0.2)
         .hex()
 
-    let textColor = isIOS
-        ? Color(colors.primary)
-              .darken(isDark ? 0 : 0.45)
-              .hex()
-        : getContrastColor(eventBackgroundColor)
+    const textColor = (color: string, background: string): string => {
+        let textColor = isIOS
+            ? Color(color)
+                  .darken(isDark ? 0 : 0.45)
+                  .hex()
+            : getContrastColor(background)
 
-    const contrast = Color(eventBackgroundColor).contrast(Color(textColor))
+        const contrast = Color(background).contrast(Color(textColor))
 
-    if (contrast < 3.5 && isIOS) {
-        textColor = Color(eventBackgroundColor).isLight()
-            ? '#000000'
-            : '#FFFFFF'
+        if (contrast < 3.5 && isIOS) {
+            textColor = Color(background).isLight() ? '#000000' : '#FFFFFF'
+        }
+        return textColor
     }
 
-    const lineColor = isIOS
-        ? Color(colors.primary)
-              .darken(isDark ? 0.25 : 0)
-              .lighten(isDark ? 0 : 0.25)
-              .hex()
-        : eventBackgroundColor
+    const lineColor = (color: string, eventBackgroundColor: string): string =>
+        isIOS
+            ? Color(color)
+                  .darken(isDark ? 0.25 : 0)
+                  .lighten(isDark ? 0 : 0.25)
+                  .hex()
+            : eventBackgroundColor
 
-    const Event = ({
+    const TimetableEvent = ({
         event,
     }: {
-        event: FriendlyTimetableEntry
+        event: CalendarTimetableEntry
     }): JSX.Element => {
         const begin = new Date(event.startDate)
         const end = new Date(event.endDate)
         const duration = end.getTime() - begin.getTime()
         const isOverflowing = duration < 1000 * 60 * 60
         const nameParts = event.shortName.split('_').slice(1)
+        const background = eventBackgroundColor(event.color)
+        const fontColor = textColor(event.color, background)
 
         const nameToDisplay =
             event.name.length > 20
@@ -127,11 +148,11 @@ export default function TimetableWeek({
             <View
                 style={{
                     ...styles.eventContainer,
-                    backgroundColor: eventBackgroundColor,
+                    backgroundColor: background,
                 }}
             >
                 <LinearGradient
-                    colors={[colors.primary, lineColor]}
+                    colors={[event.color, lineColor(event.color, background)]}
                     start={[0, 0.2]}
                     end={[1, 0.8]}
                     style={{
@@ -144,7 +165,7 @@ export default function TimetableWeek({
                         <Text
                             style={{
                                 ...styles.eventTitle,
-                                color: textColor,
+                                color: fontColor,
                             }}
                             numberOfLines={2}
                         >
@@ -155,7 +176,7 @@ export default function TimetableWeek({
                             <Text
                                 style={{
                                     ...styles.eventTime,
-                                    color: textColor,
+                                    color: fontColor,
                                     fontVariant: ['tabular-nums'],
                                 }}
                             >
@@ -172,30 +193,88 @@ export default function TimetableWeek({
                                 ellipsizeMode="tail" // Truncate text with '...' at the end
                                 style={{
                                     ...styles.eventLocation,
-                                    color: textColor,
+                                    color: fontColor,
                                 }}
                             >
                                 {event.rooms.join(', ')}
                             </Text>
                         )}
-                        {timetableNotifications[event.shortName] !==
-                            undefined &&
-                            !isOverflowing && (
-                                <PlatformIcon
-                                    color={textColor}
-                                    ios={{
-                                        name: 'bell',
-                                        size: 10,
-                                    }}
-                                    android={{
-                                        name: 'notifications',
-                                        size: 12,
-                                    }}
-                                />
-                            )}
                     </View>
                 </View>
             </View>
+        )
+    }
+    const ExamEvent = ({
+        event,
+    }: {
+        event: ExamTimetableEntry
+    }): JSX.Element => {
+        const begin = new Date(event.date)
+        const background = eventBackgroundColor(event.color)
+        const fontColor = textColor(event.color, background)
+        return (
+            <View
+                style={{
+                    ...styles.eventContainer,
+                    backgroundColor: background,
+                }}
+            >
+                <LinearGradient
+                    colors={[event.color, lineColor(event.color, background)]}
+                    start={[0, 0.2]}
+                    end={[1, 0.8]}
+                    style={{
+                        ...styles.eventLine,
+                    }}
+                />
+                <View style={styles.eventText}>
+                    <View style={{}}>
+                        <Text
+                            style={{
+                                ...styles.eventTitle,
+                                color: fontColor,
+                            }}
+                            numberOfLines={2}
+                        >
+                            {event.name}
+                        </Text>
+
+                        <Text
+                            style={{
+                                ...styles.eventTime,
+                                color: fontColor,
+                                fontVariant: ['tabular-nums'],
+                            }}
+                        >
+                            {formatFriendlyTime(begin)}
+                        </Text>
+                    </View>
+                    <View style={styles.roomRow}>
+                        <Text
+                            numberOfLines={1} // Limiting to 1 line
+                            ellipsizeMode="tail" // Truncate text with '...' at the end
+                            style={{
+                                ...styles.eventLocation,
+                                color: fontColor,
+                            }}
+                        >
+                            {event.seat ?? event.rooms}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    const Event = ({
+        event,
+    }: {
+        event: CalendarTimetableEntry | ExamTimetableEntry
+    }): JSX.Element => {
+        return event.eventType === 'exam' ? (
+            <ExamEvent event={event as ExamTimetableEntry} />
+        ) : (
+            <TimetableEvent event={event as CalendarTimetableEntry} />
         )
     }
 
@@ -269,6 +348,19 @@ export default function TimetableWeek({
     }
 
     function showEventDetails(entry: WeekViewEvent): void {
+        if (entry.eventType === 'exam') {
+            const base64Event = Buffer.from(JSON.stringify(entry)).toString(
+                'base64'
+            )
+            const navigateToPage = (): void => {
+                router.push({
+                    pathname: '(pages)/exam',
+                    params: { examEntry: base64Event },
+                })
+            }
+            navigateToPage()
+            return
+        }
         updateLecture(entry as unknown as FriendlyTimetableEntry)
         router.push({
             pathname: '(timetable)/details',
@@ -279,11 +371,11 @@ export default function TimetableWeek({
         <WeekView
             /// <reference path="" />
             ref={weekViewRef}
-            events={friendlyTimetableWithColor}
+            events={allEvents}
             selectedDate={selectedDate}
             numberOfDays={3}
             hoursInDisplay={14}
-            showNowLine
+            showNowLine={true}
             showTitle={false}
             locale="de"
             timesColumnWidth={0.15}

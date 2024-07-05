@@ -8,18 +8,40 @@ import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import packageInfo from '../../../package.json'
 
-export default function OnboardingScreen(): JSX.Element {
+export default function WhatsNewScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData
     const { t, i18n } = useTranslation('flow')
-    const { analyticsAllowed, toggleAnalytics } = React.useContext(FlowContext)
+    const [opacityValues] = useState(
+        Object.keys(
+            changelog.version[convertToMajorMinorPatch(packageInfo.version)] ??
+                []
+        )
+            .flatMap((key) => changelog.version[key])
+            .map(() => new Animated.Value(0))
+    )
+    useEffect(() => {
+        const delay = 100
+
+        setTimeout(() => {
+            const animations = opacityValues.map((opacity, index) =>
+                Animated.timing(opacity, {
+                    toValue: 1,
+                    duration: 800,
+                    useNativeDriver: true,
+                })
+            )
+            Animated.stagger(425, animations).start()
+        }, delay)
+    }, [])
+
     return (
         <View style={styles.page}>
             <View style={styles.titleBox}>
@@ -54,30 +76,43 @@ export default function OnboardingScreen(): JSX.Element {
                             key ===
                             convertToMajorMinorPatch(packageInfo.version)
                     )
-                    .map((key) => (
+                    .map((key, boxIndex) => (
                         <View key={key} style={styles.boxes}>
                             {changelog.version[key].map(
-                                ({ title, description, icon }) => (
-                                    <WhatsNewBox
+                                ({ title, description, icon }, index) => (
+                                    <Animated.View
                                         key={
                                             title[i18n.language as LanguageKey]
                                         }
-                                        title={
-                                            title[i18n.language as LanguageKey]
-                                        }
-                                        description={
-                                            description[
-                                                i18n.language as LanguageKey
-                                            ]
-                                        }
-                                        icon={icon}
-                                    />
+                                        style={{
+                                            opacity:
+                                                opacityValues[
+                                                    boxIndex *
+                                                        changelog.version[key]
+                                                            .length +
+                                                        index
+                                                ],
+                                        }}
+                                    >
+                                        <WhatsNewBox
+                                            title={
+                                                title[
+                                                    i18n.language as LanguageKey
+                                                ]
+                                            }
+                                            description={
+                                                description[
+                                                    i18n.language as LanguageKey
+                                                ]
+                                            }
+                                            icon={icon}
+                                        />
+                                    </Animated.View>
                                 )
                             )}
                         </View>
                     ))}
             </View>
-
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={[
@@ -89,11 +124,6 @@ export default function OnboardingScreen(): JSX.Element {
                     onPress={() => {
                         flow.toggleUpdated()
                         router.navigate('/')
-                        // needed to trigger the analytics toggle for users of the previous version
-                        // can be removed in the future
-                        if (analyticsAllowed === null) {
-                            toggleAnalytics()
-                        }
                     }}
                 >
                     <Text

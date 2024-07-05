@@ -1,4 +1,2 @@
-- Wähle das App Design unabhängig von deinem iOS Design (hell oder dunkel)
-- Neu gestaltete Dashboard Anpassung via Drag & Drop 
-- Fehlerbehebungen und Verbesserungen der Karte
-- Performance Verbesserungen
+- Zeigt Prüfungstermine im Kalender an
+- Performance und Design Verbesserungen
