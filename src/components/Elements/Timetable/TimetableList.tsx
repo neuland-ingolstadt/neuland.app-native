@@ -1,7 +1,7 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
 import { NotificationContext, RouteParamsContext } from '@/components/contexts'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
     formatFriendlyDateTime,
@@ -10,7 +10,9 @@ import {
 } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
+import { inverseColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { Buffer } from 'buffer'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
@@ -37,6 +39,8 @@ export type FlashListItems = FriendlyTimetableEntry | Date | string
 export default function TimetableList({
     // eslint-disable-next-line react/prop-types
     friendlyTimetable,
+    // eslint-disable-next-line react/prop-types
+    exams,
 }: ITimetableViewProps): JSX.Element {
     /**
      * Constants
@@ -78,20 +82,24 @@ export default function TimetableList({
      * Colors
      */
     const colors = theme.colors as Colors
+    const primaryColor = colors.primary
+    const inversePrimary = inverseColor(primaryColor)
 
     /**
      * Constants
      */
 
-    const groupedTimetable = getGroupedTimetable(timetable)
+    const groupedTimetable = getGroupedTimetable(timetable, exams)
     const filteredTimetable = groupedTimetable.filter(
         (section) => section.title >= today
     )
     const isDark = theme.dark
-    const lineColor = Color(colors.primary)
-        .darken(isDark ? 0.2 : 0)
-        .lighten(isDark ? 0 : 0.2)
-        .hex()
+    function getLineColor(color: string): string {
+        return Color(color)
+            .darken(isDark ? 0.2 : 0)
+            .lighten(isDark ? 0 : 0.2)
+            .hex()
+    }
 
     /**
      * Functions
@@ -137,8 +145,7 @@ export default function TimetableList({
     function renderItemSeparator(): JSX.Element {
         return <Divider color={colors.border} iosPaddingLeft={16} />
     }
-
-    function renderItem({
+    function renderTimetableItem({
         item,
     }: {
         item: FriendlyTimetableEntry
@@ -161,7 +168,10 @@ export default function TimetableList({
                 >
                     <View style={styles.eventWrapper}>
                         <LinearGradient
-                            colors={[colors.primary, lineColor]}
+                            colors={[
+                                colors.primary,
+                                getLineColor(colors.primary),
+                            ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
                             style={{
@@ -229,6 +239,86 @@ export default function TimetableList({
                 </Pressable>
             </DragDropView>
         )
+    }
+    function renderExamItem({ exam }: { exam: Exam }): JSX.Element {
+        const base64Event = Buffer.from(JSON.stringify(exam)).toString('base64')
+        const navigateToPage = (): void => {
+            router.push({
+                pathname: '(pages)/exam',
+                params: { examEntry: base64Event },
+            })
+        }
+        return (
+            <DragDropView
+                mode="drag"
+                scope="system"
+                dragValue={`${exam.name} in ${exam.rooms} (${formatFriendlyDateTime(exam.date)})`}
+            >
+                <Pressable
+                    onPress={() => {
+                        navigateToPage()
+                    }}
+                    style={styles.pressable}
+                >
+                    <View style={styles.eventWrapper}>
+                        <LinearGradient
+                            colors={[
+                                inversePrimary,
+                                getLineColor(inversePrimary),
+                            ]}
+                            start={[0, 0.9]}
+                            end={[0.7, 0.25]}
+                            style={{
+                                backgroundColor: inversePrimary,
+                                ...styles.indicator,
+                            }}
+                        />
+                        <View style={styles.nameView}>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    ...styles.titleText,
+                                }}
+                                numberOfLines={2}
+                            >
+                                {t('cards.calendar.exam', {
+                                    ns: 'navigation',
+                                    name: exam.name,
+                                })}
+                            </Text>
+                            <View style={styles.itemRow}>
+                                <Text
+                                    style={{
+                                        color: colors.labelColor,
+                                        ...styles.descriptionText,
+                                    }}
+                                >
+                                    {exam.seat ?? exam.rooms}
+                                </Text>
+                            </View>
+                        </View>
+                        <View>
+                            <Text
+                                style={{
+                                    color: colors.text,
+                                    fontVariant: ['tabular-nums'],
+                                    ...styles.descriptionText,
+                                }}
+                            >
+                                {formatFriendlyTime(exam.date)}
+                            </Text>
+                        </View>
+                    </View>
+                </Pressable>
+            </DragDropView>
+        )
+    }
+
+    function renderItem({ item }: { item: any }): JSX.Element {
+        if (item.eventType === 'exam') {
+            return renderExamItem({ exam: item })
+        }
+        return renderTimetableItem({ item })
     }
 
     return (
@@ -311,6 +401,7 @@ const styles = StyleSheet.create({
     },
     container: {
         paddingHorizontal: PAGE_PADDING,
+        paddingBottom: 80,
     },
     pressable: {
         paddingVertical: 8,

@@ -1,4 +1,5 @@
 import Color from 'color'
+import { type ColorValue } from 'react-native'
 import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
@@ -142,4 +143,17 @@ export const getStatusBarStyle = (
         default:
             return isAndroid ? (isDark ? 'light' : 'dark') : 'auto'
     }
+}
+
+export const inverseColor = (color: ColorValue): string => {
+    let inverseColor
+
+    if (color === '#ffffff' || color === '#000000') {
+        // If primary color is white or black, adjust it slightly instead of inverting
+        inverseColor = color === '#ffffff' ? '#c3edff' : '#4c8eaa'
+    } else {
+        // Otherwise, invert the color
+        inverseColor = Color(color).negate().string()
+    }
+    return inverseColor
 }

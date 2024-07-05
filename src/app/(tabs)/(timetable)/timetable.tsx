@@ -5,8 +5,9 @@ import { type Colors } from '@/components/colors'
 import { TimetableContext, UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_GUEST } from '@/hooks/contexts/userKind'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
+import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -16,6 +17,7 @@ import { ActivityIndicator, Linking, StyleSheet, View } from 'react-native'
 
 export interface ITimetableViewProps {
     friendlyTimetable: FriendlyTimetableEntry[]
+    exams: Exam[]
 }
 
 export type CalendarMode = '3days' | 'list'
@@ -59,6 +61,14 @@ export default function TimetableScreen(): JSX.Element {
             }
             return failureCount < 3
         },
+        enabled: userKind !== USER_GUEST,
+    })
+
+    const { data: exams } = useQuery({
+        queryKey: ['exams'],
+        queryFn: loadExamList,
+        staleTime: 1000 * 60 * 10, // 10 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours
         enabled: userKind !== USER_GUEST,
     })
 
@@ -237,9 +247,19 @@ export default function TimetableScreen(): JSX.Element {
         if (isLoading) return <LoadingView />
         else if (isSuccess && timetable !== undefined) {
             if (timetableMode === 'list') {
-                return <TimetableList friendlyTimetable={timetable} />
+                return (
+                    <TimetableList
+                        friendlyTimetable={timetable}
+                        exams={exams ?? []}
+                    />
+                )
             } else {
-                return <TimetableWeek friendlyTimetable={timetable} />
+                return (
+                    <TimetableWeek
+                        friendlyTimetable={timetable}
+                        exams={exams ?? []}
+                    />
+                )
             }
         } else {
             if (isPaused && !isSuccess) {

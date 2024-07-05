@@ -2,6 +2,7 @@ import API from '@/api/authenticated-api'
 import { type LectureData } from '@/hooks/contexts/notifications'
 import {
     type CalendarEvent,
+    type Exam,
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
@@ -117,17 +118,19 @@ export async function getFriendlyTimetable(
  * // }
  **/
 export function getGroupedTimetable(
-    timetable: FriendlyTimetableEntry[]
+    timetable: FriendlyTimetableEntry[],
+    exams: Exam[]
 ): TimetableSections[] {
-    const dates = [...new Set(timetable.map((x) => x.date))]
-
-    // Group lectures by date
+    const combinedData = [
+        ...timetable,
+        ...exams.map((exam) => ({ ...exam, eventType: 'exam' })),
+    ]
+    const dates = [...new Set(combinedData.map((item) => item.date))]
     const groups = dates.map((date) => ({
         title: new Date(date),
-        data: timetable.filter((x) => x.date === date),
+        data: combinedData.filter((item) => item.date === date),
     }))
-
-    return groups
+    return groups as TimetableSections[]
 }
 
 export function convertTimetableToWeekViewEvents(

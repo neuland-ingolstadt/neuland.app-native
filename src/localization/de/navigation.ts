@@ -53,7 +53,7 @@ export default {
             by: 'von {{name}}',
         },
         calendar: {
-            exam: 'Prüfung {{name}}',
+            exam: 'Prüfung: {{name}}',
             ends: 'endet ',
         },
         timetable: {
