@@ -4,7 +4,7 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import { loadTimetable } from '@/app/(tabs)/timetable'
+import { loadTimetable } from '@/app/(tabs)/(timetable)/timetable'
 import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
 import FloorPicker from '@/components/Elements/Map/FloorPicker'
@@ -31,6 +31,7 @@ import {
     getNextValidDate,
 } from '@/utils/map-utils'
 import { LoadingState, showToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import MapLibreGL from '@maplibre/maplibre-react-native'
@@ -47,7 +48,6 @@ import React, {
     useCallback,
     useContext,
     useEffect,
-    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -78,7 +78,6 @@ import { modalSection } from './ModalSections'
 
 const MapScreen = (): JSX.Element => {
     const navigation = useNavigation()
-    const isFocused = useNavigation().isFocused()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const theme = useTheme()
     const colors = theme.colors as Colors
@@ -119,17 +118,11 @@ const MapScreen = (): JSX.Element => {
     type LocationsType = Record<string, string>
     const locations: LocationsType = Locations
     const [isVisible, setIsVisible] = useState(true)
+    const [tabBarPressed, setTabBarPressed] = useState(false)
     const opacity = useSharedValue(1)
 
     // needed for Android
     void MapLibreGL.setAccessToken(null)
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            statusbarTranslucent: true,
-            statusBarColor: undefined,
-        })
-    }, [navigation])
 
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -231,7 +224,6 @@ const MapScreen = (): JSX.Element => {
 
         return nextEvent != null ? [nextEvent] : []
     }
-
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {
             bottomSheetModalRef.current?.close()
@@ -330,17 +322,22 @@ const MapScreen = (): JSX.Element => {
     }, [mapOverlay])
 
     useEffect(() => {
-        // @ts-expect-error - no types for tabPress
+        // @ts-expect-error - TabPress event is not defined in the type
         const unsubscribe = navigation.addListener('tabPress', (e) => {
-            // if already on the map screen, reset the map without animation
-            // if not on the map screen, reset the map with animation
-            // _setView(mapCenter, mapRef, isFocused)
-            bottomSheetModalRef.current?.close()
-            setView()
+            setDisableFollowUser(true)
+            setTabBarPressed(true)
         })
 
         return unsubscribe
-    }, [navigation, isFocused])
+    }, [navigation])
+
+    useEffect(() => {
+        if (tabBarPressed) {
+            bottomSheetModalRef.current?.close()
+            setView()
+            setTabBarPressed(false)
+        }
+    }, [tabBarPressed])
 
     useEffect(() => {
         if (routeParams === null || routeParams === '') {
@@ -362,6 +359,10 @@ const MapScreen = (): JSX.Element => {
             type: SEARCH_TYPES.ROOM,
             center: room.center,
             manual: false,
+        })
+        trackEvent('Room', {
+            room: routeParams,
+            origin: 'InAppLink',
         })
         setCurrentFloor({
             floor: room.Ebene,
@@ -615,6 +616,7 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         setDisableFollowUser(false)
+        bottomSheetModalRef.current?.close()
     }, [cameraTriggerKey])
 
     useEffect(() => {
@@ -772,6 +774,10 @@ const MapScreen = (): JSX.Element => {
                                         center: e.features[0].properties
                                             ?.center,
                                         manual: true,
+                                    })
+                                    trackEvent('Room', {
+                                        room: e.features[0].properties?.Raum,
+                                        origin: 'MapClick',
                                     })
 
                                     handlePresentModalPress()

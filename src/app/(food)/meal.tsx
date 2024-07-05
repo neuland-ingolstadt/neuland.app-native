@@ -325,7 +325,7 @@ export default function FoodDetail(): JSX.Element {
                     title: variant.name[i18n.language as LanguageKey],
                     value:
                         (variant?.additional ? '+ ' : '') +
-                        formatPrice(variant.prices[userKind]),
+                        formatPrice(variant.prices[userKind ?? USER_GUEST]),
                     onPress: () => {
                         trackEvent('Share', {
                             type: 'mealVariant',
@@ -335,7 +335,9 @@ export default function FoodDetail(): JSX.Element {
                                 meal: variant.name[
                                     i18n.language as LanguageKey
                                 ],
-                                price: formatPrice(variant.prices[userKind]),
+                                price: formatPrice(
+                                    variant.prices[userKind ?? USER_GUEST]
+                                ),
                                 location: restaurant,
                                 id: variant?.id,
                             }),
@@ -398,7 +400,9 @@ export default function FoodDetail(): JSX.Element {
                         await Share.share({
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
-                                price: formatPrice(meal?.prices[userKind]),
+                                price: formatPrice(
+                                    meal?.prices[userKind ?? USER_GUEST]
+                                ),
                                 location: restaurant,
                                 id: meal?.id,
                             }),

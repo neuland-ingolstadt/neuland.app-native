@@ -10,8 +10,8 @@ import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
 import PlatformIcon from '../Elements/Universal/Icon'
-import { cardIcons } from '../allCards'
 import { DashboardContext, UserKindContext } from '../contexts'
+import { cardIcons } from '../icons'
 
 interface BaseCardProps {
     title: string
@@ -57,6 +57,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
         destructive: true,
     })
 
+    const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
+    const dynamicTitle = foodKeys.includes(title) ? 'food' : title
+
     return (
         <Pressable
             onPress={onPress}
@@ -73,7 +76,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     e.nativeEvent.name === t('contextMenu.hide') &&
                         hideDashboardEntry(title)
                     e.nativeEvent.name === t('contextMenu.reset') &&
-                        resetOrder(userKind)
+                        resetOrder(userKind ?? 'guest')
                 }}
                 onPreviewPress={onPress}
             >
@@ -90,14 +93,17 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         <PlatformIcon
                             color={colors.primary}
                             ios={{
-                                name: cardIcons[title as keyof typeof cardIcons]
-                                    .ios,
+                                name: cardIcons[
+                                    dynamicTitle as keyof typeof cardIcons
+                                ].ios,
                                 size: 18,
                             }}
                             android={{
-                                name: cardIcons[title as keyof typeof cardIcons]
-                                    .android as MaterialIcon,
+                                name: cardIcons[
+                                    dynamicTitle as keyof typeof cardIcons
+                                ].android as MaterialIcon,
                                 size: 24,
+                                variant: 'outlined',
                             }}
                         />
                         <Text style={[styles.title, { color: colors.text }]}>

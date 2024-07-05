@@ -74,9 +74,25 @@ export interface FriendlyTimetableEntry {
     literature: string | null
 }
 
+export interface CalendarTimetableEntry extends FriendlyTimetableEntry {
+    eventType: string
+    color: string
+    id: number
+    startDate: Date
+    endDate: Date
+}
+
+export interface ExamTimetableEntry extends Exam {
+    eventType: string
+    color: string
+    id: number
+    startDate: Date
+    endDate: Date
+}
+
 export interface TimetableSections {
     title: Date
-    data: FriendlyTimetableEntry[]
+    data: FriendlyTimetableEntry[] | Exam[]
 }
 
 export interface CalendarEvent {

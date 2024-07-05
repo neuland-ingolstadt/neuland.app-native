@@ -6,7 +6,8 @@ import { USER_GUEST } from '@/hooks/contexts/userKind'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { getContrastColor } from '@/utils/ui-utils'
+import { getContrastColor, showToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
@@ -152,6 +153,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                 ],
                 { cancelable: false }
             )
+            trackEvent('EasterEgg', { easterEgg: 'mapSearchNeuland' })
 
             addUnlockedAppIcon('retro')
         }
@@ -178,7 +180,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                         paddingHorizontal: PAGE_PADDING,
                     }}
                 >
-                    {Platform.OS === 'ios' ? (
+                    {Platform.OS !== 'ios' ? (
                         <BottomSheetTextInput
                             ref={textInputRef}
                             style={{
@@ -297,14 +299,20 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                         )
                     ) : userKind === USER_GUEST ? (
                         <View style={styles.guestContainer}>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.noResults,
+                            <Pressable
+                                onPress={() => {
+                                    router.push('login')
                                 }}
                             >
-                                {t('pages.map.details.room.signIn')}
-                            </Text>
+                                <Text
+                                    style={{
+                                        color: colors.text,
+                                        ...styles.noResults,
+                                    }}
+                                >
+                                    {t('pages.map.details.room.signIn')}
+                                </Text>
+                            </Pressable>
                             <AttributionLink />
                         </View>
                     ) : (
@@ -356,7 +364,14 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                     lecture
                                                                         .rooms[0]
                                                             )
-
+                                                        if (details == null) {
+                                                            void showToast(
+                                                                t(
+                                                                    'toast.roomNotFound'
+                                                                )
+                                                            )
+                                                            return
+                                                        }
                                                         const etage =
                                                             details?.properties
                                                                 ?.Ebene
@@ -376,6 +391,12 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                 ?.center,
                                                             manual: false,
                                                         })
+                                                        trackEvent('Room', {
+                                                            room: lecture
+                                                                .rooms[0],
+                                                            origin: 'NextLecture',
+                                                        })
+
                                                         handlePresentModalPress()
                                                     }}
                                                 >
@@ -553,6 +574,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                         room.room
                                                                 )
 
+                                                            if (
+                                                                details == null
+                                                            ) {
+                                                                void showToast(
+                                                                    t(
+                                                                        'toast.roomNotFound'
+                                                                    )
+                                                                )
+                                                                return
+                                                            }
+
                                                             const etage =
                                                                 details
                                                                     ?.properties
@@ -574,9 +606,12 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                     undefined,
                                                                 manual: false,
                                                             })
+                                                            trackEvent('Room', {
+                                                                room: room.room,
+                                                                origin: 'AvailableRoomsSuggestion',
+                                                            })
 
                                                             handlePresentModalPress()
-                                                            bottomSheetRef.current?.close()
                                                         }}
                                                     >
                                                         <View

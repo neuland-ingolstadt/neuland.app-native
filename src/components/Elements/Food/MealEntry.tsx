@@ -65,8 +65,9 @@ export const MealEntry = ({
     )
 
     useEffect(() => {}, [userKind])
-    const price = getUserSpecificPrice(meal, userKind)
-    const label = price !== '' ? getUserSpecificLabel(userKind, t) : ''
+    const price = getUserSpecificPrice(meal, userKind ?? 'guest')
+    const label =
+        price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : ''
 
     const isNotConfigured =
         allergenSelection.length === 1 &&
@@ -97,7 +98,7 @@ export const MealEntry = ({
             scope="system"
             dragValue={t('details.share.message', {
                 meal: meal?.name[i18n.language as LanguageKey],
-                price: formatPrice(meal?.prices[userKind]),
+                price: formatPrice(meal?.prices[userKind ?? 'guest']),
                 location:
                     humanLocations[
                         meal.restaurant as keyof typeof humanLocations
@@ -157,7 +158,9 @@ export const MealEntry = ({
                         void Share.share({
                             message: t('details.share.message', {
                                 meal: meal?.name[i18n.language as LanguageKey],
-                                price: formatPrice(meal?.prices[userKind]),
+                                price: formatPrice(
+                                    meal?.prices[userKind ?? 'guest']
+                                ),
                                 location: restaurant,
                                 id: meal?.id,
                             }),
@@ -301,7 +304,10 @@ export const MealEntry = ({
                                         { color: colors.text },
                                     ]}
                                 >
-                                    {getUserSpecificPrice(meal, userKind)}
+                                    {getUserSpecificPrice(
+                                        meal,
+                                        userKind ?? 'guest'
+                                    )}
                                 </Text>
                                 {label !== '' && (
                                     <Text

@@ -5,7 +5,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
-import { ThemeContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { USER_GUEST, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type Lecturers } from '@/types/thi-api'
@@ -18,7 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { getBarTintColor, showToast } from '@/utils/ui-utils'
+import { showToast } from '@/utils/ui-utils'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -42,7 +42,6 @@ import {
     StyleSheet,
     Text,
     View,
-    useColorScheme,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
 
@@ -55,8 +54,6 @@ export default function LecturersCard(): JSX.Element {
     const navigation = useNavigation()
     const [selectedPage, setSelectedPage] = useState(0)
     const colors = useTheme().colors as Colors
-    const isDark = useColorScheme() === 'dark'
-    const { theme } = useContext(ThemeContext)
     const { t } = useTranslation('common')
     const pagerViewRef = useRef<PagerView>(null)
     const [displayesProfessors, setDisplayedProfessors] = useState(false)
@@ -229,8 +226,6 @@ export default function LecturersCard(): JSX.Element {
                     ns: 'navigation',
                 }),
 
-                barTintColor: getBarTintColor(theme, isDark),
-
                 ...Platform.select({
                     android: {
                         headerIconColor: colors.text,
@@ -256,7 +251,7 @@ export default function LecturersCard(): JSX.Element {
                 },
             },
         })
-    }, [navigation, isDark])
+    }, [navigation])
 
     const LecturerList = ({
         lecturers,

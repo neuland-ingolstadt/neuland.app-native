@@ -93,7 +93,7 @@ const PlatformIcon = ({
                         ? styles.androidIconOutlined
                         : styles.androidIconFilled),
                     color,
-                    fontSize: android.size * 1,
+                    fontSize: android.size,
                     lineHeight: android.size,
                     ...style,
                 }}

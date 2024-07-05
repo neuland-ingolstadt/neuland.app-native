@@ -1,4 +1,5 @@
 import { type Colors } from '@/components/colors'
+import { type MaterialIcon } from '@/types/material-icons'
 import { useTheme } from '@react-navigation/native'
 import React, { type FC } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
@@ -31,7 +32,7 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                     size: 26,
                 }}
                 android={{
-                    name: icon.android,
+                    name: icon.android as MaterialIcon,
                     size: 28,
                 }}
             />

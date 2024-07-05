@@ -1,4 +1,4 @@
-import { type CalendarMode } from '@/app/(tabs)/timetable'
+import { type CalendarMode } from '@/app/(tabs)/(timetable)/timetable'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 

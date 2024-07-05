@@ -7,6 +7,7 @@ import { AppIconContext, FlowContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { IMPRINT_URL, PRIVACY_URL } from '@/utils/app-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -31,7 +32,7 @@ export default function About(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
     const { analyticsAllowed, toggleAnalytics } = React.useContext(FlowContext)
-    const { addUnlockedAppIcon } = useContext(AppIconContext)
+    const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
     const sections: FormListSections[] = [
         {
             header: t('about.formlist.legal.title'),
@@ -126,9 +127,12 @@ export default function About(): JSX.Element {
                 ],
                 { cancelable: false }
             )
-            if (Platform.OS === 'ios') {
-                addUnlockedAppIcon('cat')
+            const isCollected = unlockedAppIcons.includes('cat')
+            if (!isCollected) {
+                trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
+                if (Platform.OS === 'ios') addUnlockedAppIcon('cat')
             }
+
             setPressCount(0)
         }
     }

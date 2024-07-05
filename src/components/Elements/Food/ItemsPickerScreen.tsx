@@ -1,10 +1,9 @@
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import { type Colors } from '@/components/colors'
-import { FoodFilterContext, ThemeContext } from '@/components/contexts'
+import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
-import { getBarTintColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
 import React, { useContext, useLayoutEffect, useState } from 'react'
@@ -33,7 +32,6 @@ const ItemsPickerScreen = (params: {
     const colors = useTheme().colors as Colors
     const isDark = useColorScheme() === 'dark'
     const { t, i18n } = useTranslation('food')
-    const { theme } = useContext(ThemeContext)
     const [searchQuery, setSearchQuery] = useState<string>('')
 
     let filteredEntries = Object.entries(data)
@@ -65,7 +63,6 @@ const ItemsPickerScreen = (params: {
                     ns: 'navigation',
                 }),
                 textColor: colors.text,
-                barTintColor: getBarTintColor(theme, isDark),
                 ...Platform.select({
                     android: {
                         headerIconColor: colors.text,

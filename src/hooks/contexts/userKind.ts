@@ -7,7 +7,7 @@ export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
 
 export interface UserKindContextType {
-    userKind: 'guest' | 'student' | 'employee'
+    userKind: 'guest' | 'student' | 'employee' | undefined
     userFullName: string
     userFaculty: string
     toggleUserKind: (userKind: boolean | undefined) => void
@@ -19,15 +19,15 @@ export interface UserKindContextType {
  * @returns An object with the userKind and toggleUserKind function.
  */
 export function useUserKind(): {
-    userKind: 'guest' | 'student' | 'employee'
+    userKind: 'guest' | 'student' | 'employee' | undefined
     userFullName: string
     userFaculty: string
     toggleUserKind: (userKind: boolean | undefined) => void
     updateUserFullName: (userName: string) => void
 } {
-    const [userKind, setUserKind] = useState<'guest' | 'student' | 'employee'>(
-        USER_GUEST
-    )
+    const [userKind, setUserKind] = useState<
+        'guest' | 'student' | 'employee' | undefined
+    >(undefined)
     const [userFaculty, setUserFaculty] = useState('')
     const [userFullName, setUserFullName] = useState('')
 
@@ -46,6 +46,8 @@ export function useUserKind(): {
 
             if (userType != null) {
                 setUserKind(userType as 'student' | 'employee' | 'guest')
+            } else {
+                setUserKind(USER_GUEST)
             }
 
             if (userFullName != null) {
@@ -74,7 +76,7 @@ export function useUserKind(): {
      * @param value A boolean indicating whether the user is a student (true) or an employee (false).
      */
     function toggleUserKind(value: boolean | undefined): void {
-        let userType = userKind as 'student' | 'employee' | 'guest'
+        let userType = userKind as 'student' | 'employee' | 'guest' | undefined
         switch (value) {
             case true:
                 userType = USER_STUDENT
