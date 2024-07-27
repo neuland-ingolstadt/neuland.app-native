@@ -1,6 +1,6 @@
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'

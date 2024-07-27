@@ -1,16 +1,13 @@
 import NeulandAPI from '@/api/neuland-api'
+import { type FoodLanguage } from '@/contexts/foodFilter'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
-import { type FoodLanguage } from '@/hooks/contexts/foodFilter'
-import {
-    USER_EMPLOYEE,
-    USER_GUEST,
-    USER_STUDENT,
-} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
+import { type TFunction } from 'i18next'
 
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from './app-utils'
 import { formatISODate } from './date-utils'
 
 /**
@@ -20,9 +17,11 @@ import { formatISODate } from './date-utils'
  */
 export async function loadFoodEntries(
     restaurants: string[],
-    includeStatic: boolean
+    includeStatic: boolean = false
 ): Promise<Food[]> {
-    const data = [(await NeulandAPI.getFoodPlan(restaurants)).food] as Food[][]
+    const data = [
+        (await NeulandAPI.getFoodPlan(restaurants)).food.foodData,
+    ] as Food[][]
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday
     let days: Date[] = Array.from({ length: 7 }, (_, i) => {
@@ -123,11 +122,14 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
  * @returns {string}
  */
 
-export function getUserSpecificLabel(userKind: string, t: any): string {
+export function getUserSpecificLabel(
+    userKind: string,
+    t: TFunction<'food'>
+): string {
     const labels: Labels = {
-        [USER_GUEST]: t('price.guests'),
-        [USER_EMPLOYEE]: t('price.employees'),
-        [USER_STUDENT]: t('price.students'),
+        [USER_GUEST]: t('price.guests', { ns: 'food' }),
+        [USER_EMPLOYEE]: t('price.employees', { ns: 'food' }),
+        [USER_STUDENT]: t('price.students', { ns: 'food' }),
     }
     return labels[userKind]
 }

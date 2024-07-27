@@ -1,12 +1,10 @@
 import API from '@/api/authenticated-api'
-import { type LectureData } from '@/hooks/contexts/notifications'
 import {
     type CalendarEvent,
     type Exam,
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
-import { scheduleNotificationAsync } from 'expo-notifications'
 import { type TFunction } from 'i18next'
 import { Alert, Linking } from 'react-native'
 
@@ -155,36 +153,6 @@ export function convertTimetableToWeekViewEvents(
             entry,
         }
     })
-}
-
-/**
- * Schedules a notification for a lecture.
- * @param lectureTitle Title of the lecture
- * @param room Room of the lecture
- * @param minsBefore Minutes before the lecture to send the notification
- * @param date Date of the lecture
- * @param t Translation function
- * @returns Promise with the id of the scheduled notification
- */
-export async function scheduleLectureNotification(
-    lectureTitle: string,
-    room: string,
-    minsBefore: number,
-    date: Date,
-    t: any
-): Promise<LectureData[]> {
-    const alertDate = new Date(date.getTime() - minsBefore * 60000)
-    const id = await scheduleNotificationAsync({
-        content: {
-            title: lectureTitle,
-            body: `${t('notificatons.body', {
-                mins: minsBefore,
-                room,
-            })}`,
-        },
-        trigger: alertDate,
-    })
-    return [{ startDateTime: date, room, id }]
 }
 
 /**

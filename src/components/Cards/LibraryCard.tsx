@@ -48,12 +48,7 @@ const LibraryCard = (): JSX.Element => {
         }
     }
     return (
-        <BaseCard
-            title="library"
-            onPress={() => {
-                router.push('library')
-            }}
-        >
+        <BaseCard title="library" onPressRoute="library">
             {loadingState === LoadingState.LOADED && (
                 <View
                     style={{

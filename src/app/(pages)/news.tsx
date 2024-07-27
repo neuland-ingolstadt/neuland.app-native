@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'

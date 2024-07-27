@@ -16,12 +16,14 @@ interface PopUpCardProps {
 }
 
 const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
+    const { hiddenAnnouncements, hideAnnouncement } =
+        useContext(DashboardContext)
+    const colors = useTheme().colors as Colors
+    const { t } = useTranslation('navigation')
+
     if (data === undefined) {
         return <></>
     }
-
-    const { hiddenAnnouncements, hideAnnouncement } =
-        useContext(DashboardContext)
     const filter = (data: Announcement[]): Announcement[] => {
         const now = new Date()
         const activeAnnouncements = data.filter(
@@ -36,8 +38,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
         return activeAnnouncements
     }
     const filtered = filter(data)
-    const colors = useTheme().colors as Colors
-    const { t } = useTranslation('navigation')
+
     return filtered != null && filtered.length > 0 ? (
         <Pressable
             onPress={() => {

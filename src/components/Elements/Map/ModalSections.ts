@@ -13,13 +13,16 @@ import { type TFunction } from 'i18next'
  * @param {RoomData} roomData - Data for the room
  * @param {any} t - Translation function
  * @param {any} locations - Locations
+ * @param {string} language - Language
  * @returns {FormListSections[]}
  * */
 export const modalSection = (
     roomData: RoomData,
     locations: any,
-    t: TFunction<any>
+    t: TFunction<any>,
+    language: string
 ): FormListSections[] => {
+    const roomTypeKey = language === 'de' ? 'Funktion_de' : 'Funktion_en'
     if (
         roomData.type === SEARCH_TYPES.ROOM &&
         ((roomData.occupancies !== null &&
@@ -99,7 +102,7 @@ export const modalSection = (
                               {
                                   title: t('pages.map.details.room.type'),
                                   value:
-                                      roomData?.properties?.Funktion_en ??
+                                      roomData?.properties?.[roomTypeKey] ??
                                       t('misc.unknown'),
                               },
                               {

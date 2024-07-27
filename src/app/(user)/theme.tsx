@@ -20,7 +20,7 @@ import {
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, toggleAccentColor, theme, toggleTheme } =
+    const { accentColor, setAccentColor, theme, setTheme } =
         useContext(ThemeContext)
     const { t } = useTranslation(['settings'])
 
@@ -41,7 +41,7 @@ export default function Theme(): JSX.Element {
             <View style={styles.colorBoxContainer}>
                 <Pressable
                     onPress={() => {
-                        toggleAccentColor(code)
+                        setAccentColor(code)
                         if (Platform.OS === 'ios') {
                             void Haptics.selectionAsync()
                         }
@@ -52,6 +52,10 @@ export default function Theme(): JSX.Element {
                             marginHorizontal: 15,
                         },
                     ]}
+                    accessibilityLabel={t(
+                        // @ts-expect-error cannot verify that code is a valid key
+                        `theme.colors.${code}`
+                    )}
                 >
                     <View
                         style={[
@@ -158,8 +162,8 @@ export default function Theme(): JSX.Element {
                 <SectionView title={t('theme.themes.title')}>
                     <MultiSectionRadio
                         elements={elements}
-                        selectedItem={theme}
-                        action={toggleTheme as (item: string) => void}
+                        selectedItem={theme ?? 'auto'}
+                        action={setTheme as (item: string) => void}
                     />
                 </SectionView>
             </ScrollView>

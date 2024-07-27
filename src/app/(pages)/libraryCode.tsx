@@ -1,13 +1,9 @@
-import ErrorView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/contexts/userKind'
 import { useRefreshByUser } from '@/hooks'
-import {
-    USER_EMPLOYEE,
-    USER_GUEST,
-    USER_STUDENT,
-} from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
 import {
     getPersonalData,

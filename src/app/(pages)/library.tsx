@@ -1,9 +1,9 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import LibraryBookingRow from '@/components/Elements/Rows/LibraryBookingRow'
 import LibraryReservationRow from '@/components/Elements/Rows/LibraryReservationRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { queryClient } from '@/components/provider'
@@ -27,7 +27,7 @@ import {
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
-export default function newsSCreen(): JSX.Element {
+export default function LibraryCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const [expandedRow, setExpandedRow] = useState<string | null>(null)

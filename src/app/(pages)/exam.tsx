@@ -110,8 +110,7 @@ export default function ExamDetail(): JSX.Element {
             </View>
             <View>
                 <Text style={[styles.notesText, { color: colors.labelColor }]}>
-                    All information without guarantee. Binding information is
-                    only available directly from the THI.
+                    {t('pages.exam.footer')}
                 </Text>
             </View>
         </ScrollView>

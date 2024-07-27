@@ -9,14 +9,10 @@ import {
 } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flagMap from '@/data/mensa-flags.json'
-import {
-    USER_EMPLOYEE,
-    USER_GUEST,
-    USER_STUDENT,
-} from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'

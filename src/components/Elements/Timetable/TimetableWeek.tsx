@@ -1,6 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
-import { RouteParamsContext, TimetableContext } from '@/components/contexts'
+import { TimetableContext } from '@/components/contexts'
 import {
     type CalendarTimetableEntry,
     type Exam,
@@ -62,7 +62,6 @@ export default function TimetableWeek({
 
     const router = useRouter()
     const navigation = useNavigation()
-    const { updateLecture } = useContext(RouteParamsContext)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -348,23 +347,25 @@ export default function TimetableWeek({
     }
 
     function showEventDetails(entry: WeekViewEvent): void {
+        const base64Event = Buffer.from(JSON.stringify(entry)).toString(
+            'base64'
+        )
         if (entry.eventType === 'exam') {
-            const base64Event = Buffer.from(JSON.stringify(entry)).toString(
-                'base64'
-            )
             const navigateToPage = (): void => {
-                router.push({
-                    pathname: '(pages)/exam',
+                router.navigate({
+                    pathname: 'exam',
                     params: { examEntry: base64Event },
                 })
             }
             navigateToPage()
-            return
+        } else if (entry.eventType === 'lecture') {
+            router.navigate({
+                pathname: 'lecture',
+                params: {
+                    lecture: base64Event,
+                },
+            })
         }
-        updateLecture(entry as unknown as FriendlyTimetableEntry)
-        router.push({
-            pathname: '(timetable)/details',
-        })
     }
 
     return (

@@ -1,21 +1,15 @@
 import NeulandAPI from '@/api/neuland-api'
 import PopUpCard from '@/components/Cards/PopUpCard'
 import { IndexHeaderRight } from '@/components/Elements/Dashboard/HeaderRight'
-import { HomeBottomSheet } from '@/components/Elements/Flow/HomeBottomSheet'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { type Colors } from '@/components/colors'
 import { DashboardContext } from '@/components/contexts'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import {
-    BottomSheetModal,
-    BottomSheetModalProvider,
-    BottomSheetScrollView,
-} from '@gorhom/bottom-sheet'
+import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
-import * as Notifications from 'expo-notifications'
 import { router, useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useRef, useState } from 'react'
@@ -31,37 +25,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function HomeRootScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [notification, setNotification] = useState<any>(undefined)
-    const notificationListener = useRef<any>()
-    const responseListener = useRef<any>()
-
-    useEffect(() => {
-        notificationListener.current =
-            Notifications.addNotificationReceivedListener((notification) => {
-                setNotification(notification)
-            })
-
-        responseListener.current =
-            Notifications.addNotificationResponseReceivedListener(
-                (response) => {
-                    console.log(response)
-                }
-            )
-
-        return () => {
-            Notifications.removeNotificationSubscription(
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                notificationListener.current
-            )
-            Notifications.removeNotificationSubscription(
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                responseListener.current
-            )
-        }
-    }, [])
-
     const [isPageOpen, setIsPageOpen] = useState(false)
 
     useEffect(() => {
@@ -74,27 +37,6 @@ export default function HomeRootScreen(): JSX.Element {
     const navigation = useNavigation()
     const isFocused = useNavigation().isFocused()
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-    const BottomSheet = (): JSX.Element => {
-        return (
-            <BottomSheetModal
-                index={0}
-                ref={bottomSheetModalRef}
-                snapPoints={['45%', '70%']}
-                backgroundStyle={{
-                    backgroundColor: colors.background,
-                }}
-                handleIndicatorStyle={{
-                    backgroundColor: colors.labelColor,
-                }}
-            >
-                <BottomSheetScrollView>
-                    <HomeBottomSheet
-                        bottomSheetModalRef={bottomSheetModalRef}
-                    />
-                </BottomSheetScrollView>
-            </BottomSheetModal>
-        )
-    }
 
     useEffect(() => {
         // @ts-expect-error - no types for tabPress
@@ -111,39 +53,37 @@ export default function HomeRootScreen(): JSX.Element {
         <>
             <Head>
                 {/* eslint-disable-next-line react-native/no-raw-text */}
-                <title>Dashboard</title>
+                <title>{'Dashboard'}</title>
                 <meta name="Dashboard" content="Customizable Dashboard" />
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <BottomSheetModalProvider>
-                <BottomSheet />
-                <View
-                    style={{
-                        ...styles.page,
-                        // workaround for status bar overlapping the header on iPhones with dynamic island
-                        ...(hasDynamicIsland
-                            ? {
-                                  paddingTop: topInset,
-                                  backgroundColor: colors.card,
-                              }
-                            : {}),
-                    }}
-                >
-                    {Platform.OS === 'ios' ? (
-                        <WorkaroundStack
-                            name={'Dashboard'}
-                            titleKey={'Neuland Next'}
-                            component={isPageOpen ? HomeScreen : () => <></>}
-                            largeTitle={true}
-                            transparent={false}
-                            headerRightElement={IndexHeaderRight}
-                        />
-                    ) : (
-                        <HomeScreen />
-                    )}
-                </View>
-            </BottomSheetModalProvider>
+
+            <View
+                style={{
+                    ...styles.page,
+                    // workaround for status bar overlapping the header on iPhones with dynamic island
+                    ...(hasDynamicIsland
+                        ? {
+                              paddingTop: topInset,
+                              backgroundColor: colors.card,
+                          }
+                        : {}),
+                }}
+            >
+                {Platform.OS === 'ios' ? (
+                    <WorkaroundStack
+                        name={'Dashboard'}
+                        titleKey={'navigation.dashboard'}
+                        component={isPageOpen ? HomeScreen : () => <></>}
+                        largeTitle={true}
+                        transparent={false}
+                        headerRightElement={IndexHeaderRight}
+                    />
+                ) : (
+                    <HomeScreen />
+                )}
+            </View>
         </>
     )
 }
@@ -200,6 +140,7 @@ function HomeScreen(): JSX.Element {
                 onButtonPress={() => {
                     router.push('(user)/dashboard')
                 }}
+                isCritical={false}
             />
         </View>
     ) : (
@@ -245,7 +186,7 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
     },
-    errorContainer: { paddingTop: 110 },
+    errorContainer: { paddingTop: 110, flex: 1 },
     item: {
         marginVertical: 6,
     },

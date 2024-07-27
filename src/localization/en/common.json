@@ -1,0 +1,232 @@
+{
+    "toast": {
+        "clipboard": "copied to clipboard",
+        "paused": "No internet connection",
+        "roomNotFound": "Room not found",
+        "mapOverlay": "Error while loading overlay",
+        "dashboard": "Drag & drop to reorder"
+    },
+    "error": {
+        "title": "An error occurred",
+        "description": "An error occurred while loading the data.",
+        "refreshPull": "An error occurred while loading the data.\nPull to refresh.",
+        "button": "Retry",
+        "noSession": "Not signed in.",
+        "pull": "Pull down to refresh",
+        "network": {
+            "title": "No internet connection",
+            "description": "Please check your internet connection."
+        },
+        "guest": {
+            "title": "Sign in required",
+            "description": "This feature requires you to sign in using your THI account.",
+            "button": "Sign in"
+        },
+        "permission": {
+            "title": "Feature not available",
+            "description": "This feature is not available for your user group."
+        },
+        "map": {
+            "mapLoadError": "Error while loading map",
+            "mapOverlay": "Error while loading overlay"
+        },
+        "noMeals": "No meals available",
+        "crash": {
+            "title": "Internal Error",
+            "description": "Neuland Next has encountered an internal error.",
+            "steps": "Please check the system status page and send us feedback to help us fix the issue.",
+            "reload": "Reload App",
+            "feedback": "Send Feedback",
+            "status": "Check System Status"
+        }
+    },
+    "dates": {
+        "until": "until",
+        "ends": "ends",
+        "today": "Today",
+        "notYet": "Date not yet available",
+        "tomorrow": "Tomorrow",
+        "thisWeek": "This Week",
+        "nextWeek": "Next Week"
+    },
+    "misc": {
+        "share": "Share",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "delete": "Delete",
+        "disable": "Disable",
+        "more": "more",
+        "unknown": "Unknown"
+    },
+    "pages": {
+        "calendar": {
+            "exams": {
+                "title": "Exams",
+                "error": "Not a student",
+                "errorSubtitle": "Sign in to see your exams.",
+                "noExams": {
+                    "title": "No exams found",
+                    "subtitle": "After registering for exams, they will appear here."
+                }
+            },
+            "calendar": {
+                "link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
+                "noData": {
+                    "title": "No data found",
+                    "subtitle": "Please try again later."
+                }
+            },
+            "footer": {
+                "part1": "All information without guarantee. Binding information is only available directly on the ",
+                "part2": "university website",
+                "part3": "."
+            }
+        },
+        "lecturers": {
+            "results": "Search results",
+            "personal": "Personal",
+            "faculty": "Faculty",
+            "professors": "Professors",
+            "error": {
+                "title": "No lecturers found",
+                "subtitle": "Setup your timetable to view your personal lecturers."
+            }
+        },
+        "lecturer": {
+            "details": {
+                "title": "Title",
+                "organization": "Organization",
+                "function": "Function"
+            },
+            "contact": {
+                "room": "Room",
+                "title": "Contact",
+                "phone": "Phone",
+                "office": "Office hours",
+                "exam": "Exam insights"
+            }
+        },
+        "exam": {
+            "details": {
+                "date": "Date",
+                "room": "Room",
+                "seat": "Seat",
+                "tools": "Tools"
+            },
+            "about": {
+                "title": "About",
+                "type": "Type",
+                "examiner": "Examiner",
+                "registration": "Registered",
+                "notes": "Notes"
+            },
+            "footer": "All information without guarantee. Binding information is only available directly from the THI."
+        },
+        "event": {
+            "date": "Date",
+            "location": "Location",
+            "organizer": "Organizer",
+            "description": "Description",
+            "begin": "Begin",
+            "end": "End",
+            "shareMessage": "Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
+        },
+        "map": {
+            "search": {
+                "hint": "Search the campus...",
+                "placeholder": "Search for rooms, buildings or facilities",
+                "recent": "Recent searches",
+                "clear": "Clear history",
+                "noResults": "No search results",
+                "results": "Results",
+                "fuzzy": "Suggestions"
+            },
+
+            "easterEgg": {
+                "title": "Easter Egg",
+                "message": "You unlocked the exclusive retro app icon \"neuland.app\"!",
+                "confirm": "Nice!"
+            },
+            "noAvailableRooms": "No free rooms available",
+            "details": {
+                "room": {
+                    "details": "Room details",
+                    "title": "Room",
+                    "capacity": "Capacity",
+                    "availability": "Availability",
+                    "timeLeft": "Time left",
+                    "building": "Building",
+                    "timeSpan": "Time span",
+                    "floor": "Floor",
+                    "type": "Type",
+                    "equipment": "Equipment",
+                    "available": "Available",
+                    "notAvailable": "Not available",
+                    "availableRooms": "Available rooms",
+                    "nextLecture": "Next lecture",
+                    "availableRoomsTitle": "Available rooms",
+                    "history": "Recent searches",
+                    "signIn": "Sign in to see available rooms"
+                },
+                "building": {
+                    "free": "Free rooms",
+                    "total": "Total rooms",
+                    "floors": "Floors"
+                },
+                "osm": "Map data from OpenStreetMap"
+            }
+        },
+
+        "rooms": {
+            "options": {
+                "title": "Search options",
+                "building": "Building",
+                "date": "Date",
+                "time": "Time",
+                "duration": "Duration",
+                "seats": "seats"
+            },
+            "results": "Available rooms",
+            "modified": {
+                "title": "Filter adjusted",
+                "description": "THI is currently closed. The filter has been adjusted to the next valid opening time."
+            },
+            "noRooms": {
+                "title": "No available rooms found",
+                "subtitle": "Try changing the filter options."
+            }
+        },
+        "library": {
+            "reservations": {
+                "title": "Reservations",
+                "seat": "Seat",
+                "id": "Reservation code",
+                "alert": {
+                    "title": "Delete reservation",
+                    "message": "Do you really want to delete this reservation?"
+                }
+            },
+            "available": {
+                "title": "Available seats",
+                "reserve": "Reserve",
+                "seatsAvailable": "{{available}} / {{total}} available",
+                "ratelimit": "You can not reserve more seats.",
+                "noSeats": "No more seats available.",
+                "footer": "Up to 5 active reservations are allowed per seven days. Cancelation is possible before the reservation starts.",
+                "book": "Book seat",
+                "room": "Room"
+            },
+            "code": {
+                "number": "Number",
+                "footer": "Use this barcode to sign in at the library terminals to borrow books."
+            }
+        }
+    },
+    "notification": {
+        "permission": {
+            "title": "Notifications",
+            "description": "Open the system settings to enable notifications.",
+            "button": "Settings"
+        }
+    }
+}

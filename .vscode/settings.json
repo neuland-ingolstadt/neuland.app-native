@@ -1,0 +1,17 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "i18n-ally.localesPaths": ["src/localization"],
+    "i18n-ally.autoDetection": false,
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.namespace": true
+}

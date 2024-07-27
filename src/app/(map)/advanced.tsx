@@ -1,11 +1,11 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
@@ -70,8 +70,8 @@ export default function AdvancedSearch(): JSX.Element {
 
     const startDate = getNextValidDate()
     const [building, setBuilding] = useState(BUILDINGS_ALL)
-    const [date, setDate] = useState(formatISODate(startDate))
-    const [time, setTime] = useState(formatISOTime(startDate))
+    const [date, setDate] = useState(formatISODate(startDate.startDate))
+    const [time, setTime] = useState(formatISOTime(startDate.startDate))
     const [duration, setDuration] = useState(DURATION_PRESET)
 
     const [showDate, setShowDate] = useState(Platform.OS === 'ios')

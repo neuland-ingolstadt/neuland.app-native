@@ -1,9 +1,4 @@
-import {
-    USER_EMPLOYEE,
-    USER_GUEST,
-    USER_STUDENT,
-} from '@/hooks/contexts/userKind'
-import { useRouter } from 'expo-router'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import React from 'react'
 
 import {
@@ -15,8 +10,6 @@ import {
     TimetableCard,
 } from './Cards'
 import LibraryCard from './Cards/LibraryCard'
-
-const router = useRouter()
 
 export const AllCards: Card[] = [
     {
@@ -53,27 +46,13 @@ export const AllCards: Card[] = [
         key: 'lecturers',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => (
-            <BaseCard
-                title="lecturers"
-                onPress={() => {
-                    router.push('lecturers')
-                }}
-            />
-        ),
+        card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />,
     },
     {
         key: 'news',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => (
-            <BaseCard
-                title="news"
-                onPress={() => {
-                    router.push('news')
-                }}
-            />
-        ),
+        card: () => <BaseCard title="news" onPressRoute="news" />,
     },
     {
         key: 'login',

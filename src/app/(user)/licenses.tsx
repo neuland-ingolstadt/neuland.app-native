@@ -6,8 +6,8 @@ import licenses from '@/data/licenses.json'
 import { type FormListSections } from '@/types/components'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
-import { useRouter } from 'expo-router'
-import React from 'react'
+import { useNavigation, useRouter } from 'expo-router'
+import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 
@@ -17,6 +17,31 @@ export default function Licenses(): JSX.Element {
     const colors = useTheme().colors as Colors
     const numberRegex = /\d+(\.\d+)*/
     const atRegex = /(?:@)/gi
+    const navigation = useNavigation()
+    const [localSearch, setLocalSearch] = React.useState('')
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: t('navigation.licenses.search', {
+                    ns: 'navigation',
+                }),
+
+                ...Platform.select({
+                    android: {
+                        headerIconColor: colors.text,
+                        hintTextColor: colors.text,
+                        textColor: colors.text,
+                    },
+                }),
+
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    const text = event.nativeEvent.text
+                    setLocalSearch(text)
+                },
+            },
+        })
+    }, [navigation])
 
     const licensesStaticFiltered = Object.entries(licensesStatic)
         .filter(
@@ -30,6 +55,13 @@ export default function Licenses(): JSX.Element {
 
     const licensesList = Object.entries(licensesCombined)
         .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+        // also sort by search
+        .filter(([key, value]) => {
+            if (localSearch === '') {
+                return true
+            }
+            return key.toLowerCase().includes(localSearch.toLowerCase())
+        })
         .map(([key, value]) => {
             const version = key.match(numberRegex)
             const nameWithoutVersion = key
@@ -54,13 +86,16 @@ export default function Licenses(): JSX.Element {
 
     const sections: FormListSections[] = [
         {
-            header: t('navigation.licenses', { ns: 'navigation' }),
+            header: t('navigation.licenses.title', { ns: 'navigation' }),
             items: [...licensesList],
         },
     ]
     return (
         <>
-            <ScrollView contentContainerStyle={styles.container}>
+            <ScrollView
+                contentContainerStyle={styles.container}
+                contentInsetAdjustmentBehavior="automatic"
+            >
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                     <View style={styles.notesContainer}>

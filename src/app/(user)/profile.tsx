@@ -1,17 +1,14 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import {
-    DashboardContext,
-    ThemeContext,
-    UserKindContext,
-} from '@/components/contexts'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
-import { USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
+import { USER_STUDENT } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -38,7 +35,6 @@ export default function Profile(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { toggleUserKind, userKind } = useContext(UserKindContext)
-    const { toggleAccentColor } = useContext(ThemeContext)
     const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
 
@@ -116,8 +112,8 @@ export default function Profile(): JSX.Element {
                     onPress: () => {
                         performLogout(
                             toggleUserKind,
-                            toggleAccentColor,
-                            resetOrder
+                            resetOrder,
+                            queryClient
                         ).catch((e) => {
                             console.log(e)
                         })
@@ -308,7 +304,7 @@ export default function Profile(): JSX.Element {
                             }}
                         />
                         <Text style={{ color: colors.notification }}>
-                            Logout
+                            {t('profile.logout.button')}
                         </Text>
                     </Pressable>
                 </View>

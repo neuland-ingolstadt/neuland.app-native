@@ -1,13 +1,12 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
-import { USER_GUEST, USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type Lecturers } from '@/types/thi-api'
 import { type NormalizedLecturer } from '@/types/utils'
 import {
@@ -16,6 +15,7 @@ import {
     guestError,
     networkError,
 } from '@/utils/api-utils'
+import { USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { showToast } from '@/utils/ui-utils'
@@ -60,7 +60,7 @@ export default function LecturersCard(): JSX.Element {
     const [localSearch, setLocalSearch] = useState('')
     const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
     const [faculty, setFaculty] = useState<string | null>(null)
-    const [faculityData, setFaculityData] = useState<NormalizedLecturer[]>([])
+    const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
     const headerHeight = useHeaderHeight()
 
     function setPage(page: number): void {
@@ -148,7 +148,7 @@ export default function LecturersCard(): JSX.Element {
 
             setFilteredLecturers(filtered)
         }
-    }, [localSearch])
+    }, [allLecturersResult?.data, localSearch])
     useEffect(() => {
         let filtered: NormalizedLecturer[] = []
         if (faculty !== null) {
@@ -159,7 +159,7 @@ export default function LecturersCard(): JSX.Element {
                         lecturer.organisation.includes(faculty)
                 ) ?? []
             setDisplayedProfessors(false)
-            setFaculityData(filtered)
+            setFacultyData(filtered)
             return
         }
 
@@ -172,7 +172,7 @@ export default function LecturersCard(): JSX.Element {
                 ) ?? []
 
             setDisplayedProfessors(true)
-            setFaculityData(filtered)
+            setFacultyData(filtered)
         }
     }, [faculty, allLecturersResult.data])
 
@@ -207,7 +207,7 @@ export default function LecturersCard(): JSX.Element {
         if (localSearch.length === 0 && allLecturersResult.data != null) {
             setFilteredLecturers(allLecturersResult.data)
         }
-    }, [localSearch])
+    }, [allLecturersResult.data, localSearch])
 
     useEffect(() => {
         if (
@@ -217,7 +217,13 @@ export default function LecturersCard(): JSX.Element {
         ) {
             void showToast(t('toast.paused'))
         }
-    }, [allLecturersResult.isPaused, personalLecturersResult.isPaused])
+    }, [
+        allLecturersResult.data,
+        allLecturersResult.isPaused,
+        personalLecturersResult.data,
+        personalLecturersResult.isPaused,
+        t,
+    ])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -251,7 +257,7 @@ export default function LecturersCard(): JSX.Element {
                 },
             },
         })
-    }, [navigation])
+    }, [colors.text, navigation, t])
 
     const LecturerList = ({
         lecturers,
@@ -300,6 +306,7 @@ export default function LecturersCard(): JSX.Element {
             <View
                 style={{
                     paddingHorizontal: PAGE_PADDING,
+                    ...styles.page,
                 }}
             >
                 <ErrorView
@@ -356,6 +363,7 @@ export default function LecturersCard(): JSX.Element {
             <View
                 style={{
                     paddingHorizontal: PAGE_PADDING,
+                    ...styles.page,
                 }}
             >
                 {isPersonal ? (
@@ -376,6 +384,7 @@ export default function LecturersCard(): JSX.Element {
                         onRefresh={() => {
                             void refetchByUserPersonal()
                         }}
+                        isCritical={false}
                     />
                 ) : (
                     <ErrorView
@@ -524,7 +533,7 @@ export default function LecturersCard(): JSX.Element {
                             isPersonal
                         />
                         <LecturerList
-                            lecturers={faculityData}
+                            lecturers={facultyData}
                             isPaused={allLecturersResult.isPaused}
                             isError={allLecturersResult.isError}
                             isSuccess={allLecturersResult.isSuccess}

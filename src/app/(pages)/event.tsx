@@ -116,7 +116,7 @@ export default function ClEventDetail(): JSX.Element {
                               ? {
                                     title: 'Instagram',
                                     icon: {
-                                        ios: 'logo-instagram',
+                                        ios: 'instagram',
                                         android: 'instagram',
                                         iosFallback: true,
                                     },

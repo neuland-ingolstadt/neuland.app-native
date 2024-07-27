@@ -15,14 +15,14 @@ import { cardIcons } from '../icons'
 
 interface BaseCardProps {
     title: string
-    onPress: () => void
+    onPressRoute: string
     removable?: boolean
     children?: React.ReactNode
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
     title,
-    onPress,
+    onPressRoute,
     children,
     removable = true, // ugly but more efficient than iterating over all cards
 }) => {
@@ -62,7 +62,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
 
     return (
         <Pressable
-            onPress={onPress}
+            onPress={() => {
+                router.navigate(onPressRoute)
+            }}
             delayLongPress={300}
             onLongPress={() => {}}
         >
@@ -78,7 +80,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     e.nativeEvent.name === t('contextMenu.reset') &&
                         resetOrder(userKind ?? 'guest')
                 }}
-                onPreviewPress={onPress}
+                onPreviewPress={() => {
+                    router.navigate(onPressRoute)
+                }}
             >
                 <View
                     style={[
