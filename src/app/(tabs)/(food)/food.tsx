@@ -1,7 +1,7 @@
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import { MealDay } from '@/components/Elements/Food'
 import { AllergensBanner } from '@/components/Elements/Food/AllergensBanner'
 import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
@@ -83,7 +83,7 @@ export function FoodScreen(): JSX.Element {
         if (isPaused && data != null) {
             void showToast(t('toast.paused'))
         }
-    }, [isPaused])
+    }, [data, isPaused, t])
 
     const pagerViewRef = useRef<PagerView>(null)
     function setPage(page: number): void {
@@ -329,6 +329,7 @@ export function FoodScreen(): JSX.Element {
 export default function FoodRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     const navigation = useNavigation()
+    const { t } = useTranslation('navigation')
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
@@ -343,7 +344,7 @@ export default function FoodRootScreen(): JSX.Element {
         <>
             <Head>
                 {/* eslint-disable-next-line react-native/no-raw-text */}
-                <title>Food</title>
+                <title>{t('navigation.food')}</title>
                 <meta name="Food" content="Meal plan for the canteens" />
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />

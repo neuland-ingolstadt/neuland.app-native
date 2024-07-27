@@ -122,7 +122,7 @@ export default function WhatsNewScreen(): JSX.Element {
                         styles.button,
                     ]}
                     onPress={() => {
-                        flow.toggleUpdated()
+                        flow.setUpdated(true)
                         router.navigate('/')
                     }}
                 >

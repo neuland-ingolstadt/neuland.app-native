@@ -24,12 +24,15 @@ interface WhatsNewBoxProps {
 const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
     const colors = useTheme().colors as Colors
     return (
-        <View style={[{ backgroundColor: colors.card }, styles.container]}>
+        <View
+            style={[{ backgroundColor: colors.cardContrast }, styles.container]}
+        >
             <PlatformIcon
                 color={colors.primary}
                 ios={{
                     name: icon.ios,
                     size: 26,
+                    variableValue: 1,
                 }}
                 android={{
                     name: icon.android as MaterialIcon,
@@ -55,7 +58,6 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                         styles.description,
                     ]}
                     numberOfLines={4}
-                    adjustsFontSizeToFit={true}
                 >
                     {description}
                 </Text>
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '100%',
-        gap: 20,
+        gap: 18,
     },
     textContainer: {
         flexDirection: 'column',
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     description: {
-        fontSize: 14,
+        fontSize: 14.5,
         textAlign: 'left',
     },
 })

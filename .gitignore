@@ -5,7 +5,6 @@
 .DS_Store
 
 # vs code
-.vscode/
 .VSCodeCounter/
 
 # bun

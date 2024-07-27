@@ -81,10 +81,10 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     ) : (
         <View style={styles.noRoomsFound}>
             <Text style={[styles.errorMessage, { color: colors.text }]}>
-                No free rooms found
+                {t('pages.rooms.noRooms.title')}
             </Text>
             <Text style={[styles.errorInfo, { color: colors.text }]}>
-                Try changing the filters
+                {t('pages.rooms.noRooms.subtitle')}
             </Text>
         </View>
     )

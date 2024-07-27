@@ -33,7 +33,7 @@ export default function Theme(): JSX.Element {
             header: `Version ${key}`,
             items: sorted.version[key].map((item) => ({
                 title: item.title[i18n.language as LanguageKey],
-                icon: item.icon,
+                icon: item.icon as any,
             })),
         })),
     ]
@@ -56,7 +56,7 @@ export default function Theme(): JSX.Element {
                                 )
                             }}
                         >
-                            GitHub
+                            {'GitHub'}
                         </Text>
                         .
                     </Text>

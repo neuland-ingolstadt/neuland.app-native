@@ -1,99 +1,81 @@
-import API from '@/api/authenticated-api'
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
-import { LoginAlert } from '@/components/Elements/Settings'
 import { type Colors } from '@/components/colors'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { getPersonalData, trimErrorMsg } from '@/utils/api-utils'
 import {
-    DashboardContext,
-    FlowContext,
-    UserKindContext,
-} from '@/components/contexts'
-import { USER_EMPLOYEE, USER_STUDENT } from '@/hooks/contexts/userKind'
-import { trimErrorMsg } from '@/utils/api-utils'
+    STATUS_URL,
+    USER_EMPLOYEE,
+    USER_GUEST,
+    USER_STUDENT,
+} from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
+import Color from 'color'
 import * as Haptics from 'expo-haptics'
-import { useRouter } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
-    Dimensions,
-    Keyboard,
-    KeyboardAvoidingView,
+    Alert,
+    Linking,
     Platform,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    TouchableWithoutFeedback,
     View,
 } from 'react-native'
 import Toast from 'react-native-root-toast'
 
-const useIsFloatingKeyboard = (): boolean => {
-    const windowWidth = Dimensions.get('window').width
-    const [floating, setFloating] = useState(false)
-    useEffect(() => {
-        const onKeyboardWillChangeFrame = (event: any): void => {
-            setFloating(event.endCoordinates.width !== windowWidth)
-        }
-
-        Keyboard.addListener(
-            'keyboardWillChangeFrame',
-            onKeyboardWillChangeFrame
-        )
-        return () => {
-            Keyboard.removeAllListeners('keyboardWillChangeFrame')
-        }
-    }, [windowWidth])
-
-    return floating
-}
-
-const LoginForm = (): JSX.Element => {
+const LoginForm = ({
+    navigateHome,
+}: {
+    navigateHome: () => void
+}): JSX.Element => {
     const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
     const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
     const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
     const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [infoMsg, setInfoMsg] = useState('')
-    const [notice, setNotice] = useState('')
-    const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { toggleOnboarded, isOnboarded, toggleUpdated, toggleAnalytics } =
-        React.useContext(FlowContext)
-    const { toggleUserKind, updateUserFullName } =
+    const isDark = useTheme().dark
+    const { userKind, toggleUserKind, updateUserFullName } =
         React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
     const { t } = useTranslation('flow')
-    const floatingKeyboard = useIsFloatingKeyboard()
     const { resetOrder } = useContext(DashboardContext)
-    const resetInfo = (): void => {
-        setInfoMsg('')
-        setNotice('')
-    }
+
+    const { data: personalData, refetch: refetchPersonalData } = useQuery({
+        queryKey: ['personalData'],
+        queryFn: getPersonalData,
+        staleTime: 1000 * 60 * 60 * 12, // 12 hours
+        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+        enabled: false,
+    })
 
     async function login(): Promise<void> {
+        let showStatus = true
         try {
             setLoading(true)
             const userKind = await createSession(username, password, true)
             if (userKind) {
-                updateUserFullName((await API.getFullName()) ?? username)
+                await refetchPersonalData()
+                const userFullName =
+                    personalData?.vname + ' ' + personalData?.name
+                updateUserFullName(userFullName)
             } else {
                 updateUserFullName(username)
             }
             toggleUserKind(userKind)
-            toggleUpdated()
-            if (isOnboarded === false) {
-                toggleAnalytics()
-            }
-            toggleOnboarded()
             resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
-            Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success
-            ).catch(() => {})
+            if (Platform.OS === 'ios') {
+                void Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success
+                )
+            }
 
             Toast.show(t('login.toast'), {
                 duration: Toast.durations.LONG,
@@ -103,39 +85,67 @@ const LoginForm = (): JSX.Element => {
                 hideOnPress: true,
                 delay: 0,
             })
-            router.navigate('(tabs)')
+            navigateHome()
         } catch (e) {
             const error = e as Error
             const message = trimErrorMsg(error.message)
-
             setLoading(false)
-            setNotice(t('login.alert.error.title'))
+
+            let title = t('login.alert.error.title')
+            let msg = t('login.alert.error.generic')
+
             if (message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
-                setInfoMsg(t('login.alert.error.wrongCredentials'))
+                title = t('login.alert.error.wrongCredentials.title')
+                msg = t('login.alert.error.wrongCredentials.message')
+                showStatus = false
+                setPassword('')
             } else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
-                setInfoMsg(t('login.alert.error.noConnection'))
+                title = t('login.alert.error.noConnection.title')
+                msg = t('login.alert.error.noConnection.message')
+                showStatus = false
             } else if (message.includes(ORGINAL_ERROR_MISSING)) {
-                setInfoMsg(t('login.alert.error.missing'))
+                msg = t('login.alert.error.missing')
+                showStatus = false
             } else if (
                 KNOWN_BACKEND_ERRORS.some((error) => message.includes(error))
             ) {
-                setInfoMsg(t('login.alert.error.backend'))
-            } else {
-                setInfoMsg(t('login.alert.error.generic'))
+                msg = t('login.alert.error.backend')
             }
+            Alert.alert(
+                title,
+                msg,
+                [
+                    { text: 'OK' },
+                    ...(showStatus
+                        ? [
+                              {
+                                  text: t('error.crash.status', {
+                                      ns: 'common',
+                                  }),
+                                  onPress: async () =>
+                                      await Linking.openURL(STATUS_URL),
+                              },
+                          ]
+                        : []),
+                ],
+                {
+                    cancelable: false,
+                }
+            )
         }
     }
 
     async function guestLogin(): Promise<void> {
         setLoading(true)
-        await createGuestSession()
-        toggleUserKind(undefined)
-        toggleUpdated()
-        if (isOnboarded === false) {
-            toggleAnalytics()
+
+        try {
+            await createGuestSession(userKind !== USER_GUEST)
+        } catch (error) {
+            console.error('Failed to create guest session', error)
         }
-        toggleOnboarded()
-        router.navigate('(tabs)')
+
+        toggleUserKind(undefined)
+        navigateHome()
     }
 
     async function load(key: string): Promise<string | null> {
@@ -151,8 +161,15 @@ const LoginForm = (): JSX.Element => {
                 if (savedUsername !== null && savedPassword !== null) {
                     setUsername(savedUsername)
                     setPassword(savedPassword)
-                    setNotice(t('login.alert.restored.title'))
-                    setInfoMsg(t('login.alert.restored.message'))
+
+                    Alert.alert(
+                        t('login.alert.restored.title'),
+                        t('login.alert.restored.message'),
+                        [{ text: 'OK' }],
+                        {
+                            cancelable: false,
+                        }
+                    )
                 }
             }
 
@@ -160,179 +177,160 @@ const LoginForm = (): JSX.Element => {
         }
     }, [])
 
+    const signInDisabled =
+        username.trim() === '' || password.trim() === '' || loading
+    const disabledBackgroundColor = isDark
+        ? Color(colors.primary).darken(0.3).hex()
+        : Color(colors.primary).lighten(0.3).hex()
+    const disabledTextColor = isDark
+        ? Color(getContrastColor(colors.primary)).lighten(0.1).hex()
+        : Color(getContrastColor(colors.primary)).darken(0.1).hex()
     return (
-        <>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.keyboardContainer}
-                enabled={!floatingKeyboard}
+        <View style={styles.container}>
+            <View
+                style={[
+                    styles.loginContainer,
+                    { backgroundColor: colors.card },
+                ]}
             >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.container}>
-                        <View
+                <Text
+                    style={[styles.header, { color: colors.text }]}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={1}
+                >
+                    {'THI Account'}
+                </Text>
+                <View style={styles.userNameContainer}>
+                    <Text
+                        style={{
+                            ...styles.userNameLabel,
+                            color: colors.text,
+                        }}
+                    >
+                        {t('login.username')}
+                    </Text>
+                    <TextInput
+                        style={[
+                            styles.textInput,
+                            {
+                                color: colors.text,
+                                backgroundColor: colors.inputBackground,
+                                borderColor: colors.border,
+                            },
+                        ]}
+                        placeholderTextColor={colors.labelColor}
+                        defaultValue={username}
+                        returnKeyType="next"
+                        placeholder="abc1234"
+                        onChangeText={(text) => {
+                            setUsername(text)
+                        }}
+                        clearButtonMode="while-editing"
+                        selectionColor={colors.primary}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        textContentType="oneTimeCode"
+                    />
+                </View>
+                <View style={styles.passwordContainer}>
+                    <Text
+                        style={{
+                            ...styles.userNameLabel,
+                            color: colors.text,
+                        }}
+                    >
+                        {t('login.password')}
+                    </Text>
+
+                    <TextInput
+                        style={[
+                            styles.textInput,
+                            {
+                                color: colors.text,
+                                backgroundColor: colors.inputBackground,
+                                borderColor: colors.border,
+                            },
+                        ]}
+                        placeholderTextColor={colors.labelColor}
+                        placeholder={t('login.password')}
+                        defaultValue={password}
+                        returnKeyType="done"
+                        onChangeText={(text) => {
+                            setPassword(text)
+                        }}
+                        onSubmitEditing={() => {
+                            if (username !== '') {
+                                login().catch((error: Error) => {
+                                    console.log(error)
+                                })
+                            }
+                        }}
+                        selectionColor={colors.primary}
+                        selectTextOnFocus={true}
+                        autoCapitalize="none"
+                        secureTextEntry={true}
+                        clearButtonMode="while-editing"
+                        autoComplete="current-password"
+                        textContentType="password"
+                        autoCorrect={false}
+                    />
+                </View>
+                <TouchableOpacity
+                    disabled={signInDisabled}
+                    onPress={() => {
+                        login().catch((error: Error) => {
+                            console.log(error)
+                        })
+                    }}
+                    style={[
+                        styles.loginButton,
+                        {
+                            backgroundColor: signInDisabled
+                                ? disabledBackgroundColor
+                                : colors.primary,
+                        },
+                    ]}
+                >
+                    {loading ? (
+                        <ActivityIndicator
+                            color={getContrastColor(colors.primary)}
+                            size={15}
+                        />
+                    ) : (
+                        <Text
+                            style={{
+                                ...styles.buttonText,
+                                color: signInDisabled
+                                    ? disabledTextColor
+                                    : getContrastColor(colors.primary),
+                            }}
+                        >
+                            {t('login.button')}
+                        </Text>
+                    )}
+                </TouchableOpacity>
+                <View style={styles.guestContainer}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            guestLogin().catch((error: Error) => {
+                                console.log(error)
+                            })
+                        }}
+                    >
+                        <Text
                             style={[
-                                styles.loginContainer,
-                                { backgroundColor: colors.card },
+                                styles.guestText,
+                                {
+                                    color: colors.labelSecondaryColor,
+                                },
                             ]}
                         >
-                            <Text
-                                style={[styles.header, { color: colors.text }]}
-                                adjustsFontSizeToFit={true}
-                                numberOfLines={1}
-                            >
-                                {t('login.title')}
-                            </Text>
-
-                            {infoMsg !== '' ? (
-                                <LoginAlert
-                                    errorMsg={infoMsg}
-                                    errorTitle={notice}
-                                    resetAlert={resetInfo}
-                                />
-                            ) : null}
-                            <View style={styles.userNameContainer}>
-                                <Text
-                                    style={{
-                                        ...styles.userNameLabel,
-                                        color: colors.labelColor,
-                                    }}
-                                >
-                                    {t('login.username')}
-                                </Text>
-                                <View
-                                    style={[
-                                        styles.textInputContainer,
-                                        {
-                                            borderColor:
-                                                colors.labelTertiaryColor,
-                                        },
-                                    ]}
-                                >
-                                    <TextInput
-                                        style={[
-                                            styles.textInput,
-                                            { color: colors.text },
-                                        ]}
-                                        placeholderTextColor={colors.labelColor}
-                                        defaultValue={username}
-                                        returnKeyType="next"
-                                        placeholder="abc1234"
-                                        onChangeText={(text) => {
-                                            setUsername(text)
-                                        }}
-                                        clearButtonMode="while-editing"
-                                        selectionColor={colors.primary}
-                                        autoCapitalize="none"
-                                        autoComplete="username"
-                                        textContentType="username"
-                                    />
-                                </View>
-                            </View>
-                            <View style={styles.passwordContainer}>
-                                <Text
-                                    style={{
-                                        ...styles.userNameLabel,
-                                        color: colors.labelColor,
-                                    }}
-                                >
-                                    {t('login.password')}
-                                </Text>
-                                <View
-                                    style={[
-                                        styles.textInputContainer,
-                                        {
-                                            borderColor:
-                                                colors.labelTertiaryColor,
-                                        },
-                                    ]}
-                                >
-                                    <TextInput
-                                        style={[
-                                            styles.textInput,
-                                            { color: colors.text },
-                                        ]}
-                                        placeholderTextColor={colors.labelColor}
-                                        placeholder={t('login.password')}
-                                        defaultValue={password}
-                                        returnKeyType="done"
-                                        onChangeText={(text) => {
-                                            setPassword(text)
-                                        }}
-                                        onSubmitEditing={() => {
-                                            if (username !== '') {
-                                                login().catch(
-                                                    (error: Error) => {
-                                                        console.log(error)
-                                                    }
-                                                )
-                                            }
-                                        }}
-                                        selectionColor={colors.primary}
-                                        selectTextOnFocus={true}
-                                        autoCapitalize="none"
-                                        secureTextEntry={true}
-                                        clearButtonMode="while-editing"
-                                        autoComplete="current-password"
-                                        textContentType="password"
-                                    />
-                                </View>
-                            </View>
-                            <TouchableOpacity
-                                disabled={loading}
-                                onPress={() => {
-                                    login().catch((error: Error) => {
-                                        console.log(error)
-                                    })
-                                }}
-                                style={[
-                                    styles.loginButton,
-                                    { backgroundColor: colors.primary },
-                                ]}
-                            >
-                                {loading ? (
-                                    <ActivityIndicator
-                                        color={getContrastColor(colors.primary)}
-                                        size={15}
-                                    />
-                                ) : (
-                                    <Text
-                                        style={{
-                                            ...styles.buttonText,
-                                            color: getContrastColor(
-                                                colors.primary
-                                            ),
-                                        }}
-                                    >
-                                        {t('login.button')}
-                                    </Text>
-                                )}
-                            </TouchableOpacity>
-                            <View style={styles.guestContainer}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        guestLogin().catch((error: Error) => {
-                                            console.log(error)
-                                        })
-                                    }}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.guestText,
-                                            {
-                                                color: colors.labelSecondaryColor,
-                                            },
-                                        ]}
-                                        allowFontScaling={true}
-                                    >
-                                        {t('login.guest')}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </>
+                            {t('login.guest')}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
     )
 }
 
@@ -351,51 +349,47 @@ const styles = StyleSheet.create({
         width: '100%',
         maxWidth: 400,
         paddingHorizontal: 25,
-        paddingVertical: 20,
         justifyContent: 'center',
+        paddingTop: 30,
+        paddingBottom: 30,
     },
     header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 12,
-        marginTop: 25,
-        alignSelf: 'center',
+        fontSize: 23,
+        fontWeight: '600',
+        textAlign: 'left',
+
+        marginBottom: 14,
     },
     loginButton: {
         height: 40,
         justifyContent: 'center',
         paddingHorizontal: 20,
         marginTop: 25,
-        borderRadius: 5,
+        borderRadius: 7,
         alignItems: 'center',
     },
     textInput: {
         fontSize: 16,
-        paddingVertical: 8,
+        paddingVertical: 10,
         paddingHorizontal: 10,
-    },
-    textInputContainer: {
+        borderRadius: 7,
         borderWidth: 1,
-        borderRadius: 5,
     },
+
     guestContainer: {
-        paddingTop: 3,
+        paddingTop: 24,
         alignItems: 'center',
-        marginBottom: 16,
     },
     guestText: {
-        fontSize: 14,
-        marginTop: 10,
-        marginBottom: 8,
+        fontSize: 14.5,
     },
-    keyboardContainer: {
-        flex: 1,
-    },
+
     userNameContainer: {
         paddingTop: 3,
     },
     userNameLabel: {
         paddingBottom: 5,
+        fontSize: 15,
     },
     passwordContainer: {
         paddingTop: 15,

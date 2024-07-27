@@ -2,9 +2,9 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FlowContext, UserKindContext } from '@/components/contexts'
-import { USER_STUDENT } from '@/hooks/contexts/userKind'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
+import { USER_STUDENT } from '@/utils/app-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 import { useTheme } from '@react-navigation/native'
@@ -79,12 +79,7 @@ const CalendarCard = (): JSX.Element => {
     }, [calendar, exams])
 
     return (
-        <BaseCard
-            title="calendar"
-            onPress={() => {
-                router.push('calendar')
-            }}
-        >
+        <BaseCard title="calendar" onPressRoute="calendar">
             <View
                 style={{
                     ...styles.calendarView,

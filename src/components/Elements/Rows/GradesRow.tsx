@@ -33,7 +33,8 @@ const GradesRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        ECTS: {item.ects ?? t('grades.none')}
+                        {'ECTS:'}
+                        {item.ects ?? t('grades.none')}
                     </Text>
                 </View>
             }

@@ -1,31 +1,34 @@
 import { NoSessionError } from '@/api/thi-session-handler'
+import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import {
-    DashboardContext,
-    ThemeContext,
-    UserKindContext,
-} from '@/components/contexts'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
+import { type UserKindContextType } from '@/contexts/userKind'
 import { useRefreshByUser } from '@/hooks'
-import {
-    USER_GUEST,
-    USER_STUDENT,
-    type UserKindContextType,
-} from '@/hooks/contexts/userKind'
 import { type FormListSections } from '@/types/components'
+import { type MaterialIcon } from '@/types/material-icons'
+import {
+    animatedHapticFeedback,
+    useRandomColor,
+    withBouncing,
+} from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
+import { storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Alert,
+    Dimensions,
     Linking,
     Platform,
     Pressable,
@@ -35,16 +38,84 @@ import {
     Text,
     View,
 } from 'react-native'
+import Animated, {
+    cancelAnimation,
+    useAnimatedStyle,
+    useSharedValue,
+    withSequence,
+    withTiming,
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Shimmer from 'react-native-shimmer'
 
 export default function Settings(): JSX.Element {
     const { userKind, userFullName } =
         useContext<UserKindContextType>(UserKindContext)
-    const { toggleAccentColor } = useContext(ThemeContext)
     const { resetOrder } = useContext(DashboardContext)
-
+    const insets = useSafeAreaInsets()
+    const window = Dimensions.get('window')
+    const width = window.width - insets.left - insets.right
+    const height = window.height - insets.top - insets.bottom
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const theme = useTheme()
+    const colors = theme.colors as Colors
     const { t, i18n } = useTranslation(['settings'])
+    const bottomBoundX = 0
+    const logoWidth = 171
+    const logoHeight = 18
+    const topBoundX = width - logoWidth
+    const [tapCount, setTapCount] = useState(0)
+    const translateX = useSharedValue(0)
+    const translateY = useSharedValue(0)
+    const scrollY = useRef(0)
+    const logoRotation = useSharedValue(0)
+    const velocity = 110
+
+    const { color, randomizeColor } = useRandomColor()
+
+    useEffect(() => {
+        const { bottomBoundY, topBoundY } = getBounds()
+        if (isBouncing) {
+            trackEvent('EasterEgg', { easterEgg: 'settingsLogoBounce' })
+
+            translateX.value = withBouncing(
+                velocity,
+                bottomBoundX,
+                topBoundX,
+                randomizeColor
+            )
+            translateY.value = withBouncing(
+                velocity,
+                bottomBoundY,
+                topBoundY,
+                randomizeColor
+            )
+        } else {
+            cancelAnimation(translateX)
+            cancelAnimation(translateY)
+        }
+    }, [tapCount])
+
+    const logoBounceAnimation = useAnimatedStyle(() => {
+        return {
+            transform: [
+                { translateX: translateX.value },
+                { translateY: translateY.value },
+            ],
+        }
+    })
+
+    const wobbleAnimation = useAnimatedStyle(() => {
+        return {
+            transform: [{ rotateZ: `${logoRotation.value}deg` }],
+        }
+    })
+
+    const getBounds = (): { topBoundY: number; bottomBoundY: number } => {
+        const topBoundY = height - logoHeight + scrollY.current - 5
+        const bottomBoundY = 0 + scrollY.current
+        return { topBoundY, bottomBoundY }
+    }
 
     const languageAlert = (): void => {
         const newLocale = i18n.language === 'en' ? 'de' : 'en'
@@ -61,7 +132,7 @@ export default function Settings(): JSX.Element {
                     text: t('menu.formlist.language.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        void AsyncStorage.setItem('language', newLocale)
+                        storage.set('language', newLocale)
                         void i18n.changeLanguage(newLocale)
                     },
                 },
@@ -84,8 +155,8 @@ export default function Settings(): JSX.Element {
                     onPress: () => {
                         performLogout(
                             toggleUserKind,
-                            toggleAccentColor,
-                            resetOrder
+                            resetOrder,
+                            queryClient
                         ).catch((e) => {
                             console.log(e)
                         })
@@ -98,8 +169,8 @@ export default function Settings(): JSX.Element {
     const { data, error, isLoading, isSuccess, refetch, isError } = useQuery({
         queryKey: ['personalData'],
         queryFn: getPersonalData,
-        staleTime: 1000 * 60 * 60 * 12, // 12 hours
-        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+        staleTime: 1000 * 60 * 60 * 12,
+        gcTime: 1000 * 60 * 60 * 24 * 60,
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
                 router.replace('user/login')
@@ -115,6 +186,21 @@ export default function Settings(): JSX.Element {
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
     const { toggleUserKind } = React.useContext(UserKindContext)
+    const handlePress = (): void => {
+        setTapCount(tapCount + 1)
+        animatedHapticFeedback()
+        if (tapCount < 1) {
+            const rotationDegree = 5
+
+            logoRotation.value = withSequence(
+                withTiming(-rotationDegree, { duration: 50 }),
+                withTiming(rotationDegree, { duration: 100 }),
+                withTiming(0, { duration: 50 })
+            )
+        }
+    }
+
+    const isBouncing = tapCount === 2
 
     const sections: FormListSections[] = [
         {
@@ -181,7 +267,7 @@ export default function Settings(): JSX.Element {
                               title: 'App Icon',
                               icon: {
                                   ios: 'star.square.on.square',
-                                  android: null,
+                                  android: '' as MaterialIcon,
                               },
                               onPress: () => {
                                   router.push('(user)/appicon')
@@ -250,6 +336,10 @@ export default function Settings(): JSX.Element {
         },
     ]
 
+    const logoInactiveOpacity = isBouncing ? 0 : 1
+    const logoActiveOpacity = isBouncing ? 1 : 0
+    const logoActiveHeight = isBouncing ? 18 : 0
+
     return (
         <ScrollView
             refreshControl={
@@ -262,6 +352,11 @@ export default function Settings(): JSX.Element {
                     />
                 ) : undefined
             }
+            onScroll={(event) => {
+                scrollY.current = event.nativeEvent.contentOffset.y
+                setTapCount(0)
+            }}
+            contentContainerStyle={styles.contentContainer}
         >
             <View style={styles.wrapper}>
                 <Pressable
@@ -294,7 +389,6 @@ export default function Settings(): JSX.Element {
                                             (data?.stgru ?? '') + '. Semester'
                                         }
                                         subTitle2={data?.fachrich ?? ''}
-                                        loaded={data !== undefined}
                                     >
                                         <Avatar background={colors.primary}>
                                             <Text
@@ -326,7 +420,6 @@ export default function Settings(): JSX.Element {
                                         subTitle2={t(
                                             'menu.error.noData.subtitle2'
                                         )}
-                                        loaded={true}
                                     >
                                         <Avatar
                                             background={
@@ -354,7 +447,6 @@ export default function Settings(): JSX.Element {
                                         title={userFullName}
                                         subTitle1={t('menu.employee.subtitle1')}
                                         subTitle2={t('menu.employee.subtitle2')}
-                                        loaded={data !== undefined}
                                     >
                                         <Avatar background={colors.primary}>
                                             <Text
@@ -376,7 +468,6 @@ export default function Settings(): JSX.Element {
                                         title={t('menu.guest.title')}
                                         subTitle1={t('menu.guest.subtitle')}
                                         subTitle2={''}
-                                        loaded={true}
                                     >
                                         <Avatar
                                             background={
@@ -406,7 +497,6 @@ export default function Settings(): JSX.Element {
                                             error?.message ?? 'Unknown error'
                                         }
                                         subTitle2={t('menu.error.subtitle2')}
-                                        loaded={true}
                                     >
                                         <Avatar
                                             background={
@@ -468,17 +558,75 @@ export default function Settings(): JSX.Element {
             >
                 {t('menu.copyright', { year: new Date().getFullYear() })}
             </Text>
+            <Animated.View
+                style={[
+                    styles.bounceContainer,
+                    logoBounceAnimation,
+
+                    {
+                        opacity: logoActiveOpacity,
+                        height: logoActiveHeight,
+                    },
+                ]}
+            >
+                <Pressable
+                    onPress={() => {
+                        setTapCount(0)
+                    }}
+                    disabled={!isBouncing}
+                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                >
+                    <LogoTextSVG
+                        size={16}
+                        color={isBouncing ? color : colors.text}
+                    />
+                </Pressable>
+            </Animated.View>
+
+            <Animated.View
+                style={[
+                    wobbleAnimation,
+                    styles.whobbleContainer,
+                    {
+                        opacity: logoInactiveOpacity,
+                    },
+                ]}
+            >
+                <Pressable
+                    onPress={() => {
+                        handlePress()
+                    }}
+                    disabled={isBouncing}
+                    accessibilityLabel={t('button.settingsLogo', {
+                        ns: 'accessibility',
+                    })}
+                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                >
+                    <Shimmer
+                        style={{ ...styles.shimmerContainer }}
+                        pauseDuration={5000}
+                        duration={1500}
+                        animationOpacity={0.8}
+                        animating={true}
+                    >
+                        <LogoTextSVG size={16} color={colors.text} />
+                    </Shimmer>
+                </Pressable>
+            </Animated.View>
         </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     wrapper: { paddingTop: 20, paddingHorizontal: 16 },
-
+    bounceContainer: {
+        zIndex: 10,
+        position: 'absolute',
+    },
     copyrigth: {
         fontSize: 12,
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: -10,
         marginTop: 20,
     },
     container: {
@@ -505,5 +653,16 @@ const styles = StyleSheet.create({
     avatarText: {
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    shimmerContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    contentContainer: {
+        paddingBottom: 60,
+    },
+    whobbleContainer: {
+        alignItems: 'center',
+        paddingTop: 20,
     },
 })

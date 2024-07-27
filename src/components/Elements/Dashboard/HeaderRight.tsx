@@ -1,17 +1,11 @@
 import { Avatar } from '@/components/Elements/Settings'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
-import {
-    DashboardContext,
-    ThemeContext,
-    UserKindContext,
-} from '@/components/contexts'
-import {
-    USER_EMPLOYEE,
-    USER_STUDENT,
-    type UserKindContextType,
-} from '@/hooks/contexts/userKind'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
+import { type UserKindContextType } from '@/contexts/userKind'
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
+import { USER_EMPLOYEE, USER_STUDENT } from '@/utils/app-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -37,9 +31,7 @@ export const IndexHeaderRight = (): JSX.Element => {
     const isDark = useTheme().dark
     const { userFullName, userKind } =
         useContext<UserKindContextType>(UserKindContext)
-
     const { toggleUserKind } = useContext(UserKindContext)
-    const { toggleAccentColor } = useContext(ThemeContext)
     const { resetOrder } = useContext(DashboardContext)
 
     const { data: persData } = useQuery({
@@ -87,8 +79,8 @@ export const IndexHeaderRight = (): JSX.Element => {
                     onPress: () => {
                         performLogout(
                             toggleUserKind,
-                            toggleAccentColor,
-                            resetOrder
+                            resetOrder,
+                            queryClient
                         ).catch((e) => {
                             console.log(e)
                         })
@@ -105,6 +97,7 @@ export const IndexHeaderRight = (): JSX.Element => {
             delayLongPress={300}
             onLongPress={() => {}}
             hitSlop={10}
+            accessibilityLabel={t('navigation.settings')}
         >
             <ContextMenu
                 actions={[

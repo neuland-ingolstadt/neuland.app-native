@@ -1,15 +1,16 @@
-/* eslint-disable react-native/no-color-literals */
 import { type Colors } from '@/components/colors'
 import { AppIconContext, UserKindContext } from '@/components/contexts'
-import { MapContext } from '@/hooks/contexts/map'
-import { USER_GUEST } from '@/hooks/contexts/userKind'
-import { SEARCH_TYPES } from '@/types/map'
+import { MapContext } from '@/contexts/map'
+import { SEARCH_TYPES, type SearchResult } from '@/types/map'
+import { USER_GUEST } from '@/utils/app-utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
+import Color from 'color'
+import { selectionAsync } from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import { type FeatureCollection } from 'geojson'
@@ -18,15 +19,18 @@ import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Alert,
+    Animated,
+    Easing,
+    LayoutAnimation,
     Linking,
     Platform,
     Pressable,
     SectionList,
     StyleSheet,
     Text,
-    TextInput,
     View,
 } from 'react-native'
+import { Swipeable, TextInput } from 'react-native-gesture-handler'
 import { type SharedValue } from 'react-native-reanimated'
 
 import Divider from '../Universal/Divider'
@@ -86,16 +90,21 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     allRooms,
 }) => {
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const theme = useTheme()
+    const colors = theme.colors as Colors
+    const isDark = theme.dark
     const { t, i18n } = useTranslation('common')
     const { userKind } = useContext(UserKindContext)
     const {
         localSearch,
         setLocalSearch,
+        clickedElement,
         setClickedElement,
         availableRooms,
         nextLecture,
         setCurrentFloor,
+        searchHistory,
+        updateSearchHistory,
     } = useContext(MapContext)
 
     const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
@@ -111,7 +120,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         threshold: 0.4,
         useExtendedSearch: true,
     })
-
     const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
         const results = fuse.search(localSearch.trim().toUpperCase())
         const roomResults = results.map((result) => ({
@@ -132,6 +140,27 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
         return [exactMatches, fuzzyMatches]
     }, [localSearch, allRooms])
+
+    function addToSearchHistory(newHistory: SearchResult): void {
+        const newSearchHistory = searchHistory.filter(
+            (history) => history.title !== newHistory.title
+        )
+
+        newSearchHistory.unshift(newHistory)
+
+        if (newSearchHistory.length > 5) {
+            newSearchHistory.length = 5
+        }
+
+        updateSearchHistory(newSearchHistory)
+    }
+
+    function deleteSearchHistoryItem(element: SearchResult): void {
+        const newSearchHistory = searchHistory.filter(
+            (history) => history.title !== element.title
+        )
+        updateSearchHistory(newSearchHistory)
+    }
 
     useEffect(() => {
         if (
@@ -159,6 +188,28 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         }
     }, [localSearch])
     const textInputRef = useRef<any>(null)
+    const [searchFocused, setSearchFocused] = React.useState(false)
+    const searchbarBackground = isDark
+        ? Color(colors.card).lighten(0.6).hex()
+        : Color(colors.card).darken(0.03).hex()
+    const cancelWidth = useRef(new Animated.Value(0)).current
+    const cancelOpacity = useRef(new Animated.Value(0)).current
+
+    const animate = (toValue: number): void => {
+        Animated.timing(cancelWidth, {
+            toValue,
+            duration: 250,
+            easing: Easing.inOut(Easing.quad),
+            useNativeDriver: false,
+        }).start()
+        Animated.timing(cancelOpacity, {
+            toValue: toValue === 0 ? 0 : 1,
+            duration: 250,
+            easing: Easing.inOut(Easing.quad),
+            useNativeDriver: false,
+        }).start()
+    }
+    const width = t('misc.cancel').length * 11
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -173,22 +224,23 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     textInputRef.current?.blur()
                 }
             }}
+            enableDynamicSizing={false}
         >
-            <View>
+            <BottomSheetView>
                 <View
                     style={{
                         paddingHorizontal: PAGE_PADDING,
                     }}
                 >
-                    {Platform.OS !== 'ios' ? (
-                        <BottomSheetTextInput
+                    <View style={styles.inputContainer}>
+                        <TextInput
                             ref={textInputRef}
                             style={{
-                                backgroundColor: colors.inputBackground,
+                                backgroundColor: searchbarBackground,
                                 ...styles.textInput,
                                 color: colors.text,
                             }}
-                            placeholder={t('pages.map.search.placeholder')}
+                            placeholder={t('pages.map.search.hint')}
                             placeholderTextColor={colors.labelColor}
                             value={localSearch}
                             enablesReturnKeyAutomatically
@@ -198,32 +250,174 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 setLocalSearch(text)
                             }}
                             onFocus={() => {
-                                bottomSheetRef.current?.snapToIndex(2)
+                                setSearchFocused(true)
+                                animate(width)
+
+                                bottomSheetRef.current?.expand()
                             }}
-                        />
-                    ) : (
-                        <TextInput
-                            ref={textInputRef}
-                            style={{
-                                backgroundColor: colors.inputBackground,
-                                ...styles.textInput,
-                                color: colors.text,
-                            }}
-                            placeholder={t('pages.map.search.placeholder')}
-                            placeholderTextColor={colors.labelColor}
-                            value={localSearch}
-                            enablesReturnKeyAutomatically
-                            clearButtonMode="always"
-                            onChangeText={(text) => {
-                                setLocalSearch(text)
-                            }}
-                            onFocus={() => {
-                                bottomSheetRef.current?.snapToIndex(2)
+                            onBlur={() => {
+                                setSearchFocused(false)
+                                animate(0)
                             }}
                             onEndEditing={() => {
-                                bottomSheetRef.current?.collapse()
+                                if (clickedElement === null) {
+                                    console.log(
+                                        'clickedElement is null - snapping to 1'
+                                    )
+                                    bottomSheetRef.current?.snapToIndex(1)
+                                } else {
+                                    console.log(
+                                        'clickedElement is not null - snapping to 0'
+                                    )
+                                    bottomSheetRef.current?.close()
+                                }
                             }}
                         />
+
+                        <Animated.View
+                            style={{
+                                width: cancelWidth,
+                                opacity: cancelOpacity,
+                                ...styles.cancelContainer,
+                            }}
+                        >
+                            <Pressable
+                                onPress={() => {
+                                    setLocalSearch('')
+                                    textInputRef.current?.blur()
+                                    //    bottomSheetRef.current?.snapToIndex(1)
+                                }}
+                                style={styles.cancelButton}
+                            >
+                                <Text
+                                    style={{
+                                        color: colors.primary,
+                                        ...styles.cancelButtonText,
+                                    }}
+                                    numberOfLines={1}
+                                    allowFontScaling={false}
+                                    ellipsizeMode="clip"
+                                >
+                                    {t('misc.cancel')}
+                                </Text>
+                            </Pressable>
+                        </Animated.View>
+                    </View>
+
+                    {searchFocused &&
+                        localSearch === '' &&
+                        searchHistory.length !== 0 && (
+                            <>
+                                <View style={styles.suggestionContainer}>
+                                    <View
+                                        style={
+                                            styles.suggestionSectionHeaderContainer
+                                        }
+                                    >
+                                        <Text
+                                            style={{
+                                                color: colors.text,
+                                                ...styles.suggestionSectionHeader,
+                                            }}
+                                        >
+                                            {t(
+                                                'pages.map.details.room.history'
+                                            )}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.radius}>
+                                        {searchHistory?.map(
+                                            (history, index) => (
+                                                <React.Fragment
+                                                    key={history.title}
+                                                >
+                                                    <Swipeable
+                                                        renderRightActions={() => (
+                                                            <Pressable
+                                                                style={
+                                                                    styles.swipeableActionContainer
+                                                                }
+                                                                onPress={() => {
+                                                                    LayoutAnimation.configureNext(
+                                                                        LayoutAnimation
+                                                                            .Presets
+                                                                            .easeInEaseOut
+                                                                    )
+                                                                    if (
+                                                                        Platform.OS ===
+                                                                        'ios'
+                                                                    ) {
+                                                                        void selectionAsync()
+                                                                    }
+                                                                    deleteSearchHistoryItem(
+                                                                        history
+                                                                    )
+                                                                }}
+                                                            >
+                                                                <PlatformIcon
+                                                                    color={
+                                                                        colors.notification
+                                                                    }
+                                                                    ios={{
+                                                                        name: 'trash',
+                                                                        size: 20,
+                                                                    }}
+                                                                    android={{
+                                                                        name: 'delete',
+                                                                        size: 24,
+                                                                    }}
+                                                                />
+                                                            </Pressable>
+                                                        )}
+                                                    >
+                                                        <View
+                                                            style={{
+                                                                ...styles.historyRow,
+                                                                backgroundColor:
+                                                                    colors.card,
+                                                            }}
+                                                        >
+                                                            <ResultRow
+                                                                result={history}
+                                                                index={index}
+                                                                colors={colors}
+                                                                handlePresentModalPress={
+                                                                    handlePresentModalPress
+                                                                }
+                                                                bottomSheetRef={
+                                                                    bottomSheetRef
+                                                                }
+                                                                updateSearchHistory={
+                                                                    addToSearchHistory
+                                                                }
+                                                            />
+                                                        </View>
+                                                    </Swipeable>
+                                                    {index !==
+                                                        searchHistory.length -
+                                                            1 && (
+                                                        <Divider
+                                                            key={`divider-${index}`}
+                                                        />
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        )}
+                                    </View>
+                                </View>
+                            </>
+                        )}
+
+                    {searchFocused && localSearch === '' && (
+                        <Text
+                            style={{
+                                color: colors.labelColor,
+                                ...styles.noResults,
+                                ...styles.searchHint,
+                            }}
+                        >
+                            {t('pages.map.search.placeholder')}
+                        </Text>
                     )}
 
                     {localSearch !== '' ? (
@@ -268,6 +462,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                             handlePresentModalPress
                                         }
                                         bottomSheetRef={bottomSheetRef}
+                                        updateSearchHistory={addToSearchHistory}
                                     />
                                 )}
                                 ItemSeparatorComponent={() => (
@@ -297,25 +492,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 {t('pages.map.search.noResults')}
                             </Text>
                         )
-                    ) : userKind === USER_GUEST ? (
-                        <View style={styles.guestContainer}>
-                            <Pressable
-                                onPress={() => {
-                                    router.push('login')
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.noResults,
-                                    }}
-                                >
-                                    {t('pages.map.details.room.signIn')}
-                                </Text>
-                            </Pressable>
-                            <AttributionLink />
-                        </View>
-                    ) : (
+                    ) : searchFocused ? null : (
                         <>
                             {nextLecture !== null && nextLecture.length > 0 && (
                                 <View style={styles.suggestionContainer}>
@@ -512,26 +689,28 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                             'pages.map.details.room.availableRooms'
                                         )}
                                     </Text>
-                                    <Pressable
-                                        onPress={() => {
-                                            router.push('(map)/advanced')
-                                        }}
-                                        hitSlop={{
-                                            top: 10,
-                                            right: 10,
-                                            bottom: 10,
-                                            left: 10,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: colors.primary,
-                                                ...styles.suggestionMoreButtonText,
+                                    {userKind !== USER_GUEST && (
+                                        <Pressable
+                                            onPress={() => {
+                                                router.push('(map)/advanced')
+                                            }}
+                                            hitSlop={{
+                                                top: 10,
+                                                right: 10,
+                                                bottom: 10,
+                                                left: 10,
                                             }}
                                         >
-                                            {t('misc.more')}
-                                        </Text>
-                                    </Pressable>
+                                            <Text
+                                                style={{
+                                                    color: colors.primary,
+                                                    ...styles.suggestionMoreButtonText,
+                                                }}
+                                            >
+                                                {t('misc.more')}
+                                            </Text>
+                                        </Pressable>
+                                    )}
                                 </View>
                                 <View
                                     style={{
@@ -539,7 +718,16 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                         ...styles.radius,
                                     }}
                                 >
-                                    {availableRooms === null ? (
+                                    {userKind === USER_GUEST ? (
+                                        <Text
+                                            style={{
+                                                color: colors.text,
+                                                ...styles.noResults,
+                                            }}
+                                        >
+                                            {t('pages.map.details.room.signIn')}
+                                        </Text>
+                                    ) : availableRooms === null ? (
                                         <ActivityIndicator
                                             size="small"
                                             color={colors.primary}
@@ -665,7 +853,10 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                     {
                                                                         room.capacity
                                                                     }{' '}
-                                                                    seats)
+                                                                    {t(
+                                                                        'pages.rooms.options.seats'
+                                                                    )}
+                                                                    )
                                                                 </Text>
                                                             </View>
                                                         </View>
@@ -712,7 +903,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                         </>
                     )}
                 </View>
-            </View>
+            </BottomSheetView>
         </BottomSheet>
     )
 }
@@ -758,9 +949,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginBottom: 10,
         fontSize: 17,
+        flex: 1,
+    },
+    historyRow: {
+        paddingVertical: 5,
+        paddingHorizontal: 12,
+
+        width: '100%',
     },
     suggestionRow: {
-        paddingVertical: 10,
+        paddingVertical: 14,
         paddingHorizontal: 12,
         flexDirection: 'row',
     },
@@ -793,6 +991,7 @@ const styles = StyleSheet.create({
     },
     radius: {
         borderRadius: 14,
+        overflow: 'hidden',
     },
     noResults: {
         textAlign: 'center',
@@ -800,9 +999,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     header: {
-        fontSize: 15,
-        marginTop: 12,
-        marginBottom: 6,
+        fontWeight: '500',
+        fontSize: 20,
+        paddingTop: 8,
+        marginBottom: 2,
         textAlign: 'left',
     },
     loadingMargin: {
@@ -818,8 +1018,29 @@ const styles = StyleSheet.create({
         fontSize: 15,
         paddingStart: 4,
     },
-    guestContainer: {
-        paddingTop: 15,
-        gap: 35,
+    searchHint: {
+        paddingTop: 60,
+    },
+    swipeableActionContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 70,
+    },
+    cancelContainer: { justifyContent: 'center' },
+    cancelButton: {
+        paddingLeft: 10,
+        paddingRight: 2,
+
+        alignSelf: 'center',
+    },
+    cancelButtonText: {
+        textAlign: 'center',
+        fontSize: 15,
+        fontWeight: '600',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        height: 40,
+        marginBottom: 10,
     },
 })

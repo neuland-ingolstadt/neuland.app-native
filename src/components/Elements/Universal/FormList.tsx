@@ -87,6 +87,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                                 'normal',
                                                         },
                                                     ]}
+                                                    selectable={
+                                                        item.selectable ?? false
+                                                    }
                                                 >
                                                     {item.value}
                                                 </Text>

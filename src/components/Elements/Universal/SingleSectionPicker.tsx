@@ -8,7 +8,8 @@ import PlatformIcon from './Icon'
 interface SectionPickerProps {
     title: string
     selectedItem: boolean
-    action: () => void
+    action: (state: boolean) => void
+    state: boolean
 }
 
 /**
@@ -16,6 +17,7 @@ interface SectionPickerProps {
  * @param {string} title - The title of the item.
  * @param {boolean} selectedItem - Whether the item is selected.
  * @param {() => void} action - The function to be called when the item is selected.
+ * @param {boolean} state - The state of the item.
  * @returns {JSX.Element} - The MultiSectionPicker component.
  * @example
  * <SingleSectionPicker
@@ -37,7 +39,7 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
             <React.Fragment>
                 <Pressable
                     onPress={() => {
-                        action()
+                        action(!selectedItem)
                     }}
                     style={({ pressed }) => [
                         { opacity: pressed ? 0.8 : 1 },

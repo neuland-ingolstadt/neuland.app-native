@@ -52,7 +52,7 @@ export default function FoodPreferences(): JSX.Element {
         selectedRestaurants,
         toggleSelectedRestaurant,
         showStatic,
-        toggleShowStatic,
+        setShowStatic,
         foodLanguage,
         toggleFoodLanguage,
     } = useContext(FoodFilterContext)
@@ -92,8 +92,8 @@ export default function FoodPreferences(): JSX.Element {
                 <SectionView title={'Filter'}>
                     <SingleSectionPicker
                         title={t('preferences.formlist.static')}
-                        selectedItem={showStatic}
-                        action={toggleShowStatic}
+                        selectedItem={showStatic ?? false}
+                        action={setShowStatic}
                     />
                 </SectionView>
                 <View style={{ ...styles.sectionContainer }}>

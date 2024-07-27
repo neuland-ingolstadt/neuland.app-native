@@ -1,2 +1,11 @@
-- Displays exam dates in the calendar
-- Performance and design improvements
+- New onboarding and login design
+- New search history for map search
+- Native design of the extended room search
+- Improved calendar performance
+- Improved error handling
+- Reduced initial loading time of the app
+- Reduced size of the app
+- Fixes missing translations
+- Fixes errors when loading the meal data
+- New system status page
+- New Easter Egg

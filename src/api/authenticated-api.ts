@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import courseShortNames from '@/data/course-short-names.json'
-import { type CourseShortNames } from '@/types/data'
 import {
     type AvailableLibrarySeats,
     type Exams,
@@ -21,40 +19,6 @@ export interface PersonalData {
         stg?: string
         po_url?: string
     }
-}
-
-/**
- * Determines the users faculty.
- * @param {PersonalData} data Personal data
- * @returns {string} Faculty name (e.g. `Informatik`)
- */
-function extractFacultyFromPersonalData(data: PersonalData): string | null {
-    if (data?.persdata?.stg == null) {
-        return null
-    }
-    const shortNames: CourseShortNames = courseShortNames
-    const shortName = data.persdata.stg
-    const faculty = Object.keys(shortNames).find((faculty) =>
-        (courseShortNames as Record<string, string[]>)[faculty].includes(
-            shortName
-        )
-    )
-
-    return faculty ?? null
-}
-
-/**
- * Determines the users SPO version.
- * @param {PersonalData} data Personal data
- * @returns {string}
- */
-function extractSpoFromPersonalData(data: PersonalData): string | null {
-    if (data?.persdata?.po_url == null) {
-        return null
-    }
-
-    const split = data.persdata.po_url.split('/').filter((x) => x.length > 0)
-    return split[split.length - 1]
 }
 
 /**
@@ -108,43 +72,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         })
 
         return res
-    }
-
-    /**
-     * Extracts the faculty from the personal data
-     * @returns {Promise<string | null>} Promise that resolves with the faculty of the user
-     */
-    async getFaculty(): Promise<string | null> {
-        const data = await this.getPersonalData()
-        return extractFacultyFromPersonalData(data)
-    }
-
-    /**
-     * Extracts the SPO version from the personal data
-     * @returns {Promise<string | null>} Promise that resolves with the SPO version of the user
-     */
-    async getSpoName(): Promise<string | null> {
-        const data = await this.getPersonalData()
-        return extractSpoFromPersonalData(data)
-    }
-
-    /**
-     * Extracts the full name from the personal data
-     * @returns {Promise<string | null>} Promise that resolves with the full name of the user
-     */
-    async getFullName(): Promise<string | null> {
-        const data = await this.getPersonalData()
-        const fullName = data?.persdata?.vname + ' ' + data?.persdata?.name
-        return fullName
-    }
-
-    /**
-     * Extracts the bib number from the personal data
-     * @returns {Promise<string | null>} Promise that resolves with the bib number of the user
-     */
-    async getLibraryNumber(): Promise<string | null> {
-        const data = await this.getPersonalData()
-        return data?.persdata?.bibnr
     }
 
     /**

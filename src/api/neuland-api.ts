@@ -66,73 +66,67 @@ class NeulandAPIClient {
         return await this.performGraphQLQuery(gql`
             query {
                 food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
-                    timestamp
-                    meals {
-      variants {
-        name {
-          de
-          en
-        }
-        additional
-        prices {
-          student
-          employee
-          guest
-        }
-        id
-        allergens
-        flags
-        nutrition {
-          kj
-          kcal
-          fat
-          fatSaturated
-          carbs
-          sugar
-          fiber
-          protein
-          salt
-        }
-        originalLanguage
-        static
-        restaurant
-        parent {
-          id
-          category
-        }
-        
-      }
-      name {
-        de
-        en
-      }
-      id
-      category
-      prices {
-        student
-        employee
-        guest
-      }
-      allergens
-      flags
-      nutrition {
-        kj
-        kcal
-        fat
-        fatSaturated
-        carbs
-        sugar
-        fiber
-        protein
-        salt
-      }
-      originalLanguage
-      static
-      restaurant
-    }
+                    foodData {
+                        timestamp
+                        meals {
+                            name {
+                                de
+                                en
+                            }
+                            id
+                            category
+                            prices {
+                                student
+                                employee
+                                guest
+                            }
+                            allergens
+                            flags
+                            nutrition {
+                                kj
+                                kcal
+                                fat
+                                fatSaturated
+                                carbs
+                                sugar
+                                fiber
+                                protein
+                                salt
+                            }
+                            variants {
+                                name {
+                                    de
+                                    en
+                                }
+                                additional
+                                id
+                                allergens
+                                flags
+                                originalLanguage
+                                static
+                                restaurant
+                                parent {
+                                    id
+                                    category
+                                }
+                                prices {
+                                    student
+                                    employee
+                                    guest
+                                }
+                            }
+                            originalLanguage
+                            static
+                            restaurant
+                        }
+                        }
+                        errors {
+                            location
+                            message
+                        }
+                    }
                 }
-            }
-        `)
+            `)
     }
 
     /**

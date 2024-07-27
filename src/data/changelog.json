@@ -87,7 +87,7 @@
                 },
                 "icon": {
                     "ios": "calendar",
-                    "android": "calendar"
+                    "android": "today"
                 }
             },
             {
@@ -161,7 +161,7 @@
                 },
                 "icon": {
                     "ios": "calendar",
-                    "android": "calendar"
+                    "android": "calendar_month"
                 }
             },
             {
@@ -189,7 +189,7 @@
                 },
                 "icon": {
                     "ios": "lock.shield",
-                    "android": "chart_pie"
+                    "android": "query_stats"
                 }
             }
         ],

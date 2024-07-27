@@ -9,11 +9,14 @@ import { ignoreTime } from './date-utils'
 
 export const compileTime = new Date()
 export const calendar: Calendar[] = rawCalendar
-    .map((x) => {
+    .map((x: unknown) => {
         const event: Calendar = {
-            ...x,
-            begin: new Date(x.begin),
-            end: x.end != null ? new Date(x.end) : undefined,
+            ...(x as Calendar),
+            begin: new Date((x as Calendar).begin),
+            end:
+                (x as Calendar).end != null
+                    ? new Date((x as any).end as string)
+                    : undefined,
         }
 
         return event

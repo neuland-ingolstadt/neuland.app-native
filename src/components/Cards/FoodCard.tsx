@@ -2,6 +2,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type LanguageKey } from '@/localization/i18n'
+import { USER_GUEST } from '@/utils/app-utils'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
@@ -11,7 +12,6 @@ import {
 } from '@/utils/food-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
@@ -20,8 +20,6 @@ import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
-
-    const router = useRouter()
     const colors = useTheme().colors as Colors
     const {
         selectedRestaurants,
@@ -85,7 +83,7 @@ const FoodCard = (): JSX.Element => {
                             foodLanguage,
                             i18n.language as LanguageKey
                         ),
-                        price: getUserSpecificPrice(x, userKind),
+                        price: getUserSpecificPrice(x, userKind ?? USER_GUEST),
                     })),
                     ...(hiddenEntriesCount > 0
                         ? [
@@ -141,12 +139,7 @@ const FoodCard = (): JSX.Element => {
     }, [selectedRestaurants])
 
     return (
-        <BaseCard
-            title={foodCardTitle}
-            onPress={() => {
-                router.replace('food')
-            }}
-        >
+        <BaseCard title={foodCardTitle} onPressRoute="food">
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (

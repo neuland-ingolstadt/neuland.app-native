@@ -5,10 +5,11 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { AppIconContext, FlowContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
-import { IMPRINT_URL, PRIVACY_URL } from '@/utils/app-utils'
+import { IMPRINT_URL, PRIVACY_URL, STATUS_URL } from '@/utils/app-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
+import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useContext, useState } from 'react'
@@ -25,43 +26,40 @@ import {
     View,
 } from 'react-native'
 
-import { version } from '../../../package.json'
-
 export default function About(): JSX.Element {
     const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
-    const { analyticsAllowed, toggleAnalytics } = React.useContext(FlowContext)
+    const { analyticsAllowed, setAnalyticsAllowed } =
+        React.useContext(FlowContext)
     const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
+    const version = `${Application.nativeApplicationVersion}`
+    const versionWithCode = `${version} (${Application.nativeBuildVersion})`
+    const [displayVersion, setDisplayVersion] = useState(version)
+
+    const toggleVersion = (): void => {
+        setDisplayVersion((prev) =>
+            prev === version ? versionWithCode : version
+        )
+    }
+
     const sections: FormListSections[] = [
         {
-            header: t('about.formlist.legal.title'),
+            header: 'App',
             items: [
                 {
-                    title: t('about.formlist.legal.privacy'),
-                    icon: {
-                        ios: 'hand.raised',
-                        android: 'lock_open',
-                    },
-                    onPress: async () => await Linking.openURL(PRIVACY_URL),
+                    title: 'Version',
+                    value: displayVersion,
+                    onPress: toggleVersion,
+                    selectable: true,
                 },
                 {
-                    title: t('about.formlist.legal.imprint'),
-                    icon: linkIcon,
-                    onPress: async () => await Linking.openURL(IMPRINT_URL),
-                },
-                {
-                    title: t('navigation.licenses', { ns: 'navigation' }),
+                    title: 'Changelog',
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('(user)/licenses')
+                        router.push('(user)/changelog')
                     },
                 },
-            ],
-        },
-        {
-            header: t('about.formlist.about.title'),
-            items: [
                 {
                     title: 'Feedback',
                     icon: {
@@ -73,6 +71,44 @@ export default function About(): JSX.Element {
                             'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
                         ),
                 },
+                {
+                    title: 'System Status',
+                    icon: {
+                        ios: 'bubble.left.and.exclamationmark.bubble.right',
+                        android: 'sync_problem',
+                    },
+                    onPress: () => {
+                        void Linking.openURL(STATUS_URL)
+                    },
+                },
+            ],
+        },
+        {
+            header: t('about.formlist.legal.title'),
+            items: [
+                {
+                    title: t('about.formlist.legal.privacy'),
+                    icon: linkIcon,
+                    onPress: async () => await Linking.openURL(PRIVACY_URL),
+                },
+                {
+                    title: t('about.formlist.legal.imprint'),
+                    icon: linkIcon,
+                    onPress: async () => await Linking.openURL(IMPRINT_URL),
+                },
+                {
+                    title: t('navigation.licenses.title', { ns: 'navigation' }),
+                    icon: chevronIcon,
+                    onPress: () => {
+                        router.push('(user)/licenses')
+                    },
+                },
+            ],
+        },
+
+        {
+            header: t('about.formlist.about.title'),
+            items: [
                 {
                     title: 'Github',
                     icon: {
@@ -90,22 +126,6 @@ export default function About(): JSX.Element {
                     icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('https://neuland-ingolstadt.de/'),
-                },
-            ],
-        },
-        {
-            header: 'App',
-            items: [
-                {
-                    title: 'Version',
-                    value: version,
-                },
-                {
-                    title: 'Changelog',
-                    icon: chevronIcon,
-                    onPress: () => {
-                        router.push('(user)/changelog')
-                    },
                 },
             ],
         },
@@ -177,7 +197,7 @@ export default function About(): JSX.Element {
                                         styles.header,
                                     ]}
                                 >
-                                    Neuland Next
+                                    {'Neuland Next'}
                                 </Text>
                                 <Text
                                     style={[
@@ -185,7 +205,7 @@ export default function About(): JSX.Element {
                                         styles.text,
                                     ]}
                                 >
-                                    Native Version
+                                    {'Native Version'}
                                 </Text>
                             </View>
                             <View>
@@ -203,7 +223,7 @@ export default function About(): JSX.Element {
                                         styles.text,
                                     ]}
                                 >
-                                    Neuland Ingolstadt e.V.
+                                    {'Neuland Ingolstadt e.V.'}
                                 </Text>
                             </View>
                         </View>
@@ -220,7 +240,8 @@ export default function About(): JSX.Element {
                     <SingleSectionPicker
                         title={t('about.analytics.toggle')}
                         selectedItem={analyticsAllowed ?? false}
-                        action={toggleAnalytics}
+                        action={setAnalyticsAllowed}
+                        state={analyticsAllowed ?? false}
                     />
                 </SectionView>
             </ScrollView>

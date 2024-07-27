@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "lokalise.i18n-ally",
+        "esbenp.prettier-vscode",
+        "eslint.vscode-eslint"
+    ]
+}

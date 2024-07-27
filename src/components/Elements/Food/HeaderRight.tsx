@@ -2,11 +2,13 @@ import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
 export const FoodHeaderRight = (): JSX.Element => {
+    const { t } = useTranslation(['accessibility'])
     const colors = useTheme().colors as Colors
     return (
         <Pressable
@@ -15,6 +17,7 @@ export const FoodHeaderRight = (): JSX.Element => {
             }}
             hitSlop={10}
             style={styles.headerButton}
+            accessibilityLabel={t('button.foodPreferences')}
         >
             <View>
                 <PlatformIcon

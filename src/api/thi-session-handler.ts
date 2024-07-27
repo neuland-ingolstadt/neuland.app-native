@@ -1,9 +1,6 @@
-import { useNotification } from '@/hooks'
-import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { storage } from '@/utils/storage'
 import * as SecureStore from 'expo-secure-store'
 
-import packageInfo from '../../package.json'
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
@@ -55,7 +52,7 @@ export async function createSession(
         throw new Error('Session is not a string')
     }
 
-    await AsyncStorage.setItem('sessionCreated', Date.now().toString())
+    storage.set('sessionCreated', Date.now().toString())
 
     await save('session', session)
     if (stayLoggedIn) {
@@ -68,14 +65,11 @@ export async function createSession(
 /**
  * Logs in the user as a guest.
  */
-export async function createGuestSession(): Promise<void> {
-    await forgetSession()
+export async function createGuestSession(forget = true): Promise<void> {
+    if (forget) {
+        await forgetSession()
+    }
     await save('session', 'guest')
-    await AsyncStorage.setItem('isOnboarded', 'true')
-    await AsyncStorage.setItem(
-        `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`,
-        'true'
-    )
 }
 
 /**
@@ -91,9 +85,7 @@ export async function callWithSession<T>(
     method: (session: string) => Promise<T>
 ): Promise<T> {
     let session = await load('session')
-    const sessionCreated = parseInt(
-        (await AsyncStorage.getItem('sessionCreated')) ?? '0'
-    )
+    const sessionCreated = parseInt(storage.getString('sessionCreated') ?? '0')
     // redirect user if he never had a session
     if (session == null) {
         throw new NoSessionError()
@@ -125,8 +117,8 @@ export async function callWithSession<T>(
             session = newSession
 
             await save('session', session)
-            await AsyncStorage.setItem('sessionCreated', Date.now().toString())
-            await AsyncStorage.setItem('isStudent', isStudent.toString())
+            storage.set('sessionCreated', Date.now().toString())
+            storage.set('isStudent', isStudent.toString())
         } catch (e) {
             throw new NoSessionError()
         }
@@ -152,14 +144,8 @@ export async function callWithSession<T>(
                     )
                     session = newSession
                     await save('session', session)
-                    await AsyncStorage.setItem(
-                        'sessionCreated',
-                        Date.now().toString()
-                    )
-                    await AsyncStorage.setItem(
-                        'isStudent',
-                        isStudent.toString()
-                    )
+                    storage.set('sessionCreated', Date.now().toString())
+                    storage.set('isStudent', isStudent.toString())
                 } catch (e) {
                     throw new NoSessionError()
                 }
@@ -185,7 +171,7 @@ export async function callWithSession<T>(
  */
 export async function obtainSession(router: object): Promise<string | null> {
     let session = await load('session')
-    const age = parseInt((await AsyncStorage.getItem('sessionCreated')) ?? '0')
+    const age = parseInt(storage.getString('sessionCreated') ?? '0')
 
     const username = await load('username')
     const password = await load('password')
@@ -207,8 +193,8 @@ export async function obtainSession(router: object): Promise<string | null> {
             )
             session = newSession
             await save('session', session)
-            await AsyncStorage.setItem('sessionCreated', Date.now().toString())
-            await AsyncStorage.setItem('isStudent', isStudent.toString())
+            storage.set('sessionCreated', Date.now().toString())
+            storage.set('isStudent', isStudent.toString())
         } catch (e) {
             console.log('Failed to log in again')
             console.error(e)
@@ -222,7 +208,6 @@ export async function obtainSession(router: object): Promise<string | null> {
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-    const { cancelAll } = useNotification()
     const session = await load('session')
     if (session === null) {
         console.log('No session to forget')
@@ -234,24 +219,27 @@ export async function forgetSession(): Promise<void> {
     } catch (e) {
         console.error(e)
     }
-    // clear all AsyncStorage data
     await Promise.all([
         SecureStore.deleteItemAsync('session'),
         SecureStore.deleteItemAsync('username'),
         SecureStore.deleteItemAsync('password'),
+        SecureStore.deleteItemAsync('userFullName'),
+        SecureStore.deleteItemAsync('userType'),
     ])
 
     // clear all AsyncStorage data except analytics
     try {
-        const analytics = await AsyncStorage.getItem('analytics')
-        await AsyncStorage.clear()
-        if (analytics != null) {
-            await AsyncStorage.setItem('analytics', analytics)
+        const keys = storage.getAllKeys()
+        for (const key of keys) {
+            if (
+                key !== 'analytics' &&
+                key !== 'isOnboardedv1' &&
+                !key.startsWith('isUpdated-')
+            ) {
+                storage.delete(key)
+            }
         }
     } catch (e) {
         console.error(e)
     }
-
-    // cancel all scheduled notifications
-    await cancelAll()
 }

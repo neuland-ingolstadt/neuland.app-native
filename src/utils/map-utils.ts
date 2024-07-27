@@ -4,7 +4,6 @@ import { type Rooms } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
 import { type GeoJsonProperties, type Position } from 'geojson'
-import { type TFunction } from 'i18next'
 import { Platform, Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
@@ -186,27 +185,31 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
  * If outside the opening hours, this will skip to the time the university opens.
  * @returns {Date}
  */
-export function getNextValidDate(): Date {
+
+export function getNextValidDate(): { startDate: Date; wasModified: boolean } {
     const startDate = new Date()
+    let wasModified = false // Track if startDate is modified
 
     if (startDate.getDay() === 6 && startDate.getHours() > 20) {
         startDate.setDate(startDate.getDate() + 2)
         startDate.setHours(8)
         startDate.setMinutes(15)
+        wasModified = true // Date was modified
     } else if (startDate.getDay() === 0 || startDate.getHours() > 20) {
-        // sunday or after 9pm
+        // Sunday or after 8pm
         startDate.setDate(startDate.getDate() + 1)
         startDate.setHours(8)
         startDate.setMinutes(15)
+        wasModified = true // Date was modified
     } else if (startDate.getHours() < 8) {
-        // before 6am
+        // Before 8am
         startDate.setHours(8)
         startDate.setMinutes(15)
+        wasModified = true // Date was modified
     }
 
-    return startDate
+    return { startDate, wasModified }
 }
-
 /**
  * Filters suitable room openings.
  * @param {object[]} data Room data
@@ -273,6 +276,11 @@ export async function searchRooms(
         .sort((a, b) => a.room.localeCompare(b.room))
 }
 
+/**
+ * Filters suitable room openings.
+ * @param rooms Room data
+ * @returns {object[]}
+ */
 export function getCenter(rooms: Position[][][]): Position {
     const getCenterPoint = (points: Position[][]): Position[] => {
         const x = points[0].map((point: any) => point[0])
@@ -301,6 +309,11 @@ export function getCenter(rooms: Position[][][]): Position {
     ]
 }
 
+/**
+ * Filters suitable room openings.
+ * @param coordinates  oom data
+ * @returns Position
+ */
 export function getCenterSingle(
     coordinates: number[][][] | undefined
 ): number[] {
@@ -335,24 +348,6 @@ export const handleShareModal = (room: string): void => {
     void Share.share(
         Platform.OS === 'android' ? { message: payload } : { url: payload }
     )
-}
-
-/**
- * Adjusts error message to use it with ErrorView
- * @param errorMsg Error message
- * @returns
- */
-export function adjustErrorTitle(errorMsg: string, t: TFunction<any>): string {
-    switch (errorMsg) {
-        case 'noInternetConnection':
-            return 'Network request failed'
-        case 'mapLoadError':
-            return t('error.map.mapLoadError')
-        case 'mapOverlay':
-            return t('error.map.mapOverlay')
-        default:
-            return 'Error'
-    }
 }
 
 /**

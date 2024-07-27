@@ -140,7 +140,7 @@ export const BottomSheetDetailModal = ({
                                         }}
                                         android={{
                                             name: 'expand_more',
-                                            size: 24,
+                                            size: 18,
                                         }}
                                         style={Platform.select({
                                             android: {

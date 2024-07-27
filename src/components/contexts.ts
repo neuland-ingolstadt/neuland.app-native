@@ -1,15 +1,14 @@
-import { type AppIconHook } from '@/hooks/contexts/appIcon'
-import { type Dashboard } from '@/hooks/contexts/dashboard'
-import { type FlowHook } from '@/hooks/contexts/flow'
-import { type FoodFilter } from '@/hooks/contexts/foodFilter'
-import { type Notifications } from '@/hooks/contexts/notifications'
-import { type RouteParams } from '@/hooks/contexts/routing'
-import { type ThemeHook } from '@/hooks/contexts/theme'
+import { type AppIconHook } from '@/contexts/appIcon'
+import { type Dashboard } from '@/contexts/dashboard'
+import { type FlowHook } from '@/contexts/flow'
+import { type FoodFilter } from '@/contexts/foodFilter'
+import { type RouteParams } from '@/contexts/routing'
+import { type ThemeHook } from '@/contexts/theme'
 import {
     DEFAULT_TIMETABLE_MODE,
     type TimetableHook,
-} from '@/hooks/contexts/timetable'
-import { type UserKindContextType } from '@/hooks/contexts/userKind'
+} from '@/contexts/timetable'
+import { type UserKindContextType } from '@/contexts/userKind'
 import { createContext } from 'react'
 
 export const RouteParamsContext = createContext<RouteParams>({
@@ -29,13 +28,13 @@ export const FoodFilterContext = createContext<FoodFilter>({
     initAllergenSelection: () => {},
     toggleSelectedPreferences: () => {},
     toggleSelectedRestaurant: () => {},
-    toggleShowStatic: () => {},
+    setShowStatic: () => {},
     toggleFoodLanguage: () => {},
 })
 
 export const UserKindContext = createContext<UserKindContextType>({
     userKind: 'student',
-    userFaculty: 'unknown',
+    userFaculty: undefined,
     userFullName: '',
     toggleUserKind: () => {},
     updateUserFullName: () => {},
@@ -43,15 +42,15 @@ export const UserKindContext = createContext<UserKindContextType>({
 
 export const ThemeContext = createContext<ThemeHook>({
     theme: 'auto',
-    toggleTheme: () => {},
+    setTheme: () => {},
     accentColor: 'blue',
-    toggleAccentColor: () => {},
+    setAccentColor: () => {},
 })
 
 export const AppIconContext = createContext<AppIconHook>({
     appIcon: 'default',
     unlockedAppIcons: [],
-    toggleAppIcon: () => {},
+    setAppIcon: () => {},
     addUnlockedAppIcon: () => {},
 })
 
@@ -68,11 +67,11 @@ export const DashboardContext = createContext<Dashboard>({
 
 export const FlowContext = createContext<FlowHook>({
     isOnboarded: true,
-    toggleOnboarded: () => {},
+    setOnboarded: () => {},
     isUpdated: true,
-    toggleUpdated: () => {},
+    setUpdated: () => {},
     analyticsAllowed: false,
-    toggleAnalytics: () => {},
+    setAnalyticsAllowed: () => {},
     analyticsInitialized: false,
     initializeAnalytics: () => {},
 })
@@ -82,11 +81,4 @@ export const TimetableContext = createContext<TimetableHook>({
     setTimetableMode: () => {},
     selectedDate: new Date(),
     setSelectedDate: () => {},
-})
-
-export const NotificationContext = createContext<Notifications>({
-    timetableNotifications: {},
-    updateTimetableNotifications: () => {},
-    deleteTimetableNotifications: () => {},
-    removeNotification: () => {},
 })

@@ -1,13 +1,17 @@
 import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { type GradeAverage } from '@/types/utils'
-import { networkError } from '@/utils/api-utils'
+import {
+    extractSpoName,
+    getPersonalData,
+    networkError,
+} from '@/utils/api-utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -39,12 +43,14 @@ export default function GradesSCreen(): JSX.Element {
      * Loads the average grade from the API and sets the state accordingly.
      * @returns {Promise<void>} A promise that resolves when the average grade has been loaded.
      */
-    async function loadAverageGrade(): Promise<void> {
+    async function loadAverageGrade(
+        spoName: string | undefined
+    ): Promise<void> {
         if (isSpoLoading) {
             return
         }
         try {
-            const average = await loadGradeAverage(spoWeights)
+            const average = await loadGradeAverage(spoWeights, spoName)
             if (average.result !== undefined && average.result !== null) {
                 setGradeAverage(average)
                 setAverageLoadingState(LoadingState.LOADED)
@@ -85,9 +91,18 @@ export default function GradesSCreen(): JSX.Element {
             return failureCount < 3
         },
     })
+
+    const { data: personalData } = useQuery({
+        queryKey: ['personalData'],
+        queryFn: getPersonalData,
+        staleTime: 1000 * 60 * 60 * 12, // 12 hours
+        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
+    })
+
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     useEffect(() => {
-        void loadAverageGrade()
+        const spoName = extractSpoName(personalData)
+        void loadAverageGrade(spoName)
     }, [spoWeights, grades?.finished])
 
     return (
