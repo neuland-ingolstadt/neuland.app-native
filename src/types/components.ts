@@ -10,6 +10,7 @@ export interface SectionGroup {
         ios: string
         android: MaterialIcon | CommunityIcon
         iosFallback?: boolean
+        androidVariant?: 'outlined' | 'filled'
     }
     disabled?: boolean
     onPress?: () => Promise<void> | void
@@ -32,7 +33,7 @@ export interface SectionGroup {
 }
 
 export interface FormListSections {
-    header: string
+    header?: string
     footer?: string
     items: SectionGroup[]
 }

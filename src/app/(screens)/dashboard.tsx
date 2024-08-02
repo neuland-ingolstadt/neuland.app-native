@@ -5,8 +5,9 @@ import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { cardIcons } from '@/components/icons'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
+import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { USER_GUEST, arraysEqual } from '@/utils/app-utils'
+import { arraysEqual } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -41,7 +42,7 @@ export default function DashboardEdit(): JSX.Element {
         updateDashboardOrder,
     } = useContext(DashboardContext)
     const isDark = useTheme().dark
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation(['settings'])
     const [draggedId, setDraggedId] = useState<number | null>(null)
@@ -122,6 +123,7 @@ export default function DashboardEdit(): JSX.Element {
 
     const handleReset = useCallback(() => {
         resetOrder(userKind ?? 'guest')
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         if (Platform.OS === 'ios') {
             void Haptics.notificationAsync(
                 Haptics.NotificationFeedbackType.Success
@@ -131,11 +133,10 @@ export default function DashboardEdit(): JSX.Element {
 
     useEffect(() => {
         const defaultHidden = getDefaultDashboardOrder(userKind).hidden.map(
-            (item) => item.key
+            (item) => item
         )
         const defaultShown =
-            getDefaultDashboardOrder(userKind).shown?.map((item) => item.key) ??
-            []
+            getDefaultDashboardOrder(userKind).shown?.map((item) => item) ?? []
 
         if (shownDashboardEntries == null) {
             return
@@ -159,7 +160,7 @@ export default function DashboardEdit(): JSX.Element {
 
         setDefaultHiddenKeys(defaultHidden)
     }, [shownDashboardEntries, hiddenDashboardEntries, userKind])
-
+    console.info(filteredHiddenDashboardEntries)
     return (
         <View>
             <ScrollView
@@ -261,7 +262,9 @@ export default function DashboardEdit(): JSX.Element {
                                         parentWidth={width}
                                         renderItem={renderItem}
                                         onDataChange={(data: Card[]) => {
-                                            updateDashboardOrder(data)
+                                            updateDashboardOrder(
+                                                data.map((x) => x.key)
+                                            )
                                         }}
                                         onClickItem={() => {
                                             void showToast(
@@ -358,14 +361,14 @@ export default function DashboardEdit(): JSX.Element {
                                                         ios={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
-                                                            ].ios,
+                                                            ]?.ios,
                                                             size: 17,
                                                         }}
                                                         android={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
                                                             ]
-                                                                .android as MaterialIcon,
+                                                                ?.android as MaterialIcon,
                                                             size: 21,
                                                             variant: 'outlined',
                                                         }}
@@ -505,14 +508,15 @@ function RowItem({
                     ios={{
                         name: isDragged
                             ? 'line.3.horizontal'
-                            : cardIcons[item.key as keyof typeof cardIcons].ios,
+                            : cardIcons[item.key as keyof typeof cardIcons]
+                                  ?.ios,
                         size: 17,
                     }}
                     android={{
                         name: isDragged
                             ? 'drag_handle'
                             : (cardIcons[item.key as keyof typeof cardIcons]
-                                  .android as MaterialIcon),
+                                  ?.android as MaterialIcon),
                         size: 21,
                         variant: 'outlined',
                     }}

@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { STATUS_URL } from '@/utils/app-utils'
+import { STATUS_URL } from '@/data/constants'
 import { useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import React from 'react'

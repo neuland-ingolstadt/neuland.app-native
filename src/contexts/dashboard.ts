@@ -1,179 +1,169 @@
 import { AllCards, type Card } from '@/components/allCards'
-import { storage } from '@/utils/storage'
-import { useEffect, useState } from 'react'
+import { USER_GUEST } from '@/data/constants'
+import { useCallback, useMemo } from 'react'
+import { useMMKVObject } from 'react-native-mmkv'
 
 import { useUserKind } from './userKind'
 
-/**
- * Returns an object containing two arrays of Card objects, one for the cards that should be shown by default and one for the hidden cards.
- * @param userKind - A string representing the user type.
- * @returns An object containing two arrays of Card objects, one for the cards that should be shown by default and one for the hidden cards.
- */
 export function getDefaultDashboardOrder(userKind: string | undefined): {
-    shown: Card[]
-    hidden: Card[]
+    shown: string[]
+    hidden: string[]
 } {
     const filter = (x: Card): boolean => x.default.includes(userKind ?? 'guest')
     return {
-        shown: AllCards.filter(filter),
-        hidden: AllCards.filter((x) => !filter(x)),
+        shown: AllCards.filter(filter).map((card) => card.key),
+        hidden: AllCards.filter((x) => !filter(x)).map((card) => card.key),
     }
 }
 
 export interface Dashboard {
-    shownDashboardEntries: Card[] | null
+    shownDashboardEntries: Card[]
     hiddenDashboardEntries: Card[]
     hiddenAnnouncements: string[]
     hideAnnouncement: (id: string) => void
     hideDashboardEntry: (key: string) => void
     bringBackDashboardEntry: (key: string) => void
     resetOrder: (userKind: string) => void
-    updateDashboardOrder: (shown: Card[]) => void
+    updateDashboardOrder: (shown: string[]) => void
 }
 
 export function useDashboard(): Dashboard {
-    const [shownDashboardEntries, setShownDashboardEntries] = useState<
-        Card[] | null
-    >(null)
-    const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState<
-        Card[]
-    >([])
-    const [hiddenAnnouncements, setHiddenAnnouncements] = useState<string[]>([])
-    const { userKind } = useUserKind()
-    useEffect(() => {
-        async function load(): Promise<void> {
-            const personalDashboard = storage.getString('personalDashboard')
-            const personalDashboardHidden = storage.getString(
-                'personalDashboardHidden'
-            )
-            const hiddenAnnouncements = storage.getString('hiddenAnnouncements')
+    const [shownDashboardEntries, setShownDashboardEntries] = useMMKVObject<
+        string[]
+    >('shownDashboardEnetsriessss')
+    const [hiddenDashboardEntries, setHiddenDashboardEntries] = useMMKVObject<
+        string[]
+    >('hiddenDashboardEnetsriessss')
+    const [hiddenAnnouncements, setHiddenAnnouncements] = useMMKVObject<
+        string[]
+    >('hiddenAnnouncements')
+    const { userKind = USER_GUEST } = useUserKind()
 
-            if (hiddenAnnouncements != null) {
-                setHiddenAnnouncements(
-                    JSON.parse(hiddenAnnouncements) as string[]
-                )
-            }
-            if (personalDashboard != null) {
-                const entries = JSON.parse(personalDashboard)
-                    .map((x: string) => AllCards.find((y) => y.key === x))
-                    .filter((x: Record<string, Card>) => x != null) as Card[]
-                setShownDashboardEntries(entries)
+    const defaultEntries = useMemo(
+        () => getDefaultDashboardOrder(userKind),
+        [userKind]
+    )
 
-                if (personalDashboardHidden != null) {
-                    const hiddenEntries = JSON.parse(
-                        personalDashboardHidden
-                    ).map((x: string) =>
-                        AllCards.find((y) => y.key === x)
-                    ) as Card[]
+    const entries = useMemo(
+        () =>
+            (shownDashboardEntries ?? defaultEntries.shown).reduce<Card[]>(
+                (acc, key) => {
+                    const card = AllCards.find((y) => y.key === key)
+                    if (card != null) acc.push(card)
+                    return acc
+                },
+                []
+            ),
+        [shownDashboardEntries, defaultEntries.shown]
+    )
 
-                    setHiddenDashboardEntries(hiddenEntries)
+    const hiddenEntries = useMemo(
+        () =>
+            (hiddenDashboardEntries ?? defaultEntries.hidden).reduce<Card[]>(
+                (acc, key) => {
+                    const card = AllCards.find((y) => y.key === key)
+                    if (card != null) acc.push(card)
+                    return acc
+                },
+                []
+            ),
+        [hiddenDashboardEntries, defaultEntries.hidden]
+    )
+
+    const changeDashboardOrder = useCallback(
+        (entries: string[], hiddenEntries: string[]) => {
+            console.log('changeDashboardOrder', entries, hiddenEntries)
+            setShownDashboardEntries(entries)
+            setHiddenDashboardEntries(hiddenEntries)
+        },
+        [setShownDashboardEntries, setHiddenDashboardEntries]
+    )
+
+    const updateDashboardOrder = useCallback(
+        (entries: string[]) => {
+            console.log('updateDashboardOrder', entries)
+            setShownDashboardEntries(entries)
+        },
+        [setShownDashboardEntries]
+    )
+
+    const hideDashboardEntry = useCallback(
+        (key: string) => {
+            const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
+            const card = foodKeys.includes(key) ? 'food' : key
+            setShownDashboardEntries((prevEntries) => {
+                const entries = [...(prevEntries ?? defaultEntries.shown)]
+                const hiddenEntries = [...(hiddenDashboardEntries ?? [])]
+
+                const index = entries.findIndex((x) => x === card)
+                if (index >= 0) {
+                    const hiddenCard = entries[index]
+                    hiddenEntries.push(hiddenCard)
+                    entries.splice(index, 1)
                 }
-            } else {
-                const entries = getDefaultDashboardOrder(userKind)
-                setShownDashboardEntries(entries.shown)
-                setHiddenDashboardEntries(entries.hidden)
+
+                changeDashboardOrder(entries, hiddenEntries)
+                return entries
+            })
+        },
+        [defaultEntries.shown, hiddenDashboardEntries, changeDashboardOrder]
+    )
+
+    const hideAnnouncement = useCallback(
+        (id: string) => {
+            setHiddenAnnouncements((prev) => {
+                const newHiddenAnnouncements = new Set(prev ?? [])
+                newHiddenAnnouncements.add(id)
+                return Array.from(newHiddenAnnouncements)
+            })
+        },
+        [setHiddenAnnouncements]
+    )
+
+    const bringBackDashboardEntry = useCallback(
+        (key: string) => {
+            setShownDashboardEntries((prevEntries) => {
+                if (prevEntries == null) {
+                    throw new Error('prevEntries is null')
+                }
+                const entries = [...prevEntries]
+                const hiddenEntries = [...(hiddenDashboardEntries ?? [])]
+
+                const index = hiddenEntries.findIndex(
+                    (x) => x !== undefined && x === key
+                )
+                if (index >= 0) {
+                    const shownCard = hiddenEntries[index]
+                    entries.push(shownCard)
+                    hiddenEntries.splice(index, 1)
+                }
+
+                changeDashboardOrder(entries, hiddenEntries)
+                return entries
+            })
+        },
+        [hiddenDashboardEntries, changeDashboardOrder]
+    )
+
+    const resetOrder = useCallback(
+        (userKind: string) => {
+            const defaultEntries = getDefaultDashboardOrder(userKind)
+            if (defaultEntries.shown == null) {
+                throw new Error('defaultEntries.shown is null')
             }
-        }
-
-        void load()
-    }, [userKind])
-
-    function changeDashboardOrder(
-        entries: Card[],
-        hiddenEntries: Card[]
-    ): void {
-        storage.set(
-            'personalDashboard',
-            JSON.stringify(entries.map((x) => x.key))
-        )
-        storage.set(
-            'personalDashboardHidden',
-            JSON.stringify(hiddenEntries.map((x) => x.key))
-        )
-        setShownDashboardEntries(entries)
-        setHiddenDashboardEntries(hiddenEntries)
-    }
-
-    function updateDashboardOrder(entries: Card[]): void {
-        storage.set(
-            'personalDashboard',
-            JSON.stringify(entries.map((x) => x.key))
-        )
-        setShownDashboardEntries(entries)
-    }
-
-    function hideDashboardEntry(key: string): void {
-        const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
-        const card = foodKeys.includes(key) ? 'food' : key
-        setShownDashboardEntries((prevEntries) => {
-            if (prevEntries == null) {
-                throw new Error('prevEntries is null')
-            }
-            const entries = [...prevEntries]
-            const hiddenEntries = [...hiddenDashboardEntries]
-
-            const index = entries.findIndex((x) => x.key === card)
-            if (index >= 0) {
-                const hiddenCard = entries[index]
-                hiddenEntries.push(hiddenCard)
-                entries.splice(index, 1)
-            }
-
-            changeDashboardOrder(entries, hiddenEntries)
-            return entries
-        })
-    }
-
-    function hideAnnouncement(id: string): void {
-        setHiddenAnnouncements((prev) => {
-            const newHiddenAnnouncements = [...prev]
-            newHiddenAnnouncements.push(id)
-            storage.set(
-                'hiddenAnnouncements',
-                JSON.stringify(newHiddenAnnouncements)
-            )
-            return newHiddenAnnouncements
-        })
-    }
-
-    function bringBackDashboardEntry(key: string): void {
-        setShownDashboardEntries((prevEntries) => {
-            if (prevEntries == null) {
-                throw new Error('prevEntries is null')
-            }
-            const entries = [...prevEntries]
-            const hiddenEntries = [...hiddenDashboardEntries]
-
-            const index = hiddenEntries.findIndex(
-                (x) => x !== undefined && x.key === key
-            )
-            if (index >= 0) {
-                const shownCard = hiddenEntries[index]
-                entries.push(shownCard)
-                hiddenEntries.splice(index, 1)
-            }
-
-            changeDashboardOrder(entries, hiddenEntries)
-            return entries // Return the updated entries array
-        })
-    }
-
-    function resetOrder(userKind: string): void {
-        const defaultEntries = getDefaultDashboardOrder(userKind)
-        if (defaultEntries.shown == null) {
-            throw new Error('defaultEntries.shown is null')
-        }
-        changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)
-    }
+            changeDashboardOrder(defaultEntries.shown, defaultEntries.hidden)
+        },
+        [changeDashboardOrder]
+    )
 
     return {
-        shownDashboardEntries,
-        hiddenDashboardEntries,
+        shownDashboardEntries: entries,
+        hiddenDashboardEntries: hiddenEntries,
         hideDashboardEntry,
         bringBackDashboardEntry,
         resetOrder,
         updateDashboardOrder,
-        hiddenAnnouncements,
+        hiddenAnnouncements: hiddenAnnouncements ?? [],
         hideAnnouncement,
     }
 }

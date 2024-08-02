@@ -4,7 +4,7 @@ import LogoSVG from '@/components/Elements/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
 import { type Colors } from '@/components/colors'
 import { FlowContext, UserKindContext } from '@/components/contexts'
-import { PRIVACY_URL, USER_GUEST } from '@/utils/app-utils'
+import { PRIVACY_URL, USER_GUEST } from '@/data/constants'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -87,7 +87,7 @@ export default function OnboardingScreen(): JSX.Element {
                             router.navigate('login')
                             router.setParams({ fromOnboarding: 'true' })
                         } else {
-                            router.replace('/')
+                            router.replace('(tabs)/(index)')
                         }
                     }}
                     disabled={buttonDisabled}

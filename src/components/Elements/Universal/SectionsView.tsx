@@ -56,7 +56,7 @@ const SectionView = ({
 const styles = StyleSheet.create({
     footerText: {
         marginTop: 6,
-        fontSize: 12,
+        fontSize: 12.5,
         paddingHorizontal: PAGE_PADDING,
     },
     labelText: {

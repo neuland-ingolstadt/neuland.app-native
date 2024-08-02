@@ -44,7 +44,7 @@ export default function NotesDetails(): JSX.Element {
     }, [navigation])
 
     async function setDelayedIsLoaded(): Promise<void> {
-        const delay = Platform.OS === 'ios' ? 100 : 0
+        const delay = Platform.OS === 'ios' ? 50 : 0
 
         await new Promise((resolve) => setTimeout(resolve, delay))
         setIsLoaded(true)

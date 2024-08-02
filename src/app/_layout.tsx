@@ -10,10 +10,15 @@ import { useTheme } from '@react-navigation/native'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
+import Head from 'expo-router/head'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const unstable_settings = {
+    initialRouteName: '(index)',
+}
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { theme: appTheme } = useContext(ThemeContext)
@@ -63,6 +68,21 @@ function RootLayout(): JSX.Element {
 
     return (
         <>
+            <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
+                <title>Neuland Next</title>
+                <meta
+                    name="description"
+                    content="An unofficial campus app for TH Ingolstadt"
+                />
+                <meta
+                    property="og:description"
+                    content="An unofficial campus app for TH Ingolstadt"
+                />
+                <meta property="expo:handoff" content="true" />
+                <meta property="expo:spotlight" content="true" />
+            </Head>
+
             <Stack
                 screenOptions={{
                     statusBarStyle: getStatusBarStyle(
@@ -76,15 +96,23 @@ function RootLayout(): JSX.Element {
                 }}
             >
                 <Stack.Screen
+                    name="index"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
                     name="(tabs)"
                     options={{
                         title: 'Home',
                         headerShown: false,
-                        headerLargeTitle: true,
+                        animation: 'none',
+                        gestureEnabled: false,
                     }}
                 />
+
                 <Stack.Screen
-                    name="(user)/login"
+                    name="(screens)/login"
                     options={{
                         title: 'Account',
                         animation: 'none',
@@ -95,28 +123,28 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/settings"
+                    name="(screens)/settings"
                     options={{
                         title: t('navigation.settings'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/changelog"
+                    name="(screens)/changelog"
                     options={{
                         title: 'Changelog',
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(food)/preferences"
+                    name="(screens)/foodPreferences"
                     options={{
                         title: t('navigation.preferences'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(food)/flags"
+                    name="(screens)/foodFlags"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -130,7 +158,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(food)/allergens"
+                    name="(screens)/foodAllergens"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -144,7 +172,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(food)/meal"
+                    name="(screens)/meal"
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
@@ -158,7 +186,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(timetable)/lecture"
+                    name="(screens)/lecture"
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
@@ -172,7 +200,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(timetable)/webView"
+                    name="(screens)/webView"
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
@@ -186,14 +214,21 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/theme"
+                    name="(screens)/theme"
                     options={{
                         title: t('navigation.theme'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/appicon"
+                    name="(screens)/accent"
+                    options={{
+                        title: t('navigation.accent'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/appIcon"
                     // @ts-expect-error route params are not typed
                     options={({
                         route,
@@ -211,28 +246,28 @@ function RootLayout(): JSX.Element {
                     })}
                 />
                 <Stack.Screen
-                    name="(user)/profile"
+                    name="(screens)/profile"
                     options={{
                         title: t('navigation.profile'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/about"
+                    name="(screens)/about"
                     options={{
                         title: t('navigation.about'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/licenses"
+                    name="(screens)/licenses"
                     options={{
                         title: t('navigation.licenses.title'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/license"
+                    name="(screens)/license"
                     options={{
                         title: t('navigation.license'),
                         ...Platform.select({
@@ -246,28 +281,28 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/dashboard"
+                    name="(screens)/dashboard"
                     options={{
                         title: 'Dashboard',
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(user)/grades"
+                    name="(screens)/grades"
                     options={{
                         title: t('navigation.grades'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(map)/advanced"
+                    name="(screens)/roomSearch"
                     options={{
                         title: t('navigation.advancedSearch'),
                         animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/events"
+                    name="(screens)/clEvents"
                     options={{
                         title: 'Campus Life Events',
                         ...Platform.select({
@@ -278,7 +313,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/event"
+                    name="(screens)/clEvent"
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
@@ -292,7 +327,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/calendar"
+                    name="(screens)/calendar"
                     options={{
                         title: t('navigation.calendar'),
                         ...Platform.select({
@@ -303,7 +338,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/exam"
+                    name="(screens)/exam"
                     options={{
                         title: t('navigation.examDetails'),
                         ...Platform.select({
@@ -317,7 +352,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/lecturers"
+                    name="(screens)/lecturers"
                     options={{
                         title: t('navigation.lecturers.title'),
                         ...Platform.select({
@@ -328,7 +363,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/lecturer"
+                    name="(screens)/lecturer"
                     options={{
                         title: t('navigation.lecturer'),
                         ...Platform.select({
@@ -342,7 +377,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/library"
+                    name="(screens)/library"
                     options={{
                         title: t('navigation.library'),
                         ...Platform.select({
@@ -354,7 +389,7 @@ function RootLayout(): JSX.Element {
                         headerRight: () => (
                             <Pressable
                                 onPress={() => {
-                                    router.push('(pages)/libraryCode')
+                                    router.push('(screens)/libraryCode')
                                 }}
                                 accessibilityLabel={t('button.libraryBarcode', {
                                     ns: 'accessibility',
@@ -376,7 +411,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/libraryCode"
+                    name="(screens)/libraryCode"
                     options={{
                         title: t('navigation.libraryCode'),
                         ...Platform.select({
@@ -390,7 +425,7 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(pages)/news"
+                    name="(screens)/news"
                     options={{
                         title: t('navigation.news'),
                         ...Platform.select({

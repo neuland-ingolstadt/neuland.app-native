@@ -176,7 +176,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     }}
                                     android={{
                                         name: 'near_me',
-                                        size: 22,
+                                        size: 21,
+                                        variant: 'outlined',
                                     }}
                                 />
                             </View>

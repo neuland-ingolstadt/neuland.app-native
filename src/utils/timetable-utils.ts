@@ -20,6 +20,10 @@ export async function getFriendlyTimetable(
     date: Date,
     detailed: boolean = false
 ): Promise<FriendlyTimetableEntry[]> {
+    // if month is august or september, there are no lectures. Adjust the date to october
+    if (date.getMonth() === 7 || date.getMonth() === 8) {
+        date.setMonth(9)
+    }
     const [rawTimetableResponse, rawTimetableNextMonthResponse] =
         await Promise.all([
             API.getTimetable(date, detailed),

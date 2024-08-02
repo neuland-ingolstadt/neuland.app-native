@@ -17,7 +17,7 @@ export const cardIcons = {
     },
     library: {
         ios: 'books.vertical.fill',
-        android: 'book',
+        android: 'book_2',
     },
     lecturers: {
         ios: 'person.2.fill',
@@ -30,5 +30,9 @@ export const cardIcons = {
     login: {
         ios: 'person.fill.questionmark',
         android: 'person',
+    },
+    links: {
+        ios: 'safari.fill',
+        android: 'link',
     },
 }

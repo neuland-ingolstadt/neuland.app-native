@@ -3,12 +3,13 @@ import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native'
 
 import PlatformIcon from './Icon'
 
 interface FormListProps {
     sections: FormListSections[]
+    rowStyle?: ViewStyle
 }
 
 /**
@@ -16,7 +17,7 @@ interface FormListProps {
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
  * @returns {JSX.Element} - A React component that renders the list of forms.
  */
-const FormList: React.FC<FormListProps> = ({ sections }) => {
+const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
     const colors = useTheme().colors as Colors
     return (
         <View style={styles.wrapper}>
@@ -45,7 +46,7 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                         onPress={item.onPress}
                                         style={({ pressed }) => [
                                             {
-                                                opacity: pressed ? 0.5 : 1,
+                                                opacity: pressed ? 0.9 : 1,
                                             },
                                         ]}
                                         disabled={
@@ -54,11 +55,12 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                         }
                                     >
                                         <View
-                                            style={
-                                                item.layout === 'column'
+                                            style={{
+                                                ...(item.layout === 'column'
                                                     ? styles.cardColumn
-                                                    : styles.cardRow
-                                            }
+                                                    : styles.cardRow),
+                                                ...rowStyle,
+                                            }}
                                         >
                                             {item.title != null && (
                                                 <Text
@@ -116,6 +118,9 @@ const FormList: React.FC<FormListProps> = ({ sections }) => {
                                                     android={{
                                                         name: item.icon.android,
                                                         size: 18,
+                                                        variant:
+                                                            item.icon
+                                                                .androidVariant,
                                                     }}
                                                 />
                                             )}

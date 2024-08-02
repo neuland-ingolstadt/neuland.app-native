@@ -72,7 +72,7 @@ export default function Licenses(): JSX.Element {
                 title: nameWithoutVersion,
                 icon: chevronIcon,
                 onPress: async () => {
-                    router.push('(user)/license')
+                    router.navigate('license')
                     router.setParams({
                         license: value.licenses,
                         version: version != null ? version[0] : '',

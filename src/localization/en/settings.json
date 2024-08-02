@@ -24,8 +24,10 @@
             },
             "appearance": {
                 "title": "Appearance",
+                "accent": "Accent Color",
                 "theme": "Design"
             },
+
             "language": {
                 "title": "Change language",
                 "message": "Confirm to change the app language to German.",
@@ -132,7 +134,8 @@
             "title": "Theme",
             "default": "Automatic",
             "dark": "Dark",
-            "light": "Light"
+            "light": "Light",
+            "footer": "Change color scheme of the app. This allows you to override the system settings."
         }
     },
     "dashboard": {

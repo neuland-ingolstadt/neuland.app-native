@@ -4,7 +4,7 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.8.3",
+        "version": "0.9.0",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "orientation": "portrait",
         "userInterfaceStyle": "automatic",
@@ -25,7 +25,8 @@
                 "CFBundleAllowMixedLocalizations": true,
                 "CFBundleLocalizations": ["en", "de"],
                 "CFBundleDevelopmentRegion": "en",
-                "UIViewControllerBasedStatusBarAppearance": true
+                "UIViewControllerBasedStatusBarAppearance": true,
+                "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
             },
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
@@ -38,10 +39,17 @@
             },
             "icon": "./src/assets/appIcons/default.png"
         },
+        "locales": {
+            "en-US": "./src/localization/en/ios.json",
+            "de-DE": "./src/localization/de/ios.json"
+        },
+        "androidStatusBar": {
+            "translucent": true
+        },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 114,
+            "versionCode": 138,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",
@@ -60,7 +68,7 @@
             [
                 "expo-router",
                 {
-                    "origin": "https://neuland.app"
+                    "headOrigin": "https://neuland.app"
                 }
             ],
             ["expo-secure-store"],

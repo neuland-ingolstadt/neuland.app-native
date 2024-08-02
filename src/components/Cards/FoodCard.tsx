@@ -1,8 +1,8 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'
-import { USER_GUEST } from '@/utils/app-utils'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
@@ -27,7 +27,7 @@ const FoodCard = (): JSX.Element => {
         preferencesSelection,
         foodLanguage,
     } = useContext(FoodFilterContext)
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>
     >([])
@@ -38,6 +38,7 @@ const FoodCard = (): JSX.Element => {
         staleTime: 1000 * 60 * 10, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hourss
     })
+
     useEffect(() => {
         if (!isSuccess) {
             // if data is not loaded yet, do nothing
@@ -139,7 +140,7 @@ const FoodCard = (): JSX.Element => {
     }, [selectedRestaurants])
 
     return (
-        <BaseCard title={foodCardTitle} onPressRoute="food">
+        <BaseCard title={foodCardTitle} onPressRoute="(tabs)/(food)">
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (

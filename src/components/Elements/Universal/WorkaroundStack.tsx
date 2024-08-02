@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { type HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
@@ -13,6 +14,7 @@ export interface WorkaroundStackProps {
     headerSearchBarOptions?: any
     headerRightElement?: ((props: HeaderButtonProps) => ReactNode) | undefined
     params?: any
+    androidFallback?: boolean
 }
 
 /*
@@ -37,10 +39,30 @@ function WorkaroundStack({
     headerRightElement = undefined,
     headerSearchBarOptions = undefined,
     params = {},
+    androidFallback = false,
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
+    const StackAndroid = createStackNavigator()
 
+    // When using the native stack on Android, the header button is invisible. This is another workaround in the workaround.
+    if (Platform.OS === 'android' && androidFallback) {
+        return (
+            <StackAndroid.Navigator>
+                <StackAndroid.Screen
+                    name={name}
+                    component={component}
+                    options={{
+                        title: t(
+                            // @ts-expect-error Type not checked
+                            titleKey
+                        ),
+                    }}
+                    initialParams={params}
+                />
+            </StackAndroid.Navigator>
+        )
+    }
     return (
         <Stack.Navigator>
             <Stack.Screen
@@ -51,12 +73,13 @@ function WorkaroundStack({
                         titleKey
                     ),
                     headerShown: true,
-                    headerLargeTitle: largeTitle,
+                    headerLargeTitle: Platform.OS === 'ios' && largeTitle,
                     headerRight: headerRightElement,
+
                     ...(Platform.OS === 'ios' && transparent
                         ? {
                               headerTransparent: true,
-                              headerBlurEffect: 'regular',
+                              headerBlurEffect: 'prominent',
                           }
                         : {}),
                     headerSearchBarOptions,

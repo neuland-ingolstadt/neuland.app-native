@@ -2,7 +2,7 @@
 import { type Colors } from '@/components/colors'
 import i18n from '@/localization/i18n'
 import { type Announcement } from '@/types/neuland-api'
-import { CARD_PADDING } from '@/utils/style-utils'
+import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -49,6 +49,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
             style={[
                 styles.card,
                 {
+                    marginHorizontal: PAGE_PADDING,
                     borderColor: colors.border,
                     backgroundColor: colors.card,
                 },

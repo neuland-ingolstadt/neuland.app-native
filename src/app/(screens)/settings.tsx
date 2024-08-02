@@ -2,11 +2,12 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
 import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
@@ -16,13 +17,13 @@ import {
     withBouncing,
 } from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import { storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
+import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -49,7 +50,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Shimmer from 'react-native-shimmer'
 
 export default function Settings(): JSX.Element {
-    const { userKind, userFullName } =
+    const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
     const insets = useSafeAreaInsets()
@@ -70,7 +71,8 @@ export default function Settings(): JSX.Element {
     const scrollY = useRef(0)
     const logoRotation = useSharedValue(0)
     const velocity = 110
-
+    const username =
+        userKind === USER_EMPLOYEE && SecureStore.getItem('username')
     const { color, randomizeColor } = useRandomColor()
 
     useEffect(() => {
@@ -214,7 +216,7 @@ export default function Settings(): JSX.Element {
                     },
 
                     onPress: () => {
-                        router.push('(user)/dashboard')
+                        router.navigate('dashboard')
                     },
                 },
                 {
@@ -224,7 +226,7 @@ export default function Settings(): JSX.Element {
                         ios: 'fork.knife',
                     },
                     onPress: () => {
-                        router.push('(food)/preferences')
+                        router.navigate('preferences')
                     },
                 },
                 {
@@ -252,13 +254,23 @@ export default function Settings(): JSX.Element {
             header: t('menu.formlist.appearance.title'),
             items: [
                 {
-                    title: t('menu.formlist.appearance.theme'),
+                    title: t('menu.formlist.appearance.accent'),
                     icon: {
                         ios: 'paintpalette',
                         android: 'palette',
                     },
                     onPress: () => {
-                        router.push('(user)/theme')
+                        router.navigate('accent')
+                    },
+                },
+                {
+                    title: t('menu.formlist.appearance.theme'),
+                    icon: {
+                        ios: 'moon.stars',
+                        android: 'routine',
+                    },
+                    onPress: () => {
+                        router.navigate('theme')
                     },
                 },
                 ...(Platform.OS === 'ios'
@@ -270,37 +282,11 @@ export default function Settings(): JSX.Element {
                                   android: '' as MaterialIcon,
                               },
                               onPress: () => {
-                                  router.push('(user)/appicon')
+                                  router.navigate('appIcon')
                               },
                           },
                       ]
                     : []),
-            ],
-        },
-
-        {
-            header: 'Quick Links',
-            items: [
-                {
-                    title: 'Primuss',
-                    icon: linkIcon,
-                    onPress: async () =>
-                        await Linking.openURL(
-                            'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
-                        ),
-                },
-                {
-                    title: 'Moodle',
-                    icon: linkIcon,
-                    onPress: async () =>
-                        await Linking.openURL('https://moodle.thi.de/'),
-                },
-                {
-                    title: 'Webmail',
-                    icon: linkIcon,
-                    onPress: async () =>
-                        await Linking.openURL('http://outlook.thi.de/'),
-                },
             ],
         },
         {
@@ -313,8 +299,19 @@ export default function Settings(): JSX.Element {
                         android: 'chevron_right',
                     },
                     onPress: () => {
-                        router.push('(user)/about')
+                        router.navigate('about')
                     },
+                },
+                {
+                    title: 'Feedback',
+                    icon: {
+                        ios: 'envelope',
+                        android: 'mail',
+                    },
+                    onPress: async () =>
+                        await Linking.openURL(
+                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
+                        ),
                 },
                 {
                     title: t('menu.formlist.legal.rate'),
@@ -365,9 +362,9 @@ export default function Settings(): JSX.Element {
                             logoutAlert()
                         } else {
                             if (userKind === 'student') {
-                                router.push('(user)/profile')
+                                router.navigate('profile')
                             } else if (userKind === 'guest') {
-                                router.push('(user)/login')
+                                router.navigate('login')
                             }
                         }
                     }}
@@ -444,7 +441,7 @@ export default function Settings(): JSX.Element {
                             ) : userKind === 'employee' ? (
                                 <>
                                     <NameBox
-                                        title={userFullName}
+                                        title={username as string}
                                         subTitle1={t('menu.employee.subtitle1')}
                                         subTitle2={t('menu.employee.subtitle2')}
                                     >
@@ -457,7 +454,9 @@ export default function Settings(): JSX.Element {
                                                     ...styles.avatarText,
                                                 }}
                                             >
-                                                {getInitials(userFullName)}
+                                                {getInitials(
+                                                    (username as string) ?? ''
+                                                )}
                                             </Text>
                                         </Avatar>
                                     </NameBox>

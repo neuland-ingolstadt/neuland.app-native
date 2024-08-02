@@ -101,7 +101,7 @@ const ResultRow: React.FC<{
 const styles = StyleSheet.create({
     searchRowContainer: {
         flexDirection: 'row',
-        paddingVertical: 8,
+        paddingVertical: 10,
         alignItems: 'center',
     },
     searchIconContainer: {

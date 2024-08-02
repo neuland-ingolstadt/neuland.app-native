@@ -1,0 +1,3 @@
+CFBundleDisplayName = "Neuland Next";
+NSFaceIDUsageDescription = "Allow Neuland Next to use Face ID.";
+NSLocationWhenInUseUsageDescription = "Allow Neuland Next to access your location to show your location on the map.";

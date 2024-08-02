@@ -86,9 +86,8 @@ export default function GradesSCreen(): JSX.Element {
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
                 router.replace('user/login')
-                return false
             }
-            return failureCount < 3
+            return false
         },
     })
 
@@ -101,13 +100,15 @@ export default function GradesSCreen(): JSX.Element {
 
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     useEffect(() => {
+        if (personalData === undefined) return
         const spoName = extractSpoName(personalData)
-        void loadAverageGrade(spoName)
+        void loadAverageGrade(spoName ?? undefined)
     }, [spoWeights, grades?.finished])
 
     return (
         <ScrollView
             contentContainerStyle={styles.contentContainer}
+            contentInsetAdjustmentBehavior="automatic"
             refreshControl={
                 isSuccess ? (
                     <RefreshControl
@@ -125,11 +126,16 @@ export default function GradesSCreen(): JSX.Element {
                 </View>
             )}
             {isError && (
-                <ErrorView
-                    title={error.message}
-                    onRefresh={refetchByUser}
-                    refreshing={isRefetchingByUser}
-                />
+                <View style={styles.loadingContainer}>
+                    <ErrorView
+                        title={error.message}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
+                        isCritical={
+                            !error.message.includes('No grade data available')
+                        }
+                    />
+                </View>
             )}
             {isPaused && !isSuccess && (
                 <ErrorView

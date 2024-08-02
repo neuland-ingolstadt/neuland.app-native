@@ -2,7 +2,7 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/contexts/userKind'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import {
@@ -32,7 +32,7 @@ import {
 export default function LibraryCode(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [brightness, setBrightness] = useState<number>(0)
     const brightnessRef = useRef<number>(0)
 

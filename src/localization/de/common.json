@@ -58,7 +58,29 @@
         "more": "mehr",
         "unknown": "Unbekannt"
     },
+    "quicklinks": {
+        "primuss": "Primuss",
+        "moodle": "Moodle",
+        "webmail": "E-Mail",
+        "studVer": "StudVer",
+        "marketplace": "Markt-platz",
+        "myTHI": "MyTHI",
+        "library": "Biblio-thek"
+    },
     "pages": {
+        "quicklinks": {
+            "title": "Quick Links",
+            "footer": "Die Dashboard Karte zeigt die zuletzt besuchten Links an.",
+            "links": {
+                "primuss": "Primuss",
+                "moodle": "Moodle",
+                "webmail": "E-Mail",
+                "studVer": "Studierendenvertretung",
+                "marketplace": "THI Marktplatz",
+                "myTHI": "MyTHI",
+                "library": "Bibliothekskatalog"
+            }
+        },
         "calendar": {
             "exams": {
                 "title": "Prüfungen",

@@ -58,7 +58,29 @@
         "more": "more",
         "unknown": "Unknown"
     },
+    "quicklinks": {
+        "primuss": "Primuss",
+        "moodle": "Moodle",
+        "webmail": "E-Mail",
+        "studVer": "StudVer",
+        "marketplace": "Market-place",
+        "myTHI": "MyTHI",
+        "library": "Library"
+    },
     "pages": {
+        "quicklinks": {
+            "title": "Quick Links",
+            "footer": "The dashboard card shows the most recently visited links.",
+            "links": {
+                "primuss": "Primuss",
+                "moodle": "Moodle",
+                "webmail": "E-Mail",
+                "studVer": "Student Representation",
+                "marketplace": "THI Marketplace",
+                "myTHI": "MyTHI",
+                "library": "Library Catalog"
+            }
+        },
         "calendar": {
             "exams": {
                 "title": "Exams",

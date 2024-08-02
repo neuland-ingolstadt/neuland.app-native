@@ -1,6 +1,7 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
@@ -17,7 +18,7 @@ import BaseCard from './BaseCard'
 
 const TimetableCard = (): JSX.Element => {
     const colors = useTheme().colors as Colors
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
         FriendlyTimetableEntry[]
@@ -33,7 +34,7 @@ const TimetableCard = (): JSX.Element => {
     }
 
     const { data: timetable } = useQuery({
-        queryKey: ['timetable'],
+        queryKey: ['timetableV2', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours,

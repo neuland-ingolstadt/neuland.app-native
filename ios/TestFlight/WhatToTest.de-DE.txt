@@ -1,11 +1,3 @@
-- Neues Onboarding und Login Design
-- Neuer Suchverlauf bei Kartensuche
-- Natives Design der erweiterten Raumsuche
-- Verbesserte Kalender Performance
-- Verbessertes Error Handling
-- Verringert initale Ladezeit der App
-- Verringert größe der App
-- Behebt fehlende Übersetzungen
-- Behebt Fehler beim Laden der Essensdaten
-- Neue System Status Seite
-- Neues Easter Egg
+- Neue Quick Links Karte
+- Performance Verbesserungen
+- Bugfixes

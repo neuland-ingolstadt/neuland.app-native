@@ -1,8 +1,7 @@
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import * as Application from 'expo-application'
 import { useState } from 'react'
 import { useMMKVBoolean } from 'react-native-mmkv'
-
-import packageInfo from '../../package.json'
 
 export interface FlowHook {
     isOnboarded: boolean | undefined
@@ -23,9 +22,10 @@ export interface FlowHook {
  * @returns An object containing the flow state and functions to update it.
  */
 export function useFlow(): FlowHook {
+    const version = Application.nativeApplicationVersion ?? '0.0.0'
     const [isOnboarded, setOnboarded] = useMMKVBoolean('isOnboardedv1')
     const [isUpdated, setUpdated] = useMMKVBoolean(
-        `isUpdated-${convertToMajorMinorPatch(packageInfo.version)}`
+        `isUpdated-${convertToMajorMinorPatch(version)}`
     )
     const [analyticsAllowed, setAnalyticsAllowed] = useMMKVBoolean('analytics')
     const [analyticsInitialized, setAnalyticsInitialized] =

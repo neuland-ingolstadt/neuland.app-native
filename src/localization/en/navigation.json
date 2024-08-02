@@ -12,6 +12,7 @@
         "allergens": "Allergens",
         "details": "Details",
         "theme": "Design",
+        "accent": "Accent Color",
         "profile": "Profile",
         "about": "About",
         "advancedSearch": "Advanced Search",
@@ -49,7 +50,8 @@
             "mensa": "Mensa Ingolstadt",
             "mensaNeuburg": "Theke Neuburg",
             "food": "Food",
-            "login": "Sign in"
+            "login": "Sign in",
+            "links": "Quick Links"
         },
         "announcements": {
             "readMore": "Tap to learn more."

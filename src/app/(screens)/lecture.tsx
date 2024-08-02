@@ -86,7 +86,7 @@ export default function TimetableDetails(): JSX.Element {
                 title: t(titleKey),
                 icon: chevronIcon,
                 onPress: () => {
-                    router.push('(timetable)/webView')
+                    router.push('webView')
                     router.setParams({
                         title: t(titleKey),
                         html,
@@ -134,7 +134,6 @@ export default function TimetableDetails(): JSX.Element {
 
     return (
         <>
-            {}
             <ScrollView>
                 <View style={styles.page}>
                     <DetailsRow>

@@ -29,11 +29,3 @@ export function arraysEqual(arr1: any[], arr2: any[]): boolean {
     }
     return true
 }
-
-export const PRIVACY_URL =
-    'https://assets.neuland.app/datenschutzerklaerung-app-v2.htm'
-export const IMPRINT_URL = 'https://assets.neuland.app/impressum-app.htm'
-export const STATUS_URL = 'https://status.neuland.app/status/app'
-export const USER_STUDENT = 'student'
-export const USER_EMPLOYEE = 'employee'
-export const USER_GUEST = 'guest'
