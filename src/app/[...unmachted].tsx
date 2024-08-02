@@ -31,7 +31,7 @@ export default function Unmatched(): JSX.Element {
                     if (router.canGoBack()) {
                         router.back()
                     } else {
-                        router.replace('/')
+                        router.replace('(tabs)/(index)')
                     }
                 }}
             />

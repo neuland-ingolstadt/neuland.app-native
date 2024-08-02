@@ -9,7 +9,7 @@ function t(...args: any): any {
 }
 
 /**
- * Formats a date like "Mo., 1.10.2020"
+ * Formats a date like "Tue., 1.10.2020"
  * @param {Date|string} datetime
  * @param {FriendlyDateOptions} options
  * @returns {string}
@@ -30,9 +30,11 @@ export function formatFriendlyDate(
     } else if (date.isSame(tomorrow, 'day') && options.relative !== false) {
         return t('dates.tomorrow')
     } else {
-        const weekday = date.format(
-            options.weekday === 'short' ? 'ddd' : 'dddd'
-        )
+        // Format the weekday in English
+        const weekday = date
+            .locale(i18n.language)
+            .format(options.weekday === 'short' ? 'ddd' : 'dddd')
+        // Format the day, month, and year in German
         const dayMonthYear = date.locale('de').format('D.M.YYYY')
         return `${weekday}, ${dayMonthYear}`
     }

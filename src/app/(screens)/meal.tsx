@@ -8,11 +8,11 @@ import {
     UserKindContext,
 } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -53,7 +53,7 @@ export default function FoodDetail(): JSX.Element {
         toggleSelectedPreferences,
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const { updateRouteParams } = useContext(RouteParamsContext)
 
     const dataSources = {

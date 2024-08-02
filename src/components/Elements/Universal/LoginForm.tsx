@@ -1,16 +1,15 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
-import { getPersonalData, trimErrorMsg } from '@/utils/api-utils'
 import {
     STATUS_URL,
     USER_EMPLOYEE,
     USER_GUEST,
     USER_STUDENT,
-} from '@/utils/app-utils'
+} from '@/data/constants'
+import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
 import * as SecureStore from 'expo-secure-store'
@@ -42,33 +41,17 @@ const LoginForm = ({
     const [password, setPassword] = useState('')
     const colors = useTheme().colors as Colors
     const isDark = useTheme().dark
-    const { userKind, toggleUserKind, updateUserFullName } =
+    const { userKind = USER_GUEST, toggleUserKind } =
         React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
     const { t } = useTranslation('flow')
     const { resetOrder } = useContext(DashboardContext)
-
-    const { data: personalData, refetch: refetchPersonalData } = useQuery({
-        queryKey: ['personalData'],
-        queryFn: getPersonalData,
-        staleTime: 1000 * 60 * 60 * 12, // 12 hours
-        gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
-        enabled: false,
-    })
 
     async function login(): Promise<void> {
         let showStatus = true
         try {
             setLoading(true)
             const userKind = await createSession(username, password, true)
-            if (userKind) {
-                await refetchPersonalData()
-                const userFullName =
-                    personalData?.vname + ' ' + personalData?.name
-                updateUserFullName(userFullName)
-            } else {
-                updateUserFullName(username)
-            }
             toggleUserKind(userKind)
             resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
             if (Platform.OS === 'ios') {
@@ -149,7 +132,7 @@ const LoginForm = ({
     }
 
     async function load(key: string): Promise<string | null> {
-        return await SecureStore.getItemAsync(key)
+        return SecureStore.getItem(key)
     }
 
     useEffect(() => {

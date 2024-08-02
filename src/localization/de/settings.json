@@ -24,6 +24,7 @@
             },
             "appearance": {
                 "title": "Darstellung",
+                "accent": "Akzentfarbe",
                 "theme": "Design"
             },
             "language": {
@@ -131,7 +132,8 @@
             "title": "Design",
             "default": "Automatisch",
             "dark": "Dunkel",
-            "light": "Hell"
+            "light": "Hell",
+            "footer": "Ändere das Farbschema der App. Dies ermöglicht es dir, die Systemeinstellungen zu überschreiben."
         }
     },
     "dashboard": {

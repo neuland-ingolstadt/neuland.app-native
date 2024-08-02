@@ -65,14 +65,14 @@ export default function FoodPreferences(): JSX.Element {
                     title: t('preferences.formlist.allergens'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('(food)/allergens')
+                        router.push('foodAllergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('(food)/flags')
+                        router.push('foodFlags')
                     },
                 },
             ],
@@ -94,6 +94,7 @@ export default function FoodPreferences(): JSX.Element {
                         title={t('preferences.formlist.static')}
                         selectedItem={showStatic ?? false}
                         action={setShowStatic}
+                        state={false}
                     />
                 </SectionView>
                 <View style={{ ...styles.sectionContainer }}>

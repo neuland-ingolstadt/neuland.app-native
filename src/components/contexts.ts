@@ -1,21 +1,15 @@
-import { type AppIconHook } from '@/contexts/appIcon'
 import { type Dashboard } from '@/contexts/dashboard'
 import { type FlowHook } from '@/contexts/flow'
 import { type FoodFilter } from '@/contexts/foodFilter'
+import { type PreferencesType } from '@/contexts/preferences'
 import { type RouteParams } from '@/contexts/routing'
 import { type ThemeHook } from '@/contexts/theme'
-import {
-    DEFAULT_TIMETABLE_MODE,
-    type TimetableHook,
-} from '@/contexts/timetable'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { createContext } from 'react'
 
 export const RouteParamsContext = createContext<RouteParams>({
     routeParams: '',
     updateRouteParams: () => {},
-    lecture: null,
-    updateLecture: () => {},
 })
 
 export const FoodFilterContext = createContext<FoodFilter>({
@@ -35,9 +29,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
 export const UserKindContext = createContext<UserKindContextType>({
     userKind: 'student',
     userFaculty: undefined,
-    userFullName: '',
     toggleUserKind: () => {},
-    updateUserFullName: () => {},
 })
 
 export const ThemeContext = createContext<ThemeHook>({
@@ -47,11 +39,18 @@ export const ThemeContext = createContext<ThemeHook>({
     setAccentColor: () => {},
 })
 
-export const AppIconContext = createContext<AppIconHook>({
-    appIcon: 'default',
+export const PreferencesContext = createContext<PreferencesType>({
+    appIcon: undefined,
     unlockedAppIcons: [],
     setAppIcon: () => {},
     addUnlockedAppIcon: () => {},
+
+    timetableMode: 'list',
+    setTimetableMode: () => {},
+    selectedDate: new Date(),
+    setSelectedDate: () => {},
+    recentQuicklinks: [],
+    addRecentQuicklink: () => {},
 })
 
 export const DashboardContext = createContext<Dashboard>({
@@ -74,11 +73,4 @@ export const FlowContext = createContext<FlowHook>({
     setAnalyticsAllowed: () => {},
     analyticsInitialized: false,
     initializeAnalytics: () => {},
-})
-
-export const TimetableContext = createContext<TimetableHook>({
-    timetableMode: DEFAULT_TIMETABLE_MODE,
-    setTimetableMode: () => {},
-    selectedDate: new Date(),
-    setSelectedDate: () => {},
 })

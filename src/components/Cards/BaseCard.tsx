@@ -1,7 +1,8 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { type Colors } from '@/components/colors'
+import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { CARD_PADDING } from '@/utils/style-utils'
+import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
@@ -30,7 +31,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const { t } = useTranslation('navigation')
 
     const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
 
     const actions = []
 
@@ -67,6 +68,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
             }}
             delayLongPress={300}
             onLongPress={() => {}}
+            style={{ marginHorizontal: PAGE_PADDING }}
         >
             <ContextMenu
                 // @ts-expect-error cannot verify that title is a valid key
@@ -74,7 +76,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                 actions={actions}
                 onPress={(e) => {
                     e.nativeEvent.name === t('contextMenu.settings') &&
-                        router.push('(user)/dashboard')
+                        router.navigate('dashboard')
                     e.nativeEvent.name === t('contextMenu.hide') &&
                         hideDashboardEntry(title)
                     e.nativeEvent.name === t('contextMenu.reset') &&
@@ -99,13 +101,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             ios={{
                                 name: cardIcons[
                                     dynamicTitle as keyof typeof cardIcons
-                                ].ios,
+                                ]?.ios,
                                 size: 18,
                             }}
                             android={{
                                 name: cardIcons[
                                     dynamicTitle as keyof typeof cardIcons
-                                ].android as MaterialIcon,
+                                ]?.android as MaterialIcon,
                                 size: 24,
                                 variant: 'outlined',
                             }}
@@ -139,6 +141,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         flex: 1,
+        paddingBottom: Platform.OS === 'android' ? 2 : 0,
     },
     titleView: {
         flexDirection: 'row',

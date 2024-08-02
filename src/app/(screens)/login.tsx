@@ -1,6 +1,6 @@
 import LoginForm from '@/components/Elements/Universal/LoginForm'
 import { type Colors } from '@/components/colors'
-import { PRIVACY_URL } from '@/utils/app-utils'
+import { PRIVACY_URL } from '@/data/constants'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -98,10 +98,10 @@ export default function Login(): JSX.Element {
     const navigateHome = (): void => {
         if (fromOnboarding === 'true') {
             router.dismissAll()
-            router.replace('/')
+            router.replace('(tabs)/(index)')
             return
         }
-        router.navigate('/')
+        router.navigate('(tabs)/(index)')
     }
 
     useEffect(() => {

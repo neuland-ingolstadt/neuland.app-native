@@ -21,7 +21,7 @@ const EventsCard = (): JSX.Element => {
     })
 
     return (
-        <BaseCard title="events" onPressRoute="events">
+        <BaseCard title="events" onPressRoute="clEvents">
             {Boolean(isSuccess) && data !== undefined && (
                 <View
                     style={{

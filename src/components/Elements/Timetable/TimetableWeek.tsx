@@ -1,6 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/contexts'
+import { PreferencesContext } from '@/components/contexts'
 import {
     type CalendarTimetableEntry,
     type Exam,
@@ -24,8 +24,6 @@ import WeekView, {
 
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
-// Import HeaderComponentProps
-
 export default function TimetableWeek({
     // eslint-disable-next-line react/prop-types
     friendlyTimetable,
@@ -34,9 +32,14 @@ export default function TimetableWeek({
 }: ITimetableViewProps): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
-    const { selectedDate, setSelectedDate } = useContext(TimetableContext)
+    const { selectedDate, setSelectedDate } = useContext(PreferencesContext)
     // get the first day of friendlyTimetable that is not in the past
     const today = new Date()
+    const firstElementeDate = friendlyTimetable.find(
+        (entry: FriendlyTimetableEntry) => new Date(entry.startDate) > today
+    )?.startDate
+    const [localSelectedDate, setLocalSelectedDate] =
+        React.useState(selectedDate)
     const inversePrimary = inverseColor(colors.primary)
     const friendlyTimetableWithColor = friendlyTimetable.map(
         (entry: FriendlyTimetableEntry, index: number) => ({
@@ -62,21 +65,32 @@ export default function TimetableWeek({
 
     const router = useRouter()
     const navigation = useNavigation()
-
+    const stripTime = (date: Date): Date => {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    }
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <HeaderRight
                     setToday={() => {
+                        const strippedLocalSelectedDate =
+                            stripTime(localSelectedDate)
+                        const strippedToday = stripTime(today)
+
+                        const targetDate =
+                            strippedLocalSelectedDate.getTime() ===
+                            strippedToday.getTime()
+                                ? firstElementeDate ?? today
+                                : today
                         // @ts-expect-error typescript doesn't know that goToDate exists
-                        weekViewRef.current?.goToDate(today)
-                        setLocalSelectedDate(today)
+                        weekViewRef.current?.goToDate(new Date(targetDate))
+                        setLocalSelectedDate(new Date(targetDate))
                     }}
                 />
             ),
             headerLeft: () => <HeaderLeft />,
         })
-    }, [navigation])
+    }, [navigation, localSelectedDate])
 
     const isDark = theme.dark
     const isIOS = Platform.OS === 'ios'
@@ -156,7 +170,6 @@ export default function TimetableWeek({
                     end={[1, 0.8]}
                     style={{
                         ...styles.eventLine,
-                        // backgroundColor: colors.primary,
                     }}
                 />
                 <View style={styles.eventText}>
@@ -279,9 +292,6 @@ export default function TimetableWeek({
 
     const weekViewRef = React.useRef<typeof WeekView>(null)
     const isMountedRef = React.useRef(false)
-
-    const [localSelectedDate, setLocalSelectedDate] =
-        React.useState(selectedDate)
 
     useEffect(() => {
         if (weekViewRef.current != null) {

@@ -2,11 +2,11 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
 import { type Colors } from '@/components/colors'
-import { TimetableContext, UserKindContext } from '@/components/contexts'
+import { PreferencesContext, UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
-import { USER_GUEST } from '@/utils/app-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { useTheme } from '@react-navigation/native'
@@ -32,7 +32,7 @@ export default function TimetableScreen(): JSX.Element {
     const theme = useTheme()
     const colors = theme.colors as Colors
 
-    const { timetableMode } = useContext(TimetableContext)
+    const { timetableMode } = useContext(PreferencesContext)
 
     const { t } = useTranslation(['timetable'])
 
@@ -46,7 +46,7 @@ export default function TimetableScreen(): JSX.Element {
         isSuccess,
         refetch,
     } = useQuery({
-        queryKey: ['timetable', userKind],
+        queryKey: ['timetableV2', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10,
         gcTime: 1000 * 60 * 60 * 24 * 7,

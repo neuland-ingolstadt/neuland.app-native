@@ -1,13 +1,16 @@
 import { type Colors } from '@/components/colors'
-import { AppIconContext, UserKindContext } from '@/components/contexts'
+import { PreferencesContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
+import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES, type SearchResult } from '@/types/map'
-import { USER_GUEST } from '@/utils/app-utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, showToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+    BottomSheetTextInput,
+    BottomSheetView,
+} from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import { selectionAsync } from 'expo-haptics'
@@ -94,7 +97,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     const colors = theme.colors as Colors
     const isDark = theme.dark
     const { t, i18n } = useTranslation('common')
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const {
         localSearch,
         setLocalSearch,
@@ -107,7 +110,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         updateSearchHistory,
     } = useContext(MapContext)
 
-    const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
+    const { unlockedAppIcons, addUnlockedAppIcon } =
+        useContext(PreferencesContext)
 
     const fuse = new Fuse(allRooms.features, {
         keys: [
@@ -233,46 +237,89 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     }}
                 >
                     <View style={styles.inputContainer}>
-                        <TextInput
-                            ref={textInputRef}
-                            style={{
-                                backgroundColor: searchbarBackground,
-                                ...styles.textInput,
-                                color: colors.text,
-                            }}
-                            placeholder={t('pages.map.search.hint')}
-                            placeholderTextColor={colors.labelColor}
-                            value={localSearch}
-                            enablesReturnKeyAutomatically
-                            clearButtonMode="always"
-                            enterKeyHint="search"
-                            onChangeText={(text) => {
-                                setLocalSearch(text)
-                            }}
-                            onFocus={() => {
-                                setSearchFocused(true)
-                                animate(width)
+                        {Platform.OS !== 'ios' ? (
+                            <TextInput
+                                ref={textInputRef}
+                                style={{
+                                    backgroundColor: searchbarBackground,
+                                    ...styles.textInput,
+                                    color: colors.text,
+                                }}
+                                placeholder={t('pages.map.search.hint')}
+                                placeholderTextColor={colors.labelColor}
+                                value={localSearch}
+                                enablesReturnKeyAutomatically
+                                clearButtonMode="always"
+                                enterKeyHint="search"
+                                onChangeText={(text) => {
+                                    setLocalSearch(text)
+                                }}
+                                onFocus={() => {
+                                    setSearchFocused(true)
+                                    animate(width)
 
-                                bottomSheetRef.current?.expand()
-                            }}
-                            onBlur={() => {
-                                setSearchFocused(false)
-                                animate(0)
-                            }}
-                            onEndEditing={() => {
-                                if (clickedElement === null) {
-                                    console.log(
-                                        'clickedElement is null - snapping to 1'
-                                    )
-                                    bottomSheetRef.current?.snapToIndex(1)
-                                } else {
-                                    console.log(
-                                        'clickedElement is not null - snapping to 0'
-                                    )
-                                    bottomSheetRef.current?.close()
-                                }
-                            }}
-                        />
+                                    bottomSheetRef.current?.expand()
+                                }}
+                                onBlur={() => {
+                                    setSearchFocused(false)
+                                    animate(0)
+                                }}
+                                onEndEditing={() => {
+                                    if (clickedElement === null) {
+                                        console.log(
+                                            'clickedElement is null - snapping to 1'
+                                        )
+                                        bottomSheetRef.current?.snapToIndex(1)
+                                    } else {
+                                        console.log(
+                                            'clickedElement is not null - snapping to 0'
+                                        )
+                                        bottomSheetRef.current?.close()
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <BottomSheetTextInput
+                                ref={textInputRef}
+                                style={{
+                                    backgroundColor: searchbarBackground,
+                                    ...styles.textInput,
+                                    color: colors.text,
+                                }}
+                                placeholder={t('pages.map.search.hint')}
+                                placeholderTextColor={colors.labelColor}
+                                value={localSearch}
+                                enablesReturnKeyAutomatically
+                                clearButtonMode="always"
+                                enterKeyHint="search"
+                                onChangeText={(text) => {
+                                    setLocalSearch(text)
+                                }}
+                                onFocus={() => {
+                                    setSearchFocused(true)
+                                    animate(width)
+
+                                    bottomSheetRef.current?.expand()
+                                }}
+                                onBlur={() => {
+                                    setSearchFocused(false)
+                                    animate(0)
+                                }}
+                                onEndEditing={() => {
+                                    if (clickedElement === null) {
+                                        console.log(
+                                            'clickedElement is null - snapping to 1'
+                                        )
+                                        bottomSheetRef.current?.snapToIndex(1)
+                                    } else {
+                                        console.log(
+                                            'clickedElement is not null - snapping to 0'
+                                        )
+                                        bottomSheetRef.current?.close()
+                                    }
+                                }}
+                            />
+                        )}
 
                         <Animated.View
                             style={{
@@ -692,7 +739,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     {userKind !== USER_GUEST && (
                                         <Pressable
                                             onPress={() => {
-                                                router.push('(map)/advanced')
+                                                router.navigate('roomSearch')
                                             }}
                                             hitSlop={{
                                                 top: 10,
@@ -952,7 +999,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     historyRow: {
-        paddingVertical: 5,
+        paddingVertical: 3,
         paddingHorizontal: 12,
 
         width: '100%',

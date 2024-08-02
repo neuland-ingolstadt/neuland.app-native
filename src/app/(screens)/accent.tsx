@@ -1,4 +1,3 @@
-import MultiSectionRadio from '@/components/Elements/Food/FoodLanguageSection'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
@@ -20,8 +19,7 @@ import {
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, setAccentColor, theme, setTheme } =
-        useContext(ThemeContext)
+    const { accentColor, setAccentColor } = useContext(ThemeContext)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
@@ -124,21 +122,6 @@ export default function Theme(): JSX.Element {
             }))
     )
 
-    const elements = [
-        {
-            key: 'auto',
-            title: t('theme.themes.default'),
-        },
-        {
-            key: 'light',
-            title: t('theme.themes.light'),
-        },
-        {
-            key: 'dark',
-            title: t('theme.themes.dark'),
-        },
-    ]
-
     return (
         <>
             <ScrollView>
@@ -158,13 +141,6 @@ export default function Theme(): JSX.Element {
                             <ColorBoxMatrix colors={rowColors} key={index} />
                         ))}
                     </View>
-                </SectionView>
-                <SectionView title={t('theme.themes.title')}>
-                    <MultiSectionRadio
-                        elements={elements}
-                        selectedItem={theme ?? 'auto'}
-                        action={setTheme as (item: string) => void}
-                    />
                 </SectionView>
             </ScrollView>
         </>

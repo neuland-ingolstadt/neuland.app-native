@@ -1,13 +1,12 @@
 import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
+import { USER_GUEST } from '@/data/constants'
 import courseShortNames from '@/data/course-short-names.json'
 import { type CourseShortNames } from '@/types/data'
 import { type PersDataDetails } from '@/types/thi-api'
 import { type QueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { getItemAsync } from 'expo-secure-store'
-
-import { USER_GUEST } from './app-utils'
 
 export const networkError = 'Network request failed'
 export const guestError = 'User is logged in as guest'
@@ -51,7 +50,7 @@ export const performLogout = async (
         resetDashboard(USER_GUEST)
         await createGuestSession()
         queryClient.clear()
-        router.navigate('/')
+        router.navigate('(tabs)/(index)')
     } catch (e) {
         console.log(e)
     }

@@ -136,7 +136,7 @@ export const modalSection = (
                     {
                         title: t('pages.map.details.building.free'),
                         value:
-                            occupancies.available.toString() ??
+                            occupancies.available?.toString() ??
                             t('misc.unknown'),
                     },
                     {

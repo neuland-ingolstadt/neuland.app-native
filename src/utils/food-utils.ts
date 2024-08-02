@@ -1,13 +1,13 @@
 import NeulandAPI from '@/api/neuland-api'
 import { type FoodLanguage } from '@/contexts/foodFilter'
 import allergenMap from '@/data/allergens.json'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
 import { type TFunction } from 'i18next'
 
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from './app-utils'
 import { formatISODate } from './date-utils'
 
 /**

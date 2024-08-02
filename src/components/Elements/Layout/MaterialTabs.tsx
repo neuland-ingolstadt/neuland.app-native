@@ -2,21 +2,11 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { type Theme } from '@react-navigation/native'
 import Color from 'color'
-import { withLayoutContext } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Easing } from 'react-native'
-import {
-    type MaterialBottomTabNavigationOptions,
-    createMaterialBottomTabNavigator, // @ts-expect-error no types
-} from 'react-native-paper/react-navigation'
 
-const { Navigator } = createMaterialBottomTabNavigator()
-const MaterialBottomTabs = withLayoutContext<
-    // @ts-expect-error Missing arguments in type
-    MaterialBottomTabNavigationOptions,
-    typeof Navigator
->(Navigator)
+import MaterialBottomTabs from './MaterialTabbar'
 
 const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
     const isDark = theme.dark
@@ -46,9 +36,6 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     ? Color(colors.card).mix(Color(colors.primary), 0.04).hex()
                     : Color(colors.card).mix(Color(colors.primary), 0.1).hex(),
             }}
-            sceneContainerStyle={{
-                backgroundColor: colors.background,
-            }}
         >
             <MaterialBottomTabs.Screen
                 name="(index)"
@@ -72,7 +59,7 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                         />
                     ),
                 }}
-            />
+            ></MaterialBottomTabs.Screen>
 
             <MaterialBottomTabs.Screen
                 name="(timetable)"

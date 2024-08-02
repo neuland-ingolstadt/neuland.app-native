@@ -5,9 +5,9 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { guestError, networkError } from '@/utils/api-utils'
-import { USER_GUEST } from '@/utils/app-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
@@ -28,7 +28,7 @@ import {
 import PagerView from 'react-native-pager-view'
 
 export default function CalendarPage(): JSX.Element {
-    const { userKind } = React.useContext(UserKindContext)
+    const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const displayTypes = ['Events', t('pages.calendar.exams.title')]
@@ -55,7 +55,7 @@ export default function CalendarPage(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.push('(user)/login')
+                router.push(' login')
                 return false
             }
             return failureCount < 3
@@ -257,13 +257,14 @@ export default function CalendarPage(): JSX.Element {
                                             )}
                                             icon={{
                                                 ios: 'calendar.badge.clock',
-                                                android: 'calendar-clock',
+                                                android: 'calendar_clock',
                                             }}
                                             buttonText="Primuss"
                                             onButtonPress={() => {
                                                 void Linking.openURL(primussUrl)
                                             }}
                                             inModal
+                                            isCritical={false}
                                         />
                                     )}
                                 </View>

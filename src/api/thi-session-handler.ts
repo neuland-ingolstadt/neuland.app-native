@@ -9,8 +9,8 @@ async function save(key: string, value: string): Promise<void> {
     await SecureStore.setItemAsync(key, value)
 }
 
-async function load(key: string): Promise<string | null> {
-    return await SecureStore.getItemAsync(key)
+function load(key: string): string | null {
+    return SecureStore.getItem(key)
 }
 
 /**
@@ -84,7 +84,7 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
     method: (session: string) => Promise<T>
 ): Promise<T> {
-    let session = await load('session')
+    let session = load('session')
     const sessionCreated = parseInt(storage.getString('sessionCreated') ?? '0')
     // redirect user if he never had a session
     if (session == null) {
@@ -93,12 +93,12 @@ export async function callWithSession<T>(
         throw new UnavailableSessionError()
     }
 
-    const username = await load('username')
+    const username = load('username')
     if (username === null) {
         throw new UnavailableSessionError()
     }
 
-    const password = await load('password')
+    const password = load('password')
     if (password === null) {
         throw new UnavailableSessionError()
     }
@@ -170,11 +170,11 @@ export async function callWithSession<T>(
  * @param {object} router Next.js router object
  */
 export async function obtainSession(router: object): Promise<string | null> {
-    let session = await load('session')
+    let session = load('session')
     const age = parseInt(storage.getString('sessionCreated') ?? '0')
 
-    const username = await load('username')
-    const password = await load('password')
+    const username = load('username')
+    const password = load('password')
 
     // invalidate expired session
     if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
@@ -208,7 +208,7 @@ export async function obtainSession(router: object): Promise<string | null> {
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-    const session = await load('session')
+    const session = load('session')
     if (session === null) {
         console.log('No session to forget')
         return

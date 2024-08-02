@@ -3,9 +3,9 @@ import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/components/colors'
-import { AppIconContext, FlowContext } from '@/components/contexts'
+import { FlowContext, PreferencesContext } from '@/components/contexts'
+import { IMPRINT_URL, PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
-import { IMPRINT_URL, PRIVACY_URL, STATUS_URL } from '@/utils/app-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
@@ -32,7 +32,8 @@ export default function About(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const { analyticsAllowed, setAnalyticsAllowed } =
         React.useContext(FlowContext)
-    const { unlockedAppIcons, addUnlockedAppIcon } = useContext(AppIconContext)
+    const { unlockedAppIcons, addUnlockedAppIcon } =
+        useContext(PreferencesContext)
     const version = `${Application.nativeApplicationVersion}`
     const versionWithCode = `${version} (${Application.nativeBuildVersion})`
     const [displayVersion, setDisplayVersion] = useState(version)
@@ -57,19 +58,8 @@ export default function About(): JSX.Element {
                     title: 'Changelog',
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('(user)/changelog')
+                        router.navigate('changelog')
                     },
-                },
-                {
-                    title: 'Feedback',
-                    icon: {
-                        ios: 'envelope',
-                        android: 'mail',
-                    },
-                    onPress: async () =>
-                        await Linking.openURL(
-                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
-                        ),
                 },
                 {
                     title: 'System Status',
@@ -100,7 +90,7 @@ export default function About(): JSX.Element {
                     title: t('navigation.licenses.title', { ns: 'navigation' }),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('(user)/licenses')
+                        router.navigate('licenses')
                     },
                 },
             ],
@@ -147,7 +137,8 @@ export default function About(): JSX.Element {
                 ],
                 { cancelable: false }
             )
-            const isCollected = unlockedAppIcons.includes('cat')
+            const isCollected = unlockedAppIcons?.includes('cat')
+            console.log('isCollected', isCollected)
             if (!isCollected) {
                 trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
                 if (Platform.OS === 'ios') addUnlockedAppIcon('cat')

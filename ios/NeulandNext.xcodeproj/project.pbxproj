@@ -11,29 +11,34 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
+		5EA579CB98A042F5873E8D2B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15D289C40A50492AA788F5C8 /* InfoPlist.strings */; };
 		79A805BC94BC0AD1674AEE08 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2DE9A45D19FFF21A2FC7974A /* PrivacyInfo.xcprivacy */; };
-		8D5068EC878C59C883999F54 /* libPods-NeulandNext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06990B0683C233C81D3FC54E /* libPods-NeulandNext.a */; };
+		8F67CB1D1CD0F80933516397 /* libPods-NeulandNext.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF16343C6EDDD0DDB9165116 /* libPods-NeulandNext.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		B7E3797A2C54A52E006A4193 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = EC742494CB1CE25F860AF0D3 /* MapLibre */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		CCE77C0024F64283949166B7 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4A762513EF4F1B924A16CC /* noop-file.swift */; };
+		D419EF2B714A439388DCB898 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AF143DA9DAE546BAA252E633 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		06990B0683C233C81D3FC54E /* libPods-NeulandNext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NeulandNext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* NeulandNext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeulandNext.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NeulandNext/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NeulandNext/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = NeulandNext/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NeulandNext/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NeulandNext/main.m; sourceTree = "<group>"; };
+		15D289C40A50492AA788F5C8 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = "de-DE.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2D4A762513EF4F1B924A16CC /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "NeulandNext/noop-file.swift"; sourceTree = "<group>"; };
 		2DE9A45D19FFF21A2FC7974A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NeulandNext/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4F50E0A33A0E4558A8B767F1 /* NeulandNext-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "NeulandNext-Bridging-Header.h"; path = "NeulandNext/NeulandNext-Bridging-Header.h"; sourceTree = "<group>"; };
-		72A79DCA58B8752024BEA846 /* Pods-NeulandNext.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.release.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.release.xcconfig"; sourceTree = "<group>"; };
-		82FE156074BAC87B9E65C2EB /* Pods-NeulandNext.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.debug.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.debug.xcconfig"; sourceTree = "<group>"; };
+		83AB1D9E2FAA015F64BDF1B1 /* Pods-NeulandNext.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.release.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = NeulandNext/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AF143DA9DAE546BAA252E633 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = "en-US.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		B7A252912C646BAE009CD149 /* NeulandNextRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NeulandNextRelease.entitlements; path = NeulandNext/NeulandNextRelease.entitlements; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		CA782F3247ED429475C0817A /* Pods-NeulandNext.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeulandNext.debug.xcconfig"; path = "Target Support Files/Pods-NeulandNext/Pods-NeulandNext.debug.xcconfig"; sourceTree = "<group>"; };
+		DF16343C6EDDD0DDB9165116 /* libPods-NeulandNext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NeulandNext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-NeulandNext/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -44,7 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7E3797A2C54A52E006A4193 /* MapLibre in Frameworks */,
-				8D5068EC878C59C883999F54 /* libPods-NeulandNext.a in Frameworks */,
+				8F67CB1D1CD0F80933516397 /* libPods-NeulandNext.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +59,7 @@
 		13B07FAE1A68108700A75B9A /* NeulandNext */ = {
 			isa = PBXGroup;
 			children = (
+				B7A252912C646BAE009CD149 /* NeulandNextRelease.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -72,7 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				06990B0683C233C81D3FC54E /* libPods-NeulandNext.a */,
+				DF16343C6EDDD0DDB9165116 /* libPods-NeulandNext.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -115,10 +121,20 @@
 			name = NeulandNext;
 			sourceTree = "<group>";
 		};
+		9E2D6BF4082F41509DE67D98 /* en-US.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				AF143DA9DAE546BAA252E633 /* InfoPlist.strings */,
+			);
+			name = "en-US.lproj";
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
+				9E2D6BF4082F41509DE67D98 /* en-US.lproj */,
+				ECA594B7E2814632BBDA7E25 /* de-DE.lproj */,
 			);
 			name = Supporting;
 			path = NeulandNext/Supporting;
@@ -127,8 +143,8 @@
 		D65327D7A22EEC0BE12398D9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				82FE156074BAC87B9E65C2EB /* Pods-NeulandNext.debug.xcconfig */,
-				72A79DCA58B8752024BEA846 /* Pods-NeulandNext.release.xcconfig */,
+				CA782F3247ED429475C0817A /* Pods-NeulandNext.debug.xcconfig */,
+				83AB1D9E2FAA015F64BDF1B1 /* Pods-NeulandNext.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -141,6 +157,14 @@
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
+		ECA594B7E2814632BBDA7E25 /* de-DE.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				15D289C40A50492AA788F5C8 /* InfoPlist.strings */,
+			);
+			name = "de-DE.lproj";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -148,17 +172,16 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "NeulandNext" */;
 			buildPhases = (
-				AC187E7DAD84E11C58F32B3A /* [CP] Check Pods Manifest.lock */,
+				FEE37F9A8B5F91F5E82374E8 /* [CP] Check Pods Manifest.lock */,
 				910811D19BBBDAE542453C80 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				3563AF2B08A14DCAACDF586C /* Remove signature files (Xcode 15 workaround) */,
-				02AF97E726504DDFAD70E08F /* Remove signature files (Xcode 15 workaround) */,
-				051670571E954A2599A0996F /* Remove signature files (Xcode 15 workaround) */,
-				B236907FE49EC6684DE31FE8 /* [CP] Embed Pods Frameworks */,
-				911A5352CB8168932B899129 /* [CP] Copy Pods Resources */,
+				B5D7FBC2AB8C412844A0CF8B /* [CP] Embed Pods Frameworks */,
+				AA761E64C35603CEBB2FA769 /* [CP] Copy Pods Resources */,
+				C6874FEF2F234D4A988A9C56 /* Remove signature files (Xcode 15 workaround) */,
+				FC608338A6A74B469AA88597 /* Remove signature files (Xcode 15 workaround) */,
 			);
 			buildRules = (
 			);
@@ -215,6 +238,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				79A805BC94BC0AD1674AEE08 /* PrivacyInfo.xcprivacy in Resources */,
+				D419EF2B714A439388DCB898 /* InfoPlist.strings in Resources */,
+				5EA579CB98A042F5873E8D2B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,48 +261,6 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
 		};
-		02AF97E726504DDFAD70E08F /* Remove signature files (Xcode 15 workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode 15 workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi";
-		};
-		051670571E954A2599A0996F /* Remove signature files (Xcode 15 workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode 15 workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi";
-		};
-		3563AF2B08A14DCAACDF586C /* Remove signature files (Xcode 15 workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode 15 workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi";
-		};
 		910811D19BBBDAE542453C80 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -297,7 +280,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NeulandNext/expo-configure-project.sh\"\n";
 		};
-		911A5352CB8168932B899129 /* [CP] Copy Pods Resources */ = {
+		AA761E64C35603CEBB2FA769 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -333,7 +316,53 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AC187E7DAD84E11C58F32B3A /* [CP] Check Pods Manifest.lock */ = {
+		B5D7FBC2AB8C412844A0CF8B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C6874FEF2F234D4A988A9C56 /* Remove signature files (Xcode 15 workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode 15 workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi\n";
+		};
+		FC608338A6A74B469AA88597 /* Remove signature files (Xcode 15 workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode 15 workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$XCODE_VERSION_MAJOR\" = \"1500\" ]; then\n    echo \"Remove signature files (Xcode 15 workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  fi";
+		};
+		FEE37F9A8B5F91F5E82374E8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -355,24 +384,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B236907FE49EC6684DE31FE8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -392,7 +403,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 82FE156074BAC87B9E65C2EB /* Pods-NeulandNext.debug.xcconfig */;
+			baseConfigurationReference = CA782F3247ED429475C0817A /* Pods-NeulandNext.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -438,12 +449,12 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72A79DCA58B8752024BEA846 /* Pods-NeulandNext.release.xcconfig */;
+			baseConfigurationReference = 83AB1D9E2FAA015F64BDF1B1 /* Pods-NeulandNext.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNext.entitlements;
+				CODE_SIGN_ENTITLEMENTS = NeulandNext/NeulandNextRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

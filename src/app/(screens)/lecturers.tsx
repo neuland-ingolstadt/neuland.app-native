@@ -6,6 +6,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type Lecturers } from '@/types/thi-api'
 import { type NormalizedLecturer } from '@/types/utils'
@@ -15,7 +16,6 @@ import {
     guestError,
     networkError,
 } from '@/utils/api-utils'
-import { USER_GUEST, USER_STUDENT } from '@/utils/app-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { showToast } from '@/utils/ui-utils'
@@ -50,7 +50,7 @@ export default function LecturersCard(): JSX.Element {
     const [filteredLecturers, setFilteredLecturers] = useState<
         NormalizedLecturer[]
     >([])
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()
     const [selectedPage, setSelectedPage] = useState(0)
     const colors = useTheme().colors as Colors
@@ -88,7 +88,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.push('(user)/login')
+                        router.push('login')
                         return false
                     }
                     return failureCount < 3
@@ -106,7 +106,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.push('(user)/login')
+                        router.navigate('login')
                         return false
                     }
                     return failureCount < 3

@@ -26,6 +26,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
+                    tabBarStyle: {
+                        backgroundColor: colors.card,
+                    },
                 }}
             >
                 <Tabs.Screen
@@ -33,7 +36,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     options={{
                         title: 'Home',
                         headerShown: false,
-
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}

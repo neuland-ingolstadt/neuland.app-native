@@ -2,27 +2,35 @@ import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
 import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
 import { type Colors } from '@/components/colors'
 import {
-    AppIconContext,
+    DashboardContext,
     FlowContext,
     FoodFilterContext,
+    PreferencesContext,
+    UserKindContext,
 } from '@/components/contexts'
 import changelog from '@/data/changelog.json'
+import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
 import Color from 'color'
+import * as Application from 'expo-application'
 import * as NavigationBar from 'expo-navigation-bar'
 import { Redirect, usePathname, useRouter } from 'expo-router'
-import * as SplashScreen from 'expo-splash-screen'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
-import { humanLocations } from '../(food)/meal'
-import { appIcons } from '../(user)/appicon'
-import packageInfo from '../../../package.json'
+import { appIcons } from '../(screens)/appIcon'
+import { humanLocations } from '../(screens)/meal'
+
+declare const process: {
+    env: {
+        EXPO_PUBLIC_APTABASE_KEY: string
+    }
+}
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
@@ -32,28 +40,43 @@ export default function HomeLayout(): JSX.Element {
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
-    const { appIcon, setAppIcon } = useContext(AppIconContext)
-    // @ts-expect-error: Env types are not defined
-    const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY as string
+    const { appIcon, setAppIcon } = useContext(PreferencesContext)
+
+    const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
     const { analyticsAllowed, initializeAnalytics, analyticsInitialized } =
         React.useContext(FlowContext)
     const { isOnboarded } = React.useContext(FlowContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
+    const { shownDashboardEntries, hiddenDashboardEntries, resetOrder } =
+        useContext(DashboardContext)
+
     const pathname = usePathname()
 
     useEffect(() => {
-        const prepare = async (): Promise<void> => {
-            if (isOnboarded === true) {
-                await SplashScreen.hideAsync()
+        if (
+            userKind !== USER_GUEST &&
+            shownDashboardEntries !== null &&
+            shownDashboardEntries.length > 0
+        ) {
+            if (
+                !shownDashboardEntries.some((card) => card.key === 'links') &&
+                !hiddenDashboardEntries.some((card) => card.key === 'links')
+            ) {
+                resetOrder(userKind)
             }
         }
-        void prepare()
     }, [isOnboarded])
 
     useEffect(() => {
         // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
         const prepare = async (): Promise<void> => {
-            const tabsPaths = ['/', '/timetable', '/map', '/food']
+            const tabsPaths = ['/', '/timetable', '/map', '/food', '/links']
             const isTab = tabsPaths.includes(pathname)
+
+            if (isOnboarded !== true) {
+                await NavigationBar.setBackgroundColorAsync(colors.contrast)
+                return
+            }
 
             await NavigationBar.setBackgroundColorAsync(
                 isTab
@@ -73,7 +96,7 @@ export default function HomeLayout(): JSX.Element {
         if (Platform.OS === 'android') {
             void prepare()
         }
-    }, [theme.dark, pathname, isDark, colors])
+    }, [theme.dark, pathname, isDark, colors, isOnboarded])
 
     useEffect(() => {
         const shortcuts = [
@@ -125,7 +148,7 @@ export default function HomeLayout(): JSX.Element {
         return () => {
             if (shortcutSubscription != null) shortcutSubscription.remove()
         }
-    }, [selectedRestaurants, router, appIcon, t])
+    }, [selectedRestaurants, router, t])
 
     useEffect(() => {
         console.log('Analytics allowed:', analyticsAllowed)
@@ -159,17 +182,20 @@ export default function HomeLayout(): JSX.Element {
         return <Redirect href={'onboarding'} />
     }
 
-    const isChangelogAvailable = Object.keys(changelog.version).some(
-        (version) => version === convertToMajorMinorPatch(packageInfo.version)
-    )
+    const version = Application.nativeApplicationVersion
+    const isChangelogAvailable =
+        version != null
+            ? Object.keys(changelog.version).some(
+                  (version) => version === convertToMajorMinorPatch(version)
+              )
+            : false
 
     if (
-        flow.isUpdated === false &&
+        flow.isUpdated !== true &&
         isChangelogAvailable &&
-        flow.isOnboarded !== false
+        flow.isOnboarded === true
     ) {
         router.navigate('(flow)/whatsnew')
-        void SplashScreen.hideAsync()
     }
 
     return Platform.OS === 'android' ? (

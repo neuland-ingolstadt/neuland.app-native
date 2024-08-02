@@ -5,10 +5,10 @@ import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
+import { USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
-import { USER_STUDENT } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -59,7 +59,7 @@ export default function Profile(): JSX.Element {
         const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
         if (securityLevel === 0) {
             // no passcode or biometric auth set up
-            router.push('(user)/grades')
+            router.push('grades')
             return
         }
 
@@ -69,7 +69,7 @@ export default function Profile(): JSX.Element {
         })
 
         if (biometricAuth.success) {
-            router.push('(user)/grades')
+            router.push('grades')
         }
     }
 
@@ -163,7 +163,6 @@ export default function Profile(): JSX.Element {
                 },
             ],
         },
-
         {
             header: t('profile.formlist.study.title'),
             items: [
@@ -173,9 +172,16 @@ export default function Profile(): JSX.Element {
                 },
                 {
                     title: t('profile.formlist.study.spo'),
-                    value: data?.pvers,
+                    value:
+                        data?.pvers === 'k.A.'
+                            ? t('misc.unknown', { ns: 'common' })
+                            : data?.pvers,
                     onPress: async () => {
-                        if (data?.po_url !== undefined && data.po_url !== '') {
+                        if (
+                            data?.po_url !== undefined &&
+                            data.po_url !== '' &&
+                            data.po_url !== 'http://www.thi.de'
+                        ) {
                             void Linking.openURL(data.po_url)
                         }
                     },

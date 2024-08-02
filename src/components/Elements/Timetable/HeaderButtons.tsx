@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/contexts'
+import { PreferencesContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
@@ -10,7 +10,7 @@ import PlatformIcon from '../Universal/Icon'
 
 export function HeaderLeft(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { timetableMode, setTimetableMode } = useContext(TimetableContext)
+    const { timetableMode, setTimetableMode } = useContext(PreferencesContext)
     const marginRight = Platform.OS === 'ios' ? 0 : 10
     const { t } = useTranslation(['accessibility'])
 

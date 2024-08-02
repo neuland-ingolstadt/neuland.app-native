@@ -2,7 +2,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
-import { AppIconContext } from '@/components/contexts'
+import { PreferencesContext } from '@/components/contexts'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
@@ -36,7 +36,8 @@ export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { appIcon, setAppIcon, unlockedAppIcons } = useContext(AppIconContext)
+    const { appIcon, setAppIcon, unlockedAppIcons } =
+        useContext(PreferencesContext)
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],

@@ -1,7 +1,7 @@
 import { type MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
-import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
+import { type ColorValue, Platform, StyleSheet, Text } from 'react-native'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
@@ -71,25 +71,23 @@ const PlatformIcon = ({
                 }}
             />
         ) : (
-            <View>
-                <SweetSFSymbol
-                    name={ios.name as SystemName}
-                    size={ios.size}
-                    colors={[
-                        color as string,
-                        ...(ios.additionalColor != null
-                            ? [ios.additionalColor]
-                            : []),
-                    ]}
-                    weight={ios.weight ?? 'regular'}
-                    style={{
-                        ...style,
-                    }}
-                    variant={ios.variant as any}
-                    variableValue={ios.variableValue}
-                    renderingMode={ios.renderMode}
-                />
-            </View>
+            <SweetSFSymbol
+                name={ios.name as SystemName}
+                size={ios.size}
+                colors={[
+                    color as string,
+                    ...(ios.additionalColor != null
+                        ? [ios.additionalColor]
+                        : []),
+                ]}
+                weight={ios.weight ?? 'regular'}
+                style={{
+                    ...style,
+                }}
+                variant={ios.variant as any}
+                variableValue={ios.variableValue}
+                renderingMode={ios.renderMode}
+            />
         )
     } else {
         return (
