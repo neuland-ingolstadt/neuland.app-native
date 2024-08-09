@@ -1,6 +1,5 @@
 import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
-import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
@@ -8,19 +7,12 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const LoginCard = (): JSX.Element => {
-    const router = useRouter()
     const colors = useTheme().colors as Colors
 
     const { t } = useTranslation('navigation')
-
+    console.log('rendering LoginCard')
     return (
-        <BaseCard
-            title="login"
-            removable={false}
-            onPress={() => {
-                router.push('login')
-            }}
-        >
+        <BaseCard title="login" removable={false} onPressRoute="login">
             <View
                 style={{
                     ...styles.calendarView,

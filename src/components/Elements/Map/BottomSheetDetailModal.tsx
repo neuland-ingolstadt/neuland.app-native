@@ -85,37 +85,34 @@ export const BottomSheetDetailModal = ({
                                     onPress={() => {
                                         handleShareModal(roomData.title)
                                     }}
+                                    style={{
+                                        backgroundColor: colors.card,
+                                        ...styles.roomDetailButton,
+                                    }}
                                 >
-                                    <View
-                                        style={{
-                                            backgroundColor: colors.card,
-                                            ...styles.roomDetailButton,
+                                    <PlatformIcon
+                                        color={Color(colors.text)
+                                            .darken(0.1)
+                                            .hex()}
+                                        ios={{
+                                            name: 'square.and.arrow.up',
+                                            size: 14,
+                                            weight: 'bold',
                                         }}
-                                    >
-                                        <PlatformIcon
-                                            color={Color(colors.text)
-                                                .darken(0.1)
-                                                .hex()}
-                                            ios={{
-                                                name: 'square.and.arrow.up',
-                                                size: 15,
-                                                weight: 'bold',
-                                            }}
-                                            android={{
-                                                name: 'share',
-                                                size: 24,
-                                            }}
-                                            style={Platform.select({
-                                                android: {
-                                                    height: 24,
-                                                    width: 24,
-                                                },
-                                                ios: {
-                                                    marginBottom: 3,
-                                                },
-                                            })}
-                                        />
-                                    </View>
+                                        android={{
+                                            name: 'share',
+                                            size: 17,
+                                        }}
+                                        style={Platform.select({
+                                            android: {
+                                                height: 24,
+                                                width: 24,
+                                            },
+                                            ios: {
+                                                marginBottom: 3,
+                                            },
+                                        })}
+                                    />
                                 </Pressable>
                             )}
                             <Pressable
@@ -135,12 +132,12 @@ export const BottomSheetDetailModal = ({
                                             .hex()}
                                         ios={{
                                             name: 'xmark',
-                                            size: 14,
+                                            size: 13,
                                             weight: 'bold',
                                         }}
                                         android={{
                                             name: 'expand_more',
-                                            size: 24,
+                                            size: 21,
                                         }}
                                         style={Platform.select({
                                             android: {

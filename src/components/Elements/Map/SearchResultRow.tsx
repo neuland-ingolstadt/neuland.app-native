@@ -1,10 +1,11 @@
 import { type Colors } from '@/components/colors'
-import { MapContext } from '@/hooks/contexts/map'
+import { MapContext } from '@/contexts/map'
 import { type SearchResult } from '@/types/map'
 import { getContrastColor } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Keyboard, StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
@@ -15,15 +16,19 @@ const ResultRow: React.FC<{
     colors: Colors
     handlePresentModalPress: () => void
     bottomSheetRef: React.RefObject<any>
+    updateSearchHistory: (result: SearchResult) => void
 }> = ({
     result,
     index,
     colors,
     handlePresentModalPress,
     bottomSheetRef,
+    updateSearchHistory,
 }): JSX.Element => {
     const { setClickedElement, setLocalSearch, setCurrentFloor } =
         useContext(MapContext)
+    const { i18n } = useTranslation()
+    const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
     return (
         <TouchableOpacity
             key={index}
@@ -32,7 +37,7 @@ const ResultRow: React.FC<{
                 const center = result.item.properties?.center
                 Keyboard.dismiss()
                 bottomSheetRef.current?.collapse()
-                //  _setView(center, mapRef)
+                updateSearchHistory(result)
                 setClickedElement({
                     data: result.title,
                     type: result.item.properties?.rtype,
@@ -48,7 +53,6 @@ const ResultRow: React.FC<{
                     origin: 'Search',
                 })
                 handlePresentModalPress()
-                //  _injectMarker(mapRef, center, colors)
                 setLocalSearch('')
             }}
         >
@@ -72,7 +76,7 @@ const ResultRow: React.FC<{
                 />
             </View>
 
-            <View>
+            <View style={styles.flex}>
                 <Text
                     style={{
                         color: colors.text,
@@ -87,7 +91,7 @@ const ResultRow: React.FC<{
                         ...styles.suggestionSubtitle,
                     }}
                 >
-                    {result.subtitle}
+                    {result.item.properties?.[roomTypeKey] ?? result.subtitle}
                 </Text>
             </View>
         </TouchableOpacity>
@@ -97,7 +101,8 @@ const ResultRow: React.FC<{
 const styles = StyleSheet.create({
     searchRowContainer: {
         flexDirection: 'row',
-        paddingVertical: 8,
+        paddingVertical: 10,
+        alignItems: 'center',
     },
     searchIconContainer: {
         marginRight: 14,
@@ -115,6 +120,10 @@ const styles = StyleSheet.create({
     suggestionSubtitle: {
         fontWeight: '400',
         fontSize: 14,
+        maxWidth: '90%',
+    },
+    flex: {
+        flex: 1,
     },
 })
 export default ResultRow

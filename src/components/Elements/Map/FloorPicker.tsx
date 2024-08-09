@@ -1,5 +1,5 @@
 import { type Colors } from '@/components/colors'
-import { MapContext } from '@/hooks/contexts/map'
+import { MapContext } from '@/contexts/map'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React, { useContext } from 'react'
@@ -157,6 +157,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         onPress={() => {
                             setCameraTriggerKey((prev) => prev + 1)
                         }}
+                        accessibilityLabel="Center on current location"
                     >
                         <View
                             style={{
@@ -175,7 +176,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     }}
                                     android={{
                                         name: 'near_me',
-                                        size: 22,
+                                        size: 21,
+                                        variant: 'outlined',
                                     }}
                                 />
                             </View>

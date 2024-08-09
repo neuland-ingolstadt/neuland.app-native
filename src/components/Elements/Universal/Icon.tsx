@@ -1,7 +1,7 @@
 import { type MaterialIcon } from '@/types/material-icons'
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
-import { type ColorValue, Platform, StyleSheet, Text, View } from 'react-native'
+import { type ColorValue, Platform, StyleSheet, Text } from 'react-native'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
@@ -41,12 +41,12 @@ interface PlatformIconProps {
 }
 export const linkIcon = {
     ios: 'safari',
-    android: 'link',
+    android: 'link' as MaterialIcon,
 }
 
 export const chevronIcon = {
     ios: 'chevron.forward',
-    android: 'chevron_right',
+    android: 'chevron_right' as MaterialIcon,
 }
 
 const PlatformIcon = ({
@@ -57,32 +57,37 @@ const PlatformIcon = ({
 }: PlatformIconProps): JSX.Element => {
     if (Platform.OS === 'ios') {
         return ios.fallback ?? false ? (
-            <Ionicons
-                name={ios.name as typeof Ionicons.defaultProps.name}
-                size={ios.size - 2}
+            <MaterialCommunityIcons
+                name={
+                    ios.name as typeof MaterialCommunityIcons.defaultProps.name
+                }
+                size={ios.size}
                 color={color}
-                style={{ width: ios.size - 2, height: ios.size, ...style }}
+                style={{
+                    width: ios.size,
+                    height: ios.size,
+                    ...styles.iosFallbackOffset,
+                    ...style,
+                }}
             />
         ) : (
-            <View>
-                <SweetSFSymbol
-                    name={ios.name as SystemName}
-                    size={ios.size}
-                    colors={[
-                        color as string,
-                        ...(ios.additionalColor != null
-                            ? [ios.additionalColor]
-                            : []),
-                    ]}
-                    weight={ios.weight ?? 'regular'}
-                    style={{
-                        ...style,
-                    }}
-                    variant={ios.variant as any}
-                    variableValue={ios.variableValue}
-                    renderingMode={ios.renderMode}
-                />
-            </View>
+            <SweetSFSymbol
+                name={ios.name as SystemName}
+                size={ios.size}
+                colors={[
+                    color as string,
+                    ...(ios.additionalColor != null
+                        ? [ios.additionalColor]
+                        : []),
+                ]}
+                weight={ios.weight ?? 'regular'}
+                style={{
+                    ...style,
+                }}
+                variant={ios.variant as any}
+                variableValue={ios.variableValue}
+                renderingMode={ios.renderMode}
+            />
         )
     } else {
         return (
@@ -117,7 +122,7 @@ export default PlatformIcon
 
 const communityIcons: string[] = ['instagram', 'github']
 
-type CommunityIcon = 'instagram' | 'github'
+export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 
 const styles = StyleSheet.create({
     androidIcon: {
@@ -131,5 +136,8 @@ const styles = StyleSheet.create({
     },
     communityIcon: {
         paddingTop: 50,
+    },
+    iosFallbackOffset: {
+        marginRight: -2,
     },
 })

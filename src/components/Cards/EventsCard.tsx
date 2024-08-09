@@ -3,7 +3,6 @@ import { type Colors } from '@/components/colors'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
@@ -11,7 +10,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
-    const router = useRouter()
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
 
@@ -23,12 +21,7 @@ const EventsCard = (): JSX.Element => {
     })
 
     return (
-        <BaseCard
-            title="events"
-            onPress={() => {
-                router.push('events')
-            }}
-        >
+        <BaseCard title="events" onPressRoute="clEvents">
             {Boolean(isSuccess) && data !== undefined && (
                 <View
                     style={{

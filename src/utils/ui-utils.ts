@@ -157,3 +157,18 @@ export const inverseColor = (color: ColorValue): string => {
     }
     return inverseColor
 }
+
+/**
+ * Generates a random HSL color, which is vibrant and visible.
+ * @returns A random HSL color.
+ */
+export function getRandomHSLColor(): string {
+    function rand(min: number, max: number): number {
+        return min + Math.random() * (max - min)
+    }
+
+    const h = rand(1, 360) // hue
+    const s = rand(60, 100) // saturation
+    const l = rand(30, 70) // lightness
+    return `hsl(${h},${s}%,${l}%)`
+}

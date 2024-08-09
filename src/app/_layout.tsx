@@ -1,61 +1,32 @@
+import CrashView from '@/components/Elements/Error/CrashView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import { storage } from '@/utils/storage'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from '@react-navigation/native'
-import * as Sentry from '@sentry/react-native'
 import { getLocales } from 'expo-localization'
-import { Stack, useNavigationContainerRef, useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
+import { Try } from 'expo-router/build/views/Try'
+import Head from 'expo-router/head'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    AppState,
-    LogBox,
-    Platform,
-    Pressable,
-    useColorScheme,
-} from 'react-native'
+import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 
-LogBox.ignoreLogs(['new NativeEventEmitter'])
-
-const sentryDsn = process.env.EXPO_PUBLIC_SENTRY_DSN
-const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
-
-Sentry.init({
-    dsn: sentryDsn,
-    enabled: !__DEV__,
-    integrations: [
-        new Sentry.ReactNativeTracing({
-            // Pass instrumentation to be used as `routingInstrumentation`
-            routingInstrumentation,
-        }),
-    ],
-    beforeSend(event) {
-        delete event.contexts?.app?.device_app_hash
-        return event
-    },
-})
-
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const unstable_settings = {
+    initialRouteName: '(index)',
+}
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { theme: appTheme } = useContext(ThemeContext)
-    const { t } = useTranslation('navigation')
-
-    const ref = useNavigationContainerRef()
-
-    React.useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (ref) {
-            routingInstrumentation.registerNavigationContainer(ref)
-        }
-    }, [ref])
+    const { t } = useTranslation(['navigation'])
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
-            const savedLanguage = await AsyncStorage.getItem('language')
+            const savedLanguage = storage.getString('language')
             if (
                 savedLanguage !== null &&
                 Platform.OS === 'android' &&
@@ -94,381 +65,420 @@ function RootLayout(): JSX.Element {
 
     const colors = useTheme().colors as Colors
     const isOsDark = useColorScheme() === 'dark'
+
     return (
         <>
-            <Sentry.TouchEventBoundary>
-                <Stack
-                    screenOptions={{
-                        statusBarStyle: getStatusBarStyle(
-                            appTheme,
-                            Platform.OS === 'android',
-                            isOsDark
-                        ),
-                        // Android
-                        statusBarTranslucent: true,
-                    }}
-                >
-                    <Stack.Screen
-                        name="(tabs)"
-                        options={{
-                            title: 'Home',
-                            headerShown: false,
-                            headerLargeTitle: true,
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/login"
-                        options={{
-                            title: 'THI Account',
-                            presentation: 'formSheet',
-                            gestureEnabled: false,
-                            headerBackButtonMenuEnabled: false,
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/settings"
-                        options={{
-                            title: t('navigation.settings'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/changelog"
-                        options={{
-                            title: 'Changelog',
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(food)/preferences"
-                        options={{
-                            title: t('navigation.preferences'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(food)/flags"
-                        options={{
-                            headerShown: false,
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(food)/allergens"
-                        options={{
-                            headerShown: false,
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(food)/meal"
-                        options={{
-                            title: t('navigation.details'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(timetable)/details"
-                        options={{
-                            title: t('navigation.details'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(timetable)/webView"
-                        options={{
-                            title: t('navigation.details'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/theme"
-                        options={{
-                            title: t('navigation.theme'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/appicon"
-                        // @ts-expect-error route params are not typed
-                        options={({
-                            route,
-                        }: {
-                            route: {
-                                params: { fromAppShortcut: string }
-                            }
-                        }) => ({
-                            title: 'App Icon',
-                            animation: 'slide_from_right',
-                            presentation:
-                                route.params?.fromAppShortcut === 'true'
-                                    ? 'modal'
-                                    : undefined,
-                        })}
-                    />
-                    <Stack.Screen
-                        name="(user)/profile"
-                        options={{
-                            title: t('navigation.profile'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/about"
-                        options={{
-                            title: t('navigation.about'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/licenses"
-                        options={{
-                            title: t('navigation.licenses'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/license"
-                        options={{
-                            title: t('navigation.license'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/dashboard"
-                        options={{
-                            title: 'Dashboard',
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(user)/grades"
-                        options={{
-                            title: t('navigation.grades'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(map)/advanced"
-                        options={{
-                            title: t('navigation.advancedSearch'),
-                            animation: 'slide_from_right',
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/events"
-                        options={{
-                            title: 'Campus Life Events',
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/event"
-                        options={{
-                            title: 'Event Details',
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/calendar"
-                        options={{
-                            title: t('navigation.calendar'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/exam"
-                        options={{
-                            title: t('navigation.examDetails'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/lecturers"
-                        options={{
-                            title: t('navigation.lecturers.title'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/lecturer"
-                        options={{
-                            title: t('navigation.lecturer'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/library"
-                        options={{
-                            title: t('navigation.library'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                            }),
+            <Head>
+                {/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
+                <title>Neuland Next</title>
+                <meta
+                    name="description"
+                    content="An unofficial campus app for TH Ingolstadt"
+                />
+                <meta
+                    property="og:description"
+                    content="An unofficial campus app for TH Ingolstadt"
+                />
+                <meta property="expo:handoff" content="true" />
+                <meta property="expo:spotlight" content="true" />
+            </Head>
 
-                            headerRight: () => (
-                                <Pressable
-                                    onPress={() => {
-                                        router.push('(pages)/libraryCode')
+            <Stack
+                screenOptions={{
+                    statusBarStyle: getStatusBarStyle(
+                        (appTheme as 'light' | 'dark' | 'auto' | undefined) ??
+                            'auto',
+                        Platform.OS === 'android',
+                        isOsDark
+                    ),
+                    // Android
+                    statusBarTranslucent: true,
+                }}
+            >
+                <Stack.Screen
+                    name="index"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="(tabs)"
+                    options={{
+                        title: 'Home',
+                        headerShown: false,
+                        animation: 'none',
+                        gestureEnabled: false,
+                    }}
+                />
+
+                <Stack.Screen
+                    name="(screens)/login"
+                    options={{
+                        title: 'Account',
+                        animation: 'none',
+                        gestureEnabled: false,
+                        headerShown: false,
+                        headerBackVisible: false,
+                        headerBackButtonMenuEnabled: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/settings"
+                    options={{
+                        title: t('navigation.settings'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/changelog"
+                    options={{
+                        title: 'Changelog',
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/foodPreferences"
+                    options={{
+                        title: t('navigation.preferences'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/foodFlags"
+                    options={{
+                        headerShown: false,
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/foodAllergens"
+                    options={{
+                        headerShown: false,
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/meal"
+                    options={{
+                        title: t('navigation.details'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/lecture"
+                    options={{
+                        title: t('navigation.details'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/webView"
+                    options={{
+                        title: t('navigation.details'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/theme"
+                    options={{
+                        title: t('navigation.theme'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/accent"
+                    options={{
+                        title: t('navigation.accent'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/appIcon"
+                    // @ts-expect-error route params are not typed
+                    options={({
+                        route,
+                    }: {
+                        route: {
+                            params: { fromAppShortcut: string }
+                        }
+                    }) => ({
+                        title: 'App Icon',
+                        animation: 'slide_from_right',
+                        presentation:
+                            route.params?.fromAppShortcut === 'true'
+                                ? 'modal'
+                                : undefined,
+                    })}
+                />
+                <Stack.Screen
+                    name="(screens)/profile"
+                    options={{
+                        title: t('navigation.profile'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/about"
+                    options={{
+                        title: t('navigation.about'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/licenses"
+                    options={{
+                        title: t('navigation.licenses.title'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/license"
+                    options={{
+                        title: t('navigation.license'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/dashboard"
+                    options={{
+                        title: 'Dashboard',
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/grades"
+                    options={{
+                        title: t('navigation.grades'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/roomSearch"
+                    options={{
+                        title: t('navigation.advancedSearch'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/clEvents"
+                    options={{
+                        title: 'Campus Life Events',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/clEvent"
+                    options={{
+                        title: 'Event Details',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/calendar"
+                    options={{
+                        title: t('navigation.calendar'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/exam"
+                    options={{
+                        title: t('navigation.examDetails'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/lecturers"
+                    options={{
+                        title: t('navigation.lecturers.title'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/lecturer"
+                    options={{
+                        title: t('navigation.lecturer'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/library"
+                    options={{
+                        title: t('navigation.library'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                        }),
+
+                        headerRight: () => (
+                            <Pressable
+                                onPress={() => {
+                                    router.push('(screens)/libraryCode')
+                                }}
+                                accessibilityLabel={t('button.libraryBarcode', {
+                                    ns: 'accessibility',
+                                })}
+                            >
+                                <PlatformIcon
+                                    color={colors.text}
+                                    ios={{
+                                        name: 'barcode',
+                                        size: 22,
                                     }}
-                                >
-                                    <PlatformIcon
-                                        color={colors.text}
-                                        ios={{
-                                            name: 'barcode',
-                                            size: 22,
-                                        }}
-                                        android={{
-                                            name: 'barcode_scanner',
-                                            size: 24,
-                                        }}
-                                    />
-                                </Pressable>
-                            ),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/libraryCode"
-                        options={{
-                            title: t('navigation.libraryCode'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    presentation: 'modal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(pages)/news"
-                        options={{
-                            title: t('navigation.news'),
-                            ...Platform.select({
-                                android: {
-                                    animation: 'slide_from_right',
-                                },
-                                ios: {
-                                    headerTransparent: true,
-                                    headerBlurEffect: 'regular',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(flow)/onboarding"
-                        options={{
-                            headerShown: false,
-                            animation: 'none',
-                            gestureEnabled: false,
-                            ...Platform.select({
-                                ios: {
-                                    presentation: 'fullScreenModal',
-                                },
-                            }),
-                        }}
-                    />
-                    <Stack.Screen
-                        name="(flow)/whatsnew"
-                        options={{
-                            headerShown: false,
-                            gestureEnabled: false,
-                            ...Platform.select({
-                                ios: {
-                                    presentation: 'formSheet',
-                                },
-                            }),
-                        }}
-                    />
-                </Stack>
-            </Sentry.TouchEventBoundary>
+                                    android={{
+                                        name: 'barcode_scanner',
+                                        size: 24,
+                                    }}
+                                />
+                            </Pressable>
+                        ),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/libraryCode"
+                    options={{
+                        title: t('navigation.libraryCode'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/news"
+                    options={{
+                        title: t('navigation.news'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                headerTransparent: true,
+                                headerBlurEffect: 'regular',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
+                    name="(flow)/onboarding"
+                    options={{
+                        headerShown: false,
+
+                        animation: 'none',
+                        gestureEnabled: false,
+                        ...Platform.select({
+                            ios: {
+                                presentation: 'fullScreenModal',
+                            },
+                        }),
+                    }}
+                />
+
+                <Stack.Screen
+                    name="(flow)/whatsnew"
+                    options={{
+                        headerShown: false,
+                        gestureEnabled: false,
+                        ...Platform.select({
+                            ios: {
+                                presentation: 'formSheet',
+                            },
+                        }),
+                    }}
+                />
+            </Stack>
         </>
     )
 }
 
 const ProviderComponent = (): JSX.Element => {
     return (
-        <Provider>
-            <RootLayout />
-        </Provider>
+        <Try catch={CrashView}>
+            <Provider>
+                <RootLayout />
+            </Provider>
+        </Try>
     )
 }
 
-export default Sentry.wrap(ProviderComponent)
+export default ProviderComponent

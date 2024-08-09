@@ -1,18 +1,15 @@
 import { useAppState, useOnlineManager } from '@/hooks'
-import { useTimetable } from '@/hooks/contexts/timetable'
 import i18n from '@/localization/i18n'
+import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
     DarkTheme,
     DefaultTheme,
     ThemeProvider,
 } from '@react-navigation/native'
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { usePathname } from 'expo-router'
-import 'expo-status-bar'
 import React, { useEffect } from 'react'
 import {
     type AppStateStatus,
@@ -23,27 +20,25 @@ import {
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RootSiblingParent } from 'react-native-root-siblings'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import {
-    useAppIcon,
     useDashboard,
     useFlow,
     useFoodFilter,
+    usePreferences,
     useRouteParams,
     useTheme,
     useUserKind,
-} from '../hooks/contexts'
-import { useNotifications } from '../hooks/contexts/notifications'
+} from '../contexts'
 import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
 import {
-    AppIconContext,
     DashboardContext,
     FlowContext,
     FoodFilterContext,
-    NotificationContext,
+    PreferencesContext,
     RouteParamsContext,
     ThemeContext,
-    TimetableContext,
     UserKindContext,
 } from './contexts'
 
@@ -66,10 +61,6 @@ export const queryClient = new QueryClient({
     },
 })
 
-const asyncStoragePersister = createAsyncStoragePersister({
-    storage: AsyncStorage,
-})
-
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
  * @param children - The child components to be wrapped by the Provider.
@@ -87,10 +78,8 @@ export default function Provider({
     const colorScheme = useColorScheme()
     const flow = useFlow()
     const routeParams = useRouteParams()
-    const appIcon = useAppIcon()
+    const preferences = usePreferences()
     const pathname = usePathname()
-    const timetableHook = useTimetable()
-    const notifications = useNotifications()
 
     useOnlineManager()
     useAppState(onAppStateChange)
@@ -101,7 +90,8 @@ export default function Provider({
      */
     const getPrimary = (scheme: 'light' | 'dark'): string => {
         try {
-            const primary = accentColors[themeHook.accentColor][scheme]
+            const primary =
+                accentColors[themeHook.accentColor ?? 'blue'][scheme]
             return primary
         } catch (e) {
             return accentColors.blue[scheme]
@@ -142,7 +132,7 @@ export default function Provider({
             return
         }
         trackEvent('AccentColor', {
-            color: themeHook.accentColor,
+            color: themeHook.accentColor ?? 'blue',
         })
     }, [themeHook.accentColor, flow.analyticsInitialized])
 
@@ -151,7 +141,7 @@ export default function Provider({
             return
         }
         trackEvent('Theme', {
-            theme: themeHook.theme,
+            theme: themeHook.theme ?? 'auto',
         })
     }, [themeHook.accentColor, flow.analyticsInitialized])
 
@@ -161,10 +151,10 @@ export default function Provider({
         }
         if (Platform.OS === 'ios') {
             trackEvent('AppIcon', {
-                appIcon: appIcon.appIcon,
+                appIcon: preferences.appIcon ?? 'default',
             })
         }
-    }, [appIcon.appIcon, flow.analyticsInitialized])
+    }, [preferences.appIcon, flow.analyticsInitialized])
 
     useEffect(() => {
         if (!flow.analyticsInitialized || userKind.userKind === undefined) {
@@ -243,9 +233,9 @@ export default function Provider({
             return
         }
         trackEvent('TimetableMode', {
-            timetableMode: timetableHook.timetableMode,
+            timetableMode: preferences.timetableMode ?? 'list',
         })
-    }, [flow.analyticsAllowed, flow.analyticsInitialized])
+    }, [preferences.timetableMode, flow.analyticsInitialized])
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
@@ -267,40 +257,36 @@ export default function Provider({
         <GestureHandlerRootView style={styles.container}>
             <PersistQueryClientProvider
                 client={queryClient}
-                persistOptions={{ persister: asyncStoragePersister }}
+                persistOptions={{ persister: syncStoragePersister }}
             >
                 <ThemeProvider
                     value={colorScheme === 'dark' ? darkTheme : lightTheme}
                 >
-                    <TimetableContext.Provider value={timetableHook}>
-                        <NotificationContext.Provider value={notifications}>
-                            <ThemeContext.Provider value={themeHook}>
-                                <AppIconContext.Provider value={appIcon}>
-                                    <FlowContext.Provider value={flow}>
-                                        <UserKindContext.Provider
-                                            value={userKind}
+                    <ThemeContext.Provider value={themeHook}>
+                        <PreferencesContext.Provider value={preferences}>
+                            <FlowContext.Provider value={flow}>
+                                <UserKindContext.Provider value={userKind}>
+                                    <FoodFilterContext.Provider
+                                        value={foodFilter}
+                                    >
+                                        <DashboardContext.Provider
+                                            value={dashboard}
                                         >
-                                            <FoodFilterContext.Provider
-                                                value={foodFilter}
+                                            <RouteParamsContext.Provider
+                                                value={routeParams}
                                             >
-                                                <DashboardContext.Provider
-                                                    value={dashboard}
-                                                >
-                                                    <RouteParamsContext.Provider
-                                                        value={routeParams}
-                                                    >
-                                                        <RootSiblingParent>
-                                                            {children}
-                                                        </RootSiblingParent>
-                                                    </RouteParamsContext.Provider>
-                                                </DashboardContext.Provider>
-                                            </FoodFilterContext.Provider>
-                                        </UserKindContext.Provider>
-                                    </FlowContext.Provider>
-                                </AppIconContext.Provider>
-                            </ThemeContext.Provider>
-                        </NotificationContext.Provider>
-                    </TimetableContext.Provider>
+                                                <RootSiblingParent>
+                                                    <SafeAreaProvider>
+                                                        {children}
+                                                    </SafeAreaProvider>
+                                                </RootSiblingParent>
+                                            </RouteParamsContext.Provider>
+                                        </DashboardContext.Provider>
+                                    </FoodFilterContext.Provider>
+                                </UserKindContext.Provider>
+                            </FlowContext.Provider>
+                        </PreferencesContext.Provider>
+                    </ThemeContext.Provider>
                 </ThemeProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>

@@ -24,7 +24,7 @@ const LecturerRow = ({
         updateRouteParams(item.room_short ?? '')
     }
     const onPressRow = (): void => {
-        router.push('(pages)/lecturer')
+        router.navigate('lecturer')
         router.setParams({ lecturerEntry: JSON.stringify(item) })
     }
     const { t } = useTranslation('api')
@@ -73,7 +73,10 @@ const LecturerRow = ({
                                         color: colors.labelColor,
                                     }}
                                 >
-                                    {'Room: '}
+                                    {t('pages.lecturer.contact.room', {
+                                        ns: 'common',
+                                    })}
+                                    {': '}
                                 </Text>
                                 <Text
                                     style={{

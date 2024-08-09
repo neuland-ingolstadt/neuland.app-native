@@ -1,4 +1,4 @@
-import { type MaterialCommunityIcons } from '@expo/vector-icons'
+import { type CommunityIcon } from '@/components/Elements/Universal/Icon'
 import { type ColorValue } from 'react-native'
 
 import { type MaterialIcon } from './material-icons'
@@ -8,8 +8,9 @@ export interface SectionGroup {
     value?: string
     icon?: {
         ios: string
-        android: MaterialIcon | typeof MaterialCommunityIcons.defaultProps.name
+        android: MaterialIcon | CommunityIcon
         iosFallback?: boolean
+        androidVariant?: 'outlined' | 'filled'
     }
     disabled?: boolean
     onPress?: () => Promise<void> | void
@@ -28,10 +29,11 @@ export interface SectionGroup {
         | '800'
         | '900'
         | undefined
+    selectable?: boolean
 }
 
 export interface FormListSections {
-    header: string
+    header?: string
     footer?: string
     items: SectionGroup[]
 }

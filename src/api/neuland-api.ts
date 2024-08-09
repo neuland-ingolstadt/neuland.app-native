@@ -3,7 +3,7 @@ import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -66,73 +66,67 @@ class NeulandAPIClient {
         return await this.performGraphQLQuery(gql`
             query {
                 food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
-                    timestamp
-                    meals {
-      variants {
-        name {
-          de
-          en
-        }
-        additional
-        prices {
-          student
-          employee
-          guest
-        }
-        id
-        allergens
-        flags
-        nutrition {
-          kj
-          kcal
-          fat
-          fatSaturated
-          carbs
-          sugar
-          fiber
-          protein
-          salt
-        }
-        originalLanguage
-        static
-        restaurant
-        parent {
-          id
-          category
-        }
-        
-      }
-      name {
-        de
-        en
-      }
-      id
-      category
-      prices {
-        student
-        employee
-        guest
-      }
-      allergens
-      flags
-      nutrition {
-        kj
-        kcal
-        fat
-        fatSaturated
-        carbs
-        sugar
-        fiber
-        protein
-        salt
-      }
-      originalLanguage
-      static
-      restaurant
-    }
+                    foodData {
+                        timestamp
+                        meals {
+                            name {
+                                de
+                                en
+                            }
+                            id
+                            category
+                            prices {
+                                student
+                                employee
+                                guest
+                            }
+                            allergens
+                            flags
+                            nutrition {
+                                kj
+                                kcal
+                                fat
+                                fatSaturated
+                                carbs
+                                sugar
+                                fiber
+                                protein
+                                salt
+                            }
+                            variants {
+                                name {
+                                    de
+                                    en
+                                }
+                                additional
+                                id
+                                allergens
+                                flags
+                                originalLanguage
+                                static
+                                restaurant
+                                parent {
+                                    id
+                                    category
+                                }
+                                prices {
+                                    student
+                                    employee
+                                    guest
+                                }
+                            }
+                            originalLanguage
+                            static
+                            restaurant
+                        }
+                        }
+                        errors {
+                            location
+                            message
+                        }
+                    }
                 }
-            }
-        `)
+            `)
     }
 
     /**

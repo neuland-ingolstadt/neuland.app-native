@@ -1,6 +1,7 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
@@ -8,7 +9,7 @@ import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect, useRouter } from 'expo-router'
+import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
@@ -16,9 +17,8 @@ import { StyleSheet, Text, View } from 'react-native'
 import BaseCard from './BaseCard'
 
 const TimetableCard = (): JSX.Element => {
-    const router = useRouter()
     const colors = useTheme().colors as Colors
-    const { userKind } = useContext(UserKindContext)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
         FriendlyTimetableEntry[]
@@ -34,7 +34,7 @@ const TimetableCard = (): JSX.Element => {
     }
 
     const { data: timetable } = useQuery({
-        queryKey: ['timetable', userKind],
+        queryKey: ['timetableV2', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours,
@@ -86,12 +86,7 @@ const TimetableCard = (): JSX.Element => {
 
     const currentTime = new Date()
     return (
-        <BaseCard
-            title="timetable"
-            onPress={() => {
-                router.push('timetable')
-            }}
-        >
+        <BaseCard title="timetable" onPressRoute="timetable">
             {loadingState === LoadingState.LOADED && (
                 <View
                     style={{

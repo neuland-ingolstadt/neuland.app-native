@@ -64,7 +64,7 @@ export const AllergensBanner = ({
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            router.push('(food)/allergens')
+                            router.push('foodAllergens')
                         }}
                     >
                         <Text
