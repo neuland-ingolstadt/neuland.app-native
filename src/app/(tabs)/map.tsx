@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-color-literals */
 import MapScreen from '@/components/Elements/Map/MapScreen'
-import { MapContext } from '@/hooks/contexts/map'
-import { type ClickedMapElement } from '@/types/map'
+import { MapContext } from '@/contexts/map'
+import { type ClickedMapElement, type SearchResult } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
+import { storage } from '@/utils/storage'
 import Maplibre from '@maplibre/maplibre-react-native'
-import type * as Location from 'expo-location'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Platform, StyleSheet, View } from 'react-native'
 
 export default function MapRootScreen(): JSX.Element {
+    const { t } = useTranslation(['navigation'])
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)
@@ -27,9 +29,33 @@ export default function MapRootScreen(): JSX.Element {
     const [nextLecture, setNextLecture] = useState<
         FriendlyTimetableEntry[] | null
     >(null)
-    const [location, setLocation] = useState<
-        Location.LocationObject | null | 'notGranted'
-    >(null)
+
+    const [searchHistory, setSearchHistory] = useState<SearchResult[]>([])
+    const updateSearchHistory = (newHistory: SearchResult[]): void => {
+        setSearchHistory(newHistory)
+
+        const jsonValue = JSON.stringify(newHistory)
+        storage.set('mapSearchHistory', jsonValue)
+    }
+
+    const loadSearchHistory = async (): Promise<void> => {
+        const jsonValue = storage.getString('mapSearchHistory')
+        if (jsonValue != null) {
+            try {
+                const parsedValue = JSON.parse(jsonValue) as SearchResult[]
+                setSearchHistory(parsedValue)
+            } catch (error) {
+                console.info('Failed to parse search history:', error)
+            }
+        } else {
+            setSearchHistory([])
+        }
+    }
+    // Load search history on component mount
+    useEffect(() => {
+        void loadSearchHistory()
+    }, [])
+
     const contextValue = {
         localSearch,
         setLocalSearch,
@@ -39,18 +65,22 @@ export default function MapRootScreen(): JSX.Element {
         setAvailableRooms,
         currentFloor,
         setCurrentFloor,
-        location,
-        setLocation,
         nextLecture,
         setNextLecture,
+        searchHistory,
+        setSearchHistory,
+        updateSearchHistory,
     }
 
-    void Maplibre.requestAndroidLocationPermissions()
+    if (Platform.OS === 'android') {
+        void Maplibre.requestAndroidLocationPermissions()
+    }
+
     return (
         <>
             <Head>
                 {/* eslint-disable-next-line react-native/no-raw-text */}
-                <title>Map</title>
+                <title>{t('navigation.map')}</title>
                 <meta name="Campus Map" content="Interactive Campus Map" />
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />

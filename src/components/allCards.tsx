@@ -1,9 +1,4 @@
-import {
-    USER_EMPLOYEE,
-    USER_GUEST,
-    USER_STUDENT,
-} from '@/hooks/contexts/userKind'
-import { useRouter } from 'expo-router'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import React from 'react'
 
 import {
@@ -11,12 +6,11 @@ import {
     CalendarCard,
     EventsCard,
     FoodCard,
+    LinkCard,
     LoginCard,
     TimetableCard,
 } from './Cards'
 import LibraryCard from './Cards/LibraryCard'
-
-const router = useRouter()
 
 export const AllCards: Card[] = [
     {
@@ -25,23 +19,25 @@ export const AllCards: Card[] = [
         default: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <TimetableCard />,
     },
-    {
-        key: 'food',
-        removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => <FoodCard />,
-    },
+
     {
         key: 'calendar',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <CalendarCard />,
     },
+
     {
         key: 'events',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <EventsCard />,
+    },
+    {
+        key: 'food',
+        removable: true,
+        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        card: () => <FoodCard />,
     },
     {
         key: 'library',
@@ -50,31 +46,24 @@ export const AllCards: Card[] = [
         card: () => <LibraryCard />,
     },
     {
-        key: 'lecturers',
+        key: 'links',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => (
-            <BaseCard
-                title="lecturers"
-                onPress={() => {
-                    router.push('lecturers')
-                }}
-            />
-        ),
+        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        card: () => <LinkCard />,
     },
     {
         key: 'news',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => (
-            <BaseCard
-                title="news"
-                onPress={() => {
-                    router.push('news')
-                }}
-            />
-        ),
+        card: () => <BaseCard title="news" onPressRoute="news" />,
     },
+    {
+        key: 'lecturers',
+        removable: true,
+        default: [USER_STUDENT, USER_EMPLOYEE],
+        card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />,
+    },
+
     {
         key: 'login',
         removable: false,

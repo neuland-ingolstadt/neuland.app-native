@@ -102,10 +102,10 @@ export async function calculateECTS(): Promise<number> {
  * @throws {Error} - if the grade average is not available
  */
 export async function loadGradeAverage(
-    courseSPOs: SpoWeights | null = null
+    courseSPOs: SpoWeights | null = null,
+    spoName: string | null = null
 ): Promise<GradeAverage> {
     const gradeList = await getGradeList()
-    const spoName = await API.getSpoName()
 
     if (spoName == null || courseSPOs?.[spoName] == null) {
         throw new Error('Failed to load data')

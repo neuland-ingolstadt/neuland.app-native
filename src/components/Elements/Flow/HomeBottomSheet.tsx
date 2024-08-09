@@ -33,7 +33,7 @@ export const HomeBottomSheet = ({
                         color: colors.text,
                     }}
                 >
-                    coming soon
+                    {'Report a problem'}
                 </Text>
             </View>
         </BottomSheetView>

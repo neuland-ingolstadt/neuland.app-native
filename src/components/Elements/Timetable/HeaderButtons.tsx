@@ -1,16 +1,18 @@
 import { type Colors } from '@/components/colors'
-import { TimetableContext } from '@/components/contexts'
+import { PreferencesContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
 export function HeaderLeft(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { timetableMode, setTimetableMode } = useContext(TimetableContext)
+    const { timetableMode, setTimetableMode } = useContext(PreferencesContext)
     const marginRight = Platform.OS === 'ios' ? 0 : 10
+    const { t } = useTranslation(['accessibility'])
 
     return (
         <Pressable
@@ -23,6 +25,7 @@ export function HeaderLeft(): JSX.Element {
             }}
             hitSlop={10}
             style={{ marginRight }}
+            accessibilityLabel={t('button.timetableMode')}
         >
             <PlatformIcon
                 color={colors.text}
@@ -51,8 +54,13 @@ interface HeaderRightProps {
 
 export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     const colors = useTheme().colors as Colors
+    const { t } = useTranslation(['accessibility'])
     return (
-        <Pressable onPress={setToday} hitSlop={10}>
+        <Pressable
+            onPress={setToday}
+            hitSlop={10}
+            accessibilityLabel={t('button.timetableBack')}
+        >
             <PlatformIcon
                 color={colors.text}
                 ios={{

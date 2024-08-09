@@ -1,0 +1,91 @@
+{
+    "expo": {
+        "name": "Neuland Next",
+        "slug": "neuland-app-native",
+        "scheme": "neuland",
+        "owner": "neuland-ingolstadt",
+        "version": "0.9.0",
+        "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
+        "orientation": "portrait",
+        "userInterfaceStyle": "automatic",
+        "ios": {
+            "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
+            "buildNumber": "71",
+            "supportsTablet": true,
+            "userInterfaceStyle": "automatic",
+            "associatedDomains": [
+                "webcredentials:neuland.app",
+                "activitycontinuation:neuland.app"
+            ],
+            "config": {
+                "usesNonExemptEncryption": false
+            },
+            "infoPlist": {
+                "RCTAsyncStorageExcludeFromBackup": false,
+                "CFBundleAllowMixedLocalizations": true,
+                "CFBundleLocalizations": ["en", "de"],
+                "CFBundleDevelopmentRegion": "en",
+                "UIViewControllerBasedStatusBarAppearance": true,
+                "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
+            },
+            "splash": {
+                "image": "./src/assets/splash/splashLight.png",
+                "resizeMode": "contain",
+                "backgroundColor": "#ffffff",
+                "dark": {
+                    "image": "./src/assets/splash/splashDark.png",
+                    "backgroundColor": "#000000"
+                }
+            },
+            "icon": "./src/assets/appIcons/default.png"
+        },
+        "locales": {
+            "en-US": "./src/localization/en/ios.json",
+            "de-DE": "./src/localization/de/ios.json"
+        },
+        "androidStatusBar": {
+            "translucent": true
+        },
+        "android": {
+            "package": "app.neuland",
+            "userInterfaceStyle": "automatic",
+            "versionCode": 138,
+            "splash": {
+                "image": "./src/assets/splash/splashLight.png",
+                "resizeMode": "contain",
+                "backgroundColor": "#ffffff",
+                "dark": {
+                    "backgroundColor": "#000000",
+                    "image": "./src/assets/splash/splashDark.png"
+                }
+            }
+        },
+        "sdkVersion": "51.0.0",
+        "experiments": {
+            "tsconfigPaths": true
+        },
+        "plugins": [
+            [
+                "expo-router",
+                {
+                    "headOrigin": "https://neuland.app"
+                }
+            ],
+            ["expo-secure-store"],
+            ["expo-localization"],
+            [
+                "expo-local-authentication",
+                {
+                    "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+                }
+            ],
+            ["@maplibre/maplibre-react-native"],
+            "expo-build-properties"
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "b0ef9e3f-3115-44b0-abc7-99dd75821353"
+            }
+        }
+    }
+}

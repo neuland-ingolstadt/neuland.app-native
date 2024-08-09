@@ -1,2 +1,3 @@
-- Zeigt Prüfungstermine im Kalender an
-- Performance und Design Verbesserungen
+- Neue Quick Links Karte
+- Performance Verbesserungen
+- Bugfixes

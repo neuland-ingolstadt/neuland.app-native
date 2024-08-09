@@ -1,8 +1,6 @@
 import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST: string =
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions, @typescript-eslint/prefer-nullish-coalescing
-    process.env.EXPO_PUBLIC_THI_API_ENDPOINT || 'hiplan.thi.de'
+const ENDPOINT_HOST: string = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -32,6 +30,7 @@ export class AnonymousAPIClient {
      * Submits an API request to the THI backend using a WebSocket proxy
      */
     async request(params: Record<string, string>): Promise<any> {
+        // @ts-expect-error cannot verify environment variable
         const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
         const headers = new Headers({
             Host: ENDPOINT_HOST,

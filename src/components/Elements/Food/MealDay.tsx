@@ -194,12 +194,12 @@ export const MealDay = ({
         }
         return null
     }
-
+    const { t } = useTranslation('food')
     return isEmpty ? (
         <>
             <View style={styles.emptyContainer}>
                 <Text style={{ ...styles.emptyText, color: colors.text }}>
-                    No meals found for this day.
+                    {t('dashboard.empty')}
                 </Text>
             </View>
         </>

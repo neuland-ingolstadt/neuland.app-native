@@ -2,7 +2,7 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
 import { FlowContext, UserKindContext } from '@/components/contexts'
-import { USER_STUDENT } from '@/hooks/contexts/userKind'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
@@ -24,7 +24,7 @@ const CalendarCard = (): JSX.Element => {
     const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
     const flow = useContext(FlowContext)
-    const { userKind } = React.useContext(UserKindContext)
+    const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     interface CardExams {
         name: string
         begin: Date
@@ -42,7 +42,7 @@ const CalendarCard = (): JSX.Element => {
         } catch (e) {
             if (e instanceof NoSessionError) {
                 if (flow.isOnboarded === true) {
-                    router.push('(user)/login')
+                    router.navigate('login')
                 }
             } else if ((e as Error).message === 'Query not possible') {
                 // ignore, leaving examList empty
@@ -60,7 +60,7 @@ const CalendarCard = (): JSX.Element => {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.push('(user)/login')
+                router.navigate('login')
                 return false
             }
             return failureCount < 3
@@ -79,12 +79,7 @@ const CalendarCard = (): JSX.Element => {
     }, [calendar, exams])
 
     return (
-        <BaseCard
-            title="calendar"
-            onPress={() => {
-                router.push('calendar')
-            }}
-        >
+        <BaseCard title="calendar" onPressRoute="calendar">
             <View
                 style={{
                     ...styles.calendarView,

@@ -2,7 +2,7 @@
 import { type Colors } from '@/components/colors'
 import i18n from '@/localization/i18n'
 import { type Announcement } from '@/types/neuland-api'
-import { CARD_PADDING } from '@/utils/style-utils'
+import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,12 +16,14 @@ interface PopUpCardProps {
 }
 
 const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
+    const { hiddenAnnouncements, hideAnnouncement } =
+        useContext(DashboardContext)
+    const colors = useTheme().colors as Colors
+    const { t } = useTranslation('navigation')
+
     if (data === undefined) {
         return <></>
     }
-
-    const { hiddenAnnouncements, hideAnnouncement } =
-        useContext(DashboardContext)
     const filter = (data: Announcement[]): Announcement[] => {
         const now = new Date()
         const activeAnnouncements = data.filter(
@@ -36,8 +38,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
         return activeAnnouncements
     }
     const filtered = filter(data)
-    const colors = useTheme().colors as Colors
-    const { t } = useTranslation('navigation')
+
     return filtered != null && filtered.length > 0 ? (
         <Pressable
             onPress={() => {
@@ -48,6 +49,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
             style={[
                 styles.card,
                 {
+                    marginHorizontal: PAGE_PADDING,
                     borderColor: colors.border,
                     backgroundColor: colors.card,
                 },

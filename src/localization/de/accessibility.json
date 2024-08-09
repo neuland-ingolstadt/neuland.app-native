@@ -1,0 +1,9 @@
+{
+    "button": {
+        "foodPreferences": "Essenspräferenzen",
+        "timetableMode": "Stundenplanansicht wechseln",
+        "timetableBack": "Zu heute springen",
+        "settingsLogo": "Neuland Logo",
+        "libraryBarcode": "Bibliotheksnummer als Barcode"
+    }
+}

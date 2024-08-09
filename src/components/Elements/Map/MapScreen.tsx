@@ -5,15 +5,14 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import { loadTimetable } from '@/app/(tabs)/(timetable)/timetable'
+import ErrorView from '@/components/Elements/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
 import FloorPicker from '@/components/Elements/Map/FloorPicker'
-import ErrorView from '@/components/Elements/Universal/ErrorView'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
-import { MapContext } from '@/hooks/contexts/map'
-import { USER_GUEST } from '@/hooks/contexts/userKind'
-import i18n from '@/localization/i18n'
+import { MapContext } from '@/contexts/map'
+import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { type FriendlyTimetableEntry } from '@/types/utils'
@@ -28,13 +27,16 @@ import {
     getCenter,
     getCenterSingle,
     getIcon,
-    getNextValidDate,
 } from '@/utils/map-utils'
 import { LoadingState, showToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import MapLibreGL from '@maplibre/maplibre-react-native'
+import MapLibreGL, {
+    type CameraRef,
+    type MapViewRef,
+    type UserLocationRef,
+} from '@maplibre/maplibre-react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from 'expo-router'
@@ -71,7 +73,6 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import Toast from 'react-native-root-toast'
-import { Path, Svg } from 'react-native-svg'
 
 import packageInfo from '../../../../package.json'
 import { modalSection } from './ModalSections'
@@ -86,7 +87,7 @@ const MapScreen = (): JSX.Element => {
     const { userKind, userFaculty } = useContext(UserKindContext)
     const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const bottomSheetRef = useRef<BottomSheet>(null)
     const bottomSheetModalRef = useRef<BottomSheetModal>(null)
     const currentPosition = useSharedValue(0)
@@ -103,25 +104,24 @@ const MapScreen = (): JSX.Element => {
     } = useContext(MapContext)
     const [disableFollowUser, setDisableFollowUser] = useState(false)
     const [showAllFloors, setShowAllFloors] = useState(false)
-    const mapRef = useRef<MapLibreGL.MapView>(null)
-    const cameraRef = useRef<MapLibreGL.Camera>(null)
-    const locationRef = useRef<MapLibreGL.UserLocation>(null)
+    const mapRef = useRef<MapViewRef>(null)
+    const cameraRef = useRef<CameraRef>(null)
+    const locationRef = useRef<UserLocationRef>(null)
     const currentDate = new Date()
 
     enum Locations {
         IN = 'Ingolstadt',
         ND = 'Neuburg',
     }
-    const lightStyle = 'https://maps.opheys.dev/styles/light/style.json'
-    const darkStyle = 'https://maps.opheys.dev/styles/dark/style.json'
+    const lightStyle = 'https://tile.neuland.app/styles/light/style.json'
+    const darkStyle = 'https://tile.neuland.app/styles/dark/style.json'
 
     type LocationsType = Record<string, string>
     const locations: LocationsType = Locations
     const [isVisible, setIsVisible] = useState(true)
     const [tabBarPressed, setTabBarPressed] = useState(false)
     const opacity = useSharedValue(1)
-
-    // needed for Android
+    // required for android
     void MapLibreGL.setAccessToken(null)
 
     const toggleShowAllFloors = (): void => {
@@ -176,7 +176,7 @@ const MapScreen = (): JSX.Element => {
     }, [overlayError])
 
     const { data: timetable } = useQuery({
-        queryKey: ['timetable', userKind],
+        queryKey: ['timetableV2', userKind],
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10, // 10 minutes
         gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
@@ -408,7 +408,7 @@ const MapScreen = (): JSX.Element => {
                 return
             }
             try {
-                const dateObj = getNextValidDate()
+                const dateObj = new Date()
                 const date = formatISODate(dateObj)
                 const time = formatISOTime(dateObj)
                 const rooms = await filterRooms(roomStatusData, date, time)
@@ -677,6 +677,22 @@ const MapScreen = (): JSX.Element => {
         }
     }, [regionChange, isVisible, opacity])
 
+    const showFiltered = useCallback(() => {
+        return (
+            filteredGeoJSON != null &&
+            filteredGeoJSON.features.length > 0 &&
+            !showAllFloors
+        )
+    }, [filteredGeoJSON, showAllFloors])
+
+    const showAvailableFiltered = useCallback(() => {
+        return (
+            availableFilteredGeoJSON != null &&
+            availableFilteredGeoJSON.features.length > 0 &&
+            !showAllFloors
+        )
+    }, [availableFilteredGeoJSON, showAllFloors])
+
     return (
         <View style={styles.container}>
             <>
@@ -687,11 +703,7 @@ const MapScreen = (): JSX.Element => {
                             backgroundColor: colors.background,
                         }}
                     >
-                        <ErrorView
-                            title={t('error.map.mapLoadError')}
-                            onRefresh={() => mapRef.current?.render()}
-                            refreshing={true}
-                        />
+                        <ErrorView title={t('error.map.mapLoadError')} />
                     </View>
                 )}
                 {mapLoadState === LoadingState.LOADING && (
@@ -709,147 +721,171 @@ const MapScreen = (): JSX.Element => {
                 )}
             </>
 
-            <View style={styles.innerContainer}>
-                <View style={styles.map}>
-                    <MapLibreGL.MapView
-                        style={styles.map}
-                        tintColor={
-                            Platform.OS === 'ios' ? colors.primary : undefined
+            <View style={styles.map}>
+                <MapLibreGL.MapView
+                    style={styles.map}
+                    tintColor={
+                        Platform.OS === 'ios' ? colors.primary : undefined
+                    }
+                    logoEnabled={false}
+                    styleURL={theme.dark ? darkStyle : lightStyle}
+                    attributionEnabled={false}
+                    onDidFailLoadingMap={() => {
+                        setMapLoadState(LoadingState.ERROR)
+                    }}
+                    onDidFinishLoadingMap={() => {
+                        setMapLoadState(LoadingState.LOADED)
+                    }}
+                    ref={mapRef}
+                    onDidFinishRenderingMapFully={() => {
+                        setRegionChange(false)
+                    }}
+                    onRegionIsChanging={() => {
+                        setRegionChange(true)
+                    }}
+                    compassViewMargins={
+                        Platform.OS === 'android'
+                            ? {
+                                  x: 5,
+                                  y: 70,
+                              }
+                            : undefined
+                    }
+                >
+                    {/* @ts-expect-error - The type definitions are incorrect */}
+                    <MapLibreGL.Images
+                        nativeAssetImages={['pin']}
+                        images={{
+                            // https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
+                            'map-marker': require('@/assets/map-marker.png'),
+                        }}
+                    />
+                    <MapLibreGL.Camera
+                        ref={cameraRef}
+                        zoomLevel={16.5}
+                        centerCoordinate={mapCenter}
+                        animationDuration={0}
+                        minZoomLevel={14}
+                        maxZoomLevel={19}
+                        followUserLocation={
+                            cameraTriggerKey !== 0 &&
+                            clickedElement == null &&
+                            !disableFollowUser
                         }
-                        logoEnabled={false}
-                        styleURL={theme.dark ? darkStyle : lightStyle}
-                        attributionEnabled={false}
-                        onDidFailLoadingMap={() => {
-                            setMapLoadState(LoadingState.ERROR)
-                        }}
-                        onDidFinishLoadingMap={() => {
-                            setMapLoadState(LoadingState.LOADED)
-                        }}
-                        ref={mapRef}
-                        onDidFinishRenderingMapFully={() => {
-                            setRegionChange(false)
-                        }}
-                        onRegionIsChanging={() => {
-                            setRegionChange(true)
-                        }}
-                        compassViewMargins={
-                            Platform.OS === 'android'
-                                ? {
-                                      x: 5,
-                                      y: 70,
-                                  }
-                                : undefined
-                        }
-                    >
-                        <MapLibreGL.Camera
-                            ref={cameraRef}
-                            zoomLevel={16.5}
-                            centerCoordinate={mapCenter}
-                            animationDuration={0}
-                            minZoomLevel={14}
-                            maxZoomLevel={19}
-                            followUserLocation={
-                                cameraTriggerKey !== 0 &&
-                                clickedElement == null &&
-                                !disableFollowUser
-                            }
-                            triggerKey={cameraTriggerKey}
-                            followUserMode={MapLibreGL.UserTrackingMode.Follow}
-                        />
-                        <MapLibreGL.UserLocation
-                            ref={locationRef}
-                            renderMode="native"
-                            animated={true}
-                            showsUserHeadingIndicator
-                        />
-
-                        {filteredGeoJSON != null && (
-                            <MapLibreGL.ShapeSource
-                                id="allRoomsSource"
-                                shape={filteredGeoJSON}
-                                onPress={(e) => {
-                                    setClickedElement({
-                                        data: e.features[0].properties?.Raum,
-                                        type: SEARCH_TYPES.ROOM,
-                                        center: e.features[0].properties
-                                            ?.center,
-                                        manual: true,
-                                    })
-                                    trackEvent('Room', {
-                                        room: e.features[0].properties?.Raum,
-                                        origin: 'MapClick',
-                                    })
-
-                                    handlePresentModalPress()
+                        triggerKey={cameraTriggerKey}
+                        followUserMode={MapLibreGL.UserTrackingMode.Follow}
+                    />
+                    <MapLibreGL.UserLocation
+                        ref={locationRef}
+                        renderMode="native"
+                        animated={true}
+                        showsUserHeadingIndicator
+                    />
+                    {clickedElement !== null && (
+                        <MapLibreGL.ShapeSource
+                            id="clickedElementSource"
+                            shape={{
+                                type: 'FeatureCollection',
+                                features: [
+                                    {
+                                        type: 'Feature',
+                                        geometry: {
+                                            type: 'Point',
+                                            coordinates:
+                                                clickedElement.center as number[],
+                                        },
+                                        properties: {},
+                                    },
+                                ],
+                            }}
+                        >
+                            <MapLibreGL.SymbolLayer
+                                id="clickedElementMarker"
+                                // eslint-disable-next-line react-native/no-inline-styles
+                                style={{
+                                    iconImage: 'map-marker',
+                                    iconColor: colors.primary,
+                                    iconSize: 0.17,
+                                    iconAnchor: 'bottom',
                                 }}
-                                hitbox={{ width: 0, height: 0 }}
-                            >
-                                <MapLibreGL.FillLayer
-                                    id="allRoomsFill"
-                                    style={layerStyles.allRooms}
-                                />
-                                <MapLibreGL.LineLayer
-                                    id="allRoomsOutline"
-                                    style={layerStyles.allRoomsOutline}
-                                />
-                            </MapLibreGL.ShapeSource>
-                        )}
-                        {availableFilteredGeoJSON != null && (
-                            <MapLibreGL.ShapeSource
-                                id="availableRoomsSource"
-                                shape={availableFilteredGeoJSON}
-                            >
-                                <MapLibreGL.FillLayer
-                                    id="availableRoomsFill"
-                                    style={{
-                                        ...layerStyles.availableRooms,
-                                        fillColor: colors.primary,
-                                    }}
-                                />
-                                <MapLibreGL.LineLayer
-                                    id="availableRoomsOutline"
-                                    style={{
-                                        ...layerStyles.availableRoomsOutline,
-                                        lineColor: colors.primary,
-                                    }}
-                                />
-                            </MapLibreGL.ShapeSource>
-                        )}
-                        {clickedElement != null && (
-                            <MapLibreGL.MarkerView
-                                id="selectedRoomMarker"
-                                coordinate={clickedElement.center as number[]}
-                                anchor={{ x: 0.5, y: 1 }}
-                            >
-                                <Svg
-                                    width={40}
-                                    height={50}
-                                    viewBox="170 0 624 944"
-                                    fill="none"
-                                >
-                                    <Path
-                                        d="M512 85.3c-164.9 0-298.6 133.7-298.6 298.6 0 164.9 298.6 554.6 298.6 554.6s298.6-389.7 298.6-554.6c0-164.9-133.7-298.6-298.6-298.6z m0 448a149.3 149.3 0 1 1 0-298.6 149.3 149.3 0 0 1 0 298.6z"
-                                        fill={colors.text}
-                                        strokeWidth="0"
-                                    />
-                                </Svg>
-                            </MapLibreGL.MarkerView>
-                        )}
-                    </MapLibreGL.MapView>
-                    <>
-                        {overlayError === null && (
-                            <FloorPicker
-                                floors={uniqueEtages}
-                                showAllFloors={showAllFloors}
-                                toggleShowAllFloors={toggleShowAllFloors}
-                                setCameraTriggerKey={setCameraTriggerKey}
+                                layerIndex={104} // Ensure this layer is above others
                             />
-                        )}
-                    </>
-                </View>
+                        </MapLibreGL.ShapeSource>
+                    )}
+                    {showFiltered() && (
+                        <MapLibreGL.ShapeSource
+                            id="allRoomsSource"
+                            shape={filteredGeoJSON}
+                            onPress={(e) => {
+                                setClickedElement({
+                                    data: e.features[0].properties?.Raum,
+                                    type: SEARCH_TYPES.ROOM,
+                                    center: e.features[0].properties?.center,
+                                    manual: true,
+                                })
+                                trackEvent('Room', {
+                                    room: e.features[0].properties?.Raum,
+                                    origin: 'MapClick',
+                                })
+                                handlePresentModalPress()
+                            }}
+                            hitbox={{ width: 0, height: 0 }}
+                        >
+                            <MapLibreGL.FillLayer
+                                id="allRoomsFill"
+                                style={layerStyles.allRooms}
+                                layerIndex={100}
+                            />
+                            <MapLibreGL.LineLayer
+                                id="allRoomsOutline"
+                                style={layerStyles.allRoomsOutline}
+                                layerIndex={101}
+                            />
+                        </MapLibreGL.ShapeSource>
+                    )}
+                    {showAvailableFiltered() && (
+                        <MapLibreGL.ShapeSource
+                            id="availableRoomsSource"
+                            shape={availableFilteredGeoJSON}
+                        >
+                            <MapLibreGL.FillLayer
+                                id="availableRoomsFill"
+                                style={{
+                                    ...layerStyles.availableRooms,
+                                    fillColor: colors.primary,
+                                }}
+                                layerIndex={102}
+                            />
+                            <MapLibreGL.LineLayer
+                                id="availableRoomsOutline"
+                                style={{
+                                    ...layerStyles.availableRoomsOutline,
+                                    lineColor: colors.primary,
+                                }}
+                                layerIndex={103}
+                            />
+                        </MapLibreGL.ShapeSource>
+                    )}
+                </MapLibreGL.MapView>
+                <>
+                    {overlayError === null && (
+                        <FloorPicker
+                            floors={uniqueEtages}
+                            showAllFloors={showAllFloors}
+                            toggleShowAllFloors={toggleShowAllFloors}
+                            setCameraTriggerKey={setCameraTriggerKey}
+                        />
+                    )}
+                </>
             </View>
 
-            <Animated.View style={[styles.osmContainer, animatedStyles]}>
+            <Animated.View
+                style={[
+                    styles.osmContainer,
+                    animatedStyles,
+                    { top: Platform.OS === 'ios' ? -19 : -24 },
+                ]}
+            >
                 <Pressable
                     onPress={() => {
                         void Linking.openURL(
@@ -876,7 +912,12 @@ const MapScreen = (): JSX.Element => {
                 handleSheetChangesModal={handleSheetChangesModal}
                 currentPositionModal={currentPositionModal}
                 roomData={roomData}
-                modalSection={modalSection(roomData, locations, t)}
+                modalSection={modalSection(
+                    roomData,
+                    locations,
+                    t,
+                    i18n.language
+                )}
             />
         </View>
     )
@@ -888,7 +929,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    innerContainer: { flex: 1 },
     map: {
         flex: 1,
     },
@@ -904,11 +944,10 @@ const styles = StyleSheet.create({
     osmContainer: {
         height: 30,
         right: 0,
-        top: -19,
+        top: -24,
         marginRight: 4,
         alignItems: 'flex-end',
         zIndex: 99,
         position: 'absolute',
-        gap: 2,
     },
 })

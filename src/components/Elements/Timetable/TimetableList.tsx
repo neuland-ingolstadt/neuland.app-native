@@ -1,6 +1,5 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { type Colors } from '@/components/colors'
-import { NotificationContext, RouteParamsContext } from '@/components/contexts'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -16,7 +15,7 @@ import { Buffer } from 'buffer'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
-import React, { useContext, useLayoutEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Pressable,
@@ -27,11 +26,10 @@ import {
     View,
 } from 'react-native'
 
+import ErrorView from '../Error/ErrorView'
 // @ts-expect-error no types
 import DragDropView from '../Exclusive/DragView'
 import Divider from '../Universal/Divider'
-import ErrorView from '../Universal/ErrorView'
-import PlatformIcon from '../Universal/Icon'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
@@ -56,8 +54,6 @@ export default function TimetableList({
     const theme = useTheme()
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
-    const { timetableNotifications } = useContext(NotificationContext)
-    const { updateLecture } = useContext(RouteParamsContext)
     const { t } = useTranslation('timetable')
 
     useLayoutEffect(() => {
@@ -105,9 +101,13 @@ export default function TimetableList({
      * Functions
      */
     function showEventDetails(entry: FriendlyTimetableEntry): void {
-        updateLecture(entry)
-        router.push({
-            pathname: '(timetable)/details',
+        const base64Event = Buffer.from(JSON.stringify(entry)).toString(
+            'base64'
+        )
+
+        router.navigate({
+            pathname: 'lecture',
+            params: { lecture: base64Event },
         })
     }
 
@@ -198,21 +198,6 @@ export default function TimetableList({
                                 >
                                     {item.rooms?.join(', ')}
                                 </Text>
-                                {timetableNotifications[item.shortName] !==
-                                    undefined && (
-                                    <PlatformIcon
-                                        color={colors.labelColor}
-                                        ios={{
-                                            name: 'bell',
-                                            size: 12,
-                                        }}
-                                        android={{
-                                            name: 'notifications_active',
-                                            variant: 'outlined',
-                                            size: 14,
-                                        }}
-                                    />
-                                )}
                             </View>
                         </View>
                         <View>
@@ -244,7 +229,7 @@ export default function TimetableList({
         const base64Event = Buffer.from(JSON.stringify(exam)).toString('base64')
         const navigateToPage = (): void => {
             router.push({
-                pathname: '(pages)/exam',
+                pathname: 'exam',
                 params: { examEntry: base64Event },
             })
         }
@@ -331,6 +316,7 @@ export default function TimetableList({
                         ios: 'fireworks',
                         android: 'celebration',
                     }}
+                    isCritical={false}
                 />
             ) : (
                 <SectionList

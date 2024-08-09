@@ -2,11 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>Allow $(PRODUCT_NAME) to access your location</key>
-    <array>
-      <string>en</string>
-      <string>de</string>
-    </array>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
     <key>CFBundleAllowMixedLocalizations</key>
@@ -48,15 +43,6 @@
           <key>UIPrerenderedIcon</key>
           <false/>
         </dict>
-        <key>Retro</key>
-        <dict>
-          <key>CFBundleIconFiles</key>
-          <array>
-            <string>Retro</string>
-          </array>
-          <key>UIPrerenderedIcon</key>
-          <false/>
-        </dict>
         <key>RainbowDark</key>
         <dict>
           <key>CFBundleIconFiles</key>
@@ -71,6 +57,15 @@
           <key>CFBundleIconFiles</key>
           <array>
             <string>RainbowMoonLight</string>
+          </array>
+          <key>UIPrerenderedIcon</key>
+          <false/>
+        </dict>
+        <key>Retro</key>
+        <dict>
+          <key>CFBundleIconFiles</key>
+          <array>
+            <string>Retro</string>
           </array>
           <key>UIPrerenderedIcon</key>
           <false/>
@@ -91,7 +86,7 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.8.2</string>
+    <string>0.9.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -111,7 +106,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>71</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSRequiresIPhoneOS</key>
@@ -125,18 +120,10 @@
     </dict>
     <key>NSFaceIDUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to use Face ID.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to use your location.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your location</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your location</string>
+    <string>Allow Neuland Next to access your location to show your location on the map.</string>
     <key>NSUserActivityTypes</key>
     <array>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
@@ -145,10 +132,6 @@
     </array>
     <key>RCTAsyncStorageExcludeFromBackup</key>
     <false/>
-    <key>UIBackgroundModes</key>
-    <array>
-      <string>fetch</string>
-    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import { type Colors } from '@/components/colors'
 import { FlowContext } from '@/components/contexts'
@@ -7,38 +8,78 @@ import { type Changelog } from '@/types/data'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import * as Application from 'expo-application'
+import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
 import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, Pressable, StyleSheet, Text, View } from 'react-native'
-
-import packageInfo from '../../../package.json'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withDelay,
+    withSequence,
+    withTiming,
+} from 'react-native-reanimated'
 
 export default function WhatsNewScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData
     const { t, i18n } = useTranslation('flow')
-    const [opacityValues] = useState(
-        Object.keys(
-            changelog.version[convertToMajorMinorPatch(packageInfo.version)] ??
-                []
-        )
-            .flatMap((key) => changelog.version[key])
-            .map(() => new Animated.Value(0))
+    const version = convertToMajorMinorPatch(
+        Application.nativeApplicationVersion ?? '0.0.0'
     )
-    useEffect(() => {
-        const delay = 100
+    const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
+        (key) => changelog.version[key]
+    ).length
 
+    const opacityValues = changelog.version[version].map(() =>
+        useSharedValue(0)
+    )
+    const rotationValues = Array.from({ length: totalItems }, () =>
+        useSharedValue(0)
+    )
+
+    const handlePress = (index: number): void => {
+        if (Platform.OS === 'ios') {
+            void impactAsync(ImpactFeedbackStyle.Light)
+        }
+        const direction = Math.random() > 0.5 ? 1 : -1
+        const rotation = rotationValues[index]
+        rotation.value = withSequence(
+            withTiming(direction * -1.5, {
+                duration: 100,
+                easing: Easing.linear,
+            }),
+            withTiming(direction * 1, {
+                duration: 100,
+                easing: Easing.linear,
+            }),
+            withTiming(direction * -0.5, {
+                duration: 100,
+                easing: Easing.linear,
+            }),
+            withTiming(0, {
+                duration: 100,
+                easing: Easing.linear,
+            })
+        )
+    }
+
+    useEffect(() => {
+        const delay = 200
         setTimeout(() => {
-            const animations = opacityValues.map((opacity, index) =>
-                Animated.timing(opacity, {
-                    toValue: 1,
-                    duration: 800,
-                    useNativeDriver: true,
-                })
-            )
-            Animated.stagger(425, animations).start()
+            opacityValues.forEach((opacity, index) => {
+                opacity.value = withDelay(
+                    index * 440,
+                    withTiming(1, {
+                        duration: 800,
+                        easing: Easing.linear,
+                    })
+                )
+            })
         }, delay)
     }, [])
 
@@ -64,51 +105,79 @@ export default function WhatsNewScreen(): JSX.Element {
                     ]}
                 >
                     {t('whatsnew.version', {
-                        version: convertToMajorMinorPatch(packageInfo.version),
+                        version,
                     })}
                 </Text>
             </View>
 
             <View style={[styles.boxesContainer, styles.boxes]}>
                 {Object.keys(changelog.version)
-                    .filter(
-                        (key) =>
-                            key ===
-                            convertToMajorMinorPatch(packageInfo.version)
-                    )
+                    .filter((key) => key === version)
                     .map((key, boxIndex) => (
                         <View key={key} style={styles.boxes}>
                             {changelog.version[key].map(
-                                ({ title, description, icon }, index) => (
-                                    <Animated.View
-                                        key={
-                                            title[i18n.language as LanguageKey]
+                                ({ title, description, icon }, index) => {
+                                    const overallIndex =
+                                        boxIndex *
+                                            changelog.version[key].length +
+                                        index
+
+                                    const opacityStyle = useAnimatedStyle(
+                                        () => {
+                                            return {
+                                                opacity:
+                                                    opacityValues[overallIndex]
+                                                        .value,
+                                            }
                                         }
-                                        style={{
-                                            opacity:
-                                                opacityValues[
-                                                    boxIndex *
-                                                        changelog.version[key]
-                                                            .length +
-                                                        index
+                                    )
+
+                                    const rotationStyle = useAnimatedStyle(
+                                        () => {
+                                            return {
+                                                transform: [
+                                                    {
+                                                        rotateZ: `${rotationValues[overallIndex].value}deg`,
+                                                    },
                                                 ],
-                                        }}
-                                    >
-                                        <WhatsNewBox
-                                            title={
+                                            }
+                                        }
+                                    )
+
+                                    return (
+                                        <Animated.View
+                                            key={
                                                 title[
                                                     i18n.language as LanguageKey
                                                 ]
                                             }
-                                            description={
-                                                description[
-                                                    i18n.language as LanguageKey
-                                                ]
-                                            }
-                                            icon={icon}
-                                        />
-                                    </Animated.View>
-                                )
+                                            style={[
+                                                opacityStyle,
+                                                rotationStyle,
+                                            ]}
+                                        >
+                                            <Pressable
+                                                onPress={() => {
+                                                    handlePress(overallIndex)
+                                                }}
+                                            >
+                                                <WhatsNewBox
+                                                    title={
+                                                        title[
+                                                            i18n.language as LanguageKey
+                                                        ]
+                                                    }
+                                                    description={
+                                                        description[
+                                                            i18n.language as LanguageKey
+                                                        ]
+                                                    }
+                                                    icon={icon}
+                                                />
+                                            </Pressable>
+                                        </Animated.View>
+                                    )
+                                }
                             )}
                         </View>
                     ))}
@@ -122,8 +191,8 @@ export default function WhatsNewScreen(): JSX.Element {
                         styles.button,
                     ]}
                     onPress={() => {
-                        flow.toggleUpdated()
-                        router.navigate('/')
+                        flow.setUpdated(true)
+                        router.navigate('(tabs)/(index)')
                     }}
                 >
                     <Text

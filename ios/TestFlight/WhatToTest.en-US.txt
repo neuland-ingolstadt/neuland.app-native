@@ -1,2 +1,1 @@
-- Displays exam dates in the calendar
-- Performance and design improvements
+- New quick links 

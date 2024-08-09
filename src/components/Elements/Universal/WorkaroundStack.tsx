@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { type HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export interface WorkaroundStackProps {
     name: string
@@ -14,6 +14,7 @@ export interface WorkaroundStackProps {
     headerSearchBarOptions?: any
     headerRightElement?: ((props: HeaderButtonProps) => ReactNode) | undefined
     params?: any
+    androidFallback?: boolean
 }
 
 /*
@@ -38,36 +39,55 @@ function WorkaroundStack({
     headerRightElement = undefined,
     headerSearchBarOptions = undefined,
     params = {},
+    androidFallback = false,
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
+    const StackAndroid = createStackNavigator()
 
-    return (
-        <SafeAreaProvider>
-            <Stack.Navigator>
-                <Stack.Screen
+    // When using the native stack on Android, the header button is invisible. This is another workaround in the workaround.
+    if (Platform.OS === 'android' && androidFallback) {
+        return (
+            <StackAndroid.Navigator>
+                <StackAndroid.Screen
                     name={name}
+                    component={component}
                     options={{
                         title: t(
                             // @ts-expect-error Type not checked
                             titleKey
                         ),
-                        headerShown: true,
-                        headerLargeTitle: largeTitle,
-                        headerRight: headerRightElement,
-                        ...(Platform.OS === 'ios' && transparent
-                            ? {
-                                  headerTransparent: true,
-                                  headerBlurEffect: 'regular',
-                              }
-                            : {}),
-                        headerSearchBarOptions,
                     }}
-                    component={component}
                     initialParams={params}
                 />
-            </Stack.Navigator>
-        </SafeAreaProvider>
+            </StackAndroid.Navigator>
+        )
+    }
+    return (
+        <Stack.Navigator>
+            <Stack.Screen
+                name={name}
+                options={{
+                    title: t(
+                        // @ts-expect-error Type not checked
+                        titleKey
+                    ),
+                    headerShown: true,
+                    headerLargeTitle: Platform.OS === 'ios' && largeTitle,
+                    headerRight: headerRightElement,
+
+                    ...(Platform.OS === 'ios' && transparent
+                        ? {
+                              headerTransparent: true,
+                              headerBlurEffect: 'prominent',
+                          }
+                        : {}),
+                    headerSearchBarOptions,
+                }}
+                component={component}
+                initialParams={params}
+            />
+        </Stack.Navigator>
     )
 }
 

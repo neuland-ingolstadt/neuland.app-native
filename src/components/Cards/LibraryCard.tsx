@@ -41,19 +41,14 @@ const LibraryCard = (): JSX.Element => {
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
             if (e instanceof NoSessionError && flow.isOnboarded === true) {
-                router.push('(user)/login')
+                router.navigate('login')
             } else {
                 // ignore
             }
         }
     }
     return (
-        <BaseCard
-            title="library"
-            onPress={() => {
-                router.push('library')
-            }}
-        >
+        <BaseCard title="library" onPressRoute="library">
             {loadingState === LoadingState.LOADED && (
                 <View
                     style={{

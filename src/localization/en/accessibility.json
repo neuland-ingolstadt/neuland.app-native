@@ -1,0 +1,9 @@
+{
+    "button": {
+        "foodPreferences": "Food Preferences",
+        "timetableMode": "Switch Timetable View",
+        "timetableBack": "Jump to today",
+        "settingsLogo": "Neuland Logo",
+        "libraryBarcode": "Library Number as Barcode"
+    }
+}

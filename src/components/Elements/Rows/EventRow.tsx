@@ -32,7 +32,7 @@ const CLEventRow = ({
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
             'base64'
         )
-        router.push('(pages)/event')
+        router.navigate('clEvent')
         router.setParams({ clEventEntry: base64Event })
     }
     return (

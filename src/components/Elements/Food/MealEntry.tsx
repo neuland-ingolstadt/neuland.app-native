@@ -1,7 +1,8 @@
-import { humanLocations } from '@/app/(food)/meal'
+import { humanLocations } from '@/app/(screens)/meal'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
-import { type UserKindContextType } from '@/hooks/contexts/userKind'
+import { type UserKindContextType } from '@/contexts/userKind'
+import { USER_GUEST } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Meal } from '@/types/neuland-api'
 import {
@@ -57,7 +58,8 @@ export const MealEntry = ({
         i18n.language
     )
     const colors = useTheme().colors as Colors
-    const { userKind } = useContext<UserKindContextType>(UserKindContext)
+    const { userKind = USER_GUEST } =
+        useContext<UserKindContextType>(UserKindContext)
     const userFlags = convertRelevantFlags(
         meal.flags ?? [],
         preferencesSelection,
@@ -142,7 +144,7 @@ export const MealEntry = ({
                         JSON.stringify(meal)
                     ).toString('base64')
                     router.push({
-                        pathname: '(food)/meal',
+                        pathname: 'meal',
                         params: {
                             foodEntry: base64Event,
                         },
@@ -175,7 +177,7 @@ export const MealEntry = ({
                             JSON.stringify(meal)
                         ).toString('base64')
                         router.push({
-                            pathname: '(food)/meal',
+                            pathname: 'meal',
                             params: {
                                 foodEntry: base64Event,
                             },
