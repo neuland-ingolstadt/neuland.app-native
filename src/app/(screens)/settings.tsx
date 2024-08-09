@@ -226,7 +226,7 @@ export default function Settings(): JSX.Element {
                         ios: 'fork.knife',
                     },
                     onPress: () => {
-                        router.navigate('preferences')
+                        router.navigate('foodPreferences')
                     },
                 },
                 {

@@ -1,1 +1,3 @@
-- New quick links 
+- New quick links card on the dashboard
+- Performance improvements
+- Bug fixes

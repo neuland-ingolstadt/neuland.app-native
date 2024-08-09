@@ -73,7 +73,7 @@ export default function WhatsNewScreen(): JSX.Element {
         setTimeout(() => {
             opacityValues.forEach((opacity, index) => {
                 opacity.value = withDelay(
-                    index * 440,
+                    index * 400,
                     withTiming(1, {
                         duration: 800,
                         easing: Easing.linear,
@@ -84,7 +84,7 @@ export default function WhatsNewScreen(): JSX.Element {
     }, [])
 
     return (
-        <View style={styles.page}>
+        <View style={{ ...styles.page, backgroundColor: colors.contrast }}>
             <View style={styles.titleBox}>
                 <Text
                     style={[
@@ -242,14 +242,14 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 7,
-        paddingVertical: 12,
+        paddingVertical: 15,
         paddingHorizontal: 20,
         width: '50%',
         alignSelf: 'center',
     },
     buttonText: {
         textAlign: 'center',
-        fontWeight: '500',
+        fontWeight: '600',
         fontSize: 15,
     },
 })

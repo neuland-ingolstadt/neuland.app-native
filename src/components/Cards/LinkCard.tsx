@@ -14,12 +14,17 @@ import BaseCard from './BaseCard'
 const LinkCard = (): JSX.Element => {
     const { t } = useTranslation('common')
     const colors = useTheme().colors as Colors
-    const { recentQuicklinks } = useContext(PreferencesContext)
+    const { recentQuicklinks, addRecentQuicklink } =
+        useContext(PreferencesContext)
 
     const userQuicklinks = recentQuicklinks
         .map((title) => quicklinks.find((quicklink) => quicklink.key === title))
         .filter((quicklink) => quicklink !== undefined)
-
+    const linkPress = async (key: string, url: string): Promise<void> => {
+        addRecentQuicklink(key)
+        trackEvent('Quicklink', { link: key })
+        await Linking.openURL(url)
+    }
     return (
         <BaseCard title="links" onPressRoute="links">
             <View style={styles.cardsFilled}>
@@ -28,8 +33,7 @@ const LinkCard = (): JSX.Element => {
                         <Pressable
                             key={index}
                             onPress={() => {
-                                trackEvent('Quicklink', { link: link.key })
-                                void Linking.openURL(link.url)
+                                void linkPress(link.key, link.url)
                             }}
                             style={{
                                 backgroundColor: colors.cardButton,

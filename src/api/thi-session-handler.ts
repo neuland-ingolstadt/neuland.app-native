@@ -149,7 +149,6 @@ export async function callWithSession<T>(
                 } catch (e) {
                     throw new NoSessionError()
                 }
-
                 return await method(session)
             } else {
                 throw new NoSessionError()
@@ -211,20 +210,18 @@ export async function forgetSession(): Promise<void> {
     const session = load('session')
     if (session === null) {
         console.log('No session to forget')
-        return
+    } else {
+        try {
+            await API.logout(session)
+        } catch (e) {
+            console.error(e)
+        }
     }
 
-    try {
-        await API.logout(session)
-    } catch (e) {
-        console.error(e)
-    }
     await Promise.all([
         SecureStore.deleteItemAsync('session'),
         SecureStore.deleteItemAsync('username'),
         SecureStore.deleteItemAsync('password'),
-        SecureStore.deleteItemAsync('userFullName'),
-        SecureStore.deleteItemAsync('userType'),
     ])
 
     // clear all AsyncStorage data except analytics

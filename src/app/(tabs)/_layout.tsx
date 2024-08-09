@@ -72,7 +72,6 @@ export default function HomeLayout(): JSX.Element {
         const prepare = async (): Promise<void> => {
             const tabsPaths = ['/', '/timetable', '/map', '/food', '/links']
             const isTab = tabsPaths.includes(pathname)
-
             if (isOnboarded !== true) {
                 await NavigationBar.setBackgroundColorAsync(colors.contrast)
                 return

@@ -10,7 +10,6 @@ const LoginCard = (): JSX.Element => {
     const colors = useTheme().colors as Colors
 
     const { t } = useTranslation('navigation')
-    console.log('rendering LoginCard')
     return (
         <BaseCard title="login" removable={false} onPressRoute="login">
             <View
