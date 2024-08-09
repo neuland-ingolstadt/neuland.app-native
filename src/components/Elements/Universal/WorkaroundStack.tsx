@@ -57,6 +57,7 @@ function WorkaroundStack({
                             // @ts-expect-error Type not checked
                             titleKey
                         ),
+                        headerRight: headerRightElement as any,
                     }}
                     initialParams={params}
                 />

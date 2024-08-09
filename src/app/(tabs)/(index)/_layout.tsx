@@ -36,8 +36,6 @@ export default function Layout(): JSX.Element {
                     backgroundColor: colors.labelSecondaryColor,
                 },
                 backdropComponent: renderBackdrop,
-                stackBehavior: 'replace',
-                enableDynamicSizing: true,
             }}
         />
     )

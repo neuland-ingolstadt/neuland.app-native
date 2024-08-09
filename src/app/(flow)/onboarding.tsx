@@ -3,8 +3,8 @@ import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import LogoSVG from '@/components/Elements/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
 import { type Colors } from '@/components/colors'
-import { FlowContext, UserKindContext } from '@/components/contexts'
-import { PRIVACY_URL, USER_GUEST } from '@/data/constants'
+import { FlowContext } from '@/components/contexts'
+import { PRIVACY_URL } from '@/data/constants'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -34,7 +34,6 @@ import Shimmer from 'react-native-shimmer'
 
 export default function OnboardingScreen(): JSX.Element {
     const flow = React.useContext(FlowContext)
-    const userkind = React.useContext(UserKindContext)
     const { t } = useTranslation('flow')
 
     const data = [
@@ -82,13 +81,8 @@ export default function OnboardingScreen(): JSX.Element {
                         flow.setOnboarded(true)
                         flow.setUpdated(true)
                         flow.setAnalyticsAllowed(true)
-
-                        if (userkind.userKind === USER_GUEST) {
-                            router.navigate('login')
-                            router.setParams({ fromOnboarding: 'true' })
-                        } else {
-                            router.replace('(tabs)/(index)')
-                        }
+                        router.navigate('login')
+                        router.setParams({ fromOnboarding: 'true' })
                     }}
                     disabled={buttonDisabled}
                 >

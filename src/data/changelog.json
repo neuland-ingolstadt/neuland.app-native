@@ -58,7 +58,7 @@
                 },
                 "icon": {
                     "ios": "link",
-                    "android": "link"
+                    "android": "captive_portal"
                 }
             },
             {
@@ -72,7 +72,7 @@
                 },
                 "icon": {
                     "ios": "bolt",
-                    "android": "bug_report"
+                    "android": "bolt"
                 }
             },
             {

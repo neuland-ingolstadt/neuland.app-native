@@ -101,7 +101,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     const {
         localSearch,
         setLocalSearch,
-        clickedElement,
         setClickedElement,
         availableRooms,
         nextLecture,
@@ -264,19 +263,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     setSearchFocused(false)
                                     animate(0)
                                 }}
-                                onEndEditing={() => {
-                                    if (clickedElement === null) {
-                                        console.log(
-                                            'clickedElement is null - snapping to 1'
-                                        )
-                                        bottomSheetRef.current?.snapToIndex(1)
-                                    } else {
-                                        console.log(
-                                            'clickedElement is not null - snapping to 0'
-                                        )
-                                        bottomSheetRef.current?.close()
-                                    }
-                                }}
                             />
                         ) : (
                             <BottomSheetTextInput
@@ -304,19 +290,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 onBlur={() => {
                                     setSearchFocused(false)
                                     animate(0)
-                                }}
-                                onEndEditing={() => {
-                                    if (clickedElement === null) {
-                                        console.log(
-                                            'clickedElement is null - snapping to 1'
-                                        )
-                                        bottomSheetRef.current?.snapToIndex(1)
-                                    } else {
-                                        console.log(
-                                            'clickedElement is not null - snapping to 0'
-                                        )
-                                        bottomSheetRef.current?.close()
-                                    }
                                 }}
                             />
                         )}

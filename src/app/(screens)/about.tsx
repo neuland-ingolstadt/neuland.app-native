@@ -65,7 +65,7 @@ export default function About(): JSX.Element {
                     title: 'System Status',
                     icon: {
                         ios: 'bubble.left.and.exclamationmark.bubble.right',
-                        android: 'sync_problem',
+                        android: 'troubleshoot',
                     },
                     onPress: () => {
                         void Linking.openURL(STATUS_URL)

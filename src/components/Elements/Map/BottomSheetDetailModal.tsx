@@ -101,12 +101,11 @@ export const BottomSheetDetailModal = ({
                                         }}
                                         android={{
                                             name: 'share',
-                                            size: 17,
+                                            size: 16,
                                         }}
                                         style={Platform.select({
                                             android: {
-                                                height: 24,
-                                                width: 24,
+                                                marginRight: 2,
                                             },
                                             ios: {
                                                 marginBottom: 3,
@@ -141,8 +140,7 @@ export const BottomSheetDetailModal = ({
                                         }}
                                         style={Platform.select({
                                             android: {
-                                                height: 24,
-                                                width: 24,
+                                                marginRight: 2,
                                             },
                                             ios: {
                                                 marginTop: 1,

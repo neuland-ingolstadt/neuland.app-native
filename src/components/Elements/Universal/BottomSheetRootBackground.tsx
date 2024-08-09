@@ -5,7 +5,7 @@ import { Platform, StyleSheet, View } from 'react-native'
 
 const BottomSheetRootBackground = (): JSX.Element => {
     const { colors, dark } = useTheme()
-    const darkIos = 'rgba(0, 0, 0, 0.45)'
+    const darkIos = 'rgba(0, 0, 0, 0.3)'
     const lightIos = 'rgba(255, 255, 255, 0.5)'
     return Platform.OS === 'ios' ? (
         <View
@@ -17,7 +17,7 @@ const BottomSheetRootBackground = (): JSX.Element => {
             ]}
         >
             <BlurView
-                intensity={dark ? 70 : 50}
+                intensity={dark ? 80 : 50}
                 style={StyleSheet.absoluteFillObject}
                 tint={dark ? 'dark' : 'light'}
             />

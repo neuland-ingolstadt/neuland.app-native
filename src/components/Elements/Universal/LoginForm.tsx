@@ -41,8 +41,8 @@ const LoginForm = ({
     const [password, setPassword] = useState('')
     const colors = useTheme().colors as Colors
     const isDark = useTheme().dark
-    const { userKind = USER_GUEST, toggleUserKind } =
-        React.useContext(UserKindContext)
+    // No guest fallback is provided, so the guest session will be created correctly
+    const { userKind, toggleUserKind } = React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
     const { t } = useTranslation('flow')
     const { resetOrder } = useContext(DashboardContext)
@@ -120,6 +120,8 @@ const LoginForm = ({
 
     async function guestLogin(): Promise<void> {
         setLoading(true)
+        setUsername('')
+        setPassword('')
 
         try {
             await createGuestSession(userKind !== USER_GUEST)
@@ -129,6 +131,7 @@ const LoginForm = ({
 
         toggleUserKind(undefined)
         navigateHome()
+        setLoading(false)
     }
 
     async function load(key: string): Promise<string | null> {
