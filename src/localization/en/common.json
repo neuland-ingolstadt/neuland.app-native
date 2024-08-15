@@ -1,7 +1,10 @@
 {
     "toast": {
         "clipboard": "copied to clipboard",
-        "paused": "No internet connection",
+        "paused": {
+            "title": "No internet connection",
+            "description": "Data may be outdated"
+        },
         "roomNotFound": "Room not found",
         "mapOverlay": "Error while loading overlay",
         "dashboard": "Drag & drop to reorder"
@@ -63,9 +66,10 @@
         "moodle": "Moodle",
         "webmail": "E-Mail",
         "studVer": "StudVer",
-        "marketplace": "Market-place",
+        "marketplace": "Marketplace",
         "myTHI": "MyTHI",
-        "library": "Library"
+        "library": "Library",
+        "thi": "THI"
     },
     "pages": {
         "quicklinks": {
@@ -76,10 +80,12 @@
                 "moodle": "Moodle",
                 "webmail": "E-Mail",
                 "studVer": "Student Representation",
-                "marketplace": "THI Marketplace",
+                "marketplace": "Marketplace",
                 "myTHI": "MyTHI",
-                "library": "Library Catalog"
-            }
+                "library": "Library Catalog",
+                "thi": "THI Website"
+            },
+            "more": "more links"
         },
         "calendar": {
             "exams": {

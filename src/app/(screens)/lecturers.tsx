@@ -18,7 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { showToast } from '@/utils/ui-utils'
+import { pausedToast } from '@/utils/ui-utils'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -215,7 +215,7 @@ export default function LecturersCard(): JSX.Element {
             (personalLecturersResult.isPaused &&
                 personalLecturersResult.data != null)
         ) {
-            void showToast(t('toast.paused'))
+            pausedToast()
         }
     }, [
         allLecturersResult.data,

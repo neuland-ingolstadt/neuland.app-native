@@ -131,10 +131,9 @@ export default function TimetableDetails(): JSX.Element {
             ],
         },
     ]
-
     return (
         <>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.page}>
                     <DetailsRow>
                         <DetailsSymbol>
@@ -306,36 +305,40 @@ export default function TimetableDetails(): JSX.Element {
                                     </View>
                                 </DetailsBody>
                             </DetailsRow>
-                            <Separator />
                         </>
                     ) : null}
 
-                    <DetailsRow>
-                        <DetailsSymbol>
-                            <PlatformIcon
-                                color={colors.labelColor}
-                                ios={{
-                                    name: 'person',
-                                    size: 21,
-                                }}
-                                android={{
-                                    name: 'person',
-                                    size: 24,
-                                }}
-                            />
-                        </DetailsSymbol>
+                    {lecture.lecturer !== null ? (
+                        <>
+                            <Separator />
+                            <DetailsRow>
+                                <DetailsSymbol>
+                                    <PlatformIcon
+                                        color={colors.labelColor}
+                                        ios={{
+                                            name: 'person',
+                                            size: 21,
+                                        }}
+                                        android={{
+                                            name: 'person',
+                                            size: 24,
+                                        }}
+                                    />
+                                </DetailsSymbol>
 
-                        <DetailsBody>
-                            <Text
-                                style={{
-                                    ...styles.text1,
-                                    color: colors.text,
-                                }}
-                            >
-                                {lecture.lecturer}
-                            </Text>
-                        </DetailsBody>
-                    </DetailsRow>
+                                <DetailsBody>
+                                    <Text
+                                        style={{
+                                            ...styles.text1,
+                                            color: colors.text,
+                                        }}
+                                    >
+                                        {lecture.lecturer}
+                                    </Text>
+                                </DetailsBody>
+                            </DetailsRow>
+                        </>
+                    ) : null}
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
 

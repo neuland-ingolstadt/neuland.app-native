@@ -9,7 +9,7 @@ import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
-import { showToast } from '@/utils/ui-utils'
+import { pausedToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
@@ -81,7 +81,7 @@ export function FoodScreen(): JSX.Element {
 
     useEffect(() => {
         if (isPaused && data != null) {
-            void showToast(t('toast.paused'))
+            pausedToast()
         }
     }, [data, isPaused, t])
 

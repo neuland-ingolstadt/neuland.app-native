@@ -28,7 +28,7 @@ import {
     getCenterSingle,
     getIcon,
 } from '@/utils/map-utils'
-import { LoadingState, showToast } from '@/utils/ui-utils'
+import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -39,6 +39,7 @@ import MapLibreGL, {
 } from '@maplibre/maplibre-react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'burnt'
 import { useNavigation } from 'expo-router'
 import {
     type Feature,
@@ -72,7 +73,6 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from 'react-native-reanimated'
-import Toast from 'react-native-root-toast'
 
 import packageInfo from '../../../../package.json'
 import { modalSection } from './ModalSections'
@@ -149,7 +149,6 @@ const MapScreen = (): JSX.Element => {
 
     const handlePresentModalPress = useCallback(() => {
         bottomSheetRef.current?.close()
-
         bottomSheetModalRef.current?.present()
     }, [])
 
@@ -164,13 +163,11 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         if (overlayError != null) {
-            Toast.show(t('toast.mapOverlay', { ns: 'common' }), {
-                duration: Toast.durations.SHORT,
-                position: 50,
-                shadow: false,
-                animation: true,
-                hideOnPress: true,
-                delay: 0,
+            toast({
+                title: t('toast.mapOverlay', { ns: 'common' }),
+                preset: 'error',
+                duration: 3,
+                from: 'top',
             })
         }
     }, [overlayError])
@@ -349,7 +346,7 @@ const MapScreen = (): JSX.Element => {
         )?.properties
 
         if (room == null) {
-            void showToast(t('toast.roomNotFound'))
+            roomNotFoundToast(routeParams, colors.notification)
             updateRouteParams('')
             return
         }

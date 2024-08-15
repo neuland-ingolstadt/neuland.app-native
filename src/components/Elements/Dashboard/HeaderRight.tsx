@@ -9,6 +9,7 @@ import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import * as Device from 'expo-device'
 import { useRouter } from 'expo-router'
 import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
@@ -114,6 +115,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         children: JSX.Element
     }): JSX.Element => (
         <ContextMenu
+            disabled={Device.deviceType === Device.DeviceType.DESKTOP}
             actions={[
                 ...(userKind === 'student'
                     ? [

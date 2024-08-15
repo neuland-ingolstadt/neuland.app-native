@@ -1,6 +1,8 @@
+import { trackEvent } from '@aptabase/react-native'
+import { toast } from 'burnt'
 import Color from 'color'
+import { t } from 'i18next'
 import { type ColorValue } from 'react-native'
-import Toast, { type ToastOptions } from 'react-native-root-toast'
 
 export enum LoadingState {
     LOADING,
@@ -110,26 +112,38 @@ export const lighten = (percentage: number, color: string): string => {
     return newColor
 }
 
-let toast: any = null
-export const showToast = async (
-    message: string,
-    options?: ToastOptions
-): Promise<void> => {
-    if (toast !== null) {
-        Toast.hide(toast)
-    }
-
-    toast = Toast.show(message, {
-        duration: Toast.durations.SHORT,
-        position: 50,
-        shadow: false,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-        ...options,
+export const roomNotFoundToast = (room: string, color: string): void => {
+    trackEvent('RoomNotFound', { room })
+    toast({
+        title: t('toast.roomNotFound', { ns: 'common' }),
+        message: room,
+        preset: 'custom',
+        haptic: 'error',
+        duration: 3,
+        from: 'top',
+        icon: {
+            ios: {
+                name: 'exclamationmark.magnifyingglass',
+                color,
+            },
+        },
     })
 }
-
+export const pausedToast = (): void => {
+    toast({
+        title: t('toast.paused.title', { ns: 'common' }),
+        message: t('toast.paused.description', { ns: 'common' }),
+        preset: 'custom',
+        duration: 2,
+        from: 'top',
+        icon: {
+            ios: {
+                name: 'wifi.slash',
+                color: '#ed8422',
+            },
+        },
+    })
+}
 export const getStatusBarStyle = (
     theme: 'light' | 'dark' | 'auto',
     isAndroid: boolean,

@@ -72,7 +72,6 @@ export function useDashboard(): Dashboard {
 
     const changeDashboardOrder = useCallback(
         (entries: string[], hiddenEntries: string[]) => {
-            console.log('changeDashboardOrder', entries, hiddenEntries)
             setShownDashboardEntries(entries)
             setHiddenDashboardEntries(hiddenEntries)
         },
@@ -81,7 +80,6 @@ export function useDashboard(): Dashboard {
 
     const updateDashboardOrder = useCallback(
         (entries: string[]) => {
-            console.log('updateDashboardOrder', entries)
             setShownDashboardEntries(entries)
         },
         [setShownDashboardEntries]

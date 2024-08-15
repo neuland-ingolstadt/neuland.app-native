@@ -9,8 +9,8 @@ import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { showToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
@@ -267,11 +267,21 @@ export default function DashboardEdit(): JSX.Element {
                                             )
                                         }}
                                         onClickItem={() => {
-                                            void showToast(
-                                                t('toast.dashboard', {
+                                            toast({
+                                                title: t('toast.dashboard', {
                                                     ns: 'common',
-                                                })
-                                            )
+                                                }),
+                                                preset: 'custom',
+                                                haptic: 'warning',
+                                                duration: 2,
+                                                from: 'top',
+                                                icon: {
+                                                    ios: {
+                                                        name: 'hand.draw',
+                                                        color: colors.primary,
+                                                    },
+                                                },
+                                            })
                                         }}
                                         onDragging={(
                                             _gestureState: any,

@@ -1,0 +1,13 @@
+diff --git a/android/src/paper/java/com/reactnativepagerview/PagerViewViewManager.kt b/android/src/paper/java/com/reactnativepagerview/PagerViewViewManager.kt
+index 4d0adffe6a658de709319e0700b35f726783dca2..959362c62af06f791088c416e2db8f1629ab63ce 100644
+--- a/android/src/paper/java/com/reactnativepagerview/PagerViewViewManager.kt
++++ b/android/src/paper/java/com/reactnativepagerview/PagerViewViewManager.kt
+@@ -69,7 +69,7 @@ class PagerViewViewManager : ViewGroupManager<NestedScrollableHost>() {
+         return host
+     }
+ 
+-    override fun addView(host: NestedScrollableHost, child: View?, index: Int) {
++    override fun addView(host: NestedScrollableHost, child: View, index: Int) {
+         PagerViewViewManagerImpl.addView(host, child, index)
+     }
+ 

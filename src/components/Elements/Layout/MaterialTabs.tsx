@@ -36,6 +36,7 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     ? Color(colors.card).mix(Color(colors.primary), 0.04).hex()
                     : Color(colors.card).mix(Color(colors.primary), 0.1).hex(),
             }}
+            keyboardHidesNavigationBar={false}
         >
             <MaterialBottomTabs.Screen
                 name="(index)"

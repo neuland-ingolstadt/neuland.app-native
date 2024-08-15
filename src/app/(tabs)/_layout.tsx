@@ -70,7 +70,7 @@ export default function HomeLayout(): JSX.Element {
     useEffect(() => {
         // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
         const prepare = async (): Promise<void> => {
-            const tabsPaths = ['/', '/timetable', '/map', '/food', '/links']
+            const tabsPaths = ['/', '/timetable', '/map', '/food']
             const isTab = tabsPaths.includes(pathname)
             if (isOnboarded !== true) {
                 await NavigationBar.setBackgroundColorAsync(colors.contrast)
@@ -129,11 +129,32 @@ export default function HomeLayout(): JSX.Element {
                               selectedRestaurants[0] as keyof typeof humanLocations
                           ],
                 data: {
-                    path: '(tabs)/food',
+                    path: '(tabs)/(food)',
                 },
                 symbolName: 'fork.knife',
                 iconName: 'silverware_fork_knife',
             },
+            ...(userKind === USER_GUEST
+                ? [
+                      {
+                          id: 'login',
+                          type: 'login',
+                          title: t('navigation.login'),
+                          data: { path: 'login' },
+                          symbolName: 'person.circle',
+                          iconName: 'account_circle',
+                      },
+                  ]
+                : [
+                      {
+                          id: 'profile',
+                          type: 'profile',
+                          title: t('navigation.profile'),
+                          data: { path: 'profile' },
+                          symbolName: 'person.circle',
+                          iconName: 'account_circle',
+                      },
+                  ]),
         ]
         function processShortcut(item: ShortcutItem): void {
             router.navigate(item.data.path as string)
@@ -147,7 +168,7 @@ export default function HomeLayout(): JSX.Element {
         return () => {
             if (shortcutSubscription != null) shortcutSubscription.remove()
         }
-    }, [selectedRestaurants, router, t])
+    }, [selectedRestaurants, router, t, userKind])
 
     useEffect(() => {
         console.log('Analytics allowed:', analyticsAllowed)

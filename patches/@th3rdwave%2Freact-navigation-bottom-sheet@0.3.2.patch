@@ -1,0 +1,22 @@
+diff --git a/src/BottomSheetView.tsx b/src/BottomSheetView.tsx
+index cc6f6c9ab4ee9c32897e5fb7b757a781778a01a5..0c0f4a3e6cf7c965b59bf052ad6fcc9d69a267ed 100644
+--- a/src/BottomSheetView.tsx
++++ b/src/BottomSheetView.tsx
+@@ -134,7 +134,7 @@ export function BottomSheetView({ state, descriptors }: Props) {
+       {firstScreen.render()}
+       <Overlay>
+         {shouldRenderProvider.current && (
+-          <BottomSheetModalProvider>
++          <>
+             {state.routes.slice(1).map((route) => {
+               const { options, navigation, render } = descriptors[route.key];
+ 
+@@ -174,7 +174,7 @@ export function BottomSheetView({ state, descriptors }: Props) {
+                 </BottomSheetModalScreen>
+               );
+             })}
+-          </BottomSheetModalProvider>
++          </>
+         )}
+       </Overlay>
+     </>

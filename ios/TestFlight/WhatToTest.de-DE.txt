@@ -1,3 +1,2 @@
-- Neue Quick Links Karte
-- Performance Verbesserungen
-- Bugfixes
+Leistungs- und Zuverlässigkeitstests für 1.0.
+Bitte melde alle Probleme und auch die kleinsten Details, die nicht richtig erscheinen.

@@ -6,7 +6,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Keyboard, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -35,8 +35,6 @@ const ResultRow: React.FC<{
             style={styles.searchRowContainer}
             onPress={() => {
                 const center = result.item.properties?.center
-                Keyboard.dismiss()
-                bottomSheetRef.current?.collapse()
                 updateSearchHistory(result)
                 setClickedElement({
                     data: result.title,
