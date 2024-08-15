@@ -19,6 +19,7 @@ import {
     StyleSheet,
     Text,
     View,
+    useWindowDimensions,
 } from 'react-native'
 import Animated, {
     Easing,
@@ -110,7 +111,7 @@ export default function OnboardingScreen(): JSX.Element {
     const textLogoOpacity = useSharedValue(1)
     const logoMargin = useSharedValue(1)
     const [isWhobbleDisabled, setWhobbleDisabled] = useState(true)
-
+    const window = Dimensions.get('window')
     const CardsElement = (): JSX.Element => {
         return (
             <Animated.View style={[styles.boxesContainer, styles.boxes]}>
@@ -229,7 +230,6 @@ export default function OnboardingScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
 
     const insets = useSafeAreaInsets()
-    const window = Dimensions.get('window')
 
     const textLogoAnimatedStyle = useAnimatedStyle(() => {
         return {
@@ -293,7 +293,7 @@ export default function OnboardingScreen(): JSX.Element {
                                     },
                                     () => {
                                         cardsViewHeight.value = withTiming(
-                                            window.height * 0.4,
+                                            reanimatedWindow.height * 0.4,
                                             {
                                                 duration: 50,
                                                 easing: Easing.out(Easing.quad),
@@ -359,11 +359,12 @@ export default function OnboardingScreen(): JSX.Element {
         )
     }, [])
 
+    const reanimatedWindow = useWindowDimensions()
     const logoFadeOutAnimatedStyle = useAnimatedStyle(() => {
         return {
             opacity: logoOpacity.value,
             height: 150 * logoMargin.value,
-            marginTop: logoMargin.value * window.height * 0.5,
+            marginTop: logoMargin.value * reanimatedWindow.height * 0.5,
             marginBottom: logoMargin.value * 40,
         }
     })
@@ -415,7 +416,7 @@ export default function OnboardingScreen(): JSX.Element {
                         {t('onboarding.page1.title')}
                     </Animated.Text>
                     <Shimmer
-                        opacity={isIos ? 0.65 : 0.9}
+                        opacity={isIos ? 0.65 : 1}
                         pauseDuration={300}
                         duration={1400}
                         animating={isIos ? buttonDisabled : false}

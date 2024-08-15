@@ -2,7 +2,7 @@
 import { type Colors } from '@/components/colors'
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
+import { CARD_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
@@ -16,7 +16,7 @@ import { cardIcons } from '../icons'
 
 interface BaseCardProps {
     title: string
-    onPressRoute: string
+    onPressRoute?: string
     removable?: boolean
     children?: React.ReactNode
 }
@@ -63,12 +63,13 @@ const BaseCard: React.FC<BaseCardProps> = ({
 
     return (
         <Pressable
+            disabled={onPressRoute == null}
             onPress={() => {
-                router.navigate(onPressRoute)
+                onPressRoute != null && router.navigate(onPressRoute)
             }}
             delayLongPress={300}
             onLongPress={() => {}}
-            style={{ marginHorizontal: PAGE_PADDING }}
+            //  style={{ paddingHorizontal: PAGE_PADDING }}
         >
             <ContextMenu
                 // @ts-expect-error cannot verify that title is a valid key
@@ -83,7 +84,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         resetOrder(userKind ?? 'guest')
                 }}
                 onPreviewPress={() => {
-                    router.navigate(onPressRoute)
+                    onPressRoute != null && router.navigate(onPressRoute)
                 }}
             >
                 <View
@@ -116,18 +117,19 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             {/* @ts-expect-error cannot verify that title is a valid key */}
                             {t('cards.titles.' + title)}
                         </Text>
-
-                        <PlatformIcon
-                            color={colors.labelColor}
-                            ios={{
-                                name: 'chevron.forward',
-                                size: 16,
-                            }}
-                            android={{
-                                name: 'chevron_right',
-                                size: 26,
-                            }}
-                        />
+                        {onPressRoute != null && (
+                            <PlatformIcon
+                                color={colors.labelColor}
+                                ios={{
+                                    name: 'chevron.forward',
+                                    size: 16,
+                                }}
+                                android={{
+                                    name: 'chevron_right',
+                                    size: 26,
+                                }}
+                            />
+                        )}
                     </View>
                     {children != null && <>{children}</>}
                 </View>

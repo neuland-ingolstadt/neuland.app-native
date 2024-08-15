@@ -10,6 +10,7 @@ import {
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
 import * as SecureStore from 'expo-secure-store'
@@ -26,7 +27,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import Toast from 'react-native-root-toast'
 
 const LoginForm = ({
     navigateHome,
@@ -59,14 +59,12 @@ const LoginForm = ({
                     Haptics.NotificationFeedbackType.Success
                 )
             }
-
-            Toast.show(t('login.toast'), {
-                duration: Toast.durations.LONG,
-                position: 50,
-                shadow: false,
-                animation: true,
-                hideOnPress: true,
-                delay: 0,
+            toast({
+                title: t('login.toast'),
+                preset: 'done',
+                haptic: 'success',
+                duration: 2.5,
+                from: 'top',
             })
             navigateHome()
         } catch (e) {

@@ -2,6 +2,7 @@ import { useAppState, useOnlineManager } from '@/hooks'
 import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
     DarkTheme,
     DefaultTheme,
@@ -19,7 +20,6 @@ import {
     useColorScheme,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { RootSiblingParent } from 'react-native-root-siblings'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import {
@@ -262,31 +262,31 @@ export default function Provider({
                 <ThemeProvider
                     value={colorScheme === 'dark' ? darkTheme : lightTheme}
                 >
-                    <ThemeContext.Provider value={themeHook}>
-                        <PreferencesContext.Provider value={preferences}>
-                            <FlowContext.Provider value={flow}>
-                                <UserKindContext.Provider value={userKind}>
-                                    <FoodFilterContext.Provider
-                                        value={foodFilter}
-                                    >
-                                        <DashboardContext.Provider
-                                            value={dashboard}
+                    <BottomSheetModalProvider>
+                        <ThemeContext.Provider value={themeHook}>
+                            <PreferencesContext.Provider value={preferences}>
+                                <FlowContext.Provider value={flow}>
+                                    <UserKindContext.Provider value={userKind}>
+                                        <FoodFilterContext.Provider
+                                            value={foodFilter}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
+                                            <DashboardContext.Provider
+                                                value={dashboard}
                                             >
-                                                <RootSiblingParent>
+                                                <RouteParamsContext.Provider
+                                                    value={routeParams}
+                                                >
                                                     <SafeAreaProvider>
                                                         {children}
                                                     </SafeAreaProvider>
-                                                </RootSiblingParent>
-                                            </RouteParamsContext.Provider>
-                                        </DashboardContext.Provider>
-                                    </FoodFilterContext.Provider>
-                                </UserKindContext.Provider>
-                            </FlowContext.Provider>
-                        </PreferencesContext.Provider>
-                    </ThemeContext.Provider>
+                                                </RouteParamsContext.Provider>
+                                            </DashboardContext.Provider>
+                                        </FoodFilterContext.Provider>
+                                    </UserKindContext.Provider>
+                                </FlowContext.Provider>
+                            </PreferencesContext.Provider>
+                        </ThemeContext.Provider>
+                    </BottomSheetModalProvider>
                 </ThemeProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>

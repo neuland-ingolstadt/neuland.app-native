@@ -1,25 +1,22 @@
 import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Platform, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
 
-const PADDING = 12
+const PADDING = 4
 
 export default function NotesDetails(): JSX.Element {
-    const [isLoaded, setIsLoaded] = React.useState(false)
-
     const navigation = useNavigation()
-    const windowWidth = Dimensions.get('window').width
-
     const colors = useTheme().colors as Colors
     const { title, html } = useLocalSearchParams<{
         title: string
         html: string
     }>()
+    const [loaded, setLoaded] = useState(false)
 
     const { t } = useTranslation('timetable')
 
@@ -28,11 +25,11 @@ export default function NotesDetails(): JSX.Element {
     <html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
     <style>
     body {
-        padding-top: ${PADDING}px;
+        padding: ${PADDING}px;
         color: ${colors.text};
         background-color: ${colors.background};
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-size: 14px;
+        font-size: 15px;
     }
     </style>
     ${sanitizedHtml}`
@@ -43,53 +40,25 @@ export default function NotesDetails(): JSX.Element {
         })
     }, [navigation])
 
-    async function setDelayedIsLoaded(): Promise<void> {
-        const delay = Platform.OS === 'ios' ? 50 : 0
-
-        await new Promise((resolve) => setTimeout(resolve, delay))
-        setIsLoaded(true)
-    }
-
     return (
         <>
             <WebView
-                onLoadEnd={() => {
-                    void setDelayedIsLoaded()
-                }}
-                style={{
-                    ...styles.webView,
-                    width: windowWidth - PADDING * 2,
-                    backgroundColor: colors.background,
-                    color: colors.text,
-                }}
-                originWhitelist={['*']}
                 source={{ html: styledHtml }}
                 scalesPageToFit
+                onLoadEnd={(e) => {
+                    if (!loaded) {
+                        setLoaded(true)
+                    }
+                }}
             />
-
-            {/* prevent flickering on load on iOS */}
-            {isLoaded ? null : (
+            {!loaded && (
                 <View
                     style={{
-                        ...styles.iosContainer,
+                        ...StyleSheet.absoluteFillObject,
                         backgroundColor: colors.background,
                     }}
-                />
+                ></View>
             )}
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    webView: {
-        height: '100%',
-        padding: PADDING,
-        alignSelf: 'center',
-    },
-    iosContainer: {
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-        justifyContent: 'center',
-    },
-})

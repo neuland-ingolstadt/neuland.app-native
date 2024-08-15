@@ -12,6 +12,7 @@ import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
 import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
@@ -29,7 +30,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import Toast from 'react-native-root-toast'
 
 export default function Profile(): JSX.Element {
     const router = useRouter()
@@ -37,6 +37,7 @@ export default function Profile(): JSX.Element {
     const { toggleUserKind, userKind } = useContext(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
+    const [isLoggingOut, setIsLoggingOut] = React.useState(false)
 
     const { data, error, isLoading, isPaused, isSuccess, refetch, isError } =
         useQuery({
@@ -73,7 +74,6 @@ export default function Profile(): JSX.Element {
         }
     }
 
-    let toast: any = null
     const copyToClipboard = async (text: string): Promise<void> => {
         if (text.length === 0) {
             return
@@ -83,17 +83,16 @@ export default function Profile(): JSX.Element {
         if (Platform.OS === 'android') {
             return
         }
-        if (toast !== null) {
-            Toast.hide(toast)
-        }
 
-        toast = Toast.show(t('toast.clipboard', { ns: 'common' }), {
-            duration: Toast.durations.SHORT,
-            position: 50,
-            shadow: false,
-            animation: true,
-            hideOnPress: true,
-            delay: 0,
+        toast({
+            title: t('toast.clipboard', {
+                ns: 'common',
+            }),
+            message: text,
+            preset: 'done',
+            haptic: 'success',
+            duration: 2,
+            from: 'top',
         })
     }
 
@@ -110,13 +109,14 @@ export default function Profile(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
-                        performLogout(
-                            toggleUserKind,
-                            resetOrder,
-                            queryClient
-                        ).catch((e) => {
-                            console.log(e)
-                        })
+                        setIsLoggingOut(true)
+                        performLogout(toggleUserKind, resetOrder, queryClient)
+                            .catch((e) => {
+                                console.log(e)
+                            })
+                            .finally(() => {
+                                setIsLoggingOut(false)
+                            })
                     },
                 },
             ]
@@ -288,32 +288,44 @@ export default function Profile(): JSX.Element {
                             }}
                         />
                     ))}
-                <View
+
+                <Pressable
+                    onPress={logoutAlert}
                     style={{
+                        ...styles.logoutButton,
                         backgroundColor: colors.card,
-                        ...styles.logoutContainer,
                     }}
+                    disabled={isLoggingOut}
                 >
-                    <Pressable
-                        onPress={logoutAlert}
-                        style={styles.logoutButton}
-                    >
-                        <PlatformIcon
+                    {isLoggingOut ? (
+                        <ActivityIndicator
+                            size="small"
                             color={colors.notification}
-                            ios={{
-                                name: 'rectangle.portrait.and.arrow.right',
-                                size: 18,
-                            }}
-                            android={{
-                                name: 'logout',
-                                size: 22,
-                            }}
                         />
-                        <Text style={{ color: colors.notification }}>
-                            {t('profile.logout.button')}
-                        </Text>
-                    </Pressable>
-                </View>
+                    ) : (
+                        <>
+                            <PlatformIcon
+                                color={colors.notification}
+                                ios={{
+                                    name: 'rectangle.portrait.and.arrow.right',
+                                    size: 18,
+                                }}
+                                android={{
+                                    name: 'logout',
+                                    size: 22,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    color: colors.notification,
+                                    ...styles.logoutText,
+                                }}
+                            >
+                                {t('profile.logout.button')}
+                            </Text>
+                        </>
+                    )}
+                </Pressable>
             </ScrollView>
         </>
     )
@@ -327,19 +339,21 @@ const styles = StyleSheet.create({
         width: '100%',
         alignSelf: 'center',
     },
-    logoutContainer: {
+    logoutButton: {
         borderRadius: 10,
         marginBottom: 30,
         marginTop: 10,
         alignItems: 'center',
         alignSelf: 'center',
-    },
-    logoutButton: {
         flexDirection: 'row',
-        alignItems: 'center',
         paddingVertical: 12,
         paddingHorizontal: 40,
         gap: 10,
+        minWidth: 165,
+        justifyContent: 'center',
+    },
+    logoutText: {
+        fontSize: 16,
     },
     loadingContainer: {
         paddingVertical: 40,

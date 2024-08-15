@@ -87,8 +87,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     options={{
                         title: t('navigation.map'),
                         headerShown: false,
-
-                        tabBarHideOnKeyboard: true,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}

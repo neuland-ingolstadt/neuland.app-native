@@ -12,6 +12,7 @@ const studverLink = 'https://studverthi.de'
 const marketplaceLink = 'https://www.thi.de/service/marketplace/'
 const myThiLink = 'https://mythi.de'
 const libraryLink = 'https://opac.ku.de/index-hi.html'
+const thiLink = 'https://www.thi.de'
 
 export const quicklinks = [
     {
@@ -43,7 +44,15 @@ export const quicklinks = [
         url: studverLink,
         icon: {
             ios: 'person.bubble',
-            android: 'podium',
+            android: '3p',
+        },
+    },
+    {
+        key: 'THI',
+        url: thiLink,
+        icon: {
+            ios: 'globe',
+            android: 'captive_portal',
         },
     },
     {

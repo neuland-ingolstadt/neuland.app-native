@@ -6,7 +6,7 @@ import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { showToast } from '@/utils/ui-utils'
+import { pausedToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect } from 'react'
@@ -30,7 +30,7 @@ export default function Events(): JSX.Element {
 
     useEffect(() => {
         if (isPaused && data != null) {
-            void showToast(t('toast.paused'))
+            pausedToast()
         }
     }, [isPaused])
 

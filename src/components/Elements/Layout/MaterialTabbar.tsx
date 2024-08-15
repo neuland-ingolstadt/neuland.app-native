@@ -2,7 +2,7 @@ import type { EventMapBase, NavigationState } from '@react-navigation/native'
 import { withLayoutContext } from 'expo-router'
 import {
     type MaterialBottomTabNavigationOptions,
-    createMaterialBottomTabNavigator, // @ts-expect-error no types
+    createMaterialBottomTabNavigator,
 } from 'react-native-paper/react-navigation'
 
 const { Navigator } = createMaterialBottomTabNavigator()

@@ -76,7 +76,7 @@ const LinkScreen = (): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-    formlistRow: { marginVertical: 14.5 },
+    formlistRow: { marginVertical: 13.5 },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

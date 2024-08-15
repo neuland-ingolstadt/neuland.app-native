@@ -20,10 +20,15 @@ import {
     StyleSheet,
     View,
 } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function HomeRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
-
+    const colors = useTheme().colors as Colors
+    const safeArea = useSafeAreaInsets()
+    const topInset = safeArea.top
+    const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
+    const paddingTop = hasDynamicIsland ? topInset : 0
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
@@ -41,6 +46,8 @@ export default function HomeRootScreen(): JSX.Element {
             <View
                 style={{
                     ...styles.page,
+                    paddingTop,
+                    backgroundColor: colors.card,
                 }}
             >
                 <WorkaroundStack
@@ -48,7 +55,7 @@ export default function HomeRootScreen(): JSX.Element {
                     titleKey={'navigation.dashboard'}
                     component={isPageOpen ? HomeScreen : () => <></>}
                     largeTitle={true}
-                    transparent={true}
+                    transparent={!hasDynamicIsland}
                     headerRightElement={IndexHeaderRight}
                     androidFallback
                 />
@@ -65,7 +72,7 @@ function HomeScreen(): JSX.Element {
     )
     const colors = useTheme().colors as Colors
     const [columns, setColumns] = useState(
-        Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
+        Math.floor(Dimensions.get('window').width < 800 ? 1 : 1)
     )
     const navigation = useNavigation()
     const { t } = useTranslation(['navigation', 'settings'])
@@ -142,8 +149,8 @@ function HomeScreen(): JSX.Element {
                 if (columns !== 1) {
                     paddingStyle =
                         index % 2 === 0
-                            ? { paddingRight: PAGE_PADDING / 2 }
-                            : { paddingLeft: PAGE_PADDING / 2 }
+                            ? { marginRight: PAGE_PADDING / 2 }
+                            : { marginLeft: PAGE_PADDING / 2 }
                 }
 
                 return (
@@ -173,6 +180,8 @@ const styles = StyleSheet.create({
     errorContainer: { paddingTop: 110, flex: 1 },
     item: {
         marginVertical: 6,
+        gap: 0,
+        marginHorizontal: PAGE_PADDING,
     },
     container: {
         paddingBottom: PAGE_BOTTOM_SAFE_AREA,

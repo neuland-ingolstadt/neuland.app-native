@@ -6,7 +6,14 @@ import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 import PlatformIcon from '../Elements/Universal/Icon'
 import BaseCard from './BaseCard'
@@ -25,6 +32,7 @@ const LinkCard = (): JSX.Element => {
         trackEvent('Quicklink', { link: key })
         await Linking.openURL(url)
     }
+
     return (
         <BaseCard title="links" onPressRoute="links">
             <View style={styles.cardsFilled}>
@@ -44,11 +52,12 @@ const LinkCard = (): JSX.Element => {
                                 color={colors.primary}
                                 ios={{
                                     name: link.icon.ios,
-                                    size: 18,
+                                    size: 17,
+                                    weight: 'semibold',
                                 }}
                                 android={{
                                     name: link.icon.android as MaterialIcon,
-                                    size: 20,
+                                    size: 21,
                                     variant: 'outlined',
                                 }}
                             />
@@ -57,7 +66,10 @@ const LinkCard = (): JSX.Element => {
                                     ...styles.eventTitle,
                                     color: colors.text,
                                 }}
-                                numberOfLines={2}
+                                numberOfLines={1}
+                                adjustsFontSizeToFit={Platform.OS === 'ios'}
+                                minimumFontScale={0.8}
+                                ellipsizeMode="tail"
                             >
                                 {t(
                                     // @ts-expect-error Type cannot be verified
@@ -76,23 +88,23 @@ const styles = StyleSheet.create({
     cardsFilled: {
         paddingTop: 14,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap',
         gap: 10,
     },
     eventTitle: {
         fontWeight: '500',
-        fontSize: 16,
+        fontSize: 14.5,
+        flexShrink: 1,
     },
     linkBox: {
-        padding: 12,
+        paddingTop: 12,
+        paddingBottom: 7,
+        paddingHorizontal: 8,
         borderRadius: 8,
-
-        flexDirection: 'row',
-        gap: 10,
+        gap: Platform.OS === 'android' ? 2 : 7,
         flex: 1,
-        overflow: 'hidden',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
     },
 })
 

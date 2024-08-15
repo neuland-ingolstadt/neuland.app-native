@@ -1,0 +1,247 @@
+diff --git a/src/components/BottomNavigation/BottomNavigationBar.tsx b/src/components/BottomNavigation/BottomNavigationBar.tsx
+index 0bfe303bfb443396ede776726faa0f8ba32752cd..3189231f27b4876cd2e8d80aa035026972fd7398 100644
+--- a/src/components/BottomNavigation/BottomNavigationBar.tsx
++++ b/src/components/BottomNavigation/BottomNavigationBar.tsx
+@@ -676,48 +676,9 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+             const focused = navigationState.index === index;
+             const active = tabsAnims[index];
+ 
+-            // Scale the label up
+-            const scale =
+-              labeled && shifting
+-                ? active.interpolate({
+-                    inputRange: [0, 1],
+-                    outputRange: [0.5, 1],
+-                  })
+-                : 1;
+-
+-            // Move down the icon to account for no-label in shifting and smaller label in non-shifting.
+-            const translateY = labeled
+-              ? shifting
+-                ? active.interpolate({
+-                    inputRange: [0, 1],
+-                    outputRange: [7, 0],
+-                  })
+-                : 0
+-              : 7;
+-
+             // We render the active icon and label on top of inactive ones and cross-fade them on change.
+             // This trick gives the illusion that we are animating between active and inactive colors.
+             // This is to ensure that we can use native driver, as colors cannot be animated with native driver.
+-            const activeOpacity = active;
+-            const inactiveOpacity = active.interpolate({
+-              inputRange: [0, 1],
+-              outputRange: [1, 0],
+-            });
+-
+-            const v3ActiveOpacity = focused ? 1 : 0;
+-            const v3InactiveOpacity = shifting
+-              ? inactiveOpacity
+-              : focused
+-              ? 0
+-              : 1;
+-
+-            // Scale horizontally the outline pill
+-            const outlineScale = focused
+-              ? active.interpolate({
+-                  inputRange: [0, 1],
+-                  outputRange: [0.5, 1],
+-                })
+-              : 0;
+ 
+             const badge = getBadge({ route });
+ 
+@@ -745,8 +706,6 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+                   : 0) - (!isV3 ? 2 : 0),
+             };
+ 
+-            const isV3Shifting = isV3 && shifting && labeled;
+-
+             const font = isV3 ? theme.fonts.labelMedium : {};
+ 
+             return renderTouchable({
+@@ -772,79 +731,44 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+                       : styles.v3NoLabelContainer)
+                   }
+                 >
+-                  <Animated.View
++                  <View
+                     style={[
+                       styles.iconContainer,
+                       isV3 && styles.v3IconContainer,
+-                      (!isV3 || isV3Shifting) && {
+-                        transform: [{ translateY }],
+-                      },
++                     
+                     ]}
+                   >
+-                    {isV3 && focused && (
+-                      <Animated.View
+-                        style={[
+-                          styles.outline,
+-                          {
+-                            transform: [
+-                              {
+-                                scaleX: outlineScale,
+-                              },
+-                            ],
+-                            backgroundColor: theme.colors.secondaryContainer,
+-                          },
+-                          activeIndicatorStyle,
+-                        ]}
+-                      />
+-                    )}
+-                    <Animated.View
++                {isV3 && focused && (
++                    <View
+                       style={[
+-                        styles.iconWrapper,
+-                        isV3 && styles.v3IconWrapper,
+-                        { opacity: isV3 ? v3ActiveOpacity : activeOpacity },
++                        styles.outline,
++                        {
++                          backgroundColor: theme.colors.secondaryContainer,
++                        },
++                        activeIndicatorStyle,
+                       ]}
+-                    >
+-                      {renderIcon ? (
+-                        renderIcon({
+-                          route,
+-                          focused: true,
+-                          color: activeTintColor,
+-                        })
+-                      ) : (
+-                        <Icon
+-                          source={route.focusedIcon as IconSource}
+-                          color={activeTintColor}
+-                          size={24}
+-                        />
+-                      )}
+-                    </Animated.View>
+-                    <Animated.View
++                    />
++                  )}
++                    <View
+                       style={[
+                         styles.iconWrapper,
+                         isV3 && styles.v3IconWrapper,
+-                        {
+-                          opacity: isV3 ? v3InactiveOpacity : inactiveOpacity,
+-                        },
+                       ]}
+                     >
+                       {renderIcon ? (
+                         renderIcon({
+                           route,
+-                          focused: false,
+-                          color: inactiveTintColor,
++                          focused: focused,
++                          color: focused ? activeTintColor : inactiveTintColor,
+                         })
+                       ) : (
+                         <Icon
+-                          source={
+-                            theme.isV3 && route.unfocusedIcon !== undefined
+-                              ? route.unfocusedIcon
+-                              : (route.focusedIcon as IconSource)
+-                          }
+-                          color={inactiveTintColor}
++                          source={focused ? route.focusedIcon as IconSource : route.unfocusedIcon as IconSource}
++                          color={focused ? activeTintColor : inactiveTintColor}
+                           size={24}
+                         />
+                       )}
+-                    </Animated.View>
++                    </View>
+                     <View style={[styles.badgeContainer, badgeStyle]}>
+                       {typeof badge === 'boolean' ? (
+                         <Badge visible={badge} size={isV3 ? 6 : 8} />
+@@ -854,27 +778,24 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+                         </Badge>
+                       )}
+                     </View>
+-                  </Animated.View>
++                  </View>
+                   {labeled ? (
+-                    <Animated.View
++                    <View
+                       style={[
+                         styles.labelContainer,
+-                        !isV3 && { transform: [{ scale }] },
++                        
+                       ]}
+                     >
+-                      <Animated.View
+-                        style={[
+-                          styles.labelWrapper,
+-                          (!isV3 || isV3Shifting) && {
+-                            opacity: activeOpacity,
+-                          },
+-                        ]}
++                      <View 
++                          style={[
++                            styles.labelWrapper,
++                          ]}        
+                       >
+                         {renderLabel ? (
+                           renderLabel({
+                             route,
+                             focused: true,
+-                            color: activeLabelColor,
++                            color: focused ? activeLabelColor : inactiveLabelColor,
+                           })
+                         ) : (
+                           <Text
+@@ -883,7 +804,7 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+                             style={[
+                               styles.label,
+                               {
+-                                color: activeLabelColor,
++                                color: focused ? activeLabelColor : inactiveLabelColor,
+                                 ...font,
+                               },
+                             ]}
+@@ -891,39 +812,9 @@ const BottomNavigationBar = <Route extends BaseRoute>({
+                             {getLabelText({ route })}
+                           </Text>
+                         )}
+-                      </Animated.View>
+-                      {shifting ? null : (
+-                        <Animated.View
+-                          style={[
+-                            styles.labelWrapper,
+-                            { opacity: inactiveOpacity },
+-                          ]}
+-                        >
+-                          {renderLabel ? (
+-                            renderLabel({
+-                              route,
+-                              focused: false,
+-                              color: inactiveLabelColor,
+-                            })
+-                          ) : (
+-                            <Text
+-                              maxFontSizeMultiplier={labelMaxFontSizeMultiplier}
+-                              variant="labelMedium"
+-                              selectable={false}
+-                              style={[
+-                                styles.label,
+-                                {
+-                                  color: inactiveLabelColor,
+-                                  ...font,
+-                                },
+-                              ]}
+-                            >
+-                              {getLabelText({ route })}
+-                            </Text>
+-                          )}
+-                        </Animated.View>
+-                      )}
+-                    </Animated.View>
++                      </View>
++                    
++                    </View>
+                   ) : (
+                     !isV3 && <View style={styles.labelContainer} />
+                   )}

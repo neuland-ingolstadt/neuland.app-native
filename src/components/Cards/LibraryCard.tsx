@@ -9,7 +9,7 @@ import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { LayoutAnimation, StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
@@ -37,6 +37,7 @@ const LibraryCard = (): JSX.Element => {
             })
 
             setReservations(firstTwoReservations)
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             setLoadingState(LoadingState.LOADED)
         } catch (e: any) {
             setLoadingState(LoadingState.ERROR)
