@@ -36,8 +36,11 @@ export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const { appIcon, setAppIcon, unlockedAppIcons } =
-        useContext(PreferencesContext)
+    const {
+        appIcon = 'default',
+        setAppIcon,
+        unlockedAppIcons,
+    } = useContext(PreferencesContext)
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],

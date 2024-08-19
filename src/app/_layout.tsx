@@ -11,9 +11,11 @@ import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
+import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -23,6 +25,20 @@ function RootLayout(): JSX.Element {
     const router = useRouter()
     const { theme: appTheme } = useContext(ThemeContext)
     const { t } = useTranslation(['navigation'])
+    const isPad = DeviceInfo.isTablet()
+
+    useEffect(() => {
+        // iOS already unlocks the screen orientation on iPad by default
+        if (Platform.OS === 'android') {
+            if (isPad) {
+                void ScreenOrientation.unlockAsync()
+            } else {
+                void ScreenOrientation.lockAsync(
+                    ScreenOrientation.OrientationLock.PORTRAIT_UP
+                )
+            }
+        }
+    }, [isPad])
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
@@ -93,6 +109,7 @@ function RootLayout(): JSX.Element {
                     ),
                     // Android
                     statusBarTranslucent: true,
+                    // statusBarHidden: true
                 }}
             >
                 <Stack.Screen

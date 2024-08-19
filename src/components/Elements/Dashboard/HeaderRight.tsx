@@ -9,7 +9,6 @@ import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import * as Device from 'expo-device'
 import { useRouter } from 'expo-router'
 import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
@@ -23,6 +22,7 @@ import {
     Text,
 } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
+import { getDeviceType } from 'react-native-device-info'
 
 export const IndexHeaderRight = (): JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
@@ -115,7 +115,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         children: JSX.Element
     }): JSX.Element => (
         <ContextMenu
-            disabled={Device.deviceType === Device.DeviceType.DESKTOP}
+            disabled={getDeviceType() === 'Desktop'}
             actions={[
                 ...(userKind === 'student'
                     ? [
