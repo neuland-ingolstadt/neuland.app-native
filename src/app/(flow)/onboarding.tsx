@@ -21,6 +21,7 @@ import {
     View,
     useWindowDimensions,
 } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import Animated, {
     Easing,
     runOnJS,
@@ -377,6 +378,9 @@ export default function OnboardingScreen(): JSX.Element {
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
     const scaleFontSize = (size: number): number => {
+        if (DeviceInfo.isTablet()) {
+            return size
+        }
         const guidelineBaseWidth = 475
         return size * (window.width / guidelineBaseWidth)
     }

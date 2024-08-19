@@ -72,7 +72,7 @@ function HomeScreen(): JSX.Element {
     )
     const colors = useTheme().colors as Colors
     const [columns, setColumns] = useState(
-        Math.floor(Dimensions.get('window').width < 800 ? 1 : 1)
+        Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )
     const navigation = useNavigation()
     const { t } = useTranslation(['navigation', 'settings'])

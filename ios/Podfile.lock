@@ -272,6 +272,28 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoScreenOrientation (7.0.5):
+    - DoubleConversion
+    - ExpoModulesCore
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - ExpoSecureStore (13.0.2):
     - ExpoModulesCore
   - ExpoSystemUI (3.0.7):
@@ -1887,6 +1909,8 @@ PODS:
     - React
   - RNDateTimePicker (8.0.1):
     - React-Core
+  - RNDeviceInfo (11.1.0):
+    - React-Core
   - RNDynamicAppIcon (1.1.0):
     - React
   - RNFlashList (1.6.4):
@@ -2039,6 +2063,7 @@ DEPENDENCIES:
   - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - ExpoLocalization (from `../node_modules/expo-localization/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
+  - ExpoScreenOrientation (from `../node_modules/expo-screen-orientation/ios`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
@@ -2116,6 +2141,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNDynamicAppIcon (from `../node_modules/react-native-dynamic-app-icon`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -2190,6 +2216,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-localization/ios"
   ExpoModulesCore:
     :path: "../node_modules/expo-modules-core"
+  ExpoScreenOrientation:
+    :path: "../node_modules/expo-screen-orientation/ios"
   ExpoSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
   ExpoSystemUI:
@@ -2341,6 +2369,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-quick-actions"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNDynamicAppIcon:
     :path: "../node_modules/react-native-dynamic-app-icon"
   RNFlashList:
@@ -2388,6 +2418,7 @@ SPEC CHECKSUMS:
   ExpoLocalAuthentication: 9e02a56a4cf9868f0052656a93d4c94101a42ed7
   ExpoLocalization: f04eeec2e35bed01ab61c72ee1768ec04d093d01
   ExpoModulesCore: e3b0b4547b004d90b8efbf17e1886c1600df343b
+  ExpoScreenOrientation: 9a13e7438f4b62f313ca3c22d1abeeef847c9599
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   EXSplashScreen: 5461621eafa685600296f3702ed35cc8dcb18aae
@@ -2465,6 +2496,7 @@ SPEC CHECKSUMS:
   ReactCommon: 3ae48fa4cfa7052a270c2150ececfc94e541fb8a
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: b6a9b35a785ecbe12b4e7d6de5439d0aa4614146
+  RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: b521ebdd7f9352673817f1d98e8bdc0c8cf8545b
   RNGestureHandler: 939f21fabf5d45a725c0bf175eb819dd25cf2e70

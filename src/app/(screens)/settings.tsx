@@ -115,7 +115,7 @@ export default function Settings(): JSX.Element {
 
     const getBounds = (): { topBoundY: number; bottomBoundY: number } => {
         const topBoundY = height - logoHeight + scrollY.current - 5
-        const bottomBoundY = 0 + scrollY.current
+        const bottomBoundY = scrollY.current
         return { topBoundY, bottomBoundY }
     }
 
@@ -337,6 +337,27 @@ export default function Settings(): JSX.Element {
     const logoActiveOpacity = isBouncing ? 1 : 0
     const logoActiveHeight = isBouncing ? 18 : 0
 
+    const ShimmerEffect = (props: {
+        children: React.ReactNode
+    }): JSX.Element => {
+        return Platform.OS === 'ios' ? (
+            <Shimmer
+                style={{ ...styles.shimmerContainer }}
+                pauseDuration={5000}
+                duration={1500}
+                animationOpacity={0.8}
+                animating={true}
+            >
+                {props.children}
+            </Shimmer>
+        ) : (
+            <View
+                style={{ ...styles.shimmerContainer, ...styles.androidShimmer }}
+            >
+                {props.children}
+            </View>
+        )
+    }
     return (
         <ScrollView
             refreshControl={
@@ -601,15 +622,9 @@ export default function Settings(): JSX.Element {
                     })}
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
-                    <Shimmer
-                        style={{ ...styles.shimmerContainer }}
-                        pauseDuration={5000}
-                        duration={1500}
-                        animationOpacity={0.8}
-                        animating={true}
-                    >
+                    <ShimmerEffect>
                         <LogoTextSVG size={16} color={colors.text} />
-                    </Shimmer>
+                    </ShimmerEffect>
                 </Pressable>
             </Animated.View>
         </ScrollView>
@@ -656,6 +671,9 @@ const styles = StyleSheet.create({
     shimmerContainer: {
         alignItems: 'center',
         alignSelf: 'center',
+    },
+    androidShimmer: {
+        opacity: 0.6,
     },
     contentContainer: {
         paddingBottom: 60,

@@ -675,20 +675,15 @@ const MapScreen = (): JSX.Element => {
     }, [regionChange, isVisible, opacity])
 
     const showFiltered = useCallback(() => {
-        return (
-            filteredGeoJSON != null &&
-            filteredGeoJSON.features.length > 0 &&
-            !showAllFloors
-        )
-    }, [filteredGeoJSON, showAllFloors])
+        return filteredGeoJSON != null && filteredGeoJSON.features.length > 0
+    }, [filteredGeoJSON])
 
     const showAvailableFiltered = useCallback(() => {
         return (
             availableFilteredGeoJSON != null &&
-            availableFilteredGeoJSON.features.length > 0 &&
-            !showAllFloors
+            availableFilteredGeoJSON.features.length > 0
         )
-    }, [availableFilteredGeoJSON, showAllFloors])
+    }, [availableFilteredGeoJSON])
 
     return (
         <View style={styles.container}>
