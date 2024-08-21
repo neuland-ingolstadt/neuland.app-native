@@ -3,7 +3,14 @@
 
 # Neuland Next - native version of neuland.app
 
-<a href="https://play.google.com/store/apps/details?id=app.neuland"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=70px /></a>
+<div style="display: flex; align-items: center;">
+  <a href="https://apps.apple.com/app/neuland-next/id1617096811">
+    <img alt="Download on the App Store" src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" height="50px" />
+  </a>
+  <a href="https://play.google.com/store/apps/details?id=app.neuland">
+    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="74px" />
+  </a>
+</div>
 
 An open source, mobile app developed using React Native, serving as a replacement for the official Technische Hochschule Ingolstadt (THI) app.
 It features a modern user interface and utilizes the Expo framework for easy development and deployment.

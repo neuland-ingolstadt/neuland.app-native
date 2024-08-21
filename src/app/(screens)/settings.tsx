@@ -322,10 +322,12 @@ export default function Settings(): JSX.Element {
                     onPress: () => {
                         if (Platform.OS === 'android') {
                             void Linking.openURL(
-                                'market://details?id=app.neuland'
+                                'market://details?id=app.neuland&showAllReviews=true'
                             )
                         } else {
-                            alert('Not available yet')
+                            void Linking.openURL(
+                                'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
+                            )
                         }
                     },
                 },
