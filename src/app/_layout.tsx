@@ -246,21 +246,10 @@ function RootLayout(): JSX.Element {
                 />
                 <Stack.Screen
                     name="(screens)/appIcon"
-                    // @ts-expect-error route params are not typed
-                    options={({
-                        route,
-                    }: {
-                        route: {
-                            params: { fromAppShortcut: string }
-                        }
-                    }) => ({
+                    options={{
                         title: 'App Icon',
-                        animation: 'slide_from_right',
-                        presentation:
-                            route.params?.fromAppShortcut === 'true'
-                                ? 'modal'
-                                : undefined,
-                    })}
+                        presentation: 'modal',
+                    }}
                 />
                 <Stack.Screen
                     name="(screens)/profile"
