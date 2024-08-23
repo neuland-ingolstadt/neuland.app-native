@@ -1,10 +1,10 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
+import { chevronIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/components/colors'
 import { FlowContext, PreferencesContext } from '@/components/contexts'
-import { IMPRINT_URL, PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -74,52 +74,57 @@ export default function About(): JSX.Element {
             ],
         },
         {
-            header: t('about.formlist.legal.title'),
+            header: t('about.formlist.contact.title'),
             items: [
                 {
-                    title: t('about.formlist.legal.privacy'),
-                    icon: linkIcon,
-                    onPress: async () => await Linking.openURL(PRIVACY_URL),
+                    title: t('about.formlist.contact.feedback'),
+                    icon: {
+                        ios: 'envelope',
+                        android: 'mail',
+                    },
+                    onPress: async () =>
+                        await Linking.openURL(
+                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
+                        ),
                 },
                 {
-                    title: t('about.formlist.legal.imprint'),
-                    icon: linkIcon,
-                    onPress: async () => await Linking.openURL(IMPRINT_URL),
-                },
-                {
-                    title: t('navigation.licenses.title', { ns: 'navigation' }),
-                    icon: chevronIcon,
+                    title:
+                        Platform.OS === 'ios'
+                            ? t('about.formlist.contact.rateiOS')
+                            : t('about.formlist.contact.rateAndroid'),
+                    icon: {
+                        ios: 'star',
+                        android: 'star',
+                    },
                     onPress: () => {
-                        router.navigate('licenses')
+                        if (Platform.OS === 'android') {
+                            void Linking.openURL(
+                                'market://details?id=app.neuland&showAllReviews=true'
+                            )
+                        } else {
+                            void Linking.openURL(
+                                'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
+                            )
+                        }
                     },
                 },
             ],
         },
 
         {
-            header: t('about.formlist.about.title'),
+            header: t('about.formlist.legal.title'),
             items: [
                 {
-                    title: 'Github',
-                    icon: {
-                        ios: 'safari',
-                        android: 'github',
+                    title: t('about.formlist.legal.button'),
+                    icon: chevronIcon,
+                    onPress: () => {
+                        router.navigate('legal')
                     },
-
-                    onPress: async () =>
-                        await Linking.openURL(
-                            'https://github.com/neuland-ingolstadt/neuland.app-native'
-                        ),
-                },
-                {
-                    title: 'Website',
-                    icon: linkIcon,
-                    onPress: async () =>
-                        await Linking.openURL('https://neuland-ingolstadt.de/'),
                 },
             ],
         },
     ]
+
     const handlePress = (): void => {
         setPressCount(pressCount + 1)
 
@@ -148,6 +153,12 @@ export default function About(): JSX.Element {
         }
     }
     const [pressCount, setPressCount] = useState(0)
+    const handleWebsitePress = (): void => {
+        Linking.openURL('https://neuland-ingolstadt.de/').catch((err) => {
+            console.error('Failed to open URL:', err)
+        })
+    }
+
     return (
         <>
             <ScrollView
@@ -208,14 +219,16 @@ export default function About(): JSX.Element {
                                 >
                                     {t('about.header.developed')}
                                 </Text>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.text,
-                                    ]}
-                                >
-                                    {'Neuland Ingolstadt e.V.'}
-                                </Text>
+                                <Pressable onPress={handleWebsitePress}>
+                                    <Text
+                                        style={[
+                                            { color: colors.text },
+                                            styles.text,
+                                        ]}
+                                    >
+                                        {'Neuland Ingolstadt e.V.'}
+                                    </Text>
+                                </Pressable>
                             </View>
                         </View>
                     </View>
@@ -227,6 +240,12 @@ export default function About(): JSX.Element {
                 <SectionView
                     title={t('about.analytics.title')}
                     footer={t('about.analytics.message')}
+                    link={{
+                        text: t('about.analytics.link'),
+                        destination: () => {
+                            void Linking.openURL(PRIVACY_URL + '#Analytics')
+                        },
+                    }}
                 >
                     <SingleSectionPicker
                         title={t('about.analytics.toggle')}

@@ -14,18 +14,18 @@ PODS:
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
-  - Expo (51.0.29):
+  - Expo (51.0.31):
     - ExpoModulesCore
-  - expo-dev-client (4.0.23):
+  - expo-dev-client (4.0.25):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (4.0.25):
+  - expo-dev-launcher (4.0.27):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 4.0.25)
+    - expo-dev-launcher/Main (= 4.0.27)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -51,7 +51,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (4.0.25):
+  - expo-dev-launcher/Main (4.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -80,7 +80,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (4.0.25):
+  - expo-dev-launcher/Unsafe (4.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -108,10 +108,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu (5.0.19):
+  - expo-dev-menu (5.0.21):
     - DoubleConversion
-    - expo-dev-menu/Main (= 5.0.19)
-    - expo-dev-menu/ReactNativeCompatibles (= 5.0.19)
+    - expo-dev-menu/Main (= 5.0.21)
+    - expo-dev-menu/ReactNativeCompatibles (= 5.0.21)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -132,7 +132,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - expo-dev-menu-interface (1.8.3)
-  - expo-dev-menu/Main (5.0.19):
+  - expo-dev-menu/Main (5.0.21):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu-interface
@@ -158,7 +158,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/ReactNativeCompatibles (5.0.19):
+  - expo-dev-menu/ReactNativeCompatibles (5.0.21):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -179,7 +179,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/SafeAreaView (5.0.19):
+  - expo-dev-menu/SafeAreaView (5.0.21):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -201,7 +201,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/Vendored (5.0.19):
+  - expo-dev-menu/Vendored (5.0.21):
     - DoubleConversion
     - expo-dev-menu/SafeAreaView
     - glog
@@ -249,7 +249,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (15.0.3):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.21):
+  - ExpoModulesCore (1.12.23):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -325,9 +325,9 @@ PODS:
   - FBLazyVector (0.75.2)
   - fmt (9.1.0)
   - glog (0.3.5)
-  - hermes-engine (0.75.1):
-    - hermes-engine/Pre-built (= 0.75.1)
-  - hermes-engine/Pre-built (0.75.1)
+  - hermes-engine (0.75.2):
+    - hermes-engine/Pre-built (= 0.75.2)
+  - hermes-engine/Pre-built (0.75.2)
   - maplibre-react-native (10.0.0-alpha.10):
     - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.10)
     - React
@@ -335,9 +335,9 @@ PODS:
   - maplibre-react-native/DynamicLibrary (10.0.0-alpha.10):
     - React
     - React-Core
-  - MMKV (1.3.7):
-    - MMKVCore (~> 1.3.7)
-  - MMKVCore (1.3.7)
+  - MMKV (1.3.9):
+    - MMKVCore (~> 1.3.9)
+  - MMKVCore (1.3.9)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -2399,10 +2399,10 @@ SPEC CHECKSUMS:
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
-  Expo: 2c1f878fb356a11e8c32eb391f97eb7abfb21e55
-  expo-dev-client: 924e474dc9eccf507260a22c5a8301bed0497453
-  expo-dev-launcher: 68fda6b11a516ee3d1d213f75702e40628a4fe76
-  expo-dev-menu: 577a3e7a22fb3bf4f07125840f6deca7f99c7837
+  Expo: 4773e11951abd0f666f67023f0cb1d48c3e8a32b
+  expo-dev-client: 97910d9e4753f5deae96c3b657a071ee09ce85f5
+  expo-dev-launcher: fc33891203a796c1e9cf0507d54707bf75a8b7de
+  expo-dev-menu: d93c46bfa7bd088b20423945b6d0fb3dff7d647b
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
   ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoBlur: fa53f874e7b208bc3756d1bf07903c12e790beb1
@@ -2417,7 +2417,7 @@ SPEC CHECKSUMS:
   ExpoLinearGradient: 8cec4a09426d8934c433e83cb36262d72c667fce
   ExpoLocalAuthentication: 9e02a56a4cf9868f0052656a93d4c94101a42ed7
   ExpoLocalization: f04eeec2e35bed01ab61c72ee1768ec04d093d01
-  ExpoModulesCore: e3b0b4547b004d90b8efbf17e1886c1600df343b
+  ExpoModulesCore: bfa5f6cbd610372986f5020890b18eb904794410
   ExpoScreenOrientation: 9a13e7438f4b62f313ca3c22d1abeeef847c9599
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
@@ -2426,10 +2426,10 @@ SPEC CHECKSUMS:
   FBLazyVector: 38bb611218305c3bc61803e287b8a81c6f63b619
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
-  hermes-engine: e949b1da40409c52aa7bd79ff32cec045f5b4650
+  hermes-engine: 3b6e0717ca847e2fc90a201e59db36caf04dee88
   maplibre-react-native: 94290e011a0ac4750cac7e897f4da37000633fd9
-  MMKV: 36a22a9ec84c9bb960613a089ddf6f48be9312b0
-  MMKVCore: 158e61c8516401a9fac730288acb29e6fc19bbf9
+  MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
+  MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 34cbf122b623037ea9facad2e92e53434c5c7422
   RCTRequired: 24c446d7bcd0f517d516b6265d8df04dc3eb1219
@@ -2511,6 +2511,6 @@ SPEC CHECKSUMS:
   SwiftUIReactNative: 3241f6b3d9cf6dc29b3dc64f7d838770f19fd604
   Yoga: a1d7895431387402a674fd0d1c04ec85e87909b8
 
-PODFILE CHECKSUM: 8f55d200c3224a632d8274414fb89a5f361d7979
+PODFILE CHECKSUM: eb8d44c3910293b1a3f7ed642b8a9986f933fce8
 
 COCOAPODS: 1.14.3

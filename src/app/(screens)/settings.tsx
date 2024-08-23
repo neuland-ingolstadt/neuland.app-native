@@ -1,6 +1,8 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
 import { Avatar, NameBox } from '@/components/Elements/Settings'
+import GradesButton from '@/components/Elements/Settings/GradesButton'
+import Divider from '@/components/Elements/Universal/Divider'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
@@ -35,6 +37,7 @@ import {
     Pressable,
     RefreshControl,
     ScrollView,
+    Share,
     StyleSheet,
     Text,
     View,
@@ -180,7 +183,7 @@ export default function Settings(): JSX.Element {
             } else if (userKind !== 'student') {
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
         enabled: userKind === USER_STUDENT,
     })
@@ -302,32 +305,25 @@ export default function Settings(): JSX.Element {
                         router.navigate('about')
                     },
                 },
+
                 {
-                    title: 'Feedback',
+                    title: t('menu.formlist.legal.share'),
                     icon: {
-                        ios: 'envelope',
-                        android: 'mail',
-                    },
-                    onPress: async () =>
-                        await Linking.openURL(
-                            'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
-                        ),
-                },
-                {
-                    title: t('menu.formlist.legal.rate'),
-                    icon: {
-                        ios: 'star',
-                        android: 'star',
+                        ios: 'square.and.arrow.up',
+                        android: 'share',
                     },
                     onPress: () => {
+                        trackEvent('Share', { share: 'app' })
                         if (Platform.OS === 'android') {
-                            void Linking.openURL(
-                                'market://details?id=app.neuland&showAllReviews=true'
-                            )
+                            void Share.share({
+                                message:
+                                    'https://play.google.com/store/apps/details?id=app.neuland',
+                            })
                         } else {
-                            void Linking.openURL(
-                                'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
-                            )
+                            void Share.share({
+                                url: 'https://apps.apple.com/app/neuland-next/id1617096811',
+                                message: t('menu.formlist.legal.shareMessage'),
+                            })
                         }
                     },
                 },
@@ -360,6 +356,7 @@ export default function Settings(): JSX.Element {
             </View>
         )
     }
+
     return (
         <ScrollView
             refreshControl={
@@ -402,67 +399,111 @@ export default function Settings(): JSX.Element {
                             {(isLoading || isSuccess) &&
                             userKind === 'student' &&
                             data?.mtknr !== undefined ? (
-                                <>
-                                    <NameBox
-                                        title={data?.vname + ' ' + data?.name}
-                                        subTitle1={
-                                            (data?.stgru ?? '') + '. Semester'
-                                        }
-                                        subTitle2={data?.fachrich ?? ''}
-                                    >
-                                        <Avatar background={colors.primary}>
-                                            <Text
-                                                style={{
-                                                    color: getContrastColor(
-                                                        colors.primary
-                                                    ),
-                                                    ...styles.avatarText,
-                                                }}
-                                            >
-                                                {getInitials(
-                                                    data?.vname +
-                                                        ' ' +
-                                                        data?.name
-                                                )}
-                                            </Text>
-                                        </Avatar>
-                                    </NameBox>
-                                </>
+                                <View style={styles.nameOuterContainer}>
+                                    <View style={styles.nameInnerContainer}>
+                                        <NameBox
+                                            title={
+                                                data?.vname + ' ' + data?.name
+                                            }
+                                            subTitle1={
+                                                (data?.stgru ?? '') +
+                                                '. Semester'
+                                            }
+                                            subTitle2={data?.fachrich ?? ''}
+                                        >
+                                            <Avatar background={colors.primary}>
+                                                <Text
+                                                    style={{
+                                                        color: getContrastColor(
+                                                            colors.primary
+                                                        ),
+                                                        ...styles.avatarText,
+                                                    }}
+                                                >
+                                                    {getInitials(
+                                                        data?.vname +
+                                                            ' ' +
+                                                            data?.name
+                                                    )}
+                                                </Text>
+                                            </Avatar>
+                                        </NameBox>
+
+                                        <PlatformIcon
+                                            color={colors.labelSecondaryColor}
+                                            ios={{
+                                                name: 'chevron.forward',
+
+                                                size: 16,
+                                            }}
+                                            android={{
+                                                name: 'chevron_right',
+                                                size: 26,
+                                            }}
+                                            style={styles.iconAlign}
+                                        />
+                                    </View>
+                                    <Divider
+                                        iosPaddingLeft={16}
+                                        color={colors.labelTertiaryColor}
+                                    />
+                                    <GradesButton />
+                                </View>
                             ) : isSuccess &&
                               userKind === 'student' &&
                               data?.mtknr === undefined ? (
-                                <>
-                                    <NameBox
-                                        title={t('menu.error.noData.title')}
-                                        subTitle1={t(
-                                            'menu.error.noData.subtitle1'
-                                        )}
-                                        subTitle2={t(
-                                            'menu.error.noData.subtitle2'
-                                        )}
-                                    >
-                                        <Avatar
-                                            background={
-                                                colors.labelTertiaryColor
-                                            }
+                                <View style={styles.nameOuterContainer}>
+                                    <View style={styles.nameInnerContainer}>
+                                        <NameBox
+                                            title={t('menu.error.noData.title')}
+                                            subTitle1={t(
+                                                'menu.error.noData.subtitle1'
+                                            )}
+                                            subTitle2={t(
+                                                'menu.error.noData.subtitle2'
+                                            )}
                                         >
-                                            <PlatformIcon
-                                                color={colors.background}
-                                                ios={{
-                                                    name: 'exclamationmark.triangle',
-                                                    variant: 'fill',
-                                                    size: 26,
-                                                }}
-                                                android={{
-                                                    name: 'warning',
-                                                    size: 28,
-                                                }}
-                                            />
-                                        </Avatar>
-                                    </NameBox>
-                                </>
+                                            <Avatar
+                                                background={
+                                                    colors.labelTertiaryColor
+                                                }
+                                            >
+                                                <PlatformIcon
+                                                    color={colors.background}
+                                                    ios={{
+                                                        name: 'exclamationmark.triangle',
+                                                        variant: 'fill',
+                                                        size: 26,
+                                                    }}
+                                                    android={{
+                                                        name: 'warning',
+                                                        size: 28,
+                                                    }}
+                                                />
+                                            </Avatar>
+                                        </NameBox>
+                                        <PlatformIcon
+                                            color={colors.labelSecondaryColor}
+                                            ios={{
+                                                name: 'chevron.forward',
+
+                                                size: 16,
+                                            }}
+                                            android={{
+                                                name: 'chevron_right',
+                                                size: 26,
+                                            }}
+                                            style={styles.iconAlign}
+                                        />
+                                    </View>
+                                    <Divider
+                                        iosPaddingLeft={16}
+                                        color={colors.labelTertiaryColor}
+                                    />
+                                    <GradesButton />
+                                </View>
                             ) : userKind === 'employee' ? (
-                                <>
+                                <View style={styles.nameInnerContainer}>
                                     <NameBox
                                         title={username as string}
                                         subTitle1={t('menu.employee.subtitle1')}
@@ -483,9 +524,9 @@ export default function Settings(): JSX.Element {
                                             </Text>
                                         </Avatar>
                                     </NameBox>
-                                </>
+                                </View>
                             ) : userKind === 'guest' ? (
-                                <>
+                                <View style={styles.nameInnerContainer}>
                                     <NameBox
                                         title={t('menu.guest.title')}
                                         subTitle1={t('menu.guest.subtitle')}
@@ -510,7 +551,20 @@ export default function Settings(): JSX.Element {
                                             />
                                         </Avatar>
                                     </NameBox>
-                                </>
+                                    <PlatformIcon
+                                        color={colors.labelSecondaryColor}
+                                        ios={{
+                                            name: 'chevron.forward',
+
+                                            size: 16,
+                                        }}
+                                        android={{
+                                            name: 'chevron_right',
+                                            size: 26,
+                                        }}
+                                        style={styles.iconAlign}
+                                    />
+                                </View>
                             ) : isError ? (
                                 <>
                                     <NameBox
@@ -549,21 +603,6 @@ export default function Settings(): JSX.Element {
                             ) : (
                                 <></>
                             )}
-
-                            {isSuccess || userKind === USER_GUEST ? (
-                                <PlatformIcon
-                                    color={colors.labelSecondaryColor}
-                                    ios={{
-                                        name: 'chevron.forward',
-
-                                        size: 16,
-                                    }}
-                                    android={{
-                                        name: 'chevron_right',
-                                        size: 26,
-                                    }}
-                                />
-                            ) : null}
                         </View>
                     </View>
                 </Pressable>
@@ -650,8 +689,6 @@ const styles = StyleSheet.create({
 
         borderRadius: 10,
         width: '100%',
-        paddingVertical: 24,
-        paddingHorizontal: 14,
     },
     nameBox: {
         flexDirection: 'row',
@@ -683,5 +720,14 @@ const styles = StyleSheet.create({
     whobbleContainer: {
         alignItems: 'center',
         paddingTop: 20,
+    },
+    iconAlign: {
+        alignSelf: 'center',
+    },
+    nameOuterContainer: { flexDirection: 'column', flex: 1 },
+    nameInnerContainer: {
+        flexDirection: 'row',
+        paddingVertical: 20,
+        paddingHorizontal: 14,
     },
 })

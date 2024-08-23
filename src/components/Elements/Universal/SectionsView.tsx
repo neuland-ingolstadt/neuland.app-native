@@ -8,10 +8,12 @@ const SectionView = ({
     title,
     footer,
     children,
+    link,
 }: {
     title: string
     footer?: string
     children: JSX.Element
+    link?: { text: string; destination: () => void }
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
 
@@ -47,6 +49,18 @@ const SectionView = ({
                     ]}
                 >
                     {footer}
+                    {link != null && (
+                        <Text
+                            onPress={link.destination}
+                            style={[
+                                styles.footerText,
+                                { color: colors.primary },
+                            ]}
+                        >
+                            {' '}
+                            {link.text}
+                        </Text>
+                    )}
                 </Text>
             )}
         </>

@@ -96,7 +96,7 @@ export default function AdvancedSearch(): JSX.Element {
                 router.replace('user/login')
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
     })
     const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)

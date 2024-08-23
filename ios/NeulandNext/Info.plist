@@ -76,17 +76,12 @@
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
-    <key>CFBundleLocalizations</key>
-    <array>
-      <string>en</string>
-      <string>de</string>
-    </array>
     <key>CFBundleName</key>
     <string>$(PRODUCT_NAME)</string>
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.9.1</string>
+    <string>0.9.3</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleURLTypes</key>
@@ -106,7 +101,9 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>83</string>
+    <string>88</string>
+    <key>EXDefaultScreenOrientationMask</key>
+    <string>UIInterfaceOrientationMaskAllButUpsideDown</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSRequiresIPhoneOS</key>
@@ -124,7 +121,6 @@
     <string>Allow Neuland Next to access your location to show your location on the map.</string>
     <key>NSUserActivityTypes</key>
     <array>
-      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>RCTAsyncStorageExcludeFromBackup</key>

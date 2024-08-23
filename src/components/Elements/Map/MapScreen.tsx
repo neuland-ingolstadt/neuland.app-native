@@ -185,7 +185,7 @@ const MapScreen = (): JSX.Element => {
             if (ignoreErrors.includes(error?.message)) {
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
         enabled: userKind !== USER_GUEST,
     })
@@ -394,7 +394,7 @@ const MapScreen = (): JSX.Element => {
             if (error instanceof NoSessionError) {
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
     })
 
@@ -875,7 +875,7 @@ const MapScreen = (): JSX.Element => {
                 style={[
                     styles.osmContainer,
                     animatedStyles,
-                    { top: Platform.OS === 'ios' ? -19 : -24 },
+                    { top: Platform.OS === 'ios' ? -19 : -22 },
                 ]}
             >
                 <Pressable

@@ -59,6 +59,7 @@ const NameBox = ({
                             ...styles.subtitle,
                             color: colors.text,
                         }}
+                        numberOfLines={2}
                     >
                         {subTitle2}
                     </Text>
@@ -86,5 +87,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flex: 1,
         marginLeft: 16,
+        justifyContent: 'center',
     },
 })

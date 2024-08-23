@@ -5,7 +5,7 @@
         "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@babel/runtime@7.25.0": {
+    "@babel/runtime@7.25.4": {
         "licenses": "MIT",
         "repository": "https://github.com/babel/babel",
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
@@ -65,13 +65,13 @@
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.52.0": {
+    "@tanstack/react-query-persist-client@5.52.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.52.0": {
+    "@tanstack/react-query@5.52.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -185,7 +185,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@51.0.29": {
+    "expo@51.0.31": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",

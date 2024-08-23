@@ -33,9 +33,10 @@
                 "confirm": "Bestätigen"
             },
             "legal": {
-                "title": "Rechtliches",
+                "title": "App",
                 "about": "Über",
-                "rate": "Bewerte die App"
+                "share": "Teile die App",
+                "shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀"
             }
         },
         "copyright": "© {{year}} von Neuland Ingolstadt e.V."
@@ -47,11 +48,13 @@
         "formlist": {
             "legal": {
                 "title": "Rechtliches",
-                "privacy": "Datenschutz",
-                "imprint": "Impressum"
+                "button": "Rechtliche Infos"
             },
-            "about": {
-                "title": "Über uns"
+            "contact": {
+                "title": "Kontakt",
+                "feedback": "Feedback",
+                "rateAndroid": "Bewerte im Play Store",
+                "rateiOS": "Bewerte im App Store"
             }
         },
         "easterEgg": {
@@ -63,7 +66,21 @@
         "analytics": {
             "title": "Analytics",
             "toggle": "Anonyme Nutzungsdaten Sammeln",
-            "message": "Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich."
+            "message": "Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich.",
+            "link": "Über Analytics"
+        }
+    },
+    "legal": {
+        "formlist": {
+            "legal": {
+                "title": "Rechtliches",
+                "privacy": "Datenschutz",
+                "imprint": "Impressum"
+            },
+            "us": {
+                "title": "Sonstiges",
+                "source": "Quellcode"
+            }
         }
     },
     "changelog": {
@@ -87,7 +104,9 @@
                 "title": "Benutzer",
                 "matrical": "Matrikelnummer",
                 "library": "Bibliotheksnummer",
-                "printer": "Druckguthaben"
+                "printer": "Druckguthaben",
+                "status": "Rückmeldung",
+                "statusInactive": "Fehlend"
             },
             "study": {
                 "title": "Studium",

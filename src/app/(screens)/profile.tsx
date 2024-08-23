@@ -1,7 +1,7 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -14,7 +14,6 @@ import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
-import * as LocalAuthentication from 'expo-local-authentication'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -51,28 +50,10 @@ export default function Profile(): JSX.Element {
                     router.replace('user/login')
                     return false
                 }
-                return failureCount < 3
+                return failureCount < 2
             },
         })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
-
-    const handleBiometricAuth = async (): Promise<void> => {
-        const securityLevel = await LocalAuthentication.getEnrolledLevelAsync()
-        if (securityLevel === 0) {
-            // no passcode or biometric auth set up
-            router.push('grades')
-            return
-        }
-
-        const biometricAuth = await LocalAuthentication.authenticateAsync({
-            promptMessage: 'Verify your identity to show your grades',
-            fallbackLabel: 'Enter Passcode',
-        })
-
-        if (biometricAuth.success) {
-            router.push('grades')
-        }
-    }
 
     const copyToClipboard = async (text: string): Promise<void> => {
         if (text.length === 0) {
@@ -124,18 +105,6 @@ export default function Profile(): JSX.Element {
     }
 
     const sections: FormListSections[] = [
-        {
-            header: t('profile.formlist.grades.title'),
-            items: [
-                {
-                    title: t('profile.formlist.grades.button'),
-                    icon: chevronIcon,
-                    onPress: async () => {
-                        await handleBiometricAuth()
-                    },
-                },
-            ],
-        },
         {
             header: t('profile.formlist.user.title'),
             items: [
@@ -190,6 +159,13 @@ export default function Profile(): JSX.Element {
                     title: t('profile.formlist.study.group'),
                     value: data?.stgru,
                 },
+                {
+                    title: t('profile.formlist.user.status'),
+                    value:
+                        data?.rue === '1'
+                            ? data?.rue_sem
+                            : t('profile.formlist.user.statusInactive'),
+                },
             ],
         },
         {
@@ -202,20 +178,28 @@ export default function Profile(): JSX.Element {
                         await copyToClipboard(data?.fhmail ?? '')
                     },
                 },
-                {
-                    title: 'Email',
-                    value: data?.email,
-                    onPress: async () => {
-                        await copyToClipboard(data?.email ?? '')
-                    },
-                },
-                {
-                    title: t('profile.formlist.contact.phone'),
-                    value: data?.telefon,
-                    onPress: async () => {
-                        await copyToClipboard(data?.telefon ?? '')
-                    },
-                },
+                ...(data?.email === ''
+                    ? []
+                    : [
+                          {
+                              title: 'Email',
+                              value: data?.email,
+                              onPress: async () => {
+                                  await copyToClipboard(data?.email ?? '')
+                              },
+                          },
+                      ]),
+                ...(data?.telefon === ''
+                    ? []
+                    : [
+                          {
+                              title: t('profile.formlist.contact.phone'),
+                              value: data?.telefon,
+                              onPress: async () => {
+                                  await copyToClipboard(data?.telefon ?? '')
+                              },
+                          },
+                      ]),
                 {
                     title: t('profile.formlist.contact.street'),
                     value: data?.str,
