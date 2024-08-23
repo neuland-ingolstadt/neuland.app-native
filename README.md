@@ -3,12 +3,12 @@
 
 # Neuland Next - native version of neuland.app
 
-<div style="display: flex; align-items: center;">
+<div style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
-    <img alt="Download on the App Store" src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" height="50px" />
+    <img alt="Download on the App Store" src="assets/github/Apple_Badge_EN.svg" height="50px" />
   </a>
   <a href="https://play.google.com/store/apps/details?id=app.neuland">
-    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="74px" />
+    <img alt="Get it on Google Play" src="assets/github/Google_Badge_EN.svg" height="50px" />
   </a>
 </div>
 

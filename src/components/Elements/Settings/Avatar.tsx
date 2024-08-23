@@ -31,6 +31,7 @@ const Avatar = ({
         backgroundColor: background,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
     }
 
     return <View style={avatarSize}>{children}</View>

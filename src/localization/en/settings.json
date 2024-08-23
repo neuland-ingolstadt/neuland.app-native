@@ -27,16 +27,16 @@
                 "accent": "Accent Color",
                 "theme": "Design"
             },
-
             "language": {
                 "title": "Change language",
                 "message": "Confirm to change the app language to German.",
                 "confirm": "Confirm"
             },
             "legal": {
-                "title": "Legal",
+                "title": "App",
                 "about": "About",
-                "rate": "Rate the app"
+                "share": "Share the app",
+                "shareMessage": "Get Neuland Next for your phone! 🚀"
             }
         },
         "copyright": "© {{year}} by Neuland Ingolstadt e.V."
@@ -48,11 +48,14 @@
         "formlist": {
             "legal": {
                 "title": "Legal",
-                "privacy": "Privacy Policy",
-                "imprint": "Imprint"
+                "button": "Legal Information"
             },
-            "about": {
-                "title": "About us"
+            "contact": {
+                "title": "Contact",
+                "feedback": "Feedback",
+
+                "rateAndroid": "Rate on Play Store",
+                "rateiOS": "Rate on App Store"
             }
         },
         "easterEgg": {
@@ -64,7 +67,21 @@
         "analytics": {
             "title": "Analytics",
             "toggle": "Collect Anonymous Usage Data",
-            "message": "Help us improve the app by sending anonymous usage data. It is not possible to deduce your identity at any time."
+            "message": "Help us improve the app by sending anonymous usage data. It is not possible to deduce your identity at any time.",
+            "link": "About Analytics"
+        }
+    },
+    "legal": {
+        "formlist": {
+            "legal": {
+                "title": "Legal",
+                "privacy": "Privacy",
+                "imprint": "Imprint"
+            },
+            "us": {
+                "title": "Other",
+                "source": "Source code"
+            }
         }
     },
     "changelog": {
@@ -79,17 +96,18 @@
             "message": "Looks like you are no longer enrolled. Please check your Primuss account.",
             "button": "Primuss"
         },
-
         "formlist": {
             "grades": {
                 "title": "Grades",
-                "button": "Grades and subjects"
+                "button": "Grades and Subjects"
             },
             "user": {
                 "title": "User",
                 "matrical": "Matriculation number",
                 "library": "Library number",
-                "printer": "Printer credits"
+                "printer": "Printer credits",
+                "status": "Re-registration",
+                "statusInactive": "Missing"
             },
             "study": {
                 "title": "Study",

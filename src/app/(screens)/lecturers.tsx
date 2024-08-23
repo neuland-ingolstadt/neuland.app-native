@@ -91,7 +91,7 @@ export default function LecturersCard(): JSX.Element {
                         router.push('login')
                         return false
                     }
-                    return failureCount < 3
+                    return failureCount < 2
                 },
                 enabled: userKind !== USER_GUEST,
             },
@@ -109,7 +109,7 @@ export default function LecturersCard(): JSX.Element {
                         router.navigate('login')
                         return false
                     }
-                    return failureCount < 3
+                    return failureCount < 2
                 },
                 enabled: userKind !== USER_GUEST,
             },

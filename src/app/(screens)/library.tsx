@@ -85,7 +85,7 @@ export default function LibraryCreen(): JSX.Element {
                     router.replace('user/login')
                     return false
                 }
-                return failureCount < 3
+                return failureCount < 2
             },
         })
 
@@ -128,7 +128,7 @@ export default function LibraryCreen(): JSX.Element {
                 router.replace('user/login')
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
     })
 

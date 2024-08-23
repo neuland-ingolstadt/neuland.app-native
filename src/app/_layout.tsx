@@ -266,6 +266,13 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
+                    name="(screens)/legal"
+                    options={{
+                        title: t('navigation.legal'),
+                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
                     name="(screens)/licenses"
                     options={{
                         title: t('navigation.licenses.title'),

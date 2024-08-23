@@ -4,13 +4,13 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.9.1",
+        "version": "0.9.3",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "orientation": "portrait",
         "userInterfaceStyle": "automatic",
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-            "buildNumber": "83",
+            "buildNumber": "89",
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
@@ -23,7 +23,6 @@
             "infoPlist": {
                 "RCTAsyncStorageExcludeFromBackup": false,
                 "CFBundleAllowMixedLocalizations": true,
-                "CFBundleLocalizations": ["en", "de"],
                 "CFBundleDevelopmentRegion": "en",
                 "UIViewControllerBasedStatusBarAppearance": true,
                 "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
@@ -40,13 +39,13 @@
             "icon": "./src/assets/appIcons/default.png"
         },
         "locales": {
-            "en-US": "./src/localization/en/ios.json",
-            "de-DE": "./src/localization/de/ios.json"
+            "en": "./src/localization/en/ios.json",
+            "de": "./src/localization/de/ios.json"
         },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 157,
+            "versionCode": 159,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",

@@ -1,3 +1,9 @@
+import {
+    authenticateAsync,
+    getEnrolledLevelAsync,
+} from 'expo-local-authentication'
+import { router } from 'expo-router'
+
 /**
  * Converts a version string in the format x.y.z to x.y.
  * @param version - The version string to convert.
@@ -28,4 +34,26 @@ export function arraysEqual(arr1: any[], arr2: any[]): boolean {
         if (arr1[i] !== arr2[i]) return false
     }
     return true
+}
+
+/**
+ * Handles biometric authentication for a given path.
+ * @param path - The path to navigate to after successful authentication.
+ */
+export const handleBiometricAuth = async (path: string): Promise<void> => {
+    const securityLevel = await getEnrolledLevelAsync()
+    if (securityLevel === 0) {
+        // no passcode or biometric auth set up
+        router.navigate(path)
+        return
+    }
+
+    const biometricAuth = await authenticateAsync({
+        promptMessage: 'Verify your identity to show your grades',
+        fallbackLabel: 'Enter Passcode',
+    })
+
+    if (biometricAuth.success) {
+        router.navigate(path)
+    }
 }

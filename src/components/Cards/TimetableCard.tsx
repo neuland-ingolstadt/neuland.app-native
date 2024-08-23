@@ -46,7 +46,7 @@ const TimetableCard = (): JSX.Element => {
             if (ignoreErrors.includes(error?.message)) {
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
     })
 

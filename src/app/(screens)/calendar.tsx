@@ -58,7 +58,7 @@ export default function CalendarPage(): JSX.Element {
                 router.push(' login')
                 return false
             }
-            return failureCount < 3
+            return failureCount < 2
         },
         enabled: userKind !== USER_GUEST,
     })
