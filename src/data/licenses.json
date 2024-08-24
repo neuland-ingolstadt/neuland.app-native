@@ -287,7 +287,7 @@
         "licenseUrl": "https://github.com/mrousavy/react-native-mmkv/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-pager-view@6.3.4": {
+    "react-native-pager-view@6.4.0": {
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-pager-view",
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",

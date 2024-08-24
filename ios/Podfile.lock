@@ -231,8 +231,6 @@ PODS:
     - ExpoModulesCore
   - ExpoClipboard (6.0.3):
     - ExpoModulesCore
-  - ExpoDevice (6.0.2):
-    - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
   - ExpoFont (12.0.9):
@@ -1596,7 +1594,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.3.1):
     - React-Core
-  - react-native-pager-view (6.3.4):
+  - react-native-pager-view (6.4.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2053,7 +2051,6 @@ DEPENDENCIES:
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoBrightness (from `../node_modules/expo-brightness/ios`)
   - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
-  - ExpoDevice (from `../node_modules/expo-device/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
@@ -2196,8 +2193,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-brightness/ios"
   ExpoClipboard:
     :path: "../node_modules/expo-clipboard/ios"
-  ExpoDevice:
-    :path: "../node_modules/expo-device/ios"
   ExpoFileSystem:
     :path: "../node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2408,7 +2403,6 @@ SPEC CHECKSUMS:
   ExpoBlur: fa53f874e7b208bc3756d1bf07903c12e790beb1
   ExpoBrightness: c184f0ef116a51d7f5c1dd4c253d4d9806a5e022
   ExpoClipboard: 23d203f5d4843699fbc45be1cc4fe1fbd811a6fa
-  ExpoDevice: fc94f0e42ecdfd897e7590f2874fc64dfa7e9b1c
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
   ExpoFont: e7f2275c10ca8573c991e007329ad6bf98086485
   ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
@@ -2463,7 +2457,7 @@ SPEC CHECKSUMS:
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
   react-native-mmkv: 7d0b6c2a79e73100b933f2947a9c8741d664e18b
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
-  react-native-pager-view: 0d82f72782f104aeb818caf14c6311cde094a9bb
+  react-native-pager-view: 2aef9f11fb8f436a68e0c58f7658cad8736d1121
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688

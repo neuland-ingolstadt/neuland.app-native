@@ -1,2 +1,3 @@
-Performance and reliability testing for 1.0.
-Please report any issues and even the smallest details that don't seem right.
+In this update, we implemented some improvements for you so that you can use the app even more smoothly and conveniently.
+We've worked on performance in the background, fixed small bugs and optimized the overall user experience.
+Stay tuned so you don't miss any more updates!

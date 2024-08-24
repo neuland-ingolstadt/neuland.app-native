@@ -140,7 +140,10 @@ function HomeScreen(): JSX.Element {
             onScroll={handleScroll}
             key={orientation}
             contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={styles.container}
+            contentContainerStyle={{
+                ...styles.container,
+                backgroundColor: colors.background,
+            }}
             showsVerticalScrollIndicator={false}
             data={shownDashboardEntries}
             renderItem={({ item, index }) => {
