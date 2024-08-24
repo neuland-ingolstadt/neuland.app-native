@@ -1,10 +1,12 @@
 /* eslint-disable react-native/no-color-literals */
 import MapScreen from '@/components/Elements/Map/MapScreen'
+import { type Colors } from '@/components/colors'
 import { MapContext } from '@/contexts/map'
 import { type ClickedMapElement, type SearchResult } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
 import { storage } from '@/utils/storage'
 import Maplibre from '@maplibre/maplibre-react-native'
+import { useTheme } from '@react-navigation/native'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +14,7 @@ import { Platform, StyleSheet, View } from 'react-native'
 
 export default function MapRootScreen(): JSX.Element {
     const { t } = useTranslation(['navigation'])
+    const colors = useTheme().colors as Colors
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)
@@ -88,6 +91,7 @@ export default function MapRootScreen(): JSX.Element {
             <View
                 style={{
                     ...styles.page,
+                    backgroundColor: colors.background,
                 }}
             >
                 {isPageOpen ? (

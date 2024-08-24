@@ -1,2 +1,3 @@
-Leistungs- und Zuverlässigkeitstests für 1.0.
-Bitte melde alle Probleme und auch die kleinsten Details, die nicht richtig erscheinen.
+In diesem Update haben wir einige Verbesserungen für dich umgesetzt, damit du die App noch flüssiger und angenehmer nutzen kannst.
+Wir haben im Hintergrund an der Performance geschraubt, kleine Fehler behoben und das gesamte Nutzererlebnis optimiert.
+Bleib dran, um keine weiteren Updates zu verpassen!

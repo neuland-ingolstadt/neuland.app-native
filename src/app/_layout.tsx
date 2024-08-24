@@ -28,15 +28,12 @@ function RootLayout(): JSX.Element {
     const isPad = DeviceInfo.isTablet()
 
     useEffect(() => {
-        // iOS already unlocks the screen orientation on iPad by default
-        if (Platform.OS === 'android') {
-            if (isPad) {
-                void ScreenOrientation.unlockAsync()
-            } else {
-                void ScreenOrientation.lockAsync(
-                    ScreenOrientation.OrientationLock.PORTRAIT_UP
-                )
-            }
+        if (isPad) {
+            void ScreenOrientation.unlockAsync()
+        } else {
+            void ScreenOrientation.lockAsync(
+                ScreenOrientation.OrientationLock.PORTRAIT_UP
+            )
         }
     }, [isPad])
 
@@ -109,7 +106,6 @@ function RootLayout(): JSX.Element {
                     ),
                     // Android
                     statusBarTranslucent: true,
-                    // statusBarHidden: true
                 }}
             >
                 <Stack.Screen

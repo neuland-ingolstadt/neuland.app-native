@@ -65,8 +65,8 @@ export default function Settings(): JSX.Element {
     const colors = theme.colors as Colors
     const { t, i18n } = useTranslation(['settings'])
     const bottomBoundX = 0
-    const logoWidth = 171
-    const logoHeight = 18
+    const logoWidth = 159
+    const logoHeight = 15
     const topBoundX = width - logoWidth
     const [tapCount, setTapCount] = useState(0)
     const translateX = useSharedValue(0)
@@ -638,7 +638,7 @@ export default function Settings(): JSX.Element {
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
                     <LogoTextSVG
-                        size={16}
+                        size={15}
                         color={isBouncing ? color : colors.text}
                     />
                 </Pressable>
@@ -664,7 +664,7 @@ export default function Settings(): JSX.Element {
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
                     <ShimmerEffect>
-                        <LogoTextSVG size={16} color={colors.text} />
+                        <LogoTextSVG size={15} color={colors.text} />
                     </ShimmerEffect>
                 </Pressable>
             </Animated.View>

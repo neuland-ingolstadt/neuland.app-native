@@ -29,7 +29,7 @@ const GradesButton = (): JSX.Element => {
             <PlatformIcon
                 color={colors.labelSecondaryColor}
                 ios={{
-                    name: 'chart.xyaxis.line',
+                    name: 'book',
                     size: 15,
                 }}
                 android={{

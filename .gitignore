@@ -7,6 +7,9 @@
 # vs code
 .VSCodeCounter/
 
+# idea
+.idea/
+
 # bun
 **/node_modules
 
