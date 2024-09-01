@@ -15,10 +15,17 @@ import { Linking, StyleSheet, Text, View } from 'react-native'
 const LinkScreen = (): JSX.Element => {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const { addRecentQuicklink } = useContext(PreferencesContext)
+    const { addRecentQuicklink, recentQuicklinks } =
+        useContext(PreferencesContext)
+    console.log(
+        useContext(PreferencesContext),
+        'PreferencesContext',
+        recentQuicklinks
+    )
     const typedQuicklinks = quicklinks as Quicklink[]
 
     const linkPress = async (key: string, url: string): Promise<void> => {
+        console.log('Link pressed:', key)
         addRecentQuicklink(key)
         router.back()
         trackEvent('Quicklink', { link: key })

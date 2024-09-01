@@ -187,11 +187,10 @@
             "modernDark": "Modern Dark",
             "retro": "neuland.app",
             "modernGreen": "Modern Green",
-            "modernPink": "Modern Pink",
+            "modernPurple": "Modern Purple",
             "rainbowMoonLight": "Rainbow Light",
-            "rainbowDark": "Rainbow Dark",
             "rainbowNeon": "Rainbow Neon",
-            "cat": "Pradise Cat"
+            "cat": "Paradise Cat"
         },
         "categories": {
             "default": "Default",

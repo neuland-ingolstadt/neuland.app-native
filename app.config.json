@@ -75,7 +75,9 @@
                 }
             ],
             ["@maplibre/maplibre-react-native"],
-            "expo-build-properties",
+            [
+                "expo-build-properties"
+            ],
             [
                 "expo-screen-orientation",
                 {

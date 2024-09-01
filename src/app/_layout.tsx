@@ -107,6 +107,7 @@ function RootLayout(): JSX.Element {
                     // Android
                     statusBarTranslucent: true,
                 }}
+                
             >
                 <Stack.Screen
                     name="index"

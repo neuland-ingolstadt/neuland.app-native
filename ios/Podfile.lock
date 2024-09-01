@@ -294,8 +294,6 @@ PODS:
     - Yoga
   - ExpoSecureStore (13.0.2):
     - ExpoModulesCore
-  - ExpoSystemUI (3.0.7):
-    - ExpoModulesCore
   - EXSplashScreen (0.27.5):
     - DoubleConversion
     - ExpoModulesCore
@@ -1594,7 +1592,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.3.1):
     - React-Core
-  - react-native-pager-view (6.4.0):
+  - react-native-pager-view (6.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1934,7 +1932,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.15.0):
+  - RNReanimated (3.15.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1954,10 +1952,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.0)
-    - RNReanimated/worklets (= 3.15.0)
+    - RNReanimated/reanimated (= 3.15.1)
+    - RNReanimated/worklets (= 3.15.1)
     - Yoga
-  - RNReanimated/reanimated (3.15.0):
+  - RNReanimated/reanimated (3.15.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1978,7 +1976,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.15.0):
+  - RNReanimated/worklets (3.15.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2062,7 +2060,6 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoScreenOrientation (from `../node_modules/expo-screen-orientation/ios`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
-  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2215,8 +2212,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-screen-orientation/ios"
   ExpoSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
-  ExpoSystemUI:
-    :path: "../node_modules/expo-system-ui/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   EXUpdatesInterface:
@@ -2414,7 +2409,6 @@ SPEC CHECKSUMS:
   ExpoModulesCore: bfa5f6cbd610372986f5020890b18eb904794410
   ExpoScreenOrientation: 9a13e7438f4b62f313ca3c22d1abeeef847c9599
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
-  ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   EXSplashScreen: 5461621eafa685600296f3702ed35cc8dcb18aae
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 38bb611218305c3bc61803e287b8a81c6f63b619
@@ -2457,7 +2451,7 @@ SPEC CHECKSUMS:
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
   react-native-mmkv: 7d0b6c2a79e73100b933f2947a9c8741d664e18b
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
-  react-native-pager-view: 2aef9f11fb8f436a68e0c58f7658cad8736d1121
+  react-native-pager-view: c476f76d54f946df5147645e902d3d7173688187
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
@@ -2494,7 +2488,7 @@ SPEC CHECKSUMS:
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: b521ebdd7f9352673817f1d98e8bdc0c8cf8545b
   RNGestureHandler: 939f21fabf5d45a725c0bf175eb819dd25cf2e70
-  RNReanimated: 74413c59c47123d7144db601d065627c75c746a3
+  RNReanimated: b0912c8ba12f6c03db07c851c4de71c3eed6c83c
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
   RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86

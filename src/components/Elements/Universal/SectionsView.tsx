@@ -10,26 +10,28 @@ const SectionView = ({
     children,
     link,
 }: {
-    title: string
+    title?: string
     footer?: string
     children: JSX.Element
     link?: { text: string; destination: () => void }
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
-
+    console.log(title)
     return (
         <>
             <View style={styles.sectionContainer}>
-                <Text
-                    style={[
-                        styles.labelText,
-                        {
-                            color: colors.labelSecondaryColor,
-                        },
-                    ]}
-                >
-                    {title}
-                </Text>
+                {title !== '' && title !== undefined && (
+                    <Text
+                        style={[
+                            styles.labelText,
+                            {
+                                color: colors.labelSecondaryColor,
+                            },
+                        ]}
+                    >
+                        {title}
+                    </Text>
+                )}
                 <View
                     style={[
                         styles.sectionBox,

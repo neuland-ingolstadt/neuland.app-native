@@ -45,6 +45,7 @@ export function usePreferences(): PreferencesType {
 
     const addRecentQuicklink = useCallback(
         (quicklink: string): void => {
+            console.log('Adding quicklink:', quicklink)
             const existingQuicklinks = recentQuicklinks ?? []
 
             // Create a new list with the new quicklink at the front
@@ -67,7 +68,7 @@ export function usePreferences(): PreferencesType {
                 ...uniqueQuicklinks,
                 ...additionalQuicklinks,
             ].slice(0, 3)
-
+            console.log('Final quicklinks:', finalQuicklinks)
             // Update the state and storage with the final list
             setRecentQuicklinks(finalQuicklinks)
         },

@@ -262,9 +262,9 @@ export default function Provider({
                 <ThemeProvider
                     value={colorScheme === 'dark' ? darkTheme : lightTheme}
                 >
-                    <BottomSheetModalProvider>
-                        <ThemeContext.Provider value={themeHook}>
-                            <PreferencesContext.Provider value={preferences}>
+                    <ThemeContext.Provider value={themeHook}>
+                        <PreferencesContext.Provider value={preferences}>
+                            <BottomSheetModalProvider>
                                 <FlowContext.Provider value={flow}>
                                     <UserKindContext.Provider value={userKind}>
                                         <FoodFilterContext.Provider
@@ -284,9 +284,9 @@ export default function Provider({
                                         </FoodFilterContext.Provider>
                                     </UserKindContext.Provider>
                                 </FlowContext.Provider>
-                            </PreferencesContext.Provider>
-                        </ThemeContext.Provider>
-                    </BottomSheetModalProvider>
+                            </BottomSheetModalProvider>
+                        </PreferencesContext.Provider>
+                    </ThemeContext.Provider>
                 </ThemeProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>

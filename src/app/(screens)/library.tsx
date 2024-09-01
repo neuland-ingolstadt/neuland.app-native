@@ -1,9 +1,15 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
-import LibraryBookingRow from '@/components/Elements/Rows/LibraryBookingRow'
-import LibraryReservationRow from '@/components/Elements/Rows/LibraryReservationRow'
+import LibraryBookinView from '@/components/Elements/Libraray/LibraryBookingView'
+import LibraryReservationRow from '@/components/Elements/Libraray/LibraryReservationRow'
+import LibrarySlotRow from '@/components/Elements/Libraray/LibrarySlotRow'
+import {
+    BottomSheetRootBackground,
+    renderBackdrop,
+} from '@/components/Elements/Universal/BottomSheetRootBackground'
 import Divider from '@/components/Elements/Universal/Divider'
+import Dropdown from '@/components/Elements/Universal/Dropdown'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors } from '@/components/colors'
 import { queryClient } from '@/components/provider'
@@ -12,20 +18,26 @@ import { type AvailableLibrarySeats, type Reservation } from '@/types/thi-api'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { getFriendlyAvailableLibrarySeats } from '@/utils/library-utils'
+import {
+    BottomSheetModal,
+    BottomSheetModalProvider,
+    BottomSheetView,
+} from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Button,
     LayoutAnimation,
     RefreshControl,
     StyleSheet,
     Text,
     View,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { Pressable, ScrollView } from 'react-native-gesture-handler'
 
 export default function LibraryCreen(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -170,11 +182,18 @@ export default function LibraryCreen(): JSX.Element {
         reservationTime: { from: Date; to: Date },
         reservationSeat: string
     ): Promise<void> => {
-        void addReservationMutation.mutateAsync({
-            reservationRoom,
-            reservationTime,
-            reservationSeat,
-        })
+        addReservationMutation
+            .mutateAsync({
+                reservationRoom,
+                reservationTime,
+                reservationSeat,
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+            .finally(() => {
+                bottomSheetModalRef.current?.dismiss()
+            })
     }
 
     /**
@@ -184,165 +203,211 @@ export default function LibraryCreen(): JSX.Element {
     const deleteReservation = async (id: string): Promise<void> => {
         deleteReservationMutation.mutate(id)
     }
-
+    const bottomSheetModalRef = React.useRef<BottomSheetModal>(null)
+    const handlePresentModalPress = useCallback(() => {
+        console.log('handlePresentModalPress')
+        bottomSheetModalRef.current?.present()
+    }, [])
+    const handleSheetChanges = useCallback((index: number) => {
+        console.log('handleSheetChanges', index)
+    }, [])
+    const snapPoints = useMemo(() => ['35%', '55%', '80%'], [])
+    const [selectedItem, setSelectedItem] = useState<AvailableLibrarySeats>()
     return (
-        <ScrollView
-            contentContainerStyle={styles.contentContainer}
-            refreshControl={
-                isSuccess ? (
-                    <RefreshControl
-                        refreshing={isRefetchingByUser}
-                        onRefresh={() => {
-                            void refetchByUser()
+        <BottomSheetModalProvider>
+            <ScrollView
+                contentContainerStyle={styles.contentContainer}
+                refreshControl={
+                    isSuccess ? (
+                        <RefreshControl
+                            refreshing={isRefetchingByUser}
+                            onRefresh={() => {
+                                void refetchByUser()
+                            }}
+                        />
+                    ) : undefined
+                }
+            >
+                <View>
+                    {isLoading && (
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator
+                                size="small"
+                                color={colors.primary}
+                            />
+                        </View>
+                    )}
+                    {isError && (
+                        <ErrorView
+                            title={error.message}
+                            onRefresh={refetchByUser}
+                            refreshing={isRefetchingByUser}
+                        />
+                    )}
+                    {isPaused && !isSuccess && (
+                        <ErrorView
+                            title={networkError}
+                            onRefresh={refetchByUser}
+                            refreshing={isRefetchingByUser}
+                        />
+                    )}
+                    {isSuccess && data !== undefined && (
+                        <>
+                            {data.reservations.length > 0 && (
+                                <SectionView
+                                    title={t(
+                                        'pages.library.reservations.title'
+                                    )}
+                                >
+                                    <>
+                                        {data.reservations?.map(
+                                            (reservation, index) => (
+                                                <React.Fragment key={index}>
+                                                    <LibraryReservationRow
+                                                        reservation={
+                                                            reservation
+                                                        }
+                                                        colors={colors}
+                                                        deleteReservation={
+                                                            deleteReservation
+                                                        }
+                                                    />
+                                                    {index !==
+                                                        data.reservations
+                                                            .length -
+                                                            1 && (
+                                                        <Divider
+                                                            color={
+                                                                colors.labelColor
+                                                            }
+                                                            iosPaddingLeft={16}
+                                                        />
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        )}
+                                    </>
+                                </SectionView>
+                            )}
+
+                            {data.available.length > 0 ? (
+                                <>
+                                    {data.available?.map((day, i) => (
+                                        <SectionView
+                                            title={formatFriendlyDate(
+                                                day.date,
+                                                {
+                                                    weekday: 'long',
+                                                }
+                                            )}
+                                            key={i}
+                                        >
+                                            <View>
+                                                {day.resource.length > 0 ? (
+                                                    day.resource.map(
+                                                        (time, j) => {
+                                                            return (
+                                                                <React.Fragment key={j}>
+                                                                    <LibrarySlotRow
+                                                                        item={
+                                                                            time
+                                                                        }
+                                                                        colors={
+                                                                            colors
+                                                                        }
+                                                                        onExpand={() => {
+                                                                            setSelectedItem(
+                                                                                time
+                                                                            )
+
+                                                                            handlePresentModalPress()
+                                                                        }}
+                                                                    />
+                                                                    {j !==
+                                                                        day
+                                                                            .resource
+                                                                            .length -
+                                                                            1 && (
+                                                                        <Divider
+                                                                            color={
+                                                                                colors.labelColor
+                                                                            }
+                                                                            iosPaddingLeft={
+                                                                                16
+                                                                            }
+                                                                        />
+                                                                    )}
+                                                                </React.Fragment>
+                                                            )
+                                                        }
+                                                    )
+                                                ) : (
+                                                    <Text
+                                                        style={{
+                                                            ...styles.teaserText,
+                                                            color: colors.text,
+                                                        }}
+                                                    >
+                                                        {t(
+                                                            'pages.library.available.noSeats'
+                                                        )}
+                                                    </Text>
+                                                )}
+                                            </View>
+                                        </SectionView>
+                                    ))}
+                                </>
+                            ) : (
+                                <SectionView
+                                    title={t('pages.library.available.title')}
+                                >
+                                    <Text
+                                        style={{
+                                            ...styles.teaserText,
+                                            color: colors.text,
+                                        }}
+                                    >
+                                        {t('pages.library.available.ratelimit')}
+                                    </Text>
+                                </SectionView>
+                            )}
+                        </>
+                    )}
+                </View>
+            </ScrollView>
+
+            <BottomSheetModal
+                ref={bottomSheetModalRef}
+                index={1}
+                snapPoints={snapPoints}
+                onChange={handleSheetChanges}
+                backgroundComponent={BottomSheetRootBackground}
+                backdropComponent={renderBackdrop}
+                handleIndicatorStyle={{
+                    backgroundColor: colors.labelSecondaryColor,
+                }}
+            >
+                <BottomSheetView style={styles.sheetContainer}>
+                    <Text style={{ ...styles.text, color: colors.text }}>
+                        Seat Reservation
+                    </Text>
+                    <LibraryBookinView
+                        item={selectedItem}
+                        colors={colors}
+                        addReservation={addReservation}
+                        onComplete={() => {
+                            bottomSheetModalRef.current?.forceClose()
                         }}
                     />
-                ) : undefined
-            }
-        >
-            <View>
-                {isLoading && (
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
-                    </View>
-                )}
-                {isError && (
-                    <ErrorView
-                        title={error.message}
-                        onRefresh={refetchByUser}
-                        refreshing={isRefetchingByUser}
-                    />
-                )}
-                {isPaused && !isSuccess && (
-                    <ErrorView
-                        title={networkError}
-                        onRefresh={refetchByUser}
-                        refreshing={isRefetchingByUser}
-                    />
-                )}
-                {isSuccess && data !== undefined && (
-                    <>
-                        {data.reservations.length > 0 && (
-                            <SectionView
-                                title={t('pages.library.reservations.title')}
-                            >
-                                <>
-                                    {data.reservations?.map(
-                                        (reservation, index) => (
-                                            <React.Fragment key={index}>
-                                                <LibraryReservationRow
-                                                    reservation={reservation}
-                                                    colors={colors}
-                                                    deleteReservation={
-                                                        deleteReservation
-                                                    }
-                                                />
-                                                {index !==
-                                                    data.reservations.length -
-                                                        1 && (
-                                                    <Divider
-                                                        color={
-                                                            colors.labelColor
-                                                        }
-                                                        iosPaddingLeft={16}
-                                                    />
-                                                )}
-                                            </React.Fragment>
-                                        )
-                                    )}
-                                </>
-                            </SectionView>
-                        )}
-
-                        {data.available.length > 0 ? (
-                            <>
-                                {data.available?.map((day, i) => (
-                                    <SectionView
-                                        title={formatFriendlyDate(day.date, {
-                                            weekday: 'long',
-                                        })}
-                                        key={i}
-                                    >
-                                        <View>
-                                            {day.resource.length > 0 ? (
-                                                day.resource.map((time, j) => {
-                                                    return (
-                                                        <React.Fragment
-                                                            key={time.from.toString()}
-                                                        >
-                                                            <LibraryBookingRow
-                                                                item={time}
-                                                                colors={colors}
-                                                                addReservation={
-                                                                    addReservation
-                                                                }
-                                                                isExpanded={
-                                                                    expandedRow ===
-                                                                    time.from.toString()
-                                                                }
-                                                                onExpand={() => {
-                                                                    toggleRow(
-                                                                        time.from.toString()
-                                                                    )
-                                                                }}
-                                                            />
-                                                            {j !==
-                                                                day.resource
-                                                                    .length -
-                                                                    1 && (
-                                                                <Divider
-                                                                    color={
-                                                                        colors.labelColor
-                                                                    }
-                                                                    iosPaddingLeft={
-                                                                        16
-                                                                    }
-                                                                />
-                                                            )}
-                                                        </React.Fragment>
-                                                    )
-                                                })
-                                            ) : (
-                                                <Text
-                                                    style={{
-                                                        ...styles.teaserText,
-                                                        color: colors.text,
-                                                    }}
-                                                >
-                                                    {t(
-                                                        'pages.library.available.noSeats'
-                                                    )}
-                                                </Text>
-                                            )}
-                                        </View>
-                                    </SectionView>
-                                ))}
-                            </>
-                        ) : (
-                            <SectionView
-                                title={t('pages.library.available.title')}
-                            >
-                                <Text
-                                    style={{
-                                        ...styles.teaserText,
-                                        color: colors.text,
-                                    }}
-                                >
-                                    {t('pages.library.available.ratelimit')}
-                                </Text>
-                            </SectionView>
-                        )}
-                    </>
-                )}
-            </View>
-        </ScrollView>
+                </BottomSheetView>
+            </BottomSheetModal>
+        </BottomSheetModalProvider>
     )
 }
 
 const styles = StyleSheet.create({
-    contentContainer: { paddingBottom: 32 },
+    contentContainer: { paddingBottom: 32, flex: 1 },
+    sheetContainer: { flex: 1 },
     teaserText: {
         fontSize: 17,
         marginHorizontal: 10,
@@ -353,5 +418,11 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    text: {
+        fontSize: 23,
+        fontWeight: 'bold',
+        marginTop: 10,
+        marginLeft: 10,
     },
 })
