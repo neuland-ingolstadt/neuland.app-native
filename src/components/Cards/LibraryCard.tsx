@@ -2,62 +2,57 @@ import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
 import { type Colors } from '@/components/colors'
-import { FlowContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useContext, useEffect, useState } from 'react'
-import { LayoutAnimation, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 import BaseCard from './BaseCard'
 
 const LibraryCard = (): JSX.Element => {
     const router = useRouter()
     const colors = useTheme().colors as Colors
-    const flow = useContext(FlowContext)
     const { userKind } = useContext(UserKindContext)
-    const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
-    const [reservations, setReservations] = useState<Reservation[]>([])
 
-    useEffect(() => {
-        if (userKind !== 'guest') {
-            void loadData()
-        }
-    }, [userKind])
-
-    async function loadData(): Promise<void> {
-        try {
-            const response = await API.getLibraryReservations()
-            const firstTwoReservations = response.slice(0, 2).map((x) => {
-                x.start = new Date(x.reservation_begin.replace(' ', 'T'))
-                x.end = new Date(x.reservation_end.replace(' ', 'T'))
-                return x
-            })
-
-            setReservations(firstTwoReservations)
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e: any) {
-            setLoadingState(LoadingState.ERROR)
-            if (e instanceof NoSessionError && flow.isOnboarded === true) {
-                router.navigate('login')
-            } else {
-                // ignore
-            }
-        }
+    async function loadLibraryReservations(): Promise<Reservation[]> {
+        const response = await API.getLibraryReservations()
+        response.forEach((x) => {
+            x.start = new Date(x.reservation_begin.replace(' ', 'T'))
+            x.end = new Date(x.reservation_end.replace(' ', 'T'))
+        })
+        return response
     }
+
+    const { data, isSuccess } = useQuery({
+        queryKey: ['libraryReservations'],
+        queryFn: loadLibraryReservations,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        gcTime: 1000 * 60 * 60 * 24, // 24 hours,
+        enabled: userKind !== USER_GUEST,
+        retry(failureCount, error) {
+            if (error instanceof NoSessionError) {
+                router.replace('user/login')
+                return false
+            }
+            return failureCount < 2
+        },
+    })
+
     return (
         <BaseCard title="library" onPressRoute="library">
-            {loadingState === LoadingState.LOADED && (
+            {isSuccess && data.length > 0 && (
                 <View
                     style={{
                         ...styles.calendarView,
-                        ...(reservations.length > 0 && styles.cardsFilled),
+                        ...(data.length > 0 && styles.cardsFilled),
                     }}
                 >
-                    {reservations.map((item, index) => (
+                    {data.slice(0, 2).map((item, index) => (
                         <React.Fragment key={index}>
                             <View>
                                 <Text
@@ -79,12 +74,12 @@ const LibraryCard = (): JSX.Element => {
                                     numberOfLines={1}
                                 >
                                     {formatFriendlyDateTimeRange(
-                                        item.start,
-                                        item.end
+                                        new Date(item.start),
+                                        new Date(item.end)
                                     )}
                                 </Text>
                             </View>
-                            {reservations.length - 1 !== index && (
+                            {data.length - 1 !== index && (
                                 <Divider color={colors.border} width={'100%'} />
                             )}
                         </React.Fragment>

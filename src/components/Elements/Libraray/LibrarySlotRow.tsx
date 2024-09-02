@@ -11,22 +11,32 @@ const LibrarySlotRow = ({
     colors,
     item,
     onExpand,
+    index,
 }: {
     colors: Colors
     item: AvailableRoomItem
     onExpand: () => void
+    index: number
 }): JSX.Element => {
     const { t } = useTranslation('common')
-
+    const date = new Date()
     const availSeats = Object.values(item.resources).reduce(
         (acc, room) => acc + room.num_seats,
         0
     )
+
+    const timespanText =
+        date > item.from
+            ? `${t('dates.now')} - ${formatFriendlyTime(item.to)}`
+            : `${formatFriendlyTime(
+                  item.from
+              )} - ${formatFriendlyTime(item.to)}`
+
     return (
         <View style={styles.container}>
             <Pressable
+                disabled={availSeats === 0}
                 onPress={() => {
-                    if (availSeats === 0) return
                     onExpand()
                 }}
                 style={styles.eventContainer}
@@ -39,9 +49,7 @@ const LibrarySlotRow = ({
                         }}
                         numberOfLines={2}
                     >
-                        {`${formatFriendlyTime(
-                            item.from
-                        )} - ${formatFriendlyTime(item.to)}`}
+                        {timespanText}
                     </Text>
                     {
                         <>
