@@ -78,9 +78,7 @@ const Dropdown: React.FC<Props> = ({
                             style={{
                                 ...styles.buttonText,
                                 color: colors.text,
-                                ...(isSelected === true
-                                    ? styles.selectedText
-                                    : {}),
+                                ...(isSelected ? styles.selectedText : {}),
                             }}
                         >
                             {item}

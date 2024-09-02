@@ -268,7 +268,6 @@ export default function LibrarySreen(): JSX.Element {
     }
     const bottomSheetModalRef = React.useRef<BottomSheetModal>(null)
     const handlePresentModalPress = useCallback(() => {
-        console.log('handlePresentModalPress')
         bottomSheetModalRef.current?.present()
     }, [])
 

@@ -23,7 +23,6 @@ const BookingFrame = ({
         (acc, room) => acc + room.num_seats,
         0
     )
-    console.log('availSeats', item)
     return (
         <SectionView footer={t('pages.library.available.footer')}>
             <View style={styles.reserveContainer}>

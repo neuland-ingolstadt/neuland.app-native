@@ -16,7 +16,6 @@ const SectionView = ({
     link?: { text: string; destination: () => void }
 }): JSX.Element => {
     const colors = useTheme().colors as Colors
-    console.log(title)
     return (
         <>
             <View style={styles.sectionContainer}>

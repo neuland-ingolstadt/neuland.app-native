@@ -107,7 +107,6 @@ function RootLayout(): JSX.Element {
                     // Android
                     statusBarTranslucent: true,
                 }}
-                
             >
                 <Stack.Screen
                     name="index"
@@ -245,7 +244,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/appIcon"
                     options={{
                         title: 'App Icon',
-                        presentation: 'modal',
                     }}
                 />
                 <Stack.Screen
