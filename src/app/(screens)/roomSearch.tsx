@@ -39,25 +39,15 @@ const DURATIONS = [
     '00:30',
     '00:45',
     '01:00',
-    '01:15',
     '01:30',
-    '01:45',
     '02:00',
-    '02:15',
     '02:30',
-    '02:45',
     '03:00',
-    '03:15',
     '03:30',
-    '03:45',
     '04:00',
-    '04:15',
     '04:30',
-    '04:45',
     '05:00',
-    '05:15',
     '05:30',
-    '05:45',
     '06:00',
 ]
 
@@ -242,9 +232,7 @@ export default function AdvancedSearch(): JSX.Element {
                             <Dropdown
                                 data={DURATIONS}
                                 defaultValue={DURATION_PRESET}
-                                defaultText={DURATION_PRESET}
                                 onSelect={setDuration}
-                                selected={duration}
                             />
                         </View>
                         <Divider iosPaddingLeft={16} />
@@ -260,9 +248,7 @@ export default function AdvancedSearch(): JSX.Element {
                             <Dropdown
                                 data={ALL_BUILDINGS}
                                 defaultValue={BUILDINGS_ALL}
-                                defaultText={BUILDINGS_ALL}
                                 onSelect={setBuilding}
-                                selected={building}
                             />
                         </View>
                     </View>

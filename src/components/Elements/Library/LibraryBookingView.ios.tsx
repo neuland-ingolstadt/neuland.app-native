@@ -1,5 +1,6 @@
 import { type Colors } from '@/components/colors'
-import { type AvailableRoom, type AvailableRoomItem } from '@/types/thi-api'
+import { type AvailableRoomItem } from '@/types/thi-api'
+import { getAvailableRooms } from '@/utils/library-utils'
 import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
@@ -19,18 +20,7 @@ const LibraryBookingView = ({
         reservationSeat: string
     ) => Promise<void>
 }): JSX.Element => {
-    function getAvailableRooms(): Array<[string, AvailableRoom, number]> {
-        return Object.entries(item.resources)
-            .map(
-                ([roomId, room], idx) =>
-                    [roomId, room, idx] as [string, AvailableRoom, number]
-            )
-            .filter(
-                ([, room]: [string, AvailableRoom, number]) =>
-                    room.num_seats > 0
-            )
-    }
-    const rooms = getAvailableRooms()
+    const rooms = getAvailableRooms(item)
     const colors = useTheme().colors as Colors
     const uniqueRoomNames = [...new Set(rooms.map((item) => item[1].room_name))]
     const [seats, setSeats] = useState<string[]>([])

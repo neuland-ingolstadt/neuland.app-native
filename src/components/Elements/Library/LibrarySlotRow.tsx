@@ -83,7 +83,7 @@ const LibrarySlotRow = ({
                                         size: 20,
                                     }}
                                     android={{
-                                        name: 'expand_less',
+                                        name: 'add',
                                         size: 26,
                                     }}
                                 />

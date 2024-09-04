@@ -1,6 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
@@ -8,9 +8,8 @@ import SelectDropdown from 'react-native-select-dropdown'
 interface Props {
     data: string[]
     defaultValue: string
-    defaultText: string
     onSelect: (selectedItem: string) => void
-    selected: string
+    reset?: boolean
     width?: number
 }
 
@@ -27,11 +26,21 @@ const Dropdown: React.FC<Props> = ({
     data,
     defaultValue,
     onSelect,
+    reset = false,
     width = 100,
 }) => {
     const colors = useTheme().colors as Colors
+    const ref = React.createRef<SelectDropdown>()
+
+    useEffect(() => {
+        if (ref.current != null && reset) {
+            ref.current?.selectIndex(0)
+        }
+    }, [reset])
+
     return (
         <SelectDropdown
+            ref={ref}
             data={data}
             defaultValue={defaultValue}
             dropdownStyle={{

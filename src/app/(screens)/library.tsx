@@ -1,9 +1,9 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
-import LibraryBookingView from '@/components/Elements/Libraray/LibraryBookingView'
-import LibraryReservationRow from '@/components/Elements/Libraray/LibraryReservationRow'
-import LibrarySlotRow from '@/components/Elements/Libraray/LibrarySlotRow'
+import LibraryBookingView from '@/components/Elements/Library/LibraryBookingView'
+import LibraryReservationRow from '@/components/Elements/Library/LibraryReservationRow'
+import LibrarySlotRow from '@/components/Elements/Library/LibrarySlotRow'
 import {
     BottomSheetRootBackground,
     renderBackdrop,

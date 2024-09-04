@@ -192,9 +192,9 @@ export const IndexHeaderRight = (): JSX.Element => {
     return (
         <Pressable
             onPress={() => {
-                router.navigate('settings')
+                // router.navigate('settings')
             }}
-            delayLongPress={300}
+            delayLongPress={0}
             onLongPress={() => {}}
             accessibilityLabel={t('navigation.settings')}
             style={{
