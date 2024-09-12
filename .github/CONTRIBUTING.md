@@ -44,8 +44,8 @@ To contribute, please follow these guidelines:
         bun android
         ```
 
-    > [!NOTE]  
-    > Step 7 is required every time the dependencies are updated.
+> [!NOTE]  
+> Step 7 is required every time the dependencies are updated.
 
 ## Development
 
