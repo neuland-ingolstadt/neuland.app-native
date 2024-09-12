@@ -51,11 +51,8 @@ const LibraryBookingView = ({
                   )
                 : []
         setSeats(seatsArray)
-        console.log('seatsArray', seatsArray)
-        console.log('seat', seat)
         // if the new room has not the selected seat available, select the first seat
         if (!seatsArray.includes(seat)) {
-            alert('seat not available')
             setReset(true)
         } else {
             setReset(false)

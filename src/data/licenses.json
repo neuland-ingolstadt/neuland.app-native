@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-alpha.10": {
+    "@maplibre/maplibre-react-native@10.0.0-alpha.13": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -59,19 +59,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.54.1": {
+    "@tanstack/query-sync-storage-persister@5.55.4": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.54.1": {
+    "@tanstack/react-query-persist-client@5.55.4": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.54.1": {
+    "@tanstack/react-query@5.55.4": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -203,13 +203,13 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@23.14.0": {
+    "i18next@23.15.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "metro@0.80.11": {
+    "metro@0.80.12": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/metro",
         "licenseUrl": "https://github.com/facebook/metro",
@@ -347,7 +347,7 @@
         "licenseUrl": "https://github.com/hoangnm/react-native-week-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native@0.75.2": {
+    "react-native@0.75.3": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react-native",
         "licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",

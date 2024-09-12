@@ -31,9 +31,6 @@ const BookButton: React.FC<BookingButtonProps> = ({
     const [reserve, setReserve] = useState(false)
     const { t } = useTranslation('common')
     const colors = useTheme().colors as Colors
-    console.log(item)
-    console.log(room)
-    console.log(seat)
     return (
         <View style={styles.confirmContainer}>
             <Pressable
