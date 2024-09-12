@@ -6,28 +6,28 @@ To contribute, please follow these guidelines:
 
 ## Getting Started
 
-1.  Fork the repository and clone it to your local machine.
-2.  Install the required software:
+1. Fork the repository and clone it to your local machine.
+2. Install the required software:
 
     - [Visual Studio Code](https://code.visualstudio.com/)
     - [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12) (for iOS development, macOS only)
     - [Android Studio](https://developer.android.com/studio) (for Android development)
 
-3.  Install the required dependencies:
+3. Install the required dependencies:
 
     - [Node.js 18 LTS](https://nodejs.org/en/) or higher
     - [Bun](https://bun.sh) or simply use npm or yarn
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
-4.  In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+4. In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
 
-5.  Install project dependencies by running the following command in the project directory:
+5. Install project dependencies by running the following command in the project directory:
 
     ```bash
     bun install
     ```
 
-6.  Setup the emulator
+6. Setup the emulator
 
     Android (_Windows, macOS, and Linux_):
 
@@ -37,12 +37,12 @@ To contribute, please follow these guidelines:
 
     - Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
 
-7.  Create a development build for your desired platform.
+7. Create a development build for your desired platform.
 
-        ```bash
-        bun ios
-        bun android
-        ```
+    ```bash
+    bun ios
+    bun android
+    ```
 
 > [!NOTE]  
 > Step 7 is required every time the dependencies are updated.
@@ -89,22 +89,22 @@ To contribute, please follow these guidelines:
 
 ## Code Style
 
--   Follow the existing code style and conventions used in the project.
--   Use meaningful variable and function names to improve code readability.
--   Document your code when necessary using inline comments.
+- Follow the existing code style and conventions used in the project.
+- Use meaningful variable and function names to improve code readability.
+- Document your code when necessary using inline comments.
 
--   Follow the existing code style and conventions used in the project.
--   Use meaningful variable and function names to improve code readability.
--   Document your code when necessary using inline comments.
+- Follow the existing code style and conventions used in the project.
+- Use meaningful variable and function names to improve code readability.
+- Document your code when necessary using inline comments.
 
 We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
 But you can also run these commands manually:
 
--   `bun lint` to check for linting errors
--   `bun lint:fix` to automatically fix linting errors
--   `bun format` to format the code using Prettier
+- `bun lint` to check for linting errors
+- `bun lint:fix` to automatically fix linting errors
+- `bun format` to format the code using Prettier
 
 ## Issues and Discussions
 
--   Feel free to open an issue if you encounter a bug or want to suggest an improvement.
--   For questions or more general concerns, create a thread in the discussion tab.
+- Feel free to open an issue if you encounter a bug or want to suggest an improvement.
+- For questions or more general concerns, create a thread in the discussion tab.
