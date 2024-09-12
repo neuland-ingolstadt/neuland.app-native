@@ -34,11 +34,11 @@
 				<key>UIPrerenderedIcon</key>
 				<false/>
 			</dict>
-      <key>ModernPurple</key>
+      <key>ModernPink</key>
 			<dict>
 				<key>CFBundleIconFiles</key>
 				<array>
-					<string>ModernPurple</string>
+					<string>ModernPink</string>
 				</array>
 				<key>UIPrerenderedIcon</key>
 				<false/>

@@ -25,7 +25,7 @@ iconImages = {
     default: require('@/assets/appIcons/default.png'),
     retro: require('@/assets/appIcons/retro.png'),
     modernGreen: require('@/assets/appIcons/modernGreen.png'),
-    modernPurple: require('@/assets/appIcons/modernPurple.png'),
+    modernPink: require('@/assets/appIcons/modernPurple.png'),
     rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
     rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
     cat: require('@/assets/appIcons/cat.png'),
@@ -43,7 +43,7 @@ export default function AppIconPicker(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],
-        default: ['default', 'modernGreen', 'modernPurple'],
+        default: ['default', 'modernGreen', 'modernPink'],
         rainbow: ['rainbowNeon', 'rainbowMoonLight'],
     }
 
