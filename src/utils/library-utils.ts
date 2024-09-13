@@ -1,5 +1,9 @@
 import API from '@/api/authenticated-api'
-import { type AvailableLibrarySeats } from '@/types/thi-api'
+import {
+    type AvailableLibrarySeats,
+    type AvailableRoom,
+    type AvailableRoomItem,
+} from '@/types/thi-api'
 import { combineDateTime } from '@/utils/date-utils'
 
 /**
@@ -27,4 +31,26 @@ export async function getFriendlyAvailableLibrarySeats(): Promise<
             }),
         }
     })
+}
+
+/**
+ * Get the available rooms.
+ * @param {object} item
+ * @returns {array}
+ */
+export function getAvailableRooms(
+    item: AvailableRoomItem
+): Array<[string, AvailableRoom, number]> {
+    return Object.entries(item.resources)
+        .map(([roomId, room], idx) => {
+            // Remove "Lesesaal" from room_name
+            const updatedRoom = {
+                ...room,
+                room_name: room.room_name.replace('Lesesaal ', ''),
+            }
+            return [roomId, updatedRoom, idx] as [string, AvailableRoom, number]
+        })
+        .filter(
+            ([, room]: [string, AvailableRoom, number]) => room.num_seats > 0
+        )
 }

@@ -184,14 +184,12 @@
     "appIcon": {
         "names": {
             "default": "Neuland Next",
-            "modernDark": "Modern Dark",
             "retro": "neuland.app",
             "modernGreen": "Modern Green",
             "modernPink": "Modern Pink",
             "rainbowMoonLight": "Rainbow Light",
-            "rainbowDark": "Rainbow Dark",
             "rainbowNeon": "Rainbow Neon",
-            "cat": "Pradise Cat"
+            "cat": "Paradise Cat"
         },
         "categories": {
             "default": "Default",

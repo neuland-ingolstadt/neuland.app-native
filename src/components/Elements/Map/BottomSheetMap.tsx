@@ -227,6 +227,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     textInputRef.current?.blur()
                 }
             }}
+            enableDynamicSizing={false}
         >
             <BottomSheetView
                 style={{
@@ -272,7 +273,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             onPress={() => {
                                 setLocalSearch('')
                                 textInputRef.current?.blur()
-                                //    bottomSheetRef.current?.snapToIndex(1)
+                                bottomSheetRef.current?.snapToIndex(1)
                             }}
                             style={styles.cancelButton}
                         >

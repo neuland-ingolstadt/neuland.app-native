@@ -1,11 +1,14 @@
+import {
+    BottomSheetBackdrop,
+    type BottomSheetBackdropProps,
+} from '@gorhom/bottom-sheet'
 import { useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 
-const BottomSheetRootBackground = (): JSX.Element => {
+export const BottomSheetRootBackground = (): JSX.Element => {
     const { colors, dark } = useTheme()
-    console.log(dark)
     const darkIos = 'rgba(0, 0, 0, 0.3)'
     const lightIos = 'rgba(255, 255, 255, 0.5)'
     return Platform.OS === 'ios' ? (
@@ -30,6 +33,17 @@ const BottomSheetRootBackground = (): JSX.Element => {
     )
 }
 
+export const renderBackdrop = (
+    props: BottomSheetBackdropProps
+): JSX.Element => (
+    <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        opacity={0.3}
+    />
+)
+
 const styles = StyleSheet.create({
     bottomSheet: {
         ...StyleSheet.absoluteFillObject,
@@ -38,5 +52,3 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
 })
-
-export default BottomSheetRootBackground

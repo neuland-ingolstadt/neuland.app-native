@@ -1,10 +1,9 @@
 import BottomSheet from '@/components/Elements/Layout/BottomSheet'
-import BottomSheetRootBackground from '@/components/Elements/Universal/BottomSheetRootBackground'
-import { type Colors } from '@/components/colors'
 import {
-    BottomSheetBackdrop,
-    type BottomSheetBackdropProps,
-} from '@gorhom/bottom-sheet'
+    BottomSheetRootBackground,
+    renderBackdrop,
+} from '@/components/Elements/Universal/BottomSheetRootBackground'
+import { type Colors } from '@/components/colors'
 import '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { Slot } from 'expo-router'
@@ -14,14 +13,6 @@ import React from 'react'
 export const unstable_settings = {
     initialRouteName: 'index',
 }
-const renderBackdrop = (props: BottomSheetBackdropProps): JSX.Element => (
-    <BottomSheetBackdrop
-        {...props}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        opacity={0.4}
-    />
-)
 
 export default function Layout(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -36,6 +27,7 @@ export default function Layout(): JSX.Element {
                     backgroundColor: colors.labelSecondaryColor,
                 },
                 backdropComponent: renderBackdrop,
+                enableDynamicSizing: true,
             }}
         />
     )

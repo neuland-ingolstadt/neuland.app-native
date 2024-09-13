@@ -1,6 +1,6 @@
 import { type Colors } from '@/components/colors'
 import { useTheme } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
@@ -8,9 +8,8 @@ import SelectDropdown from 'react-native-select-dropdown'
 interface Props {
     data: string[]
     defaultValue: string
-    defaultText: string
     onSelect: (selectedItem: string) => void
-    selected: string
+    reset?: boolean
     width?: number
 }
 
@@ -19,7 +18,6 @@ interface Props {
  *
  * @param data - An array of strings that represents the dropdown options.
  * @param defaultValue - The default value of the dropdown.
- * @param defaultText - The default text of the dropdown.
  * @param onSelect - A function that is called when an option is selected.
  * @param selected - The currently selected option.
  * @param width - The width of the dropdown.
@@ -27,53 +25,75 @@ interface Props {
 const Dropdown: React.FC<Props> = ({
     data,
     defaultValue,
-    defaultText,
     onSelect,
-    selected,
+    reset = false,
     width = 100,
 }) => {
     const colors = useTheme().colors as Colors
+    const ref = React.createRef<SelectDropdown>()
+
+    useEffect(() => {
+        if (ref.current != null && reset) {
+            ref.current?.selectIndex(0)
+        }
+    }, [reset])
+
     return (
         <SelectDropdown
+            ref={ref}
             data={data}
             defaultValue={defaultValue}
-            defaultButtonText={defaultText}
-            buttonTextAfterSelection={() => {
-                return selected
-            }}
-            rowTextForSelection={(item, index) => {
-                return item
-            }}
-            buttonStyle={[
-                styles.dropdownButton,
-                {
-                    backgroundColor: colors.datePickerBackground,
-                    width,
-                },
-            ]}
-            buttonTextStyle={{
-                color: colors.text,
-                ...styles.buttonText,
-            }}
-            rowTextStyle={{
-                color: colors.text,
-                ...styles.buttonText,
-            }}
-            rowStyle={{
-                backgroundColor: colors.datePickerBackground,
-                borderBottomColor: colors.labelTertiaryColor,
-                ...styles.rowHeight,
-            }}
-            dropdownStyle={styles.dropdown}
-            selectedRowStyle={{
-                backgroundColor: colors.primary,
-            }}
-            selectedRowTextStyle={{
-                color: colors.text,
-                ...styles.selectedText,
+            dropdownStyle={{
+                ...styles.dropdown,
+                backgroundColor: colors.card,
             }}
             onSelect={(selectedItem: string) => {
                 onSelect(selectedItem)
+            }}
+            renderButton={(selectedItem, isOpened) => {
+                return (
+                    <View
+                        style={[
+                            styles.dropdownButton,
+                            {
+                                backgroundColor: colors.datePickerBackground,
+
+                                width,
+                            },
+                        ]}
+                    >
+                        <Text
+                            numberOfLines={1}
+                            allowFontScaling={false}
+                            style={{
+                                color: colors.text,
+                            }}
+                        >
+                            {selectedItem}
+                        </Text>
+                    </View>
+                )
+            }}
+            renderItem={(item, index, isSelected) => {
+                return (
+                    <View
+                        style={{
+                            ...styles.rowHeight,
+                            backgroundColor: colors.card,
+                            borderColor: colors.border,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                ...styles.buttonText,
+                                color: colors.text,
+                                ...(isSelected ? styles.selectedText : {}),
+                            }}
+                        >
+                            {item}
+                        </Text>
+                    </View>
+                )
             }}
         />
     )
@@ -89,9 +109,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 15,
+        textAlign: 'center',
     },
     rowHeight: {
         height: 38,
+        justifyContent: 'center',
+        borderBottomWidth: 1,
     },
     dropdown: {
         borderRadius: 8,

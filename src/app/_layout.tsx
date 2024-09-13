@@ -244,7 +244,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/appIcon"
                     options={{
                         title: 'App Icon',
-                        presentation: 'modal',
                     }}
                 />
                 <Stack.Screen

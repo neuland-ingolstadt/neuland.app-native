@@ -1,14 +1,38 @@
 {
-    "images": [
+  "images" : [
+    {
+      "filename" : "modernGreen.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
         {
-            "filename": "modernGreen.png",
-            "idiom": "universal",
-            "platform": "ios",
-            "size": "1024x1024"
+          "appearance" : "luminosity",
+          "value" : "dark"
         }
-    ],
-    "info": {
-        "author": "xcode",
-        "version": 1
+      ],
+      "filename" : "modernGreenDark.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "tinted"
+        }
+      ],
+      "filename" : "darkTinted.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
     }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
 }
