@@ -46,14 +46,8 @@ export function usePreferences(): PreferencesType {
     const addRecentQuicklink = useCallback(
         (quicklink: string): void => {
             const existingQuicklinks = recentQuicklinks ?? []
-
-            // Create a new list with the new quicklink at the front
             const updatedQuicklinks = [quicklink, ...existingQuicklinks]
-
-            // Remove duplicates by converting to a Set and back to an array
             const uniqueQuicklinks = Array.from(new Set(updatedQuicklinks))
-
-            // If fewer than 3 quicklinks after deduplication, add default quicklinks
             const neededQuicklinks = 3 - uniqueQuicklinks.length
             const additionalQuicklinks =
                 neededQuicklinks > 0
@@ -62,13 +56,11 @@ export function usePreferences(): PreferencesType {
                           .slice(0, neededQuicklinks)
                     : []
 
-            // Combine unique quicklinks with additional quicklinks, ensuring the total length is 3
             const finalQuicklinks = [
                 ...uniqueQuicklinks,
                 ...additionalQuicklinks,
             ].slice(0, 3)
-
-            // Update the state and storage with the final list
+            console.log('Final quicklinks:', finalQuicklinks)
             setRecentQuicklinks(finalQuicklinks)
         },
         [recentQuicklinks, setRecentQuicklinks]

@@ -896,7 +896,7 @@ const MapScreen = (): JSX.Element => {
                 bottomSheetRef={bottomSheetRef}
                 currentPosition={currentPosition}
                 handlePresentModalPress={handlePresentModalPress}
-                allRooms={allRooms}
+                allRooms={allRooms}             
             />
 
             <BottomSheetDetailModal

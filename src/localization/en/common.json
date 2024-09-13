@@ -7,7 +7,8 @@
         },
         "roomNotFound": "Room not found",
         "mapOverlay": "Error while loading overlay",
-        "dashboard": "Drag & drop to reorder"
+        "dashboard": "Drag & drop to reorder",
+        "tryAgain": "Please try again"
     },
     "error": {
         "title": "An error occurred",
@@ -50,7 +51,8 @@
         "notYet": "Date not yet available",
         "tomorrow": "Tomorrow",
         "thisWeek": "This Week",
-        "nextWeek": "Next Week"
+        "nextWeek": "Next Week",
+        "now": "Now"
     },
     "misc": {
         "share": "Share",
@@ -169,7 +171,6 @@
                 "results": "Results",
                 "fuzzy": "Suggestions"
             },
-
             "easterEgg": {
                 "title": "Easter Egg",
                 "message": "You unlocked the exclusive retro app icon \"neuland.app\"!",
@@ -204,7 +205,6 @@
                 "osm": "Map data from OpenStreetMap"
             }
         },
-
         "rooms": {
             "options": {
                 "title": "Search options",
@@ -232,22 +232,29 @@
                 "alert": {
                     "title": "Delete reservation",
                     "message": "Do you really want to delete this reservation?"
+                },
+                "error": {
+                    "delete": "Failed to delete",
+                    "book": "Reservation failed"
                 }
             },
             "available": {
+                "available": "Available",
                 "title": "Available seats",
                 "reserve": "Reserve",
                 "seatsAvailable": "{{available}} / {{total}} available",
                 "ratelimit": "You can not reserve more seats.",
                 "noSeats": "No more seats available.",
                 "footer": "Up to 5 active reservations are allowed per seven days. Cancelation is possible before the reservation starts.",
-                "book": "Book seat",
-                "room": "Room"
+                "book": "Reserve seat",
+                "room": "Room",
+                "seatReservation": "Seat reservation"
             },
             "code": {
                 "number": "Number",
                 "footer": "Use this barcode to sign in at the library terminals to borrow books."
-            }
+            },
+            "timeSlot": "Timeslot"
         }
     },
     "notification": {

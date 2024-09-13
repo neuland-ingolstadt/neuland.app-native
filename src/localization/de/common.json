@@ -7,7 +7,8 @@
         },
         "roomNotFound": "Raum nicht gefunden",
         "mapOverlay": "Fehler beim Laden des Overlays",
-        "dashboard": "Drag & Drop zum Sortieren"
+        "dashboard": "Drag & Drop zum Sortieren",
+        "tryAgain": "Versuche es erneut"
     },
     "error": {
         "title": "Ein Fehler ist aufgetreten",
@@ -50,7 +51,8 @@
         "today": "Heute",
         "tomorrow": "Morgen",
         "thisWeek": "Diese Woche",
-        "nextWeek": "Nächste Woche"
+        "nextWeek": "Nächste Woche",
+        "now": "Jetzt"
     },
     "misc": {
         "share": "Teilen",
@@ -230,9 +232,14 @@
                 "alert": {
                     "title": "Reservierung löschen",
                     "message": "Möchtest du diese Reservierung wirklich löschen?"
+                },
+                "error": {
+                    "delete": "Löschen fehlgeschlagen",
+                    "book": "Reservierung fehlgeschlagen"
                 }
             },
             "available": {
+                "available": "Verfügbar",
                 "title": "Verfügbare Plätze",
                 "reserve": "Reservieren",
                 "seatsAvailable": "{{available}} / {{total}} verfügbar",
@@ -240,12 +247,14 @@
                 "noSeats": "Keine weiteren Plätze verfügbar.",
                 "footer": "Bis zu 5 aktive Reservierungen innerhalb von sieben Tagen erlaubt. Stornierung ist vor Beginn der Reservierung möglich.",
                 "book": "Platz buchen",
-                "room": "Raum"
+                "room": "Raum",
+                "seatReservation": "Platzreservierung"
             },
             "code": {
                 "number": "Nummer",
                 "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
-            }
+            },
+            "timeSlot": "Zeitfenster"
         }
     },
     "notification": {

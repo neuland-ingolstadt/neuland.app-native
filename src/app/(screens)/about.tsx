@@ -143,7 +143,6 @@ export default function About(): JSX.Element {
                 { cancelable: false }
             )
             const isCollected = unlockedAppIcons?.includes('cat')
-            console.log('isCollected', isCollected)
             if (!isCollected) {
                 trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
                 if (Platform.OS === 'ios') addUnlockedAppIcon('cat')
