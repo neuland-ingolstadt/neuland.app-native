@@ -8,7 +8,7 @@ const members = [
     avatar: 'https://github.com/Robert27.png',
     name: 'Robert Eggl',
    logo: './assets/robert.png',
-    title: 'Founder & Project Lead Neuand Next',
+    title: 'Founder & Project Lead Neuland Next',
     links: [
       { icon: 'github', link: 'https://github.com/Robert27' },
     ]
