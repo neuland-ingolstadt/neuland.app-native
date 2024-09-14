@@ -314,17 +314,11 @@ export default function Settings(): JSX.Element {
                     },
                     onPress: () => {
                         trackEvent('Share', { share: 'app' })
-                        if (Platform.OS === 'android') {
-                            void Share.share({
-                                message:
-                                    'https://play.google.com/store/apps/details?id=app.neuland',
-                            })
-                        } else {
-                            void Share.share({
-                                url: 'https://apps.apple.com/app/neuland-next/id1617096811',
-                                message: t('menu.formlist.legal.shareMessage'),
-                            })
-                        }
+
+                        void Share.share({
+                            url: 'https://next.neuland.app/get',
+                            message: t('menu.formlist.legal.shareMessage'),
+                        })
                     },
                 },
             ],

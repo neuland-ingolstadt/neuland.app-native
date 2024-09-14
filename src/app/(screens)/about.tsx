@@ -1,5 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon } from '@/components/Elements/Universal/Icon'
+import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { type Colors } from '@/components/colors'
@@ -86,6 +86,12 @@ export default function About(): JSX.Element {
                         await Linking.openURL(
                             'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
                         ),
+                },
+                {
+                    title: 'App Website',
+                    icon: linkIcon,
+                    onPress: async () =>
+                        await Linking.openURL('https://next.neuland.app'),
                 },
                 {
                     title:

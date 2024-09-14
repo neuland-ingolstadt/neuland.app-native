@@ -22,10 +22,12 @@ It features a modern user interface and utilizes the Expo framework for easy dev
 The app aims at implementing all important features of the official app as free and open source software with a modern UI and native features.
 To achieve this, the existing React backend was adapted and the Neuland GraphQL API was created.
 
+Learn more about the app on the [Neuland Next website](https://next.neuland.app).
+
 ### Contributing
 
 We are always looking for contributors to help us improve the app.
-Check out the [contributing guidelines](.github/CONTRIBUTING.md) to get started.
+Check out the [contributing guidelines](https://next.neuland.app/en/app/setup) to get started.
 
 ## Beta Testing
 
