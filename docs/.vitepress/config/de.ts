@@ -71,13 +71,14 @@ export const de = defineConfig({
 function sidebarApp(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: "The App",
+      text: "Die App",
       collapsed: false,
       items: [
-        { text: "Neuland Next", link: "app" },
+        { text: "Neuland Next", link: "main" },
         { text: "Funktionen", link: "features" },
-        { text: "Installieren", link: "download" },
         { text: "FAQ", link: "faq" },
+        { text: "Installieren", link: "download" },
+        { text: "Beta", link: "beta" },
       ],
     },
     {

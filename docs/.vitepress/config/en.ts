@@ -33,10 +33,11 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
       text: "The App",
       collapsed: false,
       items: [
-        { text: "Neuland Next", link: "app" },
+        { text: "Neuland Next", link: "main" },
         { text: "Features", link: "features" },
-        { text: "Install", link: "download" },
         { text: "FAQ", link: "faq" },
+        { text: "Install", link: "download" },
+        { text: "Beta", link: "beta" },
       ],
     },
     {
