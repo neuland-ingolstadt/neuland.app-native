@@ -39,7 +39,7 @@ export default function About(): JSX.Element {
             header: t('legal.formlist.us.title'),
             items: [
                 {
-                    title: 'Website',
+                    title: 'Neuland Ingolstadt e.V.',
                     icon: linkIcon,
                     onPress: async () =>
                         await Linking.openURL('https://neuland-ingolstadt.de/'),

@@ -2,6 +2,7 @@
 import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
 import LogoSVG from '@/components/Elements/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
+import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import { FlowContext } from '@/components/contexts'
 import { PRIVACY_URL } from '@/data/constants'
@@ -36,7 +37,7 @@ import Shimmer from 'react-native-shimmer'
 
 export default function OnboardingScreen(): JSX.Element {
     const flow = React.useContext(FlowContext)
-    const { t } = useTranslation('flow')
+    const { t, i18n } = useTranslation('flow')
 
     const data = [
         {
@@ -68,36 +69,34 @@ export default function OnboardingScreen(): JSX.Element {
 
     const ContinueButton = (): JSX.Element => {
         return (
-            <View style={styles.buttonContainer}>
-                <Pressable
+            <Pressable
+                style={[
+                    {
+                        backgroundColor: colors.primary,
+                    },
+                    styles.button,
+                ]}
+                onPress={() => {
+                    if (Platform.OS === 'ios') {
+                        void Haptics.selectionAsync()
+                    }
+                    flow.setOnboarded(true)
+                    flow.setUpdated(true)
+                    flow.setAnalyticsAllowed(true)
+                    router.navigate('login')
+                    router.setParams({ fromOnboarding: 'true' })
+                }}
+                disabled={buttonDisabled}
+            >
+                <Text
                     style={[
-                        {
-                            backgroundColor: colors.primary,
-                        },
-                        styles.button,
+                        { color: getContrastColor(colors.primary) },
+                        styles.buttonText,
                     ]}
-                    onPress={() => {
-                        if (Platform.OS === 'ios') {
-                            void Haptics.selectionAsync()
-                        }
-                        flow.setOnboarded(true)
-                        flow.setUpdated(true)
-                        flow.setAnalyticsAllowed(true)
-                        router.navigate('login')
-                        router.setParams({ fromOnboarding: 'true' })
-                    }}
-                    disabled={buttonDisabled}
                 >
-                    <Text
-                        style={[
-                            { color: getContrastColor(colors.primary) },
-                            styles.buttonText,
-                        ]}
-                    >
-                        {t('whatsnew.continue')}
-                    </Text>
-                </Pressable>
-            </View>
+                    {t('whatsnew.continue')}
+                </Text>
+            </Pressable>
         )
     }
 
@@ -111,8 +110,10 @@ export default function OnboardingScreen(): JSX.Element {
     const cardsViewHeight = useSharedValue(0)
     const textLogoOpacity = useSharedValue(1)
     const logoMargin = useSharedValue(1)
+    const helpOpacity = useSharedValue(0)
     const [isWhobbleDisabled, setWhobbleDisabled] = useState(true)
     const window = Dimensions.get('window')
+
     const CardsElement = (): JSX.Element => {
         return (
             <Animated.View style={[styles.boxesContainer, styles.boxes]}>
@@ -185,17 +186,17 @@ export default function OnboardingScreen(): JSX.Element {
     }
 
     const LegalArea = (): JSX.Element => {
-        const animatedStyle = useAnimatedStyle(() => ({
+        const legalAnimatedStyle = useAnimatedStyle(() => ({
             opacity: legalOpacity.value,
             transform: [{ translateY: legalTranslateY.value }],
         }))
-
         return (
-            <Animated.View style={{ ...animatedStyle }}>
+            <Animated.View style={{ ...legalAnimatedStyle }}>
                 <View
                     style={{
                         ...styles.privacyRow,
-                        marginBottom: window.height * 0.04,
+                        marginBottom: window.height * 0.035,
+                        marginTop: window.height * 0.008,
                     }}
                 >
                     <Text
@@ -248,6 +249,15 @@ export default function OnboardingScreen(): JSX.Element {
         return {
             transform: [{ translateY: textTranslateY.value }],
             opacity: textOpacity.value,
+        }
+    })
+
+    const helpAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            position: 'absolute',
+            top: insets.top + 15,
+            right: 18,
+            opacity: helpOpacity.value,
         }
     })
 
@@ -322,7 +332,13 @@ export default function OnboardingScreen(): JSX.Element {
                                                 )
                                         })
                                         runOnJS(setWhobbleDisabled)(false)
-
+                                        helpOpacity.value = withDelay(
+                                            1400,
+                                            withTiming(1, {
+                                                duration: 500,
+                                                easing: Easing.out(Easing.quad),
+                                            })
+                                        )
                                         legalOpacity.value = withDelay(
                                             1400,
                                             withTiming(1, {
@@ -454,13 +470,36 @@ export default function OnboardingScreen(): JSX.Element {
                     <LogoTextSVG size={15} color={colors.text} />
                 </Animated.View>
             </View>
+            <Animated.View style={helpAnimatedStyle}>
+                <Pressable
+                    onPress={() => {
+                        void Linking.openURL(
+                            `https://next.neuland.app/${i18n.language === 'de' ? '' : 'en/'}app/faq`
+                        )
+                    }}
+                    style={{}}
+                >
+                    <PlatformIcon
+                        color={colors.labelSecondaryColor}
+                        ios={{
+                            name: 'questionmark.circle',
+                            size: 20,
+                            variableValue: 1,
+                        }}
+                        android={{
+                            name: 'help',
+                            size: 25,
+                            variant: 'outlined',
+                        }}
+                    />
+                </Pressable>
+            </Animated.View>
         </>
     )
 }
 
 const styles = StyleSheet.create({
     logoTextGroup: { flex: 1, justifyContent: 'center' },
-    buttonContainer: {},
     boxesContainer: {
         paddingTop: 20,
         justifyContent: 'center',
@@ -501,7 +540,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         flexShrink: 1,
     },
-    heading1: { fontWeight: 'bold', textAlign: 'center', marginTop: 20 },
+    heading1: { fontWeight: 'bold', textAlign: 'center' },
     heading2: { fontWeight: 'bold', textAlign: 'center' },
     cardsContainer: {
         flexGrow: 0.5,

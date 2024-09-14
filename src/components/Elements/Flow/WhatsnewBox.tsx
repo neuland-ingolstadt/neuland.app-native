@@ -47,6 +47,7 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                         },
                         styles.title,
                     ]}
+                    numberOfLines={2}
                 >
                     {title}
                 </Text>
@@ -57,6 +58,8 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                         },
                         styles.description,
                     ]}
+                    adjustsFontSizeToFit
+                    minimumFontScale={0.8}
                     numberOfLines={4}
                 >
                     {description}

@@ -1,7 +1,7 @@
 {
     "extends": "expo/tsconfig.base",
-    "baseUrl": ".",
     "compilerOptions": {
+        "baseUrl": ".",
         "paths": {
             "@/*": ["./src/*"],
             "ios/*": ["./ios/NeulandNext/Images.xcassets/*"]
