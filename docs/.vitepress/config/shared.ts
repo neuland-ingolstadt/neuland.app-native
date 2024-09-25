@@ -20,14 +20,14 @@ export const shared = defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "Neuland Next | Deine inoffizielle THI App",
+        content: "Neuland Next | Deine inoffizielle App für die THI",
       },
     ],
     [
       "meta",
       {
         property: "title",
-        content: "Neuland Next | Deine inoffizielle THI App",
+        content: "Neuland Next | Deine inoffizielle App für die THI",
       },
     ],
     [
@@ -48,7 +48,7 @@ export const shared = defineConfig({
       "meta",
       {
         property: "og:title",
-        content: "Neuland Next | Deine inoffizielle THI App",
+        content: "Neuland Next | Deine inoffizielle App für die THI",
       },
     ],
     ["meta", { property: "og:image", content: "/og-image.png" }],
@@ -65,7 +65,7 @@ export const shared = defineConfig({
       "meta",
       {
         property: "twitter:title",
-        content: "Neuland Next | Deine inoffizielle THI App",
+        content: "Neuland Next | Deine inoffizielle App für die THI",
       },
     ],
     [

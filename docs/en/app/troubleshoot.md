@@ -15,6 +15,6 @@ Any known issues will be listed on the status page along with updates on the pro
 
 If available, use the in-app feedback feature to report the issue. This will help us identify the problem and provide a solution.
 
-Also you can report the issue via email to [app-feedback@informatik.sex](mailto:app-feedback@informatik.sexy). Please include as much information as possible, such as the device you are using, the version of the app, and a detailed description of the issue.
+Also you can report the issue via email to [app-feedback@informatik.sexy](mailto:app-feedback@informatik.sexy). Please include as much information as possible, such as the device you are using, the version of the app, and a detailed description of the issue.
 
 For more advanced users, you can also report the issue on our [GitHub repository](htttp://github.com/neuland-ingolstadt/neuland.app-native).

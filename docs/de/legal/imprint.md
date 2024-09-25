@@ -10,5 +10,5 @@ Telefon: 015678 384646
 Registergericht: Amtsgericht Ingolstadt\
 Registernummer: VR 201088
 
-Vertreten durch: Alexander Horn, Timo Weese, Michael Schubert\
+Vertreten durch: Alexander Horn, Timo Weese, Paulina Mair\
 Inhaltlich verantwortlich: Alexander Horn

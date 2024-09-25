@@ -1,11 +1,11 @@
 ---
 layout: home
 title: Neuland Next
-titleTemplate: Deine inoffizielle THI-App
+titleTemplate: Deine inoffizielle App für die THI
 
 hero:
   name: "Neuland Next"
-  text: "Deine inoffizielle THI-App"
+  text: "Deine inoffizielle App für die THI"
   tagline: Von Neuland Ingolstadt e.V.
   image:
     src: /assets/logo-dark.png

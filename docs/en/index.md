@@ -2,11 +2,11 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 title: Neuland Next
-titleTemplate: Your unofficial THI App
+titleTemplate: Your unofficial app for THI
 
 hero:
   name: "Neuland Next"
-  text: "Your unofficial THI App"
+  text: "Your unofficial app for THI"
   tagline: By Neuland Ingolstadt e.V.
   image:
     src: /assets/logo-dark.png
