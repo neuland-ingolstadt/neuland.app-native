@@ -10,5 +10,5 @@ Phone: 015678 384646
 Registry court: Amtsgericht Ingolstadt\
 Register number: VR 201088
 
-Represented by: Alexander Horn, Timo Weese, Michael Schubert\
+Represented by: Alexander Horn, Timo Weese, Paulina Mair\
 Responsible for the content: Alexander Horn
