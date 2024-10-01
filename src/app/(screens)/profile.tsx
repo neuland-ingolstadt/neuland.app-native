@@ -47,7 +47,7 @@ export default function Profile(): JSX.Element {
             enabled: userKind === USER_STUDENT,
             retry(failureCount, error) {
                 if (error instanceof NoSessionError) {
-                    router.replace('user/login')
+                    router.replace('login')
                     return false
                 }
                 return failureCount < 2
@@ -270,6 +270,7 @@ export default function Profile(): JSX.Element {
                                 ios: 'person.crop.circle.badge.exclamationmark',
                                 android: 'account_circle_off',
                             }}
+                            isCritical={false}
                         />
                     ))}
 

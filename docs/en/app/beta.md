@@ -3,6 +3,12 @@
 Help us test the latest features before they're released to the public.\
 To join the beta program, follow the instructions below.
 
+::: warning Availability
+
+Please note that depending on the development stage, not all features are available in the beta version and the release version of the app may differ. We recommend installing the beta version only on a device that is not used for daily use.
+
+:::
+
 ## iOS, iPadOS and macOS
 
 To join the beta program, you need to install the TestFlight app. TestFlight is Apple's platform for beta testing apps. It allows developers to invite users to test their apps before they're released to the public.

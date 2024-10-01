@@ -101,7 +101,7 @@ export default function LibrarySreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours,
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('user/login')
+                router.replace('login')
                 return false
             }
             return failureCount < 2
@@ -123,7 +123,7 @@ export default function LibrarySreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours,
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('user/login')
+                router.replace('login')
                 return false
             }
             return failureCount < 2
@@ -186,7 +186,7 @@ export default function LibrarySreen(): JSX.Element {
         },
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('user/login')
+                router.replace('login')
                 return false
             }
             return failureCount < 1
