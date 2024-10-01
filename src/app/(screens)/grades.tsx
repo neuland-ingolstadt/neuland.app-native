@@ -85,7 +85,7 @@ export default function GradesSCreen(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('user/login')
+                router.replace('login')
             }
             return false
         },

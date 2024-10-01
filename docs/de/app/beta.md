@@ -2,6 +2,12 @@
 
 Hilf uns, die neuesten Funktionen zu testen, bevor sie der Öffentlichkeit zur Verfügung gestellt werden. Um am Beta-Programm teilzunehmen, befolge die Anweisungen unten.
 
+::: warning Verfügbarkeit
+
+Beachte, dass je nach Entwicklungsstand nicht alle Funktionen in der Beta-Version verfügbar sind und der Release Versionen der App abweichen können. Wir empfehlen, die Beta-Version nur auf einem Gerät zu installieren, das nicht für den täglichen Gebrauch verwendet wird.
+
+:::
+
 ## iOS, iPadOS und macOS
 
 Um am Beta-Programm teilzunehmen, musst du die TestFlight-App installieren. TestFlight ist Apples Plattform für das Beta-Testen von Apps. Es ermöglicht Entwicklern, Benutzer einzuladen, ihre Apps zu testen, bevor sie der Öffentlichkeit zur Verfügung gestellt werden.

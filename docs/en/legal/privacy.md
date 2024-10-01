@@ -98,5 +98,5 @@ Die für uns zuständige Behörde erreichen Sie im Internet unter lda.bayern.de,
 
 ## Stand
 
-Erste Version: 24.2.2023
+Erste Version: 24.2.2023\
 Letzte Aktualisierung 24.7.2024
