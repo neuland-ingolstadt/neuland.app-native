@@ -35,7 +35,8 @@
         },
         "license": "Lizenz",
         "login": "Anmelden",
-        "legal": "Rechtliches"
+        "legal": "Rechtliches",
+        "sports": "Hoschulsport"
     },
     "cards": {
         "titles": {
@@ -52,7 +53,8 @@
             "mensaNeuburg": "Theke Neuburg",
             "food": "Essen",
             "login": "Anmelden",
-            "links": "Quick Links"
+            "links": "Quick Links",
+            "sports": "Hochschulsport"
         },
         "announcements": {
             "readMore": "Tippe, um mehr zu erfahren."

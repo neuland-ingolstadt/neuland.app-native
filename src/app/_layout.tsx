@@ -474,6 +474,17 @@ function RootLayout(): JSX.Element {
                         }),
                     }}
                 />
+                <Stack.Screen
+                    name="(screens)/sports"
+                    options={{
+                        title: t('navigation.sports'),
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                        }),
+                    }}
+                />
             </Stack>
         </>
     )
