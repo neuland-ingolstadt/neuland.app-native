@@ -10,9 +10,9 @@ function redirectBasedOnOS() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    window.location.href = "https://apps.apple.com/app/neuland-next/id1617096811";
+    window.location.href = "https://apps.apple.com/app/apple-store/id1617096811?pt=124486931&ct=web&mt=8";
   } else if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
-    window.location.href = "https://apps.apple.com/app/neuland-next/id1617096811";
+    window.location.href = "https://apps.apple.com/app/apple-store/id1617096811?pt=124486931&ct=web&mt=8";
   } else if (/android/i.test(userAgent)) {
     window.location.href = "https://play.google.com/store/apps/details?id=app.neuland";
   } else {

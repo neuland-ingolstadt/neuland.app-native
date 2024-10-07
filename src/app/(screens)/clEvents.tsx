@@ -5,7 +5,7 @@ import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
         width: '100%',
         borderRadius: 8,
         justifyContent: 'center',
-        marginBottom: MODAL_BOTTOM_MARGIN,
+        marginBottom: 64,
     },
 })
