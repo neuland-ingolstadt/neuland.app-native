@@ -313,7 +313,7 @@ export default function Settings(): JSX.Element {
                         android: 'share',
                     },
                     onPress: () => {
-                        trackEvent('Share', { share: 'app' })
+                        trackEvent('Share', { type: 'app' })
 
                         void Share.share({
                             url: 'https://next.neuland.app/get',
