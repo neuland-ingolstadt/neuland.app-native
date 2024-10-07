@@ -109,3 +109,27 @@ export interface Announcement {
     priority: number
     url: string | null
 }
+
+export interface UniversitySports {
+    id: string
+    title: {
+        de: string
+        en: string
+    }
+    description: {
+        de: string
+        en: string
+    }
+    campus: string
+    location: string
+    weekday: string
+    startTime: string
+    endTime: string
+    requiresRegistration: boolean
+    invitationLink: string | null
+    eMail: string | null
+}
+
+export interface GetUniversitySportsData {
+    universitySports: UniversitySports[]
+}

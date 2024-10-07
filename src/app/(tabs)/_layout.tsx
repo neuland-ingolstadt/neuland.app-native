@@ -54,13 +54,12 @@ export default function HomeLayout(): JSX.Element {
 
     useEffect(() => {
         if (
-            userKind !== USER_GUEST &&
             shownDashboardEntries !== null &&
             shownDashboardEntries.length > 0
         ) {
             if (
-                !shownDashboardEntries.some((card) => card.key === 'links') &&
-                !hiddenDashboardEntries.some((card) => card.key === 'links')
+                !shownDashboardEntries.some((card) => card.key === 'sports') &&
+                !hiddenDashboardEntries.some((card) => card.key === 'sports')
             ) {
                 resetOrder(userKind)
             }

@@ -35,7 +35,8 @@
         },
         "license": "License",
         "login": "Sign in",
-        "dashboard": "Neuland Next"
+        "dashboard": "Neuland Next",
+        "sports": "University Sports"
     },
     "cards": {
         "titles": {
@@ -52,7 +53,8 @@
             "mensaNeuburg": "Theke Neuburg",
             "food": "Food",
             "login": "Sign in",
-            "links": "Quick Links"
+            "links": "Quick Links",
+            "sports": "University Sports"
         },
         "announcements": {
             "readMore": "Tap to learn more."

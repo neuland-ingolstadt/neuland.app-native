@@ -35,4 +35,8 @@ export const cardIcons = {
         ios: 'safari.fill',
         android: 'link',
     },
+    sports: {
+        ios: 'figure.highintensity.intervaltraining',
+        android: 'sports_soccer',
+    },
 }

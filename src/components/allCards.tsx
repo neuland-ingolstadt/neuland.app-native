@@ -36,7 +36,7 @@ export const AllCards: Card[] = [
     {
         key: 'food',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        default: [USER_GUEST],
         card: () => <FoodCard />,
     },
     {
@@ -50,6 +50,12 @@ export const AllCards: Card[] = [
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <LinkCard />,
+    },
+    {
+        key: 'sports',
+        removable: true,
+        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        card: () => <BaseCard title="sports" onPressRoute="sports" />,
     },
     {
         key: 'news',
