@@ -10,7 +10,7 @@ import {
 } from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { usePathname } from 'expo-router'
+import { useSegments } from 'expo-router'
 import React, { useEffect } from 'react'
 import {
     type AppStateStatus,
@@ -79,7 +79,7 @@ export default function Provider({
     const flow = useFlow()
     const routeParams = useRouteParams()
     const preferences = usePreferences()
-    const pathname = usePathname()
+    const segments = useSegments()
 
     useOnlineManager()
     useAppState(onAppStateChange)
@@ -117,15 +117,26 @@ export default function Provider({
     }
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        // This effect uses segments instead of usePathname which resolves some issues with the router.
+        if (
+            !flow.analyticsInitialized ||
+            !Array.isArray(segments) ||
+            segments.length === 0
+        ) {
             return
         }
-        setTimeout(() => {
-            trackEvent('Route', {
-                pathname,
-            })
-        }, 0)
-    }, [pathname, flow.analyticsInitialized])
+
+        const lastSegment = segments[segments.length - 1]
+
+        const path =
+            typeof lastSegment === 'string'
+                ? `/${lastSegment.replace(/[()]/g, '')}`
+                : '/'
+
+        requestAnimationFrame(() => {
+            trackEvent('Route', { path })
+        })
+    }, [segments, flow.analyticsInitialized])
 
     useEffect(() => {
         if (!flow.analyticsInitialized) {
