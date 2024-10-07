@@ -1,4 +1,5 @@
 import { type SpoWeights } from '@/types/asset-api'
+import { type GetUniversitySportsData } from '@/types/neuland-api'
 import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
@@ -153,7 +154,7 @@ class NeulandAPIClient {
      * Gets the university sports events
      * @returns {Promise<any>} A promise that resolves with the university sports events data
      */
-    async getUniversitySports(): Promise<any> {
+    async getUniversitySports(): Promise<GetUniversitySportsData> {
         return await this.performGraphQLQuery(gql`
             query {
                 universitySports {
@@ -174,8 +175,6 @@ class NeulandAPIClient {
                     requiresRegistration
                     invitationLink
                     eMail
-                    createdAt
-                    updatedAt
                 }
             }
         `)
