@@ -5,6 +5,7 @@ import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPi
 import { type Colors } from '@/components/colors'
 import { FlowContext, PreferencesContext } from '@/components/contexts'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -164,6 +165,15 @@ export default function About(): JSX.Element {
         })
     }
 
+    const handleContributorsPress = (): void => {
+        const url =
+            'https://next.neuland.app/' +
+            (i18n.language === 'en' ? 'en/' : '') +
+            'about/contributors'
+        Linking.openURL(url).catch((err) => {
+            console.error('Failed to open URL:', err)
+        })
+    }
     return (
         <>
             <ScrollView
@@ -230,6 +240,7 @@ export default function About(): JSX.Element {
                                             { color: colors.text },
                                             styles.text,
                                         ]}
+                                        onPress={handleContributorsPress}
                                     >
                                         {'Neuland Ingolstadt e.V.'}
                                     </Text>

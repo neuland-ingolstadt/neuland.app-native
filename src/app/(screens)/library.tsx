@@ -482,7 +482,7 @@ export default function LibrarySreen(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    contentContainer: { paddingBottom: 32, flex: 1 },
+    contentContainer: { paddingBottom: 32 },
     sheetContainer: { flex: 1 },
     teaserText: {
         fontSize: 17,

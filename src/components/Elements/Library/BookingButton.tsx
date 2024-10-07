@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -35,7 +36,8 @@ const BookButton: React.FC<BookingButtonProps> = ({
         <View style={styles.confirmContainer}>
             <Pressable
                 style={{
-                    backgroundColor: colors.cardButton,
+                    backgroundColor:
+                        Platform.OS === 'ios' ? colors.cardButton : colors.card,
                     ...styles.bookButton,
                 }}
                 onPress={() => {
