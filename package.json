@@ -121,7 +121,8 @@
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3",
     "prop-types": "^15.8.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "@types/bun": "latest"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,yml, md}": [

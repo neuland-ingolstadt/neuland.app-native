@@ -16,7 +16,7 @@
 Neuland Next is availabe for all common platforms. You can download the app from the App Store or Google Play Store.
 
 <div class="links" id="links">
-      <a href="https://apps.apple.com/app/neuland-next/id1617096811">
+      <a href="https://apps.apple.com/app/apple-store/id1617096811?pt=124486931&ct=web&mt=8">
         <img alt="Download on the App Store" src="/assets/Apple_Badge_EN.svg" />
       </a>
       <a href="https://play.google.com/store/apps/details?id=app.neuland">
