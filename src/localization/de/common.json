@@ -61,7 +61,9 @@
         "delete": "Löschen",
         "disable": "Deaktivieren",
         "more": "mehr",
-        "unknown": "Unbekannt"
+        "unknown": "Unbekannt",
+        "true": "Ja",
+        "false": "Nein"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -155,10 +157,14 @@
         "event": {
             "date": "Datum",
             "location": "Ort",
+
             "organizer": "Veranstalter",
             "description": "Beschreibung",
             "begin": "Beginn",
             "end": "Ende",
+            "registration": "Anmeldung erforderlich",
+            "invitationLink": "Einladungslink",
+            "eMail": "E-Mail",
             "shareMessage": "Schau dir dieses Event an: {{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events"
         },
         "map": {
@@ -255,6 +261,11 @@
                 "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
             },
             "timeSlot": "Zeitfenster"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sport"
+            }
         }
     },
     "notification": {

@@ -61,7 +61,9 @@
         "delete": "Delete",
         "disable": "Disable",
         "more": "more",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "true": "Yes",
+        "false": "No"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -159,6 +161,9 @@
             "description": "Description",
             "begin": "Begin",
             "end": "End",
+            "registration": "Registration required",
+            "invitationLink": "Invitation link",
+            "eMail": "E-Mail",
             "shareMessage": "Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
         },
         "map": {
@@ -255,6 +260,11 @@
                 "footer": "Use this barcode to sign in at the library terminals to borrow books."
             },
             "timeSlot": "Timeslot"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sports"
+            }
         }
     },
     "notification": {

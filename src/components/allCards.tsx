@@ -52,12 +52,6 @@ export const AllCards: Card[] = [
         card: () => <LinkCard />,
     },
     {
-        key: 'sports',
-        removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-        card: () => <BaseCard title="sports" onPressRoute="sports" />,
-    },
-    {
         key: 'news',
         removable: true,
         default: [USER_STUDENT, USER_EMPLOYEE],

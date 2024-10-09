@@ -117,8 +117,8 @@ export interface UniversitySports {
         en: string
     }
     description: {
-        de: string
-        en: string
+        de: string | null
+        en: string | null
     }
     campus: string
     location: string

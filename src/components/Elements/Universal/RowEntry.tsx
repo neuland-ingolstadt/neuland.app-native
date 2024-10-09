@@ -16,6 +16,7 @@ const RowEntry = ({
     rightChildren,
     onPress,
     maxTitleWidth,
+    backgroundColor,
 }: {
     title: string
     colors: Colors
@@ -24,10 +25,11 @@ const RowEntry = ({
     onPress?: () => void
     isExamCard?: boolean
     maxTitleWidth?: DimensionValue
+    backgroundColor?: string
 }): JSX.Element => {
     return (
         <Pressable onPress={onPress}>
-            <View style={styles.eventContainer}>
+            <View style={{ ...styles.eventContainer, backgroundColor }}>
                 <View
                     style={[
                         styles.detailsContainer,
