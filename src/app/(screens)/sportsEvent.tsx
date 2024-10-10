@@ -10,7 +10,7 @@ import { Buffer } from 'buffer'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function SportsEventDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -32,7 +32,7 @@ export default function SportsEventDetail(): JSX.Element {
         sportsEvent?.description.en != null
     const isEmailAvailable =
         sportsEvent?.eMail != null || sportsEvent?.eMail !== ''
-    const isInvitationLinkAvailable = sportsEvent?.invitationLink != null
+    const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
     const sections: FormListSections[] = [
         {
@@ -87,7 +87,12 @@ export default function SportsEventDetail(): JSX.Element {
                     ? [
                           {
                               title: t('pages.event.invitationLink'),
-                              value: sportsEvent.invitationLink ?? undefined,
+                              value: 'Link',
+                              onPress: () => {
+                                  void Linking.openURL(
+                                      sportsEvent.invitationLink ?? ''
+                                  )
+                              },
                           },
                       ]
                     : []),

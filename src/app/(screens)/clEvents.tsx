@@ -36,7 +36,7 @@ export default function Events(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24, // 24 hours
             },
             {
-                queryKey: ['universitySportj'],
+                queryKey: ['universitySports'],
                 queryFn: loadUniversitySportsEvents,
                 select: (
                     data: Array<{ title: string; data: UniversitySports[] }>

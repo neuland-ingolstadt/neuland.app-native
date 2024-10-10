@@ -84,6 +84,7 @@ export function formatFriendlyTimeRange(
     begin: string,
     end?: string | null
 ): string {
+    console.log('begin', begin, 'end', end)
     let str = formatFriendlyTimeString(begin)
     if (end != null) {
         str += ' – ' + formatFriendlyTimeString(end)

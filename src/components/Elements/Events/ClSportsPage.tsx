@@ -23,6 +23,8 @@ import {
 } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 
+import Divider from '../Universal/Divider'
+
 export default function ClSportsPage({
     sportsResult,
     selectedLocations,
@@ -107,12 +109,13 @@ export default function ClSportsPage({
                 </Pressable>
                 <Collapsible collapsed={collapsed}>
                     <View style={styles.contentContainer}>
-                        {data.map((event) => (
-                            <SportsRow
-                                event={event}
-                                colors={colors}
-                                key={event.id}
-                            />
+                        {data.map((event, index) => (
+                            <React.Fragment key={event.id}>
+                                <SportsRow event={event} colors={colors} />
+                                {index < data.length - 1 && (
+                                    <Divider iosPaddingLeft={16} />
+                                )}
+                            </React.Fragment>
                         ))}
                     </View>
                 </Collapsible>
@@ -253,6 +256,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         marginHorizontal: PAGE_PADDING,
+        paddingBottom: 64,
     },
     contentBorder: {
         borderRadius: 8,
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     },
     weekdaysContainer: { marginBottom: 12 },
     campusHeader: {
-        fontWeight: 'bold',
+        fontWeight: '500',
         verticalAlign: 'middle',
         fontSize: 16,
     },
