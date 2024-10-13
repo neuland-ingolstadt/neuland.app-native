@@ -53,7 +53,7 @@ const SportsRow = ({
                                 size: 14,
                             }}
                             android={{
-                                name: 'expand_more',
+                                name: 'location_on',
                                 size: 20,
                             }}
                             style={styles.toggleIcon}

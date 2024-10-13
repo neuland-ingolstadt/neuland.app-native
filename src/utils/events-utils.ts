@@ -20,7 +20,7 @@ export async function loadCampusLifeEvents(): Promise<CLEvents[]> {
 }
 
 type GroupedSportsEvents = Array<{
-    title: string
+    title: UniversitySports['weekday']
     data: UniversitySports[]
 }>
 /**
@@ -48,7 +48,7 @@ export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents>
 
     const sections = Object.keys(groupedEvents)
         .map((weekday) => ({
-            title: weekday,
+            title: weekday as UniversitySports['weekday'],
             data: groupedEvents[weekday],
         }))
         .sort((a, b) => weekdays.indexOf(a.title) - weekdays.indexOf(b.title))

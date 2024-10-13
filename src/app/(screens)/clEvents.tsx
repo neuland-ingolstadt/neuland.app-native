@@ -2,8 +2,6 @@ import ClEventsPage from '@/components/Elements/Events/ClEventsPage'
 import ClSportsPage from '@/components/Elements/Events/ClSportsPage'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { type Colors } from '@/components/colors'
-import { UserKindContext } from '@/components/contexts'
-import { type UniversitySports } from '@/types/neuland-api'
 import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,
@@ -12,7 +10,7 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { useQueries } from '@tanstack/react-query'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, StyleSheet, View, useWindowDimensions } from 'react-native'
 import PagerView from 'react-native-pager-view'
@@ -20,13 +18,6 @@ import PagerView from 'react-native-pager-view'
 export default function Events(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
-    const { userFaculty } = useContext(UserKindContext)
-    const [selectedLocations, setSelectedLocations] = useState<string[]>(
-        userFaculty === 'Nachhaltige Infrastruktur'
-            ? ['Neuburg']
-            : ['Ingolstadt']
-    )
-
     const results = useQueries({
         queries: [
             {
@@ -38,20 +29,6 @@ export default function Events(): JSX.Element {
             {
                 queryKey: ['universitySports'],
                 queryFn: loadUniversitySportsEvents,
-                select: (
-                    data: Array<{ title: string; data: UniversitySports[] }>
-                ) => {
-                    // filter data based on selected locations
-                    console.log('data', data)
-                    return data
-                        .map((section) => ({
-                            ...section,
-                            data: section.data.filter((event) =>
-                                selectedLocations.includes(event.campus)
-                            ),
-                        }))
-                        .filter((section) => section.data.length > 0)
-                },
                 staleTime: 1000 * 60 * 60, // 60 minutes
                 gcTime: 1000 * 60 * 60 * 24, // 24 hours
             },
@@ -120,11 +97,7 @@ export default function Events(): JSX.Element {
                 overdrag
             >
                 <ClEventsPage clEventsResult={results[0]} />
-                <ClSportsPage
-                    sportsResult={results[1]}
-                    selectedLocations={selectedLocations}
-                    setSelectedLocations={setSelectedLocations}
-                />
+                <ClSportsPage sportsResult={results[1]} />
             </PagerView>
         </View>
     )

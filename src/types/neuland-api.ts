@@ -122,7 +122,14 @@ export interface UniversitySports {
     }
     campus: string
     location: string
-    weekday: string
+    weekday:
+        | 'Monday'
+        | 'Tuesday'
+        | 'Wednesday'
+        | 'Thursday'
+        | 'Friday'
+        | 'Saturday'
+        | 'Sunday'
     startTime: string
     endTime: string
     requiresRegistration: boolean

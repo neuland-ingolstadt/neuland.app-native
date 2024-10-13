@@ -28,10 +28,9 @@ export default function SportsEventDetail(): JSX.Element {
     }
 
     const isDescriptionAvailable =
-        sportsEvent?.description.de != null ||
-        sportsEvent?.description.en != null
-    const isEmailAvailable =
-        sportsEvent?.eMail != null || sportsEvent?.eMail !== ''
+        !((sportsEvent?.description.de ?? '') === '') ||
+        !((sportsEvent?.description.en ?? '') === '')
+    const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
     const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
     const sections: FormListSections[] = [
@@ -39,7 +38,17 @@ export default function SportsEventDetail(): JSX.Element {
             header: 'Details',
             items: [
                 {
-                    title: t('pages.event.date'),
+                    title: t('pages.event.weekday'),
+                    value: t(
+                        `dates.weekdays.${
+                            sportsEvent.weekday.toLowerCase() as Lowercase<
+                                UniversitySports['weekday']
+                            >
+                        }`
+                    ),
+                },
+                {
+                    title: t('pages.event.time'),
                     value: formatFriendlyTimeRange(
                         sportsEvent.startTime,
                         sportsEvent.endTime

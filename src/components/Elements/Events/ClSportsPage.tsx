@@ -2,6 +2,7 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import SportsRow from '@/components/Elements/Rows/SportsRow'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
+import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { type UniversitySports } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
@@ -9,7 +10,7 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { type UseQueryResult } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
@@ -27,16 +28,36 @@ import Divider from '../Universal/Divider'
 
 export default function ClSportsPage({
     sportsResult,
-    selectedLocations,
-    setSelectedLocations,
 }: {
     sportsResult: UseQueryResult<
-        Array<{ title: string; data: UniversitySports[] }>,
+        Array<{ title: UniversitySports['weekday']; data: UniversitySports[] }>,
         Error
     >
-    selectedLocations: string[]
-    setSelectedLocations: (locations: string[]) => void
 }): JSX.Element {
+    const { userCampus } = useContext(UserKindContext)
+    const [selectedLocation, setSelectedLocation] =
+        useState<string>('Ingolstadt')
+
+    useEffect(() => {
+        if (userCampus != null) {
+            setSelectedLocation(userCampus)
+        }
+    }, [userCampus])
+
+    const sportsEvents = useMemo(() => {
+        if (sportsResult.data == null) {
+            return []
+        }
+        return sportsResult.data
+            .map((section) => ({
+                ...section,
+                data: section.data.filter(
+                    (event) => event.campus === selectedLocation
+                ),
+            }))
+            .filter((section) => section.data.length > 0)
+    }, [sportsResult.data, selectedLocation])
+
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const locations = ['Ingolstadt', 'Neuburg']
@@ -50,13 +71,20 @@ export default function ClSportsPage({
     const EventList = ({
         data,
     }: {
-        data: Array<{ title: string; data: UniversitySports[] }>
+        data: Array<{
+            title: UniversitySports['weekday']
+            data: UniversitySports[]
+        }>
     }): JSX.Element => {
         return (
             <View>
                 {data.map((section, index) => (
                     <SportsWeekday
-                        title={section.title}
+                        title={
+                            section.title.toLowerCase() as Lowercase<
+                                UniversitySports['weekday']
+                            >
+                        }
                         data={section.data}
                         key={index}
                     />
@@ -69,7 +97,7 @@ export default function ClSportsPage({
         title,
         data,
     }: {
-        title: string
+        title: Lowercase<UniversitySports['weekday']>
         data: UniversitySports[]
     }): JSX.Element => {
         const [collapsed, setCollapsed] = useState(false)
@@ -90,7 +118,7 @@ export default function ClSportsPage({
                                 { color: colors.text },
                             ]}
                         >
-                            {title}
+                            {t(`dates.weekdays.${title}`)}
                         </Text>
                         <PlatformIcon
                             color={colors.primary}
@@ -133,24 +161,19 @@ export default function ClSportsPage({
                 style={{
                     borderColor: colors.border,
                     ...styles.locationButtonContainer,
-                    backgroundColor: selectedLocations.includes(location)
-                        ? colors.primary
-                        : colors.card,
+                    backgroundColor:
+                        selectedLocation === location
+                            ? colors.primary
+                            : colors.card,
                 }}
                 onPress={() => {
-                    if (selectedLocations.includes(location)) {
-                        setSelectedLocations(
-                            selectedLocations.filter((loc) => loc !== location)
-                        )
-                    } else {
-                        setSelectedLocations([...selectedLocations, location])
-                    }
+                    setSelectedLocation(location)
                 }}
             >
                 <Text
                     style={{
                         color: getContrastColor(
-                            selectedLocations.includes(location)
+                            selectedLocation === location
                                 ? colors.primary
                                 : colors.card
                         ),
@@ -225,19 +248,20 @@ export default function ClSportsPage({
                             }}
                         >
                             {sportsResult.data != null ? (
-                                <EventList data={sportsResult.data} />
+                                <EventList data={sportsEvents} />
                             ) : (
                                 <ErrorView
                                     title={t(
-                                        'pages.calendar.exams.noExams.title'
-                                    )}
-                                    message={t(
-                                        'pages.calendar.exams.noExams.subtitle'
+                                        'pages.clEvents.sports.noEvents.title'
                                     )}
                                     icon={{
-                                        ios: 'calendar.badge.clock',
-                                        android: 'calendar_clock',
+                                        // TODO: Select sports icon for iOS
+                                        ios: 'todo',
+                                        android: 'sports_gymnastics',
                                     }}
+                                    message={t(
+                                        'pages.clEvents.sports.noEvents.subtitle'
+                                    )}
                                     inModal
                                     isCritical={false}
                                 />

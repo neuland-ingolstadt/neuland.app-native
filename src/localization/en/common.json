@@ -52,7 +52,16 @@
         "tomorrow": "Tomorrow",
         "thisWeek": "This Week",
         "nextWeek": "Next Week",
-        "now": "Now"
+        "now": "Now",
+        "weekdays": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
+        }
     },
     "misc": {
         "share": "Share",
@@ -156,6 +165,8 @@
         },
         "event": {
             "date": "Date",
+            "time": "Time",
+            "weekday": "Weekday",
             "location": "Location",
             "organizer": "Organizer",
             "description": "Description",
@@ -263,7 +274,11 @@
         },
         "clEvents": {
             "sports": {
-                "title": "Sports"
+                "title": "Sports",
+                "noEvents": {
+                    "title": "No sports events found",
+                    "subtitle": "Check back later."
+                }
             }
         }
     },
