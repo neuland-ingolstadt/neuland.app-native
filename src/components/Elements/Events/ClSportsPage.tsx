@@ -10,11 +10,13 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { type UseQueryResult } from '@tanstack/react-query'
+import { selectionAsync } from 'expo-haptics'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Animated,
+    Platform,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -124,8 +126,8 @@ export default function ClSportsPage({
                             color={colors.primary}
                             ios={{
                                 name: collapsed ? 'chevron.down' : 'chevron.up',
-                                size: 14,
-                                weight: 'bold',
+                                size: 13,
+                                weight: 'semibold',
                             }}
                             android={{
                                 name: collapsed ? 'expand_more' : 'expand_less',
@@ -168,6 +170,9 @@ export default function ClSportsPage({
                 }}
                 onPress={() => {
                     setSelectedLocation(location)
+                    if (Platform.OS === 'ios') {
+                        void selectionAsync()
+                    }
                 }}
             >
                 <Text
@@ -313,7 +318,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         borderWidth: 1,
 
-        borderRadius: 10,
+        borderRadius: 8,
     },
     locationRow: {
         flexDirection: 'row',
@@ -321,7 +326,7 @@ const styles = StyleSheet.create({
         gap: 8,
         paddingVertical: 8,
     },
-    weekdaysContainer: { marginBottom: 12 },
+    weekdaysContainer: { marginBottom: 10 },
     campusHeader: {
         fontWeight: '500',
         verticalAlign: 'middle',
