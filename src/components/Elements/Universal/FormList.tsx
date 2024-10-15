@@ -98,6 +98,7 @@ const RenderSectionItems: React.FC<{
     rowStyle?: ViewStyle
 }> = ({ items, rowStyle }) => {
     const colors = useTheme().colors as Colors
+
     return (
         <View style={[styles.blockCard, { backgroundColor: colors.card }]}>
             {items.map((item, index) => (
@@ -131,6 +132,7 @@ const RenderSectionItems: React.FC<{
                                     {item.title}
                                 </Text>
                             )}
+
                             {item.value != null && (
                                 <Text
                                     style={[
@@ -169,6 +171,10 @@ const RenderSectionItems: React.FC<{
                                         name: item.icon.android,
                                         size: 18,
                                         variant: item.icon.androidVariant,
+                                    }}
+                                    // eslint-disable-next-line react-native/no-inline-styles
+                                    style={{
+                                        marginLeft: item.value != null ? 8 : 0,
                                     }}
                                 />
                             )}

@@ -2,6 +2,7 @@ import { type Colors } from '@/components/colors'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { sportsCategories } from '@/utils/events-utils'
 import { ROW_PADDING } from '@/utils/style-utils'
 import { Buffer } from 'buffer'
 import { router } from 'expo-router'
@@ -46,7 +47,7 @@ const SportsRow = ({
                     </Text>
 
                     <View style={styles.campusRow}>
-                        <PlatformIcon
+                        {/* <PlatformIcon
                             color={colors.labelSecondaryColor}
                             ios={{
                                 name: 'mappin.and.ellipse',
@@ -57,7 +58,7 @@ const SportsRow = ({
                                 size: 20,
                             }}
                             style={styles.toggleIcon}
-                        />
+                        /> */}
                         <Text
                             style={{
                                 ...styles.rightText,
@@ -86,6 +87,21 @@ const SportsRow = ({
                         </Text>
                     </View>
                 </>
+            }
+            icon={
+                <PlatformIcon
+                    color={colors.primary}
+                    ios={{
+                        name: sportsCategories[event.sportsCategory].iosIcon,
+                        size: 16,
+                    }}
+                    android={{
+                        name: sportsCategories[event.sportsCategory]
+                            .androidIcon,
+                        size: 22,
+                    }}
+                    style={styles.toggleIcon}
+                />
             }
             maxTitleWidth={'70%'}
         />

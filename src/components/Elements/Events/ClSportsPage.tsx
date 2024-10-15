@@ -7,7 +7,6 @@ import { useRefreshByUser } from '@/hooks'
 import { type UniversitySports } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import { type UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
@@ -158,15 +157,13 @@ export default function ClSportsPage({
     }: {
         location: string
     }): JSX.Element => {
+        const fontWeight = selectedLocation === location ? '600' : undefined
         return (
             <Pressable
                 style={{
                     borderColor: colors.border,
                     ...styles.locationButtonContainer,
-                    backgroundColor:
-                        selectedLocation === location
-                            ? colors.primary
-                            : colors.card,
+                    backgroundColor: colors.card,
                 }}
                 onPress={() => {
                     setSelectedLocation(location)
@@ -177,11 +174,11 @@ export default function ClSportsPage({
             >
                 <Text
                     style={{
-                        color: getContrastColor(
+                        color:
                             selectedLocation === location
                                 ? colors.primary
-                                : colors.card
-                        ),
+                                : colors.text,
+                        fontWeight,
                     }}
                 >
                     {location}
@@ -316,7 +313,7 @@ const styles = StyleSheet.create({
     locationButtonContainer: {
         padding: 8,
         paddingHorizontal: 16,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth,
 
         borderRadius: 8,
     },

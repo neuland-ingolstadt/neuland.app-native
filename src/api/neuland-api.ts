@@ -175,6 +175,7 @@ class NeulandAPIClient {
                     requiresRegistration
                     invitationLink
                     eMail
+                    sportsCategory
                 }
             }
         `)

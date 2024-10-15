@@ -172,7 +172,9 @@
             "description": "Beschreibung",
             "begin": "Beginn",
             "end": "Ende",
-            "registration": "Anmeldung erforderlich",
+            "registration": "Anmeldung",
+            "required": "Erforderlich",
+            "optional": "Optional",
             "invitationLink": "Einladungslink",
             "eMail": "E-Mail",
             "shareMessage": "Schau dir dieses Event an: {{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events"

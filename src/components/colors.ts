@@ -18,6 +18,7 @@ interface StaticThemeColors {
     card: string
     cardButton: string
     notification: string
+    warning: string
     inputBackground: string
     contrast: string
     cardContrast: string
@@ -84,6 +85,7 @@ export const lightColors: StaticThemeColors = {
     card: '#ffffff',
     cardButton: '#f2f2f2',
     notification: '#ff0000',
+    warning: '#f48e00',
     inputBackground: '#e9e9e9',
     contrast: '#ffffff',
     cardContrast: '#eeeeee',
@@ -99,6 +101,7 @@ export const darkColors: StaticThemeColors = {
     card: '#1c1c1d',
     cardButton: '#2f2f2f',
     notification: '#ff0000',
+    warning: '#ff9900',
     inputBackground: '#383838',
     contrast: '#000000',
     cardContrast: '#1c1c1d',

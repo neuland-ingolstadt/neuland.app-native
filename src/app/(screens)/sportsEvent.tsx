@@ -55,12 +55,12 @@ export default function SportsEventDetail(): JSX.Element {
                     ),
                 },
                 {
-                    title: t('pages.event.location'),
-                    value: sportsEvent.location,
-                },
-                {
                     title: 'Campus',
                     value: sportsEvent?.campus,
+                },
+                {
+                    title: t('pages.event.location'),
+                    value: sportsEvent.location,
                 },
             ],
         },
@@ -81,14 +81,32 @@ export default function SportsEventDetail(): JSX.Element {
                 {
                     title: t('pages.event.registration'),
                     value: sportsEvent?.requiresRegistration
-                        ? t('misc.true')
-                        : t('misc.false'),
+                        ? t('pages.event.required')
+                        : t('pages.event.optional'),
+                    icon: sportsEvent?.requiresRegistration
+                        ? {
+                              ios: 'exclamationmark.triangle',
+                              android: 'warning',
+                          }
+                        : {
+                              ios: 'checkmark.seal',
+                              android: 'cancel',
+                          },
+                    iconColor: sportsEvent?.requiresRegistration
+                        ? colors.warning
+                        : undefined,
                 },
                 ...(isEmailAvailable
                     ? [
                           {
                               title: t('pages.event.eMail'),
                               value: sportsEvent.eMail ?? undefined,
+                              onPress: () => {
+                                  void Linking.openURL(
+                                      `mailto:${sportsEvent.eMail}`
+                                  )
+                              },
+                              iconColor: colors.primary,
                           },
                       ]
                     : []),
@@ -102,6 +120,8 @@ export default function SportsEventDetail(): JSX.Element {
                                       sportsEvent.invitationLink ?? ''
                                   )
                               },
+
+                              iconColor: colors.primary,
                           },
                       ]
                     : []),
