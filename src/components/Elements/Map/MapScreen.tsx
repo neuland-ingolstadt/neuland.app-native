@@ -343,7 +343,6 @@ const MapScreen = (): JSX.Element => {
         if (mapLoadState !== LoadingState.LOADED) {
             return
         }
-        bottomSheetModalRef.current?.close()
         const room = allRooms.features.find(
             (x) => x.properties?.Raum === routeParams
         )?.properties
@@ -427,9 +426,8 @@ const MapScreen = (): JSX.Element => {
         void load()
     }, [userKind, roomStatusData])
 
-    // if current floor changes hide the detail sheet and marker
     useEffect(() => {
-        if (clickedElement != null) {
+        if (clickedElement != null && currentFloor?.manual === true) {
             bottomSheetModalRef.current?.close()
         }
     }, [currentFloor])
