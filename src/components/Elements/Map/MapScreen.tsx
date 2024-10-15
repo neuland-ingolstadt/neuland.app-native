@@ -652,7 +652,7 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         // As required by the OSM attribution, the attribution must be displayed until the user interacts with the map or 5 seconds after the map has loaded
-        let timer: number | Timer | undefined
+        let timer: any
         const startFadeOut = (): void => {
             opacity.value = withTiming(0, { duration: 500 }, () => {
                 runOnJS(setIsVisible)(false)
@@ -668,6 +668,7 @@ const MapScreen = (): JSX.Element => {
         }
 
         return () => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             clearTimeout(timer)
         }
     }, [regionChange, isVisible, opacity])
