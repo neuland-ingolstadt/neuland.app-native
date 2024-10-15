@@ -8,6 +8,7 @@ import {
 } from '@/utils/events-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQueries } from '@tanstack/react-query'
 import React, { useEffect, useRef, useState } from 'react'
@@ -56,6 +57,7 @@ export default function Events(): JSX.Element {
         pagerViewRef.current?.setPage(page)
     }
     const displayTypes = ['Events', t('pages.clEvents.sports.title')]
+    const pages = ['events', 'sports']
 
     return (
         <View
@@ -92,6 +94,9 @@ export default function Events(): JSX.Element {
                 onPageSelected={(e) => {
                     const page = e.nativeEvent.position
                     setSelectedData(page)
+                    trackEvent('Route', {
+                        path: 'clEvents/' + pages[page],
+                    })
                 }}
                 scrollEnabled
                 overdrag

@@ -33,7 +33,6 @@ export default function ClEventsPage({
     } = useRefreshByUser(clEventsResult.refetch)
 
     const scrollY = new Animated.Value(0)
-
     return (
         <View>
             <ScrollView
