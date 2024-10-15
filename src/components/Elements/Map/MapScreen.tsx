@@ -340,7 +340,9 @@ const MapScreen = (): JSX.Element => {
         if (routeParams === null || routeParams === '') {
             return
         }
-
+        if (mapLoadState !== LoadingState.LOADED) {
+            return
+        }
         const room = allRooms.features.find(
             (x) => x.properties?.Raum === routeParams
         )?.properties
@@ -368,8 +370,7 @@ const MapScreen = (): JSX.Element => {
         handlePresentModalPress()
 
         updateRouteParams('')
-        bottomSheetRef.current?.forceClose()
-    }, [routeParams])
+    }, [routeParams, mapLoadState])
 
     useEffect(() => {
         setMapCenter(
@@ -425,9 +426,8 @@ const MapScreen = (): JSX.Element => {
         void load()
     }, [userKind, roomStatusData])
 
-    // if current floor changes hide the detail sheet and marker
     useEffect(() => {
-        if (clickedElement != null) {
+        if (clickedElement != null && currentFloor?.manual === true) {
             bottomSheetModalRef.current?.close()
         }
     }, [currentFloor])
@@ -652,7 +652,7 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         // As required by the OSM attribution, the attribution must be displayed until the user interacts with the map or 5 seconds after the map has loaded
-        let timer: NodeJS.Timeout
+        let timer: number | Timer | undefined
         const startFadeOut = (): void => {
             opacity.value = withTiming(0, { duration: 500 }, () => {
                 runOnJS(setIsVisible)(false)
@@ -660,10 +660,8 @@ const MapScreen = (): JSX.Element => {
         }
 
         if (regionChange) {
-            // If region changes, fade out directly without waiting for 5 seconds
             startFadeOut()
         } else if (!regionChange && isVisible) {
-            // Otherwise, wait for 5 seconds before fading out
             timer = setTimeout(() => {
                 startFadeOut()
             }, 5000)
@@ -896,7 +894,7 @@ const MapScreen = (): JSX.Element => {
                 bottomSheetRef={bottomSheetRef}
                 currentPosition={currentPosition}
                 handlePresentModalPress={handlePresentModalPress}
-                allRooms={allRooms}             
+                allRooms={allRooms}
             />
 
             <BottomSheetDetailModal
