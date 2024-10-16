@@ -158,7 +158,7 @@ export default function ClSportsPage({
         location: string
     }): JSX.Element => {
         const isSelected = selectedLocation === location
-        const textShadowColor = isSelected ? colors.primary : 'transparent'
+        const fontWeight = isSelected ? '600' : undefined
         return (
             <Pressable
                 style={{
@@ -174,11 +174,9 @@ export default function ClSportsPage({
                 }}
             >
                 <Text
-                    // To avoid width jumping we use textshadow instead of fontweight
                     style={{
-                        ...styles.locationText,
                         color: isSelected ? colors.primary : colors.text,
-                        textShadowColor,
+                        fontWeight,
                     }}
                 >
                     {location}
@@ -297,13 +295,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignContent: 'center',
         paddingBottom: 10,
-        paddingTop: 0,
     },
     toggleIcon: {
         marginRight: 4,
-
-        alignSelf: 'center',
-        alignContent: 'center',
+        alignSelf: 'flex-end',
     },
     categoryText: {
         fontSize: 16,
@@ -328,9 +323,5 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         verticalAlign: 'middle',
         fontSize: 16,
-    },
-    locationText: {
-        textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 2,
     },
 })

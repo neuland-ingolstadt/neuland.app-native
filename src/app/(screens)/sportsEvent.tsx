@@ -2,6 +2,7 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
+import { type MaterialIcon } from '@/types/material-icons'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
@@ -76,7 +77,7 @@ export default function SportsEventDetail(): JSX.Element {
               ]
             : []),
         {
-            header: 'Contact',
+            header: t('pages.event.contact'),
             items: [
                 {
                     title: t('pages.event.registration'),
@@ -90,7 +91,8 @@ export default function SportsEventDetail(): JSX.Element {
                           }
                         : {
                               ios: 'checkmark.seal',
-                              android: 'cancel',
+                              android: 'new_releases' as MaterialIcon,
+                              androidVariant: 'outlined',
                           },
                     iconColor: sportsEvent?.requiresRegistration
                         ? colors.warning

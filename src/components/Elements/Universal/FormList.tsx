@@ -3,7 +3,14 @@ import { type Colors } from '@/components/colors'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native'
+import {
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+    type ViewStyle,
+} from 'react-native'
 
 import PlatformIcon from './Icon'
 
@@ -174,7 +181,9 @@ const RenderSectionItems: React.FC<{
                                     }}
                                     // eslint-disable-next-line react-native/no-inline-styles
                                     style={{
-                                        marginLeft: item.value != null ? 8 : 0,
+                                        marginLeft: item.value != null ? 6 : 0,
+                                        marginTop:
+                                            Platform.OS === 'android' ? 2 : 0,
                                     }}
                                 />
                             )}

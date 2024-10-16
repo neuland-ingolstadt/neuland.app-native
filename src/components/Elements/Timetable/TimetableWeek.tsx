@@ -80,7 +80,7 @@ export default function TimetableWeek({
                         const targetDate =
                             strippedLocalSelectedDate.getTime() ===
                             strippedToday.getTime()
-                                ? firstElementeDate ?? today
+                                ? (firstElementeDate ?? today)
                                 : today
                         // @ts-expect-error typescript doesn't know that goToDate exists
                         weekViewRef.current?.goToDate(new Date(targetDate))
@@ -382,7 +382,7 @@ export default function TimetableWeek({
         <WeekView
             /// <reference path="" />
             ref={weekViewRef}
-            events={allEvents}
+            events={allEvents as unknown as WeekViewEvent[]}
             selectedDate={selectedDate}
             numberOfDays={3}
             hoursInDisplay={14}
@@ -390,7 +390,9 @@ export default function TimetableWeek({
             showTitle={false}
             locale="de"
             timesColumnWidth={0.15}
-            nowLineColor={colors.primary}
+            nowLineColor={
+                Platform.OS === 'ios' ? colors.primary : colors.notification
+            }
             headerStyle={{
                 backgroundColor: colors.background,
                 borderColor: colors.border,
