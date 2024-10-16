@@ -89,36 +89,6 @@
                     "android": "bug_report"
                 }
             }
-        ],
-        "1.0": [
-            {
-                "title": {
-                    "de": "Hochschulsport",
-                    "en": "University Sports"
-                },
-                "description": {
-                    "de": "Entdecke die neue Hochschulsport Seite und finde passende Kurse für dich.",
-                    "en": "Discover the new university sports page and find suitable courses for you."
-                },
-                "icon": {
-                    "ios": "dumbbell",
-                    "android": "fitness_center"
-                }
-            },
-            {
-                "title": {
-                    "de": "Fehlerbehebungen",
-                    "en": "Bug Fixes"
-                },
-                "description": {
-                    "de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
-                    "en": "Many small bugs have been fixed to make the app even better."
-                },
-                "icon": {
-                    "ios": "hammer",
-                    "android": "bug_report"
-                }
-            }
         ]
     }
 }
