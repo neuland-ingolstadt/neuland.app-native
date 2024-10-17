@@ -35,5 +35,6 @@ export interface SectionGroup {
 export interface FormListSections {
     header?: string
     footer?: string
-    items: SectionGroup[]
+    items?: SectionGroup[]
+    item?: string
 }

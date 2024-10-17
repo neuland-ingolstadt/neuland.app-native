@@ -12,7 +12,7 @@ export const cardIcons = {
         android: 'event',
     },
     events: {
-        ios: 'party.popper.fill',
+        ios: 'figure.2',
         android: 'celebration',
     },
     library: {

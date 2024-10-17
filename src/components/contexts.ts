@@ -29,6 +29,7 @@ export const FoodFilterContext = createContext<FoodFilter>({
 export const UserKindContext = createContext<UserKindContextType>({
     userKind: 'student',
     userFaculty: undefined,
+    userCampus: undefined,
     toggleUserKind: () => {},
 })
 

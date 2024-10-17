@@ -10,6 +10,7 @@ import { useRefreshByUser } from '@/hooks'
 import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -69,6 +70,7 @@ export default function CalendarPage(): JSX.Element {
         pagerViewRef.current?.setPage(page)
     }
     const scrollY = new Animated.Value(0)
+    const pages = ['events', 'exams']
 
     const CalendarFooter = (): JSX.Element => {
         return (
@@ -130,6 +132,9 @@ export default function CalendarPage(): JSX.Element {
                 onPageSelected={(e) => {
                     const page = e.nativeEvent.position
                     setSelectedData(page)
+                    trackEvent('Route', {
+                        path: 'calendar/' + pages[page],
+                    })
                 }}
                 scrollEnabled
                 overdrag

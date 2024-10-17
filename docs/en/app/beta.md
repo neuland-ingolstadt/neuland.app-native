@@ -5,7 +5,8 @@ To join the beta program, follow the instructions below.
 
 ::: warning Availability
 
-Please note that depending on the development stage, not all features are available in the beta version and the release version of the app may differ. We recommend installing the beta version only on a device that is not used for daily use.
+Please note that depending on the development stage, not all features are available in the beta version and the app may be unstable.
+We recommend installing the beta version only on a device that is not used for daily use.
 
 :::
 

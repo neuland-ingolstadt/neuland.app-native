@@ -2,7 +2,6 @@ import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
 import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
 import { type Colors } from '@/components/colors'
 import {
-    DashboardContext,
     FlowContext,
     FoodFilterContext,
     PreferencesContext,
@@ -47,25 +46,7 @@ export default function HomeLayout(): JSX.Element {
         React.useContext(FlowContext)
     const { isOnboarded } = React.useContext(FlowContext)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const { shownDashboardEntries, hiddenDashboardEntries, resetOrder } =
-        useContext(DashboardContext)
-
     const pathname = usePathname()
-
-    useEffect(() => {
-        if (
-            userKind !== USER_GUEST &&
-            shownDashboardEntries !== null &&
-            shownDashboardEntries.length > 0
-        ) {
-            if (
-                !shownDashboardEntries.some((card) => card.key === 'links') &&
-                !hiddenDashboardEntries.some((card) => card.key === 'links')
-            ) {
-                resetOrder(userKind)
-            }
-        }
-    }, [isOnboarded])
 
     useEffect(() => {
         // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color

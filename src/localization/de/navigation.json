@@ -35,7 +35,8 @@
         },
         "license": "Lizenz",
         "login": "Anmelden",
-        "legal": "Rechtliches"
+        "legal": "Rechtliches",
+        "sports": "Hochschulsport"
     },
     "cards": {
         "titles": {
@@ -45,14 +46,15 @@
             "lecturers": "Dozenten",
             "news": "THI Neuigkeiten",
             "library": "Bibliothek",
-            "events": "Campus Life",
+            "events": "Events & Sport",
             "reimanns": "Reimanns",
             "canisius": "Canisius Konvikt",
             "mensa": "Mensa Ingolstadt",
             "mensaNeuburg": "Theke Neuburg",
             "food": "Essen",
             "login": "Anmelden",
-            "links": "Quick Links"
+            "links": "Quick Links",
+            "sports": "Hochschulsport"
         },
         "announcements": {
             "readMore": "Tippe, um mehr zu erfahren."

@@ -321,6 +321,20 @@ function RootLayout(): JSX.Element {
                     }}
                 />
                 <Stack.Screen
+                    name="(screens)/sportsEvent"
+                    options={{
+                        title: 'Event Details',
+                        ...Platform.select({
+                            android: {
+                                animation: 'slide_from_right',
+                            },
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
+                    }}
+                />
+                <Stack.Screen
                     name="(screens)/clEvent"
                     options={{
                         title: 'Event Details',
