@@ -16,6 +16,8 @@ const RowEntry = ({
     rightChildren,
     onPress,
     maxTitleWidth,
+    backgroundColor,
+    icon,
 }: {
     title: string
     colors: Colors
@@ -24,23 +26,28 @@ const RowEntry = ({
     onPress?: () => void
     isExamCard?: boolean
     maxTitleWidth?: DimensionValue
+    backgroundColor?: string
+    icon?: JSX.Element
 }): JSX.Element => {
     return (
         <Pressable onPress={onPress}>
-            <View style={styles.eventContainer}>
+            <View style={{ ...styles.eventContainer, backgroundColor }}>
                 <View
                     style={[
                         styles.detailsContainer,
                         { maxWidth: maxTitleWidth },
                     ]}
                 >
-                    <Text
-                        style={{ ...styles.titleText, color: colors.text }}
-                        numberOfLines={2}
-                        textBreakStrategy="highQuality"
-                    >
-                        {title}
-                    </Text>
+                    <View style={styles.titleContainer}>
+                        {icon}
+                        <Text
+                            style={{ ...styles.titleText, color: colors.text }}
+                            numberOfLines={2}
+                            textBreakStrategy="highQuality"
+                        >
+                            {title}
+                        </Text>
+                    </View>
                     {leftChildren}
                 </View>
 
@@ -70,6 +77,7 @@ const styles = StyleSheet.create({
         padding: ROW_PADDING,
         maxWidth: '70%',
     },
+    titleContainer: { flexDirection: 'row', gap: 4, paddingBottom: 2 },
 })
 
 export default RowEntry

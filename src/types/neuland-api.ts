@@ -1,3 +1,5 @@
+import { type sportsCategories } from '@/utils/events-utils'
+
 export interface Parking {
     name: string
     available: number
@@ -108,4 +110,38 @@ export interface Announcement {
     endDateTime: number
     priority: number
     url: string | null
+}
+
+type SportsCategory = keyof typeof sportsCategories
+
+export interface UniversitySports {
+    id: string
+    title: {
+        de: string
+        en: string
+    }
+    description: {
+        de: string | null
+        en: string | null
+    }
+    campus: string
+    location: string
+    weekday:
+        | 'Monday'
+        | 'Tuesday'
+        | 'Wednesday'
+        | 'Thursday'
+        | 'Friday'
+        | 'Saturday'
+        | 'Sunday'
+    startTime: string
+    endTime: string
+    requiresRegistration: boolean
+    invitationLink: string | null
+    eMail: string | null
+    sportsCategory: SportsCategory
+}
+
+export interface GetUniversitySportsData {
+    universitySports: UniversitySports[]
 }

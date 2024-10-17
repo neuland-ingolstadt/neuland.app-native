@@ -52,7 +52,16 @@
         "tomorrow": "Tomorrow",
         "thisWeek": "This Week",
         "nextWeek": "Next Week",
-        "now": "Now"
+        "now": "Now",
+        "weekdays": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
+        }
     },
     "misc": {
         "share": "Share",
@@ -61,7 +70,9 @@
         "delete": "Delete",
         "disable": "Disable",
         "more": "more",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "true": "Yes",
+        "false": "No"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -154,11 +165,19 @@
         },
         "event": {
             "date": "Date",
+            "time": "Time",
+            "weekday": "Weekday",
             "location": "Location",
             "organizer": "Organizer",
             "description": "Description",
             "begin": "Begin",
             "end": "End",
+            "registration": "Registration",
+            "required": "Required",
+            "contact": "Contact",
+            "optional": "Optional",
+            "invitationLink": "Invitation link",
+            "eMail": "E-Mail",
             "shareMessage": "Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
         },
         "map": {
@@ -255,6 +274,15 @@
                 "footer": "Use this barcode to sign in at the library terminals to borrow books."
             },
             "timeSlot": "Timeslot"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sports",
+                "noEvents": {
+                    "title": "No sports events found",
+                    "subtitle": "Check back later."
+                }
+            }
         }
     },
     "notification": {

@@ -52,7 +52,16 @@
         "tomorrow": "Morgen",
         "thisWeek": "Diese Woche",
         "nextWeek": "Nächste Woche",
-        "now": "Jetzt"
+        "now": "Jetzt",
+        "weekdays": {
+            "monday": "Montag",
+            "tuesday": "Dienstag",
+            "wednesday": "Mittwoch",
+            "thursday": "Donnerstag",
+            "friday": "Freitag",
+            "saturday": "Samstag",
+            "sunday": "Sonntag"
+        }
     },
     "misc": {
         "share": "Teilen",
@@ -61,7 +70,9 @@
         "delete": "Löschen",
         "disable": "Deaktivieren",
         "more": "mehr",
-        "unknown": "Unbekannt"
+        "unknown": "Unbekannt",
+        "true": "Ja",
+        "false": "Nein"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -154,11 +165,19 @@
         },
         "event": {
             "date": "Datum",
+            "time": "Uhrzeit",
+            "weekday": "Wochentag",
             "location": "Ort",
             "organizer": "Veranstalter",
             "description": "Beschreibung",
             "begin": "Beginn",
             "end": "Ende",
+            "registration": "Anmeldung",
+            "required": "Erforderlich",
+            "contact": "Kontakt",
+            "optional": "Optional",
+            "invitationLink": "Einladungslink",
+            "eMail": "E-Mail",
             "shareMessage": "Schau dir dieses Event an: {{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events"
         },
         "map": {
@@ -255,6 +274,15 @@
                 "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
             },
             "timeSlot": "Zeitfenster"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sport",
+                "noEvents": {
+                    "title": "Keine Sportveranstaltungen",
+                    "subtitle": "Bitte versuche es später erneut."
+                }
+            }
         }
     },
     "notification": {

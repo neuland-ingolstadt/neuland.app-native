@@ -75,7 +75,8 @@ const MealCategory = ({
                             color={colors.primary}
                             ios={{
                                 name: collapsed ? 'chevron.down' : 'chevron.up',
-                                size: 12,
+                                size: 13,
+                                weight: 'semibold',
                             }}
                             android={{
                                 name: collapsed ? 'expand_more' : 'expand_less',
