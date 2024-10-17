@@ -329,6 +329,12 @@
         "licenseUrl": "https://github.com/AdelRedaa97/react-native-select-dropdown/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-shared-group-preferences@1.1.24": {
+        "licenses": "MIT",
+        "repository": "https://github.com/KjellConnelly/react-native-shared-group-preferences",
+        "licenseUrl": "https://github.com/KjellConnelly/react-native-shared-group-preferences",
+        "parents": "neuland"
+    },
     "react-native-shimmer@0.6.0": {
         "licenses": "MIT",
         "repository": "https://github.com/oblador/react-native-shimmer",

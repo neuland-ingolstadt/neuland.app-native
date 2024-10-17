@@ -4,12 +4,12 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.9.8",
+        "version": "0.9.9",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-            "buildNumber": "125",
+            "buildNumber": "130",
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
