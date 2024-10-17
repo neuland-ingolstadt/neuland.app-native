@@ -72,7 +72,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.9</string>
+	<string>0.10.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -92,7 +92,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>128</string>
+	<string>135</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>14.0.0</string>
 	<key>EXDefaultScreenOrientationMask</key>
 	<string>UIInterfaceOrientationMaskAllButUpsideDown</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -146,9 +148,5 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	 <dict>
-        <key>LSMinimumSystemVersion</key>
-        <string>14.0.0</string>
-    </dict>
 </dict>
 </plist>
