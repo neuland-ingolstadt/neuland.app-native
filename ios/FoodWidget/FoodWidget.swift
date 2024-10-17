@@ -49,55 +49,47 @@ struct MockData {
       originalLanguage: .de,
       mealStatic: false,
       restaurant: .ingolstadtMensa
-    )
+    ),
+    
     // Add more mock meals as needed
   ]
 }
-
-//
-//  FoodWidget.swift
-//  FoodWidget
-//
-//  Created by Robert Eggl on 16.10.24.
-//
 
 import WidgetKit
 import SwiftUI
 
 struct MealProvider: TimelineProvider {
   func placeholder(in context: Context) -> MealEntry {
-    MealEntry(date: Date(), meals: [])
+    MealEntry(date: Date(), meals: [], error: nil)
   }
   
   func getSnapshot(in context: Context, completion: @escaping (MealEntry) -> ()) {
-    let entry = MealEntry(date: Date(), meals: MockData.meals) // Use mock data for the snapshot
+    let entry = MealEntry(date: Date(), meals: MockData.meals, error: nil) // Use mock data for the snapshot
     completion(entry)
   }
   
   func getTimeline(in context: Context, completion: @escaping (Timeline<MealEntry>) -> ()) {
-    // Fetch the real data from the GraphQL API
-    let operation = GraphQLOperation.fetchFood(locations: ["ingolstadtMensa"]) // Modify locations as needed
+    let operation = GraphQLOperation.fetchFood(locations: ["ingolstadtMensa"])
     
     performOperation(operation) { result in
-      var timelineEntries: [MealEntry] = [] // Declare entries inside the closure
+      var timelineEntries: [MealEntry] = []
+      let currentDate = Date()
       
       switch result {
       case .success(let food):
-        let currentDate = Date()
-        let meals = filterMealsForToday(food).foodData.flatMap { $0.meals } // Extract filtered meals for today
+        let meals = filterMealsForToday(food).foodData.flatMap { $0.meals }
         
-        // Generate a timeline with the fetched meal data
         for hourOffset in 0 ..< 5 {
           let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-          let entry = MealEntry(date: entryDate, meals: meals)
+          let entry = MealEntry(date: entryDate, meals: meals, error: nil)
           timelineEntries.append(entry)
         }
         
       case .failure(let error):
         print("Error fetching meals: \(error.localizedDescription)")
         
-        // Provide fallback mock data if fetching fails
-        let fallbackEntry = MealEntry(date: Date(), meals: MockData.meals)
+        // Create an entry with the error message
+        let fallbackEntry = MealEntry(date: Date(), meals: [], error: "Failed to load meals. Please try again later.")
         timelineEntries.append(fallbackEntry)
       }
       
@@ -107,36 +99,42 @@ struct MealProvider: TimelineProvider {
   }
 
 
+
 }
 
 struct MealEntry: TimelineEntry {
   let date: Date
   let meals: [Meal]
+  let error: String?
 }
 
 struct FoodWidgetEntryView: View {
   var entry: MealEntry
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 3) {
-      Text("Meals")
+    if let errorMessage = entry.error {
+      // Display the error message
+      Text(errorMessage)
         .font(.headline)
-      
-      ForEach(entry.meals.prefix(3), id: \.id) { meal in
-        VStack(alignment: .leading, spacing: 2) {
-          Text(meal.name.de)
-            .font(.subheadline).fontWeight(.medium).lineLimit(2)
-          Text("\(translateRestaurant(meal.restaurant) ) • \(meal.prices.student, specifier: "%.2f") €")
-            .font(.caption)
-          
-          
+        .foregroundColor(.red)
+        .multilineTextAlignment(.center)
+        .padding()
+    } else {
+      // Normal meal display
+      VStack(alignment: .leading, spacing: 3) {
+        Text("Meals")
+          .font(.headline)
+        
+        ForEach(entry.meals.prefix(3), id: \.id) { meal in
+          VStack(alignment: .leading, spacing: 2) {
+            Text(meal.name.de)
+              .font(.subheadline).fontWeight(.medium).lineLimit(2)
+            Text("\(translateRestaurant(meal.restaurant)) • \(meal.prices.student, specifier: "%.2f") €")
+              .font(.caption)
+          }
         }
       }
     }
-   
-    
-    
-    
   }
 }
 
@@ -163,5 +161,7 @@ struct FoodWidget: Widget {
 #Preview(as: .systemSmall) {
   FoodWidget()
 } timeline: {
-  MealEntry(date: .now, meals: MockData.meals)
+  MealEntry(date: .now, meals: MockData.meals, error: nil) // No error
+  MealEntry(date: .now, meals: [], error: "Failed to load meals. Please try again later.") // With error
 }
+
