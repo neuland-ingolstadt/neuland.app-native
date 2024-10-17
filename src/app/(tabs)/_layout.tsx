@@ -48,20 +48,6 @@ export default function HomeLayout(): JSX.Element {
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const pathname = usePathname()
 
-    // useEffect(() => {
-    //     if (
-    //         shownDashboardEntries !== null &&
-    //         shownDashboardEntries.length > 0
-    //     ) {
-    //         if (
-    //             !shownDashboardEntries.some((card) => card.key === 'name') &&
-    //             !hiddenDashboardEntries.some((card) => card.key === 'name')
-    //         ) {
-    //             resetOrder(userKind)
-    //         }
-    //     }
-    // }, [isOnboarded])
-
     useEffect(() => {
         // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
         const prepare = async (): Promise<void> => {

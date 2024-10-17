@@ -9,7 +9,7 @@
         "userInterfaceStyle": "automatic",
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-            "buildNumber": "127",
+            "buildNumber": "133",
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
@@ -44,7 +44,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 170,
+            "versionCode": 172,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",

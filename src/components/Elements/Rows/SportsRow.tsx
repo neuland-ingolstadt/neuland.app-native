@@ -46,28 +46,14 @@ const SportsRow = ({
                         {event.location}
                     </Text>
 
-                    <View style={styles.campusRow}>
-                        {/* <PlatformIcon
-                            color={colors.labelSecondaryColor}
-                            ios={{
-                                name: 'mappin.and.ellipse',
-                                size: 14,
-                            }}
-                            android={{
-                                name: 'location_on',
-                                size: 20,
-                            }}
-                            style={styles.toggleIcon}
-                        /> */}
-                        <Text
-                            style={{
-                                ...styles.rightText,
-                                color: colors.labelColor,
-                            }}
-                        >
-                            {event.campus}
-                        </Text>
-                    </View>
+                    <Text
+                        style={{
+                            ...styles.rightText,
+                            color: colors.labelColor,
+                        }}
+                    >
+                        {event.campus}
+                    </Text>
                 </>
             }
             rightChildren={
@@ -129,10 +115,6 @@ const styles = StyleSheet.create({
     toggleIcon: {
         marginRight: 4,
         alignSelf: 'center',
-    },
-    campusRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
 })
 

@@ -146,5 +146,9 @@
 	<string>Automatic</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	 <dict>
+        <key>LSMinimumSystemVersion</key>
+        <string>14.0.0</string>
+    </dict>
 </dict>
 </plist>
