@@ -218,7 +218,7 @@ func performOperation<Input, Output>(_ operation: GraphQLOperation<Input, Output
       if let object = result.object {
         let filteredObject = filterMealsForToday(object as! Food)
         print(filteredObject)
-        completion(.success(object))
+        completion(.success(filteredObject as! Output))
       } else {
         print(result.errorMessages.joined(separator: "\n"))
         completion(.failure(NSError(domain: "Server error", code: 1)))

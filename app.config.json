@@ -9,7 +9,7 @@
         "userInterfaceStyle": "automatic",
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-            "buildNumber": "130",
+            "buildNumber": "137",
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [

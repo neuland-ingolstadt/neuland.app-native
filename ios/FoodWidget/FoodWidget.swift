@@ -77,14 +77,17 @@ struct MealProvider: TimelineProvider {
       
       switch result {
       case .success(let food):
-        let meals = filterMealsForToday(food).foodData.flatMap { $0.meals }
+        let filteredFood = filterMealsForToday(food)
         
-        for hourOffset in 0 ..< 5 {
-          let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-          let entry = MealEntry(date: entryDate, meals: meals, error: nil)
-          timelineEntries.append(entry)
+        if !filteredFood.foodData.isEmpty {
+          let todayMeals = filteredFood.foodData.flatMap { $0.meals }
+
+          let mealEntry = MealEntry(date: currentDate, meals: todayMeals, error: nil)
+          timelineEntries.append(mealEntry)
+        } else {
+          let fallbackEntry = MealEntry(date: currentDate, meals: [], error: "No meals available for today.")
+          timelineEntries.append(fallbackEntry)
         }
-        
       case .failure(let error):
         print("Error fetching meals: \(error.localizedDescription)")
         
