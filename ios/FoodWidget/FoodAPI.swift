@@ -143,31 +143,33 @@ extension GraphQLOperation where Input == FoodInput, Output == Food {
   }
 }
 
-func filterMealsForToday(_ food: Food) -> Food {
-  let today = Calendar.current.startOfDay(for: Date())  // Get today's date without time
+func filterMealsForTodayOrNext(_ food: Food) -> Food {
+  let today = Calendar.current.startOfDay(for: Date())
   let dateFormatter = DateFormatter()
-  dateFormatter.dateFormat = "yyyy-MM-dd"  // Adjust format to match your timestamp format
+  dateFormatter.dateFormat = "yyyy-MM-dd"
   
-  let filteredFoodData: [FoodDatum] = food.foodData.compactMap { foodDatum in
-    // Parse the timestamp to get the meal's date
+  var foundMeals = false
+  var filteredFoodData: [FoodDatum] = []
+  
+  for foodDatum in food.foodData {
     guard let mealDate = dateFormatter.date(from: foodDatum.timestamp) else {
-      return nil  // Skip this datum if the date parsing fails
+      continue  // Skip if date parsing fails
     }
     
-    let mealStartOfDay = Calendar.current.startOfDay(for: mealDate)  // Remove time component
+    let mealStartOfDay = Calendar.current.startOfDay(for: mealDate)
     
-    // Filter the meals if the date matches today's date
-    if mealStartOfDay == today {
-      // Filter only meals in the "main" category
-      let mainMeals = foodDatum.meals.filter { $0.category == .main  && !$0.mealStatic}
+    // Check for today or future dates
+    if mealStartOfDay >= today {
+      let mainMeals = foodDatum.meals.filter { $0.category == .main && !$0.mealStatic }
       
       if !mainMeals.isEmpty {
-        // Return a new FoodDatum with only the main meals
-        return FoodDatum(timestamp: foodDatum.timestamp, meals: mainMeals)
+        filteredFoodData.append(FoodDatum(timestamp: foodDatum.timestamp, meals: mainMeals))
+        foundMeals = true
       }
     }
     
-    return nil  // Discard any data not from today or without "main" category meals
+    // If we found meals for today, stop searching
+    if foundMeals { break }
   }
   
   return Food(foodData: filteredFoodData, errors: food.errors)
@@ -176,9 +178,9 @@ func filterMealsForToday(_ food: Food) -> Food {
 func translateRestaurant(_ restaurant: Restaurant) -> String {
     switch restaurant {
     case .ingolstadtMensa:
-        return "Mensa Ing"
+        return "Mensa Ingolstadt"
     case .neuburgMensa:
-        return "Mensa Nbg"
+        return "Mensa Neuburg"
     case .reimanns:
         return "Reimanns"
     case .canisius:
@@ -216,7 +218,7 @@ func performOperation<Input, Output>(_ operation: GraphQLOperation<Input, Output
     do {
       let result = try JSONDecoder().decode(GraphQLResult<Output>.self, from: data)
       if let object = result.object {
-        let filteredObject = filterMealsForToday(object as! Food)
+        let filteredObject = filterMealsForTodayOrNext(object as! Food)
         print(filteredObject)
         completion(.success(filteredObject as! Output))
       } else {

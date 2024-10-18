@@ -38,10 +38,10 @@ struct MockData {
       restaurant: .ingolstadtMensa
     ),
     Meal(
-      id: "145fa614",
+      id: "145fea614",
       name: Name(de: "Grießbrei mit Zimt und Zucker und Kirschkompott", en: "Semolina porridge with cinnamon and sugar and cherry compote"),
       category: .main,
-      prices: Prices(student: 2.17, employee: 4.13, guest: 4.34),
+      prices: Prices(student: 2.19, employee: 4.13, guest: 4.34),
       allergens: ["Mi", "Wz"],
       flags: ["V"],
       nutrition: Nutrition(kj: 3384, kcal: 808, fat: 35.5, fatSaturated: 23.6, carbs: 101.8, sugar: 63.4, fiber: 1, protein: 18.6, salt: 1.1),
@@ -69,7 +69,7 @@ struct MealProvider: TimelineProvider {
   }
   
   func getTimeline(in context: Context, completion: @escaping (Timeline<MealEntry>) -> ()) {
-    let operation = GraphQLOperation.fetchFood(locations: ["ingolstadtMensa"])
+    let operation = GraphQLOperation.fetchFood(locations: ["IngolstadtMensa"])
     
     performOperation(operation) { result in
       var timelineEntries: [MealEntry] = []
@@ -77,10 +77,11 @@ struct MealProvider: TimelineProvider {
       
       switch result {
       case .success(let food):
-        let filteredFood = filterMealsForToday(food)
+        let filteredFood = food
         
         if !filteredFood.foodData.isEmpty {
           let todayMeals = filteredFood.foodData.flatMap { $0.meals }
+          print(todayMeals)
 
           let mealEntry = MealEntry(date: currentDate, meals: todayMeals, error: nil)
           timelineEntries.append(mealEntry)
@@ -92,7 +93,7 @@ struct MealProvider: TimelineProvider {
         print("Error fetching meals: \(error.localizedDescription)")
         
         // Create an entry with the error message
-        let fallbackEntry = MealEntry(date: Date(), meals: [], error: "Failed to load meals. Please try again later.")
+        let fallbackEntry = MealEntry(date: Date(), meals: [], error: error.localizedDescription)
         timelineEntries.append(fallbackEntry)
       }
       
@@ -125,7 +126,7 @@ struct FoodWidgetEntryView: View {
     } else {
       // Normal meal display
       VStack(alignment: .leading, spacing: 3) {
-        Text("Meals")
+        Text("Meals \(entry.date.formatted())")
           .font(.headline)
         
         ForEach(entry.meals.prefix(3), id: \.id) { meal in
@@ -161,7 +162,7 @@ struct FoodWidget: Widget {
   }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
   FoodWidget()
 } timeline: {
   MealEntry(date: .now, meals: MockData.meals, error: nil) // No error
