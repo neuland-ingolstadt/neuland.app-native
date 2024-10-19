@@ -147,7 +147,9 @@ export default function ErrorView({
                     styles.logoutContainer,
                     {
                         backgroundColor:
-                            inModal ?? false ? colors.background : colors.card,
+                            (inModal ?? false)
+                                ? colors.background
+                                : colors.card,
                     },
                 ]}
                 onPress={buttonProps?.onPress}
@@ -185,8 +187,8 @@ export default function ErrorView({
                 ...(inModal
                     ? styles.innerContainerModal
                     : styles.innerContainer),
-                backgroundColor: inModal ?? false ? colors.card : undefined,
-                borderRadius: inModal ?? false ? 10 : 0,
+                backgroundColor: (inModal ?? false) ? colors.card : undefined,
+                borderRadius: (inModal ?? false) ? 10 : 0,
             }}
         >
             <View style={styles.errorContainer}>
@@ -196,7 +198,7 @@ export default function ErrorView({
                         ios={{
                             name: getIcon(),
                             size: 50,
-                            ...(icon?.multiColor ?? false
+                            ...((icon?.multiColor ?? false)
                                 ? { renderMode: 'multicolor', variableValue: 1 }
                                 : {}),
                         }}
