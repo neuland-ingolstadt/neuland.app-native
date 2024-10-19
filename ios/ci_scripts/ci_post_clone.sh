@@ -11,12 +11,16 @@ brew link node@22
 node -v
 npm -v
 
+echo "===== Installing Bun ====="
+brew tap oven-sh/bun
+brew install bun 
+bun -v
 
 # Install dependencies
 echo "===== Running bun install ====="
 cd ../..
 ls
-npm install --ignore-scripts
+bun install --frozen-lockfile --ignore-scripts -p
 echo "===== Running pod install ====="
 cd ios
 pod install
