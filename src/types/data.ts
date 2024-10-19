@@ -1,3 +1,5 @@
+import { type MaterialIcon } from './material-icons'
+
 export interface Allergens {
     de: string
     en: string
@@ -97,7 +99,7 @@ export interface Changelog {
 export interface Version {
     title: Description
     description: Description
-    icon: { ios: string; android: string }
+    icon: { ios: string; android: MaterialIcon }
 }
 
 export interface Description {

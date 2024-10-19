@@ -126,10 +126,10 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,yml, md}": [
-      "npx prettier --write"
+      "bunx prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [
-      "npx eslint --fix"
+      "bunx eslint --fix"
     ]
   },
   "expo": {

@@ -92,7 +92,7 @@ export default function LecturerDetail(): JSX.Element {
                     disabled: validEmail,
                     layout: validEmail ? 'column' : 'row',
                     iconColor:
-                        lecturer?.email.includes('@') ?? false
+                        (lecturer?.email.includes('@') ?? false)
                             ? colors.primary
                             : undefined,
                     onPress: () => {

@@ -51,6 +51,7 @@ export type MaterialIcon =
     | 'window'
     | 'space_dashboard'
     | 'dns'
+    | 'new_releases'
     | 'table_view'
     | 'table'
     | 'view_sidebar'

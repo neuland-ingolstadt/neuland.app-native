@@ -11,29 +11,38 @@ import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
-    const changelog: Changelog = changelogData
+    const changelog = changelogData as Changelog
     const { t, i18n } = useTranslation(['settings'])
-    const sorted = {
+    const sorted: Changelog = {
         version: Object.keys(changelog.version)
-            .sort((a, b) => Number(b) - Number(a))
+            .sort((a, b) => {
+                const [aParts, bParts] = [a, b].map((v) =>
+                    v.split('.').map(Number)
+                )
+                for (
+                    let i = 0;
+                    i < Math.max(aParts.length, bParts.length);
+                    i++
+                ) {
+                    const [aPart, bPart] = [aParts[i] ?? 0, bParts[i] ?? 0]
+                    if (aPart !== bPart) return bPart - aPart
+                }
+                return 0
+            })
             .reduce(
-                (
-                    obj: Record<string, (typeof changelog.version)[string]>,
-                    key
-                ) => {
-                    obj[key] = changelog.version[key]
-                    return obj
-                },
+                (obj, key) => ({ ...obj, [key]: changelog.version[key] }),
                 {}
             ),
     }
+
+    console.log(sorted)
 
     const sections: FormListSections[] = [
         ...Object.keys(sorted.version).map((key) => ({
             header: `Version ${key}`,
             items: sorted.version[key].map((item) => ({
                 title: item.title[i18n.language as LanguageKey],
-                icon: item.icon as any,
+                icon: item.icon,
             })),
         })),
     ]

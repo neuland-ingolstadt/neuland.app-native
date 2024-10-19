@@ -148,7 +148,7 @@ const RenderSectionItems: React.FC<{
                                             : styles.rowDetails,
                                         {
                                             color:
-                                                item.iconColor ??
+                                                item.textColor ??
                                                 colors.labelColor,
                                             fontWeight:
                                                 item.fontWeight ?? 'normal',

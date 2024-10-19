@@ -217,7 +217,7 @@ export function FoodScreen(): JSX.Element {
                         title={
                             error?.message === 'noMeals'
                                 ? t('error.noMeals')
-                                : error?.message ?? t('error.title')
+                                : (error?.message ?? t('error.title'))
                         }
                         onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}

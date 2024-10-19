@@ -2,7 +2,6 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type MaterialIcon } from '@/types/material-icons'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
@@ -86,17 +85,17 @@ export default function SportsEventDetail(): JSX.Element {
                         : t('pages.event.optional'),
                     icon: sportsEvent?.requiresRegistration
                         ? {
-                              ios: 'exclamationmark.triangle',
+                              ios: 'exclamationmark.triangle.fill',
                               android: 'warning',
                           }
                         : {
                               ios: 'checkmark.seal',
-                              android: 'new_releases' as MaterialIcon,
+                              android: 'new_releases',
                               androidVariant: 'outlined',
                           },
                     iconColor: sportsEvent?.requiresRegistration
                         ? colors.warning
-                        : undefined,
+                        : colors.success,
                 },
                 ...(isEmailAvailable
                     ? [
@@ -108,7 +107,7 @@ export default function SportsEventDetail(): JSX.Element {
                                       `mailto:${sportsEvent.eMail}`
                                   )
                               },
-                              iconColor: colors.primary,
+                              textColor: colors.primary,
                           },
                       ]
                     : []),
@@ -122,8 +121,7 @@ export default function SportsEventDetail(): JSX.Element {
                                       sportsEvent.invitationLink ?? ''
                                   )
                               },
-
-                              iconColor: colors.primary,
+                              textColor: colors.primary,
                           },
                       ]
                     : []),

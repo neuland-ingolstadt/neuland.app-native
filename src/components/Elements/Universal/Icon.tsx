@@ -56,7 +56,7 @@ const PlatformIcon = ({
     style,
 }: PlatformIconProps): JSX.Element => {
     if (Platform.OS === 'ios') {
-        return ios.fallback ?? false ? (
+        return (ios.fallback ?? false) ? (
             <MaterialCommunityIcons
                 name={
                     ios.name as typeof MaterialCommunityIcons.defaultProps.name
