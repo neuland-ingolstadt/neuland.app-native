@@ -15,6 +15,7 @@ export interface SectionGroup {
     disabled?: boolean
     onPress?: () => Promise<void> | void
     iconColor?: ColorValue
+    textColor?: ColorValue
     layout?: 'row' | 'column'
     fontWeight?:
         | 'normal'

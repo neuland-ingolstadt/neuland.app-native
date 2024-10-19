@@ -33,7 +33,7 @@ const Divider: FC<DividerProps> = ({
             width: '100%',
             alignSelf:
                 position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
-            paddingLeft: Platform.OS === 'android' ? 0 : iosPaddingLeft ?? 0,
+            paddingLeft: Platform.OS === 'android' ? 0 : (iosPaddingLeft ?? 0),
         },
         line: {
             width: width ?? '100%',

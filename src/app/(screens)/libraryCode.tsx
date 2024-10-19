@@ -164,7 +164,7 @@ export default function LibraryCode(): JSX.Element {
                     title={
                         isError
                             ? // @ts-expect-error error is type never
-                              error?.message ?? t('error.title')
+                              (error?.message ?? t('error.title'))
                             : t('error.title')
                     }
                     onRefresh={refetchByUser}

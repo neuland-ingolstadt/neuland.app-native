@@ -38,8 +38,6 @@ Die Rechtsgrundlage ist Art 6 Abs 1 Zif b DSGVO.
 
 Von der App zwischengespeicherte personenbezogene Daten können jederzeit entweder durch das Abmelden oder das Schließen der App und Löschen der Website- /Appdaten gelöscht werden.
 
-
-
 ## PRIMUSS Zugangsdaten
 
 Die Zugangsdaten des Nutzers zum PRIMUSS Portal werden von der Neuland App zwischen-gespeichert.
