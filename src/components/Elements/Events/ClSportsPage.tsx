@@ -159,6 +159,8 @@ export default function ClSportsPage({
     }): JSX.Element => {
         const isSelected = selectedLocation === location
         const fontWeight = isSelected ? '600' : undefined
+        const invisibleText = '#00000000'
+
         return (
             <Pressable
                 style={{
@@ -173,14 +175,26 @@ export default function ClSportsPage({
                     }
                 }}
             >
-                <Text
-                    style={{
-                        color: isSelected ? colors.primary : colors.text,
-                        fontWeight,
-                    }}
-                >
-                    {location}
-                </Text>
+                <View style={styles.locationTextContainer}>
+                    {/* Invisible text to reserve space */}
+                    <Text
+                        style={{
+                            color: invisibleText,
+                            ...styles.invisibleFont,
+                        }}
+                    >
+                        {location}
+                    </Text>
+                    <Text
+                        style={{
+                            color: isSelected ? colors.primary : colors.text,
+                            fontWeight,
+                            ...styles.locationText,
+                        }}
+                    >
+                        {location}
+                    </Text>
+                </View>
             </Pressable>
         )
     }
@@ -255,8 +269,7 @@ export default function ClSportsPage({
                                         'pages.clEvents.sports.noEvents.title'
                                     )}
                                     icon={{
-                                        // TODO: Select sports icon for iOS
-                                        ios: 'todo',
+                                        ios: 'sportscourt',
                                         android: 'sports_gymnastics',
                                     }}
                                     message={t(
@@ -309,7 +322,8 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingHorizontal: 16,
         borderWidth: StyleSheet.hairlineWidth,
-
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 8,
     },
     locationRow: {
@@ -324,4 +338,15 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle',
         fontSize: 16,
     },
+    invisibleFont: {
+        fontWeight: '600',
+    },
+    locationText: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        textAlign: 'center',
+    },
+    locationTextContainer: { position: 'relative', alignItems: 'center' },
 })
