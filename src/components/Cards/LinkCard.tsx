@@ -37,6 +37,9 @@ const LinkCard = (): JSX.Element => {
         <BaseCard title="links" onPressRoute="links">
             <View style={styles.cardsFilled}>
                 {userQuicklinks.map((link, index) => {
+                    if (link === undefined) {
+                        return null
+                    }
                     return (
                         <Pressable
                             key={index}
