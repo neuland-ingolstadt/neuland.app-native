@@ -175,6 +175,12 @@ export async function loadGradeAverage(
             (acc, curr) => acc + (curr.weight ?? defaultWeight),
             0
         )
+
+        // Check if weight is 0 to avoid division by zero
+        if (weight === 0) {
+            throw new Error('Failed to calculate average')
+        }
+
         return Math.floor((result / weight) * 10) / 10
     }
     average.result = calculateAverage(1)
@@ -182,6 +188,6 @@ export async function loadGradeAverage(
     const avg4 = calculateAverage(4)
     average.resultMin = Math.min(avgP5, avg4)
     average.resultMax = Math.max(avgP5, avg4)
-
+    console.log(average)
     return average
 }

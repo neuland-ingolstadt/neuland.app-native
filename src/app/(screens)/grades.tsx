@@ -146,90 +146,123 @@ export default function GradesSCreen(): JSX.Element {
             )}
             {isSuccess && grades !== null && (
                 <>
-                    <SectionView title={t('grades.average')}>
-                        <View style={styles.loadedContainer}>
-                            {averageLoadingState === LoadingState.LOADING && (
-                                <ActivityIndicator
-                                    size="small"
-                                    color={colors.primary}
-                                />
-                            )}
-                            {averageLoadingState === LoadingState.ERROR && (
-                                <Text
-                                    style={[
-                                        styles.averageErrorText,
-                                        { color: colors.text },
-                                    ]}
-                                >
-                                    {t('grades.averageError')}
-                                </Text>
-                            )}
-                            {averageLoadingState === LoadingState.LOADED &&
-                                gradeAverage !== undefined &&
-                                gradeAverage !== null && (
-                                    <View style={styles.averageContainer}>
+                    {grades.finished.length !== 0 && (
+                        <>
+                            <SectionView title={t('grades.average')}>
+                                <View style={styles.loadedContainer}>
+                                    {averageLoadingState ===
+                                        LoadingState.LOADING && (
+                                        <ActivityIndicator
+                                            size="small"
+                                            color={colors.primary}
+                                        />
+                                    )}
+                                    {averageLoadingState ===
+                                        LoadingState.ERROR && (
                                         <Text
                                             style={[
-                                                styles.averageText,
+                                                styles.averageErrorText,
                                                 { color: colors.text },
                                             ]}
                                         >
-                                            {gradeAverage.resultMin !==
-                                                gradeAverage.resultMax && '~ '}
-                                            {gradeAverage.result}
+                                            {t('grades.averageError')}
                                         </Text>
+                                    )}
+                                    {averageLoadingState ===
+                                        LoadingState.LOADED &&
+                                        gradeAverage !== undefined &&
+                                        gradeAverage !== null && (
+                                            <View
+                                                style={styles.averageContainer}
+                                            >
+                                                <Text
+                                                    style={[
+                                                        styles.averageText,
+                                                        { color: colors.text },
+                                                    ]}
+                                                >
+                                                    {gradeAverage.resultMin !==
+                                                        gradeAverage.resultMax &&
+                                                        '~ '}
+                                                    {gradeAverage.result}
+                                                </Text>
 
-                                        <Text
-                                            style={[
-                                                styles.averageNote,
-                                                { color: colors.labelColor },
-                                            ]}
-                                        >
-                                            {gradeAverage.resultMin ===
-                                            gradeAverage.resultMax
-                                                ? t('grades.exactAverage', {
-                                                      number: gradeAverage
-                                                          .entries.length,
-                                                  })
-                                                : t('grades.missingAverage', {
-                                                      min: gradeAverage.resultMin,
-                                                      max: gradeAverage.resultMax,
-                                                  })}
-                                        </Text>
-                                    </View>
-                                )}
-                        </View>
-                    </SectionView>
-                    <SectionView title={t('grades.finished')}>
-                        <React.Fragment>
-                            {grades?.finished?.map((grade, index) => (
-                                <React.Fragment key={index}>
-                                    <GradesRow item={grade} colors={colors} />
-                                    {index !== grades.finished.length - 1 && (
-                                        <Divider
-                                            color={colors.labelTertiaryColor}
-                                            iosPaddingLeft={16}
-                                        />
-                                    )}
+                                                <Text
+                                                    style={[
+                                                        styles.averageNote,
+                                                        {
+                                                            color: colors.labelColor,
+                                                        },
+                                                    ]}
+                                                >
+                                                    {gradeAverage.resultMin ===
+                                                    gradeAverage.resultMax
+                                                        ? t(
+                                                              'grades.exactAverage',
+                                                              {
+                                                                  number: gradeAverage
+                                                                      .entries
+                                                                      .length,
+                                                              }
+                                                          )
+                                                        : t(
+                                                              'grades.missingAverage',
+                                                              {
+                                                                  min: gradeAverage.resultMin,
+                                                                  max: gradeAverage.resultMax,
+                                                              }
+                                                          )}
+                                                </Text>
+                                            </View>
+                                        )}
+                                </View>
+                            </SectionView>
+                            <SectionView title={t('grades.finished')}>
+                                <React.Fragment>
+                                    {grades?.finished?.map((grade, index) => (
+                                        <React.Fragment key={index}>
+                                            <GradesRow
+                                                item={grade}
+                                                colors={colors}
+                                            />
+                                            {index !==
+                                                grades.finished.length - 1 && (
+                                                <Divider
+                                                    color={
+                                                        colors.labelTertiaryColor
+                                                    }
+                                                    iosPaddingLeft={16}
+                                                />
+                                            )}
+                                        </React.Fragment>
+                                    ))}
                                 </React.Fragment>
-                            ))}
-                        </React.Fragment>
-                    </SectionView>
-                    <SectionView title={t('grades.open')}>
-                        <React.Fragment>
-                            {grades?.missing?.map((grade, index) => (
-                                <React.Fragment key={index}>
-                                    <GradesRow item={grade} colors={colors} />
-                                    {index !== grades.missing.length - 1 && (
-                                        <Divider
-                                            color={colors.labelTertiaryColor}
-                                            iosPaddingLeft={16}
+                            </SectionView>
+                        </>
+                    )}
+                    {grades.missing.length !== 0 && (
+                        <SectionView title={t('grades.open')}>
+                            <React.Fragment>
+                                {grades?.missing?.map((grade, index) => (
+                                    <React.Fragment key={index}>
+                                        <GradesRow
+                                            item={grade}
+                                            colors={colors}
                                         />
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </React.Fragment>
-                    </SectionView>
+                                        {index !==
+                                            grades.missing.length - 1 && (
+                                            <Divider
+                                                color={
+                                                    colors.labelTertiaryColor
+                                                }
+                                                iosPaddingLeft={16}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </React.Fragment>
+                        </SectionView>
+                    )}
                     <View style={styles.notesBox}>
                         <Text
                             style={[
