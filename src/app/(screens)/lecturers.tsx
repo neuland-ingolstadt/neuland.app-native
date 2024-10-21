@@ -329,9 +329,11 @@ export default function LecturersCard(): JSX.Element {
                 keyExtractor={(_, index) => index.toString()}
                 contentContainerStyle={{
                     marginHorizontal: PAGE_PADDING,
+
                     backgroundColor: colors.card,
                     ...styles.loadedRows,
                 }}
+                contentInsetAdjustmentBehavior="always"
                 refreshControl={
                     <RefreshControl
                         refreshing={

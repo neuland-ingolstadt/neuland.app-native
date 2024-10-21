@@ -74,12 +74,14 @@ const LibraryBookingView = ({
                     </Picker>
                 </View>
             </BookingFrame>
-            <BookButton
-                addReservation={addReservation}
-                item={item}
-                room={roomBindung.value}
-                seat={seatBindung.value}
-            />
+            <View style={styles.buttonContainer}>
+                <BookButton
+                    addReservation={addReservation}
+                    item={item}
+                    room={roomBindung.value}
+                    seat={seatBindung.value}
+                />
+            </View>
         </>
     )
 }
@@ -98,6 +100,9 @@ const styles = StyleSheet.create({
     },
     seatPicker: {
         width: '25%',
+    },
+    buttonContainer: {
+        paddingTop: 6,
     },
 })
 

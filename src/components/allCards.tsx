@@ -36,7 +36,7 @@ export const AllCards: Card[] = [
     {
         key: 'food',
         removable: true,
-        default: [USER_GUEST],
+        default: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
         card: () => <FoodCard />,
     },
     {

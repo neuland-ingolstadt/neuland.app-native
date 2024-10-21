@@ -337,12 +337,15 @@ const MapScreen = (): JSX.Element => {
     }, [tabBarPressed])
 
     useEffect(() => {
-        if (routeParams === null || routeParams === '') {
+        if (
+            routeParams === null ||
+            routeParams === '' ||
+            allRooms == null ||
+            mapLoadState !== LoadingState.LOADED
+        ) {
             return
         }
-        if (mapLoadState !== LoadingState.LOADED) {
-            return
-        }
+
         const room = allRooms.features.find(
             (x) => x.properties?.Raum === routeParams
         )?.properties
@@ -370,7 +373,7 @@ const MapScreen = (): JSX.Element => {
         handlePresentModalPress()
 
         updateRouteParams('')
-    }, [routeParams, mapLoadState])
+    }, [routeParams, mapLoadState, allRooms])
 
     useEffect(() => {
         setMapCenter(

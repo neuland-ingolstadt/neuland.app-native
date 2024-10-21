@@ -17,7 +17,7 @@
         "licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@gorhom/bottom-sheet@5.0.2": {
+    "@gorhom/bottom-sheet@5.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/gorhom/react-native-bottom-sheet",
         "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
@@ -185,12 +185,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "express@4.21.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expressjs/express",
-        "licenseUrl": "https://github.com/expressjs/express/raw/master/LICENSE",
-        "parents": "neuland-next-docs"
-    },
     "fuse.js@7.0.0": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/krisk/Fuse",
@@ -209,7 +203,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@23.16.1": {
+    "i18next@23.16.2": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
