@@ -288,7 +288,7 @@ export default function FoodDetail(): JSX.Element {
                         restaurant as keyof typeof humanLocations
                     ],
                     onPress: handlePress,
-                    iconColor: locationExists ? colors.primary : undefined,
+                    textColor: locationExists ? colors.primary : undefined,
                     disabled: !locationExists,
                 },
                 {

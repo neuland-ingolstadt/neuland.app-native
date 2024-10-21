@@ -67,7 +67,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.room'),
                     value: lecturer?.room_short,
                     disabled: lecturer?.room_short === '',
-                    iconColor: colors.primary,
+                    textColor: colors.primary,
                     onPress: () => {
                         updateRouteParams(lecturer?.room_short ?? '')
                         router.navigate('(tabs)/map')
@@ -77,7 +77,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.phone'),
                     value: lecturer?.tel_dienst,
                     disabled: lecturer?.tel_dienst === '',
-                    iconColor: colors.primary,
+                    textColor: colors.primary,
                     onPress: () => {
                         void Linking.openURL(
                             `tel:${
@@ -91,7 +91,7 @@ export default function LecturerDetail(): JSX.Element {
                     value: lecturer?.email,
                     disabled: validEmail,
                     layout: validEmail ? 'column' : 'row',
-                    iconColor:
+                    textColor:
                         (lecturer?.email.includes('@') ?? false)
                             ? colors.primary
                             : undefined,

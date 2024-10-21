@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'flex-start',
         paddingHorizontal: 15,
-        marginVertical: 23,
+        marginVertical: 13,
     },
     blockFooter: {
         fontSize: 12,
@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
     },
     columnDetails: {
         textAlign: 'left',
+        paddingTop: 2,
         fontSize: 16,
     },
 })
