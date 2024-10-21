@@ -178,7 +178,7 @@
             "optional": "Optional",
             "invitationLink": "Invitation link",
             "eMail": "E-Mail",
-            "shareMessage": "Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
+            "shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
         },
         "map": {
             "search": {

@@ -42,6 +42,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import Animated, {
     cancelAnimation,
     useAnimatedStyle,
@@ -276,7 +277,8 @@ export default function Settings(): JSX.Element {
                         router.navigate('theme')
                     },
                 },
-                ...(Platform.OS === 'ios'
+                ...(Platform.OS === 'ios' &&
+                DeviceInfo.getDeviceType() !== 'Desktop'
                     ? [
                           {
                               title: 'App Icon',

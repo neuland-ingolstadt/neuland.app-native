@@ -133,12 +133,7 @@ export default function ClEventDetail(): JSX.Element {
             ? [
                   {
                       header: t('pages.event.description'),
-                      items: [
-                          {
-                              value: clEvent?.description,
-                              layout: 'column' as any,
-                          },
-                      ],
+                      item: clEvent?.description,
                   },
               ]
             : []),
@@ -175,10 +170,10 @@ export default function ClEventDetail(): JSX.Element {
                     await Share.share({
                         message: t('pages.event.shareMessage', {
                             title: clEvent?.title,
-
                             organizer: clEvent?.organizer,
-                            date: formatFriendlyDateTime(
-                                clEvent?.begin as unknown as string
+                            date: formatFriendlyDateTimeRange(
+                                new Date(clEvent?.begin as unknown as string),
+                                new Date(clEvent?.end as unknown as string)
                             ),
                         }),
                     })
