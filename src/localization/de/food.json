@@ -8,7 +8,7 @@
     "preferences": {
         "formlist": {
             "allergens": "Allergene",
-            "flags": "Vorlieben",
+            "flags": "Kennzeichnungen",
             "static": "Dauerhafte Gerichte",
             "language": "Essenssprache"
         },
@@ -39,7 +39,6 @@
     "details": {
         "footer": "Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.",
         "translated": "Dieses Gericht wurde automatisch übersetzt. ",
-
         "formlist": {
             "prices": {
                 "title": "Preise",
@@ -67,7 +66,6 @@
             "variants": "Varianten",
             "allergenFooter": "Wir können die Richtigkeit und Vollständigkeit der Angaben nicht garantieren. ({{allergens}})",
             "flagsFooter": "Tippe auf einen Eintrag, um deine Vorlieben zu aktualisieren.",
-
             "alert": {
                 "allergen": {
                     "title": "Allergene aktualisieren",

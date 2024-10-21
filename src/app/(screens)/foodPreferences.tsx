@@ -2,7 +2,7 @@ import MultiSectionRadio, {
     type FoodLanguageElement,
 } from '@/components/Elements/Food/FoodLanguageSection'
 import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon } from '@/components/Elements/Universal/Icon'
+import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
@@ -108,17 +108,31 @@ export default function FoodPreferences(): JSX.Element {
                     />
                 </SectionView>
             </View>
-            <View style={styles.notesBox}>
-                <Text
-                    style={[
-                        styles.notesText,
-                        {
-                            color: colors.labelColor,
-                        },
-                    ]}
-                >
-                    {t('preferences.footer')}
-                </Text>
+            <View style={styles.sectionContainer}>
+                <View style={styles.notesBox}>
+                    <PlatformIcon
+                        color={colors.warning}
+                        ios={{
+                            name: 'exclamationmark.triangle',
+                            variant: 'fill',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'warning',
+                            size: 24,
+                        }}
+                    />
+                    <Text
+                        style={[
+                            styles.notesText,
+                            {
+                                color: colors.labelColor,
+                            },
+                        ]}
+                    >
+                        {t('preferences.footer')}
+                    </Text>
+                </View>
             </View>
         </ScrollView>
     )
@@ -133,15 +147,20 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     notesBox: {
-        width: '92%',
+        width: '100%',
         alignSelf: 'center',
-        paddingTop: 16,
         paddingBottom: 32,
+        paddingTop: 8,
+        flexDirection: 'row',
+        gap: 12,
+        alignItems: 'center',
+        alignContent: 'center',
     },
     notesText: {
         fontSize: 11,
         fontWeight: 'normal',
-        paddingTop: 8,
         textAlign: 'left',
+        flex: 1,
+        flexShrink: 1,
     },
 })

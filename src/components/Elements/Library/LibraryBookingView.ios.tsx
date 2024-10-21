@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         width: '25%',
     },
     buttonContainer: {
-        paddingTop: 6,
+        paddingTop: 8,
     },
 })
 
