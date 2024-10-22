@@ -1,3 +1,4 @@
+import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'
 import { useAppState, useOnlineManager } from '@/hooks'
 import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
@@ -91,7 +92,9 @@ export default function Provider({
     const getPrimary = (scheme: 'light' | 'dark'): string => {
         try {
             const primary =
-                accentColors[themeHook.accentColor ?? 'blue'][scheme]
+                accentColors[themeHook.accentColor ?? DEFAULT_ACCENT_COLOR][
+                    scheme
+                ]
             return primary
         } catch (e) {
             return accentColors.blue[scheme]
@@ -143,7 +146,7 @@ export default function Provider({
             return
         }
         trackEvent('AccentColor', {
-            color: themeHook.accentColor ?? 'blue',
+            color: themeHook.accentColor ?? DEFAULT_ACCENT_COLOR,
         })
     }, [themeHook.accentColor, flow.analyticsInitialized])
 

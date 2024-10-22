@@ -2,6 +2,7 @@ import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type Colors, accentColors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
+import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
@@ -19,7 +20,8 @@ import {
 export default function Theme(): JSX.Element {
     const colors = useTheme().colors as Colors
     const deviceTheme = useTheme()
-    const { accentColor, setAccentColor } = useContext(ThemeContext)
+    const { accentColor = DEFAULT_ACCENT_COLOR, setAccentColor } =
+        useContext(ThemeContext)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
