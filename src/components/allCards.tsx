@@ -16,68 +16,78 @@ export const AllCards: Card[] = [
     {
         key: 'timetable',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
+        initial: [USER_STUDENT, USER_EMPLOYEE],
+        allowed: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <TimetableCard />,
     },
 
     {
         key: 'calendar',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <CalendarCard />,
     },
 
     {
         key: 'events',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <EventsCard />,
     },
     {
         key: 'food',
         removable: true,
-        default: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
+        initial: [USER_GUEST],
+        allowed: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
         card: () => <FoodCard />,
     },
     {
         key: 'library',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
+        initial: [USER_STUDENT, USER_EMPLOYEE],
+        allowed: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <LibraryCard />,
     },
     {
         key: 'links',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+        allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
         card: () => <LinkCard />,
     },
     {
         key: 'news',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
+        initial: [USER_STUDENT, USER_EMPLOYEE],
+        allowed: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <BaseCard title="news" onPressRoute="news" />,
     },
     {
         key: 'lecturers',
         removable: true,
-        default: [USER_STUDENT, USER_EMPLOYEE],
+        initial: [USER_STUDENT, USER_EMPLOYEE],
+        allowed: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />,
     },
 
     {
         key: 'login',
         removable: false,
-        exclusive: true,
-        default: [USER_GUEST],
+        initial: [USER_GUEST],
+        stillVisible: false,
+        allowed: [USER_GUEST],
         card: () => <LoginCard />,
     },
 ]
 
 export interface Card {
     key: string
-    removable: boolean
-    exclusive?: boolean
-    default: string[]
+    removable: boolean // can the card be removed
+    stillVisible?: boolean // is the card visible to not allowed users
+    initial: string[] // for which user kind is the card shown by default
+    allowed: string[] // for which user kind is the card allowed
     card: () => JSX.Element
 }
 
