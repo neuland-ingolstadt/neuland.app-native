@@ -233,13 +233,14 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         if (timetable == null) {
+            setNextLecture([])
             return
         }
         const ongoingOrNextEvent = getOngoingOrNextEvent(timetable)
         if (ongoingOrNextEvent.length > 0) {
             setNextLecture(ongoingOrNextEvent)
         }
-    }, [timetable])
+    }, [timetable, userKind])
 
     const allRooms: FeatureCollection = useMemo(() => {
         if (mapOverlay == null) {
