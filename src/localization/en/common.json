@@ -214,7 +214,9 @@
                     "nextLecture": "Next lecture",
                     "availableRoomsTitle": "Available rooms",
                     "history": "Recent searches",
-                    "signIn": "Sign in to see available rooms"
+                    "signIn": "Sign in to see available rooms",
+                    "report": "Report an issue",
+                    "reportMail": "mailto:app-feedback@informatik.sexy?subject=Report%20room%20issue&body=Room%3A%0D%0AIssue%3A%0D%0ASuggestion%3A"
                 },
                 "building": {
                     "free": "Free rooms",
