@@ -214,7 +214,9 @@
                     "availableRoomsTitle": "Verfügbare Räume",
                     "history": "Zuletzt gesucht",
                     "signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
-                    "equipment": "Ausstattung"
+                    "equipment": "Ausstattung",
+                    "report": "Fehler melden",
+                    "reportMail": "mailto:app-feedback@informatik.sexy?subject=Raum%20Fehler%20melden&body=Raum%3A%0D%0AProblem%3A%0D%0AVorschlag%3A"
                 },
                 "building": {
                     "free": "Freie Räume",

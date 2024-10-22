@@ -11,7 +11,9 @@ import {
 import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
+    Linking,
     Platform,
     Pressable,
     Share,
@@ -40,6 +42,42 @@ const handleShareModal = (room: string): void => {
     })
     void Share.share(
         Platform.OS === 'android' ? { message: payload } : { url: payload }
+    )
+}
+
+const ReportLink: React.FC = () => {
+    const colors = useTheme().colors as Colors
+    const { t } = useTranslation('common')
+
+    return (
+        <View style={styles.reportContainer}>
+            <Pressable
+                onPress={() => {
+                    void Linking.openURL(t('pages.map.details.room.reportMail'))
+                }}
+                style={styles.reportLink}
+            >
+                <Text
+                    style={{
+                        color: colors.labelColor,
+                        ...styles.reportText,
+                    }}
+                >
+                    {t('pages.map.details.room.report')}
+                </Text>
+                <PlatformIcon
+                    color={colors.labelColor}
+                    ios={{
+                        name: 'chevron.forward',
+                        size: 11,
+                    }}
+                    android={{
+                        name: 'chevron_right',
+                        size: 16,
+                    }}
+                />
+            </Pressable>
+        </View>
     )
 }
 
@@ -162,6 +200,7 @@ export const BottomSheetDetailModal = ({
                     <View style={styles.formList}>
                         <FormList sections={modalSection} />
                     </View>
+                    <ReportLink />
                 </BottomSheetView>
             </BottomSheetModal>
         </BottomSheetModalProvider>
@@ -169,6 +208,16 @@ export const BottomSheetDetailModal = ({
 }
 
 const styles = StyleSheet.create({
+    reportContainer: { paddingVertical: 10 },
+    reportLink: {
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
+    },
+    reportText: {
+        fontSize: 15,
+        paddingStart: 4,
+    },
     formList: {
         marginVertical: 16,
         width: '100%',

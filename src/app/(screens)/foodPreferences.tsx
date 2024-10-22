@@ -109,7 +109,9 @@ export default function FoodPreferences(): JSX.Element {
                 </SectionView>
             </View>
             <View style={styles.sectionContainer}>
-                <View style={styles.notesBox}>
+                <View
+                    style={{ ...styles.notesBox, backgroundColor: colors.card }}
+                >
                     <PlatformIcon
                         color={colors.warning}
                         ios={{
@@ -149,12 +151,13 @@ const styles = StyleSheet.create({
     notesBox: {
         width: '100%',
         alignSelf: 'center',
-        paddingBottom: 32,
-        paddingTop: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 14,
         flexDirection: 'row',
-        gap: 12,
+        gap: 10,
         alignItems: 'center',
         alignContent: 'center',
+        borderRadius: 8,
     },
     notesText: {
         fontSize: 11,
