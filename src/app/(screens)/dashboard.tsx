@@ -47,7 +47,7 @@ export default function DashboardEdit(): JSX.Element {
     const { t } = useTranslation(['settings'])
     const [draggedId, setDraggedId] = useState<number | null>(null)
     const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
-    const [defaultHiddenKeys, setDefaultHiddenKeys] = useState<string[]>([])
+    const [unavailableCards, setUnavailableCards] = useState<Card[]>([])
     const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
         useState<Card[]>([])
 
@@ -81,11 +81,7 @@ export default function DashboardEdit(): JSX.Element {
 
     useEffect(() => {
         setFilteredHiddenDashboardEntries(
-            hiddenDashboardEntries?.filter(
-                (item) =>
-                    item?.exclusive !== true ||
-                    item.default.includes(userKind ?? 'guest')
-            )
+            hiddenDashboardEntries.concat(unavailableCards)
         )
     }, [hiddenDashboardEntries, userKind])
 
@@ -94,8 +90,6 @@ export default function DashboardEdit(): JSX.Element {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             hideDashboardEntry(params.key)
         }
-        // To call this worklet from React (e.g., in an event handler or useEffect)
-
         const isLast =
             shownDashboardEntries?.[shownDashboardEntries.length - 1].key ===
             params.key
@@ -132,11 +126,9 @@ export default function DashboardEdit(): JSX.Element {
     }, [resetOrder])
 
     useEffect(() => {
-        const defaultHidden = getDefaultDashboardOrder(userKind).hidden.map(
-            (item) => item
-        )
-        const defaultShown =
-            getDefaultDashboardOrder(userKind).shown?.map((item) => item) ?? []
+        const { hidden, shown } = getDefaultDashboardOrder(userKind)
+        const defaultHidden = hidden.map((item) => item)
+        const defaultShown = shown.map((item) => item)
 
         if (shownDashboardEntries == null) {
             return
@@ -157,10 +149,22 @@ export default function DashboardEdit(): JSX.Element {
                         .map((item) => item.key) || []
                 )
         )
-
-        setDefaultHiddenKeys(defaultHidden)
     }, [shownDashboardEntries, hiddenDashboardEntries, userKind])
-    console.info(filteredHiddenDashboardEntries)
+
+    useEffect(() => {
+        const keys = getDefaultDashboardOrder(userKind).unavailable
+        const cards = keys.map((key) => {
+            return {
+                key,
+                removable: false,
+                initial: [],
+                allowed: [],
+                card: () => <></>,
+            }
+        })
+        setUnavailableCards(cards)
+    }, [userKind])
+
     return (
         <View>
             <ScrollView
@@ -339,9 +343,7 @@ export default function DashboardEdit(): JSX.Element {
                                     return (
                                         <React.Fragment key={index}>
                                             <Pressable
-                                                disabled={defaultHiddenKeys.includes(
-                                                    item.key
-                                                )}
+                                                disabled={!item.removable}
                                                 onPress={() => {
                                                     handleRestore(item)
                                                 }}
@@ -397,9 +399,7 @@ export default function DashboardEdit(): JSX.Element {
                                                             { ns: 'navigation' }
                                                         )}
                                                     </Text>
-                                                    {defaultHiddenKeys.includes(
-                                                        item.key
-                                                    ) ? (
+                                                    {!item.removable ? (
                                                         <PlatformIcon
                                                             color={
                                                                 colors.labelColor

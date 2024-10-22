@@ -5,15 +5,34 @@ import { useMMKVObject } from 'react-native-mmkv'
 
 import { useUserKind } from './userKind'
 
-export function getDefaultDashboardOrder(userKind: string | undefined): {
+interface DashboardOrder {
     shown: string[]
     hidden: string[]
-} {
-    const filter = (x: Card): boolean => x.default.includes(userKind ?? 'guest')
-    return {
-        shown: AllCards.filter(filter).map((card) => card.key),
-        hidden: AllCards.filter((x) => !filter(x)).map((card) => card.key),
-    }
+    unavailable: string[]
+}
+
+export function getDefaultDashboardOrder(
+    userKind: string | undefined
+): DashboardOrder {
+    const userRole = userKind ?? USER_GUEST
+
+    const shown: string[] = [] // default visible cards
+    const hidden: string[] = [] // default hidden cards
+    const unavailable: string[] = [] // cards that are not available for the user and not secret
+
+    AllCards.forEach((card) => {
+        if (card.allowed.includes(userRole)) {
+            if (card.initial.includes(userRole)) {
+                shown.push(card.key)
+            } else {
+                hidden.push(card.key)
+            }
+        } else if (card.stillVisible ?? true) {
+            unavailable.push(card.key)
+        }
+    })
+
+    return { shown, hidden, unavailable }
 }
 
 export interface Dashboard {
@@ -30,10 +49,10 @@ export interface Dashboard {
 export function useDashboard(): Dashboard {
     const [shownDashboardEntries, setShownDashboardEntries] = useMMKVObject<
         string[]
-    >('shownDashboardEnetsriessss')
+    >('shownDashboardEnetsriesV4')
     const [hiddenDashboardEntries, setHiddenDashboardEntries] = useMMKVObject<
         string[]
-    >('hiddenDashboardEnetsriessss')
+    >('hiddenDashboardEnetsriesV4')
     const [hiddenAnnouncements, setHiddenAnnouncements] = useMMKVObject<
         string[]
     >('hiddenAnnouncements')
@@ -121,11 +140,11 @@ export function useDashboard(): Dashboard {
     const bringBackDashboardEntry = useCallback(
         (key: string) => {
             setShownDashboardEntries((prevEntries) => {
-                if (prevEntries == null) {
-                    throw new Error('prevEntries is null')
-                }
-                const entries = [...prevEntries]
-                const hiddenEntries = [...(hiddenDashboardEntries ?? [])]
+                // using defaultEntries if the user has not configured the dashboard yet
+                const entries = [...(prevEntries ?? defaultEntries.shown)]
+                const hiddenEntries = [
+                    ...(hiddenDashboardEntries ?? defaultEntries.hidden),
+                ]
 
                 const index = hiddenEntries.findIndex(
                     (x) => x !== undefined && x === key
@@ -135,7 +154,6 @@ export function useDashboard(): Dashboard {
                     entries.push(shownCard)
                     hiddenEntries.splice(index, 1)
                 }
-
                 changeDashboardOrder(entries, hiddenEntries)
                 return entries
             })
