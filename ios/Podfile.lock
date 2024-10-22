@@ -324,11 +324,11 @@ PODS:
   - hermes-engine (0.75.4):
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
-  - maplibre-react-native (10.0.0-alpha.21):
-    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.21)
+  - maplibre-react-native (10.0.0-alpha.22):
+    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.22)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.21):
+  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.22):
     - React
     - React-Core
   - MMKV (1.3.9):
@@ -2434,7 +2434,7 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
-  maplibre-react-native: 036275da627e8ef8883a200825a48d21cda5ca4d
+  maplibre-react-native: 39fbcca23e3cbd4bdd0c007cf135cef947083285
   MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
   MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740

@@ -1,6 +1,5 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareButton from '@/components/Elements/Universal/ShareButton'
+import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import { type Colors } from '@/components/colors'
 import {
     FoodFilterContext,
@@ -14,16 +13,23 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
+import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
-import { router, useLocalSearchParams } from 'expo-router'
-import React, { useContext } from 'react'
+import {
+    router,
+    useFocusEffect,
+    useLocalSearchParams,
+    useNavigation,
+} from 'expo-router'
+import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Alert,
     Linking,
+    Platform,
+    Pressable,
     ScrollView,
     Share,
     StyleSheet,
@@ -55,13 +61,65 @@ export default function FoodDetail(): JSX.Element {
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const { updateRouteParams } = useContext(RouteParamsContext)
-
+    const navigation = useNavigation()
     const dataSources = {
         IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
         NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
+    const shareMeal = (): void => {
+        trackEvent('Share', {
+            type: 'meal',
+        })
+        void Share.share({
+            message: t('details.share.message', {
+                meal: meal?.name[i18n.language as LanguageKey],
+                price: formatPrice(meal?.prices[userKind ?? USER_GUEST]),
+                location: meal?.restaurant,
+                id: meal?.id,
+            }),
+        })
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            navigation.setOptions({
+                headerRight: () => (
+                    <Pressable
+                        onPress={() => {
+                            shareMeal()
+                        }}
+                        style={{
+                            backgroundColor: colors.background,
+                            ...styles.shareButton,
+                        }}
+                    >
+                        <PlatformIcon
+                            color={colors.primary}
+                            ios={{
+                                name: 'square.and.arrow.up',
+                                size: 16,
+                                weight: 'semibold',
+                            }}
+                            android={{
+                                name: 'share',
+                                size: 18,
+                            }}
+                            style={Platform.select({
+                                android: {
+                                    marginRight: 2,
+                                },
+                                ios: {
+                                    marginBottom: 3,
+                                },
+                            })}
+                        />
+                    </Pressable>
+                ),
+            })
+        }, [meal, i18n.language])
+    )
 
     interface Locations {
         IngolstadtMensa: string
@@ -361,6 +419,7 @@ export default function FoodDetail(): JSX.Element {
                   ...aboutSection,
               ]
             : [...priceSection, ...variantsSection, ...aboutSection]
+
     return (
         <>
             <ScrollView>
@@ -388,30 +447,36 @@ export default function FoodDetail(): JSX.Element {
                 <View style={styles.formList}>
                     <FormList sections={sections} />
                 </View>
-                <ShareButton
-                    onPress={async () => {
-                        trackEvent('Share', {
-                            type: 'meal',
-                        })
-                        await Share.share({
-                            message: t('details.share.message', {
-                                meal: meal?.name[i18n.language as LanguageKey],
-                                price: formatPrice(
-                                    meal?.prices[userKind ?? USER_GUEST]
-                                ),
-                                location: restaurant,
-                                id: meal?.id,
-                            }),
-                        })
-                    }}
-                />
+
                 <View style={styles.notesContainer}>
-                    <Text
-                        style={[styles.notesText, { color: colors.labelColor }]}
+                    <View
+                        style={{
+                            ...styles.notesBox,
+                            backgroundColor: colors.card,
+                        }}
                     >
-                        {!isTranslated() ? t('details.translated') : ''}
-                        {t('details.footer')}
-                    </Text>
+                        <PlatformIcon
+                            color={colors.warning}
+                            ios={{
+                                name: 'exclamationmark.triangle',
+                                variant: 'fill',
+                                size: 21,
+                            }}
+                            android={{
+                                name: 'warning',
+                                size: 24,
+                            }}
+                        />
+                        <Text
+                            style={[
+                                styles.notesText,
+                                { color: colors.labelColor },
+                            ]}
+                        >
+                            {!isTranslated() ? t('details.translated') : ''}
+                            {t('details.footer')}
+                        </Text>
+                    </View>
                 </View>
             </ScrollView>
         </>
@@ -419,6 +484,15 @@ export default function FoodDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
+    shareButton: {
+        marginRight: -5,
+        borderRadius: 25,
+        padding: 7,
+        width: 34,
+        height: 34,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     formList: {
         marginVertical: 16,
         width: '100%',
@@ -440,12 +514,26 @@ const styles = StyleSheet.create({
     },
     notesContainer: {
         alignSelf: 'center',
-        width: '92%',
+        paddingHorizontal: PAGE_PADDING,
         marginTop: 20,
-        marginBottom: 40,
+        marginBottom: PAGE_BOTTOM_SAFE_AREA,
+    },
+    notesBox: {
+        width: '100%',
+        alignSelf: 'center',
+        paddingVertical: 8,
+        paddingHorizontal: 14,
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+        alignContent: 'center',
+        borderRadius: 8,
     },
     notesText: {
+        fontSize: 11,
+        fontWeight: 'normal',
         textAlign: 'left',
-        fontSize: 12,
+        flex: 1,
+        flexShrink: 1,
     },
 })
