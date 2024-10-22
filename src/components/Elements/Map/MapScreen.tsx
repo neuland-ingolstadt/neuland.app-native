@@ -910,7 +910,8 @@ const MapScreen = (): JSX.Element => {
                     roomData,
                     locations,
                     t,
-                    i18n.language
+                    i18n.language,
+                    userKind === USER_GUEST
                 )}
             />
         </View>

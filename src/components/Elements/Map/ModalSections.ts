@@ -20,9 +20,11 @@ export const modalSection = (
     roomData: RoomData,
     locations: any,
     t: TFunction<any>,
-    language: string
+    language: string,
+    isGuest: boolean
 ): FormListSections[] => {
     const roomTypeKey = language === 'de' ? 'Funktion_de' : 'Funktion_en'
+
     if (
         roomData.type === SEARCH_TYPES.ROOM &&
         ((roomData.occupancies !== null &&
@@ -31,47 +33,62 @@ export const modalSection = (
     ) {
         const occupancies = roomData.occupancies as AvailableRoom
         return [
-            {
-                header: t('pages.map.details.room.availability'),
-                items:
-                    roomData.occupancies == null
-                        ? [
-                              {
-                                  title: t('pages.map.details.room.available'),
-                                  value: t(
-                                      'pages.map.details.room.notAvailable'
-                                  ),
-                              },
-                          ]
-                        : [
-                              {
-                                  title: t('pages.map.details.room.timeLeft'),
-                                  value: (() => {
-                                      const timeLeft =
-                                          new Date(
-                                              occupancies.until
-                                          ).getTime() - new Date().getTime()
-                                      const minutes = Math.floor(
-                                          (timeLeft / 1000 / 60) % 60
-                                      )
-                                      const hours = Math.floor(
-                                          (timeLeft / (1000 * 60 * 60)) % 24
-                                      )
-                                      const formattedMinutes =
-                                          minutes < 10 ? `0${minutes}` : minutes
-                                      return `${hours}:${formattedMinutes}h`
-                                  })(),
-                              },
-                              {
-                                  title: t('pages.map.details.room.timeSpan'),
-                                  value: `${formatFriendlyTime(
-                                      occupancies.from
-                                  )} - ${formatFriendlyTime(
-                                      occupancies.until
-                                  )}`,
-                              },
-                          ],
-            },
+            ...(!isGuest
+                ? [
+                      {
+                          header: t('pages.map.details.room.availability'),
+                          items:
+                              roomData.occupancies == null
+                                  ? [
+                                        {
+                                            title: t(
+                                                'pages.map.details.room.available'
+                                            ),
+                                            value: t(
+                                                'pages.map.details.room.notAvailable'
+                                            ),
+                                        },
+                                    ]
+                                  : [
+                                        {
+                                            title: t(
+                                                'pages.map.details.room.timeLeft'
+                                            ),
+                                            value: (() => {
+                                                const timeLeft =
+                                                    new Date(
+                                                        occupancies.until
+                                                    ).getTime() -
+                                                    new Date().getTime()
+                                                const minutes = Math.floor(
+                                                    (timeLeft / 1000 / 60) % 60
+                                                )
+                                                const hours = Math.floor(
+                                                    (timeLeft /
+                                                        (1000 * 60 * 60)) %
+                                                        24
+                                                )
+                                                const formattedMinutes =
+                                                    minutes < 10
+                                                        ? `0${minutes}`
+                                                        : minutes
+                                                return `${hours}:${formattedMinutes}h`
+                                            })(),
+                                        },
+                                        {
+                                            title: t(
+                                                'pages.map.details.room.timeSpan'
+                                            ),
+                                            value: `${formatFriendlyTime(
+                                                occupancies.from
+                                            )} - ${formatFriendlyTime(
+                                                occupancies.until
+                                            )}`,
+                                        },
+                                    ],
+                      },
+                  ]
+                : []),
             ...(roomData.properties !== null
                 ? [
                       {

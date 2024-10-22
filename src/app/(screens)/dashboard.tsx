@@ -83,7 +83,7 @@ export default function DashboardEdit(): JSX.Element {
         setFilteredHiddenDashboardEntries(
             hiddenDashboardEntries.concat(unavailableCards)
         )
-    }, [hiddenDashboardEntries, userKind])
+    }, [hiddenDashboardEntries, userKind, unavailableCards])
 
     const renderItem = (params: ExtendedCard): JSX.Element => {
         const onPressDelete = (): void => {

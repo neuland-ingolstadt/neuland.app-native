@@ -678,11 +678,15 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     </Pressable>
                                 )}
                             </View>
-                            <View
+                            <Pressable
                                 style={{
                                     backgroundColor: colors.card,
                                     ...styles.radius,
                                 }}
+                                onPress={() => {
+                                    router.navigate('login')
+                                }}
+                                disabled={userKind !== USER_GUEST}
                             >
                                 {userKind === USER_GUEST ? (
                                     <Text
@@ -851,7 +855,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                             </React.Fragment>
                                         ))
                                 )}
-                            </View>
+                            </Pressable>
                         </View>
                         <AttributionLink />
                     </>
