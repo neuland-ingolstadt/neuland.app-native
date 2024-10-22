@@ -1,5 +1,7 @@
 import { useMMKVString } from 'react-native-mmkv'
 
+export const DEFAULT_ACCENT_COLOR = 'blue'
+
 export interface ThemeHook {
     accentColor: string | undefined
     theme: string | undefined // ('light' | 'dark' | 'auto') as string
