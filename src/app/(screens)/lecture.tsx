@@ -6,7 +6,7 @@ import Separator from '@/components/Elements/Timetable/Separator'
 import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
-import ShareButton from '@/components/Elements/Universal/ShareButton'
+import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
 import { type Colors } from '@/components/colors'
 import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections, type SectionGroup } from '@/types/components'
@@ -16,9 +16,14 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import {
+    useFocusEffect,
+    useLocalSearchParams,
+    useNavigation,
+    useRouter,
+} from 'expo-router'
 import moment from 'moment'
-import React, { useContext, useRef } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Pressable,
@@ -32,6 +37,7 @@ import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
+    const navigation = useNavigation()
     const { updateRouteParams } = useContext(RouteParamsContext)
     const colors = useTheme().colors as Colors
     const { lecture: lectureParam } = useLocalSearchParams()
@@ -44,6 +50,18 @@ export default function TimetableDetails(): JSX.Element {
         lectureString === undefined
             ? null
             : JSON.parse(Buffer.from(lectureString, 'base64').toString())
+
+    useFocusEffect(
+        useCallback(() => {
+            if (lecture === null) {
+                return
+            }
+            navigation.setOptions({
+                headerRight: () => <ShareHeaderButton onPress={shareEvent} />,
+            })
+        }, [])
+    )
+
     if (lecture === null) {
         return <ErrorView title="Cannot display lecture" />
     }
@@ -341,12 +359,6 @@ export default function TimetableDetails(): JSX.Element {
                     ) : null}
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
-
-                        <ShareButton
-                            onPress={async () => {
-                                await shareEvent()
-                            }}
-                        />
                     </View>
 
                     <ViewShot ref={shareRef} style={styles.viewShot}>

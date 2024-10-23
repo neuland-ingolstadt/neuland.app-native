@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-alpha.21": {
+    "@maplibre/maplibre-react-native@10.0.0-alpha.22": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",

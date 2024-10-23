@@ -178,7 +178,8 @@
             "optional": "Optional",
             "invitationLink": "Einladungslink",
             "eMail": "E-Mail",
-            "shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events"
+            "shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://next.neuland.app/",
+            "shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\nhttps://next.neuland.app/"
         },
         "map": {
             "search": {

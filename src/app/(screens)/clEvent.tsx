@@ -1,6 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareButton from '@/components/Elements/Universal/ShareButton'
+import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
 import { type Colors } from '@/components/colors'
 import clubs from '@/data/clubs.json'
 import { type FormListSections } from '@/types/components'
@@ -13,8 +13,12 @@ import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
-import { useLocalSearchParams } from 'expo-router'
-import React from 'react'
+import {
+    useFocusEffect,
+    useLocalSearchParams,
+    useNavigation,
+} from 'expo-router'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Linking,
@@ -28,6 +32,7 @@ import {
 export default function ClEventDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
     const { clEventEntry } = useLocalSearchParams<{ clEventEntry: string }>()
+    const navigation = useNavigation()
     const clEvent: CLEvents | undefined =
         clEventEntry != null
             ? JSON.parse(Buffer.from(clEventEntry, 'base64').toString())
@@ -43,6 +48,36 @@ export default function ClEventDetail(): JSX.Element {
     const isWebsiteAvailable = club?.website != null && club?.website !== ''
     const isInstagramAvailable =
         club?.instagram != null && club?.instagram !== ''
+
+    useFocusEffect(
+        useCallback(() => {
+            navigation.setOptions({
+                headerRight: () => (
+                    <ShareHeaderButton
+                        onPress={async () => {
+                            trackEvent('Share', {
+                                type: 'clEvent',
+                            })
+                            await Share.share({
+                                message: t('pages.event.shareMessage', {
+                                    title: clEvent?.title,
+                                    organizer: clEvent?.organizer,
+                                    date: formatFriendlyDateTimeRange(
+                                        new Date(
+                                            clEvent?.begin as unknown as string
+                                        ),
+                                        new Date(
+                                            clEvent?.end as unknown as string
+                                        )
+                                    ),
+                                }),
+                            })
+                        }}
+                    />
+                ),
+            })
+        }, [])
+    )
     const sections: FormListSections[] = [
         {
             header: 'Details',
@@ -162,23 +197,6 @@ export default function ClEventDetail(): JSX.Element {
             <View style={styles.formList}>
                 <FormList sections={sections} />
             </View>
-            <ShareButton
-                onPress={async () => {
-                    trackEvent('Share', {
-                        type: 'clEvent',
-                    })
-                    await Share.share({
-                        message: t('pages.event.shareMessage', {
-                            title: clEvent?.title,
-                            organizer: clEvent?.organizer,
-                            date: formatFriendlyDateTimeRange(
-                                new Date(clEvent?.begin as unknown as string),
-                                new Date(clEvent?.end as unknown as string)
-                            ),
-                        }),
-                    })
-                }}
-            />
         </ScrollView>
     )
 }
