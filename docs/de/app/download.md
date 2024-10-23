@@ -42,6 +42,8 @@ Die App ist für Android-Telefone und -Tablets verfügbar. Du kannst die App im 
 Die minimal erforderliche Android-Version ist 6.0 und kann nicht außerhalb der Europäischen Union installiert werden.
 :::
 
+Eine Version für F-Droid ist für die Zukunft geplant. Bleib dran für Updates.
+
 ## MacOS
 
 Die App ist auch für MacOS auf Apple Silicon verfügbar. Du kannst die App im Mac App Store herunterladen.

@@ -8,7 +8,7 @@ Your **personal timetable** from PRIMUSS and your exams at a glance. Choose betw
 
 ### Calendar & Events
 
-All important **semester dates** and **campus events** in one place. Never miss a deadline or campus life event again.
+All important **semester dates** and **campus events** in one place. The current university sports program is also available. Never miss a deadline or event again.
 
 ### Profile
 

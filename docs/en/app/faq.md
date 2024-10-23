@@ -53,6 +53,12 @@ Opt-out of analytics is available in the app settings.
 
 You can find more information about our privacy policy in our [privacy policy](/en/legal/privacy.md).
 
+## How can I view my timetable?
+
+To display your timetable, you first need to configure it using the [THI timetable website](https://hiplan.thi.de).
+
+To do this, go to the page, log in and create your timetable by clicking on ‘Persönlicher Studenplan’ and then on ‘Fächerauswahl’. Select your subjects and save your timetable. Once you have done this, you can see your timetable in Neuland Next.
+
 ## Can I contribute to Neuland Next?
 
 Yes, you can! Neuland Next is an open-source project, and we welcome contributions from the community. Whether you are a developer, designer, or student, you can help us improve the app and make it better for everyone.

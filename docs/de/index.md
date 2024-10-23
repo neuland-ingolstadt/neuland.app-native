@@ -24,13 +24,13 @@ features:
     details: Dein persönlicher Stundenplan aus PRIMUSS und deine Prüfungen auf einen Blick.
   - title: Kalender & Events
     icon: 🎉
-    details: Alle wichtigen Semestertermine und Campus-Events an einem Ort. Verpasse nie wieder eine Frist oder ein Event.
+    details: Alle wichtigen Semestertermine, Campus-Events und Hochschulsport an einem Ort. Verpasse nie wieder eine Frist oder ein Event.
   - title: Profil
     icon: 👤
     details: Sieh dir deine Noten an, prüfe dein Druckerguthaben und erfahre vieles mehr über dein Studium.
   - title: Mensa
     icon: 🍽
-    details: Schau dir den Speiseplan der Mensa an, inklusive Allergie- und Nährwertinformationen inklusive persönlicher Vorlieben.
+    details: Schau dir den Speiseplan der Mensa an, inklusive Allergie- und Nährwertinformationen sowie persönlicher Vorlieben.
   - title: Campusplan
     icon: 🗺
     details: Finde verfügbare Räume und erkunde den Campus mit intelligenten Vorschlägen und integrierter Suche.

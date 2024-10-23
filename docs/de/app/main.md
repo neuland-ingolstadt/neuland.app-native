@@ -19,7 +19,7 @@ Die App vereint alle wichtigen Informationen für Studierende an einem Ort. Sie 
 <!-- screenshoits horizentol-->
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="/assets/screen-1-de.jpeg" alt="Screenshots von Neuland Next" style="width: 30%;">
+  <img src="/assets/screen-1-de.jpg" alt="Screenshots von Neuland Next" style="width: 30%;">
   <img src="/assets/screen-2-de.jpeg" alt="Screenshots von Neuland Next" style="width: 30%;">
   <img src="/assets/screen-3-de.jpeg" alt="Screenshots von Neuland Next" style="width: 30%;">
 </div>
