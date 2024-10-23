@@ -1,16 +1,29 @@
 import FormList from '@/components/Elements/Universal/FormList'
+import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
 import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer'
-import { useLocalSearchParams } from 'expo-router'
-import React from 'react'
+import {
+    useFocusEffect,
+    useLocalSearchParams,
+    useNavigation,
+} from 'expo-router'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+    Linking,
+    ScrollView,
+    Share,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 
 export default function SportsEventDetail(): JSX.Element {
     const colors = useTheme().colors as Colors
@@ -22,6 +35,43 @@ export default function SportsEventDetail(): JSX.Element {
             ? JSON.parse(Buffer.from(sportsEventEntry, 'base64').toString())
             : undefined
     const { t, i18n } = useTranslation('common')
+    const navigation = useNavigation()
+    useFocusEffect(
+        useCallback(() => {
+            if (sportsEvent == null) {
+                return
+            }
+            navigation.setOptions({
+                headerRight: () => (
+                    <ShareHeaderButton
+                        onPress={async () => {
+                            trackEvent('Share', {
+                                type: 'sportsEvent',
+                            })
+                            await Share.share({
+                                message: t('pages.event.shareSports', {
+                                    title: sportsEvent?.title[
+                                        i18n.language as LanguageKey
+                                    ],
+                                    weekday: t(
+                                        `dates.weekdays.${
+                                            sportsEvent.weekday.toLowerCase() as Lowercase<
+                                                UniversitySports['weekday']
+                                            >
+                                        }`
+                                    ),
+                                    time: formatFriendlyTimeRange(
+                                        sportsEvent.startTime,
+                                        sportsEvent.endTime
+                                    ),
+                                }),
+                            })
+                        }}
+                    />
+                ),
+            })
+        }, [])
+    )
 
     if (sportsEvent == null) {
         return <></>

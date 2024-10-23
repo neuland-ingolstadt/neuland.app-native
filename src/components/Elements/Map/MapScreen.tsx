@@ -342,6 +342,7 @@ const MapScreen = (): JSX.Element => {
             routeParams === null ||
             routeParams === '' ||
             allRooms == null ||
+            allRooms.features.length === 0 ||
             mapLoadState !== LoadingState.LOADED
         ) {
             return

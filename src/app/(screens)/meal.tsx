@@ -1,5 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
+import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
 import { type Colors } from '@/components/colors'
 import {
     FoodFilterContext,
@@ -28,8 +29,6 @@ import { useTranslation } from 'react-i18next'
 import {
     Alert,
     Linking,
-    Platform,
-    Pressable,
     ScrollView,
     Share,
     StyleSheet,
@@ -85,40 +84,9 @@ export default function FoodDetail(): JSX.Element {
     useFocusEffect(
         useCallback(() => {
             navigation.setOptions({
-                headerRight: () => (
-                    <Pressable
-                        onPress={() => {
-                            shareMeal()
-                        }}
-                        style={{
-                            backgroundColor: colors.background,
-                            ...styles.shareButton,
-                        }}
-                    >
-                        <PlatformIcon
-                            color={colors.primary}
-                            ios={{
-                                name: 'square.and.arrow.up',
-                                size: 16,
-                                weight: 'semibold',
-                            }}
-                            android={{
-                                name: 'share',
-                                size: 18,
-                            }}
-                            style={Platform.select({
-                                android: {
-                                    marginRight: 2,
-                                },
-                                ios: {
-                                    marginBottom: 3,
-                                },
-                            })}
-                        />
-                    </Pressable>
-                ),
+                headerRight: () => <ShareHeaderButton onPress={shareMeal} />,
             })
-        }, [meal, i18n.language])
+        }, [])
     )
 
     interface Locations {
@@ -484,15 +452,6 @@ export default function FoodDetail(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-    shareButton: {
-        marginRight: -5,
-        borderRadius: 25,
-        padding: 7,
-        width: 34,
-        height: 34,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     formList: {
         marginVertical: 16,
         width: '100%',
