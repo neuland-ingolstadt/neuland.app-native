@@ -54,6 +54,12 @@ Das Opt-out ist in den App-Einstellungen möglich.
 
 Weitere Informationen zu unserer Datenschutzrichtlinie findest du in unserer [Datenschutzerklärung](/legal/privacy.md).
 
+## Wie kann ich meinen Stundenplan anzeigen?
+
+Um deinen Stundenplan anzuzeigen, musst du diesen zuerst auf der [THI Stundenplan-Website](https://hiplan.thi.de) zusammenstellen.
+
+Gehe dazu auf die Seite, logge dich ein und erstelle deinen Stundenplan, indem du auf "Persönlicher Stundenplan" und dann auf "Fächerauswahl" klickst. Wähle deine Fächer aus und speichere deinen Stundenplan. Sobald du das getan hast, kannst du deinen Stundenplan in Neuland Next sehen.
+
 ## Kann ich zu Neuland Next beitragen?
 
 Ja, das kannst du! Neuland Next ist ein Open-Source-Projekt, und wir begrüßen Beiträge aus der Community. Ob du Entwickler, Designer oder Student bist, du kannst uns helfen, die App zu verbessern und für alle besser zu machen.

@@ -25,13 +25,13 @@ features:
     details: Your personal timetable from PRIMUSS and your exams at a glance.
   - title: Calendar & Events
     icon: 🎉
-    details: All important semester dates and Campus events in one place. Never miss a deadline or event again.
+    details: All important semester dates, Campus events and university sports in one place. Never miss a deadline or event again.
   - title: Profile
     icon: 👤
     details: View your grades, printer credits and much more information about your studies.
   - title: Cafeteria
     icon: 🍽
-    details: Check the cafeteria menu, including allergen and nutritional information including personal preferences.
+    details: Check the cafeteria menu, including allergen and nutritional information as well as personal preferences.
   - title: Campus Map
     icon: 🗺
     details: Find available rooms and explore the campus with smart suggestions and integrated search.

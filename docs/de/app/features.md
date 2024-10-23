@@ -8,7 +8,7 @@ Dein **persönlicher Stundenplan** aus PRIMUSS und deine Prüfungen auf einen Bl
 
 ### Kalender & Events
 
-Alle wichtigen **Semestertermine** und **Campus-Events** an einem Ort. Verpasse nie wieder eine Deadline oder ein Event.
+Alle wichtigen **Semestertermine** und **Campus-Events** an einem Ort. Das aktuelle Hochschulsportprogramm ist ebenfalls verfügbar. Verpasse nie wieder eine Deadline oder ein Event.
 
 ### Profil
 

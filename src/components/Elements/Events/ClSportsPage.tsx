@@ -330,7 +330,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
-        paddingVertical: 8,
+        paddingTop: 8,
+        paddingBottom: 4,
     },
     weekdaysContainer: { marginBottom: 10 },
     campusHeader: {

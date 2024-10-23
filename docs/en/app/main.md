@@ -19,7 +19,7 @@ The app brings together all important information for students in one place. It 
 <!-- screenshoits horizentol-->
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <img src="/assets/screen-1-en.jpeg" alt="Screenshots of Neuland Next" style="width: 30%;">
+  <img src="/assets/screen-1-en.jpg" alt="Screenshots of Neuland Next" style="width: 30%;">
   <img src="/assets/screen-2-en.jpeg" alt="Screenshots of Neuland Next" style="width: 30%;">
   <img src="/assets/screen-3-en.jpeg" alt="Screenshots of Neuland Next" style="width: 30%;">
 </div>
