@@ -24,6 +24,7 @@ import {
     useLocalSearchParams,
     useNavigation,
 } from 'expo-router'
+import { type i18n } from 'i18next'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -41,6 +42,31 @@ export const humanLocations = {
     NeuburgMensa: 'Mensa Neuburg',
     Reimanns: 'Reimanns',
     Canisius: 'Canisius Konvikt',
+}
+
+export function shareMeal(
+    meal: Meal,
+    i18n: i18n,
+    userKind: 'guest' | 'employee' | 'student'
+): void {
+    trackEvent('Share', {
+        type: 'meal',
+    })
+    void Share.share({
+        message: i18n.t('details.share.message', {
+            ns: 'food',
+            meal: meal?.name[i18n.language as LanguageKey],
+            price: formatPrice(meal.prices[userKind ?? USER_GUEST]),
+            location:
+                meal?.restaurant != null
+                    ? humanLocations[
+                          meal.restaurant as keyof typeof humanLocations
+                      ]
+                    : i18n.t('misc.unknown', { ns: 'common' }),
+
+            id: meal?.id,
+        }),
+    })
 }
 
 export default function FoodDetail(): JSX.Element {
@@ -67,24 +93,18 @@ export default function FoodDetail(): JSX.Element {
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
-    const shareMeal = (): void => {
-        trackEvent('Share', {
-            type: 'meal',
-        })
-        void Share.share({
-            message: t('details.share.message', {
-                meal: meal?.name[i18n.language as LanguageKey],
-                price: formatPrice(meal?.prices[userKind ?? USER_GUEST]),
-                location: meal?.restaurant,
-                id: meal?.id,
-            }),
-        })
-    }
 
     useFocusEffect(
         useCallback(() => {
+            if (meal === undefined) return
             navigation.setOptions({
-                headerRight: () => <ShareHeaderButton onPress={shareMeal} />,
+                headerRight: () => (
+                    <ShareHeaderButton
+                        onPress={() => {
+                            shareMeal(meal, i18n, userKind)
+                        }}
+                    />
+                ),
             })
         }, [])
     )
