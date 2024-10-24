@@ -122,7 +122,9 @@ const MapScreen = (): JSX.Element => {
     const [tabBarPressed, setTabBarPressed] = useState(false)
     const opacity = useSharedValue(1)
     // required for android
-    void MapLibreGL.setAccessToken(null)
+    if (Platform.OS === 'android') {
+        void MapLibreGL.setAccessToken(null)
+    }
 
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
