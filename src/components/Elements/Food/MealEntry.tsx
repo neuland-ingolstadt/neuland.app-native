@@ -1,4 +1,4 @@
-import { humanLocations } from '@/app/(screens)/meal'
+import { humanLocations, shareMeal } from '@/app/(screens)/meal'
 import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
@@ -22,14 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Platform,
-    Pressable,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 
 // @ts-expect-error - no types available
@@ -90,10 +83,7 @@ export const MealEntry = ({
         : t('empty.noAllergens')
 
     const [key, setKey] = useState(Math.random())
-    const restaurant =
-        meal.restaurant != null
-            ? meal.restaurant.charAt(0).toUpperCase() + meal.restaurant.slice(1)
-            : ''
+
     return (
         <DragDropView
             mode="drag"
@@ -157,16 +147,7 @@ export const MealEntry = ({
                         trackEvent('Share', {
                             type: 'meal',
                         })
-                        void Share.share({
-                            message: t('details.share.message', {
-                                meal: meal?.name[i18n.language as LanguageKey],
-                                price: formatPrice(
-                                    meal?.prices[userKind ?? 'guest']
-                                ),
-                                location: restaurant,
-                                id: meal?.id,
-                            }),
-                        })
+                        shareMeal(meal, i18n, userKind)
                     }
                     setKey(Math.random())
                 }}
