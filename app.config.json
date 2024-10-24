@@ -44,7 +44,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 185,
+            "versionCode": 186,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",
