@@ -16,7 +16,7 @@ import Color from 'color'
 import * as Application from 'expo-application'
 import * as NavigationBar from 'expo-navigation-bar'
 import { Redirect, usePathname, useRouter } from 'expo-router'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 // @ts-expect-error no types
@@ -47,6 +47,24 @@ export default function HomeLayout(): JSX.Element {
     const { isOnboarded } = React.useContext(FlowContext)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const pathname = usePathname()
+    const [redirect, setRedirect] = useState<boolean>(false)
+    const version = Application.nativeApplicationVersion
+    const isChangelogAvailable =
+        version != null
+            ? Object.keys(changelog.version).some(
+                  (version) => version === convertToMajorMinorPatch(version)
+              )
+            : false
+
+    useEffect(() => {
+        if (
+            flow.isUpdated !== true &&
+            isChangelogAvailable &&
+            flow.isOnboarded === true
+        ) {
+            setRedirect(true)
+        }
+    }, [])
 
     useEffect(() => {
         // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
@@ -183,20 +201,8 @@ export default function HomeLayout(): JSX.Element {
         return <Redirect href={'onboarding'} />
     }
 
-    const version = Application.nativeApplicationVersion
-    const isChangelogAvailable =
-        version != null
-            ? Object.keys(changelog.version).some(
-                  (version) => version === convertToMajorMinorPatch(version)
-              )
-            : false
-
-    if (
-        flow.isUpdated !== true &&
-        isChangelogAvailable &&
-        flow.isOnboarded === true
-    ) {
-        router.navigate('(flow)/whatsnew')
+    if (redirect) {
+        router.navigate('whatsnew')
     }
 
     return Platform.OS === 'android' ? (

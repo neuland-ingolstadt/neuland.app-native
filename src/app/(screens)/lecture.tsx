@@ -291,9 +291,8 @@ export default function TimetableDetails(): JSX.Element {
                                             <React.Fragment key={i}>
                                                 <Pressable
                                                     onPress={() => {
-                                                        router.navigate(
-                                                            '(tabs)/map'
-                                                        )
+                                                        router.back()
+                                                        router.navigate('map')
                                                         updateRouteParams(room)
                                                     }}
                                                 >

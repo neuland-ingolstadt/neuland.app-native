@@ -70,6 +70,7 @@ export default function LecturerDetail(): JSX.Element {
                     textColor: colors.primary,
                     onPress: () => {
                         updateRouteParams(lecturer?.room_short ?? '')
+                        router.back()
                         router.navigate('(tabs)/map')
                     },
                 },

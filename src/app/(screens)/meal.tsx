@@ -316,7 +316,8 @@ export default function FoodDetail(): JSX.Element {
         const location = locations[restaurant as keyof typeof locations]
 
         if (restaurant != null && location !== undefined) {
-            router.navigate('(tabs)/map')
+            router.back()
+            router.navigate('map')
             updateRouteParams(location)
         }
     }

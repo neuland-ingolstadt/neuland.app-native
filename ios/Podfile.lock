@@ -14,18 +14,18 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.1):
     - ExpoModulesCore
-  - Expo (52.0.0-preview.3):
+  - Expo (52.0.0-preview.5):
     - ExpoModulesCore
-  - expo-dev-client (5.0.0-preview.1):
+  - expo-dev-client (5.0.0-preview.2):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (5.0.2):
+  - expo-dev-launcher (5.0.4):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 5.0.2)
+    - expo-dev-launcher/Main (= 5.0.4)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -51,7 +51,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (5.0.2):
+  - expo-dev-launcher/Main (5.0.4):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -80,7 +80,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (5.0.2):
+  - expo-dev-launcher/Unsafe (5.0.4):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -108,10 +108,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu (6.0.2):
+  - expo-dev-menu (6.0.3):
     - DoubleConversion
-    - expo-dev-menu/Main (= 6.0.2)
-    - expo-dev-menu/ReactNativeCompatibles (= 6.0.2)
+    - expo-dev-menu/Main (= 6.0.3)
+    - expo-dev-menu/ReactNativeCompatibles (= 6.0.3)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.01.01.00)
@@ -132,7 +132,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - expo-dev-menu-interface (1.9.0)
-  - expo-dev-menu/Main (6.0.2):
+  - expo-dev-menu/Main (6.0.3):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu-interface
@@ -158,7 +158,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/ReactNativeCompatibles (6.0.2):
+  - expo-dev-menu/ReactNativeCompatibles (6.0.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -179,7 +179,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/SafeAreaView (6.0.2):
+  - expo-dev-menu/SafeAreaView (6.0.3):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -201,7 +201,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-menu/Vendored (6.0.2):
+  - expo-dev-menu/Vendored (6.0.3):
     - DoubleConversion
     - expo-dev-menu/SafeAreaView
     - glog
@@ -237,17 +237,17 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
-  - ExpoHead (4.0.0-preview.1):
+  - ExpoHead (4.0.0-preview.3):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
-  - ExpoLinearGradient (14.0.0):
+  - ExpoLinearGradient (14.0.1):
     - ExpoModulesCore
   - ExpoLocalAuthentication (15.0.1):
     - ExpoModulesCore
   - ExpoLocalization (16.0.0):
     - ExpoModulesCore
-  - ExpoModulesCore (2.0.0-preview.3):
+  - ExpoModulesCore (2.0.0-preview.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -294,7 +294,9 @@ PODS:
     - Yoga
   - ExpoSecureStore (14.0.0):
     - ExpoModulesCore
-  - EXSplashScreen (0.28.1):
+  - ExpoSystemUI (4.0.1):
+    - ExpoModulesCore
+  - EXSplashScreen (0.28.2):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -324,11 +326,11 @@ PODS:
   - hermes-engine (0.76.0):
     - hermes-engine/Pre-built (= 0.76.0)
   - hermes-engine/Pre-built (0.76.0)
-  - maplibre-react-native (10.0.0-alpha.22):
-    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.22)
+  - maplibre-react-native (10.0.0-alpha.23):
+    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.23)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.22):
+  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.23):
     - React
     - React-Core
   - RCT-Folly (2024.01.01.00):
@@ -2025,7 +2027,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (13.1.0):
+  - RNDeviceInfo (13.2.0):
     - React-Core
   - RNDynamicAppIcon (1.1.0):
     - React
@@ -2285,6 +2287,7 @@ DEPENDENCIES:
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoScreenOrientation (from `../node_modules/expo-screen-orientation/ios`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
+  - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2437,6 +2440,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-screen-orientation/ios"
   ExpoSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
+  ExpoSystemUI:
+    :path: "../node_modules/expo-system-ui/ios"
   EXSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
   EXUpdatesInterface:
@@ -2609,17 +2614,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aptabase-react-native: 4b0d69af453e0b79e60b0bd926702ccb599cb681
-  boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
+  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   Burnt: dde5dd245f124a4594098e3938ba71aae4ec83c3
-  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EXApplication: e1ad9c950c98b2b134578092c948b10b403f3ea7
   EXConstants: c74958e9232c8c2a8d27537fc555253297ff7a3c
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: d2859eb09b260b4e819299782fb5e43da36e248b
-  Expo: 21c3f93cc6e14de0ba3b32f8361bfc70100f4a71
-  expo-dev-client: 7cf800eb55343b617149ec7b30266e6db129770c
-  expo-dev-launcher: 0d937968ae1fd97d82dc39d2acde2284d2e0d914
-  expo-dev-menu: 7f39524249d75726d3ce25f5f93d483159ed24bf
+  Expo: ac3163073848ef5bce615df9f06ce6a42bcec8da
+  expo-dev-client: b50839d7dc046c2f4a3e4a131a8e087b25ce8411
+  expo-dev-launcher: b60b558980f5939525260ef0e01e28496be32afe
+  expo-dev-menu: 3e95bb131347c052ffc29c846b584e9a7210140f
   expo-dev-menu-interface: 6f83f3119a91557e1d04cf43d6320ef545082fd4
   ExpoAsset: 9de2f325e8c97a4c6c2bc85e507ae7f0809c91aa
   ExpoBlur: 562b3da84d3cd79016c411671eaf71a404266415
@@ -2628,22 +2633,23 @@ SPEC CHECKSUMS:
   ExpoFileSystem: d8b51caca86749a132c8ffde46be9a175e46b819
   ExpoFont: 2fb6d98e0a5352bebcaa568d6bfbba0e0f2e0097
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
-  ExpoHead: 4014be700ffb7e3bc6cfb998751cbd1c2f6313e7
+  ExpoHead: d2f0c9c9b4cc00a0f13fd225cc44e71d76796dd2
   ExpoKeepAwake: 783e68647b969b210a786047c3daa7b753dcac1f
-  ExpoLinearGradient: 9bc3195e1aecea3e5ee91d0d739cdb47b20ba014
+  ExpoLinearGradient: 7ca3b1d1625a1ab85c129abce4a3cdc78a9500a3
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
-  ExpoModulesCore: 766bea3afffa294519544c67e30f8786858db44d
+  ExpoModulesCore: e776f2355f2b5c2e411f4d2087fea17873fd9306
   ExpoScreenOrientation: 191c1ca42371747ae9b95b0ad93fbb75f33cf7b3
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
-  EXSplashScreen: 203df0f8354a00ef6c52ad125ec7ab064175b87c
+  ExpoSystemUI: 1861c02d848faf2e6dc4143a478d213e1ca56fe9
+  EXSplashScreen: 00b991b6898782550bf6323546ee51a8c88f014d
   EXUpdatesInterface: 1dcebac98ac5dad4289e6ff2bd5616822e894397
   FBLazyVector: aa59bef5c46e93168bffcf3dc37ee1e176de799a
-  fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
+  fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
+  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 9de51d2f67336348a6cd5b686330e436d1dbd522
-  maplibre-react-native: 39fbcca23e3cbd4bdd0c007cf135cef947083285
-  RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
+  maplibre-react-native: 051c8bfe391b6f28e07f9a84948d4bb6eb2766b6
+  RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: 4c2c4a088b6f0ccfcbd53c9d5614b0238ad57909
   RCTRequired: 2d8a683a7848bc0baf5883f0792c1ac43f6267b5
   RCTTypeSafety: 23df4344c69c602e1c5a8053a93c633af1bee825
@@ -2711,7 +2717,7 @@ SPEC CHECKSUMS:
   ReactCommon: 429ca28cd813c31359c73ffac6dc24f93347d522
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: 6008d74df8122d6af6d9d08096bff19a8c6ba647
-  RNDeviceInfo: e13b7d68878fba693c9fbb13ca4d56ad57d95917
+  RNDeviceInfo: 29e01d5ae94bdb5a0f6c11a4c438132545b4df80
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: 6f169ad83e52579b7754cbbcec1b004c27d82c93
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045

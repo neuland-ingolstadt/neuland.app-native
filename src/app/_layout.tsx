@@ -483,7 +483,7 @@ function RootLayout(): JSX.Element {
                         gestureEnabled: false,
                         ...Platform.select({
                             ios: {
-                                presentation: 'formSheet',
+                                presentation: 'modal',
                             },
                         }),
                     }}

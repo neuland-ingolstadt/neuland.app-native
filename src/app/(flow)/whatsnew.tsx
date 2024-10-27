@@ -26,7 +26,7 @@ import Animated, {
 export default function WhatsNewScreen(): JSX.Element {
     const colors = useTheme().colors as Colors
     const flow = React.useContext(FlowContext)
-    const changelog: Changelog = changelogData
+    const changelog = changelogData as Changelog
     const { t, i18n } = useTranslation('flow')
     const version = convertToMajorMinorPatch(
         Application.nativeApplicationVersion ?? '0.0.0'

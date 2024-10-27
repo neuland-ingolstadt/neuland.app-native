@@ -194,6 +194,7 @@ export default function About(): JSX.Element {
                                     styles.logoIcon,
                                     {
                                         shadowColor: colors.text,
+                                        boxShadow: `4 4 10 0 ${colors.labelTertiaryColor}`,
                                         backgroundColor: colors.card,
                                     },
                                 ]}
@@ -298,9 +299,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     logoIcon: {
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
         borderRadius: 9,
     },
     logoImage: {

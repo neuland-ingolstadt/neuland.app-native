@@ -21,6 +21,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
     return (
         <>
             <Tabs
+                detachInactiveScreens={false}
                 screenOptions={{
                     tabBarActiveTintColor: colors.primary,
                     tabBarLabelStyle: {
@@ -36,6 +37,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     options={{
                         title: 'Home',
                         headerShown: false,
+
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 color={color}

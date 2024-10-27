@@ -253,13 +253,13 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-
+        console.log('themeHook.theme', themeHook.theme)
         if (themeHook.theme === 'dark') {
             Appearance.setColorScheme('dark')
         } else if (themeHook.theme === 'light') {
             Appearance.setColorScheme('light')
-        } else {
-            Appearance.setColorScheme(null)
+        } else if (themeHook.theme === 'auto') {
+            //  Appearance.setColorScheme(undefined)
         }
 
         return () => {

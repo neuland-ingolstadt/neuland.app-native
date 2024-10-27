@@ -19,7 +19,6 @@ import {
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useHeaderHeight } from '@react-navigation/elements'
 import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
@@ -44,6 +43,7 @@ import {
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 export default function LecturersCard(): JSX.Element {
     const router = useRouter()
@@ -61,7 +61,6 @@ export default function LecturersCard(): JSX.Element {
     const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
     const [faculty, setFaculty] = useState<string | null>(null)
     const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
-    const headerHeight = useHeaderHeight()
 
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
@@ -494,60 +493,55 @@ export default function LecturersCard(): JSX.Element {
             </>
         )
     }
-
     return (
-        <View
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-                ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 10,
-            }}
-        >
-            {userKind === USER_GUEST ? (
-                <ErrorView title={guestError} />
-            ) : !isSearchBarFocused ? (
-                <View style={styles.searchContainer}>
-                    <ToggleRow
-                        items={[
-                            t('pages.lecturers.personal'),
-                            displayesProfessors
-                                ? t('pages.lecturers.professors')
-                                : t('pages.lecturers.faculty'),
-                        ]}
-                        selectedElement={selectedPage}
-                        setSelectedElement={setPage}
-                    />
-                    <PagerView
-                        style={styles.page}
-                        initialPage={selectedPage}
-                        onPageSelected={(e) => {
-                            setSelectedPage(e.nativeEvent.position)
-                        }}
-                        ref={pagerViewRef}
-                    >
-                        <LecturerList
-                            lecturers={personalLecturersResult.data}
-                            isPaused={personalLecturersResult.isPaused}
-                            isError={personalLecturersResult.isError}
-                            isSuccess={personalLecturersResult.isSuccess}
-                            error={personalLecturersResult.error}
-                            isLoading={personalLecturersResult.isLoading}
-                            isPersonal
+        <SafeAreaProvider>
+            <SafeAreaView edges={['top']} style={styles.page}>
+                {userKind === USER_GUEST ? (
+                    <ErrorView title={guestError} />
+                ) : !isSearchBarFocused ? (
+                    <View style={styles.searchContainer}>
+                        <ToggleRow
+                            items={[
+                                t('pages.lecturers.personal'),
+                                displayesProfessors
+                                    ? t('pages.lecturers.professors')
+                                    : t('pages.lecturers.faculty'),
+                            ]}
+                            selectedElement={selectedPage}
+                            setSelectedElement={setPage}
                         />
-                        <LecturerList
-                            lecturers={facultyData}
-                            isPaused={allLecturersResult.isPaused}
-                            isError={allLecturersResult.isError}
-                            isSuccess={allLecturersResult.isSuccess}
-                            error={allLecturersResult.error}
-                            isLoading={allLecturersResult.isLoading}
-                        />
-                    </PagerView>
-                </View>
-            ) : (
-                <FilterSectionList />
-            )}
-        </View>
+                        <PagerView
+                            style={styles.page}
+                            initialPage={selectedPage}
+                            onPageSelected={(e) => {
+                                setSelectedPage(e.nativeEvent.position)
+                            }}
+                            ref={pagerViewRef}
+                        >
+                            <LecturerList
+                                lecturers={personalLecturersResult.data}
+                                isPaused={personalLecturersResult.isPaused}
+                                isError={personalLecturersResult.isError}
+                                isSuccess={personalLecturersResult.isSuccess}
+                                error={personalLecturersResult.error}
+                                isLoading={personalLecturersResult.isLoading}
+                                isPersonal
+                            />
+                            <LecturerList
+                                lecturers={facultyData}
+                                isPaused={allLecturersResult.isPaused}
+                                isError={allLecturersResult.isError}
+                                isSuccess={allLecturersResult.isSuccess}
+                                error={allLecturersResult.error}
+                                isLoading={allLecturersResult.isLoading}
+                            />
+                        </PagerView>
+                    </View>
+                ) : (
+                    <FilterSectionList />
+                )}
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
@@ -572,12 +566,9 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 4,
     },
-    searchContainer: { flex: 1, gap: 10 },
+    searchContainer: { flex: 1, gap: 10, paddingTop: 10 },
     resultsCountContainer: {
-        position: 'absolute',
-        right: 0,
-        left: 0,
-        zIndex: 1,
+        paddingTop: 10,
     },
     resultsCount: {
         paddingHorizontal: 12,
