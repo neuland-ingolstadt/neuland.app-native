@@ -99,5 +99,9 @@ export const shared = defineConfig({
         link: "https://www.instagram.com/neuland_ingolstadt/",
       },
     ],
+    editLink: {
+      pattern: 'https://github.com/neuland-ingolstadt/neuland.app-native/tree/main/docs/:path'
+    }
   },
+  lastUpdated: true
 });

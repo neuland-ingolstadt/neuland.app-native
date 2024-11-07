@@ -1,3 +1,8 @@
+---
+editLink: false
+lastUpdated: false
+---
+
 # Imprint
 
 Neuland Ingolstadt e.V.\

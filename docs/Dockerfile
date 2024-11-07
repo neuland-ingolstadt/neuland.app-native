@@ -1,7 +1,10 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1 as base
+FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
+
+# Install git
+RUN apt-get update && apt-get install -y git
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds
