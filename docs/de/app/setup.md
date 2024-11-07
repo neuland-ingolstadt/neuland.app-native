@@ -11,7 +11,7 @@
 
 3. Installiere die benötigten Abhängigkeiten:
 
-   - [Node.js](https://nodejs.org/en/) 18 LTS oder höher
+   - [Node.js](https://nodejs.org/en/) 22 LTS oder höher
    - [Bun](https://bun.sh) oder nutze npm, wenn du die Abhängigkeiten nicht änderst
    - [Watchman](https://facebook.github.io/watchman/docs/install) (für Linux- oder macOS-Nutzer)
 
@@ -33,7 +33,16 @@
 
    - Folge der [offiziellen Anleitung](https://docs.expo.dev/workflow/ios-simulator/), um den iOS-Simulator einzurichten.
 
-7. Erstelle einen Entwicklungsbuild für deine gewünschte Plattform.
+7. Kopiere die `.env.local.example` Datei in `.env.local` und fülle die Variablen aus.
+   \
+   Siehe die [Hinweise](/app/contribute#entwickler) zum API-Schlüssel.
+
+```env
+EXPO_PUBLIC_THI_API_KEY=abc123  // [!code --]
+EXPO_PUBLIC_THI_API_KEY=SUPER_SECRET_API_KEY  // [!code ++]
+```
+
+8. Erstelle einen Entwicklungsbuild für deine gewünschte Plattform.
 
    ```sh
    bun ios
@@ -42,7 +51,7 @@
 
 ::: warning Hinweis
 
-Schritt 7 ist jedes Mal erforderlich, wenn die Abhängigkeiten aktualisiert werden.
+Schritt 8 ist jedes Mal erforderlich, wenn die Abhängigkeiten aktualisiert werden.
 
 :::
 
@@ -60,9 +69,9 @@ Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build aus
 
 ## Änderungen commiten
 
-1. Committe deine Änderungen in deinen Branch. Um beschreibende Commit-Nachrichten zu gewährleisten, empfehlen wir die Verwendung des Angular Commit-Nachricht-Stils.
+1. Committe deine Änderungen in deinen Branch. Um beschreibende Commit-Nachrichten und das automatische Erstellen des Changelogs zu gewährleisten, empfehlen wir die Verwendung des Angular Commit-Nachricht-Stils.
 2. Erstelle einen Pull-Request von deinem Branch zum Develop-Branch dieses Repositories.
-3. Gib einen klaren und beschreibenden Titel sowie eine Beschreibung für deine Pull-Request an, welcher die vorgenommenen Änderungen zusammenfasst.
+3. Gib einen klaren und beschreibenden Titel sowie eine Beschreibung für deine Pull-Request an, welcher die vorgenommenen Änderungen zusammenfasst. Verwende ebenfalls den Angular Commit-Nachricht-Stil für den Pull-Request-Titel.
 4. Sobald dein Pull-Request eingereicht ist, wird unser Team deine Änderungen überprüfen und dir ein Feedback geben und gegebenenfalls weitere Änderungen anfordern.
 
 ::: details Details zum Angular Commit-Nachricht-Stil
@@ -89,7 +98,7 @@ Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build aus
 - Verwende aussagekräftige Variablen- und Funktionsnamen, um die Lesbarkeit des Codes zu verbessern.
 - Dokumentiere deinen Code bei Bedarf mit Inline-Kommentaren.
 
-Wir verwenden den **Husky** Git-Hook, um Commits automatisch gemäß den ESLint-Regeln zu korrigieren und sie mit Prettier zu formatieren.
+Wir verwenden den **Husky** Git-Hook, um Commits automatisch gemäß den ESLint-Regeln zu korrigieren, sie mit Prettier zu formatieren und den Commit-Nachrichten-Stil zu überprüfen.
 Du kannst diese Befehle aber auch manuell ausführen:
 
 - `bun lint` um nach Linting-Fehlern zu suchen
