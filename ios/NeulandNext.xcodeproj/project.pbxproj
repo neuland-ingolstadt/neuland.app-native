@@ -177,9 +177,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				43D5CBB4A0124FD999C6854F /* Remove signature files (Xcode workaround) */,
-				E5FC73EE06B5457CB7DC1948 /* Remove signature files (Xcode workaround) */,
-				5B7E2398FE574C1993B99B38 /* Remove signature files (Xcode workaround) */,
-				AD22782366F04F58A2836D00 /* Remove signature files (Xcode workaround) */,
 				D9E96C27A1B19AFF2FE86FEF /* [CP] Embed Pods Frameworks */,
 				1268E3183CA2E965B96E10AE /* [CP] Copy Pods Resources */,
 			);
@@ -340,34 +337,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NeulandNext/expo-configure-project.sh\"\n";
 		};
-		5B7E2398FE574C1993B99B38 /* Remove signature files (Xcode workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\n    echo \"Remove signature files (Xcode workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  ";
-		};
-		AD22782366F04F58A2836D00 /* Remove signature files (Xcode workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\n    echo \"Remove signature files (Xcode workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  ";
-		};
 		D9E96C27A1B19AFF2FE86FEF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -385,20 +354,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NeulandNext/Pods-NeulandNext-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		E5FC73EE06B5457CB7DC1948 /* Remove signature files (Xcode workaround) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Remove signature files (Xcode workaround)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\n    echo \"Remove signature files (Xcode workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  ";
 		};
 		EA5E52A82502A20341C97D4D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

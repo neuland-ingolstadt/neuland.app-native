@@ -7,9 +7,11 @@
         "version": "0.10.1",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
+        "newArchEnabled": true,
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
             "buildNumber": "136",
+
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
