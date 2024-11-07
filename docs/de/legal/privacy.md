@@ -1,3 +1,8 @@
+---
+editLink: false
+lastUpdated: false
+---
+
 # Datenschutzerklärung der Neuland App
 
 ## Hinweise zur Datenverarbeitung
