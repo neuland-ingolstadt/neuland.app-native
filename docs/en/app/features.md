@@ -36,3 +36,7 @@ Access key university platforms such as moodle, PRIMUSS or your webmail with a s
 Stay up to date with the **latest news** from the THI.
 \
 And more - regular updates based on feedback are on their way!
+
+## Changelog
+
+Each update brings new features, improvements and bug fixes. Check out the [change log](https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md) on GitHub for a detailed overview of the changes in each version.

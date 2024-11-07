@@ -11,7 +11,7 @@
 
 3.  Install the required dependencies:
 
-    - [Node.js](https://nodejs.org/en/) 18 LTS or higher
+    - [Node.js](https://nodejs.org/en/) 22 LTS or higher
     - [Bun](https://bun.sh) or use npm if you dont't change dependencies
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
@@ -33,7 +33,16 @@
 
     - Follow the [official guide](https://docs.expo.dev/workflow/ios-simulator/) to set up the iOS simulator.
 
-7.  Create a development build for your desired platform.
+7.  Copy the `.env.local.example` file to `.env.local` and fill in the variables.
+    \
+    See the [notes](/app/contribute#developer) on the API key.
+
+```env
+EXPO_PUBLIC_THI_API_KEY=abc123  // [!code --]
+EXPO_PUBLIC_THI_API_KEY=SUPER_SECRET_API_KEY  // [!code ++]
+```
+
+8.  Create a development build for your desired platform.
 
     ```sh
     bun ios
@@ -42,7 +51,7 @@
 
 ::: warning Note
 
-Step 7 is required every time the dependencies are updated.
+Step 8 is required every time the dependencies are updated.
 
 :::
 
@@ -60,9 +69,9 @@ Step 7 is required every time the dependencies are updated.
 
 ## Submitting Changes
 
-1. Commit your changes to your branch. To ensure descriptive commit messages, we recommend using the Angular commit message style for your commit messages.
+1. Commit your changes to your branch. To ensure descriptive commit messages and automatic changelog generation, we require using the Angular commit message style for your commit messages.
 2. Create a pull request from your branch to the develop branch of this repository.
-3. Provide a clear and descriptive title and description for your pull request, summarizing the changes you made.
+3. Provide a clear and descriptive title and description for your pull request, summarizing the changes you made. Also make sure use the Angular commit message style for the pull request title.
 4. Once your pull request is submitted, our team will review your changes and provide feedback or request further modifications if needed.
 
 ::: details Details on the Angular commit message style
@@ -93,7 +102,7 @@ Step 7 is required every time the dependencies are updated.
 - Use meaningful variable and function names to improve code readability.
 - Document your code when necessary using inline comments.
 
-We use the **Husky** git hook to automatically fix commits according to ESLint rules and format them using Prettier.
+We use the **Husky** git hook to automatically fix commits according to ESLint rules, format them using Prettier and to enforce the commit message style.
 But you can also run these commands manually:
 
 - `bun lint` to check for linting errors
