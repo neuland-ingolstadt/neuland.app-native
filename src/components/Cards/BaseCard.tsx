@@ -62,30 +62,30 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const dynamicTitle = foodKeys.includes(title) ? 'food' : title
 
     return (
-        <Pressable
-            disabled={onPressRoute == null}
-            onPress={() => {
+        <ContextMenu
+            // @ts-expect-error cannot verify that title is a valid key
+            title={t('cards.titles.' + title)}
+            actions={actions}
+            onPress={(e) => {
+                e.nativeEvent.name === t('contextMenu.settings') &&
+                    router.navigate('dashboard')
+                e.nativeEvent.name === t('contextMenu.hide') &&
+                    hideDashboardEntry(title)
+                e.nativeEvent.name === t('contextMenu.reset') &&
+                    resetOrder(userKind ?? 'guest')
+            }}
+            onPreviewPress={() => {
                 onPressRoute != null && router.navigate(onPressRoute)
             }}
-            delayLongPress={300}
-            onLongPress={() => {}}
-            //  style={{ paddingHorizontal: PAGE_PADDING }}
         >
-            <ContextMenu
-                // @ts-expect-error cannot verify that title is a valid key
-                title={t('cards.titles.' + title)}
-                actions={actions}
-                onPress={(e) => {
-                    e.nativeEvent.name === t('contextMenu.settings') &&
-                        router.navigate('dashboard')
-                    e.nativeEvent.name === t('contextMenu.hide') &&
-                        hideDashboardEntry(title)
-                    e.nativeEvent.name === t('contextMenu.reset') &&
-                        resetOrder(userKind ?? 'guest')
-                }}
-                onPreviewPress={() => {
+            <Pressable
+                disabled={onPressRoute == null}
+                onPress={() => {
                     onPressRoute != null && router.navigate(onPressRoute)
                 }}
+                delayLongPress={300}
+                onLongPress={() => {}}
+                //  style={{ paddingHorizontal: PAGE_PADDING }}
             >
                 <View
                     style={[
@@ -133,8 +133,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     </View>
                     {children != null && <>{children}</>}
                 </View>
-            </ContextMenu>
-        </Pressable>
+            </Pressable>
+        </ContextMenu>
     )
 }
 
