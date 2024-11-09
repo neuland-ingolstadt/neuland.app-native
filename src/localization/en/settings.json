@@ -80,7 +80,8 @@
             },
             "us": {
                 "title": "Other",
-                "source": "Source code"
+                "source": "Source code",
+                "faq": "FAQ"
             }
         }
     },
