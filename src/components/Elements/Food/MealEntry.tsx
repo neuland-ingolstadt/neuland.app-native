@@ -16,7 +16,7 @@ import {
 import { CARD_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'

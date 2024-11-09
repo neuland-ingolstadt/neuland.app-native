@@ -17,7 +17,7 @@ import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useTheme } from '@react-navigation/native'
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer/'
 import {
     router,
     useFocusEffect,

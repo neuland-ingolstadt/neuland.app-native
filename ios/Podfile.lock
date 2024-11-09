@@ -340,11 +340,6 @@ PODS:
     - fmt (= 9.1.0)
     - glog
     - RCT-Folly/Default (= 2024.01.01.00)
-  - RCT-Folly/Default (2024.01.01.00):
-    - boost
-    - DoubleConversion
-    - fmt (= 9.1.0)
-    - glog
   - RCT-Folly/Fabric (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -2401,9 +2396,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aptabase-react-native: 4b0d69af453e0b79e60b0bd926702ccb599cb681
-  boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
+  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   Burnt: dde5dd245f124a4594098e3938ba71aae4ec83c3
-  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EXApplication: c08200c34daca7af7fd76ac4b9d606077410e8ad
   EXConstants: 409690fbfd5afea964e5e9d6c4eb2c2b59222c59
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
@@ -2431,13 +2426,13 @@ SPEC CHECKSUMS:
   EXSplashScreen: 5461621eafa685600296f3702ed35cc8dcb18aae
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
-  fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
+  fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
+  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
   maplibre-react-native: 39fbcca23e3cbd4bdd0c007cf135cef947083285
   MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
   MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
-  RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
+  RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
   RCTTypeSafety: 28e24a6e44f5cbf912c66dde6ab7e07d1059a205
