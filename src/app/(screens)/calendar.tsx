@@ -20,6 +20,7 @@ import {
     ActivityIndicator,
     Animated,
     Linking,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     Text,
@@ -63,7 +64,7 @@ export default function CalendarPage(): JSX.Element {
         },
         enabled: userKind !== USER_GUEST,
     })
-    const { refetchByUser } = useRefreshByUser(refetch)
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     const screenHeight = useWindowDimensions().height
     const pagerViewRef = useRef<PagerView>(null)
     function setPage(page: number): void {
@@ -202,6 +203,14 @@ export default function CalendarPage(): JSX.Element {
                                 ],
                                 { useNativeDriver: false }
                             ) as any
+                        }
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={isRefetchingByUser}
+                                onRefresh={() => {
+                                    void refetchByUser()
+                                }}
+                            />
                         }
                         scrollEventThrottle={16}
                     >
