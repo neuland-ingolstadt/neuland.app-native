@@ -92,7 +92,9 @@ export default function About(): JSX.Element {
                     title: 'App Website',
                     icon: linkIcon,
                     onPress: async () =>
-                        await Linking.openURL('https://next.neuland.app'),
+                        await Linking.openURL(
+                            `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}`
+                        ),
                 },
                 {
                     title:

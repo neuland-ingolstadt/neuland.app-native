@@ -10,7 +10,7 @@ import { Linking, ScrollView, StyleSheet, View } from 'react-native'
 
 export default function About(): JSX.Element {
     const router = useRouter()
-    const { t } = useTranslation(['settings'])
+    const { t, i18n } = useTranslation(['settings'])
 
     const sections: FormListSections[] = [
         {
@@ -54,6 +54,18 @@ export default function About(): JSX.Element {
                     onPress: async () =>
                         await Linking.openURL(
                             'https://github.com/neuland-ingolstadt/neuland.app-native'
+                        ),
+                },
+                {
+                    title: t('legal.formlist.us.faq'),
+                    icon: {
+                        ios: 'safari',
+                        android: 'github',
+                    },
+
+                    onPress: async () =>
+                        await Linking.openURL(
+                            `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}app/faq`
                         ),
                 },
             ],

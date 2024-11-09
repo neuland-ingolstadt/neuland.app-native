@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.1] - 2024-11-09
+
+### 🚀 Features
+
+-   _(calendar)_ Add refresh control to enable exams refetching
+-   _(about)_ Update links and add FAQ section in legal screen
+
+### 🐛 Bug Fixes
+
+-   _(food)_ Correct formatting of restaurant location string
+-   _(announcements)_ Integrate api changes to fix card display
+
+### 📚 Documentation
+
+-   Update setup and features documentation, add changelog section
+-   Add edit link and last updated options for documentation pages
+
+### ⚙️ Miscellaneous Tasks
+
+-   Add changelog and git-cliff configuration
+
 ## [0.10.0] - 2024-10-23
 
 ### 🚀 Features

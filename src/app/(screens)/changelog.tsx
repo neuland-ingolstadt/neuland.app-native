@@ -61,7 +61,7 @@ export default function Theme(): JSX.Element {
                             style={{ color: colors.primary }}
                             onPress={() => {
                                 void Linking.openURL(
-                                    'https://github.com/neuland-ingolstadt/neuland.app-native/commits/'
+                                    'https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md'
                                 )
                             }}
                         >
