@@ -167,7 +167,7 @@ function HomeScreen(): JSX.Element {
             estimatedItemSize={114}
             ListHeaderComponent={() =>
                 data !== undefined ? (
-                    <PopUpCard data={data?.announcements} />
+                    <PopUpCard data={data?.appAnnouncements} />
                 ) : (
                     <></>
                 )

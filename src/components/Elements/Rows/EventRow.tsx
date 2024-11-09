@@ -5,7 +5,7 @@ import {
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
 import { ROW_PADDING } from '@/utils/style-utils'
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

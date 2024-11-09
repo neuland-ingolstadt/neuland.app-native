@@ -25,11 +25,11 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
         return <></>
     }
     const filter = (data: Announcement[]): Announcement[] => {
-        const now = new Date()
+        const now = Date.now()
         const activeAnnouncements = data.filter(
             (announcement: Announcement) =>
-                announcement.startDateTime < now.getTime() &&
-                announcement.endDateTime > now.getTime() &&
+                new Date(announcement.startDateTime).getTime() < now &&
+                new Date(announcement.endDateTime).getTime() > now &&
                 !hiddenAnnouncements.includes(announcement.id)
         )
         activeAnnouncements.sort(
@@ -38,7 +38,6 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
         return activeAnnouncements
     }
     const filtered = filter(data)
-
     return filtered != null && filtered.length > 0 ? (
         <Pressable
             onPress={() => {

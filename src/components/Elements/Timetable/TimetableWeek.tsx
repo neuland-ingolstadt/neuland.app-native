@@ -10,7 +10,7 @@ import {
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor, inverseColor } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
