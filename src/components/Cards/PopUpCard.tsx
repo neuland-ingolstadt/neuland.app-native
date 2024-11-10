@@ -33,7 +33,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
                 !hiddenAnnouncements.includes(announcement.id)
         )
         activeAnnouncements.sort(
-            (a: Announcement, b: Announcement) => b.priority - a.priority
+            (a: Announcement, b: Announcement) => a.priority - b.priority
         )
         return activeAnnouncements
     }
