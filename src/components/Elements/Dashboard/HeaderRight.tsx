@@ -204,7 +204,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         >
             <PlatformMenu>
                 {userKind === USER_EMPLOYEE ? (
-                    <Avatar size={28} background={styles.primary.color}>
+                    <Avatar size={28}>
                         <Text
                             style={{
                                 color: getContrastColor(styles.primary.color),
@@ -243,7 +243,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                         style={styles.icon}
                     />
                 ) : initials !== '' || !showLoadingIndicator ? (
-                    <Avatar size={28} background={styles.primary.color}>
+                    <Avatar size={28}>
                         <Text
                             style={{
                                 color: getContrastColor(styles.primary.color),

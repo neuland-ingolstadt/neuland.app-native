@@ -1,8 +1,7 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -31,7 +30,7 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
     selectedItem,
     action,
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             {elements.map((item, index) => (
@@ -46,13 +45,10 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
                         ]}
                     >
                         <View style={styles.container}>
-                            <Text style={[styles.text, { color: colors.text }]}>
-                                {item.title}
-                            </Text>
+                            <Text style={styles.text}>{item.title}</Text>
 
                             {selectedItem === item.key ? (
                                 <PlatformIcon
-                                    color={colors.primary}
                                     ios={{
                                         name: 'checkmark',
                                         size: 15,
@@ -68,17 +64,14 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
                         </View>
                     </Pressable>
                     {index < elements.length - 1 && (
-                        <Divider
-                            color={colors.labelTertiaryColor}
-                            iosPaddingLeft={16}
-                        />
+                        <Divider iosPaddingLeft={16} />
                     )}
                 </React.Fragment>
             ))}
         </>
     )
 }
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -90,7 +83,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         paddingVertical: 1,
+        color: theme.colors.text,
     },
-})
+    icon: {
+        color: theme.colors.primary,
+    },
+}))
 
 export default MultiSectionRadio

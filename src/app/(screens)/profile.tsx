@@ -2,7 +2,6 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { USER_STUDENT } from '@/data/constants'
@@ -10,7 +9,6 @@ import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
@@ -25,14 +23,14 @@ import {
     Pressable,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Profile(): JSX.Element {
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { toggleUserKind, userKind } = useContext(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
@@ -231,7 +229,7 @@ export default function Profile(): JSX.Element {
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator
                             size="small"
-                            color={colors.primary}
+                            color={styles.primary.color}
                         />
                     </View>
                 )}
@@ -276,21 +274,17 @@ export default function Profile(): JSX.Element {
 
                 <Pressable
                     onPress={logoutAlert}
-                    style={{
-                        ...styles.logoutButton,
-                        backgroundColor: colors.card,
-                    }}
+                    style={styles.logoutButton}
                     disabled={isLoggingOut}
                 >
                     {isLoggingOut ? (
                         <ActivityIndicator
                             size="small"
-                            color={colors.notification}
+                            color={styles.notification.color}
                         />
                     ) : (
                         <>
                             <PlatformIcon
-                                color={colors.notification}
                                 ios={{
                                     name: 'rectangle.portrait.and.arrow.right',
                                     size: 18,
@@ -299,13 +293,9 @@ export default function Profile(): JSX.Element {
                                     name: 'logout',
                                     size: 22,
                                 }}
+                                style={styles.notification}
                             />
-                            <Text
-                                style={{
-                                    color: colors.notification,
-                                    ...styles.logoutText,
-                                }}
-                            >
+                            <Text style={styles.logoutText}>
                                 {t('profile.logout.button')}
                             </Text>
                         </>
@@ -316,7 +306,7 @@ export default function Profile(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     contentContainer: { paddingBottom: 32 },
     container: {
         paddingVertical: 16,
@@ -336,13 +326,21 @@ const styles = StyleSheet.create({
         gap: 10,
         minWidth: 165,
         justifyContent: 'center',
+        backgroundColor: theme.colors.card,
     },
     logoutText: {
         fontSize: 16,
+        color: theme.colors.notification,
     },
     loadingContainer: {
         paddingVertical: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
-})
+    primary: {
+        color: theme.colors.primary,
+    },
+    notification: {
+        color: theme.colors.notification,
+    },
+}))

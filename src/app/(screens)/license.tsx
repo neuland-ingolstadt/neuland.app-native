@@ -1,17 +1,16 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { linkIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useGlobalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function License(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
 
     const { license, version, licenseUrl, repository, name } =
@@ -91,14 +90,7 @@ export default function License(): JSX.Element {
                     <SectionView
                         title={t('navigation.license', { ns: 'navigation' })}
                     >
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.text,
-                            }}
-                        >
-                            {licenseText}
-                        </Text>
+                        <Text style={styles.text}>{licenseText}</Text>
                     </SectionView>
                 )}
             </ScrollView>
@@ -106,7 +98,7 @@ export default function License(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formlistContainer: {
         marginTop: 10,
         marginBottom: 16,
@@ -117,8 +109,9 @@ const styles = StyleSheet.create({
     text: {
         padding: 16,
         fontSize: 13,
+        color: theme.colors.text,
     },
     container: {
         paddingBottom: MODAL_BOTTOM_MARGIN,
     },
-})
+}))

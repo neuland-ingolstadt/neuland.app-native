@@ -4,7 +4,6 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { type GradeAverage } from '@/types/utils'
 import {
@@ -15,7 +14,6 @@ import {
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -24,16 +22,16 @@ import {
     ActivityIndicator,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import packageInfo from '../../../package.json'
 
 export default function GradesSCreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('settings')
+    const { styles } = useStyles(stylesheet)
     const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
 
     const [averageLoadingState, setAverageLoadingState] =
@@ -122,7 +120,10 @@ export default function GradesSCreen(): JSX.Element {
         >
             {isLoading && (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <ActivityIndicator
+                        size="small"
+                        color={styles.activityIndicator.color}
+                    />
                 </View>
             )}
             {isError && (
@@ -154,17 +155,14 @@ export default function GradesSCreen(): JSX.Element {
                                         LoadingState.LOADING && (
                                         <ActivityIndicator
                                             size="small"
-                                            color={colors.primary}
+                                            color={
+                                                styles.activityIndicator.color
+                                            }
                                         />
                                     )}
                                     {averageLoadingState ===
                                         LoadingState.ERROR && (
-                                        <Text
-                                            style={[
-                                                styles.averageErrorText,
-                                                { color: colors.text },
-                                            ]}
-                                        >
+                                        <Text style={styles.averageErrorText}>
                                             {t('grades.averageError')}
                                         </Text>
                                     )}
@@ -176,10 +174,7 @@ export default function GradesSCreen(): JSX.Element {
                                                 style={styles.averageContainer}
                                             >
                                                 <Text
-                                                    style={[
-                                                        styles.averageText,
-                                                        { color: colors.text },
-                                                    ]}
+                                                    style={styles.averageText}
                                                 >
                                                     {gradeAverage.resultMin !==
                                                         gradeAverage.resultMax &&
@@ -188,12 +183,7 @@ export default function GradesSCreen(): JSX.Element {
                                                 </Text>
 
                                                 <Text
-                                                    style={[
-                                                        styles.averageNote,
-                                                        {
-                                                            color: colors.labelColor,
-                                                        },
-                                                    ]}
+                                                    style={styles.averageNote}
                                                 >
                                                     {gradeAverage.resultMin ===
                                                     gradeAverage.resultMax
@@ -221,18 +211,10 @@ export default function GradesSCreen(): JSX.Element {
                                 <React.Fragment>
                                     {grades?.finished?.map((grade, index) => (
                                         <React.Fragment key={index}>
-                                            <GradesRow
-                                                item={grade}
-                                                colors={colors}
-                                            />
+                                            <GradesRow item={grade} />
                                             {index !==
                                                 grades.finished.length - 1 && (
-                                                <Divider
-                                                    color={
-                                                        colors.labelTertiaryColor
-                                                    }
-                                                    iosPaddingLeft={16}
-                                                />
+                                                <Divider iosPaddingLeft={16} />
                                             )}
                                         </React.Fragment>
                                     ))}
@@ -245,18 +227,10 @@ export default function GradesSCreen(): JSX.Element {
                             <React.Fragment>
                                 {grades?.missing?.map((grade, index) => (
                                     <React.Fragment key={index}>
-                                        <GradesRow
-                                            item={grade}
-                                            colors={colors}
-                                        />
+                                        <GradesRow item={grade} />
                                         {index !==
                                             grades.missing.length - 1 && (
-                                            <Divider
-                                                color={
-                                                    colors.labelTertiaryColor
-                                                }
-                                                iosPaddingLeft={16}
-                                            />
+                                            <Divider iosPaddingLeft={16} />
                                         )}
                                     </React.Fragment>
                                 ))}
@@ -264,14 +238,7 @@ export default function GradesSCreen(): JSX.Element {
                         </SectionView>
                     )}
                     <View style={styles.notesBox}>
-                        <Text
-                            style={[
-                                styles.notesText,
-                                {
-                                    color: colors.labelColor,
-                                },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {t('grades.footer')}
                         </Text>
                     </View>
@@ -281,7 +248,7 @@ export default function GradesSCreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     contentContainer: {
         paddingBottom: 32,
     },
@@ -305,6 +272,7 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         paddingTop: 8,
         textAlign: 'left',
+        color: theme.colors.labelColor,
     },
     loadingContainer: {
         paddingTop: 40,
@@ -321,13 +289,19 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         fontWeight: '700',
         textAlign: 'center',
+        color: theme.colors.text,
     },
     averageNote: {
         fontSize: 14,
         textAlign: 'left',
+        color: theme.colors.labelColor,
     },
     averageErrorText: {
         fontSize: 15,
         textAlign: 'center',
+        color: theme.colors.text,
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+}))

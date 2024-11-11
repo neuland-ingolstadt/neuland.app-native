@@ -2,12 +2,10 @@ import API from '@/api/authenticated-api'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import {
@@ -22,10 +20,10 @@ import {
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function NewsScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
-
+    const { styles } = useStyles(stylesheet)
     const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
         useQuery({
             queryKey: ['thiNews'],
@@ -39,7 +37,10 @@ export default function NewsScreen(): JSX.Element {
         <View>
             {isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <ActivityIndicator
+                        size="small"
+                        color={styles.activityIndicator.color}
+                    />
                 </View>
             ) : isError ? (
                 <View style={styles.errorContainer}>
@@ -78,23 +79,11 @@ export default function NewsScreen(): JSX.Element {
                     contentContainerStyle={styles.contentContainer}
                     renderItem={({ item }) => (
                         <View style={styles.sectionContainer} key={item.title}>
-                            <Text
-                                style={[
-                                    styles.dateText,
-                                    {
-                                        color: colors.labelSecondaryColor,
-                                    },
-                                ]}
-                            >
+                            <Text style={styles.dateText}>
                                 {formatFriendlyDate(item.date)}
                             </Text>
                             <Pressable
-                                style={[
-                                    styles.sectionBox,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
+                                style={styles.sectionBox}
                                 onPress={() => {
                                     void Linking.openURL(item.href)
                                 }}
@@ -108,16 +97,12 @@ export default function NewsScreen(): JSX.Element {
 
                                 <View style={styles.titleContainer}>
                                     <Text
-                                        style={[
-                                            styles.titleText,
-                                            { color: colors.text },
-                                        ]}
+                                        style={styles.titleText}
                                         numberOfLines={2}
                                     >
                                         {item.title}
                                     </Text>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'chevron.forward',
                                             size: 15,
@@ -126,15 +111,11 @@ export default function NewsScreen(): JSX.Element {
                                             name: 'chevron_right',
                                             size: 16,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </View>
                                 <Divider width={'100%'} />
-                                <Text
-                                    style={[
-                                        styles.teaserText,
-                                        { color: colors.text },
-                                    ]}
-                                >
+                                <Text style={styles.teaserText}>
                                     {item.teaser}
                                 </Text>
                             </Pressable>
@@ -146,7 +127,7 @@ export default function NewsScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     errorContainer: {
         paddingTop: Platform.OS === 'ios' ? 0 : 100,
         height: Platform.OS === 'ios' ? '90%' : '100%',
@@ -157,6 +138,7 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         textTransform: 'uppercase',
         marginBottom: 6,
+        color: theme.colors.labelSecondaryColor,
     },
     contentContainer: {
         paddingTop: Platform.OS === 'ios' ? 105 : 5,
@@ -174,6 +156,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginHorizontal: 12,
         marginVertical: 6,
+        color: theme.colors.text,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -189,6 +172,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         flex: 1,
         marginVertical: 8,
+        color: theme.colors.text,
     },
     sectionContainer: {
         width: '100%',
@@ -199,10 +183,19 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         justifyContent: 'center',
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
+        borderWidth: StyleSheet.hairlineWidth,
     },
     loadingContainer: {
         paddingTop: Platform.OS === 'ios' ? 140 : 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    icon: {
+        color: theme.colors.labelColor,
+    },
+}))

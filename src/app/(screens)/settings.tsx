@@ -5,7 +5,6 @@ import GradesButton from '@/components/Elements/Settings/GradesButton'
 import Divider from '@/components/Elements/Universal/Divider'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
@@ -22,7 +21,6 @@ import { getPersonalData, performLogout } from '@/utils/api-utils'
 import { storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import * as SecureStore from 'expo-secure-store'
@@ -38,7 +36,6 @@ import {
     RefreshControl,
     ScrollView,
     Share,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
@@ -52,8 +49,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Shimmer from 'react-native-shimmer'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Settings(): JSX.Element {
+    const { styles } = useStyles(stylesheet)
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
@@ -62,8 +61,6 @@ export default function Settings(): JSX.Element {
     const width = window.width - insets.left - insets.right
     const height = window.height - insets.top - insets.bottom
     const router = useRouter()
-    const theme = useTheme()
-    const colors = theme.colors as Colors
     const { t, i18n } = useTranslation(['settings'])
     const bottomBoundX = 0
     const logoWidth = 159
@@ -385,12 +382,7 @@ export default function Settings(): JSX.Element {
                         }
                     }}
                 >
-                    <View
-                        style={[
-                            styles.container,
-                            { backgroundColor: colors.card },
-                        ]}
-                    >
+                    <View style={styles.container}>
                         <View style={styles.nameBox}>
                             {(isLoading || isSuccess) &&
                             userKind === 'student' &&
@@ -407,15 +399,8 @@ export default function Settings(): JSX.Element {
                                             }
                                             subTitle2={data?.fachrich ?? ''}
                                         >
-                                            <Avatar background={colors.primary}>
-                                                <Text
-                                                    style={{
-                                                        color: getContrastColor(
-                                                            colors.primary
-                                                        ),
-                                                        ...styles.avatarText,
-                                                    }}
-                                                >
+                                            <Avatar>
+                                                <Text style={styles.avatarText}>
                                                     {getInitials(
                                                         data?.vname +
                                                             ' ' +
@@ -426,7 +411,6 @@ export default function Settings(): JSX.Element {
                                         </NameBox>
 
                                         <PlatformIcon
-                                            color={colors.labelSecondaryColor}
                                             ios={{
                                                 name: 'chevron.forward',
 
@@ -439,10 +423,7 @@ export default function Settings(): JSX.Element {
                                             style={styles.iconAlign}
                                         />
                                     </View>
-                                    <Divider
-                                        iosPaddingLeft={16}
-                                        color={colors.labelTertiaryColor}
-                                    />
+                                    <Divider iosPaddingLeft={16} />
                                     <GradesButton />
                                 </View>
                             ) : isSuccess &&
@@ -461,11 +442,11 @@ export default function Settings(): JSX.Element {
                                         >
                                             <Avatar
                                                 background={
-                                                    colors.labelTertiaryColor
+                                                    styles.avatarGuest
+                                                        .backgroundColor
                                                 }
                                             >
                                                 <PlatformIcon
-                                                    color={colors.background}
                                                     ios={{
                                                         name: 'exclamationmark.triangle',
                                                         variant: 'fill',
@@ -475,11 +456,11 @@ export default function Settings(): JSX.Element {
                                                         name: 'warning',
                                                         size: 28,
                                                     }}
+                                                    style={styles.iconGuest}
                                                 />
                                             </Avatar>
                                         </NameBox>
                                         <PlatformIcon
-                                            color={colors.labelSecondaryColor}
                                             ios={{
                                                 name: 'chevron.forward',
 
@@ -492,10 +473,7 @@ export default function Settings(): JSX.Element {
                                             style={styles.iconAlign}
                                         />
                                     </View>
-                                    <Divider
-                                        iosPaddingLeft={16}
-                                        color={colors.labelTertiaryColor}
-                                    />
+                                    <Divider iosPaddingLeft={16} />
                                     <GradesButton />
                                 </View>
                             ) : userKind === 'employee' ? (
@@ -505,15 +483,8 @@ export default function Settings(): JSX.Element {
                                         subTitle1={t('menu.employee.subtitle1')}
                                         subTitle2={t('menu.employee.subtitle2')}
                                     >
-                                        <Avatar background={colors.primary}>
-                                            <Text
-                                                style={{
-                                                    color: getContrastColor(
-                                                        colors.primary
-                                                    ),
-                                                    ...styles.avatarText,
-                                                }}
-                                            >
+                                        <Avatar>
+                                            <Text style={styles.avatarText}>
                                                 {getInitials(
                                                     (username as string) ?? ''
                                                 )}
@@ -530,7 +501,8 @@ export default function Settings(): JSX.Element {
                                     >
                                         <Avatar
                                             background={
-                                                colors.labelTertiaryColor
+                                                styles.avatarGuest
+                                                    .backgroundColor
                                             }
                                         >
                                             <PlatformIcon
@@ -548,7 +520,6 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                     <PlatformIcon
-                                        color={colors.labelSecondaryColor}
                                         ios={{
                                             name: 'chevron.forward',
 
@@ -572,11 +543,12 @@ export default function Settings(): JSX.Element {
                                     >
                                         <Avatar
                                             background={
-                                                colors.labelTertiaryColor
+                                                styles.avatarGuest
+                                                    .backgroundColor
                                             }
                                         >
                                             <PlatformIcon
-                                                color={colors.background}
+                                                color={styles.iconGuest.color}
                                                 ios={{
                                                     name: 'exclamationmark.triangle',
                                                     variant: 'fill',
@@ -607,12 +579,7 @@ export default function Settings(): JSX.Element {
                 </View>
             </View>
 
-            <Text
-                style={[
-                    styles.copyrigth,
-                    { color: colors.labelSecondaryColor },
-                ]}
-            >
+            <Text style={styles.copyrigth}>
                 {t('menu.copyright', { year: new Date().getFullYear() })}
             </Text>
             <Animated.View
@@ -635,7 +602,7 @@ export default function Settings(): JSX.Element {
                 >
                     <LogoTextSVG
                         size={15}
-                        color={isBouncing ? color : colors.text}
+                        color={isBouncing ? color : styles.textColor.color}
                     />
                 </Pressable>
             </Animated.View>
@@ -660,7 +627,7 @@ export default function Settings(): JSX.Element {
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
                     <ShimmerEffect>
-                        <LogoTextSVG size={15} color={colors.text} />
+                        <LogoTextSVG size={15} color={styles.textColor.color} />
                     </ShimmerEffect>
                 </Pressable>
             </Animated.View>
@@ -668,7 +635,7 @@ export default function Settings(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     wrapper: { paddingTop: 20, paddingHorizontal: 16 },
     bounceContainer: {
         zIndex: 10,
@@ -679,10 +646,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: -10,
         marginTop: 20,
+        color: theme.colors.labelSecondaryColor,
     },
     container: {
         alignSelf: 'center',
-
+        backgroundColor: theme.colors.card,
         borderRadius: 10,
         width: '100%',
     },
@@ -702,6 +670,7 @@ const styles = StyleSheet.create({
     avatarText: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: getContrastColor(theme.colors.primary),
     },
     shimmerContainer: {
         alignItems: 'center',
@@ -719,6 +688,7 @@ const styles = StyleSheet.create({
     },
     iconAlign: {
         alignSelf: 'center',
+        color: theme.colors.labelSecondaryColor,
     },
     nameOuterContainer: { flexDirection: 'column', flex: 1 },
     nameInnerContainer: {
@@ -726,4 +696,13 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 14,
     },
-})
+    textColor: {
+        color: theme.colors.text,
+    },
+    avatarGuest: {
+        backgroundColor: theme.colors.labelTertiaryColor,
+    },
+    iconGuest: {
+        color: theme.colors.background,
+    },
+}))

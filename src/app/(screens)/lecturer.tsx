@@ -1,17 +1,16 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
 import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { lecturerEntry } = useLocalSearchParams<{ lecturerEntry: string }>()
     const lecturer: NormalizedLecturer | undefined =
         lecturerEntry != null ? JSON.parse(lecturerEntry) : undefined
@@ -67,7 +66,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.room'),
                     value: lecturer?.room_short,
                     disabled: lecturer?.room_short === '',
-                    textColor: colors.primary,
+                    textColor: styles.primary.color,
                     onPress: () => {
                         updateRouteParams(lecturer?.room_short ?? '')
                         router.navigate('(tabs)/map')
@@ -77,7 +76,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.phone'),
                     value: lecturer?.tel_dienst,
                     disabled: lecturer?.tel_dienst === '',
-                    textColor: colors.primary,
+                    textColor: styles.primary.color,
                     onPress: () => {
                         void Linking.openURL(
                             `tel:${
@@ -93,7 +92,7 @@ export default function LecturerDetail(): JSX.Element {
                     layout: validEmail ? 'column' : 'row',
                     textColor:
                         (lecturer?.email.includes('@') ?? false)
-                            ? colors.primary
+                            ? styles.primary.color
                             : undefined,
                     onPress: () => {
                         void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
@@ -121,14 +120,9 @@ export default function LecturerDetail(): JSX.Element {
 
     return (
         <ScrollView style={styles.page}>
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
+            <View style={styles.titleContainer}>
                 <Text
-                    style={[styles.titleText, { color: colors.text }]}
+                    style={styles.titleText}
                     allowFontScaling={true}
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
@@ -145,7 +139,7 @@ export default function LecturerDetail(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         padding: PAGE_PADDING,
     },
@@ -161,9 +155,14 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
+        backgroundColor: theme.colors.card,
     },
     titleText: {
         fontSize: 18,
         textAlign: 'center',
+        color: theme.colors.text,
     },
-})
+    primary: {
+        color: theme.colors.primary,
+    },
+}))

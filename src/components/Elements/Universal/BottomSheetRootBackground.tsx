@@ -2,15 +2,20 @@ import {
     BottomSheetBackdrop,
     type BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export const BottomSheetRootBackground = (): JSX.Element => {
-    const { colors, dark } = useTheme()
     const darkIos = 'rgba(0, 0, 0, 0.3)'
     const lightIos = 'rgba(255, 255, 255, 0.5)'
+    const { styles } = useStyles(stylesheet)
+    const dark = UnistylesRuntime.themeName === 'dark'
     return Platform.OS === 'ios' ? (
         <View
             style={[
@@ -27,9 +32,7 @@ export const BottomSheetRootBackground = (): JSX.Element => {
             />
         </View>
     ) : (
-        <View
-            style={[styles.bottomSheet, { backgroundColor: colors.background }]}
-        />
+        <View style={styles.bottomSheet} />
     )
 }
 
@@ -44,11 +47,12 @@ export const renderBackdrop = (
     />
 )
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     bottomSheet: {
         ...StyleSheet.absoluteFillObject,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
         overflow: 'hidden',
+        backgroundColor: theme.colors.background,
     },
-})
+}))

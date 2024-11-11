@@ -4,7 +4,6 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
-import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -20,7 +19,6 @@ import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useHeaderHeight } from '@react-navigation/elements'
-import { useTheme } from '@react-navigation/native'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -39,11 +37,15 @@ import {
     Platform,
     RefreshControl,
     SectionList,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export default function LecturersCard(): JSX.Element {
     const router = useRouter()
@@ -53,7 +55,7 @@ export default function LecturersCard(): JSX.Element {
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()
     const [selectedPage, setSelectedPage] = useState(0)
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const pagerViewRef = useRef<PagerView>(null)
     const [displayesProfessors, setDisplayedProfessors] = useState(false)
@@ -234,9 +236,9 @@ export default function LecturersCard(): JSX.Element {
 
                 ...Platform.select({
                     android: {
-                        headerIconColor: colors.text,
-                        hintTextColor: colors.text,
-                        textColor: colors.text,
+                        headerIconColor: styles.androidSearchBar.color,
+                        hintTextColor: styles.androidSearchBar.color,
+                        textColor: styles.androidSearchBar.color,
                     },
                 }),
                 shouldShowHintSearchIcon: false,
@@ -257,7 +259,7 @@ export default function LecturersCard(): JSX.Element {
                 },
             },
         })
-    }, [colors.text, navigation, t])
+    }, [UnistylesRuntime.themeName, navigation, t])
 
     const LecturerList = ({
         lecturers,
@@ -300,7 +302,7 @@ export default function LecturersCard(): JSX.Element {
             <ActivityIndicator
                 style={styles.loadingContainer}
                 size="small"
-                color={colors.primary}
+                color={styles.activityIndicator.color}
             />
         ) : isError ? (
             <View
@@ -327,12 +329,7 @@ export default function LecturersCard(): JSX.Element {
             <FlatList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
-                contentContainerStyle={{
-                    marginHorizontal: PAGE_PADDING,
-
-                    backgroundColor: colors.card,
-                    ...styles.loadedRows,
-                }}
+                contentContainerStyle={styles.loadedRows}
                 contentInsetAdjustmentBehavior="always"
                 refreshControl={
                     <RefreshControl
@@ -351,12 +348,9 @@ export default function LecturersCard(): JSX.Element {
                 style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
                 renderItem={({ item, index }) => (
                     <React.Fragment key={index}>
-                        <LecturerRow item={item} colors={colors} />
+                        <LecturerRow item={item} />
                         {index !== lecturers.length - 1 && (
-                            <Divider
-                                color={colors.labelTertiaryColor}
-                                iosPaddingLeft={16}
-                            />
+                            <Divider iosPaddingLeft={16} />
                         )}
                     </React.Fragment>
                 )}
@@ -411,7 +405,7 @@ export default function LecturersCard(): JSX.Element {
                 <ActivityIndicator
                     style={styles.loadingContainer}
                     size="small"
-                    color={colors.primary}
+                    color={styles.activityIndicator.color}
                 />
             </View>
         ) : allLecturersResult.isPaused ? (
@@ -433,12 +427,7 @@ export default function LecturersCard(): JSX.Element {
         ) : (
             <>
                 <View style={styles.resultsCountContainer}>
-                    <Text
-                        style={{
-                            ...styles.resultsCount,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.resultsCount}>
                         {filteredLecturers.length}{' '}
                         {t('pages.lecturers.results')}
                     </Text>
@@ -451,7 +440,8 @@ export default function LecturersCard(): JSX.Element {
                             key={index}
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
-                                backgroundColor: colors.card,
+                                backgroundColor:
+                                    styles.sectionContainer.backgroundColor,
                                 borderTopLeftRadius: index === 0 ? 8 : 0,
                                 borderTopRightRadius: index === 0 ? 8 : 0,
                                 borderBottomLeftRadius:
@@ -460,30 +450,15 @@ export default function LecturersCard(): JSX.Element {
                                     index === section.data.length - 1 ? 8 : 0,
                             }}
                         >
-                            <LecturerRow item={item} colors={colors} />
+                            <LecturerRow item={item} />
                             {index !== section.data.length - 1 && (
-                                <Divider
-                                    color={colors.labelTertiaryColor}
-                                    iosPaddingLeft={16}
-                                />
+                                <Divider iosPaddingLeft={16} />
                             )}
                         </View>
                     )}
                     renderSectionHeader={({ section: { title } }) => (
-                        <View
-                            style={{
-                                backgroundColor: colors.background,
-                                ...styles.sectionHeaderContainer,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    ...styles.sectionHeader,
-                                    color: colors.text,
-                                }}
-                            >
-                                {title}
-                            </Text>
+                        <View style={styles.sectionHeaderContainer}>
+                            <Text style={styles.sectionHeader}>{title}</Text>
                         </View>
                     )}
                     contentContainerStyle={{
@@ -551,12 +526,14 @@ export default function LecturersCard(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         flex: 1,
     },
     loadedRows: {
         borderRadius: 8,
+        marginHorizontal: PAGE_PADDING,
+        backgroundColor: theme.colors.card,
     },
     loadingContainer: {
         paddingTop: 40,
@@ -567,10 +544,12 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold',
         textTransform: 'uppercase',
+        color: theme.colors.text,
     },
     sectionHeaderContainer: {
         paddingVertical: 8,
         paddingHorizontal: 4,
+        backgroundColor: theme.colors.background,
     },
     searchContainer: { flex: 1, gap: 10 },
     resultsCountContainer: {
@@ -583,5 +562,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         textAlign: 'right',
         fontSize: 13,
+        color: theme.colors.labelColor,
     },
-})
+    androidSearchBar: {
+        color: theme.colors.text,
+    },
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    sectionContainer: {
+        backgroundColor: theme.colors.card,
+    },
+}))

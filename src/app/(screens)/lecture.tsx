@@ -7,14 +7,12 @@ import ShareCard from '@/components/Elements/Timetable/ShareCard'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
 import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
-import { type Colors } from '@/components/colors'
 import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import {
     useFocusEffect,
@@ -25,21 +23,15 @@ import {
 import moment from 'moment'
 import React, { useCallback, useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Pressable,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Pressable, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
     const navigation = useNavigation()
     const { updateRouteParams } = useContext(RouteParamsContext)
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { lecture: lectureParam } = useLocalSearchParams()
     const { t } = useTranslation('timetable')
     const lectureString = Array.isArray(lectureParam)
@@ -155,29 +147,12 @@ export default function TimetableDetails(): JSX.Element {
                 <View style={styles.page}>
                     <DetailsRow>
                         <DetailsSymbol>
-                            <View
-                                style={{
-                                    ...styles.eventColorCircle,
-                                    backgroundColor: colors.primary,
-                                }}
-                            />
+                            <View style={styles.eventColorCircle} />
                         </DetailsSymbol>
                         <DetailsBody>
-                            <Text
-                                style={{
-                                    ...styles.eventName,
-                                    color: colors.text,
-                                }}
-                            >
-                                {lecture.name}
-                            </Text>
+                            <Text style={styles.eventName}>{lecture.name}</Text>
                             {lecture.shortName.length > 0 ? (
-                                <Text
-                                    style={{
-                                        ...styles.eventShortName,
-                                        color: colors.labelColor,
-                                    }}
-                                >
+                                <Text style={styles.eventShortName}>
                                     {lecture.shortName}
                                 </Text>
                             ) : (
@@ -191,7 +166,7 @@ export default function TimetableDetails(): JSX.Element {
                     <DetailsRow>
                         <DetailsSymbol>
                             <PlatformIcon
-                                color={colors.labelColor}
+                                style={styles.icon}
                                 ios={{
                                     name: 'clock',
                                     size: 21,
@@ -206,12 +181,7 @@ export default function TimetableDetails(): JSX.Element {
                         <DetailsBody>
                             <View style={styles.dateRow}>
                                 <View>
-                                    <Text
-                                        style={{
-                                            ...styles.text1,
-                                            color: colors.text,
-                                        }}
-                                    >
+                                    <Text style={styles.text1}>
                                         {formatFriendlyDate(startDate, {
                                             weekday: 'long',
                                             relative: false,
@@ -219,17 +189,12 @@ export default function TimetableDetails(): JSX.Element {
                                     </Text>
 
                                     <View style={styles.detailsContainer}>
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.text,
-                                            }}
-                                        >
+                                        <Text style={styles.text2}>
                                             {formatFriendlyTime(startDate)}
                                         </Text>
 
                                         <PlatformIcon
-                                            color={colors.labelColor}
+                                            style={styles.icon}
                                             ios={{
                                                 name: 'chevron.forward',
                                                 size: 12,
@@ -240,21 +205,11 @@ export default function TimetableDetails(): JSX.Element {
                                             }}
                                         />
 
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.text,
-                                            }}
-                                        >
+                                        <Text style={styles.text2}>
                                             {formatFriendlyTime(endDate)}
                                         </Text>
 
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.labelColor,
-                                            }}
-                                        >
+                                        <Text style={styles.text2Label}>
                                             {`(${moment(endDate).diff(
                                                 moment(startDate),
                                                 'minutes'
@@ -273,7 +228,6 @@ export default function TimetableDetails(): JSX.Element {
                             <DetailsRow>
                                 <DetailsSymbol>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'mappin.and.ellipse',
                                             size: 21,
@@ -282,6 +236,7 @@ export default function TimetableDetails(): JSX.Element {
                                             name: 'place',
                                             size: 24,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </DetailsSymbol>
 
@@ -297,24 +252,14 @@ export default function TimetableDetails(): JSX.Element {
                                                         updateRouteParams(room)
                                                     }}
                                                 >
-                                                    <Text
-                                                        style={{
-                                                            ...styles.text1,
-                                                            color: colors.primary,
-                                                        }}
-                                                    >
+                                                    <Text style={styles.text1}>
                                                         {room}
                                                     </Text>
                                                 </Pressable>
                                                 {i <
                                                     lecture.rooms.length -
                                                         1 && (
-                                                    <Text
-                                                        style={{
-                                                            ...styles.text1,
-                                                            color: colors.labelColor,
-                                                        }}
-                                                    >
+                                                    <Text style={styles.text1}>
                                                         {', '}
                                                     </Text>
                                                 )}
@@ -332,7 +277,6 @@ export default function TimetableDetails(): JSX.Element {
                             <DetailsRow>
                                 <DetailsSymbol>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'person',
                                             size: 21,
@@ -341,16 +285,12 @@ export default function TimetableDetails(): JSX.Element {
                                             name: 'person',
                                             size: 24,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </DetailsSymbol>
 
                                 <DetailsBody>
-                                    <Text
-                                        style={{
-                                            ...styles.text1,
-                                            color: colors.text,
-                                        }}
-                                    >
+                                    <Text style={styles.text1}>
                                         {lecture.lecturer}
                                     </Text>
                                 </DetailsBody>
@@ -370,7 +310,7 @@ export default function TimetableDetails(): JSX.Element {
     )
 }
 
-export const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         display: 'flex',
         padding: PAGE_PADDING,
@@ -379,19 +319,36 @@ export const styles = StyleSheet.create({
         width: 15,
         aspectRatio: 1,
         borderRadius: 9999,
+        backgroundColor: theme.colors.primary,
     },
     eventName: {
         fontSize: 24,
         fontWeight: 'bold',
+        color: theme.colors.text,
     },
     eventShortName: {
         fontSize: 14,
+        color: theme.colors.labelColor,
     },
     text1: {
         fontSize: 18,
+        color: theme.colors.text,
+    },
+    text1Label: {
+        fontSize: 18,
+        color: theme.colors.labelColor,
+    },
+    text1Primary: {
+        fontSize: 18,
+        color: theme.colors.primary,
     },
     text2: {
         fontSize: 14,
+        color: theme.colors.text,
+    },
+    text2Label: {
+        fontSize: 14,
+        color: theme.colors.labelColor,
     },
     detailsContainer: {
         display: 'flex',
@@ -420,4 +377,7 @@ export const styles = StyleSheet.create({
         width: '100%',
         paddingRight: 12,
     },
-})
+    icon: {
+        color: theme.colors.labelColor,
+    },
+}))

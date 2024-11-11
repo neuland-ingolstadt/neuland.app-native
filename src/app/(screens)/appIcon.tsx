@@ -1,10 +1,8 @@
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors } from '@/components/colors'
 import { PreferencesContext } from '@/components/contexts'
 import { capitalizeFirstLetter } from '@/utils/app-utils'
-import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -12,12 +10,12 @@ import {
     type ImageProps,
     Pressable,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 // @ts-expect-error cannot verify the type of this prop
 import AppIcon from 'react-native-dynamic-app-icon'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 let iconImages: Record<string, ImageProps> = {}
 
@@ -34,7 +32,7 @@ iconImages = {
 export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const {
         appIcon = 'default',
         setAppIcon,
@@ -66,12 +64,7 @@ export default function AppIconPicker(): JSX.Element {
                                 title={t(`appIcon.categories.${key}`)}
                                 key={key}
                             >
-                                <View
-                                    style={[
-                                        styles.sectionContainer,
-                                        { backgroundColor: colors.card },
-                                    ]}
-                                >
+                                <View style={styles.sectionContainer}>
                                     {value.map((icon) => {
                                         return (
                                             <React.Fragment key={icon}>
@@ -99,17 +92,14 @@ export default function AppIconPicker(): JSX.Element {
                                                             source={
                                                                 iconImages[icon]
                                                             }
-                                                            style={{
-                                                                borderColor:
-                                                                    colors.border,
-                                                                ...styles.imageContainer,
-                                                            }}
+                                                            style={
+                                                                styles.imageContainer
+                                                            }
                                                         />
                                                         <Text
-                                                            style={{
-                                                                color: colors.text,
-                                                                ...styles.iconText,
-                                                            }}
+                                                            style={
+                                                                styles.iconText
+                                                            }
                                                         >
                                                             {t(
                                                                 // @ts-expect-error cannot verify the type of this prop
@@ -119,9 +109,6 @@ export default function AppIconPicker(): JSX.Element {
                                                     </View>
                                                     {appIcon === icon && (
                                                         <PlatformIcon
-                                                            color={
-                                                                colors.primary
-                                                            }
                                                             ios={{
                                                                 name: 'checkmark',
                                                                 size: 20,
@@ -151,10 +138,7 @@ export default function AppIconPicker(): JSX.Element {
                                                 }
                                             >
                                                 <Text
-                                                    style={{
-                                                        color: colors.text,
-                                                        ...styles.exclusiveText,
-                                                    }}
+                                                    style={styles.exclusiveText}
                                                 >
                                                     {t('appIcon.exclusive')}
                                                 </Text>
@@ -170,7 +154,7 @@ export default function AppIconPicker(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
         width: '100%',
@@ -180,6 +164,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignContent: 'center',
         justifyContent: 'center',
+        backgroundColor: theme.colors.card,
     },
     exclusiveContainer: {
         justifyContent: 'center',
@@ -191,6 +176,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
         fontWeight: '500',
+        color: theme.colors.text,
     },
     rowContainer: {
         flexDirection: 'row',
@@ -210,11 +196,13 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 18,
         borderWidth: 1,
+        borderColor: theme.colors.border,
     },
     iconText: {
         textAlign: 'center',
         fontSize: 18,
         fontWeight: '500',
         alignSelf: 'center',
+        color: theme.colors.text,
     },
-})
+}))
