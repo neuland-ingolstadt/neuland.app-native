@@ -13,30 +13,19 @@ import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const CalendarRow = ({
-    event,
-    colors,
-}: {
-    event: Calendar
-    colors: Colors
-}): JSX.Element => {
+const CalendarRow = ({ event }: { event: Calendar }): JSX.Element => {
     const { t, i18n } = useTranslation('common')
+    const { styles } = useStyles(stylesheet)
     return (
         <RowEntry
             title={event.name[i18n.language as LanguageKey]}
-            colors={colors}
             leftChildren={
-                <Text
-                    style={{
-                        ...styles.leftText,
-                        color: colors.labelColor,
-                    }}
-                    numberOfLines={2}
-                >
+                <Text style={styles.leftText} numberOfLines={2}>
                     {event.hasHours === true
                         ? formatFriendlyDateTimeRange(
                               event.begin,
@@ -47,12 +36,7 @@ const CalendarRow = ({
             }
             rightChildren={
                 <View style={styles.rightContainer}>
-                    <Text
-                        style={{
-                            ...styles.rightText,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.rightText}>
                         {event.begin != null && (
                             <>
                                 {event.end != null && event.begin < new Date()
@@ -79,6 +63,7 @@ const ExamRow = ({
     event: Exam
     colors: Colors
 }): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
     const navigateToPage = (): void => {
         router.push({
@@ -91,7 +76,6 @@ const ExamRow = ({
     return (
         <RowEntry
             title={event.name}
-            colors={colors}
             leftChildren={
                 <>
                     <Text
@@ -129,12 +113,7 @@ const ExamRow = ({
             }
             rightChildren={
                 <View style={styles.rightContainerExam}>
-                    <Text
-                        style={{
-                            ...styles.rightTextExam,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.rightTextExam}>
                         {formatFriendlyRelativeTime(new Date(event.date))}
                     </Text>
                 </View>
@@ -145,11 +124,12 @@ const ExamRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     rightContainer: { justifyContent: 'flex-end', padding: ROW_PADDING },
     rightContainerExam: { justifyContent: 'flex-end', padding: 5 },
     leftText: {
         fontSize: 13,
+        color: theme.colors.labelColor,
     },
     rightTextExam: {
         fontSize: 14,
@@ -158,10 +138,12 @@ const styles = StyleSheet.create({
     rightText: {
         fontSize: 14,
         fontWeight: '400',
+        color: theme.colors.labelColor,
     },
     mainText: {
         fontSize: 13,
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export { CalendarRow, ExamRow }

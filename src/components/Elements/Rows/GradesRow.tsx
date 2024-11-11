@@ -1,20 +1,14 @@
-import { type Colors } from '@/components/colors'
 import { type Grade } from '@/types/thi-api'
 import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const GradesRow = ({
-    colors,
-    item,
-}: {
-    colors: Colors
-
-    item: Grade
-}): JSX.Element => {
+const GradesRow = ({ item }: { item: Grade }): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('settings')
     if (item.titel === null || item.titel === '') {
         return <></>
@@ -23,16 +17,9 @@ const GradesRow = ({
     return (
         <RowEntry
             title={item.titel}
-            colors={colors}
             leftChildren={
                 <View style={styles.leftContainer}>
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.leftText1,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.leftText1} numberOfLines={2}>
                         {'ECTS: '}
                         {item.ects ?? t('grades.none')}
                     </Text>
@@ -43,20 +30,10 @@ const GradesRow = ({
                     <View style={styles.rightContainer}>
                         {item.note !== null && item.note !== '' && (
                             <View style={styles.rightInnerContainer}>
-                                <Text
-                                    style={{
-                                        ...styles.rightText1,
-                                        color: colors.labelColor,
-                                    }}
-                                >
+                                <Text style={styles.rightText1}>
                                     {item.note}
                                 </Text>
-                                <Text
-                                    style={{
-                                        ...styles.rightText2,
-                                        color: colors.labelSecondaryColor,
-                                    }}
-                                >
+                                <Text style={styles.rightText2}>
                                     {t('grades.grade')}
                                 </Text>
                             </View>
@@ -69,12 +46,13 @@ const GradesRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     leftContainer: { paddingTop: 3 },
     leftText1: {
         fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
+        color: theme.colors.labelColor,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -89,11 +67,13 @@ const styles = StyleSheet.create({
     rightText1: {
         fontSize: 20,
         fontWeight: '500',
+        color: theme.colors.labelColor,
     },
     rightText2: {
         fontSize: 14,
         fontWeight: '400',
+        color: theme.colors.labelSecondaryColor,
     },
-})
+}))
 
 export default GradesRow

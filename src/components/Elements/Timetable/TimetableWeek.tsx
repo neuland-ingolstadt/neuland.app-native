@@ -1,5 +1,4 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
-import { type Colors } from '@/components/colors'
 import { PreferencesContext } from '@/components/contexts'
 import {
     type CalendarTimetableEntry,
@@ -16,7 +15,12 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
 import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 import WeekView, {
     type HeaderComponentProps,
     type WeekViewEvent,
@@ -31,7 +35,7 @@ export default function TimetableWeek({
     exams,
 }: ITimetableViewProps): JSX.Element {
     const theme = useTheme()
-    const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { selectedDate, setSelectedDate } = useContext(PreferencesContext)
     // get the first day of friendlyTimetable that is not in the past
     const today = new Date()
@@ -40,12 +44,11 @@ export default function TimetableWeek({
     )?.startDate
     const [localSelectedDate, setLocalSelectedDate] =
         React.useState(selectedDate)
-    const inversePrimary = inverseColor(colors.primary)
     const friendlyTimetableWithColor = friendlyTimetable.map(
         (entry: FriendlyTimetableEntry, index: number) => ({
             ...entry,
             eventType: 'lecture',
-            color: colors.primary,
+            color: styles.primary.color,
             id: index,
             startDate: new Date(entry.startDate),
             endDate: new Date(entry.endDate),
@@ -55,7 +58,7 @@ export default function TimetableWeek({
     const examsWithColor = exams.map((exam: Exam, index: number) => ({
         ...exam,
         eventType: 'exam',
-        color: inversePrimary,
+        color: styles.primary.color,
         id: friendlyTimetable.length + index, // Ensure unique ID by continuing from the last timetable entry ID
         startDate: new Date(exam.date),
         endDate: new Date(new Date(exam.date).getTime() + 1000 * 60 * 60 * 1.5), // Correctly calculate the endDate
@@ -105,16 +108,6 @@ export default function TimetableWeek({
                   .string()
             : color
 
-    const dayBackgroundColor = Color(colors.card)
-        .darken(isDark ? 0 : 0.13)
-        .lighten(isDark ? 0.23 : 0)
-        .rgb()
-        .string()
-
-    const dayTextColor = Color(colors.primary)
-        .darken(isDark ? 0 : 0.2)
-        .hex()
-
     const textColor = (color: string, background: string): string => {
         let textColor = isIOS
             ? Color(color)
@@ -150,7 +143,7 @@ export default function TimetableWeek({
         const nameParts = event.shortName.split('_').slice(1)
         const background = eventBackgroundColor(event.color)
         const fontColor = textColor(event.color, background)
-
+        const { styles } = useStyles(stylesheet)
         const nameToDisplay =
             event.name.length > 20
                 ? nameParts.join('_') !== ''
@@ -224,6 +217,7 @@ export default function TimetableWeek({
         const begin = new Date(event.date)
         const background = eventBackgroundColor(event.color)
         const fontColor = textColor(event.color, background)
+        const { styles } = useStyles(stylesheet)
         return (
             <View
                 style={{
@@ -335,21 +329,10 @@ export default function TimetableWeek({
         isToday,
     }: HeaderComponentProps): JSX.Element => {
         const eventDate = moment(date)
+        const { styles } = useStyles(stylesheet)
         return (
-            <View
-                style={{
-                    backgroundColor: dayBackgroundColor,
-                    ...styles.dayCointainer,
-                }}
-            >
-                <Text
-                    style={{
-                        color: isToday ? dayTextColor : colors.text,
-                        ...(isToday
-                            ? styles.dayTextBold
-                            : styles.dayTextNormal),
-                    }}
-                >
+            <View style={styles.dayCointainer}>
+                <Text style={styles.dayHeaderText(isToday)}>
                     {eventDate.format('dd DD.MM')}
                 </Text>
             </View>
@@ -380,7 +363,6 @@ export default function TimetableWeek({
 
     return (
         <WeekView
-            /// <reference path="" />
             ref={weekViewRef}
             events={allEvents as unknown as WeekViewEvent[]}
             selectedDate={selectedDate}
@@ -390,20 +372,10 @@ export default function TimetableWeek({
             showTitle={false}
             locale="de"
             timesColumnWidth={0.15}
-            nowLineColor={
-                Platform.OS === 'ios' ? colors.primary : colors.notification
-            }
-            headerStyle={{
-                backgroundColor: colors.background,
-                borderColor: colors.border,
-                ...styles.headerStyle,
-            }}
-            headerTextStyle={{
-                color: colors.text,
-            }}
-            hourTextStyle={{
-                color: colors.text,
-            }}
+            nowLineColor={styles.nowLine(isIOS).color}
+            headerStyle={styles.headerStyle}
+            headerTextStyle={styles.text}
+            hourTextStyle={styles.text}
             startHour={8}
             // @ts-expect-error wrong type
             EventComponent={Event}
@@ -416,14 +388,14 @@ export default function TimetableWeek({
             onSwipePrev={(event) => {
                 setLocalSelectedDate(new Date(event))
             }}
-            gridRowStyle={{ borderColor: colors.border }}
-            gridColumnStyle={{ borderColor: colors.border }}
+            gridRowStyle={styles.grid}
+            gridColumnStyle={styles.grid}
             DayHeaderComponent={DayHeaderComponent}
         />
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     eventContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -461,6 +433,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 7,
         paddingVertical: 4,
         borderRadius: 8,
+        backgroundColor: Color(theme.colors.card)
+            .darken(UnistylesRuntime.themeName === 'dark' ? 0 : 0.13)
+            .lighten(UnistylesRuntime.themeName === 'dark' ? 0.23 : 0)
+            .rgb()
+            .string(),
     },
     dayTextNormal: {
         fontSize: 14,
@@ -471,10 +448,39 @@ const styles = StyleSheet.create({
     },
     headerStyle: {
         borderBottomWidth: 0.2,
+        backgroundColor: theme.colors.background,
+        borderColor: theme.colors.border,
     },
     roomRow: {
         flexDirection: 'row',
         gap: 4,
         alignItems: 'center',
     },
-})
+    primary: {
+        color: theme.colors.primary,
+    },
+    inversePrimary: {
+        color: inverseColor(theme.colors.primary),
+    },
+    card: {
+        color: theme.colors.card,
+    },
+    nowLine: (isIOS: boolean) => ({
+        color: isIOS ? theme.colors.primary : theme.colors.notification,
+    }),
+    text: {
+        color: theme.colors.text,
+    },
+    grid: {
+        borderColor: theme.colors.border,
+    },
+    dayHeaderText: (isToday: boolean) => ({
+        color: isToday
+            ? theme.colors.primary
+            : Color(theme.colors.primary)
+                  .darken(UnistylesRuntime.themeName === 'dark' ? 0 : 0.2)
+                  .hex(),
+        fontSize: 14,
+        fontWeight: isToday ? 'bold' : 'normal',
+    }),
+}))

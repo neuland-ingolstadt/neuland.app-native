@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTimeRange,
@@ -9,18 +8,13 @@ import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const CLEventRow = ({
-    colors,
-    event,
-}: {
-    colors: Colors
-
-    event: CLEvents
-}): JSX.Element => {
+const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     let begin = null
     if (event.begin !== null) {
@@ -38,26 +32,13 @@ const CLEventRow = ({
     return (
         <RowEntry
             title={event.title}
-            colors={colors}
             onPress={onPressRow}
             leftChildren={
                 <>
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.leftText1,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.leftText1} numberOfLines={2}>
                         {event.organizer}
                     </Text>
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.labelColor,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.leftText2} numberOfLines={2}>
                         {formatFriendlyDateTimeRange(begin, end)}
                     </Text>
                 </>
@@ -65,12 +46,7 @@ const CLEventRow = ({
             rightChildren={
                 <>
                     <View style={styles.rightContainer}>
-                        <Text
-                            style={{
-                                ...styles.rightText,
-                                color: colors.labelColor,
-                            }}
-                        >
+                        <Text style={styles.rightText}>
                             {begin != null && (
                                 <>
                                     {end != null && begin < new Date()
@@ -89,14 +65,16 @@ const CLEventRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     leftText1: {
         fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
+        color: theme.colors.labelColor,
     },
     leftText2: {
         fontSize: 13,
+        color: theme.colors.labelColor,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -106,7 +84,8 @@ const styles = StyleSheet.create({
     rightText: {
         fontSize: 14,
         fontWeight: '400',
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export default CLEventRow

@@ -21,7 +21,6 @@ const Avatar = ({
 }: {
     size?: number
     background: ColorValue
-
     children: JSX.Element
 }): JSX.Element => {
     const avatarSize: StyleProp<ViewStyle> = {

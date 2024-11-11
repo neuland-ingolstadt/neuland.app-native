@@ -1,25 +1,18 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Separator(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
-    return (
-        <View
-            style={{
-                ...styles.separator,
-                backgroundColor: colors.border,
-            }}
-        />
-    )
+    return <View style={styles.separator} />
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     separator: {
         marginLeft: 50 + 12,
         height: 1,
         marginVertical: 13,
+        backgroundColor: theme.colors.border,
     },
-})
+}))

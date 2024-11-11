@@ -1,5 +1,4 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
-import { type Colors } from '@/components/colors'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -17,14 +16,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Pressable,
-    SafeAreaView,
-    SectionList,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Pressable, SafeAreaView, SectionList, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import ErrorView from '../Error/ErrorView'
 // @ts-expect-error no types
@@ -55,6 +48,7 @@ export default function TimetableList({
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
     const { t } = useTranslation('timetable')
+    const { styles } = useStyles(stylesheet)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -77,9 +71,6 @@ export default function TimetableList({
     /**
      * Colors
      */
-    const colors = theme.colors as Colors
-    const primaryColor = colors.primary
-    const inversePrimary = inverseColor(primaryColor)
 
     /**
      * Constants
@@ -115,25 +106,11 @@ export default function TimetableList({
         const isToday = formatISODate(title) === formatISODate(today)
 
         return (
-            <View
-                style={{
-                    backgroundColor: colors.background,
-                    ...styles.sectionView,
-                }}
-            >
-                <Text
-                    style={{
-                        ...styles.sectionTitle,
-                        color: isToday ? colors.primary : colors.text,
-                    }}
-                >
+            <View style={styles.sectionView}>
+                <Text style={styles.sectionTitle(isToday)}>
                     {formatFriendlyDate(title, { weekday: 'long' })}
                 </Text>
-                <Divider
-                    color={colors.labelTertiaryColor}
-                    iosPaddingLeft={16}
-                    width={'100%'}
-                />
+                <Divider iosPaddingLeft={16} width={'100%'} />
             </View>
         )
     }
@@ -143,7 +120,7 @@ export default function TimetableList({
     }
 
     function renderItemSeparator(): JSX.Element {
-        return <Divider color={colors.border} iosPaddingLeft={16} />
+        return <Divider color={styles.divider.color} iosPaddingLeft={16} />
     }
     function renderTimetableItem({
         item,
@@ -169,54 +146,31 @@ export default function TimetableList({
                     <View style={styles.eventWrapper}>
                         <LinearGradient
                             colors={[
-                                colors.primary,
-                                getLineColor(colors.primary),
+                                styles.primary.color,
+                                getLineColor(styles.primary.color),
                             ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
                             style={{
-                                backgroundColor: colors.primary,
+                                backgroundColor: styles.primary.color,
                                 ...styles.indicator,
                             }}
                         />
                         <View style={styles.nameView}>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.titleText,
-                                }}
-                                numberOfLines={1}
-                            >
+                            <Text style={styles.titleText} numberOfLines={1}>
                                 {item.name}
                             </Text>
                             <View style={styles.itemRow}>
-                                <Text
-                                    style={{
-                                        color: colors.labelColor,
-                                        ...styles.descriptionText,
-                                    }}
-                                >
+                                <Text style={styles.descriptionText}>
                                     {item.rooms?.join(', ')}
                                 </Text>
                             </View>
                         </View>
                         <View>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    fontVariant: ['tabular-nums'],
-                                    ...styles.descriptionText,
-                                }}
-                            >
+                            <Text style={styles.time}>
                                 {formatFriendlyTime(item.startDate)}
                             </Text>
-                            <Text
-                                style={{
-                                    color: colors.labelColor,
-                                    fontVariant: ['tabular-nums'],
-                                    ...styles.descriptionText,
-                                }}
-                            >
+                            <Text style={styles.time2}>
                                 {formatFriendlyTime(item.endDate)}
                             </Text>
                         </View>
@@ -248,48 +202,31 @@ export default function TimetableList({
                     <View style={styles.eventWrapper}>
                         <LinearGradient
                             colors={[
-                                inversePrimary,
-                                getLineColor(inversePrimary),
+                                styles.inversePrimary.color,
+                                getLineColor(styles.inversePrimary.color),
                             ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
                             style={{
-                                backgroundColor: inversePrimary,
+                                backgroundColor: styles.inversePrimary.color,
                                 ...styles.indicator,
                             }}
                         />
                         <View style={styles.nameView}>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.titleText,
-                                }}
-                                numberOfLines={2}
-                            >
+                            <Text style={styles.titleText} numberOfLines={2}>
                                 {t('cards.calendar.exam', {
                                     ns: 'navigation',
                                     name: exam.name,
                                 })}
                             </Text>
                             <View style={styles.itemRow}>
-                                <Text
-                                    style={{
-                                        color: colors.labelColor,
-                                        ...styles.descriptionText,
-                                    }}
-                                >
+                                <Text style={styles.descriptionText}>
                                     {exam.seat ?? exam.rooms}
                                 </Text>
                             </View>
                         </View>
                         <View>
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    fontVariant: ['tabular-nums'],
-                                    ...styles.descriptionText,
-                                }}
-                            >
+                            <Text style={styles.time}>
                                 {formatFriendlyTime(exam.date)}
                             </Text>
                         </View>
@@ -341,7 +278,7 @@ export default function TimetableList({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     itemRow: {
         flexDirection: 'row',
         gap: 4,
@@ -351,12 +288,14 @@ const styles = StyleSheet.create({
         paddingTop: PAGE_PADDING,
         marginBottom: 8,
         gap: 6,
+        backgroundColor: theme.colors.background,
     },
-    sectionTitle: {
+    sectionTitle: (isToday: boolean) => ({
         fontSize: 15,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-    },
+        color: isToday ? theme.colors.primary : theme.colors.text,
+    }),
     pageView: {
         flex: 1,
     },
@@ -378,9 +317,21 @@ const styles = StyleSheet.create({
     titleText: {
         fontWeight: '500',
         fontSize: 16,
+        color: theme.colors.text,
     },
     descriptionText: {
         fontSize: 15,
+        color: theme.colors.labelColor,
+    },
+    time: {
+        fontSize: 15,
+        fontVariant: ['tabular-nums'],
+        color: theme.colors.text,
+    },
+    time2: {
+        fontSize: 15,
+        fontVariant: ['tabular-nums'],
+        color: theme.colors.labelColor,
     },
     sectionFooter: {
         height: 20,
@@ -392,4 +343,13 @@ const styles = StyleSheet.create({
     pressable: {
         paddingVertical: 8,
     },
-})
+    divider: {
+        color: theme.colors.border,
+    },
+    primary: {
+        color: theme.colors.primary,
+    },
+    inversePrimary: {
+        color: inverseColor(theme.colors.primary),
+    },
+}))

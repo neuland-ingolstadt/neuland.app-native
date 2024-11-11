@@ -7,6 +7,7 @@ import {
     StyleSheet,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface DividerProps {
     width?: DimensionValue
@@ -28,25 +29,27 @@ const Divider: FC<DividerProps> = ({
     position,
     iosPaddingLeft,
 }) => {
-    const styles = StyleSheet.create({
-        container: {
-            width: '100%',
-            alignSelf:
-                position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
-            paddingLeft: Platform.OS === 'android' ? 0 : (iosPaddingLeft ?? 0),
-        },
-        line: {
-            width: width ?? '100%',
-            borderBottomColor: color ?? 'grey',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-        },
-    })
+    const { styles } = useStyles(stylesheet)
 
     return (
-        <View style={styles.container}>
-            <View style={styles.line} />
+        <View style={styles.container({ position, iosPaddingLeft })}>
+            <View style={styles.line({ width, color })} />
         </View>
     )
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+    container: ({ position, iosPaddingLeft }) => ({
+        width: '100%',
+        alignSelf:
+            position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
+        paddingLeft: Platform.OS === 'android' ? 0 : (iosPaddingLeft ?? 0),
+    }),
+    line: ({ width, color }) => ({
+        width: width ?? '100%',
+        borderBottomColor: color ?? theme.colors.labelTertiaryColor,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    }),
+}))
 
 export default Divider

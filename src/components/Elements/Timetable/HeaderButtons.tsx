@@ -1,15 +1,14 @@
-import { type Colors } from '@/components/colors'
 import { PreferencesContext } from '@/components/contexts'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
 export function HeaderLeft(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { timetableMode, setTimetableMode } = useContext(PreferencesContext)
     const marginRight = Platform.OS === 'ios' ? 0 : 10
     const { t } = useTranslation(['accessibility'])
@@ -28,7 +27,6 @@ export function HeaderLeft(): JSX.Element {
             accessibilityLabel={t('button.timetableMode')}
         >
             <PlatformIcon
-                color={colors.text}
                 ios={{
                     name:
                         timetableMode === 'list'
@@ -43,6 +41,7 @@ export function HeaderLeft(): JSX.Element {
                             : 'event_note',
                     size: 24,
                 }}
+                style={styles.icon}
             />
         </Pressable>
     )
@@ -53,7 +52,7 @@ interface HeaderRightProps {
 }
 
 export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['accessibility'])
     return (
         <Pressable
@@ -62,7 +61,6 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
             accessibilityLabel={t('button.timetableBack')}
         >
             <PlatformIcon
-                color={colors.text}
                 ios={{
                     name: 'arrow.uturn.left',
                     size: 22,
@@ -71,7 +69,14 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
                     name: 'keyboard_return',
                     size: 24,
                 }}
+                style={styles.icon}
             />
         </Pressable>
     )
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+    icon: {
+        color: theme.colors.text,
+    },
+}))

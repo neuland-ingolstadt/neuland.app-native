@@ -1,13 +1,11 @@
 import { Avatar } from '@/components/Elements/Settings'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import { getItem } from 'expo-secure-store'
@@ -18,16 +16,16 @@ import {
     Alert,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
 } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 import { getDeviceType } from 'react-native-device-info'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const IndexHeaderRight = (): JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
@@ -113,81 +111,84 @@ export const IndexHeaderRight = (): JSX.Element => {
         children,
     }: {
         children: JSX.Element
-    }): JSX.Element => (
-        <ContextMenu
-            disabled={getDeviceType() === 'Desktop'}
-            actions={[
-                ...(userKind === 'student'
-                    ? [
-                          {
-                              title: t('navigation.profile'),
-                              subtitle: persData?.vname + ' ' + persData?.name,
-                              systemIcon:
-                                  Platform.OS === 'ios'
-                                      ? 'person.crop.circle'
-                                      : undefined,
-                          },
-                      ]
-                    : []),
-                {
-                    title: t('navigation.accent'),
-                    systemIcon:
-                        Platform.OS === 'ios' ? 'paintpalette' : undefined,
-                },
-                {
-                    title: t('navigation.about'),
-                    systemIcon:
-                        Platform.OS === 'ios' ? 'info.circle' : undefined,
-                },
-                ...(userKind !== 'guest'
-                    ? [
-                          {
-                              title: 'Logout',
-                              systemIcon:
-                                  Platform.OS === 'ios'
-                                      ? 'person.fill.xmark'
-                                      : undefined,
-                              destructive: true,
-                          },
-                      ]
-                    : []),
-                ...(userKind === 'guest'
-                    ? [
-                          {
-                              title: t('menu.guest.title', {
-                                  ns: 'settings',
-                              }),
-                              systemIcon:
-                                  Platform.OS === 'ios'
-                                      ? 'person.fill.questionmark'
-                                      : undefined,
-                          },
-                      ]
-                    : []),
-            ]}
-            onPress={(e) => {
-                if (e.nativeEvent.name === t('navigation.profile')) {
-                    router.push('profile')
-                } else if (e.nativeEvent.name === t('navigation.accent')) {
-                    router.push('accent')
-                } else if (e.nativeEvent.name === t('navigation.about')) {
-                    router.push('about')
-                } else if (e.nativeEvent.name === 'Logout') {
-                    logoutAlert()
-                } else if (
-                    e.nativeEvent.name ===
-                    t('menu.guest.title', { ns: 'settings' })
-                ) {
-                    router.push('login')
-                }
-            }}
-            onPreviewPress={() => {
-                router.navigate('settings')
-            }}
-        >
-            {children}
-        </ContextMenu>
-    )
+    }): JSX.Element => {
+        return (
+            <ContextMenu
+                disabled={getDeviceType() === 'Desktop'}
+                actions={[
+                    ...(userKind === 'student'
+                        ? [
+                              {
+                                  title: t('navigation.profile'),
+                                  subtitle:
+                                      persData?.vname + ' ' + persData?.name,
+                                  systemIcon:
+                                      Platform.OS === 'ios'
+                                          ? 'person.crop.circle'
+                                          : undefined,
+                              },
+                          ]
+                        : []),
+                    {
+                        title: t('navigation.accent'),
+                        systemIcon:
+                            Platform.OS === 'ios' ? 'paintpalette' : undefined,
+                    },
+                    {
+                        title: t('navigation.about'),
+                        systemIcon:
+                            Platform.OS === 'ios' ? 'info.circle' : undefined,
+                    },
+                    ...(userKind !== 'guest'
+                        ? [
+                              {
+                                  title: 'Logout',
+                                  systemIcon:
+                                      Platform.OS === 'ios'
+                                          ? 'person.fill.xmark'
+                                          : undefined,
+                                  destructive: true,
+                              },
+                          ]
+                        : []),
+                    ...(userKind === 'guest'
+                        ? [
+                              {
+                                  title: t('menu.guest.title', {
+                                      ns: 'settings',
+                                  }),
+                                  systemIcon:
+                                      Platform.OS === 'ios'
+                                          ? 'person.fill.questionmark'
+                                          : undefined,
+                              },
+                          ]
+                        : []),
+                ]}
+                onPress={(e) => {
+                    if (e.nativeEvent.name === t('navigation.profile')) {
+                        router.push('profile')
+                    } else if (e.nativeEvent.name === t('navigation.accent')) {
+                        router.push('accent')
+                    } else if (e.nativeEvent.name === t('navigation.about')) {
+                        router.push('about')
+                    } else if (e.nativeEvent.name === 'Logout') {
+                        logoutAlert()
+                    } else if (
+                        e.nativeEvent.name ===
+                        t('menu.guest.title', { ns: 'settings' })
+                    ) {
+                        router.push('login')
+                    }
+                }}
+                onPreviewPress={() => {
+                    router.navigate('settings')
+                }}
+            >
+                {children}
+            </ContextMenu>
+        )
+    }
 
     return (
         <Pressable
@@ -203,10 +204,10 @@ export const IndexHeaderRight = (): JSX.Element => {
         >
             <PlatformMenu>
                 {userKind === USER_EMPLOYEE ? (
-                    <Avatar size={28} background={colors.primary}>
+                    <Avatar size={28} background={styles.primary.color}>
                         <Text
                             style={{
-                                color: getContrastColor(colors.primary),
+                                color: getContrastColor(styles.primary.color),
                                 ...styles.iconText,
                             }}
                             numberOfLines={1}
@@ -217,7 +218,6 @@ export const IndexHeaderRight = (): JSX.Element => {
                     </Avatar>
                 ) : userKind === USER_GUEST || isError ? (
                     <PlatformIcon
-                        color={colors.text}
                         ios={{
                             name: 'person.crop.circle',
                             size: 24,
@@ -226,12 +226,12 @@ export const IndexHeaderRight = (): JSX.Element => {
                             name: 'account_circle',
                             size: 26,
                         }}
+                        style={styles.icon}
                     />
                 ) : userKind === USER_STUDENT &&
                   isSuccess &&
                   persData?.mtknr === undefined ? (
                     <PlatformIcon
-                        color={colors.text}
                         ios={{
                             name: 'person.crop.circle.badge.exclamationmark',
                             size: 24,
@@ -240,12 +240,13 @@ export const IndexHeaderRight = (): JSX.Element => {
                             name: 'account_circle_off',
                             size: 26,
                         }}
+                        style={styles.icon}
                     />
                 ) : initials !== '' || !showLoadingIndicator ? (
-                    <Avatar size={28} background={colors.primary}>
+                    <Avatar size={28} background={styles.primary.color}>
                         <Text
                             style={{
-                                color: getContrastColor(colors.primary),
+                                color: getContrastColor(styles.primary.color),
                                 ...styles.iconText,
                             }}
                             numberOfLines={1}
@@ -256,7 +257,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                     </Avatar>
                 ) : (
                     <ActivityIndicator
-                        color={colors.text}
+                        color={styles.icon.color}
                         size="small"
                         style={styles.center}
                     />
@@ -266,7 +267,7 @@ export const IndexHeaderRight = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     iconText: {
         fontSize: 13,
         fontWeight: 'bold',
@@ -275,4 +276,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-})
+    primary: {
+        color: theme.colors.primary,
+    },
+    icon: {
+        color: theme.colors.text,
+    },
+}))

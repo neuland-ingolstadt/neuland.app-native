@@ -1,7 +1,6 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React, { type ReactNode } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface NameBoxProps {
     children: ReactNode
@@ -26,27 +25,18 @@ const NameBox = ({
     subTitle1,
     subTitle2,
 }: NameBoxProps): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
         <>
             {children}
             <View style={styles.container}>
-                <Text
-                    style={{
-                        ...styles.title,
-                        color: colors.text,
-                    }}
-                    numberOfLines={1}
-                >
+                <Text style={styles.title} numberOfLines={1}>
                     {title}
                 </Text>
 
                 <Text
-                    style={{
-                        ...styles.subtitle,
-                        color: colors.text,
-                    }}
+                    style={styles.subtitle}
                     numberOfLines={2}
                     allowFontScaling={true}
                 >
@@ -54,13 +44,7 @@ const NameBox = ({
                 </Text>
 
                 {subTitle2 !== '' && (
-                    <Text
-                        style={{
-                            ...styles.subtitle,
-                            color: colors.text,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.subtitle} numberOfLines={2}>
                         {subTitle2}
                     </Text>
                 )}
@@ -71,16 +55,18 @@ const NameBox = ({
 
 export default NameBox
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     subtitle: {
         fontSize: 12,
         overflow: 'hidden',
         lineHeight: 14,
+        color: theme.colors.text,
     },
     title: {
         fontWeight: 'bold',
         fontSize: 18,
         overflow: 'hidden',
+        color: theme.colors.text,
     },
     container: {
         maxWidth: '92%',
@@ -89,4 +75,4 @@ const styles = StyleSheet.create({
         marginLeft: 16,
         justifyContent: 'center',
     },
-})
+}))

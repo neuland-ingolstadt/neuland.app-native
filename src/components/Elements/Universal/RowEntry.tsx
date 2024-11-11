@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { type DimensionValue, Pressable, Text, View } from 'react-native'
@@ -6,7 +5,6 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
     title,
-    colors,
     leftChildren,
     rightChildren,
     onPress,
@@ -15,7 +13,6 @@ const RowEntry = ({
     icon,
 }: {
     title: string
-    colors: Colors
     leftChildren: JSX.Element
     rightChildren: JSX.Element
     onPress?: () => void

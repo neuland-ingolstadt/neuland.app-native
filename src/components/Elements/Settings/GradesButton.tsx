@@ -1,16 +1,14 @@
-import { type Colors } from '@/components/colors'
 import { handleBiometricAuth } from '@/utils/app-utils'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { Pressable, Text } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
 const GradesButton = (): JSX.Element => {
-    const theme = useTheme()
     const { t } = useTranslation('settings')
-    const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <Pressable
             onPress={() => {
@@ -18,16 +16,10 @@ const GradesButton = (): JSX.Element => {
             }}
             style={styles.gradesRow}
         >
-            <Text
-                style={{
-                    color: colors.text,
-                    ...styles.gradesText,
-                }}
-            >
+            <Text style={styles.gradesText}>
                 {t('profile.formlist.grades.button')}
             </Text>
             <PlatformIcon
-                color={colors.labelSecondaryColor}
                 ios={{
                     name: 'book',
                     size: 15,
@@ -36,13 +28,13 @@ const GradesButton = (): JSX.Element => {
                     name: 'bar_chart_4_bars',
                     size: 18,
                 }}
-                style={styles.iconAlign}
+                style={styles.icon}
             />
         </Pressable>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     gradesRow: {
         flexDirection: 'row',
         flex: 1,
@@ -52,10 +44,12 @@ const styles = StyleSheet.create({
     gradesText: {
         flex: 1,
         fontSize: 16,
+        color: theme.colors.text,
     },
-    iconAlign: {
+    icon: {
         alignSelf: 'center',
+        color: theme.colors.labelSecondaryColor,
     },
-})
+}))
 
 export default GradesButton
