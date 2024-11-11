@@ -14,12 +14,14 @@ import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
+    const { styles } = useStyles(stylesheet)
     const colors = useTheme().colors as Colors
     const {
         selectedRestaurants,
@@ -144,12 +146,7 @@ const FoodCard = (): JSX.Element => {
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
-                        <Text
-                            style={[
-                                styles.emptyMenu,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.emptyMenu}>
                             {t('dashboard.empty')}
                         </Text>
                     )}
@@ -157,20 +154,14 @@ const FoodCard = (): JSX.Element => {
                         <React.Fragment key={index}>
                             <View style={styles.mealEntry}>
                                 <Text
-                                    style={[
-                                        styles.mealTitle,
-                                        { color: colors.text },
-                                    ]}
+                                    style={styles.mealTitle}
                                     numberOfLines={2}
                                 >
                                     {meal.name}
                                 </Text>
                                 {meal.price != null && (
                                     <Text
-                                        style={[
-                                            styles.mealPrice,
-                                            { color: colors.labelColor },
-                                        ]}
+                                        style={styles.mealPrice}
                                         numberOfLines={1}
                                     >
                                         {meal.price}
@@ -188,7 +179,7 @@ const FoodCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     listView: {
         gap: 8,
         paddingTop: 12,
@@ -198,9 +189,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         flexGrow: 1,
         flexShrink: 1,
+        color: theme.colors.text,
     },
     mealPrice: {
         fontSize: 15,
+        color: theme.colors.labelColor,
     },
     mealEntry: {
         flexDirection: 'row',
@@ -209,7 +202,8 @@ const styles = StyleSheet.create({
     emptyMenu: {
         fontWeight: '500',
         fontSize: 16,
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export default FoodCard

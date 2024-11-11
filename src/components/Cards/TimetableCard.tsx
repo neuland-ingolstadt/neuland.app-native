@@ -12,11 +12,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const TimetableCard: React.FC = () => {
+    const { styles } = useStyles(stylesheet)
     const colors = useTheme().colors as Colors
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
@@ -114,17 +116,10 @@ const TimetableCard: React.FC = () => {
 
         return (
             <View key={index}>
-                <Text
-                    style={{ ...styles.eventTitle, color: colors.text }}
-                    numberOfLines={1}
-                >
+                <Text style={styles.eventTitle} numberOfLines={1}>
                     {event.name}
                 </Text>
-                <Text
-                    style={{ ...styles.eventDetails, color: colors.labelColor }}
-                >
-                    {eventText}
-                </Text>
+                <Text style={styles.eventDetails}>{eventText}</Text>
                 {index < filteredTimetable.length - 1 && (
                     <>
                         <View style={styles.divider} />
@@ -153,12 +148,12 @@ const TimetableCard: React.FC = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     calendarView: { gap: 8 },
     cardsFilled: { paddingTop: 12 },
-    eventTitle: { fontWeight: '500', fontSize: 16 },
-    eventDetails: { fontSize: 15 },
+    eventTitle: { fontWeight: '500', fontSize: 16, color: theme.colors.text },
+    eventDetails: { fontSize: 15, color: theme.colors.labelColor },
     divider: { height: 10 },
-})
+}))
 
 export default TimetableCard

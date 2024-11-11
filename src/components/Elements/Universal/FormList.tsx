@@ -1,16 +1,8 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { type FormListSections, type SectionGroup } from '@/types/components'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import {
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-    type ViewStyle,
-} from 'react-native'
+import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
 
@@ -29,38 +21,17 @@ interface RenderSectionFrameProps {
 interface RenderSectionItemProps {
     sectionIndex: number
     section: FormListSections
-    colors: {
-        card: string
-        text: string
-    }
 }
 
 const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
     sectionIndex,
     section,
-    colors,
 }) => {
+    const { styles } = useStyles(stylesheet)
     return (
         <View key={sectionIndex} style={styles.block}>
-            <View
-                style={[
-                    styles.blockCard,
-                    styles.itemBlock,
-                    {
-                        backgroundColor: colors.card,
-                    },
-                ]}
-            >
-                <Text
-                    style={[
-                        styles.columnDetails,
-                        {
-                            color: colors.text,
-                        },
-                    ]}
-                >
-                    {section.item}
-                </Text>
+            <View style={(styles.blockCard, styles.itemBlock)}>
+                <Text style={styles.columnDetails}>{section.item}</Text>
             </View>
         </View>
     )
@@ -72,30 +43,13 @@ const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
     footer,
     header,
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
+
     return (
         <View key={sectionIndex} style={styles.block}>
-            {header != null && (
-                <Text
-                    style={[
-                        styles.blockHeader,
-                        { color: colors.labelSecondaryColor },
-                    ]}
-                >
-                    {header}
-                </Text>
-            )}
+            {header != null && <Text style={styles.blockHeader}>{header}</Text>}
             {children}
-            {footer != null && (
-                <Text
-                    style={[
-                        styles.blockFooter,
-                        { color: colors.labelSecondaryColor },
-                    ]}
-                >
-                    {footer}
-                </Text>
-            )}
+            {footer != null && <Text style={styles.blockFooter}>{footer}</Text>}
         </View>
     )
 }
@@ -104,10 +58,10 @@ const RenderSectionItems: React.FC<{
     items: SectionGroup[]
     rowStyle?: ViewStyle
 }> = ({ items, rowStyle }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
-        <View style={[styles.blockCard, { backgroundColor: colors.card }]}>
+        <View style={styles.blockCard}>
             {items.map((item, index) => (
                 <React.Fragment key={index}>
                     <Pressable
@@ -128,14 +82,7 @@ const RenderSectionItems: React.FC<{
                             }}
                         >
                             {item.title != null && (
-                                <Text
-                                    style={[
-                                        styles.rowTitle,
-                                        {
-                                            color: colors.text,
-                                        },
-                                    ]}
-                                >
+                                <Text style={styles.rowTitle}>
                                     {item.title}
                                 </Text>
                             )}
@@ -149,7 +96,7 @@ const RenderSectionItems: React.FC<{
                                         {
                                             color:
                                                 item.textColor ??
-                                                colors.labelColor,
+                                                styles.labelColor.color,
                                             fontWeight:
                                                 item.fontWeight ?? 'normal',
                                         },
@@ -161,10 +108,6 @@ const RenderSectionItems: React.FC<{
                             )}
                             {item.icon != null && (
                                 <PlatformIcon
-                                    color={
-                                        item.iconColor ??
-                                        colors.labelSecondaryColor
-                                    }
                                     ios={{
                                         name: item.icon.ios,
                                         fallback: item.icon.iosFallback,
@@ -184,6 +127,9 @@ const RenderSectionItems: React.FC<{
                                         marginLeft: item.value != null ? 6 : 0,
                                         marginTop:
                                             Platform.OS === 'android' ? 2 : 0,
+                                        color:
+                                            item.iconColor ??
+                                            styles.labelColor.color,
                                     }}
                                 />
                             )}
@@ -192,7 +138,7 @@ const RenderSectionItems: React.FC<{
 
                     {index < items.length - 1 && (
                         <Divider
-                            color={colors.labelTertiaryColor}
+                            color={styles.labelTertiaryColor.color}
                             iosPaddingLeft={16}
                         />
                     )}
@@ -207,7 +153,7 @@ const RenderSectionItems: React.FC<{
  * @returns {JSX.Element} - A React component that renders the list of forms.
  */
 const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
         <View style={styles.wrapper}>
@@ -234,7 +180,6 @@ const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
                         <RenderSectionItem
                             sectionIndex={sectionIndex}
                             section={section}
-                            colors={colors}
                         />
                     </RenderSectionFrame>
                 ) : null
@@ -243,7 +188,7 @@ const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     wrapper: {
         width: '100%',
         gap: 16,
@@ -255,13 +200,16 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
+        color: theme.colors.labelSecondaryColor,
     },
     blockCard: {
         borderRadius: 8,
+        backgroundColor: theme.colors.card,
     },
     itemBlock: {
         paddingHorizontal: 16,
         paddingVertical: 13,
+        backgroundColor: theme.colors.card,
     },
     cardRow: {
         flexDirection: 'row',
@@ -278,12 +226,14 @@ const styles = StyleSheet.create({
     blockFooter: {
         fontSize: 12,
         fontWeight: '400',
+        color: theme.colors.labelSecondaryColor,
     },
     rowTitle: {
         fontSize: 16,
         flexGrow: 1,
         flexShrink: 1,
         flexWrap: 'wrap',
+        color: theme.colors.text,
     },
     rowDetails: {
         textAlign: 'right',
@@ -294,7 +244,17 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         paddingTop: 2,
         fontSize: 16,
+        color: theme.colors.text,
     },
-})
+    labelColor: {
+        color: theme.colors.labelColor,
+    },
+    labelSecondaryColor: {
+        color: theme.colors.labelSecondaryColor,
+    },
+    labelTertiaryColor: {
+        color: theme.colors.labelTertiaryColor,
+    },
+}))
 
 export default FormList

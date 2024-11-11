@@ -79,6 +79,7 @@
     "react-native-select-dropdown": "^4.0.1",
     "react-native-shimmer": "0.6.0",
     "react-native-svg": "15.2.0",
+    "react-native-unistyles": "^2.11.0",
     "react-native-view-shot": "^3.8.0",
     "react-native-webview": "13.8.6",
     "react-native-week-view": "0.30.0",

@@ -1,12 +1,13 @@
 import { type MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
-import { type ColorValue, Platform, StyleSheet, Text } from 'react-native'
+import { type ColorValue, Platform, Text } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
 interface PlatformIconProps {
-    color: string | ColorValue
+    color?: string | ColorValue
 
     android: {
         name: MaterialIcon | CommunityIcon
@@ -55,6 +56,7 @@ const PlatformIcon = ({
     ios,
     style,
 }: PlatformIconProps): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     if (Platform.OS === 'ios') {
         return (ios.fallback ?? false) ? (
             <MaterialCommunityIcons
@@ -62,7 +64,7 @@ const PlatformIcon = ({
                     ios.name as typeof MaterialCommunityIcons.defaultProps.name
                 }
                 size={ios.size}
-                color={color}
+                color={style?.color ?? styles.defaultColor.color}
                 style={{
                     width: ios.size,
                     height: ios.size,
@@ -75,7 +77,7 @@ const PlatformIcon = ({
                 name={ios.name as SystemName}
                 size={ios.size}
                 colors={[
-                    color as string,
+                    style?.color ?? styles.defaultColor.color,
                     ...(ios.additionalColor != null
                         ? [ios.additionalColor]
                         : []),
@@ -124,7 +126,7 @@ const communityIcons: string[] = ['instagram', 'github']
 
 export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     androidIcon: {
         paddingTop: 3,
     },
@@ -140,4 +142,7 @@ const styles = StyleSheet.create({
     iosFallbackOffset: {
         marginRight: -2,
     },
-})
+    defaultColor: {
+        color: theme.colors.primary,
+    },
+}))

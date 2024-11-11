@@ -1,7 +1,6 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Platform, Pressable, StyleSheet } from 'react-native'
+import { Platform, Pressable } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
 
@@ -12,20 +11,16 @@ interface ShareButtonProps {
 export default function ShareHeaderButton({
     onPress,
 }: ShareButtonProps): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
         <Pressable
             onPress={() => {
                 void onPress()
             }}
-            style={{
-                backgroundColor: colors.background,
-                ...styles.shareButton,
-            }}
+            style={styles.shareButton}
         >
             <PlatformIcon
-                color={colors.primary}
                 ios={{
                     name: 'square.and.arrow.up',
                     size: 16,
@@ -48,7 +43,7 @@ export default function ShareHeaderButton({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     shareButton: {
         marginRight: -5,
         borderRadius: 25,
@@ -57,5 +52,6 @@ const styles = StyleSheet.create({
         height: 34,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: theme.colors.background,
     },
-})
+}))

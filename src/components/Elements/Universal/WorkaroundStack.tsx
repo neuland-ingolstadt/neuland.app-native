@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export interface WorkaroundStackProps {
     name: string
@@ -44,7 +45,7 @@ function WorkaroundStack({
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()
-
+    const { styles } = useStyles(stylesheet)
     // When using the native stack on Android, the header button is invisible. This is another workaround in the workaround.
     if (Platform.OS === 'android' && androidFallback) {
         return (
@@ -58,6 +59,11 @@ function WorkaroundStack({
                             titleKey
                         ),
                         headerRight: headerRightElement as any,
+                        headerStyle: {
+                            backgroundColor:
+                                styles.headerBackground.backgroundColor,
+                        },
+                        headerTitleStyle: { color: styles.headerStyle.color },
                     }}
                     initialParams={params}
                 />
@@ -76,14 +82,13 @@ function WorkaroundStack({
                     headerShown: true,
                     headerLargeTitle: Platform.OS === 'ios' && largeTitle,
                     headerRight: headerRightElement,
-
-                    ...(Platform.OS === 'ios' && transparent
-                        ? {
-                              headerTransparent: true,
-                              headerBlurEffect: 'prominent',
-                          }
-                        : {}),
+                    headerLargeStyle: styles.headerBackground,
+                    headerStyle: styles.headerBackground,
                     headerSearchBarOptions,
+                    contentStyle: styles.background,
+                    headerTitleStyle: {
+                        color: styles.headerStyle.color,
+                    },
                 }}
                 component={component}
                 initialParams={params}
@@ -91,5 +96,9 @@ function WorkaroundStack({
         </Stack.Navigator>
     )
 }
-
+const stylesheet = createStyleSheet((theme) => ({
+    headerStyle: { color: theme.colors.text },
+    headerBackground: { backgroundColor: theme.colors.card },
+    background: { backgroundColor: theme.colors.background },
+}))
 export default WorkaroundStack

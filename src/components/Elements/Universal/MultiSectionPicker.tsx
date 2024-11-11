@@ -1,8 +1,7 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
 
@@ -29,7 +28,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
     selectedItems,
     action,
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
         <>
@@ -45,12 +44,9 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                         ]}
                     >
                         <View style={styles.container}>
-                            <Text style={[styles.text, { color: colors.text }]}>
-                                {item.title}
-                            </Text>
+                            <Text style={styles.text}>{item.title}</Text>
                             {selectedItems.includes(item.key) ? (
                                 <PlatformIcon
-                                    color={colors.primary}
                                     ios={{
                                         name: 'checkmark',
                                         size: 15,
@@ -67,7 +63,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                     </Pressable>
                     {index < elements.length - 1 && (
                         <Divider
-                            color={colors.labelTertiaryColor}
+                            color={styles.divider.color}
                             iosPaddingLeft={16}
                         />
                     )}
@@ -77,7 +73,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -89,7 +85,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         paddingVertical: 1,
+        color: theme.colors.text,
     },
-})
+    divider: {
+        color: theme.colors.labelTertiaryColor,
+    },
+}))
 
 export default MultiSectionPicker

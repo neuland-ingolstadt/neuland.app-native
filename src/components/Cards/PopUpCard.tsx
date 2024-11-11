@@ -1,12 +1,11 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import { type Colors } from '@/components/colors'
 import i18n from '@/localization/i18n'
 import { type Announcement } from '@/types/neuland-api'
 import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Linking, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Elements/Universal/Icon'
 import { DashboardContext } from '../contexts'
@@ -18,8 +17,8 @@ interface PopUpCardProps {
 const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
     const { hiddenAnnouncements, hideAnnouncement } =
         useContext(DashboardContext)
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
+    const { styles } = useStyles(stylesheet)
 
     if (data === undefined) {
         return <></>
@@ -45,18 +44,10 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
                     void Linking.openURL(filtered[0].url)
                 }
             }}
-            style={[
-                styles.card,
-                {
-                    marginHorizontal: PAGE_PADDING,
-                    borderColor: colors.border,
-                    backgroundColor: colors.card,
-                },
-            ]}
+            style={styles.card}
         >
             <View style={styles.titleView}>
                 <PlatformIcon
-                    color={colors.primary}
                     ios={{
                         name: 'megaphone.fill',
                         size: 18,
@@ -66,7 +57,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
                         size: 24,
                     }}
                 />
-                <Text style={[styles.title, { color: colors.text }]}>
+                <Text style={styles.title}>
                     {/* @ts-expect-error cannot verify that title is a valid key */}
                     {filtered[0].title[i18n.language]}
                 </Text>
@@ -77,7 +68,6 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
                     hitSlop={10}
                 >
                     <PlatformIcon
-                        color={colors.labelColor}
                         ios={{
                             name: 'xmark',
                             size: 16,
@@ -86,15 +76,16 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
                             name: 'close',
                             size: 26,
                         }}
+                        style={styles.closeIcon}
                     />
                 </Pressable>
             </View>
-            <Text style={{ color: colors.text, ...styles.description }}>
+            <Text style={styles.description}>
                 {/* @ts-expect-error cannot verify that description is a valid key */}
                 {filtered[0].description[i18n.language]}
             </Text>
             {filtered[0].url !== null && filtered[0].url !== '' ? (
-                <Text style={{ color: colors.labelColor, ...styles.footer }}>
+                <Text style={styles.footer}>
                     {t('cards.announcements.readMore')}
                 </Text>
             ) : (
@@ -106,11 +97,12 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     title: {
         fontSize: 16,
         fontWeight: '500',
         flex: 1,
+        color: theme.colors.text,
     },
     titleView: {
         flexDirection: 'row',
@@ -121,18 +113,26 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingTop: CARD_PADDING,
         paddingHorizontal: CARD_PADDING,
+        marginHorizontal: PAGE_PADDING,
         paddingBottom: 14,
         marginVertical: 6,
+        borderColor: theme.colors.border,
+        backgroundColor: theme.colors.card,
     },
     description: {
         marginTop: 10,
         fontSize: 15,
+        color: theme.colors.text,
     },
     footer: {
         marginTop: 10,
         fontSize: 11,
         textAlign: 'right',
+        color: theme.colors.labelColor,
     },
-})
+    closeIcon: {
+        color: theme.colors.labelColor,
+    },
+}))
 
 export default PopUpCard

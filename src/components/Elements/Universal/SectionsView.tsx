@@ -1,8 +1,7 @@
-import { type Colors } from '@/components/colors'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const SectionView = ({
     title,
@@ -15,48 +14,22 @@ const SectionView = ({
     children: JSX.Element
     link?: { text: string; destination: () => void }
 }): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             <View style={styles.sectionContainer}>
                 {title !== '' && title !== undefined && (
-                    <Text
-                        style={[
-                            styles.labelText,
-                            {
-                                color: colors.labelSecondaryColor,
-                            },
-                        ]}
-                    >
-                        {title}
-                    </Text>
+                    <Text style={styles.labelText}>{title}</Text>
                 )}
-                <View
-                    style={[
-                        styles.sectionBox,
-                        {
-                            backgroundColor: colors.card,
-                        },
-                    ]}
-                >
-                    {children}
-                </View>
+                <View style={styles.sectionBox}>{children}</View>
             </View>
             {footer != null && (
-                <Text
-                    style={[
-                        styles.footerText,
-                        { color: colors.labelSecondaryColor },
-                    ]}
-                >
+                <Text style={styles.footerText(false)}>
                     {footer}
                     {link != null && (
                         <Text
                             onPress={link.destination}
-                            style={[
-                                styles.footerText,
-                                { color: colors.primary },
-                            ]}
+                            style={styles.footerText(true)}
                         >
                             {' '}
                             {link.text}
@@ -68,17 +41,19 @@ const SectionView = ({
     )
 }
 
-const styles = StyleSheet.create({
-    footerText: {
+const stylesheet = createStyleSheet((theme) => ({
+    footerText: (isLink: boolean) => ({
         marginTop: 6,
         fontSize: 12.5,
         paddingHorizontal: PAGE_PADDING,
-    },
+        color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor,
+    }),
     labelText: {
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
         marginBottom: 4,
+        color: theme.colors.labelSecondaryColor,
     },
     sectionContainer: {
         marginTop: 16,
@@ -92,7 +67,8 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 2,
         justifyContent: 'center',
+        backgroundColor: theme.colors.card,
     },
-})
+}))
 
 export default SectionView

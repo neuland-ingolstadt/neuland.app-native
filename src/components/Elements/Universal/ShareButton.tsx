@@ -1,8 +1,7 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
 
@@ -13,19 +12,11 @@ interface ShareButtonProps {
 export default function ShareButton({
     onPress,
 }: ShareButtonProps): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
     return (
-        <Pressable
-            style={[
-                {
-                    backgroundColor: colors.card,
-                },
-                styles.shareButton,
-            ]}
-            onPress={onPress}
-        >
+        <Pressable style={styles.shareButton} onPress={onPress}>
             <View style={styles.shareContent}>
                 <PlatformIcon
                     ios={{
@@ -36,29 +27,31 @@ export default function ShareButton({
                         name: 'share',
                         size: 18,
                     }}
-                    color={colors.primary}
                 />
 
-                <Text style={[{ color: colors.primary }, styles.shareText]}>
-                    {t('misc.share')}
-                </Text>
+                <Text style={styles.shareText}>{t('misc.share')}</Text>
             </View>
         </Pressable>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     shareButton: {
         alignSelf: 'center',
         paddingHorizontal: 45,
         paddingVertical: 12,
         borderRadius: 8,
         marginTop: 5,
+        backgroundColor: theme.colors.card,
     },
     shareContent: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
     },
-    shareText: { fontSize: 17, alignItems: 'flex-end' },
-})
+    shareText: {
+        fontSize: 17,
+        alignItems: 'flex-end',
+        color: theme.colors.primary,
+    },
+}))

@@ -5,11 +5,13 @@ import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
 
@@ -24,31 +26,23 @@ const EventsCard = (): JSX.Element => {
         <BaseCard title="events" onPressRoute="clEvents">
             {Boolean(isSuccess) && data !== undefined && (
                 <View
-                    style={{
-                        ...styles.calendarView,
-                        ...(data.length > 0 && styles.calendarFilled),
-                    }}
+                    style={[
+                        styles.calendarView,
+                        data.length > 0 && styles.calendarFilled,
+                    ]}
                 >
                     {data.slice(0, 2).map((event, index, slicedData) => (
                         <React.Fragment key={index}>
                             <View>
                                 <View>
                                     <Text
-                                        style={[
-                                            styles.eventTitle,
-                                            {
-                                                color: colors.text,
-                                            },
-                                        ]}
+                                        style={styles.eventTitle}
                                         numberOfLines={1}
                                     >
                                         {event.title}
                                     </Text>
                                     <Text
-                                        style={[
-                                            styles.eventDetails,
-                                            { color: colors.labelColor },
-                                        ]}
+                                        style={styles.eventDetails}
                                         numberOfLines={1}
                                     >
                                         {t('cards.events.by', {
@@ -69,7 +63,7 @@ const EventsCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     calendarView: {
         gap: 8,
         paddingTop: 12,
@@ -80,10 +74,12 @@ const styles = StyleSheet.create({
     eventTitle: {
         fontWeight: '500',
         fontSize: 16,
+        color: theme.colors.text,
     },
     eventDetails: {
         fontSize: 15,
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export default EventsCard

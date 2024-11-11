@@ -1,7 +1,6 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
 
@@ -33,7 +32,7 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
     selectedItem,
     action,
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             <React.Fragment>
@@ -47,12 +46,9 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
                     ]}
                 >
                     <View style={styles.container}>
-                        <Text style={[styles.text, { color: colors.text }]}>
-                            {title}
-                        </Text>
+                        <Text style={styles.text}>{title}</Text>
                         {selectedItem ? (
                             <PlatformIcon
-                                color={colors.primary}
                                 ios={{
                                     name: 'checkmark',
                                     size: 15,
@@ -72,7 +68,7 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 
 export default SingleSectionPicker
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -84,5 +80,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         paddingVertical: 1,
+        color: theme.colors.text,
     },
-})
+}))

@@ -1,8 +1,7 @@
-import { type Colors } from '@/components/colors'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const ToggleRow = ({
     items,
@@ -13,8 +12,7 @@ const ToggleRow = ({
     selectedElement: number
     setSelectedElement: (element: number) => void
 }): JSX.Element => {
-    const colors = useTheme().colors as Colors // Make sure to replace `Colors` with the actual type of your colors
-
+    const { styles } = useStyles(stylesheet)
     return (
         <View style={styles.buttonRow}>
             {items.map((item, index) => {
@@ -25,26 +23,11 @@ const ToggleRow = ({
                                 setSelectedElement(index)
                             }}
                         >
-                            <View
-                                style={[
-                                    styles.buttonContainer,
-                                    {
-                                        backgroundColor: colors.card,
-                                        shadowColor: colors.text,
-                                    },
-                                ]}
-                            >
+                            <View style={styles.buttonContainer}>
                                 <Text
-                                    style={{
-                                        color:
-                                            selectedElement === index
-                                                ? colors.primary
-                                                : colors.text,
-
-                                        ...(selectedElement === index
-                                            ? styles.textSelected
-                                            : styles.textNotSelected),
-                                    }}
+                                    style={styles.text(
+                                        selectedElement === index
+                                    )}
                                 >
                                     {item}{' '}
                                 </Text>
@@ -57,7 +40,7 @@ const ToggleRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     textSelected: {
         fontWeight: '500',
         fontSize: 15,
@@ -65,6 +48,13 @@ const styles = StyleSheet.create({
     textNotSelected: {
         fontWeight: 'normal',
         fontSize: 15,
+    },
+    text(selected: boolean) {
+        return {
+            fontWeight: selected ? '500' : 'normal',
+            color: selected ? theme.colors.primary : theme.colors.text,
+            fontSize: 15,
+        }
     },
     buttonRow: {
         flexDirection: 'row',
@@ -91,7 +81,9 @@ const styles = StyleSheet.create({
 
         paddingHorizontal: PAGE_PADDING,
         paddingVertical: 10,
+        backgroundColor: theme.colors.card,
+        shadowColor: theme.colors.text,
     },
-})
+}))
 
 export default ToggleRow

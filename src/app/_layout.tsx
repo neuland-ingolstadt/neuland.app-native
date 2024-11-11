@@ -4,6 +4,7 @@ import { type Colors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
 import { getStatusBarStyle } from '@/utils/ui-utils'
 import { useTheme } from '@react-navigation/native'
@@ -16,6 +17,7 @@ import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -75,7 +77,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
+    const { styles } = useStyles(stylesheet)
     const colors = useTheme().colors as Colors
     const isOsDark = useColorScheme() === 'dark'
 
@@ -104,6 +106,10 @@ function RootLayout(): JSX.Element {
                         Platform.OS === 'android',
                         isOsDark
                     ),
+                    contentStyle: styles.background,
+                    headerStyle: styles.headerBackground,
+                    headerTintColor: styles.headerTintColor.color,
+                    headerTitleStyle: styles.headerTextStyle,
                     // Android
                     statusBarTranslucent: true,
                 }}
@@ -504,3 +510,9 @@ const ProviderComponent = (): JSX.Element => {
 }
 
 export default ProviderComponent
+const stylesheet = createStyleSheet((theme) => ({
+    headerTextStyle: { color: theme.colors.text },
+    headerTintColor: { color: theme.colors.primary },
+    headerBackground: { backgroundColor: theme.colors.card },
+    background: { backgroundColor: theme.colors.background },
+}))

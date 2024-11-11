@@ -1,13 +1,8 @@
 import { type Colors } from '@/components/colors'
 import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
-import {
-    type DimensionValue,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { type DimensionValue, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
     title,
@@ -29,6 +24,7 @@ const RowEntry = ({
     backgroundColor?: string
     icon?: JSX.Element
 }): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     return (
         <Pressable onPress={onPress}>
             <View style={{ ...styles.eventContainer, backgroundColor }}>
@@ -41,7 +37,7 @@ const RowEntry = ({
                     <View style={styles.titleContainer}>
                         {icon}
                         <Text
-                            style={{ ...styles.titleText, color: colors.text }}
+                            style={styles.titleText}
                             numberOfLines={2}
                             textBreakStrategy="highQuality"
                         >
@@ -57,11 +53,11 @@ const RowEntry = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     titleText: {
         fontSize: 16,
         fontWeight: '600',
-
+        color: theme.colors.text,
         marginBottom: 1,
     },
     eventContainer: {
@@ -78,6 +74,6 @@ const styles = StyleSheet.create({
         maxWidth: '70%',
     },
     titleContainer: { flexDirection: 'row', gap: 4, paddingBottom: 2 },
-})
+}))
 
 export default RowEntry
