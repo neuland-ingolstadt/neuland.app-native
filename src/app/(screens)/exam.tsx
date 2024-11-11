@@ -1,18 +1,17 @@
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { type Exam } from '@/types/utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ExamDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { examEntry } = useLocalSearchParams<{ examEntry: string }>()
     const exam: Exam | undefined =
         examEntry != null
@@ -90,14 +89,9 @@ export default function ExamDetail(): JSX.Element {
             style={styles.page}
             contentContainerStyle={styles.container}
         >
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
+            <View style={styles.titleContainer}>
                 <Text
-                    style={[styles.titleText, { color: colors.text }]}
+                    style={styles.titleText}
                     allowFontScaling={true}
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
@@ -109,15 +103,13 @@ export default function ExamDetail(): JSX.Element {
                 <FormList sections={sections} />
             </View>
             <View>
-                <Text style={[styles.notesText, { color: colors.labelColor }]}>
-                    {t('pages.exam.footer')}
-                </Text>
+                <Text style={styles.notesText}>{t('pages.exam.footer')}</Text>
             </View>
         </ScrollView>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         padding: PAGE_PADDING,
     },
@@ -136,13 +128,16 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
+        backgroundColor: theme.colors.card,
     },
     titleText: {
         fontSize: 18,
         textAlign: 'center',
+        color: theme.colors.text,
     },
     notesText: {
         textAlign: 'left',
         fontSize: 13,
+        color: theme.colors.labelColor,
     },
-})
+}))

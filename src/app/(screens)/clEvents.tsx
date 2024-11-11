@@ -1,7 +1,6 @@
 import ClEventsPage from '@/components/Elements/Events/ClEventsPage'
 import ClSportsPage from '@/components/Elements/Events/ClSportsPage'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
-import { type Colors } from '@/components/colors'
 import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,
@@ -9,16 +8,16 @@ import {
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { useQueries } from '@tanstack/react-query'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { Animated, View, useWindowDimensions } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): JSX.Element {
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
+    const { styles } = useStyles(stylesheet)
     const results = useQueries({
         queries: [
             {
@@ -68,7 +67,6 @@ export default function Events(): JSX.Element {
         >
             <Animated.View
                 style={{
-                    borderColor: colors.border,
                     borderBottomWidth: scrollY.interpolate({
                         inputRange: [0, 0, 1],
                         outputRange: [0, 0, 0.5],
@@ -108,11 +106,12 @@ export default function Events(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     pagerContainer: {
         flex: 1,
     },
     toggleContainer: {
         paddingBottom: 12,
+        borderColor: theme.colors.border,
     },
-})
+}))

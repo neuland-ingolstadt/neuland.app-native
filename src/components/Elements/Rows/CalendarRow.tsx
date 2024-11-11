@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { type Exam } from '@/types/utils'
@@ -56,13 +55,7 @@ const CalendarRow = ({ event }: { event: Calendar }): JSX.Element => {
     )
 }
 
-const ExamRow = ({
-    event,
-    colors,
-}: {
-    event: Exam
-    colors: Colors
-}): JSX.Element => {
+const ExamRow = ({ event }: { event: Exam }): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
     const navigateToPage = (): void => {
@@ -78,33 +71,15 @@ const ExamRow = ({
             title={event.name}
             leftChildren={
                 <>
-                    <Text
-                        style={{
-                            ...styles.mainText,
-                            color: colors.text,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.mainText1} numberOfLines={2}>
                         {formatFriendlyDateTime(event.date)}
                     </Text>
-                    <Text
-                        style={{
-                            ...styles.mainText,
-                            color: colors.labelColor,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.mainText2} numberOfLines={2}>
                         {`${t('pages.exam.details.room')}: ${
                             event.rooms ?? 'n/a'
                         }`}
                     </Text>
-                    <Text
-                        style={{
-                            ...styles.mainText,
-                            color: colors.labelColor,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.mainText2} numberOfLines={2}>
                         {`${t('pages.exam.details.seat')}: ${
                             event.seat ?? 'n/a'
                         }`}
@@ -140,9 +115,13 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '400',
         color: theme.colors.labelColor,
     },
-    mainText: {
+    mainText2: {
         fontSize: 13,
         color: theme.colors.labelColor,
+    },
+    mainText1: {
+        fontSize: 13,
+        color: theme.colors.text,
     },
 }))
 

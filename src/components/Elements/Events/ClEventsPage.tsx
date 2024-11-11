@@ -1,12 +1,10 @@
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import CLEventRow from '@/components/Elements/Rows/EventRow'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { type CLEvents } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { type UseQueryResult } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,16 +13,16 @@ import {
     Animated,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventsPage({
     clEventsResult,
 }: {
     clEventsResult: UseQueryResult<CLEvents[], Error>
 }): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
     const {
@@ -61,7 +59,10 @@ export default function ClEventsPage({
                 }
             >
                 {clEventsResult.isLoading ? (
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <ActivityIndicator
+                        size="small"
+                        color={styles.activityIndicator.color}
+                    />
                 ) : clEventsResult.isError ? (
                     <ErrorView
                         title={
@@ -75,34 +76,16 @@ export default function ClEventsPage({
                 ) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
                     <ErrorView title={networkError} inModal />
                 ) : (
-                    <View
-                        style={{
-                            backgroundColor: colors.card,
-                            ...styles.contentBorder,
-                        }}
-                    >
+                    <View style={styles.contentBorder}>
                         {clEventsResult.data != null &&
                         clEventsResult.data.length > 0 ? (
-                            <View
-                                style={{
-                                    backgroundColor: colors.card,
-                                    ...styles.contentBorder,
-                                }}
-                            >
+                            <View style={styles.contentBorder}>
                                 {clEventsResult.data?.map((event, index) => (
                                     <React.Fragment key={index}>
-                                        <CLEventRow
-                                            event={event}
-                                            colors={colors}
-                                        />
+                                        <CLEventRow event={event} />
                                         {index !==
                                             clEventsResult.data.length - 1 && (
-                                            <Divider
-                                                color={
-                                                    colors.labelTertiaryColor
-                                                }
-                                                iosPaddingLeft={16}
-                                            />
+                                            <Divider iosPaddingLeft={16} />
                                         )}
                                     </React.Fragment>
                                 ))}
@@ -128,7 +111,7 @@ export default function ClEventsPage({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
@@ -138,5 +121,9 @@ const styles = StyleSheet.create({
 
     contentBorder: {
         borderRadius: 8,
+        backgroundColor: theme.colors.card,
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+}))

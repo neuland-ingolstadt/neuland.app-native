@@ -1,13 +1,11 @@
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import SportsRow from '@/components/Elements/Rows/SportsRow'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { type UniversitySports } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { type UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
@@ -24,6 +22,7 @@ import {
     View,
 } from 'react-native'
 import Collapsible from 'react-native-collapsible'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
 
@@ -35,6 +34,7 @@ export default function ClSportsPage({
         Error
     >
 }): JSX.Element {
+    const { styles } = useStyles(stylesheet)
     const { userCampus } = useContext(UserKindContext)
     const [selectedLocation, setSelectedLocation] =
         useState<string>('Ingolstadt')
@@ -59,7 +59,6 @@ export default function ClSportsPage({
             .filter((section) => section.data.length > 0)
     }, [sportsResult.data, selectedLocation])
 
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('common')
     const locations = ['Ingolstadt', 'Neuburg']
 
@@ -113,16 +112,10 @@ export default function ClSportsPage({
                     hitSlop={{ top: 6, bottom: 6 }}
                 >
                     <View style={styles.categoryContainer}>
-                        <Text
-                            style={[
-                                styles.categoryText,
-                                { color: colors.text },
-                            ]}
-                        >
+                        <Text style={styles.categoryText}>
                             {t(`dates.weekdays.${title}`)}
                         </Text>
                         <PlatformIcon
-                            color={colors.primary}
                             ios={{
                                 name: collapsed ? 'chevron.down' : 'chevron.up',
                                 size: 13,
@@ -140,7 +133,7 @@ export default function ClSportsPage({
                     <View style={styles.contentContainer}>
                         {data.map((event, index) => (
                             <React.Fragment key={event.id}>
-                                <SportsRow event={event} colors={colors} />
+                                <SportsRow event={event} />
                                 {index < data.length - 1 && (
                                     <Divider iosPaddingLeft={16} />
                                 )}
@@ -158,16 +151,10 @@ export default function ClSportsPage({
         location: string
     }): JSX.Element => {
         const isSelected = selectedLocation === location
-        const fontWeight = isSelected ? '600' : undefined
-        const invisibleText = '#00000000'
 
         return (
             <Pressable
-                style={{
-                    borderColor: colors.border,
-                    ...styles.locationButtonContainer,
-                    backgroundColor: colors.card,
-                }}
+                style={styles.locationButtonContainer}
                 onPress={() => {
                     setSelectedLocation(location)
                     if (Platform.OS === 'ios') {
@@ -177,21 +164,8 @@ export default function ClSportsPage({
             >
                 <View style={styles.locationTextContainer}>
                     {/* Invisible text to reserve space */}
-                    <Text
-                        style={{
-                            color: invisibleText,
-                            ...styles.invisibleFont,
-                        }}
-                    >
-                        {location}
-                    </Text>
-                    <Text
-                        style={{
-                            color: isSelected ? colors.primary : colors.text,
-                            fontWeight,
-                            ...styles.locationText,
-                        }}
-                    >
+                    <Text style={styles.invisibleFont}>{location}</Text>
+                    <Text style={styles.locationText(isSelected)}>
                         {location}
                     </Text>
                 </View>
@@ -227,7 +201,10 @@ export default function ClSportsPage({
                 }
             >
                 {sportsResult.isLoading ? (
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <ActivityIndicator
+                        size="small"
+                        color={styles.activityIndicator.color}
+                    />
                 ) : sportsResult.isError ? (
                     <ErrorView
                         title={sportsResult.error?.message ?? t('error.title')}
@@ -240,14 +217,7 @@ export default function ClSportsPage({
                     <ErrorView title={networkError} inModal />
                 ) : (
                     <View>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.campusHeader,
-                            }}
-                        >
-                            {'Campus'}
-                        </Text>
+                        <Text style={styles.campusHeader}>{'Campus'}</Text>
                         <View style={styles.locationRow}>
                             {locations.map((location, index) => (
                                 <LocationButton
@@ -287,7 +257,7 @@ export default function ClSportsPage({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
@@ -317,6 +287,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingTop: 10,
         fontWeight: '600',
+        colors: theme.colors.text,
     },
     locationButtonContainer: {
         padding: 8,
@@ -325,6 +296,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 8,
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
     },
     locationRow: {
         flexDirection: 'row',
@@ -338,16 +311,23 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         verticalAlign: 'middle',
         fontSize: 16,
+        color: theme.colors.text,
     },
     invisibleFont: {
         fontWeight: '600',
+        color: '#00000000',
     },
-    locationText: {
+    locationText: (isSelect: boolean) => ({
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         textAlign: 'center',
-    },
+        fontWeight: isSelect ? '600' : undefined,
+        color: isSelect ? theme.colors.primary : theme.colors.text,
+    }),
     locationTextContainer: { position: 'relative', alignItems: 'center' },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+}))
