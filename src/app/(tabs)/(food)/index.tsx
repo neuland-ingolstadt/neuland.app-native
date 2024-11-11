@@ -198,7 +198,7 @@ export function FoodScreen(): JSX.Element {
                         />
                     ) : undefined
                 }
-                style={{ ...styles.page, backgroundColor: colors.background }}
+                style={{ ...styles.page }}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.container}
                 showsVerticalScrollIndicator={false}

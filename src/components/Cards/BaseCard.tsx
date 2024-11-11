@@ -116,6 +116,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                     name: 'chevron_right',
                                     size: 26,
                                 }}
+                                style={styles.labelColor}
                             />
                         )}
                     </View>

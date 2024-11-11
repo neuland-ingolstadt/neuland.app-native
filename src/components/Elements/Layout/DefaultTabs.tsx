@@ -5,14 +5,20 @@ import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet } from 'react-native'
+import { Platform } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
     const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const BlurTab = (): JSX.Element => (
         <BlurView
-            tint={theme.dark ? 'dark' : 'light'}
+            tint={UnistylesRuntime.themeName === 'dark' ? 'dark' : 'light'}
             intensity={75}
             style={styles.blurTab}
         />
@@ -22,10 +28,11 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
         <>
             <Tabs
                 screenOptions={{
-                    tabBarActiveTintColor: colors.primary,
+                    tabBarActiveTintColor: styles.active.color,
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
+
                     tabBarStyle: {
                         backgroundColor: colors.card,
                     },
@@ -36,9 +43,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     options={{
                         title: 'Home',
                         headerShown: false,
+
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
-                                color={color}
                                 ios={{
                                     name: 'house',
                                     variant: 'fill',
@@ -47,6 +54,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 android={{
                                     name: 'home',
                                     size,
+                                }}
+                                style={{
+                                    color,
                                 }}
                             />
                         ),
@@ -64,7 +74,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
-                                color={color}
                                 ios={{
                                     name: 'clock',
                                     variant: 'fill',
@@ -73,6 +82,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 android={{
                                     name: 'calendar_month',
                                     size,
+                                }}
+                                style={{
+                                    color,
                                 }}
                             />
                         ),
@@ -89,7 +101,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
-                                color={color}
                                 ios={{
                                     name: 'map',
                                     variant: 'fill',
@@ -98,6 +109,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 android={{
                                     name: 'map',
                                     size,
+                                }}
+                                style={{
+                                    color,
                                 }}
                             />
                         ),
@@ -111,7 +125,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                         headerShown: false,
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
-                                color={color}
                                 ios={{
                                     name: 'fork.knife',
                                     size: size - 2,
@@ -119,6 +132,9 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 android={{
                                     name: 'restaurant',
                                     size,
+                                }}
+                                style={{
+                                    color,
                                 }}
                             />
                         ),
@@ -133,7 +149,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     blurTab: {
         position: 'absolute',
         top: 0,
@@ -141,6 +157,11 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
-})
+    headerTextStyle: { color: theme.colors.text },
+    headerTintColor: { color: theme.colors.primary },
+    headerBackground: { backgroundColor: theme.colors.card },
+    background: { backgroundColor: theme.colors.background },
+    active: { color: theme.colors.primary },
+}))
 
 export default DefaultTabs

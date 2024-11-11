@@ -38,7 +38,7 @@ export default function HomeRootScreen(): JSX.Element {
 
             <View
                 style={{
-                    ...styles.page,
+                    ...styles.header,
                     paddingTop,
                 }}
             >
@@ -153,6 +153,11 @@ const stylesheet = createStyleSheet((theme) => ({
         flex: 1,
         backgroundColor: theme.colors.background,
     },
+    header: {
+        flex: 1,
+        backgroundColor: theme.colors.card,
+    },
+
     errorContainer: { paddingTop: 110, flex: 1 },
     item: {
         marginVertical: 6,
