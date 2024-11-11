@@ -1,17 +1,9 @@
-import { type Colors } from '@/components/colors'
 import { STATUS_URL } from '@/data/constants'
-import { useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const FeedbackButton = ({
     error,
@@ -21,7 +13,7 @@ export const FeedbackButton = ({
     crash: boolean
 }): JSX.Element => {
     const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const platform = Platform.OS
     const appVersion = `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`
     const subject = crash ? 'App-Crash' : 'App-Error'
@@ -34,23 +26,13 @@ export const FeedbackButton = ({
     }
     return (
         <Pressable
-            style={[
-                styles.container,
-                {
-                    backgroundColor: colors.background,
-                },
-            ]}
+            style={styles.container}
             onPress={() => {
                 sendMail()
             }}
         >
             <View style={styles.refreshButton}>
-                <Text
-                    style={{
-                        color: colors.text,
-                        ...styles.actionButtonText,
-                    }}
-                >
+                <Text style={styles.actionButtonText}>
                     {t('error.crash.feedback')}
                 </Text>
             </View>
@@ -60,27 +42,17 @@ export const FeedbackButton = ({
 
 export const StatusButton = (): JSX.Element => {
     const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
         <Pressable
-            style={[
-                styles.container,
-                {
-                    backgroundColor: colors.background,
-                },
-            ]}
+            style={styles.container}
             onPress={() => {
                 void Linking.openURL(STATUS_URL)
             }}
         >
             <View style={styles.refreshButton}>
-                <Text
-                    style={{
-                        color: colors.text,
-                        ...styles.actionButtonText,
-                    }}
-                >
+                <Text style={styles.actionButtonText}>
                     {t('error.crash.status')}
                 </Text>
             </View>
@@ -88,11 +60,12 @@ export const StatusButton = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         borderRadius: 10,
         alignItems: 'center',
         alignSelf: 'center',
+        backgroundColor: theme.colors.background,
     },
     refreshButton: {
         flexDirection: 'row',
@@ -104,5 +77,6 @@ const styles = StyleSheet.create({
     actionButtonText: {
         fontSize: 15,
         fontWeight: '600',
+        color: theme.colors.text,
     },
-})
+}))

@@ -1,10 +1,9 @@
-import { type Colors } from '@/components/colors'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { type ErrorBoundaryProps, usePathname } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LogoTextSVG from '../Flow/svgs/logoText'
 import PlatformIcon from '../Universal/Icon'
@@ -16,24 +15,11 @@ export const ErrorButton = ({
     onPress: () => void
 }): JSX.Element => {
     const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
-        <Pressable
-            style={[
-                styles.logoutContainer,
-                {
-                    backgroundColor: colors.card,
-                },
-            ]}
-            onPress={onPress}
-        >
+        <Pressable style={styles.logoutContainer} onPress={onPress}>
             <View style={styles.refreshButton}>
-                <Text
-                    style={{
-                        color: colors.primary,
-                        ...styles.refreshButtonText,
-                    }}
-                >
+                <Text style={styles.refreshButtonText}>
                     {t('error.crash.reload')}
                 </Text>
             </View>
@@ -45,7 +31,7 @@ export default function CrashView({
     error,
     retry,
 }: ErrorBoundaryProps): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()
     trackEvent('ErrorView', {
@@ -61,20 +47,10 @@ export default function CrashView({
     }
 
     return (
-        <View
-            style={{
-                backgroundColor: colors.background,
-                ...styles.flex,
-            }}
-        >
-            <View
-                style={{
-                    ...styles.innerContainer,
-                }}
-            >
+        <View style={styles.flex}>
+            <View style={styles.innerContainer}>
                 <View style={styles.topContainer}>
                     <PlatformIcon
-                        color={colors.primary}
                         ios={{
                             name: 'pc',
                             size: 80,
@@ -85,15 +61,10 @@ export default function CrashView({
                             size: 80,
                         }}
                     />
-                    <Text
-                        style={{
-                            ...styles.errorTitle,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.errorTitle}>
                         {t('error.crash.title')}
                     </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
+                    <Text style={styles.errorInfo}>
                         {t('error.crash.description')}
                     </Text>
                 </View>
@@ -102,15 +73,16 @@ export default function CrashView({
                 <ErrorButton onPress={handlePress} />
             </View>
             <View style={styles.logoContainer}>
-                <LogoTextSVG size={15} color={colors.labelSecondaryColor} />
+                <LogoTextSVG size={15} color={styles.logoColor.color} />
             </View>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     flex: {
         flex: 1,
+        backgroundColor: theme.colors.background,
     },
     topContainer: { alignItems: 'center', gap: 20 },
 
@@ -128,11 +100,13 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         marginTop: 8,
         textAlign: 'center',
+        color: theme.colors.text,
     },
     logoutContainer: {
         borderRadius: 10,
         alignItems: 'center',
         alignSelf: 'center',
+        backgroundColor: theme.colors.card,
     },
     refreshButton: {
         flexDirection: 'row',
@@ -143,14 +117,19 @@ const styles = StyleSheet.create({
     refreshButtonText: {
         fontSize: 16,
         fontWeight: '600',
+        color: theme.colors.primary,
     },
     errorInfo: {
         fontSize: 18,
         textAlign: 'center',
+        color: theme.colors.text,
     },
     logoContainer: {
         bottom: 30,
         position: 'absolute',
         alignSelf: 'center',
     },
-})
+    logoColor: {
+        color: theme.colors.labelSecondaryColor,
+    },
+}))

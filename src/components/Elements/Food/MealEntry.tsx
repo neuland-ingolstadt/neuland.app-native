@@ -1,5 +1,4 @@
 import { humanLocations, shareMeal } from '@/app/(screens)/meal'
-import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
@@ -15,15 +14,15 @@ import {
 } from '@/utils/food-utils'
 import { CARD_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // @ts-expect-error - no types available
 import DragDropView from '../Exclusive/DragView'
@@ -45,12 +44,12 @@ export const MealEntry = ({
     const { preferencesSelection, allergenSelection, foodLanguage } =
         useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
+    const { styles } = useStyles(stylesheet)
     const userAllergens = convertRelevantAllergens(
         meal.allergens ?? [],
         allergenSelection,
         i18n.language
     )
-    const colors = useTheme().colors as Colors
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
     const userFlags = convertRelevantFlags(
@@ -168,24 +167,10 @@ export const MealEntry = ({
                     onLongPress={() => {}}
                     style={styles.pressable}
                 >
-                    <View
-                        key={index}
-                        style={[
-                            styles.container,
-                            {
-                                backgroundColor: colors.card,
-                                shadowColor: colors.text,
-                            },
-                        ]}
-                    >
+                    <View key={index} style={styles.container}>
                         <View style={styles.innerContainer}>
                             <Text
-                                style={[
-                                    styles.Title,
-                                    {
-                                        color: colors.text,
-                                    },
-                                ]}
+                                style={styles.title}
                                 adjustsFontSizeToFit={true}
                                 numberOfLines={2}
                             >
@@ -199,20 +184,15 @@ export const MealEntry = ({
                                 <LinearGradient
                                     style={styles.variantContainer}
                                     colors={[
-                                        colors.labelBackground,
-                                        Color(colors.labelBackground)
+                                        styles.labelBackground.color,
+                                        Color(styles.labelBackground.color)
                                             .lighten(0.15)
                                             .hex(),
                                     ]}
                                     start={[0, 1]}
                                     end={[1, 0]}
                                 >
-                                    <Text
-                                        style={{
-                                            color: colors.text,
-                                            ...styles.variantText,
-                                        }}
-                                    >
+                                    <Text style={styles.variantText}>
                                         {'+ ' + meal.variants.length}
                                     </Text>
                                 </LinearGradient>
@@ -227,9 +207,11 @@ export const MealEntry = ({
                                                 key={index}
                                                 style={styles.flagsBox}
                                                 colors={[
-                                                    colors.labelBackground,
+                                                    styles.labelBackground
+                                                        .color,
                                                     Color(
-                                                        colors.labelBackground
+                                                        styles.labelBackground
+                                                            .color
                                                     )
                                                         .lighten(0.13)
                                                         .hex(),
@@ -237,14 +219,7 @@ export const MealEntry = ({
                                                 start={[0, 0]}
                                                 end={[1, 0]}
                                             >
-                                                <Text
-                                                    style={[
-                                                        styles.flagsText,
-                                                        {
-                                                            color: colors.text,
-                                                        },
-                                                    ]}
-                                                >
+                                                <Text style={styles.flagsText}>
                                                     {flag}
                                                 </Text>
                                             </LinearGradient>
@@ -264,15 +239,9 @@ export const MealEntry = ({
                                                 variant: 'outlined',
                                             }}
                                             style={styles.icon}
-                                            color={colors.notification}
                                         />
                                         <Text
-                                            style={[
-                                                styles.allergene,
-                                                {
-                                                    color: colors.notification,
-                                                },
-                                            ]}
+                                            style={styles.allergene}
                                             numberOfLines={3}
                                         >
                                             {textContent}
@@ -281,24 +250,14 @@ export const MealEntry = ({
                                 )}
                             </View>
                             <View style={styles.priceContainer}>
-                                <Text
-                                    style={[
-                                        styles.price,
-                                        { color: colors.text },
-                                    ]}
-                                >
+                                <Text style={styles.price}>
                                     {getUserSpecificPrice(
                                         meal,
                                         userKind ?? 'guest'
                                     )}
                                 </Text>
                                 {label !== '' && (
-                                    <Text
-                                        style={[
-                                            styles.priceLabel,
-                                            { color: colors.labelColor },
-                                        ]}
-                                    >
+                                    <Text style={styles.priceLabel}>
                                         {label}
                                     </Text>
                                 )}
@@ -311,7 +270,7 @@ export const MealEntry = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         padding: CARD_PADDING,
         width: '100%',
@@ -323,6 +282,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 1,
+        backgroundColor: theme.colors.card,
+        shadowColor: theme.colors.text,
     },
     innerContainer: {
         flexDirection: 'row',
@@ -331,10 +292,11 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     contextMenu: { zIndex: 3 },
-    Title: {
+    title: {
         fontWeight: '500',
         fontSize: 16,
         maxWidth: '88%',
+        color: theme.colors.text,
     },
     detailsContainer: {
         flexDirection: 'row',
@@ -364,6 +326,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         paddingHorizontal: 4,
         paddingVertical: 2,
+        color: theme.colors.text,
     },
     allergensContainer: {
         flexDirection: 'row',
@@ -383,10 +346,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         alignSelf: 'flex-end',
+        color: theme.colors.text,
     },
     priceLabel: {
         fontSize: 12,
         alignSelf: 'flex-end',
+        color: theme.colors.labelColor,
     },
     pressable: {
         marginTop: 8,
@@ -394,9 +359,11 @@ const styles = StyleSheet.create({
     icon: {
         marginRight: 4,
         alignSelf: 'center',
+        color: theme.colors.notification,
     },
     allergene: {
         fontSize: 12,
+        color: theme.colors.notification,
     },
     variantContainer: {
         borderRadius: 4,
@@ -409,5 +376,9 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         textAlign: 'center',
         textAlignVertical: 'center',
+        color: theme.colors.text,
     },
-})
+    labelBackground: {
+        color: theme.colors.labelBackground,
+    },
+}))

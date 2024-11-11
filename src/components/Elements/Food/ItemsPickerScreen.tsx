@@ -1,21 +1,17 @@
 import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
-import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
-import { useTheme } from '@react-navigation/native'
 import { useNavigation } from 'expo-router'
 import React, { useContext, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Platform, ScrollView, Text, View } from 'react-native'
 import {
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-    useColorScheme,
-} from 'react-native'
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 /*
  * Screen for selecting allergens or preferences
@@ -29,8 +25,8 @@ const ItemsPickerScreen = (params: {
     const data = type === 'allergens' ? allergenMap : flapMap
     const placeholderKey =
         type === 'allergens' ? 'allergensSearch' : 'flagsSearch'
-    const colors = useTheme().colors as Colors
-    const isDark = useColorScheme() === 'dark'
+    const isDark = UnistylesRuntime.themeName === 'dark'
+    const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('food')
     const [searchQuery, setSearchQuery] = useState<string>('')
 
@@ -62,11 +58,11 @@ const ItemsPickerScreen = (params: {
                 placeholder: t(`navigation.${placeholderKey}`, {
                     ns: 'navigation',
                 }),
-                textColor: colors.text,
+                textColor: styles.text.color,
                 ...Platform.select({
                     android: {
-                        headerIconColor: colors.text,
-                        hintTextColor: colors.text,
+                        headerIconColor: styles.text.color,
+                        hintTextColor: styles.text.color,
                     },
                 }),
                 shouldShowHintSearchIcon: false,
@@ -76,11 +72,11 @@ const ItemsPickerScreen = (params: {
                 },
             },
         })
-    }, [navigation, colors.text, isDark])
+    }, [navigation, isDark])
 
     return (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-            <View style={[styles.container, { backgroundColor: colors.card }]}>
+            <View style={styles.container}>
                 <MultiSectionPicker
                     elements={filteredEntries}
                     selectedItems={
@@ -96,14 +92,7 @@ const ItemsPickerScreen = (params: {
                 />
             </View>
             {filteredEntries.length === 0 && (
-                <Text
-                    style={[
-                        {
-                            color: colors.labelColor,
-                        },
-                        styles.filteredText,
-                    ]}
-                >
+                <Text style={styles.filteredText}>
                     {t(
                         // @ts-expect-error Translation key is dynamic
                         'empty.' + type
@@ -114,17 +103,21 @@ const ItemsPickerScreen = (params: {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
-
         width: '100%',
         justifyContent: 'center',
+        backgroundColor: theme.colors.card,
     },
     filteredText: {
         alignSelf: 'center',
         marginTop: 20,
+        color: theme.colors.labelColor,
     },
-})
+    text: {
+        color: theme.colors.text,
+    },
+}))
 
 export default ItemsPickerScreen

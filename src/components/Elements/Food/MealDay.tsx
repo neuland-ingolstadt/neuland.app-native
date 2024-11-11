@@ -1,10 +1,10 @@
 import { type Colors } from '@/components/colors'
 import { type Food, type Meal } from '@/types/neuland-api'
-import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, type StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 import { MealEntry } from './MealEntry'
@@ -51,7 +51,7 @@ const MealCategory = ({
     }
     const { t } = useTranslation('food')
 
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             <View key={category} style={styles.categoryContainerCollapsed}>
@@ -63,16 +63,10 @@ const MealCategory = ({
                     hitSlop={{ top: 6, bottom: 6 }}
                 >
                     <View style={styles.categoryContainer}>
-                        <Text
-                            style={[
-                                styles.categoryText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.categoryText}>
                             {t(`categories.${category}`, category)}
                         </Text>
                         <PlatformIcon
-                            color={colors.primary}
                             ios={{
                                 name: collapsed ? 'chevron.down' : 'chevron.up',
                                 size: 13,
@@ -164,6 +158,7 @@ export const MealDay = ({
         restaurantName: string
         meals: Meal[]
         groupedMeals: Record<string, Meal[]>
+        styles: StyleSheet.NamedStyles<any>
     }
 
     /**
@@ -177,16 +172,12 @@ export const MealDay = ({
         restaurantName,
         meals,
         groupedMeals,
+        styles,
     }: RestaurantProps): JSX.Element | null => {
         if (meals.length > 0) {
             return (
                 <View>
-                    <Text
-                        style={[
-                            styles.dayRestaurantTitle,
-                            { color: colors.text },
-                        ]}
-                    >
+                    <Text style={styles.dayRestaurantTitle}>
                         {restaurantName}
                     </Text>
                     <MealGroup group={groupedMeals} />
@@ -196,12 +187,11 @@ export const MealDay = ({
         return null
     }
     const { t } = useTranslation('food')
+    const { styles } = useStyles(stylesheet)
     return isEmpty ? (
         <>
             <View style={styles.emptyContainer}>
-                <Text style={{ ...styles.emptyText, color: colors.text }}>
-                    {t('dashboard.empty')}
-                </Text>
+                <Text style={styles.emptyText}>{t('dashboard.empty')}</Text>
             </View>
         </>
     ) : (
@@ -210,37 +200,42 @@ export const MealDay = ({
                 restaurantName: 'Mensa Ingolstadt',
                 meals: ingolstadtMensa,
                 groupedMeals: ingolstadtMensaGrouped,
+                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Theke Neuburg',
                 meals: neuburgMensa,
                 groupedMeals: neuburgMensaGrouped,
+                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Reimanns',
                 meals: reimanns,
                 groupedMeals: reimannsGrouped,
+                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Canisius Konvikt',
                 meals: canisius,
                 groupedMeals: canisiusGrouped,
+                styles,
             })}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     emptyContainer: {
         paddingTop: 40,
         alignItems: 'center',
     },
-    emptyText: { fontSize: 16 },
+    emptyText: { fontSize: 16, color: theme.colors.text },
     dayRestaurantTitle: {
         fontWeight: 'bold',
         fontSize: 18,
         paddingTop: 5,
         paddingBottom: 3,
+        color: theme.colors.text,
     },
     categoryContainer: {
         flexDirection: 'row',
@@ -252,10 +247,12 @@ const styles = StyleSheet.create({
     toggleIcon: {
         marginRight: 4,
         alignSelf: 'center',
+        color: theme.colors.primary,
     },
     categoryText: {
         fontSize: 15,
         fontWeight: '500',
+        color: theme.colors.labelColor,
     },
     categoryContainerCollapsed: { paddingBottom: 8 },
-})
+}))

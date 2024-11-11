@@ -1,8 +1,6 @@
-import { type Colors } from '@/components/colors'
 import { type MaterialIcon } from '@/types/material-icons'
 import { guestError, networkError, permissionError } from '@/utils/api-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { router, usePathname } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,10 +9,10 @@ import {
     Pressable,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 import StatusBox from './ActionBox'
@@ -40,7 +38,7 @@ export default function ErrorView({
     inModal?: boolean
     isCritical?: boolean
 }): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()
     const getIcon = (): MaterialIcon | any => {
@@ -143,24 +141,11 @@ export default function ErrorView({
         return (buttonProps != null || title === guestError) &&
             title !== permissionError ? (
             <Pressable
-                style={[
-                    styles.logoutContainer,
-                    {
-                        backgroundColor:
-                            (inModal ?? false)
-                                ? colors.background
-                                : colors.card,
-                    },
-                ]}
+                style={styles.logoutContainer(inModal ?? false)}
                 onPress={buttonProps?.onPress}
             >
                 <View style={styles.refreshButton}>
-                    <Text
-                        style={{
-                            color: colors.primary,
-                            ...styles.refreshButtonText,
-                        }}
-                    >
+                    <Text style={styles.refreshButtonText}>
                         {buttonProps?.text}
                     </Text>
                 </View>
@@ -182,19 +167,11 @@ export default function ErrorView({
                     <></>
                 )
             }
-            // eslint-disable-next-line react-native/no-inline-styles
-            contentContainerStyle={{
-                ...(inModal
-                    ? styles.innerContainerModal
-                    : styles.innerContainer),
-                backgroundColor: (inModal ?? false) ? colors.card : undefined,
-                borderRadius: (inModal ?? false) ? 10 : 0,
-            }}
+            contentContainerStyle={styles.container(inModal ?? false)}
         >
             <View style={styles.errorContainer}>
                 <View style={styles.topContainer}>
                     <PlatformIcon
-                        color={colors.primary}
                         ios={{
                             name: getIcon(),
                             size: 50,
@@ -207,25 +184,15 @@ export default function ErrorView({
                             size: 64,
                         }}
                     />
-                    <Text
-                        style={{
-                            ...styles.errorTitle,
-                            color: colors.text,
-                        }}
-                        selectable
-                    >
+                    <Text style={styles.errorTitle} selectable>
                         {getTitle().slice(0, 150)}
                     </Text>
-                    <Text style={[styles.errorInfo, { color: colors.text }]}>
-                        {getMessage()}
-                    </Text>
+                    <Text style={styles.errorInfo}>{getMessage()}</Text>
                 </View>
 
                 <ErrorButton />
                 {refreshing != null && title !== guestError && (
-                    <Text style={[styles.errorFooter, { color: colors.text }]}>
-                        {t('error.pull')}
-                    </Text>
+                    <Text style={styles.errorFooter}>{t('error.pull')}</Text>
                 )}
                 {showBox && (
                     <StatusBox error={new Error(title)} crash={false} />
@@ -235,19 +202,15 @@ export default function ErrorView({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     topContainer: { alignItems: 'center', gap: 20 },
-    innerContainerModal: {
+    container: (inModal: boolean) => ({
         paddingHorizontal: 25,
         flex: 1,
-        paddingTop: 50,
-        paddingBottom: 25,
-    },
-    innerContainer: {
-        paddingHorizontal: 25,
-        flex: 1,
-        paddingBottom: Platform.OS === 'ios' ? 50 : 0, // iOS has transparent tab bar so we need to add padding
-    },
+        paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0, // iOS has transparent tab bar so we need to add padding
+        backgroundColor: inModal ? theme.colors.card : undefined,
+        borderRadius: inModal ? 10 : 0,
+    }),
     errorContainer: {
         gap: 12,
         justifyContent: 'space-evenly',
@@ -260,14 +223,16 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         marginTop: 8,
         textAlign: 'center',
+        color: theme.colors.text,
     },
-    logoutContainer: {
+    logoutContainer: (inModal: boolean) => ({
         borderRadius: 10,
         marginBottom: 20,
         marginTop: 30,
         alignItems: 'center',
         alignSelf: 'center',
-    },
+        backgroundColor: inModal ? theme.colors.background : theme.colors.card,
+    }),
     refreshButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -277,17 +242,20 @@ const styles = StyleSheet.create({
     refreshButtonText: {
         fontSize: 16,
         fontWeight: '600',
+        color: theme.colors.primary,
     },
     errorInfo: {
         fontSize: 16,
         fontWeight: '500',
         textAlign: 'center',
         marginTop: 12,
+        color: theme.colors.text,
     },
     errorFooter: {
         fontSize: 16,
         textAlign: 'center',
         fontWeight: '600',
         marginTop: 16,
+        color: theme.colors.text,
     },
-})
+}))

@@ -1,15 +1,14 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
 export const FoodHeaderRight = (): JSX.Element => {
     const { t } = useTranslation(['accessibility'])
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <Pressable
             onPress={() => {
@@ -21,7 +20,6 @@ export const FoodHeaderRight = (): JSX.Element => {
         >
             <View>
                 <PlatformIcon
-                    color={colors.text}
                     ios={{
                         name: 'line.3.horizontal.decrease',
                         size: 22,
@@ -36,8 +34,11 @@ export const FoodHeaderRight = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
         marginHorizontal: 0,
     },
-})
+    icon: {
+        color: theme.colors.text,
+    },
+}))

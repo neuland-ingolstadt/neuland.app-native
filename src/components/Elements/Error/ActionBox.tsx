@@ -1,8 +1,7 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { FeedbackButton, StatusButton } from './ActionButtons'
 
@@ -13,35 +12,30 @@ export default function StatusBox({
     error: Error
     crash: boolean
 }): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     return (
-        <View
-            style={{
-                backgroundColor: colors.card,
-                ...styles.boxContainer,
-            }}
-        >
-            <Text style={[styles.errorDetail, { color: colors.text }]}>
-                {t('error.crash.steps')}
-            </Text>
+        <View style={styles.boxContainer}>
+            <Text style={styles.errorDetail}>{t('error.crash.steps')}</Text>
             <FeedbackButton error={error} crash={crash} />
             <StatusButton />
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     errorDetail: {
         fontSize: 17,
         textAlign: 'center',
         fontWeight: '500',
         paddingBottom: 30,
+        color: theme.colors.text,
     },
     boxContainer: {
         alignItems: 'center',
         gap: 15,
         borderRadius: 12,
         padding: 25,
+        backgroundColor: theme.colors.card,
     },
-})
+}))

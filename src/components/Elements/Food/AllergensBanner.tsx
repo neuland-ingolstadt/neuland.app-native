@@ -1,17 +1,10 @@
-import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/contexts'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { Animated, Text, TouchableOpacity, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -22,13 +15,11 @@ export const AllergensBanner = ({
 }): JSX.Element => {
     const { t } = useTranslation('common')
     const { initAllergenSelection } = useContext(FoodFilterContext)
-    const colors = useTheme().colors as Colors
-    const contrastTextColor = getContrastColor(colors.primary)
+    const { styles } = useStyles(stylesheet)
     return (
         <Animated.View
             style={{
                 ...styles.paddingContainer,
-                borderBottomColor: colors.border,
                 borderBottomWidth: scrollY.interpolate({
                     inputRange: [0, 0, 0],
                     outputRange: [0, 0, 0.5],
@@ -36,12 +27,7 @@ export const AllergensBanner = ({
                 }),
             }}
         >
-            <View
-                style={{
-                    backgroundColor: colors.primary,
-                    ...styles.bannerContainer,
-                }}
-            >
+            <View style={styles.bannerContainer}>
                 <TouchableOpacity
                     onPress={() => {
                         initAllergenSelection()
@@ -58,7 +44,7 @@ export const AllergensBanner = ({
                             name: 'close',
                             size: 20,
                         }}
-                        color={contrastTextColor}
+                        style={styles.contrastColor}
                     />
                 </TouchableOpacity>
                 <View>
@@ -67,23 +53,13 @@ export const AllergensBanner = ({
                             router.push('foodAllergens')
                         }}
                     >
-                        <Text
-                            style={{
-                                color: contrastTextColor,
-                                ...styles.bannerTitle,
-                            }}
-                        >
+                        <Text style={styles.bannerTitle}>
                             {t('navigation.allergens', {
                                 ns: 'navigation',
                             })}
                         </Text>
 
-                        <Text
-                            style={{
-                                color: contrastTextColor,
-                                ...styles.bannerText,
-                            }}
-                        >
+                        <Text style={styles.bannerText}>
                             {t('empty.config', { ns: 'food' })}
                         </Text>
                     </TouchableOpacity>
@@ -93,12 +69,13 @@ export const AllergensBanner = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     bannerContainer: {
         padding: 10,
         borderRadius: 8,
         marginTop: 2,
         marginBottom: 10,
+        backgroundColor: theme.colors.primary,
     },
     dismissButton: {
         position: 'absolute',
@@ -111,13 +88,19 @@ const styles = StyleSheet.create({
     bannerTitle: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: getContrastColor(theme.colors.primary),
     },
     bannerText: {
         marginTop: 3,
         fontSize: 14,
+        color: getContrastColor(theme.colors.primary),
     },
     paddingContainer: {
         paddingHorizontal: 12,
         borderBottomWidth: 0.5,
+        borderBottomColor: theme.colors.border,
     },
-})
+    contrastColor: {
+        color: getContrastColor(theme.colors.primary),
+    },
+}))
