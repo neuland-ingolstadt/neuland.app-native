@@ -153,7 +153,6 @@ const stylesheet = createStyleSheet((theme) => ({
         top: 0,
     },
     tabbarStyle: (blur: boolean) => ({
-        position: 'absolute',
         borderTopColor: theme.colors.border,
         backgroundColor: blur
             ? Platform.OS === 'ios'

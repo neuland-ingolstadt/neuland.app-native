@@ -192,6 +192,6 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     xIcon: {
         color:
-            UnistylesRuntime.colorScheme === 'dark' ? '#4a4a4aff' : '#b6b6b6ff',
+            UnistylesRuntime.colorScheme === 'dark' ? '#b6b6b6ff' : '#4a4a4aff',
     },
 }))

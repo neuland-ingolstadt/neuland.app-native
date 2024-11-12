@@ -582,6 +582,7 @@ const MapScreen = (): JSX.Element => {
                 zoomLevel: 16.5,
                 animationDuration: 400,
                 heading: 0,
+                animationMode: 'flyTo',
             })
             return
         }
@@ -593,6 +594,7 @@ const MapScreen = (): JSX.Element => {
             centerCoordinate: [longitude, adjustedLatitude],
             zoomLevel: 17,
             animationDuration: 500,
+            animationMode: 'flyTo',
         })
     }
 
@@ -611,8 +613,9 @@ const MapScreen = (): JSX.Element => {
                 zoomLevel: 16.5,
                 animationDuration: 500,
                 heading: 0,
+                animationMode: 'flyTo',
             })
-        } else if (clickedElement !== null && clickedElement.manual === false) {
+        } else if (clickedElement !== null) {
             setView(clickedElement)
         }
     }, [clickedElement])
@@ -760,7 +763,6 @@ const MapScreen = (): JSX.Element => {
                             clickedElement == null &&
                             !disableFollowUser
                         }
-                        triggerKey={cameraTriggerKey}
                         followUserMode={MapLibreGL.UserTrackingMode.Follow}
                     />
                     <MapLibreGL.UserLocation

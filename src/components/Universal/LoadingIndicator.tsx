@@ -10,7 +10,7 @@ const LoadingIndicator = ({ style }: LoadingIndicatorProps): JSX.Element => {
     const { theme } = useStyles()
     return (
         <ActivityIndicator
-            size="large"
+            size="small"
             color={theme.colors.primary}
             style={style}
         />
