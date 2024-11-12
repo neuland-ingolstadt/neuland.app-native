@@ -1,9 +1,12 @@
-import { type Colors } from '@/components/colors'
 import { MapContext } from '@/contexts/map'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React, { useContext } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -20,9 +23,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
     toggleShowAllFloors,
     setCameraTriggerKey,
 }): JSX.Element => {
-    const theme = useTheme()
-    const colors = theme.colors as Colors
-    const isDark = theme.dark
+    const { styles } = useStyles(stylesheet)
+    const isDark = UnistylesRuntime.themeName === 'dark'
     const { currentFloor, setCurrentFloor } = useContext(MapContext)
 
     return (
@@ -50,21 +52,12 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 >
                     <View
                         style={{
-                            ...styles.ButtonAreaSection,
-                            ...(!showAllFloors
-                                ? styles.borderWithNormal
-                                : styles.borderWidthEmpty),
-                            borderColor: colors.border,
-                            backgroundColor: colors.card,
+                            ...styles.buttonAreaSection,
+                            ...styles.borderWith(!showAllFloors),
                         }}
                     >
-                        <View style={styles.Button}>
-                            <Text
-                                style={{
-                                    ...styles.ButtonText,
-                                    color: colors.text,
-                                }}
-                            >
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText(true)}>
                                 {currentFloor?.floor === 'EG'
                                     ? '0'
                                     : currentFloor?.floor}
@@ -79,7 +72,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         toggleShowAllFloors()
                     }}
                 >
-                    <View style={styles.Button}>
+                    <View style={styles.button}>
                         <PlatformIcon
                             color={isDark ? '#b6b6b6ff' : '#4a4a4aff'}
                             ios={{
@@ -95,14 +88,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 </Pressable>
             )}
             {showAllFloors && (
-                <View
-                    style={[
-                        styles.ButtonAreaSection,
-                        {
-                            borderColor: colors.border,
-                        },
-                    ]}
-                >
+                <View style={styles.buttonAreaSection}>
                     {floors.map((floor, index) => (
                         <Pressable
                             onPress={() => {
@@ -115,29 +101,17 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         >
                             <View
                                 style={[
-                                    styles.Button,
-                                    // eslint-disable-next-line react-native/no-inline-styles
-                                    {
-                                        borderBottomColor: colors.border,
-                                        backgroundColor:
-                                            currentFloor?.floor === floor
-                                                ? colors.primary
-                                                : colors.card,
-                                        borderBottomWidth:
-                                            index === floors.length - 1 ? 0 : 1,
-                                    },
+                                    styles.button,
+                                    styles.buttonDynamically(
+                                        currentFloor?.floor === floor,
+                                        index === floors.length - 1
+                                    ),
                                 ]}
                             >
                                 <Text
-                                    style={[
-                                        styles.ButtonText,
-                                        {
-                                            color:
-                                                currentFloor?.floor === floor
-                                                    ? colors.background
-                                                    : colors.text,
-                                        },
-                                    ]}
+                                    style={styles.buttonText(
+                                        currentFloor?.floor === floor
+                                    )}
                                 >
                                     {floor === 'EG' ? '0' : floor}
                                 </Text>
@@ -155,15 +129,13 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 >
                     <View
                         style={{
-                            ...styles.ButtonAreaSection,
-                            ...styles.borderWithNormal,
-                            borderColor: colors.border,
-                            backgroundColor: colors.card,
+                            ...styles.buttonAreaSection,
+                            ...styles.borderWith(true),
                         }}
                     >
-                        <View style={styles.Button}>
+                        <View style={styles.button}>
                             <PlatformIcon
-                                color={colors.labelColor}
+                                style={styles.icon}
                                 ios={{
                                     name: 'location.fill',
                                     size: 18,
@@ -184,17 +156,21 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 
 export default FloorPicker
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     ButtonArea: {
         marginHorizontal: 8,
         marginTop: 110,
         position: 'absolute',
         right: 0,
     },
-    ButtonAreaSection: {
+    icon: {
+        color: theme.colors.labelColor,
+    },
+    buttonAreaSection: {
         borderRadius: 7,
         overflow: 'hidden',
         marginTop: 5,
+        borderColor: theme.colors.border,
         borderWidth: 1,
     },
     borderWidthEmpty: {
@@ -203,7 +179,11 @@ const styles = StyleSheet.create({
     borderWithNormal: {
         borderWidth: 1,
     },
-    Button: {
+    borderWith: (border: boolean) => ({
+        borderWidth: border ? 1 : 0,
+        backgroundColor: theme.colors.card,
+    }),
+    button: {
         width: 38,
         height: 38,
         alignContent: 'center',
@@ -211,8 +191,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
     },
-    ButtonText: {
+    buttonDynamically: (current: boolean, floor: boolean) => ({
+        borderBottomColor: theme.colors.border,
+        backgroundColor: current ? theme.colors.primary : theme.colors.card,
+        borderBottomWidth: floor ? 0 : 1,
+    }),
+    buttonText: (text: boolean) => ({
         fontWeight: '500',
         fontSize: 15,
-    },
-})
+        color: text ? theme.colors.text : theme.colors.background,
+    }),
+}))

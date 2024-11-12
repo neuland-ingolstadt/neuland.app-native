@@ -9,7 +9,6 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
 import FloorPicker from '@/components/Elements/Map/FloorPicker'
-import { type Colors } from '@/components/colors'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
@@ -63,7 +62,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
@@ -73,6 +71,11 @@ import Animated, {
     useSharedValue,
     withTiming,
 } from 'react-native-reanimated'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 import packageInfo from '../../../../package.json'
 import { modalSection } from './ModalSections'
@@ -81,8 +84,8 @@ const MapScreen = (): JSX.Element => {
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const theme = useTheme()
-    const colors = theme.colors as Colors
-    const isDark = theme.dark
+    const { styles } = useStyles(stylesheet)
+    const isDark = UnistylesRuntime.themeName === 'dark'
 
     const { userKind, userFaculty } = useContext(UserKindContext)
     const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
@@ -353,7 +356,7 @@ const MapScreen = (): JSX.Element => {
         )?.properties
 
         if (room == null) {
-            roomNotFoundToast(routeParams, colors.notification)
+            roomNotFoundToast(routeParams, styles.notification.color)
             updateRouteParams('')
             return
         }
@@ -693,25 +696,15 @@ const MapScreen = (): JSX.Element => {
         <View style={styles.container}>
             <>
                 {mapLoadState === LoadingState.ERROR && (
-                    <View
-                        style={{
-                            ...styles.errorContainer,
-                            backgroundColor: colors.background,
-                        }}
-                    >
+                    <View style={styles.errorContainer}>
                         <ErrorView title={t('error.map.mapLoadError')} />
                     </View>
                 )}
                 {mapLoadState === LoadingState.LOADING && (
-                    <View
-                        style={{
-                            ...styles.errorContainer,
-                            backgroundColor: colors.background,
-                        }}
-                    >
+                    <View style={styles.errorContainer}>
                         <ActivityIndicator
                             size="small"
-                            color={colors.primary}
+                            color={styles.activityIndicator.color}
                         />
                     </View>
                 )}
@@ -721,7 +714,9 @@ const MapScreen = (): JSX.Element => {
                 <MapLibreGL.MapView
                     style={styles.map}
                     tintColor={
-                        Platform.OS === 'ios' ? colors.primary : undefined
+                        Platform.OS === 'ios'
+                            ? styles.activeColor.color
+                            : undefined
                     }
                     logoEnabled={false}
                     styleURL={theme.dark ? darkStyle : lightStyle}
@@ -800,7 +795,7 @@ const MapScreen = (): JSX.Element => {
                                 // eslint-disable-next-line react-native/no-inline-styles
                                 style={{
                                     iconImage: 'map-marker',
-                                    iconColor: colors.primary,
+                                    iconColor: styles.activeColor.color,
                                     iconSize: 0.17,
                                     iconAnchor: 'bottom',
                                 }}
@@ -848,7 +843,7 @@ const MapScreen = (): JSX.Element => {
                                 id="availableRoomsFill"
                                 style={{
                                     ...layerStyles.availableRooms,
-                                    fillColor: colors.primary,
+                                    fillColor: styles.activeColor.color,
                                 }}
                                 layerIndex={102}
                             />
@@ -856,7 +851,7 @@ const MapScreen = (): JSX.Element => {
                                 id="availableRoomsOutline"
                                 style={{
                                     ...layerStyles.availableRoomsOutline,
-                                    lineColor: colors.primary,
+                                    lineColor: styles.activeColor.color,
                                 }}
                                 layerIndex={103}
                             />
@@ -922,7 +917,7 @@ const MapScreen = (): JSX.Element => {
 
 export default MapScreen
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         flex: 1,
     },
@@ -936,6 +931,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         position: 'absolute',
+        backgroundColor: theme.colors.background,
     },
     osmAtrribution: { fontSize: 13 },
     osmContainer: {
@@ -947,4 +943,13 @@ const styles = StyleSheet.create({
         zIndex: 99,
         position: 'absolute',
     },
-})
+    notification: {
+        color: theme.colors.notification,
+    },
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    activeColor: {
+        color: theme.colors.primary,
+    },
+}))

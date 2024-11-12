@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { PreferencesContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
@@ -11,7 +10,6 @@ import BottomSheet, {
     BottomSheetTextInput,
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import { selectionAsync } from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -29,12 +27,16 @@ import {
     Platform,
     Pressable,
     SectionList,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { type SharedValue } from 'react-native-reanimated'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
@@ -49,7 +51,7 @@ interface MapBottomSheetProps {
 }
 
 const AttributionLink: React.FC = () => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
     return (
@@ -62,16 +64,10 @@ const AttributionLink: React.FC = () => {
                 }}
                 style={styles.attributionLink}
             >
-                <Text
-                    style={{
-                        color: colors.labelColor,
-                        ...styles.attributionText,
-                    }}
-                >
+                <Text style={styles.attributionText}>
                     {t('pages.map.details.osm')}
                 </Text>
                 <PlatformIcon
-                    color={colors.labelColor}
                     ios={{
                         name: 'chevron.forward',
                         size: 11,
@@ -80,6 +76,7 @@ const AttributionLink: React.FC = () => {
                         name: 'chevron_right',
                         size: 16,
                     }}
+                    style={styles.label}
                 />
             </Pressable>
         </View>
@@ -93,9 +90,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     allRooms,
 }) => {
     const router = useRouter()
-    const theme = useTheme()
-    const colors = theme.colors as Colors
-    const isDark = theme.dark
+    const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('common')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const {
@@ -192,9 +187,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }, [localSearch])
     const textInputRef = useRef<any>(null)
     const [searchFocused, setSearchFocused] = React.useState(false)
-    const searchbarBackground = isDark
-        ? Color(colors.card).lighten(0.6).hex()
-        : Color(colors.card).darken(0.03).hex()
     const cancelWidth = useRef(new Animated.Value(0)).current
     const cancelOpacity = useRef(new Animated.Value(0)).current
 
@@ -237,13 +229,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                 <BottomSheetView style={styles.inputContainer}>
                     <BottomSheetTextInput
                         ref={textInputRef}
-                        style={{
-                            backgroundColor: searchbarBackground,
-                            ...styles.textInput,
-                            color: colors.text,
-                        }}
+                        style={styles.textInput}
                         placeholder={t('pages.map.search.hint')}
-                        placeholderTextColor={colors.labelColor}
+                        placeholderTextColor={styles.label.color}
                         value={localSearch}
                         enablesReturnKeyAutomatically
                         clearButtonMode="always"
@@ -278,10 +266,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             style={styles.cancelButton}
                         >
                             <Text
-                                style={{
-                                    color: colors.primary,
-                                    ...styles.cancelButtonText,
-                                }}
+                                style={styles.cancelButtonText}
                                 numberOfLines={1}
                                 allowFontScaling={false}
                                 ellipsizeMode="clip"
@@ -303,10 +288,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     }
                                 >
                                     <Text
-                                        style={{
-                                            color: colors.text,
-                                            ...styles.suggestionSectionHeader,
-                                        }}
+                                        style={styles.suggestionSectionHeader}
                                     >
                                         {t('pages.map.details.room.history')}
                                     </Text>
@@ -338,9 +320,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                         }}
                                                     >
                                                         <PlatformIcon
-                                                            color={
-                                                                colors.notification
-                                                            }
                                                             ios={{
                                                                 name: 'trash',
                                                                 size: 20,
@@ -349,26 +328,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                 name: 'delete',
                                                                 size: 24,
                                                             }}
+                                                            style={styles.toast}
                                                         />
                                                     </Pressable>
                                                 )}
                                             >
-                                                <View
-                                                    style={{
-                                                        ...styles.historyRow,
-                                                        backgroundColor:
-                                                            colors.card,
-                                                    }}
-                                                >
+                                                <View style={styles.historyRow}>
                                                     <ResultRow
                                                         result={history}
                                                         index={index}
-                                                        colors={colors}
                                                         handlePresentModalPress={
                                                             handlePresentModalPress
-                                                        }
-                                                        bottomSheetRef={
-                                                            bottomSheetRef
                                                         }
                                                         updateSearchHistory={
                                                             addToSearchHistory
@@ -390,13 +360,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     )}
 
                 {searchFocused && localSearch === '' && (
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.noResults,
-                            ...styles.searchHint,
-                        }}
-                    >
+                    <Text style={styles.searchHint}>
                         {t('pages.map.search.placeholder')}
                     </Text>
                 )}
@@ -436,11 +400,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 <ResultRow
                                     result={item}
                                     index={index}
-                                    colors={colors}
                                     handlePresentModalPress={
                                         handlePresentModalPress
                                     }
-                                    bottomSheetRef={bottomSheetRef}
                                     updateSearchHistory={addToSearchHistory}
                                 />
                             )}
@@ -449,23 +411,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             )}
                             stickySectionHeadersEnabled={false}
                             renderSectionHeader={({ section: { title } }) => (
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.header,
-                                    }}
-                                >
-                                    {title}
-                                </Text>
+                                <Text style={styles.header}>{title}</Text>
                             )}
                         />
                     ) : (
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.noResults,
-                            }}
-                        >
+                        <Text style={styles.noResults}>
                             {t('pages.map.search.noResults')}
                         </Text>
                     )
@@ -479,32 +429,19 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     }
                                 >
                                     <Text
-                                        style={{
-                                            color: colors.text,
-                                            ...styles.suggestionSectionHeader,
-                                        }}
+                                        style={styles.suggestionSectionHeader}
                                     >
                                         {t(
                                             'pages.map.details.room.nextLecture'
                                         )}
                                     </Text>
-                                    <Text
-                                        style={{
-                                            color: colors.labelColor,
-                                            ...styles.suggestionMoreDateText,
-                                        }}
-                                    >
+                                    <Text style={styles.suggestionMoreDateText}>
                                         {formatFriendlyDate(
                                             nextLecture[0].date
                                         )}
                                     </Text>
                                 </View>
-                                <View
-                                    style={{
-                                        backgroundColor: colors.card,
-                                        ...styles.radius,
-                                    }}
-                                >
+                                <View style={styles.radiusBg}>
                                     {nextLecture.map((lecture, key) => (
                                         <React.Fragment key={key}>
                                             <Pressable
@@ -520,7 +457,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     if (details == null) {
                                                         roomNotFoundToast(
                                                             lecture.rooms[0],
-                                                            colors.notification
+                                                            styles.toast.color
                                                         )
                                                         return
                                                     }
@@ -556,16 +493,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     }
                                                 >
                                                     <View
-                                                        style={{
-                                                            backgroundColor:
-                                                                colors.primary,
-                                                            ...styles.suggestionIconContainer,
-                                                        }}
+                                                        style={
+                                                            styles.suggestionIconContainer
+                                                        }
                                                     >
                                                         <PlatformIcon
-                                                            color={getContrastColor(
-                                                                colors.primary
-                                                            )}
                                                             ios={{
                                                                 name: 'clock.fill',
                                                                 size: 18,
@@ -574,6 +506,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                 name: 'school',
                                                                 size: 20,
                                                             }}
+                                                            style={
+                                                                styles.primaryContrast
+                                                            }
                                                         />
                                                     </View>
 
@@ -583,19 +518,17 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                         }
                                                     >
                                                         <Text
-                                                            style={{
-                                                                color: colors.text,
-                                                                ...styles.suggestionTitle,
-                                                            }}
+                                                            style={
+                                                                styles.suggestionTitle
+                                                            }
                                                             numberOfLines={2}
                                                         >
                                                             {lecture.name}
                                                         </Text>
                                                         <Text
-                                                            style={{
-                                                                color: colors.text,
-                                                                ...styles.suggestionSubtitle,
-                                                            }}
+                                                            style={
+                                                                styles.suggestionSubtitle
+                                                            }
                                                         >
                                                             {lecture.rooms.join(
                                                                 ', '
@@ -609,25 +542,13 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                     }
                                                 >
                                                     <Text
-                                                        style={{
-                                                            color: colors.labelColor,
-                                                            fontVariant: [
-                                                                'tabular-nums',
-                                                            ],
-                                                        }}
+                                                        style={styles.timeLabel}
                                                     >
                                                         {formatFriendlyTime(
                                                             lecture.startDate
                                                         )}
                                                     </Text>
-                                                    <Text
-                                                        style={{
-                                                            color: colors.text,
-                                                            fontVariant: [
-                                                                'tabular-nums',
-                                                            ],
-                                                        }}
-                                                    >
+                                                    <Text style={styles.time}>
                                                         {formatFriendlyTime(
                                                             lecture.endDate
                                                         )}
@@ -647,12 +568,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             <View
                                 style={styles.suggestionSectionHeaderContainer}
                             >
-                                <Text
-                                    style={{
-                                        color: colors.text,
-                                        ...styles.suggestionSectionHeader,
-                                    }}
-                                >
+                                <Text style={styles.suggestionSectionHeader}>
                                     {t('pages.map.details.room.availableRooms')}
                                 </Text>
                                 {userKind !== USER_GUEST && (
@@ -668,10 +584,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                         }}
                                     >
                                         <Text
-                                            style={{
-                                                color: colors.primary,
-                                                ...styles.suggestionMoreButtonText,
-                                            }}
+                                            style={
+                                                styles.suggestionMoreButtonText
+                                            }
                                         >
                                             {t('misc.more')}
                                         </Text>
@@ -679,37 +594,24 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                 )}
                             </View>
                             <Pressable
-                                style={{
-                                    backgroundColor: colors.card,
-                                    ...styles.radius,
-                                }}
+                                style={styles.radiusBg}
                                 onPress={() => {
                                     router.navigate('login')
                                 }}
                                 disabled={userKind !== USER_GUEST}
                             >
                                 {userKind === USER_GUEST ? (
-                                    <Text
-                                        style={{
-                                            color: colors.text,
-                                            ...styles.noResults,
-                                        }}
-                                    >
+                                    <Text style={styles.noResults}>
                                         {t('pages.map.details.room.signIn')}
                                     </Text>
                                 ) : availableRooms === null ? (
                                     <ActivityIndicator
                                         size="small"
-                                        color={colors.primary}
+                                        color={styles.activityIndicator.color}
                                         style={styles.loadingMargin}
                                     />
                                 ) : availableRooms.length === 0 ? (
-                                    <Text
-                                        style={{
-                                            color: colors.text,
-                                            ...styles.noResults,
-                                        }}
-                                    >
+                                    <Text style={styles.noResults}>
                                         {t('pages.map.noAvailableRooms')}
                                     </Text>
                                 ) : (
@@ -732,7 +634,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                         if (details == null) {
                                                             roomNotFoundToast(
                                                                 room.room,
-                                                                colors.notification
+                                                                styles.toast
+                                                                    .color
                                                             )
                                                             return
                                                         }
@@ -771,16 +674,11 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                         }
                                                     >
                                                         <View
-                                                            style={{
-                                                                backgroundColor:
-                                                                    colors.primary,
-                                                                ...styles.suggestionIconContainer,
-                                                            }}
+                                                            style={
+                                                                styles.suggestionIconContainer
+                                                            }
                                                         >
                                                             <PlatformIcon
-                                                                color={getContrastColor(
-                                                                    colors.primary
-                                                                )}
                                                                 ios={{
                                                                     name: 'studentdesk',
                                                                     size: 18,
@@ -789,6 +687,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                                     name: 'school',
                                                                     size: 20,
                                                                 }}
+                                                                style={
+                                                                    styles.primaryContrast
+                                                                }
                                                             />
                                                         </View>
 
@@ -798,18 +699,16 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                             }
                                                         >
                                                             <Text
-                                                                style={{
-                                                                    color: colors.text,
-                                                                    ...styles.suggestionTitle,
-                                                                }}
+                                                                style={
+                                                                    styles.suggestionTitle
+                                                                }
                                                             >
                                                                 {room.room}
                                                             </Text>
                                                             <Text
-                                                                style={{
-                                                                    color: colors.text,
-                                                                    ...styles.suggestionSubtitle,
-                                                                }}
+                                                                style={
+                                                                    styles.suggestionSubtitle
+                                                                }
                                                             >
                                                                 {room.type} (
                                                                 {room.capacity}{' '}
@@ -826,24 +725,16 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                                         }
                                                     >
                                                         <Text
-                                                            style={{
-                                                                color: colors.labelColor,
-                                                                fontVariant: [
-                                                                    'tabular-nums',
-                                                                ],
-                                                            }}
+                                                            style={
+                                                                styles.timeLabel
+                                                            }
                                                         >
                                                             {formatFriendlyTime(
                                                                 room.from
                                                             )}
                                                         </Text>
                                                         <Text
-                                                            style={{
-                                                                color: colors.text,
-                                                                fontVariant: [
-                                                                    'tabular-nums',
-                                                                ],
-                                                            }}
+                                                            style={styles.time}
                                                         >
                                                             {formatFriendlyTime(
                                                                 room.until
@@ -867,7 +758,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
 export default MapBottomSheet
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     suggestionContainer: {
         marginBottom: 10,
     },
@@ -877,6 +768,7 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         marginBottom: 2,
         textAlign: 'left',
+        color: theme.colors.text,
     },
     suggestionContent: {
         flex: 1,
@@ -893,12 +785,14 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         fontSize: 16,
         fontWeight: '500',
+        color: theme.colors.primary,
     },
     suggestionMoreDateText: {
         textAlign: 'right',
         paddingRight: 10,
         fontSize: 15,
         fontWeight: '500',
+        color: theme.colors.labelColor,
     },
     textInput: {
         height: 40,
@@ -907,11 +801,16 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 17,
         flex: 1,
+        backgroundColor:
+            UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card).lighten(0.6).hex()
+                : Color(theme.colors.card).darken(0.03).hex(),
+        color: theme.colors.text,
     },
     historyRow: {
         paddingVertical: 3,
         paddingHorizontal: 12,
-
+        backgroundColor: theme.colors.card,
         width: '100%',
     },
     suggestionRow: {
@@ -932,15 +831,18 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: theme.colors.primary,
     },
     suggestionTitle: {
         fontWeight: '600',
         fontSize: 16,
         marginBottom: 1,
+        color: theme.colors.text,
     },
     suggestionSubtitle: {
         fontWeight: '400',
         fontSize: 14,
+        color: theme.colors.text,
     },
     suggestionRightContainer: {
         flexDirection: 'column',
@@ -950,10 +852,16 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         overflow: 'hidden',
     },
+    radiusBg: {
+        borderRadius: 14,
+        overflow: 'hidden',
+        backgroundColor: theme.colors.card,
+    },
     noResults: {
         textAlign: 'center',
         paddingVertical: 30,
         fontSize: 16,
+        color: theme.colors.text,
     },
     header: {
         fontWeight: '500',
@@ -961,6 +869,7 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         marginBottom: 2,
         textAlign: 'left',
+        color: theme.colors.text,
     },
     loadingMargin: {
         marginVertical: 30,
@@ -974,9 +883,14 @@ const styles = StyleSheet.create({
     attributionText: {
         fontSize: 15,
         paddingStart: 4,
+        color: theme.colors.labelColor,
     },
     searchHint: {
         paddingTop: 60,
+        textAlign: 'center',
+        paddingVertical: 30,
+        fontSize: 16,
+        color: theme.colors.labelColor,
     },
     swipeableActionContainer: {
         justifyContent: 'center',
@@ -994,10 +908,31 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 15,
         fontWeight: '600',
+        color: theme.colors.primary,
     },
     inputContainer: {
         flexDirection: 'row',
         height: 40,
         marginBottom: 10,
     },
-})
+    toast: {
+        color: theme.colors.notification,
+    },
+    label: {
+        color: theme.colors.labelColor,
+    },
+    time: {
+        color: theme.colors.text,
+        fontVariant: ['tabular-nums'],
+    },
+    timeLabel: {
+        color: theme.colors.labelColor,
+        fontVariant: ['tabular-nums'],
+    },
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    primaryContrast: {
+        color: getContrastColor(theme.colors.primary),
+    },
+}))

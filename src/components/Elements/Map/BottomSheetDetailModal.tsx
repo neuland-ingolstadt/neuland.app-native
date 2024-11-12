@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { type FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import { PAGE_PADDING } from '@/utils/style-utils'
@@ -8,20 +7,12 @@ import {
     BottomSheetModalProvider,
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
 import Color from 'color'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    Platform,
-    Pressable,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, Platform, Pressable, Share, Text, View } from 'react-native'
 import { type SharedValue } from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import FormList from '../Universal/FormList'
 import PlatformIcon from '../Universal/Icon'
@@ -46,7 +37,7 @@ const handleShareModal = (room: string): void => {
 }
 
 const ReportLink: React.FC = () => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
     return (
@@ -57,16 +48,11 @@ const ReportLink: React.FC = () => {
                 }}
                 style={styles.reportLink}
             >
-                <Text
-                    style={{
-                        color: colors.labelColor,
-                        ...styles.reportText,
-                    }}
-                >
+                <Text style={styles.reportText}>
                     {t('pages.map.details.room.report')}
                 </Text>
                 <PlatformIcon
-                    color={colors.labelColor}
+                    style={styles.chevronIcon}
                     ios={{
                         name: 'chevron.forward',
                         size: 11,
@@ -96,7 +82,7 @@ export const BottomSheetDetailModal = ({
     roomData,
     modalSection,
 }: BottomSheetDetailModalProps): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <BottomSheetModalProvider>
             <BottomSheetModal
@@ -109,12 +95,7 @@ export const BottomSheetDetailModal = ({
             >
                 <BottomSheetView style={styles.contentContainer}>
                     <View style={styles.modalSectionHeaderContainer}>
-                        <Text
-                            style={{
-                                color: colors.text,
-                                ...styles.modalSectionHeader,
-                            }}
-                        >
+                        <Text style={styles.modalSectionHeader}>
                             {roomData.title}
                         </Text>
                         <View style={styles.buttonsContainer}>
@@ -123,15 +104,9 @@ export const BottomSheetDetailModal = ({
                                     onPress={() => {
                                         handleShareModal(roomData.title)
                                     }}
-                                    style={{
-                                        backgroundColor: colors.card,
-                                        ...styles.roomDetailButton,
-                                    }}
+                                    style={styles.roomDetailButton}
                                 >
                                     <PlatformIcon
-                                        color={Color(colors.text)
-                                            .darken(0.1)
-                                            .hex()}
                                         ios={{
                                             name: 'square.and.arrow.up',
                                             size: 14,
@@ -141,14 +116,7 @@ export const BottomSheetDetailModal = ({
                                             name: 'share',
                                             size: 16,
                                         }}
-                                        style={Platform.select({
-                                            android: {
-                                                marginRight: 2,
-                                            },
-                                            ios: {
-                                                marginBottom: 3,
-                                            },
-                                        })}
+                                        style={styles.shareIcon(Platform.OS)}
                                     />
                                 </Pressable>
                             )}
@@ -157,16 +125,8 @@ export const BottomSheetDetailModal = ({
                                     bottomSheetModalRef.current?.close()
                                 }}
                             >
-                                <View
-                                    style={{
-                                        backgroundColor: colors.card,
-                                        ...styles.roomDetailButton,
-                                    }}
-                                >
+                                <View style={styles.roomDetailButton}>
                                     <PlatformIcon
-                                        color={Color(colors.text)
-                                            .darken(0.1)
-                                            .hex()}
                                         ios={{
                                             name: 'xmark',
                                             size: 13,
@@ -176,27 +136,13 @@ export const BottomSheetDetailModal = ({
                                             name: 'expand_more',
                                             size: 21,
                                         }}
-                                        style={Platform.select({
-                                            android: {
-                                                marginRight: 2,
-                                            },
-                                            ios: {
-                                                marginTop: 1,
-                                            },
-                                        })}
+                                        style={styles.xIcon(Platform.OS)}
                                     />
                                 </View>
                             </Pressable>
                         </View>
                     </View>
-                    <Text
-                        style={{
-                            color: colors.text,
-                            ...styles.roomSubtitle,
-                        }}
-                    >
-                        {roomData.subtitle}
-                    </Text>
+                    <Text style={styles.roomSubtitle}>{roomData.subtitle}</Text>
                     <View style={styles.formList}>
                         <FormList sections={modalSection} />
                     </View>
@@ -207,7 +153,7 @@ export const BottomSheetDetailModal = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     reportContainer: { paddingVertical: 10 },
     reportLink: {
         flexDirection: 'row',
@@ -217,6 +163,7 @@ const styles = StyleSheet.create({
     reportText: {
         fontSize: 15,
         paddingStart: 4,
+        color: theme.colors.labelColor,
     },
     formList: {
         marginVertical: 16,
@@ -231,9 +178,11 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 26,
         textAlign: 'left',
+        color: theme.colors.text,
     },
     roomSubtitle: {
         fontSize: 16,
+        color: theme.colors.text,
     },
     modalSectionHeaderContainer: {
         flexDirection: 'row',
@@ -247,6 +196,20 @@ const styles = StyleSheet.create({
         height: 34,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: theme.colors.card,
     },
     buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
-})
+    chevronIcon: {
+        color: theme.colors.labelColor,
+    },
+    shareIcon: (platform) => ({
+        color: Color(theme.colors.text).darken(0.1).hex(),
+        marginRight: platform === 'android' ? 2 : 0,
+        marginBottom: platform === 'ios' ? 3 : 0,
+    }),
+    xIcon: (platform) => ({
+        color: Color(theme.colors.text).darken(0.1).hex(),
+        marginRight: platform === 'android' ? 2 : 0,
+        marginTop: platform === 'ios' ? 1 : 0,
+    }),
+}))
