@@ -37,7 +37,7 @@
         "react-native/no-single-element-style-arrays": 2,
         "i18next/no-literal-string": 2,
         "react-hooks/rules-of-hooks": "error",
-        "react-native-unistyles/no-unused-styles": "warn",
+        "react-native-unistyles/no-unused-styles": "error",
         "react-native-unistyles/sort-styles": [
             "warn",
             "asc",

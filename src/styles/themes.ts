@@ -46,7 +46,7 @@ export const darkTheme = {
         success: '#37d837',
         datePickerBackground: '#2a2a2c',
         card: 'rgb(18, 18, 18)',
-        cardButton: '#2f2f2f',
+        cardButton: '#262626',
         notification: 'rgb(255, 69, 58)',
         warning: '#ff9900',
         inputBackground: '#383838',

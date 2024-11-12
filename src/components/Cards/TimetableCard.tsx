@@ -16,7 +16,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
 const TimetableCard: React.FC = () => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
@@ -120,7 +120,7 @@ const TimetableCard: React.FC = () => {
                 {index < filteredTimetable.length - 1 && (
                     <>
                         <View style={styles.divider} />
-                        <Divider width="100%" />
+                        <Divider width="100%" color={theme.colors.border} />
                     </>
                 )}
             </View>

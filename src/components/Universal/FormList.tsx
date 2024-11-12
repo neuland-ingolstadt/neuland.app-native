@@ -58,7 +58,7 @@ const RenderSectionItems: React.FC<{
     items: SectionGroup[]
     rowStyle?: ViewStyle
 }> = ({ items, rowStyle }) => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
 
     return (
         <View style={styles.blockCard}>
@@ -96,7 +96,7 @@ const RenderSectionItems: React.FC<{
                                         {
                                             color:
                                                 item.textColor ??
-                                                styles.labelColor.color,
+                                                theme.colors.labelColor,
                                             fontWeight:
                                                 item.fontWeight ?? 'normal',
                                         },
@@ -129,7 +129,7 @@ const RenderSectionItems: React.FC<{
                                             Platform.OS === 'android' ? 2 : 0,
                                         color:
                                             item.iconColor ??
-                                            styles.labelColor.color,
+                                            theme.colors.labelSecondaryColor,
                                     }}
                                 />
                             )}
@@ -137,10 +137,7 @@ const RenderSectionItems: React.FC<{
                     </Pressable>
 
                     {index < items.length - 1 && (
-                        <Divider
-                            color={styles.labelTertiaryColor.color}
-                            iosPaddingLeft={16}
-                        />
+                        <Divider iosPaddingLeft={16} />
                     )}
                 </React.Fragment>
             ))}
@@ -230,15 +227,6 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingHorizontal: 16,
         paddingVertical: 13,
     },
-    labelColor: {
-        color: theme.colors.labelColor,
-    },
-    labelSecondaryColor: {
-        color: theme.colors.labelSecondaryColor,
-    },
-    labelTertiaryColor: {
-        color: theme.colors.labelTertiaryColor,
-    },
     rowDetails: {
         fontSize: 16,
         maxWidth: '65%',
@@ -250,9 +238,6 @@ const stylesheet = createStyleSheet((theme) => ({
         flexShrink: 1,
         flexWrap: 'wrap',
         fontSize: 16,
-    },
-    test: {
-        color: theme.colors.text,
     },
     wrapper: {
         gap: 16,

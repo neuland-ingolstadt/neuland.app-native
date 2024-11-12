@@ -9,7 +9,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 
     const { data, isSuccess } = useQuery({
@@ -50,7 +50,10 @@ const EventsCard = (): JSX.Element => {
                             </View>
 
                             {slicedData.length - 1 !== index && (
-                                <Divider width={'100%'} />
+                                <Divider
+                                    width={'100%'}
+                                    color={theme.colors.border}
+                                />
                             )}
                         </React.Fragment>
                     ))}

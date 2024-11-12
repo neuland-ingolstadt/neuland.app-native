@@ -76,7 +76,12 @@ const stylesheet = createStyleSheet((theme) => ({
         justifyContent: 'center',
         width: '100%',
     },
-    innerButton: { alignItems: 'center', height: 20, width: 100 },
+    innerButton: {
+        alignItems: 'center',
+        height: 20,
+        justifyContent: 'center',
+        width: 100,
+    },
     leftText2: {
         color: theme.colors.text,
         fontSize: 15,
