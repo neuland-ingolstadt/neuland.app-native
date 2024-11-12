@@ -8,7 +8,6 @@ import { useRefreshByUser } from '@/hooks'
 import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
-import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
@@ -362,7 +361,7 @@ const stylesheet = createStyleSheet((theme) => ({
     }),
     innerScrollContainer: {
         marginHorizontal: 12,
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     loadedContainer: {
         flexDirection: 'row',

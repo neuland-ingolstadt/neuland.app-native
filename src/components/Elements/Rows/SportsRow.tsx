@@ -2,7 +2,6 @@ import i18n, { type LanguageKey } from '@/localization/i18n'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
-import { ROW_PADDING } from '@/utils/style-utils'
 import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
@@ -81,7 +80,7 @@ const stylesheet = createStyleSheet((theme) => ({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: ROW_PADDING,
+        padding: theme.margins.rowPadding,
     },
     rightText: {
         fontSize: 14,

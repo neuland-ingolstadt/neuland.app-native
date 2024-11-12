@@ -1,7 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { CARD_PADDING } from '@/utils/style-utils'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -67,7 +66,6 @@ const BaseCard: React.FC<BaseCardProps> = ({
             }}
             delayLongPress={300}
             onLongPress={() => {}}
-            //  style={{ paddingHorizontal: PAGE_PADDING }}
         >
             <ContextMenu
                 // @ts-expect-error cannot verify that title is a valid key
@@ -132,7 +130,7 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
         borderRadius: 8,
-        padding: CARD_PADDING,
+        padding: theme.margins.card,
     },
     labelColor: {
         color: theme.colors.labelColor,

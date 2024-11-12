@@ -3,7 +3,6 @@ import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
-import { ROW_PADDING } from '@/utils/style-utils'
 import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
@@ -79,7 +78,7 @@ const stylesheet = createStyleSheet((theme) => ({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: ROW_PADDING,
+        padding: theme.margins.rowPadding,
     },
     rightText: {
         color: theme.colors.labelColor,

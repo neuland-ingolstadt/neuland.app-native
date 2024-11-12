@@ -2,7 +2,6 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -145,7 +144,7 @@ const stylesheet = createStyleSheet((theme) => ({
         width: '100%',
     },
     page: {
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     titleContainer: {
         alignItems: 'center',

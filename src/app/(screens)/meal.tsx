@@ -13,7 +13,6 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
 import {
@@ -453,7 +452,7 @@ const stylesheet = createStyleSheet((theme) => ({
     formList: {
         alignSelf: 'center',
         marginVertical: 16,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     iconWarning: {
@@ -473,9 +472,9 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     notesContainer: {
         alignSelf: 'center',
-        marginBottom: PAGE_BOTTOM_SAFE_AREA,
+        marginBottom: theme.margins.bottomSafeArea,
         marginTop: 20,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     notesText: {
         color: theme.colors.labelColor,

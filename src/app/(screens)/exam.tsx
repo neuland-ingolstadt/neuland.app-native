@@ -2,7 +2,6 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { type FormListSections } from '@/types/components'
 import { type Exam } from '@/types/utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { Buffer } from 'buffer/'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
@@ -112,7 +111,7 @@ export default function ExamDetail(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         gap: 12,
-        marginBottom: MODAL_BOTTOM_MARGIN,
+        marginBottom: theme.margins.modalBottomMargin,
     },
     formList: {
         alignSelf: 'center',
@@ -124,7 +123,7 @@ const stylesheet = createStyleSheet((theme) => ({
         textAlign: 'left',
     },
     page: {
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     titleContainer: {
         alignItems: 'center',

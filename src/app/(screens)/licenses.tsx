@@ -3,7 +3,6 @@ import { chevronIcon } from '@/components/Elements/Universal/Icon'
 import licensesStatic from '@/data/licenses-static.json'
 import licenses from '@/data/licenses.json'
 import { type FormListSections } from '@/types/components'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -110,13 +109,13 @@ export default function Licenses(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: MODAL_BOTTOM_MARGIN,
+        paddingBottom: theme.margins.modalBottomMargin,
     },
     formlistContainer: {
         alignSelf: 'center',
         marginBottom: 24,
         marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     notesContainer: {

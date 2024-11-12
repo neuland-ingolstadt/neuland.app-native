@@ -4,7 +4,6 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
 import {
@@ -197,7 +196,7 @@ export default function SportsEventDetail(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         gap: 12,
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     formList: {
         alignSelf: 'center',
@@ -205,7 +204,7 @@ const stylesheet = createStyleSheet((theme) => ({
         width: '100%',
     },
     page: {
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     titleContainer: {
         alignItems: 'center',

@@ -6,7 +6,6 @@ import { FlowContext, PreferencesContext } from '@/components/contexts'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
@@ -176,9 +175,7 @@ export default function About(): JSX.Element {
     }
     return (
         <>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
-            >
+            <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.container}>
                     <View style={styles.logoContainer}>
                         <Pressable
@@ -257,10 +254,13 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingBottom: 20,
         paddingTop: 30,
     },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
     formlistContainer: {
         alignSelf: 'center',
         marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     header: {

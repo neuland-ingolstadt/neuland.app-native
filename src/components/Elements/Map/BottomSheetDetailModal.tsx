@@ -1,6 +1,5 @@
 import { type FormListSections } from '@/types/components'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import {
     BottomSheetModal,
@@ -160,7 +159,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     contentContainer: {
         flex: 1,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     formList: {
         alignSelf: 'center',

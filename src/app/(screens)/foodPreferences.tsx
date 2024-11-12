@@ -8,7 +8,6 @@ import SectionView from '@/components/Elements/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
 import { FoodFilterContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -155,7 +154,7 @@ const stylesheet = createStyleSheet((theme) => ({
     sectionContainer: {
         alignSelf: 'center',
         marginTop: 16,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     warningIcon: {

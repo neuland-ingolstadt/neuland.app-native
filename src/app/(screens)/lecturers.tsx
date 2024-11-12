@@ -17,7 +17,6 @@ import {
     networkError,
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -279,11 +278,7 @@ export default function LecturersCard(): JSX.Element {
         isPersonal?: boolean
     }): JSX.Element => {
         return isPaused && !isSuccess ? (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.viewHorizontal}>
                 <ErrorView
                     title={networkError}
                     refreshing={
@@ -303,7 +298,7 @@ export default function LecturersCard(): JSX.Element {
         ) : isError ? (
             <View
                 style={{
-                    paddingHorizontal: PAGE_PADDING,
+                    ...styles.viewHorizontal,
                     ...styles.page,
                 }}
             >
@@ -341,7 +336,7 @@ export default function LecturersCard(): JSX.Element {
                         }}
                     />
                 }
-                style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
+                style={styles.pageBottom}
                 renderItem={({ item, index }) => (
                     <React.Fragment key={index}>
                         <LecturerRow item={item} />
@@ -352,12 +347,7 @@ export default function LecturersCard(): JSX.Element {
                 )}
             />
         ) : (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                    ...styles.page,
-                }}
-            >
+            <View style={styles.pagePadding}>
                 {isPersonal ? (
                     <ErrorView
                         title={t('pages.lecturers.error.title')}
@@ -393,11 +383,7 @@ export default function LecturersCard(): JSX.Element {
 
     const FilterSectionList = (): JSX.Element => {
         return allLecturersResult.isLoading ? (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.viewHorizontal}>
                 <LoadingIndicator style={styles.loadingContainer} />
             </View>
         ) : allLecturersResult.isPaused ? (
@@ -452,10 +438,7 @@ export default function LecturersCard(): JSX.Element {
                             <Text style={styles.sectionHeader}>{title}</Text>
                         </View>
                     )}
-                    contentContainerStyle={{
-                        marginHorizontal: PAGE_PADDING,
-                        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-                    }}
+                    contentContainerStyle={styles.contentContainer}
                 />
             </>
         )
@@ -518,10 +501,14 @@ export default function LecturersCard(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    contentContainer: {
+        marginHorizontal: theme.margins.page,
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
     loadedRows: {
         backgroundColor: theme.colors.card,
         borderRadius: 8,
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
     },
     loadingContainer: {
         alignItems: 'center',
@@ -530,6 +517,12 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         flex: 1,
+    },
+    pageBottom: {
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
+    pagePadding: {
+        paddingHorizontal: theme.margins.page,
     },
     resultsCount: {
         color: theme.colors.labelColor,
@@ -554,5 +547,8 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.background,
         paddingHorizontal: 4,
         paddingVertical: 8,
+    },
+    viewHorizontal: {
+        paddingHorizontal: theme.margins.page,
     },
 }))

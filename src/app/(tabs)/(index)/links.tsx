@@ -3,7 +3,6 @@ import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
@@ -58,11 +57,7 @@ const LinkScreen = (): JSX.Element => {
                     {t('pages.quicklinks.title')}
                 </Text>
             </View>
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.page}>
                 <FormList sections={sections} rowStyle={styles.formlistRow} />
             </View>
         </>
@@ -75,7 +70,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     headerText: {
         color: theme.colors.text,
@@ -83,6 +78,9 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '600',
         paddingBottom: 10,
         paddingTop: 5,
+    },
+    page: {
+        paddingHorizontal: theme.margins.page,
     },
 }))
 

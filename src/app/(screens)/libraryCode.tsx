@@ -11,7 +11,6 @@ import {
     networkError,
     permissionError,
 } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
@@ -166,7 +165,7 @@ const stylesheet = createStyleSheet((theme) => ({
     barcodeContainer: {
         alignSelf: 'center',
         borderRadius: 10,
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         marginTop: 20,
         paddingVertical: 14,
         width: '100%',
@@ -178,7 +177,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     container: {
         alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         paddingVertical: 16,
         width: '100%',
     },

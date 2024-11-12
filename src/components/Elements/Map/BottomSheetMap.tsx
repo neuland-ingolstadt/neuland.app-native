@@ -3,7 +3,6 @@ import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES, type SearchResult } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, {
@@ -221,11 +220,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             }}
             enableDynamicSizing={false}
         >
-            <BottomSheetView
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <BottomSheetView style={styles.page}>
                 <BottomSheetView style={styles.inputContainer}>
                     <BottomSheetTextInput
                         ref={textInputRef}
@@ -369,9 +364,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     searchResultsExact.length > 0 ||
                     searchResultsFuzzy.length > 0 ? (
                         <SectionList
-                            contentContainerStyle={{
-                                paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-                            }}
+                            contentContainerStyle={styles.contentContainer}
                             keyboardShouldPersistTaps="always"
                             sections={[
                                 ...(searchResultsExact.length > 0
@@ -781,6 +774,9 @@ const stylesheet = createStyleSheet((theme) => ({
         textAlign: 'center',
     },
     cancelContainer: { justifyContent: 'center' },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
     header: {
         color: theme.colors.text,
         fontSize: 20,
@@ -800,6 +796,7 @@ const stylesheet = createStyleSheet((theme) => ({
         height: 40,
         marginBottom: 10,
     },
+
     label: {
         color: theme.colors.labelColor,
     },
@@ -811,6 +808,9 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 16,
         paddingVertical: 30,
         textAlign: 'center',
+    },
+    page: {
+        paddingHorizontal: theme.margins.page,
     },
     primaryContrast: {
         color: getContrastColor(theme.colors.primary),

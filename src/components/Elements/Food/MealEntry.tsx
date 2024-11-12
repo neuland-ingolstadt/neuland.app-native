@@ -12,7 +12,6 @@ import {
     getUserSpecificPrice,
     mealName,
 } from '@/utils/food-utils'
-import { CARD_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
 import Color from 'color'
@@ -287,7 +286,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
         borderRadius: 8,
-        padding: CARD_PADDING,
+        padding: theme.margins.card,
         shadowColor: theme.colors.text,
         shadowOffset: {
             width: 0,

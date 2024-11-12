@@ -1,5 +1,4 @@
 import { type Grade } from '@/types/thi-api'
-import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -57,7 +56,7 @@ const stylesheet = createStyleSheet((theme) => ({
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: ROW_PADDING,
+        padding: theme.margins.rowPadding,
     },
     rightInnerContainer: {
         alignItems: 'flex-end',

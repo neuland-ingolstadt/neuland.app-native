@@ -7,7 +7,6 @@ import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { useTheme } from '@react-navigation/native'
 import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
@@ -420,7 +419,7 @@ function RowItem({
     isLast,
     isDragged,
 }: RowItemProps): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const bottomWidth = isLast || isDragged ? 0 : 1
 
     return (
@@ -430,7 +429,7 @@ function RowItem({
                     styles.row,
                     styles.outerRow,
                     {
-                        width: width - PAGE_PADDING * 2,
+                        width: width - theme.margins.page * 2,
                         borderBottomWidth: bottomWidth,
                     },
                 ]}
@@ -552,7 +551,7 @@ const stylesheet = createStyleSheet((theme) => ({
         borderColor: theme.colors.border,
     },
     page: {
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     reset: (hasUserDefaultOrder: boolean) => ({
         fontSize: 16,

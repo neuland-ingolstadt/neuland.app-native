@@ -1,4 +1,3 @@
-import { ROW_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { type DimensionValue, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -56,7 +55,7 @@ const stylesheet = createStyleSheet((theme) => ({
 
         flexDirection: 'column',
         maxWidth: '70%',
-        padding: ROW_PADDING,
+        padding: theme.margins.rowPadding,
     },
     eventContainer: {
         flexDirection: 'row',

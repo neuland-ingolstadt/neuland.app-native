@@ -6,7 +6,6 @@ import {
     formatFriendlyTime,
     formatISODate,
 } from '@/utils/date-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { inverseColor } from '@/utils/ui-utils'
 import { Buffer } from 'buffer/'
@@ -281,7 +280,7 @@ export default function TimetableList({
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         paddingBottom: 80,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     descriptionText: {
         color: theme.colors.labelColor,
@@ -328,7 +327,7 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.background,
         gap: 6,
         marginBottom: 8,
-        paddingTop: PAGE_PADDING,
+        paddingTop: theme.margins.page,
     },
     time: {
         color: theme.colors.text,

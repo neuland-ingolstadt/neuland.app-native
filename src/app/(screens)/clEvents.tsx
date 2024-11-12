@@ -5,7 +5,6 @@ import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,
 } from '@/utils/events-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQueries } from '@tanstack/react-query'
@@ -59,12 +58,7 @@ export default function Events(): JSX.Element {
     const pages = ['events', 'sports']
 
     return (
-        <View
-            style={{
-                paddingVertical: PAGE_PADDING,
-                ...styles.pagerContainer,
-            }}
-        >
+        <View style={styles.page}>
             <Animated.View
                 style={{
                     borderBottomWidth: scrollY.interpolate({
@@ -107,6 +101,10 @@ export default function Events(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    page: {
+        flex: 1,
+        paddingVertical: theme.margins.page,
+    },
     pagerContainer: {
         flex: 1,
     },

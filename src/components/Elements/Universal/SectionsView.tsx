@@ -1,4 +1,3 @@
-import { PAGE_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -45,7 +44,7 @@ const stylesheet = createStyleSheet((theme) => ({
     footerText: (isLink: boolean) => ({
         marginTop: 6,
         fontSize: 12.5,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor,
     }),
     labelText: {
@@ -66,7 +65,7 @@ const stylesheet = createStyleSheet((theme) => ({
     sectionContainer: {
         alignSelf: 'center',
         marginTop: 16,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
 }))

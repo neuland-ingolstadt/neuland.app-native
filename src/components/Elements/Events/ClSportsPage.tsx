@@ -5,7 +5,6 @@ import { UserKindContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { type UniversitySports } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { type UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
@@ -176,8 +175,8 @@ export default function ClSportsPage({
     return (
         <View>
             <ScrollView
-                contentContainerStyle={[styles.itemsContainer]}
-                style={{ paddingHorizontal: PAGE_PADDING }}
+                contentContainerStyle={styles.itemsContainer}
+                style={styles.page}
                 onScroll={
                     Animated.event(
                         [
@@ -288,7 +287,7 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         paddingBottom: 64,
         width: '100%',
     },
@@ -319,6 +318,9 @@ const stylesheet = createStyleSheet((theme) => ({
         color: isSelect ? theme.colors.primary : theme.colors.text,
     }),
     locationTextContainer: { alignItems: 'center', position: 'relative' },
+    page: {
+        paddingHorizontal: theme.margins.page,
+    },
     toggleIcon: {
         alignSelf: 'flex-end',
         marginRight: 4,

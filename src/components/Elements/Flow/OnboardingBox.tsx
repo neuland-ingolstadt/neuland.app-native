@@ -1,4 +1,3 @@
-import { CARD_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -18,7 +17,7 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderRadius: 8,
         maxWidth: 600,
-        padding: CARD_PADDING,
+        padding: theme.margins.card,
     },
     text: {
         color: theme.colors.text,

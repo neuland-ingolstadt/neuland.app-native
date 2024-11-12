@@ -1,7 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import i18n from '@/localization/i18n'
 import { type Announcement } from '@/types/neuland-api'
-import { CARD_PADDING, PAGE_PADDING } from '@/utils/style-utils'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, Text, View } from 'react-native'
@@ -102,11 +101,11 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
         borderRadius: 8,
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         marginVertical: 6,
         paddingBottom: 14,
-        paddingHorizontal: CARD_PADDING,
-        paddingTop: CARD_PADDING,
+        paddingHorizontal: theme.margins.card,
+        paddingTop: theme.margins.card,
     },
     closeIcon: {
         color: theme.colors.labelColor,

@@ -1,4 +1,3 @@
-import { PAGE_PADDING } from '@/utils/style-utils'
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -46,7 +45,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
         borderRadius: 8,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         paddingVertical: 10,
         shadowColor: theme.colors.text,
 
@@ -63,7 +62,7 @@ const stylesheet = createStyleSheet((theme) => ({
         flexDirection: 'row',
         gap: 12,
         justifyContent: 'space-between',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     buttonView: {

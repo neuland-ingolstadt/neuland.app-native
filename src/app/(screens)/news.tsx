@@ -6,7 +6,6 @@ import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import {
@@ -127,9 +126,9 @@ export default function NewsScreen(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     contentContainer: {
         gap: 18,
-        paddingBottom: MODAL_BOTTOM_MARGIN,
+        paddingBottom: theme.margins.modalBottomMargin,
         paddingTop: Platform.OS === 'ios' ? 105 : 5,
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     dateText: {
         color: theme.colors.labelSecondaryColor,

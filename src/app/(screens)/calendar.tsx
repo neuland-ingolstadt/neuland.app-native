@@ -9,7 +9,6 @@ import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -88,7 +87,7 @@ export default function CalendarPage(): JSX.Element {
     return (
         <View
             style={{
-                paddingVertical: PAGE_PADDING,
+                ...styles.viewVertical,
                 ...styles.pagerContainer,
             }}
         >
@@ -129,8 +128,8 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 1: Events */}
                 <View>
                     <ScrollView
-                        contentContainerStyle={[styles.itemsContainer]}
-                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        contentContainerStyle={styles.itemsContainer}
+                        style={styles.viewHorizontal}
                         onScroll={
                             Animated.event(
                                 [
@@ -163,8 +162,8 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 2: Exams */}
                 <View>
                     <ScrollView
-                        contentContainerStyle={[styles.itemsContainer]}
-                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        contentContainerStyle={styles.itemsContainer}
+                        style={styles.viewHorizontal}
                         onScroll={
                             Animated.event(
                                 [
@@ -273,7 +272,7 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         width: '100%',
     },
     pagerContainer: {
@@ -282,5 +281,11 @@ const stylesheet = createStyleSheet((theme) => ({
     toggleContainer: {
         borderColor: theme.colors.border,
         paddingBottom: 12,
+    },
+    viewHorizontal: {
+        paddingHorizontal: theme.margins.page,
+    },
+    viewVertical: {
+        paddingVertical: theme.margins.page,
     },
 }))

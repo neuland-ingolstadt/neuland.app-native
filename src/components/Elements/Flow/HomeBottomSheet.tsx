@@ -1,4 +1,3 @@
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { BottomSheetView } from '@gorhom/bottom-sheet'
 import React from 'react'
 import { Text, View } from 'react-native'
@@ -18,7 +17,7 @@ export const HomeBottomSheet = (): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     contentContainer: {
         flex: 1,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     text: {
         color: theme.colors.text,

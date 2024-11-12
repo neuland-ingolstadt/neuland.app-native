@@ -9,7 +9,6 @@ import { USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
@@ -303,7 +302,7 @@ export default function Profile(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         paddingVertical: 16,
         width: '100%',
     },

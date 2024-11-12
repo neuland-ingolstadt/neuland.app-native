@@ -20,10 +20,11 @@ export const lightTheme = {
         primary: '#0079fa', // default blue, updated dynamically in provider
     },
     margins: {
-        sm: 2,
-        md: 4,
-        lg: 8,
-        xl: 12,
+        page: 12,
+        card: 16,
+        bottomSafeArea: 90,
+        modalBottomMargin: 32,
+        rowPadding: 5,
     },
     radius: {
         sm: 4,
@@ -55,10 +56,11 @@ export const darkTheme = {
         primary: '#0b83ff',
     },
     margins: {
-        sm: 2,
-        md: 4,
-        lg: 8,
-        xl: 12,
+        page: 12,
+        card: 16,
+        bottomSafeArea: 90,
+        modalBottomMargin: 32,
+        rowPadding: 5,
     },
     radius: {
         sm: 4,

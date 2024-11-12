@@ -13,7 +13,6 @@ import {
     networkError,
 } from '@/utils/api-utils'
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -239,7 +238,7 @@ const stylesheet = createStyleSheet((theme) => ({
     averageContainer: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
     },
     averageErrorText: {
         color: theme.colors.text,
@@ -265,7 +264,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         borderRadius: 8,
         justifyContent: 'center',
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         marginVertical: 16,
         minHeight: 70,
         width: '100%',
@@ -278,7 +277,7 @@ const stylesheet = createStyleSheet((theme) => ({
     notesBox: {
         alignSelf: 'flex-start',
         paddingBottom: 32,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         paddingTop: 16,
     },
     notesText: {

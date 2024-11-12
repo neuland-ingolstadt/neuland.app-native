@@ -2,7 +2,6 @@ import FormList from '@/components/Elements/Universal/FormList'
 import { linkIcon } from '@/components/Elements/Universal/Icon'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { type FormListSections } from '@/types/components'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useGlobalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -100,13 +99,13 @@ export default function License(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: MODAL_BOTTOM_MARGIN,
+        paddingBottom: theme.margins.modalBottomMargin,
     },
     formlistContainer: {
         alignSelf: 'center',
         marginBottom: 16,
         marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     text: {

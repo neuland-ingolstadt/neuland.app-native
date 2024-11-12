@@ -4,7 +4,6 @@ import Divider from '@/components/Elements/Universal/Divider'
 import { useRefreshByUser } from '@/hooks'
 import { type CLEvents } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { type UseQueryResult } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,8 +29,8 @@ export default function ClEventsPage({
     return (
         <View>
             <ScrollView
-                contentContainerStyle={[styles.itemsContainer]}
-                style={{ paddingHorizontal: PAGE_PADDING }}
+                contentContainerStyle={styles.itemsContainer}
+                style={styles.page}
                 onScroll={
                     Animated.event(
                         [
@@ -112,7 +111,10 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         width: '100%',
+    },
+    page: {
+        paddingHorizontal: theme.margins.page,
     },
 }))

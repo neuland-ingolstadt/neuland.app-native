@@ -4,7 +4,6 @@ import { IndexHeaderRight } from '@/components/Elements/Dashboard/HeaderRight'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -57,7 +56,7 @@ export default function HomeRootScreen(): JSX.Element {
 }
 
 function HomeScreen(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { shownDashboardEntries } = React.useContext(DashboardContext)
     const [orientation, setOrientation] = useState(
         Dimensions.get('window').width
@@ -124,8 +123,8 @@ function HomeScreen(): JSX.Element {
                 if (columns !== 1) {
                     paddingStyle =
                         index % 2 === 0
-                            ? { marginRight: PAGE_PADDING / 2 }
-                            : { marginLeft: PAGE_PADDING / 2 }
+                            ? { marginRight: theme.margins.page / 2 }
+                            : { marginLeft: theme.margins.page / 2 }
                 }
 
                 return (
@@ -150,7 +149,7 @@ function HomeScreen(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        paddingBottom: theme.margins.bottomSafeArea,
         paddingTop: 6,
     },
     errorContainer: { flex: 1, paddingTop: 110 },
@@ -161,7 +160,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     item: {
         gap: 0,
-        marginHorizontal: PAGE_PADDING,
+        marginHorizontal: theme.margins.page,
         marginVertical: 6,
     },
     page: {

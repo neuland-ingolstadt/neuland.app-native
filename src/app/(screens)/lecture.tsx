@@ -11,7 +11,6 @@ import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
 import {
@@ -349,7 +348,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         display: 'flex',
-        padding: PAGE_PADDING,
+        padding: theme.margins.page,
     },
     roomContainer: {
         display: 'flex',
