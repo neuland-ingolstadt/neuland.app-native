@@ -17,13 +17,19 @@ export const lightTheme = {
         cardContrast: '#eeeeee',
         border: 'rgb(216, 216, 216)',
         text: 'rgb(28, 28, 30)',
-        primary: '#0079fa',
+        primary: '#0079fa', // default blue, updated dynamically in provider
     },
     margins: {
         sm: 2,
         md: 4,
         lg: 8,
         xl: 12,
+    },
+    radius: {
+        sm: 4,
+        md: 8,
+        lg: 12,
+        infinite: 9999,
     },
 } as const
 
@@ -54,6 +60,10 @@ export const darkTheme = {
         lg: 8,
         xl: 12,
     },
+    radius: {
+        sm: 4,
+        md: 8,
+        lg: 12,
+        infinite: 9999,
+    },
 } as const
-
-// define other themes
