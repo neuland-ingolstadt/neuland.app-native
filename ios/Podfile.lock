@@ -324,11 +324,11 @@ PODS:
   - hermes-engine (0.75.4):
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
-  - maplibre-react-native (10.0.0-alpha.24):
-    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.24)
+  - maplibre-react-native (10.0.0-alpha.25):
+    - maplibre-react-native/DynamicLibrary (= 10.0.0-alpha.25)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.24):
+  - maplibre-react-native/DynamicLibrary (10.0.0-alpha.25):
     - React
     - React-Core
   - MMKV (1.3.9):
@@ -1618,7 +1618,7 @@ PODS:
   - react-native-shimmer (0.6.0):
     - React (>= 0.45.1)
     - Shimmer (~> 1)
-  - react-native-unistyles (2.11.0):
+  - react-native-unistyles (2.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2458,7 +2458,7 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
-  maplibre-react-native: 2ea5c90cff3ddb9899d3737492a38be67adf660d
+  maplibre-react-native: 33a5857b7f2837f41b61267ae877acaab8a8c49d
   MMKV: 817ba1eea17421547e01e087285606eb270a8dcb
   MMKVCore: af055b00e27d88cd92fad301c5fecd1ff9b26dd9
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
@@ -2497,7 +2497,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: c476f76d54f946df5147645e902d3d7173688187
   react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
-  react-native-unistyles: 5a70d6471e201250675427bddaf0a49d5f390eaf
+  react-native-unistyles: e42ae5e7dbe5a0b0bc81a139d6c4440b1ae0ed88
   react-native-view-shot: 6b7ed61d77d88580fed10954d45fad0eb2d47688
   react-native-webview: 867e3873051b9adf8c14efa2755712b69011d8f4
   React-nativeconfig: 8c83d992b9cc7d75b5abe262069eaeea4349f794
