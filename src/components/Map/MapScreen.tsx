@@ -5,10 +5,10 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import { loadTimetable } from '@/app/(tabs)/(timetable)/timetable'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { BottomSheetDetailModal } from '@/components/Elements/Map/BottomSheetDetailModal'
-import MapBottomSheet from '@/components/Elements/Map/BottomSheetMap'
-import FloorPicker from '@/components/Elements/Map/FloorPicker'
+import ErrorView from '@/components/Error/ErrorView'
+import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
+import MapBottomSheet from '@/components/Map/BottomSheetMap'
+import FloorPicker from '@/components/Map/FloorPicker'
 import { RouteParamsContext, UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
@@ -75,7 +75,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-import packageInfo from '../../../../package.json'
+import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
 

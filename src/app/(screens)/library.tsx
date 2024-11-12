@@ -1,16 +1,16 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import LibraryBookingView from '@/components/Elements/Library/LibraryBookingView'
-import LibraryReservationRow from '@/components/Elements/Library/LibraryReservationRow'
-import LibrarySlotRow from '@/components/Elements/Library/LibrarySlotRow'
+import ErrorView from '@/components/Error/ErrorView'
+import LibraryBookingView from '@/components/Library/LibraryBookingView'
+import LibraryReservationRow from '@/components/Library/LibraryReservationRow'
+import LibrarySlotRow from '@/components/Library/LibrarySlotRow'
 import {
     BottomSheetRootBackground,
     renderBackdrop,
-} from '@/components/Elements/Universal/BottomSheetRootBackground'
-import Divider from '@/components/Elements/Universal/Divider'
-import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
-import SectionView from '@/components/Elements/Universal/SectionsView'
+} from '@/components/Universal/BottomSheetRootBackground'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import SectionView from '@/components/Universal/SectionsView'
 import { queryClient } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
 import {

@@ -1,5 +1,5 @@
-import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
-import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
+import DefaultTabs from '@/components/Layout/DefaultTabs'
+import MaterialTabs from '@/components/Layout/MaterialTabs'
 import {
     FlowContext,
     FoodFilterContext,

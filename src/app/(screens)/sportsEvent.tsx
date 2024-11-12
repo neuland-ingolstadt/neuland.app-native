@@ -1,5 +1,5 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
+import FormList from '@/components/Universal/FormList'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type UniversitySports } from '@/types/neuland-api'

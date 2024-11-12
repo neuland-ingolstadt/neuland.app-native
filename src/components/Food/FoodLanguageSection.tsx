@@ -1,35 +1,36 @@
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import React from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon'
+import PlatformIcon from '../Universal/Icon'
 
-interface Element {
+export interface FoodLanguageElement {
     title: string
     key: string
 }
 
-interface SectionPickerProps {
-    elements: Element[]
-    selectedItems: string[]
+/**
+ * A component that renders a list of selectable items with a title and a checkmark icon.
+ * @param {FoodLanguageElement[]} elements - The list of selectable items.
+ * @param {string[]} selectedItems - The list of selected items.
+ * @param {(item: FoodLanguage) => void} action - The function to be called when an item is selected.
+ * @returns {JSX.Element} - The MultiSectionPicker component.
+ */
+export interface FoodLanguagePickerProps {
+    elements: FoodLanguageElement[]
+    selectedItem: string
     action: (item: string) => void
 }
 
-/**
- * A component that renders a list of selectable items with a title and a checkmark icon.
- * @param {Element[]} elements - The list of selectable items.
- * @param {string[]} selectedItems - The list of selected items.
- * @param {(item: string) => void} action - The function to be called when an item is selected.
- * @returns {JSX.Element} - The MultiSectionPicker component.
- */
-const MultiSectionPicker: React.FC<SectionPickerProps> = ({
+// ...
+
+const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
     elements,
-    selectedItems,
+    selectedItem,
     action,
 }) => {
     const { styles } = useStyles(stylesheet)
-
     return (
         <>
             {elements.map((item, index) => (
@@ -45,7 +46,8 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                     >
                         <View style={styles.container}>
                             <Text style={styles.text}>{item.title}</Text>
-                            {selectedItems.includes(item.key) ? (
+
+                            {selectedItem === item.key ? (
                                 <PlatformIcon
                                     ios={{
                                         name: 'checkmark',
@@ -69,7 +71,6 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
         </>
     )
 }
-
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignItems: 'center',
@@ -86,4 +87,4 @@ const stylesheet = createStyleSheet((theme) => ({
     },
 }))
 
-export default MultiSectionPicker
+export default MultiSectionRadio

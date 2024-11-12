@@ -1,4 +1,5 @@
-import Dropdown from '@/components/Elements/Universal/Dropdown'
+import Divider from '@/components/Universal/Divider'
+import Dropdown from '@/components/Universal/Dropdown'
 import { type AvailableRoomItem } from '@/types/thi-api'
 import { getAvailableRooms } from '@/utils/library-utils'
 import React, { useEffect, useState } from 'react'
@@ -6,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import Divider from '../Universal/Divider'
 import BookButton from './BookingButton'
 import BookingFrame from './BookingFrame'
 

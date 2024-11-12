@@ -1,5 +1,5 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
 import { type Card, type ExtendedCard } from '@/components/allCards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { cardIcons } from '@/components/icons'

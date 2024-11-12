@@ -24,7 +24,7 @@ import ContextMenu from 'react-native-context-menu-view'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // @ts-expect-error - no types available
-import DragDropView from '../Exclusive/DragView'
+import DragDropView from '../../Exclusive/DragView'
 import PlatformIcon from '../Universal/Icon'
 
 /**

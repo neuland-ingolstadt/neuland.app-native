@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Elements/Universal/Icon'
+import PlatformIcon from '../Universal/Icon'
 import BaseCard from './BaseCard'
 
 const LinkCard = (): JSX.Element => {

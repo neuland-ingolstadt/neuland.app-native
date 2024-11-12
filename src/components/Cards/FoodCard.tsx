@@ -1,4 +1,4 @@
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'

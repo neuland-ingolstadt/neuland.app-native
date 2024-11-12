@@ -1,4 +1,4 @@
-import LoginForm from '@/components/Elements/Universal/LoginForm'
+import LoginForm from '@/components/Universal/LoginForm'
 import { PRIVACY_URL } from '@/data/constants'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'

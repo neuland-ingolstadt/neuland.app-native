@@ -1,12 +1,10 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
-import Divider from '@/components/Elements/Universal/Divider'
-import Dropdown, {
-    DropdownButton,
-} from '@/components/Elements/Universal/Dropdown'
-import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
+import ErrorView from '@/components/Error/ErrorView'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import Divider from '@/components/Universal/Divider'
+import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'

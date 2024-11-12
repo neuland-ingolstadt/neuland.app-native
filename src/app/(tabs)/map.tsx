@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
-import MapScreen from '@/components/Elements/Map/MapScreen'
+import MapScreen from '@/components/Map/MapScreen'
 import { MapContext } from '@/contexts/map'
 import { type ClickedMapElement, type SearchResult } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'

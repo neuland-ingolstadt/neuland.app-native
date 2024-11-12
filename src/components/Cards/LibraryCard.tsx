@@ -1,6 +1,6 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type Reservation } from '@/types/thi-api'

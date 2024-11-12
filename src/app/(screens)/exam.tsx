@@ -1,4 +1,4 @@
-import FormList from '@/components/Elements/Universal/FormList'
+import FormList from '@/components/Universal/FormList'
 import { type FormListSections } from '@/types/components'
 import { type Exam } from '@/types/utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'

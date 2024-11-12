@@ -1,4 +1,4 @@
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import React from 'react'
 import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native'

@@ -1,4 +1,4 @@
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import PlatformIcon from '@/components/Universal/Icon'
 import { type Theme } from '@react-navigation/native'
 import Color from 'color'
 import React from 'react'

@@ -1,4 +1,4 @@
-import FormList from '@/components/Elements/Universal/FormList'
+import FormList from '@/components/Universal/FormList'
 import changelogData from '@/data/changelog.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'

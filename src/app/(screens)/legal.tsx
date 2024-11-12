@@ -1,5 +1,5 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
 import { useRouter } from 'expo-router'

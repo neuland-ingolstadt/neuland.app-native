@@ -1,5 +1,5 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon } from '@/components/Elements/Universal/Icon'
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon } from '@/components/Universal/Icon'
 import licensesStatic from '@/data/licenses-static.json'
 import licenses from '@/data/licenses.json'
 import { type FormListSections } from '@/types/components'

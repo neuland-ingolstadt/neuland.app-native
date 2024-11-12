@@ -1,11 +1,11 @@
 import MultiSectionRadio, {
     type FoodLanguageElement,
-} from '@/components/Elements/Food/FoodLanguageSection'
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
-import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
+} from '@/components/Food/FoodLanguageSection'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { FoodFilterContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { useRouter } from 'expo-router'

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
 import { FlowContext } from '@/components/contexts'
 import changelogData from '@/data/changelog.json'
 import { type LanguageKey } from '@/localization/i18n'

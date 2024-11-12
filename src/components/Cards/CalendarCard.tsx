@@ -1,5 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import { FlowContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'

@@ -1,4 +1,4 @@
-import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'

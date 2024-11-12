@@ -1,4 +1,4 @@
-import FormList from '@/components/Elements/Universal/FormList'
+import FormList from '@/components/Universal/FormList'
 import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
 import { type FormListSections } from '@/types/components'

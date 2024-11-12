@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
-import LogoSVG from '@/components/Elements/Flow/svgs/logo'
-import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import LogoSVG from '@/components/Flow/svgs/logo'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import PlatformIcon from '@/components/Universal/Icon'
 import { FlowContext } from '@/components/contexts'
 import { PRIVACY_URL } from '@/data/constants'
 import { getContrastColor } from '@/utils/ui-utils'

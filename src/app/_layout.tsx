@@ -1,5 +1,5 @@
-import CrashView from '@/components/Elements/Error/CrashView'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import CrashView from '@/components/Error/CrashView'
+import PlatformIcon from '@/components/Universal/Icon'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'

@@ -1,5 +1,5 @@
-import { Avatar } from '@/components/Elements/Settings'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import { Avatar } from '@/components/Settings'
+import PlatformIcon from '@/components/Universal/Icon'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'

@@ -21,9 +21,9 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-import ErrorView from '../Error/ErrorView'
 // @ts-expect-error no types
-import DragDropView from '../Exclusive/DragView'
+import DragDropView from '../../Exclusive/DragView'
+import ErrorView from '../Error/ErrorView'
 import Divider from '../Universal/Divider'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 

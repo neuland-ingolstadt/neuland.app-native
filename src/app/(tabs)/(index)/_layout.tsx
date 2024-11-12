@@ -1,8 +1,8 @@
-import BottomSheet from '@/components/Elements/Layout/BottomSheet'
+import BottomSheet from '@/components/Layout/BottomSheet'
 import {
     BottomSheetRootBackground,
     renderBackdrop,
-} from '@/components/Elements/Universal/BottomSheetRootBackground'
+} from '@/components/Universal/BottomSheetRootBackground'
 import '@react-navigation/elements'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Slot } from 'expo-router'

@@ -1,5 +1,5 @@
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import SectionView from '@/components/Elements/Universal/SectionsView'
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
 import { accentColors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'

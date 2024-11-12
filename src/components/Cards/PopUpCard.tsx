@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Elements/Universal/Icon'
+import PlatformIcon from '../Universal/Icon'
 import { DashboardContext } from '../contexts'
 
 interface PopUpCardProps {

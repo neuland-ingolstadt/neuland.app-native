@@ -1,4 +1,4 @@
-import Divider from '@/components/Elements/Universal/Divider'
+import Divider from '@/components/Universal/Divider'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'

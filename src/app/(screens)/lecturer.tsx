@@ -1,4 +1,4 @@
-import FormList from '@/components/Elements/Universal/FormList'
+import FormList from '@/components/Universal/FormList'
 import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'

@@ -1,4 +1,4 @@
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import PlatformIcon from '@/components/Universal/Icon'
 import { type Theme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'

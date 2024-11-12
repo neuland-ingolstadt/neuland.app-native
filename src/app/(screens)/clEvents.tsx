@@ -1,6 +1,6 @@
-import ClEventsPage from '@/components/Elements/Events/ClEventsPage'
-import ClSportsPage from '@/components/Elements/Events/ClSportsPage'
-import ToggleRow from '@/components/Elements/Universal/ToggleRow'
+import ClEventsPage from '@/components/Events/ClEventsPage'
+import ClSportsPage from '@/components/Events/ClSportsPage'
+import ToggleRow from '@/components/Universal/ToggleRow'
 import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,

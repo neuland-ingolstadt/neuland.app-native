@@ -1,6 +1,6 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import {
     FoodFilterContext,
     RouteParamsContext,
