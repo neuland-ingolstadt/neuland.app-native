@@ -165,6 +165,5 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         backgroundColor: theme.colors.background,
-        flex: 1,
     },
 }))

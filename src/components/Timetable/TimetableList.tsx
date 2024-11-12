@@ -1,4 +1,8 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
+import ErrorView from '@/components/Error/ErrorView'
+// @ts-expect-error no types
+import DragDropView from '@/components/Exclusive/DragView'
+import Divider from '@/components/Universal/Divider'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -21,10 +25,6 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-// @ts-expect-error no types
-import DragDropView from '../../Exclusive/DragView'
-import ErrorView from '../Error/ErrorView'
-import Divider from '../Universal/Divider'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string

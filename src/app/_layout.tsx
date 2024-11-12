@@ -458,6 +458,7 @@ function RootLayout(): JSX.Element {
                                 animation: 'slide_from_right',
                             },
                             ios: {
+                                headerStyle: undefined,
                                 headerTransparent: true,
                                 headerBlurEffect: 'regular',
                             },

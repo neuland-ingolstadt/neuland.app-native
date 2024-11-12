@@ -11,7 +11,7 @@ export default function TimetableStack(): JSX.Element {
     const topInset = safeArea.top
     const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
     const paddingTop = hasDynamicIsland ? topInset : 0
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     return (
         <View style={{ ...styles.page, paddingTop }}>
             <Stack
@@ -20,7 +20,7 @@ export default function TimetableStack(): JSX.Element {
                     title: t('navigation.timetable'),
                     headerStyle: styles.headerBackground,
                     headerTitleStyle: styles.headerTextStyle,
-                    headerTintColor: styles.headerTintColor.color,
+                    headerTintColor: theme.colors.primary,
                     contentStyle: styles.background,
                 }}
             ></Stack>
@@ -29,19 +29,11 @@ export default function TimetableStack(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    blurTab: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-    headerTextStyle: { color: theme.colors.text },
-    headerTintColor: { color: theme.colors.primary },
-    headerBackground: { backgroundColor: theme.colors.card },
     background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
+    headerTextStyle: { color: theme.colors.text },
     page: {
-        flex: 1,
         backgroundColor: theme.colors.card,
+        flex: 1,
     },
 }))

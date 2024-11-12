@@ -1,4 +1,6 @@
+import PlatformIcon from '@/components/Universal/Icon'
 import { MapContext } from '@/contexts/map'
+import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import React, { useContext } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
@@ -7,8 +9,6 @@ import {
     createStyleSheet,
     useStyles,
 } from 'react-native-unistyles'
-
-import PlatformIcon from '../Universal/Icon'
 
 interface FloorPickerProps {
     floors: string[]
@@ -24,7 +24,6 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
     setCameraTriggerKey,
 }): JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const isDark = UnistylesRuntime.themeName === 'dark'
     const { currentFloor, setCurrentFloor } = useContext(MapContext)
 
     return (
@@ -57,7 +56,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         }}
                     >
                         <View style={styles.button}>
-                            <Text style={styles.buttonText(true)}>
+                            <Text style={styles.buttonText(false)}>
                                 {currentFloor?.floor === 'EG'
                                     ? '0'
                                     : currentFloor?.floor}
@@ -74,7 +73,6 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                 >
                     <View style={styles.button}>
                         <PlatformIcon
-                            color={isDark ? '#b6b6b6ff' : '#4a4a4aff'}
                             ios={{
                                 name: 'xmark.circle.fill',
                                 size: 26,
@@ -83,6 +81,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                 name: 'cancel',
                                 size: 26,
                             }}
+                            style={styles.xIcon}
                         />
                     </View>
                 </Pressable>
@@ -108,11 +107,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     ),
                                 ]}
                             >
-                                <Text
-                                    style={styles.buttonText(
-                                        currentFloor?.floor === floor
-                                    )}
-                                >
+                                <Text style={styles.buttonText(true)}>
                                     {floor === 'EG' ? '0' : floor}
                                 </Text>
                             </View>
@@ -187,12 +182,16 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: current ? theme.colors.primary : theme.colors.card,
         borderBottomWidth: floor ? 0 : 1,
     }),
-    buttonText: (text: boolean) => ({
+    buttonText: (open: boolean) => ({
         fontWeight: '500',
         fontSize: 15,
-        color: text ? theme.colors.text : theme.colors.background,
+        color: open ? getContrastColor(theme.colors.text) : theme.colors.text,
     }),
     icon: {
         color: theme.colors.labelColor,
+    },
+    xIcon: {
+        color:
+            UnistylesRuntime.colorScheme === 'dark' ? '#4a4a4aff' : '#b6b6b6ff',
     },
 }))

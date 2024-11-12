@@ -1,3 +1,4 @@
+import PlatformIcon from '@/components/Universal/Icon'
 import { type Food, type Meal } from '@/types/neuland-api'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -5,7 +6,6 @@ import { Pressable, type StyleSheet, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
 import { MealEntry } from './MealEntry'
 
 /**

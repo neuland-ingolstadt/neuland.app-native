@@ -1,4 +1,7 @@
 import { humanLocations, shareMeal } from '@/app/(screens)/meal'
+// @ts-expect-error - no types available
+import DragDropView from '@/components/Exclusive/DragView'
+import PlatformIcon from '@/components/Universal/Icon'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
@@ -22,10 +25,6 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-// @ts-expect-error - no types available
-import DragDropView from '../../Exclusive/DragView'
-import PlatformIcon from '../Universal/Icon'
 
 /**
  * Renders a single meal entry in the food menu.

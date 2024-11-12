@@ -252,12 +252,15 @@ export default function Provider({
         console.log('Appearance.getColorScheme()', Appearance.getColorScheme())
 
         if (themeHook.theme === 'dark') {
+            Appearance.setColorScheme('dark')
             UnistylesRuntime.setAdaptiveThemes(false)
             UnistylesRuntime.setTheme('dark')
         } else if (themeHook.theme === 'light') {
+            Appearance.setColorScheme('light')
             UnistylesRuntime.setAdaptiveThemes(false)
             UnistylesRuntime.setTheme('light')
         } else {
+            Appearance.setColorScheme(undefined)
             UnistylesRuntime.setAdaptiveThemes(true)
         }
 
