@@ -1,6 +1,5 @@
 import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
 import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
-import { type Colors } from '@/components/colors'
 import {
     FlowContext,
     FoodFilterContext,
@@ -12,10 +11,9 @@ import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import { type Theme, useTheme } from '@react-navigation/native'
-import Color from 'color'
 import * as Application from 'expo-application'
 import * as NavigationBar from 'expo-navigation-bar'
-import { Redirect, usePathname, useRouter } from 'expo-router'
+import { Redirect, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
@@ -33,9 +31,7 @@ declare const process: {
 
 export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
-    const isDark = theme.dark
     const router = useRouter()
-    const colors = theme.colors as Colors
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
@@ -46,37 +42,16 @@ export default function HomeLayout(): JSX.Element {
         React.useContext(FlowContext)
     const { isOnboarded } = React.useContext(FlowContext)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const pathname = usePathname()
 
-    useEffect(() => {
-        // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
-        const prepare = async (): Promise<void> => {
-            const tabsPaths = ['/', '/timetable', '/map', '/food']
-            const isTab = tabsPaths.includes(pathname)
-            if (isOnboarded !== true) {
-                await NavigationBar.setBackgroundColorAsync(colors.contrast)
-                return
-            }
-
-            await NavigationBar.setBackgroundColorAsync(
-                isTab
-                    ? isDark
-                        ? Color(colors.card)
-                              .mix(Color(colors.primary), 0.04)
-                              .hex()
-                        : Color(colors.card)
-                              .mix(Color(colors.primary), 0.1)
-                              .hex()
-                    : colors.background
-            )
-            await NavigationBar.setButtonStyleAsync(
-                theme.dark ? 'light' : 'dark'
-            )
-        }
-        if (Platform.OS === 'android') {
-            void prepare()
-        }
-    }, [theme.dark, pathname, isDark, colors, isOnboarded])
+    // Android only
+    const prepare = async (): Promise<void> => {
+        void NavigationBar.setPositionAsync('absolute')
+        // transparent backgrounds to see through
+        void NavigationBar.setBackgroundColorAsync('#ffffff00')
+    }
+    if (Platform.OS === 'android') {
+        void prepare()
+    }
 
     useEffect(() => {
         const shortcuts = [
