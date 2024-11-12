@@ -136,21 +136,18 @@ function RootLayout(): JSX.Element {
                     name="(screens)/settings"
                     options={{
                         title: t('navigation.settings'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/changelog"
                     options={{
                         title: 'Changelog',
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/foodPreferences"
                     options={{
                         title: t('navigation.preferences'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -158,9 +155,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -172,9 +166,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -186,9 +177,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -200,9 +188,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -214,9 +199,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -227,14 +209,12 @@ function RootLayout(): JSX.Element {
                     name="(screens)/theme"
                     options={{
                         title: t('navigation.theme'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/accent"
                     options={{
                         title: t('navigation.accent'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -247,28 +227,24 @@ function RootLayout(): JSX.Element {
                     name="(screens)/profile"
                     options={{
                         title: t('navigation.profile'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/about"
                     options={{
                         title: t('navigation.about'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/legal"
                     options={{
                         title: t('navigation.legal'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/licenses"
                     options={{
                         title: t('navigation.licenses.title'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -276,9 +252,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.license'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -289,32 +262,24 @@ function RootLayout(): JSX.Element {
                     name="(screens)/dashboard"
                     options={{
                         title: 'Dashboard',
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/grades"
                     options={{
                         title: t('navigation.grades'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/roomSearch"
                     options={{
                         title: t('navigation.advancedSearch'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/clEvents"
                     options={{
                         title: 'Campus Life Events',
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
                     }}
                 />
                 <Stack.Screen
@@ -322,9 +287,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -336,9 +298,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -349,11 +308,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/calendar"
                     options={{
                         title: t('navigation.calendar'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
                     }}
                 />
                 <Stack.Screen
@@ -361,9 +315,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.examDetails'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -374,11 +325,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/lecturers"
                     options={{
                         title: t('navigation.lecturers.title'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
                     }}
                 />
                 <Stack.Screen
@@ -386,9 +332,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.lecturer'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -399,11 +342,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/library"
                     options={{
                         title: t('navigation.library'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
 
                         headerRight: () => (
                             <Pressable
@@ -434,9 +372,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.libraryCode'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -448,9 +383,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.news'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 headerStyle: undefined,
                                 headerTransparent: true,
