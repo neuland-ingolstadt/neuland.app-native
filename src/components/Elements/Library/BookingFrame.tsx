@@ -1,10 +1,9 @@
-import { type Colors } from '@/components/colors'
 import { type AvailableRoomItem } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
 import SectionView from '../Universal/SectionsView'
@@ -16,7 +15,7 @@ const BookingFrame = ({
     item: AvailableRoomItem
     children: React.ReactNode
 }): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
     const availSeats = Object.values(item.resources).reduce(
@@ -27,46 +26,21 @@ const BookingFrame = ({
         <SectionView footer={t('pages.library.available.footer')}>
             <View style={styles.reserveContainer}>
                 <View style={styles.dropdownContainer}>
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.leftText2}>
                         {`${t('pages.library.timeSlot')}`}
                     </Text>
 
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.labelColor,
-                            ...styles.rowRight,
-                        }}
-                    >
+                    <Text style={styles.rowRight}>
                         {`${formatFriendlyDateTimeRange(new Date(item.from), new Date(item.to))}`}
                     </Text>
                 </View>
-                <Divider
-                    color={colors.labelTertiaryColor}
-                    iosPaddingLeft={16}
-                />
+                <Divider iosPaddingLeft={16} />
                 <View style={styles.dropdownContainer}>
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.leftText2}>
                         {t('pages.library.available.available')}
                     </Text>
 
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            ...styles.rowRight,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.rowRight}>
                         {t('pages.library.available.seatsAvailable', {
                             available: availSeats,
                             total: Object.values(item.resources).reduce(
@@ -76,17 +50,14 @@ const BookingFrame = ({
                         })}
                     </Text>
                 </View>
-                <Divider
-                    color={colors.labelTertiaryColor}
-                    iosPaddingLeft={16}
-                />
+                <Divider iosPaddingLeft={16} />
                 {children}
             </View>
         </SectionView>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     dropdownContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -99,14 +70,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
-
     leftText2: {
         fontSize: 15,
+        color: theme.colors.text,
     },
     rowRight: {
         width: '70%',
         textAlign: 'right',
+        fontSize: 15,
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export default BookingFrame

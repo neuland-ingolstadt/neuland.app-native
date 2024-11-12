@@ -1,7 +1,5 @@
 import LoginForm from '@/components/Elements/Universal/LoginForm'
-import { type Colors } from '@/components/colors'
 import { PRIVACY_URL } from '@/data/constants'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
@@ -13,7 +11,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     TouchableWithoutFeedback,
     View,
@@ -25,6 +22,7 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
@@ -81,7 +79,7 @@ const textsDE = shuffleArray([
 ])
 
 export default function Login(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const floatingKeyboard = useIsFloatingKeyboard()
     const { t, i18n } = useTranslation('flow')
     const [currentTextIndex, setCurrentTextIndex] = useState(0)
@@ -146,12 +144,7 @@ export default function Login(): JSX.Element {
                         enabled={!floatingKeyboard}
                     >
                         <View>
-                            <Text
-                                style={{
-                                    ...styles.header1,
-                                    color: colors.text,
-                                }}
-                            >
+                            <Text style={styles.header1}>
                                 {t('login.title1')}
                             </Text>
                             <TouchableWithoutFeedback
@@ -164,10 +157,7 @@ export default function Login(): JSX.Element {
                             >
                                 <Animated.View style={animatedStyle}>
                                     <Text
-                                        style={{
-                                            ...styles.header3,
-                                            color: colors.labelColor,
-                                        }}
+                                        style={styles.header3}
                                         numberOfLines={1}
                                         adjustsFontSizeToFit
                                     >
@@ -177,9 +167,8 @@ export default function Login(): JSX.Element {
                             </TouchableWithoutFeedback>
                         </View>
 
-                        <View style={styles.loginContainer}>
-                            <LoginForm navigateHome={navigateHome} />
-                        </View>
+                        <LoginForm navigateHome={navigateHome} />
+
                         <View />
                         <View />
                     </KeyboardAvoidingView>
@@ -189,12 +178,7 @@ export default function Login(): JSX.Element {
                                 void Linking.openURL(PRIVACY_URL)
                             }}
                         >
-                            <Text
-                                style={{
-                                    ...styles.privacyLink,
-                                    color: colors.labelColor,
-                                }}
-                            >
+                            <Text style={styles.privacyLink}>
                                 {t('onboarding.links.privacy')}
                             </Text>
                         </Pressable>
@@ -205,7 +189,7 @@ export default function Login(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     keyboardContainer: {
         flex: 1,
         justifyContent: 'space-evenly',
@@ -216,11 +200,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
 
-    loginContainer: {},
     header1: {
         fontSize: 42,
         fontWeight: 'bold',
         textAlign: 'left',
+        color: theme.colors.text,
     },
 
     header3: {
@@ -229,6 +213,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontWeight: '400',
         minHeight: 30,
+        color: theme.colors.labelColor,
     },
     linkContainer: {
         bottom: 70,
@@ -240,5 +225,6 @@ const styles = StyleSheet.create({
     privacyLink: {
         textAlign: 'center',
         fontSize: 14,
+        color: theme.colors.labelColor,
     },
-})
+}))

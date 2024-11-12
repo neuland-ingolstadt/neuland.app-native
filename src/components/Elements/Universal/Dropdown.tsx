@@ -1,9 +1,8 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SelectDropdown from 'react-native-select-dropdown'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface Props {
     data: string[]
@@ -29,7 +28,7 @@ const Dropdown: React.FC<Props> = ({
     reset = false,
     width = 100,
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const ref = React.createRef<SelectDropdown>()
 
     useEffect(() => {
@@ -43,10 +42,7 @@ const Dropdown: React.FC<Props> = ({
             ref={ref}
             data={data}
             defaultValue={defaultValue}
-            dropdownStyle={{
-                ...styles.dropdown,
-                backgroundColor: colors.card,
-            }}
+            dropdownStyle={styles.dropdown}
             onSelect={(selectedItem: string) => {
                 onSelect(selectedItem)
             }}
@@ -56,8 +52,6 @@ const Dropdown: React.FC<Props> = ({
                         style={[
                             styles.dropdownButton,
                             {
-                                backgroundColor: colors.datePickerBackground,
-
                                 width,
                             },
                         ]}
@@ -65,9 +59,7 @@ const Dropdown: React.FC<Props> = ({
                         <Text
                             numberOfLines={1}
                             allowFontScaling={false}
-                            style={{
-                                color: colors.text,
-                            }}
+                            style={styles.itemText}
                         >
                             {selectedItem}
                         </Text>
@@ -76,17 +68,10 @@ const Dropdown: React.FC<Props> = ({
             }}
             renderItem={(item, index, isSelected) => {
                 return (
-                    <View
-                        style={{
-                            ...styles.rowHeight,
-                            backgroundColor: colors.card,
-                            borderColor: colors.border,
-                        }}
-                    >
+                    <View style={styles.rowHeight}>
                         <Text
                             style={{
                                 ...styles.buttonText,
-                                color: colors.text,
                                 ...(isSelected ? styles.selectedText : {}),
                             }}
                         >
@@ -99,56 +84,20 @@ const Dropdown: React.FC<Props> = ({
     )
 }
 
-const styles = StyleSheet.create({
-    dropdownButton: {
-        borderRadius: 8,
-        height: 32,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
-    buttonText: {
-        fontSize: 15,
-        textAlign: 'center',
-    },
-    rowHeight: {
-        height: 38,
-        justifyContent: 'center',
-        borderBottomWidth: 1,
-    },
-    dropdown: {
-        borderRadius: 8,
-        shadowOpacity: 0.3,
-        shadowOffset: { width: 0.1, height: 0.1 },
-    },
-    selectedText: {
-        fontWeight: '500',
-    },
-})
-
 export default Dropdown
 
 export const DropdownButton: React.FC<{
     children: React.ReactNode
     onPress: () => void
 }> = ({ children, onPress }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <TouchableOpacity onPress={onPress}>
-            <View
-                style={[
-                    styles.dropdownButton,
-                    {
-                        backgroundColor: colors.datePickerBackground,
-                    },
-                ]}
-            >
+            <View style={styles.dropdownButton}>
                 <Text
                     numberOfLines={1}
                     allowFontScaling={false}
-                    style={{
-                        color: colors.text,
-                    }}
+                    style={styles.text}
                 >
                     {children}
                 </Text>
@@ -156,3 +105,41 @@ export const DropdownButton: React.FC<{
         </TouchableOpacity>
     )
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+    text: {
+        color: theme.colors.text,
+    },
+    dropdownButton: {
+        borderRadius: 8,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        backgroundColor: theme.colors.datePickerBackground,
+    },
+    buttonText: {
+        fontSize: 15,
+        textAlign: 'center',
+        color: theme.colors.text,
+    },
+    rowHeight: {
+        height: 38,
+        justifyContent: 'center',
+        borderBottomWidth: 1,
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
+    },
+    dropdown: {
+        borderRadius: 8,
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 0.1, height: 0.1 },
+        backgroundColor: theme.colors.card,
+    },
+    selectedText: {
+        fontWeight: '500',
+    },
+    itemText: {
+        color: theme.colors.text,
+    },
+}))

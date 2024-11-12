@@ -1,5 +1,4 @@
 import { createGuestSession, createSession } from '@/api/thi-session-handler'
-import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import {
     STATUS_URL,
@@ -9,7 +8,6 @@ import {
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
@@ -21,12 +19,16 @@ import {
     Alert,
     Linking,
     Platform,
-    StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
     View,
 } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 const LoginForm = ({
     navigateHome,
@@ -39,8 +41,7 @@ const LoginForm = ({
     const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const colors = useTheme().colors as Colors
-    const isDark = useTheme().dark
+    const { styles } = useStyles(stylesheet)
     // No guest fallback is provided, so the guest session will be created correctly
     const { userKind, toggleUserKind } = React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
@@ -163,46 +164,24 @@ const LoginForm = ({
 
     const signInDisabled =
         username.trim() === '' || password.trim() === '' || loading
-    const disabledBackgroundColor = isDark
-        ? Color(colors.primary).darken(0.3).hex()
-        : Color(colors.primary).lighten(0.3).hex()
-    const disabledTextColor = isDark
-        ? Color(getContrastColor(colors.primary)).lighten(0.1).hex()
-        : Color(getContrastColor(colors.primary)).darken(0.1).hex()
+
     return (
         <View style={styles.container}>
-            <View
-                style={[
-                    styles.loginContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
+            <View style={styles.loginContainer}>
                 <Text
-                    style={[styles.header, { color: colors.text }]}
+                    style={styles.header}
                     adjustsFontSizeToFit={true}
                     numberOfLines={1}
                 >
                     {'THI Account'}
                 </Text>
                 <View style={styles.userNameContainer}>
-                    <Text
-                        style={{
-                            ...styles.userNameLabel,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.userNameLabel}>
                         {t('login.username')}
                     </Text>
                     <TextInput
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                                backgroundColor: colors.inputBackground,
-                                borderColor: colors.border,
-                            },
-                        ]}
-                        placeholderTextColor={colors.labelColor}
+                        style={styles.textInput}
+                        placeholderTextColor={styles.label.color}
                         defaultValue={username}
                         returnKeyType="next"
                         placeholder="abc1234"
@@ -210,32 +189,20 @@ const LoginForm = ({
                             setUsername(text)
                         }}
                         clearButtonMode="while-editing"
-                        selectionColor={colors.primary}
+                        selectionColor={styles.primary.color}
                         autoCapitalize="none"
                         autoCorrect={false}
                         textContentType="oneTimeCode"
                     />
                 </View>
                 <View style={styles.passwordContainer}>
-                    <Text
-                        style={{
-                            ...styles.userNameLabel,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.userNameLabel}>
                         {t('login.password')}
                     </Text>
 
                     <TextInput
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                                backgroundColor: colors.inputBackground,
-                                borderColor: colors.border,
-                            },
-                        ]}
-                        placeholderTextColor={colors.labelColor}
+                        style={styles.textInput}
+                        placeholderTextColor={styles.label.color}
                         placeholder={t('login.password')}
                         defaultValue={password}
                         returnKeyType="done"
@@ -249,7 +216,7 @@ const LoginForm = ({
                                 })
                             }
                         }}
-                        selectionColor={colors.primary}
+                        selectionColor={styles.primary.color}
                         selectTextOnFocus={true}
                         autoCapitalize="none"
                         secureTextEntry={true}
@@ -266,29 +233,15 @@ const LoginForm = ({
                             console.log(error)
                         })
                     }}
-                    style={[
-                        styles.loginButton,
-                        {
-                            backgroundColor: signInDisabled
-                                ? disabledBackgroundColor
-                                : colors.primary,
-                        },
-                    ]}
+                    style={styles.loginButton(signInDisabled)}
                 >
                     {loading ? (
                         <ActivityIndicator
-                            color={getContrastColor(colors.primary)}
+                            color={getContrastColor(styles.primary.color)}
                             size={15}
                         />
                     ) : (
-                        <Text
-                            style={{
-                                ...styles.buttonText,
-                                color: signInDisabled
-                                    ? disabledTextColor
-                                    : getContrastColor(colors.primary),
-                            }}
-                        >
+                        <Text style={styles.buttonText(signInDisabled)}>
                             {t('login.button')}
                         </Text>
                     )}
@@ -301,16 +254,7 @@ const LoginForm = ({
                             })
                         }}
                     >
-                        <Text
-                            style={[
-                                styles.guestText,
-                                {
-                                    color: colors.labelSecondaryColor,
-                                },
-                            ]}
-                        >
-                            {t('login.guest')}
-                        </Text>
+                        <Text style={styles.guestText}>{t('login.guest')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -319,7 +263,7 @@ const LoginForm = ({
 }
 
 const black = '#000000'
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: { alignItems: 'center', justifyContent: 'center' },
     loginContainer: {
         shadowColor: black,
@@ -336,28 +280,37 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingTop: 30,
         paddingBottom: 30,
+        backgroundColor: theme.colors.card,
     },
     header: {
         fontSize: 23,
         fontWeight: '600',
         textAlign: 'left',
-
+        color: theme.colors.text,
         marginBottom: 14,
     },
-    loginButton: {
+    loginButton: (disabled: boolean) => ({
         height: 40,
         justifyContent: 'center',
         paddingHorizontal: 20,
         marginTop: 25,
         borderRadius: 7,
         alignItems: 'center',
-    },
+        backgroundColor: disabled
+            ? UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.primary).darken(0.3).hex()
+                : Color(theme.colors.primary).lighten(0.3).hex()
+            : theme.colors.primary,
+    }),
     textInput: {
         fontSize: 16,
         paddingVertical: 10,
         paddingHorizontal: 10,
         borderRadius: 7,
         borderWidth: 1,
+        color: theme.colors.text,
+        backgroundColor: theme.colors.inputBackground,
+        borderColor: theme.colors.border,
     },
 
     guestContainer: {
@@ -366,6 +319,7 @@ const styles = StyleSheet.create({
     },
     guestText: {
         fontSize: 14.5,
+        color: theme.colors.labelSecondaryColor,
     },
 
     userNameContainer: {
@@ -374,14 +328,30 @@ const styles = StyleSheet.create({
     userNameLabel: {
         paddingBottom: 5,
         fontSize: 15,
+        color: theme.colors.text,
     },
     passwordContainer: {
         paddingTop: 15,
     },
-    buttonText: {
+    buttonText: (disabled: boolean) => ({
         fontWeight: 'bold',
         fontSize: 15,
+        color: disabled
+            ? UnistylesRuntime.themeName === 'dark'
+                ? Color(getContrastColor(theme.colors.primary))
+                      .lighten(0.1)
+                      .hex()
+                : Color(getContrastColor(theme.colors.primary))
+                      .darken(0.1)
+                      .hex()
+            : getContrastColor(theme.colors.primary),
+    }),
+    primary: {
+        color: theme.colors.primary,
     },
-})
+    label: {
+        color: theme.colors.labelColor,
+    },
+}))
 
 export default LoginForm

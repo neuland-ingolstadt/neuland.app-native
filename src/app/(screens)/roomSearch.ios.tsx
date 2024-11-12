@@ -4,7 +4,6 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -18,18 +17,12 @@ import {
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
 
 const DURATIONS = [
@@ -52,7 +45,7 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
 
@@ -143,36 +136,19 @@ export default function AdvancedSearch(): JSX.Element {
         <>
             <ScrollView style={styles.scrollView}>
                 <View>
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.options.title')}
                     </Text>
-                    <View
-                        style={[
-                            styles.section,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
-                    >
+                    <View style={styles.section}>
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.date')}
                             </Text>
 
                             <DateTimePicker
                                 value={new Date(date + 'T' + time)}
                                 mode="date"
-                                accentColor={colors.primary}
+                                accentColor={styles.indicator.color}
                                 locale="de-DE"
                                 onChange={(_event, selectedDate) => {
                                     setDate(formatISODate(selectedDate))
@@ -190,12 +166,7 @@ export default function AdvancedSearch(): JSX.Element {
 
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.time')}
                             </Text>
 
@@ -203,7 +174,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 value={new Date(date + 'T' + time)}
                                 mode="time"
                                 is24Hour={true}
-                                accentColor={colors.primary}
+                                accentColor={styles.indicator.color}
                                 locale="de-DE"
                                 minuteInterval={5}
                                 onChange={(_event, selectedDate) => {
@@ -213,19 +184,14 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.duration')}
                             </Text>
 
                             <Picker
                                 selection={duration}
                                 pickerStyle="menu"
-                                tint={colors.primary}
+                                tint={styles.indicator.color}
                                 offset={{ x: 15, y: 0 }}
                             >
                                 {DURATIONS.map((option) => (
@@ -235,19 +201,14 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.building')}
                             </Text>
 
                             <Picker
                                 selection={building}
                                 pickerStyle="menu"
-                                tint={colors.primary}
+                                tint={styles.indicator.color}
                                 offset={{ x: 20, y: 0 }}
                             >
                                 {ALL_BUILDINGS.map((option) => (
@@ -257,12 +218,7 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                     </View>
                     {wasModified && isDateAndTimeEqualToStart() && (
-                        <View
-                            style={{
-                                ...styles.section,
-                                backgroundColor: colors.card,
-                            }}
-                        >
+                        <View style={styles.section}>
                             <View style={styles.adjustContainer}>
                                 <PlatformIcon
                                     ios={{
@@ -273,24 +229,13 @@ export default function AdvancedSearch(): JSX.Element {
                                         name: 'update',
                                         size: 20,
                                     }}
-                                    color={colors.primary}
                                 />
-                                <Text
-                                    style={{
-                                        color: colors.primary,
-                                        ...styles.adjustedTitle,
-                                    }}
-                                >
+                                <Text style={styles.adjustedTitle}>
                                     {t('pages.rooms.modified.title')}
                                 </Text>
                             </View>
 
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.adjustText,
-                                }}
-                            >
+                            <Text style={styles.adjustText}>
                                 {t('pages.rooms.modified.description', {
                                     date,
                                     time,
@@ -298,27 +243,15 @@ export default function AdvancedSearch(): JSX.Element {
                             </Text>
                         </View>
                     )}
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.results')}
                     </Text>
                     <View style={styles.sectionContainer}>
-                        <View
-                            style={[
-                                styles.section,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                        >
+                        <View style={styles.section}>
                             {filterState === LoadingState.LOADING ||
                             isLoading ? (
                                 <ActivityIndicator
-                                    color={colors.primary}
+                                    color={styles.indicator.color}
                                     style={styles.loadingIndicator}
                                 />
                             ) : isPaused ? (
@@ -349,7 +282,7 @@ export default function AdvancedSearch(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     sectionContainer: {
         paddingBottom: 20,
     },
@@ -358,17 +291,19 @@ const styles = StyleSheet.create({
     },
     sectionHeader: {
         fontSize: 13,
-
+        color: theme.colors.labelSecondaryColor,
         fontWeight: 'normal',
         textTransform: 'uppercase',
         marginBottom: 4,
     },
     optionTitle: {
         fontSize: 15,
+        color: theme.colors.text,
     },
     section: {
         marginBottom: 16,
         borderRadius: 8,
+        backgroundColor: theme.colors.card,
     },
     loadingIndicator: {
         paddingVertical: 30,
@@ -393,9 +328,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 5,
         fontWeight: '500',
+        color: theme.colors.primary,
     },
     adjustText: {
         padding: 10,
         fontSize: 15,
+        color: theme.colors.text,
     },
-})
+    indicator: {
+        color: theme.colors.primary,
+    },
+}))
