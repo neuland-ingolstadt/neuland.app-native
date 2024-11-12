@@ -19,7 +19,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
-    initialRouteName: '(index)',
+    initialRouteName: '(tabs)',
 }
 function RootLayout(): JSX.Element {
     const router = useRouter()
@@ -111,12 +111,6 @@ function RootLayout(): JSX.Element {
                     statusBarTranslucent: true,
                 }}
             >
-                <Stack.Screen
-                    name="index"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
                 <Stack.Screen
                     name="(tabs)"
                     options={{
