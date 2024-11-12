@@ -15,7 +15,7 @@ const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         maxWidth: 600,
         padding: theme.margins.card,
     },

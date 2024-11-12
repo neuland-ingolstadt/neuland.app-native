@@ -507,7 +507,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     loadedRows: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginHorizontal: theme.margins.page,
     },
     loadingContainer: {

@@ -309,7 +309,7 @@ const stylesheet = createStyleSheet((theme) => ({
 
     loginContainer: {
         backgroundColor: theme.colors.card,
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         justifyContent: 'center',
         maxWidth: 400,
         paddingBottom: 30,

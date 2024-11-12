@@ -64,7 +64,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         backgroundColor:
             Platform.OS === 'ios' ? theme.colors.cardButton : theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         gap: 5,
         justifyContent: 'center',
         marginTop: 14,

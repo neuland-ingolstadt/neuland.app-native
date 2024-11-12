@@ -100,7 +100,7 @@ const stylesheet = createStyleSheet((theme) => ({
     card: {
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginHorizontal: theme.margins.page,
         marginVertical: 6,
         paddingBottom: 14,

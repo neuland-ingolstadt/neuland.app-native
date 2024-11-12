@@ -56,7 +56,7 @@ const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignItems: 'center',
         backgroundColor: theme.colors.cardContrast,
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         flexDirection: 'row',
         gap: 18,
         paddingHorizontal: 20,

@@ -72,7 +72,7 @@ export const AllergensBanner = ({
 const stylesheet = createStyleSheet((theme) => ({
     bannerContainer: {
         backgroundColor: theme.colors.primary,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginBottom: 10,
         marginTop: 2,
         padding: 10,
@@ -91,7 +91,7 @@ const stylesheet = createStyleSheet((theme) => ({
         color: getContrastColor(theme.colors.primary),
     },
     dismissButton: {
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         padding: 5,
         position: 'absolute',
         right: 5,

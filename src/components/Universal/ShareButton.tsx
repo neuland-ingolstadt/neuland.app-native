@@ -39,7 +39,7 @@ const stylesheet = createStyleSheet((theme) => ({
     shareButton: {
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginTop: 5,
         paddingHorizontal: 45,
         paddingVertical: 12,

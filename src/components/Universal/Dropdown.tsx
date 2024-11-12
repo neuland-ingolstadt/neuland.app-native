@@ -114,14 +114,14 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     dropdown: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         shadowOffset: { width: 0.1, height: 0.1 },
         shadowOpacity: 0.3,
     },
     dropdownButton: {
         alignItems: 'center',
         backgroundColor: theme.colors.datePickerBackground,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         height: 32,
         justifyContent: 'center',
         paddingHorizontal: 10,

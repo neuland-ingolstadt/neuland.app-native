@@ -136,7 +136,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         flexDirection: 'row',
         gap: 10,
         paddingHorizontal: 14,

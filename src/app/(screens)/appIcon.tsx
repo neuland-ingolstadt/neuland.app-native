@@ -202,7 +202,7 @@ const stylesheet = createStyleSheet((theme) => ({
     sectionContainer: {
         alignContent: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         justifyContent: 'center',
     },
 }))

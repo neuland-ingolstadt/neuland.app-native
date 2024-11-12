@@ -194,7 +194,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     blockCard: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
     },
     blockFooter: {
         color: theme.colors.labelSecondaryColor,

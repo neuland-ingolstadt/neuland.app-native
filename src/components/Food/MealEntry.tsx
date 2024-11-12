@@ -284,7 +284,7 @@ const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         padding: theme.margins.card,
         shadowColor: theme.colors.text,
         shadowOffset: {
@@ -315,7 +315,7 @@ const stylesheet = createStyleSheet((theme) => ({
     flagsBox: {
         alignContent: 'center',
         alignItems: 'center',
-        borderRadius: 4,
+        borderRadius: theme.radius.sm,
         flexDirection: 'row',
         marginBottom: 2,
         marginRight: 4,
@@ -365,7 +365,7 @@ const stylesheet = createStyleSheet((theme) => ({
         maxWidth: '88%',
     },
     variantContainer: {
-        borderRadius: 4,
+        borderRadius: theme.radius.sm,
         maxWidth: '10%',
         paddingHorizontal: 6,
         paddingVertical: 2,

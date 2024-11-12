@@ -262,7 +262,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     loadedContainer: {
         alignSelf: 'center',
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         justifyContent: 'center',
         marginHorizontal: theme.margins.page,
         marginVertical: 16,

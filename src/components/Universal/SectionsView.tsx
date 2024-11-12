@@ -57,7 +57,7 @@ const stylesheet = createStyleSheet((theme) => ({
     sectionBox: {
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         justifyContent: 'center',
         marginTop: 2,
         width: '100%',

@@ -88,7 +88,7 @@ const stylesheet = createStyleSheet((theme) => ({
     linkBox: {
         alignItems: 'center',
         backgroundColor: theme.colors.cardButton,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         flex: 1,
         gap: Platform.OS === 'android' ? 2 : 7,
         justifyContent: 'space-between',

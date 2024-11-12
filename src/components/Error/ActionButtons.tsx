@@ -70,7 +70,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.background,
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
     },
 
     refreshButton: {

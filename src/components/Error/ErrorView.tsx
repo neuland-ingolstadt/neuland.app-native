@@ -239,7 +239,7 @@ const stylesheet = createStyleSheet((theme) => ({
         textAlign: 'center',
     },
     logoutContainer: (inModal: boolean) => ({
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         marginBottom: 20,
         marginTop: 30,
         alignItems: 'center',

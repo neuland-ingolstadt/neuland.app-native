@@ -150,7 +150,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginBottom: 20,
         paddingHorizontal: 5,
         paddingVertical: 10,

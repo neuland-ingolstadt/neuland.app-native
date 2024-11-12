@@ -253,7 +253,7 @@ export default function CalendarPage(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     contentBorder: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
     },
     footerContainer: {
         marginVertical: 10,

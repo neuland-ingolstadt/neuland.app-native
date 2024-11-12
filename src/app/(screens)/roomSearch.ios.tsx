@@ -323,7 +323,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     section: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         marginBottom: 16,
     },
     sectionContainer: {

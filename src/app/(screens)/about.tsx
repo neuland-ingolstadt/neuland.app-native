@@ -279,7 +279,7 @@ const stylesheet = createStyleSheet((theme) => ({
         shadowColor: theme.colors.text,
         shadowOffset: { width: 2, height: 4 },
         shadowOpacity: 0.4,
-        shadowRadius: 8,
+        shadowRadius: theme.radius.md,
     },
     logoImage: {
         borderRadius: 9,

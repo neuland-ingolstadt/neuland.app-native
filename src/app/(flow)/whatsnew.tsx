@@ -193,7 +193,7 @@ const stylesheet = createStyleSheet((theme) => ({
     button: {
         alignSelf: 'center',
         backgroundColor: theme.colors.primary,
-        borderRadius: 7,
+        borderRadius: theme.radius.md,
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '50%',

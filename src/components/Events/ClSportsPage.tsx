@@ -274,10 +274,10 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingTop: 10,
     },
     contentBorder: {
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
     },
     contentContainer: {
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         overflow: 'hidden',
     },
     invisibleFont: {
@@ -295,7 +295,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         borderWidth: StyleSheet.hairlineWidth,
         justifyContent: 'center',
         padding: 8,

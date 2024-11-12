@@ -27,7 +27,7 @@ const stylesheet = createStyleSheet((theme) => ({
     boxContainer: {
         alignItems: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 12,
+        borderRadius: theme.radius.lg,
         gap: 15,
         padding: 25,
     },

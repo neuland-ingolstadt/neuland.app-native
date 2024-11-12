@@ -911,7 +911,7 @@ const stylesheet = createStyleSheet((theme) => ({
             UnistylesRuntime.themeName === 'dark'
                 ? Color(theme.colors.card).lighten(0.6).hex()
                 : Color(theme.colors.card).darken(0.03).hex(),
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         color: theme.colors.text,
         flex: 1,
         fontSize: 17,

@@ -400,7 +400,7 @@ const stylesheet = createStyleSheet((theme) => ({
             .lighten(UnistylesRuntime.themeName === 'dark' ? 0.23 : 0)
             .rgb()
             .string(),
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         paddingHorizontal: 7,
         paddingVertical: 4,
     },

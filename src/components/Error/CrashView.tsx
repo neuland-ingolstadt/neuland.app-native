@@ -118,7 +118,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
     },
     refreshButton: {
         alignItems: 'center',

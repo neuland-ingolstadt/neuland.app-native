@@ -649,7 +649,7 @@ const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         width: '100%',
     },
     contentContainer: {

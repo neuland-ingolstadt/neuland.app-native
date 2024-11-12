@@ -62,7 +62,6 @@ export default function Theme(): JSX.Element {
                     >
                         {accentColor === code && (
                             <PlatformIcon
-                                color={getContrastColor(themeAccentColor)}
                                 ios={{
                                     name: 'checkmark',
                                     size: 20,
@@ -70,6 +69,9 @@ export default function Theme(): JSX.Element {
                                 android={{
                                     name: 'check',
                                     size: 24,
+                                }}
+                                style={{
+                                    color: getContrastColor(themeAccentColor),
                                 }}
                             />
                         )}
@@ -136,12 +138,12 @@ const stylesheet = createStyleSheet((theme) => ({
     colorBox: {
         alignContent: 'center',
         alignItems: 'center',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: theme.radius.mg,
+        borderBottomRightRadius: theme.radius.mg,
         borderColor: theme.colors.border,
-        borderRadius: 4,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: theme.radius.sm,
+        borderTopLeftRadius: theme.radius.mg,
+        borderTopRightRadius: theme.radius.mg,
         borderWidth: 2,
         flexDirection: 'row',
         height: 60,
@@ -165,7 +167,7 @@ const stylesheet = createStyleSheet((theme) => ({
     sectionContainer: {
         alignContent: 'center',
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         flexDirection: 'column',
         flexWrap: 'wrap',
         justifyContent: 'center',

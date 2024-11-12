@@ -653,7 +653,7 @@ const MapScreen = (): JSX.Element => {
                 ? 'rgba(166, 173, 181, 0.70)'
                 : 'rgba(218, 218, 218, 0.70)',
             paddingHorizontal: 4,
-            borderRadius: 4,
+            borderRadius: theme.radius.sm,
         },
     }
 

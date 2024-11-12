@@ -129,7 +129,7 @@ const stylesheet = createStyleSheet((theme) => ({
     card: {
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         padding: theme.margins.card,
     },
     labelColor: {

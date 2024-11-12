@@ -164,7 +164,7 @@ export default function LibraryCode(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     barcodeContainer: {
         alignSelf: 'center',
-        borderRadius: 10,
+        borderRadius: theme.radius.mg,
         marginHorizontal: theme.margins.page,
         marginTop: 20,
         paddingVertical: 14,

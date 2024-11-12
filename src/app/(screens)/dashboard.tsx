@@ -499,13 +499,13 @@ const stylesheet = createStyleSheet((theme) => ({
         marginTop: 6,
     },
     card: {
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         overflow: 'hidden',
         paddingHorizontal: 0,
     },
     emptyContainer: {
         backgroundColor: theme.colors.card,
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         justifyContent: 'center',
     },
     footer: {
@@ -543,7 +543,7 @@ const stylesheet = createStyleSheet((theme) => ({
         textAlign: 'left',
     },
     outer: {
-        borderRadius: 8,
+        borderRadius: theme.radius.md,
         flex: 1,
         overflow: 'hidden',
     },
