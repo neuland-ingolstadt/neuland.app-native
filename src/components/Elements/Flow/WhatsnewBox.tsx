@@ -1,8 +1,7 @@
-import { type Colors } from '@/components/colors'
 import { type MaterialIcon } from '@/types/material-icons'
-import { useTheme } from '@react-navigation/native'
 import React, { type FC } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -22,13 +21,10 @@ interface WhatsNewBoxProps {
  * <WhatsNewBox title="Title" description="Description" icon="chevron-forward-circle" />
  */
 const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
-        <View
-            style={[{ backgroundColor: colors.cardContrast }, styles.container]}
-        >
+        <View style={styles.container}>
             <PlatformIcon
-                color={colors.primary}
                 ios={{
                     name: icon.ios,
                     size: 26,
@@ -40,24 +36,11 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                 }}
             />
             <View style={styles.textContainer}>
-                <Text
-                    style={[
-                        {
-                            color: colors.text,
-                        },
-                        styles.title,
-                    ]}
-                    numberOfLines={2}
-                >
+                <Text style={styles.title} numberOfLines={2}>
                     {title}
                 </Text>
                 <Text
-                    style={[
-                        {
-                            color: colors.labelColor,
-                        },
-                        styles.description,
-                    ]}
+                    style={styles.description}
                     adjustsFontSizeToFit
                     minimumFontScale={0.8}
                     numberOfLines={4}
@@ -69,7 +52,7 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -78,6 +61,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         width: '100%',
         gap: 18,
+        backgroundColor: theme.colors.cardContrast,
     },
     textContainer: {
         flexDirection: 'column',
@@ -87,11 +71,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'left',
+        color: theme.colors.text,
     },
     description: {
         fontSize: 14.5,
         textAlign: 'left',
+        color: theme.colors.labelColor,
     },
-})
+}))
 
 export default WhatsNewBox

@@ -1,9 +1,8 @@
-import { type Colors } from '@/components/colors'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { type BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface BottomSheetDetailModalProps {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>
@@ -21,28 +20,24 @@ interface BottomSheetDetailModalProps {
 export const HomeBottomSheet = ({
     bottomSheetModalRef,
 }: BottomSheetDetailModalProps): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <BottomSheetView style={styles.contentContainer}>
             <View>
-                <Text
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    style={{
-                        fontSize: 21,
-                        fontWeight: 'bold',
-                        color: colors.text,
-                    }}
-                >
-                    {'Report a problem'}
-                </Text>
+                <Text style={styles.text}>{'Report a problem'}</Text>
             </View>
         </BottomSheetView>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     contentContainer: {
         flex: 1,
         paddingHorizontal: PAGE_PADDING,
     },
-})
+    text: {
+        fontSize: 21,
+        fontWeight: 'bold',
+        color: theme.colors.text,
+    },
+}))

@@ -1,45 +1,30 @@
-import { type Colors } from '@/components/colors'
 import { CARD_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     return (
-        <View
-            style={[
-                styles.container,
-                {
-                    backgroundColor: colors.card,
-                },
-            ]}
-        >
-            <Text
-                style={[
-                    styles.text,
-                    {
-                        color: colors.text,
-                    },
-                ]}
-            >
-                {title}
-            </Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>{title}</Text>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         borderRadius: 8,
         padding: CARD_PADDING,
         maxWidth: 600,
+        backgroundColor: theme.colors.card,
     },
     text: {
         fontSize: 16,
         textAlign: 'left',
+        color: theme.colors.text,
     },
-})
+}))
 
 export default OnboardingBox
