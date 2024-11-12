@@ -1,5 +1,4 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { type Theme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
@@ -13,7 +12,6 @@ import {
 } from 'react-native-unistyles'
 
 const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
-    const colors = theme.colors as Colors
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const BlurTab = (): JSX.Element => (
@@ -31,10 +29,6 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                     tabBarActiveTintColor: styles.active.color,
                     tabBarLabelStyle: {
                         marginBottom: 2,
-                    },
-
-                    tabBarStyle: {
-                        backgroundColor: colors.card,
                     },
                 }}
             >
@@ -61,7 +55,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                             />
                         ),
 
-                        tabBarStyle: { position: 'absolute' },
+                        tabBarStyle: styles.tabbarStyle(true),
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
@@ -88,7 +82,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 }}
                             />
                         ),
-                        tabBarStyle: { position: 'absolute' },
+                        tabBarStyle: styles.tabbarStyle(true),
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
@@ -115,6 +109,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 }}
                             />
                         ),
+                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -139,7 +134,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                             />
                         ),
 
-                        tabBarStyle: { position: 'absolute' },
+                        tabBarStyle: styles.tabbarStyle(true),
                         tabBarBackground: () =>
                             Platform.OS === 'ios' ? <BlurTab /> : null,
                     }}
@@ -162,6 +157,15 @@ const stylesheet = createStyleSheet((theme) => ({
     headerBackground: { backgroundColor: theme.colors.card },
     background: { backgroundColor: theme.colors.background },
     active: { color: theme.colors.primary },
+    tabbarStyle: (blur: boolean) => ({
+        position: 'absolute',
+        borderTopColor: theme.colors.border,
+        backgroundColor: blur
+            ? Platform.OS === 'ios'
+                ? undefined
+                : theme.colors.card
+            : theme.colors.card,
+    }),
 }))
 
 export default DefaultTabs

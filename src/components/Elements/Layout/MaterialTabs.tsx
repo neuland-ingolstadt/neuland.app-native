@@ -1,41 +1,28 @@
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { type Theme } from '@react-navigation/native'
 import Color from 'color'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Easing } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 import MaterialBottomTabs from './MaterialTabbar'
 
 const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
-    const isDark = theme.dark
-    const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 
     return (
         <MaterialBottomTabs
             sceneAnimationEasing={Easing.ease}
-            activeColor={colors.text}
-            inactiveColor={colors.labelColor}
-            activeIndicatorStyle={{
-                backgroundColor: isDark
-                    ? Color(colors.card)
-                          .mix(Color(colors.primary), 0.06)
-                          .lighten(1.4)
-                          .saturate(1)
-                          .hex()
-                    : Color(colors.card)
-                          .mix(Color(colors.primary), 0.3)
-                          .darken(0.05)
-                          .saturate(0.1)
-                          .hex(),
-            }}
-            barStyle={{
-                backgroundColor: isDark
-                    ? Color(colors.card).mix(Color(colors.primary), 0.04).hex()
-                    : Color(colors.card).mix(Color(colors.primary), 0.1).hex(),
-            }}
+            activeColor={styles.headerTextStyle.color}
+            inactiveColor={styles.lable.color}
+            activeIndicatorStyle={styles.indicator}
+            barStyle={styles.barStyle}
             keyboardHidesNavigationBar={false}
         >
             <MaterialBottomTabs.Screen
@@ -136,5 +123,38 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
         </MaterialBottomTabs>
     )
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+    headerTextStyle: { color: theme.colors.text },
+    lable: { color: theme.colors.labelColor },
+    headerTintColor: { color: theme.colors.primary },
+    headerBackground: { backgroundColor: theme.colors.card },
+    background: { backgroundColor: theme.colors.background },
+    active: { color: theme.colors.primary },
+    indicator: {
+        backgroundColor:
+            UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.06)
+                      .lighten(1.4)
+                      .saturate(1)
+                      .hex()
+                : Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.3)
+                      .darken(0.05)
+                      .saturate(0.1)
+                      .hex(),
+    },
+    barStyle: {
+        backgroundColor:
+            UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.04)
+                      .hex()
+                : Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.1)
+                      .hex(),
+    },
+}))
 
 export default MaterialTabs

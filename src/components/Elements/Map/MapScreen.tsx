@@ -36,7 +36,6 @@ import MapLibreGL, {
     type MapViewRef,
     type UserLocationRef,
 } from '@maplibre/maplibre-react-native'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { useNavigation } from 'expo-router'
@@ -83,7 +82,6 @@ import { modalSection } from './ModalSections'
 const MapScreen = (): JSX.Element => {
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
-    const theme = useTheme()
     const { styles } = useStyles(stylesheet)
     const isDark = UnistylesRuntime.themeName === 'dark'
 
@@ -719,7 +717,11 @@ const MapScreen = (): JSX.Element => {
                             : undefined
                     }
                     logoEnabled={false}
-                    styleURL={theme.dark ? darkStyle : lightStyle}
+                    styleURL={
+                        UnistylesRuntime.themeName === 'dark'
+                            ? darkStyle
+                            : lightStyle
+                    }
                     attributionEnabled={false}
                     onDidFailLoadingMap={() => {
                         setMapLoadState(LoadingState.ERROR)

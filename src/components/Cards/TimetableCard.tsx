@@ -1,5 +1,4 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
@@ -7,7 +6,6 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
@@ -19,7 +17,6 @@ import BaseCard from './BaseCard'
 
 const TimetableCard: React.FC = () => {
     const { styles } = useStyles(stylesheet)
-    const colors = useTheme().colors as Colors
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
@@ -123,7 +120,7 @@ const TimetableCard: React.FC = () => {
                 {index < filteredTimetable.length - 1 && (
                     <>
                         <View style={styles.divider} />
-                        <Divider color={colors.border} width="100%" />
+                        <Divider width="100%" />
                     </>
                 )}
             </View>

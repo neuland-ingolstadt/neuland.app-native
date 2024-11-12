@@ -1,7 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
 import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
-import { type Colors } from '@/components/colors'
 import {
     FoodFilterContext,
     RouteParamsContext,
@@ -16,7 +15,6 @@ import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import {
     router,
@@ -27,15 +25,8 @@ import {
 import { type i18n } from 'i18next'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    Linking,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const humanLocations = {
     IngolstadtMensa: 'Mensa Ingolstadt',
@@ -70,7 +61,7 @@ export function shareMeal(
 }
 
 export default function FoodDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
         foodEntry != null
@@ -271,7 +262,7 @@ export default function FoodDetail(): JSX.Element {
                               ios: 'checkmark.seal',
                           }
                         : undefined,
-                    iconColor: colors.success,
+                    iconColor: styles.iconSuccess.color,
                     onPress: () => {
                         itemAlert(flag, 'flag')
                     },
@@ -296,7 +287,7 @@ export default function FoodDetail(): JSX.Element {
                                   ios: 'exclamationmark.triangle',
                               }
                             : undefined,
-                        iconColor: colors.notification,
+                        iconColor: styles.iconNotification.color,
                         onPress: () => {
                             itemAlert(allergen, 'allergen')
                         },
@@ -334,7 +325,9 @@ export default function FoodDetail(): JSX.Element {
                         restaurant as keyof typeof humanLocations
                     ],
                     onPress: handlePress,
-                    textColor: locationExists ? colors.primary : undefined,
+                    textColor: locationExists
+                        ? styles.colorPrimary.color
+                        : undefined,
                     disabled: !locationExists,
                 },
                 {
@@ -411,14 +404,9 @@ export default function FoodDetail(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <View
-                    style={[
-                        styles.titleContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                >
+                <View style={styles.titleContainer}>
                     <Text
-                        style={[styles.titleText, { color: colors.text }]}
+                        style={styles.titleText}
                         allowFontScaling={true}
                         adjustsFontSizeToFit={true}
                         numberOfLines={2}
@@ -437,14 +425,8 @@ export default function FoodDetail(): JSX.Element {
                 </View>
 
                 <View style={styles.notesContainer}>
-                    <View
-                        style={{
-                            ...styles.notesBox,
-                            backgroundColor: colors.card,
-                        }}
-                    >
+                    <View style={styles.notesBox}>
                         <PlatformIcon
-                            color={colors.warning}
                             ios={{
                                 name: 'exclamationmark.triangle',
                                 variant: 'fill',
@@ -454,13 +436,9 @@ export default function FoodDetail(): JSX.Element {
                                 name: 'warning',
                                 size: 24,
                             }}
+                            style={styles.iconWarning}
                         />
-                        <Text
-                            style={[
-                                styles.notesText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {!isTranslated() ? t('details.translated') : ''}
                             {t('details.footer')}
                         </Text>
@@ -471,7 +449,7 @@ export default function FoodDetail(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formList: {
         marginVertical: 16,
         width: '100%',
@@ -486,10 +464,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
+        backgroundColor: theme.colors.card,
     },
     titleText: {
         fontSize: 18,
         textAlign: 'center',
+        color: theme.colors.text,
     },
     notesContainer: {
         alignSelf: 'center',
@@ -507,6 +487,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignContent: 'center',
         borderRadius: 8,
+        backgroundColor: theme.colors.card,
     },
     notesText: {
         fontSize: 11,
@@ -514,5 +495,18 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         flex: 1,
         flexShrink: 1,
+        color: theme.colors.labelColor,
     },
-})
+    iconSuccess: {
+        color: theme.colors.success,
+    },
+    iconNotification: {
+        color: theme.colors.notification,
+    },
+    iconWarning: {
+        color: theme.colors.warning,
+    },
+    colorPrimary: {
+        color: theme.colors.primary,
+    },
+}))

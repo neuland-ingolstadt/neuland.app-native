@@ -2,7 +2,6 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import { MealDay } from '@/components/Elements/Food'
 import { AllergensBanner } from '@/components/Elements/Food/AllergensBanner'
 import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
-import { type Colors } from '@/components/colors'
 import { FoodFilterContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { type Food } from '@/types/neuland-api'
@@ -10,7 +9,6 @@ import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
 import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { useNavigation } from 'expo-router'
@@ -31,14 +29,14 @@ import {
     Pressable,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export function FoodScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const { selectedRestaurants, showStatic, allergenSelection } =
         useContext(FoodFilterContext)
@@ -104,7 +102,7 @@ export function FoodScreen(): JSX.Element {
         index: number
     }): JSX.Element => {
         const date = new Date(day.timestamp)
-        const { colors } = useTheme()
+        const { styles } = useStyles(stylesheet)
 
         const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
         const isFirstDay = index === 0
@@ -127,25 +125,9 @@ export function FoodScreen(): JSX.Element {
                         setPage(index)
                     }}
                 >
-                    <View
-                        style={[
-                            styles.dayButtonContainer,
-                            {
-                                backgroundColor: colors.card,
-                                shadowColor: colors.text,
-                            },
-                        ]}
-                    >
+                    <View style={styles.dayButtonContainer}>
                         <Text
-                            style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                ...(selectedDay === index
-                                    ? styles.selectedDayText2
-                                    : styles.normalDayText2),
-                            }}
+                            style={styles.dayText2(selectedDay === index)}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
                         >
@@ -156,15 +138,7 @@ export function FoodScreen(): JSX.Element {
                                 .slice(0, 2)}
                         </Text>
                         <Text
-                            style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                ...(selectedDay === index
-                                    ? styles.selectedDayText
-                                    : styles.normalDayText),
-                            }}
+                            style={styles.dayText(selectedDay === index)}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
                         >
@@ -208,7 +182,7 @@ export function FoodScreen(): JSX.Element {
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator
                             size="small"
-                            color={colors.primary}
+                            color={styles.activityIndicator.color}
                         />
                     </View>
                 )}
@@ -237,7 +211,7 @@ export function FoodScreen(): JSX.Element {
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
                                 ...styles.animtedContainer,
-                                borderBottomColor: colors.border,
+
                                 borderBottomWidth: showAllergensBanner
                                     ? 0
                                     : scrollY.interpolate({
@@ -313,7 +287,6 @@ export function FoodScreen(): JSX.Element {
                                     <MealDay
                                         day={data[index]}
                                         index={index}
-                                        colors={colors}
                                         key={index}
                                     />
                                 </ScrollView>
@@ -354,7 +327,7 @@ export default function FoodRootScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         flex: 1,
     },
@@ -366,6 +339,7 @@ const styles = StyleSheet.create({
     },
     animtedContainer: {
         width: '100%',
+        borderBottomColor: theme.colors.border,
     },
     loadedContainer: {
         flexDirection: 'row',
@@ -393,19 +367,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         paddingVertical: 8,
+        backgroundColor: theme.colors.card,
+        shadowColor: theme.colors.text,
     },
     innerScrollContainer: {
         marginHorizontal: 12,
         paddingBottom: PAGE_BOTTOM_SAFE_AREA,
     },
-    selectedDayText: {
-        fontSize: 16,
-        fontWeight: '500',
-    },
-    normalDayText: {
-        fontSize: 16,
-        fontWeight: 'normal',
-    },
+
     selectedDayText2: {
         fontSize: 15,
         fontWeight: '500',
@@ -414,4 +383,17 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'normal',
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    dayText: (selected: boolean) => ({
+        color: selected ? theme.colors.primary : theme.colors.text,
+        fontSize: 16,
+        fontWeight: selected ? '500' : 'normal',
+    }),
+    dayText2: (selected: boolean) => ({
+        color: selected ? theme.colors.primary : theme.colors.text,
+        fontSize: 15,
+        fontWeight: selected ? '500' : 'normal',
+    }),
+}))

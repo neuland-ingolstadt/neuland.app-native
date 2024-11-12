@@ -248,13 +248,17 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
+        console.log('themeHook.theme', themeHook.theme)
+        console.log('Appearance.getColorScheme()', Appearance.getColorScheme())
 
         if (themeHook.theme === 'dark') {
-            Appearance.setColorScheme('dark')
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('dark')
         } else if (themeHook.theme === 'light') {
-            Appearance.setColorScheme('light')
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('light')
         } else {
-            Appearance.setColorScheme(null)
+            UnistylesRuntime.setAdaptiveThemes(true)
         }
 
         return () => {

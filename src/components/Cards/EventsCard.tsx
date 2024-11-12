@@ -1,7 +1,5 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +10,6 @@ import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const colors = useTheme().colors as Colors
     const { t } = useTranslation('navigation')
 
     const { data, isSuccess } = useQuery({
@@ -53,7 +50,7 @@ const EventsCard = (): JSX.Element => {
                             </View>
 
                             {slicedData.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider width={'100%'} />
                             )}
                         </React.Fragment>
                     ))}

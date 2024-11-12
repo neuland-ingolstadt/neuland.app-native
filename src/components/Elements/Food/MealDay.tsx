@@ -1,4 +1,3 @@
-import { type Colors } from '@/components/colors'
 import { type Food, type Meal } from '@/types/neuland-api'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -100,11 +99,9 @@ const MealCategory = ({
 export const MealDay = ({
     day,
     index,
-    colors,
 }: {
     day: Food
     index: number
-    colors: Colors
 }): JSX.Element => {
     /**
      * Filters an array of meals by restaurant name.

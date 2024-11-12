@@ -3,7 +3,7 @@ import {
     type BottomSheetNavigationEventMap,
     type BottomSheetNavigationOptions,
     type BottomSheetNavigationState,
-    createBottomSheetNavigator, // @ts-expect-error Type cannot be verified
+    createBottomSheetNavigator,
 } from '@th3rdwave/react-navigation-bottom-sheet'
 import { withLayoutContext } from 'expo-router'
 
