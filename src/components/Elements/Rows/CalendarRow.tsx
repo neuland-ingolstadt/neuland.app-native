@@ -100,28 +100,28 @@ const ExamRow = ({ event }: { event: Exam }): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    leftText: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+    },
+    mainText1: {
+        color: theme.colors.text,
+        fontSize: 13,
+    },
+    mainText2: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+    },
     rightContainer: { justifyContent: 'flex-end', padding: ROW_PADDING },
     rightContainerExam: { justifyContent: 'flex-end', padding: 5 },
-    leftText: {
-        fontSize: 13,
+    rightText: {
         color: theme.colors.labelColor,
+        fontSize: 14,
+        fontWeight: '400',
     },
     rightTextExam: {
         fontSize: 14,
         fontWeight: '400',
-    },
-    rightText: {
-        fontSize: 14,
-        fontWeight: '400',
-        color: theme.colors.labelColor,
-    },
-    mainText2: {
-        fontSize: 13,
-        color: theme.colors.labelColor,
-    },
-    mainText1: {
-        fontSize: 13,
-        color: theme.colors.text,
     },
 }))
 

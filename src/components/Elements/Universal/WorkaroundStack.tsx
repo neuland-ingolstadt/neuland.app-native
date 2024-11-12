@@ -25,7 +25,6 @@ export interface WorkaroundStackProps {
  * @param name - name of the stack
  * @param titleKey - translation key for the title
  * @param component - component to render
- * @param transparent - whether the header should be transparent
  * @param largeTitle - whether the header should be large
  * @param headerRightElement - element to render on the right side of the header
  * @param params - params to pass to the component
@@ -35,7 +34,6 @@ function WorkaroundStack({
     name,
     titleKey,
     component,
-    transparent = false,
     largeTitle = false,
     headerRightElement = undefined,
     headerSearchBarOptions = undefined,
@@ -45,7 +43,7 @@ function WorkaroundStack({
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     // When using the native stack on Android, the header button is invisible. This is another workaround in the workaround.
     if (Platform.OS === 'android' && androidFallback) {
         return (
@@ -63,7 +61,7 @@ function WorkaroundStack({
                             backgroundColor:
                                 styles.headerBackground.backgroundColor,
                         },
-                        headerTitleStyle: { color: styles.headerStyle.color },
+                        headerTitleStyle: { color: theme.colors.text },
                     }}
                     initialParams={params}
                 />
@@ -87,7 +85,7 @@ function WorkaroundStack({
                     headerSearchBarOptions,
                     contentStyle: styles.background,
                     headerTitleStyle: {
-                        color: styles.headerStyle.color,
+                        color: theme.colors.text,
                     },
                 }}
                 component={component}
@@ -97,8 +95,7 @@ function WorkaroundStack({
     )
 }
 const stylesheet = createStyleSheet((theme) => ({
-    headerStyle: { color: theme.colors.text },
-    headerBackground: { backgroundColor: theme.colors.card },
     background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
 }))
 export default WorkaroundStack

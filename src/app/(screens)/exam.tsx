@@ -110,34 +110,34 @@ export default function ExamDetail(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    container: {
+        gap: 12,
+        marginBottom: MODAL_BOTTOM_MARGIN,
+    },
+    formList: {
+        alignSelf: 'center',
+        width: '100%',
+    },
+    notesText: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+        textAlign: 'left',
+    },
     page: {
         padding: PAGE_PADDING,
     },
-    container: {
-        marginBottom: MODAL_BOTTOM_MARGIN,
-        gap: 12,
-    },
-    formList: {
-        width: '100%',
-        alignSelf: 'center',
-    },
     titleContainer: {
+        alignItems: 'center',
         alignSelf: 'center',
-        width: '100%',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
         paddingHorizontal: 5,
         paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-        backgroundColor: theme.colors.card,
+        width: '100%',
     },
     titleText: {
+        color: theme.colors.text,
         fontSize: 18,
         textAlign: 'center',
-        color: theme.colors.text,
-    },
-    notesText: {
-        textAlign: 'left',
-        fontSize: 13,
-        color: theme.colors.labelColor,
     },
 }))

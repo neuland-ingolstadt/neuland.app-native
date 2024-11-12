@@ -39,7 +39,7 @@ export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
     const isDark = theme.dark
     const router = useRouter()
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme: styleTheme } = useStyles(stylesheet)
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
@@ -59,7 +59,7 @@ export default function HomeLayout(): JSX.Element {
             const isTab = tabsPaths.includes(pathname)
             if (isOnboarded !== true) {
                 await NavigationBar.setBackgroundColorAsync(
-                    styles.contrast.backgroundColor
+                    styleTheme.colors.contrast
                 )
                 return
             }
@@ -216,7 +216,4 @@ const stylesheet = createStyleSheet((theme) => ({
                       .hex()
             : theme.colors.background,
     }),
-    contrast: {
-        backgroundColor: theme.colors.contrast,
-    },
 }))

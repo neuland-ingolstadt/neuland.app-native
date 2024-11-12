@@ -31,7 +31,7 @@ export default function CrashView({
     error,
     retry,
 }: ErrorBoundaryProps): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()
     trackEvent('ErrorView', {
@@ -73,63 +73,63 @@ export default function CrashView({
                 <ErrorButton onPress={handlePress} />
             </View>
             <View style={styles.logoContainer}>
-                <LogoTextSVG size={15} color={styles.logoColor.color} />
+                <LogoTextSVG
+                    size={15}
+                    color={theme.colors.labelSecondaryColor}
+                />
             </View>
         </View>
     )
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    flex: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
-    },
-    topContainer: { alignItems: 'center', gap: 20 },
-
-    innerContainer: {
-        flex: 1,
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        width: '85%',
-        alignSelf: 'center',
-        paddingVertical: 20,
+    errorInfo: {
+        color: theme.colors.text,
+        fontSize: 18,
+        textAlign: 'center',
     },
     errorTitle: {
+        color: theme.colors.text,
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 8,
         marginTop: 8,
         textAlign: 'center',
-        color: theme.colors.text,
+    },
+
+    flex: {
+        backgroundColor: theme.colors.background,
+        flex: 1,
+    },
+    innerContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        flex: 1,
+        justifyContent: 'space-evenly',
+        paddingVertical: 20,
+        width: '85%',
+    },
+    logoContainer: {
+        alignSelf: 'center',
+        bottom: 30,
+        position: 'absolute',
     },
     logoutContainer: {
-        borderRadius: 10,
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
+        borderRadius: 10,
     },
     refreshButton: {
-        flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        flexDirection: 'row',
         paddingHorizontal: 30,
+        paddingVertical: 10,
     },
     refreshButtonText: {
+        color: theme.colors.primary,
         fontSize: 16,
         fontWeight: '600',
-        color: theme.colors.primary,
     },
-    errorInfo: {
-        fontSize: 18,
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    logoContainer: {
-        bottom: 30,
-        position: 'absolute',
-        alignSelf: 'center',
-    },
-    logoColor: {
-        color: theme.colors.labelSecondaryColor,
-    },
+    topContainer: { alignItems: 'center', gap: 20 },
 }))

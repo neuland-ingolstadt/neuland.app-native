@@ -1,6 +1,7 @@
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import TimetableList from '@/components/Elements/Timetable/TimetableList'
 import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { PreferencesContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -11,7 +12,7 @@ import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Linking, View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export interface ITimetableViewProps {
@@ -74,10 +75,7 @@ export default function TimetableScreen(): JSX.Element {
     const LoadingView = (): JSX.Element => {
         return (
             <View style={styles.loadingView}>
-                <ActivityIndicator
-                    size="small"
-                    color={styles.acitivityIndicator.color}
-                />
+                <LoadingIndicator />
             </View>
         )
     }
@@ -167,15 +165,12 @@ export default function TimetableScreen(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     loadingView: {
-        position: 'absolute',
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        height: '100%',
         backgroundColor: theme.colors.background,
-    },
-    acitivityIndicator: {
-        color: theme.colors.primary,
+        flex: 1,
+        height: '100%',
+        justifyContent: 'center',
+        position: 'absolute',
+        width: '100%',
     },
 }))

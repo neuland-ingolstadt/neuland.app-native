@@ -69,40 +69,40 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    errorInfo: {
+        color: theme.colors.text,
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    errorMessage: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+    noRoomsFound: {
+        gap: 5,
+        paddingVertical: 20,
+    },
+    roomDetails: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+    },
+    roomName: {
+        color: theme.colors.primary,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    roomTime: {
+        color: theme.colors.text,
+        fontSize: 15,
+    },
     rowEntry: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
+        gap: 15,
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 8,
-        gap: 15,
-    },
-    roomName: {
-        fontWeight: '500',
-        fontSize: 16,
-        color: theme.colors.primary,
-    },
-    roomDetails: {
-        fontSize: 13,
-        color: theme.colors.labelColor,
-    },
-    roomTime: {
-        fontSize: 15,
-        color: theme.colors.text,
-    },
-    noRoomsFound: {
-        paddingVertical: 20,
-        gap: 5,
-    },
-    errorMessage: {
-        fontWeight: '600',
-        fontSize: 16,
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    errorInfo: {
-        fontSize: 14,
-        textAlign: 'center',
-        color: theme.colors.text,
     },
 }))

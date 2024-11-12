@@ -1,5 +1,6 @@
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { UserKindContext } from '@/components/contexts'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -17,14 +18,7 @@ import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Dimensions,
-    Platform,
-    Pressable,
-    Text,
-    View,
-} from 'react-native'
+import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibraryCode(): JSX.Element {
@@ -110,10 +104,7 @@ export default function LibraryCode(): JSX.Element {
                 <ErrorView title={permissionError} />
             ) : isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator
-                        size="small"
-                        color={styles.activityIndicator.color}
-                    />
+                    <LoadingIndicator />
                 </View>
             ) : isError ? (
                 <ErrorView
@@ -172,42 +163,39 @@ export default function LibraryCode(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    container: {
-        paddingVertical: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    loadingContainer: {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    notesContainer: {
-        alignSelf: 'center',
-        width: '100%',
-        marginTop: 14,
-        marginBottom: 40,
-    },
-    notesText: {
-        textAlign: 'left',
-        fontSize: 12,
-        color: theme.colors.labelColor,
-    },
     barcodeContainer: {
+        alignSelf: 'center',
+        borderRadius: 10,
+        marginHorizontal: PAGE_PADDING,
         marginTop: 20,
         paddingVertical: 14,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginHorizontal: PAGE_PADDING,
         width: '100%',
     },
     barcodeStyle: {
+        alignSelf: 'center',
         marginVertical: 6,
         paddingHorizontal: 10,
-        alignSelf: 'center',
     },
-    activityIndicator: {
-        color: theme.colors.primary,
+    container: {
+        alignSelf: 'center',
+        paddingHorizontal: PAGE_PADDING,
+        paddingVertical: 16,
+        width: '100%',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 40,
+    },
+    notesContainer: {
+        alignSelf: 'center',
+        marginBottom: 40,
+        marginTop: 14,
+        width: '100%',
+    },
+    notesText: {
+        color: theme.colors.labelColor,
+        fontSize: 12,
+        textAlign: 'left',
     },
 }))

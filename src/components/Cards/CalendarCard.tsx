@@ -76,7 +76,7 @@ const CalendarCard = (): JSX.Element => {
         setMixedCalendar(combined.slice(0, 2))
     }, [calendar, exams])
 
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
 
     return (
         <BaseCard title="calendar" onPressRoute="calendar">
@@ -103,7 +103,7 @@ const CalendarCard = (): JSX.Element => {
                         </View>
                         {mixedCalendar.length - 1 !== index && (
                             <Divider
-                                color={styles.divider.color}
+                                color={theme.colors.border}
                                 width={'100%'}
                             />
                         )}
@@ -121,17 +121,14 @@ const stylesheet = createStyleSheet((theme) => ({
     calenderFilled: {
         paddingTop: 12,
     },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-        color: theme.colors.text,
-    },
     eventDetails: {
-        fontSize: 15,
         color: theme.colors.labelColor,
+        fontSize: 15,
     },
-    divider: {
-        color: theme.colors.border,
+    eventTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
     },
 }))
 

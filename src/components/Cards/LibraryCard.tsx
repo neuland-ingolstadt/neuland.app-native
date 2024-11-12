@@ -14,7 +14,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
 const LibraryCard = (): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { userKind } = useContext(UserKindContext)
     const router = useRouter()
 
@@ -72,7 +72,7 @@ const LibraryCard = (): JSX.Element => {
                             </View>
                             {data.length - 1 !== index && (
                                 <Divider
-                                    color={styles.border.color}
+                                    color={theme.colors.border}
                                     width={'100%'}
                                 />
                             )}
@@ -87,9 +87,8 @@ const LibraryCard = (): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     calendarView: { gap: 8 },
     cardsFilled: { paddingTop: 12 },
-    eventTitle: { fontWeight: '500', fontSize: 16, color: theme.colors.text },
-    eventDetails: { fontSize: 15, color: theme.colors.labelColor },
-    border: { color: theme.colors.border },
+    eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
+    eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' },
 }))
 
 export default LibraryCard

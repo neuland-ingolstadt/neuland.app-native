@@ -128,27 +128,27 @@ const BaseCard: React.FC<BaseCardProps> = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    title: {
-        fontSize: 16,
-        fontWeight: '500',
-        flex: 1,
-        paddingBottom: Platform.OS === 'android' ? 2 : 0,
-        color: theme.colors.text,
-    },
-    titleView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        color: theme.colors.text,
-    },
     card: {
-        borderRadius: 8,
-        padding: CARD_PADDING,
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
+        borderRadius: 8,
+        padding: CARD_PADDING,
     },
     labelColor: {
         color: theme.colors.labelColor,
+    },
+    title: {
+        color: theme.colors.text,
+        flex: 1,
+        fontSize: 16,
+        fontWeight: '500',
+        paddingBottom: Platform.OS === 'android' ? 2 : 0,
+    },
+    titleView: {
+        alignItems: 'center',
+        color: theme.colors.text,
+        flexDirection: 'row',
+        gap: 10,
     },
 }))
 

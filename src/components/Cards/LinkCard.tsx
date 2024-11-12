@@ -74,27 +74,27 @@ const LinkCard = (): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     cardsFilled: {
-        paddingTop: 14,
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 10,
+        paddingTop: 14,
     },
     eventTitle: {
-        fontWeight: '500',
-        fontSize: 14.5,
-        flexShrink: 1,
         color: theme.colors.text,
+        flexShrink: 1,
+        fontSize: 14.5,
+        fontWeight: '500',
     },
     linkBox: {
-        paddingTop: 12,
+        alignItems: 'center',
+        backgroundColor: theme.colors.cardButton,
+        borderRadius: 8,
+        flex: 1,
+        gap: Platform.OS === 'android' ? 2 : 7,
+        justifyContent: 'space-between',
         paddingBottom: 7,
         paddingHorizontal: 8,
-        borderRadius: 8,
-        gap: Platform.OS === 'android' ? 2 : 7,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: theme.colors.cardButton,
+        paddingTop: 12,
     },
 }))
 

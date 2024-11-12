@@ -77,37 +77,37 @@ const ResultRow: React.FC<{
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    searchRowContainer: {
-        flexDirection: 'row',
-        paddingVertical: 10,
-        alignItems: 'center',
-    },
-    searchIconContainer: {
-        marginRight: 14,
-        width: 40,
-        height: 40,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.colors.primary,
-    },
-
-    suggestionTitle: {
-        fontWeight: '600',
-        fontSize: 16,
-        color: theme.colors.text,
-    },
-    suggestionSubtitle: {
-        fontWeight: '400',
-        fontSize: 14,
-        maxWidth: '90%',
-        color: theme.colors.text,
-    },
     flex: {
         flex: 1,
     },
     icon: {
         color: getContrastColor(theme.colors.primary),
+    },
+
+    searchIconContainer: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.primary,
+        borderRadius: 50,
+        height: 40,
+        justifyContent: 'center',
+        marginRight: 14,
+        width: 40,
+    },
+    searchRowContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingVertical: 10,
+    },
+    suggestionSubtitle: {
+        color: theme.colors.text,
+        fontSize: 14,
+        fontWeight: '400',
+        maxWidth: '90%',
+    },
+    suggestionTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
     },
 }))
 export default ResultRow

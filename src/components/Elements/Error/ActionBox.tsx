@@ -24,18 +24,18 @@ export default function StatusBox({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    errorDetail: {
-        fontSize: 17,
-        textAlign: 'center',
-        fontWeight: '500',
-        paddingBottom: 30,
-        color: theme.colors.text,
-    },
     boxContainer: {
         alignItems: 'center',
-        gap: 15,
-        borderRadius: 12,
-        padding: 25,
         backgroundColor: theme.colors.card,
+        borderRadius: 12,
+        gap: 15,
+        padding: 25,
+    },
+    errorDetail: {
+        color: theme.colors.text,
+        fontSize: 17,
+        fontWeight: '500',
+        paddingBottom: 30,
+        textAlign: 'center',
     },
 }))

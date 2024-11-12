@@ -9,7 +9,6 @@ import {
 import { PAGE_PADDING } from '@/utils/style-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { inverseColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -17,7 +16,11 @@ import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, SafeAreaView, SectionList, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 import ErrorView from '../Error/ErrorView'
 // @ts-expect-error no types
@@ -44,11 +47,10 @@ export default function TimetableList({
      * Hooks
      */
     const router = useRouter()
-    const theme = useTheme()
     const navigation = useNavigation()
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
     const { t } = useTranslation('timetable')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -80,7 +82,7 @@ export default function TimetableList({
     const filteredTimetable = groupedTimetable.filter(
         (section) => section.title >= today
     )
-    const isDark = theme.dark
+    const isDark = UnistylesRuntime.themeName === 'dark'
     function getLineColor(color: string): string {
         return Color(color)
             .darken(isDark ? 0.2 : 0)
@@ -120,7 +122,7 @@ export default function TimetableList({
     }
 
     function renderItemSeparator(): JSX.Element {
-        return <Divider color={styles.divider.color} iosPaddingLeft={16} />
+        return <Divider color={theme.colors.border} iosPaddingLeft={16} />
     }
     function renderTimetableItem({
         item,
@@ -146,13 +148,12 @@ export default function TimetableList({
                     <View style={styles.eventWrapper}>
                         <LinearGradient
                             colors={[
-                                styles.primary.color,
-                                getLineColor(styles.primary.color),
+                                theme.colors.primary,
+                                getLineColor(theme.colors.primary),
                             ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
                             style={{
-                                backgroundColor: styles.primary.color,
                                 ...styles.indicator,
                             }}
                         />
@@ -202,15 +203,14 @@ export default function TimetableList({
                     <View style={styles.eventWrapper}>
                         <LinearGradient
                             colors={[
-                                styles.inversePrimary.color,
-                                getLineColor(styles.inversePrimary.color),
+                                inverseColor(theme.colors.primary),
+                                getLineColor(
+                                    inverseColor(theme.colors.primary)
+                                ),
                             ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
-                            style={{
-                                backgroundColor: styles.inversePrimary.color,
-                                ...styles.indicator,
-                            }}
+                            style={styles.indicator}
                         />
                         <View style={styles.nameView}>
                             <Text style={styles.titleText} numberOfLines={2}>
@@ -279,25 +279,13 @@ export default function TimetableList({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    itemRow: {
-        flexDirection: 'row',
-        gap: 4,
-        alignItems: 'center',
+    container: {
+        paddingBottom: 80,
+        paddingHorizontal: PAGE_PADDING,
     },
-    sectionView: {
-        paddingTop: PAGE_PADDING,
-        marginBottom: 8,
-        gap: 6,
-        backgroundColor: theme.colors.background,
-    },
-    sectionTitle: (isToday: boolean) => ({
+    descriptionText: {
+        color: theme.colors.labelColor,
         fontSize: 15,
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        color: isToday ? theme.colors.primary : theme.colors.text,
-    }),
-    pageView: {
-        flex: 1,
     },
     eventWrapper: {
         display: 'flex',
@@ -305,51 +293,56 @@ const stylesheet = createStyleSheet((theme) => ({
         gap: 10,
     },
     indicator: {
-        width: 4,
+        backgroundColor: theme.colors.primary,
         borderRadius: 2,
         height: '100%',
+        width: 4,
+    },
+
+    itemRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 4,
     },
     nameView: {
         flexGrow: 1,
         flexShrink: 1,
         marginRight: 12,
     },
-    titleText: {
-        fontWeight: '500',
-        fontSize: 16,
-        color: theme.colors.text,
-    },
-    descriptionText: {
-        fontSize: 15,
-        color: theme.colors.labelColor,
-    },
-    time: {
-        fontSize: 15,
-        fontVariant: ['tabular-nums'],
-        color: theme.colors.text,
-    },
-    time2: {
-        fontSize: 15,
-        fontVariant: ['tabular-nums'],
-        color: theme.colors.labelColor,
-    },
-    sectionFooter: {
-        height: 20,
-    },
-    container: {
-        paddingHorizontal: PAGE_PADDING,
-        paddingBottom: 80,
+    pageView: {
+        flex: 1,
     },
     pressable: {
         paddingVertical: 8,
     },
-    divider: {
-        color: theme.colors.border,
+    sectionFooter: {
+        height: 20,
     },
-    primary: {
-        color: theme.colors.primary,
+    sectionTitle: (isToday: boolean) => ({
+        fontSize: 15,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        color: isToday ? theme.colors.primary : theme.colors.text,
+    }),
+    sectionView: {
+        backgroundColor: theme.colors.background,
+        gap: 6,
+        marginBottom: 8,
+        paddingTop: PAGE_PADDING,
     },
-    inversePrimary: {
-        color: inverseColor(theme.colors.primary),
+    time: {
+        color: theme.colors.text,
+        fontSize: 15,
+        fontVariant: ['tabular-nums'],
+    },
+    time2: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
+        fontVariant: ['tabular-nums'],
+    },
+    titleText: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
     },
 }))

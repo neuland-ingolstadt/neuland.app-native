@@ -74,15 +74,15 @@ const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     container: { flexDirection: 'row' },
     leftText1: {
-        fontSize: 15,
+        color: theme.colors.labelColor,
 
+        fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
-        color: theme.colors.labelColor,
     },
     leftText2: {
-        fontSize: 13,
         color: theme.colors.labelColor,
+        fontSize: 13,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -90,14 +90,14 @@ const stylesheet = createStyleSheet((theme) => ({
         padding: ROW_PADDING,
     },
     rightText1: {
+        color: theme.colors.labelColor,
         fontSize: 14,
         fontWeight: '400',
-        color: theme.colors.labelColor,
     },
     rightText2: {
+        color: theme.colors.primary,
         fontSize: 14,
         fontWeight: '400',
-        color: theme.colors.primary,
     },
 }))
 

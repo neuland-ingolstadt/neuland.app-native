@@ -75,7 +75,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const isOsDark = useColorScheme() === 'dark'
 
     return (
@@ -105,7 +105,7 @@ function RootLayout(): JSX.Element {
                     ),
                     contentStyle: styles.background,
                     headerStyle: styles.headerBackground,
-                    headerTintColor: styles.headerTintColor.color,
+                    headerTintColor: theme.colors.primary,
                     headerTitleStyle: styles.headerTextStyle,
                     // Android
                     statusBarTranslucent: true,
@@ -508,8 +508,7 @@ const ProviderComponent = (): JSX.Element => {
 
 export default ProviderComponent
 const stylesheet = createStyleSheet((theme) => ({
-    headerTextStyle: { color: theme.colors.text },
-    headerTintColor: { color: theme.colors.primary },
-    headerBackground: { backgroundColor: theme.colors.card },
     background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
+    headerTextStyle: { color: theme.colors.text },
 }))

@@ -72,17 +72,17 @@ const LinkScreen = (): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     formlistRow: { marginVertical: 13.5 },
     headerContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
         paddingHorizontal: PAGE_PADDING,
     },
     headerText: {
         color: theme.colors.text,
         fontSize: 23,
         fontWeight: '600',
-        paddingTop: 5,
         paddingBottom: 10,
+        paddingTop: 5,
     },
 }))
 

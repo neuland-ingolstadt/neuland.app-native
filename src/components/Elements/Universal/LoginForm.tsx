@@ -41,7 +41,7 @@ const LoginForm = ({
     const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     // No guest fallback is provided, so the guest session will be created correctly
     const { userKind, toggleUserKind } = React.useContext(UserKindContext)
     const [loading, setLoading] = useState(false)
@@ -181,7 +181,7 @@ const LoginForm = ({
                     </Text>
                     <TextInput
                         style={styles.textInput}
-                        placeholderTextColor={styles.label.color}
+                        placeholderTextColor={theme.colors.labelColor}
                         defaultValue={username}
                         returnKeyType="next"
                         placeholder="abc1234"
@@ -189,7 +189,7 @@ const LoginForm = ({
                             setUsername(text)
                         }}
                         clearButtonMode="while-editing"
-                        selectionColor={styles.primary.color}
+                        selectionColor={theme.colors.primary}
                         autoCapitalize="none"
                         autoCorrect={false}
                         textContentType="oneTimeCode"
@@ -202,7 +202,7 @@ const LoginForm = ({
 
                     <TextInput
                         style={styles.textInput}
-                        placeholderTextColor={styles.label.color}
+                        placeholderTextColor={theme.colors.labelColor}
                         placeholder={t('login.password')}
                         defaultValue={password}
                         returnKeyType="done"
@@ -216,7 +216,7 @@ const LoginForm = ({
                                 })
                             }
                         }}
-                        selectionColor={styles.primary.color}
+                        selectionColor={theme.colors.primary}
                         selectTextOnFocus={true}
                         autoCapitalize="none"
                         secureTextEntry={true}
@@ -237,7 +237,7 @@ const LoginForm = ({
                 >
                     {loading ? (
                         <ActivityIndicator
-                            color={getContrastColor(styles.primary.color)}
+                            color={getContrastColor(theme.colors.primary)}
                             size={15}
                         />
                     ) : (
@@ -264,30 +264,34 @@ const LoginForm = ({
 
 const black = '#000000'
 const stylesheet = createStyleSheet((theme) => ({
+    buttonText: (disabled: boolean) => ({
+        fontWeight: 'bold',
+        fontSize: 15,
+        color: disabled
+            ? UnistylesRuntime.themeName === 'dark'
+                ? Color(getContrastColor(theme.colors.primary))
+                      .lighten(0.1)
+                      .hex()
+                : Color(getContrastColor(theme.colors.primary))
+                      .darken(0.1)
+                      .hex()
+            : getContrastColor(theme.colors.primary),
+    }),
     container: { alignItems: 'center', justifyContent: 'center' },
-    loginContainer: {
-        shadowColor: black,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        borderRadius: 10,
-        width: '100%',
-        maxWidth: 400,
-        paddingHorizontal: 25,
-        justifyContent: 'center',
-        paddingTop: 30,
-        paddingBottom: 30,
-        backgroundColor: theme.colors.card,
+    guestContainer: {
+        alignItems: 'center',
+        paddingTop: 24,
+    },
+    guestText: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 14.5,
     },
     header: {
+        color: theme.colors.text,
         fontSize: 23,
         fontWeight: '600',
-        textAlign: 'left',
-        color: theme.colors.text,
         marginBottom: 14,
+        textAlign: 'left',
     },
     loginButton: (disabled: boolean) => ({
         height: 40,
@@ -302,55 +306,45 @@ const stylesheet = createStyleSheet((theme) => ({
                 : Color(theme.colors.primary).lighten(0.3).hex()
             : theme.colors.primary,
     }),
-    textInput: {
-        fontSize: 16,
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 7,
-        borderWidth: 1,
-        color: theme.colors.text,
-        backgroundColor: theme.colors.inputBackground,
-        borderColor: theme.colors.border,
-    },
 
-    guestContainer: {
-        paddingTop: 24,
-        alignItems: 'center',
-    },
-    guestText: {
-        fontSize: 14.5,
-        color: theme.colors.labelSecondaryColor,
-    },
-
-    userNameContainer: {
-        paddingTop: 3,
-    },
-    userNameLabel: {
-        paddingBottom: 5,
-        fontSize: 15,
-        color: theme.colors.text,
+    loginContainer: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 10,
+        justifyContent: 'center',
+        maxWidth: 400,
+        paddingBottom: 30,
+        paddingHorizontal: 25,
+        paddingTop: 30,
+        shadowColor: black,
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        width: '100%',
     },
     passwordContainer: {
         paddingTop: 15,
     },
-    buttonText: (disabled: boolean) => ({
-        fontWeight: 'bold',
-        fontSize: 15,
-        color: disabled
-            ? UnistylesRuntime.themeName === 'dark'
-                ? Color(getContrastColor(theme.colors.primary))
-                      .lighten(0.1)
-                      .hex()
-                : Color(getContrastColor(theme.colors.primary))
-                      .darken(0.1)
-                      .hex()
-            : getContrastColor(theme.colors.primary),
-    }),
-    primary: {
-        color: theme.colors.primary,
+
+    textInput: {
+        backgroundColor: theme.colors.inputBackground,
+        borderColor: theme.colors.border,
+        borderRadius: 7,
+        borderWidth: 1,
+        color: theme.colors.text,
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
     },
-    label: {
-        color: theme.colors.labelColor,
+    userNameContainer: {
+        paddingTop: 3,
+    },
+    userNameLabel: {
+        color: theme.colors.text,
+        fontSize: 15,
+        paddingBottom: 5,
     },
 }))
 

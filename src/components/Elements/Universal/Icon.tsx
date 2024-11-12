@@ -56,7 +56,7 @@ const PlatformIcon = ({
     ios,
     style,
 }: PlatformIconProps): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     if (Platform.OS === 'ios') {
         return (ios.fallback ?? false) ? (
             <MaterialCommunityIcons
@@ -64,7 +64,7 @@ const PlatformIcon = ({
                     ios.name as typeof MaterialCommunityIcons.defaultProps.name
                 }
                 size={ios.size}
-                color={style?.color ?? styles.defaultColor.color}
+                color={style?.color ?? theme.colors.primary}
                 style={{
                     width: ios.size,
                     height: ios.size,
@@ -77,7 +77,7 @@ const PlatformIcon = ({
                 name={ios.name as SystemName}
                 size={ios.size}
                 colors={[
-                    style?.color ?? styles.defaultColor.color,
+                    style?.color ?? theme.colors.primary,
                     ...(ios.additionalColor != null
                         ? [ios.additionalColor]
                         : []),
@@ -141,8 +141,5 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     iosFallbackOffset: {
         marginRight: -2,
-    },
-    defaultColor: {
-        color: theme.colors.primary,
     },
 }))

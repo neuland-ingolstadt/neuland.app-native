@@ -311,73 +311,65 @@ export default function TimetableDetails(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    page: {
-        display: 'flex',
-        padding: PAGE_PADDING,
-    },
-    eventColorCircle: {
-        width: 15,
-        aspectRatio: 1,
-        borderRadius: 9999,
-        backgroundColor: theme.colors.primary,
-    },
-    eventName: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: theme.colors.text,
-    },
-    eventShortName: {
-        fontSize: 14,
-        color: theme.colors.labelColor,
-    },
-    text1: {
-        fontSize: 18,
-        color: theme.colors.text,
-    },
-    text1Label: {
-        fontSize: 18,
-        color: theme.colors.labelColor,
-    },
-    text1Primary: {
-        fontSize: 18,
-        color: theme.colors.primary,
-    },
-    text2: {
-        fontSize: 14,
-        color: theme.colors.text,
-    },
-    text2Label: {
-        fontSize: 14,
-        color: theme.colors.labelColor,
+    dateRow: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 12,
+        width: '100%',
     },
     detailsContainer: {
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
         gap: 4,
-        alignItems: 'center',
+    },
+    eventColorCircle: {
+        aspectRatio: 1,
+        backgroundColor: theme.colors.primary,
+        borderRadius: 9999,
+        width: 15,
+    },
+    eventName: {
+        color: theme.colors.text,
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    eventShortName: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
     },
     formListContainer: {
-        marginTop: 24,
         gap: 12,
+        marginTop: 24,
+    },
+    icon: {
+        color: theme.colors.labelColor,
+    },
+    page: {
+        display: 'flex',
+        padding: PAGE_PADDING,
     },
     roomContainer: {
         display: 'flex',
         flexDirection: 'row',
     },
+    text1: {
+        color: theme.colors.text,
+        fontSize: 18,
+    },
+    text2: {
+        color: theme.colors.text,
+        fontSize: 14,
+    },
+    text2Label: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
+    },
     viewShot: {
-        zIndex: -1,
         position: 'absolute',
         transform: [{ translateX: -1000 }],
-    },
-    dateRow: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        paddingRight: 12,
-    },
-    icon: {
-        color: theme.colors.labelColor,
+        zIndex: -1,
     },
 }))

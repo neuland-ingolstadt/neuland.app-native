@@ -222,34 +222,34 @@ export const MealDay = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    emptyContainer: {
-        paddingTop: 40,
-        alignItems: 'center',
-    },
-    emptyText: { fontSize: 16, color: theme.colors.text },
-    dayRestaurantTitle: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        paddingTop: 5,
-        paddingBottom: 3,
-        color: theme.colors.text,
-    },
     categoryContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 3,
         paddingBottom: 3,
-    },
-    toggleIcon: {
-        marginRight: 4,
-        alignSelf: 'center',
-        color: theme.colors.primary,
-    },
-    categoryText: {
-        fontSize: 15,
-        fontWeight: '500',
-        color: theme.colors.labelColor,
+        paddingTop: 3,
     },
     categoryContainerCollapsed: { paddingBottom: 8 },
+    categoryText: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
+        fontWeight: '500',
+    },
+    dayRestaurantTitle: {
+        color: theme.colors.text,
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingBottom: 3,
+        paddingTop: 5,
+    },
+    emptyContainer: {
+        alignItems: 'center',
+        paddingTop: 40,
+    },
+    emptyText: { color: theme.colors.text, fontSize: 16 },
+    toggleIcon: {
+        alignSelf: 'center',
+        color: theme.colors.primary,
+        marginRight: 4,
+    },
 }))

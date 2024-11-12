@@ -8,7 +8,6 @@ import {
 } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor, inverseColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -34,8 +33,7 @@ export default function TimetableWeek({
     // eslint-disable-next-line react/prop-types
     exams,
 }: ITimetableViewProps): JSX.Element {
-    const theme = useTheme()
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { selectedDate, setSelectedDate } = useContext(PreferencesContext)
     // get the first day of friendlyTimetable that is not in the past
     const today = new Date()
@@ -48,7 +46,7 @@ export default function TimetableWeek({
         (entry: FriendlyTimetableEntry, index: number) => ({
             ...entry,
             eventType: 'lecture',
-            color: styles.primary.color,
+            color: theme.colors.primary,
             id: index,
             startDate: new Date(entry.startDate),
             endDate: new Date(entry.endDate),
@@ -58,7 +56,7 @@ export default function TimetableWeek({
     const examsWithColor = exams.map((exam: Exam, index: number) => ({
         ...exam,
         eventType: 'exam',
-        color: styles.primary.color,
+        color: inverseColor(theme.colors.primary),
         id: friendlyTimetable.length + index, // Ensure unique ID by continuing from the last timetable entry ID
         startDate: new Date(exam.date),
         endDate: new Date(new Date(exam.date).getTime() + 1000 * 60 * 60 * 1.5), // Correctly calculate the endDate
@@ -95,7 +93,7 @@ export default function TimetableWeek({
         })
     }, [navigation, localSelectedDate])
 
-    const isDark = theme.dark
+    const isDark = UnistylesRuntime.themeName === 'dark'
     const isIOS = Platform.OS === 'ios'
 
     const eventBackgroundColor = (color: string): string =>
@@ -396,83 +394,15 @@ export default function TimetableWeek({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    eventContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        borderRadius: 5,
-        overflow: 'hidden',
-    },
-    eventLine: {
-        width: 4,
-
-        borderTopStartRadius: 5,
-        borderBottomStartRadius: 5,
-    },
-    eventText: {
-        flex: 1,
-        flexDirection: 'column',
-        paddingLeft: 3,
-        paddingRight: 2,
-        paddingVertical: 3,
-        justifyContent: 'space-between',
-    },
-    eventTitle: {
-        fontWeight: 'bold',
-        marginBottom: 1,
-
-        fontSize: 15,
-    },
-    eventTime: {
-        fontWeight: '500',
-        fontSize: 14,
-    },
-    eventLocation: {
-        fontSize: 14,
-    },
     dayCointainer: {
-        paddingHorizontal: 7,
-        paddingVertical: 4,
-        borderRadius: 8,
         backgroundColor: Color(theme.colors.card)
             .darken(UnistylesRuntime.themeName === 'dark' ? 0 : 0.13)
             .lighten(UnistylesRuntime.themeName === 'dark' ? 0.23 : 0)
             .rgb()
             .string(),
-    },
-    dayTextNormal: {
-        fontSize: 14,
-    },
-    dayTextBold: {
-        fontSize: 14,
-        fontWeight: 'bold',
-    },
-    headerStyle: {
-        borderBottomWidth: 0.2,
-        backgroundColor: theme.colors.background,
-        borderColor: theme.colors.border,
-    },
-    roomRow: {
-        flexDirection: 'row',
-        gap: 4,
-        alignItems: 'center',
-    },
-    primary: {
-        color: theme.colors.primary,
-    },
-    inversePrimary: {
-        color: inverseColor(theme.colors.primary),
-    },
-    card: {
-        color: theme.colors.card,
-    },
-    nowLine: (isIOS: boolean) => ({
-        color: isIOS ? theme.colors.primary : theme.colors.notification,
-    }),
-    text: {
-        color: theme.colors.text,
-    },
-    grid: {
-        borderColor: theme.colors.border,
+        borderRadius: 8,
+        paddingHorizontal: 7,
+        paddingVertical: 4,
     },
     dayHeaderText: (isToday: boolean) => ({
         color: isToday
@@ -483,4 +413,58 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 14,
         fontWeight: isToday ? 'bold' : 'normal',
     }),
+    eventContainer: {
+        borderRadius: 5,
+        flex: 1,
+        flexDirection: 'row',
+        overflow: 'hidden',
+    },
+    eventLine: {
+        borderBottomStartRadius: 5,
+
+        borderTopStartRadius: 5,
+        width: 4,
+    },
+    eventLocation: {
+        fontSize: 14,
+    },
+    eventText: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        paddingLeft: 3,
+        paddingRight: 2,
+        paddingVertical: 3,
+    },
+    eventTime: {
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    eventTitle: {
+        fontSize: 15,
+        fontWeight: 'bold',
+
+        marginBottom: 1,
+    },
+    grid: {
+        borderColor: theme.colors.border,
+    },
+    headerStyle: {
+        backgroundColor: theme.colors.background,
+        borderBottomWidth: 0.2,
+        borderColor: theme.colors.border,
+    },
+
+    nowLine: (isIOS: boolean) => ({
+        color: isIOS ? theme.colors.primary : theme.colors.notification,
+    }),
+
+    roomRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 4,
+    },
+    text: {
+        color: theme.colors.text,
+    },
 }))

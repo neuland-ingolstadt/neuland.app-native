@@ -11,21 +11,17 @@ import { useRouter } from 'expo-router'
 import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Alert,
-    Platform,
-    Pressable,
-    Text,
-} from 'react-native'
+import { Alert, Platform, Pressable, Text } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
 import { getDeviceType } from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+import LoadingIndicator from '../Universal/LoadingIndicator'
+
 export const IndexHeaderRight = (): JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
     const router = useRouter()
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
 
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
@@ -207,7 +203,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                     <Avatar size={28}>
                         <Text
                             style={{
-                                color: getContrastColor(styles.primary.color),
+                                color: getContrastColor(theme.colors.primary),
                                 ...styles.iconText,
                             }}
                             numberOfLines={1}
@@ -246,7 +242,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                     <Avatar size={28}>
                         <Text
                             style={{
-                                color: getContrastColor(styles.primary.color),
+                                color: getContrastColor(theme.colors.primary),
                                 ...styles.iconText,
                             }}
                             numberOfLines={1}
@@ -256,11 +252,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                         </Text>
                     </Avatar>
                 ) : (
-                    <ActivityIndicator
-                        color={styles.icon.color}
-                        size="small"
-                        style={styles.center}
-                    />
+                    <LoadingIndicator style={styles.center} />
                 )}
             </PlatformMenu>
         </Pressable>
@@ -268,18 +260,15 @@ export const IndexHeaderRight = (): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    iconText: {
-        fontSize: 13,
-        fontWeight: 'bold',
-    },
     center: {
-        justifyContent: 'center',
         alignItems: 'center',
-    },
-    primary: {
-        color: theme.colors.primary,
+        justifyContent: 'center',
     },
     icon: {
         color: theme.colors.text,
+    },
+    iconText: {
+        fontSize: 13,
+        fontWeight: 'bold',
     },
 }))

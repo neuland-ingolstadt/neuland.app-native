@@ -55,7 +55,6 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Appearance,
     LayoutAnimation,
     Linking,
@@ -77,12 +76,13 @@ import {
 } from 'react-native-unistyles'
 
 import packageInfo from '../../../../package.json'
+import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
 
 const MapScreen = (): JSX.Element => {
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const isDark = UnistylesRuntime.themeName === 'dark'
 
     const { userKind, userFaculty } = useContext(UserKindContext)
@@ -354,7 +354,7 @@ const MapScreen = (): JSX.Element => {
         )?.properties
 
         if (room == null) {
-            roomNotFoundToast(routeParams, styles.notification.color)
+            roomNotFoundToast(routeParams, theme.colors.notification)
             updateRouteParams('')
             return
         }
@@ -700,10 +700,7 @@ const MapScreen = (): JSX.Element => {
                 )}
                 {mapLoadState === LoadingState.LOADING && (
                     <View style={styles.errorContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={styles.activityIndicator.color}
-                        />
+                        <LoadingIndicator />
                     </View>
                 )}
             </>
@@ -712,9 +709,7 @@ const MapScreen = (): JSX.Element => {
                 <MapLibreGL.MapView
                     style={styles.map}
                     tintColor={
-                        Platform.OS === 'ios'
-                            ? styles.activeColor.color
-                            : undefined
+                        Platform.OS === 'ios' ? theme.colors.primary : undefined
                     }
                     logoEnabled={false}
                     styleURL={
@@ -797,7 +792,7 @@ const MapScreen = (): JSX.Element => {
                                 // eslint-disable-next-line react-native/no-inline-styles
                                 style={{
                                     iconImage: 'map-marker',
-                                    iconColor: styles.activeColor.color,
+                                    iconColor: theme.colors.primary,
                                     iconSize: 0.17,
                                     iconAnchor: 'bottom',
                                 }}
@@ -845,7 +840,7 @@ const MapScreen = (): JSX.Element => {
                                 id="availableRoomsFill"
                                 style={{
                                     ...layerStyles.availableRooms,
-                                    fillColor: styles.activeColor.color,
+                                    fillColor: theme.colors.primary,
                                 }}
                                 layerIndex={102}
                             />
@@ -853,7 +848,7 @@ const MapScreen = (): JSX.Element => {
                                 id="availableRoomsOutline"
                                 style={{
                                     ...layerStyles.availableRoomsOutline,
-                                    lineColor: styles.activeColor.color,
+                                    lineColor: theme.colors.primary,
                                 }}
                                 layerIndex={103}
                             />
@@ -923,35 +918,26 @@ const stylesheet = createStyleSheet((theme) => ({
     container: {
         flex: 1,
     },
+    errorContainer: {
+        backgroundColor: theme.colors.background,
+        flex: 1,
+        height: '100%',
+        justifyContent: 'center',
+        position: 'absolute',
+        width: '100%',
+        zIndex: 100,
+    },
     map: {
         flex: 1,
     },
-    errorContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        zIndex: 100,
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        backgroundColor: theme.colors.background,
-    },
     osmAtrribution: { fontSize: 13 },
     osmContainer: {
+        alignItems: 'flex-end',
         height: 30,
+        marginRight: 4,
+        position: 'absolute',
         right: 0,
         top: -24,
-        marginRight: 4,
-        alignItems: 'flex-end',
         zIndex: 99,
-        position: 'absolute',
-    },
-    notification: {
-        color: theme.colors.notification,
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
-    },
-    activeColor: {
-        color: theme.colors.primary,
     },
 }))

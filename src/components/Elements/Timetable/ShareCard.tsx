@@ -156,69 +156,69 @@ export default function ShareCard({ event }: ShareCardProps): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    wrapper: {
-        aspectRatio: 1,
-        height: 350,
-        paddingTop: 24,
-        paddingRight: 24,
-        paddingLeft: 6,
-        gap: 4,
-        display: 'flex',
-        backgroundColor: theme.colors.background,
-    },
-    eventColorCircle: {
-        width: 15,
-        aspectRatio: 1,
-        borderRadius: 9999,
-        backgroundColor: theme.colors.primary,
-    },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 20,
-        color: theme.colors.text,
-    },
-    shortName: {
-        fontSize: 16,
-        color: theme.colors.labelColor,
-    },
-    text1: {
-        fontSize: 18,
-        color: theme.colors.text,
-    },
-    text2: {
-        fontSize: 14,
-        color: theme.colors.text,
-    },
-    text3: {
-        fontSize: 14,
-        color: theme.colors.labelColor,
-    },
     detailsContainer: {
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
         gap: 4,
-        alignItems: 'center',
+    },
+    eventColorCircle: {
+        aspectRatio: 1,
+        backgroundColor: theme.colors.primary,
+        borderRadius: 9999,
+        width: 15,
+    },
+    icon: {
+        color: theme.colors.labelColor,
     },
     roomContainer: {
         display: 'flex',
         flexDirection: 'row',
         gap: 4,
     },
+    shortName: {
+        color: theme.colors.labelColor,
+        fontSize: 16,
+    },
+    text1: {
+        color: theme.colors.text,
+        fontSize: 18,
+    },
+    text2: {
+        color: theme.colors.text,
+        fontSize: 14,
+    },
+    text3: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
+    },
+    title: {
+        color: theme.colors.text,
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
     waterMark: {
-        position: 'absolute',
+        alignItems: 'center',
         bottom: 16,
-        right: 24,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
         gap: 6,
+        position: 'absolute',
+        right: 24,
     },
     waterMarkText: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 'bold',
-        color: theme.colors.text,
     },
-    icon: {
-        color: theme.colors.labelColor,
+    wrapper: {
+        aspectRatio: 1,
+        backgroundColor: theme.colors.background,
+        display: 'flex',
+        gap: 4,
+        height: 350,
+        paddingLeft: 6,
+        paddingRight: 24,
+        paddingTop: 24,
     },
 }))

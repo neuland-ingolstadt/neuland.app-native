@@ -9,6 +9,7 @@ import {
     renderBackdrop,
 } from '@/components/Elements/Universal/BottomSheetRootBackground'
 import Divider from '@/components/Elements/Universal/Divider'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { queryClient } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
@@ -30,18 +31,12 @@ import { toast } from 'burnt'
 import { router } from 'expo-router'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    LayoutAnimation,
-    RefreshControl,
-    Text,
-    View,
-} from 'react-native'
+import { LayoutAnimation, RefreshControl, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibrarySreen(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
@@ -293,10 +288,7 @@ export default function LibrarySreen(): JSX.Element {
                 <View>
                     {isLoading ? (
                         <View style={styles.loadingContainer}>
-                            <ActivityIndicator
-                                size="small"
-                                color={styles.activityIndicator.color}
-                            />
+                            <LoadingIndicator />
                         </View>
                     ) : isErrorReservations ? (
                         <ErrorView
@@ -347,8 +339,8 @@ export default function LibrarySreen(): JSX.Element {
                                                             1 && (
                                                         <Divider
                                                             color={
-                                                                styles.label
-                                                                    .color
+                                                                theme.colors
+                                                                    .labelColor
                                                             }
                                                             iosPaddingLeft={16}
                                                         />
@@ -399,9 +391,9 @@ export default function LibrarySreen(): JSX.Element {
                                                                             1 && (
                                                                         <Divider
                                                                             color={
-                                                                                styles
-                                                                                    .label
-                                                                                    .color
+                                                                                theme
+                                                                                    .colors
+                                                                                    .labelColor
                                                                             }
                                                                             iosPaddingLeft={
                                                                                 16
@@ -468,33 +460,28 @@ export default function LibrarySreen(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     contentContainer: { paddingBottom: 32 },
-    sheetContainer: { flex: 1 },
-    teaserText: {
-        fontSize: 17,
-        marginHorizontal: 10,
-        textAlign: 'center',
-        marginVertical: 30,
-        color: theme.colors.text,
-    },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: 23,
-        fontWeight: 'bold',
-        marginTop: 10,
-        color: theme.colors.text,
-        marginLeft: 10,
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
-    },
-    label: {
-        color: theme.colors.labelColor,
-    },
     handleIndicatorStyle: {
         backgroundColor: theme.colors.labelSecondaryColor,
+    },
+
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
+    },
+    sheetContainer: { flex: 1 },
+    teaserText: {
+        color: theme.colors.text,
+        fontSize: 17,
+        marginHorizontal: 10,
+        marginVertical: 30,
+        textAlign: 'center',
+    },
+    text: {
+        color: theme.colors.text,
+        fontSize: 23,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        marginTop: 10,
     },
 }))

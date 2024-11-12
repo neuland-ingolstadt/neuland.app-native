@@ -61,21 +61,21 @@ const EventsCard = (): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    calendarFilled: {
+        paddingTop: 10,
+    },
     calendarView: {
         gap: 8,
         paddingTop: 12,
     },
-    calendarFilled: {
-        paddingTop: 10,
+    eventDetails: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
     },
     eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
         color: theme.colors.text,
-    },
-    eventDetails: {
-        fontSize: 15,
-        color: theme.colors.labelColor,
+        fontSize: 16,
+        fontWeight: '500',
     },
 }))
 

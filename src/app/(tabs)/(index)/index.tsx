@@ -149,23 +149,23 @@ function HomeScreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    page: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
-    },
-    header: {
-        flex: 1,
-        backgroundColor: theme.colors.card,
-    },
-
-    errorContainer: { paddingTop: 110, flex: 1 },
-    item: {
-        marginVertical: 6,
-        gap: 0,
-        marginHorizontal: PAGE_PADDING,
-    },
     container: {
         paddingBottom: PAGE_BOTTOM_SAFE_AREA,
         paddingTop: 6,
+    },
+    errorContainer: { flex: 1, paddingTop: 110 },
+
+    header: {
+        backgroundColor: theme.colors.card,
+        flex: 1,
+    },
+    item: {
+        gap: 0,
+        marginHorizontal: PAGE_PADDING,
+        marginVertical: 6,
+    },
+    page: {
+        backgroundColor: theme.colors.background,
+        flex: 1,
     },
 }))

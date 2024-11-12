@@ -154,53 +154,53 @@ export const BottomSheetDetailModal = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    reportContainer: { paddingVertical: 10 },
-    reportLink: {
-        flexDirection: 'row',
-        gap: 4,
-        alignItems: 'center',
-    },
-    reportText: {
-        fontSize: 15,
-        paddingStart: 4,
+    buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
+    chevronIcon: {
         color: theme.colors.labelColor,
-    },
-    formList: {
-        marginVertical: 16,
-        width: '100%',
-        alignSelf: 'center',
     },
     contentContainer: {
         flex: 1,
         paddingHorizontal: PAGE_PADDING,
     },
-    modalSectionHeader: {
-        fontWeight: '600',
-        fontSize: 26,
-        textAlign: 'left',
-        color: theme.colors.text,
+    formList: {
+        alignSelf: 'center',
+        marginVertical: 16,
+        width: '100%',
     },
-    roomSubtitle: {
-        fontSize: 16,
+    modalSectionHeader: {
         color: theme.colors.text,
+        fontSize: 26,
+        fontWeight: '600',
+        textAlign: 'left',
     },
     modalSectionHeaderContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingBottom: 0,
     },
+    reportContainer: { paddingVertical: 10 },
+    reportLink: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 4,
+    },
+    reportText: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
+        paddingStart: 4,
+    },
     roomDetailButton: {
-        borderRadius: 25,
-        padding: 7,
-        width: 34,
-        height: 34,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme.colors.card,
+        borderRadius: 25,
+        height: 34,
+        justifyContent: 'center',
+        padding: 7,
+        width: 34,
     },
-    buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
-    chevronIcon: {
-        color: theme.colors.labelColor,
+    roomSubtitle: {
+        color: theme.colors.text,
+        fontSize: 16,
     },
     shareIcon: (platform) => ({
         color: Color(theme.colors.text).darken(0.1).hex(),

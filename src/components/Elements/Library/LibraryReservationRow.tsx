@@ -92,22 +92,22 @@ const LibraryReservationRow = ({
 
 const stylesheet = createStyleSheet((theme) => ({
     leftText1: {
+        color: theme.colors.labelColor,
         fontSize: 15,
         fontWeight: '500',
-        color: theme.colors.labelColor,
     },
     leftText2: {
-        marginTop: 2,
-        fontSize: 14,
         color: theme.colors.labelColor,
+        fontSize: 14,
+        marginTop: 2,
+    },
+    notification: {
+        color: theme.colors.notification,
     },
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 5,
-    },
-    notification: {
-        color: theme.colors.notification,
     },
 }))
 

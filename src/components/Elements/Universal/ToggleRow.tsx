@@ -41,13 +41,33 @@ const ToggleRow = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    textSelected: {
-        fontWeight: '500',
-        fontSize: 15,
+    buttonContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        paddingHorizontal: PAGE_PADDING,
+        paddingVertical: 10,
+        shadowColor: theme.colors.text,
+
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+        width: '100%',
     },
-    textNotSelected: {
-        fontWeight: 'normal',
-        fontSize: 15,
+    buttonRow: {
+        alignSelf: 'center',
+        flexDirection: 'row',
+        gap: 12,
+        justifyContent: 'space-between',
+        paddingHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
+    buttonView: {
+        flex: 1,
     },
     text(selected: boolean) {
         return {
@@ -55,34 +75,6 @@ const stylesheet = createStyleSheet((theme) => ({
             color: selected ? theme.colors.primary : theme.colors.text,
             fontSize: 15,
         }
-    },
-    buttonRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        alignSelf: 'center',
-        gap: 12,
-        paddingHorizontal: PAGE_PADDING,
-    },
-    buttonView: {
-        flex: 1,
-    },
-    buttonContainer: {
-        width: '100%',
-        alignSelf: 'center',
-        borderRadius: 8,
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 1,
-        alignItems: 'center',
-
-        paddingHorizontal: PAGE_PADDING,
-        paddingVertical: 10,
-        backgroundColor: theme.colors.card,
-        shadowColor: theme.colors.text,
     },
 }))
 

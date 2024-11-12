@@ -250,54 +250,54 @@ export default function About(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    appTitleContainer: {
+        marginBottom: 10,
+    },
     container: {
-        paddingTop: 30,
         paddingBottom: 20,
+        paddingTop: 30,
+    },
+    formlistContainer: {
+        alignSelf: 'center',
+        marginTop: 10,
+        paddingHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
+    header: {
+        color: theme.colors.text,
+        fontSize: 22,
+        fontWeight: 'bold',
     },
     logoContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'space-evenly',
+    },
+    logoIcon: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 9,
+        shadowColor: theme.colors.text,
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+    },
+    logoImage: {
+        borderRadius: 9,
+        flex: 1,
+        height: 100,
+        resizeMode: 'contain',
+        width: 100,
     },
     logoTextContainer: {
         flexDirection: 'column',
     },
-    appTitleContainer: {
-        marginBottom: 10,
-    },
-    formlistContainer: {
-        marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    logoIcon: {
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        borderRadius: 9,
-        shadowColor: theme.colors.text,
-        backgroundColor: theme.colors.card,
-    },
-    logoImage: {
-        flex: 1,
-        width: 100,
-        height: 100,
-        resizeMode: 'contain',
-        borderRadius: 9,
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        color: theme.colors.text,
-    },
     subHeader: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 'bold',
-        color: theme.colors.text,
     },
     text: {
-        fontSize: 16,
         color: theme.colors.text,
+        fontSize: 16,
     },
 }))

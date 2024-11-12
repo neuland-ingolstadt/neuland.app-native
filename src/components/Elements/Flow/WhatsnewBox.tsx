@@ -54,29 +54,29 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
-        flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: theme.colors.cardContrast,
         borderRadius: 10,
+        flexDirection: 'row',
+        gap: 18,
         paddingHorizontal: 20,
         paddingVertical: 15,
         width: '100%',
-        gap: 18,
-        backgroundColor: theme.colors.cardContrast,
+    },
+    description: {
+        color: theme.colors.labelColor,
+        fontSize: 14.5,
+        textAlign: 'left',
     },
     textContainer: {
         flexDirection: 'column',
         paddingRight: 40,
     },
     title: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'left',
-        color: theme.colors.text,
-    },
-    description: {
-        fontSize: 14.5,
-        textAlign: 'left',
-        color: theme.colors.labelColor,
     },
 }))
 

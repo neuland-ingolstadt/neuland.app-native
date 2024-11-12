@@ -2,6 +2,7 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
@@ -15,7 +16,6 @@ import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Animated,
     Linking,
     RefreshControl,
@@ -188,10 +188,7 @@ export default function CalendarPage(): JSX.Element {
                         scrollEventThrottle={16}
                     >
                         {isLoading ? (
-                            <ActivityIndicator
-                                size="small"
-                                color={styles.primary.color}
-                            />
+                            <LoadingIndicator />
                         ) : isError ? (
                             <ErrorView
                                 title={error?.message ?? t('error.title')}
@@ -255,38 +252,35 @@ export default function CalendarPage(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    itemsContainer: {
-        alignSelf: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        marginHorizontal: PAGE_PADDING,
-    },
-    footerText1: {
-        fontSize: 12,
-        fontWeight: 'normal',
-        paddingBottom: 25,
-        textAlign: 'justify',
-        color: theme.colors.labelColor,
-    },
-    footerText2: {
-        textDecorationLine: 'underline',
-        color: theme.colors.text,
-    },
-    pagerContainer: {
-        flex: 1,
+    contentBorder: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
     },
     footerContainer: {
         marginVertical: 10,
     },
-    contentBorder: {
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
+    footerText1: {
+        color: theme.colors.labelColor,
+        fontSize: 12,
+        fontWeight: 'normal',
+        paddingBottom: 25,
+        textAlign: 'justify',
+    },
+    footerText2: {
+        color: theme.colors.text,
+        textDecorationLine: 'underline',
+    },
+    itemsContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
+    pagerContainer: {
+        flex: 1,
     },
     toggleContainer: {
-        paddingBottom: 12,
         borderColor: theme.colors.border,
-    },
-    primary: {
-        color: theme.colors.primary,
+        paddingBottom: 12,
     },
 }))

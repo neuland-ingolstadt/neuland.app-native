@@ -102,7 +102,7 @@ export default function MapRootScreen(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     page: {
-        flex: 1,
         backgroundColor: theme.colors.background,
+        flex: 1,
     },
 }))

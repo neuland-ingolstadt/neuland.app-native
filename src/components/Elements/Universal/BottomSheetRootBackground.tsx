@@ -50,9 +50,9 @@ export const renderBackdrop = (
 const stylesheet = createStyleSheet((theme) => ({
     bottomSheet: {
         ...StyleSheet.absoluteFillObject,
+        backgroundColor: theme.colors.background,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
         overflow: 'hidden',
-        backgroundColor: theme.colors.background,
     },
 }))

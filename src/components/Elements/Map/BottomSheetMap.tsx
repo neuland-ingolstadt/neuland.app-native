@@ -18,7 +18,6 @@ import { type FeatureCollection } from 'geojson'
 import React, { useContext, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Alert,
     Animated,
     Easing,
@@ -40,6 +39,7 @@ import {
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
+import LoadingIndicator from '../Universal/LoadingIndicator'
 import BottomSheetBackground from './BottomSheetBackground'
 import ResultRow from './SearchResultRow'
 
@@ -605,9 +605,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                         {t('pages.map.details.room.signIn')}
                                     </Text>
                                 ) : availableRooms === null ? (
-                                    <ActivityIndicator
-                                        size="small"
-                                        color={styles.activityIndicator.color}
+                                    <LoadingIndicator
                                         style={styles.loadingMargin}
                                     />
                                 ) : availableRooms.length === 0 ? (
@@ -759,167 +757,167 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 export default MapBottomSheet
 
 const stylesheet = createStyleSheet((theme) => ({
-    suggestionContainer: {
-        marginBottom: 10,
-    },
-    suggestionSectionHeader: {
-        fontWeight: '600',
-        fontSize: 20,
-        paddingTop: 8,
-        marginBottom: 2,
-        textAlign: 'left',
-        color: theme.colors.text,
-    },
-    suggestionContent: {
-        flex: 1,
-        paddingRight: 14,
-    },
-    suggestionSectionHeaderContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        marginBottom: 4,
-    },
-    suggestionMoreButtonText: {
-        textAlign: 'right',
-        paddingRight: 10,
-        fontSize: 16,
-        fontWeight: '500',
-        color: theme.colors.primary,
-    },
-    suggestionMoreDateText: {
-        textAlign: 'right',
-        paddingRight: 10,
-        fontSize: 15,
-        fontWeight: '500',
-        color: theme.colors.labelColor,
-    },
-    textInput: {
-        height: 40,
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        fontSize: 17,
-        flex: 1,
-        backgroundColor:
-            UnistylesRuntime.themeName === 'dark'
-                ? Color(theme.colors.card).lighten(0.6).hex()
-                : Color(theme.colors.card).darken(0.03).hex(),
-        color: theme.colors.text,
-    },
-    historyRow: {
-        paddingVertical: 3,
-        paddingHorizontal: 12,
-        backgroundColor: theme.colors.card,
-        width: '100%',
-    },
-    suggestionRow: {
-        paddingVertical: 14,
-        paddingHorizontal: 12,
-        flexDirection: 'row',
-    },
-    suggestionInnerRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flex: 1,
-    },
-    suggestionIconContainer: {
-        marginRight: 14,
-        width: 40,
-        height: 40,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.colors.primary,
-    },
-    suggestionTitle: {
-        fontWeight: '600',
-        fontSize: 16,
-        marginBottom: 1,
-        color: theme.colors.text,
-    },
-    suggestionSubtitle: {
-        fontWeight: '400',
-        fontSize: 14,
-        color: theme.colors.text,
-    },
-    suggestionRightContainer: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    radius: {
-        borderRadius: 14,
-        overflow: 'hidden',
-    },
-    radiusBg: {
-        borderRadius: 14,
-        overflow: 'hidden',
-        backgroundColor: theme.colors.card,
-    },
-    noResults: {
-        textAlign: 'center',
-        paddingVertical: 30,
-        fontSize: 16,
-        color: theme.colors.text,
-    },
-    header: {
-        fontWeight: '500',
-        fontSize: 20,
-        paddingTop: 8,
-        marginBottom: 2,
-        textAlign: 'left',
-        color: theme.colors.text,
-    },
-    loadingMargin: {
-        marginVertical: 30,
-    },
     attributionContainer: { paddingVertical: 40 },
     attributionLink: {
+        alignItems: 'center',
         flexDirection: 'row',
         gap: 4,
-        alignItems: 'center',
     },
     attributionText: {
+        color: theme.colors.labelColor,
         fontSize: 15,
         paddingStart: 4,
-        color: theme.colors.labelColor,
     },
-    searchHint: {
-        paddingTop: 60,
-        textAlign: 'center',
-        paddingVertical: 30,
-        fontSize: 16,
-        color: theme.colors.labelColor,
-    },
-    swipeableActionContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 70,
-    },
-    cancelContainer: { justifyContent: 'center' },
     cancelButton: {
-        paddingLeft: 10,
-        paddingRight: 2,
-
         alignSelf: 'center',
+        paddingLeft: 10,
+
+        paddingRight: 2,
     },
     cancelButtonText: {
-        textAlign: 'center',
+        color: theme.colors.primary,
         fontSize: 15,
         fontWeight: '600',
-        color: theme.colors.primary,
+        textAlign: 'center',
+    },
+    cancelContainer: { justifyContent: 'center' },
+    header: {
+        color: theme.colors.text,
+        fontSize: 20,
+        fontWeight: '500',
+        marginBottom: 2,
+        paddingTop: 8,
+        textAlign: 'left',
+    },
+    historyRow: {
+        backgroundColor: theme.colors.card,
+        paddingHorizontal: 12,
+        paddingVertical: 3,
+        width: '100%',
     },
     inputContainer: {
         flexDirection: 'row',
         height: 40,
         marginBottom: 10,
     },
-    toast: {
-        color: theme.colors.notification,
-    },
     label: {
         color: theme.colors.labelColor,
+    },
+    loadingMargin: {
+        marginVertical: 30,
+    },
+    noResults: {
+        color: theme.colors.text,
+        fontSize: 16,
+        paddingVertical: 30,
+        textAlign: 'center',
+    },
+    primaryContrast: {
+        color: getContrastColor(theme.colors.primary),
+    },
+    radius: {
+        borderRadius: 14,
+        overflow: 'hidden',
+    },
+    radiusBg: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 14,
+        overflow: 'hidden',
+    },
+    searchHint: {
+        color: theme.colors.labelColor,
+        fontSize: 16,
+        paddingTop: 60,
+        paddingVertical: 30,
+        textAlign: 'center',
+    },
+    suggestionContainer: {
+        marginBottom: 10,
+    },
+    suggestionContent: {
+        flex: 1,
+        paddingRight: 14,
+    },
+    suggestionIconContainer: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.primary,
+        borderRadius: 50,
+        height: 40,
+        justifyContent: 'center',
+        marginRight: 14,
+        width: 40,
+    },
+    suggestionInnerRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    suggestionMoreButtonText: {
+        color: theme.colors.primary,
+        fontSize: 16,
+        fontWeight: '500',
+        paddingRight: 10,
+        textAlign: 'right',
+    },
+    suggestionMoreDateText: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
+        fontWeight: '500',
+        paddingRight: 10,
+        textAlign: 'right',
+    },
+    suggestionRightContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    suggestionRow: {
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        paddingVertical: 14,
+    },
+    suggestionSectionHeader: {
+        color: theme.colors.text,
+        fontSize: 20,
+        fontWeight: '600',
+        marginBottom: 2,
+        paddingTop: 8,
+        textAlign: 'left',
+    },
+    suggestionSectionHeaderContainer: {
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+    },
+    suggestionSubtitle: {
+        color: theme.colors.text,
+        fontSize: 14,
+        fontWeight: '400',
+    },
+    suggestionTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 1,
+    },
+    swipeableActionContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 70,
+    },
+    textInput: {
+        backgroundColor:
+            UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card).lighten(0.6).hex()
+                : Color(theme.colors.card).darken(0.03).hex(),
+        borderRadius: 10,
+        color: theme.colors.text,
+        flex: 1,
+        fontSize: 17,
+        height: 40,
+        marginBottom: 10,
+        paddingHorizontal: 10,
     },
     time: {
         color: theme.colors.text,
@@ -929,10 +927,7 @@ const stylesheet = createStyleSheet((theme) => ({
         color: theme.colors.labelColor,
         fontVariant: ['tabular-nums'],
     },
-    activityIndicator: {
-        color: theme.colors.primary,
-    },
-    primaryContrast: {
-        color: getContrastColor(theme.colors.primary),
+    toast: {
+        color: theme.colors.notification,
     },
 }))

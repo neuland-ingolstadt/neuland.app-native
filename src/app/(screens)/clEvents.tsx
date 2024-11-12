@@ -111,7 +111,7 @@ const stylesheet = createStyleSheet((theme) => ({
         flex: 1,
     },
     toggleContainer: {
-        paddingBottom: 12,
         borderColor: theme.colors.border,
+        paddingBottom: 12,
     },
 }))

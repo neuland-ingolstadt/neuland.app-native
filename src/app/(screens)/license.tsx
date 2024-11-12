@@ -99,19 +99,19 @@ export default function License(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    formlistContainer: {
-        marginTop: 10,
-        marginBottom: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    text: {
-        padding: 16,
-        fontSize: 13,
-        color: theme.colors.text,
-    },
     container: {
         paddingBottom: MODAL_BOTTOM_MARGIN,
+    },
+    formlistContainer: {
+        alignSelf: 'center',
+        marginBottom: 16,
+        marginTop: 10,
+        paddingHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
+    text: {
+        color: theme.colors.text,
+        fontSize: 13,
+        padding: 16,
     },
 }))

@@ -189,62 +189,46 @@ const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    wrapper: {
-        width: '100%',
-        gap: 16,
-    },
     block: {
         gap: 6,
     },
+    blockCard: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+    },
+    blockFooter: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 12,
+        fontWeight: '400',
+    },
     blockHeader: {
+        color: theme.colors.labelSecondaryColor,
         fontSize: 13,
         fontWeight: 'normal',
         textTransform: 'uppercase',
-        color: theme.colors.labelSecondaryColor,
-    },
-    blockCard: {
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
-    },
-    itemBlock: {
-        paddingHorizontal: 16,
-        paddingVertical: 13,
-        backgroundColor: theme.colors.card,
-    },
-    cardRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 16,
-        marginVertical: 13,
     },
     cardColumn: {
-        flexDirection: 'column',
         alignItems: 'flex-start',
-        paddingHorizontal: 15,
+        flexDirection: 'column',
         marginVertical: 13,
+        paddingHorizontal: 15,
     },
-    blockFooter: {
-        fontSize: 12,
-        fontWeight: '400',
-        color: theme.colors.labelSecondaryColor,
-    },
-    rowTitle: {
-        fontSize: 16,
-        flexGrow: 1,
-        flexShrink: 1,
-        flexWrap: 'wrap',
-        color: theme.colors.text,
-    },
-    rowDetails: {
-        textAlign: 'right',
-        maxWidth: '65%',
-        fontSize: 16,
+    cardRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        marginVertical: 13,
+        paddingHorizontal: 16,
     },
     columnDetails: {
-        textAlign: 'left',
-        paddingTop: 2,
-        fontSize: 16,
         color: theme.colors.text,
+        fontSize: 16,
+        paddingTop: 2,
+        textAlign: 'left',
+    },
+    itemBlock: {
+        backgroundColor: theme.colors.card,
+        paddingHorizontal: 16,
+        paddingVertical: 13,
     },
     labelColor: {
         color: theme.colors.labelColor,
@@ -254,6 +238,25 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     labelTertiaryColor: {
         color: theme.colors.labelTertiaryColor,
+    },
+    rowDetails: {
+        fontSize: 16,
+        maxWidth: '65%',
+        textAlign: 'right',
+    },
+    rowTitle: {
+        color: theme.colors.text,
+        flexGrow: 1,
+        flexShrink: 1,
+        flexWrap: 'wrap',
+        fontSize: 16,
+    },
+    test: {
+        color: theme.colors.text,
+    },
+    wrapper: {
+        gap: 16,
+        width: '100%',
     },
 }))
 

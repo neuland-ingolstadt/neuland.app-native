@@ -70,16 +70,16 @@ export default SingleSectionPicker
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginRight: 8,
         paddingHorizontal: 6,
         paddingVertical: 4,
-        marginRight: 8,
-        alignItems: 'center',
     },
     text: {
+        color: theme.colors.text,
         fontSize: 16,
         paddingVertical: 1,
-        color: theme.colors.text,
     },
 }))

@@ -190,41 +190,41 @@ export default function Login(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    container: {
+        alignSelf: 'center',
+        flex: 1,
+        width: '90%',
+    },
+    header1: {
+        color: theme.colors.text,
+        fontSize: 42,
+        fontWeight: 'bold',
+        textAlign: 'left',
+    },
+
+    header3: {
+        color: theme.colors.labelColor,
+        fontSize: 26,
+        fontWeight: '400',
+        marginTop: 10,
+        minHeight: 30,
+        textAlign: 'left',
+    },
+
     keyboardContainer: {
         flex: 1,
         justifyContent: 'space-evenly',
     },
-    container: {
-        flex: 1,
-        width: '90%',
-        alignSelf: 'center',
-    },
-
-    header1: {
-        fontSize: 42,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        color: theme.colors.text,
-    },
-
-    header3: {
-        fontSize: 26,
-        textAlign: 'left',
-        marginTop: 10,
-        fontWeight: '400',
-        minHeight: 30,
-        color: theme.colors.labelColor,
-    },
     linkContainer: {
-        bottom: 70,
-        position: 'absolute',
-        gap: 6,
-        alignSelf: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
+        bottom: 70,
+        gap: 6,
+        position: 'absolute',
     },
     privacyLink: {
-        textAlign: 'center',
-        fontSize: 14,
         color: theme.colors.labelColor,
+        fontSize: 14,
+        textAlign: 'center',
     },
 }))

@@ -49,10 +49,10 @@ const GradesRow = ({ item }: { item: Grade }): JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
     leftContainer: { paddingTop: 3 },
     leftText1: {
+        color: theme.colors.labelColor,
         fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
-        color: theme.colors.labelColor,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -60,19 +60,19 @@ const stylesheet = createStyleSheet((theme) => ({
         padding: ROW_PADDING,
     },
     rightInnerContainer: {
-        flexDirection: 'column',
         alignItems: 'flex-end',
+        flexDirection: 'column',
         gap: 5,
     },
     rightText1: {
+        color: theme.colors.labelColor,
         fontSize: 20,
         fontWeight: '500',
-        color: theme.colors.labelColor,
     },
     rightText2: {
+        color: theme.colors.labelSecondaryColor,
         fontSize: 14,
         fontWeight: '400',
-        color: theme.colors.labelSecondaryColor,
     },
 }))
 

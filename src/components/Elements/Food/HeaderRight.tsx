@@ -28,6 +28,7 @@ export const FoodHeaderRight = (): JSX.Element => {
                         name: 'filter_list',
                         size: 24,
                     }}
+                    style={styles.icon}
                 />
             </View>
         </Pressable>

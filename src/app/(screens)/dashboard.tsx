@@ -42,7 +42,7 @@ export default function DashboardEdit(): JSX.Element {
     } = useContext(DashboardContext)
     const isDark = useTheme().dark
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
     const [draggedId, setDraggedId] = useState<number | null>(null)
     const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
@@ -246,8 +246,8 @@ export default function DashboardEdit(): JSX.Element {
                                                 icon: {
                                                     ios: {
                                                         name: 'hand.draw',
-                                                        color: styles.primary
-                                                            .color,
+                                                        color: theme.colors
+                                                            .primary,
                                                     },
                                                 },
                                             })
@@ -490,95 +490,69 @@ function RowItem({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    page: {
-        padding: PAGE_PADDING,
-    },
-    outer: {
-        flex: 1,
-        borderRadius: 8,
-        overflow: 'hidden',
-    },
-    wrapper: {
-        gap: 14,
-    },
     block: {
-        width: '100%',
         alignSelf: 'center',
         gap: 6,
+        width: '100%',
     },
     blockContainer: {
+        backgroundColor: theme.colors.card,
         marginTop: 6,
-        backgroundColor: theme.colors.card,
-    },
-    noteContainer: {
-        marginTop: 3,
-        paddingHorizontal: 12,
-        backgroundColor: theme.colors.card,
-    },
-    noteTextContainer: {
-        paddingTop: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        paddingVertical: 9,
-        justifyContent: 'flex-start',
-    },
-    notesTitle: {
-        fontSize: 17,
-        fontWeight: '600',
-        textAlign: 'left',
-        color: theme.colors.primary,
-    },
-    notesMessage: {
-        fontSize: 15,
-        textAlign: 'left',
-        marginBottom: 12,
-        color: theme.colors.text,
     },
     card: {
         borderRadius: 8,
-        paddingHorizontal: 0,
         overflow: 'hidden',
-    },
-    shownBg: {
-        backgroundColor: theme.colors.background,
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 14,
-        backgroundColor: theme.colors.card,
-        minHeight: 48,
-        justifyContent: 'center',
-        paddingHorizontal: 16,
-    },
-    text: {
-        fontSize: 16,
-        flexGrow: 1,
-        flexShrink: 1,
-        color: theme.colors.text,
-    },
-    textEmpty: {
-        fontSize: 16,
-        textAlign: 'center',
-        color: theme.colors.text,
+        paddingHorizontal: 0,
     },
     emptyContainer: {
+        backgroundColor: theme.colors.card,
         borderRadius: 8,
         justifyContent: 'center',
-        backgroundColor: theme.colors.card,
-    },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        color: theme.colors.labelSecondaryColor,
     },
     footer: {
+        color: theme.colors.labelColor,
         fontSize: 12,
         fontWeight: 'normal',
         textAlign: 'left',
-        color: theme.colors.labelColor,
+    },
+    minusIcon: {
+        color: theme.colors.labelSecondaryColor,
+    },
+    noteContainer: {
+        backgroundColor: theme.colors.card,
+        marginTop: 3,
+        paddingHorizontal: 12,
+    },
+    noteTextContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 8,
+        justifyContent: 'flex-start',
+        paddingTop: 12,
+        paddingVertical: 9,
+    },
+    notesMessage: {
+        color: theme.colors.text,
+        fontSize: 15,
+        marginBottom: 12,
+        textAlign: 'left',
+    },
+    notesTitle: {
+        color: theme.colors.primary,
+        fontSize: 17,
+        fontWeight: '600',
+        textAlign: 'left',
+    },
+    outer: {
+        borderRadius: 8,
+        flex: 1,
+        overflow: 'hidden',
+    },
+    outerRow: {
+        borderColor: theme.colors.border,
+    },
+    page: {
+        padding: PAGE_PADDING,
     },
     reset: (hasUserDefaultOrder: boolean) => ({
         fontSize: 16,
@@ -588,13 +562,36 @@ const stylesheet = createStyleSheet((theme) => ({
             ? theme.colors.labelColor
             : theme.colors.text,
     }),
-    minusIcon: {
+    row: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.card,
+        flexDirection: 'row',
+        gap: 14,
+        justifyContent: 'center',
+        minHeight: 48,
+        paddingHorizontal: 16,
+    },
+    sectionHeaderText: {
         color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        textTransform: 'uppercase',
     },
-    primary: {
-        color: theme.colors.primary,
+    shownBg: {
+        backgroundColor: theme.colors.background,
     },
-    outerRow: {
-        borderColor: theme.colors.border,
+    text: {
+        color: theme.colors.text,
+        flexGrow: 1,
+        flexShrink: 1,
+        fontSize: 16,
+    },
+    textEmpty: {
+        color: theme.colors.text,
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    wrapper: {
+        gap: 14,
     },
 }))

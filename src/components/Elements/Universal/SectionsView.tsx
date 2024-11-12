@@ -49,25 +49,25 @@ const stylesheet = createStyleSheet((theme) => ({
         color: isLink ? theme.colors.primary : theme.colors.labelSecondaryColor,
     }),
     labelText: {
+        color: theme.colors.labelSecondaryColor,
         fontSize: 13,
         fontWeight: 'normal',
-        textTransform: 'uppercase',
         marginBottom: 4,
-        color: theme.colors.labelSecondaryColor,
-    },
-    sectionContainer: {
-        marginTop: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
+        textTransform: 'uppercase',
     },
     sectionBox: {
         alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        marginTop: 2,
-        justifyContent: 'center',
         backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        justifyContent: 'center',
+        marginTop: 2,
+        width: '100%',
+    },
+    sectionContainer: {
+        alignSelf: 'center',
+        marginTop: 16,
+        paddingHorizontal: PAGE_PADDING,
+        width: '100%',
     },
 }))
 

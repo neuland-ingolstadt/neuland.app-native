@@ -203,7 +203,6 @@ export default function ErrorView({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    topContainer: { alignItems: 'center', gap: 20 },
     container: (inModal: boolean) => ({
         paddingHorizontal: 25,
         flex: 1,
@@ -212,18 +211,32 @@ const stylesheet = createStyleSheet((theme) => ({
         borderRadius: inModal ? 10 : 0,
     }),
     errorContainer: {
+        flex: 1,
         gap: 12,
         justifyContent: 'space-evenly',
-        flex: 1,
+    },
+    errorFooter: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop: 16,
+        textAlign: 'center',
     },
 
+    errorInfo: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+        marginTop: 12,
+        textAlign: 'center',
+    },
     errorTitle: {
+        color: theme.colors.text,
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
         marginTop: 8,
         textAlign: 'center',
-        color: theme.colors.text,
     },
     logoutContainer: (inModal: boolean) => ({
         borderRadius: 10,
@@ -234,28 +247,15 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: inModal ? theme.colors.background : theme.colors.card,
     }),
     refreshButton: {
-        flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        flexDirection: 'row',
         paddingHorizontal: 40,
+        paddingVertical: 10,
     },
     refreshButtonText: {
-        fontSize: 16,
-        fontWeight: '600',
         color: theme.colors.primary,
-    },
-    errorInfo: {
         fontSize: 16,
-        fontWeight: '500',
-        textAlign: 'center',
-        marginTop: 12,
-        color: theme.colors.text,
-    },
-    errorFooter: {
-        fontSize: 16,
-        textAlign: 'center',
         fontWeight: '600',
-        marginTop: 16,
-        color: theme.colors.text,
     },
+    topContainer: { alignItems: 'center', gap: 20 },
 }))

@@ -8,14 +8,10 @@ import { PAGE_PADDING } from '@/utils/style-utils'
 import { type UseQueryResult } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Animated,
-    RefreshControl,
-    ScrollView,
-    View,
-} from 'react-native'
+import { Animated, RefreshControl, ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+
+import LoadingIndicator from '../Universal/LoadingIndicator'
 
 export default function ClEventsPage({
     clEventsResult,
@@ -59,10 +55,7 @@ export default function ClEventsPage({
                 }
             >
                 {clEventsResult.isLoading ? (
-                    <ActivityIndicator
-                        size="small"
-                        color={styles.activityIndicator.color}
-                    />
+                    <LoadingIndicator />
                 ) : clEventsResult.isError ? (
                     <ErrorView
                         title={
@@ -112,18 +105,14 @@ export default function ClEventsPage({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    contentBorder: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+    },
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        width: '100%',
         marginHorizontal: PAGE_PADDING,
-    },
-
-    contentBorder: {
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
+        width: '100%',
     },
 }))

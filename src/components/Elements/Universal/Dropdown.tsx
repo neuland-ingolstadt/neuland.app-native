@@ -107,39 +107,39 @@ export const DropdownButton: React.FC<{
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    text: {
+    buttonText: {
         color: theme.colors.text,
+        fontSize: 15,
+        textAlign: 'center',
+    },
+    dropdown: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        shadowOffset: { width: 0.1, height: 0.1 },
+        shadowOpacity: 0.3,
     },
     dropdownButton: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.datePickerBackground,
         borderRadius: 8,
         height: 32,
         justifyContent: 'center',
-        alignItems: 'center',
         paddingHorizontal: 10,
-        backgroundColor: theme.colors.datePickerBackground,
     },
-    buttonText: {
-        fontSize: 15,
-        textAlign: 'center',
+    itemText: {
         color: theme.colors.text,
     },
     rowHeight: {
+        backgroundColor: theme.colors.card,
+        borderBottomWidth: 1,
+        borderColor: theme.colors.border,
         height: 38,
         justifyContent: 'center',
-        borderBottomWidth: 1,
-        backgroundColor: theme.colors.card,
-        borderColor: theme.colors.border,
-    },
-    dropdown: {
-        borderRadius: 8,
-        shadowOpacity: 0.3,
-        shadowOffset: { width: 0.1, height: 0.1 },
-        backgroundColor: theme.colors.card,
     },
     selectedText: {
         fontWeight: '500',
     },
-    itemText: {
+    text: {
         color: theme.colors.text,
     },
 }))

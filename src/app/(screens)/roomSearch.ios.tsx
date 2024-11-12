@@ -4,6 +4,7 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -21,7 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
 
@@ -45,7 +46,7 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
 
@@ -148,7 +149,7 @@ export default function AdvancedSearch(): JSX.Element {
                             <DateTimePicker
                                 value={new Date(date + 'T' + time)}
                                 mode="date"
-                                accentColor={styles.indicator.color}
+                                accentColor={theme.colors.primary}
                                 locale="de-DE"
                                 onChange={(_event, selectedDate) => {
                                     setDate(formatISODate(selectedDate))
@@ -174,7 +175,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 value={new Date(date + 'T' + time)}
                                 mode="time"
                                 is24Hour={true}
-                                accentColor={styles.indicator.color}
+                                accentColor={theme.colors.primary}
                                 locale="de-DE"
                                 minuteInterval={5}
                                 onChange={(_event, selectedDate) => {
@@ -191,7 +192,7 @@ export default function AdvancedSearch(): JSX.Element {
                             <Picker
                                 selection={duration}
                                 pickerStyle="menu"
-                                tint={styles.indicator.color}
+                                tint={theme.colors.primary}
                                 offset={{ x: 15, y: 0 }}
                             >
                                 {DURATIONS.map((option) => (
@@ -208,7 +209,7 @@ export default function AdvancedSearch(): JSX.Element {
                             <Picker
                                 selection={building}
                                 pickerStyle="menu"
-                                tint={styles.indicator.color}
+                                tint={theme.colors.primary}
                                 offset={{ x: 20, y: 0 }}
                             >
                                 {ALL_BUILDINGS.map((option) => (
@@ -250,8 +251,7 @@ export default function AdvancedSearch(): JSX.Element {
                         <View style={styles.section}>
                             {filterState === LoadingState.LOADING ||
                             isLoading ? (
-                                <ActivityIndicator
-                                    color={styles.indicator.color}
+                                <LoadingIndicator
                                     style={styles.loadingIndicator}
                                 />
                             ) : isPaused ? (
@@ -283,59 +283,57 @@ export default function AdvancedSearch(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    sectionContainer: {
-        paddingBottom: 20,
+    adjustContainer: {
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 5,
+        paddingHorizontal: 10,
+        paddingTop: 10,
     },
-    scrollView: {
-        padding: 12,
-    },
-    sectionHeader: {
-        fontSize: 13,
-        color: theme.colors.labelSecondaryColor,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    optionTitle: {
-        fontSize: 15,
+    adjustText: {
         color: theme.colors.text,
+        fontSize: 15,
+        padding: 10,
     },
-    section: {
-        marginBottom: 16,
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
+    adjustedTitle: {
+        color: theme.colors.primary,
+        fontSize: 16,
+        fontWeight: '500',
+        marginLeft: 5,
     },
+
     loadingIndicator: {
         paddingVertical: 30,
     },
+    optionTitle: {
+        color: theme.colors.text,
+        fontSize: 15,
+    },
     optionsRow: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
 
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingVertical: 6,
     },
-    adjustContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'center',
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        gap: 5,
+    scrollView: {
+        padding: 12,
     },
-    adjustedTitle: {
-        fontSize: 16,
-        marginLeft: 5,
-        fontWeight: '500',
-        color: theme.colors.primary,
+    section: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        marginBottom: 16,
     },
-    adjustText: {
-        padding: 10,
-        fontSize: 15,
-        color: theme.colors.text,
+    sectionContainer: {
+        paddingBottom: 20,
     },
-    indicator: {
-        color: theme.colors.primary,
+    sectionHeader: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        marginBottom: 4,
+        textTransform: 'uppercase',
     },
 }))

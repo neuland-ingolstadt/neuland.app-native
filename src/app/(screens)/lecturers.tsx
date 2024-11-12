@@ -3,6 +3,7 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import LecturerRow from '@/components/Elements/Rows/LecturerRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Elements/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
@@ -31,7 +32,6 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     FlatList,
     Linking,
     Platform,
@@ -55,7 +55,7 @@ export default function LecturersCard(): JSX.Element {
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()
     const [selectedPage, setSelectedPage] = useState(0)
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const pagerViewRef = useRef<PagerView>(null)
     const [displayesProfessors, setDisplayedProfessors] = useState(false)
@@ -236,9 +236,9 @@ export default function LecturersCard(): JSX.Element {
 
                 ...Platform.select({
                     android: {
-                        headerIconColor: styles.androidSearchBar.color,
-                        hintTextColor: styles.androidSearchBar.color,
-                        textColor: styles.androidSearchBar.color,
+                        headerIconColor: theme.colors.text,
+                        hintTextColor: theme.colors.text,
+                        textColor: theme.colors.text,
                     },
                 }),
                 shouldShowHintSearchIcon: false,
@@ -299,11 +299,7 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isLoading ? (
-            <ActivityIndicator
-                style={styles.loadingContainer}
-                size="small"
-                color={styles.activityIndicator.color}
-            />
+            <LoadingIndicator style={styles.loadingContainer} />
         ) : isError ? (
             <View
                 style={{
@@ -402,11 +398,7 @@ export default function LecturersCard(): JSX.Element {
                     paddingHorizontal: PAGE_PADDING,
                 }}
             >
-                <ActivityIndicator
-                    style={styles.loadingContainer}
-                    size="small"
-                    color={styles.activityIndicator.color}
-                />
+                <LoadingIndicator style={styles.loadingContainer} />
             </View>
         ) : allLecturersResult.isPaused ? (
             <ErrorView
@@ -440,8 +432,7 @@ export default function LecturersCard(): JSX.Element {
                             key={index}
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
-                                backgroundColor:
-                                    styles.sectionContainer.backgroundColor,
+                                backgroundColor: theme.colors.card,
                                 borderTopLeftRadius: index === 0 ? 8 : 0,
                                 borderTopRightRadius: index === 0 ? 8 : 0,
                                 borderBottomLeftRadius:
@@ -527,50 +518,41 @@ export default function LecturersCard(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    loadedRows: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        marginHorizontal: PAGE_PADDING,
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
+    },
     page: {
         flex: 1,
     },
-    loadedRows: {
-        borderRadius: 8,
-        marginHorizontal: PAGE_PADDING,
-        backgroundColor: theme.colors.card,
+    resultsCount: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+        paddingHorizontal: 12,
+        textAlign: 'right',
     },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
+    resultsCountContainer: {
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        zIndex: 1,
     },
+    searchContainer: { flex: 1, gap: 10 },
     sectionHeader: {
+        color: theme.colors.text,
         fontSize: 17,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        color: theme.colors.text,
     },
     sectionHeaderContainer: {
-        paddingVertical: 8,
-        paddingHorizontal: 4,
         backgroundColor: theme.colors.background,
-    },
-    searchContainer: { flex: 1, gap: 10 },
-    resultsCountContainer: {
-        position: 'absolute',
-        right: 0,
-        left: 0,
-        zIndex: 1,
-    },
-    resultsCount: {
-        paddingHorizontal: 12,
-        textAlign: 'right',
-        fontSize: 13,
-        color: theme.colors.labelColor,
-    },
-    androidSearchBar: {
-        color: theme.colors.text,
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
-    },
-    sectionContainer: {
-        backgroundColor: theme.colors.card,
+        paddingHorizontal: 4,
+        paddingVertical: 8,
     },
 }))

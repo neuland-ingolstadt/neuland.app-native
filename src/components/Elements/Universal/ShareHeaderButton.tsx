@@ -45,13 +45,13 @@ export default function ShareHeaderButton({
 
 const stylesheet = createStyleSheet((theme) => ({
     shareButton: {
-        marginRight: -5,
-        borderRadius: 25,
-        padding: 7,
-        width: 34,
-        height: 34,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme.colors.background,
+        borderRadius: 25,
+        height: 34,
+        justifyContent: 'center',
+        marginRight: -5,
+        padding: 7,
+        width: 34,
     },
 }))

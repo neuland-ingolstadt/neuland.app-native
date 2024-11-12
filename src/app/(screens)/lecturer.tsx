@@ -10,7 +10,7 @@ import { Linking, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { lecturerEntry } = useLocalSearchParams<{ lecturerEntry: string }>()
     const lecturer: NormalizedLecturer | undefined =
         lecturerEntry != null ? JSON.parse(lecturerEntry) : undefined
@@ -66,7 +66,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.room'),
                     value: lecturer?.room_short,
                     disabled: lecturer?.room_short === '',
-                    textColor: styles.primary.color,
+                    textColor: theme.colors.primary,
                     onPress: () => {
                         updateRouteParams(lecturer?.room_short ?? '')
                         router.navigate('(tabs)/map')
@@ -76,7 +76,7 @@ export default function LecturerDetail(): JSX.Element {
                     title: t('pages.lecturer.contact.phone'),
                     value: lecturer?.tel_dienst,
                     disabled: lecturer?.tel_dienst === '',
-                    textColor: styles.primary.color,
+                    textColor: theme.colors.primary,
                     onPress: () => {
                         void Linking.openURL(
                             `tel:${
@@ -92,7 +92,7 @@ export default function LecturerDetail(): JSX.Element {
                     layout: validEmail ? 'column' : 'row',
                     textColor:
                         (lecturer?.email.includes('@') ?? false)
-                            ? styles.primary.color
+                            ? theme.colors.primary
                             : undefined,
                     onPress: () => {
                         void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
@@ -140,29 +140,26 @@ export default function LecturerDetail(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    formList: {
+        alignSelf: 'center',
+        width: '100%',
+    },
     page: {
         padding: PAGE_PADDING,
     },
-    formList: {
-        width: '100%',
-        alignSelf: 'center',
-    },
     titleContainer: {
-        marginBottom: 20,
+        alignItems: 'center',
         alignSelf: 'center',
-        width: '100%',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        marginBottom: 20,
         paddingHorizontal: 5,
         paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-        backgroundColor: theme.colors.card,
+        width: '100%',
     },
     titleText: {
+        color: theme.colors.text,
         fontSize: 18,
         textAlign: 'center',
-        color: theme.colors.text,
-    },
-    primary: {
-        color: theme.colors.primary,
     },
 }))

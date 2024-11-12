@@ -148,9 +148,9 @@ const TimetableCard: React.FC = () => {
 const stylesheet = createStyleSheet((theme) => ({
     calendarView: { gap: 8 },
     cardsFilled: { paddingTop: 12 },
-    eventTitle: { fontWeight: '500', fontSize: 16, color: theme.colors.text },
-    eventDetails: { fontSize: 15, color: theme.colors.labelColor },
     divider: { height: 10 },
+    eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
+    eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' },
 }))
 
 export default TimetableCard

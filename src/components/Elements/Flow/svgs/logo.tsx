@@ -1,12 +1,12 @@
 import React from 'react'
 import { G, Path, Svg } from 'react-native-svg'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useStyles } from 'react-native-unistyles'
 
 export default function LogoSVG({ size }: { size: number }): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { theme } = useStyles()
 
     return (
-        <Svg viewBox="0 0 75.09 95.05" fill={styles.text.color} height={size}>
+        <Svg viewBox="0 0 75.09 95.05" fill={theme.colors.text} height={size}>
             <G className="cls-1">
                 <G id="Ebene_2" data-name="Ebene 2">
                     <G id="Aufteilung">
@@ -20,8 +20,3 @@ export default function LogoSVG({ size }: { size: number }): JSX.Element {
         </Svg>
     )
 }
-const stylesheet = createStyleSheet((theme) => ({
-    text: {
-        color: theme.colors.text,
-    },
-}))

@@ -17,15 +17,15 @@ export default function NotesDetails(): JSX.Element {
     const [loaded, setLoaded] = useState(false)
 
     const { t } = useTranslation('timetable')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const sanitizedHtml = sanitizeHtml(html ?? '')
     const styledHtml = `
     <html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
     <style>
     body {
         padding: ${PADDING}px;
-        color: ${styles.text.color};
-        background-color: ${styles.background.backgroundColor};
+        color: ${theme.colors.text};
+        background-color: ${theme.colors.background};
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-size: 15px;
     }
@@ -58,11 +58,5 @@ const stylesheet = createStyleSheet((theme) => ({
     container: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: theme.colors.background,
-    },
-    background: {
-        backgroundColor: theme.colors.background,
-    },
-    text: {
-        color: theme.colors.text,
     },
 }))

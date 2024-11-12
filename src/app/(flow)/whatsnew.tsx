@@ -183,51 +183,51 @@ export default function WhatsNewScreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    page: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 40,
-        gap: 20,
-        backgroundColor: theme.colors.contrast,
-    },
-    titleBox: {
-        flex: 1,
-        justifyContent: 'flex-end',
-    },
-    buttonContainer: {
-        flex: 1,
+    boxes: {
+        gap: 12,
     },
     boxesContainer: {
         flex: 4,
         justifyContent: 'center',
     },
-    boxes: {
-        gap: 12,
-    },
-    title: {
-        fontSize: 32,
-        paddingBottom: 10,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    subtitle: {
-        fontSize: 14,
-        textAlign: 'center',
-        color: theme.colors.labelColor,
-    },
     button: {
-        borderRadius: 7,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        width: '50%',
         alignSelf: 'center',
         backgroundColor: theme.colors.primary,
+        borderRadius: 7,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        width: '50%',
+    },
+    buttonContainer: {
+        flex: 1,
     },
     buttonText: {
-        textAlign: 'center',
-        fontWeight: '600',
-        fontSize: 15,
         color: getContrastColor(theme.colors.primary),
+        fontSize: 15,
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+    page: {
+        backgroundColor: theme.colors.contrast,
+        flex: 1,
+        gap: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 40,
+    },
+    subtitle: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    title: {
+        color: theme.colors.text,
+        fontSize: 32,
+        fontWeight: 'bold',
+        paddingBottom: 10,
+        textAlign: 'center',
+    },
+    titleBox: {
+        flex: 1,
+        justifyContent: 'flex-end',
     },
 }))

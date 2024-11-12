@@ -3,6 +3,7 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import GradesRow from '@/components/Elements/Rows/GradesRow'
 import Divider from '@/components/Elements/Universal/Divider'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import SectionView from '@/components/Elements/Universal/SectionsView'
 import { useRefreshByUser } from '@/hooks'
 import { type GradeAverage } from '@/types/utils'
@@ -18,13 +19,7 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    RefreshControl,
-    ScrollView,
-    Text,
-    View,
-} from 'react-native'
+import { RefreshControl, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import packageInfo from '../../../package.json'
@@ -120,10 +115,7 @@ export default function GradesSCreen(): JSX.Element {
         >
             {isLoading && (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator
-                        size="small"
-                        color={styles.activityIndicator.color}
-                    />
+                    <LoadingIndicator />
                 </View>
             )}
             {isError && (
@@ -153,12 +145,7 @@ export default function GradesSCreen(): JSX.Element {
                                 <View style={styles.loadedContainer}>
                                     {averageLoadingState ===
                                         LoadingState.LOADING && (
-                                        <ActivityIndicator
-                                            size="small"
-                                            color={
-                                                styles.activityIndicator.color
-                                            }
-                                        />
+                                        <LoadingIndicator />
                                     )}
                                     {averageLoadingState ===
                                         LoadingState.ERROR && (
@@ -249,59 +236,56 @@ export default function GradesSCreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    averageContainer: {
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        marginHorizontal: PAGE_PADDING,
+    },
+    averageErrorText: {
+        color: theme.colors.text,
+        fontSize: 15,
+        textAlign: 'center',
+    },
+    averageNote: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
+        textAlign: 'left',
+    },
+    averageText: {
+        color: theme.colors.text,
+        fontSize: 25,
+        fontWeight: '700',
+        marginBottom: 5,
+        textAlign: 'center',
+    },
     contentContainer: {
         paddingBottom: 32,
     },
     loadedContainer: {
         alignSelf: 'center',
         borderRadius: 8,
-        width: '100%',
-        minHeight: 70,
-        marginVertical: 16,
-        marginHorizontal: PAGE_PADDING,
         justifyContent: 'center',
+        marginHorizontal: PAGE_PADDING,
+        marginVertical: 16,
+        minHeight: 70,
+        width: '100%',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
     },
     notesBox: {
-        paddingHorizontal: PAGE_PADDING,
         alignSelf: 'flex-start',
-        paddingTop: 16,
         paddingBottom: 32,
+        paddingHorizontal: PAGE_PADDING,
+        paddingTop: 16,
     },
     notesText: {
+        color: theme.colors.labelColor,
         fontSize: 12,
         fontWeight: 'normal',
         paddingTop: 8,
         textAlign: 'left',
-        color: theme.colors.labelColor,
-    },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    averageContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        marginHorizontal: PAGE_PADDING,
-    },
-    averageText: {
-        fontSize: 25,
-        marginBottom: 5,
-        fontWeight: '700',
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    averageNote: {
-        fontSize: 14,
-        textAlign: 'left',
-        color: theme.colors.labelColor,
-    },
-    averageErrorText: {
-        fontSize: 15,
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
     },
 }))

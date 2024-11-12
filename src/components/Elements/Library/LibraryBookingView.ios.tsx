@@ -19,7 +19,7 @@ const LibraryBookingView = ({
         reservationSeat: string
     ) => Promise<void>
 }): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const rooms = getAvailableRooms(item)
     const uniqueRoomNames = [...new Set(rooms.map((item) => item[1].room_name))]
     const [seats, setSeats] = useState<string[]>([])
@@ -51,7 +51,7 @@ const LibraryBookingView = ({
                     <Picker
                         selection={roomBindung}
                         pickerStyle="wheel"
-                        tint={styles.primary.color}
+                        tint={theme.colors.primary}
                         style={styles.locationPicker}
                         lineLimit={1}
                         scaleEffect={0.9}
@@ -62,7 +62,7 @@ const LibraryBookingView = ({
                     </Picker>
                     <Picker
                         selection={seatBindung}
-                        tint={styles.primary.color}
+                        tint={theme.colors.primary}
                         pickerStyle="wheel"
                         style={styles.seatPicker}
                         scaleEffect={0.9}
@@ -86,25 +86,22 @@ const LibraryBookingView = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    buttonContainer: {
+        paddingTop: 8,
+    },
     dropdownContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
         paddingHorizontal: 10,
         paddingVertical: 12,
+        width: '100%',
     },
     locationPicker: {
         width: '75%',
     },
     seatPicker: {
         width: '25%',
-    },
-    buttonContainer: {
-        paddingTop: 8,
-    },
-    primary: {
-        color: theme.colors.primary,
     },
 }))
 

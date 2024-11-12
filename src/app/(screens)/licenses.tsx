@@ -13,7 +13,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function Licenses(): JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['settings'])
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const numberRegex = /\d+(\.\d+)*/
     const atRegex = /(?:@)/gi
     const navigation = useNavigation()
@@ -28,9 +28,9 @@ export default function Licenses(): JSX.Element {
 
                 ...Platform.select({
                     android: {
-                        headerIconColor: styles.searchTextInput.color,
-                        hintTextColor: styles.searchTextInput.color,
-                        textColor: styles.searchTextInput.color,
+                        headerIconColor: theme.colors.text,
+                        hintTextColor: theme.colors.text,
+                        textColor: theme.colors.text,
                     },
                 }),
 
@@ -109,28 +109,25 @@ export default function Licenses(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    formlistContainer: {
-        marginTop: 10,
-        marginBottom: 24,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
     container: {
         paddingBottom: MODAL_BOTTOM_MARGIN,
     },
+    formlistContainer: {
+        alignSelf: 'center',
+        marginBottom: 24,
+        marginTop: 10,
+        paddingHorizontal: PAGE_PADDING,
+        width: '100%',
+    },
     notesContainer: {
         alignSelf: 'center',
-        width: '100%',
-        marginTop: 14,
         marginBottom: 40,
+        marginTop: 14,
+        width: '100%',
     },
     notesText: {
-        textAlign: 'left',
-        fontSize: 12,
         color: theme.colors.labelColor,
-    },
-    searchTextInput: {
-        color: theme.colors.text,
+        fontSize: 12,
+        textAlign: 'left',
     },
 }))

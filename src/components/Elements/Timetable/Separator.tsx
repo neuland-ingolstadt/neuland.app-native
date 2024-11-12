@@ -10,9 +10,9 @@ export default function Separator(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     separator: {
-        marginLeft: 50 + 12,
-        height: 1,
-        marginVertical: 13,
         backgroundColor: theme.colors.border,
+        height: 1,
+        marginLeft: 50 + 12,
+        marginVertical: 13,
     },
 }))

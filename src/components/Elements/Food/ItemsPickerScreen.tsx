@@ -26,7 +26,7 @@ const ItemsPickerScreen = (params: {
     const placeholderKey =
         type === 'allergens' ? 'allergensSearch' : 'flagsSearch'
     const isDark = UnistylesRuntime.themeName === 'dark'
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('food')
     const [searchQuery, setSearchQuery] = useState<string>('')
 
@@ -58,11 +58,11 @@ const ItemsPickerScreen = (params: {
                 placeholder: t(`navigation.${placeholderKey}`, {
                     ns: 'navigation',
                 }),
-                textColor: styles.text.color,
+                textColor: theme.colors.text,
                 ...Platform.select({
                     android: {
-                        headerIconColor: styles.text.color,
-                        hintTextColor: styles.text.color,
+                        headerIconColor: theme.colors.text,
+                        hintTextColor: theme.colors.text,
                     },
                 }),
                 shouldShowHintSearchIcon: false,
@@ -106,17 +106,14 @@ const ItemsPickerScreen = (params: {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
-        width: '100%',
-        justifyContent: 'center',
         backgroundColor: theme.colors.card,
+        justifyContent: 'center',
+        width: '100%',
     },
     filteredText: {
         alignSelf: 'center',
-        marginTop: 20,
         color: theme.colors.labelColor,
-    },
-    text: {
-        color: theme.colors.text,
+        marginTop: 20,
     },
 }))
 

@@ -2,6 +2,7 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { USER_STUDENT } from '@/data/constants'
@@ -16,7 +17,6 @@ import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Alert,
     Linking,
     Platform,
@@ -227,10 +227,7 @@ export default function Profile(): JSX.Element {
             >
                 {isLoading && (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={styles.primary.color}
-                        />
+                        <LoadingIndicator />
                     </View>
                 )}
                 {isError && (
@@ -278,10 +275,7 @@ export default function Profile(): JSX.Element {
                     disabled={isLoggingOut}
                 >
                     {isLoggingOut ? (
-                        <ActivityIndicator
-                            size="small"
-                            color={styles.notification.color}
-                        />
+                        <LoadingIndicator />
                     ) : (
                         <>
                             <PlatformIcon
@@ -307,38 +301,35 @@ export default function Profile(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    contentContainer: { paddingBottom: 32 },
     container: {
-        paddingVertical: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
         alignSelf: 'center',
+        paddingHorizontal: PAGE_PADDING,
+        paddingVertical: 16,
+        width: '100%',
+    },
+    contentContainer: { paddingBottom: 32 },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 40,
     },
     logoutButton: {
-        borderRadius: 10,
-        marginBottom: 30,
-        marginTop: 10,
         alignItems: 'center',
         alignSelf: 'center',
-        flexDirection: 'row',
-        paddingVertical: 12,
-        paddingHorizontal: 40,
-        gap: 10,
-        minWidth: 165,
-        justifyContent: 'center',
         backgroundColor: theme.colors.card,
+        borderRadius: 10,
+        flexDirection: 'row',
+        gap: 10,
+        justifyContent: 'center',
+        marginBottom: 30,
+        marginTop: 10,
+        minWidth: 165,
+        paddingHorizontal: 40,
+        paddingVertical: 12,
     },
     logoutText: {
-        fontSize: 16,
         color: theme.colors.notification,
-    },
-    loadingContainer: {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    primary: {
-        color: theme.colors.primary,
+        fontSize: 16,
     },
     notification: {
         color: theme.colors.notification,

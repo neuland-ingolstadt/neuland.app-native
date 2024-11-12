@@ -44,7 +44,7 @@ export const MealEntry = ({
     const { preferencesSelection, allergenSelection, foodLanguage } =
         useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const userAllergens = convertRelevantAllergens(
         meal.allergens ?? [],
         allergenSelection,
@@ -184,8 +184,8 @@ export const MealEntry = ({
                                 <LinearGradient
                                     style={styles.variantContainer}
                                     colors={[
-                                        styles.labelBackground.color,
-                                        Color(styles.labelBackground.color)
+                                        theme.colors.labelBackground,
+                                        Color(theme.colors.labelBackground)
                                             .lighten(0.15)
                                             .hex(),
                                     ]}
@@ -207,11 +207,11 @@ export const MealEntry = ({
                                                 key={index}
                                                 style={styles.flagsBox}
                                                 colors={[
-                                                    styles.labelBackground
-                                                        .color,
+                                                    theme.colors
+                                                        .labelBackground,
                                                     Color(
-                                                        styles.labelBackground
-                                                            .color
+                                                        theme.colors
+                                                            .labelBackground
                                                     )
                                                         .lighten(0.13)
                                                         .hex(),
@@ -271,114 +271,112 @@ export const MealEntry = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    allergene: {
+        color: theme.colors.notification,
+        fontSize: 12,
+    },
+    allergensContainer: {
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 2,
+        marginTop: 6,
+        width: '80%',
+    },
     container: {
-        padding: CARD_PADDING,
-        width: '100%',
         alignSelf: 'center',
+        backgroundColor: theme.colors.card,
         borderRadius: 8,
+        padding: CARD_PADDING,
+        shadowColor: theme.colors.text,
         shadowOffset: {
             width: 0,
             height: 1,
         },
         shadowOpacity: 0.1,
         shadowRadius: 1,
-        backgroundColor: theme.colors.card,
-        shadowColor: theme.colors.text,
-    },
-    innerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
         width: '100%',
     },
     contextMenu: { zIndex: 3 },
-    title: {
-        fontWeight: '500',
-        fontSize: 16,
-        maxWidth: '88%',
-        color: theme.colors.text,
-    },
-    detailsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: 3,
-    },
     detailsColumns: {
         flexDirection: 'column',
         flex: 1,
         paddingTop: 2,
     },
+    detailsContainer: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingTop: 3,
+    },
     flags: {
+        alignContent: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignContent: 'center',
     },
     flagsBox: {
-        flexDirection: 'row',
         alignContent: 'center',
         alignItems: 'center',
         borderRadius: 4,
-        marginRight: 4,
+        flexDirection: 'row',
         marginBottom: 2,
+        marginRight: 4,
     },
     flagsText: {
+        color: theme.colors.text,
         fontSize: 12,
         paddingHorizontal: 4,
         paddingVertical: 2,
-        color: theme.colors.text,
     },
-    allergensContainer: {
+    icon: {
+        alignSelf: 'center',
+        color: theme.colors.notification,
+        marginRight: 4,
+    },
+    innerContainer: {
+        alignItems: 'flex-start',
         flexDirection: 'row',
-        alignContent: 'center',
-        alignItems: 'center',
-        marginTop: 6,
-        width: '80%',
-        gap: 2,
+        justifyContent: 'space-between',
+        width: '100%',
     },
-    priceContainer: {
-        flexDirection: 'column',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-        alignSelf: 'flex-end',
-    },
-    price: {
-        fontSize: 14,
-        fontWeight: '500',
-        alignSelf: 'flex-end',
-        color: theme.colors.text,
-    },
-    priceLabel: {
-        fontSize: 12,
-        alignSelf: 'flex-end',
-        color: theme.colors.labelColor,
-    },
+
     pressable: {
         marginTop: 8,
     },
-    icon: {
-        marginRight: 4,
-        alignSelf: 'center',
-        color: theme.colors.notification,
+    price: {
+        alignSelf: 'flex-end',
+        color: theme.colors.text,
+        fontSize: 14,
+        fontWeight: '500',
     },
-    allergene: {
+    priceContainer: {
+        alignItems: 'flex-end',
+        alignSelf: 'flex-end',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+    },
+    priceLabel: {
+        alignSelf: 'flex-end',
+        color: theme.colors.labelColor,
         fontSize: 12,
-        color: theme.colors.notification,
+    },
+    title: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+        maxWidth: '88%',
     },
     variantContainer: {
         borderRadius: 4,
+        maxWidth: '10%',
         paddingHorizontal: 6,
         paddingVertical: 2,
-        maxWidth: '10%',
     },
     variantText: {
+        color: theme.colors.text,
         fontSize: 11,
         fontWeight: '500',
         textAlign: 'center',
         textAlignVertical: 'center',
-        color: theme.colors.text,
-    },
-    labelBackground: {
-        color: theme.colors.labelBackground,
     },
 }))

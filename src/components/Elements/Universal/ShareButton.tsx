@@ -38,20 +38,20 @@ export default function ShareButton({
 const stylesheet = createStyleSheet((theme) => ({
     shareButton: {
         alignSelf: 'center',
-        paddingHorizontal: 45,
-        paddingVertical: 12,
+        backgroundColor: theme.colors.card,
         borderRadius: 8,
         marginTop: 5,
-        backgroundColor: theme.colors.card,
+        paddingHorizontal: 45,
+        paddingVertical: 12,
     },
     shareContent: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         gap: 10,
     },
     shareText: {
-        fontSize: 17,
         alignItems: 'flex-end',
         color: theme.colors.primary,
+        fontSize: 17,
     },
 }))

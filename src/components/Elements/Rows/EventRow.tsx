@@ -67,14 +67,14 @@ const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     leftText1: {
+        color: theme.colors.labelColor,
         fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
-        color: theme.colors.labelColor,
     },
     leftText2: {
-        fontSize: 13,
         color: theme.colors.labelColor,
+        fontSize: 13,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -82,9 +82,9 @@ const stylesheet = createStyleSheet((theme) => ({
         padding: ROW_PADDING,
     },
     rightText: {
+        color: theme.colors.labelColor,
         fontSize: 14,
         fontWeight: '400',
-        color: theme.colors.labelColor,
     },
 }))
 

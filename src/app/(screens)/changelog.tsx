@@ -73,23 +73,23 @@ export default function Theme(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    wrapper: {
-        marginVertical: 16,
-        alignSelf: 'center',
-        width: '92%',
-    },
     notesContainer: {
         alignSelf: 'center',
         flexDirection: 'row',
-        width: '92%',
         marginBottom: 40,
+        width: '92%',
     },
     notesText: {
-        textAlign: 'left',
-        fontSize: 13,
         color: theme.colors.labelColor,
+        fontSize: 13,
+        textAlign: 'left',
     },
     text: {
         color: theme.colors.primary,
+    },
+    wrapper: {
+        alignSelf: 'center',
+        marginVertical: 16,
+        width: '92%',
     },
 }))

@@ -11,7 +11,6 @@ import { selectionAsync } from 'expo-haptics'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Animated,
     Platform,
     Pressable,
@@ -25,6 +24,7 @@ import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
+import LoadingIndicator from '../Universal/LoadingIndicator'
 
 export default function ClSportsPage({
     sportsResult,
@@ -201,10 +201,7 @@ export default function ClSportsPage({
                 }
             >
                 {sportsResult.isLoading ? (
-                    <ActivityIndicator
-                        size="small"
-                        color={styles.activityIndicator.color}
-                    />
+                    <LoadingIndicator />
                 ) : sportsResult.isError ? (
                     <ErrorView
                         title={sportsResult.error?.message ?? t('error.title')}
@@ -258,12 +255,24 @@ export default function ClSportsPage({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    itemsContainer: {
-        alignSelf: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        marginHorizontal: PAGE_PADDING,
-        paddingBottom: 64,
+    campusHeader: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+        verticalAlign: 'middle',
+    },
+    categoryContainer: {
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+    },
+    categoryText: {
+        colors: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+        paddingTop: 10,
     },
     contentBorder: {
         borderRadius: 8,
@@ -272,50 +281,33 @@ const stylesheet = createStyleSheet((theme) => ({
         borderRadius: 8,
         overflow: 'hidden',
     },
-    categoryContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        alignContent: 'center',
-        paddingBottom: 10,
-    },
-    toggleIcon: {
-        marginRight: 4,
-        alignSelf: 'flex-end',
-    },
-    categoryText: {
-        fontSize: 16,
-        paddingTop: 10,
+    invisibleFont: {
+        color: '#00000000',
         fontWeight: '600',
-        colors: theme.colors.text,
+    },
+    itemsContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginHorizontal: PAGE_PADDING,
+        paddingBottom: 64,
+        width: '100%',
     },
     locationButtonContainer: {
-        padding: 8,
-        paddingHorizontal: 16,
-        borderWidth: StyleSheet.hairlineWidth,
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 8,
         backgroundColor: theme.colors.card,
         borderColor: theme.colors.border,
+        borderRadius: 8,
+        borderWidth: StyleSheet.hairlineWidth,
+        justifyContent: 'center',
+        padding: 8,
+        paddingHorizontal: 16,
     },
     locationRow: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         gap: 8,
-        paddingTop: 8,
         paddingBottom: 4,
-    },
-    weekdaysContainer: { marginBottom: 10 },
-    campusHeader: {
-        fontWeight: '500',
-        verticalAlign: 'middle',
-        fontSize: 16,
-        color: theme.colors.text,
-    },
-    invisibleFont: {
-        fontWeight: '600',
-        color: '#00000000',
+        paddingTop: 8,
     },
     locationText: (isSelect: boolean) => ({
         position: 'absolute',
@@ -326,8 +318,10 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: isSelect ? '600' : undefined,
         color: isSelect ? theme.colors.primary : theme.colors.text,
     }),
-    locationTextContainer: { position: 'relative', alignItems: 'center' },
-    activityIndicator: {
-        color: theme.colors.primary,
+    locationTextContainer: { alignItems: 'center', position: 'relative' },
+    toggleIcon: {
+        alignSelf: 'flex-end',
+        marginRight: 4,
     },
+    weekdaysContainer: { marginBottom: 10 },
 }))

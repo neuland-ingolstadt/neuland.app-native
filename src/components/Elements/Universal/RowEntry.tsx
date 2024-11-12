@@ -51,11 +51,12 @@ const RowEntry = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    titleText: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: theme.colors.text,
-        marginBottom: 1,
+    detailsContainer: {
+        alignItems: 'flex-start',
+
+        flexDirection: 'column',
+        maxWidth: '70%',
+        padding: ROW_PADDING,
     },
     eventContainer: {
         flexDirection: 'row',
@@ -63,14 +64,13 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingHorizontal: 10,
         paddingVertical: 12,
     },
-    detailsContainer: {
-        flexDirection: 'column',
-
-        alignItems: 'flex-start',
-        padding: ROW_PADDING,
-        maxWidth: '70%',
-    },
     titleContainer: { flexDirection: 'row', gap: 4, paddingBottom: 2 },
+    titleText: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 1,
+    },
 }))
 
 export default RowEntry

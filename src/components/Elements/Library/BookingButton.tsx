@@ -1,14 +1,10 @@
 import { type AvailableRoomItem } from '@/types/thi-api'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Platform,
-    Pressable,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+
+import LoadingIndicator from '../Universal/LoadingIndicator'
 
 interface BookingButtonProps {
     addReservation: (
@@ -51,10 +47,7 @@ const BookButton: React.FC<BookingButtonProps> = ({
             >
                 <View style={styles.innerButton}>
                     {reserve ? (
-                        <ActivityIndicator
-                            size={'small'}
-                            color={styles.indicator.color}
-                        />
+                        <LoadingIndicator />
                     ) : (
                         <Text style={styles.leftText2}>
                             {t('pages.library.available.book')}
@@ -68,28 +61,25 @@ const BookButton: React.FC<BookingButtonProps> = ({
 
 const stylesheet = createStyleSheet((theme) => ({
     bookButton: {
-        marginTop: 14,
-        borderRadius: 8,
-        justifyContent: 'center',
         alignItems: 'center',
-        gap: 5,
-        paddingVertical: 12,
-        paddingHorizontal: 33,
         backgroundColor:
             Platform.OS === 'ios' ? theme.colors.cardButton : theme.colors.card,
+        borderRadius: 8,
+        gap: 5,
+        justifyContent: 'center',
+        marginTop: 14,
+        paddingHorizontal: 33,
+        paddingVertical: 12,
     },
-    innerButton: { width: 100, alignItems: 'center', height: 20 },
     confirmContainer: {
-        width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
+        width: '100%',
     },
+    innerButton: { alignItems: 'center', height: 20, width: 100 },
     leftText2: {
-        fontSize: 15,
         color: theme.colors.text,
-    },
-    indicator: {
-        color: theme.colors.primary,
+        fontSize: 15,
     },
 }))
 

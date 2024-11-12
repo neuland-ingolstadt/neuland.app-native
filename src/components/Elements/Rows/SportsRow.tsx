@@ -13,7 +13,7 @@ import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
 
 const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const onPressRow = (): void => {
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
             'base64'
@@ -26,7 +26,7 @@ const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
         <RowEntry
             title={event.title[i18n.language as LanguageKey]}
             onPress={onPressRow}
-            backgroundColor={styles.background.backgroundColor}
+            backgroundColor={theme.colors.card}
             leftChildren={
                 <>
                     <Text style={styles.leftText1} numberOfLines={1}>
@@ -69,14 +69,14 @@ const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     leftText1: {
+        color: theme.colors.labelColor,
         fontSize: 15,
         fontWeight: '500',
         marginBottom: 4,
-        color: theme.colors.labelColor,
     },
     leftText2: {
-        fontSize: 13,
         color: theme.colors.labelColor,
+        fontSize: 13,
     },
     rightContainer: {
         flexDirection: 'column',
@@ -88,11 +88,8 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '400',
     },
     toggleIcon: {
-        marginRight: 4,
         alignSelf: 'center',
-    },
-    background: {
-        backgroundColor: theme.colors.card,
+        marginRight: 4,
     },
 }))
 

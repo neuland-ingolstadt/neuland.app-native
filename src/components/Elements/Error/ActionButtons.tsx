@@ -61,22 +61,22 @@ export const StatusButton = (): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    actionButtonText: {
+        color: theme.colors.text,
+        fontSize: 15,
+        fontWeight: '600',
+    },
     container: {
-        borderRadius: 10,
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.background,
-    },
-    refreshButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
+        borderRadius: 10,
     },
 
-    actionButtonText: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: theme.colors.text,
+    refreshButton: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingHorizontal: 30,
+        paddingVertical: 10,
     },
 }))

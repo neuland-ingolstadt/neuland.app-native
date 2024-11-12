@@ -38,13 +38,13 @@ const stylesheet = createStyleSheet((theme) => ({
     gradesRow: {
         flexDirection: 'row',
         flex: 1,
-        paddingVertical: 13,
         paddingHorizontal: 16,
+        paddingVertical: 13,
     },
     gradesText: {
+        color: theme.colors.text,
         flex: 1,
         fontSize: 16,
-        color: theme.colors.text,
     },
     icon: {
         alignSelf: 'center',

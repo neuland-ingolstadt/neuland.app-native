@@ -93,38 +93,38 @@ const LibrarySlotRow = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    container: { flexDirection: 'column' },
+    detailsContainer: {
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+        maxWidth: '70%',
+        padding: 5,
+    },
     eventContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
         paddingVertical: 12,
     },
-    detailsContainer: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        padding: 5,
-        maxWidth: '70%',
-    },
+
     leftText1: {
-        marginTop: 2,
+        color: theme.colors.labelColor,
         fontSize: 15,
         fontWeight: '500',
-        color: theme.colors.labelColor,
+        marginTop: 2,
     },
-
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
         padding: 5,
     },
+
     timespanText: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: '600',
-        color: theme.colors.text,
         marginBottom: 1,
     },
-
-    container: { flexDirection: 'column' },
 }))
 
 export default LibrarySlotRow

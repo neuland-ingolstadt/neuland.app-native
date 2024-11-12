@@ -19,7 +19,7 @@ import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const {
         selectedRestaurants,
         allergenSelection,
@@ -167,7 +167,7 @@ const FoodCard = (): JSX.Element => {
                             </View>
                             {foodEntries.length - 1 !== index && (
                                 <Divider
-                                    color={styles.divider.color}
+                                    color={theme.colors.border}
                                     width={'100%'}
                                 />
                             )}
@@ -180,32 +180,29 @@ const FoodCard = (): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    emptyMenu: {
+        color: theme.colors.labelColor,
+        fontSize: 16,
+        fontWeight: '500',
+    },
     listView: {
         gap: 8,
         paddingTop: 12,
-    },
-    mealTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-        flexGrow: 1,
-        flexShrink: 1,
-        color: theme.colors.text,
-    },
-    mealPrice: {
-        fontSize: 15,
-        color: theme.colors.labelColor,
     },
     mealEntry: {
         flexDirection: 'row',
         gap: 12,
     },
-    emptyMenu: {
-        fontWeight: '500',
-        fontSize: 16,
+    mealPrice: {
         color: theme.colors.labelColor,
+        fontSize: 15,
     },
-    divider: {
-        color: theme.colors.border,
+    mealTitle: {
+        color: theme.colors.text,
+        flexGrow: 1,
+        flexShrink: 1,
+        fontSize: 16,
+        fontWeight: '500',
     },
 }))
 

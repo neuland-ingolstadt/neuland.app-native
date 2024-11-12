@@ -2,6 +2,7 @@ import ErrorView from '@/components/Elements/Error/ErrorView'
 import { MealDay } from '@/components/Elements/Food'
 import { AllergensBanner } from '@/components/Elements/Food/AllergensBanner'
 import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { FoodFilterContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
 import { type Food } from '@/types/neuland-api'
@@ -22,7 +23,6 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Animated,
     Dimensions,
     Platform,
@@ -180,10 +180,7 @@ export function FoodScreen(): JSX.Element {
             >
                 {isLoading && (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={styles.activityIndicator.color}
-                        />
+                        <LoadingIndicator />
                     </View>
                 )}
                 {isError && (
@@ -328,63 +325,30 @@ export default function FoodRootScreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    page: {
-        flex: 1,
-    },
-    pagerContainer: {
-        flex: 1,
+    animtedContainer: {
+        borderBottomColor: theme.colors.border,
+        width: '100%',
     },
     container: {
         flex: 1,
     },
-    animtedContainer: {
-        width: '100%',
-        borderBottomColor: theme.colors.border,
-    },
-    loadedContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: 10,
-        marginHorizontal: 12,
-    },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     dayButtonContainer: {
-        width: '100%',
-        height: 60,
-        alignSelf: 'center',
         alignContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
         borderRadius: 8,
+        height: 60,
+        justifyContent: 'space-evenly',
+        paddingVertical: 8,
+        shadowColor: theme.colors.text,
         shadowOffset: {
             width: 0,
             height: 1,
         },
         shadowOpacity: 0.1,
         shadowRadius: 1,
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        paddingVertical: 8,
-        backgroundColor: theme.colors.card,
-        shadowColor: theme.colors.text,
-    },
-    innerScrollContainer: {
-        marginHorizontal: 12,
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-    },
-
-    selectedDayText2: {
-        fontSize: 15,
-        fontWeight: '500',
-    },
-    normalDayText2: {
-        fontSize: 15,
-        fontWeight: 'normal',
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
+        width: '100%',
     },
     dayText: (selected: boolean) => ({
         color: selected ? theme.colors.primary : theme.colors.text,
@@ -396,4 +360,26 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 15,
         fontWeight: selected ? '500' : 'normal',
     }),
+    innerScrollContainer: {
+        marginHorizontal: 12,
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+    },
+    loadedContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 12,
+        marginVertical: 10,
+    },
+
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
+    },
+    page: {
+        flex: 1,
+    },
+    pagerContainer: {
+        flex: 1,
+    },
 }))

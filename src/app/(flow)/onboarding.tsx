@@ -447,7 +447,7 @@ export default function OnboardingScreen(): JSX.Element {
                 <Animated.View
                     style={[styles.fullLogoContainer, textLogoAnimatedStyle]}
                 >
-                    <LogoTextSVG size={15} color={styles.svg.color} />
+                    <LogoTextSVG size={15} color={styles.heading1.color} />
                 </Animated.View>
             </View>
             <Animated.View style={helpAnimatedStyle}>
@@ -479,80 +479,77 @@ export default function OnboardingScreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    logoTextGroup: { flex: 1, justifyContent: 'center' },
-    boxesContainer: {
-        paddingTop: 20,
-        justifyContent: 'center',
-    },
     boxes: {
         gap: 12,
         marginHorizontal: 40,
     },
-
+    boxesContainer: {
+        justifyContent: 'center',
+        paddingTop: 20,
+    },
     button: {
-        borderRadius: 7,
-        paddingVertical: 14,
-        paddingHorizontal: 24,
-        width: '50%',
         alignSelf: 'center',
         backgroundColor: theme.colors.primary,
-    },
-    buttonText: {
-        textAlign: 'center',
-        fontWeight: '700',
-        fontSize: 16,
-        color: getContrastColor(theme.colors.primary),
-    },
-    page: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: theme.colors.contrast,
+        borderRadius: 7,
+        paddingHorizontal: 24,
+        paddingVertical: 14,
+        width: '50%',
     },
 
-    linkPrivacy: {
-        fontWeight: 'bold',
-        color: theme.colors.text,
-    },
-    privacyRow: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    privacyText: {
-        flexWrap: 'wrap',
-        flex: 1,
+    buttonText: {
+        color: getContrastColor(theme.colors.primary),
+        fontSize: 16,
+        fontWeight: '700',
         textAlign: 'center',
-        flexShrink: 1,
-        color: theme.colors.labelColor,
-    },
-    heading1: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    heading2: {
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: theme.colors.text,
     },
     cardsContainer: {
         flexGrow: 0.5,
     },
-    legalContainer: {
-        flex: 1,
-        width: '95%',
-        justifyContent: 'center',
-    },
     fullLogoContainer: {
-        position: 'absolute',
-        bottom: 30,
-        width: '100%',
         alignItems: 'center',
+        bottom: 30,
+        position: 'absolute',
+        width: '100%',
     },
-    svg: {
+
+    heading1: {
         color: theme.colors.text,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    heading2: {
+        color: theme.colors.text,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     icon: {
         color: theme.colors.labelSecondaryColor,
+    },
+    legalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        width: '95%',
+    },
+    linkPrivacy: {
+        color: theme.colors.text,
+        fontWeight: 'bold',
+    },
+    logoTextGroup: { flex: 1, justifyContent: 'center' },
+    page: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.contrast,
+        flex: 1,
+    },
+    privacyRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    privacyText: {
+        color: theme.colors.labelColor,
+        flexWrap: 'wrap',
+        flex: 1,
+        flexShrink: 1,
+        textAlign: 'center',
     },
 }))

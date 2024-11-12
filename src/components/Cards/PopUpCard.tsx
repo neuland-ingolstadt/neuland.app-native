@@ -98,40 +98,40 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    title: {
-        fontSize: 16,
-        fontWeight: '500',
-        flex: 1,
-        color: theme.colors.text,
-    },
-    titleView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-    },
     card: {
-        borderRadius: 8,
-        paddingTop: CARD_PADDING,
-        paddingHorizontal: CARD_PADDING,
-        marginHorizontal: PAGE_PADDING,
-        paddingBottom: 14,
-        marginVertical: 6,
-        borderColor: theme.colors.border,
         backgroundColor: theme.colors.card,
-    },
-    description: {
-        marginTop: 10,
-        fontSize: 15,
-        color: theme.colors.text,
-    },
-    footer: {
-        marginTop: 10,
-        fontSize: 11,
-        textAlign: 'right',
-        color: theme.colors.labelColor,
+        borderColor: theme.colors.border,
+        borderRadius: 8,
+        marginHorizontal: PAGE_PADDING,
+        marginVertical: 6,
+        paddingBottom: 14,
+        paddingHorizontal: CARD_PADDING,
+        paddingTop: CARD_PADDING,
     },
     closeIcon: {
         color: theme.colors.labelColor,
+    },
+    description: {
+        color: theme.colors.text,
+        fontSize: 15,
+        marginTop: 10,
+    },
+    footer: {
+        color: theme.colors.labelColor,
+        fontSize: 11,
+        marginTop: 10,
+        textAlign: 'right',
+    },
+    title: {
+        color: theme.colors.text,
+        flex: 1,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    titleView: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 10,
     },
 }))
 

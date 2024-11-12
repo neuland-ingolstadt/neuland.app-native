@@ -12,7 +12,7 @@ import {
 } from 'react-native-unistyles'
 
 const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const BlurTab = (): JSX.Element => (
         <BlurView
@@ -26,7 +26,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
         <>
             <Tabs
                 screenOptions={{
-                    tabBarActiveTintColor: styles.active.color,
+                    tabBarActiveTintColor: styleTheme.colors.primary,
                     tabBarLabelStyle: {
                         marginBottom: 2,
                     },
@@ -146,17 +146,12 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     blurTab: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
         bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
     },
-    headerTextStyle: { color: theme.colors.text },
-    headerTintColor: { color: theme.colors.primary },
-    headerBackground: { backgroundColor: theme.colors.card },
-    background: { backgroundColor: theme.colors.background },
-    active: { color: theme.colors.primary },
     tabbarStyle: (blur: boolean) => ({
         position: 'absolute',
         borderTopColor: theme.colors.border,

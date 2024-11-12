@@ -163,33 +163,24 @@ const stylesheet = createStyleSheet((theme) => ({
         position: 'absolute',
         right: 0,
     },
-    icon: {
-        color: theme.colors.labelColor,
-    },
-    buttonAreaSection: {
-        borderRadius: 7,
-        overflow: 'hidden',
-        marginTop: 5,
-        borderColor: theme.colors.border,
-        borderWidth: 1,
-    },
-    borderWidthEmpty: {
-        borderWidth: 0,
-    },
-    borderWithNormal: {
-        borderWidth: 1,
-    },
     borderWith: (border: boolean) => ({
         borderWidth: border ? 1 : 0,
         backgroundColor: theme.colors.card,
     }),
     button: {
-        width: 38,
-        height: 38,
         alignContent: 'center',
-        justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
+        height: 38,
+        justifyContent: 'center',
+        width: 38,
+    },
+    buttonAreaSection: {
+        borderColor: theme.colors.border,
+        borderRadius: 7,
+        borderWidth: 1,
+        marginTop: 5,
+        overflow: 'hidden',
     },
     buttonDynamically: (current: boolean, floor: boolean) => ({
         borderBottomColor: theme.colors.border,
@@ -201,4 +192,7 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 15,
         color: text ? theme.colors.text : theme.colors.background,
     }),
+    icon: {
+        color: theme.colors.labelColor,
+    },
 }))

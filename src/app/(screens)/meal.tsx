@@ -61,7 +61,7 @@ export function shareMeal(
 }
 
 export default function FoodDetail(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
         foodEntry != null
@@ -262,7 +262,7 @@ export default function FoodDetail(): JSX.Element {
                               ios: 'checkmark.seal',
                           }
                         : undefined,
-                    iconColor: styles.iconSuccess.color,
+                    iconColor: theme.colors.success,
                     onPress: () => {
                         itemAlert(flag, 'flag')
                     },
@@ -287,7 +287,7 @@ export default function FoodDetail(): JSX.Element {
                                   ios: 'exclamationmark.triangle',
                               }
                             : undefined,
-                        iconColor: styles.iconNotification.color,
+                        iconColor: theme.colors.notification,
                         onPress: () => {
                             itemAlert(allergen, 'allergen')
                         },
@@ -326,7 +326,7 @@ export default function FoodDetail(): JSX.Element {
                     ],
                     onPress: handlePress,
                     textColor: locationExists
-                        ? styles.colorPrimary.color
+                        ? theme.colors.primary
                         : undefined,
                     disabled: !locationExists,
                 },
@@ -451,62 +451,53 @@ export default function FoodDetail(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     formList: {
+        alignSelf: 'center',
         marginVertical: 16,
-        width: '100%',
-        alignSelf: 'center',
         paddingHorizontal: PAGE_PADDING,
-    },
-    titleContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-        backgroundColor: theme.colors.card,
-    },
-    titleText: {
-        fontSize: 18,
-        textAlign: 'center',
-        color: theme.colors.text,
-    },
-    notesContainer: {
-        alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
-        marginTop: 20,
-        marginBottom: PAGE_BOTTOM_SAFE_AREA,
-    },
-    notesBox: {
         width: '100%',
-        alignSelf: 'center',
-        paddingVertical: 8,
-        paddingHorizontal: 14,
-        flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
-        alignContent: 'center',
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
-    },
-    notesText: {
-        fontSize: 11,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        flex: 1,
-        flexShrink: 1,
-        color: theme.colors.labelColor,
-    },
-    iconSuccess: {
-        color: theme.colors.success,
-    },
-    iconNotification: {
-        color: theme.colors.notification,
     },
     iconWarning: {
         color: theme.colors.warning,
     },
-    colorPrimary: {
-        color: theme.colors.primary,
+    notesBox: {
+        alignContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        width: '100%',
+    },
+    notesContainer: {
+        alignSelf: 'center',
+        marginBottom: PAGE_BOTTOM_SAFE_AREA,
+        marginTop: 20,
+        paddingHorizontal: PAGE_PADDING,
+    },
+    notesText: {
+        color: theme.colors.labelColor,
+        flex: 1,
+        flexShrink: 1,
+        fontSize: 11,
+        fontWeight: 'normal',
+        textAlign: 'left',
+    },
+    titleContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        marginTop: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 10,
+        width: '92%',
+    },
+    titleText: {
+        color: theme.colors.text,
+        fontSize: 18,
+        textAlign: 'center',
     },
 }))

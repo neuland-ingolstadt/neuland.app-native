@@ -157,52 +157,52 @@ export default function AppIconPicker(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
-        width: '100%',
         paddingBottom: 50,
-    },
-    sectionContainer: {
-        borderRadius: 8,
-        alignContent: 'center',
-        justifyContent: 'center',
-        backgroundColor: theme.colors.card,
+        width: '100%',
     },
     exclusiveContainer: {
         justifyContent: 'center',
-        paddingVertical: 20,
-        paddingHorizontal: 20,
         minHeight: 90,
+        paddingHorizontal: 20,
+        paddingVertical: 20,
     },
     exclusiveText: {
-        textAlign: 'center',
+        color: theme.colors.text,
         fontSize: 17,
         fontWeight: '500',
+        textAlign: 'center',
+    },
+    iconText: {
+        alignSelf: 'center',
         color: theme.colors.text,
+        fontSize: 18,
+        fontWeight: '500',
+        textAlign: 'center',
+    },
+    imageContainer: {
+        borderColor: theme.colors.border,
+        borderRadius: 18,
+        borderWidth: 1,
+        height: 80,
+        width: 80,
     },
     rowContainer: {
-        flexDirection: 'row',
-
         alignItems: 'center',
+
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingStart: 12,
         paddingEnd: 20,
+        paddingStart: 12,
         paddingVertical: 12,
     },
     rowInnerContainer: {
         flexDirection: 'row',
         gap: 32,
     },
-    imageContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 18,
-        borderWidth: 1,
-        borderColor: theme.colors.border,
-    },
-    iconText: {
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: '500',
-        alignSelf: 'center',
-        color: theme.colors.text,
+    sectionContainer: {
+        alignContent: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        justifyContent: 'center',
     },
 }))

@@ -6,6 +6,7 @@ import Divider from '@/components/Elements/Universal/Divider'
 import Dropdown, {
     DropdownButton,
 } from '@/components/Elements/Universal/Dropdown'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -23,13 +24,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Platform,
-    ScrollView,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const DURATIONS = [
@@ -52,7 +47,7 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
 
@@ -147,7 +142,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 <DateTimePicker
                                     value={new Date(date + 'T' + time)}
                                     mode="date"
-                                    accentColor={styles.indicator.color}
+                                    accentColor={theme.colors.primary}
                                     locale="de-DE"
                                     onChange={(_event, selectedDate) => {
                                         setShowDate(Platform.OS !== 'android')
@@ -185,7 +180,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     value={new Date(date + 'T' + time)}
                                     mode="time"
                                     is24Hour={true}
-                                    accentColor={styles.indicator.color}
+                                    accentColor={theme.colors.primary}
                                     locale="de-DE"
                                     minuteInterval={5}
                                     onChange={(_event, selectedDate) => {
@@ -225,8 +220,7 @@ export default function AdvancedSearch(): JSX.Element {
                         <View style={styles.section}>
                             {filterState === LoadingState.LOADING ||
                             isLoading ? (
-                                <ActivityIndicator
-                                    color={styles.indicator.color}
+                                <LoadingIndicator
                                     style={styles.loadingIndicator}
                                 />
                             ) : isPaused ? (
@@ -258,39 +252,36 @@ export default function AdvancedSearch(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    sectionContainer: {
-        paddingBottom: 20,
-    },
-    scrollView: {
-        padding: 12,
-    },
-    sectionHeader: {
-        fontSize: 13,
-        color: theme.colors.labelSecondaryColor,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    optionTitle: {
-        fontSize: 15,
-        color: theme.colors.text,
-    },
-    section: {
-        marginBottom: 16,
-        borderRadius: 8,
-        backgroundColor: theme.colors.card,
-    },
     loadingIndicator: {
         paddingVertical: 30,
     },
+    optionTitle: {
+        color: theme.colors.text,
+        fontSize: 15,
+    },
     optionsRow: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingVertical: 6,
     },
-    indicator: {
-        color: theme.colors.primary,
+    scrollView: {
+        padding: 12,
+    },
+    section: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
+        marginBottom: 16,
+    },
+    sectionContainer: {
+        paddingBottom: 20,
+    },
+    sectionHeader: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        marginBottom: 4,
+        textTransform: 'uppercase',
     },
 }))

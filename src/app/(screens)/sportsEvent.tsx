@@ -18,7 +18,7 @@ import { Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { sportsEventEntry } = useLocalSearchParams<{
         sportsEventEntry: string
     }>()
@@ -149,7 +149,7 @@ export default function SportsEventDetail(): JSX.Element {
                                       `mailto:${sportsEvent.eMail}`
                                   )
                               },
-                              textColor: styles.primary.color,
+                              textColor: theme.colors.primary,
                           },
                       ]
                     : []),
@@ -163,7 +163,7 @@ export default function SportsEventDetail(): JSX.Element {
                                       sportsEvent.invitationLink ?? ''
                                   )
                               },
-                              textColor: styles.primary.color,
+                              textColor: theme.colors.primary,
                           },
                       ]
                     : []),
@@ -195,34 +195,31 @@ export default function SportsEventDetail(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    container: {
+        gap: 12,
+        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+    },
+    formList: {
+        alignSelf: 'center',
+        paddingBottom: 12,
+        width: '100%',
+    },
     page: {
         padding: PAGE_PADDING,
     },
-    container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-        gap: 12,
-    },
-    formList: {
-        width: '100%',
-        alignSelf: 'center',
-        paddingBottom: 12,
-    },
     titleContainer: {
+        alignItems: 'center',
         alignSelf: 'center',
-        width: '100%',
+        backgroundColor: theme.colors.card,
+        borderRadius: 8,
         paddingHorizontal: 5,
         paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-        backgroundColor: theme.colors.card,
+        width: '100%',
     },
     titleText: {
+        color: theme.colors.text,
         fontSize: 18,
         textAlign: 'center',
-        color: theme.colors.text,
-    },
-    primary: {
-        color: theme.colors.primary,
     },
     warning: (active: boolean) => ({
         color: active ? theme.colors.warning : theme.colors.success,

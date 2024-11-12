@@ -59,26 +59,26 @@ const BookingFrame = ({
 
 const stylesheet = createStyleSheet((theme) => ({
     dropdownContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
         paddingHorizontal: 10,
         paddingVertical: 12,
+        width: '100%',
+    },
+    leftText2: {
+        color: theme.colors.text,
+        fontSize: 15,
     },
     reserveContainer: {
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
-    leftText2: {
-        fontSize: 15,
-        color: theme.colors.text,
-    },
     rowRight: {
-        width: '70%',
-        textAlign: 'right',
-        fontSize: 15,
         color: theme.colors.labelColor,
+        fontSize: 15,
+        textAlign: 'right',
+        width: '70%',
     },
 }))
 

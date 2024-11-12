@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodStack(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const safeArea = useSafeAreaInsets()
     const topInset = safeArea.top
@@ -24,7 +24,7 @@ export default function FoodStack(): JSX.Element {
                     headerShown: true,
                     headerStyle: styles.headerBackground,
                     headerTitleStyle: styles.headerTextStyle,
-                    headerTintColor: styles.headerTintColor.color,
+                    headerTintColor: theme.colors.primary,
                     contentStyle: styles.background,
                     title: t('navigation.food'),
                 }}
@@ -34,19 +34,11 @@ export default function FoodStack(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    blurTab: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    },
-    headerTextStyle: { color: theme.colors.text },
-    headerTintColor: { color: theme.colors.primary },
-    headerBackground: { backgroundColor: theme.colors.card },
     background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
+    headerTextStyle: { color: theme.colors.text },
     page: {
-        flex: 1,
         backgroundColor: theme.colors.card,
+        flex: 1,
     },
 }))

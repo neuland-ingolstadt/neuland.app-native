@@ -13,14 +13,14 @@ import {
 import MaterialBottomTabs from './MaterialTabbar'
 
 const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 
     return (
         <MaterialBottomTabs
             sceneAnimationEasing={Easing.ease}
-            activeColor={styles.headerTextStyle.color}
-            inactiveColor={styles.lable.color}
+            activeColor={styleTheme.colors.text}
+            inactiveColor={styleTheme.colors.labelColor}
             activeIndicatorStyle={styles.indicator}
             barStyle={styles.barStyle}
             keyboardHidesNavigationBar={false}
@@ -125,12 +125,16 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    headerTextStyle: { color: theme.colors.text },
-    lable: { color: theme.colors.labelColor },
-    headerTintColor: { color: theme.colors.primary },
-    headerBackground: { backgroundColor: theme.colors.card },
-    background: { backgroundColor: theme.colors.background },
-    active: { color: theme.colors.primary },
+    barStyle: {
+        backgroundColor:
+            UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.04)
+                      .hex()
+                : Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.1)
+                      .hex(),
+    },
     indicator: {
         backgroundColor:
             UnistylesRuntime.themeName === 'dark'
@@ -143,16 +147,6 @@ const stylesheet = createStyleSheet((theme) => ({
                       .mix(Color(theme.colors.primary), 0.3)
                       .darken(0.05)
                       .saturate(0.1)
-                      .hex(),
-    },
-    barStyle: {
-        backgroundColor:
-            UnistylesRuntime.themeName === 'dark'
-                ? Color(theme.colors.card)
-                      .mix(Color(theme.colors.primary), 0.04)
-                      .hex()
-                : Color(theme.colors.card)
-                      .mix(Color(theme.colors.primary), 0.1)
                       .hex(),
     },
 }))

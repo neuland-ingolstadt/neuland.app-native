@@ -2,6 +2,7 @@ import API from '@/api/authenticated-api'
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import Divider from '@/components/Elements/Universal/Divider'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
+import LoadingIndicator from '@/components/Elements/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
@@ -9,7 +10,6 @@ import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import {
-    ActivityIndicator,
     FlatList,
     Image,
     Linking,
@@ -37,10 +37,7 @@ export default function NewsScreen(): JSX.Element {
         <View>
             {isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator
-                        size="small"
-                        color={styles.activityIndicator.color}
-                    />
+                    <LoadingIndicator />
                 </View>
             ) : isError ? (
                 <View style={styles.errorContainer}>
@@ -128,74 +125,70 @@ export default function NewsScreen(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    errorContainer: {
-        paddingTop: Platform.OS === 'ios' ? 0 : 100,
-        height: Platform.OS === 'ios' ? '90%' : '100%',
+    contentContainer: {
+        gap: 18,
+        paddingBottom: MODAL_BOTTOM_MARGIN,
+        paddingTop: Platform.OS === 'ios' ? 105 : 5,
+        padding: PAGE_PADDING,
     },
-
     dateText: {
+        color: theme.colors.labelSecondaryColor,
         fontSize: 13,
         fontWeight: 'normal',
-        textTransform: 'uppercase',
         marginBottom: 6,
-        color: theme.colors.labelSecondaryColor,
+        textTransform: 'uppercase',
     },
-    contentContainer: {
-        paddingTop: Platform.OS === 'ios' ? 105 : 5,
-        gap: 18,
-        padding: PAGE_PADDING,
-        paddingBottom: MODAL_BOTTOM_MARGIN,
-    },
-    imageContainer: {
-        height: 200,
-        objectFit: 'cover',
-        borderTopRightRadius: 8,
-        borderTopLeftRadius: 8,
-    },
-    teaserText: {
-        fontSize: 14,
-        marginHorizontal: 12,
-        marginVertical: 6,
-        color: theme.colors.text,
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 12,
-        gap: 10,
-        minHeight: 40,
-    },
-    titleText: {
-        fontSize: 16,
-        flexShrink: 1,
-        fontWeight: '700',
-        textAlign: 'left',
-        flex: 1,
-        marginVertical: 8,
-        color: theme.colors.text,
-    },
-    sectionContainer: {
-        width: '100%',
-        alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        justifyContent: 'center',
-        backgroundColor: theme.colors.card,
-        borderColor: theme.colors.border,
-        borderWidth: StyleSheet.hairlineWidth,
-    },
-    loadingContainer: {
-        paddingTop: Platform.OS === 'ios' ? 140 : 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    activityIndicator: {
-        color: theme.colors.primary,
+    errorContainer: {
+        height: Platform.OS === 'ios' ? '90%' : '100%',
+        paddingTop: Platform.OS === 'ios' ? 0 : 100,
     },
     icon: {
         color: theme.colors.labelColor,
+    },
+    imageContainer: {
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        height: 200,
+        objectFit: 'cover',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: Platform.OS === 'ios' ? 140 : 40,
+    },
+    sectionBox: {
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
+        borderRadius: 8,
+        borderWidth: StyleSheet.hairlineWidth,
+        justifyContent: 'center',
+        width: '100%',
+    },
+    sectionContainer: {
+        alignSelf: 'center',
+        width: '100%',
+    },
+    teaserText: {
+        color: theme.colors.text,
+        fontSize: 14,
+        marginHorizontal: 12,
+        marginVertical: 6,
+    },
+    titleContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 10,
+        marginHorizontal: 12,
+        minHeight: 40,
+    },
+    titleText: {
+        color: theme.colors.text,
+        flexShrink: 1,
+        flex: 1,
+        fontSize: 16,
+        fontWeight: '700',
+        marginVertical: 8,
+        textAlign: 'left',
     },
 }))

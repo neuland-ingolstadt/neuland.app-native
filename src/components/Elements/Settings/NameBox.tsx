@@ -56,23 +56,23 @@ const NameBox = ({
 export default NameBox
 
 const stylesheet = createStyleSheet((theme) => ({
-    subtitle: {
-        fontSize: 12,
-        overflow: 'hidden',
-        lineHeight: 14,
-        color: theme.colors.text,
-    },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        overflow: 'hidden',
-        color: theme.colors.text,
-    },
     container: {
-        maxWidth: '92%',
         alignItems: 'flex-start',
         flex: 1,
-        marginLeft: 16,
         justifyContent: 'center',
+        marginLeft: 16,
+        maxWidth: '92%',
+    },
+    subtitle: {
+        color: theme.colors.text,
+        fontSize: 12,
+        lineHeight: 14,
+        overflow: 'hidden',
+    },
+    title: {
+        color: theme.colors.text,
+        fontSize: 18,
+        fontWeight: 'bold',
+        overflow: 'hidden',
     },
 }))

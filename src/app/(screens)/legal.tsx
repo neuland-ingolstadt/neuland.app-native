@@ -6,10 +6,12 @@ import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, View } from 'react-native'
+import { Linking, ScrollView, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): JSX.Element {
     const router = useRouter()
+    const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation(['settings'])
 
     const sections: FormListSections[] = [
@@ -85,11 +87,11 @@ export default function About(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet({
     formlistContainer: {
+        alignSelf: 'center',
         marginTop: 10,
         paddingHorizontal: PAGE_PADDING,
         width: '100%',
-        alignSelf: 'center',
     },
 })

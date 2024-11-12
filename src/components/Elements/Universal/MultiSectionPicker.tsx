@@ -62,10 +62,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                         </View>
                     </Pressable>
                     {index < elements.length - 1 && (
-                        <Divider
-                            color={styles.divider.color}
-                            iosPaddingLeft={16}
-                        />
+                        <Divider iosPaddingLeft={16} />
                     )}
                 </React.Fragment>
             ))}
@@ -75,20 +72,17 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginRight: 8,
         paddingHorizontal: 6,
         paddingVertical: 4,
-        marginRight: 8,
-        alignItems: 'center',
     },
     text: {
+        color: theme.colors.text,
         fontSize: 16,
         paddingVertical: 1,
-        color: theme.colors.text,
-    },
-    divider: {
-        color: theme.colors.labelTertiaryColor,
     },
 }))
 
