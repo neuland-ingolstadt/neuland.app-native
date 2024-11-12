@@ -44,5 +44,5 @@
             { "ignoreClassNames": false, "ignoreStyleProperties": false }
         ]
     },
-    "ignorePatterns": ["metro.config.js"]
+    "ignorePatterns": ["metro.config.js", "node_modules/", "ios/", "android/"]
 }
