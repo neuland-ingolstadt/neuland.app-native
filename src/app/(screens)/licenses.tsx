@@ -1,20 +1,19 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { chevronIcon } from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import licensesStatic from '@/data/licenses-static.json'
 import licenses from '@/data/licenses.json'
 import { type FormListSections } from '@/types/components'
 import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Platform, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Licenses(): JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['settings'])
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const numberRegex = /\d+(\.\d+)*/
     const atRegex = /(?:@)/gi
     const navigation = useNavigation()
@@ -29,9 +28,9 @@ export default function Licenses(): JSX.Element {
 
                 ...Platform.select({
                     android: {
-                        headerIconColor: colors.text,
-                        hintTextColor: colors.text,
-                        textColor: colors.text,
+                        headerIconColor: styles.searchTextInput.color,
+                        hintTextColor: styles.searchTextInput.color,
+                        textColor: styles.searchTextInput.color,
                     },
                 }),
 
@@ -99,12 +98,7 @@ export default function Licenses(): JSX.Element {
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                     <View style={styles.notesContainer}>
-                        <Text
-                            style={[
-                                styles.notesText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {t('licenses.footer')}
                         </Text>
                     </View>
@@ -114,7 +108,7 @@ export default function Licenses(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formlistContainer: {
         marginTop: 10,
         marginBottom: 24,
@@ -134,5 +128,9 @@ const styles = StyleSheet.create({
     notesText: {
         textAlign: 'left',
         fontSize: 12,
+        color: theme.colors.labelColor,
     },
-})
+    searchTextInput: {
+        color: theme.colors.text,
+    },
+}))

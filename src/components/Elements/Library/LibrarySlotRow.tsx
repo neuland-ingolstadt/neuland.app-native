@@ -1,25 +1,22 @@
-import { type Colors } from '@/components/colors'
 import { type AvailableRoomItem } from '@/types/thi-api'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
 const LibrarySlotRow = ({
-    colors,
     item,
     onExpand,
-    index,
 }: {
-    colors: Colors
     item: AvailableRoomItem
     onExpand: () => void
-    index: number
 }): JSX.Element => {
     const { t } = useTranslation('common')
     const date = new Date()
+    const { styles } = useStyles(stylesheet)
     const availSeats = Object.values(item.resources).reduce(
         (acc, room) => acc + room.num_seats,
         0
@@ -42,23 +39,12 @@ const LibrarySlotRow = ({
                 style={styles.eventContainer}
             >
                 <View style={styles.detailsContainer}>
-                    <Text
-                        style={{
-                            ...styles.timespanText,
-                            color: colors.text,
-                        }}
-                        numberOfLines={2}
-                    >
+                    <Text style={styles.timespanText} numberOfLines={2}>
                         {timespanText}
                     </Text>
                     {
                         <>
-                            <Text
-                                style={{
-                                    ...styles.leftText1,
-                                    color: colors.labelColor,
-                                }}
-                            >
+                            <Text style={styles.leftText1}>
                                 {t('pages.library.available.seatsAvailable', {
                                     available: availSeats,
                                     total: Object.values(item.resources).reduce(
@@ -76,7 +62,6 @@ const LibrarySlotRow = ({
                         <View style={styles.rightContainer}>
                             {availSeats !== 0 ? (
                                 <PlatformIcon
-                                    color={colors.primary}
                                     ios={{
                                         name: 'plus',
 
@@ -89,7 +74,6 @@ const LibrarySlotRow = ({
                                 />
                             ) : (
                                 <PlatformIcon
-                                    color={colors.primary}
                                     ios={{
                                         name: 'clock.badge.xmark',
                                         size: 20,
@@ -108,7 +92,7 @@ const LibrarySlotRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     eventContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -125,6 +109,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
         fontSize: 15,
         fontWeight: '500',
+        color: theme.colors.labelColor,
     },
 
     rightContainer: {
@@ -135,11 +120,11 @@ const styles = StyleSheet.create({
     timespanText: {
         fontSize: 16,
         fontWeight: '600',
-
+        color: theme.colors.text,
         marginBottom: 1,
     },
 
     container: { flexDirection: 'column' },
-})
+}))
 
 export default LibrarySlotRow

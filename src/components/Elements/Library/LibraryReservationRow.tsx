@@ -1,24 +1,22 @@
-import { type Colors } from '@/components/colors'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
 
 const LibraryReservationRow = ({
-    colors,
     reservation,
     deleteReservation,
 }: {
-    colors: Colors
     reservation: Reservation
     deleteReservation: (id: string) => Promise<void>
 }): JSX.Element => {
     const { t } = useTranslation('common')
-
+    const { styles } = useStyles(stylesheet)
     const deleteAlert = (): void => {
         Alert.alert(
             t('pages.library.reservations.alert.title'),
@@ -42,36 +40,20 @@ const LibraryReservationRow = ({
     return (
         <RowEntry
             title={reservation.rcategory}
-            colors={colors}
             leftChildren={
                 <>
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.leftText1,
-                        }}
-                    >
+                    <Text style={styles.leftText1}>
                         {`${t('pages.library.reservations.seat')} ${
                             reservation.resource
                         }`}
                     </Text>
-                    <Text
-                        style={{
-                            ...styles.leftText1,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.leftText1}>
                         {formatFriendlyDateTimeRange(
                             new Date(reservation.start),
                             new Date(reservation.end)
                         )}
                     </Text>
-                    <Text
-                        style={{
-                            color: colors.labelColor,
-                            ...styles.leftText2,
-                        }}
-                    >
+                    <Text style={styles.leftText2}>
                         {`${t('pages.library.reservations.id')}: ${
                             reservation.reservation_id
                         }`}
@@ -88,7 +70,7 @@ const LibraryReservationRow = ({
                                 }}
                             >
                                 <PlatformIcon
-                                    color={colors.notification}
+                                    style={styles.notification}
                                     ios={{
                                         name: 'trash',
                                         size: 18,
@@ -108,20 +90,25 @@ const LibraryReservationRow = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     leftText1: {
         fontSize: 15,
         fontWeight: '500',
+        color: theme.colors.labelColor,
     },
     leftText2: {
         marginTop: 2,
         fontSize: 14,
+        color: theme.colors.labelColor,
     },
     rightContainer: {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 5,
     },
-})
+    notification: {
+        color: theme.colors.notification,
+    },
+}))
 
 export default LibraryReservationRow

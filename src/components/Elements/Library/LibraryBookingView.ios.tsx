@@ -1,9 +1,8 @@
-import { type Colors } from '@/components/colors'
 import { type AvailableRoomItem } from '@/types/thi-api'
 import { getAvailableRooms } from '@/utils/library-utils'
-import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
 
 import BookButton from './BookingButton'
@@ -20,8 +19,8 @@ const LibraryBookingView = ({
         reservationSeat: string
     ) => Promise<void>
 }): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const rooms = getAvailableRooms(item)
-    const colors = useTheme().colors as Colors
     const uniqueRoomNames = [...new Set(rooms.map((item) => item[1].room_name))]
     const [seats, setSeats] = useState<string[]>([])
     const roomBindung = useBinding(uniqueRoomNames[0])
@@ -52,7 +51,7 @@ const LibraryBookingView = ({
                     <Picker
                         selection={roomBindung}
                         pickerStyle="wheel"
-                        tint={colors.primary}
+                        tint={styles.primary.color}
                         style={styles.locationPicker}
                         lineLimit={1}
                         scaleEffect={0.9}
@@ -63,7 +62,7 @@ const LibraryBookingView = ({
                     </Picker>
                     <Picker
                         selection={seatBindung}
-                        tint={colors.primary}
+                        tint={styles.primary.color}
                         pickerStyle="wheel"
                         style={styles.seatPicker}
                         scaleEffect={0.9}
@@ -86,7 +85,7 @@ const LibraryBookingView = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     dropdownContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -104,6 +103,9 @@ const styles = StyleSheet.create({
     buttonContainer: {
         paddingTop: 8,
     },
-})
+    primary: {
+        color: theme.colors.primary,
+    },
+}))
 
 export default LibraryBookingView

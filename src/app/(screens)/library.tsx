@@ -10,7 +10,6 @@ import {
 } from '@/components/Elements/Universal/BottomSheetRootBackground'
 import Divider from '@/components/Elements/Universal/Divider'
 import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors } from '@/components/colors'
 import { queryClient } from '@/components/provider'
 import { useRefreshByUser } from '@/hooks'
 import {
@@ -26,7 +25,6 @@ import {
     BottomSheetModalProvider,
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
-import { useTheme } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { router } from 'expo-router'
@@ -36,14 +34,14 @@ import {
     ActivityIndicator,
     LayoutAnimation,
     RefreshControl,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibrarySreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const [expandedRow, setExpandedRow] = useState<string | null>(null)
 
@@ -297,7 +295,7 @@ export default function LibrarySreen(): JSX.Element {
                         <View style={styles.loadingContainer}>
                             <ActivityIndicator
                                 size="small"
-                                color={colors.primary}
+                                color={styles.activityIndicator.color}
                             />
                         </View>
                     ) : isErrorReservations ? (
@@ -340,7 +338,6 @@ export default function LibrarySreen(): JSX.Element {
                                                         reservation={
                                                             reservation
                                                         }
-                                                        colors={colors}
                                                         deleteReservation={
                                                             deleteReservation
                                                         }
@@ -350,7 +347,8 @@ export default function LibrarySreen(): JSX.Element {
                                                             1 && (
                                                         <Divider
                                                             color={
-                                                                colors.labelColor
+                                                                styles.label
+                                                                    .color
                                                             }
                                                             iosPaddingLeft={16}
                                                         />
@@ -386,9 +384,6 @@ export default function LibrarySreen(): JSX.Element {
                                                                         item={
                                                                             time
                                                                         }
-                                                                        colors={
-                                                                            colors
-                                                                        }
                                                                         onExpand={() => {
                                                                             setSelectedItem(
                                                                                 time
@@ -396,9 +391,6 @@ export default function LibrarySreen(): JSX.Element {
 
                                                                             handlePresentModalPress()
                                                                         }}
-                                                                        index={
-                                                                            j
-                                                                        }
                                                                     />
                                                                     {j !==
                                                                         day
@@ -407,7 +399,9 @@ export default function LibrarySreen(): JSX.Element {
                                                                             1 && (
                                                                         <Divider
                                                                             color={
-                                                                                colors.labelColor
+                                                                                styles
+                                                                                    .label
+                                                                                    .color
                                                                             }
                                                                             iosPaddingLeft={
                                                                                 16
@@ -420,10 +414,9 @@ export default function LibrarySreen(): JSX.Element {
                                                     )
                                                 ) : (
                                                     <Text
-                                                        style={{
-                                                            ...styles.teaserText,
-                                                            color: colors.text,
-                                                        }}
+                                                        style={
+                                                            styles.teaserText
+                                                        }
                                                     >
                                                         {t(
                                                             'pages.library.available.noSeats'
@@ -438,12 +431,7 @@ export default function LibrarySreen(): JSX.Element {
                                 <SectionView
                                     title={t('pages.library.available.title')}
                                 >
-                                    <Text
-                                        style={{
-                                            ...styles.teaserText,
-                                            color: colors.text,
-                                        }}
-                                    >
+                                    <Text style={styles.teaserText}>
                                         {t('pages.library.available.ratelimit')}
                                     </Text>
                                 </SectionView>
@@ -460,18 +448,15 @@ export default function LibrarySreen(): JSX.Element {
                 snapPoints={snapPoints}
                 backgroundComponent={BottomSheetRootBackground}
                 backdropComponent={renderBackdrop}
-                handleIndicatorStyle={{
-                    backgroundColor: colors.labelSecondaryColor,
-                }}
+                handleIndicatorStyle={styles.handleIndicatorStyle}
             >
                 <BottomSheetView style={styles.sheetContainer}>
-                    <Text style={{ ...styles.text, color: colors.text }}>
+                    <Text style={styles.text}>
                         {t('pages.library.available.seatReservation')}
                     </Text>
                     {selectedItem != null && (
                         <LibraryBookingView
                             item={selectedItem}
-                            colors={colors}
                             addReservation={addReservation}
                         />
                     )}
@@ -481,7 +466,7 @@ export default function LibrarySreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     contentContainer: { paddingBottom: 32 },
     sheetContainer: { flex: 1 },
     teaserText: {
@@ -489,6 +474,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         textAlign: 'center',
         marginVertical: 30,
+        color: theme.colors.text,
     },
     loadingContainer: {
         paddingTop: 40,
@@ -499,6 +485,16 @@ const styles = StyleSheet.create({
         fontSize: 23,
         fontWeight: 'bold',
         marginTop: 10,
+        color: theme.colors.text,
         marginLeft: 10,
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+    label: {
+        color: theme.colors.labelColor,
+    },
+    handleIndicatorStyle: {
+        backgroundColor: theme.colors.labelSecondaryColor,
+    },
+}))

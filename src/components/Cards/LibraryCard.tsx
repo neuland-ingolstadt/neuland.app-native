@@ -1,12 +1,10 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
@@ -17,7 +15,6 @@ import BaseCard from './BaseCard'
 
 const LibraryCard = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const colors = useTheme().colors as Colors
     const { userKind } = useContext(UserKindContext)
     const router = useRouter()
 
@@ -74,7 +71,10 @@ const LibraryCard = (): JSX.Element => {
                                 </Text>
                             </View>
                             {data.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider
+                                    color={styles.border.color}
+                                    width={'100%'}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -89,6 +89,7 @@ const stylesheet = createStyleSheet((theme) => ({
     cardsFilled: { paddingTop: 12 },
     eventTitle: { fontWeight: '500', fontSize: 16, color: theme.colors.text },
     eventDetails: { fontSize: 15, color: theme.colors.labelColor },
+    border: { color: theme.colors.border },
 }))
 
 export default LibraryCard

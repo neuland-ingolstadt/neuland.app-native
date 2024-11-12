@@ -1,6 +1,5 @@
 import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
 import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
-import { type Colors } from '@/components/colors'
 import {
     FlowContext,
     FoodFilterContext,
@@ -19,6 +18,11 @@ import { Redirect, usePathname, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
@@ -35,7 +39,7 @@ export default function HomeLayout(): JSX.Element {
     const theme: Theme = useTheme()
     const isDark = theme.dark
     const router = useRouter()
-    const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
     const { selectedRestaurants } = useContext(FoodFilterContext)
@@ -54,20 +58,14 @@ export default function HomeLayout(): JSX.Element {
             const tabsPaths = ['/', '/timetable', '/map', '/food']
             const isTab = tabsPaths.includes(pathname)
             if (isOnboarded !== true) {
-                await NavigationBar.setBackgroundColorAsync(colors.contrast)
+                await NavigationBar.setBackgroundColorAsync(
+                    styles.contrast.backgroundColor
+                )
                 return
             }
 
             await NavigationBar.setBackgroundColorAsync(
-                isTab
-                    ? isDark
-                        ? Color(colors.card)
-                              .mix(Color(colors.primary), 0.04)
-                              .hex()
-                        : Color(colors.card)
-                              .mix(Color(colors.primary), 0.1)
-                              .hex()
-                    : colors.background
+                styles.navBackground(isTab).backgroundColor
             )
             await NavigationBar.setButtonStyleAsync(
                 theme.dark ? 'light' : 'dark'
@@ -76,7 +74,7 @@ export default function HomeLayout(): JSX.Element {
         if (Platform.OS === 'android') {
             void prepare()
         }
-    }, [theme.dark, pathname, isDark, colors, isOnboarded])
+    }, [theme.dark, pathname, isDark, UnistylesRuntime.themeName, isOnboarded])
 
     useEffect(() => {
         const shortcuts = [
@@ -205,3 +203,20 @@ export default function HomeLayout(): JSX.Element {
         <DefaultTabs theme={theme} />
     )
 }
+
+const stylesheet = createStyleSheet((theme) => ({
+    navBackground: (isTab: boolean) => ({
+        backgroundColor: isTab
+            ? UnistylesRuntime.themeName === 'dark'
+                ? Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.04)
+                      .hex()
+                : Color(theme.colors.card)
+                      .mix(Color(theme.colors.primary), 0.1)
+                      .hex()
+            : theme.colors.background,
+    }),
+    contrast: {
+        backgroundColor: theme.colors.contrast,
+    },
+}))

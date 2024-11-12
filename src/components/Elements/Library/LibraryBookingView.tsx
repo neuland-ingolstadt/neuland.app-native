@@ -1,11 +1,10 @@
 import Dropdown from '@/components/Elements/Universal/Dropdown'
-import { type Colors } from '@/components/colors'
 import { type AvailableRoomItem } from '@/types/thi-api'
 import { getAvailableRooms } from '@/utils/library-utils'
-import { useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
 import BookButton from './BookingButton'
@@ -15,7 +14,6 @@ const LibraryBookingView = ({
     item,
     addReservation,
 }: {
-    colors: Colors
     item: AvailableRoomItem
     addReservation: (
         reservationRoom: string,
@@ -23,7 +21,7 @@ const LibraryBookingView = ({
         reservationSeat: string
     ) => Promise<void>
 }): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const rooms = getAvailableRooms(item)
     const uniqueRoomNames = [
         ...new Set(
@@ -67,12 +65,7 @@ const LibraryBookingView = ({
         <>
             <BookingFrame item={item}>
                 <View style={styles.dropdownContainer}>
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.leftText2}>
                         {`${t('pages.library.available.room')}:`}
                     </Text>
 
@@ -83,14 +76,9 @@ const LibraryBookingView = ({
                         width={200}
                     />
                 </View>
-                <Divider width={'100%'} color={colors.labelTertiaryColor} />
+                <Divider width={'100%'} />
                 <View style={styles.dropdownContainer}>
-                    <Text
-                        style={{
-                            ...styles.leftText2,
-                            color: colors.text,
-                        }}
-                    >
+                    <Text style={styles.leftText2}>
                         {`${t('pages.library.reservations.seat')}:`}
                     </Text>
 
@@ -113,7 +101,7 @@ const LibraryBookingView = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     dropdownContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -124,7 +112,8 @@ const styles = StyleSheet.create({
     },
     leftText2: {
         fontSize: 15,
+        color: theme.colors.text,
     },
-})
+}))
 
 export default LibraryBookingView

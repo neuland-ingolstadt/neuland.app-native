@@ -1,13 +1,11 @@
 import CrashView from '@/components/Elements/Error/CrashView'
 import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
@@ -78,7 +76,6 @@ function RootLayout(): JSX.Element {
         }
     }, [])
     const { styles } = useStyles(stylesheet)
-    const colors = useTheme().colors as Colors
     const isOsDark = useColorScheme() === 'dark'
 
     return (
@@ -424,7 +421,7 @@ function RootLayout(): JSX.Element {
                                 })}
                             >
                                 <PlatformIcon
-                                    color={colors.text}
+                                    style={styles.headerTextStyle}
                                     ios={{
                                         name: 'barcode',
                                         size: 22,

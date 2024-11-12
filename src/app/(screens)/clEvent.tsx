@@ -1,7 +1,6 @@
 import FormList from '@/components/Elements/Universal/FormList'
 import { linkIcon } from '@/components/Elements/Universal/Icon'
 import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
-import { type Colors } from '@/components/colors'
 import clubs from '@/data/clubs.json'
 import { type FormListSections } from '@/types/components'
 import { type CLEvents } from '@/types/neuland-api'
@@ -11,7 +10,6 @@ import {
 } from '@/utils/date-utils'
 import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import {
     useFocusEffect,
@@ -20,17 +18,11 @@ import {
 } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { clEventEntry } = useLocalSearchParams<{ clEventEntry: string }>()
     const navigation = useNavigation()
     const clEvent: CLEvents | undefined =
@@ -179,14 +171,9 @@ export default function ClEventDetail(): JSX.Element {
             style={styles.page}
             contentContainerStyle={styles.container}
         >
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
+            <View style={styles.titleContainer}>
                 <Text
-                    style={[styles.titleText, { color: colors.text }]}
+                    style={styles.titleText}
                     allowFontScaling={true}
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
@@ -201,7 +188,7 @@ export default function ClEventDetail(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
         padding: PAGE_PADDING,
     },
@@ -221,9 +208,11 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
+        backgroundColor: theme.colors.card,
     },
     titleText: {
         fontSize: 18,
         textAlign: 'center',
+        color: theme.colors.text,
     },
-})
+}))

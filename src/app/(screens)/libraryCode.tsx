@@ -1,6 +1,5 @@
 import ErrorView from '@/components/Elements/Error/ErrorView'
 import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
 import { UserKindContext } from '@/components/contexts'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -13,7 +12,6 @@ import {
 } from '@/utils/api-utils'
 import { PAGE_PADDING } from '@/utils/style-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
@@ -24,13 +22,13 @@ import {
     Dimensions,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibraryCode(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [brightness, setBrightness] = useState<number>(0)
@@ -112,7 +110,10 @@ export default function LibraryCode(): JSX.Element {
                 <ErrorView title={permissionError} />
             ) : isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <ActivityIndicator
+                        size="small"
+                        color={styles.activityIndicator.color}
+                    />
                 </View>
             ) : isError ? (
                 <ErrorView
@@ -149,12 +150,7 @@ export default function LibraryCode(): JSX.Element {
                         />
                     </Pressable>
                     <View style={styles.notesContainer}>
-                        <Text
-                            style={[
-                                styles.notesText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {t('pages.library.code.footer')}
                         </Text>
                     </View>
@@ -175,7 +171,7 @@ export default function LibraryCode(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         paddingVertical: 16,
         paddingHorizontal: PAGE_PADDING,
@@ -196,6 +192,7 @@ const styles = StyleSheet.create({
     notesText: {
         textAlign: 'left',
         fontSize: 12,
+        color: theme.colors.labelColor,
     },
     barcodeContainer: {
         marginTop: 20,
@@ -210,4 +207,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         alignSelf: 'center',
     },
-})
+    activityIndicator: {
+        color: theme.colors.primary,
+    },
+}))

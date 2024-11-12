@@ -1,16 +1,14 @@
-import { type Colors } from '@/components/colors'
 import { type AvailableRoomItem } from '@/types/thi-api'
-import { useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     ActivityIndicator,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface BookingButtonProps {
     addReservation: (
@@ -31,15 +29,11 @@ const BookButton: React.FC<BookingButtonProps> = ({
 }): JSX.Element => {
     const [reserve, setReserve] = useState(false)
     const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     return (
         <View style={styles.confirmContainer}>
             <Pressable
-                style={{
-                    backgroundColor:
-                        Platform.OS === 'ios' ? colors.cardButton : colors.card,
-                    ...styles.bookButton,
-                }}
+                style={styles.bookButton}
                 onPress={() => {
                     setReserve(true)
                     void addReservation(
@@ -59,15 +53,10 @@ const BookButton: React.FC<BookingButtonProps> = ({
                     {reserve ? (
                         <ActivityIndicator
                             size={'small'}
-                            color={colors.primary}
+                            color={styles.indicator.color}
                         />
                     ) : (
-                        <Text
-                            style={{
-                                ...styles.leftText2,
-                                color: colors.text,
-                            }}
-                        >
+                        <Text style={styles.leftText2}>
                             {t('pages.library.available.book')}
                         </Text>
                     )}
@@ -77,7 +66,7 @@ const BookButton: React.FC<BookingButtonProps> = ({
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     bookButton: {
         marginTop: 14,
         borderRadius: 8,
@@ -86,6 +75,8 @@ const styles = StyleSheet.create({
         gap: 5,
         paddingVertical: 12,
         paddingHorizontal: 33,
+        backgroundColor:
+            Platform.OS === 'ios' ? theme.colors.cardButton : theme.colors.card,
     },
     innerButton: { width: 100, alignItems: 'center', height: 20 },
     confirmContainer: {
@@ -95,7 +86,11 @@ const styles = StyleSheet.create({
     },
     leftText2: {
         fontSize: 15,
+        color: theme.colors.text,
     },
-})
+    indicator: {
+        color: theme.colors.primary,
+    },
+}))
 
 export default BookButton

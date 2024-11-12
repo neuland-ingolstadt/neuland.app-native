@@ -1,5 +1,4 @@
 import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'
@@ -10,7 +9,6 @@ import {
     mealName,
     userMealRating,
 } from '@/utils/food-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +20,6 @@ import BaseCard from './BaseCard'
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
     const { styles } = useStyles(stylesheet)
-    const colors = useTheme().colors as Colors
     const {
         selectedRestaurants,
         allergenSelection,
@@ -169,7 +166,10 @@ const FoodCard = (): JSX.Element => {
                                 )}
                             </View>
                             {foodEntries.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider
+                                    color={styles.divider.color}
+                                    width={'100%'}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -203,6 +203,9 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '500',
         fontSize: 16,
         color: theme.colors.labelColor,
+    },
+    divider: {
+        color: theme.colors.border,
     },
 }))
 
