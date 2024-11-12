@@ -56,11 +56,13 @@ function WorkaroundStack({
                             // @ts-expect-error Type not checked
                             titleKey
                         ),
+                        cardStyle: { backgroundColor: theme.colors.background },
                         headerRight: headerRightElement as any,
                         headerStyle: {
                             backgroundColor:
                                 styles.headerBackground.backgroundColor,
                         },
+
                         headerTitleStyle: { color: theme.colors.text },
                     }}
                     initialParams={params}

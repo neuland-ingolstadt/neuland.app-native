@@ -43,7 +43,9 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 name: 'house',
                                 size: 17,
                             }}
-                            color={props.color}
+                            style={{
+                                color: props.color,
+                            }}
                         />
                     ),
                 }}
@@ -68,7 +70,9 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 name: 'calendar',
                                 size: 17,
                             }}
-                            color={props.color}
+                            style={{
+                                color: props.color,
+                            }}
                         />
                     ),
                 }}
@@ -92,7 +96,9 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 name: 'map',
                                 size: 17,
                             }}
-                            color={props.color}
+                            style={{
+                                color: props.color,
+                            }}
                         />
                     ),
                 }}
@@ -115,7 +121,9 @@ const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 name: 'fork.knife',
                                 size: 17,
                             }}
-                            color={props.color}
+                            style={{
+                                color: props.color,
+                            }}
                         />
                     ),
                 }}

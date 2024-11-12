@@ -505,7 +505,6 @@ export default function Settings(): JSX.Element {
                                             }
                                         >
                                             <PlatformIcon
-                                                color={'white'}
                                                 ios={{
                                                     name: 'person',
                                                     variant: 'fill',
@@ -515,6 +514,7 @@ export default function Settings(): JSX.Element {
                                                     name: 'account_circle',
                                                     size: 32,
                                                 }}
+                                                style={styles.iconGuest}
                                             />
                                         </Avatar>
                                     </NameBox>
@@ -546,7 +546,6 @@ export default function Settings(): JSX.Element {
                                             }
                                         >
                                             <PlatformIcon
-                                                color={styles.iconGuest.color}
                                                 ios={{
                                                     name: 'exclamationmark.triangle',
                                                     variant: 'fill',
@@ -556,6 +555,7 @@ export default function Settings(): JSX.Element {
                                                     name: 'warning',
                                                     size: 28,
                                                 }}
+                                                style={styles.iconGuest}
                                             />
                                         </Avatar>
                                     </NameBox>
@@ -668,7 +668,8 @@ const stylesheet = createStyleSheet((theme) => ({
         color: theme.colors.labelSecondaryColor,
     },
     iconGuest: {
-        color: theme.colors.background,
+        color: 'white',
+        marginTop: Platform.OS === 'android' ? 2 : 0,
     },
     loading: {
         alignItems: 'center',

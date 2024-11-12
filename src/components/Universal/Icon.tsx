@@ -1,14 +1,12 @@
 import { type MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import React from 'react'
-import { type ColorValue, Platform, Text } from 'react-native'
+import { Platform, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
 interface PlatformIconProps {
-    color?: string | ColorValue
-
     android: {
         name: MaterialIcon | CommunityIcon
         size: number
@@ -51,7 +49,6 @@ export const chevronIcon = {
 }
 
 const PlatformIcon = ({
-    color,
     android,
     ios,
     style,
@@ -99,9 +96,9 @@ const PlatformIcon = ({
                     ...(android.variant === 'outlined'
                         ? styles.androidIconOutlined
                         : styles.androidIconFilled),
-                    color,
                     fontSize: android.size,
                     lineHeight: android.size,
+                    color: style?.color ?? theme.colors.primary,
                     ...style,
                 }}
             >
@@ -109,7 +106,7 @@ const PlatformIcon = ({
                     <MaterialCommunityIcons
                         name={android.name as any}
                         size={android.size}
-                        color={color}
+                        color={style?.color ?? theme.colors.primary}
                         style={{ ...styles.communityIcon, ...style }}
                     />
                 ) : (
