@@ -85,6 +85,7 @@ function WorkaroundStack({
                     headerLargeStyle: styles.headerBackground,
                     headerStyle: styles.headerBackground,
                     headerSearchBarOptions,
+                    headerTintColor: theme.colors.primary,
                     contentStyle: styles.background,
                     headerTitleStyle: {
                         color: theme.colors.text,

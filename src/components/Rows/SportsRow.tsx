@@ -83,6 +83,7 @@ const stylesheet = createStyleSheet((theme) => ({
         padding: theme.margins.rowPadding,
     },
     rightText: {
+        color: theme.colors.labelColor,
         fontSize: 14,
         fontWeight: '400',
     },

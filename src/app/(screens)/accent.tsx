@@ -4,16 +4,18 @@ import { accentColors } from '@/components/colors'
 import { ThemeContext } from '@/components/contexts'
 import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export default function Theme(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const deviceTheme = useTheme()
     const { accentColor = DEFAULT_ACCENT_COLOR, setAccentColor } =
         useContext(ThemeContext)
     const { t } = useTranslation(['settings'])
@@ -31,7 +33,8 @@ export default function Theme(): JSX.Element {
         code: string
     }): JSX.Element => {
         const { styles } = useStyles(stylesheet)
-        const themeAccentColor = deviceTheme.dark ? color.dark : color.light
+        const themeAccentColor =
+            UnistylesRuntime.themeName === 'dark' ? color.dark : color.light
         return (
             <View style={styles.colorBoxContainer}>
                 <Pressable
