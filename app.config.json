@@ -41,10 +41,13 @@
             "en": "./src/localization/en/ios.json",
             "de": "./src/localization/de/ios.json"
         },
+        "androidStatusBar": {
+            "translucent": true
+        },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 192,
+            "versionCode": 195,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",
