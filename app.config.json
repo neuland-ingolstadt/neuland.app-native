@@ -4,12 +4,12 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.10.1",
+        "version": "0.10.2",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
-            "buildNumber": "136",
+            "buildNumber": "199",
             "supportsTablet": true,
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
@@ -41,10 +41,13 @@
             "en": "./src/localization/en/ios.json",
             "de": "./src/localization/de/ios.json"
         },
+        "androidStatusBar": {
+            "translucent": true
+        },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 188,
+            "versionCode": 195,
             "splash": {
                 "image": "./src/assets/splash/splashLight.png",
                 "resizeMode": "contain",

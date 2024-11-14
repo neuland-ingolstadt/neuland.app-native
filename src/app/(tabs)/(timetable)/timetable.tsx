@@ -1,7 +1,7 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import TimetableList from '@/components/Elements/Timetable/TimetableList'
-import TimetableWeek from '@/components/Elements/Timetable/TimetableWeek'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import TimetableList from '@/components/Timetable/TimetableList'
+import TimetableWeek from '@/components/Timetable/TimetableWeek'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { PreferencesContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -9,11 +9,11 @@ import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Linking, StyleSheet, View } from 'react-native'
+import { Linking, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export interface ITimetableViewProps {
     friendlyTimetable: FriendlyTimetableEntry[]
@@ -29,8 +29,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 }
 
 export default function TimetableScreen(): JSX.Element {
-    const theme = useTheme()
-    const colors = theme.colors as Colors
+    const { styles } = useStyles(stylesheet)
 
     const { timetableMode } = useContext(PreferencesContext)
 
@@ -50,7 +49,7 @@ export default function TimetableScreen(): JSX.Element {
         queryFn: loadTimetable,
         staleTime: 1000 * 60 * 10,
         gcTime: 1000 * 60 * 60 * 24 * 7,
-        retry(failureCount, error) {
+        retry(_, error) {
             const ignoreErrors = [
                 '"Time table does not exist" (-202)',
                 'Timetable is empty',
@@ -75,13 +74,8 @@ export default function TimetableScreen(): JSX.Element {
 
     const LoadingView = (): JSX.Element => {
         return (
-            <View
-                style={{
-                    backgroundColor: colors.background,
-                    ...styles.loadingView,
-                }}
-            >
-                <ActivityIndicator size="small" color={colors.primary} />
+            <View style={styles.loadingView}>
+                <LoadingIndicator />
             </View>
         )
     }
@@ -169,13 +163,14 @@ export default function TimetableScreen(): JSX.Element {
     return isPageOpen ? <TempList /> : <></>
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     loadingView: {
-        position: 'absolute',
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
+        backgroundColor: theme.colors.background,
+        flex: 1,
         height: '100%',
+        justifyContent: 'center',
+        position: 'absolute',
+        width: '100%',
     },
-})
+}))

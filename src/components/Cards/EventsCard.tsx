@@ -1,16 +1,15 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import Divider from '@/components/Universal/Divider'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 
     const { data, isSuccess } = useQuery({
@@ -24,31 +23,23 @@ const EventsCard = (): JSX.Element => {
         <BaseCard title="events" onPressRoute="clEvents">
             {Boolean(isSuccess) && data !== undefined && (
                 <View
-                    style={{
-                        ...styles.calendarView,
-                        ...(data.length > 0 && styles.calendarFilled),
-                    }}
+                    style={[
+                        styles.calendarView,
+                        data.length > 0 && styles.calendarFilled,
+                    ]}
                 >
                     {data.slice(0, 2).map((event, index, slicedData) => (
                         <React.Fragment key={index}>
                             <View>
                                 <View>
                                     <Text
-                                        style={[
-                                            styles.eventTitle,
-                                            {
-                                                color: colors.text,
-                                            },
-                                        ]}
+                                        style={styles.eventTitle}
                                         numberOfLines={1}
                                     >
                                         {event.title}
                                     </Text>
                                     <Text
-                                        style={[
-                                            styles.eventDetails,
-                                            { color: colors.labelColor },
-                                        ]}
+                                        style={styles.eventDetails}
                                         numberOfLines={1}
                                     >
                                         {t('cards.events.by', {
@@ -59,7 +50,10 @@ const EventsCard = (): JSX.Element => {
                             </View>
 
                             {slicedData.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider
+                                    width={'100%'}
+                                    color={theme.colors.border}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -69,21 +63,23 @@ const EventsCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    calendarFilled: {
+        paddingTop: 10,
+    },
     calendarView: {
         gap: 8,
         paddingTop: 12,
     },
-    calendarFilled: {
-        paddingTop: 10,
-    },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-    },
     eventDetails: {
+        color: theme.colors.labelColor,
         fontSize: 15,
     },
-})
+    eventTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+}))
 
 export default EventsCard

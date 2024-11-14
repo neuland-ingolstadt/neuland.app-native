@@ -1,7 +1,6 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
-import { type Colors } from '@/components/colors'
+import FormList from '@/components/Universal/FormList'
+import { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import clubs from '@/data/clubs.json'
 import { type FormListSections } from '@/types/components'
 import { type CLEvents } from '@/types/neuland-api'
@@ -9,9 +8,7 @@ import {
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
 } from '@/utils/date-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import {
     useFocusEffect,
@@ -20,17 +17,11 @@ import {
 } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { clEventEntry } = useLocalSearchParams<{ clEventEntry: string }>()
     const navigation = useNavigation()
     const clEvent: CLEvents | undefined =
@@ -179,14 +170,9 @@ export default function ClEventDetail(): JSX.Element {
             style={styles.page}
             contentContainerStyle={styles.container}
         >
-            <View
-                style={[
-                    styles.titleContainer,
-                    { backgroundColor: colors.card },
-                ]}
-            >
+            <View style={styles.titleContainer}>
                 <Text
-                    style={[styles.titleText, { color: colors.text }]}
+                    style={styles.titleText}
                     allowFontScaling={true}
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
@@ -201,29 +187,31 @@ export default function ClEventDetail(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        padding: PAGE_PADDING,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
         gap: 12,
+        paddingBottom: theme.margins.modalBottomMargin,
     },
     formList: {
-        width: '100%',
         alignSelf: 'center',
         paddingBottom: 12,
+        width: '100%',
+    },
+    page: {
+        padding: theme.margins.page,
     },
     titleContainer: {
+        alignItems: 'center',
         alignSelf: 'center',
-        width: '100%',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
         paddingHorizontal: 5,
         paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
+        width: '100%',
     },
     titleText: {
+        color: theme.colors.text,
         fontSize: 18,
         textAlign: 'center',
     },
-})
+}))

@@ -1,19 +1,17 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
+import FormList from '@/components/Universal/FormList'
 import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const LinkScreen = (): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const { addRecentQuicklink } = useContext(PreferencesContext)
     const typedQuicklinks = quicklinks as Quicklink[]
@@ -55,40 +53,35 @@ const LinkScreen = (): JSX.Element => {
     return (
         <>
             <View style={styles.headerContainer}>
-                <Text
-                    style={{
-                        ...styles.headerText,
-                        color: colors.text,
-                    }}
-                >
+                <Text style={styles.headerText}>
                     {t('pages.quicklinks.title')}
                 </Text>
             </View>
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.page}>
                 <FormList sections={sections} rowStyle={styles.formlistRow} />
             </View>
         </>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formlistRow: { marginVertical: 13.5 },
     headerContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     headerText: {
+        color: theme.colors.text,
         fontSize: 23,
         fontWeight: '600',
-        paddingTop: 5,
         paddingBottom: 10,
+        paddingTop: 5,
     },
-})
+    page: {
+        paddingHorizontal: theme.margins.page,
+    },
+}))
 
 export default LinkScreen

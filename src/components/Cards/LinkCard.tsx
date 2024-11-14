@@ -1,26 +1,18 @@
-import { type Colors } from '@/components/colors'
 import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Linking,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Elements/Universal/Icon'
+import PlatformIcon from '../Universal/Icon'
 import BaseCard from './BaseCard'
 
 const LinkCard = (): JSX.Element => {
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const colors = useTheme().colors as Colors
     const { recentQuicklinks, addRecentQuicklink } =
         useContext(PreferencesContext)
 
@@ -46,13 +38,9 @@ const LinkCard = (): JSX.Element => {
                             onPress={() => {
                                 void linkPress(link.key, link.url)
                             }}
-                            style={{
-                                backgroundColor: colors.cardButton,
-                                ...styles.linkBox,
-                            }}
+                            style={styles.linkBox}
                         >
                             <PlatformIcon
-                                color={colors.primary}
                                 ios={{
                                     name: link.icon.ios,
                                     size: 17,
@@ -65,10 +53,7 @@ const LinkCard = (): JSX.Element => {
                                 }}
                             />
                             <Text
-                                style={{
-                                    ...styles.eventTitle,
-                                    color: colors.text,
-                                }}
+                                style={styles.eventTitle}
                                 numberOfLines={1}
                                 adjustsFontSizeToFit={Platform.OS === 'ios'}
                                 minimumFontScale={0.8}
@@ -87,28 +72,30 @@ const LinkCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     cardsFilled: {
-        paddingTop: 14,
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 10,
+        paddingTop: 14,
     },
     eventTitle: {
-        fontWeight: '500',
-        fontSize: 14.5,
+        color: theme.colors.text,
         flexShrink: 1,
+        fontSize: 14.5,
+        fontWeight: '500',
     },
     linkBox: {
-        paddingTop: 12,
+        alignItems: 'center',
+        backgroundColor: theme.colors.cardButton,
+        borderRadius: theme.radius.md,
+        flex: 1,
+        gap: Platform.OS === 'android' ? 2 : 7,
+        justifyContent: 'space-between',
         paddingBottom: 7,
         paddingHorizontal: 8,
-        borderRadius: 8,
-        gap: Platform.OS === 'android' ? 2 : 7,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        paddingTop: 12,
     },
-})
+}))
 
 export default LinkCard

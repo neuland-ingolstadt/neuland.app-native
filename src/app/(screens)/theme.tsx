@@ -1,5 +1,5 @@
-import MultiSectionRadio from '@/components/Elements/Food/FoodLanguageSection'
-import SectionView from '@/components/Elements/Universal/SectionsView'
+import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
+import SectionView from '@/components/Universal/SectionsView'
 import { ThemeContext } from '@/components/contexts'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -16,7 +16,13 @@
         "tsconfigRootDir": "./",
         "noUnusedLocals": true
     },
-    "plugins": ["react", "react-native", "i18next", "react-hooks"],
+    "plugins": [
+        "react",
+        "react-native",
+        "i18next",
+        "react-hooks",
+        "react-native-unistyles"
+    ],
     "settings": {
         "react": {
             "version": "detect"
@@ -30,7 +36,13 @@
         "react-native/no-raw-text": 2,
         "react-native/no-single-element-style-arrays": 2,
         "i18next/no-literal-string": 2,
-        "react-hooks/rules-of-hooks": "error"
+        "react-hooks/rules-of-hooks": "error",
+        "react-native-unistyles/no-unused-styles": "error",
+        "react-native-unistyles/sort-styles": [
+            "warn",
+            "asc",
+            { "ignoreClassNames": false, "ignoreStyleProperties": false }
+        ]
     },
-    "ignorePatterns": ["metro.config.js"]
+    "ignorePatterns": ["metro.config.js", "node_modules/", "ios/", "android/"]
 }

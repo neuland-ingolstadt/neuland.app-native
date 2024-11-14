@@ -1,25 +1,23 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import Divider from '@/components/Universal/Divider'
 import { FlowContext, UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const CalendarCard = (): JSX.Element => {
     type Combined = Calendar | CardExams
     const router = useRouter()
-    const colors = useTheme().colors as Colors
     const time = new Date()
     const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
@@ -78,46 +76,36 @@ const CalendarCard = (): JSX.Element => {
         setMixedCalendar(combined.slice(0, 2))
     }, [calendar, exams])
 
+    const { styles, theme } = useStyles(stylesheet)
+
     return (
         <BaseCard title="calendar" onPressRoute="calendar">
             <View
                 style={{
                     ...styles.calendarView,
-                    ...(mixedCalendar.length > 0 && styles.calendarFilled),
+                    ...(mixedCalendar.length > 0 && styles.calenderFilled),
                 }}
             >
                 {mixedCalendar.map((event, index) => (
                     <React.Fragment key={index}>
                         <View>
-                            <Text
-                                style={[
-                                    styles.eventTitle,
-                                    {
-                                        color: colors.text,
-                                    },
-                                ]}
-                                numberOfLines={2}
-                            >
+                            <Text style={styles.eventTitle} numberOfLines={2}>
                                 {typeof event.name === 'object'
                                     ? event.name[i18n.language as LanguageKey]
                                     : event.name}
                             </Text>
-                            <Text
-                                style={[
-                                    styles.eventDetails,
-                                    { color: colors.labelColor },
-                                ]}
-                                numberOfLines={1}
-                            >
+                            <Text style={styles.eventDetails} numberOfLines={1}>
                                 {event.end != null && event.begin < time
                                     ? t('cards.calendar.ends') +
                                       formatFriendlyRelativeTime(event.end)
                                     : formatFriendlyRelativeTime(event.begin)}
                             </Text>
                         </View>
-
                         {mixedCalendar.length - 1 !== index && (
-                            <Divider color={colors.border} width={'100%'} />
+                            <Divider
+                                color={theme.colors.border}
+                                width={'100%'}
+                            />
                         )}
                     </React.Fragment>
                 ))}
@@ -126,20 +114,22 @@ const CalendarCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     calendarView: {
         gap: 8,
     },
-    calendarFilled: {
+    calenderFilled: {
         paddingTop: 12,
     },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-    },
     eventDetails: {
+        color: theme.colors.labelColor,
         fontSize: 15,
     },
-})
+    eventTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+}))
 
 export default CalendarCard

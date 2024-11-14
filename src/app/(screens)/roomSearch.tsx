@@ -1,12 +1,10 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
-import Divider from '@/components/Elements/Universal/Divider'
-import Dropdown, {
-    DropdownButton,
-} from '@/components/Elements/Universal/Dropdown'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import Divider from '@/components/Universal/Divider'
+import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -20,19 +18,12 @@ import {
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const DURATIONS = [
     '00:15',
@@ -54,7 +45,7 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
 
@@ -126,29 +117,12 @@ export default function AdvancedSearch(): JSX.Element {
         <>
             <ScrollView style={styles.scrollView}>
                 <View>
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.options.title')}
                     </Text>
-                    <View
-                        style={[
-                            styles.section,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
-                    >
+                    <View style={styles.section}>
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.date')}
                             </Text>
 
@@ -166,7 +140,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 <DateTimePicker
                                     value={new Date(date + 'T' + time)}
                                     mode="date"
-                                    accentColor={colors.primary}
+                                    accentColor={theme.colors.primary}
                                     locale="de-DE"
                                     onChange={(_event, selectedDate) => {
                                         setShowDate(Platform.OS !== 'android')
@@ -185,12 +159,7 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.time')}
                             </Text>
 
@@ -209,7 +178,7 @@ export default function AdvancedSearch(): JSX.Element {
                                     value={new Date(date + 'T' + time)}
                                     mode="time"
                                     is24Hour={true}
-                                    accentColor={colors.primary}
+                                    accentColor={theme.colors.primary}
                                     locale="de-DE"
                                     minuteInterval={5}
                                     onChange={(_event, selectedDate) => {
@@ -221,12 +190,7 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.duration')}
                             </Text>
                             <Dropdown
@@ -237,12 +201,7 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.building')}
                             </Text>
                             <Dropdown
@@ -252,27 +211,14 @@ export default function AdvancedSearch(): JSX.Element {
                             />
                         </View>
                     </View>
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.results')}
                     </Text>
                     <View style={styles.sectionContainer}>
-                        <View
-                            style={[
-                                styles.section,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                        >
+                        <View style={styles.section}>
                             {filterState === LoadingState.LOADING ||
                             isLoading ? (
-                                <ActivityIndicator
-                                    color={colors.primary}
+                                <LoadingIndicator
                                     style={styles.loadingIndicator}
                                 />
                             ) : isPaused ? (
@@ -303,35 +249,37 @@ export default function AdvancedSearch(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    sectionContainer: {
-        paddingBottom: 20,
-    },
-    scrollView: {
-        padding: 12,
-    },
-    sectionHeader: {
-        fontSize: 13,
-
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    optionTitle: {
-        fontSize: 15,
-    },
-    section: {
-        marginBottom: 16,
-        borderRadius: 8,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     loadingIndicator: {
         paddingVertical: 30,
     },
+    optionTitle: {
+        color: theme.colors.text,
+        fontSize: 15,
+    },
     optionsRow: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingVertical: 6,
     },
-})
+    scrollView: {
+        padding: 12,
+    },
+    section: {
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        marginBottom: 16,
+    },
+    sectionContainer: {
+        paddingBottom: 20,
+    },
+    sectionHeader: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        marginBottom: 4,
+        textTransform: 'uppercase',
+    },
+}))
