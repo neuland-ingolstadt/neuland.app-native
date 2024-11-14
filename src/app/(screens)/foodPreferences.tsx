@@ -1,20 +1,18 @@
 import MultiSectionRadio, {
     type FoodLanguageElement,
-} from '@/components/Elements/Food/FoodLanguageSection'
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
-import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
-import { type Colors } from '@/components/colors'
+} from '@/components/Food/FoodLanguageSection'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { FoodFilterContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodPreferences(): JSX.Element {
     const { t } = useTranslation('food')
@@ -45,7 +43,7 @@ export default function FoodPreferences(): JSX.Element {
         { key: 'de', title: t('preferences.languages.de') },
         { key: 'en', title: t('preferences.languages.en') },
     ]
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const router = useRouter()
 
     const {
@@ -109,11 +107,8 @@ export default function FoodPreferences(): JSX.Element {
                 </SectionView>
             </View>
             <View style={styles.sectionContainer}>
-                <View
-                    style={{ ...styles.notesBox, backgroundColor: colors.card }}
-                >
+                <View style={styles.notesBox}>
                     <PlatformIcon
-                        color={colors.warning}
                         ios={{
                             name: 'exclamationmark.triangle',
                             variant: 'fill',
@@ -123,15 +118,9 @@ export default function FoodPreferences(): JSX.Element {
                             name: 'warning',
                             size: 24,
                         }}
+                        style={styles.warningIcon}
                     />
-                    <Text
-                        style={[
-                            styles.notesText,
-                            {
-                                color: colors.labelColor,
-                            },
-                        ]}
-                    >
+                    <Text style={styles.notesText}>
                         {t('preferences.footer')}
                     </Text>
                 </View>
@@ -140,30 +129,35 @@ export default function FoodPreferences(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: { flex: 1 },
-    sectionContainer: {
-        marginTop: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
     notesBox: {
-        width: '100%',
+        alignContent: 'center',
+        alignItems: 'center',
         alignSelf: 'center',
-        paddingVertical: 8,
-        paddingHorizontal: 14,
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
         flexDirection: 'row',
         gap: 10,
-        alignItems: 'center',
-        alignContent: 'center',
-        borderRadius: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        width: '100%',
     },
     notesText: {
+        color: theme.colors.labelColor,
+        flex: 1,
+        flexShrink: 1,
         fontSize: 11,
         fontWeight: 'normal',
         textAlign: 'left',
-        flex: 1,
-        flexShrink: 1,
     },
-})
+    sectionContainer: {
+        alignSelf: 'center',
+        marginTop: 16,
+        paddingHorizontal: theme.margins.page,
+        width: '100%',
+    },
+    warningIcon: {
+        color: theme.colors.warning,
+    },
+}))

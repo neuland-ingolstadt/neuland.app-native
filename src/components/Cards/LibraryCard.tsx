@@ -1,23 +1,22 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import Divider from '@/components/Universal/Divider'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const LibraryCard = (): JSX.Element => {
-    const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { userKind } = useContext(UserKindContext)
+    const router = useRouter()
 
     async function loadLibraryReservations(): Promise<Reservation[]> {
         const response = await API.getLibraryReservations()
@@ -47,30 +46,22 @@ const LibraryCard = (): JSX.Element => {
         <BaseCard title="library" onPressRoute="library">
             {isSuccess && data.length > 0 && (
                 <View
-                    style={{
-                        ...styles.calendarView,
-                        ...(data.length > 0 && styles.cardsFilled),
-                    }}
+                    style={[
+                        styles.calendarView,
+                        data.length > 0 && styles.cardsFilled,
+                    ]}
                 >
                     {data.slice(0, 2).map((item, index) => (
                         <React.Fragment key={index}>
                             <View>
                                 <Text
-                                    style={[
-                                        styles.eventTitle,
-                                        {
-                                            color: colors.text,
-                                        },
-                                    ]}
+                                    style={styles.eventTitle}
                                     numberOfLines={1}
                                 >
                                     {item.rcategory}
                                 </Text>
                                 <Text
-                                    style={[
-                                        styles.eventDetails,
-                                        { color: colors.labelColor },
-                                    ]}
+                                    style={styles.eventDetails}
                                     numberOfLines={1}
                                 >
                                     {formatFriendlyDateTimeRange(
@@ -80,7 +71,10 @@ const LibraryCard = (): JSX.Element => {
                                 </Text>
                             </View>
                             {data.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider
+                                    color={theme.colors.border}
+                                    width={'100%'}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -90,20 +84,11 @@ const LibraryCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
-    calendarView: {
-        gap: 8,
-    },
-    cardsFilled: {
-        paddingTop: 12,
-    },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-    },
-    eventDetails: {
-        fontSize: 15,
-    },
-})
+const stylesheet = createStyleSheet((theme) => ({
+    calendarView: { gap: 8 },
+    cardsFilled: { paddingTop: 12 },
+    eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
+    eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' },
+}))
 
 export default LibraryCard

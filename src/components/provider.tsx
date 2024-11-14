@@ -4,11 +4,6 @@ import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
-} from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useSegments } from 'expo-router'
@@ -18,10 +13,10 @@ import {
     Appearance,
     Platform,
     StyleSheet,
-    useColorScheme,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { UnistylesRuntime } from 'react-native-unistyles'
 
 import {
     useDashboard,
@@ -32,7 +27,7 @@ import {
     useTheme,
     useUserKind,
 } from '../contexts'
-import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
+import { accentColors } from './colors'
 import {
     DashboardContext,
     FlowContext,
@@ -76,7 +71,6 @@ export default function Provider({
     const userKind = useUserKind()
     const themeHook = useTheme()
     const dashboard = useDashboard()
-    const colorScheme = useColorScheme()
     const flow = useFlow()
     const routeParams = useRouteParams()
     const preferences = usePreferences()
@@ -101,23 +95,24 @@ export default function Provider({
         }
     }
 
-    const lightTheme: AppTheme = {
-        ...DefaultTheme,
-        colors: {
-            ...DefaultTheme.colors,
-            primary: getPrimary('light'),
-            ...lightColors,
-        },
-    }
-
-    const darkTheme: AppTheme = {
-        ...DarkTheme,
-        colors: {
-            ...DarkTheme.colors,
-            primary: getPrimary('dark'),
-            ...darkColors,
-        },
-    }
+    useEffect(() => {
+        UnistylesRuntime.updateTheme('dark', (currentTheme) => ({
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                // @ts-expect-error cannot verify that the new primary color is valid
+                primary: getPrimary('dark'),
+            },
+        }))
+        UnistylesRuntime.updateTheme('light', (currentTheme) => ({
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                // @ts-expect-error cannot verify that the new primary color is valid
+                primary: getPrimary('light'),
+            },
+        }))
+    }, [themeHook.accentColor])
 
     useEffect(() => {
         // This effect uses segments instead of usePathname which resolves some issues with the router.
@@ -253,13 +248,20 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
+        console.log('themeHook.theme', themeHook.theme)
+        console.log('Appearance.getColorScheme()', Appearance.getColorScheme())
 
         if (themeHook.theme === 'dark') {
             Appearance.setColorScheme('dark')
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('dark')
         } else if (themeHook.theme === 'light') {
             Appearance.setColorScheme('light')
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('light')
         } else {
-            Appearance.setColorScheme(null)
+            Appearance.setColorScheme(undefined)
+            UnistylesRuntime.setAdaptiveThemes(true)
         }
 
         return () => {
@@ -273,35 +275,31 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: syncStoragePersister }}
             >
-                <ThemeProvider
-                    value={colorScheme === 'dark' ? darkTheme : lightTheme}
-                >
-                    <ThemeContext.Provider value={themeHook}>
-                        <PreferencesContext.Provider value={preferences}>
-                            <BottomSheetModalProvider>
-                                <FlowContext.Provider value={flow}>
-                                    <UserKindContext.Provider value={userKind}>
-                                        <FoodFilterContext.Provider
-                                            value={foodFilter}
+                <ThemeContext.Provider value={themeHook}>
+                    <PreferencesContext.Provider value={preferences}>
+                        <BottomSheetModalProvider>
+                            <FlowContext.Provider value={flow}>
+                                <UserKindContext.Provider value={userKind}>
+                                    <FoodFilterContext.Provider
+                                        value={foodFilter}
+                                    >
+                                        <DashboardContext.Provider
+                                            value={dashboard}
                                         >
-                                            <DashboardContext.Provider
-                                                value={dashboard}
+                                            <RouteParamsContext.Provider
+                                                value={routeParams}
                                             >
-                                                <RouteParamsContext.Provider
-                                                    value={routeParams}
-                                                >
-                                                    <SafeAreaProvider>
-                                                        {children}
-                                                    </SafeAreaProvider>
-                                                </RouteParamsContext.Provider>
-                                            </DashboardContext.Provider>
-                                        </FoodFilterContext.Provider>
-                                    </UserKindContext.Provider>
-                                </FlowContext.Provider>
-                            </BottomSheetModalProvider>
-                        </PreferencesContext.Provider>
-                    </ThemeContext.Provider>
-                </ThemeProvider>
+                                                <SafeAreaProvider>
+                                                    {children}
+                                                </SafeAreaProvider>
+                                            </RouteParamsContext.Provider>
+                                        </DashboardContext.Provider>
+                                    </FoodFilterContext.Provider>
+                                </UserKindContext.Provider>
+                            </FlowContext.Provider>
+                        </BottomSheetModalProvider>
+                    </PreferencesContext.Provider>
+                </ThemeContext.Provider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )

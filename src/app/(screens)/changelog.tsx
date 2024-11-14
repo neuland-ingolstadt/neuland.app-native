@@ -1,16 +1,15 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
+import FormList from '@/components/Universal/FormList'
 import changelogData from '@/data/changelog.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Changelog } from '@/types/data'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Theme(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const changelog = changelogData as Changelog
     const { t, i18n } = useTranslation(['settings'])
     const sorted: Changelog = {
@@ -53,12 +52,10 @@ export default function Theme(): JSX.Element {
                     <FormList sections={sections} />
                 </View>
                 <View style={styles.notesContainer}>
-                    <Text
-                        style={[styles.notesText, { color: colors.labelColor }]}
-                    >
+                    <Text style={styles.notesText}>
                         {t('changelog.footer')}
                         <Text
-                            style={{ color: colors.primary }}
+                            style={styles.text}
                             onPress={() => {
                                 void Linking.openURL(
                                     'https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md'
@@ -75,20 +72,24 @@ export default function Theme(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    wrapper: {
-        marginVertical: 16,
-        alignSelf: 'center',
-        width: '92%',
-    },
+const stylesheet = createStyleSheet((theme) => ({
     notesContainer: {
         alignSelf: 'center',
         flexDirection: 'row',
-        width: '92%',
         marginBottom: 40,
+        width: '92%',
     },
     notesText: {
-        textAlign: 'left',
+        color: theme.colors.labelColor,
         fontSize: 13,
+        textAlign: 'left',
     },
-})
+    text: {
+        color: theme.colors.primary,
+    },
+    wrapper: {
+        alignSelf: 'center',
+        marginVertical: 16,
+        width: '92%',
+    },
+}))

@@ -1,7 +1,6 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareHeaderButton from '@/components/Elements/Universal/ShareHeaderButton'
-import { type Colors } from '@/components/colors'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import {
     FoodFilterContext,
     RouteParamsContext,
@@ -14,9 +13,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type Meal } from '@/types/neuland-api'
 import { formatPrice, mealName } from '@/utils/food-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { Buffer } from 'buffer/'
 import {
     router,
@@ -27,15 +24,8 @@ import {
 import { type i18n } from 'i18next'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    Linking,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const humanLocations = {
     IngolstadtMensa: 'Mensa Ingolstadt',
@@ -70,7 +60,7 @@ export function shareMeal(
 }
 
 export default function FoodDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
     const meal: Meal | undefined =
         foodEntry != null
@@ -271,7 +261,7 @@ export default function FoodDetail(): JSX.Element {
                               ios: 'checkmark.seal',
                           }
                         : undefined,
-                    iconColor: colors.success,
+                    iconColor: theme.colors.success,
                     onPress: () => {
                         itemAlert(flag, 'flag')
                     },
@@ -296,7 +286,7 @@ export default function FoodDetail(): JSX.Element {
                                   ios: 'exclamationmark.triangle',
                               }
                             : undefined,
-                        iconColor: colors.notification,
+                        iconColor: theme.colors.notification,
                         onPress: () => {
                             itemAlert(allergen, 'allergen')
                         },
@@ -334,7 +324,9 @@ export default function FoodDetail(): JSX.Element {
                         restaurant as keyof typeof humanLocations
                     ],
                     onPress: handlePress,
-                    textColor: locationExists ? colors.primary : undefined,
+                    textColor: locationExists
+                        ? theme.colors.primary
+                        : undefined,
                     disabled: !locationExists,
                 },
                 {
@@ -411,14 +403,9 @@ export default function FoodDetail(): JSX.Element {
     return (
         <>
             <ScrollView>
-                <View
-                    style={[
-                        styles.titleContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                >
+                <View style={styles.titleContainer}>
                     <Text
-                        style={[styles.titleText, { color: colors.text }]}
+                        style={styles.titleText}
                         allowFontScaling={true}
                         adjustsFontSizeToFit={true}
                         numberOfLines={2}
@@ -437,14 +424,8 @@ export default function FoodDetail(): JSX.Element {
                 </View>
 
                 <View style={styles.notesContainer}>
-                    <View
-                        style={{
-                            ...styles.notesBox,
-                            backgroundColor: colors.card,
-                        }}
-                    >
+                    <View style={styles.notesBox}>
                         <PlatformIcon
-                            color={colors.warning}
                             ios={{
                                 name: 'exclamationmark.triangle',
                                 variant: 'fill',
@@ -454,13 +435,9 @@ export default function FoodDetail(): JSX.Element {
                                 name: 'warning',
                                 size: 24,
                             }}
+                            style={styles.iconWarning}
                         />
-                        <Text
-                            style={[
-                                styles.notesText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {!isTranslated() ? t('details.translated') : ''}
                             {t('details.footer')}
                         </Text>
@@ -471,48 +448,55 @@ export default function FoodDetail(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formList: {
+        alignSelf: 'center',
         marginVertical: 16,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
-        alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
     },
-    titleContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        borderRadius: 8,
+    iconWarning: {
+        color: theme.colors.warning,
+    },
+    notesBox: {
+        alignContent: 'center',
         alignItems: 'center',
-    },
-    titleText: {
-        fontSize: 18,
-        textAlign: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        width: '100%',
     },
     notesContainer: {
         alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
+        marginBottom: theme.margins.bottomSafeArea,
         marginTop: 20,
-        marginBottom: PAGE_BOTTOM_SAFE_AREA,
-    },
-    notesBox: {
-        width: '100%',
-        alignSelf: 'center',
-        paddingVertical: 8,
-        paddingHorizontal: 14,
-        flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center',
-        alignContent: 'center',
-        borderRadius: 8,
+        paddingHorizontal: theme.margins.page,
     },
     notesText: {
+        color: theme.colors.labelColor,
+        flex: 1,
+        flexShrink: 1,
         fontSize: 11,
         fontWeight: 'normal',
         textAlign: 'left',
-        flex: 1,
-        flexShrink: 1,
     },
-})
+    titleContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        marginTop: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 10,
+        width: '92%',
+    },
+    titleText: {
+        color: theme.colors.text,
+        fontSize: 18,
+        textAlign: 'center',
+    },
+}))

@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
-import LogoSVG from '@/components/Elements/Flow/svgs/logo'
-import LogoTextSVG from '@/components/Elements/Flow/svgs/logoText'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import LogoSVG from '@/components/Flow/svgs/logo'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import PlatformIcon from '@/components/Universal/Icon'
 import { FlowContext } from '@/components/contexts'
 import { PRIVACY_URL } from '@/data/constants'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -17,7 +15,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     View,
     useWindowDimensions,
@@ -34,6 +31,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Shimmer from 'react-native-shimmer'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function OnboardingScreen(): JSX.Element {
     const flow = React.useContext(FlowContext)
@@ -68,14 +66,10 @@ export default function OnboardingScreen(): JSX.Element {
     ]
 
     const ContinueButton = (): JSX.Element => {
+        const { styles } = useStyles(stylesheet)
         return (
             <Pressable
-                style={[
-                    {
-                        backgroundColor: colors.primary,
-                    },
-                    styles.button,
-                ]}
+                style={styles.button}
                 onPress={() => {
                     if (Platform.OS === 'ios') {
                         void Haptics.selectionAsync()
@@ -88,14 +82,7 @@ export default function OnboardingScreen(): JSX.Element {
                 }}
                 disabled={buttonDisabled}
             >
-                <Text
-                    style={[
-                        { color: getContrastColor(colors.primary) },
-                        styles.buttonText,
-                    ]}
-                >
-                    {t('whatsnew.continue')}
-                </Text>
+                <Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>
             </Pressable>
         )
     }
@@ -115,6 +102,7 @@ export default function OnboardingScreen(): JSX.Element {
     const window = Dimensions.get('window')
 
     const CardsElement = (): JSX.Element => {
+        const { styles } = useStyles(stylesheet)
         return (
             <Animated.View style={[styles.boxesContainer, styles.boxes]}>
                 {data.map(({ title, description, icon }, index) => {
@@ -190,6 +178,7 @@ export default function OnboardingScreen(): JSX.Element {
             opacity: legalOpacity.value,
             transform: [{ translateY: legalTranslateY.value }],
         }))
+        const { styles } = useStyles(stylesheet)
         return (
             <Animated.View style={{ ...legalAnimatedStyle }}>
                 <View
@@ -204,17 +193,13 @@ export default function OnboardingScreen(): JSX.Element {
                             ...styles.privacyText,
 
                             maxWidth: window.width,
-                            color: colors.labelColor,
                         }}
                         numberOfLines={2}
                     >
                         <Text>{t('onboarding.links.agree1')}</Text>
                         <Text
                             disabled={buttonDisabled}
-                            style={{
-                                color: colors.text,
-                                ...styles.linkPrivacy,
-                            }}
+                            style={styles.linkPrivacy}
                             onPress={() => {
                                 void Linking.openURL(PRIVACY_URL)
                             }}
@@ -228,8 +213,6 @@ export default function OnboardingScreen(): JSX.Element {
             </Animated.View>
         )
     }
-
-    const colors = useTheme().colors as Colors
 
     const insets = useSafeAreaInsets()
 
@@ -402,7 +385,7 @@ export default function OnboardingScreen(): JSX.Element {
     }
     const scaledHeading = scaleFontSize(33)
     const isIos = Platform.OS === 'ios'
-
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             <View
@@ -410,7 +393,6 @@ export default function OnboardingScreen(): JSX.Element {
                     ...styles.page,
                     paddingTop: insets.top + 20,
                     paddingBottom: insets.bottom + 60,
-                    backgroundColor: colors.contrast,
                 }}
             >
                 <View style={styles.logoTextGroup}>
@@ -426,7 +408,6 @@ export default function OnboardingScreen(): JSX.Element {
                     <Animated.Text
                         style={[
                             {
-                                color: colors.text,
                                 fontSize: scaledHeading,
                                 ...styles.heading1,
                             },
@@ -444,7 +425,6 @@ export default function OnboardingScreen(): JSX.Element {
                         <Animated.Text
                             style={[
                                 {
-                                    color: colors.text,
                                     fontSize: scaledHeading,
                                     ...styles.heading2,
                                 },
@@ -467,7 +447,7 @@ export default function OnboardingScreen(): JSX.Element {
                 <Animated.View
                     style={[styles.fullLogoContainer, textLogoAnimatedStyle]}
                 >
-                    <LogoTextSVG size={15} color={colors.text} />
+                    <LogoTextSVG size={15} color={styles.heading1.color} />
                 </Animated.View>
             </View>
             <Animated.View style={helpAnimatedStyle}>
@@ -480,7 +460,7 @@ export default function OnboardingScreen(): JSX.Element {
                     style={{}}
                 >
                     <PlatformIcon
-                        color={colors.labelSecondaryColor}
+                        style={styles.icon}
                         ios={{
                             name: 'questionmark.circle',
                             size: 20,
@@ -498,62 +478,78 @@ export default function OnboardingScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    logoTextGroup: { flex: 1, justifyContent: 'center' },
-    boxesContainer: {
-        paddingTop: 20,
-        justifyContent: 'center',
-    },
+const stylesheet = createStyleSheet((theme) => ({
     boxes: {
         gap: 12,
         marginHorizontal: 40,
     },
-
-    button: {
-        borderRadius: 7,
-        paddingVertical: 14,
-        paddingHorizontal: 24,
-        width: '50%',
-        alignSelf: 'center',
-    },
-    buttonText: {
-        textAlign: 'center',
-        fontWeight: '700',
-        fontSize: 16,
-    },
-    page: {
-        flex: 1,
-        alignItems: 'center',
-    },
-
-    linkPrivacy: {
-        fontWeight: 'bold',
-    },
-    privacyRow: {
-        flexDirection: 'row',
+    boxesContainer: {
         justifyContent: 'center',
-        alignItems: 'center',
+        paddingTop: 20,
     },
-    privacyText: {
-        flexWrap: 'wrap',
-        flex: 1,
+    button: {
+        alignSelf: 'center',
+        backgroundColor: theme.colors.primary,
+        borderRadius: theme.radius.md,
+        paddingHorizontal: 24,
+        paddingVertical: 14,
+        width: '50%',
+    },
+
+    buttonText: {
+        color: getContrastColor(theme.colors.primary),
+        fontSize: 16,
+        fontWeight: '700',
         textAlign: 'center',
-        flexShrink: 1,
     },
-    heading1: { fontWeight: 'bold', textAlign: 'center' },
-    heading2: { fontWeight: 'bold', textAlign: 'center' },
     cardsContainer: {
         flexGrow: 0.5,
     },
+    fullLogoContainer: {
+        alignItems: 'center',
+        bottom: 30,
+        position: 'absolute',
+        width: '100%',
+    },
+
+    heading1: {
+        color: theme.colors.text,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    heading2: {
+        color: theme.colors.text,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    icon: {
+        color: theme.colors.labelSecondaryColor,
+    },
     legalContainer: {
         flex: 1,
+        justifyContent: 'center',
         width: '95%',
+    },
+    linkPrivacy: {
+        color: theme.colors.text,
+        fontWeight: 'bold',
+    },
+    logoTextGroup: { flex: 1, justifyContent: 'center' },
+    page: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.contrast,
+        flex: 1,
+    },
+    privacyRow: {
+        alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'center',
     },
-    fullLogoContainer: {
-        position: 'absolute',
-        bottom: 30,
-        width: '100%',
-        alignItems: 'center',
+    privacyText: {
+        color: theme.colors.labelColor,
+        flexWrap: 'wrap',
+        flex: 1,
+        flexShrink: 1,
+        textAlign: 'center',
     },
-})
+}))

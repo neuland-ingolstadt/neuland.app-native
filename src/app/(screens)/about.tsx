@@ -1,15 +1,12 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
-import { type Colors } from '@/components/colors'
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { FlowContext, PreferencesContext } from '@/components/contexts'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -22,14 +19,14 @@ import {
     Platform,
     Pressable,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): JSX.Element {
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
     const { analyticsAllowed, setAnalyticsAllowed } =
         React.useContext(FlowContext)
@@ -178,9 +175,7 @@ export default function About(): JSX.Element {
     }
     return (
         <>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
-            >
+            <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.container}>
                     <View style={styles.logoContainer}>
                         <Pressable
@@ -191,15 +186,7 @@ export default function About(): JSX.Element {
                                 handlePress()
                             }}
                         >
-                            <View
-                                style={[
-                                    styles.logoIcon,
-                                    {
-                                        shadowColor: colors.text,
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                            >
+                            <View style={styles.logoIcon}>
                                 <Image
                                     source={require('@/assets/appIcons/default.png')}
                                     alt="Neuland Next Logo"
@@ -210,38 +197,20 @@ export default function About(): JSX.Element {
 
                         <View style={styles.logoTextContainer}>
                             <View style={styles.appTitleContainer}>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.header,
-                                    ]}
-                                >
+                                <Text style={styles.header}>
                                     {'Neuland Next'}
                                 </Text>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.text,
-                                    ]}
-                                >
+                                <Text style={styles.text}>
                                     {'Native Version'}
                                 </Text>
                             </View>
                             <View>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.subHeader,
-                                    ]}
-                                >
+                                <Text style={styles.subHeader}>
                                     {t('about.header.developed')}
                                 </Text>
                                 <Pressable onPress={handleWebsitePress}>
                                     <Text
-                                        style={[
-                                            { color: colors.text },
-                                            styles.text,
-                                        ]}
+                                        style={styles.text}
                                         onPress={handleContributorsPress}
                                     >
                                         {'Neuland Ingolstadt e.V.'}
@@ -277,50 +246,58 @@ export default function About(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    appTitleContainer: {
+        marginBottom: 10,
+    },
     container: {
-        paddingTop: 30,
         paddingBottom: 20,
+        paddingTop: 30,
+    },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
+    formlistContainer: {
+        alignSelf: 'center',
+        marginTop: 10,
+        paddingHorizontal: theme.margins.page,
+        width: '100%',
+    },
+    header: {
+        color: theme.colors.text,
+        fontSize: 22,
+        fontWeight: 'bold',
     },
     logoContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'space-evenly',
+    },
+    logoIcon: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 9,
+        shadowColor: theme.colors.text,
+        shadowOffset: { width: 2, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: theme.radius.md,
+    },
+    logoImage: {
+        borderRadius: 9,
+        flex: 1,
+        height: 100,
+        resizeMode: 'contain',
+        width: 100,
     },
     logoTextContainer: {
         flexDirection: 'column',
     },
-    appTitleContainer: {
-        marginBottom: 10,
-    },
-    formlistContainer: {
-        marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    logoIcon: {
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        borderRadius: 9,
-    },
-    logoImage: {
-        flex: 1,
-        width: 100,
-        height: 100,
-        resizeMode: 'contain',
-        borderRadius: 9,
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
     subHeader: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 'bold',
     },
     text: {
+        color: theme.colors.text,
         fontSize: 16,
     },
-})
+}))

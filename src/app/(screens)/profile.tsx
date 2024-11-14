@@ -1,16 +1,14 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
@@ -18,21 +16,20 @@ import { useRouter } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Alert,
     Linking,
     Platform,
     Pressable,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Profile(): JSX.Element {
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { toggleUserKind, userKind } = useContext(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
@@ -229,10 +226,7 @@ export default function Profile(): JSX.Element {
             >
                 {isLoading && (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
+                        <LoadingIndicator />
                     </View>
                 )}
                 {isError && (
@@ -276,21 +270,14 @@ export default function Profile(): JSX.Element {
 
                 <Pressable
                     onPress={logoutAlert}
-                    style={{
-                        ...styles.logoutButton,
-                        backgroundColor: colors.card,
-                    }}
+                    style={styles.logoutButton}
                     disabled={isLoggingOut}
                 >
                     {isLoggingOut ? (
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.notification}
-                        />
+                        <LoadingIndicator />
                     ) : (
                         <>
                             <PlatformIcon
-                                color={colors.notification}
                                 ios={{
                                     name: 'rectangle.portrait.and.arrow.right',
                                     size: 18,
@@ -299,13 +286,9 @@ export default function Profile(): JSX.Element {
                                     name: 'logout',
                                     size: 22,
                                 }}
+                                style={styles.notification}
                             />
-                            <Text
-                                style={{
-                                    color: colors.notification,
-                                    ...styles.logoutText,
-                                }}
-                            >
+                            <Text style={styles.logoutText}>
                                 {t('profile.logout.button')}
                             </Text>
                         </>
@@ -316,33 +299,38 @@ export default function Profile(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    contentContainer: { paddingBottom: 32 },
+const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingVertical: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
         alignSelf: 'center',
+        paddingHorizontal: theme.margins.page,
+        paddingVertical: 16,
+        width: '100%',
+    },
+    contentContainer: { paddingBottom: 32 },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 40,
     },
     logoutButton: {
-        borderRadius: 10,
-        marginBottom: 30,
-        marginTop: 10,
         alignItems: 'center',
         alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.mg,
         flexDirection: 'row',
-        paddingVertical: 12,
-        paddingHorizontal: 40,
         gap: 10,
-        minWidth: 165,
         justifyContent: 'center',
+        marginBottom: 30,
+        marginTop: 10,
+        minWidth: 165,
+        paddingHorizontal: 40,
+        paddingVertical: 12,
     },
     logoutText: {
+        color: theme.colors.notification,
         fontSize: 16,
     },
-    loadingContainer: {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
+    notification: {
+        color: theme.colors.notification,
     },
-})
+}))

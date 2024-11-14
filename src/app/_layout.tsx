@@ -1,12 +1,11 @@
-import CrashView from '@/components/Elements/Error/CrashView'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
+import CrashView from '@/components/Error/CrashView'
+import PlatformIcon from '@/components/Universal/Icon'
 import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
 import { getStatusBarStyle } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
@@ -16,6 +15,7 @@ import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -75,8 +75,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const isOsDark = useColorScheme() === 'dark'
 
     return (
@@ -104,16 +103,14 @@ function RootLayout(): JSX.Element {
                         Platform.OS === 'android',
                         isOsDark
                     ),
+                    contentStyle: styles.background,
+                    headerStyle: styles.headerBackground,
+                    headerTintColor: theme.colors.primary,
+                    headerTitleStyle: styles.headerTextStyle,
                     // Android
                     statusBarTranslucent: true,
                 }}
             >
-                <Stack.Screen
-                    name="index"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
                 <Stack.Screen
                     name="(tabs)"
                     options={{
@@ -145,6 +142,12 @@ function RootLayout(): JSX.Element {
                     name="(screens)/changelog"
                     options={{
                         title: 'Changelog',
+                    }}
+                />
+                <Stack.Screen
+                    name="index"
+                    options={{
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
@@ -356,7 +359,7 @@ function RootLayout(): JSX.Element {
                                 })}
                             >
                                 <PlatformIcon
-                                    color={colors.text}
+                                    style={styles.headerTextStyle}
                                     ios={{
                                         name: 'barcode',
                                         size: 22,
@@ -387,6 +390,7 @@ function RootLayout(): JSX.Element {
                         title: t('navigation.news'),
                         ...Platform.select({
                             ios: {
+                                headerStyle: undefined,
                                 headerTransparent: true,
                                 headerBlurEffect: 'regular',
                             },
@@ -436,3 +440,8 @@ const ProviderComponent = (): JSX.Element => {
 }
 
 export default ProviderComponent
+const stylesheet = createStyleSheet((theme) => ({
+    background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
+    headerTextStyle: { color: theme.colors.text },
+}))

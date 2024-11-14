@@ -1,33 +1,21 @@
-import { type Colors } from '@/components/colors'
-import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const LoginCard = (): JSX.Element => {
-    const colors = useTheme().colors as Colors
-
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     return (
         <BaseCard title="login" removable={false} onPressRoute="login">
-            <View
-                style={{
-                    ...styles.calendarView,
-                    ...styles.cardsFilled,
-                }}
-            >
+            <View style={styles.calendarView}>
                 <View>
-                    <Text style={{ ...styles.eventTitle, color: colors.text }}>
+                    <Text style={styles.eventTitle}>
                         {t('cards.login.title')}
                     </Text>
-                    <Text
-                        style={{
-                            ...styles.eventDetails,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.eventDetails}>
                         {t('cards.login.message')}
                     </Text>
                 </View>
@@ -36,20 +24,20 @@ const LoginCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     calendarView: {
         gap: 12,
-    },
-    cardsFilled: {
         paddingTop: 10,
     },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-    },
     eventDetails: {
+        color: theme.colors.labelColor,
         fontSize: 15,
     },
-})
+    eventTitle: {
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+}))
 
 export default LoginCard

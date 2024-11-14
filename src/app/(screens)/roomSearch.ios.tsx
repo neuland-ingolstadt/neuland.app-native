@@ -1,10 +1,10 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { FreeRoomsList } from '@/components/Elements/Map/FreeRoomsList'
-import Divider from '@/components/Elements/Universal/Divider'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { type AvailableRoom } from '@/types/utils'
 import { networkError } from '@/utils/api-utils'
@@ -18,18 +18,12 @@ import {
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Picker, useBinding } from 'swiftui-react-native'
 
 const DURATIONS = [
@@ -52,7 +46,7 @@ const DURATIONS = [
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
 
@@ -143,36 +137,19 @@ export default function AdvancedSearch(): JSX.Element {
         <>
             <ScrollView style={styles.scrollView}>
                 <View>
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.options.title')}
                     </Text>
-                    <View
-                        style={[
-                            styles.section,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
-                    >
+                    <View style={styles.section}>
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.date')}
                             </Text>
 
                             <DateTimePicker
                                 value={new Date(date + 'T' + time)}
                                 mode="date"
-                                accentColor={colors.primary}
+                                accentColor={theme.colors.primary}
                                 locale="de-DE"
                                 onChange={(_event, selectedDate) => {
                                     setDate(formatISODate(selectedDate))
@@ -190,12 +167,7 @@ export default function AdvancedSearch(): JSX.Element {
 
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.time')}
                             </Text>
 
@@ -203,7 +175,7 @@ export default function AdvancedSearch(): JSX.Element {
                                 value={new Date(date + 'T' + time)}
                                 mode="time"
                                 is24Hour={true}
-                                accentColor={colors.primary}
+                                accentColor={theme.colors.primary}
                                 locale="de-DE"
                                 minuteInterval={5}
                                 onChange={(_event, selectedDate) => {
@@ -213,19 +185,14 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.duration')}
                             </Text>
 
                             <Picker
                                 selection={duration}
                                 pickerStyle="menu"
-                                tint={colors.primary}
+                                tint={theme.colors.primary}
                                 offset={{ x: 15, y: 0 }}
                             >
                                 {DURATIONS.map((option) => (
@@ -235,19 +202,14 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                         <Divider iosPaddingLeft={16} />
                         <View style={styles.optionsRow}>
-                            <Text
-                                style={[
-                                    styles.optionTitle,
-                                    { color: colors.text },
-                                ]}
-                            >
+                            <Text style={styles.optionTitle}>
                                 {t('pages.rooms.options.building')}
                             </Text>
 
                             <Picker
                                 selection={building}
                                 pickerStyle="menu"
-                                tint={colors.primary}
+                                tint={theme.colors.primary}
                                 offset={{ x: 20, y: 0 }}
                             >
                                 {ALL_BUILDINGS.map((option) => (
@@ -257,12 +219,7 @@ export default function AdvancedSearch(): JSX.Element {
                         </View>
                     </View>
                     {wasModified && isDateAndTimeEqualToStart() && (
-                        <View
-                            style={{
-                                ...styles.section,
-                                backgroundColor: colors.card,
-                            }}
-                        >
+                        <View style={styles.section}>
                             <View style={styles.adjustContainer}>
                                 <PlatformIcon
                                     ios={{
@@ -273,24 +230,13 @@ export default function AdvancedSearch(): JSX.Element {
                                         name: 'update',
                                         size: 20,
                                     }}
-                                    color={colors.primary}
                                 />
-                                <Text
-                                    style={{
-                                        color: colors.primary,
-                                        ...styles.adjustedTitle,
-                                    }}
-                                >
+                                <Text style={styles.adjustedTitle}>
                                     {t('pages.rooms.modified.title')}
                                 </Text>
                             </View>
 
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.adjustText,
-                                }}
-                            >
+                            <Text style={styles.adjustText}>
                                 {t('pages.rooms.modified.description', {
                                     date,
                                     time,
@@ -298,27 +244,14 @@ export default function AdvancedSearch(): JSX.Element {
                             </Text>
                         </View>
                     )}
-                    <Text
-                        style={[
-                            styles.sectionHeader,
-                            { color: colors.labelSecondaryColor },
-                        ]}
-                    >
+                    <Text style={styles.sectionHeader}>
                         {t('pages.rooms.results')}
                     </Text>
                     <View style={styles.sectionContainer}>
-                        <View
-                            style={[
-                                styles.section,
-                                {
-                                    backgroundColor: colors.card,
-                                },
-                            ]}
-                        >
+                        <View style={styles.section}>
                             {filterState === LoadingState.LOADING ||
                             isLoading ? (
-                                <ActivityIndicator
-                                    color={colors.primary}
+                                <LoadingIndicator
                                     style={styles.loadingIndicator}
                                 />
                             ) : isPaused ? (
@@ -349,53 +282,58 @@ export default function AdvancedSearch(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    sectionContainer: {
-        paddingBottom: 20,
+const stylesheet = createStyleSheet((theme) => ({
+    adjustContainer: {
+        alignContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 5,
+        paddingHorizontal: 10,
+        paddingTop: 10,
     },
-    scrollView: {
-        padding: 12,
-    },
-    sectionHeader: {
-        fontSize: 13,
-
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    optionTitle: {
+    adjustText: {
+        color: theme.colors.text,
         fontSize: 15,
+        padding: 10,
     },
-    section: {
-        marginBottom: 16,
-        borderRadius: 8,
+    adjustedTitle: {
+        color: theme.colors.primary,
+        fontSize: 16,
+        fontWeight: '500',
+        marginLeft: 5,
     },
+
     loadingIndicator: {
         paddingVertical: 30,
     },
+    optionTitle: {
+        color: theme.colors.text,
+        fontSize: 15,
+    },
     optionsRow: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
 
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingVertical: 6,
     },
-    adjustContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'center',
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        gap: 5,
+    scrollView: {
+        padding: 12,
     },
-    adjustedTitle: {
-        fontSize: 16,
-        marginLeft: 5,
-        fontWeight: '500',
+    section: {
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        marginBottom: 16,
     },
-    adjustText: {
-        padding: 10,
-        fontSize: 15,
+    sectionContainer: {
+        paddingBottom: 20,
     },
-})
+    sectionHeader: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        marginBottom: 4,
+        textTransform: 'uppercase',
+    },
+}))

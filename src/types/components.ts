@@ -1,4 +1,4 @@
-import { type CommunityIcon } from '@/components/Elements/Universal/Icon'
+import { type CommunityIcon } from '@/components/Universal/Icon'
 import { type ColorValue } from 'react-native'
 
 import { type MaterialIcon } from './material-icons'

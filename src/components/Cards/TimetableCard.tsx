@@ -1,5 +1,4 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import Divider from '@/components/Universal/Divider'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
@@ -7,17 +6,17 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const TimetableCard: React.FC = () => {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
@@ -114,21 +113,14 @@ const TimetableCard: React.FC = () => {
 
         return (
             <View key={index}>
-                <Text
-                    style={{ ...styles.eventTitle, color: colors.text }}
-                    numberOfLines={1}
-                >
+                <Text style={styles.eventTitle} numberOfLines={1}>
                     {event.name}
                 </Text>
-                <Text
-                    style={{ ...styles.eventDetails, color: colors.labelColor }}
-                >
-                    {eventText}
-                </Text>
+                <Text style={styles.eventDetails}>{eventText}</Text>
                 {index < filteredTimetable.length - 1 && (
                     <>
                         <View style={styles.divider} />
-                        <Divider color={colors.border} width="100%" />
+                        <Divider width="100%" color={theme.colors.border} />
                     </>
                 )}
             </View>
@@ -153,12 +145,12 @@ const TimetableCard: React.FC = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     calendarView: { gap: 8 },
     cardsFilled: { paddingTop: 12 },
-    eventTitle: { fontWeight: '500', fontSize: 16 },
-    eventDetails: { fontSize: 15 },
     divider: { height: 10 },
-})
+    eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
+    eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' },
+}))
 
 export default TimetableCard

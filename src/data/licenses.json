@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-alpha.24": {
+    "@maplibre/maplibre-react-native@10.0.0-alpha.25": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -333,6 +333,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/react-native-svg",
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "react-native-unistyles@2.12.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jpudysz/react-native-unistyles",
+        "licenseUrl": "https://github.com/jpudysz/react-native-unistyles/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-view-shot@3.8.0": {
