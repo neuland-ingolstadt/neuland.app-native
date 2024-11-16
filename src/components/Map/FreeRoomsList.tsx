@@ -1,8 +1,7 @@
-import { RouteParamsContext } from '@/components/contexts'
 import { type AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { useRouter } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -16,7 +15,6 @@ interface FreeRoomsListProps {
 export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
     const { styles } = useStyles(stylesheet)
     const router = useRouter()
-    const { updateRouteParams } = useContext(RouteParamsContext)
     const { t } = useTranslation('common')
 
     return rooms !== null && rooms.length > 0 ? (
@@ -26,8 +24,10 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                     <View>
                         <Pressable
                             onPress={() => {
-                                router.navigate('(tabs)/map')
-                                updateRouteParams(room.room)
+                                router.replace({
+                                    pathname: '(tabs)/map',
+                                    params: { room: room.room },
+                                })
                             }}
                         >
                             <Text style={styles.roomName}>{room.room}</Text>

@@ -25,6 +25,7 @@ export default function ErrorView({
     onButtonPress,
     onRefresh,
     refreshing,
+    showPullLabel,
     inModal = false,
     isCritical = true,
 }: {
@@ -35,6 +36,7 @@ export default function ErrorView({
     onButtonPress?: () => void
     onRefresh?: () => any
     refreshing?: boolean
+    showPullLabel?: boolean
     inModal?: boolean
     isCritical?: boolean
 }): JSX.Element {
@@ -191,9 +193,10 @@ export default function ErrorView({
                 </View>
 
                 <ErrorButton />
-                {refreshing != null && title !== guestError && (
+                {(refreshing != null && title !== guestError) ||
+                showPullLabel === true ? (
                     <Text style={styles.errorFooter}>{t('error.pull')}</Text>
-                )}
+                ) : null}
                 {showBox && (
                     <StatusBox error={new Error(title)} crash={false} />
                 )}

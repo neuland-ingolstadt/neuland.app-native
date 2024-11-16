@@ -23,7 +23,6 @@ import {
     useFlow,
     useFoodFilter,
     usePreferences,
-    useRouteParams,
     useTheme,
     useUserKind,
 } from '../contexts'
@@ -33,7 +32,6 @@ import {
     FlowContext,
     FoodFilterContext,
     PreferencesContext,
-    RouteParamsContext,
     ThemeContext,
     UserKindContext,
 } from './contexts'
@@ -72,7 +70,6 @@ export default function Provider({
     const themeHook = useTheme()
     const dashboard = useDashboard()
     const flow = useFlow()
-    const routeParams = useRouteParams()
     const preferences = usePreferences()
     const segments = useSegments()
 
@@ -286,13 +283,9 @@ export default function Provider({
                                         <DashboardContext.Provider
                                             value={dashboard}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
-                                            >
-                                                <SafeAreaProvider>
-                                                    {children}
-                                                </SafeAreaProvider>
-                                            </RouteParamsContext.Provider>
+                                            <SafeAreaProvider>
+                                                {children}
+                                            </SafeAreaProvider>
                                         </DashboardContext.Provider>
                                     </FoodFilterContext.Provider>
                                 </UserKindContext.Provider>

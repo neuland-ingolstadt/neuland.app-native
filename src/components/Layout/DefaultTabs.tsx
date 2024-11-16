@@ -1,5 +1,4 @@
 import PlatformIcon from '@/components/Universal/Icon'
-import { type Theme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
 import React from 'react'
@@ -11,7 +10,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
+const DefaultTabs = (): JSX.Element => {
     const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const BlurTab = (): JSX.Element => (

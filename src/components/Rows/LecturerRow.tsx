@@ -1,7 +1,7 @@
-import { RouteParamsContext } from '@/components/contexts'
 import { type NormalizedLecturer } from '@/types/utils'
+import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -10,15 +10,19 @@ import RowEntry from '../Universal/RowEntry'
 
 const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const { updateRouteParams } = useContext(RouteParamsContext)
 
     const onPressRoom = (): void => {
-        router.navigate('(tabs)/map')
-        updateRouteParams(item.room_short ?? '')
+        router.replace({
+            pathname: '(tabs)/map',
+            params: { room: item.room_short ?? '' },
+        })
     }
     const onPressRow = (): void => {
-        router.navigate('lecturer')
-        router.setParams({ lecturerEntry: JSON.stringify(item) })
+        const base64Event = Buffer.from(JSON.stringify(item)).toString('base64')
+        router.navigate({
+            pathname: 'lecturer',
+            params: { lecturerEntry: base64Event },
+        })
     }
     const { t } = useTranslation('api')
 

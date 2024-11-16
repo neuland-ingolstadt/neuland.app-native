@@ -15,12 +15,17 @@ import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
     initialRouteName: '(index)',
 }
+
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { theme: appTheme } = useContext(ThemeContext)
@@ -77,7 +82,7 @@ function RootLayout(): JSX.Element {
     }, [])
     const { styles, theme } = useStyles(stylesheet)
     const isOsDark = useColorScheme() === 'dark'
-
+    console.log('UnistylesRuntime.themeName', UnistylesRuntime.themeName)
     return (
         <>
             <Head>

@@ -1,11 +1,7 @@
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import {
-    FoodFilterContext,
-    RouteParamsContext,
-    UserKindContext,
-} from '@/components/contexts'
+import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
@@ -75,7 +71,6 @@ export default function FoodDetail(): JSX.Element {
     } = useContext(FoodFilterContext)
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const { updateRouteParams } = useContext(RouteParamsContext)
     const navigation = useNavigation()
     const dataSources = {
         IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
@@ -306,8 +301,10 @@ export default function FoodDetail(): JSX.Element {
         const location = locations[restaurant as keyof typeof locations]
 
         if (restaurant != null && location !== undefined) {
-            router.navigate('(tabs)/map')
-            updateRouteParams(location)
+            router.replace({
+                pathname: '(tabs)/map',
+                params: { room: location },
+            })
         }
     }
 

@@ -157,7 +157,6 @@ export function FoodScreen(): JSX.Element {
     const showAllergensBanner =
         allergenSelection.length === 1 &&
         allergenSelection[0] === 'not-configured'
-
     return (
         <>
             <ScrollView
@@ -177,31 +176,26 @@ export function FoodScreen(): JSX.Element {
                 showsVerticalScrollIndicator={false}
                 scrollEnabled={!isLoading}
             >
-                {isLoading && (
+                {isLoading && !isRefetchingByUser ? (
                     <View style={styles.loadingContainer}>
                         <LoadingIndicator />
                     </View>
-                )}
-                {isError && (
+                ) : isError ? (
                     <ErrorView
                         title={
                             error?.message === 'noMeals'
                                 ? t('error.noMeals')
                                 : (error?.message ?? t('error.title'))
                         }
-                        onRefresh={refetchByUser}
-                        refreshing={isRefetchingByUser}
+                        showPullLabel={true}
                     />
-                )}
-                {isPaused && !isSuccess && (
+                ) : isPaused && !isSuccess ? (
                     <ErrorView
                         title={networkError}
                         onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}
                     />
-                )}
-
-                {isSuccess && data.length > 0 && (
+                ) : isSuccess && data.length > 0 ? (
                     <>
                         <Animated.View
                             // eslint-disable-next-line react-native/no-inline-styles
@@ -239,7 +233,7 @@ export function FoodScreen(): JSX.Element {
                         <PagerView
                             ref={pagerViewRef}
                             style={{
-                                ...styles.pagerContainer,
+                                ...styles.page,
                                 height: screenHeight,
                             }}
                             initialPage={0}
@@ -252,6 +246,14 @@ export function FoodScreen(): JSX.Element {
                         >
                             {data.map((_: any, index: number) => (
                                 <ScrollView
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={isRefetchingByUser}
+                                            onRefresh={() => {
+                                                void refetchByUser()
+                                            }}
+                                        />
+                                    }
                                     scrollEventThrottle={16}
                                     onScroll={Animated.event(
                                         [
@@ -265,16 +267,6 @@ export function FoodScreen(): JSX.Element {
                                         ],
                                         { useNativeDriver: false }
                                     )}
-                                    refreshControl={
-                                        isSuccess ? (
-                                            <RefreshControl
-                                                refreshing={isRefetchingByUser}
-                                                onRefresh={() => {
-                                                    void refetchByUser()
-                                                }}
-                                            />
-                                        ) : undefined
-                                    }
                                     key={index}
                                     contentContainerStyle={
                                         styles.innerScrollContainer
@@ -289,7 +281,7 @@ export function FoodScreen(): JSX.Element {
                             ))}
                         </PagerView>
                     </>
-                )}
+                ) : null}
             </ScrollView>
         </>
     )
@@ -376,9 +368,6 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingTop: 40,
     },
     page: {
-        flex: 1,
-    },
-    pagerContainer: {
         flex: 1,
     },
 }))
