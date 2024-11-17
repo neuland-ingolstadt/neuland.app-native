@@ -11,7 +11,7 @@ import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable } from 'react-native'
+import { AppState, Platform, Pressable, StatusBar } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import {
     UnistylesRuntime,
@@ -95,7 +95,7 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-
+            <StatusBar translucent backgroundColor="transparent" />
             <Stack
                 screenOptions={{
                     contentStyle: styles.background,

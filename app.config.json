@@ -33,7 +33,6 @@
             "de": "./src/localization/de/ios.json"
         },
         "androidStatusBar": {
-            "backgroundColor": "#3F51B5",
             "translucent": true
         },
         "android": {
