@@ -42,7 +42,7 @@ const DefaultTabs = (): JSX.Element => {
                                 ios={{
                                     name: 'house',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'home',
@@ -70,7 +70,7 @@ const DefaultTabs = (): JSX.Element => {
                                 ios={{
                                     name: 'clock',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'calendar_month',
@@ -97,7 +97,7 @@ const DefaultTabs = (): JSX.Element => {
                                 ios={{
                                     name: 'map',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'map',
@@ -121,7 +121,7 @@ const DefaultTabs = (): JSX.Element => {
                             <PlatformIcon
                                 ios={{
                                     name: 'fork.knife',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'restaurant',
