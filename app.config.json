@@ -33,12 +33,13 @@
             "de": "./src/localization/de/ios.json"
         },
         "androidStatusBar": {
+            "backgroundColor": "#3F51B5",
             "translucent": true
         },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 195
+            "versionCode": 201
         },
         "sdkVersion": "52.0.0",
         "experiments": {

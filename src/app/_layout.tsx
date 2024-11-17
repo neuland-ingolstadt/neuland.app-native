@@ -1,19 +1,17 @@
 import CrashView from '@/components/Error/CrashView'
 import PlatformIcon from '@/components/Universal/Icon'
-import { ThemeContext } from '@/components/contexts'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
-import { getStatusBarStyle } from '@/utils/ui-utils'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
+import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import {
     UnistylesRuntime,
@@ -28,7 +26,6 @@ export const unstable_settings = {
 
 function RootLayout(): JSX.Element {
     const router = useRouter()
-    const { theme: appTheme } = useContext(ThemeContext)
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
 
@@ -81,7 +78,6 @@ function RootLayout(): JSX.Element {
         }
     }, [])
     const { styles, theme } = useStyles(stylesheet)
-    const isOsDark = useColorScheme() === 'dark'
     console.log('UnistylesRuntime.themeName', UnistylesRuntime.themeName)
     return (
         <>
@@ -102,18 +98,10 @@ function RootLayout(): JSX.Element {
 
             <Stack
                 screenOptions={{
-                    statusBarStyle: getStatusBarStyle(
-                        (appTheme as 'light' | 'dark' | 'auto' | undefined) ??
-                            'auto',
-                        Platform.OS === 'android',
-                        isOsDark
-                    ),
                     contentStyle: styles.background,
                     headerStyle: styles.headerBackground,
                     headerTintColor: theme.colors.primary,
                     headerTitleStyle: styles.headerTextStyle,
-                    // Android
-                    statusBarTranslucent: true,
                 }}
             >
                 <Stack.Screen

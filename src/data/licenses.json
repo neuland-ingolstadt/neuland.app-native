@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-alpha.25": {
+    "@maplibre/maplibre-react-native@10.0.0-alpha.26": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -47,13 +47,13 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-navigation/native@7.0.2": {
+    "@react-navigation/native@7.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-navigation/stack@7.0.2": {
+    "@react-navigation/stack@7.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
@@ -65,19 +65,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.59.20": {
+    "@tanstack/query-sync-storage-persister@5.60.5": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.59.20": {
+    "@tanstack/react-query-persist-client@5.60.5": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.59.20": {
+    "@tanstack/react-query@5.60.5": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -161,13 +161,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-navigation-bar@4.0.2": {
+    "expo-navigation-bar@4.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-router@4.0.5": {
+    "expo-router@4.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -185,13 +185,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@0.29.10": {
+    "expo-splash-screen@0.29.11": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.6": {
+    "expo@52.0.7": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -401,7 +401,7 @@
         "licenseUrl": "https://github.com/andrew-levy/sweet-sfsymbols",
         "parents": "neuland"
     },
-    "swiftui-react-native@6.3.2": {
+    "swiftui-react-native@6.3.3": {
         "licenses": "MIT",
         "repository": "https://github.com/andrew-levy/swiftui-react-native",
         "licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
