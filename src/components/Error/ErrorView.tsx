@@ -169,6 +169,7 @@ export default function ErrorView({
                     <></>
                 )
             }
+            scrollEnabled={!inModal}
             contentContainerStyle={styles.container(inModal ?? false)}
         >
             <View style={styles.errorContainer}>
@@ -212,6 +213,7 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingBottom: inModal ? 25 : Platform.OS === 'ios' ? 50 : 0, // iOS has transparent tab bar so we need to add padding
         backgroundColor: inModal ? theme.colors.card : undefined,
         borderRadius: inModal ? 10 : 0,
+        paddingTop: inModal ? 25 : 0,
     }),
     errorContainer: {
         flex: 1,

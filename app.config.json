@@ -23,7 +23,7 @@
                 "RCTAsyncStorageExcludeFromBackup": false,
                 "CFBundleAllowMixedLocalizations": true,
                 "CFBundleDevelopmentRegion": "en",
-                "UIViewControllerBasedStatusBarAppearance": true,
+                "UIViewControllerBasedStatusBarAppearance": false,
                 "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
             },
             "icon": "./src/assets/appIcons/default.png"
@@ -60,7 +60,14 @@
                 }
             ],
             ["@maplibre/maplibre-react-native"],
-            ["expo-build-properties"],
+            [
+                "expo-build-properties",
+                {
+                    "ios": {
+                        "deploymentTarget": "15.1"
+                    }
+                }
+            ],
             [
                 "expo-screen-orientation",
                 {

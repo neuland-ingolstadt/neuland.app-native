@@ -159,23 +159,7 @@ export function FoodScreen(): JSX.Element {
         allergenSelection[0] === 'not-configured'
     return (
         <>
-            <ScrollView
-                refreshControl={
-                    isError ? (
-                        <RefreshControl
-                            refreshing={isRefetchingByUser}
-                            onRefresh={() => {
-                                void refetchByUser()
-                            }}
-                        />
-                    ) : undefined
-                }
-                style={{ ...styles.page }}
-                contentInsetAdjustmentBehavior="always"
-                contentContainerStyle={styles.container}
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={!isLoading}
-            >
+            <View style={{ ...styles.page }}>
                 {isLoading && !isRefetchingByUser ? (
                     <View style={styles.loadingContainer}>
                         <LoadingIndicator />
@@ -187,7 +171,8 @@ export function FoodScreen(): JSX.Element {
                                 ? t('error.noMeals')
                                 : (error?.message ?? t('error.title'))
                         }
-                        showPullLabel={true}
+                        onRefresh={refetchByUser}
+                        refreshing={isRefetchingByUser}
                     />
                 ) : isPaused && !isSuccess ? (
                     <ErrorView
@@ -282,7 +267,7 @@ export function FoodScreen(): JSX.Element {
                         </PagerView>
                     </>
                 ) : null}
-            </ScrollView>
+            </View>
         </>
     )
 }
@@ -319,9 +304,6 @@ const stylesheet = createStyleSheet((theme) => ({
     animtedContainer: {
         borderBottomColor: theme.colors.border,
         width: '100%',
-    },
-    container: {
-        flex: 1,
     },
     dayButtonContainer: {
         alignContent: 'center',
