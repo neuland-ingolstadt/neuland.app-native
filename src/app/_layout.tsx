@@ -136,7 +136,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/settings"
                     options={{
                         title: t('navigation.settings'),
-                        animation: 'fade',
                     }}
                 />
                 <Stack.Screen
