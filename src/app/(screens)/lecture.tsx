@@ -7,7 +7,6 @@ import ShareCard from '@/components/Timetable/ShareCard'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
@@ -20,16 +19,22 @@ import {
     useRouter,
 } from 'expo-router'
 import moment from 'moment'
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Share, Text, View } from 'react-native'
+import {
+    InteractionManager,
+    Pressable,
+    ScrollView,
+    Share,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
     const navigation = useNavigation()
-    const { updateRouteParams } = useContext(RouteParamsContext)
     const { styles } = useStyles(stylesheet)
     const { lecture: lectureParam } = useLocalSearchParams()
     const { t } = useTranslation('timetable')
@@ -245,13 +250,25 @@ export default function TimetableDetails(): JSX.Element {
                                             <React.Fragment key={i}>
                                                 <Pressable
                                                     onPress={() => {
-                                                        router.navigate(
-                                                            '(tabs)/map'
+                                                        router.dismissAll()
+                                                        void InteractionManager.runAfterInteractions(
+                                                            () => {
+                                                                router.navigate(
+                                                                    {
+                                                                        pathname:
+                                                                            '(tabs)/map',
+                                                                        params: {
+                                                                            room,
+                                                                        },
+                                                                    }
+                                                                )
+                                                            }
                                                         )
-                                                        updateRouteParams(room)
                                                     }}
                                                 >
-                                                    <Text style={styles.text1}>
+                                                    <Text
+                                                        style={styles.roomText}
+                                                    >
                                                         {room}
                                                     </Text>
                                                 </Pressable>
@@ -353,6 +370,10 @@ const stylesheet = createStyleSheet((theme) => ({
     roomContainer: {
         display: 'flex',
         flexDirection: 'row',
+    },
+    roomText: {
+        color: theme.colors.primary,
+        fontSize: 18,
     },
     text1: {
         color: theme.colors.text,

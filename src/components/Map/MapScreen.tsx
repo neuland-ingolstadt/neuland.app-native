@@ -9,7 +9,7 @@ import ErrorView from '@/components/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
-import { RouteParamsContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
@@ -38,7 +38,7 @@ import MapLibreGL, {
 } from '@maplibre/maplibre-react-native'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
-import { useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import {
     type Feature,
     type FeatureCollection,
@@ -84,9 +84,8 @@ const MapScreen = (): JSX.Element => {
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const { styles, theme } = useStyles(stylesheet)
     const isDark = UnistylesRuntime.themeName === 'dark'
-
+    const params = useLocalSearchParams<{ room: string }>()
     const { userKind, userFaculty } = useContext(UserKindContext)
-    const { routeParams, updateRouteParams } = useContext(RouteParamsContext)
     const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
     const { t, i18n } = useTranslation('common')
     const bottomSheetRef = useRef<BottomSheet>(null)
@@ -340,8 +339,13 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         if (
-            routeParams === null ||
-            routeParams === '' ||
+            params.room == null ||
+            params.room === '' ||
+            params.room === undefined
+        ) {
+            return
+        }
+        if (
             allRooms == null ||
             allRooms.features.length === 0 ||
             mapLoadState !== LoadingState.LOADED
@@ -350,23 +354,23 @@ const MapScreen = (): JSX.Element => {
         }
 
         const room = allRooms.features.find(
-            (x) => x.properties?.Raum === routeParams
+            (x) => x.properties?.Raum === params.room
         )?.properties
 
         if (room == null) {
-            roomNotFoundToast(routeParams, theme.colors.notification)
-            updateRouteParams('')
+            roomNotFoundToast(params.room, theme.colors.notification)
+            router.setParams({ room: '' })
             return
         }
-
+        bottomSheetRef.current?.close()
         setClickedElement({
-            data: routeParams,
+            data: params.room,
             type: SEARCH_TYPES.ROOM,
             center: room.center,
             manual: false,
         })
         trackEvent('Room', {
-            room: routeParams,
+            room: params.room,
             origin: 'InAppLink',
         })
         setCurrentFloor({
@@ -375,8 +379,8 @@ const MapScreen = (): JSX.Element => {
         })
         handlePresentModalPress()
 
-        updateRouteParams('')
-    }, [routeParams, mapLoadState, allRooms])
+        router.setParams({ room: '' })
+    }, [params, mapLoadState, allRooms])
 
     useEffect(() => {
         setMapCenter(
@@ -387,8 +391,8 @@ const MapScreen = (): JSX.Element => {
     }, [userFaculty])
 
     useEffect(() => {
-        if (localSearch?.length === 1) {
-            updateRouteParams('')
+        if (localSearch?.length === 1 && params.room != null) {
+            router.setParams(undefined)
         }
     }, [localSearch])
 

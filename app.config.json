@@ -4,7 +4,7 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.10.2",
+        "version": "0.11.0",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
         "ios": {
@@ -23,17 +23,8 @@
                 "RCTAsyncStorageExcludeFromBackup": false,
                 "CFBundleAllowMixedLocalizations": true,
                 "CFBundleDevelopmentRegion": "en",
-                "UIViewControllerBasedStatusBarAppearance": true,
+                "UIViewControllerBasedStatusBarAppearance": false,
                 "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
-            },
-            "splash": {
-                "image": "./src/assets/splash/splashLight.png",
-                "resizeMode": "contain",
-                "backgroundColor": "#ffffff",
-                "dark": {
-                    "image": "./src/assets/splash/splashDark.png",
-                    "backgroundColor": "#000000"
-                }
             },
             "icon": "./src/assets/appIcons/default.png"
         },
@@ -41,24 +32,12 @@
             "en": "./src/localization/en/ios.json",
             "de": "./src/localization/de/ios.json"
         },
-        "androidStatusBar": {
-            "translucent": true
-        },
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 195,
-            "splash": {
-                "image": "./src/assets/splash/splashLight.png",
-                "resizeMode": "contain",
-                "backgroundColor": "#ffffff",
-                "dark": {
-                    "backgroundColor": "#000000",
-                    "image": "./src/assets/splash/splashDark.png"
-                }
-            }
+            "versionCode": 218
         },
-        "sdkVersion": "51.0.0",
+        "sdkVersion": "52.0.0",
         "experiments": {
             "tsconfigPaths": true
         },
@@ -78,11 +57,30 @@
                 }
             ],
             ["@maplibre/maplibre-react-native"],
-            ["expo-build-properties"],
+            [
+                "expo-build-properties",
+                {
+                    "ios": {
+                        "deploymentTarget": "15.1"
+                    }
+                }
+            ],
             [
                 "expo-screen-orientation",
                 {
                     "initialOrientation": "DEFAULT"
+                }
+            ],
+            [
+                "expo-splash-screen",
+                {
+                    "backgroundColor": "#ffffff",
+                    "image": "./src/assets/splash/splashIconDark.png",
+                    "dark": {
+                        "image": "./src/assets/splash/splashIconLight.png",
+                        "backgroundColor": "#000000"
+                    },
+                    "imageWidth": 200
                 }
             ]
         ],

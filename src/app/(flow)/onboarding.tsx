@@ -71,14 +71,17 @@ export default function OnboardingScreen(): JSX.Element {
             <Pressable
                 style={styles.button}
                 onPress={() => {
+                    console.log('ContinueButton')
                     if (Platform.OS === 'ios') {
                         void Haptics.selectionAsync()
                     }
                     flow.setOnboarded(true)
                     flow.setUpdated(true)
                     flow.setAnalyticsAllowed(true)
-                    router.navigate('login')
-                    router.setParams({ fromOnboarding: 'true' })
+                    router.navigate({
+                        pathname: '(screens)/login',
+                        params: { fromOnboarding: 'true' },
+                    })
                 }}
                 disabled={buttonDisabled}
             >

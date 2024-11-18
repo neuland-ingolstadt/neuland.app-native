@@ -107,7 +107,12 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     ),
                                 ]}
                             >
-                                <Text style={styles.buttonText(true)}>
+                                <Text
+                                    style={styles.buttonText(
+                                        true,
+                                        currentFloor?.floor === floor
+                                    )}
+                                >
                                     {floor === 'EG' ? '0' : floor}
                                 </Text>
                             </View>
@@ -182,10 +187,13 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: current ? theme.colors.primary : theme.colors.card,
         borderBottomWidth: floor ? 0 : 1,
     }),
-    buttonText: (open: boolean) => ({
+    buttonText: (open: boolean, current: boolean) => ({
         fontWeight: '500',
         fontSize: 15,
-        color: open ? getContrastColor(theme.colors.text) : theme.colors.text,
+        color:
+            open && current
+                ? getContrastColor(theme.colors.text)
+                : theme.colors.text,
     }),
     icon: {
         color: theme.colors.labelColor,

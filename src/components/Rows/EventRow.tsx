@@ -25,8 +25,10 @@ const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
             'base64'
         )
-        router.navigate('clEvent')
-        router.setParams({ clEventEntry: base64Event })
+        router.navigate({
+            pathname: 'clEvent',
+            params: { clEventEntry: base64Event },
+        })
     }
     return (
         <RowEntry

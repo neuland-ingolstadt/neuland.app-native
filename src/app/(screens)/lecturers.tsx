@@ -449,7 +449,7 @@ export default function LecturersCard(): JSX.Element {
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
                 ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 10,
+                marginTop: Platform.OS === 'ios' ? headerHeight + 10 : 10,
             }}
         >
             {userKind === USER_GUEST ? (

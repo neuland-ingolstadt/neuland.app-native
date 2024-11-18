@@ -4,6 +4,11 @@ import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import {
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
+} from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useSegments } from 'expo-router'
@@ -23,7 +28,6 @@ import {
     useFlow,
     useFoodFilter,
     usePreferences,
-    useRouteParams,
     useTheme,
     useUserKind,
 } from '../contexts'
@@ -33,7 +37,6 @@ import {
     FlowContext,
     FoodFilterContext,
     PreferencesContext,
-    RouteParamsContext,
     ThemeContext,
     UserKindContext,
 } from './contexts'
@@ -72,7 +75,6 @@ export default function Provider({
     const themeHook = useTheme()
     const dashboard = useDashboard()
     const flow = useFlow()
-    const routeParams = useRouteParams()
     const preferences = usePreferences()
     const segments = useSegments()
 
@@ -248,9 +250,6 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-        console.log('themeHook.theme', themeHook.theme)
-        console.log('Appearance.getColorScheme()', Appearance.getColorScheme())
-
         if (themeHook.theme === 'dark') {
             Appearance.setColorScheme('dark')
             UnistylesRuntime.setAdaptiveThemes(false)
@@ -275,31 +274,35 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: syncStoragePersister }}
             >
-                <ThemeContext.Provider value={themeHook}>
-                    <PreferencesContext.Provider value={preferences}>
-                        <BottomSheetModalProvider>
-                            <FlowContext.Provider value={flow}>
-                                <UserKindContext.Provider value={userKind}>
-                                    <FoodFilterContext.Provider
-                                        value={foodFilter}
-                                    >
-                                        <DashboardContext.Provider
-                                            value={dashboard}
+                <ThemeProvider
+                    value={
+                        UnistylesRuntime.themeName === 'dark'
+                            ? DarkTheme
+                            : DefaultTheme
+                    }
+                >
+                    <ThemeContext.Provider value={themeHook}>
+                        <PreferencesContext.Provider value={preferences}>
+                            <BottomSheetModalProvider>
+                                <FlowContext.Provider value={flow}>
+                                    <UserKindContext.Provider value={userKind}>
+                                        <FoodFilterContext.Provider
+                                            value={foodFilter}
                                         >
-                                            <RouteParamsContext.Provider
-                                                value={routeParams}
+                                            <DashboardContext.Provider
+                                                value={dashboard}
                                             >
                                                 <SafeAreaProvider>
                                                     {children}
                                                 </SafeAreaProvider>
-                                            </RouteParamsContext.Provider>
-                                        </DashboardContext.Provider>
-                                    </FoodFilterContext.Provider>
-                                </UserKindContext.Provider>
-                            </FlowContext.Provider>
-                        </BottomSheetModalProvider>
-                    </PreferencesContext.Provider>
-                </ThemeContext.Provider>
+                                            </DashboardContext.Provider>
+                                        </FoodFilterContext.Provider>
+                                    </UserKindContext.Provider>
+                                </FlowContext.Provider>
+                            </BottomSheetModalProvider>
+                        </PreferencesContext.Provider>
+                    </ThemeContext.Provider>
+                </ThemeProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )

@@ -31,7 +31,7 @@ Neuland Next ist für alle gängigen Plattformen verfügbar. Du kannst die App i
 Die App ist für iOS und iPadOS verfügbar. Du kannst die App im Apple App Store herunterladen.
 
 ::: info Hinweis
-Die minimal erforderliche iOS-Version ist 13.4 und kann nicht außerhalb der Europäischen Union installiert werden.
+Die minimal erforderliche iOS-Version ist 15.1 und kann nicht außerhalb der Europäischen Union installiert werden.
 :::
 
 ## Android
@@ -39,7 +39,7 @@ Die minimal erforderliche iOS-Version ist 13.4 und kann nicht außerhalb der Eur
 Die App ist für Android-Telefone und -Tablets verfügbar. Du kannst die App im Google Play Store herunterladen.
 
 ::: info Hinweis
-Die minimal erforderliche Android-Version ist 6.0 und kann nicht außerhalb der Europäischen Union installiert werden.
+Die minimal erforderliche Android-Version ist 7.0 und kann nicht außerhalb der Europäischen Union installiert werden.
 :::
 
 Eine Version für F-Droid ist für die Zukunft geplant. Bleib dran für Updates.

@@ -2,15 +2,9 @@ import { type Dashboard } from '@/contexts/dashboard'
 import { type FlowHook } from '@/contexts/flow'
 import { type FoodFilter } from '@/contexts/foodFilter'
 import { type PreferencesType } from '@/contexts/preferences'
-import { type RouteParams } from '@/contexts/routing'
 import { type ThemeHook } from '@/contexts/theme'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { createContext } from 'react'
-
-export const RouteParamsContext = createContext<RouteParams>({
-    routeParams: '',
-    updateRouteParams: () => {},
-})
 
 export const FoodFilterContext = createContext<FoodFilter>({
     allergenSelection: [],
