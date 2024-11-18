@@ -276,7 +276,9 @@ export default function Provider({
             >
                 <ThemeProvider
                     value={
-                        themeHook.theme === 'dark' ? DarkTheme : DefaultTheme
+                        UnistylesRuntime.themeName === 'dark'
+                            ? DarkTheme
+                            : DefaultTheme
                     }
                 >
                     <ThemeContext.Provider value={themeHook}>
