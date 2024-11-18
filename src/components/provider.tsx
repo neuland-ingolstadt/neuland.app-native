@@ -245,9 +245,6 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-        console.log('themeHook.theme', themeHook.theme)
-        console.log('Appearance.getColorScheme()', Appearance.getColorScheme())
-
         if (themeHook.theme === 'dark') {
             Appearance.setColorScheme('dark')
             UnistylesRuntime.setAdaptiveThemes(false)
