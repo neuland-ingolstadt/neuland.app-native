@@ -5,6 +5,7 @@ import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
 import { getLocales } from 'expo-localization'
+import * as NavigationBar from 'expo-navigation-bar'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
@@ -29,6 +30,13 @@ function RootLayout(): JSX.Element {
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
 
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+            void NavigationBar.setPositionAsync('absolute')
+            // transparent backgrounds to see through
+            void NavigationBar.setBackgroundColorAsync('#ffffff00')
+        }
+    }, [])
     useEffect(() => {
         if (isPad) {
             void ScreenOrientation.unlockAsync()

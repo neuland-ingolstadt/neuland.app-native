@@ -167,7 +167,7 @@ export const IndexHeaderRight = (): JSX.Element => {
 
     const MemoIcon = React.useMemo(
         () => <IconComponent />,
-        [userKind, initials, showLoadingIndicator]
+        [userKind, initials, showLoadingIndicator, theme.colors]
     )
     const PlatformMenu = ({
         children,
