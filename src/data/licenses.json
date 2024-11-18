@@ -53,7 +53,7 @@
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-navigation/stack@7.0.3": {
+    "@react-navigation/stack@7.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
