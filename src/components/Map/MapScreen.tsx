@@ -362,8 +362,7 @@ const MapScreen = (): JSX.Element => {
             router.setParams({ room: '' })
             return
         }
-        console.log('Room found', params.room)
-
+        bottomSheetRef.current?.close()
         setClickedElement({
             data: params.room,
             type: SEARCH_TYPES.ROOM,

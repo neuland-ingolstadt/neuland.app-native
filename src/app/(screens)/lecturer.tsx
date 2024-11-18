@@ -5,7 +5,13 @@ import { Buffer } from 'buffer/'
 import { router, useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Text, View } from 'react-native'
+import {
+    InteractionManager,
+    Linking,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): JSX.Element {
@@ -68,9 +74,13 @@ export default function LecturerDetail(): JSX.Element {
                     disabled: lecturer?.room_short === '',
                     textColor: theme.colors.primary,
                     onPress: () => {
-                        router.replace({
-                            pathname: '(tabs)/map',
-                            params: { room: lecturer?.room_short ?? '' },
+                        router.dismissAll()
+                        // Wait for the screen to dismiss before navigating
+                        void InteractionManager.runAfterInteractions(() => {
+                            router.navigate({
+                                pathname: '(tabs)/map',
+                                params: { room: lecturer?.room_short ?? '' },
+                            })
                         })
                     },
                 },

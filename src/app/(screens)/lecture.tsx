@@ -21,7 +21,14 @@ import {
 import moment from 'moment'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView, Share, Text, View } from 'react-native'
+import {
+    InteractionManager,
+    Pressable,
+    ScrollView,
+    Share,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
@@ -243,10 +250,20 @@ export default function TimetableDetails(): JSX.Element {
                                             <React.Fragment key={i}>
                                                 <Pressable
                                                     onPress={() => {
-                                                        router.replace({
-                                                            pathname: 'map',
-                                                            params: { room },
-                                                        })
+                                                        router.dismissAll()
+                                                        void InteractionManager.runAfterInteractions(
+                                                            () => {
+                                                                router.navigate(
+                                                                    {
+                                                                        pathname:
+                                                                            '(tabs)/map',
+                                                                        params: {
+                                                                            room,
+                                                                        },
+                                                                    }
+                                                                )
+                                                            }
+                                                        )
                                                     }}
                                                 >
                                                     <Text
