@@ -24,7 +24,6 @@ import {
 export const unstable_settings = {
     initialRouteName: '(index)',
 }
-
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['navigation'])
@@ -137,6 +136,7 @@ function RootLayout(): JSX.Element {
                     name="(screens)/settings"
                     options={{
                         title: t('navigation.settings'),
+                        animation: 'fade',
                     }}
                 />
                 <Stack.Screen

@@ -4,6 +4,11 @@ import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import {
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
+} from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useSegments } from 'expo-router'
@@ -269,27 +274,33 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: syncStoragePersister }}
             >
-                <ThemeContext.Provider value={themeHook}>
-                    <PreferencesContext.Provider value={preferences}>
-                        <BottomSheetModalProvider>
-                            <FlowContext.Provider value={flow}>
-                                <UserKindContext.Provider value={userKind}>
-                                    <FoodFilterContext.Provider
-                                        value={foodFilter}
-                                    >
-                                        <DashboardContext.Provider
-                                            value={dashboard}
+                <ThemeProvider
+                    value={
+                        themeHook.theme === 'dark' ? DarkTheme : DefaultTheme
+                    }
+                >
+                    <ThemeContext.Provider value={themeHook}>
+                        <PreferencesContext.Provider value={preferences}>
+                            <BottomSheetModalProvider>
+                                <FlowContext.Provider value={flow}>
+                                    <UserKindContext.Provider value={userKind}>
+                                        <FoodFilterContext.Provider
+                                            value={foodFilter}
                                         >
-                                            <SafeAreaProvider>
-                                                {children}
-                                            </SafeAreaProvider>
-                                        </DashboardContext.Provider>
-                                    </FoodFilterContext.Provider>
-                                </UserKindContext.Provider>
-                            </FlowContext.Provider>
-                        </BottomSheetModalProvider>
-                    </PreferencesContext.Provider>
-                </ThemeContext.Provider>
+                                            <DashboardContext.Provider
+                                                value={dashboard}
+                                            >
+                                                <SafeAreaProvider>
+                                                    {children}
+                                                </SafeAreaProvider>
+                                            </DashboardContext.Provider>
+                                        </FoodFilterContext.Provider>
+                                    </UserKindContext.Provider>
+                                </FlowContext.Provider>
+                            </BottomSheetModalProvider>
+                        </PreferencesContext.Provider>
+                    </ThemeContext.Provider>
+                </ThemeProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )

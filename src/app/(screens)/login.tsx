@@ -99,7 +99,7 @@ export default function Login(): JSX.Element {
             router.replace('(tabs)/(index)')
             return
         }
-        router.navigate('(tabs)/(index)')
+        router.dismissAll()
     }
 
     useEffect(() => {

@@ -91,7 +91,7 @@ android {
         applicationId 'app.neuland'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 211
+        versionCode 212
         versionName "0.10.2"
     }
     signingConfigs {
