@@ -155,23 +155,23 @@ export default function HomeLayout(): JSX.Element {
     }, [appIcon])
 
     if (isOnboarded !== true) {
-        return <Redirect href={'onboarding'} />
+        return <Redirect href={'(flow)/onboarding'} />
     }
 
     const version = Application.nativeApplicationVersion
+    const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
     const isChangelogAvailable =
         version != null
             ? Object.keys(changelog.version).some(
-                  (version) => version === convertToMajorMinorPatch(version)
+                  (changelogVersion) => changelogVersion === processedVersion
               )
             : false
-
     if (
         flow.isUpdated !== true &&
         isChangelogAvailable &&
         flow.isOnboarded === true
     ) {
-        router.navigate('(flow)/whatsnew')
+        return <Redirect href={'(flow)/whatsnew'} />
     }
 
     return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />

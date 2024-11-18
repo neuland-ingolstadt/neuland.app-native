@@ -133,6 +133,50 @@
                     "android": "bug_report"
                 }
             }
+        ],
+        "0.11": [
+            {
+                "title": {
+                    "de": "Hochschulsport",
+                    "en": "University Sports"
+                },
+                "description": {
+                    "de": "Finde alle Hochschulsport Angebote auf einen Blick in der neuen Events & Sport Ansicht.",
+                    "en": "Find all university sports offers at a glance in the new Events & Sports view."
+                },
+                "icon": {
+                    "ios": "dumbbell",
+                    "android": "exercise"
+                }
+            },
+            {
+                "title": {
+                    "de": "Weitere Quick Links",
+                    "en": "More Quick Links"
+                },
+                "description": {
+                    "de": "Klicke auf die Karte, um weitere Quick Links aufzurufen und deine Lieblingslinks anzupassen.",
+                    "en": "Click on the card to access more quick links and customize your favorite links."
+                },
+                "icon": {
+                    "ios": "link",
+                    "android": "captive_portal"
+                }
+            },
+            {
+                "title": {
+                    "de": "Fehlerbehebungen",
+                    "en": "Bug Fixes"
+                },
+                "description": {
+                    "de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
+                    "en": "Many small bugs have been fixed to make the app even better."
+                },
+                "icon": {
+                    "ios": "hammer",
+                    "android": "bug_report"
+                }
+            }
         ]
     }
 }

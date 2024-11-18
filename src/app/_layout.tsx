@@ -14,11 +14,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, StatusBar } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import {
-    UnistylesRuntime,
-    createStyleSheet,
-    useStyles,
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -85,7 +81,6 @@ function RootLayout(): JSX.Element {
         }
     }, [])
     const { styles, theme } = useStyles(stylesheet)
-    console.log('UnistylesRuntime.themeName', UnistylesRuntime.themeName)
     return (
         <>
             <Head>
@@ -417,11 +412,7 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         gestureEnabled: false,
-                        ...Platform.select({
-                            ios: {
-                                presentation: 'formSheet',
-                            },
-                        }),
+                        animation: 'fade_from_bottom',
                     }}
                 />
             </Stack>
