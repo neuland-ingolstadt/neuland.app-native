@@ -288,7 +288,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         justifyContent: 'center',
         marginHorizontal: theme.margins.page,
-        paddingBottom: 64,
+        paddingBottom: theme.margins.bottomSafeArea,
         width: '100%',
     },
     locationButtonContainer: {

@@ -185,6 +185,7 @@ export default function CalendarPage(): JSX.Element {
                             />
                         }
                         scrollEventThrottle={16}
+                        scrollEnabled={!isError}
                     >
                         {isLoading ? (
                             <LoadingIndicator />

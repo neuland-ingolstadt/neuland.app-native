@@ -7,7 +7,6 @@ import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
-import { useTheme } from '@react-navigation/native'
 import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -39,7 +38,6 @@ export default function DashboardEdit(): JSX.Element {
         resetOrder,
         updateDashboardOrder,
     } = useContext(DashboardContext)
-    const isDark = useTheme().dark
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
@@ -359,11 +357,6 @@ export default function DashboardEdit(): JSX.Element {
                                                         />
                                                     ) : (
                                                         <PlatformIcon
-                                                            color={
-                                                                isDark
-                                                                    ? 'white'
-                                                                    : 'black'
-                                                            }
                                                             ios={{
                                                                 name: 'plus.circle',
                                                                 variant: 'fill',
@@ -373,6 +366,9 @@ export default function DashboardEdit(): JSX.Element {
                                                                 name: 'add_circle',
                                                                 size: 24,
                                                             }}
+                                                            style={
+                                                                styles.restoreIcon
+                                                            }
                                                         />
                                                     )}
                                                 </View>
@@ -561,6 +557,9 @@ const stylesheet = createStyleSheet((theme) => ({
             ? theme.colors.labelColor
             : theme.colors.text,
     }),
+    restoreIcon: {
+        color: theme.colors.text,
+    },
     row: {
         alignItems: 'center',
         backgroundColor: theme.colors.card,

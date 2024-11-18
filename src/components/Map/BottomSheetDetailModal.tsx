@@ -133,7 +133,7 @@ export const BottomSheetDetailModal = ({
                                         }}
                                         android={{
                                             name: 'expand_more',
-                                            size: 21,
+                                            size: 22,
                                         }}
                                         style={styles.xIcon(Platform.OS)}
                                     />
@@ -208,7 +208,6 @@ const stylesheet = createStyleSheet((theme) => ({
     }),
     xIcon: (platform) => ({
         color: Color(theme.colors.text).darken(0.1).hex(),
-        marginRight: platform === 'android' ? 2 : 0,
         marginTop: platform === 'ios' ? 1 : 0,
     }),
 }))

@@ -30,6 +30,9 @@ export default function WhatsNewScreen(): JSX.Element {
     const version = convertToMajorMinorPatch(
         Application.nativeApplicationVersion ?? '0.0.0'
     )
+    if (changelog.version[version] === undefined) {
+        router.navigate('(tabs)/(index)')
+    }
     const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
         (key) => changelog.version[key]
     ).length

@@ -29,7 +29,7 @@ Neuland Next is availabe for all common platforms. You can download the app from
 The app is available for iOS and iPadOS. You can download the app from the Apple App Store.
 
 ::: info Note
-The minimum required iOS version is 13.4 and can not be installed outside the European Union.
+The minimum required iOS version is 15.1 and can not be installed outside the European Union.
 :::
 
 ## Android
@@ -37,7 +37,7 @@ The minimum required iOS version is 13.4 and can not be installed outside the Eu
 The app is available for Android phones and tablets. You can download the app from the Google Play Store.
 
 ::: info Note
-The minimum required Android version is 6.0 and can not be installed outside the European Union.
+The minimum required Android version is 7.0 and can not be installed outside the European Union.
 :::
 
 The F-Droid version is planned to be released in the future. Stay tuned for updates.

@@ -1,5 +1,4 @@
 import PlatformIcon from '@/components/Universal/Icon'
-import { type Theme } from '@react-navigation/native'
 import Color from 'color'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +11,7 @@ import {
 
 import MaterialBottomTabs from './MaterialTabbar'
 
-const MaterialTabs = ({ theme }: { theme: Theme }): JSX.Element => {
+const MaterialTabs = (): JSX.Element => {
     const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 

@@ -10,7 +10,6 @@ import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
-import { type Theme, useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import * as NavigationBar from 'expo-navigation-bar'
 import { Redirect, useRouter } from 'expo-router'
@@ -30,7 +29,6 @@ declare const process: {
 }
 
 export default function HomeLayout(): JSX.Element {
-    const theme: Theme = useTheme()
     const router = useRouter()
     const flow = React.useContext(FlowContext)
     const { t } = useTranslation('navigation')
@@ -113,8 +111,10 @@ export default function HomeLayout(): JSX.Element {
                   ]),
         ]
         function processShortcut(item: ShortcutItem): void {
-            router.navigate(item.data.path as string)
-            router.setParams({ fromAppShortcut: 'true' })
+            router.navigate({
+                pathname: item.data.path as string,
+                params: { fromAppShortcut: 'true' },
+            })
         }
 
         const shortcutSubscription =
@@ -155,28 +155,24 @@ export default function HomeLayout(): JSX.Element {
     }, [appIcon])
 
     if (isOnboarded !== true) {
-        return <Redirect href={'onboarding'} />
+        return <Redirect href={'(flow)/onboarding'} />
     }
 
     const version = Application.nativeApplicationVersion
+    const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
     const isChangelogAvailable =
         version != null
             ? Object.keys(changelog.version).some(
-                  (version) => version === convertToMajorMinorPatch(version)
+                  (changelogVersion) => changelogVersion === processedVersion
               )
             : false
-
     if (
         flow.isUpdated !== true &&
         isChangelogAvailable &&
         flow.isOnboarded === true
     ) {
-        router.navigate('(flow)/whatsnew')
+        return <Redirect href={'(flow)/whatsnew'} />
     }
 
-    return Platform.OS === 'android' ? (
-        <MaterialTabs theme={theme} />
-    ) : (
-        <DefaultTabs theme={theme} />
-    )
+    return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />
 }

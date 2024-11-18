@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { type HeaderButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +12,7 @@ export interface WorkaroundStackProps {
     transparent?: boolean
     largeTitle?: boolean
     headerSearchBarOptions?: any
-    headerRightElement?: ((props: HeaderButtonProps) => ReactNode) | undefined
+    headerRightElement?: ((props: any) => ReactNode) | undefined
     params?: any
     androidFallback?: boolean
 }

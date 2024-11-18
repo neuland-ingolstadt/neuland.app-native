@@ -112,6 +112,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         justifyContent: 'center',
         marginHorizontal: theme.margins.page,
+        paddingBottom: theme.margins.bottomSafeArea,
         width: '100%',
     },
     page: {

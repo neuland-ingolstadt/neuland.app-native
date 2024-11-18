@@ -1,5 +1,4 @@
 import PlatformIcon from '@/components/Universal/Icon'
-import { type Theme } from '@react-navigation/native'
 import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
 import React from 'react'
@@ -11,7 +10,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
+const DefaultTabs = (): JSX.Element => {
     const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     const BlurTab = (): JSX.Element => (
@@ -43,7 +42,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 ios={{
                                     name: 'house',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'home',
@@ -71,7 +70,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 ios={{
                                     name: 'clock',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'calendar_month',
@@ -98,7 +97,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                                 ios={{
                                     name: 'map',
                                     variant: 'fill',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'map',
@@ -122,7 +121,7 @@ const DefaultTabs = ({ theme }: { theme: Theme }): JSX.Element => {
                             <PlatformIcon
                                 ios={{
                                     name: 'fork.knife',
-                                    size: size - 2,
+                                    size: size - 4,
                                 }}
                                 android={{
                                     name: 'restaurant',

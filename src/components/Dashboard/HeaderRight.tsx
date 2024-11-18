@@ -103,6 +103,72 @@ export const IndexHeaderRight = (): JSX.Element => {
         )
     }
 
+    const IconComponent = (): JSX.Element => {
+        return (
+            <PlatformMenu>
+                {userKind === USER_EMPLOYEE ? (
+                    <Avatar size={28}>
+                        <Text
+                            style={{
+                                color: getContrastColor(theme.colors.primary),
+                                ...styles.iconText,
+                            }}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                        >
+                            {getInitials((username as string) ?? '')}
+                        </Text>
+                    </Avatar>
+                ) : userKind === USER_GUEST || isError ? (
+                    <PlatformIcon
+                        ios={{
+                            name: 'person.crop.circle',
+                            size: 24,
+                        }}
+                        android={{
+                            name: 'account_circle',
+                            size: 26,
+                        }}
+                        style={styles.icon}
+                    />
+                ) : userKind === USER_STUDENT &&
+                  isSuccess &&
+                  persData?.mtknr === undefined ? (
+                    <PlatformIcon
+                        ios={{
+                            name: 'person.crop.circle.badge.exclamationmark',
+                            size: 24,
+                        }}
+                        android={{
+                            name: 'account_circle_off',
+                            size: 26,
+                        }}
+                        style={styles.icon}
+                    />
+                ) : initials !== '' || !showLoadingIndicator ? (
+                    <Avatar size={28}>
+                        <Text
+                            style={{
+                                color: getContrastColor(theme.colors.primary),
+                                ...styles.iconText,
+                            }}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                        >
+                            {initials}
+                        </Text>
+                    </Avatar>
+                ) : (
+                    <LoadingIndicator style={styles.center} />
+                )}
+            </PlatformMenu>
+        )
+    }
+
+    const MemoIcon = React.useMemo(
+        () => <IconComponent />,
+        [userKind, initials, showLoadingIndicator, theme.colors]
+    )
     const PlatformMenu = ({
         children,
     }: {
@@ -198,63 +264,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                 paddingRight: androidPadding,
             }}
         >
-            <PlatformMenu>
-                {userKind === USER_EMPLOYEE ? (
-                    <Avatar size={28}>
-                        <Text
-                            style={{
-                                color: getContrastColor(theme.colors.primary),
-                                ...styles.iconText,
-                            }}
-                            numberOfLines={1}
-                            adjustsFontSizeToFit={true}
-                        >
-                            {getInitials((username as string) ?? '')}
-                        </Text>
-                    </Avatar>
-                ) : userKind === USER_GUEST || isError ? (
-                    <PlatformIcon
-                        ios={{
-                            name: 'person.crop.circle',
-                            size: 24,
-                        }}
-                        android={{
-                            name: 'account_circle',
-                            size: 26,
-                        }}
-                        style={styles.icon}
-                    />
-                ) : userKind === USER_STUDENT &&
-                  isSuccess &&
-                  persData?.mtknr === undefined ? (
-                    <PlatformIcon
-                        ios={{
-                            name: 'person.crop.circle.badge.exclamationmark',
-                            size: 24,
-                        }}
-                        android={{
-                            name: 'account_circle_off',
-                            size: 26,
-                        }}
-                        style={styles.icon}
-                    />
-                ) : initials !== '' || !showLoadingIndicator ? (
-                    <Avatar size={28}>
-                        <Text
-                            style={{
-                                color: getContrastColor(theme.colors.primary),
-                                ...styles.iconText,
-                            }}
-                            numberOfLines={1}
-                            adjustsFontSizeToFit={true}
-                        >
-                            {initials}
-                        </Text>
-                    </Avatar>
-                ) : (
-                    <LoadingIndicator style={styles.center} />
-                )}
-            </PlatformMenu>
+            {MemoIcon}
         </Pressable>
     )
 }

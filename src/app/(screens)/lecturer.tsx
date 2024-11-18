@@ -1,20 +1,27 @@
 import FormList from '@/components/Universal/FormList'
-import { RouteParamsContext } from '@/components/contexts'
 import { type FormListSections } from '@/types/components'
 import { type NormalizedLecturer } from '@/types/utils'
+import { Buffer } from 'buffer/'
 import { router, useLocalSearchParams } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Text, View } from 'react-native'
+import {
+    InteractionManager,
+    Linking,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const { lecturerEntry } = useLocalSearchParams<{ lecturerEntry: string }>()
     const lecturer: NormalizedLecturer | undefined =
-        lecturerEntry != null ? JSON.parse(lecturerEntry) : undefined
+        lecturerEntry != null
+            ? JSON.parse(Buffer.from(lecturerEntry, 'base64').toString())
+            : undefined
     const { t } = useTranslation('common')
-    const { updateRouteParams } = useContext(RouteParamsContext)
 
     const validEmail =
         lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false)
@@ -67,8 +74,14 @@ export default function LecturerDetail(): JSX.Element {
                     disabled: lecturer?.room_short === '',
                     textColor: theme.colors.primary,
                     onPress: () => {
-                        updateRouteParams(lecturer?.room_short ?? '')
-                        router.navigate('(tabs)/map')
+                        router.dismissAll()
+                        // Wait for the screen to dismiss before navigating
+                        void InteractionManager.runAfterInteractions(() => {
+                            router.navigate({
+                                pathname: '(tabs)/map',
+                                params: { room: lecturer?.room_short ?? '' },
+                            })
+                        })
                     },
                 },
                 {

@@ -17,8 +17,10 @@ const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
             'base64'
         )
-        router.navigate('sportsEvent')
-        router.setParams({ sportsEventEntry: base64Event })
+        router.navigate({
+            pathname: 'sportsEvent',
+            params: { sportsEventEntry: base64Event },
+        })
     }
 
     return (

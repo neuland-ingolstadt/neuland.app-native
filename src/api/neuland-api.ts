@@ -4,7 +4,7 @@ import { gql, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -66,7 +66,7 @@ class NeulandAPIClient {
     async getFoodPlan(locations: string[]): Promise<any> {
         return await this.performGraphQLQuery(gql`
             query {
-                food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
+                food(locations: [${locations.map((x) => x).join(',')}]) {
                     foodData {
                         timestamp
                         meals {
