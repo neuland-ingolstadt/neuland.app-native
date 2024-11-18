@@ -4,7 +4,7 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.10.2",
+        "version": "0.11.0",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
         "ios": {
@@ -35,7 +35,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 214
+            "versionCode": 215
         },
         "sdkVersion": "52.0.0",
         "experiments": {
