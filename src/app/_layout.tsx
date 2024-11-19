@@ -1,5 +1,6 @@
 import CrashView from '@/components/Error/CrashView'
 import PlatformIcon from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
@@ -182,6 +183,9 @@ function RootLayout(): JSX.Element {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -193,6 +197,9 @@ function RootLayout(): JSX.Element {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -292,6 +299,9 @@ function RootLayout(): JSX.Element {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -303,6 +313,9 @@ function RootLayout(): JSX.Element {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
