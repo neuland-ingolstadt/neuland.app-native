@@ -14,18 +14,18 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.3):
     - ExpoModulesCore
-  - Expo (52.0.7):
+  - Expo (52.0.8):
     - ExpoModulesCore
-  - expo-dev-client (5.0.2):
+  - expo-dev-client (5.0.3):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (5.0.14):
+  - expo-dev-launcher (5.0.15):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 5.0.14)
+    - expo-dev-launcher/Main (= 5.0.15)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -51,7 +51,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (5.0.14):
+  - expo-dev-launcher/Main (5.0.15):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -80,7 +80,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (5.0.14):
+  - expo-dev-launcher/Unsafe (5.0.15):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -231,13 +231,13 @@ PODS:
     - ExpoModulesCore
   - ExpoClipboard (7.0.0):
     - ExpoModulesCore
-  - ExpoFileSystem (18.0.3):
+  - ExpoFileSystem (18.0.4):
     - ExpoModulesCore
   - ExpoFont (13.0.1):
     - ExpoModulesCore
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
-  - ExpoHead (4.0.6):
+  - ExpoHead (4.0.7):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
@@ -247,7 +247,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (16.0.0):
     - ExpoModulesCore
-  - ExpoModulesCore (2.0.3):
+  - ExpoModulesCore (2.0.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2478,24 +2478,24 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: a883468e03b0234d4787e2c0ae4a65726f13cb05
-  Expo: 46cbe74ce0d0f4a4d7b726e90693eb8dfcec6de0
-  expo-dev-client: 7eb2bb228895757364d5650b3744db4694ee0bf7
-  expo-dev-launcher: 3b0d62ad3fa17ddaaa84ae42c1ed59896dc12fc5
+  Expo: c3e32beff4379726ad2e94068563fa03ae7109b0
+  expo-dev-client: 84a7f4a302387b57388d053900b56611b28b65ee
+  expo-dev-launcher: a94e0934c1c8e607af7596ac659928b8a3d8d2b0
   expo-dev-menu: 3c09f402ac39257bf6cd4ed4f48478020b56838e
   expo-dev-menu-interface: 1495ca112a4961f9fbaf586ae952faaafdbd967b
   ExpoAsset: 8138f2a9ec55ae1ad7c3871448379f7d97692d15
   ExpoBlur: 562b3da84d3cd79016c411671eaf71a404266415
   ExpoBrightness: ce777f6a365592f745428cb0acc9066b400182e8
   ExpoClipboard: 166ca8c13ca1041f5ba619a211f59427ab5da8a7
-  ExpoFileSystem: cc31b7a48031ab565f9eb5c2b61aa08d774a271a
+  ExpoFileSystem: dc2679a2b5d4c465ca881129074da95faee943d5
   ExpoFont: 7522d869d84ee2ee8093ee997fef5b86f85d856b
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
-  ExpoHead: e18c3b28f8e22de7e1f26c085c346a91ea7f459b
+  ExpoHead: 43187036da62330d381a79a34fc37aeaca9530f8
   ExpoKeepAwake: 783e68647b969b210a786047c3daa7b753dcac1f
   ExpoLinearGradient: 7ca3b1d1625a1ab85c129abce4a3cdc78a9500a3
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
-  ExpoModulesCore: 2d1df04dc27f91d8b383c0ec7f1d121e3d9b7f68
+  ExpoModulesCore: 371193c6b17285837f56807f7cac568f07dc4060
   ExpoScreenOrientation: 21f691bc804e35e19e3a2113f7b02393d5bdb5db
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
   ExpoSplashScreen: 26cee50e9e95572baf87cd3a8ccaf2ffc3856422
