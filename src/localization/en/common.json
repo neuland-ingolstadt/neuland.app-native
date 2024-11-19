@@ -110,6 +110,9 @@
                     "subtitle": "After registering for exams, they will appear here."
                 }
             },
+            "events": {
+                "title": "Dates"
+            },
             "calendar": {
                 "link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
                 "noData": {

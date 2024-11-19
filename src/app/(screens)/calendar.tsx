@@ -30,7 +30,10 @@ export default function CalendarPage(): JSX.Element {
     const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const displayTypes = ['Events', t('pages.calendar.exams.title')]
+    const displayTypes = [
+        t('pages.calendar.events.title'),
+        t('pages.calendar.exams.title'),
+    ]
     const [selectedData, setSelectedData] = useState<number>(0)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {

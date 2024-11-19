@@ -110,6 +110,9 @@
                     "subtitle": "Nach der Anmeldung zu Prüfungen werden sie hier angezeigt."
                 }
             },
+            "events": {
+                "title": "Termine"
+            },
             "calendar": {
                 "link": "https://www.thi.de/studium/pruefung/semestertermine/",
                 "noData": {
