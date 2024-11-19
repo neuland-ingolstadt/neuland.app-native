@@ -28,26 +28,37 @@ export default function ShareHeaderButton({
                 }}
                 android={{
                     name: 'share',
-                    size: 18,
+                    size: 20,
                 }}
-                style={Platform.select({
-                    android: {
-                        marginRight: 2,
-                    },
-                    ios: {
-                        marginBottom: 3,
-                    },
-                })}
+                style={styles.icon}
             />
         </Pressable>
     )
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    icon: {
+        ...Platform.select({
+            android: {
+                marginRight: 2,
+                color: theme.colors.text,
+            },
+            ios: {
+                marginBottom: 3,
+                color: theme.colors.primary,
+            },
+        }),
+    },
     shareButton: {
         alignItems: 'center',
-        backgroundColor: theme.colors.background,
-        borderRadius: 25,
+        backgroundColor: Platform.select({
+            android: undefined,
+            ios: theme.colors.background,
+        }),
+        borderRadius: Platform.select({
+            android: undefined,
+            ios: theme.radius.infinite,
+        }),
         height: 34,
         justifyContent: 'center',
         marginRight: -5,
