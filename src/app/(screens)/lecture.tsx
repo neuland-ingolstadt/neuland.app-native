@@ -10,6 +10,7 @@ import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import { type FormListSections, type SectionGroup } from '@/types/components'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
 import {
@@ -145,6 +146,7 @@ export default function TimetableDetails(): JSX.Element {
             ],
         },
     ]
+
     return (
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -246,41 +248,49 @@ export default function TimetableDetails(): JSX.Element {
 
                                 <DetailsBody>
                                     <View style={styles.roomContainer}>
-                                        {lecture.rooms.map((room, i) => (
-                                            <React.Fragment key={i}>
-                                                <Pressable
-                                                    onPress={() => {
-                                                        router.dismissAll()
-                                                        void InteractionManager.runAfterInteractions(
-                                                            () => {
-                                                                router.navigate(
-                                                                    {
-                                                                        pathname:
-                                                                            '(tabs)/map',
-                                                                        params: {
-                                                                            room,
-                                                                        },
-                                                                    }
-                                                                )
-                                                            }
-                                                        )
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={styles.roomText}
+                                        {lecture.rooms.map((room, i) => {
+                                            const isValid = isValidRoom(room)
+                                            return (
+                                                <React.Fragment key={i}>
+                                                    <Pressable
+                                                        onPress={() => {
+                                                            router.dismissAll()
+                                                            void InteractionManager.runAfterInteractions(
+                                                                () => {
+                                                                    router.navigate(
+                                                                        {
+                                                                            pathname:
+                                                                                '(tabs)/map',
+                                                                            params: {
+                                                                                room,
+                                                                            },
+                                                                        }
+                                                                    )
+                                                                }
+                                                            )
+                                                        }}
+                                                        disabled={!isValid}
                                                     >
-                                                        {room}
-                                                    </Text>
-                                                </Pressable>
-                                                {i <
-                                                    lecture.rooms.length -
-                                                        1 && (
-                                                    <Text style={styles.text1}>
-                                                        {', '}
-                                                    </Text>
-                                                )}
-                                            </React.Fragment>
-                                        ))}
+                                                        <Text
+                                                            style={styles.roomText(
+                                                                isValid
+                                                            )}
+                                                        >
+                                                            {room}
+                                                        </Text>
+                                                    </Pressable>
+                                                    {i <
+                                                        lecture.rooms.length -
+                                                            1 && (
+                                                        <Text
+                                                            style={styles.text1}
+                                                        >
+                                                            {', '}
+                                                        </Text>
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        })}
                                     </View>
                                 </DetailsBody>
                             </DetailsRow>
@@ -371,10 +381,10 @@ const stylesheet = createStyleSheet((theme) => ({
         display: 'flex',
         flexDirection: 'row',
     },
-    roomText: {
-        color: theme.colors.primary,
+    roomText: (isValid: boolean) => ({
+        color: isValid ? theme.colors.primary : theme.colors.text,
         fontSize: 18,
-    },
+    }),
     text1: {
         color: theme.colors.text,
         fontSize: 18,

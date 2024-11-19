@@ -406,10 +406,10 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     dayHeaderText: (isToday: boolean) => ({
         color: isToday
-            ? theme.colors.primary
-            : Color(theme.colors.primary)
+            ? Color(theme.colors.primary)
                   .darken(UnistylesRuntime.themeName === 'dark' ? 0 : 0.2)
-                  .hex(),
+                  .hex()
+            : theme.colors.text,
         fontSize: 14,
         fontWeight: isToday ? 'bold' : 'normal',
     }),

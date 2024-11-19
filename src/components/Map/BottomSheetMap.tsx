@@ -3,6 +3,7 @@ import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES, type SearchResult } from '@/types/map'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import BottomSheet, {
@@ -439,6 +440,13 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                                     {nextLecture.map((lecture, key) => (
                                         <React.Fragment key={key}>
                                             <Pressable
+                                                disabled={
+                                                    lecture.rooms.length ===
+                                                        0 ||
+                                                    !isValidRoom(
+                                                        lecture.rooms[0]
+                                                    )
+                                                }
                                                 style={styles.suggestionRow}
                                                 onPress={() => {
                                                     const details =
