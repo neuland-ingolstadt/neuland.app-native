@@ -219,6 +219,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                 }
             }}
             enableDynamicSizing={false}
+            handleIndicatorStyle={styles.indicator}
         >
             <BottomSheetView style={styles.page}>
                 <BottomSheetView style={styles.inputContainer}>
@@ -791,12 +792,15 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingVertical: 3,
         width: '100%',
     },
+    indicator: {
+        backgroundColor: theme.colors.labelSecondaryColor,
+    },
+
     inputContainer: {
         flexDirection: 'row',
         height: 40,
         marginBottom: 10,
     },
-
     label: {
         color: theme.colors.labelColor,
     },

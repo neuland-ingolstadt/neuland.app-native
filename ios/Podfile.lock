@@ -296,6 +296,8 @@ PODS:
     - ExpoModulesCore
   - ExpoSplashScreen (0.29.11):
     - ExpoModulesCore
+  - ExpoStoreReview (8.0.0):
+    - ExpoModulesCore
   - ExpoSystemUI (4.0.3):
     - ExpoModulesCore
   - EXUpdatesInterface (1.0.0):
@@ -2072,7 +2074,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.1.0):
+  - RNScreens (4.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2136,6 +2138,7 @@ DEPENDENCIES:
   - ExpoScreenOrientation (from `../node_modules/expo-screen-orientation/ios`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
   - ExpoSplashScreen (from `../node_modules/expo-splash-screen/ios`)
+  - ExpoStoreReview (from `../node_modules/expo-store-review/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2292,6 +2295,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-secure-store/ios"
   ExpoSplashScreen:
     :path: "../node_modules/expo-splash-screen/ios"
+  ExpoStoreReview:
+    :path: "../node_modules/expo-store-review/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
   EXUpdatesInterface:
@@ -2494,6 +2499,7 @@ SPEC CHECKSUMS:
   ExpoScreenOrientation: 21f691bc804e35e19e3a2113f7b02393d5bdb5db
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
   ExpoSplashScreen: 26cee50e9e95572baf87cd3a8ccaf2ffc3856422
+  ExpoStoreReview: f3439c43f13fa497cfe07d16b095f39101ed5548
   ExpoSystemUI: d8fb1abd91c7283d8ead3df77ed0575b85f1bb42
   EXUpdatesInterface: 1dcebac98ac5dad4289e6ff2bd5616822e894397
   FBLazyVector: bc70dcb22ad30ce734a7cce7210791dc737e230f
@@ -2576,7 +2582,7 @@ SPEC CHECKSUMS:
   RNFlashList: 115dd44377580761bff386a0caebf165424cf16f
   RNGestureHandler: 511250b190a284388f9dd0d2e56c1df76f14cfb8
   RNReanimated: 3e6072b3d49d4fc687b8f1ba3022f0fdc0b43969
-  RNScreens: e6f9bc3a41be76af2ba0a815ea299a0000b1c838
+  RNScreens: ae4f97fae3cbc96841668d0d3c0a0b83bbf9383a
   RNSVG: 8b1a777d54096b8c2a0fd38fc9d5a454332bbb4d
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748

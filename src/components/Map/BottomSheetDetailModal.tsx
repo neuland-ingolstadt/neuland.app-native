@@ -91,6 +91,7 @@ export const BottomSheetDetailModal = ({
                 onDismiss={handleSheetChangesModal}
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPositionModal}
+                handleIndicatorStyle={styles.indicator}
             >
                 <BottomSheetView style={styles.contentContainer}>
                     <View style={styles.modalSectionHeaderContainer}>
@@ -165,6 +166,9 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         marginVertical: 16,
         width: '100%',
+    },
+    indicator: {
+        backgroundColor: theme.colors.labelSecondaryColor,
     },
     modalSectionHeader: {
         color: theme.colors.text,
