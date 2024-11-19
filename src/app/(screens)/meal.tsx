@@ -20,15 +20,7 @@ import {
 import { type i18n } from 'i18next'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    InteractionManager,
-    Linking,
-    ScrollView,
-    Share,
-    Text,
-    View,
-} from 'react-native'
+import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const humanLocations = {
@@ -309,13 +301,9 @@ export default function FoodDetail(): JSX.Element {
         const location = locations[restaurant as keyof typeof locations]
 
         if (restaurant != null && location !== undefined) {
-            router.dismissAll()
-            // Wait for the screen to dismiss before navigating
-            void InteractionManager.runAfterInteractions(() => {
-                router.navigate({
-                    pathname: '(tabs)/map',
-                    params: { room: location },
-                })
+            router.dismissTo({
+                pathname: '(tabs)/map',
+                params: { room: location },
             })
         }
     }
