@@ -94,10 +94,12 @@ export default function TimetableDetails(): JSX.Element {
                 title: t(titleKey),
                 icon: chevronIcon,
                 onPress: () => {
-                    router.push('webView')
-                    router.setParams({
-                        title: t(titleKey),
-                        html,
+                    router.push({
+                        pathname: 'webView',
+                        params: {
+                            title: t(titleKey),
+                            html,
+                        },
                     })
                 },
             }
