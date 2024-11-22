@@ -117,7 +117,6 @@ export default function Provider({
     }, [themeHook.accentColor])
 
     useEffect(() => {
-        console.log('segments', segments)
         // This effect uses segments instead of usePathname which resolves some issues with the router.
         if (!flow.analyticsInitialized || !Array.isArray(segments)) {
             return
@@ -131,7 +130,6 @@ export default function Provider({
                 : '/'
 
         requestAnimationFrame(() => {
-            console.log('trackEvent', path)
             trackEvent('Route', { path })
         })
     }, [segments, flow.analyticsInitialized])

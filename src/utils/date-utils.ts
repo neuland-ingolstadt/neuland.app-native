@@ -121,13 +121,15 @@ export function formatFriendlyDateTimeRange(
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime(datetime?: Date | string): string {
+export function formatFriendlyDateTime(
+    datetime?: Date | string
+): string | null {
     if (datetime == null || isNaN(new Date(datetime).getTime())) {
         return 'No date available'
     }
     // if year is 1970, it's probably not yet available
     if (new Date(datetime).getFullYear() === 1970) {
-        return t('dates.notYet')
+        return null
     }
     const date = formatFriendlyDate(datetime)
     const time = formatFriendlyTime(datetime)

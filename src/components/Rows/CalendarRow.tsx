@@ -2,6 +2,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { type Exam } from '@/types/utils'
 import {
+    formatFriendlyDate,
     formatFriendlyDateRange,
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
@@ -65,25 +66,32 @@ const ExamRow = ({ event }: { event: Exam }): JSX.Element => {
     }
 
     const { t } = useTranslation('common')
+    const showDetails =
+        formatFriendlyDateTime(event.date) != null ||
+        event.rooms !== '' ||
+        event.seat != null
+
     return (
         <RowEntry
             title={event.name}
             leftChildren={
-                <>
+                showDetails ? (
+                    <>
+                        <Text style={styles.mainText1} numberOfLines={2}>
+                            {formatFriendlyDateTime(event.date)}
+                        </Text>
+                        <Text style={styles.mainText2} numberOfLines={2}>
+                            {`${t('pages.exam.details.room')}: ${event.rooms ?? 'n/a'}`}
+                        </Text>
+                        <Text style={styles.mainText2} numberOfLines={2}>
+                            {`${t('pages.exam.details.seat')}: ${event.seat ?? 'n/a'}`}
+                        </Text>
+                    </>
+                ) : (
                     <Text style={styles.mainText1} numberOfLines={2}>
-                        {formatFriendlyDateTime(event.date)}
+                        {`${t('pages.exam.about.registration')}: ${formatFriendlyDate(event.enrollment)}`}
                     </Text>
-                    <Text style={styles.mainText2} numberOfLines={2}>
-                        {`${t('pages.exam.details.room')}: ${
-                            event.rooms ?? 'n/a'
-                        }`}
-                    </Text>
-                    <Text style={styles.mainText2} numberOfLines={2}>
-                        {`${t('pages.exam.details.seat')}: ${
-                            event.seat ?? 'n/a'
-                        }`}
-                    </Text>
-                </>
+                )
             }
             rightChildren={
                 <View style={styles.rightContainerExam}>
