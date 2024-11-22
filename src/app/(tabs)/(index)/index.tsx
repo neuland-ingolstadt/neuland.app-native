@@ -42,7 +42,7 @@ export default function HomeRootScreen(): JSX.Element {
                 }}
             >
                 <WorkaroundStack
-                    name={'Dashboard'}
+                    name={'dashboard'}
                     titleKey={'navigation.dashboard'}
                     component={isPageOpen ? HomeScreen : () => <></>}
                     largeTitle={true}

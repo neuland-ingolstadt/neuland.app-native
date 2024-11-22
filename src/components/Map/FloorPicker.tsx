@@ -56,7 +56,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                         }}
                     >
                         <View style={styles.button}>
-                            <Text style={styles.buttonText(false)}>
+                            <Text style={styles.buttonText(false, false)}>
                                 {currentFloor?.floor === 'EG'
                                     ? '0'
                                     : currentFloor?.floor}
