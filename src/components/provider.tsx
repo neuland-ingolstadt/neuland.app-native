@@ -21,7 +21,7 @@ import {
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { UnistylesRuntime } from 'react-native-unistyles'
+import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
 import {
     useDashboard,
@@ -117,12 +117,9 @@ export default function Provider({
     }, [themeHook.accentColor])
 
     useEffect(() => {
+        console.log('segments', segments)
         // This effect uses segments instead of usePathname which resolves some issues with the router.
-        if (
-            !flow.analyticsInitialized ||
-            !Array.isArray(segments) ||
-            segments.length === 0
-        ) {
+        if (!flow.analyticsInitialized || !Array.isArray(segments)) {
             return
         }
 
@@ -134,6 +131,7 @@ export default function Provider({
                 : '/'
 
         requestAnimationFrame(() => {
+            console.log('trackEvent', path)
             trackEvent('Route', { path })
         })
     }, [segments, flow.analyticsInitialized])
@@ -274,35 +272,39 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: syncStoragePersister }}
             >
-                <ThemeProvider
-                    value={
-                        UnistylesRuntime.themeName === 'dark'
-                            ? DarkTheme
-                            : DefaultTheme
-                    }
-                >
-                    <ThemeContext.Provider value={themeHook}>
-                        <PreferencesContext.Provider value={preferences}>
-                            <BottomSheetModalProvider>
-                                <FlowContext.Provider value={flow}>
-                                    <UserKindContext.Provider value={userKind}>
-                                        <FoodFilterContext.Provider
-                                            value={foodFilter}
+                <UnistylesProvider>
+                    <ThemeProvider
+                        value={
+                            UnistylesRuntime.themeName === 'dark'
+                                ? DarkTheme
+                                : DefaultTheme
+                        }
+                    >
+                        <ThemeContext.Provider value={themeHook}>
+                            <PreferencesContext.Provider value={preferences}>
+                                <BottomSheetModalProvider>
+                                    <FlowContext.Provider value={flow}>
+                                        <UserKindContext.Provider
+                                            value={userKind}
                                         >
-                                            <DashboardContext.Provider
-                                                value={dashboard}
+                                            <FoodFilterContext.Provider
+                                                value={foodFilter}
                                             >
-                                                <SafeAreaProvider>
-                                                    {children}
-                                                </SafeAreaProvider>
-                                            </DashboardContext.Provider>
-                                        </FoodFilterContext.Provider>
-                                    </UserKindContext.Provider>
-                                </FlowContext.Provider>
-                            </BottomSheetModalProvider>
-                        </PreferencesContext.Provider>
-                    </ThemeContext.Provider>
-                </ThemeProvider>
+                                                <DashboardContext.Provider
+                                                    value={dashboard}
+                                                >
+                                                    <SafeAreaProvider>
+                                                        {children}
+                                                    </SafeAreaProvider>
+                                                </DashboardContext.Provider>
+                                            </FoodFilterContext.Provider>
+                                        </UserKindContext.Provider>
+                                    </FlowContext.Provider>
+                                </BottomSheetModalProvider>
+                            </PreferencesContext.Provider>
+                        </ThemeContext.Provider>
+                    </ThemeProvider>
+                </UnistylesProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )
