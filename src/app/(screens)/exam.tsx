@@ -33,9 +33,10 @@ export default function ExamDetail(): JSX.Element {
             items: [
                 {
                     title: t('pages.exam.details.date'),
-                    value: formatFriendlyDateTime(
-                        exam?.date as unknown as string
-                    ),
+                    value:
+                        formatFriendlyDateTime(
+                            exam?.date as unknown as string
+                        ) ?? undefined,
                 },
 
                 {
@@ -71,9 +72,10 @@ export default function ExamDetail(): JSX.Element {
                 },
                 {
                     title: t('pages.exam.about.registration'),
-                    value: formatFriendlyDateTime(
-                        exam?.enrollment as unknown as string
-                    ),
+                    value:
+                        formatFriendlyDateTime(
+                            exam?.enrollment as unknown as string
+                        ) ?? undefined,
                 },
                 {
                     title: t('pages.exam.about.notes'),
