@@ -7,7 +7,7 @@ import Color from 'color'
 import { type FeatureCollection } from 'geojson'
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, Text } from 'react-native'
+import { Platform, Pressable, Text } from 'react-native'
 import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
     useAnimatedStyle,
@@ -56,7 +56,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }))
 
     const animate = (toValue: number): void => {
-        cancelWidth.value = withTiming(toValue, { duration: 250 })
+        cancelWidth.value = withTiming(toValue, { duration: 200 })
         cancelOpacity.value = withTiming(toValue === 0 ? 0 : 1, {
             duration: 250,
         })
@@ -183,7 +183,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     cancelContainer: { justifyContent: 'center' },
     indicator: {
-        backgroundColor: theme.colors.labelSecondaryColor,
+        backgroundColor: theme.colors.labelTertiaryColor,
     },
 
     inputContainer: {
@@ -206,8 +206,12 @@ const stylesheet = createStyleSheet((theme) => ({
     textInput: {
         backgroundColor:
             UnistylesRuntime.themeName === 'dark'
-                ? Color(theme.colors.card).lighten(0.3).hex()
-                : Color(theme.colors.card).darken(0.03).hex(),
+                ? Color(theme.colors.card)
+                      .lighten(Platform.OS === 'ios' ? 0.3 : 0.1)
+                      .hex()
+                : Color(theme.colors.card)
+                      .darken(Platform.OS === 'ios' ? 0.03 : 0.01)
+                      .hex(),
         borderRadius: theme.radius.mg,
         color: theme.colors.text,
         flex: 1,

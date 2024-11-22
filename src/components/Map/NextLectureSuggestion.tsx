@@ -26,7 +26,7 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
         useContext(MapContext)
     const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    if (nextLecture === null || nextLecture.length > 0) {
+    if (nextLecture == null || nextLecture.length === 0) {
         return null
     }
     return (
