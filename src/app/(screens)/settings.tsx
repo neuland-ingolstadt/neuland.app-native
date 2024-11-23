@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next'
 import {
     Alert,
     Dimensions,
+    LayoutAnimation,
     Linking,
     Platform,
     Pressable,
@@ -202,6 +203,12 @@ export default function Settings(): JSX.Element {
             )
         }
     }
+
+    useEffect(() => {
+        if (isLoading || isSuccess) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        }
+    }, [isLoading, isSuccess])
 
     const isBouncing = tapCount === 2
 
@@ -384,7 +391,7 @@ export default function Settings(): JSX.Element {
                 >
                     <View style={styles.container}>
                         <View style={styles.nameBox}>
-                            {(isLoading || isSuccess) &&
+                            {isSuccess &&
                             userKind === 'student' &&
                             data?.mtknr !== undefined ? (
                                 <View style={styles.nameOuterContainer}>
@@ -531,7 +538,15 @@ export default function Settings(): JSX.Element {
                                         style={styles.iconAlign}
                                     />
                                 </View>
-                            ) : isError ? (
+                            ) : isLoading ? (
+                                <>
+                                    <View style={styles.nameInnerContainer}>
+                                        <View style={styles.loading}>
+                                            <LoadingIndicator />
+                                        </View>
+                                    </View>
+                                </>
+                            ) : (
                                 <>
                                     <NameBox
                                         title="Error"
@@ -560,14 +575,6 @@ export default function Settings(): JSX.Element {
                                         </Avatar>
                                     </NameBox>
                                 </>
-                            ) : isLoading ? (
-                                <>
-                                    <View style={styles.loading}>
-                                        <LoadingIndicator />
-                                    </View>
-                                </>
-                            ) : (
-                                <></>
                             )}
                         </View>
                     </View>

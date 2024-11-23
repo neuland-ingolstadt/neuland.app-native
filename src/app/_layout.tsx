@@ -15,7 +15,11 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable, StatusBar } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -31,6 +35,7 @@ function RootLayout(): JSX.Element {
             void NavigationBar.setPositionAsync('absolute')
             // transparent backgrounds to see through
             void NavigationBar.setBackgroundColorAsync('#ffffff00')
+            UnistylesRuntime.navigationBar.setColor('#ffffff00')
         }
     }, [])
     useEffect(() => {
