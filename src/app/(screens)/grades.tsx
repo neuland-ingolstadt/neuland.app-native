@@ -18,7 +18,14 @@ import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, ScrollView, Text, View } from 'react-native'
+import {
+    AppState,
+    type AppStateStatus,
+    RefreshControl,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import packageInfo from '../../../package.json'
@@ -96,6 +103,23 @@ export default function GradesSCreen(): JSX.Element {
         const spoName = extractSpoName(personalData)
         void loadAverageGrade(spoName ?? undefined)
     }, [spoWeights, grades?.finished])
+
+    useEffect(() => {
+        const handleAppStateChange = (nextAppState: AppStateStatus): void => {
+            if (nextAppState === 'inactive' || nextAppState === 'background') {
+                router.back()
+            }
+        }
+
+        const subscription = AppState.addEventListener(
+            'change',
+            handleAppStateChange
+        )
+
+        return () => {
+            subscription.remove()
+        }
+    }, [])
 
     return (
         <ScrollView
