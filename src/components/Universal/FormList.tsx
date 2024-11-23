@@ -9,6 +9,7 @@ import PlatformIcon from './Icon'
 interface FormListProps {
     sections: FormListSections[]
     rowStyle?: ViewStyle
+    privacyHidden?: boolean
 }
 
 interface RenderSectionFrameProps {
@@ -56,8 +57,9 @@ const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
 
 const RenderSectionItems: React.FC<{
     items: SectionGroup[]
+    privacyHidden: boolean
     rowStyle?: ViewStyle
-}> = ({ items, rowStyle }) => {
+}> = ({ items, privacyHidden, rowStyle }) => {
     const { styles, theme } = useStyles(stylesheet)
 
     return (
@@ -87,7 +89,7 @@ const RenderSectionItems: React.FC<{
                                 </Text>
                             )}
 
-                            {item.value != null && (
+                            {item.value != null && !privacyHidden && (
                                 <Text
                                     style={[
                                         item.layout === 'column'
@@ -149,7 +151,11 @@ const RenderSectionItems: React.FC<{
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
  * @returns {JSX.Element} - A React component that renders the list of forms.
  */
-const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
+const FormList: React.FC<FormListProps> = ({
+    sections,
+    rowStyle,
+    privacyHidden,
+}) => {
     const { styles } = useStyles(stylesheet)
 
     return (
@@ -165,6 +171,7 @@ const FormList: React.FC<FormListProps> = ({ sections, rowStyle }) => {
                         <RenderSectionItems
                             items={section.items}
                             rowStyle={rowStyle}
+                            privacyHidden={privacyHidden ?? false}
                         />
                     </RenderSectionFrame>
                 ) : section.item != null ? (

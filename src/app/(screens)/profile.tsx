@@ -13,10 +13,12 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Alert,
+    AppState,
+    type AppStateStatus,
     Linking,
     Platform,
     Pressable,
@@ -51,6 +53,25 @@ export default function Profile(): JSX.Element {
             },
         })
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+    const [isBackground, setIsBackground] = React.useState(false)
+    useEffect(() => {
+        const handleAppStateChange = (nextAppState: AppStateStatus): void => {
+            if (nextAppState === 'inactive' || nextAppState === 'background') {
+                setIsBackground(true)
+            } else {
+                setIsBackground(false)
+            }
+        }
+
+        const subscription = AppState.addEventListener(
+            'change',
+            handleAppStateChange
+        )
+
+        return () => {
+            subscription.remove()
+        }
+    }, [])
 
     const copyToClipboard = async (text: string): Promise<void> => {
         if (text.length === 0) {
@@ -246,7 +267,10 @@ export default function Profile(): JSX.Element {
                 {isSuccess &&
                     (data?.mtknr !== undefined ? (
                         <View style={styles.container}>
-                            <FormList sections={sections} />
+                            <FormList
+                                sections={sections}
+                                privacyHidden={isBackground}
+                            />
                         </View>
                     ) : (
                         <ErrorView
