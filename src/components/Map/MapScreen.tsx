@@ -397,7 +397,7 @@ const MapScreen = (): JSX.Element => {
     }, [localSearch])
 
     const { data: roomStatusData } = useQuery({
-        queryKey: ['fnreeRooms', formatISODate(currentDate)],
+        queryKey: ['freeRooms', formatISODate(currentDate)],
         queryFn: async () => await API.getFreeRooms(currentDate),
         staleTime: 1000 * 60 * 60, // 60 minutes
         gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
