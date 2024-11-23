@@ -1941,7 +1941,7 @@ PODS:
     - React
   - RNDateTimePicker (8.2.0):
     - React-Core
-  - RNDeviceInfo (14.0.0):
+  - RNDeviceInfo (14.0.1):
     - React-Core
   - RNDynamicAppIcon (1.1.0):
     - React
@@ -2577,7 +2577,7 @@ SPEC CHECKSUMS:
   ReactCommon: 89c87b343deacc8610b099ac764848f0ce937e3e
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
-  RNDeviceInfo: 6192a9c9167e256803e554038b22b3b2b40163dc
+  RNDeviceInfo: 825f0d2f4381327317f12d1522720a8f76e6a19e
   RNDynamicAppIcon: f7eb12d6c2e6e957eead111dacdb93af318396ac
   RNFlashList: 115dd44377580761bff386a0caebf165424cf16f
   RNGestureHandler: 511250b190a284388f9dd0d2e56c1df76f14cfb8

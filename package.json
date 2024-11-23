@@ -67,7 +67,7 @@
     "react-native": "0.76.3",
     "react-native-collapsible": "1.6.1",
     "react-native-context-menu-view": "^1.16.0",
-    "react-native-device-info": "^14.0.0",
+    "react-native-device-info": "^14.0.1",
     "react-native-drag-drop-ios": "^0.1.1",
     "react-native-drag-sort": "^2.4.4",
     "react-native-dynamic-app-icon": "^1.1.0",
