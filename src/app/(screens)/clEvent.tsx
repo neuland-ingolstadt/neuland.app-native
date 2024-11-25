@@ -1,7 +1,6 @@
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import clubs from '@/data/clubs.json'
 import { type FormListSections } from '@/types/components'
 import { type CLEvents } from '@/types/neuland-api'
 import {
@@ -35,10 +34,8 @@ export default function ClEventDetail(): JSX.Element {
         new Date(clEvent.begin).toDateString() !==
             new Date(clEvent.end).toDateString()
 
-    const club = clubs.find((club) => club.club === clEvent?.organizer)
-    const isWebsiteAvailable = club?.website != null && club?.website !== ''
-    const isInstagramAvailable =
-        club?.instagram != null && club?.instagram !== ''
+    const isWebsiteAvailable = clEvent?.host.website != null
+    const isInstagramAvailable = clEvent?.host.instagram != null
 
     useFocusEffect(
         useCallback(() => {
@@ -52,7 +49,7 @@ export default function ClEventDetail(): JSX.Element {
                             await Share.share({
                                 message: t('pages.event.shareMessage', {
                                     title: clEvent?.title,
-                                    organizer: clEvent?.organizer,
+                                    organizer: clEvent?.host.name,
                                     date: formatFriendlyDateTimeRange(
                                         new Date(
                                             clEvent?.begin as unknown as string
@@ -120,11 +117,11 @@ export default function ClEventDetail(): JSX.Element {
 
                 {
                     title: t('pages.event.organizer'),
-                    value: clEvent?.organizer,
+                    value: clEvent?.host.name,
                 },
             ],
         },
-        ...(club != null && (isWebsiteAvailable || isInstagramAvailable)
+        ...(isWebsiteAvailable || isInstagramAvailable
             ? [
                   {
                       header: 'Links',
@@ -134,7 +131,9 @@ export default function ClEventDetail(): JSX.Element {
                                     title: 'Website',
                                     icon: linkIcon,
                                     onPress: () => {
-                                        void Linking.openURL(club.website)
+                                        void Linking.openURL(
+                                            clEvent.host.website
+                                        )
                                     },
                                 }
                               : null,
@@ -147,7 +146,9 @@ export default function ClEventDetail(): JSX.Element {
                                         iosFallback: true,
                                     },
                                     onPress: () => {
-                                        void Linking.openURL(club.instagram)
+                                        void Linking.openURL(
+                                            clEvent.host.instagram
+                                        )
                                     },
                                 }
                               : null,

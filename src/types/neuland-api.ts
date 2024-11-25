@@ -17,13 +17,18 @@ export interface Charging {
 }
 
 export interface CLEvents {
-    id: string
-    organizer: string
+    host: ClHost
     title: string
     begin: Date | null
     end: Date | null
     location: string | null
     description: string | null
+}
+
+export interface ClHost {
+    name: string
+    website: string
+    instagram: string
 }
 
 export interface Food {

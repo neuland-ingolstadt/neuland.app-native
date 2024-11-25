@@ -43,7 +43,7 @@ const EventsCard = (): JSX.Element => {
                                         numberOfLines={1}
                                     >
                                         {t('cards.events.by', {
-                                            name: event.organizer,
+                                            name: event.host.name,
                                         })}
                                     </Text>
                                 </View>
