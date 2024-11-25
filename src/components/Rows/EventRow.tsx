@@ -37,7 +37,7 @@ const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
             leftChildren={
                 <>
                     <Text style={styles.leftText1} numberOfLines={2}>
-                        {event.organizer}
+                        {event.host.name}
                     </Text>
                     <Text style={styles.leftText2} numberOfLines={2}>
                         {formatFriendlyDateTimeRange(begin, end)}

@@ -138,8 +138,11 @@ class NeulandAPIClient {
         return await this.performGraphQLQuery(gql`
             query {
                 clEvents {
-                    id
-                    organizer
+                    host {
+                        name
+                        website
+                        instagram
+                    }
                     title
                     begin
                     end
