@@ -188,6 +188,5 @@ export async function loadGradeAverage(
     const avg4 = calculateAverage(4)
     average.resultMin = Math.min(avgP5, avg4)
     average.resultMax = Math.max(avgP5, avg4)
-    console.log(average)
     return average
 }
