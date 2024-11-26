@@ -42,6 +42,7 @@
             "tsconfigPaths": true
         },
         "plugins": [
+            ["react-native-edge-to-edge"],
             [
                 "expo-router",
                 {
@@ -82,7 +83,8 @@
                     },
                     "imageWidth": 200
                 }
-            ]
+            ],
+            "react-native-edge-to-edge"
         ],
         "extra": {
             "eas": {
