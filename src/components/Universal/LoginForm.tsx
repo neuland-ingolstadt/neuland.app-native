@@ -212,7 +212,7 @@ const LoginForm = ({
                         onSubmitEditing={() => {
                             if (username !== '') {
                                 login().catch((error: Error) => {
-                                    console.log(error)
+                                    console.debug(error)
                                 })
                             }
                         }}
@@ -230,7 +230,7 @@ const LoginForm = ({
                     disabled={signInDisabled}
                     onPress={() => {
                         login().catch((error: Error) => {
-                            console.log(error)
+                            console.debug(error)
                         })
                     }}
                     style={styles.loginButton(signInDisabled)}
@@ -250,7 +250,7 @@ const LoginForm = ({
                     <TouchableOpacity
                         onPress={() => {
                             guestLogin().catch((error: Error) => {
-                                console.log(error)
+                                console.debug(error)
                             })
                         }}
                     >

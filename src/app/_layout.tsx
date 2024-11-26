@@ -15,7 +15,11 @@ import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -91,7 +95,9 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <SystemBars style="auto" />
+            <SystemBars
+                style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
+            />
             <Stack
                 screenOptions={{
                     contentStyle: styles.background,

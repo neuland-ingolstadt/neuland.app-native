@@ -153,7 +153,7 @@ export function convertTimetableToWeekViewEvents(
             title: entry.shortName,
             color,
             textColor,
-            location: entry.rooms.length > 0 ? entry.rooms[0] : undefined,
+            location: entry.rooms?.[0],
             entry,
         }
     })

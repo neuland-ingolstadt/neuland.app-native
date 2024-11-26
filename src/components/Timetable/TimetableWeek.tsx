@@ -142,12 +142,13 @@ export default function TimetableWeek({
         const background = eventBackgroundColor(event.color)
         const fontColor = textColor(event.color, background)
         const { styles } = useStyles(stylesheet)
+        const eventName = event.name ?? ''
         const nameToDisplay =
-            event.name.length > 20
+            eventName.length > 20
                 ? nameParts.join('_') !== ''
                     ? nameParts.join('_')
                     : event.shortName
-                : event.name
+                : eventName
         return (
             <View
                 style={{

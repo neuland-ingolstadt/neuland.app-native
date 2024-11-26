@@ -116,23 +116,23 @@ export default function HomeLayout(): JSX.Element {
     }, [selectedRestaurants, router, t, userKind])
 
     useEffect(() => {
-        console.log('Analytics allowed:', analyticsAllowed)
+        console.debug('Analytics allowed:', analyticsAllowed)
         if (aptabaseKey != null && analyticsAllowed === true) {
             Aptabase.init(aptabaseKey, {
                 host: 'https://analytics.neuland.app',
             })
             // we need to mark the analytics as initialized to trigger the initial events sent in provider.tsx
             initializeAnalytics()
-            console.log('Initialized analytics')
+            console.debug('Initialized analytics')
         } else if (
             aptabaseKey != null &&
             analyticsAllowed === false &&
             analyticsInitialized
         ) {
             Aptabase.dispose()
-            console.log('Disposed analytics')
+            console.debug('Disposed analytics')
         } else {
-            console.log('Analytics not initialized / allowed')
+            console.debug('Analytics not initialized / allowed')
         }
     }, [analyticsAllowed])
     useEffect(() => {

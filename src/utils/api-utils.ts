@@ -52,7 +52,7 @@ export const performLogout = async (
         queryClient.clear()
         router.navigate('(tabs)/(index)')
     } catch (e) {
-        console.log(e)
+        console.debug(e)
     }
 }
 

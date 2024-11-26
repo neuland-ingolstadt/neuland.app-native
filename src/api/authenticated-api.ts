@@ -41,7 +41,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @returns {object}
      */
     async requestAuthenticated(params: object): Promise<any> {
-        console.log(params)
+        console.debug(params)
         return this.sessionHandler(async (session: any) => {
             const res = await this.request({
                 session,

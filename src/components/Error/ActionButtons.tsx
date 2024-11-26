@@ -1,5 +1,6 @@
 import { STATUS_URL } from '@/data/constants'
 import * as Application from 'expo-application'
+import { usePathname } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
@@ -17,7 +18,8 @@ export const FeedbackButton = ({
     const platform = Platform.OS
     const appVersion = `${Application.nativeApplicationVersion} (${Application.nativeBuildVersion})`
     const subject = crash ? 'App-Crash' : 'App-Error'
-    const mailContent = `mailto:app-feedback@informatik.sexy?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Schritte zur Reproduktion:\nSonstiges:\n\nApp Version: ${appVersion}\nPlatform: ${platform}\nFehler: ${error.message}`)}`
+    const pathname = usePathname()
+    const mailContent = `mailto:app-feedback@informatik.sexy?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Schritte zur Reproduktion:\nSonstiges:\n\nApp Version: ${appVersion}\nPlatform: ${platform}\nSeite: ${pathname}\nFehler: ${error.message}`)}`
 
     const sendMail = (): void => {
         Linking.openURL(mailContent).catch((err) => {
