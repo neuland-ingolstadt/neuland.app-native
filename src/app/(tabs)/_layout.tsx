@@ -11,7 +11,6 @@ import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
-import * as NavigationBar from 'expo-navigation-bar'
 import { Redirect, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -40,16 +39,6 @@ export default function HomeLayout(): JSX.Element {
         React.useContext(FlowContext)
     const { isOnboarded } = React.useContext(FlowContext)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-
-    // Android only
-    const prepare = async (): Promise<void> => {
-        void NavigationBar.setPositionAsync('absolute')
-        // transparent backgrounds to see through
-        void NavigationBar.setBackgroundColorAsync('#ffffff00')
-    }
-    if (Platform.OS === 'android') {
-        void prepare()
-    }
 
     useEffect(() => {
         const shortcuts = [

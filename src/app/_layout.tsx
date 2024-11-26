@@ -6,20 +6,16 @@ import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
 import { getLocales } from 'expo-localization'
-import * as NavigationBar from 'expo-navigation-bar'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable, StatusBar } from 'react-native'
+import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import {
-    UnistylesRuntime,
-    createStyleSheet,
-    useStyles,
-} from 'react-native-unistyles'
+import { SystemBars } from 'react-native-edge-to-edge'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
@@ -30,14 +26,6 @@ function RootLayout(): JSX.Element {
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
 
-    useEffect(() => {
-        if (Platform.OS === 'android') {
-            void NavigationBar.setPositionAsync('absolute')
-            // transparent backgrounds to see through
-            void NavigationBar.setBackgroundColorAsync('#ffffff00')
-            UnistylesRuntime.navigationBar.setColor('#ffffff00')
-        }
-    }, [])
     useEffect(() => {
         if (isPad) {
             void ScreenOrientation.unlockAsync()
@@ -103,7 +91,7 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <StatusBar translucent backgroundColor="transparent" />
+            <SystemBars style="auto" />
             <Stack
                 screenOptions={{
                     contentStyle: styles.background,
