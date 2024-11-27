@@ -1,4 +1,5 @@
 import Divider from '@/components/Universal/Divider'
+import { type LanguageKey } from '@/localization/i18n'
 import { loadCampusLifeEvents } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
@@ -10,10 +11,10 @@ import BaseCard from './BaseCard'
 
 const EventsCard = (): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
-    const { t } = useTranslation('navigation')
+    const { t, i18n } = useTranslation('navigation')
 
     const { data, isSuccess } = useQuery({
-        queryKey: ['campusLifeEvents'],
+        queryKey: ['campusLifeEventsV2'],
         queryFn: loadCampusLifeEvents,
         staleTime: 1000 * 60 * 5, // 5 minutes
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
@@ -36,7 +37,11 @@ const EventsCard = (): JSX.Element => {
                                         style={styles.eventTitle}
                                         numberOfLines={1}
                                     >
-                                        {event.title}
+                                        {
+                                            event.titles[
+                                                i18n.language as LanguageKey
+                                            ]
+                                        }
                                     </Text>
                                     <Text
                                         style={styles.eventDetails}

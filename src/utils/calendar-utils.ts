@@ -71,7 +71,7 @@ export function convertCalendarToWeekViewEvents(
         return {
             start: allDay ? ignoreTime(entry.begin) : entry.begin,
             end: allDay ? ignoreTime(endDate) : endDate,
-            title: entry.name[i18n.language as LanguageKey],
+            title: entry?.name[i18n.language as LanguageKey],
             color,
             textColor,
         }

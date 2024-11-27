@@ -17,7 +17,13 @@ export async function loadCampusLifeEvents(): Promise<CLEvents[]> {
             begin: x.begin !== null ? new Date(Number(x.begin)) : null,
             end: x.end !== null ? new Date(Number(x.end)) : null,
         }))
-        .filter((x) => x.end === null || x.end > new Date())
+        .filter(
+            (x) =>
+                x.end === null ||
+                x.end > new Date() ||
+                x.titles.de !== '' ||
+                x.titles.en !== ''
+        )
     return newEvents
 }
 

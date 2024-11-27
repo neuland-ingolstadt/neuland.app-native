@@ -1,6 +1,7 @@
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { type CLEvents } from '@/types/neuland-api'
 import {
@@ -27,7 +28,7 @@ export default function ClEventDetail(): JSX.Element {
         clEventEntry != null
             ? JSON.parse(Buffer.from(clEventEntry, 'base64').toString())
             : undefined
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const isMultiDayEvent =
         clEvent?.begin != null &&
         clEvent?.end != null &&
@@ -48,7 +49,9 @@ export default function ClEventDetail(): JSX.Element {
                             })
                             await Share.share({
                                 message: t('pages.event.shareMessage', {
-                                    title: clEvent?.title,
+                                    title: clEvent?.titles[
+                                        i18n.language as LanguageKey
+                                    ],
                                     organizer: clEvent?.host.name,
                                     date: formatFriendlyDateTimeRange(
                                         new Date(
@@ -156,11 +159,11 @@ export default function ClEventDetail(): JSX.Element {
                   },
               ]
             : []),
-        ...(clEvent?.description != null && clEvent?.description !== ''
+        ...(clEvent?.descriptions != null
             ? [
                   {
                       header: t('pages.event.description'),
-                      item: clEvent?.description,
+                      item: clEvent?.descriptions[i18n.language as LanguageKey],
                   },
               ]
             : []),
@@ -178,7 +181,7 @@ export default function ClEventDetail(): JSX.Element {
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
                 >
-                    {clEvent?.title}
+                    {clEvent?.titles[i18n.language as LanguageKey]}
                 </Text>
             </View>
             <View style={styles.formList}>

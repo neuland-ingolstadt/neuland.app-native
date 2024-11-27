@@ -20,7 +20,7 @@ export default function Events(): JSX.Element {
     const results = useQueries({
         queries: [
             {
-                queryKey: ['campusLifeEvents'],
+                queryKey: ['campusLifeEventsV2'],
                 queryFn: loadCampusLifeEvents,
                 staleTime: 1000 * 60 * 60, // 60 minutes
                 gcTime: 1000 * 60 * 60 * 24, // 24 hours

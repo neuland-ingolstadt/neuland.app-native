@@ -143,11 +143,17 @@ class NeulandAPIClient {
                         website
                         instagram
                     }
-                    title
+                    titles {
+                        de
+                        en
+                    }
                     begin
                     end
                     location
-                    description
+                    descriptions {
+                        de
+                        en
+                    }
                 }
             }
         `)
