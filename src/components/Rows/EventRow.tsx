@@ -1,3 +1,4 @@
+import { type LanguageKey } from '@/localization/i18n'
 import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTimeRange,
@@ -14,7 +15,7 @@ import RowEntry from '../Universal/RowEntry'
 
 const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     let begin = null
     if (event.begin !== null) {
         begin = new Date(event.begin)
@@ -32,7 +33,7 @@ const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
     }
     return (
         <RowEntry
-            title={event.title}
+            title={event.titles[i18n.language as LanguageKey]}
             onPress={onPressRow}
             leftChildren={
                 <>

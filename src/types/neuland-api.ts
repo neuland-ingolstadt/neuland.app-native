@@ -18,11 +18,11 @@ export interface Charging {
 
 export interface CLEvents {
     host: ClHost
-    title: string
+    titles: Name
     begin: Date | null
     end: Date | null
     location: string | null
-    description: string | null
+    descriptions: Name | null
 }
 
 export interface ClHost {
