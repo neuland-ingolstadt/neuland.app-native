@@ -11,6 +11,12 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "@bottom-tabs/react-navigation@0.7.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@14.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -255,6 +261,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "react-native-bottom-tabs@0.7.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "parents": "neuland"
     },
     "react-native-collapsible@1.6.1": {

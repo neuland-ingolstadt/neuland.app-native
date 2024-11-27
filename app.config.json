@@ -16,6 +16,7 @@
                 "webcredentials:neuland.app",
                 "activitycontinuation:neuland.app"
             ],
+
             "config": {
                 "usesNonExemptEncryption": false
             },
@@ -35,22 +36,30 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 230
+            "versionCode": 231
         },
         "sdkVersion": "52.0.0",
         "experiments": {
             "tsconfigPaths": true
         },
         "plugins": [
-            ["react-native-edge-to-edge"],
+            [
+                "react-native-edge-to-edge",
+                {
+                    "android": {
+                        "parentTheme": "Material3"
+                    }
+                }
+            ],
+            "react-native-bottom-tabs",
             [
                 "expo-router",
                 {
                     "headOrigin": "https://neuland.app"
                 }
             ],
-            ["expo-secure-store"],
-            ["expo-localization"],
+            "expo-secure-store",
+            "expo-localization",
             [
                 "expo-local-authentication",
                 {
@@ -62,7 +71,8 @@
                 "expo-build-properties",
                 {
                     "ios": {
-                        "deploymentTarget": "15.1"
+                        "deploymentTarget": "15.1",
+                        "useFrameworks": "static"
                     }
                 }
             ],

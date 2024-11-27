@@ -1,5 +1,4 @@
-import DefaultTabs from '@/components/Layout/DefaultTabs'
-import MaterialTabs from '@/components/Layout/MaterialTabs'
+import TabLayout from '@/components/Layout/Tabbar'
 import {
     FlowContext,
     FoodFilterContext,
@@ -163,5 +162,5 @@ export default function HomeLayout(): JSX.Element {
         return <Redirect href={'(flow)/whatsnew'} />
     }
 
-    return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />
+    return <TabLayout />
 }
