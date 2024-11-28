@@ -13,14 +13,14 @@ const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
 
     const onPressRoom = (): void => {
         router.dismissTo({
-            pathname: '(tabs)/map',
+            pathname: '/(tabs)/map',
             params: { room: item.room_short ?? '' },
         })
     }
     const onPressRow = (): void => {
         const base64Event = Buffer.from(JSON.stringify(item)).toString('base64')
         router.navigate({
-            pathname: 'lecturer',
+            pathname: '/lecturer',
             params: { lecturerEntry: base64Event },
         })
     }

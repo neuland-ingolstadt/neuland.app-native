@@ -177,7 +177,7 @@ export default function Settings(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24 * 60,
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('login')
+                router.replace('/login')
                 return false
             } else if (userKind !== 'student') {
                 return false
@@ -224,7 +224,7 @@ export default function Settings(): JSX.Element {
                     },
 
                     onPress: () => {
-                        router.navigate('dashboard')
+                        router.navigate('/dashboard')
                     },
                 },
                 {
@@ -234,7 +234,7 @@ export default function Settings(): JSX.Element {
                         ios: 'fork.knife',
                     },
                     onPress: () => {
-                        router.navigate('foodPreferences')
+                        router.navigate('/foodPreferences')
                     },
                 },
                 {
@@ -268,7 +268,7 @@ export default function Settings(): JSX.Element {
                         android: 'palette',
                     },
                     onPress: () => {
-                        router.navigate('accent')
+                        router.navigate('/accent')
                     },
                 },
                 {
@@ -278,7 +278,7 @@ export default function Settings(): JSX.Element {
                         android: 'routine',
                     },
                     onPress: () => {
-                        router.navigate('theme')
+                        router.navigate('/theme')
                     },
                 },
                 ...(Platform.OS === 'ios' &&
@@ -291,7 +291,7 @@ export default function Settings(): JSX.Element {
                                   android: '' as MaterialIcon,
                               },
                               onPress: () => {
-                                  router.navigate('appIcon')
+                                  router.navigate('/appIcon')
                               },
                           },
                       ]
@@ -308,7 +308,7 @@ export default function Settings(): JSX.Element {
                         android: 'chevron_right',
                     },
                     onPress: () => {
-                        router.navigate('about')
+                        router.navigate('/about')
                     },
                 },
 
@@ -382,9 +382,9 @@ export default function Settings(): JSX.Element {
                             logoutAlert()
                         } else {
                             if (userKind === 'student') {
-                                router.navigate('profile')
+                                router.navigate('/profile')
                             } else if (userKind === 'guest') {
-                                router.navigate('login')
+                                router.navigate('/login')
                             }
                         }
                     }}

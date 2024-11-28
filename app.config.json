@@ -39,7 +39,8 @@
         },
         "sdkVersion": "52.0.0",
         "experiments": {
-            "tsconfigPaths": true
+            "tsconfigPaths": true,
+            "typedRoutes": true
         },
         "plugins": [
             ["react-native-edge-to-edge"],

@@ -11,7 +11,7 @@ import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
-import { Redirect, useRouter } from 'expo-router'
+import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
@@ -101,7 +101,7 @@ export default function HomeLayout(): JSX.Element {
         ]
         function processShortcut(item: ShortcutItem): void {
             router.navigate({
-                pathname: item.data.path as string,
+                pathname: item.data.path as RelativePathString,
                 params: { fromAppShortcut: 'true' },
             })
         }
@@ -144,7 +144,7 @@ export default function HomeLayout(): JSX.Element {
     }, [appIcon])
 
     if (isOnboarded !== true) {
-        return <Redirect href={'(flow)/onboarding'} />
+        return <Redirect href={'/onboarding'} />
     }
 
     const version = Application.nativeApplicationVersion
@@ -160,7 +160,7 @@ export default function HomeLayout(): JSX.Element {
         isChangelogAvailable &&
         flow.isOnboarded === true
     ) {
-        return <Redirect href={'(flow)/whatsnew'} />
+        return <Redirect href={'/whatsnew'} />
     }
 
     return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />

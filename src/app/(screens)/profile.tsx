@@ -46,7 +46,7 @@ export default function Profile(): JSX.Element {
             enabled: userKind === USER_STUDENT,
             retry(failureCount, error) {
                 if (error instanceof NoSessionError) {
-                    router.replace('login')
+                    router.replace('/login')
                     return false
                 }
                 return failureCount < 2

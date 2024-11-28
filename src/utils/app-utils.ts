@@ -2,7 +2,7 @@ import {
     authenticateAsync,
     getEnrolledLevelAsync,
 } from 'expo-local-authentication'
-import { router } from 'expo-router'
+import { type RelativePathString, router } from 'expo-router'
 
 /**
  * Converts a version string in the format x.y.z to x.y.
@@ -44,7 +44,7 @@ export const handleBiometricAuth = async (path: string): Promise<void> => {
     const securityLevel = await getEnrolledLevelAsync()
     if (securityLevel === 0) {
         // no passcode or biometric auth set up
-        router.navigate(path)
+        router.navigate(path as RelativePathString)
         return
     }
 
@@ -54,6 +54,6 @@ export const handleBiometricAuth = async (path: string): Promise<void> => {
     })
 
     if (biometricAuth.success) {
-        router.navigate(path)
+        router.navigate(path as RelativePathString)
     }
 }

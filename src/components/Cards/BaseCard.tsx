@@ -1,7 +1,7 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { router } from 'expo-router'
+import { type RelativePathString, router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
@@ -62,7 +62,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
         <Pressable
             disabled={onPressRoute == null}
             onPress={() => {
-                onPressRoute != null && router.navigate(onPressRoute)
+                onPressRoute != null &&
+                    router.navigate(onPressRoute as RelativePathString)
             }}
             delayLongPress={300}
             onLongPress={() => {}}
@@ -73,14 +74,15 @@ const BaseCard: React.FC<BaseCardProps> = ({
                 actions={actions}
                 onPress={(e) => {
                     e.nativeEvent.name === t('contextMenu.settings') &&
-                        router.navigate('dashboard')
+                        router.navigate('/dashboard')
                     e.nativeEvent.name === t('contextMenu.hide') &&
                         hideDashboardEntry(title)
                     e.nativeEvent.name === t('contextMenu.reset') &&
                         resetOrder(userKind ?? 'guest')
                 }}
                 onPreviewPress={() => {
-                    onPressRoute != null && router.navigate(onPressRoute)
+                    onPressRoute != null &&
+                        router.navigate(onPressRoute as RelativePathString)
                 }}
             >
                 <View style={styles.card}>

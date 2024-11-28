@@ -57,7 +57,7 @@ export default function CalendarPage(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.push(' login')
+                router.push('/login')
                 return false
             }
             return failureCount < 2

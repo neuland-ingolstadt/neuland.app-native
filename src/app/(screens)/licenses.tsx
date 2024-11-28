@@ -71,7 +71,7 @@ export default function Licenses(): JSX.Element {
                 icon: chevronIcon,
                 onPress: () => {
                     router.navigate({
-                        pathname: 'license',
+                        pathname: '/license',
                         params: {
                             license: value.licenses,
                             version: version != null ? version[0] : '',

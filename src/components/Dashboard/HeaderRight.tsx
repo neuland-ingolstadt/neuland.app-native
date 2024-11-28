@@ -229,22 +229,22 @@ export const IndexHeaderRight = (): JSX.Element => {
                 ]}
                 onPress={(e) => {
                     if (e.nativeEvent.name === t('navigation.profile')) {
-                        router.push('profile')
+                        router.push('/profile')
                     } else if (e.nativeEvent.name === t('navigation.accent')) {
-                        router.push('accent')
+                        router.push('/accent')
                     } else if (e.nativeEvent.name === t('navigation.about')) {
-                        router.push('about')
+                        router.push('/about')
                     } else if (e.nativeEvent.name === 'Logout') {
                         logoutAlert()
                     } else if (
                         e.nativeEvent.name ===
                         t('menu.guest.title', { ns: 'settings' })
                     ) {
-                        router.push('login')
+                        router.push('/login')
                     }
                 }}
                 onPreviewPress={() => {
-                    router.navigate('settings')
+                    router.navigate('/settings')
                 }}
             >
                 {children}
@@ -255,7 +255,7 @@ export const IndexHeaderRight = (): JSX.Element => {
     return (
         <Pressable
             onPress={() => {
-                router.navigate('settings')
+                router.navigate('/settings')
             }}
             delayLongPress={300}
             onLongPress={() => {}}

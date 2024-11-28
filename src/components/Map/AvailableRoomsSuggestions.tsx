@@ -43,7 +43,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                 {userKind !== USER_GUEST && (
                     <Pressable
                         onPress={() => {
-                            router.navigate('roomSearch')
+                            router.navigate('/roomSearch')
                         }}
                         hitSlop={{
                             top: 10,
@@ -61,7 +61,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
             <Pressable
                 style={styles.radiusBg}
                 onPress={() => {
-                    router.navigate('login')
+                    router.navigate('/login')
                 }}
                 disabled={userKind !== USER_GUEST}
             >

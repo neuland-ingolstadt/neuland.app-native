@@ -63,14 +63,14 @@ export default function FoodPreferences(): JSX.Element {
                     title: t('preferences.formlist.allergens'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('foodAllergens')
+                        router.push('/foodAllergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('foodFlags')
+                        router.push('/foodFlags')
                     },
                 },
             ],

@@ -28,7 +28,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                                 void InteractionManager.runAfterInteractions(
                                     () => {
                                         router.navigate({
-                                            pathname: '(tabs)/map',
+                                            pathname: '/(tabs)/map',
                                             params: { room: room.room },
                                         })
                                     }

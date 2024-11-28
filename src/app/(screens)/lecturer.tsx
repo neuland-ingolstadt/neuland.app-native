@@ -69,7 +69,7 @@ export default function LecturerDetail(): JSX.Element {
                     textColor: theme.colors.primary,
                     onPress: () => {
                         router.dismissTo({
-                            pathname: '(tabs)/map',
+                            pathname: '/(tabs)/map',
                             params: { room: lecturer?.room_short ?? '' },
                         })
                     },

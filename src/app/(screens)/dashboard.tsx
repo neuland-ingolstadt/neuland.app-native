@@ -174,7 +174,7 @@ export default function DashboardEdit(): JSX.Element {
                         <Pressable
                             style={[styles.card, styles.noteContainer]}
                             onPress={() => {
-                                router.navigate('login')
+                                router.navigate('/login')
                             }}
                         >
                             <View style={styles.noteTextContainer}>

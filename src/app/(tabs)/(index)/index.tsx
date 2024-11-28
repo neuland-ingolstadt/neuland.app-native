@@ -105,7 +105,7 @@ function HomeScreen(): JSX.Element {
                 }}
                 buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
                 onButtonPress={() => {
-                    router.navigate('dashboard')
+                    router.navigate('/dashboard')
                 }}
                 isCritical={false}
             />

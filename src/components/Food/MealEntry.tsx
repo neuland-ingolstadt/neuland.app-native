@@ -131,7 +131,7 @@ export const MealEntry = ({
                         JSON.stringify(meal)
                     ).toString('base64')
                     router.push({
-                        pathname: 'meal',
+                        pathname: '/meal',
                         params: {
                             foodEntry: base64Event,
                         },
@@ -155,7 +155,7 @@ export const MealEntry = ({
                             JSON.stringify(meal)
                         ).toString('base64')
                         router.push({
-                            pathname: 'meal',
+                            pathname: '/meal',
                             params: {
                                 foodEntry: base64Event,
                             },
