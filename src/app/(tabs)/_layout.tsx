@@ -1,5 +1,4 @@
-import DefaultTabs from '@/components/Layout/DefaultTabs'
-import MaterialTabs from '@/components/Layout/MaterialTabs'
+import TabLayout from '@/components/Layout/Tabbar'
 import {
     FlowContext,
     FoodFilterContext,
@@ -101,6 +100,7 @@ export default function HomeLayout(): JSX.Element {
         ]
         function processShortcut(item: ShortcutItem): void {
             router.navigate({
+                // @ts-expect-error no types
                 pathname: item.data.path as string,
                 params: { fromAppShortcut: 'true' },
             })
@@ -144,7 +144,7 @@ export default function HomeLayout(): JSX.Element {
     }, [appIcon])
 
     if (isOnboarded !== true) {
-        return <Redirect href={'(flow)/onboarding'} />
+        return <Redirect href={'/onboarding'} />
     }
 
     const version = Application.nativeApplicationVersion
@@ -160,8 +160,8 @@ export default function HomeLayout(): JSX.Element {
         isChangelogAvailable &&
         flow.isOnboarded === true
     ) {
-        return <Redirect href={'(flow)/whatsnew'} />
+        return <Redirect href={'/whatsnew'} />
     }
 
-    return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />
+    return <TabLayout />
 }

@@ -27,6 +27,7 @@ import {
     Platform,
     Pressable,
     RefreshControl,
+    SafeAreaView,
     ScrollView,
     Text,
     View,
@@ -158,117 +159,115 @@ export function FoodScreen(): JSX.Element {
         allergenSelection.length === 1 &&
         allergenSelection[0] === 'not-configured'
     return (
-        <>
-            <View style={{ ...styles.page }}>
-                {isLoading && !isRefetchingByUser ? (
-                    <View style={styles.loadingContainer}>
-                        <LoadingIndicator />
-                    </View>
-                ) : isError ? (
-                    <ErrorView
-                        title={
-                            error?.message === 'noMeals'
-                                ? t('error.noMeals')
-                                : (error?.message ?? t('error.title'))
-                        }
-                        onRefresh={refetchByUser}
-                        refreshing={isRefetchingByUser}
-                    />
-                ) : isPaused && !isSuccess ? (
-                    <ErrorView
-                        title={networkError}
-                        onRefresh={refetchByUser}
-                        refreshing={isRefetchingByUser}
-                    />
-                ) : isSuccess && data.length > 0 ? (
-                    <>
-                        <Animated.View
-                            // eslint-disable-next-line react-native/no-inline-styles
-                            style={{
-                                ...styles.animtedContainer,
+        <SafeAreaView style={{ ...styles.page }}>
+            {isLoading && !isRefetchingByUser ? (
+                <View style={styles.loadingContainer}>
+                    <LoadingIndicator />
+                </View>
+            ) : isError ? (
+                <ErrorView
+                    title={
+                        error?.message === 'noMeals'
+                            ? t('error.noMeals')
+                            : (error?.message ?? t('error.title'))
+                    }
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
+                />
+            ) : isPaused && !isSuccess ? (
+                <ErrorView
+                    title={networkError}
+                    onRefresh={refetchByUser}
+                    refreshing={isRefetchingByUser}
+                />
+            ) : isSuccess && data.length > 0 ? (
+                <>
+                    <Animated.View
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{
+                            ...styles.animtedContainer,
 
-                                borderBottomWidth: showAllergensBanner
-                                    ? 0
-                                    : scrollY.interpolate({
-                                          inputRange: [0, 0, 0],
-                                          outputRange: [0, 0, 0.5],
-                                          extrapolate: 'clamp',
-                                      }),
-                            }}
-                        >
-                            <View
-                                style={{
-                                    ...styles.loadedContainer,
-                                }}
-                            >
-                                {data
-                                    .slice(0, 5)
-                                    .map((day: Food, index: number) => (
-                                        <DayButton
-                                            day={day}
-                                            index={index}
-                                            key={index}
-                                        />
-                                    ))}
-                            </View>
-                        </Animated.View>
-                        {showAllergensBanner && (
-                            <AllergensBanner scrollY={scrollY} />
-                        )}
-                        <PagerView
-                            ref={pagerViewRef}
+                            borderBottomWidth: showAllergensBanner
+                                ? 0
+                                : scrollY.interpolate({
+                                      inputRange: [0, 0, 0],
+                                      outputRange: [0, 0, 0.5],
+                                      extrapolate: 'clamp',
+                                  }),
+                        }}
+                    >
+                        <View
                             style={{
-                                ...styles.page,
-                                height: screenHeight,
+                                ...styles.loadedContainer,
                             }}
-                            initialPage={0}
-                            onPageSelected={(e) => {
-                                const page = e.nativeEvent.position
-                                setSelectedDay(page)
-                            }}
-                            scrollEnabled
-                            overdrag
                         >
-                            {data.map((_: any, index: number) => (
-                                <ScrollView
-                                    refreshControl={
-                                        <RefreshControl
-                                            refreshing={isRefetchingByUser}
-                                            onRefresh={() => {
-                                                void refetchByUser()
-                                            }}
-                                        />
-                                    }
-                                    scrollEventThrottle={16}
-                                    onScroll={Animated.event(
-                                        [
-                                            {
-                                                nativeEvent: {
-                                                    contentOffset: {
-                                                        y: scrollY,
-                                                    },
-                                                },
-                                            },
-                                        ],
-                                        { useNativeDriver: false }
-                                    )}
-                                    key={index}
-                                    contentContainerStyle={
-                                        styles.innerScrollContainer
-                                    }
-                                >
-                                    <MealDay
-                                        day={data[index]}
+                            {data
+                                .slice(0, 5)
+                                .map((day: Food, index: number) => (
+                                    <DayButton
+                                        day={day}
                                         index={index}
                                         key={index}
                                     />
-                                </ScrollView>
-                            ))}
-                        </PagerView>
-                    </>
-                ) : null}
-            </View>
-        </>
+                                ))}
+                        </View>
+                    </Animated.View>
+                    {showAllergensBanner && (
+                        <AllergensBanner scrollY={scrollY} />
+                    )}
+                    <PagerView
+                        ref={pagerViewRef}
+                        style={{
+                            ...styles.page,
+                            height: screenHeight,
+                        }}
+                        initialPage={0}
+                        onPageSelected={(e) => {
+                            const page = e.nativeEvent.position
+                            setSelectedDay(page)
+                        }}
+                        scrollEnabled
+                        overdrag
+                    >
+                        {data.map((_: any, index: number) => (
+                            <ScrollView
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={isRefetchingByUser}
+                                        onRefresh={() => {
+                                            void refetchByUser()
+                                        }}
+                                    />
+                                }
+                                scrollEventThrottle={16}
+                                onScroll={Animated.event(
+                                    [
+                                        {
+                                            nativeEvent: {
+                                                contentOffset: {
+                                                    y: scrollY,
+                                                },
+                                            },
+                                        },
+                                    ],
+                                    { useNativeDriver: false }
+                                )}
+                                key={index}
+                                contentContainerStyle={
+                                    styles.innerScrollContainer
+                                }
+                            >
+                                <MealDay
+                                    day={data[index]}
+                                    index={index}
+                                    key={index}
+                                />
+                            </ScrollView>
+                        ))}
+                    </PagerView>
+                </>
+            ) : null}
+        </SafeAreaView>
     )
 }
 

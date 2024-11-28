@@ -10,7 +10,13 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, LayoutAnimation, Platform, View } from 'react-native'
+import {
+    Dimensions,
+    LayoutAnimation,
+    Platform,
+    SafeAreaView,
+    View,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -92,58 +98,69 @@ function HomeScreen(): JSX.Element {
         }
     }, [])
 
-    return shownDashboardEntries === null ||
-        shownDashboardEntries.length === 0 ? (
-        <View style={styles.errorContainer}>
-            <ErrorView
-                title={t('dashboard.noShown', { ns: 'settings' })}
-                message={t('dashboard.noShownDescription', { ns: 'settings' })}
-                icon={{
-                    ios: 'rainbow',
-                    multiColor: true,
-                    android: 'dashboard_customize',
-                }}
-                buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
-                onButtonPress={() => {
-                    router.navigate('dashboard')
-                }}
-                isCritical={false}
-            />
-        </View>
-    ) : (
-        <MasonryFlashList
-            key={orientation}
-            contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={{ ...styles.container, ...styles.page }}
-            showsVerticalScrollIndicator={false}
-            data={shownDashboardEntries}
-            renderItem={({ item, index }) => {
-                let paddingStyle = {}
+    return (
+        <SafeAreaView style={styles.pageView}>
+            {shownDashboardEntries === null ||
+            shownDashboardEntries.length === 0 ? (
+                <View style={styles.errorContainer}>
+                    <ErrorView
+                        title={t('dashboard.noShown', { ns: 'settings' })}
+                        message={t('dashboard.noShownDescription', {
+                            ns: 'settings',
+                        })}
+                        icon={{
+                            ios: 'rainbow',
+                            multiColor: true,
+                            android: 'dashboard_customize',
+                        }}
+                        buttonText={t('dashboard.noShownButton', {
+                            ns: 'settings',
+                        })}
+                        onButtonPress={() => {
+                            router.navigate('/dashboard')
+                        }}
+                        isCritical={false}
+                    />
+                </View>
+            ) : (
+                <MasonryFlashList
+                    key={orientation}
+                    contentInsetAdjustmentBehavior="automatic"
+                    contentContainerStyle={{
+                        ...styles.container,
+                        ...styles.page,
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    data={shownDashboardEntries}
+                    renderItem={({ item, index }) => {
+                        let paddingStyle = {}
 
-                if (columns !== 1) {
-                    paddingStyle =
-                        index % 2 === 0
-                            ? { marginRight: theme.margins.page / 2 }
-                            : { marginLeft: theme.margins.page / 2 }
-                }
+                        if (columns !== 1) {
+                            paddingStyle =
+                                index % 2 === 0
+                                    ? { marginRight: theme.margins.page / 2 }
+                                    : { marginLeft: theme.margins.page / 2 }
+                        }
 
-                return (
-                    <View style={[styles.item, paddingStyle]}>
-                        {item.card()}
-                    </View>
-                )
-            }}
-            keyExtractor={(item) => item.key}
-            numColumns={columns}
-            estimatedItemSize={114}
-            ListHeaderComponent={() =>
-                data !== undefined ? (
-                    <PopUpCard data={data?.appAnnouncements} />
-                ) : (
-                    <></>
-                )
-            }
-        />
+                        return (
+                            <View style={[styles.item, paddingStyle]}>
+                                {item.card()}
+                            </View>
+                        )
+                    }}
+                    keyExtractor={(item) => item.key}
+                    numColumns={columns}
+                    estimatedItemSize={114}
+                    ListHeaderComponent={() =>
+                        data !== undefined ? (
+                            <PopUpCard data={data?.appAnnouncements} />
+                        ) : (
+                            <></>
+                        )
+                    }
+                />
+            )}
+        </SafeAreaView>
     )
 }
 
@@ -165,5 +182,8 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         backgroundColor: theme.colors.background,
+    },
+    pageView: {
+        flex: 1,
     },
 }))

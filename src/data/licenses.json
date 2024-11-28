@@ -11,6 +11,12 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "@bottom-tabs/react-navigation@0.7.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@14.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -257,6 +263,12 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-bottom-tabs@0.7.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "parents": "neuland"
+    },
     "react-native-collapsible@1.6.1": {
         "licenses": "MIT",
         "repository": "https://oblador@github.com/oblador/react-native-collapsible",
@@ -315,12 +327,6 @@
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-pager-view",
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-paper@5.12.5": {
-        "licenses": "MIT",
-        "repository": "https://github.com/callstack/react-native-paper",
-        "licenseUrl": "https://github.com/callstack/react-native-paper/raw/master/LICENSE.md",
         "parents": "neuland"
     },
     "react-native-reanimated@3.16.3": {

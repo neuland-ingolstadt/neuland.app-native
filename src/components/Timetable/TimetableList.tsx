@@ -98,7 +98,7 @@ export default function TimetableList({
         )
 
         router.navigate({
-            pathname: 'lecture',
+            pathname: '/lecture',
             params: { lecture: base64Event },
         })
     }
@@ -183,7 +183,7 @@ export default function TimetableList({
         const base64Event = Buffer.from(JSON.stringify(exam)).toString('base64')
         const navigateToPage = (): void => {
             router.push({
-                pathname: 'exam',
+                pathname: '/exam',
                 params: { examEntry: base64Event },
             })
         }
