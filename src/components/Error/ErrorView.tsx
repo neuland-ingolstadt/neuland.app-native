@@ -116,7 +116,7 @@ export default function ErrorView({
         const buttonAction = (): void => {
             switch (title) {
                 case guestError:
-                    router.navigate('login')
+                    router.navigate('/login')
                     break
                 default:
                     if (onButtonPress != null) {
@@ -130,7 +130,7 @@ export default function ErrorView({
         if (title === guestError) {
             buttonProps = {
                 onPress: () => {
-                    router.navigate('login')
+                    router.navigate('/login')
                 },
                 text: t('error.guest.button'),
             }

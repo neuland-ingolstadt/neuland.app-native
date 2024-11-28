@@ -89,7 +89,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.push('login')
+                        router.push('/login')
                         return false
                     }
                     return failureCount < 2
@@ -107,7 +107,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.navigate('login')
+                        router.navigate('/login')
                         return false
                     }
                     return failureCount < 2

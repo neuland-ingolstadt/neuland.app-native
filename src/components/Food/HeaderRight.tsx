@@ -12,7 +12,7 @@ export const FoodHeaderRight = (): JSX.Element => {
     return (
         <Pressable
             onPress={() => {
-                router.push('foodPreferences')
+                router.push('/foodPreferences')
             }}
             hitSlop={10}
             style={styles.headerButton}

@@ -18,7 +18,7 @@ const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
             'base64'
         )
         router.navigate({
-            pathname: 'sportsEvent',
+            pathname: '/sportsEvent',
             params: { sportsEventEntry: base64Event },
         })
     }

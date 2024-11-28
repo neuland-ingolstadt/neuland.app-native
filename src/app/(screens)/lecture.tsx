@@ -95,7 +95,7 @@ export default function TimetableDetails(): JSX.Element {
                 icon: chevronIcon,
                 onPress: () => {
                     router.push({
-                        pathname: 'webView',
+                        pathname: '/webView',
                         params: {
                             title: t(titleKey),
                             html,
@@ -251,7 +251,7 @@ export default function TimetableDetails(): JSX.Element {
                                                         onPress={() => {
                                                             router.dismissTo({
                                                                 pathname:
-                                                                    '(tabs)/map',
+                                                                    '/(tabs)/map',
                                                                 params: {
                                                                     room,
                                                                 },

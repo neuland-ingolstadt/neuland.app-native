@@ -79,7 +79,7 @@ export default function OnboardingScreen(): JSX.Element {
                     flow.setUpdated(true)
                     flow.setAnalyticsAllowed(true)
                     router.navigate({
-                        pathname: '(screens)/login',
+                        pathname: '/login',
                         params: { fromOnboarding: 'true' },
                     })
                 }}

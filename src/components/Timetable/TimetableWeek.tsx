@@ -345,14 +345,14 @@ export default function TimetableWeek({
         if (entry.eventType === 'exam') {
             const navigateToPage = (): void => {
                 router.navigate({
-                    pathname: 'exam',
+                    pathname: '/exam',
                     params: { examEntry: base64Event },
                 })
             }
             navigateToPage()
         } else if (entry.eventType === 'lecture') {
             router.navigate({
-                pathname: 'lecture',
+                pathname: '/lecture',
                 params: {
                     lecture: base64Event,
                 },

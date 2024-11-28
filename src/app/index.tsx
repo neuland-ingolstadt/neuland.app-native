@@ -25,7 +25,7 @@ export default function App(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <Redirect href={'(tabs)/(index)'} />
+            <Redirect href={'/(tabs)/(index)'} />
             <View style={{ ...styles.page, backgroundColor }} />
         </>
     )

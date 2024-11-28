@@ -35,7 +35,7 @@ const LibraryCard = (): JSX.Element => {
         enabled: userKind !== USER_GUEST,
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.replace('login')
+                router.replace('/login')
                 return false
             }
             return failureCount < 2

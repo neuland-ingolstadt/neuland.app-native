@@ -56,7 +56,7 @@ export default function About(): JSX.Element {
                     title: 'Changelog',
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('changelog')
+                        router.navigate('/changelog')
                     },
                 },
                 {
@@ -124,7 +124,7 @@ export default function About(): JSX.Element {
                     title: t('about.formlist.legal.button'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('legal')
+                        router.navigate('/legal')
                     },
                 },
             ],
