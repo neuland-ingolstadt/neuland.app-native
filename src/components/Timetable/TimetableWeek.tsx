@@ -14,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
 import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Platform, SafeAreaView, Text, View } from 'react-native'
 import {
     UnistylesRuntime,
     createStyleSheet,
@@ -345,14 +345,14 @@ export default function TimetableWeek({
         if (entry.eventType === 'exam') {
             const navigateToPage = (): void => {
                 router.navigate({
-                    pathname: 'exam',
+                    pathname: '/exam',
                     params: { examEntry: base64Event },
                 })
             }
             navigateToPage()
         } else if (entry.eventType === 'lecture') {
             router.navigate({
-                pathname: 'lecture',
+                pathname: '/lecture',
                 params: {
                     lecture: base64Event,
                 },
@@ -361,36 +361,38 @@ export default function TimetableWeek({
     }
 
     return (
-        <WeekView
-            ref={weekViewRef}
-            events={allEvents as unknown as WeekViewEvent[]}
-            selectedDate={selectedDate}
-            numberOfDays={3}
-            hoursInDisplay={14}
-            showNowLine={true}
-            showTitle={false}
-            locale="de"
-            timesColumnWidth={0.15}
-            nowLineColor={styles.nowLine(isIOS).color}
-            headerStyle={styles.headerStyle}
-            headerTextStyle={styles.text}
-            hourTextStyle={styles.text}
-            startHour={8}
-            // @ts-expect-error wrong type
-            EventComponent={Event}
-            onEventPress={(event) => {
-                showEventDetails(event)
-            }}
-            onSwipeNext={(event) => {
-                setLocalSelectedDate(new Date(event))
-            }}
-            onSwipePrev={(event) => {
-                setLocalSelectedDate(new Date(event))
-            }}
-            gridRowStyle={styles.grid}
-            gridColumnStyle={styles.grid}
-            DayHeaderComponent={DayHeaderComponent}
-        />
+        <SafeAreaView style={styles.pageView}>
+            <WeekView
+                ref={weekViewRef}
+                events={allEvents as unknown as WeekViewEvent[]}
+                selectedDate={selectedDate}
+                numberOfDays={3}
+                hoursInDisplay={14}
+                showNowLine={true}
+                showTitle={false}
+                locale="de"
+                timesColumnWidth={0.15}
+                nowLineColor={styles.nowLine(isIOS).color}
+                headerStyle={styles.headerStyle}
+                headerTextStyle={styles.text}
+                hourTextStyle={styles.text}
+                startHour={8}
+                // @ts-expect-error wrong type
+                EventComponent={Event}
+                onEventPress={(event) => {
+                    showEventDetails(event)
+                }}
+                onSwipeNext={(event) => {
+                    setLocalSelectedDate(new Date(event))
+                }}
+                onSwipePrev={(event) => {
+                    setLocalSelectedDate(new Date(event))
+                }}
+                gridRowStyle={styles.grid}
+                gridColumnStyle={styles.grid}
+                DayHeaderComponent={DayHeaderComponent}
+            />
+        </SafeAreaView>
     )
 }
 
@@ -459,7 +461,9 @@ const stylesheet = createStyleSheet((theme) => ({
     nowLine: (isIOS: boolean) => ({
         color: isIOS ? theme.colors.primary : theme.colors.notification,
     }),
-
+    pageView: {
+        flex: 1,
+    },
     roomRow: {
         alignItems: 'center',
         flexDirection: 'row',

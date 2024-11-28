@@ -16,7 +16,6 @@
                 "webcredentials:neuland.app",
                 "activitycontinuation:neuland.app"
             ],
-
             "config": {
                 "usesNonExemptEncryption": false
             },
@@ -36,11 +35,12 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 231
+            "versionCode": 233
         },
         "sdkVersion": "52.0.0",
         "experiments": {
-            "tsconfigPaths": true
+            "tsconfigPaths": true,
+            "typedRoutes": true
         },
         "plugins": [
             [

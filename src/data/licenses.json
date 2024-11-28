@@ -329,12 +329,6 @@
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-paper@5.12.5": {
-        "licenses": "MIT",
-        "repository": "https://github.com/callstack/react-native-paper",
-        "licenseUrl": "https://github.com/callstack/react-native-paper/raw/master/LICENSE.md",
-        "parents": "neuland"
-    },
     "react-native-reanimated@3.16.3": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",

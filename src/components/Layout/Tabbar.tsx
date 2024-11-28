@@ -1,5 +1,6 @@
 import Color from 'color'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
 
@@ -7,6 +8,7 @@ import { Tabs } from './NativeBottomTabs'
 
 export default function TabLayout(): JSX.Element {
     const { theme } = useStyles()
+    const { t } = useTranslation('navigation')
     const isAndroid = Platform.OS === 'android'
     return (
         <Tabs
@@ -54,7 +56,7 @@ export default function TabLayout(): JSX.Element {
             <Tabs.Screen
                 name="(timetable)"
                 options={{
-                    title: 'Explore',
+                    title: t('navigation.timetable'),
                     tabBarIcon: ({ focused }: { focused: boolean }) =>
                         isAndroid
                             ? focused
@@ -66,7 +68,7 @@ export default function TabLayout(): JSX.Element {
             <Tabs.Screen
                 name="map"
                 options={{
-                    title: 'Map',
+                    title: t('navigation.map'),
                     tabBarIcon: ({ focused }: { focused: boolean }) =>
                         isAndroid
                             ? focused
@@ -78,7 +80,7 @@ export default function TabLayout(): JSX.Element {
             <Tabs.Screen
                 name="(food)"
                 options={{
-                    title: 'Food',
+                    title: t('navigation.food'),
                     tabBarIcon: ({ focused }: { focused: boolean }) =>
                         isAndroid
                             ? focused
