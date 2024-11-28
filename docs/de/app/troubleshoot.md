@@ -19,4 +19,4 @@ Falls verfügbar, nutze die Feedback-Funktion in der App, um das Problem zu meld
 
 Du kannst das Problem auch per E-Mail an [app-feedback@informatik.sexy](mailto:app-feedback@informatik.sexy) melden. Bitte gib so viele Informationen wie möglich an, wie z.B. das verwendete Gerät, die Version der App und eine detaillierte Beschreibung des Problems.
 
-Für fortgeschrittene Nutzer besteht auch die Möglichkeit, das Problem in unserem [GitHub Repository](http://github.com/neuland-ingolstadt/neuland.app-native) zu melden.
+Für fortgeschrittene Nutzer besteht auch die Möglichkeit, das Problem in unserem [GitHub Repository](https://github.com/neuland-ingolstadt/neuland.app-native/issues/new?assignees=&labels=bug&projects=&template=bug_report.yml&title=%5BBug%5D%3A+) zu melden.
