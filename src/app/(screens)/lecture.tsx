@@ -59,8 +59,10 @@ export default function TimetableDetails(): JSX.Element {
     const startDate = new Date(lecture.startDate)
     const endDate = new Date(lecture.endDate)
 
-    const examSplit = lecture.exam.split('-').slice(-1)[0].trim()
-    const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
+    const exam =
+        lecture.exam != null
+            ? `${lecture.exam.split('-').slice(-1)[0].trim()[0].toUpperCase()}${lecture.exam.split('-').slice(-1)[0].trim().slice(1)}`
+            : null
 
     async function shareEvent(): Promise<void> {
         try {
@@ -121,11 +123,15 @@ export default function TimetableDetails(): JSX.Element {
         {
             header: t('details.title'),
             items: [
-                {
-                    title: t('details.exam'),
-                    value: exam,
-                    layout: 'column',
-                },
+                ...(exam != null
+                    ? [
+                          {
+                              title: t('details.exam'),
+                              value: exam,
+                              layout: 'column' as 'column',
+                          },
+                      ]
+                    : []),
                 {
                     title: t('details.studyGroup'),
                     value: lecture.studyGroup,

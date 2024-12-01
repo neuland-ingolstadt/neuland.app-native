@@ -37,7 +37,7 @@ export default function CrashView({
     trackEvent('ErrorView', {
         title: error.message,
         path,
-        crash: false,
+        crash: true,
     })
 
     const handlePress = (): void => {
