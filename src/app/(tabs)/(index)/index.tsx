@@ -93,7 +93,7 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
-    const annoucements = getFragmentData(
+    const announcements = getFragmentData(
         AnnouncementFieldsFragmentDoc,
         data?.appAnnouncements
     )
@@ -142,7 +142,11 @@ function HomeScreen(): JSX.Element {
             numColumns={columns}
             estimatedItemSize={114}
             ListHeaderComponent={() =>
-                annoucements != null ? <PopUpCard data={annoucements} /> : <></>
+                announcements != null ? (
+                    <PopUpCard data={announcements} />
+                ) : (
+                    <></>
+                )
             }
         />
     )

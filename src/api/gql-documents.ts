@@ -8,7 +8,7 @@ export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-export const APP_ANNOUCEMENT_FRAGMENT = graphql(/* GraphQL */ `
+export const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
     fragment AnnouncementFields on Announcement {
         id
         title {
