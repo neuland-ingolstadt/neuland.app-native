@@ -1,7 +1,7 @@
+import { type CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/ErrorView'
 import CLEventRow from '@/components/Rows/EventRow'
 import Divider from '@/components/Universal/Divider'
-import { type CampusLifeEventFieldsFragment } from '@/gql/graphql'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { type UseQueryResult } from '@tanstack/react-query'

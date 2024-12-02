@@ -3,7 +3,7 @@ import {
     type CampusLifeEventsQuery,
     type FoodPlanQuery,
     type UniversitySportsQuery,
-} from '@/gql/graphql'
+} from '@/__generated__/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
 // Import the generated type
 import { type RequestDocument, type Variables, request } from 'graphql-request'

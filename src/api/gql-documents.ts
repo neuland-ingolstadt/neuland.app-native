@@ -1,4 +1,4 @@
-import { graphql } from '@/gql'
+import { graphql } from '@/__generated__/gql'
 
 export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     query AppAnnouncements {

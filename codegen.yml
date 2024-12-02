@@ -2,7 +2,7 @@ overwrite: true
 schema: 'https://api.dev.neuland.app/graphql'
 documents: 'src/api/**/*.ts'
 generates:
-    'src/gql/':
+    'src/__generated__/gql/':
         preset: 'client'
         presetConfig:
             fragmentMasking:

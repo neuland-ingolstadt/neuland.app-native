@@ -1,5 +1,5 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import { type AnnouncementFieldsFragment } from '@/gql/graphql'
+import { type AnnouncementFieldsFragment } from '@/__generated__/gql/graphql'
 import i18n from '@/localization/i18n'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'

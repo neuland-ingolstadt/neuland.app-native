@@ -1,4 +1,4 @@
-import { type CampusLifeEventFieldsFragment } from '@/gql/graphql'
+import { type CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import { type LanguageKey } from '@/localization/i18n'
 import {
     formatFriendlyDateTimeRange,

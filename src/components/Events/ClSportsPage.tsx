@@ -1,11 +1,11 @@
+import {
+    type UniversitySportsFieldsFragment,
+    type WeekdayType,
+} from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/ErrorView'
 import SportsRow from '@/components/Rows/SportsRow'
 import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
-import {
-    type UniversitySportsFieldsFragment,
-    type WeekdayType,
-} from '@/gql/graphql'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { type UseQueryResult } from '@tanstack/react-query'

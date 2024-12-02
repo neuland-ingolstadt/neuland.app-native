@@ -1,4 +1,4 @@
-import { type UniversitySportsFieldsFragment } from '@/gql/graphql'
+import { type UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
