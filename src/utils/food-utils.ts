@@ -21,8 +21,8 @@ export async function loadFoodEntries(
     restaurants: string[],
     includeStatic: boolean = false
 ): Promise<Food[]> {
-    const foodData = [(await NeulandAPI.getFoodPlan(restaurants)).food]
-    const data = getFragmentData(FoodFieldsFragmentDoc, foodData)
+    const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
+    const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday
     let days: Date[] = Array.from({ length: 7 }, (_, i) => {
