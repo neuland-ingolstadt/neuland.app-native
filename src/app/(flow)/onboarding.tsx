@@ -71,7 +71,6 @@ export default function OnboardingScreen(): JSX.Element {
             <Pressable
                 style={styles.button}
                 onPress={() => {
-                    console.log('ContinueButton')
                     if (Platform.OS === 'ios') {
                         void Haptics.selectionAsync()
                     }

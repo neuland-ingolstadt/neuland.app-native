@@ -244,7 +244,7 @@ const MapScreen = (): JSX.Element => {
 
     const allRooms: FeatureCollection = useMemo(() => {
         if (mapOverlay == null) {
-            console.log('No map overlay data')
+            console.debug('No map overlay data')
             return { type: 'FeatureCollection', features: [] }
         }
 
@@ -412,7 +412,7 @@ const MapScreen = (): JSX.Element => {
     useEffect(() => {
         async function load(): Promise<void> {
             if (roomStatusData == null) {
-                console.log('No room status data')
+                console.debug('No room status data')
                 return
             }
             try {

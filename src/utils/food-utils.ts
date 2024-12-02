@@ -1,3 +1,5 @@
+import { getFragmentData } from '@/__generated__/gql'
+import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import { type FoodLanguage } from '@/contexts/foodFilter'
 import allergenMap from '@/data/allergens.json'
@@ -19,9 +21,8 @@ export async function loadFoodEntries(
     restaurants: string[],
     includeStatic: boolean = false
 ): Promise<Food[]> {
-    const data = [
-        (await NeulandAPI.getFoodPlan(restaurants)).food.foodData,
-    ] as Food[][]
+    const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
+    const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday
     let days: Date[] = Array.from({ length: 7 }, (_, i) => {

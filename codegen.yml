@@ -1,0 +1,16 @@
+overwrite: true
+schema: 'https://api.dev.neuland.app/graphql'
+documents: 'src/api/**/*.ts'
+generates:
+    'src/__generated__/gql/':
+        preset: 'client'
+        presetConfig:
+            fragmentMasking:
+                unmaskFunctionName: 'getFragmentData'
+
+config:
+    scalars:
+        DateTime: 'Date'
+        URL: 'string'
+        LocalEndTime: 'string'
+        EmailAddress: 'string'

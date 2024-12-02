@@ -1,8 +1,11 @@
+import {
+    type UniversitySportsFieldsFragment,
+    type WeekdayType,
+} from '@/__generated__/gql/graphql'
 import FormList from '@/components/Universal/FormList'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { Buffer } from 'buffer/'
@@ -21,7 +24,7 @@ export default function SportsEventDetail(): JSX.Element {
     const { sportsEventEntry } = useLocalSearchParams<{
         sportsEventEntry: string
     }>()
-    const sportsEvent: UniversitySports | undefined =
+    const sportsEvent: UniversitySportsFieldsFragment | undefined =
         sportsEventEntry != null
             ? JSON.parse(Buffer.from(sportsEventEntry, 'base64').toString())
             : undefined
@@ -46,9 +49,7 @@ export default function SportsEventDetail(): JSX.Element {
                                     ],
                                     weekday: t(
                                         `dates.weekdays.${
-                                            sportsEvent.weekday.toLowerCase() as Lowercase<
-                                                UniversitySports['weekday']
-                                            >
+                                            sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
                                         }`
                                     ),
                                     time: formatFriendlyTimeRange(
@@ -69,8 +70,8 @@ export default function SportsEventDetail(): JSX.Element {
     }
 
     const isDescriptionAvailable =
-        !((sportsEvent?.description.de ?? '') === '') ||
-        !((sportsEvent?.description.en ?? '') === '')
+        !((sportsEvent?.description?.de ?? '') === '') ||
+        !((sportsEvent?.description?.en ?? '') === '')
     const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
     const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
@@ -82,9 +83,7 @@ export default function SportsEventDetail(): JSX.Element {
                     title: t('pages.event.weekday'),
                     value: t(
                         `dates.weekdays.${
-                            sportsEvent.weekday.toLowerCase() as Lowercase<
-                                UniversitySports['weekday']
-                            >
+                            sportsEvent.weekday.toLowerCase() as Lowercase<WeekdayType>
                         }`
                     ),
                 },
@@ -110,7 +109,7 @@ export default function SportsEventDetail(): JSX.Element {
                   {
                       header: t('pages.event.description'),
                       item:
-                          sportsEvent?.description[
+                          sportsEvent?.description?.[
                               i18n.language as LanguageKey
                           ] ?? undefined,
                   },

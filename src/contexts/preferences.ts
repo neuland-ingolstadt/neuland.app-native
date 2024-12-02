@@ -60,7 +60,6 @@ export function usePreferences(): PreferencesType {
                 ...uniqueQuicklinks,
                 ...additionalQuicklinks,
             ].slice(0, 3)
-            console.log('Final quicklinks:', finalQuicklinks)
             setRecentQuicklinks(finalQuicklinks)
         },
         [recentQuicklinks, setRecentQuicklinks]
