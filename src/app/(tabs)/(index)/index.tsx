@@ -68,7 +68,7 @@ function HomeScreen(): JSX.Element {
     )
     const { t } = useTranslation(['navigation', 'settings'])
     const { data } = useQuery({
-        queryKey: ['announcenments'],
+        queryKey: ['announcements'],
         queryFn: async () => await NeulandAPI.getAnnouncements(),
         staleTime: 1000 * 60 * 30, // 30 minutes
         gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
