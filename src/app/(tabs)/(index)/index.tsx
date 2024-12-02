@@ -4,6 +4,8 @@ import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
+import { getFragmentData } from '@/gql'
+import { AnnouncementFieldsFragmentDoc } from '@/gql/graphql'
 import { MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -66,11 +68,12 @@ function HomeScreen(): JSX.Element {
     )
     const { t } = useTranslation(['navigation', 'settings'])
     const { data } = useQuery({
-        queryKey: ['announcements'],
+        queryKey: ['announcenments'],
         queryFn: async () => await NeulandAPI.getAnnouncements(),
         staleTime: 1000 * 60 * 30, // 30 minutes
         gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
     })
+    console.log('data', data)
 
     useEffect(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -91,7 +94,10 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
+    const annoucements = getFragmentData(
+        AnnouncementFieldsFragmentDoc,
+        data?.appAnnouncements
+    )
     return shownDashboardEntries === null ||
         shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>
@@ -137,11 +143,7 @@ function HomeScreen(): JSX.Element {
             numColumns={columns}
             estimatedItemSize={114}
             ListHeaderComponent={() =>
-                data !== undefined ? (
-                    <PopUpCard data={data?.appAnnouncements} />
-                ) : (
-                    <></>
-                )
+                annoucements != null ? <PopUpCard data={annoucements} /> : <></>
             }
         />
     )

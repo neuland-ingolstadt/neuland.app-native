@@ -1,6 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
+import { type AnnouncementFieldsFragment } from '@/gql/graphql'
 import i18n from '@/localization/i18n'
-import { type Announcement } from '@/types/neuland-api'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Pressable, Text, View } from 'react-native'
@@ -10,7 +10,7 @@ import PlatformIcon from '../Universal/Icon'
 import { DashboardContext } from '../contexts'
 
 interface PopUpCardProps {
-    data: Announcement[] | undefined
+    data: AnnouncementFieldsFragment[]
 }
 
 const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
@@ -22,24 +22,24 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
     if (data === undefined) {
         return <></>
     }
-    const filter = (data: Announcement[]): Announcement[] => {
+    const filter = (
+        data: AnnouncementFieldsFragment[]
+    ): AnnouncementFieldsFragment[] => {
         const now = Date.now()
         const activeAnnouncements = data.filter(
-            (announcement: Announcement) =>
+            (announcement) =>
                 new Date(announcement.startDateTime).getTime() < now &&
                 new Date(announcement.endDateTime).getTime() > now &&
                 !hiddenAnnouncements.includes(announcement.id)
         )
-        activeAnnouncements.sort(
-            (a: Announcement, b: Announcement) => a.priority - b.priority
-        )
+        activeAnnouncements.sort((a, b) => a.priority - b.priority)
         return activeAnnouncements
     }
     const filtered = filter(data)
     return filtered != null && filtered.length > 0 ? (
         <Pressable
             onPress={() => {
-                if (filtered[0].url !== null && filtered[0].url !== '') {
+                if (filtered[0].url != null && filtered[0].url !== '') {
                     void Linking.openURL(filtered[0].url)
                 }
             }}

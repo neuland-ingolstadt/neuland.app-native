@@ -1,5 +1,5 @@
+import { type CampusLifeEventFieldsFragment } from '@/gql/graphql'
 import { type LanguageKey } from '@/localization/i18n'
-import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
@@ -13,14 +13,18 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
+const CLEventRow = ({
+    event,
+}: {
+    event: CampusLifeEventFieldsFragment
+}): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('common')
     let begin = null
-    if (event.begin !== null) {
-        begin = new Date(event.begin)
+    if (event.startDateTime != null) {
+        begin = new Date(event.startDateTime)
     }
-    const end = event.end !== null ? new Date(event.end) : null
+    const end = event.endDateTime != null ? new Date(event.endDateTime) : null
 
     const onPressRow = (): void => {
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
@@ -33,7 +37,7 @@ const CLEventRow = ({ event }: { event: CLEvents }): JSX.Element => {
     }
     return (
         <RowEntry
-            title={event.titles[i18n.language as LanguageKey]}
+            title={event.titles[i18n.language as LanguageKey] ?? ''}
             onPress={onPressRow}
             leftChildren={
                 <>

@@ -2,8 +2,11 @@ import ErrorView from '@/components/Error/ErrorView'
 import SportsRow from '@/components/Rows/SportsRow'
 import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
+import {
+    type UniversitySportsFieldsFragment,
+    type WeekdayType,
+} from '@/gql/graphql'
 import { useRefreshByUser } from '@/hooks'
-import { type UniversitySports } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { type UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
@@ -29,7 +32,10 @@ export default function ClSportsPage({
     sportsResult,
 }: {
     sportsResult: UseQueryResult<
-        Array<{ title: UniversitySports['weekday']; data: UniversitySports[] }>,
+        Array<{
+            title: WeekdayType
+            data: UniversitySportsFieldsFragment[]
+        }>,
         Error
     >
 }): JSX.Element {
@@ -71,8 +77,8 @@ export default function ClSportsPage({
         data,
     }: {
         data: Array<{
-            title: UniversitySports['weekday']
-            data: UniversitySports[]
+            title: WeekdayType
+            data: UniversitySportsFieldsFragment[]
         }>
     }): JSX.Element => {
         return (
@@ -80,9 +86,7 @@ export default function ClSportsPage({
                 {data.map((section, index) => (
                     <SportsWeekday
                         title={
-                            section.title.toLowerCase() as Lowercase<
-                                UniversitySports['weekday']
-                            >
+                            section.title.toLowerCase() as Lowercase<WeekdayType>
                         }
                         data={section.data}
                         key={index}
@@ -96,8 +100,8 @@ export default function ClSportsPage({
         title,
         data,
     }: {
-        title: Lowercase<UniversitySports['weekday']>
-        data: UniversitySports[]
+        title: Lowercase<WeekdayType>
+        data: UniversitySportsFieldsFragment[]
     }): JSX.Element => {
         const [collapsed, setCollapsed] = useState(false)
 

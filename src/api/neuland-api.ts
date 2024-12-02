@@ -1,8 +1,20 @@
+import {
+    type AppAnnouncementsQuery,
+    type CampusLifeEventsQuery,
+    type FoodPlanQuery,
+    type UniversitySportsQuery,
+} from '@/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
-import { type GetUniversitySportsData } from '@/types/neuland-api'
-import { gql, request } from 'graphql-request'
+// Import the generated type
+import { type RequestDocument, type Variables, request } from 'graphql-request'
 
 import packageInfo from '../../package.json'
+import {
+    ANNOUNCEMENT_QUERY,
+    CAMPUS_LIFE_EVENTS_QUERY,
+    FOOD_QUERY,
+    UNIVERSITY_SPORTS_QUERY,
+} from './gql-documents'
 
 const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
@@ -32,162 +44,40 @@ class NeulandAPIClient {
         }
     }
 
-    async performGraphQLQuery(query: string): Promise<any> {
-        const data = await request(GRAPHQL_ENDPOINT, query)
+    async performGraphQLQuery(
+        query: RequestDocument,
+        variables?: Variables
+    ): Promise<any> {
+        const data = await request(GRAPHQL_ENDPOINT, query, variables)
         return data
     }
 
     /**
-     * Get the announcement data from the GraphQL API
-     * @returns {Promise<any>} A promise that resolves with the announcement data
+     * Get the announcement ndata from the GraphQL API
+     * @returns {Promise<AppAnnouncementsQuery>} A promise that resolves with the announcement data
      */
-    async getAnnouncements(): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                appAnnouncements {
-                    id
-                    title {
-                        de
-                        en
-                    }
-                    description {
-                        de
-                        en
-                    }
-                    startDateTime
-                    endDateTime
-                    priority
-                    url
-                }
-            }
-        `)
+    async getAnnouncements(): Promise<AppAnnouncementsQuery> {
+        return await this.performGraphQLQuery(ANNOUNCEMENT_QUERY)
     }
 
-    async getFoodPlan(locations: string[]): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                food(locations: [${locations.map((x) => x).join(',')}]) {
-                    foodData {
-                        timestamp
-                        meals {
-                            name {
-                                de
-                                en
-                            }
-                            id
-                            category
-                            prices {
-                                student
-                                employee
-                                guest
-                            }
-                            allergens
-                            flags
-                            nutrition {
-                                kj
-                                kcal
-                                fat
-                                fatSaturated
-                                carbs
-                                sugar
-                                fiber
-                                protein
-                                salt
-                            }
-                            variants {
-                                name {
-                                    de
-                                    en
-                                }
-                                additional
-                                id
-                                allergens
-                                flags
-                                originalLanguage
-                                static
-                                restaurant
-                                parent {
-                                    id
-                                    category
-                                }
-                                prices {
-                                    student
-                                    employee
-                                    guest
-                                }
-                            }
-                            originalLanguage
-                            static
-                            restaurant
-                        }
-                        }
-                        errors {
-                            location
-                            message
-                        }
-                    }
-                }
-            `)
+    async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
+        return await this.performGraphQLQuery(FOOD_QUERY, { locations })
     }
 
     /**
      * Gets the campus life events
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
-    async getCampusLifeEvents(): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                clEvents {
-                    host {
-                        name
-                        website
-                        instagram
-                    }
-                    titles {
-                        de
-                        en
-                    }
-                    begin
-                    end
-                    location
-                    descriptions {
-                        de
-                        en
-                    }
-                }
-            }
-        `)
+    async getCampusLifeEvents(): Promise<CampusLifeEventsQuery> {
+        return await this.performGraphQLQuery(CAMPUS_LIFE_EVENTS_QUERY)
     }
 
     /**
      * Gets the university sports events
-     * @returns {Promise<any>} A promise that resolves with the university sports events data
+     * @returns {Promise<GetUniversitySportsData>} A promise that resolves with the university sports events data
      */
-    async getUniversitySports(): Promise<GetUniversitySportsData> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                universitySports {
-                    id
-                    title {
-                        de
-                        en
-                    }
-                    description {
-                        de
-                        en
-                    }
-                    campus
-                    location
-                    weekday
-                    startTime
-                    endTime
-                    requiresRegistration
-                    invitationLink
-                    eMail
-                    sportsCategory
-                }
-            }
-        `)
+    async getUniversitySports(): Promise<UniversitySportsQuery> {
+        return await this.performGraphQLQuery(UNIVERSITY_SPORTS_QUERY)
     }
 
     /**

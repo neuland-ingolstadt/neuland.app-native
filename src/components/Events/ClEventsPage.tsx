@@ -1,8 +1,8 @@
 import ErrorView from '@/components/Error/ErrorView'
 import CLEventRow from '@/components/Rows/EventRow'
 import Divider from '@/components/Universal/Divider'
+import { type CampusLifeEventFieldsFragment } from '@/gql/graphql'
 import { useRefreshByUser } from '@/hooks'
-import { type CLEvents } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { type UseQueryResult } from '@tanstack/react-query'
 import React from 'react'
@@ -15,7 +15,7 @@ import LoadingIndicator from '../Universal/LoadingIndicator'
 export default function ClEventsPage({
     clEventsResult,
 }: {
-    clEventsResult: UseQueryResult<CLEvents[], Error>
+    clEventsResult: UseQueryResult<CampusLifeEventFieldsFragment[], Error>
 }): JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
