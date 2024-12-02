@@ -1,3 +1,5 @@
+import { getFragmentData } from '@/__generated__/gql'
+import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import PopUpCard from '@/components/Cards/PopUpCard'
 import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
@@ -91,7 +93,10 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
+    const announcements = getFragmentData(
+        AnnouncementFieldsFragmentDoc,
+        data?.appAnnouncements
+    )
     return shownDashboardEntries === null ||
         shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>
@@ -137,8 +142,8 @@ function HomeScreen(): JSX.Element {
             numColumns={columns}
             estimatedItemSize={114}
             ListHeaderComponent={() =>
-                data !== undefined ? (
-                    <PopUpCard data={data?.appAnnouncements} />
+                announcements != null ? (
+                    <PopUpCard data={announcements} />
                 ) : (
                     <></>
                 )
