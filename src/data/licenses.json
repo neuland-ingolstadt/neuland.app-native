@@ -245,6 +245,12 @@
         "licenseUrl": "https://github.com/moment/moment/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-content-loader@7.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/danilowoz/react-content-loader",
+        "licenseUrl": "https://github.com/danilowoz/react-content-loader/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-dom@18.3.1": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
@@ -305,10 +311,10 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-mmkv@2.12.2": {
+    "react-native-mmkv@3.1.0": {
         "licenses": "(MIT AND BSD-3-Clause)",
         "repository": "https://github.com/mrousavy/react-native-mmkv",
-        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv/raw/master/LICENSE",
+        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
         "parents": "neuland"
     },
     "react-native-pager-view@6.5.1": {
@@ -345,12 +351,6 @@
         "licenses": "MIT",
         "repository": "https://github.com/AdelRedaa97/react-native-select-dropdown",
         "licenseUrl": "https://github.com/AdelRedaa97/react-native-select-dropdown/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-shimmer@0.6.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/oblador/react-native-shimmer",
-        "licenseUrl": "https://github.com/oblador/react-native-shimmer/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-svg@15.8.0": {
