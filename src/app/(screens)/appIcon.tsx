@@ -1,8 +1,14 @@
+import ErrorView from '@/components/Error/ErrorView'
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
 import { PreferencesContext } from '@/components/contexts'
-import { capitalizeFirstLetter } from '@/utils/app-utils'
+import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
+import {
+    getAppIconName,
+    setAlternateAppIcon,
+    supportsAlternateIcons,
+} from 'expo-alternate-app-icons'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -13,8 +19,6 @@ import {
     Text,
     View,
 } from 'react-native'
-// @ts-expect-error cannot verify the type of this prop
-import AppIcon from 'react-native-dynamic-app-icon'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 let iconImages: Record<string, ImageProps> = {}
@@ -33,11 +37,7 @@ export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const {
-        appIcon = 'default',
-        setAppIcon,
-        unlockedAppIcons,
-    } = useContext(PreferencesContext)
+    const { unlockedAppIcons } = useContext(PreferencesContext)
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],
@@ -53,6 +53,20 @@ export default function AppIconPicker(): JSX.Element {
         }
     })
 
+    const support = supportsAlternateIcons
+    console.log(`The device supports alternate icons: ${support}`)
+    const iconName = getAppIconName()
+    console.log(`The active app icon is: ${iconName}`)
+
+    if (!support) {
+        return (
+            <ErrorView
+                message={t('appIcon.error.message')}
+                title={t('appIcon.error.title')}
+                isCritical={false}
+            />
+        )
+    }
     return (
         <>
             <ScrollView>
@@ -66,18 +80,18 @@ export default function AppIconPicker(): JSX.Element {
                             >
                                 <View style={styles.sectionContainer}>
                                     {value.map((icon) => {
+                                        console.log(icon)
                                         return (
                                             <React.Fragment key={icon}>
                                                 <Pressable
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
-                                                            AppIcon.setAppIcon(
+                                                            void setAlternateAppIcon(
                                                                 capitalizeFirstLetter(
                                                                     icon
                                                                 )
                                                             )
-                                                            setAppIcon(icon)
                                                         } catch (e) {
                                                             console.log(e)
                                                         }
@@ -107,7 +121,9 @@ export default function AppIconPicker(): JSX.Element {
                                                             )}
                                                         </Text>
                                                     </View>
-                                                    {appIcon === icon && (
+                                                    {lowercaseFirstLetter(
+                                                        iconName ?? 'Default'
+                                                    ) === icon && (
                                                         <PlatformIcon
                                                             ios={{
                                                                 name: 'checkmark',

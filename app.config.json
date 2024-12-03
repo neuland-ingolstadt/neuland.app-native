@@ -51,6 +51,7 @@
                     "headOrigin": "https://neuland.app"
                 }
             ],
+            ["expo-alternate-app-icons"],
             ["expo-secure-store"],
             ["expo-localization"],
             [
@@ -86,7 +87,8 @@
                     "imageWidth": 200
                 }
             ],
-            "react-native-edge-to-edge"
+            "react-native-edge-to-edge",
+            "expo-alternate-app-icons"
         ],
         "extra": {
             "eas": {
