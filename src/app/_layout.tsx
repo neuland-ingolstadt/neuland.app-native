@@ -101,9 +101,13 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <SystemBars
-                style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
-            />
+            {Platform.OS === 'android' && (
+                <SystemBars
+                    style={
+                        UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'
+                    }
+                />
+            )}
             <Stack
                 screenOptions={{
                     contentStyle: styles.background,
