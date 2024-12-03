@@ -161,13 +161,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-navigation-bar@4.0.5": {
+    "expo-navigation-bar@4.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-router@4.0.11": {
+    "expo-router@4.0.9": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -191,13 +191,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-system-ui@4.0.5": {
+    "expo-system-ui@4.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.14": {
+    "expo@52.0.11": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
