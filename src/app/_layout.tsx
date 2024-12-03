@@ -12,7 +12,7 @@ import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable } from 'react-native'
+import { AppState, Platform, Pressable, UIManager } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import {
@@ -24,6 +24,12 @@ import {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
     initialRouteName: '(index)',
+}
+
+if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental != null) {
+        UIManager.setLayoutAnimationEnabledExperimental(true)
+    }
 }
 function RootLayout(): JSX.Element {
     const router = useRouter()
