@@ -60,7 +60,6 @@
     "expo-system-ui": "~4.0.5",
     "fuse.js": "^7.0.0",
     "graphql": "^16.9.0",
-    "graphql-request": "^7.1.2",
     "i18next": "^23.16.8",
     "metro": "^0.81.0",
     "moment": "^2.30.1",
