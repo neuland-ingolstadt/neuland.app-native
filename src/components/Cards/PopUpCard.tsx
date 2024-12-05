@@ -1,13 +1,16 @@
-// BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import { type AnnouncementFieldsFragment } from '@/__generated__/gql/graphql'
+import {
+    type AnnouncementFieldsFragment,
+    type Platform as AppPlatform,
+    type UserKind,
+} from '@/__generated__/gql/graphql'
 import i18n from '@/localization/i18n'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Pressable, Text, View } from 'react-native'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
-import { DashboardContext } from '../contexts'
+import { DashboardContext, UserKindContext } from '../contexts'
 
 interface PopUpCardProps {
     data: AnnouncementFieldsFragment[]
@@ -17,6 +20,7 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
     const { hiddenAnnouncements, hideAnnouncement } =
         useContext(DashboardContext)
     const { t } = useTranslation('navigation')
+    const { userKind = 'guest' } = useContext(UserKindContext)
     const { styles } = useStyles(stylesheet)
 
     if (data === undefined) {
@@ -28,6 +32,12 @@ const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
         const now = Date.now()
         const activeAnnouncements = data.filter(
             (announcement) =>
+                announcement?.platform?.includes(
+                    Platform.OS.toUpperCase() as AppPlatform
+                ) &&
+                announcement?.userKind?.includes(
+                    userKind?.toUpperCase() as UserKind
+                ) &&
                 new Date(announcement.startDateTime).getTime() < now &&
                 new Date(announcement.endDateTime).getTime() > now &&
                 !hiddenAnnouncements.includes(announcement.id)
