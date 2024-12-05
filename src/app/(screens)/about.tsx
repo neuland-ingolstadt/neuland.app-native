@@ -276,10 +276,8 @@ const stylesheet = createStyleSheet((theme) => ({
     logoIcon: {
         backgroundColor: theme.colors.card,
         borderRadius: 9,
+        boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
         shadowColor: theme.colors.text,
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: theme.radius.md,
     },
     logoImage: {
         borderRadius: 9,

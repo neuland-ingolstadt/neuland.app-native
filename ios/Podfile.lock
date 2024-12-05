@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.4):
     - ExpoModulesCore
-  - Expo (52.0.15):
+  - Expo (52.0.17):
     - ExpoModulesCore
   - expo-dev-client (5.0.5):
     - EXManifests
@@ -298,7 +298,7 @@ PODS:
     - Yoga
   - ExpoSecureStore (14.0.0):
     - ExpoModulesCore
-  - ExpoSplashScreen (0.29.13):
+  - ExpoSplashScreen (0.29.16):
     - ExpoModulesCore
   - ExpoSystemUI (4.0.5):
     - ExpoModulesCore
@@ -2641,7 +2641,7 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: f30a0c5d3d6cad8db9c01bab579e0aa0df5d3cb2
-  Expo: 519f13c4c6ac9d73b7dd27627ea78be54e11453c
+  Expo: a49e904c6f4edc8c3a5bde3fb75df5a64a53f555
   expo-dev-client: 49ce02cb369ab60bcb203f0ac2f8bf39f004dfc9
   expo-dev-launcher: 74c8c15678d4ef5ae39c0094192669d18f3ff0ab
   expo-dev-menu: 460327af62e2b16fe79af0082753c48e82ba099f
@@ -2663,7 +2663,7 @@ SPEC CHECKSUMS:
   ExpoModulesCore: f7db8b4faee7e5b94ad55f2bf781781a0bcf934d
   ExpoScreenOrientation: 17df4d8b6da91424e338f4b223b8801d300ebc5a
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
-  ExpoSplashScreen: 43692d041bf848883410ed9d8836871ca5cf4d6a
+  ExpoSplashScreen: ecfb699d3d04a7721688aba0a2eb61615eae572e
   ExpoSystemUI: e41835aa059bd79369f3b398b4f2b64ed4bfa5c6
   EXUpdatesInterface: 1dcebac98ac5dad4289e6ff2bd5616822e894397
   FBLazyVector: be7314029d6ec6b90f0f75ce1195b8130ed9ac4f
