@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.4):
     - ExpoModulesCore
-  - Expo (52.0.14):
+  - Expo (52.0.15):
     - ExpoModulesCore
   - expo-dev-client (5.0.5):
     - EXManifests
@@ -274,7 +274,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoScreenOrientation (8.0.0):
+  - ExpoScreenOrientation (8.0.1):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -1586,7 +1586,29 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-pager-view (6.6.1):
+  - react-native-pager-view (6.5.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - react-native-pager-view/common (= 6.5.1)
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-pager-view/common (6.5.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1715,7 +1737,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-webview (13.12.2):
+  - react-native-webview (13.12.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2157,7 +2179,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.3.0):
+  - RNScreens (4.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2178,9 +2200,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.3.0)
+    - RNScreens/common (= 4.1.0)
     - Yoga
-  - RNScreens/common (4.3.0):
+  - RNScreens/common (4.1.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2619,7 +2641,7 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: f30a0c5d3d6cad8db9c01bab579e0aa0df5d3cb2
-  Expo: 0e7b52be71a24a38d5e919e3040d8f51a8739cd0
+  Expo: 519f13c4c6ac9d73b7dd27627ea78be54e11453c
   expo-dev-client: 49ce02cb369ab60bcb203f0ac2f8bf39f004dfc9
   expo-dev-launcher: 74c8c15678d4ef5ae39c0094192669d18f3ff0ab
   expo-dev-menu: 460327af62e2b16fe79af0082753c48e82ba099f
@@ -2639,7 +2661,7 @@ SPEC CHECKSUMS:
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
   ExpoModulesCore: f7db8b4faee7e5b94ad55f2bf781781a0bcf934d
-  ExpoScreenOrientation: 191c1ca42371747ae9b95b0ad93fbb75f33cf7b3
+  ExpoScreenOrientation: 17df4d8b6da91424e338f4b223b8801d300ebc5a
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
   ExpoSplashScreen: 43692d041bf848883410ed9d8836871ca5cf4d6a
   ExpoSystemUI: e41835aa059bd79369f3b398b4f2b64ed4bfa5c6
@@ -2683,11 +2705,11 @@ SPEC CHECKSUMS:
   react-native-drag-drop-ios: 0e229576f681f47e5a3555617fdbf977b26f785d
   react-native-mmkv: bb0824bed68c01f7cc681eefa58059097bdaa796
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
-  react-native-pager-view: 9dbdfdc85d9409c054ee2581c6837c193fbadccc
+  react-native-pager-view: abc5ef92699233eb726442c7f452cac82f73d0cb
   react-native-safe-area-context: 458f6b948437afcb59198016b26bbd02ff9c3b47
   react-native-unistyles: 0eb1afdd80a5c6a408e60fb58516d44eb7fea30c
   react-native-view-shot: f0b94997decfc338383ba9dc0748985b02934b8c
-  react-native-webview: 06f91954784dde28e1210f381c791f0c5f9bd9a2
+  react-native-webview: 40b8823be3fac70f0404016e6aed754ef4307517
   React-nativeconfig: aeed6e2a8ac02b2df54476afcc7c663416c12bf7
   React-NativeModulesApple: c5b7813da94136f50ef084fa1ac077332dcfc658
   React-perflogger: 6afb7eebf7d9521cc70481688ccddf212970e9d3
@@ -2721,7 +2743,7 @@ SPEC CHECKSUMS:
   RNFlashList: 6f169ad83e52579b7754cbbcec1b004c27d82c93
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045
   RNReanimated: 006a5d3961bf09c1e96d62ed436e02b2e43b89bb
-  RNScreens: 44a3e358d5ccd7815c5ae9148988c562826992b2
+  RNScreens: 27587018b2e6082f5172b1ecf158c14a0e8842d6
   RNSVG: 536cd3c866c878faf72beaba166c8b02fe2b762b
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SPAlert: 735da1f16a887e294719217572ce1f936d8c8782
