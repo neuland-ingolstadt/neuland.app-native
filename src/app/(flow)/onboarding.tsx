@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import AnimatedText from '@/components/Flow/svgs/AnimatedText'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -30,7 +31,6 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Shimmer from 'react-native-shimmer'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function OnboardingScreen(): JSX.Element {
@@ -386,7 +386,6 @@ export default function OnboardingScreen(): JSX.Element {
         return size * (window.width / guidelineBaseWidth)
     }
     const scaledHeading = scaleFontSize(33)
-    const isIos = Platform.OS === 'ios'
     const { styles } = useStyles(stylesheet)
     return (
         <>
@@ -418,24 +417,18 @@ export default function OnboardingScreen(): JSX.Element {
                     >
                         {t('onboarding.page1.title')}
                     </Animated.Text>
-                    <Shimmer
-                        opacity={isIos ? 0.65 : 1}
-                        pauseDuration={300}
-                        duration={1400}
-                        animating={isIos ? buttonDisabled : false}
-                    >
-                        <Animated.Text
-                            style={[
-                                {
-                                    fontSize: scaledHeading,
-                                    ...styles.heading2,
-                                },
-                                textAnimatedStyle,
-                            ]}
-                        >
-                            {'Neuland Next'}
-                        </Animated.Text>
-                    </Shimmer>
+                    <AnimatedText
+                        speed={800}
+                        text="Neuland Next"
+                        disabled={!buttonDisabled}
+                        textStyles={[
+                            {
+                                fontSize: scaledHeading,
+                                ...styles.heading2,
+                            },
+                            textAnimatedStyle,
+                        ]}
+                    />
                 </View>
                 <Animated.View
                     style={[styles.cardsContainer, cardsViewAnimatedStyle]}

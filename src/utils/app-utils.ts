@@ -23,6 +23,15 @@ export function capitalizeFirstLetter(string: string): string {
 }
 
 /**
+ * Lowercases the first letter of a string.
+ * @param string - The string to lowercase.
+ * @returns The string with the first letter lowercased.
+ */
+export function lowercaseFirstLetter(string: string): string {
+    return string.charAt(0).toLowerCase() + string.slice(1)
+}
+
+/**
  * Checks if two arrays are equal.
  * @param arr1 - The first array.
  * @param arr2 - The second array.

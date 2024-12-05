@@ -24,6 +24,57 @@
     <string>0.11.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
+    <key>CFBundleIcons</key>
+	  <dict>
+		<key>CFBundleAlternateIcons</key>
+		<dict>
+			<key>Default</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Default</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>ModernGreen</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>ModernGreen</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+      <key>ModernPink</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>ModernPink</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>RainbowMoonLight</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>RainbowMoonLight</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+			<key>Retro</key>
+			<dict>
+				<key>CFBundleIconFiles</key>
+				<array>
+					<string>Retro</string>
+				</array>
+				<key>UIPrerenderedIcon</key>
+				<false/>
+			</dict>
+		</dict>
+	  </dict>
     <key>CFBundleURLTypes</key>
     <array>
       <dict>

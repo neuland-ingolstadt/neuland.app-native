@@ -272,7 +272,7 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingBottom: 10,
     },
     categoryText: {
-        colors: theme.colors.text,
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: '600',
         paddingTop: 10,

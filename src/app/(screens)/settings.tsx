@@ -1,4 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
+import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import { Avatar, NameBox } from '@/components/Settings'
 import GradesButton from '@/components/Settings/GradesButton'
@@ -49,7 +50,6 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Shimmer from 'react-native-shimmer'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Settings(): JSX.Element {
@@ -335,28 +335,6 @@ export default function Settings(): JSX.Element {
     const logoActiveOpacity = isBouncing ? 1 : 0
     const logoActiveHeight = isBouncing ? 18 : 0
 
-    const ShimmerEffect = (props: {
-        children: React.ReactNode
-    }): JSX.Element => {
-        return Platform.OS === 'ios' ? (
-            <Shimmer
-                style={{ ...styles.shimmerContainer }}
-                pauseDuration={5000}
-                duration={1500}
-                animationOpacity={0.8}
-                animating={true}
-            >
-                {props.children}
-            </Shimmer>
-        ) : (
-            <View
-                style={{ ...styles.shimmerContainer, ...styles.androidShimmer }}
-            >
-                {props.children}
-            </View>
-        )
-    }
-
     return (
         <ScrollView
             refreshControl={
@@ -631,9 +609,13 @@ export default function Settings(): JSX.Element {
                     })}
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
-                    <ShimmerEffect>
-                        <LogoTextSVG size={15} color={theme.colors.text} />
-                    </ShimmerEffect>
+                    <AnimatedLogoText
+                        dimensions={{
+                            logoWidth,
+                            logoHeight,
+                        }}
+                        speed={3.5}
+                    />
                 </Pressable>
             </Animated.View>
         </ScrollView>
@@ -641,9 +623,6 @@ export default function Settings(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    androidShimmer: {
-        opacity: 0.6,
-    },
     avatarText: {
         color: getContrastColor(theme.colors.primary),
         fontSize: 20,
@@ -696,10 +675,7 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingVertical: 20,
     },
     nameOuterContainer: { flexDirection: 'column', flex: 1 },
-    shimmerContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-    },
+
     whobbleContainer: {
         alignItems: 'center',
         paddingTop: 20,
