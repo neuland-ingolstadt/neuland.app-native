@@ -11,7 +11,7 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.7.0": {
+    "@bottom-tabs/react-navigation@0.7.2": {
         "licenses": "MIT",
         "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
@@ -263,7 +263,7 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.7.0": {
+    "react-native-bottom-tabs@0.7.2": {
         "licenses": "MIT",
         "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",

@@ -18,7 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
 import React, { useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, SafeAreaView, SectionList, Text, View } from 'react-native'
+import { Pressable, SectionList, Text, View } from 'react-native'
 import {
     UnistylesRuntime,
     createStyleSheet,
@@ -243,7 +243,7 @@ export default function TimetableList({
     }
 
     return (
-        <SafeAreaView style={styles.pageView}>
+        <>
             {filteredTimetable.length === 0 ? (
                 <ErrorView
                     title={t('error.filtered.title')}
@@ -273,7 +273,7 @@ export default function TimetableList({
                     initialNumToRender={20}
                 />
             )}
-        </SafeAreaView>
+        </>
     )
 }
 
@@ -307,9 +307,6 @@ const stylesheet = createStyleSheet((theme) => ({
         flexGrow: 1,
         flexShrink: 1,
         marginRight: 12,
-    },
-    pageView: {
-        flex: 1,
     },
     pressable: {
         paddingVertical: 8,

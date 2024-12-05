@@ -119,6 +119,7 @@ function HomeScreen(): JSX.Element {
         <MasonryFlashList
             key={orientation}
             contentInsetAdjustmentBehavior="automatic"
+            contentInset={{ top: 0, bottom: theme.margins.bottomSafeArea }}
             contentContainerStyle={{ ...styles.container, ...styles.page }}
             showsVerticalScrollIndicator={false}
             data={shownDashboardEntries}
@@ -154,7 +155,6 @@ function HomeScreen(): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: theme.margins.bottomSafeArea,
         paddingTop: 6,
     },
     errorContainer: { flex: 1, paddingTop: 110 },
