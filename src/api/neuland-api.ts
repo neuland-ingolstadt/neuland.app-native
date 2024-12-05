@@ -5,8 +5,7 @@ import {
     type UniversitySportsQuery,
 } from '@/__generated__/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
-// Import the generated type
-import { type RequestDocument, type Variables, request } from 'graphql-request'
+import { type DocumentNode, print } from 'graphql'
 
 import packageInfo from '../../package.json'
 import {
@@ -44,12 +43,33 @@ class NeulandAPIClient {
         }
     }
 
-    async performGraphQLQuery(
-        query: RequestDocument,
-        variables?: Variables
-    ): Promise<any> {
-        const data = await request(GRAPHQL_ENDPOINT, query, variables)
-        return data
+    async performGraphQLQuery<T>(
+        query: DocumentNode,
+        variables?: Record<string, any>
+    ): Promise<T> {
+        const resp = await fetch(GRAPHQL_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': USER_AGENT,
+            },
+            body: JSON.stringify({
+                query: print(query),
+                variables,
+            }),
+        })
+
+        const json = await resp.json()
+
+        if (resp.ok && json.errors == null) {
+            return json.data as T
+        } else {
+            const errorMessage =
+                json.errors != null
+                    ? JSON.stringify(json.errors)
+                    : resp.statusText
+            throw new Error('GraphQL error: ' + errorMessage)
+        }
     }
 
     /**
