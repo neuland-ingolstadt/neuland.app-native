@@ -1,21 +1,33 @@
+import { getFragmentData } from '@/__generated__/gql'
+import {
+    type CampusLifeEventFieldsFragment,
+    CampusLifeEventFieldsFragmentDoc,
+    type UniversitySportsFieldsFragment,
+    UniversitySportsFieldsFragmentDoc,
+    type WeekdayType,
+} from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import { type MaterialIcon } from '@/types/material-icons'
-import { type CLEvents, type UniversitySports } from '@/types/neuland-api'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
 /**
  * Fetches and parses the campus life events
- * @returns {Promise<CLEvents[]>}
+ * @returns {Promise<CampusLifeEventFieldsFragment[]>} A promise that resolves with the campus life events
  */
-export async function loadCampusLifeEvents(): Promise<CLEvents[]> {
-    const campusLifeEvents = (await NeulandAPI.getCampusLifeEvents())
-        .clEvents as CLEvents[]
+export async function loadCampusLifeEvents(): Promise<
+    CampusLifeEventFieldsFragment[]
+> {
+    const events = (await NeulandAPI.getCampusLifeEvents()).clEvents
+    const campusLifeEvents = getFragmentData(
+        CampusLifeEventFieldsFragmentDoc,
+        events
+    )
 
     const newEvents = campusLifeEvents
         .map((x) => ({
             ...x,
-            begin: x.begin !== null ? new Date(Number(x.begin)) : null,
-            end: x.end !== null ? new Date(Number(x.end)) : null,
+            begin: x.startDateTime != null ? new Date(x.startDateTime) : null,
+            end: x.endDateTime != null ? new Date(x.endDateTime) : null,
         }))
         .filter(
             (x) =>
@@ -28,16 +40,22 @@ export async function loadCampusLifeEvents(): Promise<CLEvents[]> {
 }
 
 type GroupedSportsEvents = Array<{
-    title: UniversitySports['weekday']
-    data: UniversitySports[]
+    title: WeekdayType
+    data: UniversitySportsFieldsFragment[]
 }>
 /**
  * Fetches and parses the university sports events
  */
 export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents> {
-    const universitySportsEvents = (await NeulandAPI.getUniversitySports())
-        .universitySports
-    const groupedEvents: Record<string, UniversitySports[]> = {}
+    const events = (await NeulandAPI.getUniversitySports()).universitySports
+    const universitySportsEvents = getFragmentData(
+        UniversitySportsFieldsFragmentDoc,
+        events
+    )
+    if (universitySportsEvents == null) {
+        return []
+    }
+    const groupedEvents: Record<string, UniversitySportsFieldsFragment[]> = {}
     const weekdays = [
         'Monday',
         'Tuesday',
@@ -56,7 +74,7 @@ export async function loadUniversitySportsEvents(): Promise<GroupedSportsEvents>
 
     const sections = Object.keys(groupedEvents)
         .map((weekday) => ({
-            title: weekday as UniversitySports['weekday'],
+            title: weekday as WeekdayType,
             data: groupedEvents[weekday],
         }))
         .sort((a, b) => weekdays.indexOf(a.title) - weekdays.indexOf(b.title))

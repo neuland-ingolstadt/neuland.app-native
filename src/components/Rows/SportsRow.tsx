@@ -1,5 +1,5 @@
+import { type UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
 import i18n, { type LanguageKey } from '@/localization/i18n'
-import { type UniversitySports } from '@/types/neuland-api'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
 import { Buffer } from 'buffer/'
@@ -11,21 +11,25 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '../Universal/Icon'
 import RowEntry from '../Universal/RowEntry'
 
-const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
+const SportsRow = ({
+    event,
+}: {
+    event: UniversitySportsFieldsFragment
+}): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
     const onPressRow = (): void => {
         const base64Event = Buffer.from(JSON.stringify(event)).toString(
             'base64'
         )
         router.navigate({
-            pathname: 'sportsEvent',
+            pathname: '/sportsEvent',
             params: { sportsEventEntry: base64Event },
         })
     }
-
+    const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
     return (
         <RowEntry
-            title={event.title[i18n.language as LanguageKey]}
+            title={event.title[i18n.language as LanguageKey] ?? ''}
             onPress={onPressRow}
             backgroundColor={theme.colors.card}
             leftChildren={
@@ -41,10 +45,7 @@ const SportsRow = ({ event }: { event: UniversitySports }): JSX.Element => {
                 <>
                     <View style={styles.rightContainer}>
                         <Text style={styles.leftText2} numberOfLines={2}>
-                            {formatFriendlyTimeRange(
-                                event.startTime,
-                                event.endTime
-                            )}
+                            {dateRange}
                         </Text>
                     </View>
                 </>

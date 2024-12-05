@@ -10,7 +10,7 @@ import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
-import { Redirect, useRouter } from 'expo-router'
+import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
@@ -100,8 +100,7 @@ export default function HomeLayout(): JSX.Element {
         ]
         function processShortcut(item: ShortcutItem): void {
             router.navigate({
-                // @ts-expect-error no types
-                pathname: item.data.path as string,
+                pathname: item.data.path as RelativePathString,
                 params: { fromAppShortcut: 'true' },
             })
         }

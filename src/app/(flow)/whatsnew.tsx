@@ -31,7 +31,7 @@ export default function WhatsNewScreen(): JSX.Element {
         Application.nativeApplicationVersion ?? '0.0.0'
     )
     if (changelog.version[version] === undefined) {
-        router.navigate('(tabs)/(index)')
+        router.navigate('/(tabs)/(index)')
     }
     const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
         (key) => changelog.version[key]
@@ -173,7 +173,7 @@ export default function WhatsNewScreen(): JSX.Element {
                     style={styles.button}
                     onPress={() => {
                         flow.setUpdated(true)
-                        router.navigate('(tabs)/(index)')
+                        router.navigate('/(tabs)/(index)')
                     }}
                 >
                     <Text style={styles.buttonText}>

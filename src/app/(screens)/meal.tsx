@@ -302,7 +302,7 @@ export default function FoodDetail(): JSX.Element {
 
         if (restaurant != null && location !== undefined) {
             router.dismissTo({
-                pathname: '(tabs)/map',
+                pathname: '/(tabs)/map',
                 params: { room: location },
             })
         }

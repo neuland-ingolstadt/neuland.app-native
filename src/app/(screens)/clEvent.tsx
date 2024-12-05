@@ -28,16 +28,21 @@ export default function ClEventDetail(): JSX.Element {
         clEventEntry != null
             ? JSON.parse(Buffer.from(clEventEntry, 'base64').toString())
             : undefined
+
     const { t, i18n } = useTranslation('common')
     const isMultiDayEvent =
-        clEvent?.begin != null &&
-        clEvent?.end != null &&
-        new Date(clEvent.begin).toDateString() !==
-            new Date(clEvent.end).toDateString()
+        clEvent?.startDateTime != null &&
+        clEvent?.endDateTime != null &&
+        new Date(clEvent.startDateTime).toDateString() !==
+            new Date(clEvent.endDateTime).toDateString()
 
     const isWebsiteAvailable = clEvent?.host.website != null
     const isInstagramAvailable = clEvent?.host.instagram != null
 
+    const dateRange = formatFriendlyDateTimeRange(
+        clEvent?.startDateTime != null ? new Date(clEvent.startDateTime) : null,
+        clEvent?.endDateTime != null ? new Date(clEvent.endDateTime) : null
+    )
     useFocusEffect(
         useCallback(() => {
             navigation.setOptions({
@@ -53,14 +58,7 @@ export default function ClEventDetail(): JSX.Element {
                                         i18n.language as LanguageKey
                                     ],
                                     organizer: clEvent?.host.name,
-                                    date: formatFriendlyDateTimeRange(
-                                        new Date(
-                                            clEvent?.begin as unknown as string
-                                        ),
-                                        new Date(
-                                            clEvent?.end as unknown as string
-                                        )
-                                    ),
+                                    date: dateRange,
                                 }),
                             })
                         }}
@@ -69,6 +67,7 @@ export default function ClEventDetail(): JSX.Element {
             })
         }, [])
     )
+
     const sections: FormListSections[] = [
         {
             header: 'Details',
@@ -77,33 +76,26 @@ export default function ClEventDetail(): JSX.Element {
                     ? [
                           {
                               title: t('pages.event.date'),
-                              value: formatFriendlyDateTimeRange(
-                                  new Date(clEvent?.begin as unknown as string),
-                                  new Date(clEvent?.end as unknown as string)
-                              ),
+                              value: dateRange,
                           },
                       ]
                     : [
-                          ...(clEvent?.begin != null
+                          ...(clEvent?.startDateTime != null
                               ? [
                                     {
                                         title: t('pages.event.begin'),
                                         value: formatFriendlyDateTime(
-                                            new Date(
-                                                clEvent.begin as unknown as string
-                                            )
+                                            new Date(clEvent.startDateTime)
                                         ),
                                     },
                                 ]
                               : []),
-                          ...(clEvent?.end != null
+                          ...(clEvent?.endDateTime != null
                               ? [
                                     {
                                         title: t('pages.event.end'),
                                         value: formatFriendlyDateTime(
-                                            new Date(
-                                                clEvent.end as unknown as string
-                                            )
+                                            new Date(clEvent.endDateTime)
                                         ),
                                     },
                                 ]

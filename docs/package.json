@@ -5,7 +5,7 @@
   "description": "Documentation and Landing Page for Neuland Next",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^5.0.1"
   },
   "devDependencies": {
     "prettier": "3.3.3",

@@ -30,7 +30,6 @@ export class AnonymousAPIClient {
      * Submits an API request to the THI backend using a WebSocket proxy
      */
     async request(params: Record<string, string>): Promise<any> {
-        // @ts-expect-error cannot verify environment variable
         const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
         const headers = new Headers({
             Host: ENDPOINT_HOST,

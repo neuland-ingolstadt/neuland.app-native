@@ -96,7 +96,7 @@ export default function Login(): JSX.Element {
     const navigateHome = (): void => {
         if (fromOnboarding === 'true') {
             router.dismissAll()
-            router.replace('(tabs)/(index)')
+            router.replace('/(tabs)/(index)')
             return
         }
         router.dismissAll()

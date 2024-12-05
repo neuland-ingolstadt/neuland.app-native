@@ -40,7 +40,7 @@ const CalendarCard = (): JSX.Element => {
         } catch (e) {
             if (e instanceof NoSessionError) {
                 if (flow.isOnboarded === true) {
-                    router.navigate('login')
+                    router.navigate('/login')
                 }
             } else if ((e as Error).message === 'Query not possible') {
                 // ignore, leaving examList empty
@@ -58,7 +58,7 @@ const CalendarCard = (): JSX.Element => {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.navigate('login')
+                router.navigate('/login')
                 return false
             }
             return failureCount < 2
