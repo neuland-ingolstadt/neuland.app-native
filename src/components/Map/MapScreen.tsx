@@ -60,7 +60,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    SafeAreaView,
     Text,
     View,
 } from 'react-native'
@@ -699,7 +698,7 @@ const MapScreen = (): JSX.Element => {
     }, [availableFilteredGeoJSON])
 
     return (
-        <SafeAreaView style={styles.container}>
+        <>
             <>
                 {mapLoadState === LoadingState.ERROR && (
                     <View style={styles.errorContainer}>
@@ -915,16 +914,13 @@ const MapScreen = (): JSX.Element => {
                     userKind === USER_GUEST
                 )}
             />
-        </SafeAreaView>
+        </>
     )
 }
 
 export default MapScreen
 
 const stylesheet = createStyleSheet((theme) => ({
-    container: {
-        flex: 1,
-    },
     errorContainer: {
         backgroundColor: theme.colors.background,
         flex: 1,

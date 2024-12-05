@@ -25,6 +25,7 @@
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
     "@babel/runtime": "^7.26.0",
+    "@bottom-tabs/react-navigation": "^0.7.2",
     "@expo/vector-icons": "^14.0.4",
     "@gorhom/bottom-sheet": "^5.0.6",
     "@kichiyaki/react-native-barcode-generator": "^0.6.7",

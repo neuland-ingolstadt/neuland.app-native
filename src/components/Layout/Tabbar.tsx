@@ -25,6 +25,10 @@ export default function TabLayout(): JSX.Element {
                               .hex()
                     : undefined
             }
+            // eslint-disable-next-line react-native/no-inline-styles
+            tabLabelStyle={{
+                fontSize: 11,
+            }}
             activeIndicatorColor={
                 isAndroid
                     ? UnistylesRuntime.themeName === 'dark'
