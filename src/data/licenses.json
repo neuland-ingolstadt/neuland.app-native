@@ -179,7 +179,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-screen-orientation@8.0.0": {
+    "expo-screen-orientation@8.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -203,7 +203,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.14": {
+    "expo@52.0.15": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -317,7 +317,7 @@
         "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
         "parents": "neuland"
     },
-    "react-native-pager-view@6.6.1": {
+    "react-native-pager-view@6.5.1": {
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-pager-view",
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
@@ -341,7 +341,7 @@
         "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-screens@4.3.0": {
+    "react-native-screens@4.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
@@ -371,7 +371,7 @@
         "licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-webview@13.12.2": {
+    "react-native-webview@13.12.5": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-webview/react-native-webview",
         "licenseUrl": "https://github.com/react-native-webview/react-native-webview/raw/master/LICENSE",
