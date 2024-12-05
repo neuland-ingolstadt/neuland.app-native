@@ -183,6 +183,10 @@
         "footer": "This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information."
     },
     "appIcon": {
+        "error": {
+            "title": "Not available",
+            "message": "Alternative app icons are not available on this device."
+        },
         "names": {
             "default": "Neuland Next",
             "retro": "neuland.app",

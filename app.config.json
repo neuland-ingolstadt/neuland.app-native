@@ -7,6 +7,7 @@
         "version": "0.11.0",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
+        "newArchEnabled": true,
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
             "buildNumber": "199",
@@ -50,6 +51,7 @@
                     "headOrigin": "https://neuland.app"
                 }
             ],
+            ["expo-alternate-app-icons"],
             ["expo-secure-store"],
             ["expo-localization"],
             [
@@ -85,7 +87,8 @@
                     "imageWidth": 200
                 }
             ],
-            "react-native-edge-to-edge"
+            "react-native-edge-to-edge",
+            "expo-alternate-app-icons"
         ],
         "extra": {
             "eas": {
