@@ -84,7 +84,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-    const { styles, theme } = useStyles(stylesheet)
+    const { styles } = useStyles(stylesheet)
     return (
         <>
             <Head>
@@ -108,14 +108,7 @@ function RootLayout(): JSX.Element {
                     }
                 />
             )}
-            <Stack
-                screenOptions={{
-                    contentStyle: styles.background,
-                    headerStyle: styles.headerBackground,
-                    headerTintColor: theme.colors.primary,
-                    headerTitleStyle: styles.headerTextStyle,
-                }}
-            >
+            <Stack>
                 <Stack.Screen
                     name="(tabs)"
                     options={{
@@ -454,7 +447,5 @@ const ProviderComponent = (): JSX.Element => {
 
 export default ProviderComponent
 const stylesheet = createStyleSheet((theme) => ({
-    background: { backgroundColor: theme.colors.background },
-    headerBackground: { backgroundColor: theme.colors.card },
     headerTextStyle: { color: theme.colors.text },
 }))

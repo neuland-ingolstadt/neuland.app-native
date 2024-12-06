@@ -1,25 +1,13 @@
 import PlatformIcon from '@/components/Universal/Icon'
-import { BlurView } from 'expo-blur'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import {
-    UnistylesRuntime,
-    createStyleSheet,
-    useStyles,
-} from 'react-native-unistyles'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const DefaultTabs = (): JSX.Element => {
     const { styles, theme: styleTheme } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
-    const BlurTab = (): JSX.Element => (
-        <BlurView
-            tint={UnistylesRuntime.themeName === 'dark' ? 'dark' : 'light'}
-            intensity={75}
-            style={styles.blurTab}
-        />
-    )
 
     return (
         <>
@@ -54,9 +42,7 @@ const DefaultTabs = (): JSX.Element => {
                             />
                         ),
 
-                        tabBarStyle: styles.tabbarStyle(true),
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
+                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -81,9 +67,7 @@ const DefaultTabs = (): JSX.Element => {
                                 }}
                             />
                         ),
-                        tabBarStyle: styles.tabbarStyle(true),
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
+                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -133,9 +117,7 @@ const DefaultTabs = (): JSX.Element => {
                             />
                         ),
 
-                        tabBarStyle: styles.tabbarStyle(true),
-                        tabBarBackground: () =>
-                            Platform.OS === 'ios' ? <BlurTab /> : null,
+                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
             </Tabs>
@@ -144,13 +126,6 @@ const DefaultTabs = (): JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    blurTab: {
-        bottom: 0,
-        left: 0,
-        position: 'absolute',
-        right: 0,
-        top: 0,
-    },
     tabbarStyle: (blur: boolean) => ({
         borderTopColor: theme.colors.border,
         backgroundColor: blur
