@@ -203,7 +203,7 @@ const stylesheet = createStyleSheet((theme) => ({
         color: theme.colors.primary,
         fontSize: 16,
         fontWeight: '500',
-        paddingRight: 10,
+        paddingRight: 10.1,
         textAlign: 'right',
     },
     suggestionRightContainer: {
@@ -240,7 +240,6 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '600',
         marginBottom: 1,
     },
-
     time: {
         color: theme.colors.text,
         fontVariant: ['tabular-nums'],

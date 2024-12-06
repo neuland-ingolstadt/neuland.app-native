@@ -65,19 +65,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.62.2": {
+    "@tanstack/query-sync-storage-persister@5.62.3": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.62.2": {
+    "@tanstack/react-query-persist-client@5.62.3": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.62.2": {
+    "@tanstack/react-query@5.62.3": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -371,7 +371,7 @@
         "licenseUrl": "https://github.com/jpudysz/react-native-unistyles/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-view-shot@4.0.2": {
+    "react-native-view-shot@4.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/gre/react-native-view-shot",
         "licenseUrl": "https://github.com/gre/react-native-view-shot/raw/master/LICENSE",
