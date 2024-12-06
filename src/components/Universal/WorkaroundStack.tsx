@@ -3,7 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export interface WorkaroundStackProps {
     name: string
@@ -33,6 +37,7 @@ function WorkaroundStack({
     name,
     titleKey,
     component,
+    transparent = false,
     largeTitle = false,
     headerRightElement = undefined,
     headerSearchBarOptions = undefined,
@@ -82,13 +87,16 @@ function WorkaroundStack({
                     headerLargeTitle: Platform.OS === 'ios' && largeTitle,
                     headerRight: headerRightElement,
                     headerLargeStyle: styles.headerBackground,
-                    headerStyle: styles.headerBackground,
+                    headerStyle: undefined,
                     headerSearchBarOptions,
                     headerTintColor: theme.colors.primary,
                     contentStyle: styles.background,
                     headerTitleStyle: {
                         color: theme.colors.text,
                     },
+                    headerShadowVisible: transparent,
+                    headerTransparent: true,
+                    headerBlurEffect: UnistylesRuntime.themeName,
                 }}
                 component={component}
                 initialParams={params}
