@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+-   _(grades, profile)_ Add app state handling for privacy visibility
+-   _(events)_ Replace static club data with api data
+-   _(ui)_ Integrate edge-to-edge layout on android
+-   _(error)_ Include current pathname in feedback email content
+-   _(api)_ Add GraphQL code generation (#130)
+-   _(app)_ Enable react native new arch (#131)
+-   _(api)_ Extend announcement popup with platform and userKind filter
+-   _(news)_ Add NewsCard component with carousel
+
+### 🐛 Bug Fixes
+
+-   _(cards)_ Correct sorting order of active announcements by priority
+-   _(android)_ Fixes laggy navigation bar background logic
+-   _(android)_ Remove laggy page transition animations
+-   _(share)_ Add placeholder button to prevent flicker on load
+-   _(rooms)_ Disable map link for invalid rooms
+-   _(lecture)_ Restore lecture detail navigation
+-   _(map)_ Improve color handling for platform compatibility
+-   _(calendar)_ Enhance exam details display and improve date formatting
+-   _(map)_ Correct query key for fetching free rooms
+-   _(settings)_ Improve loading state handling
+-   _(events)_ Update event titles and descriptions structure
+-   _(lecture)_ Handle null exam values
+-   _(about)_ Update logoIcon styles to improve shadow effect
+-   _(lecturers)_ Add SafeAreaView for improved searchbar layout
+-   _(map)_ Fix laggy map bottom sheet animation
+-   _(lecturers)_ Replace FlatList with FlashList for improved performance and layout adjustments
+
+### 🚜 Refactor
+
+-   _(map)_ Break down into several components
+-   _(app)_ Enable expo-router typed routes
+-   _(api)_ Replace graphql-request with fetch for GraphQL queries
+-   _(layout)_ Simplify layout components by removing unnecessary padding and views
+
+### ⚡ Performance
+
+-   _(navigation)_ Replace InteractionManager with dismissTo for room navigation
+
+### 🎨 Styling
+
+-   Migrate to Unistyles for improved theming and code style (#119)
+-   _(map)_ Add uniform indicator style for BottomSheet components
+-   _(calendar)_ Improves semester dates section name
+
+### ⚙️ Miscellaneous Tasks
+
+-   Upgrade to React Native 0.76 and Expo SDK 52 (#123)
+-   _(git)_ Update issue templates
+
 ## [0.10.1] - 2024-11-09
 
 ### 🚀 Features

@@ -9,7 +9,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import RowEntry from '../Universal/RowEntry'
 
 const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
 
     const onPressRoom = (): void => {
         router.dismissTo({
@@ -25,7 +25,6 @@ const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
         })
     }
     const { t } = useTranslation('api')
-
     return (
         <RowEntry
             title={`${[item.titel, item.vorname, item.name].join(' ').trim()}`}
@@ -68,6 +67,7 @@ const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
                     </View>
                 </>
             }
+            backgroundColor={theme.colors.card}
             onPress={onPressRow}
             maxTitleWidth={'75%'}
         />

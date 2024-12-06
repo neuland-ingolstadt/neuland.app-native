@@ -18,6 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -30,7 +31,6 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    FlatList,
     Linking,
     Platform,
     RefreshControl,
@@ -316,11 +316,11 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-            <FlatList
+            <FlashList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
                 contentContainerStyle={styles.loadedRows}
-                contentInsetAdjustmentBehavior="always"
+                estimatedItemSize={101}
                 refreshControl={
                     <RefreshControl
                         refreshing={
@@ -335,14 +335,31 @@ export default function LecturersCard(): JSX.Element {
                         }}
                     />
                 }
-                style={styles.pageBottom}
                 renderItem={({ item, index }) => (
-                    <React.Fragment key={index}>
+                    <View
+                        key={index}
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{
+                            overflow: 'hidden',
+                            borderTopStartRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderTopEndRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderBottomStartRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                            borderBottomEndRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                        }}
+                    >
                         <LecturerRow item={item} />
                         {index !== lecturers.length - 1 && (
                             <Divider iosPaddingLeft={16} />
                         )}
-                    </React.Fragment>
+                    </View>
                 )}
             />
         ) : (
@@ -501,10 +518,10 @@ const stylesheet = createStyleSheet((theme) => ({
         marginHorizontal: theme.margins.page,
         paddingBottom: theme.margins.bottomSafeArea,
     },
+
     loadedRows: {
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.md,
-        marginHorizontal: theme.margins.page,
+        paddingBottom: theme.margins.bottomSafeArea,
+        paddingHorizontal: theme.margins.page,
     },
     loadingContainer: {
         alignItems: 'center',
@@ -513,9 +530,6 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         flex: 1,
-    },
-    pageBottom: {
-        paddingBottom: theme.margins.bottomSafeArea,
     },
     pagePadding: {
         paddingHorizontal: theme.margins.page,
