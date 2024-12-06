@@ -888,7 +888,11 @@ const MapScreen = (): JSX.Element => {
                     }}
                     style={layerStyles.osmBackground}
                 >
-                    <Text style={styles.osmAtrribution}>
+                    <Text
+                        style={styles.osmAtrribution}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
                         {'© OpenStreetMap'}
                     </Text>
                 </Pressable>
