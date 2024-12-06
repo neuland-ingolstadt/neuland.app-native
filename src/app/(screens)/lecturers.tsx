@@ -18,7 +18,6 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useHeaderHeight } from '@react-navigation/elements'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -35,6 +34,7 @@ import {
     Linking,
     Platform,
     RefreshControl,
+    SafeAreaView,
     SectionList,
     Text,
     View,
@@ -62,7 +62,6 @@ export default function LecturersCard(): JSX.Element {
     const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
     const [faculty, setFaculty] = useState<string | null>(null)
     const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
-    const headerHeight = useHeaderHeight()
 
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
@@ -445,12 +444,9 @@ export default function LecturersCard(): JSX.Element {
     }
 
     return (
-        <View
+        <SafeAreaView
             // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-                ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 10 : 10,
-            }}
+            style={styles.page}
         >
             {userKind === USER_GUEST ? (
                 <ErrorView title={guestError} />
@@ -496,7 +492,7 @@ export default function LecturersCard(): JSX.Element {
             ) : (
                 <FilterSectionList />
             )}
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -536,7 +532,7 @@ const stylesheet = createStyleSheet((theme) => ({
         right: 0,
         zIndex: 1,
     },
-    searchContainer: { flex: 1, gap: 10 },
+    searchContainer: { flex: 1, gap: 10, paddingTop: 10 },
     sectionHeader: {
         color: theme.colors.text,
         fontSize: 17,
