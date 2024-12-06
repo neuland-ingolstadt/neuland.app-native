@@ -62,6 +62,9 @@
         "events": {
             "by": "by {{name}}"
         },
+        "news": {
+            "more": "Read all {{count}} articles"
+        },
         "calendar": {
             "exam": "Exam: {{name}}",
             "ends": "ends "

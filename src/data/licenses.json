@@ -143,6 +143,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "expo-crypto@14.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "expo-haptics@14.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -191,7 +197,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@0.29.13": {
+    "expo-splash-screen@0.29.16": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -203,7 +209,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.15": {
+    "expo@52.0.17": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -213,12 +219,6 @@
         "licenses": "Apache-2.0",
         "repository": "https://github.com/krisk/Fuse",
         "licenseUrl": "https://github.com/krisk/Fuse/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "graphql-request@7.1.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/jasonkuhrt/graphql-request",
-        "licenseUrl": "https://github.com/jasonkuhrt/graphql-request/raw/master/LICENSE",
         "parents": "neuland"
     },
     "graphql@16.9.0": {
@@ -327,6 +327,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-paper",
         "licenseUrl": "https://github.com/callstack/react-native-paper/raw/master/LICENSE.md",
+        "parents": "neuland"
+    },
+    "react-native-reanimated-carousel@3.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dohooo/react-native-reanimated-carousel",
+        "licenseUrl": "https://github.com/dohooo/react-native-reanimated-carousel/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-reanimated@3.16.3": {

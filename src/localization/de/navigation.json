@@ -62,6 +62,9 @@
         "events": {
             "by": "von {{name}}"
         },
+        "news": {
+            "more": "Lese alle {{count}} Artikel"
+        },
         "calendar": {
             "exam": "Prüfung: {{name}}",
             "ends": "endet "
