@@ -37,6 +37,10 @@
         "special": "Aktion"
     },
     "details": {
+        "error": {
+            "title": "Details nicht verfügbar",
+            "message": "Die Details zu diesem Gericht sind derzeit nicht verfügbar."
+        },
         "footer": "Wir übernehmen keine Verantwortung für die Korrektheit der Daten. Bitte überprüfe die Richtigkeit der Daten mit dem jeweiligen Restaurant, bevor du etwas zu dir nimmst.",
         "translated": "Dieses Gericht wurde automatisch übersetzt. ",
         "formlist": {

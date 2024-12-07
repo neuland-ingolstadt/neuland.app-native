@@ -75,6 +75,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                 onPressRoute != null &&
                     router.navigate(onPressRoute as RelativePathString)
             }}
+            disabled={Platform.OS === 'android'}
         >
             <Pressable
                 disabled={onPressRoute == null}
