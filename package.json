@@ -20,7 +20,7 @@
     "licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/",
     "prepare": "husky",
     "codegen": "graphql-codegen --config codegen.yml",
-    "knip": "knip"
+    "changelog": "git cliff --output CHANGELOG.md"
   },
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
