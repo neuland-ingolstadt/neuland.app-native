@@ -9,6 +9,7 @@ import {
 import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { humanLocations } from '@/utils/food-utils'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
 import { Redirect, type RelativePathString, useRouter } from 'expo-router'
@@ -19,7 +20,6 @@ import { Platform } from 'react-native'
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { appIcons } from '../(screens)/appIcon'
-import { humanLocations } from '../(screens)/meal'
 
 declare const process: {
     env: {

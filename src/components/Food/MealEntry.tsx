@@ -1,4 +1,3 @@
-import { humanLocations, shareMeal } from '@/app/(screens)/meal'
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -13,10 +12,11 @@ import {
     formatPrice,
     getUserSpecificLabel,
     getUserSpecificPrice,
+    humanLocations,
     mealName,
+    shareMeal,
 } from '@/utils/food-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
@@ -24,6 +24,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
+import { useMMKVObject } from 'react-native-mmkv'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
@@ -55,7 +56,7 @@ export const MealEntry = ({
         preferencesSelection,
         i18n.language
     )
-
+    const [, setSelectedMeal] = useMMKVObject('selectedMeal', undefined)
     useEffect(() => {}, [userKind])
     const price = getUserSpecificPrice(meal, userKind ?? 'guest')
     const label =
@@ -81,6 +82,12 @@ export const MealEntry = ({
 
     const [key, setKey] = useState(Math.random())
 
+    const itemPressed = (): void => {
+        setSelectedMeal(meal)
+        router.push({
+            pathname: '/meal',
+        })
+    }
     return (
         <DragDropView
             mode="drag"
@@ -126,17 +133,7 @@ export const MealEntry = ({
                                 : undefined,
                     },
                 ]}
-                onPreviewPress={() => {
-                    const base64Event = Buffer.from(
-                        JSON.stringify(meal)
-                    ).toString('base64')
-                    router.push({
-                        pathname: '/meal',
-                        params: {
-                            foodEntry: base64Event,
-                        },
-                    })
-                }}
+                onPreviewPress={itemPressed}
                 onPress={(e) => {
                     if (
                         e.nativeEvent.name === t('misc.share', { ns: 'common' })
@@ -150,17 +147,7 @@ export const MealEntry = ({
                 }}
             >
                 <Pressable
-                    onPress={() => {
-                        const base64Event = Buffer.from(
-                            JSON.stringify(meal)
-                        ).toString('base64')
-                        router.push({
-                            pathname: '/meal',
-                            params: {
-                                foodEntry: base64Event,
-                            },
-                        })
-                    }}
+                    onPress={itemPressed}
                     delayLongPress={300}
                     onLongPress={() => {}}
                     style={styles.pressable}
