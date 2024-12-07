@@ -1,9 +1,7 @@
 import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections } from '@/types/components'
-import { type Exam } from '@/types/utils'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
-import { Buffer } from 'buffer/'
-import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
@@ -11,11 +9,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ExamDetail(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const { examEntry } = useLocalSearchParams<{ examEntry: string }>()
-    const exam: Exam | undefined =
-        examEntry != null
-            ? JSON.parse(Buffer.from(examEntry, 'base64').toString())
-            : undefined
+    const exam = useRouteParamsStore((state) => state.selectedExam)
     const { t } = useTranslation('common')
     const typeSplit =
         exam?.type !== undefined

@@ -4,6 +4,7 @@ import PlatformIcon from '@/components/Universal/Icon'
 import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Meal } from '@/types/neuland-api'
 import {
@@ -24,7 +25,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
-import { useMMKVObject } from 'react-native-mmkv'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
@@ -56,7 +56,9 @@ export const MealEntry = ({
         preferencesSelection,
         i18n.language
     )
-    const [, setSelectedMeal] = useMMKVObject('selectedMeal', undefined)
+    const setSelectedMeal = useRouteParamsStore(
+        (state) => state.setSelectedMeal
+    )
     useEffect(() => {}, [userKind])
     const price = getUserSpecificPrice(meal, userKind ?? 'guest')
     const label =

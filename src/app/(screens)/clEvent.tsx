@@ -1,20 +1,15 @@
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
 } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
-import {
-    useFocusEffect,
-    useLocalSearchParams,
-    useNavigation,
-} from 'expo-router'
+import { useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
@@ -22,12 +17,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventDetail(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const { clEventEntry } = useLocalSearchParams<{ clEventEntry: string }>()
     const navigation = useNavigation()
-    const clEvent: CLEvents | undefined =
-        clEventEntry != null
-            ? JSON.parse(Buffer.from(clEventEntry, 'base64').toString())
-            : undefined
+    const clEvent = useCLParamsStore((state) => state.selectedClEvent)
 
     const { t, i18n } = useTranslation('common')
     const isMultiDayEvent =

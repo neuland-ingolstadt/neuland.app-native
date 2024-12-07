@@ -1,5 +1,5 @@
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type NormalizedLecturer } from '@/types/utils'
-import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,9 @@ import RowEntry from '../Universal/RowEntry'
 
 const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
-
+    const setSelectedLecturer = useRouteParamsStore(
+        (state) => state.setSelectedLecturer
+    )
     const onPressRoom = (): void => {
         router.dismissTo({
             pathname: '/(tabs)/map',
@@ -18,12 +20,10 @@ const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
         })
     }
     const onPressRow = (): void => {
-        const base64Event = Buffer.from(JSON.stringify(item)).toString('base64')
-        router.navigate({
-            pathname: '/lecturer',
-            params: { lecturerEntry: base64Event },
-        })
+        setSelectedLecturer(item)
+        router.navigate('/lecturer')
     }
+
     const { t } = useTranslation('api')
     return (
         <RowEntry
