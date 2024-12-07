@@ -93,7 +93,8 @@
     "rn-quick-actions": "^0.0.3",
     "sanitize-html": "^2.13.1",
     "sweet-sfsymbols": "0.7.2",
-    "swiftui-react-native": "^6.3.3"
+    "swiftui-react-native": "^6.3.3",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

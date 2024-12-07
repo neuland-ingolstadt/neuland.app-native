@@ -1,8 +1,8 @@
 import { type UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
-import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { Text, View } from 'react-native'
@@ -17,14 +17,12 @@ const SportsRow = ({
     event: UniversitySportsFieldsFragment
 }): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
+    const setSelectedSportsEvent = useCLParamsStore(
+        (state) => state.setSelectedSportsEvent
+    )
     const onPressRow = (): void => {
-        const base64Event = Buffer.from(JSON.stringify(event)).toString(
-            'base64'
-        )
-        router.navigate({
-            pathname: '/sportsEvent',
-            params: { sportsEventEntry: base64Event },
-        })
+        setSelectedSportsEvent(event)
+        router.navigate('/sportsEvent')
     }
     const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
     return (

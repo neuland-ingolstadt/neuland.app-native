@@ -1,3 +1,4 @@
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { type Exam } from '@/types/utils'
@@ -8,7 +9,6 @@ import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
-import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -56,13 +56,12 @@ const CalendarRow = ({ event }: { event: Calendar }): JSX.Element => {
 }
 
 const ExamRow = ({ event }: { event: Exam }): JSX.Element => {
+    const setExam = useRouteParamsStore((state) => state.setSelectedExam)
     const { styles } = useStyles(stylesheet)
-    const base64Event = Buffer.from(JSON.stringify(event)).toString('base64')
+
     const navigateToPage = (): void => {
-        router.push({
-            pathname: '/exam',
-            params: { examEntry: base64Event },
-        })
+        setExam(event)
+        router.navigate('/exam')
     }
 
     const { t } = useTranslation('common')

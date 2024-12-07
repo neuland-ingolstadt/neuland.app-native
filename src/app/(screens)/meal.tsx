@@ -6,9 +6,9 @@ import { FoodFilterContext, UserKindContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type Meal } from '@/types/neuland-api'
 import {
     formatPrice,
     humanLocations,
@@ -20,13 +20,11 @@ import { router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
-import { useMMKVObject } from 'react-native-mmkv'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodDetail(): JSX.Element {
-    const [selectedMeal] = useMMKVObject('selectedMeal', undefined)
+    const meal = useRouteParamsStore((state) => state.selectedMeal)
     const { styles, theme } = useStyles(stylesheet)
-    const meal = selectedMeal as Meal | undefined
     const {
         preferencesSelection,
         allergenSelection,

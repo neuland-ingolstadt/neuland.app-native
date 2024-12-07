@@ -1,5 +1,6 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import { PreferencesContext } from '@/components/contexts'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import {
     type CalendarTimetableEntry,
     type Exam,
@@ -8,7 +9,6 @@ import {
 } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor, inverseColor } from '@/utils/ui-utils'
-import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
@@ -42,6 +42,12 @@ export default function TimetableWeek({
     )?.startDate
     const [localSelectedDate, setLocalSelectedDate] =
         React.useState(selectedDate)
+    const setSelectedLecture = useRouteParamsStore(
+        (state) => state.setSelectedLecture
+    )
+    const setSelectedExam = useRouteParamsStore(
+        (state) => state.setSelectedExam
+    )
     const friendlyTimetableWithColor = friendlyTimetable.map(
         (entry: FriendlyTimetableEntry, index: number) => ({
             ...entry,
@@ -339,24 +345,12 @@ export default function TimetableWeek({
     }
 
     function showEventDetails(entry: WeekViewEvent): void {
-        const base64Event = Buffer.from(JSON.stringify(entry)).toString(
-            'base64'
-        )
         if (entry.eventType === 'exam') {
-            const navigateToPage = (): void => {
-                router.navigate({
-                    pathname: '/exam',
-                    params: { examEntry: base64Event },
-                })
-            }
-            navigateToPage()
+            setSelectedExam(entry as unknown as Exam)
+            router.navigate('/exam')
         } else if (entry.eventType === 'lecture') {
-            router.navigate({
-                pathname: '/lecture',
-                params: {
-                    lecture: base64Event,
-                },
-            })
+            setSelectedLecture(entry as unknown as FriendlyTimetableEntry)
+            router.navigate('/lecture')
         }
     }
 
