@@ -2,14 +2,14 @@ import ErrorView from '@/components/Error/ErrorView'
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
-import { PreferencesContext } from '@/components/contexts'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 import {
     getAppIconName,
     setAlternateAppIcon,
     supportsAlternateIcons,
 } from 'expo-alternate-app-icons'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Image,
@@ -37,7 +37,9 @@ export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const { unlockedAppIcons } = useContext(PreferencesContext)
+    const unlockedAppIcons = usePreferencesStore(
+        (state) => state.unlockedAppIcons
+    )
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],

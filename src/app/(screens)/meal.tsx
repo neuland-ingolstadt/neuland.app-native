@@ -2,10 +2,11 @@ import ErrorView from '@/components/Error/ErrorView'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
@@ -25,13 +26,20 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function FoodDetail(): JSX.Element {
     const meal = useRouteParamsStore((state) => state.selectedMeal)
     const { styles, theme } = useStyles(stylesheet)
-    const {
-        preferencesSelection,
-        allergenSelection,
-        foodLanguage,
-        toggleSelectedAllergens,
-        toggleSelectedPreferences,
-    } = useContext(FoodFilterContext)
+
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+    const toggleSelectedPreferences = useFoodFilterStore(
+        (state) => state.toggleSelectedPreferences
+    )
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()

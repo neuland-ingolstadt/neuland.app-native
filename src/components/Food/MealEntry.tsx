@@ -1,9 +1,10 @@
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import PlatformIcon from '@/components/Universal/Icon'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Meal } from '@/types/neuland-api'
@@ -40,8 +41,13 @@ export const MealEntry = ({
     meal: Meal
     index: number
 }): JSX.Element => {
-    const { preferencesSelection, allergenSelection, foodLanguage } =
-        useContext(FoodFilterContext)
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
     const { t, i18n } = useTranslation('food')
     const { styles, theme } = useStyles(stylesheet)
     const userAllergens = convertRelevantAllergens(

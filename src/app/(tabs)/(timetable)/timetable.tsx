@@ -2,9 +2,10 @@ import ErrorView from '@/components/Error/ErrorView'
 import TimetableList from '@/components/Timetable/TimetableList'
 import TimetableWeek from '@/components/Timetable/TimetableWeek'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { PreferencesContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
@@ -31,7 +32,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 export default function TimetableScreen(): JSX.Element {
     const { styles } = useStyles(stylesheet)
 
-    const { timetableMode } = useContext(PreferencesContext)
+    const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
     const { t } = useTranslation(['timetable'])
 
