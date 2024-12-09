@@ -9,6 +9,7 @@ export default function Screen(): JSX.Element {
             titleKey={'navigation.allergens'}
             component={ItemsPickerScreen}
             params={{ type: 'allergens' }}
+            androidFallback
         />
     )
 }
