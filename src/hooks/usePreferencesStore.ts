@@ -1,8 +1,7 @@
 import { defaultQuicklinks } from '@/data/constants'
+import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-
-import { zustandStorage } from './mmkv'
 
 const DEFAULT_ACCENT_COLOR = 'blue'
 
@@ -21,18 +20,33 @@ interface PreferencesStore {
     setTimetableMode: (mode: string) => void
     setSelectedDate: (date: Date) => void
     addRecentQuicklink: (quicklink: string) => void
+    reset: () => void
+}
+
+const initialState: Omit<
+    PreferencesStore,
+    | 'setAccentColor'
+    | 'setTheme'
+    | 'setAppIcon'
+    | 'addUnlockedAppIcon'
+    | 'setTimetableMode'
+    | 'setSelectedDate'
+    | 'addRecentQuicklink'
+    | 'reset'
+> = {
+    accentColor: DEFAULT_ACCENT_COLOR,
+    appIcon: undefined,
+    theme: 'auto',
+    unlockedAppIcons: [],
+    timetableMode: undefined,
+    selectedDate: new Date(),
+    recentQuicklinks: defaultQuicklinks,
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
     persist(
         (set) => ({
-            accentColor: DEFAULT_ACCENT_COLOR,
-            theme: 'auto',
-            appIcon: undefined,
-            unlockedAppIcons: [],
-            timetableMode: undefined,
-            selectedDate: new Date(),
-            recentQuicklinks: defaultQuicklinks,
+            ...initialState,
             setAccentColor: (accentColor: string) => {
                 set({ accentColor })
             },
@@ -80,6 +94,10 @@ export const usePreferencesStore = create<PreferencesStore>()(
                     ].slice(0, 3)
                     return { recentQuicklinks: finalQuicklinks }
                 })
+            },
+            reset: () => {
+                set(initialState)
+                zustandStorage.removeItem('app-storage')
             },
         }),
         {

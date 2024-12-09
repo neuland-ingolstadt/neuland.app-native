@@ -1,8 +1,7 @@
 import { type LanguageKey } from '@/localization/i18n'
+import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-
-import { zustandStorage } from './mmkv'
 
 export type FoodLanguage = LanguageKey | 'default'
 
@@ -18,16 +17,30 @@ interface FoodFilterStore {
     toggleSelectedPreferences: (name: string) => void
     setShowStatic: (value: boolean) => void
     toggleFoodLanguage: (language: string) => void
+    reset: () => void
+}
+
+const initialState: Omit<
+    FoodFilterStore,
+    | 'toggleSelectedRestaurant'
+    | 'toggleSelectedAllergens'
+    | 'initAllergenSelection'
+    | 'toggleSelectedPreferences'
+    | 'setShowStatic'
+    | 'toggleFoodLanguage'
+    | 'reset'
+> = {
+    selectedRestaurants: ['IngolstadtMensa', 'Reimanns'],
+    preferencesSelection: ['veg', 'V'],
+    allergenSelection: ['not-configured'],
+    showStatic: undefined,
+    foodLanguage: 'default',
 }
 
 export const useFoodFilterStore = create<FoodFilterStore>()(
     persist(
         (set) => ({
-            selectedRestaurants: ['IngolstadtMensa', 'Reimanns'],
-            preferencesSelection: ['veg', 'V'],
-            allergenSelection: ['not-configured'],
-            showStatic: undefined,
-            foodLanguage: 'default',
+            ...initialState,
             toggleSelectedRestaurant: (name: string) => {
                 set((state) => {
                     const checked = state.selectedRestaurants.includes(name)
@@ -79,6 +92,10 @@ export const useFoodFilterStore = create<FoodFilterStore>()(
             },
             toggleFoodLanguage: (language: string) => {
                 set({ foodLanguage: language as FoodLanguage })
+            },
+            reset: () => {
+                set({ ...initialState })
+                zustandStorage.removeItem('food-filter-store')
             },
         }),
         {
