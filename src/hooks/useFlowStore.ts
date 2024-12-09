@@ -1,13 +1,12 @@
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { zustandStorage } from '@/utils/storage'
 import * as Application from 'expo-application'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { zustandStorage } from './mmkv'
-
 interface FlowStore {
     isOnboarded: boolean | undefined
-    setOnboarded: (value: boolean) => void
+    setOnboarded: () => void
 
     updatedVersion: string | undefined
     toggleUpdated: () => void
@@ -22,8 +21,8 @@ export const useFlowStore = create<FlowStore>()(
     persist(
         (set) => ({
             isOnboarded: undefined,
-            setOnboarded: (value: boolean) => {
-                set({ isOnboarded: value })
+            setOnboarded: () => {
+                set({ isOnboarded: true })
             },
 
             updatedVersion: undefined,
@@ -39,7 +38,7 @@ export const useFlowStore = create<FlowStore>()(
             },
         }),
         {
-            name: `flow-store`,
+            name: 'flow-store',
             storage: createJSONStorage(() => zustandStorage),
         }
     )

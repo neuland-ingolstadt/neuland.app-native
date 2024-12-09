@@ -7,6 +7,8 @@ import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
 import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
 import { useQuery } from '@tanstack/react-query'
@@ -36,7 +38,8 @@ export default function Profile(): JSX.Element {
     const { resetOrder } = useContext(DashboardContext)
     const { t } = useTranslation('settings')
     const [isLoggingOut, setIsLoggingOut] = React.useState(false)
-
+    const resetPreferences = usePreferencesStore((state) => state.reset)
+    const resetFood = useFoodFilterStore((state) => state.reset)
     const { data, error, isLoading, isPaused, isSuccess, refetch, isError } =
         useQuery({
             queryKey: ['personalData'],
@@ -109,6 +112,8 @@ export default function Profile(): JSX.Element {
                     style: 'destructive',
                     onPress: () => {
                         setIsLoggingOut(true)
+                        resetFood()
+                        resetPreferences()
                         performLogout(toggleUserKind, resetOrder, queryClient)
                             .catch((e) => {
                                 console.log(e)

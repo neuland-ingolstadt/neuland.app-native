@@ -224,18 +224,9 @@ export async function forgetSession(): Promise<void> {
         SecureStore.deleteItemAsync('password'),
     ])
 
-    // clear all AsyncStorage data except analytics
+    // clear the general storage (cache)
     try {
-        const keys = storage.getAllKeys()
-        for (const key of keys) {
-            if (
-                key !== 'analytics' &&
-                key !== 'isOnboardedv1' &&
-                !key.startsWith('isUpdated-')
-            ) {
-                storage.delete(key)
-            }
-        }
+        storage.clearAll()
     } catch (e) {
         console.error(e)
     }

@@ -77,7 +77,7 @@ export default function OnboardingScreen(): JSX.Element {
                     if (Platform.OS === 'ios') {
                         void Haptics.selectionAsync()
                     }
-                    setOnboarded(true)
+                    setOnboarded()
                     toggleUpdated()
                     setAnalyticsAllowed(true)
                     router.navigate({

@@ -63,7 +63,7 @@ export default function HomeLayout(): JSX.Element {
     const [oldAccentColor] = useMMKVString('accentColor')
     // migration of old settings
     if (isOnboardedV1 === true) {
-        setOnboarded(true)
+        setOnboarded()
         storage.delete('isOnboardedv1')
     }
     if (analyticsV1 === true) {

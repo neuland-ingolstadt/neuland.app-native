@@ -12,6 +12,8 @@ import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
 import {
@@ -76,6 +78,8 @@ export default function Settings(): JSX.Element {
     const username =
         userKind === USER_EMPLOYEE && SecureStore.getItem('username')
     const { color, randomizeColor } = useRandomColor()
+    const resetPreferences = usePreferencesStore((state) => state.reset)
+    const resetFood = useFoodFilterStore((state) => state.reset)
 
     useEffect(() => {
         const { bottomBoundY, topBoundY } = getBounds()
@@ -157,6 +161,8 @@ export default function Settings(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
+                        resetPreferences()
+                        resetFood()
                         performLogout(
                             toggleUserKind,
                             resetOrder,
