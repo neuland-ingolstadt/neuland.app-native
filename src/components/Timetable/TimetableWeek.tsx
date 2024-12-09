@@ -34,7 +34,10 @@ export default function TimetableWeek({
     exams,
 }: ITimetableViewProps): JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
-    const selectedDate = usePreferencesStore((state) => state.selectedDate)
+    const selectedDateVal = usePreferencesStore((state) => state.selectedDate)
+    const selectedDate =
+        selectedDateVal != null ? new Date(selectedDateVal) : new Date()
+
     const setSelectedDate = usePreferencesStore(
         (state) => state.setSelectedDate
     )
@@ -456,7 +459,6 @@ const stylesheet = createStyleSheet((theme) => ({
     nowLine: (isIOS: boolean) => ({
         color: isIOS ? theme.colors.primary : theme.colors.notification,
     }),
-
     roomRow: {
         alignItems: 'center',
         flexDirection: 'row',
