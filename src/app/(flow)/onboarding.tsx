@@ -4,8 +4,8 @@ import AnimatedText from '@/components/Flow/svgs/AnimatedText'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import PlatformIcon from '@/components/Universal/Icon'
-import { FlowContext } from '@/components/contexts'
 import { PRIVACY_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
 import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -34,9 +34,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function OnboardingScreen(): JSX.Element {
-    const flow = React.useContext(FlowContext)
     const { t, i18n } = useTranslation('flow')
-
+    const setOnboarded = useFlowStore((state) => state.setOnboarded)
+    const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
+    const setAnalyticsAllowed = useFlowStore(
+        (state) => state.setAnalyticsAllowed
+    )
     const data = [
         {
             title: t('onboarding.cards.title1'),
@@ -74,9 +77,9 @@ export default function OnboardingScreen(): JSX.Element {
                     if (Platform.OS === 'ios') {
                         void Haptics.selectionAsync()
                     }
-                    flow.setOnboarded(true)
-                    flow.setUpdated(true)
-                    flow.setAnalyticsAllowed(true)
+                    setOnboarded(true)
+                    toggleUpdated()
+                    setAnalyticsAllowed(true)
                     router.navigate({
                         pathname: '/login',
                         params: { fromOnboarding: 'true' },

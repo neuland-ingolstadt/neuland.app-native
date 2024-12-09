@@ -1,6 +1,7 @@
 import Divider from '@/components/Universal/Divider'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { formatISODate } from '@/utils/date-utils'
 import {
@@ -20,12 +21,18 @@ import BaseCard from './BaseCard'
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
     const { styles, theme } = useStyles(stylesheet)
-    const {
-        selectedRestaurants,
-        allergenSelection,
-        preferencesSelection,
-        foodLanguage,
-    } = useContext(FoodFilterContext)
+
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>

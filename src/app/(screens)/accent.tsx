@@ -1,11 +1,10 @@
 import PlatformIcon from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
 import { accentColors } from '@/components/colors'
-import { ThemeContext } from '@/components/contexts'
-import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native'
 import {
@@ -16,8 +15,9 @@ import {
 
 export default function Theme(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const { accentColor = DEFAULT_ACCENT_COLOR, setAccentColor } =
-        useContext(ThemeContext)
+
+    const accentColor = usePreferencesStore((state) => state.accentColor)
+    const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {

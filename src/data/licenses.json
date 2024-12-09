@@ -424,5 +424,11 @@
         "repository": "https://github.com/andrew-levy/swiftui-react-native",
         "licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
         "parents": "neuland"
+    },
+    "zustand@5.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pmndrs/zustand",
+        "licenseUrl": "https://github.com/pmndrs/zustand/raw/master/LICENSE",
+        "parents": "neuland"
     }
 }

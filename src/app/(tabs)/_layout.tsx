@@ -1,21 +1,22 @@
 import DefaultTabs from '@/components/Layout/DefaultTabs'
 import MaterialTabs from '@/components/Layout/MaterialTabs'
-import {
-    FlowContext,
-    FoodFilterContext,
-    PreferencesContext,
-    UserKindContext,
-} from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { humanLocations } from '@/utils/food-utils'
+import { storage } from '@/utils/storage'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
 import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
@@ -29,17 +30,62 @@ declare const process: {
 
 export default function HomeLayout(): JSX.Element {
     const router = useRouter()
-    const flow = React.useContext(FlowContext)
+
     const { t } = useTranslation('navigation')
-    const { selectedRestaurants } = useContext(FoodFilterContext)
-    const { appIcon, setAppIcon } = useContext(PreferencesContext)
-
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const appIcon = usePreferencesStore((state) => state.appIcon)
+    const setAppIcon = usePreferencesStore((state) => state.setAppIcon)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
-    const { analyticsAllowed, initializeAnalytics, analyticsInitialized } =
-        React.useContext(FlowContext)
-    const { isOnboarded } = React.useContext(FlowContext)
-    const { userKind = USER_GUEST } = useContext(UserKindContext)
 
+    const analyticsInitialized = useSessionStore(
+        (state) => state.analyticsInitialized
+    )
+    const initializeAnalytics = useSessionStore(
+        (state) => state.initializeAnalytics
+    )
+    const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+    const setAnalyticsAllowed = useFlowStore(
+        (state) => state.setAnalyticsAllowed
+    )
+    const isOnboarded = useFlowStore((state) => state.isOnboarded)
+    const setOnboarded = useFlowStore((state) => state.setOnboarded)
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
+    const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
+    const { userKind = USER_GUEST } = useContext(UserKindContext)
+    const updatedVersion = useFlowStore((state) => state.updatedVersion)
+    const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
+    const [analyticsV1] = useMMKVBoolean('analytics')
+    const oldAllergens = storage.getString('selectedUserAllergens')
+    const [oldAccentColor] = useMMKVString('accentColor')
+    // migration of old settings
+    if (isOnboardedV1 === true) {
+        setOnboarded(true)
+        storage.delete('isOnboardedv1')
+    }
+    if (analyticsV1 === true) {
+        setAnalyticsAllowed(true)
+        storage.delete('analytics')
+    }
+    if (oldAccentColor != null) {
+        setAccentColor(oldAccentColor)
+        storage.delete('accentColor')
+    }
+    if (oldAllergens != null) {
+        const allergens = JSON.parse(oldAllergens)
+        if (allergens.length === 1 && allergens[0] === 'not-configured') {
+            /* empty */
+        } else {
+            allergens?.forEach((allergen: string) => {
+                console.debug('Migrating allergen:', allergen)
+                toggleSelectedAllergens(allergen)
+            })
+        }
+        storage.delete('selectedUserAllergens')
+    }
     useEffect(() => {
         const shortcuts = [
             {
@@ -156,9 +202,9 @@ export default function HomeLayout(): JSX.Element {
               )
             : false
     if (
-        flow.isUpdated !== true &&
+        updatedVersion !== processedVersion &&
         isChangelogAvailable &&
-        flow.isOnboarded === true
+        isOnboarded
     ) {
         return <Redirect href={'/whatsnew'} />
     }

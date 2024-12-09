@@ -1,14 +1,15 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import Divider from '@/components/Universal/Divider'
-import { FlowContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -21,7 +22,7 @@ const CalendarCard = (): JSX.Element => {
     const time = new Date()
     const { i18n, t } = useTranslation('navigation')
     const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
-    const flow = useContext(FlowContext)
+    const isOnboarded = useFlowStore((state) => state.isOnboarded)
     const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     interface CardExams {
         name: string
@@ -39,7 +40,7 @@ const CalendarCard = (): JSX.Element => {
             }))
         } catch (e) {
             if (e instanceof NoSessionError) {
-                if (flow.isOnboarded === true) {
+                if (isOnboarded === true) {
                     router.navigate('/login')
                 }
             } else if ((e as Error).message === 'Query not possible') {

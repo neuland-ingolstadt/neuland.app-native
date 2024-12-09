@@ -1,5 +1,5 @@
 import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
-import { PreferencesContext } from '@/components/contexts'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import {
     type CalendarTimetableEntry,
@@ -13,7 +13,7 @@ import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
-import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import { Platform, Text, View } from 'react-native'
 import {
     UnistylesRuntime,
@@ -34,7 +34,10 @@ export default function TimetableWeek({
     exams,
 }: ITimetableViewProps): JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
-    const { selectedDate, setSelectedDate } = useContext(PreferencesContext)
+    const selectedDate = usePreferencesStore((state) => state.selectedDate)
+    const setSelectedDate = usePreferencesStore(
+        (state) => state.setSelectedDate
+    )
     // get the first day of friendlyTimetable that is not in the past
     const today = new Date()
     const firstElementeDate = friendlyTimetable.find(

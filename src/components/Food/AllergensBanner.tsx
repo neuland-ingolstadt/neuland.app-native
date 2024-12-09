@@ -1,7 +1,7 @@
-import { FoodFilterContext } from '@/components/contexts'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { getContrastColor } from '@/utils/ui-utils'
 import { router } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Text, TouchableOpacity, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -14,7 +14,9 @@ export const AllergensBanner = ({
     scrollY: Animated.Value
 }): JSX.Element => {
     const { t } = useTranslation('common')
-    const { initAllergenSelection } = useContext(FoodFilterContext)
+    const initAllergenSelection = useFoodFilterStore(
+        (state) => state.initAllergenSelection
+    )
     const { styles } = useStyles(stylesheet)
     return (
         <Animated.View

@@ -1,5 +1,7 @@
-import { DEFAULT_ACCENT_COLOR } from '@/contexts/theme'
 import { useAppState, useOnlineManager } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
@@ -23,23 +25,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
-import {
-    useDashboard,
-    useFlow,
-    useFoodFilter,
-    usePreferences,
-    useTheme,
-    useUserKind,
-} from '../contexts'
+import { useDashboard, useUserKind } from '../contexts'
 import { accentColors } from './colors'
-import {
-    DashboardContext,
-    FlowContext,
-    FoodFilterContext,
-    PreferencesContext,
-    ThemeContext,
-    UserKindContext,
-} from './contexts'
+import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -70,16 +58,152 @@ export default function Provider({
     children,
     ...rest
 }: ProviderProps): JSX.Element {
-    const foodFilter = useFoodFilter()
     const userKind = useUserKind()
-    const themeHook = useTheme()
     const dashboard = useDashboard()
-    const flow = useFlow()
-    const preferences = usePreferences()
     const segments = useSegments()
 
     useOnlineManager()
     useAppState(onAppStateChange)
+    const theme = usePreferencesStore((state) => state.theme)
+    const accentColor = usePreferencesStore((state) => state.accentColor)
+    const timetableMode = usePreferencesStore((state) => state.timetableMode)
+    const appIcon = usePreferencesStore((state) => state.appIcon)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const analyticsInitialized = useSessionStore(
+        (state) => state.analyticsInitialized
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+
+    useEffect(() => {
+        // This effect uses segments instead of usePathname which resolves some issues with the router.
+        if (!analyticsInitialized || !Array.isArray(segments)) {
+            return
+        }
+
+        const lastSegment = segments[segments.length - 1]
+
+        const path =
+            typeof lastSegment === 'string'
+                ? `/${lastSegment.replace(/[()]/g, '')}`
+                : '/'
+
+        requestAnimationFrame(() => {
+            trackEvent('Route', { path })
+        })
+    }, [segments, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+        trackEvent('AccentColor', {
+            color: accentColor,
+        })
+    }, [accentColor, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+        trackEvent('Theme', {
+            theme: theme ?? 'auto',
+        })
+    }, [accentColor, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+        if (Platform.OS === 'ios') {
+            trackEvent('AppIcon', {
+                appIcon: appIcon ?? 'default',
+            })
+        }
+    }, [appIcon, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized || userKind.userKind === undefined) {
+            return
+        }
+        trackEvent('UserKind', {
+            userKind: userKind.userKind,
+        })
+    }, [userKind.userKind, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+
+        trackEvent('SelectedRestaurants', {
+            selectedRestaurants: selectedRestaurants.join(','),
+        })
+    }, [selectedRestaurants, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+
+        const entries: Record<string, string> = {}
+        dashboard.shownDashboardEntries?.forEach((entry, index) => {
+            if (entry !== undefined) {
+                entries[entry.key] = `Position ${index + 1}`
+            }
+        })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
+    }, [dashboard.shownDashboardEntries, analyticsInitialized])
+
+    useEffect(() => {
+        if (!analyticsInitialized) {
+            return
+        }
+
+        const entries: Record<string, string> = {}
+
+        dashboard.hiddenDashboardEntries?.forEach((entry) => {
+            if (entry !== undefined) {
+                entries[entry.key] = 'Card hidden'
+            }
+        })
+
+        if (Object.keys(entries).length > 0) {
+            trackEvent('Dashboard', entries)
+        }
+    }, [dashboard.hiddenDashboardEntries, analyticsInitialized])
+
+    useEffect((): void => {
+        if (!analyticsInitialized) {
+            return
+        }
+        trackEvent('Language', {
+            food: foodLanguage,
+        })
+    }, [foodLanguage, analyticsInitialized])
+
+    useEffect((): void => {
+        if (!analyticsInitialized) {
+            return
+        }
+        trackEvent('Language', {
+            app: i18n.language,
+        })
+    }, [i18n.language, analyticsInitialized])
+
+    useEffect((): void => {
+        if (!analyticsInitialized) {
+            return
+        }
+        trackEvent('TimetableMode', {
+            timetableMode: timetableMode ?? 'list',
+        })
+    }, [timetableMode, analyticsInitialized])
+
     /**
      * Returns the primary color for a given color scheme.
      * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
@@ -87,10 +211,7 @@ export default function Provider({
      */
     const getPrimary = (scheme: 'light' | 'dark'): string => {
         try {
-            const primary =
-                accentColors[themeHook.accentColor ?? DEFAULT_ACCENT_COLOR][
-                    scheme
-                ]
+            const primary = accentColors[accentColor][scheme]
             return primary
         } catch (e) {
             return accentColors.blue[scheme]
@@ -114,143 +235,15 @@ export default function Provider({
                 primary: getPrimary('light'),
             },
         }))
-    }, [themeHook.accentColor])
-
-    useEffect(() => {
-        // This effect uses segments instead of usePathname which resolves some issues with the router.
-        if (!flow.analyticsInitialized || !Array.isArray(segments)) {
-            return
-        }
-
-        const lastSegment = segments[segments.length - 1]
-
-        const path =
-            typeof lastSegment === 'string'
-                ? `/${lastSegment.replace(/[()]/g, '')}`
-                : '/'
-
-        requestAnimationFrame(() => {
-            trackEvent('Route', { path })
-        })
-    }, [segments, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        trackEvent('AccentColor', {
-            color: themeHook.accentColor ?? DEFAULT_ACCENT_COLOR,
-        })
-    }, [themeHook.accentColor, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        trackEvent('Theme', {
-            theme: themeHook.theme ?? 'auto',
-        })
-    }, [themeHook.accentColor, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        if (Platform.OS === 'ios') {
-            trackEvent('AppIcon', {
-                appIcon: preferences.appIcon ?? 'default',
-            })
-        }
-    }, [preferences.appIcon, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized || userKind.userKind === undefined) {
-            return
-        }
-        trackEvent('UserKind', {
-            userKind: userKind.userKind,
-        })
-    }, [userKind.userKind, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-
-        trackEvent('SelectedRestaurants', {
-            selectedRestaurants: foodFilter.selectedRestaurants.join(','),
-        })
-    }, [foodFilter.selectedRestaurants, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-
-        const entries: Record<string, string> = {}
-        dashboard.shownDashboardEntries?.forEach((entry, index) => {
-            if (entry !== undefined) {
-                entries[entry.key] = `Position ${index + 1}`
-            }
-        })
-
-        if (Object.keys(entries).length > 0) {
-            trackEvent('Dashboard', entries)
-        }
-    }, [dashboard.shownDashboardEntries, flow.analyticsInitialized])
-
-    useEffect(() => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-
-        const entries: Record<string, string> = {}
-
-        dashboard.hiddenDashboardEntries?.forEach((entry) => {
-            if (entry !== undefined) {
-                entries[entry.key] = 'Card hidden'
-            }
-        })
-
-        if (Object.keys(entries).length > 0) {
-            trackEvent('Dashboard', entries)
-        }
-    }, [dashboard.hiddenDashboardEntries, flow.analyticsInitialized])
-
-    useEffect((): void => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        trackEvent('Language', {
-            food: foodFilter.foodLanguage,
-        })
-    }, [foodFilter.foodLanguage, flow.analyticsInitialized])
-
-    useEffect((): void => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        trackEvent('Language', {
-            app: i18n.language,
-        })
-    }, [i18n.language, flow.analyticsInitialized])
-
-    useEffect((): void => {
-        if (!flow.analyticsInitialized) {
-            return
-        }
-        trackEvent('TimetableMode', {
-            timetableMode: preferences.timetableMode ?? 'list',
-        })
-    }, [preferences.timetableMode, flow.analyticsInitialized])
+    }, [accentColor])
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-        if (themeHook.theme === 'dark') {
+        if (theme === 'dark') {
             Appearance.setColorScheme('dark')
             UnistylesRuntime.setAdaptiveThemes(false)
             UnistylesRuntime.setTheme('dark')
-        } else if (themeHook.theme === 'light') {
+        } else if (theme === 'light') {
             Appearance.setColorScheme('light')
             UnistylesRuntime.setAdaptiveThemes(false)
             UnistylesRuntime.setTheme('light')
@@ -262,7 +255,7 @@ export default function Provider({
         return () => {
             subscription.remove()
         }
-    }, [themeHook.theme])
+    }, [theme])
 
     return (
         <GestureHandlerRootView style={styles.container}>
@@ -278,29 +271,15 @@ export default function Provider({
                                 : DefaultTheme
                         }
                     >
-                        <ThemeContext.Provider value={themeHook}>
-                            <PreferencesContext.Provider value={preferences}>
-                                <BottomSheetModalProvider>
-                                    <FlowContext.Provider value={flow}>
-                                        <UserKindContext.Provider
-                                            value={userKind}
-                                        >
-                                            <FoodFilterContext.Provider
-                                                value={foodFilter}
-                                            >
-                                                <DashboardContext.Provider
-                                                    value={dashboard}
-                                                >
-                                                    <SafeAreaProvider>
-                                                        {children}
-                                                    </SafeAreaProvider>
-                                                </DashboardContext.Provider>
-                                            </FoodFilterContext.Provider>
-                                        </UserKindContext.Provider>
-                                    </FlowContext.Provider>
-                                </BottomSheetModalProvider>
-                            </PreferencesContext.Provider>
-                        </ThemeContext.Provider>
+                        <BottomSheetModalProvider>
+                            <UserKindContext.Provider value={userKind}>
+                                <DashboardContext.Provider value={dashboard}>
+                                    <SafeAreaProvider>
+                                        {children}
+                                    </SafeAreaProvider>
+                                </DashboardContext.Provider>
+                            </UserKindContext.Provider>
+                        </BottomSheetModalProvider>
                     </ThemeProvider>
                 </UnistylesProvider>
             </PersistQueryClientProvider>

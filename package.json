@@ -119,7 +119,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "ajv": "^8.17.1",
-    "babel-plugin-formatjs": "^10.5.26",
+    "babel-plugin-formatjs": "^10.5.29",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
@@ -136,7 +136,7 @@
     "graphql-codegen-typescript-operation-types": "^2.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "prettier": "3.3.3",
+    "prettier": "3.4.2",
     "prop-types": "^15.8.1",
     "typescript": "^5.7.2"
   },
