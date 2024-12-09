@@ -83,7 +83,10 @@ const ItemsPickerScreen = (params: {
     }, [navigation, isDark])
 
     return (
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            contentContainerStyle={styles.contentContainer}
+        >
             <View style={styles.container}>
                 <MultiSectionPicker
                     elements={filteredEntries}
@@ -117,6 +120,9 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         justifyContent: 'center',
         width: '100%',
+    },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     filteredText: {
         alignSelf: 'center',

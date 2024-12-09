@@ -33,8 +33,8 @@ Check out the [contributing guidelines](https://next.neuland.app/en/app/setup) t
 
 Click on the link below to join the beta testing of the app:
 
--   iOS: [TestFlight](https://testflight.apple.com/join/PABWZys2)
--   Android: [Google Play](https://play.google.com/store/apps/details?id=app.neuland)
+- iOS: [TestFlight](https://testflight.apple.com/join/PABWZys2)
+- Android: [Google Play](https://play.google.com/store/apps/details?id=app.neuland)
 
 > [!IMPORTANT]  
 > Please let us know about any bugs and send us ideas for improvement so that we can improve the app.
