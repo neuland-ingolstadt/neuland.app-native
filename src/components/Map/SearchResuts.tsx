@@ -1,4 +1,5 @@
 import { MapContext } from '@/contexts/map'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type SearchResult } from '@/types/map'
 import { trackEvent } from '@aptabase/react-native'
 import Fuse from 'fuse.js'
@@ -9,7 +10,6 @@ import { Alert, Platform, SectionList, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
-import { PreferencesContext } from '../contexts'
 import ResultRow from './SearchResultRow'
 
 interface SearchResultsProps {
@@ -25,8 +25,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     const { t, i18n } = useTranslation('common')
     const { searchHistory, updateSearchHistory, localSearch } =
         useContext(MapContext)
-    const { unlockedAppIcons, addUnlockedAppIcon } =
-        useContext(PreferencesContext)
+    const unlockedAppIcons = usePreferencesStore(
+        (state) => state.unlockedAppIcons
+    )
+    const addUnlockedAppIcon = usePreferencesStore(
+        (state) => state.addUnlockedAppIcon
+    )
     useEffect(() => {
         if (
             localSearch.toLocaleLowerCase() === 'neuland' &&
