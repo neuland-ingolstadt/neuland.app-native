@@ -88,7 +88,7 @@ export default function TimetableDetails(): JSX.Element {
                 title: t(titleKey),
                 icon: chevronIcon,
                 onPress: () => {
-                    router.push({
+                    router.navigate({
                         pathname: '/webView',
                         params: {
                             title: t(titleKey),

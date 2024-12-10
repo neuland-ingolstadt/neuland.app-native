@@ -235,18 +235,18 @@ export const IndexHeaderRight = (): JSX.Element => {
                 ]}
                 onPress={(e) => {
                     if (e.nativeEvent.name === t('navigation.profile')) {
-                        router.push('/profile')
+                        router.navigate('/profile')
                     } else if (e.nativeEvent.name === t('navigation.accent')) {
-                        router.push('/accent')
+                        router.navigate('/accent')
                     } else if (e.nativeEvent.name === t('navigation.about')) {
-                        router.push('/about')
+                        router.navigate('/about')
                     } else if (e.nativeEvent.name === 'Logout') {
                         logoutAlert()
                     } else if (
                         e.nativeEvent.name ===
                         t('menu.guest.title', { ns: 'settings' })
                     ) {
-                        router.push('/login')
+                        router.navigate('/login')
                     }
                 }}
                 onPreviewPress={() => {

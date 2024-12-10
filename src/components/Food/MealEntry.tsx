@@ -92,7 +92,7 @@ export const MealEntry = ({
 
     const itemPressed = (): void => {
         setSelectedMeal(meal)
-        router.push({
+        router.navigate({
             pathname: '/meal',
         })
     }
