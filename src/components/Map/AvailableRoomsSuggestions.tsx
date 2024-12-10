@@ -46,11 +46,12 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                             router.navigate('/roomSearch')
                         }}
                         hitSlop={{
-                            top: 10,
-                            right: 10,
                             bottom: 10,
                             left: 10,
+                            right: 10,
+                            top: 10,
                         }}
+                        style={styles.suggestionMoreButton}
                     >
                         <Text style={styles.suggestionMoreButtonText}>
                             {t('misc.more')}
@@ -174,7 +175,6 @@ const stylesheet = createStyleSheet((theme) => ({
     primaryContrast: {
         color: getContrastColor(theme.colors.primary),
     },
-
     radiusBg: {
         backgroundColor: theme.colors.card,
         borderRadius: 14,
@@ -199,11 +199,14 @@ const stylesheet = createStyleSheet((theme) => ({
         flex: 1,
         justifyContent: 'space-between',
     },
+    suggestionMoreButton: {
+        flexShrink: 1,
+    },
     suggestionMoreButtonText: {
         color: theme.colors.primary,
         fontSize: 16,
         fontWeight: '500',
-        paddingRight: 10.1,
+        paddingRight: 10,
         textAlign: 'right',
     },
     suggestionRightContainer: {
