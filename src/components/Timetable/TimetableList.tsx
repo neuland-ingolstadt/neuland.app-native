@@ -31,7 +31,7 @@ export type FlashListItems = FriendlyTimetableEntry | Date | string
 
 export default function TimetableList({
     // eslint-disable-next-line react/prop-types
-    friendlyTimetable,
+    timetable,
     // eslint-disable-next-line react/prop-types
     exams,
 }: ITimetableViewProps): JSX.Element {
@@ -40,7 +40,6 @@ export default function TimetableList({
      */
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    const timetable = friendlyTimetable
 
     /**
      * Hooks

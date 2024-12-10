@@ -15,11 +15,16 @@ import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
+import { configureReanimatedLogger } from 'react-native-reanimated'
 import {
     UnistylesRuntime,
     createStyleSheet,
     useStyles,
 } from 'react-native-unistyles'
+
+configureReanimatedLogger({
+    strict: false,
+})
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
