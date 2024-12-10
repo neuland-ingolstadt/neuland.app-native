@@ -124,6 +124,7 @@ export default function TimetableWeek({
                 }}
                 allowPinchToZoom
                 start={450}
+                end={1290}
                 ref={calendarRef}
                 numberOfDays={3}
                 events={events}
