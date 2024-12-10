@@ -873,30 +873,32 @@ const MapScreen = (): JSX.Element => {
                 </>
             </View>
 
-            <Animated.View
-                style={[
-                    styles.osmContainer,
-                    animatedStyles,
-                    { top: Platform.OS === 'ios' ? -19 : -22 },
-                ]}
-            >
-                <Pressable
-                    onPress={() => {
-                        void Linking.openURL(
-                            'https://www.openstreetmap.org/copyright'
-                        )
-                    }}
-                    style={layerStyles.osmBackground}
+            {mapLoadState === LoadingState.LOADED && (
+                <Animated.View
+                    style={[
+                        styles.osmContainer,
+                        animatedStyles,
+                        { top: Platform.OS === 'ios' ? -19 : -22 },
+                    ]}
                 >
-                    <Text
-                        style={styles.osmAtrribution}
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
+                    <Pressable
+                        onPress={() => {
+                            void Linking.openURL(
+                                'https://www.openstreetmap.org/copyright'
+                            )
+                        }}
+                        style={layerStyles.osmBackground}
                     >
-                        {'© OpenStreetMap'}
-                    </Text>
-                </Pressable>
-            </Animated.View>
+                        <Text
+                            style={styles.osmAtrribution}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                        >
+                            {'© OpenStreetMap'}
+                        </Text>
+                    </Pressable>
+                </Animated.View>
+            )}
 
             <MapBottomSheet
                 bottomSheetRef={bottomSheetRef}
