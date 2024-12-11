@@ -15,7 +15,7 @@ export default function ShareHeaderButton({
 
     return (
         <Pressable
-            onPress={() => {
+            onPressOut={() => {
                 void onPress()
             }}
             style={styles.shareButton}

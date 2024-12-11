@@ -31,7 +31,7 @@ export default function About(): JSX.Element {
                     title: t('navigation.licenses.title', { ns: 'navigation' }),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('licenses')
+                        router.navigate('/licenses')
                     },
                 },
             ],

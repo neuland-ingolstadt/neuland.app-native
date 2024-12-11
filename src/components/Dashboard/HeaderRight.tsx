@@ -260,7 +260,7 @@ export const IndexHeaderRight = (): JSX.Element => {
 
     return (
         <Pressable
-            onPress={() => {
+            onPressOut={() => {
                 router.navigate('/settings')
             }}
             delayLongPress={300}

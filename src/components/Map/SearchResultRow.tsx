@@ -30,7 +30,7 @@ const ResultRow: React.FC<{
         <TouchableOpacity
             key={index}
             style={styles.searchRowContainer}
-            onPress={() => {
+            onPressOut={() => {
                 const center = result.item.properties?.center
                 updateSearchHistory(result)
                 setClickedElement({

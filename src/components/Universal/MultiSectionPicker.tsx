@@ -35,13 +35,10 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
             {elements.map((item, index) => (
                 <React.Fragment key={index}>
                     <Pressable
-                        onPress={() => {
+                        onPressOut={() => {
                             action(item.key)
                         }}
-                        style={({ pressed }) => [
-                            { opacity: pressed ? 0.8 : 1 },
-                            { padding: 8 },
-                        ]}
+                        style={styles.button}
                     >
                         <View style={styles.container}>
                             <Text style={styles.text}>{item.title}</Text>
@@ -71,6 +68,9 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    button: {
+        padding: 8,
+    },
     container: {
         alignItems: 'center',
         flexDirection: 'row',
