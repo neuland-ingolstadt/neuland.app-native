@@ -1,37 +1,39 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { CalendarRow, ExamRow } from '@/components/Elements/Rows/CalendarRow'
-import Divider from '@/components/Elements/Universal/Divider'
-import ToggleRow from '@/components/Elements/Universal/ToggleRow'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import { CalendarRow, ExamRow } from '@/components/Rows/CalendarRow'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
+import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Animated,
     Linking,
+    RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
     useWindowDimensions,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function CalendarPage(): JSX.Element {
     const { userKind = USER_GUEST } = React.useContext(UserKindContext)
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const displayTypes = ['Events', t('pages.calendar.exams.title')]
+    const displayTypes = [
+        t('pages.calendar.events.title'),
+        t('pages.calendar.exams.title'),
+    ]
     const [selectedData, setSelectedData] = useState<number>(0)
     const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
     const handleLinkPress = (): void => {
@@ -55,38 +57,28 @@ export default function CalendarPage(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.push(' login')
+                router.navigate('/login')
                 return false
             }
             return failureCount < 2
         },
         enabled: userKind !== USER_GUEST,
     })
-    const { refetchByUser } = useRefreshByUser(refetch)
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
     const screenHeight = useWindowDimensions().height
     const pagerViewRef = useRef<PagerView>(null)
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
     }
     const scrollY = new Animated.Value(0)
+    const pages = ['events', 'exams']
 
     const CalendarFooter = (): JSX.Element => {
         return (
             <View style={styles.footerContainer}>
-                <Text
-                    style={{
-                        ...styles.footerText1,
-                        color: colors.labelColor,
-                    }}
-                >
+                <Text style={styles.footerText1}>
                     {t('pages.calendar.footer.part1')}
-                    <Text
-                        style={{
-                            color: colors.text,
-                            ...styles.footerText2,
-                        }}
-                        onPress={handleLinkPress}
-                    >
+                    <Text style={styles.footerText2} onPress={handleLinkPress}>
                         {t('pages.calendar.footer.part2')}
                     </Text>
                     {t('pages.calendar.footer.part3')}
@@ -98,13 +90,12 @@ export default function CalendarPage(): JSX.Element {
     return (
         <View
             style={{
-                paddingVertical: PAGE_PADDING,
+                ...styles.viewTop,
                 ...styles.pagerContainer,
             }}
         >
             <Animated.View
                 style={{
-                    borderColor: colors.border,
                     borderBottomWidth: scrollY.interpolate({
                         inputRange: [0, 0, 1],
                         outputRange: [0, 0, 0.5],
@@ -130,6 +121,9 @@ export default function CalendarPage(): JSX.Element {
                 onPageSelected={(e) => {
                     const page = e.nativeEvent.position
                     setSelectedData(page)
+                    trackEvent('Route', {
+                        path: 'calendar/' + pages[page],
+                    })
                 }}
                 scrollEnabled
                 overdrag
@@ -137,8 +131,8 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 1: Events */}
                 <View>
                     <ScrollView
-                        contentContainerStyle={[styles.itemsContainer]}
-                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        contentContainerStyle={styles.itemsContainer}
+                        style={styles.viewHorizontal}
                         onScroll={
                             Animated.event(
                                 [
@@ -153,26 +147,13 @@ export default function CalendarPage(): JSX.Element {
                         }
                         scrollEventThrottle={16}
                     >
-                        <View
-                            style={{
-                                backgroundColor: colors.card,
-                                ...styles.contentBorder,
-                            }}
-                        >
+                        <View style={styles.contentBorder}>
                             {calendar?.length > 0 &&
                                 calendar.map((item, index) => (
                                     <React.Fragment key={`event_${index}`}>
-                                        <CalendarRow
-                                            event={item}
-                                            colors={colors}
-                                        />
+                                        <CalendarRow event={item} />
                                         {index !== calendar.length - 1 && (
-                                            <Divider
-                                                color={
-                                                    colors.labelTertiaryColor
-                                                }
-                                                iosPaddingLeft={16}
-                                            />
+                                            <Divider iosPaddingLeft={16} />
                                         )}
                                     </React.Fragment>
                                 ))}
@@ -184,8 +165,8 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 2: Exams */}
                 <View>
                     <ScrollView
-                        contentContainerStyle={[styles.itemsContainer]}
-                        style={{ paddingHorizontal: PAGE_PADDING }}
+                        contentContainerStyle={styles.itemsContainer}
+                        style={styles.viewHorizontal}
                         onScroll={
                             Animated.event(
                                 [
@@ -198,13 +179,19 @@ export default function CalendarPage(): JSX.Element {
                                 { useNativeDriver: false }
                             ) as any
                         }
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={isRefetchingByUser}
+                                onRefresh={() => {
+                                    void refetchByUser()
+                                }}
+                            />
+                        }
                         scrollEventThrottle={16}
+                        scrollEnabled={!isError}
                     >
                         {isLoading ? (
-                            <ActivityIndicator
-                                size="small"
-                                color={colors.primary}
-                            />
+                            <LoadingIndicator />
                         ) : isError ? (
                             <ErrorView
                                 title={error?.message ?? t('error.title')}
@@ -219,28 +206,17 @@ export default function CalendarPage(): JSX.Element {
                             <ErrorView title={guestError} inModal />
                         ) : (
                             <View>
-                                <View
-                                    style={{
-                                        backgroundColor: colors.card,
-                                        ...styles.contentBorder,
-                                    }}
-                                >
+                                <View style={styles.contentBorder}>
                                     {exams != null && exams.length > 0 ? (
                                         <>
                                             {exams.map((item, index) => (
                                                 <React.Fragment
                                                     key={`exam_${index}`}
                                                 >
-                                                    <ExamRow
-                                                        event={item}
-                                                        colors={colors}
-                                                    />
+                                                    <ExamRow event={item} />
                                                     {index !==
                                                         exams.length - 1 && (
                                                         <Divider
-                                                            color={
-                                                                colors.labelTertiaryColor
-                                                            }
                                                             iosPaddingLeft={16}
                                                         />
                                                     )}
@@ -278,32 +254,43 @@ export default function CalendarPage(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    itemsContainer: {
-        alignSelf: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        marginHorizontal: PAGE_PADDING,
+const stylesheet = createStyleSheet((theme) => ({
+    contentBorder: {
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+    },
+    footerContainer: {
+        marginVertical: 10,
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     footerText1: {
+        color: theme.colors.labelColor,
         fontSize: 12,
         fontWeight: 'normal',
         paddingBottom: 25,
         textAlign: 'justify',
     },
     footerText2: {
+        color: theme.colors.text,
         textDecorationLine: 'underline',
+    },
+    itemsContainer: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginHorizontal: theme.margins.page,
+        width: '100%',
     },
     pagerContainer: {
         flex: 1,
     },
-    footerContainer: {
-        marginVertical: 10,
-    },
-    contentBorder: {
-        borderRadius: 8,
-    },
     toggleContainer: {
+        borderColor: theme.colors.border,
         paddingBottom: 12,
     },
-})
+    viewHorizontal: {
+        paddingHorizontal: theme.margins.page,
+    },
+    viewTop: {
+        paddingTop: theme.margins.page,
+    },
+}))

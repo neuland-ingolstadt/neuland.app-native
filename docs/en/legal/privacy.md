@@ -1,3 +1,8 @@
+---
+editLink: false
+lastUpdated: false
+---
+
 # Datenschutzerklärung der Neuland App
 
 ## Hinweise zur Datenverarbeitung
@@ -37,8 +42,6 @@ Eine Weitergabe der Daten an Dritte findet nicht statt. Eine Drittstaatübermitt
 Die Rechtsgrundlage ist Art 6 Abs 1 Zif b DSGVO.
 
 Von der App zwischengespeicherte personenbezogene Daten können jederzeit entweder durch das Abmelden oder das Schließen der App und Löschen der Website- /Appdaten gelöscht werden.
-
-
 
 ## PRIMUSS Zugangsdaten
 

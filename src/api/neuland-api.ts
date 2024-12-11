@@ -1,9 +1,21 @@
+import {
+    type AppAnnouncementsQuery,
+    type CampusLifeEventsQuery,
+    type FoodPlanQuery,
+    type UniversitySportsQuery,
+} from '@/__generated__/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
-import { gql, request } from 'graphql-request'
+import { type DocumentNode, print } from 'graphql'
 
 import packageInfo from '../../package.json'
+import {
+    ANNOUNCEMENT_QUERY,
+    CAMPUS_LIFE_EVENTS_QUERY,
+    FOOD_QUERY,
+    UNIVERSITY_SPORTS_QUERY,
+} from './gql-documents'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string = 'https://api.dev.neuland.app/graphql'
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -31,122 +43,61 @@ class NeulandAPIClient {
         }
     }
 
-    async performGraphQLQuery(query: string): Promise<any> {
-        const data = await request(GRAPHQL_ENDPOINT, query)
-        return data
+    async performGraphQLQuery<T>(
+        query: DocumentNode,
+        variables?: Record<string, any>
+    ): Promise<T> {
+        const resp = await fetch(GRAPHQL_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': USER_AGENT,
+            },
+            body: JSON.stringify({
+                query: print(query),
+                variables,
+            }),
+        })
+
+        const json = await resp.json()
+
+        if (resp.ok && json.errors == null) {
+            return json.data as T
+        } else {
+            const errorMessage =
+                json.errors != null
+                    ? JSON.stringify(json.errors)
+                    : resp.statusText
+            throw new Error('GraphQL error: ' + errorMessage)
+        }
     }
 
     /**
-     * Get the announcement data from the GraphQL API
-     * @returns {Promise<any>} A promise that resolves with the announcement data
+     * Get the announcement ndata from the GraphQL API
+     * @returns {Promise<AppAnnouncementsQuery>} A promise that resolves with the announcement data
      */
-    async getAnnouncements(): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                announcements {
-                    id
-                    title {
-                        de
-                        en
-                    }
-                    description {
-                        de
-                        en
-                    }
-                    startDateTime
-                    endDateTime
-                    priority
-                    url
-                }
-            }
-        `)
+    async getAnnouncements(): Promise<AppAnnouncementsQuery> {
+        return await this.performGraphQLQuery(ANNOUNCEMENT_QUERY)
     }
 
-    async getFoodPlan(locations: string[]): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
-                    foodData {
-                        timestamp
-                        meals {
-                            name {
-                                de
-                                en
-                            }
-                            id
-                            category
-                            prices {
-                                student
-                                employee
-                                guest
-                            }
-                            allergens
-                            flags
-                            nutrition {
-                                kj
-                                kcal
-                                fat
-                                fatSaturated
-                                carbs
-                                sugar
-                                fiber
-                                protein
-                                salt
-                            }
-                            variants {
-                                name {
-                                    de
-                                    en
-                                }
-                                additional
-                                id
-                                allergens
-                                flags
-                                originalLanguage
-                                static
-                                restaurant
-                                parent {
-                                    id
-                                    category
-                                }
-                                prices {
-                                    student
-                                    employee
-                                    guest
-                                }
-                            }
-                            originalLanguage
-                            static
-                            restaurant
-                        }
-                        }
-                        errors {
-                            location
-                            message
-                        }
-                    }
-                }
-            `)
+    async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
+        return await this.performGraphQLQuery(FOOD_QUERY, { locations })
     }
 
     /**
      * Gets the campus life events
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
-    async getCampusLifeEvents(): Promise<any> {
-        return await this.performGraphQLQuery(gql`
-            query {
-                clEvents {
-                    id
-                    organizer
-                    title
-                    begin
-                    end
-                    location
-                    description
-                }
-            }
-        `)
+    async getCampusLifeEvents(): Promise<CampusLifeEventsQuery> {
+        return await this.performGraphQLQuery(CAMPUS_LIFE_EVENTS_QUERY)
+    }
+
+    /**
+     * Gets the university sports events
+     * @returns {Promise<GetUniversitySportsData>} A promise that resolves with the university sports events data
+     */
+    async getUniversitySports(): Promise<UniversitySportsQuery> {
+        return await this.performGraphQLQuery(UNIVERSITY_SPORTS_QUERY)
     }
 
     /**

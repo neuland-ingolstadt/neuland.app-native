@@ -65,6 +65,32 @@ export function formatFriendlyTime(datetime?: Date | string): string {
     }
     return moment(datetime).locale('de').format('HH:mm')
 }
+
+/**
+ * Basic time formatting like "08:00" which expects a string like "08:00:00"
+ * @param {string} time
+ * @returns {string}
+ */
+export function formatFriendlyTimeString(time: string): string {
+    return time.slice(0, 5)
+}
+/**
+ * Format a time range like "08:00 – 12:00" or "08:00" if end is null
+ * @param {Date} begin
+ * @param {Date | null} end
+ * @returns {string}
+ */
+export function formatFriendlyTimeRange(
+    begin: string,
+    end?: string | null
+): string {
+    let str = formatFriendlyTimeString(begin)
+    if (end != null) {
+        str += ' – ' + formatFriendlyTimeString(end)
+    }
+    return str
+}
+
 /**
  * Formats a date range like "Mo., 1.10.2021 08:00 – 12:00" or "Mo., 1.10.2021 08:00 – Do., 2.10.2021 08:00"
  * @param {Date} begin
@@ -95,13 +121,15 @@ export function formatFriendlyDateTimeRange(
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime(datetime?: Date | string): string {
+export function formatFriendlyDateTime(
+    datetime?: Date | string
+): string | null {
     if (datetime == null || isNaN(new Date(datetime).getTime())) {
         return 'No date available'
     }
     // if year is 1970, it's probably not yet available
     if (new Date(datetime).getFullYear() === 1970) {
-        return t('dates.notYet')
+        return null
     }
     const date = formatFriendlyDate(datetime)
     const time = formatFriendlyTime(datetime)
@@ -382,4 +410,47 @@ export function formatDay(date: Date): string {
         weekday: 'short',
         day: '2-digit',
     })
+}
+
+/**
+ * Format a time string to a Date object
+ * @param time - Time string in the format "HH:mm:ss"
+ * @param baseDate - Optional base date to apply the time to. Defaults to the current date.
+ * @returns A Date object with the specified time, or null if the input time is invalid.
+ */
+export const convertTimeToDate = (
+    time: string | null,
+    baseDate: Date = new Date()
+): Date | null => {
+    if (time == null) {
+        return null
+    }
+
+    const timeParts = time.split(':')
+    if (timeParts.length !== 3) {
+        console.error('Invalid time format. Expected "HH:mm:ss".')
+        return null
+    }
+
+    const [hours, minutes, seconds] = timeParts.map(Number)
+    if (
+        isNaN(hours) ||
+        hours < 0 ||
+        hours > 23 ||
+        isNaN(minutes) ||
+        minutes < 0 ||
+        minutes > 59 ||
+        isNaN(seconds) ||
+        seconds < 0 ||
+        seconds > 59
+    ) {
+        console.error(
+            'Invalid time values. Expected "HH:mm:ss" with valid hour, minute, and second values.'
+        )
+        return null
+    }
+
+    const date = new Date(baseDate)
+    date.setHours(hours, minutes, seconds, 0)
+    return date
 }

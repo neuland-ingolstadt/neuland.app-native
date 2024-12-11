@@ -1,3 +1,5 @@
+import { getFragmentData } from '@/__generated__/gql'
+import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import { type FoodLanguage } from '@/contexts/foodFilter'
 import allergenMap from '@/data/allergens.json'
@@ -6,9 +8,18 @@ import flapMap from '@/data/mensa-flags.json'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
-import { type TFunction } from 'i18next'
+import { trackEvent } from '@aptabase/react-native'
+import { type TFunction, type i18n } from 'i18next'
+import { Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
+
+export const humanLocations = {
+    IngolstadtMensa: 'Mensa Ingolstadt',
+    NeuburgMensa: 'Mensa Neuburg',
+    Reimanns: 'Reimanns',
+    Canisius: 'Canisius Konvikt',
+}
 
 /**
  * Fetches and parses the meal plan
@@ -19,9 +30,8 @@ export async function loadFoodEntries(
     restaurants: string[],
     includeStatic: boolean = false
 ): Promise<Food[]> {
-    const data = [
-        (await NeulandAPI.getFoodPlan(restaurants)).food.foodData,
-    ] as Food[][]
+    const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
+    const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
 
     // create day entries for next 7 days (current and next week including the weekend) starting from monday
     let days: Date[] = Array.from({ length: 7 }, (_, i) => {
@@ -175,4 +185,29 @@ export function userMealRating(
     } else {
         return 1
     }
+}
+
+export function shareMeal(
+    meal: Meal,
+    i18n: i18n,
+    userKind: 'guest' | 'employee' | 'student'
+): void {
+    trackEvent('Share', {
+        type: 'meal',
+    })
+    void Share.share({
+        message: i18n.t('details.share.message', {
+            ns: 'food',
+            meal: meal?.name[i18n.language as LanguageKey],
+            price: formatPrice(meal.prices[userKind ?? USER_GUEST]),
+            location:
+                meal?.restaurant != null
+                    ? humanLocations[
+                          meal.restaurant as keyof typeof humanLocations
+                      ]
+                    : i18n.t('misc.unknown', { ns: 'common' }),
+
+            id: meal?.id,
+        }),
+    })
 }

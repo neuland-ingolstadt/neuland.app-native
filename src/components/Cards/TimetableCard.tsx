@@ -1,5 +1,4 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
+import Divider from '@/components/Universal/Divider'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
@@ -7,17 +6,17 @@ import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const TimetableCard = (): JSX.Element => {
-    const colors = useTheme().colors as Colors
+const TimetableCard: React.FC = () => {
+    const { styles, theme } = useStyles(stylesheet)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
     const [filteredTimetable, setFilteredTimetable] = useState<
@@ -36,158 +35,122 @@ const TimetableCard = (): JSX.Element => {
     const { data: timetable } = useQuery({
         queryKey: ['timetableV2', userKind],
         queryFn: loadTimetable,
-        staleTime: 1000 * 60 * 10, // 10 minutes
-        gcTime: 1000 * 60 * 60 * 24, // 24 hours,
+        staleTime: 10 * 60 * 1000, // 10 minutes
+        gcTime: 24 * 60 * 60 * 1000, // 24 hours,
         retry(failureCount, error) {
             const ignoreErrors = [
                 '"Time table does not exist" (-202)',
                 'Timetable is empty',
             ]
-            if (ignoreErrors.includes(error?.message)) {
-                return false
-            }
-            return failureCount < 2
+            return !ignoreErrors.includes(error?.message) && failureCount < 2
         },
     })
 
-    const loadData = useCallback(async () => {
-        try {
-            if (timetable == null || timetable.length === 0) {
-                throw new Error('Timetable is empty')
+    const filterData = useCallback(() => {
+        if (timetable == null) return
+        const now = new Date()
+        const upcomingEvents = timetable
+            .filter((item) => new Date(item.endDate) > now)
+            .slice(0, 2)
+        setFilteredTimetable(upcomingEvents)
+        setLoadingState(LoadingState.LOADED)
+    }, [timetable])
+
+    useInterval(filterData, 60 * 1000)
+
+    useFocusEffect(
+        useCallback(() => {
+            if (
+                userKind !== USER_GUEST &&
+                loadingState !== LoadingState.LOADED
+            ) {
+                filterData()
+            } else if (userKind === USER_GUEST) {
+                setLoadingState(LoadingState.ERROR)
             }
-            const filteredTimetable = timetable
-                .filter((item) => new Date(item.endDate) > new Date())
-                .slice(0, 2)
-            setFilteredTimetable(filteredTimetable)
-            setLoadingState(LoadingState.LOADED)
-        } catch (e) {
-            setLoadingState(LoadingState.ERROR)
+        }, [userKind, loadingState, filterData])
+    )
+
+    useEffect(() => {
+        if (timetable != null) filterData()
+    }, [timetable, filterData])
+
+    const renderEvent = (
+        event: FriendlyTimetableEntry,
+        index: number,
+        currentTime: Date
+    ): JSX.Element => {
+        const isSoon =
+            event.startDate > currentTime &&
+            new Date(event.startDate) <=
+                new Date(currentTime.getTime() + 30 * 60 * 1000)
+        const isOngoing =
+            event.startDate < currentTime && event.endDate > currentTime
+        const isEndingSoon =
+            isOngoing &&
+            event.endDate.getTime() - currentTime.getTime() <= 30 * 60 * 1000
+
+        let eventText: string | null = null
+        if (isSoon) {
+            eventText = t('cards.timetable.startingSoon', {
+                count: Math.ceil(
+                    (event.startDate.getTime() - currentTime.getTime()) / 60000
+                ),
+            })
+        } else if (isEndingSoon) {
+            eventText = t('cards.timetable.endingSoon', {
+                count: Math.ceil(
+                    (event.endDate.getTime() - currentTime.getTime()) / 60000
+                ),
+            })
+        } else if (isOngoing) {
+            eventText = t('cards.timetable.ongoing', {
+                time: formatFriendlyTime(event.endDate),
+            })
+        } else {
+            eventText = formatFriendlyDateTime(event.startDate)
         }
-    }, [])
 
-    const fetchDataEvery60Secs = useCallback(() => {
-        void loadData()
-    }, [loadData, timetable])
+        return (
+            <View key={index}>
+                <Text style={styles.eventTitle} numberOfLines={1}>
+                    {event.name}
+                </Text>
+                <Text style={styles.eventDetails}>{eventText}</Text>
+                {index < filteredTimetable.length - 1 && (
+                    <>
+                        <View style={styles.divider} />
+                        <Divider width="100%" color={theme.colors.border} />
+                    </>
+                )}
+            </View>
+        )
+    }
 
-    useInterval(fetchDataEvery60Secs, 60 * 1000)
-
-    useFocusEffect(() => {
-        if (userKind !== 'guest' && loadingState !== LoadingState.LOADED) {
-            void loadData()
-        } else if (userKind === 'guest') {
-            setLoadingState(LoadingState.ERROR)
-        }
-
-        return () => {
-            // @ts-expect-error overload matches
-            clearInterval(fetchDataEvery60Secs)
-        }
-    })
-
-    const currentTime = new Date()
     return (
         <BaseCard title="timetable" onPressRoute="timetable">
             {loadingState === LoadingState.LOADED && (
                 <View
-                    style={{
-                        ...styles.calendarView,
-                        ...(filteredTimetable.length > 0 && styles.cardsFilled),
-                    }}
+                    style={[
+                        styles.calendarView,
+                        filteredTimetable.length > 0 && styles.cardsFilled,
+                    ]}
                 >
-                    {filteredTimetable.map((x, i) => {
-                        const isSoon =
-                            x.startDate > currentTime &&
-                            new Date(x.startDate) <=
-                                new Date(currentTime.getTime() + 30 * 60 * 1000)
-                        const isOngoing =
-                            x.startDate < currentTime && x.endDate > currentTime
-                        const isEndingSoon =
-                            isOngoing &&
-                            x.endDate.getTime() - currentTime.getTime() <=
-                                30 * 60 * 1000
-                        const isNotSoonOrOngoing = !isSoon && !isOngoing
-                        let text = null
-
-                        if (isSoon) {
-                            text = t('cards.timetable.startingSoon', {
-                                count: Math.ceil(
-                                    (x.startDate.getTime() -
-                                        currentTime.getTime()) /
-                                        1000 /
-                                        60
-                                ),
-                            })
-                        } else if (isEndingSoon) {
-                            text = t('cards.timetable.endingSoon', {
-                                count: Math.ceil(
-                                    (x.endDate.getTime() -
-                                        currentTime.getTime()) /
-                                        1000 /
-                                        60
-                                ),
-                            })
-                        } else if (isOngoing) {
-                            text = t('cards.timetable.ongoing', {
-                                time: formatFriendlyTime(x.endDate),
-                            })
-                        } else if (isNotSoonOrOngoing) {
-                            text = formatFriendlyDateTime(x.startDate)
-                        }
-
-                        return (
-                            <View key={i}>
-                                <Text
-                                    style={{
-                                        ...styles.eventTitle,
-                                        color: colors.text,
-                                    }}
-                                    numberOfLines={1}
-                                >
-                                    {x.name}
-                                </Text>
-                                <Text
-                                    style={{
-                                        ...styles.eventDetails,
-                                        color: colors.labelColor,
-                                    }}
-                                >
-                                    {text}
-                                </Text>
-                                {filteredTimetable.length - 1 !== i && (
-                                    <>
-                                        <View style={styles.divider} />
-                                        <Divider
-                                            color={colors.border}
-                                            width={'100%'}
-                                        />
-                                    </>
-                                )}
-                            </View>
-                        )
-                    })}
+                    {filteredTimetable.map((event, index) =>
+                        renderEvent(event, index, new Date())
+                    )}
                 </View>
             )}
         </BaseCard>
     )
 }
 
-const styles = StyleSheet.create({
-    calendarView: {
-        gap: 8,
-    },
-    cardsFilled: {
-        paddingTop: 12,
-    },
-    eventTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-    },
-    eventDetails: {
-        fontSize: 15,
-    },
-    divider: {
-        height: 10,
-    },
-})
+const stylesheet = createStyleSheet((theme) => ({
+    calendarView: { gap: 8 },
+    cardsFilled: { paddingTop: 12 },
+    divider: { height: 10 },
+    eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
+    eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' },
+}))
 
 export default TimetableCard

@@ -1,20 +1,19 @@
 /* eslint-disable react-native/no-color-literals */
-import MapScreen from '@/components/Elements/Map/MapScreen'
-import { type Colors } from '@/components/colors'
+import MapScreen from '@/components/Map/MapScreen'
 import { MapContext } from '@/contexts/map'
 import { type ClickedMapElement, type SearchResult } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
 import { storage } from '@/utils/storage'
 import Maplibre from '@maplibre/maplibre-react-native'
-import { useTheme } from '@react-navigation/native'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Platform, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function MapRootScreen(): JSX.Element {
     const { t } = useTranslation(['navigation'])
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)
@@ -88,12 +87,7 @@ export default function MapRootScreen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <View
-                style={{
-                    ...styles.page,
-                    backgroundColor: colors.background,
-                }}
-            >
+            <View style={styles.page}>
                 {isPageOpen ? (
                     <MapContext.Provider value={contextValue}>
                         <MapScreen />
@@ -106,8 +100,9 @@ export default function MapRootScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
+        backgroundColor: theme.colors.background,
         flex: 1,
     },
-})
+}))

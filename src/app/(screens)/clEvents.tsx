@@ -1,110 +1,115 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import CLEventRow from '@/components/Elements/Rows/EventRow'
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
-import { useRefreshByUser } from '@/hooks'
-import { networkError } from '@/utils/api-utils'
-import { loadCampusLifeEvents } from '@/utils/events-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
+import ClEventsPage from '@/components/Events/ClEventsPage'
+import ClSportsPage from '@/components/Events/ClSportsPage'
+import ToggleRow from '@/components/Universal/ToggleRow'
+import {
+    loadCampusLifeEvents,
+    loadUniversitySportsEvents,
+} from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
-import React, { useEffect } from 'react'
+import { trackEvent } from '@aptabase/react-native'
+import { useQueries } from '@tanstack/react-query'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native'
-import { RefreshControl } from 'react-native-gesture-handler'
+import { Animated, View, useWindowDimensions } from 'react-native'
+import PagerView from 'react-native-pager-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): JSX.Element {
-    const colors = useTheme().colors as Colors
-
     const { t } = useTranslation('common')
+    const { styles } = useStyles(stylesheet)
+    const results = useQueries({
+        queries: [
+            {
+                queryKey: ['campusLifeEventsV2'],
+                queryFn: loadCampusLifeEvents,
+                staleTime: 1000 * 60 * 60, // 60 minutes
+                gcTime: 1000 * 60 * 60 * 24, // 24 hours
+            },
+            {
+                queryKey: ['universitySports'],
+                queryFn: loadUniversitySportsEvents,
+                staleTime: 1000 * 60 * 60, // 60 minutes
+                gcTime: 1000 * 60 * 60 * 24, // 24 hours
+            },
+        ],
+    })
 
-    const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
-        useQuery({
-            queryKey: ['campusLifeEvents'],
-            queryFn: loadCampusLifeEvents,
-            staleTime: 1000 * 60 * 60, // 60 minutes
-            gcTime: 1000 * 60 * 60 * 24, // 24 hours
-        })
-    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+    const clEventsResult = results[0]
+    const sportsResult = results[1]
+
+    const scrollY = new Animated.Value(0)
 
     useEffect(() => {
-        if (isPaused && data != null) {
+        if (
+            (clEventsResult.isPaused && clEventsResult.data != null) ||
+            (sportsResult.isPaused && sportsResult.data != null)
+        ) {
             pausedToast()
         }
-    }, [isPaused])
+    }, [sportsResult.isPaused, clEventsResult.isPaused])
+    const [selectedData, setSelectedData] = useState<number>(0)
+    const screenHeight = useWindowDimensions().height
+
+    const pagerViewRef = useRef<PagerView>(null)
+    function setPage(page: number): void {
+        pagerViewRef.current?.setPage(page)
+    }
+    const displayTypes = ['Events', t('pages.clEvents.sports.title')]
+    const pages = ['events', 'sports']
 
     return (
-        <ScrollView
-            style={styles.page}
-            refreshControl={
-                !isLoading ? (
-                    <RefreshControl
-                        refreshing={isRefetchingByUser}
-                        onRefresh={() => {
-                            void refetchByUser()
-                        }}
-                    />
-                ) : undefined
-            }
-        >
-            {isLoading && (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
-                </View>
-            )}
-            {isError && (
-                <ErrorView
-                    title={error?.message ?? t('error.title')}
-                    onRefresh={refetchByUser}
-                    refreshing={false}
+        <View style={styles.page}>
+            <Animated.View
+                style={{
+                    borderBottomWidth: scrollY.interpolate({
+                        inputRange: [0, 0, 1],
+                        outputRange: [0, 0, 0.5],
+                        extrapolate: 'clamp',
+                    }),
+                    ...styles.toggleContainer,
+                }}
+            >
+                <ToggleRow
+                    items={displayTypes}
+                    selectedElement={selectedData}
+                    setSelectedElement={setPage}
                 />
-            )}
-            {isPaused && !isSuccess && (
-                <ErrorView
-                    title={networkError}
-                    onRefresh={refetchByUser}
-                    refreshing={false}
-                />
-            )}
-            {isSuccess && (
-                <View
-                    style={[
-                        styles.loadedContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                >
-                    {data.map((event, index) => (
-                        <React.Fragment key={index}>
-                            <CLEventRow event={event} colors={colors} />
-                            {index !== data.length - 1 && (
-                                <Divider
-                                    color={colors.labelTertiaryColor}
-                                    iosPaddingLeft={16}
-                                />
-                            )}
-                        </React.Fragment>
-                    ))}
-                </View>
-            )}
-        </ScrollView>
+            </Animated.View>
+
+            <PagerView
+                ref={pagerViewRef}
+                style={{
+                    ...styles.pagerContainer,
+                    height: screenHeight,
+                }}
+                initialPage={0}
+                onPageSelected={(e) => {
+                    const page = e.nativeEvent.position
+                    setSelectedData(page)
+                    trackEvent('Route', {
+                        path: 'clEvents/' + pages[page],
+                    })
+                }}
+                scrollEnabled
+                overdrag
+            >
+                <ClEventsPage clEventsResult={results[0]} />
+                <ClSportsPage sportsResult={results[1]} />
+            </PagerView>
+        </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     page: {
-        padding: PAGE_PADDING,
+        flex: 1,
+        paddingVertical: theme.margins.page,
     },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
+    pagerContainer: {
+        flex: 1,
     },
-    loadedContainer: {
-        alignSelf: 'center',
-        width: '100%',
-        borderRadius: 8,
-        justifyContent: 'center',
-        marginBottom: 64,
+    toggleContainer: {
+        borderColor: theme.colors.border,
+        paddingBottom: 12,
     },
-})
+}))

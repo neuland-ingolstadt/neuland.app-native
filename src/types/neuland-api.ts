@@ -1,27 +1,16 @@
-export interface Parking {
-    name: string
-    available: number
-}
-
-export interface Charging {
-    id: string
-    name: string
-    address: string
-    city: string
-    latitude: string
-    longitude: string
-    available: number
-    total: number
-}
-
 export interface CLEvents {
-    id: string
-    organizer: string
-    title: string
-    begin: Date | null
-    end: Date | null
+    host: ClHost
+    titles: Name
+    startDateTime: Date
+    endDateTime: Date | null
     location: string | null
-    description: string | null
+    descriptions: Name | null
+}
+
+export interface ClHost {
+    name: string
+    website: string
+    instagram: string
 }
 
 export interface Food {
@@ -76,36 +65,4 @@ export interface Prices {
     student: number
     employee: number
     guest: number
-}
-
-export interface Train {
-    name: string
-    destination: string
-    plannedTime: Date
-    actualTime: Date
-    canceled: boolean
-    plattform: number | null
-    url: string
-}
-
-export interface Bus {
-    route: string
-    destination: string
-    time: Date
-}
-
-export interface Announcement {
-    id: string
-    title: {
-        de: string
-        en: string
-    }
-    description: {
-        de: string
-        en: string
-    }
-    startDateTime: number
-    endDateTime: number
-    priority: number
-    url: string | null
 }

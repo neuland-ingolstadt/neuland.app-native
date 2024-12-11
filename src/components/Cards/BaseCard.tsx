@@ -1,16 +1,14 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import { type Colors } from '@/components/colors'
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
-import { CARD_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
-import { router } from 'expo-router'
+import { type RelativePathString, router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import ContextMenu from 'react-native-context-menu-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Elements/Universal/Icon'
+import PlatformIcon from '../Universal/Icon'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
 
@@ -27,7 +25,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
     children,
     removable = true, // ugly but more efficient than iterating over all cards
 }) => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
 
     const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
@@ -60,45 +58,37 @@ const BaseCard: React.FC<BaseCardProps> = ({
 
     const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
     const dynamicTitle = foodKeys.includes(title) ? 'food' : title
-
     return (
-        <Pressable
-            disabled={onPressRoute == null}
-            onPress={() => {
-                onPressRoute != null && router.navigate(onPressRoute)
+        <ContextMenu
+            // @ts-expect-error cannot verify that title is a valid key
+            title={t('cards.titles.' + title)}
+            actions={actions}
+            onPress={(e) => {
+                e.nativeEvent.name === t('contextMenu.settings') &&
+                    router.navigate('/dashboard')
+                e.nativeEvent.name === t('contextMenu.hide') &&
+                    hideDashboardEntry(title)
+                e.nativeEvent.name === t('contextMenu.reset') &&
+                    resetOrder(userKind ?? 'guest')
             }}
-            delayLongPress={300}
-            onLongPress={() => {}}
-            //  style={{ paddingHorizontal: PAGE_PADDING }}
+            onPreviewPress={() => {
+                onPressRoute != null &&
+                    router.navigate(onPressRoute as RelativePathString)
+            }}
+            disabled={Platform.OS === 'android'}
         >
-            <ContextMenu
-                // @ts-expect-error cannot verify that title is a valid key
-                title={t('cards.titles.' + title)}
-                actions={actions}
-                onPress={(e) => {
-                    e.nativeEvent.name === t('contextMenu.settings') &&
-                        router.navigate('dashboard')
-                    e.nativeEvent.name === t('contextMenu.hide') &&
-                        hideDashboardEntry(title)
-                    e.nativeEvent.name === t('contextMenu.reset') &&
-                        resetOrder(userKind ?? 'guest')
+            <Pressable
+                disabled={onPressRoute == null}
+                onPress={() => {
+                    onPressRoute != null &&
+                        router.navigate(onPressRoute as RelativePathString)
                 }}
-                onPreviewPress={() => {
-                    onPressRoute != null && router.navigate(onPressRoute)
-                }}
+                delayLongPress={300}
+                onLongPress={() => {}}
             >
-                <View
-                    style={[
-                        styles.card,
-                        {
-                            borderColor: colors.border,
-                            backgroundColor: colors.card,
-                        },
-                    ]}
-                >
+                <View style={styles.card}>
                     <View style={styles.titleView}>
                         <PlatformIcon
-                            color={colors.primary}
                             ios={{
                                 name: cardIcons[
                                     dynamicTitle as keyof typeof cardIcons
@@ -113,13 +103,12 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 variant: 'outlined',
                             }}
                         />
-                        <Text style={[styles.title, { color: colors.text }]}>
+                        <Text style={styles.title}>
                             {/* @ts-expect-error cannot verify that title is a valid key */}
                             {t('cards.titles.' + title)}
                         </Text>
                         {onPressRoute != null && (
                             <PlatformIcon
-                                color={colors.labelColor}
                                 ios={{
                                     name: 'chevron.forward',
                                     size: 16,
@@ -128,32 +117,40 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                     name: 'chevron_right',
                                     size: 26,
                                 }}
+                                style={styles.labelColor}
                             />
                         )}
                     </View>
                     {children != null && <>{children}</>}
                 </View>
-            </ContextMenu>
-        </Pressable>
+            </Pressable>
+        </ContextMenu>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    card: {
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
+        borderRadius: theme.radius.md,
+        padding: theme.margins.card,
+    },
+    labelColor: {
+        color: theme.colors.labelColor,
+    },
     title: {
+        color: theme.colors.text,
+        flex: 1,
         fontSize: 16,
         fontWeight: '500',
-        flex: 1,
         paddingBottom: Platform.OS === 'android' ? 2 : 0,
     },
     titleView: {
-        flexDirection: 'row',
         alignItems: 'center',
+        color: theme.colors.text,
+        flexDirection: 'row',
         gap: 10,
     },
-    card: {
-        borderRadius: 8,
-        padding: CARD_PADDING,
-    },
-})
+}))
 
 export default BaseCard

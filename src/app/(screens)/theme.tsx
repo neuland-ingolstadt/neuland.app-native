@@ -1,11 +1,12 @@
-import MultiSectionRadio from '@/components/Elements/Food/FoodLanguageSection'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import { ThemeContext } from '@/components/contexts'
-import React, { useContext } from 'react'
+import MultiSectionRadio from '@/components/Food/FoodLanguageSection'
+import SectionView from '@/components/Universal/SectionsView'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function Theme(): JSX.Element {
-    const { theme, setTheme } = useContext(ThemeContext)
+    const theme = usePreferencesStore((state) => state.theme)
+    const setTheme = usePreferencesStore((state) => state.setTheme)
     const { t } = useTranslation(['settings'])
 
     const elements = [

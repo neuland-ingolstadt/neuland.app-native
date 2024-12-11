@@ -1,16 +1,17 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { type FormListSections } from '@/types/components'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, StyleSheet, View } from 'react-native'
+import { Linking, ScrollView, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): JSX.Element {
     const router = useRouter()
-    const { t } = useTranslation(['settings'])
+    const { styles } = useStyles(stylesheet)
+    const { t, i18n } = useTranslation(['settings'])
 
     const sections: FormListSections[] = [
         {
@@ -30,7 +31,7 @@ export default function About(): JSX.Element {
                     title: t('navigation.licenses.title', { ns: 'navigation' }),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('licenses')
+                        router.navigate('/licenses')
                     },
                 },
             ],
@@ -56,15 +57,25 @@ export default function About(): JSX.Element {
                             'https://github.com/neuland-ingolstadt/neuland.app-native'
                         ),
                 },
+                {
+                    title: t('legal.formlist.us.faq'),
+                    icon: {
+                        ios: 'safari',
+                        android: 'github',
+                    },
+
+                    onPress: async () =>
+                        await Linking.openURL(
+                            `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}app/faq`
+                        ),
+                },
             ],
         },
     ]
 
     return (
         <>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
-            >
+            <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.formlistContainer}>
                     <FormList sections={sections} />
                 </View>
@@ -73,11 +84,14 @@ export default function About(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    formlistContainer: {
-        marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
+const stylesheet = createStyleSheet((theme) => ({
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
     },
-})
+    formlistContainer: {
+        alignSelf: 'center',
+        marginTop: 10,
+        paddingHorizontal: theme.margins.page,
+        width: '100%',
+    },
+}))

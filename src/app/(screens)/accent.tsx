@@ -1,25 +1,23 @@
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors, accentColors } from '@/components/colors'
-import { ThemeContext } from '@/components/contexts'
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import { accentColors } from '@/components/colors'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native'
 import {
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export default function Theme(): JSX.Element {
-    const colors = useTheme().colors as Colors
-    const deviceTheme = useTheme()
-    const { accentColor, setAccentColor } = useContext(ThemeContext)
+    const { styles } = useStyles(stylesheet)
+
+    const accentColor = usePreferencesStore((state) => state.accentColor)
+    const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
     const { t } = useTranslation(['settings'])
 
     interface ColorBoxColor {
@@ -34,11 +32,13 @@ export default function Theme(): JSX.Element {
         color: ColorBoxColor
         code: string
     }): JSX.Element => {
-        const themeAccentColor = deviceTheme.dark ? color.dark : color.light
+        const { styles } = useStyles(stylesheet)
+        const themeAccentColor =
+            UnistylesRuntime.themeName === 'dark' ? color.dark : color.light
         return (
             <View style={styles.colorBoxContainer}>
                 <Pressable
-                    onPress={() => {
+                    onPressOut={() => {
                         setAccentColor(code)
                         if (Platform.OS === 'ios') {
                             void Haptics.selectionAsync()
@@ -60,13 +60,11 @@ export default function Theme(): JSX.Element {
                             styles.colorBox,
                             {
                                 backgroundColor: themeAccentColor,
-                                borderColor: colors.border,
                             },
                         ]}
                     >
                         {accentColor === code && (
                             <PlatformIcon
-                                color={getContrastColor(themeAccentColor)}
                                 ios={{
                                     name: 'checkmark',
                                     size: 20,
@@ -75,16 +73,14 @@ export default function Theme(): JSX.Element {
                                     name: 'check',
                                     size: 24,
                                 }}
+                                style={{
+                                    color: getContrastColor(themeAccentColor),
+                                }}
                             />
                         )}
                     </View>
                 </Pressable>
-                <Text
-                    style={{
-                        color: colors.text,
-                        ...styles.colorBoxText,
-                    }}
-                >
+                <Text style={styles.colorBoxText}>
                     {/* @ts-expect-error cannot verify that code is a valid key */}
                     {t(`theme.colors.${code}`)}
                 </Text>
@@ -100,6 +96,7 @@ export default function Theme(): JSX.Element {
     }
 
     const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {
+        const { styles } = useStyles(stylesheet)
         return (
             <View style={styles.colorMatrixContainer}>
                 {colors.map((color, index) => (
@@ -129,14 +126,7 @@ export default function Theme(): JSX.Element {
                     title={t('theme.accent.title')}
                     footer={t('theme.footer')}
                 >
-                    <View
-                        style={[
-                            styles.sectionContainer,
-                            {
-                                backgroundColor: colors.card,
-                            },
-                        ]}
-                    >
+                    <View style={styles.sectionContainer}>
                         {colorRows.map((rowColors, index) => (
                             <ColorBoxMatrix colors={rowColors} key={index} />
                         ))}
@@ -147,35 +137,29 @@ export default function Theme(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     colorBox: {
-        width: 60,
-        height: 60,
-        borderRadius: 4,
-        justifyContent: 'center',
+        alignContent: 'center',
         alignItems: 'center',
-        alignContent: 'center',
-        flexDirection: 'row',
+        borderBottomLeftRadius: theme.radius.mg,
+        borderBottomRightRadius: theme.radius.mg,
+        borderColor: theme.colors.border,
+        borderRadius: theme.radius.sm,
+        borderTopLeftRadius: theme.radius.mg,
+        borderTopRightRadius: theme.radius.mg,
         borderWidth: 2,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-    },
-    sectionContainer: {
-        borderRadius: 8,
-        alignContent: 'center',
+        flexDirection: 'row',
+        height: 60,
         justifyContent: 'center',
-        flexDirection: 'column',
-        flexWrap: 'wrap',
-        paddingVertical: 18,
+        width: 60,
     },
     colorBoxContainer: {
         justifyContent: 'center',
     },
     colorBoxText: {
-        textAlign: 'center',
+        color: theme.colors.text,
         paddingTop: 4,
+        textAlign: 'center',
     },
     colorMatrixContainer: {
         flexDirection: 'row',
@@ -183,4 +167,13 @@ const styles = StyleSheet.create({
         marginVertical: 2,
         paddingVertical: 4,
     },
-})
+    sectionContainer: {
+        alignContent: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        paddingVertical: 18,
+    },
+}))

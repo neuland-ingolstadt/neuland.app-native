@@ -1,23 +1,25 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import { type Colors } from '@/components/colors'
-import { PreferencesContext } from '@/components/contexts'
-import { capitalizeFirstLetter } from '@/utils/app-utils'
-import { useTheme } from '@react-navigation/native'
-import React, { useContext } from 'react'
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
+import {
+    getAppIconName,
+    setAlternateAppIcon,
+    supportsAlternateIcons,
+} from 'expo-alternate-app-icons'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Image,
     type ImageProps,
     Pressable,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
-// @ts-expect-error cannot verify the type of this prop
-import AppIcon from 'react-native-dynamic-app-icon'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 let iconImages: Record<string, ImageProps> = {}
 
@@ -34,12 +36,10 @@ iconImages = {
 export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): JSX.Element {
-    const colors = useTheme().colors as Colors
-    const {
-        appIcon = 'default',
-        setAppIcon,
-        unlockedAppIcons,
-    } = useContext(PreferencesContext)
+    const { styles } = useStyles(stylesheet)
+    const unlockedAppIcons = usePreferencesStore(
+        (state) => state.unlockedAppIcons
+    )
     const { t } = useTranslation(['settings'])
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],
@@ -55,6 +55,20 @@ export default function AppIconPicker(): JSX.Element {
         }
     })
 
+    const support = supportsAlternateIcons
+    console.log(`The device supports alternate icons: ${support}`)
+    const iconName = getAppIconName()
+    console.log(`The active app icon is: ${iconName}`)
+
+    if (!support) {
+        return (
+            <ErrorView
+                message={t('appIcon.error.message')}
+                title={t('appIcon.error.title')}
+                isCritical={false}
+            />
+        )
+    }
     return (
         <>
             <ScrollView>
@@ -66,25 +80,20 @@ export default function AppIconPicker(): JSX.Element {
                                 title={t(`appIcon.categories.${key}`)}
                                 key={key}
                             >
-                                <View
-                                    style={[
-                                        styles.sectionContainer,
-                                        { backgroundColor: colors.card },
-                                    ]}
-                                >
+                                <View style={styles.sectionContainer}>
                                     {value.map((icon) => {
+                                        console.log(icon)
                                         return (
                                             <React.Fragment key={icon}>
                                                 <Pressable
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
-                                                            AppIcon.setAppIcon(
+                                                            void setAlternateAppIcon(
                                                                 capitalizeFirstLetter(
                                                                     icon
                                                                 )
                                                             )
-                                                            setAppIcon(icon)
                                                         } catch (e) {
                                                             console.log(e)
                                                         }
@@ -99,17 +108,14 @@ export default function AppIconPicker(): JSX.Element {
                                                             source={
                                                                 iconImages[icon]
                                                             }
-                                                            style={{
-                                                                borderColor:
-                                                                    colors.border,
-                                                                ...styles.imageContainer,
-                                                            }}
+                                                            style={
+                                                                styles.imageContainer
+                                                            }
                                                         />
                                                         <Text
-                                                            style={{
-                                                                color: colors.text,
-                                                                ...styles.iconText,
-                                                            }}
+                                                            style={
+                                                                styles.iconText
+                                                            }
                                                         >
                                                             {t(
                                                                 // @ts-expect-error cannot verify the type of this prop
@@ -117,11 +123,10 @@ export default function AppIconPicker(): JSX.Element {
                                                             )}
                                                         </Text>
                                                     </View>
-                                                    {appIcon === icon && (
+                                                    {lowercaseFirstLetter(
+                                                        iconName ?? 'Default'
+                                                    ) === icon && (
                                                         <PlatformIcon
-                                                            color={
-                                                                colors.primary
-                                                            }
                                                             ios={{
                                                                 name: 'checkmark',
                                                                 size: 20,
@@ -151,10 +156,7 @@ export default function AppIconPicker(): JSX.Element {
                                                 }
                                             >
                                                 <Text
-                                                    style={{
-                                                        color: colors.text,
-                                                        ...styles.exclusiveText,
-                                                    }}
+                                                    style={styles.exclusiveText}
                                                 >
                                                     {t('appIcon.exclusive')}
                                                 </Text>
@@ -170,51 +172,55 @@ export default function AppIconPicker(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: {
         alignSelf: 'center',
-        width: '100%',
         paddingBottom: 50,
-    },
-    sectionContainer: {
-        borderRadius: 8,
-        alignContent: 'center',
-        justifyContent: 'center',
+        width: '100%',
     },
     exclusiveContainer: {
         justifyContent: 'center',
-        paddingVertical: 20,
-        paddingHorizontal: 20,
         minHeight: 90,
+        paddingHorizontal: 20,
+        paddingVertical: 20,
     },
     exclusiveText: {
-        textAlign: 'center',
+        color: theme.colors.text,
         fontSize: 17,
         fontWeight: '500',
+        textAlign: 'center',
+    },
+    iconText: {
+        alignSelf: 'center',
+        color: theme.colors.text,
+        fontSize: 18,
+        fontWeight: '500',
+        textAlign: 'center',
+    },
+    imageContainer: {
+        borderColor: theme.colors.border,
+        borderRadius: 18,
+        borderWidth: 1,
+        height: 80,
+        width: 80,
     },
     rowContainer: {
-        flexDirection: 'row',
-
         alignItems: 'center',
+
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingStart: 12,
         paddingEnd: 20,
+        paddingStart: 12,
         paddingVertical: 12,
     },
     rowInnerContainer: {
         flexDirection: 'row',
         gap: 32,
     },
-    imageContainer: {
-        width: 80,
-        height: 80,
-        borderRadius: 18,
-        borderWidth: 1,
+    sectionContainer: {
+        alignContent: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        justifyContent: 'center',
     },
-    iconText: {
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: '500',
-        alignSelf: 'center',
-    },
-})
+}))

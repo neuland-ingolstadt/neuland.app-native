@@ -109,7 +109,7 @@ export async function callWithSession<T>(
         password != null
     ) {
         try {
-            console.log('old session, logging in...')
+            console.debug('old session, logging in...')
             const { session: newSession, isStudent } = await API.login(
                 username,
                 password
@@ -134,7 +134,7 @@ export async function callWithSession<T>(
         // the backend can throw different errors such as 'No Session' or 'Session Is Over'
         if (/session/i.test(e.message as string)) {
             if (username != null && password != null) {
-                console.log(
+                console.debug(
                     'seems to have received a session error trying to get a new session!'
                 )
                 try {
@@ -177,7 +177,7 @@ export async function obtainSession(router: object): Promise<string | null> {
 
     // invalidate expired session
     if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
-        console.log('Invalidating session')
+        console.debug('Invalidating session')
 
         session = null
     }
@@ -185,7 +185,7 @@ export async function obtainSession(router: object): Promise<string | null> {
     // try to log in again
     if (session == null && username != null && password != null) {
         try {
-            console.log('Logging in again')
+            console.debug('Logging in again')
             const { session: newSession, isStudent } = await API.login(
                 username,
                 password
@@ -195,7 +195,7 @@ export async function obtainSession(router: object): Promise<string | null> {
             storage.set('sessionCreated', Date.now().toString())
             storage.set('isStudent', isStudent.toString())
         } catch (e) {
-            console.log('Failed to log in again')
+            console.debug('Failed to log in again')
             console.error(e)
         }
     }
@@ -209,7 +209,7 @@ export async function obtainSession(router: object): Promise<string | null> {
 export async function forgetSession(): Promise<void> {
     const session = load('session')
     if (session === null) {
-        console.log('No session to forget')
+        console.debug('No session to forget')
     } else {
         try {
             await API.logout(session)
@@ -224,18 +224,9 @@ export async function forgetSession(): Promise<void> {
         SecureStore.deleteItemAsync('password'),
     ])
 
-    // clear all AsyncStorage data except analytics
+    // clear the general storage (cache)
     try {
-        const keys = storage.getAllKeys()
-        for (const key of keys) {
-            if (
-                key !== 'analytics' &&
-                key !== 'isOnboardedv1' &&
-                !key.startsWith('isUpdated-')
-            ) {
-                storage.delete(key)
-            }
-        }
+        storage.clearAll()
     } catch (e) {
         console.error(e)
     }

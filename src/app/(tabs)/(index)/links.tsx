@@ -1,21 +1,21 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
-import { PreferencesContext } from '@/components/contexts'
+import FormList from '@/components/Universal/FormList'
 import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import { router } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, StyleSheet, Text, View } from 'react-native'
+import { Linking, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const LinkScreen = (): JSX.Element => {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const { addRecentQuicklink } = useContext(PreferencesContext)
+    const addRecentQuicklink = usePreferencesStore(
+        (state) => state.addRecentQuicklink
+    )
     const typedQuicklinks = quicklinks as Quicklink[]
 
     const linkPress = async (key: string, url: string): Promise<void> => {
@@ -53,41 +53,37 @@ const LinkScreen = (): JSX.Element => {
     const sections = generateSections(typedQuicklinks)
 
     return (
-        <>
+        <View>
             <View style={styles.headerContainer}>
-                <Text
-                    style={{
-                        ...styles.headerText,
-                        color: colors.text,
-                    }}
-                >
+                <Text style={styles.headerText}>
                     {t('pages.quicklinks.title')}
                 </Text>
             </View>
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.page}>
                 <FormList sections={sections} rowStyle={styles.formlistRow} />
             </View>
-        </>
+        </View>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formlistRow: { marginVertical: 13.5 },
     headerContainer: {
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: PAGE_PADDING,
+        paddingHorizontal: theme.margins.page,
     },
     headerText: {
+        color: theme.colors.text,
         fontSize: 23,
         fontWeight: '600',
+        paddingBottom: 10,
         paddingTop: 5,
     },
-})
+    page: {
+        paddingHorizontal: theme.margins.page,
+    },
+}))
 
 export default LinkScreen

@@ -1,34 +1,22 @@
+import { getFragmentData } from '@/__generated__/gql'
+import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import PopUpCard from '@/components/Cards/PopUpCard'
-import { IndexHeaderRight } from '@/components/Elements/Dashboard/HeaderRight'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
-import { type Colors } from '@/components/colors'
+import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
+import ErrorView from '@/components/Error/ErrorView'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
-import { router, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Dimensions,
-    LayoutAnimation,
-    Platform,
-    StyleSheet,
-    View,
-} from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Dimensions, LayoutAnimation, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function HomeRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
-    const colors = useTheme().colors as Colors
-    const safeArea = useSafeAreaInsets()
-    const topInset = safeArea.top
-    const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
-    const paddingTop = hasDynamicIsland ? topInset : 0
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
@@ -43,38 +31,28 @@ export default function HomeRootScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
 
-            <View
-                style={{
-                    ...styles.page,
-                    paddingTop,
-                    backgroundColor: colors.card,
-                }}
-            >
-                <WorkaroundStack
-                    name={'Dashboard'}
-                    titleKey={'navigation.dashboard'}
-                    component={isPageOpen ? HomeScreen : () => <></>}
-                    largeTitle={true}
-                    transparent={!hasDynamicIsland}
-                    headerRightElement={IndexHeaderRight}
-                    androidFallback
-                />
-            </View>
+            <WorkaroundStack
+                name={'dashboard'}
+                titleKey={'navigation.dashboard'}
+                component={isPageOpen ? HomeScreen : () => <></>}
+                largeTitle={true}
+                transparent={true}
+                headerRightElement={IndexHeaderRight}
+                androidFallback
+            />
         </>
     )
 }
 
 function HomeScreen(): JSX.Element {
+    const { styles, theme } = useStyles(stylesheet)
     const { shownDashboardEntries } = React.useContext(DashboardContext)
-    const [isCollapsed, setIsCollapsed] = useState(false)
     const [orientation, setOrientation] = useState(
         Dimensions.get('window').width
     )
-    const colors = useTheme().colors as Colors
     const [columns, setColumns] = useState(
         Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
     )
-    const navigation = useNavigation()
     const { t } = useTranslation(['navigation', 'settings'])
     const { data } = useQuery({
         queryKey: ['announcements'],
@@ -102,21 +80,10 @@ function HomeScreen(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
-    const handleScroll = (event: any): void => {
-        if (Platform.OS !== 'ios') return
-        const offsetY = event.nativeEvent.contentOffset.y
-        setIsCollapsed(offsetY > -90)
-    }
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerStyle: {
-                backgroundColor: isCollapsed ? undefined : colors.card,
-            },
-        })
-    }, [isCollapsed, colors.card])
-
+    const announcements = getFragmentData(
+        AnnouncementFieldsFragmentDoc,
+        data?.appAnnouncements
+    )
     return shownDashboardEntries === null ||
         shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>
@@ -130,20 +97,16 @@ function HomeScreen(): JSX.Element {
                 }}
                 buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
                 onButtonPress={() => {
-                    router.navigate('dashboard')
+                    router.navigate('/dashboard')
                 }}
                 isCritical={false}
             />
         </View>
     ) : (
         <MasonryFlashList
-            onScroll={handleScroll}
             key={orientation}
             contentInsetAdjustmentBehavior="automatic"
-            contentContainerStyle={{
-                ...styles.container,
-                backgroundColor: colors.background,
-            }}
+            contentContainerStyle={{ ...styles.container, ...styles.page }}
             showsVerticalScrollIndicator={false}
             data={shownDashboardEntries}
             renderItem={({ item, index }) => {
@@ -152,8 +115,8 @@ function HomeScreen(): JSX.Element {
                 if (columns !== 1) {
                     paddingStyle =
                         index % 2 === 0
-                            ? { marginRight: PAGE_PADDING / 2 }
-                            : { marginLeft: PAGE_PADDING / 2 }
+                            ? { marginRight: theme.margins.page / 2 }
+                            : { marginLeft: theme.margins.page / 2 }
                 }
 
                 return (
@@ -166,8 +129,8 @@ function HomeScreen(): JSX.Element {
             numColumns={columns}
             estimatedItemSize={114}
             ListHeaderComponent={() =>
-                data !== undefined ? (
-                    <PopUpCard data={data?.announcements} />
+                announcements != null ? (
+                    <PopUpCard data={announcements} />
                 ) : (
                     <></>
                 )
@@ -176,18 +139,18 @@ function HomeScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-    },
-    errorContainer: { paddingTop: 110, flex: 1 },
-    item: {
-        marginVertical: 6,
-        gap: 0,
-        marginHorizontal: PAGE_PADDING,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     container: {
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        paddingBottom: theme.margins.bottomSafeArea,
         paddingTop: 6,
     },
-})
+    errorContainer: { flex: 1, paddingTop: 110 },
+    item: {
+        gap: 0,
+        marginHorizontal: theme.margins.page,
+        marginVertical: 6,
+    },
+    page: {
+        backgroundColor: theme.colors.background,
+    },
+}))

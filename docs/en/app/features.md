@@ -8,7 +8,7 @@ Your **personal timetable** from PRIMUSS and your exams at a glance. Choose betw
 
 ### Calendar & Events
 
-All important **semester dates** and **campus events** in one place. Never miss a deadline or campus life event again.
+All important **semester dates** and **campus events** in one place. The current university sports program is also available. Never miss a deadline or event again.
 
 ### Profile
 
@@ -36,3 +36,7 @@ Access key university platforms such as moodle, PRIMUSS or your webmail with a s
 Stay up to date with the **latest news** from the THI.
 \
 And more - regular updates based on feedback are on their way!
+
+## Changelog
+
+Each update brings new features, improvements and bug fixes. Check out the [change log](https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md) on GitHub for a detailed overview of the changes in each version.

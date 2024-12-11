@@ -1,4 +1,4 @@
-import { type CommunityIcon } from '@/components/Elements/Universal/Icon'
+import { type CommunityIcon } from '@/components/Universal/Icon'
 import { type ColorValue } from 'react-native'
 
 import { type MaterialIcon } from './material-icons'
@@ -15,6 +15,7 @@ export interface SectionGroup {
     disabled?: boolean
     onPress?: () => Promise<void> | void
     iconColor?: ColorValue
+    textColor?: ColorValue
     layout?: 'row' | 'column'
     fontWeight?:
         | 'normal'
@@ -35,5 +36,6 @@ export interface SectionGroup {
 export interface FormListSections {
     header?: string
     footer?: string
-    items: SectionGroup[]
+    items?: SectionGroup[]
+    item?: string
 }

@@ -8,6 +8,7 @@ export default function App(): JSX.Element {
     // This helps to avoid weird layout issues on Android where the tab bar is not displayed correctly
     const colorScheme = useColorScheme()
     const backgroundColor = colorScheme === 'dark' ? 'black' : 'white'
+
     return (
         <>
             <Head>
@@ -24,7 +25,7 @@ export default function App(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <Redirect href={'(tabs)/(index)'} />
+            <Redirect href={'/(tabs)/(index)'} />
             <View style={{ ...styles.page, backgroundColor }} />
         </>
     )

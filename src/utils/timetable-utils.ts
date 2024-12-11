@@ -153,7 +153,7 @@ export function convertTimetableToWeekViewEvents(
             title: entry.shortName,
             color,
             textColor,
-            location: entry.rooms.length > 0 ? entry.rooms[0] : undefined,
+            location: entry.rooms?.[0],
             entry,
         }
     })
@@ -195,4 +195,12 @@ export function generateKey(
     room: string
 ): string {
     return `${lectureName}-${new Date(startDate).getTime()}-${room}`
+}
+
+// This function checks if a given room string is valid based on the following criteria:
+// - The room string must start with 1 or 2 alphabetic characters (A-Z or a-z).
+// - Followed by 3 numeric digits (0-9).
+// - Optionally, it can have a 'U' in place of the first digit for basement rooms.
+export const isValidRoom = (room: string): boolean => {
+    return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room)
 }

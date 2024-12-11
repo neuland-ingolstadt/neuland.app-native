@@ -10,6 +10,7 @@ import { useMMKVString } from 'react-native-mmkv'
 export interface UserKindContextType {
     userKind: 'guest' | 'student' | 'employee' | undefined
     userFaculty: string | undefined
+    userCampus: 'Ingolstadt' | 'Neuburg' | undefined
     toggleUserKind: (userKind: boolean | undefined) => void
 }
 
@@ -24,6 +25,10 @@ export function useUserKind(): UserKindContextType {
         (value: 'student' | 'employee' | 'guest' | undefined) => void,
     ]
     const [userFaculty, setUserFaculty] = useMMKVString('userFaculty')
+    const [userCampus, setUserCampus] = useMMKVString('userCampus') as [
+        UserKindContextType['userCampus'],
+        (value: UserKindContextType['userCampus']) => void,
+    ]
 
     useEffect(() => {
         const loadData = async (): Promise<void> => {
@@ -31,6 +36,20 @@ export function useUserKind(): UserKindContextType {
                 const persData = await getPersonalData()
                 const faculty = extractFacultyFromPersonalData(persData)
                 setUserFaculty(faculty ?? undefined)
+
+                if (faculty === undefined) {
+                    console.warn(
+                        'Faculty could not be extracted from personal data'
+                    )
+                    setUserCampus(undefined)
+                } else {
+                    const campus =
+                        faculty === 'Nachhaltige Infrastruktur'
+                            ? 'Neuburg'
+                            : ('Ingolstadt' as UserKindContextType['userCampus'])
+
+                    setUserCampus(campus)
+                }
             }
         }
         void loadData()
@@ -66,6 +85,7 @@ export function useUserKind(): UserKindContextType {
         () => ({
             userKind,
             userFaculty,
+            userCampus,
             toggleUserKind,
         }),
         [userKind, userFaculty, toggleUserKind]

@@ -1,17 +1,14 @@
 import API from '@/api/authenticated-api'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import Divider from '@/components/Elements/Universal/Divider'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
-import { MODAL_BOTTOM_MARGIN, PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import {
-    ActivityIndicator,
     FlatList,
     Image,
     Linking,
@@ -22,10 +19,10 @@ import {
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function NewsScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
-
+    const { styles } = useStyles(stylesheet)
     const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
         useQuery({
             queryKey: ['thiNews'],
@@ -39,7 +36,7 @@ export default function NewsScreen(): JSX.Element {
         <View>
             {isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <LoadingIndicator />
                 </View>
             ) : isError ? (
                 <View style={styles.errorContainer}>
@@ -78,23 +75,11 @@ export default function NewsScreen(): JSX.Element {
                     contentContainerStyle={styles.contentContainer}
                     renderItem={({ item }) => (
                         <View style={styles.sectionContainer} key={item.title}>
-                            <Text
-                                style={[
-                                    styles.dateText,
-                                    {
-                                        color: colors.labelSecondaryColor,
-                                    },
-                                ]}
-                            >
+                            <Text style={styles.dateText}>
                                 {formatFriendlyDate(item.date)}
                             </Text>
                             <Pressable
-                                style={[
-                                    styles.sectionBox,
-                                    {
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
+                                style={styles.sectionBox}
                                 onPress={() => {
                                     void Linking.openURL(item.href)
                                 }}
@@ -108,16 +93,12 @@ export default function NewsScreen(): JSX.Element {
 
                                 <View style={styles.titleContainer}>
                                     <Text
-                                        style={[
-                                            styles.titleText,
-                                            { color: colors.text },
-                                        ]}
+                                        style={styles.titleText}
                                         numberOfLines={2}
                                     >
                                         {item.title}
                                     </Text>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'chevron.forward',
                                             size: 15,
@@ -126,15 +107,11 @@ export default function NewsScreen(): JSX.Element {
                                             name: 'chevron_right',
                                             size: 16,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </View>
                                 <Divider width={'100%'} />
-                                <Text
-                                    style={[
-                                        styles.teaserText,
-                                        { color: colors.text },
-                                    ]}
-                                >
+                                <Text style={styles.teaserText}>
                                     {item.teaser}
                                 </Text>
                             </Pressable>
@@ -146,63 +123,71 @@ export default function NewsScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    errorContainer: {
-        paddingTop: Platform.OS === 'ios' ? 0 : 100,
-        height: Platform.OS === 'ios' ? '90%' : '100%',
+const stylesheet = createStyleSheet((theme) => ({
+    contentContainer: {
+        gap: 18,
+        paddingBottom: theme.margins.modalBottomMargin,
+        paddingTop: Platform.OS === 'ios' ? 105 : 5,
+        padding: theme.margins.page,
     },
-
     dateText: {
+        color: theme.colors.labelSecondaryColor,
         fontSize: 13,
         fontWeight: 'normal',
-        textTransform: 'uppercase',
         marginBottom: 6,
+        textTransform: 'uppercase',
     },
-    contentContainer: {
-        paddingTop: Platform.OS === 'ios' ? 105 : 5,
-        gap: 18,
-        padding: PAGE_PADDING,
-        paddingBottom: MODAL_BOTTOM_MARGIN,
+    errorContainer: {
+        height: Platform.OS === 'ios' ? '90%' : '100%',
+        paddingTop: Platform.OS === 'ios' ? 0 : 100,
+    },
+    icon: {
+        color: theme.colors.labelColor,
     },
     imageContainer: {
+        borderTopLeftRadius: theme.radius.md,
+        borderTopRightRadius: theme.radius.md,
         height: 200,
         objectFit: 'cover',
-        borderTopRightRadius: 8,
-        borderTopLeftRadius: 8,
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: Platform.OS === 'ios' ? 140 : 40,
+    },
+    sectionBox: {
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderColor: theme.colors.border,
+        borderRadius: theme.radius.md,
+        borderWidth: StyleSheet.hairlineWidth,
+        justifyContent: 'center',
+        width: '100%',
+    },
+    sectionContainer: {
+        alignSelf: 'center',
+        width: '100%',
     },
     teaserText: {
+        color: theme.colors.text,
         fontSize: 14,
         marginHorizontal: 12,
         marginVertical: 6,
     },
     titleContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: 12,
+        flexDirection: 'row',
         gap: 10,
+        marginHorizontal: 12,
         minHeight: 40,
     },
     titleText: {
-        fontSize: 16,
+        color: theme.colors.text,
         flexShrink: 1,
-        fontWeight: '700',
-        textAlign: 'left',
         flex: 1,
+        fontSize: 16,
+        fontWeight: '700',
         marginVertical: 8,
+        textAlign: 'left',
     },
-    sectionContainer: {
-        width: '100%',
-        alignSelf: 'center',
-    },
-    sectionBox: {
-        alignSelf: 'center',
-        borderRadius: 8,
-        width: '100%',
-        justifyContent: 'center',
-    },
-    loadingContainer: {
-        paddingTop: Platform.OS === 'ios' ? 140 : 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-})
+}))

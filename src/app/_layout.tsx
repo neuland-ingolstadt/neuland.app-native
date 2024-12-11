@@ -1,29 +1,38 @@
-import CrashView from '@/components/Elements/Error/CrashView'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
-import { type Colors } from '@/components/colors'
-import { ThemeContext } from '@/components/contexts'
+import CrashView from '@/components/Error/CrashView'
+import PlatformIcon from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
 import i18n from '@/localization/i18n'
+import '@/styles/unistyles'
 import { storage } from '@/utils/storage'
-import { getStatusBarStyle } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable, useColorScheme } from 'react-native'
+import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { SystemBars } from 'react-native-edge-to-edge'
+import { configureReanimatedLogger } from 'react-native-reanimated'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
+
+configureReanimatedLogger({
+    strict: false,
+})
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
     initialRouteName: '(index)',
 }
+
 function RootLayout(): JSX.Element {
     const router = useRouter()
-    const { theme: appTheme } = useContext(ThemeContext)
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
 
@@ -75,10 +84,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-
-    const colors = useTheme().colors as Colors
-    const isOsDark = useColorScheme() === 'dark'
-
+    const { styles, theme: uniTheme } = useStyles(stylesheet)
     return (
         <>
             <Head>
@@ -95,25 +101,21 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-
+            {Platform.OS === 'android' && (
+                <SystemBars
+                    style={
+                        UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'
+                    }
+                />
+            )}
             <Stack
                 screenOptions={{
-                    statusBarStyle: getStatusBarStyle(
-                        (appTheme as 'light' | 'dark' | 'auto' | undefined) ??
-                            'auto',
-                        Platform.OS === 'android',
-                        isOsDark
-                    ),
-                    // Android
-                    statusBarTranslucent: true,
+                    contentStyle: styles.background,
+                    headerStyle: styles.headerBackground,
+                    headerTintColor: uniTheme.colors.primary,
+                    headerTitleStyle: styles.headerTextStyle,
                 }}
             >
-                <Stack.Screen
-                    name="index"
-                    options={{
-                        headerShown: false,
-                    }}
-                />
                 <Stack.Screen
                     name="(tabs)"
                     options={{
@@ -139,21 +141,24 @@ function RootLayout(): JSX.Element {
                     name="(screens)/settings"
                     options={{
                         title: t('navigation.settings'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/changelog"
                     options={{
                         title: 'Changelog',
-                        animation: 'slide_from_right',
+                    }}
+                />
+                <Stack.Screen
+                    name="index"
+                    options={{
+                        headerShown: false,
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/foodPreferences"
                     options={{
                         title: t('navigation.preferences'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -161,9 +166,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -175,9 +177,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -189,13 +188,13 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -203,13 +202,13 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -217,9 +216,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -230,14 +226,12 @@ function RootLayout(): JSX.Element {
                     name="(screens)/theme"
                     options={{
                         title: t('navigation.theme'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/accent"
                     options={{
                         title: t('navigation.accent'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -250,28 +244,24 @@ function RootLayout(): JSX.Element {
                     name="(screens)/profile"
                     options={{
                         title: t('navigation.profile'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/about"
                     options={{
                         title: t('navigation.about'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/legal"
                     options={{
                         title: t('navigation.legal'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/licenses"
                     options={{
                         title: t('navigation.licenses.title'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
@@ -279,9 +269,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.license'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -292,32 +279,38 @@ function RootLayout(): JSX.Element {
                     name="(screens)/dashboard"
                     options={{
                         title: 'Dashboard',
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/grades"
                     options={{
                         title: t('navigation.grades'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/roomSearch"
                     options={{
                         title: t('navigation.advancedSearch'),
-                        animation: 'slide_from_right',
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/clEvents"
                     options={{
                         title: 'Campus Life Events',
+                    }}
+                />
+                <Stack.Screen
+                    name="(screens)/sportsEvent"
+                    options={{
+                        title: 'Event Details',
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
+                            ios: {
+                                presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
@@ -325,24 +318,19 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
                         }),
+                        headerRight: () => (
+                            <ShareHeaderButton onPress={() => {}} />
+                        ),
                     }}
                 />
                 <Stack.Screen
                     name="(screens)/calendar"
                     options={{
                         title: t('navigation.calendar'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
                     }}
                 />
                 <Stack.Screen
@@ -350,9 +338,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.examDetails'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -363,11 +348,6 @@ function RootLayout(): JSX.Element {
                     name="(screens)/lecturers"
                     options={{
                         title: t('navigation.lecturers.title'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
                     }}
                 />
                 <Stack.Screen
@@ -375,9 +355,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.lecturer'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -388,23 +365,18 @@ function RootLayout(): JSX.Element {
                     name="(screens)/library"
                     options={{
                         title: t('navigation.library'),
-                        ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
-                        }),
 
                         headerRight: () => (
                             <Pressable
-                                onPress={() => {
-                                    router.push('(screens)/libraryCode')
+                                onPressOut={() => {
+                                    router.navigate('/libraryCode')
                                 }}
                                 accessibilityLabel={t('button.libraryBarcode', {
                                     ns: 'accessibility',
                                 })}
                             >
                                 <PlatformIcon
-                                    color={colors.text}
+                                    style={styles.headerTextStyle}
                                     ios={{
                                         name: 'barcode',
                                         size: 22,
@@ -423,9 +395,6 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.libraryCode'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
                                 presentation: 'modal',
                             },
@@ -437,10 +406,8 @@ function RootLayout(): JSX.Element {
                     options={{
                         title: t('navigation.news'),
                         ...Platform.select({
-                            android: {
-                                animation: 'slide_from_right',
-                            },
                             ios: {
+                                headerStyle: undefined,
                                 headerTransparent: true,
                                 headerBlurEffect: 'regular',
                             },
@@ -467,11 +434,7 @@ function RootLayout(): JSX.Element {
                     options={{
                         headerShown: false,
                         gestureEnabled: false,
-                        ...Platform.select({
-                            ios: {
-                                presentation: 'formSheet',
-                            },
-                        }),
+                        animation: 'fade_from_bottom',
                     }}
                 />
             </Stack>
@@ -490,3 +453,8 @@ const ProviderComponent = (): JSX.Element => {
 }
 
 export default ProviderComponent
+const stylesheet = createStyleSheet((theme) => ({
+    background: { backgroundColor: theme.colors.background },
+    headerBackground: { backgroundColor: theme.colors.card },
+    headerTextStyle: { color: theme.colors.text },
+}))

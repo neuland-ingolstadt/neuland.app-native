@@ -1,30 +1,26 @@
-import DefaultTabs from '@/components/Elements/Layout/DefaultTabs'
-import MaterialTabs from '@/components/Elements/Layout/MaterialTabs'
-import { type Colors } from '@/components/colors'
-import {
-    DashboardContext,
-    FlowContext,
-    FoodFilterContext,
-    PreferencesContext,
-    UserKindContext,
-} from '@/components/contexts'
+import DefaultTabs from '@/components/Layout/DefaultTabs'
+import MaterialTabs from '@/components/Layout/MaterialTabs'
+import { UserKindContext } from '@/components/contexts'
 import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { humanLocations } from '@/utils/food-utils'
+import { storage } from '@/utils/storage'
 import Aptabase from '@aptabase/react-native'
-import { type Theme, useTheme } from '@react-navigation/native'
-import Color from 'color'
 import * as Application from 'expo-application'
-import * as NavigationBar from 'expo-navigation-bar'
-import { Redirect, usePathname, useRouter } from 'expo-router'
+import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
 // @ts-expect-error no types
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { appIcons } from '../(screens)/appIcon'
-import { humanLocations } from '../(screens)/meal'
 
 declare const process: {
     env: {
@@ -33,70 +29,63 @@ declare const process: {
 }
 
 export default function HomeLayout(): JSX.Element {
-    const theme: Theme = useTheme()
-    const isDark = theme.dark
     const router = useRouter()
-    const colors = theme.colors as Colors
-    const flow = React.useContext(FlowContext)
+
     const { t } = useTranslation('navigation')
-    const { selectedRestaurants } = useContext(FoodFilterContext)
-    const { appIcon, setAppIcon } = useContext(PreferencesContext)
-
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const appIcon = usePreferencesStore((state) => state.appIcon)
+    const setAppIcon = usePreferencesStore((state) => state.setAppIcon)
     const aptabaseKey = process.env.EXPO_PUBLIC_APTABASE_KEY
-    const { analyticsAllowed, initializeAnalytics, analyticsInitialized } =
-        React.useContext(FlowContext)
-    const { isOnboarded } = React.useContext(FlowContext)
+
+    const analyticsInitialized = useSessionStore(
+        (state) => state.analyticsInitialized
+    )
+    const initializeAnalytics = useSessionStore(
+        (state) => state.initializeAnalytics
+    )
+    const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+    const setAnalyticsAllowed = useFlowStore(
+        (state) => state.setAnalyticsAllowed
+    )
+    const isOnboarded = useFlowStore((state) => state.isOnboarded)
+    const setOnboarded = useFlowStore((state) => state.setOnboarded)
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
+    const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const { shownDashboardEntries, hiddenDashboardEntries, resetOrder } =
-        useContext(DashboardContext)
-
-    const pathname = usePathname()
-
-    useEffect(() => {
-        if (
-            userKind !== USER_GUEST &&
-            shownDashboardEntries !== null &&
-            shownDashboardEntries.length > 0
-        ) {
-            if (
-                !shownDashboardEntries.some((card) => card.key === 'links') &&
-                !hiddenDashboardEntries.some((card) => card.key === 'links')
-            ) {
-                resetOrder(userKind)
-            }
+    const updatedVersion = useFlowStore((state) => state.updatedVersion)
+    const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
+    const [analyticsV1] = useMMKVBoolean('analytics')
+    const oldAllergens = storage.getString('selectedUserAllergens')
+    const [oldAccentColor] = useMMKVString('accentColor')
+    // migration of old settings
+    if (isOnboardedV1 === true) {
+        setOnboarded()
+        storage.delete('isOnboardedv1')
+    }
+    if (analyticsV1 === true) {
+        setAnalyticsAllowed(true)
+        storage.delete('analytics')
+    }
+    if (oldAccentColor != null) {
+        setAccentColor(oldAccentColor)
+        storage.delete('accentColor')
+    }
+    if (oldAllergens != null) {
+        const allergens = JSON.parse(oldAllergens)
+        if (allergens.length === 1 && allergens[0] === 'not-configured') {
+            /* empty */
+        } else {
+            allergens?.forEach((allergen: string) => {
+                console.debug('Migrating allergen:', allergen)
+                toggleSelectedAllergens(allergen)
+            })
         }
-    }, [isOnboarded])
-
-    useEffect(() => {
-        // Android only: Sets the navigation bar color based on the current screen to match TabBar or Background color
-        const prepare = async (): Promise<void> => {
-            const tabsPaths = ['/', '/timetable', '/map', '/food']
-            const isTab = tabsPaths.includes(pathname)
-            if (isOnboarded !== true) {
-                await NavigationBar.setBackgroundColorAsync(colors.contrast)
-                return
-            }
-
-            await NavigationBar.setBackgroundColorAsync(
-                isTab
-                    ? isDark
-                        ? Color(colors.card)
-                              .mix(Color(colors.primary), 0.04)
-                              .hex()
-                        : Color(colors.card)
-                              .mix(Color(colors.primary), 0.1)
-                              .hex()
-                    : colors.background
-            )
-            await NavigationBar.setButtonStyleAsync(
-                theme.dark ? 'light' : 'dark'
-            )
-        }
-        if (Platform.OS === 'android') {
-            void prepare()
-        }
-    }, [theme.dark, pathname, isDark, colors, isOnboarded])
-
+        storage.delete('selectedUserAllergens')
+    }
     useEffect(() => {
         const shortcuts = [
             {
@@ -157,8 +146,10 @@ export default function HomeLayout(): JSX.Element {
                   ]),
         ]
         function processShortcut(item: ShortcutItem): void {
-            router.navigate(item.data.path as string)
-            router.setParams({ fromAppShortcut: 'true' })
+            router.navigate({
+                pathname: item.data.path as RelativePathString,
+                params: { fromAppShortcut: 'true' },
+            })
         }
 
         const shortcutSubscription =
@@ -171,23 +162,23 @@ export default function HomeLayout(): JSX.Element {
     }, [selectedRestaurants, router, t, userKind])
 
     useEffect(() => {
-        console.log('Analytics allowed:', analyticsAllowed)
+        console.debug('Analytics allowed:', analyticsAllowed)
         if (aptabaseKey != null && analyticsAllowed === true) {
             Aptabase.init(aptabaseKey, {
                 host: 'https://analytics.neuland.app',
             })
             // we need to mark the analytics as initialized to trigger the initial events sent in provider.tsx
             initializeAnalytics()
-            console.log('Initialized analytics')
+            console.debug('Initialized analytics')
         } else if (
             aptabaseKey != null &&
             analyticsAllowed === false &&
             analyticsInitialized
         ) {
             Aptabase.dispose()
-            console.log('Disposed analytics')
+            console.debug('Disposed analytics')
         } else {
-            console.log('Analytics not initialized / allowed')
+            console.debug('Analytics not initialized / allowed')
         }
     }, [analyticsAllowed])
     useEffect(() => {
@@ -199,28 +190,24 @@ export default function HomeLayout(): JSX.Element {
     }, [appIcon])
 
     if (isOnboarded !== true) {
-        return <Redirect href={'onboarding'} />
+        return <Redirect href={'/onboarding'} />
     }
 
     const version = Application.nativeApplicationVersion
+    const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
     const isChangelogAvailable =
         version != null
             ? Object.keys(changelog.version).some(
-                  (version) => version === convertToMajorMinorPatch(version)
+                  (changelogVersion) => changelogVersion === processedVersion
               )
             : false
-
     if (
-        flow.isUpdated !== true &&
+        updatedVersion !== processedVersion &&
         isChangelogAvailable &&
-        flow.isOnboarded === true
+        isOnboarded
     ) {
-        router.navigate('(flow)/whatsnew')
+        return <Redirect href={'/whatsnew'} />
     }
 
-    return Platform.OS === 'android' ? (
-        <MaterialTabs theme={theme} />
-    ) : (
-        <DefaultTabs theme={theme} />
-    )
+    return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />
 }

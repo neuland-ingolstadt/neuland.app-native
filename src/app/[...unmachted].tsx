@@ -1,4 +1,4 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
+import ErrorView from '@/components/Error/ErrorView'
 import { trackEvent } from '@aptabase/react-native'
 import { router, useNavigation, usePathname } from 'expo-router'
 import React, { useEffect, useLayoutEffect } from 'react'
@@ -31,7 +31,7 @@ export default function Unmatched(): JSX.Element {
                     if (router.canGoBack()) {
                         router.back()
                     } else {
-                        router.replace('(tabs)/(index)')
+                        router.replace('/(tabs)/(index)')
                     }
                 }}
             />

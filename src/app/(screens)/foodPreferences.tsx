@@ -1,20 +1,18 @@
 import MultiSectionRadio, {
     type FoodLanguageElement,
-} from '@/components/Elements/Food/FoodLanguageSection'
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon } from '@/components/Elements/Universal/Icon'
-import MultiSectionPicker from '@/components/Elements/Universal/MultiSectionPicker'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
-import { type Colors } from '@/components/colors'
-import { FoodFilterContext } from '@/components/contexts'
+} from '@/components/Food/FoodLanguageSection'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type FormListSections } from '@/types/components'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodPreferences(): JSX.Element {
     const { t } = useTranslation('food')
@@ -45,17 +43,21 @@ export default function FoodPreferences(): JSX.Element {
         { key: 'de', title: t('preferences.languages.de') },
         { key: 'en', title: t('preferences.languages.en') },
     ]
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const router = useRouter()
 
-    const {
-        selectedRestaurants,
-        toggleSelectedRestaurant,
-        showStatic,
-        setShowStatic,
-        foodLanguage,
-        toggleFoodLanguage,
-    } = useContext(FoodFilterContext)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const toggleSelectedRestaurant = useFoodFilterStore(
+        (state) => state.toggleSelectedRestaurant
+    )
+    const showStatic = useFoodFilterStore((state) => state.showStatic)
+    const setShowStatic = useFoodFilterStore((state) => state.setShowStatic)
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+    const toggleFoodLanguage = useFoodFilterStore(
+        (state) => state.toggleFoodLanguage
+    )
 
     const sections: FormListSections[] = [
         {
@@ -65,14 +67,14 @@ export default function FoodPreferences(): JSX.Element {
                     title: t('preferences.formlist.allergens'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('foodAllergens')
+                        router.navigate('/foodAllergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('foodFlags')
+                        router.navigate('/foodFlags')
                     },
                 },
             ],
@@ -108,40 +110,58 @@ export default function FoodPreferences(): JSX.Element {
                     />
                 </SectionView>
             </View>
-            <View style={styles.notesBox}>
-                <Text
-                    style={[
-                        styles.notesText,
-                        {
-                            color: colors.labelColor,
-                        },
-                    ]}
-                >
-                    {t('preferences.footer')}
-                </Text>
+            <View style={styles.sectionContainer}>
+                <View style={styles.notesBox}>
+                    <PlatformIcon
+                        ios={{
+                            name: 'exclamationmark.triangle',
+                            variant: 'fill',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'warning',
+                            size: 24,
+                        }}
+                        style={styles.warningIcon}
+                    />
+                    <Text style={styles.notesText}>
+                        {t('preferences.footer')}
+                    </Text>
+                </View>
             </View>
         </ScrollView>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     container: { flex: 1 },
-    sectionContainer: {
-        marginTop: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
     notesBox: {
-        width: '92%',
+        alignContent: 'center',
+        alignItems: 'center',
         alignSelf: 'center',
-        paddingTop: 16,
-        paddingBottom: 32,
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        width: '100%',
     },
     notesText: {
+        color: theme.colors.labelColor,
+        flex: 1,
+        flexShrink: 1,
         fontSize: 11,
         fontWeight: 'normal',
-        paddingTop: 8,
         textAlign: 'left',
     },
-})
+    sectionContainer: {
+        alignSelf: 'center',
+        marginTop: 16,
+        paddingHorizontal: theme.margins.page,
+        width: '100%',
+    },
+    warningIcon: {
+        color: theme.colors.warning,
+    },
+}))

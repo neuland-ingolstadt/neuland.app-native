@@ -1,58 +1,60 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import DetailsBody from '@/components/Elements/Timetable/DetailsBody'
-import DetailsRow from '@/components/Elements/Timetable/DetailsRow'
-import DetailsSymbol from '@/components/Elements/Timetable/DetailsSymbol'
-import Separator from '@/components/Elements/Timetable/Separator'
-import ShareCard from '@/components/Elements/Timetable/ShareCard'
-import FormList from '@/components/Elements/Universal/FormList'
-import PlatformIcon, { chevronIcon } from '@/components/Elements/Universal/Icon'
-import ShareButton from '@/components/Elements/Universal/ShareButton'
-import { type Colors } from '@/components/colors'
-import { RouteParamsContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import DetailsBody from '@/components/Timetable/DetailsBody'
+import DetailsRow from '@/components/Timetable/DetailsRow'
+import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
+import Separator from '@/components/Timetable/Separator'
+import ShareCard from '@/components/Timetable/ShareCard'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections, type SectionGroup } from '@/types/components'
-import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
-import { Buffer } from 'buffer'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
-import React, { useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Pressable,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Pressable, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
-    const { updateRouteParams } = useContext(RouteParamsContext)
-    const colors = useTheme().colors as Colors
-    const { lecture: lectureParam } = useLocalSearchParams()
+    const navigation = useNavigation()
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('timetable')
-    const lectureString = Array.isArray(lectureParam)
-        ? lectureParam[0]
-        : lectureParam
     const shareRef = useRef<ViewShot>(null)
-    const lecture: FriendlyTimetableEntry | null =
-        lectureString === undefined
-            ? null
-            : JSON.parse(Buffer.from(lectureString, 'base64').toString())
-    if (lecture === null) {
+    const lecture = useRouteParamsStore((state) => state.selectedLecture)
+
+    useFocusEffect(
+        useCallback(() => {
+            if (lecture === undefined) {
+                navigation.setOptions({
+                    headerRight: () => undefined,
+                })
+            } else {
+                navigation.setOptions({
+                    headerRight: () => (
+                        <ShareHeaderButton onPress={shareEvent} />
+                    ),
+                })
+            }
+        }, [])
+    )
+
+    if (lecture === undefined) {
         return <ErrorView title="Cannot display lecture" />
     }
 
     const startDate = new Date(lecture.startDate)
     const endDate = new Date(lecture.endDate)
 
-    const examSplit = lecture.exam.split('-').slice(-1)[0].trim()
-    const exam = `${examSplit[0].toUpperCase()}${examSplit.slice(1)}`
+    const exam =
+        lecture.exam != null
+            ? `${lecture.exam.split('-').slice(-1)[0].trim()[0].toUpperCase()}${lecture.exam.split('-').slice(-1)[0].trim().slice(1)}`
+            : null
 
     async function shareEvent(): Promise<void> {
         try {
@@ -86,10 +88,12 @@ export default function TimetableDetails(): JSX.Element {
                 title: t(titleKey),
                 icon: chevronIcon,
                 onPress: () => {
-                    router.push('webView')
-                    router.setParams({
-                        title: t(titleKey),
-                        html,
+                    router.navigate({
+                        pathname: '/webView',
+                        params: {
+                            title: t(titleKey),
+                            html,
+                        },
                     })
                 },
             }
@@ -111,11 +115,15 @@ export default function TimetableDetails(): JSX.Element {
         {
             header: t('details.title'),
             items: [
-                {
-                    title: t('details.exam'),
-                    value: exam,
-                    layout: 'column',
-                },
+                ...(exam != null
+                    ? [
+                          {
+                              title: t('details.exam'),
+                              value: exam,
+                              layout: 'column' as 'column',
+                          },
+                      ]
+                    : []),
                 {
                     title: t('details.studyGroup'),
                     value: lecture.studyGroup,
@@ -131,35 +139,19 @@ export default function TimetableDetails(): JSX.Element {
             ],
         },
     ]
+
     return (
         <>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.page}>
                     <DetailsRow>
                         <DetailsSymbol>
-                            <View
-                                style={{
-                                    ...styles.eventColorCircle,
-                                    backgroundColor: colors.primary,
-                                }}
-                            />
+                            <View style={styles.eventColorCircle} />
                         </DetailsSymbol>
                         <DetailsBody>
-                            <Text
-                                style={{
-                                    ...styles.eventName,
-                                    color: colors.text,
-                                }}
-                            >
-                                {lecture.name}
-                            </Text>
+                            <Text style={styles.eventName}>{lecture.name}</Text>
                             {lecture.shortName.length > 0 ? (
-                                <Text
-                                    style={{
-                                        ...styles.eventShortName,
-                                        color: colors.labelColor,
-                                    }}
-                                >
+                                <Text style={styles.eventShortName}>
                                     {lecture.shortName}
                                 </Text>
                             ) : (
@@ -173,7 +165,7 @@ export default function TimetableDetails(): JSX.Element {
                     <DetailsRow>
                         <DetailsSymbol>
                             <PlatformIcon
-                                color={colors.labelColor}
+                                style={styles.icon}
                                 ios={{
                                     name: 'clock',
                                     size: 21,
@@ -188,12 +180,7 @@ export default function TimetableDetails(): JSX.Element {
                         <DetailsBody>
                             <View style={styles.dateRow}>
                                 <View>
-                                    <Text
-                                        style={{
-                                            ...styles.text1,
-                                            color: colors.text,
-                                        }}
-                                    >
+                                    <Text style={styles.text1}>
                                         {formatFriendlyDate(startDate, {
                                             weekday: 'long',
                                             relative: false,
@@ -201,17 +188,12 @@ export default function TimetableDetails(): JSX.Element {
                                     </Text>
 
                                     <View style={styles.detailsContainer}>
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.text,
-                                            }}
-                                        >
+                                        <Text style={styles.text2}>
                                             {formatFriendlyTime(startDate)}
                                         </Text>
 
                                         <PlatformIcon
-                                            color={colors.labelColor}
+                                            style={styles.icon}
                                             ios={{
                                                 name: 'chevron.forward',
                                                 size: 12,
@@ -222,21 +204,11 @@ export default function TimetableDetails(): JSX.Element {
                                             }}
                                         />
 
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.text,
-                                            }}
-                                        >
+                                        <Text style={styles.text2}>
                                             {formatFriendlyTime(endDate)}
                                         </Text>
 
-                                        <Text
-                                            style={{
-                                                ...styles.text2,
-                                                color: colors.labelColor,
-                                            }}
-                                        >
+                                        <Text style={styles.text2Label}>
                                             {`(${moment(endDate).diff(
                                                 moment(startDate),
                                                 'minutes'
@@ -255,7 +227,6 @@ export default function TimetableDetails(): JSX.Element {
                             <DetailsRow>
                                 <DetailsSymbol>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'mappin.and.ellipse',
                                             size: 21,
@@ -264,44 +235,48 @@ export default function TimetableDetails(): JSX.Element {
                                             name: 'place',
                                             size: 24,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </DetailsSymbol>
 
                                 <DetailsBody>
                                     <View style={styles.roomContainer}>
-                                        {lecture.rooms.map((room, i) => (
-                                            <React.Fragment key={i}>
-                                                <Pressable
-                                                    onPress={() => {
-                                                        router.navigate(
-                                                            '(tabs)/map'
-                                                        )
-                                                        updateRouteParams(room)
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{
-                                                            ...styles.text1,
-                                                            color: colors.primary,
+                                        {lecture.rooms.map((room, i) => {
+                                            const isValid = isValidRoom(room)
+                                            return (
+                                                <React.Fragment key={i}>
+                                                    <Pressable
+                                                        onPressOut={() => {
+                                                            router.dismissTo({
+                                                                pathname:
+                                                                    '/(tabs)/map',
+                                                                params: {
+                                                                    room,
+                                                                },
+                                                            })
                                                         }}
+                                                        disabled={!isValid}
                                                     >
-                                                        {room}
-                                                    </Text>
-                                                </Pressable>
-                                                {i <
-                                                    lecture.rooms.length -
-                                                        1 && (
-                                                    <Text
-                                                        style={{
-                                                            ...styles.text1,
-                                                            color: colors.labelColor,
-                                                        }}
-                                                    >
-                                                        {', '}
-                                                    </Text>
-                                                )}
-                                            </React.Fragment>
-                                        ))}
+                                                        <Text
+                                                            style={styles.roomText(
+                                                                isValid
+                                                            )}
+                                                        >
+                                                            {room}
+                                                        </Text>
+                                                    </Pressable>
+                                                    {i <
+                                                        lecture.rooms.length -
+                                                            1 && (
+                                                        <Text
+                                                            style={styles.text1}
+                                                        >
+                                                            {', '}
+                                                        </Text>
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        })}
                                     </View>
                                 </DetailsBody>
                             </DetailsRow>
@@ -314,7 +289,6 @@ export default function TimetableDetails(): JSX.Element {
                             <DetailsRow>
                                 <DetailsSymbol>
                                     <PlatformIcon
-                                        color={colors.labelColor}
                                         ios={{
                                             name: 'person',
                                             size: 21,
@@ -323,16 +297,12 @@ export default function TimetableDetails(): JSX.Element {
                                             name: 'person',
                                             size: 24,
                                         }}
+                                        style={styles.icon}
                                     />
                                 </DetailsSymbol>
 
                                 <DetailsBody>
-                                    <Text
-                                        style={{
-                                            ...styles.text1,
-                                            color: colors.text,
-                                        }}
-                                    >
+                                    <Text style={styles.text1}>
                                         {lecture.lecturer}
                                     </Text>
                                 </DetailsBody>
@@ -341,12 +311,6 @@ export default function TimetableDetails(): JSX.Element {
                     ) : null}
                     <View style={styles.formListContainer}>
                         <FormList sections={detailsList} />
-
-                        <ShareButton
-                            onPress={async () => {
-                                await shareEvent()
-                            }}
-                        />
                     </View>
 
                     <ViewShot ref={shareRef} style={styles.viewShot}>
@@ -358,54 +322,70 @@ export default function TimetableDetails(): JSX.Element {
     )
 }
 
-export const styles = StyleSheet.create({
-    page: {
+const stylesheet = createStyleSheet((theme) => ({
+    dateRow: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 12,
+        width: '100%',
+    },
+    detailsContainer: {
+        alignItems: 'center',
         display: 'flex',
-        padding: PAGE_PADDING,
+        flexDirection: 'row',
+        gap: 4,
     },
     eventColorCircle: {
-        width: 15,
         aspectRatio: 1,
+        backgroundColor: theme.colors.primary,
         borderRadius: 9999,
+        width: 15,
     },
     eventName: {
+        color: theme.colors.text,
         fontSize: 24,
         fontWeight: 'bold',
     },
     eventShortName: {
+        color: theme.colors.labelColor,
         fontSize: 14,
-    },
-    text1: {
-        fontSize: 18,
-    },
-    text2: {
-        fontSize: 14,
-    },
-    detailsContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 4,
-        alignItems: 'center',
     },
     formListContainer: {
-        marginTop: 24,
         gap: 12,
+        marginTop: 24,
+    },
+    icon: {
+        color: theme.colors.labelColor,
+    },
+    page: {
+        display: 'flex',
+        padding: theme.margins.page,
     },
     roomContainer: {
         display: 'flex',
         flexDirection: 'row',
     },
+    roomText: (isValid: boolean) => ({
+        color: isValid ? theme.colors.primary : theme.colors.text,
+        fontSize: 18,
+    }),
+    text1: {
+        color: theme.colors.text,
+        fontSize: 18,
+    },
+    text2: {
+        color: theme.colors.text,
+        fontSize: 14,
+    },
+    text2Label: {
+        color: theme.colors.labelColor,
+        fontSize: 14,
+    },
     viewShot: {
-        zIndex: -1,
         position: 'absolute',
         transform: [{ translateX: -1000 }],
+        zIndex: -1,
     },
-    dateRow: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        paddingRight: 12,
-    },
-})
+}))

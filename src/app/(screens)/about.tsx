@@ -1,19 +1,17 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Elements/Universal/Icon'
-import SectionView from '@/components/Elements/Universal/SectionsView'
-import SingleSectionPicker from '@/components/Elements/Universal/SingleSectionPicker'
-import { type Colors } from '@/components/colors'
-import { FlowContext, PreferencesContext } from '@/components/contexts'
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Alert,
@@ -22,19 +20,27 @@ import {
     Platform,
     Pressable,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): JSX.Element {
     const router = useRouter()
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
-    const { analyticsAllowed, setAnalyticsAllowed } =
-        React.useContext(FlowContext)
-    const { unlockedAppIcons, addUnlockedAppIcon } =
-        useContext(PreferencesContext)
+
+    const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+    const setAnalyticsAllowed = useFlowStore(
+        (state) => state.setAnalyticsAllowed
+    )
+
+    const unlockedAppIcons = usePreferencesStore(
+        (state) => state.unlockedAppIcons
+    )
+    const addUnlockedAppIcon = usePreferencesStore(
+        (state) => state.addUnlockedAppIcon
+    )
     const version = `${Application.nativeApplicationVersion}`
     const versionWithCode = `${version} (${Application.nativeBuildVersion})`
     const [displayVersion, setDisplayVersion] = useState(version)
@@ -59,7 +65,7 @@ export default function About(): JSX.Element {
                     title: 'Changelog',
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('changelog')
+                        router.navigate('/changelog')
                     },
                 },
                 {
@@ -92,7 +98,9 @@ export default function About(): JSX.Element {
                     title: 'App Website',
                     icon: linkIcon,
                     onPress: async () =>
-                        await Linking.openURL('https://next.neuland.app'),
+                        await Linking.openURL(
+                            `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}`
+                        ),
                 },
                 {
                     title:
@@ -125,7 +133,7 @@ export default function About(): JSX.Element {
                     title: t('about.formlist.legal.button'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('legal')
+                        router.navigate('/legal')
                     },
                 },
             ],
@@ -176,9 +184,7 @@ export default function About(): JSX.Element {
     }
     return (
         <>
-            <ScrollView
-                contentContainerStyle={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
-            >
+            <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.container}>
                     <View style={styles.logoContainer}>
                         <Pressable
@@ -189,15 +195,7 @@ export default function About(): JSX.Element {
                                 handlePress()
                             }}
                         >
-                            <View
-                                style={[
-                                    styles.logoIcon,
-                                    {
-                                        shadowColor: colors.text,
-                                        backgroundColor: colors.card,
-                                    },
-                                ]}
-                            >
+                            <View style={styles.logoIcon}>
                                 <Image
                                     source={require('@/assets/appIcons/default.png')}
                                     alt="Neuland Next Logo"
@@ -208,38 +206,20 @@ export default function About(): JSX.Element {
 
                         <View style={styles.logoTextContainer}>
                             <View style={styles.appTitleContainer}>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.header,
-                                    ]}
-                                >
+                                <Text style={styles.header}>
                                     {'Neuland Next'}
                                 </Text>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.text,
-                                    ]}
-                                >
+                                <Text style={styles.text}>
                                     {'Native Version'}
                                 </Text>
                             </View>
                             <View>
-                                <Text
-                                    style={[
-                                        { color: colors.text },
-                                        styles.subHeader,
-                                    ]}
-                                >
+                                <Text style={styles.subHeader}>
                                     {t('about.header.developed')}
                                 </Text>
                                 <Pressable onPress={handleWebsitePress}>
                                     <Text
-                                        style={[
-                                            { color: colors.text },
-                                            styles.text,
-                                        ]}
+                                        style={styles.text}
                                         onPress={handleContributorsPress}
                                     >
                                         {'Neuland Ingolstadt e.V.'}
@@ -275,50 +255,56 @@ export default function About(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    appTitleContainer: {
+        marginBottom: 10,
+    },
     container: {
-        paddingTop: 30,
         paddingBottom: 20,
+        paddingTop: 30,
+    },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
+    formlistContainer: {
+        alignSelf: 'center',
+        marginTop: 10,
+        paddingHorizontal: theme.margins.page,
+        width: '100%',
+    },
+    header: {
+        color: theme.colors.text,
+        fontSize: 22,
+        fontWeight: 'bold',
     },
     logoContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
+        flexDirection: 'row',
         justifyContent: 'space-evenly',
+    },
+    logoIcon: {
+        backgroundColor: theme.colors.card,
+        borderRadius: 9,
+        boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
+        shadowColor: theme.colors.text,
+    },
+    logoImage: {
+        borderRadius: 9,
+        flex: 1,
+        height: 100,
+        resizeMode: 'contain',
+        width: 100,
     },
     logoTextContainer: {
         flexDirection: 'column',
     },
-    appTitleContainer: {
-        marginBottom: 10,
-    },
-    formlistContainer: {
-        marginTop: 10,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    logoIcon: {
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        borderRadius: 9,
-    },
-    logoImage: {
-        flex: 1,
-        width: 100,
-        height: 100,
-        resizeMode: 'contain',
-        borderRadius: 9,
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
     subHeader: {
+        color: theme.colors.text,
         fontSize: 16,
         fontWeight: 'bold',
     },
     text: {
+        color: theme.colors.text,
         fontSize: 16,
     },
-})
+}))

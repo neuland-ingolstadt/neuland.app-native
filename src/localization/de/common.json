@@ -52,7 +52,16 @@
         "tomorrow": "Morgen",
         "thisWeek": "Diese Woche",
         "nextWeek": "Nächste Woche",
-        "now": "Jetzt"
+        "now": "Jetzt",
+        "weekdays": {
+            "monday": "Montag",
+            "tuesday": "Dienstag",
+            "wednesday": "Mittwoch",
+            "thursday": "Donnerstag",
+            "friday": "Freitag",
+            "saturday": "Samstag",
+            "sunday": "Sonntag"
+        }
     },
     "misc": {
         "share": "Teilen",
@@ -61,7 +70,9 @@
         "delete": "Löschen",
         "disable": "Deaktivieren",
         "more": "mehr",
-        "unknown": "Unbekannt"
+        "unknown": "Unbekannt",
+        "true": "Ja",
+        "false": "Nein"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -98,6 +109,9 @@
                     "title": "Keine Prüfungen gefunden",
                     "subtitle": "Nach der Anmeldung zu Prüfungen werden sie hier angezeigt."
                 }
+            },
+            "events": {
+                "title": "Termine"
             },
             "calendar": {
                 "link": "https://www.thi.de/studium/pruefung/semestertermine/",
@@ -154,12 +168,21 @@
         },
         "event": {
             "date": "Datum",
+            "time": "Uhrzeit",
+            "weekday": "Wochentag",
             "location": "Ort",
             "organizer": "Veranstalter",
             "description": "Beschreibung",
             "begin": "Beginn",
             "end": "Ende",
-            "shareMessage": "Schau dir dieses Event an: {{title}} von {{organizer}} um {{date}}\nhttps://neuland.app/events"
+            "registration": "Anmeldung",
+            "required": "Erforderlich",
+            "contact": "Kontakt",
+            "optional": "Optional",
+            "invitationLink": "Einladungslink",
+            "eMail": "E-Mail",
+            "shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://next.neuland.app/",
+            "shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\nhttps://next.neuland.app/"
         },
         "map": {
             "search": {
@@ -195,7 +218,9 @@
                     "availableRoomsTitle": "Verfügbare Räume",
                     "history": "Zuletzt gesucht",
                     "signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
-                    "equipment": "Ausstattung"
+                    "equipment": "Ausstattung",
+                    "report": "Fehler melden",
+                    "reportMail": "mailto:app-feedback@informatik.sexy?subject=Raum%20Fehler%20melden&body=Raum%3A%0D%0AProblem%3A%0D%0AVorschlag%3A"
                 },
                 "building": {
                     "free": "Freie Räume",
@@ -255,6 +280,15 @@
                 "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
             },
             "timeSlot": "Zeitfenster"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sport",
+                "noEvents": {
+                    "title": "Keine Sportveranstaltungen",
+                    "subtitle": "Bitte versuche es später erneut."
+                }
+            }
         }
     },
     "notification": {

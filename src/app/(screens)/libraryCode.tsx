@@ -1,6 +1,6 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import FormList from '@/components/Elements/Universal/FormList'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { UserKindContext } from '@/components/contexts'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -11,26 +11,17 @@ import {
     networkError,
     permissionError,
 } from '@/utils/api-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
 import Barcode from '@kichiyaki/react-native-barcode-generator'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Dimensions,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
+import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibraryCode(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [brightness, setBrightness] = useState<number>(0)
@@ -112,7 +103,7 @@ export default function LibraryCode(): JSX.Element {
                 <ErrorView title={permissionError} />
             ) : isLoading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color={colors.primary} />
+                    <LoadingIndicator />
                 </View>
             ) : isError ? (
                 <ErrorView
@@ -149,12 +140,7 @@ export default function LibraryCode(): JSX.Element {
                         />
                     </Pressable>
                     <View style={styles.notesContainer}>
-                        <Text
-                            style={[
-                                styles.notesText,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.notesText}>
                             {t('pages.library.code.footer')}
                         </Text>
                     </View>
@@ -164,7 +150,7 @@ export default function LibraryCode(): JSX.Element {
                     title={
                         isError
                             ? // @ts-expect-error error is type never
-                              error?.message ?? t('error.title')
+                              (error?.message ?? t('error.title'))
                             : t('error.title')
                     }
                     onRefresh={refetchByUser}
@@ -175,39 +161,40 @@ export default function LibraryCode(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        paddingVertical: 16,
-        paddingHorizontal: PAGE_PADDING,
-        width: '100%',
-        alignSelf: 'center',
-    },
-    loadingContainer: {
-        paddingVertical: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    notesContainer: {
-        alignSelf: 'center',
-        width: '100%',
-        marginTop: 14,
-        marginBottom: 40,
-    },
-    notesText: {
-        textAlign: 'left',
-        fontSize: 12,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     barcodeContainer: {
+        alignSelf: 'center',
+        borderRadius: theme.radius.mg,
+        marginHorizontal: theme.margins.page,
         marginTop: 20,
         paddingVertical: 14,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginHorizontal: PAGE_PADDING,
         width: '100%',
     },
     barcodeStyle: {
+        alignSelf: 'center',
         marginVertical: 6,
         paddingHorizontal: 10,
-        alignSelf: 'center',
     },
-})
+    container: {
+        alignSelf: 'center',
+        paddingHorizontal: theme.margins.page,
+        paddingVertical: 16,
+        width: '100%',
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 40,
+    },
+    notesContainer: {
+        alignSelf: 'center',
+        marginBottom: 40,
+        marginTop: 14,
+        width: '100%',
+    },
+    notesText: {
+        color: theme.colors.labelColor,
+        fontSize: 12,
+        textAlign: 'left',
+    },
+}))

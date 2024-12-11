@@ -1,0 +1,96 @@
+name: Bug report
+description: Report a reproducible bug or regression in this library.
+labels: [bug]
+title: '[Bug]: '
+body:
+    - type: markdown
+      attributes:
+          value: |
+              # Bug report
+
+              **Please fill the following carefully before opening a new issue.**
+              *(Your issue may be closed if it doesn't provide the required pieces of information)*
+    - type: checkboxes
+      attributes:
+          label: Before submitting a new issue
+          description: Please perform simple checks first.
+          options:
+              - label: I checked for app updates and the bug is present in the latest version.
+                required: true
+              - label: I checked the [status page](https://status.neuland.app) and the issue is not listed there.
+                required: true
+              - label: I checked for possible duplicate issues, but couldn't find any.
+                required: true
+    - type: textarea
+      id: summary
+      attributes:
+          label: Bug summary
+          description: Provide a clear and concise description of what the bug is.
+      validations:
+          required: true
+    - type: dropdown
+      id: platform
+      attributes:
+          label: App platform
+          description: Which platform are you using?
+          options:
+              - iOS
+              - iPadOS
+              - MacOS
+              - Android
+          multiple: false
+      validations:
+          required: true
+    - type: input
+      id: device
+      attributes:
+          label: Device
+          description: Which device are you using?
+          placeholder: 'iPhone 15 Pro'
+      validations:
+          required: true
+    - type: input
+      id: os-version
+      attributes:
+          label: OS version
+          description: Which version of the OS are you using?
+          placeholder: 'x.x.x'
+      validations:
+          required: true
+    - type: input
+      id: app-version
+      attributes:
+          label: App version
+          description: Which version of the app are you using? (App -> Settings -> About)
+          placeholder: 'x.x.x'
+      validations:
+          required: true
+    - type: textarea
+      id: steps-to-reproduce
+      attributes:
+          label: Steps to reproduce
+          description: |
+              - You must provide a clear list of steps and code to reproduce the problem.
+              - Also provide any relevant app configuration like settings, etc.
+              - If you can't provide a reproducible sample, please explain why.
+          value: |
+              1. …
+              2. …
+      validations:
+          required: true
+    - type: textarea
+      id: expected-behavior
+      attributes:
+          label: Expected behavior
+          description: What should happen?
+      validations:
+          required: true
+    - type: textarea
+      id: additional-information
+      attributes:
+          label: Additional information or screenshots
+          description: |
+              - Add any other context about the problem here.
+              - If applicable, add screenshots to help explain your problem.
+      validations:
+          required: false

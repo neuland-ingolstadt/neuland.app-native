@@ -6,7 +6,8 @@ const app = express();
 app.use(
   express.static(path.resolve(__dirname, ".vitepress", "dist"), {
     extensions: ["html"],
-}));
+  }),
+);
 
 const PORT = 8080;
 app.listen(PORT, () => {

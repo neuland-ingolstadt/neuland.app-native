@@ -79,7 +79,8 @@
             },
             "us": {
                 "title": "Sonstiges",
-                "source": "Quellcode"
+                "source": "Quellcode",
+                "faq": "FAQ"
             }
         }
     },
@@ -181,6 +182,10 @@
         "footer": "Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss."
     },
     "appIcon": {
+        "error": {
+            "title": "Nicht verfügbar",
+            "message": "Alternative App-Icons sind auf diesem Gerät nicht verfügbar."
+        },
         "names": {
             "default": "Neuland Next",
             "retro": "neuland.app",

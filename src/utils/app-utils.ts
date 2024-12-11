@@ -2,7 +2,7 @@ import {
     authenticateAsync,
     getEnrolledLevelAsync,
 } from 'expo-local-authentication'
-import { router } from 'expo-router'
+import { type RelativePathString, router } from 'expo-router'
 
 /**
  * Converts a version string in the format x.y.z to x.y.
@@ -20,6 +20,15 @@ export const convertToMajorMinorPatch = (version: string): string => {
  */
 export function capitalizeFirstLetter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+/**
+ * Lowercases the first letter of a string.
+ * @param string - The string to lowercase.
+ * @returns The string with the first letter lowercased.
+ */
+export function lowercaseFirstLetter(string: string): string {
+    return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
 /**
@@ -44,7 +53,7 @@ export const handleBiometricAuth = async (path: string): Promise<void> => {
     const securityLevel = await getEnrolledLevelAsync()
     if (securityLevel === 0) {
         // no passcode or biometric auth set up
-        router.navigate(path)
+        router.navigate(path as RelativePathString)
         return
     }
 
@@ -54,6 +63,6 @@ export const handleBiometricAuth = async (path: string): Promise<void> => {
     })
 
     if (biometricAuth.success) {
-        router.navigate(path)
+        router.navigate(path as RelativePathString)
     }
 }

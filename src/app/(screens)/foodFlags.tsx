@@ -1,5 +1,5 @@
-import ItemsPickerScreen from '@/components/Elements/Food/ItemsPickerScreen'
-import WorkaroundStack from '@/components/Elements/Universal/WorkaroundStack'
+import ItemsPickerScreen from '@/components/Food/ItemsPickerScreen'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import React from 'react'
 
 export default function Screen(): JSX.Element {
@@ -9,6 +9,7 @@ export default function Screen(): JSX.Element {
             titleKey={'navigation.flags'}
             component={ItemsPickerScreen}
             params={{ type: 'flags' }}
+            androidFallback
         />
     )
 }

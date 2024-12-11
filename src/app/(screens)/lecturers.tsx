@@ -1,10 +1,10 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import LecturerRow from '@/components/Elements/Rows/LecturerRow'
-import Divider from '@/components/Elements/Universal/Divider'
-import ToggleRow from '@/components/Elements/Universal/ToggleRow'
-import { type Colors } from '@/components/colors'
+import ErrorView from '@/components/Error/ErrorView'
+import LecturerRow from '@/components/Rows/LecturerRow'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -17,10 +17,8 @@ import {
     networkError,
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { PAGE_BOTTOM_SAFE_AREA, PAGE_PADDING } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useHeaderHeight } from '@react-navigation/elements'
-import { useTheme } from '@react-navigation/native'
+import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -33,17 +31,20 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
-    FlatList,
     Linking,
     Platform,
     RefreshControl,
+    SafeAreaView,
     SectionList,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import {
+    UnistylesRuntime,
+    createStyleSheet,
+    useStyles,
+} from 'react-native-unistyles'
 
 export default function LecturersCard(): JSX.Element {
     const router = useRouter()
@@ -53,7 +54,7 @@ export default function LecturersCard(): JSX.Element {
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()
     const [selectedPage, setSelectedPage] = useState(0)
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const pagerViewRef = useRef<PagerView>(null)
     const [displayesProfessors, setDisplayedProfessors] = useState(false)
@@ -61,7 +62,6 @@ export default function LecturersCard(): JSX.Element {
     const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
     const [faculty, setFaculty] = useState<string | null>(null)
     const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
-    const headerHeight = useHeaderHeight()
 
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
@@ -88,7 +88,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.push('login')
+                        router.navigate('/login')
                         return false
                     }
                     return failureCount < 2
@@ -106,7 +106,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.navigate('login')
+                        router.navigate('/login')
                         return false
                     }
                     return failureCount < 2
@@ -234,9 +234,9 @@ export default function LecturersCard(): JSX.Element {
 
                 ...Platform.select({
                     android: {
-                        headerIconColor: colors.text,
-                        hintTextColor: colors.text,
-                        textColor: colors.text,
+                        headerIconColor: theme.colors.text,
+                        hintTextColor: theme.colors.text,
+                        textColor: theme.colors.text,
                     },
                 }),
                 shouldShowHintSearchIcon: false,
@@ -257,7 +257,7 @@ export default function LecturersCard(): JSX.Element {
                 },
             },
         })
-    }, [colors.text, navigation, t])
+    }, [UnistylesRuntime.themeName, navigation, t])
 
     const LecturerList = ({
         lecturers,
@@ -277,11 +277,7 @@ export default function LecturersCard(): JSX.Element {
         isPersonal?: boolean
     }): JSX.Element => {
         return isPaused && !isSuccess ? (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
+            <View style={styles.viewHorizontal}>
                 <ErrorView
                     title={networkError}
                     refreshing={
@@ -297,15 +293,11 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isLoading ? (
-            <ActivityIndicator
-                style={styles.loadingContainer}
-                size="small"
-                color={colors.primary}
-            />
+            <LoadingIndicator style={styles.loadingContainer} />
         ) : isError ? (
             <View
                 style={{
-                    paddingHorizontal: PAGE_PADDING,
+                    ...styles.viewHorizontal,
                     ...styles.page,
                 }}
             >
@@ -324,14 +316,11 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-            <FlatList
+            <FlashList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
-                contentContainerStyle={{
-                    marginHorizontal: PAGE_PADDING,
-                    backgroundColor: colors.card,
-                    ...styles.loadedRows,
-                }}
+                contentContainerStyle={styles.loadedRows}
+                estimatedItemSize={101}
                 refreshControl={
                     <RefreshControl
                         refreshing={
@@ -346,26 +335,35 @@ export default function LecturersCard(): JSX.Element {
                         }}
                     />
                 }
-                style={{ paddingBottom: PAGE_BOTTOM_SAFE_AREA }}
                 renderItem={({ item, index }) => (
-                    <React.Fragment key={index}>
-                        <LecturerRow item={item} colors={colors} />
+                    <View
+                        key={index}
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{
+                            overflow: 'hidden',
+                            borderTopStartRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderTopEndRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderBottomStartRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                            borderBottomEndRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                        }}
+                    >
+                        <LecturerRow item={item} />
                         {index !== lecturers.length - 1 && (
-                            <Divider
-                                color={colors.labelTertiaryColor}
-                                iosPaddingLeft={16}
-                            />
+                            <Divider iosPaddingLeft={16} />
                         )}
-                    </React.Fragment>
+                    </View>
                 )}
             />
         ) : (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                    ...styles.page,
-                }}
-            >
+            <View style={styles.pagePadding}>
                 {isPersonal ? (
                     <ErrorView
                         title={t('pages.lecturers.error.title')}
@@ -401,16 +399,8 @@ export default function LecturersCard(): JSX.Element {
 
     const FilterSectionList = (): JSX.Element => {
         return allLecturersResult.isLoading ? (
-            <View
-                style={{
-                    paddingHorizontal: PAGE_PADDING,
-                }}
-            >
-                <ActivityIndicator
-                    style={styles.loadingContainer}
-                    size="small"
-                    color={colors.primary}
-                />
+            <View style={styles.viewHorizontal}>
+                <LoadingIndicator style={styles.loadingContainer} />
             </View>
         ) : allLecturersResult.isPaused ? (
             <ErrorView
@@ -431,12 +421,7 @@ export default function LecturersCard(): JSX.Element {
         ) : (
             <>
                 <View style={styles.resultsCountContainer}>
-                    <Text
-                        style={{
-                            ...styles.resultsCount,
-                            color: colors.labelColor,
-                        }}
-                    >
+                    <Text style={styles.resultsCount}>
                         {filteredLecturers.length}{' '}
                         {t('pages.lecturers.results')}
                     </Text>
@@ -449,7 +434,7 @@ export default function LecturersCard(): JSX.Element {
                             key={index}
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
-                                backgroundColor: colors.card,
+                                backgroundColor: theme.colors.card,
                                 borderTopLeftRadius: index === 0 ? 8 : 0,
                                 borderTopRightRadius: index === 0 ? 8 : 0,
                                 borderBottomLeftRadius:
@@ -458,48 +443,27 @@ export default function LecturersCard(): JSX.Element {
                                     index === section.data.length - 1 ? 8 : 0,
                             }}
                         >
-                            <LecturerRow item={item} colors={colors} />
+                            <LecturerRow item={item} />
                             {index !== section.data.length - 1 && (
-                                <Divider
-                                    color={colors.labelTertiaryColor}
-                                    iosPaddingLeft={16}
-                                />
+                                <Divider iosPaddingLeft={16} />
                             )}
                         </View>
                     )}
                     renderSectionHeader={({ section: { title } }) => (
-                        <View
-                            style={{
-                                backgroundColor: colors.background,
-                                ...styles.sectionHeaderContainer,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    ...styles.sectionHeader,
-                                    color: colors.text,
-                                }}
-                            >
-                                {title}
-                            </Text>
+                        <View style={styles.sectionHeaderContainer}>
+                            <Text style={styles.sectionHeader}>{title}</Text>
                         </View>
                     )}
-                    contentContainerStyle={{
-                        marginHorizontal: PAGE_PADDING,
-                        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
-                    }}
+                    contentContainerStyle={styles.contentContainer}
                 />
             </>
         )
     }
 
     return (
-        <View
+        <SafeAreaView
             // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-                ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 60 : 10,
-            }}
+            style={styles.page}
         >
             {userKind === USER_GUEST ? (
                 <ErrorView title={guestError} />
@@ -545,41 +509,56 @@ export default function LecturersCard(): JSX.Element {
             ) : (
                 <FilterSectionList />
             )}
-        </View>
+        </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    contentContainer: {
+        marginHorizontal: theme.margins.page,
+        paddingBottom: theme.margins.bottomSafeArea,
+    },
+
+    loadedRows: {
+        paddingBottom: theme.margins.bottomSafeArea,
+        paddingHorizontal: theme.margins.page,
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
+    },
     page: {
         flex: 1,
     },
-    loadedRows: {
-        borderRadius: 8,
+    pagePadding: {
+        paddingHorizontal: theme.margins.page,
     },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
+    resultsCount: {
+        color: theme.colors.labelColor,
+        fontSize: 13,
+        paddingHorizontal: 12,
+        textAlign: 'right',
     },
+    resultsCountContainer: {
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        zIndex: 1,
+    },
+    searchContainer: { flex: 1, gap: 10, paddingTop: 10 },
     sectionHeader: {
+        color: theme.colors.text,
         fontSize: 17,
         fontWeight: 'bold',
         textTransform: 'uppercase',
     },
     sectionHeaderContainer: {
-        paddingVertical: 8,
+        backgroundColor: theme.colors.background,
         paddingHorizontal: 4,
+        paddingVertical: 8,
     },
-    searchContainer: { flex: 1, gap: 10 },
-    resultsCountContainer: {
-        position: 'absolute',
-        right: 0,
-        left: 0,
-        zIndex: 1,
+    viewHorizontal: {
+        paddingHorizontal: theme.margins.page,
     },
-    resultsCount: {
-        paddingHorizontal: 12,
-        textAlign: 'right',
-        fontSize: 13,
-    },
-})
+}))

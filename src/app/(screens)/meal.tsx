@@ -1,66 +1,82 @@
-import FormList from '@/components/Elements/Universal/FormList'
-import { linkIcon } from '@/components/Elements/Universal/Icon'
-import ShareButton from '@/components/Elements/Universal/ShareButton'
-import { type Colors } from '@/components/colors'
-import {
-    FoodFilterContext,
-    RouteParamsContext,
-    UserKindContext,
-} from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import { UserKindContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type Meal } from '@/types/neuland-api'
-import { formatPrice, mealName } from '@/utils/food-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { useTheme } from '@react-navigation/native'
-import { Buffer } from 'buffer'
-import { router, useLocalSearchParams } from 'expo-router'
-import React, { useContext } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
-    Alert,
-    Linking,
-    ScrollView,
-    Share,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native'
-
-export const humanLocations = {
-    IngolstadtMensa: 'Mensa Ingolstadt',
-    NeuburgMensa: 'Mensa Neuburg',
-    Reimanns: 'Reimanns',
-    Canisius: 'Canisius Konvikt',
-}
+    formatPrice,
+    humanLocations,
+    mealName,
+    shareMeal,
+} from '@/utils/food-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { router, useFocusEffect, useNavigation } from 'expo-router'
+import React, { useCallback, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodDetail(): JSX.Element {
-    const colors = useTheme().colors as Colors
-    const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
-    const meal: Meal | undefined =
-        foodEntry != null
-            ? JSON.parse(Buffer.from(foodEntry, 'base64').toString())
-            : undefined
-    const {
-        preferencesSelection,
-        allergenSelection,
-        foodLanguage,
-        toggleSelectedAllergens,
-        toggleSelectedPreferences,
-    } = useContext(FoodFilterContext)
+    const meal = useRouteParamsStore((state) => state.selectedMeal)
+    const { styles, theme } = useStyles(stylesheet)
+
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+    const toggleSelectedPreferences = useFoodFilterStore(
+        (state) => state.toggleSelectedPreferences
+    )
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const { updateRouteParams } = useContext(RouteParamsContext)
-
+    const navigation = useNavigation()
     const dataSources = {
         IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
         NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            if (meal === undefined) {
+                navigation.setOptions({
+                    headerRight: () => undefined,
+                })
+            } else {
+                navigation.setOptions({
+                    headerRight: () => (
+                        <ShareHeaderButton
+                            onPress={() => {
+                                shareMeal(meal, i18n, userKind)
+                            }}
+                        />
+                    ),
+                })
+            }
+        }, [])
+    )
+
+    if (meal === undefined) {
+        return (
+            <ErrorView
+                title={t('details.error.title')}
+                message={t('details.error.message')}
+            />
+        )
     }
 
     interface Locations {
@@ -225,7 +241,7 @@ export default function FoodDetail(): JSX.Element {
                               ios: 'checkmark.seal',
                           }
                         : undefined,
-                    iconColor: colors.success,
+                    iconColor: theme.colors.success,
                     onPress: () => {
                         itemAlert(flag, 'flag')
                     },
@@ -250,7 +266,7 @@ export default function FoodDetail(): JSX.Element {
                                   ios: 'exclamationmark.triangle',
                               }
                             : undefined,
-                        iconColor: colors.notification,
+                        iconColor: theme.colors.notification,
                         onPress: () => {
                             itemAlert(allergen, 'allergen')
                         },
@@ -270,8 +286,10 @@ export default function FoodDetail(): JSX.Element {
         const location = locations[restaurant as keyof typeof locations]
 
         if (restaurant != null && location !== undefined) {
-            router.navigate('(tabs)/map')
-            updateRouteParams(location)
+            router.dismissTo({
+                pathname: '/(tabs)/map',
+                params: { room: location },
+            })
         }
     }
 
@@ -288,7 +306,9 @@ export default function FoodDetail(): JSX.Element {
                         restaurant as keyof typeof humanLocations
                     ],
                     onPress: handlePress,
-                    iconColor: locationExists ? colors.primary : undefined,
+                    textColor: locationExists
+                        ? theme.colors.primary
+                        : undefined,
                     disabled: !locationExists,
                 },
                 {
@@ -361,17 +381,13 @@ export default function FoodDetail(): JSX.Element {
                   ...aboutSection,
               ]
             : [...priceSection, ...variantsSection, ...aboutSection]
+
     return (
         <>
             <ScrollView>
-                <View
-                    style={[
-                        styles.titleContainer,
-                        { backgroundColor: colors.card },
-                    ]}
-                >
+                <View style={styles.titleContainer}>
                     <Text
-                        style={[styles.titleText, { color: colors.text }]}
+                        style={styles.titleText}
                         allowFontScaling={true}
                         adjustsFontSizeToFit={true}
                         numberOfLines={2}
@@ -388,64 +404,81 @@ export default function FoodDetail(): JSX.Element {
                 <View style={styles.formList}>
                     <FormList sections={sections} />
                 </View>
-                <ShareButton
-                    onPress={async () => {
-                        trackEvent('Share', {
-                            type: 'meal',
-                        })
-                        await Share.share({
-                            message: t('details.share.message', {
-                                meal: meal?.name[i18n.language as LanguageKey],
-                                price: formatPrice(
-                                    meal?.prices[userKind ?? USER_GUEST]
-                                ),
-                                location: restaurant,
-                                id: meal?.id,
-                            }),
-                        })
-                    }}
-                />
+
                 <View style={styles.notesContainer}>
-                    <Text
-                        style={[styles.notesText, { color: colors.labelColor }]}
-                    >
-                        {!isTranslated() ? t('details.translated') : ''}
-                        {t('details.footer')}
-                    </Text>
+                    <View style={styles.notesBox}>
+                        <PlatformIcon
+                            ios={{
+                                name: 'exclamationmark.triangle',
+                                variant: 'fill',
+                                size: 21,
+                            }}
+                            android={{
+                                name: 'warning',
+                                size: 24,
+                            }}
+                            style={styles.iconWarning}
+                        />
+                        <Text style={styles.notesText}>
+                            {!isTranslated() ? t('details.translated') : ''}
+                            {t('details.footer')}
+                        </Text>
+                    </View>
                 </View>
             </ScrollView>
         </>
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
     formList: {
+        alignSelf: 'center',
         marginVertical: 16,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
-        alignSelf: 'center',
-        paddingHorizontal: PAGE_PADDING,
     },
-    titleContainer: {
-        alignSelf: 'center',
-        width: '92%',
-        marginTop: 20,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        borderRadius: 8,
+    iconWarning: {
+        color: theme.colors.warning,
+    },
+    notesBox: {
+        alignContent: 'center',
         alignItems: 'center',
-    },
-    titleText: {
-        fontSize: 18,
-        textAlign: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        width: '100%',
     },
     notesContainer: {
         alignSelf: 'center',
-        width: '92%',
+        marginBottom: theme.margins.bottomSafeArea,
         marginTop: 20,
-        marginBottom: 40,
+        paddingHorizontal: theme.margins.page,
     },
     notesText: {
+        color: theme.colors.labelColor,
+        flex: 1,
+        flexShrink: 1,
+        fontSize: 11,
+        fontWeight: 'normal',
         textAlign: 'left',
-        fontSize: 12,
     },
-})
+    titleContainer: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        marginTop: 20,
+        paddingHorizontal: 5,
+        paddingVertical: 10,
+        width: '92%',
+    },
+    titleText: {
+        color: theme.colors.text,
+        fontSize: 18,
+        textAlign: 'center',
+    },
+}))

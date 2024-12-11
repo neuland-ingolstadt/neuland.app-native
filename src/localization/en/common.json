@@ -52,7 +52,16 @@
         "tomorrow": "Tomorrow",
         "thisWeek": "This Week",
         "nextWeek": "Next Week",
-        "now": "Now"
+        "now": "Now",
+        "weekdays": {
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
+        }
     },
     "misc": {
         "share": "Share",
@@ -61,7 +70,9 @@
         "delete": "Delete",
         "disable": "Disable",
         "more": "more",
-        "unknown": "Unknown"
+        "unknown": "Unknown",
+        "true": "Yes",
+        "false": "No"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -98,6 +109,9 @@
                     "title": "No exams found",
                     "subtitle": "After registering for exams, they will appear here."
                 }
+            },
+            "events": {
+                "title": "Dates"
             },
             "calendar": {
                 "link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
@@ -154,12 +168,21 @@
         },
         "event": {
             "date": "Date",
+            "time": "Time",
+            "weekday": "Weekday",
             "location": "Location",
             "organizer": "Organizer",
             "description": "Description",
             "begin": "Begin",
             "end": "End",
-            "shareMessage": "Check out this event: {{title}} by {{organizer}} on {{date}}\nhttps://neuland.app/events"
+            "registration": "Registration",
+            "required": "Required",
+            "contact": "Contact",
+            "optional": "Optional",
+            "invitationLink": "Invitation link",
+            "eMail": "E-Mail",
+            "shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
+            "shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en"
         },
         "map": {
             "search": {
@@ -195,7 +218,9 @@
                     "nextLecture": "Next lecture",
                     "availableRoomsTitle": "Available rooms",
                     "history": "Recent searches",
-                    "signIn": "Sign in to see available rooms"
+                    "signIn": "Sign in to see available rooms",
+                    "report": "Report an issue",
+                    "reportMail": "mailto:app-feedback@informatik.sexy?subject=Report%20room%20issue&body=Room%3A%0D%0AIssue%3A%0D%0ASuggestion%3A"
                 },
                 "building": {
                     "free": "Free rooms",
@@ -255,6 +280,15 @@
                 "footer": "Use this barcode to sign in at the library terminals to borrow books."
             },
             "timeSlot": "Timeslot"
+        },
+        "clEvents": {
+            "sports": {
+                "title": "Sports",
+                "noEvents": {
+                    "title": "No sports events found",
+                    "subtitle": "Check back later."
+                }
+            }
         }
     },
     "notification": {

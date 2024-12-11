@@ -37,6 +37,10 @@
         "special": "Special"
     },
     "details": {
+        "error": {
+            "title": "Details not available",
+            "message": "The details for this meal are currently not available."
+        },
         "footer": "We are not responsible for the correctness of the data. Please verify the correctness of the data with the respective restaurant before consume anything.",
         "translated": "This meal has been automatically translated. ",
         "formlist": {

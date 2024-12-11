@@ -1,7 +1,7 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import { type Colors } from '@/components/colors'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import Divider from '@/components/Universal/Divider'
+import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { formatISODate } from '@/utils/date-utils'
 import {
@@ -10,23 +10,29 @@ import {
     mealName,
     userMealRating,
 } from '@/utils/food-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
 const FoodCard = (): JSX.Element => {
     const { t, i18n } = useTranslation('food')
-    const colors = useTheme().colors as Colors
-    const {
-        selectedRestaurants,
-        allergenSelection,
-        preferencesSelection,
-        foodLanguage,
-    } = useContext(FoodFilterContext)
+    const { styles, theme } = useStyles(stylesheet)
+
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
         Array<{ name: string; price: string | null }>
@@ -144,12 +150,7 @@ const FoodCard = (): JSX.Element => {
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
-                        <Text
-                            style={[
-                                styles.emptyMenu,
-                                { color: colors.labelColor },
-                            ]}
-                        >
+                        <Text style={styles.emptyMenu}>
                             {t('dashboard.empty')}
                         </Text>
                     )}
@@ -157,20 +158,14 @@ const FoodCard = (): JSX.Element => {
                         <React.Fragment key={index}>
                             <View style={styles.mealEntry}>
                                 <Text
-                                    style={[
-                                        styles.mealTitle,
-                                        { color: colors.text },
-                                    ]}
+                                    style={styles.mealTitle}
                                     numberOfLines={2}
                                 >
                                     {meal.name}
                                 </Text>
                                 {meal.price != null && (
                                     <Text
-                                        style={[
-                                            styles.mealPrice,
-                                            { color: colors.labelColor },
-                                        ]}
+                                        style={styles.mealPrice}
                                         numberOfLines={1}
                                     >
                                         {meal.price}
@@ -178,7 +173,10 @@ const FoodCard = (): JSX.Element => {
                                 )}
                             </View>
                             {foodEntries.length - 1 !== index && (
-                                <Divider color={colors.border} width={'100%'} />
+                                <Divider
+                                    color={theme.colors.border}
+                                    width={'100%'}
+                                />
                             )}
                         </React.Fragment>
                     ))}
@@ -188,28 +186,31 @@ const FoodCard = (): JSX.Element => {
     )
 }
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet((theme) => ({
+    emptyMenu: {
+        color: theme.colors.labelColor,
+        fontSize: 16,
+        fontWeight: '500',
+    },
     listView: {
         gap: 8,
         paddingTop: 12,
-    },
-    mealTitle: {
-        fontWeight: '500',
-        fontSize: 16,
-        flexGrow: 1,
-        flexShrink: 1,
-    },
-    mealPrice: {
-        fontSize: 15,
     },
     mealEntry: {
         flexDirection: 'row',
         gap: 12,
     },
-    emptyMenu: {
-        fontWeight: '500',
-        fontSize: 16,
+    mealPrice: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
     },
-})
+    mealTitle: {
+        color: theme.colors.text,
+        flexGrow: 1,
+        flexShrink: 1,
+        fontSize: 16,
+        fontWeight: '500',
+    },
+}))
 
 export default FoodCard

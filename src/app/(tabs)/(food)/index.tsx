@@ -1,47 +1,44 @@
-import ErrorView from '@/components/Elements/Error/ErrorView'
-import { MealDay } from '@/components/Elements/Food'
-import { AllergensBanner } from '@/components/Elements/Food/AllergensBanner'
-import { FoodHeaderRight } from '@/components/Elements/Food/HeaderRight'
-import { type Colors } from '@/components/colors'
-import { FoodFilterContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import { MealDay } from '@/components/Food'
+import { AllergensBanner } from '@/components/Food/AllergensBanner'
+import { FoodHeaderRight } from '@/components/Food/HeaderRight'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
-import { PAGE_BOTTOM_SAFE_AREA } from '@/utils/style-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
-import React, {
-    useContext,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    ActivityIndicator,
     Animated,
     Dimensions,
     Platform,
     Pressable,
     RefreshControl,
     ScrollView,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import PagerView from 'react-native-pager-view'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export function FoodScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const [selectedDay, setSelectedDay] = useState<number>(0)
-    const { selectedRestaurants, showStatic, allergenSelection } =
-        useContext(FoodFilterContext)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const showStatic = useFoodFilterStore((state) => state.showStatic)
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+
     const [data, setData] = useState<Food[]>([])
     const { t, i18n } = useTranslation('common')
     const {
@@ -104,7 +101,7 @@ export function FoodScreen(): JSX.Element {
         index: number
     }): JSX.Element => {
         const date = new Date(day.timestamp)
-        const { colors } = useTheme()
+        const { styles } = useStyles(stylesheet)
 
         const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
         const isFirstDay = index === 0
@@ -127,25 +124,9 @@ export function FoodScreen(): JSX.Element {
                         setPage(index)
                     }}
                 >
-                    <View
-                        style={[
-                            styles.dayButtonContainer,
-                            {
-                                backgroundColor: colors.card,
-                                shadowColor: colors.text,
-                            },
-                        ]}
-                    >
+                    <View style={styles.dayButtonContainer}>
                         <Text
-                            style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                ...(selectedDay === index
-                                    ? styles.selectedDayText2
-                                    : styles.normalDayText2),
-                            }}
+                            style={styles.dayText2(selectedDay === index)}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
                         >
@@ -156,15 +137,7 @@ export function FoodScreen(): JSX.Element {
                                 .slice(0, 2)}
                         </Text>
                         <Text
-                            style={{
-                                color:
-                                    selectedDay === index
-                                        ? colors.primary
-                                        : colors.text,
-                                ...(selectedDay === index
-                                    ? styles.selectedDayText
-                                    : styles.normalDayText),
-                            }}
+                            style={styles.dayText(selectedDay === index)}
                             adjustsFontSizeToFit={true}
                             numberOfLines={1}
                         >
@@ -184,60 +157,36 @@ export function FoodScreen(): JSX.Element {
     const showAllergensBanner =
         allergenSelection.length === 1 &&
         allergenSelection[0] === 'not-configured'
-
     return (
         <>
-            <ScrollView
-                refreshControl={
-                    isError ? (
-                        <RefreshControl
-                            refreshing={isRefetchingByUser}
-                            onRefresh={() => {
-                                void refetchByUser()
-                            }}
-                        />
-                    ) : undefined
-                }
-                style={{ ...styles.page, backgroundColor: colors.background }}
-                contentInsetAdjustmentBehavior="always"
-                contentContainerStyle={styles.container}
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={!isLoading}
-            >
-                {isLoading && (
+            <View style={{ ...styles.page }}>
+                {isLoading && !isRefetchingByUser ? (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            size="small"
-                            color={colors.primary}
-                        />
+                        <LoadingIndicator />
                     </View>
-                )}
-                {isError && (
+                ) : isError ? (
                     <ErrorView
                         title={
                             error?.message === 'noMeals'
                                 ? t('error.noMeals')
-                                : error?.message ?? t('error.title')
+                                : (error?.message ?? t('error.title'))
                         }
                         onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}
                     />
-                )}
-                {isPaused && !isSuccess && (
+                ) : isPaused && !isSuccess ? (
                     <ErrorView
                         title={networkError}
                         onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}
                     />
-                )}
-
-                {isSuccess && data.length > 0 && (
+                ) : isSuccess && data.length > 0 ? (
                     <>
                         <Animated.View
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
                                 ...styles.animtedContainer,
-                                borderBottomColor: colors.border,
+
                                 borderBottomWidth: showAllergensBanner
                                     ? 0
                                     : scrollY.interpolate({
@@ -269,7 +218,7 @@ export function FoodScreen(): JSX.Element {
                         <PagerView
                             ref={pagerViewRef}
                             style={{
-                                ...styles.pagerContainer,
+                                ...styles.page,
                                 height: screenHeight,
                             }}
                             initialPage={0}
@@ -282,6 +231,14 @@ export function FoodScreen(): JSX.Element {
                         >
                             {data.map((_: any, index: number) => (
                                 <ScrollView
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={isRefetchingByUser}
+                                            onRefresh={() => {
+                                                void refetchByUser()
+                                            }}
+                                        />
+                                    }
                                     scrollEventThrottle={16}
                                     onScroll={Animated.event(
                                         [
@@ -295,16 +252,6 @@ export function FoodScreen(): JSX.Element {
                                         ],
                                         { useNativeDriver: false }
                                     )}
-                                    refreshControl={
-                                        isSuccess ? (
-                                            <RefreshControl
-                                                refreshing={isRefetchingByUser}
-                                                onRefresh={() => {
-                                                    void refetchByUser()
-                                                }}
-                                            />
-                                        ) : undefined
-                                    }
                                     key={index}
                                     contentContainerStyle={
                                         styles.innerScrollContainer
@@ -313,15 +260,14 @@ export function FoodScreen(): JSX.Element {
                                     <MealDay
                                         day={data[index]}
                                         index={index}
-                                        colors={colors}
                                         key={index}
                                     />
                                 </ScrollView>
                             ))}
                         </PagerView>
                     </>
-                )}
-            </ScrollView>
+                ) : null}
+            </View>
         </>
     )
 }
@@ -354,64 +300,56 @@ export default function FoodRootScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-    },
-    pagerContainer: {
-        flex: 1,
-    },
-    container: {
-        flex: 1,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     animtedContainer: {
+        borderBottomColor: theme.colors.border,
         width: '100%',
-    },
-    loadedContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: 10,
-        marginHorizontal: 12,
-    },
-    loadingContainer: {
-        paddingTop: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     dayButtonContainer: {
-        width: '100%',
-        height: 60,
-        alignSelf: 'center',
         alignContent: 'center',
-        borderRadius: 8,
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
+        height: 60,
+        justifyContent: 'space-evenly',
+        paddingVertical: 8,
+        shadowColor: theme.colors.text,
         shadowOffset: {
             width: 0,
             height: 1,
         },
         shadowOpacity: 0.1,
         shadowRadius: 1,
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        paddingVertical: 8,
+        width: '100%',
     },
+    dayText: (selected: boolean) => ({
+        color: selected ? theme.colors.primary : theme.colors.text,
+        fontSize: 16,
+        fontWeight: selected ? '500' : 'normal',
+    }),
+    dayText2: (selected: boolean) => ({
+        color: selected ? theme.colors.primary : theme.colors.text,
+        fontSize: 15,
+        fontWeight: selected ? '500' : 'normal',
+    }),
     innerScrollContainer: {
         marginHorizontal: 12,
-        paddingBottom: PAGE_BOTTOM_SAFE_AREA,
+        paddingBottom: theme.margins.bottomSafeArea,
     },
-    selectedDayText: {
-        fontSize: 16,
-        fontWeight: '500',
+    loadedContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 12,
+        marginVertical: 10,
     },
-    normalDayText: {
-        fontSize: 16,
-        fontWeight: 'normal',
+
+    loadingContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 40,
     },
-    selectedDayText2: {
-        fontSize: 15,
-        fontWeight: '500',
+    page: {
+        flex: 1,
     },
-    normalDayText2: {
-        fontSize: 15,
-        fontWeight: 'normal',
-    },
-})
+}))

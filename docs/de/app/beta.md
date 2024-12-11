@@ -4,7 +4,7 @@ Hilf uns, die neuesten Funktionen zu testen, bevor sie der Öffentlichkeit zur V
 
 ::: warning Verfügbarkeit
 
-Beachte, dass je nach Entwicklungsstand nicht alle Funktionen in der Beta-Version verfügbar sind und der Release Versionen der App abweichen können. Wir empfehlen, die Beta-Version nur auf einem Gerät zu installieren, das nicht für den täglichen Gebrauch verwendet wird.
+Beachte, dass je nach Entwicklungsstand nicht alle Funktionen in der Beta-Version verfügbar sind und die App möglicherweise instabil ist. Wir empfehlen, die Beta-Version nur auf einem Gerät zu installieren, das nicht für den täglichen Gebrauch verwendet wird.
 
 :::
 

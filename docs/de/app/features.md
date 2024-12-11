@@ -8,7 +8,7 @@ Dein **persönlicher Stundenplan** aus PRIMUSS und deine Prüfungen auf einen Bl
 
 ### Kalender & Events
 
-Alle wichtigen **Semestertermine** und **Campus-Events** an einem Ort. Verpasse nie wieder eine Deadline oder ein Event.
+Alle wichtigen **Semestertermine** und **Campus-Events** an einem Ort. Das aktuelle Hochschulsportprogramm ist ebenfalls verfügbar. Verpasse nie wieder eine Deadline oder ein Event.
 
 ### Profil
 
@@ -37,3 +37,7 @@ Greife mit einem Tap auf wichtige Uni-Plattformen wie Moodle, PRIMUSS oder dein 
 Bleib up-to-date mit den neuesten News von der THI.
 \
 Und vieles mehr – regelmäßige Updates basierend auf eurem Feedback sind schon in Arbeit!
+
+## Änderungsprotokoll
+
+Jedes Update bringt neue Funktionen, Verbesserungen und Fehlerbehebungen. Schau dir das [Änderungsprotokoll](https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md) auf GitHub an, um eine detaillierte Übersicht über die Änderungen in jeder Version zu erhalten.

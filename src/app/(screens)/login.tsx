@@ -1,7 +1,5 @@
-import LoginForm from '@/components/Elements/Universal/LoginForm'
-import { type Colors } from '@/components/colors'
+import LoginForm from '@/components/Universal/LoginForm'
 import { PRIVACY_URL } from '@/data/constants'
-import { useTheme } from '@react-navigation/native'
 import * as Haptics from 'expo-haptics'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
@@ -13,7 +11,6 @@ import {
     Linking,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     TouchableWithoutFeedback,
     View,
@@ -25,6 +22,7 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const useIsFloatingKeyboard = (): boolean => {
     const windowWidth = Dimensions.get('window').width
@@ -81,7 +79,7 @@ const textsDE = shuffleArray([
 ])
 
 export default function Login(): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles } = useStyles(stylesheet)
     const floatingKeyboard = useIsFloatingKeyboard()
     const { t, i18n } = useTranslation('flow')
     const [currentTextIndex, setCurrentTextIndex] = useState(0)
@@ -96,13 +94,12 @@ export default function Login(): JSX.Element {
     }>()
 
     const navigateHome = (): void => {
-        console.log('navigateHome', fromOnboarding)
         if (fromOnboarding === 'true') {
             router.dismissAll()
-            router.replace('(tabs)/(index)')
+            router.replace('/(tabs)/(index)')
             return
         }
-        router.navigate('(tabs)/(index)')
+        router.dismissAll()
     }
 
     useEffect(() => {
@@ -147,12 +144,7 @@ export default function Login(): JSX.Element {
                         enabled={!floatingKeyboard}
                     >
                         <View>
-                            <Text
-                                style={{
-                                    ...styles.header1,
-                                    color: colors.text,
-                                }}
-                            >
+                            <Text style={styles.header1}>
                                 {t('login.title1')}
                             </Text>
                             <TouchableWithoutFeedback
@@ -165,10 +157,7 @@ export default function Login(): JSX.Element {
                             >
                                 <Animated.View style={animatedStyle}>
                                     <Text
-                                        style={{
-                                            ...styles.header3,
-                                            color: colors.labelColor,
-                                        }}
+                                        style={styles.header3}
                                         numberOfLines={1}
                                         adjustsFontSizeToFit
                                     >
@@ -178,9 +167,8 @@ export default function Login(): JSX.Element {
                             </TouchableWithoutFeedback>
                         </View>
 
-                        <View style={styles.loginContainer}>
-                            <LoginForm navigateHome={navigateHome} />
-                        </View>
+                        <LoginForm navigateHome={navigateHome} />
+
                         <View />
                         <View />
                     </KeyboardAvoidingView>
@@ -190,12 +178,7 @@ export default function Login(): JSX.Element {
                                 void Linking.openURL(PRIVACY_URL)
                             }}
                         >
-                            <Text
-                                style={{
-                                    ...styles.privacyLink,
-                                    color: colors.labelColor,
-                                }}
-                            >
+                            <Text style={styles.privacyLink}>
                                 {t('onboarding.links.privacy')}
                             </Text>
                         </Pressable>
@@ -206,40 +189,42 @@ export default function Login(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    keyboardContainer: {
-        flex: 1,
-        justifyContent: 'space-evenly',
-    },
+const stylesheet = createStyleSheet((theme) => ({
     container: {
+        alignSelf: 'center',
         flex: 1,
         width: '90%',
-        alignSelf: 'center',
     },
-
-    loginContainer: {},
     header1: {
+        color: theme.colors.text,
         fontSize: 42,
         fontWeight: 'bold',
         textAlign: 'left',
     },
 
     header3: {
+        color: theme.colors.labelColor,
         fontSize: 26,
-        textAlign: 'left',
-        marginTop: 10,
         fontWeight: '400',
+        marginTop: 10,
         minHeight: 30,
+        textAlign: 'left',
+    },
+
+    keyboardContainer: {
+        flex: 1,
+        justifyContent: 'space-evenly',
     },
     linkContainer: {
-        bottom: 70,
-        position: 'absolute',
-        gap: 6,
-        alignSelf: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
+        bottom: 70,
+        gap: 6,
+        position: 'absolute',
     },
     privacyLink: {
-        textAlign: 'center',
+        color: theme.colors.labelColor,
         fontSize: 14,
+        textAlign: 'center',
     },
-})
+}))

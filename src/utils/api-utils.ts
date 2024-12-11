@@ -50,9 +50,9 @@ export const performLogout = async (
         resetDashboard(USER_GUEST)
         await createGuestSession()
         queryClient.clear()
-        router.navigate('(tabs)/(index)')
+        router.navigate('/(tabs)/(index)')
     } catch (e) {
-        console.log(e)
+        console.debug(e)
     }
 }
 
@@ -75,7 +75,6 @@ export const isKnownError = (error: Error | string): boolean => {
  * @returns The personal data of the user.
  */
 export async function getPersonalData(): Promise<PersDataDetails> {
-    console.log('Fetching personal data')
     const response = await API.getPersonalData()
     const data: PersDataDetails = response.persdata
     data.pcounter = response.pcounter

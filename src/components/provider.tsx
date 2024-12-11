@@ -1,4 +1,7 @@
 import { useAppState, useOnlineManager } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import i18n from '@/localization/i18n'
 import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
@@ -17,30 +20,14 @@ import {
     Appearance,
     Platform,
     StyleSheet,
-    useColorScheme,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
-import {
-    useDashboard,
-    useFlow,
-    useFoodFilter,
-    usePreferences,
-    useRouteParams,
-    useTheme,
-    useUserKind,
-} from '../contexts'
-import { type AppTheme, accentColors, darkColors, lightColors } from './colors'
-import {
-    DashboardContext,
-    FlowContext,
-    FoodFilterContext,
-    PreferencesContext,
-    RouteParamsContext,
-    ThemeContext,
-    UserKindContext,
-} from './contexts'
+import { useDashboard, useUserKind } from '../contexts'
+import { accentColors } from './colors'
+import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
     children: React.ReactNode
@@ -71,58 +58,27 @@ export default function Provider({
     children,
     ...rest
 }: ProviderProps): JSX.Element {
-    const foodFilter = useFoodFilter()
     const userKind = useUserKind()
-    const themeHook = useTheme()
     const dashboard = useDashboard()
-    const colorScheme = useColorScheme()
-    const flow = useFlow()
-    const routeParams = useRouteParams()
-    const preferences = usePreferences()
     const segments = useSegments()
 
     useOnlineManager()
     useAppState(onAppStateChange)
-    /**
-     * Returns the primary color for a given color scheme.
-     * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
-     * @returns The primary color for the given color scheme.
-     */
-    const getPrimary = (scheme: 'light' | 'dark'): string => {
-        try {
-            const primary =
-                accentColors[themeHook.accentColor ?? 'blue'][scheme]
-            return primary
-        } catch (e) {
-            return accentColors.blue[scheme]
-        }
-    }
-
-    const lightTheme: AppTheme = {
-        ...DefaultTheme,
-        colors: {
-            ...DefaultTheme.colors,
-            primary: getPrimary('light'),
-            ...lightColors,
-        },
-    }
-
-    const darkTheme: AppTheme = {
-        ...DarkTheme,
-        colors: {
-            ...DarkTheme.colors,
-            primary: getPrimary('dark'),
-            ...darkColors,
-        },
-    }
+    const theme = usePreferencesStore((state) => state.theme)
+    const accentColor = usePreferencesStore((state) => state.accentColor)
+    const timetableMode = usePreferencesStore((state) => state.timetableMode)
+    const appIcon = usePreferencesStore((state) => state.appIcon)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const analyticsInitialized = useSessionStore(
+        (state) => state.analyticsInitialized
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 
     useEffect(() => {
         // This effect uses segments instead of usePathname which resolves some issues with the router.
-        if (
-            !flow.analyticsInitialized ||
-            !Array.isArray(segments) ||
-            segments.length === 0
-        ) {
+        if (!analyticsInitialized || !Array.isArray(segments)) {
             return
         }
 
@@ -136,58 +92,58 @@ export default function Provider({
         requestAnimationFrame(() => {
             trackEvent('Route', { path })
         })
-    }, [segments, flow.analyticsInitialized])
+    }, [segments, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         trackEvent('AccentColor', {
-            color: themeHook.accentColor ?? 'blue',
+            color: accentColor,
         })
-    }, [themeHook.accentColor, flow.analyticsInitialized])
+    }, [accentColor, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         trackEvent('Theme', {
-            theme: themeHook.theme ?? 'auto',
+            theme: theme ?? 'auto',
         })
-    }, [themeHook.accentColor, flow.analyticsInitialized])
+    }, [accentColor, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         if (Platform.OS === 'ios') {
             trackEvent('AppIcon', {
-                appIcon: preferences.appIcon ?? 'default',
+                appIcon: appIcon ?? 'default',
             })
         }
-    }, [preferences.appIcon, flow.analyticsInitialized])
+    }, [appIcon, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized || userKind.userKind === undefined) {
+        if (!analyticsInitialized || userKind.userKind === undefined) {
             return
         }
         trackEvent('UserKind', {
             userKind: userKind.userKind,
         })
-    }, [userKind.userKind, flow.analyticsInitialized])
+    }, [userKind.userKind, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
 
         trackEvent('SelectedRestaurants', {
-            selectedRestaurants: foodFilter.selectedRestaurants.join(','),
+            selectedRestaurants: selectedRestaurants.join(','),
         })
-    }, [foodFilter.selectedRestaurants, flow.analyticsInitialized])
+    }, [selectedRestaurants, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
 
@@ -201,10 +157,10 @@ export default function Provider({
         if (Object.keys(entries).length > 0) {
             trackEvent('Dashboard', entries)
         }
-    }, [dashboard.shownDashboardEntries, flow.analyticsInitialized])
+    }, [dashboard.shownDashboardEntries, analyticsInitialized])
 
     useEffect(() => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
 
@@ -219,50 +175,87 @@ export default function Provider({
         if (Object.keys(entries).length > 0) {
             trackEvent('Dashboard', entries)
         }
-    }, [dashboard.hiddenDashboardEntries, flow.analyticsInitialized])
+    }, [dashboard.hiddenDashboardEntries, analyticsInitialized])
 
     useEffect((): void => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         trackEvent('Language', {
-            food: foodFilter.foodLanguage,
+            food: foodLanguage,
         })
-    }, [foodFilter.foodLanguage, flow.analyticsInitialized])
+    }, [foodLanguage, analyticsInitialized])
 
     useEffect((): void => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         trackEvent('Language', {
             app: i18n.language,
         })
-    }, [i18n.language, flow.analyticsInitialized])
+    }, [i18n.language, analyticsInitialized])
 
     useEffect((): void => {
-        if (!flow.analyticsInitialized) {
+        if (!analyticsInitialized) {
             return
         }
         trackEvent('TimetableMode', {
-            timetableMode: preferences.timetableMode ?? 'list',
+            timetableMode: timetableMode ?? 'list',
         })
-    }, [preferences.timetableMode, flow.analyticsInitialized])
+    }, [timetableMode, analyticsInitialized])
+
+    /**
+     * Returns the primary color for a given color scheme.
+     * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
+     * @returns The primary color for the given color scheme.
+     */
+    const getPrimary = (scheme: 'light' | 'dark'): string => {
+        try {
+            const primary = accentColors[accentColor][scheme]
+            return primary
+        } catch (e) {
+            return accentColors.blue[scheme]
+        }
+    }
+
+    useEffect(() => {
+        UnistylesRuntime.updateTheme('dark', (currentTheme) => ({
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                // @ts-expect-error cannot verify that the new primary color is valid
+                primary: getPrimary('dark'),
+            },
+        }))
+        UnistylesRuntime.updateTheme('light', (currentTheme) => ({
+            ...currentTheme,
+            colors: {
+                ...currentTheme.colors,
+                // @ts-expect-error cannot verify that the new primary color is valid
+                primary: getPrimary('light'),
+            },
+        }))
+    }, [accentColor])
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-
-        if (themeHook.theme === 'dark') {
+        if (theme === 'dark') {
             Appearance.setColorScheme('dark')
-        } else if (themeHook.theme === 'light') {
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('dark')
+        } else if (theme === 'light') {
             Appearance.setColorScheme('light')
+            UnistylesRuntime.setAdaptiveThemes(false)
+            UnistylesRuntime.setTheme('light')
         } else {
-            Appearance.setColorScheme(null)
+            Appearance.setColorScheme(undefined)
+            UnistylesRuntime.setAdaptiveThemes(true)
         }
 
         return () => {
             subscription.remove()
         }
-    }, [themeHook.theme])
+    }, [theme])
 
     return (
         <GestureHandlerRootView style={styles.container}>
@@ -270,35 +263,25 @@ export default function Provider({
                 client={queryClient}
                 persistOptions={{ persister: syncStoragePersister }}
             >
-                <ThemeProvider
-                    value={colorScheme === 'dark' ? darkTheme : lightTheme}
-                >
-                    <ThemeContext.Provider value={themeHook}>
-                        <PreferencesContext.Provider value={preferences}>
-                            <BottomSheetModalProvider>
-                                <FlowContext.Provider value={flow}>
-                                    <UserKindContext.Provider value={userKind}>
-                                        <FoodFilterContext.Provider
-                                            value={foodFilter}
-                                        >
-                                            <DashboardContext.Provider
-                                                value={dashboard}
-                                            >
-                                                <RouteParamsContext.Provider
-                                                    value={routeParams}
-                                                >
-                                                    <SafeAreaProvider>
-                                                        {children}
-                                                    </SafeAreaProvider>
-                                                </RouteParamsContext.Provider>
-                                            </DashboardContext.Provider>
-                                        </FoodFilterContext.Provider>
-                                    </UserKindContext.Provider>
-                                </FlowContext.Provider>
-                            </BottomSheetModalProvider>
-                        </PreferencesContext.Provider>
-                    </ThemeContext.Provider>
-                </ThemeProvider>
+                <UnistylesProvider>
+                    <ThemeProvider
+                        value={
+                            UnistylesRuntime.themeName === 'dark'
+                                ? DarkTheme
+                                : DefaultTheme
+                        }
+                    >
+                        <BottomSheetModalProvider>
+                            <UserKindContext.Provider value={userKind}>
+                                <DashboardContext.Provider value={dashboard}>
+                                    <SafeAreaProvider>
+                                        {children}
+                                    </SafeAreaProvider>
+                                </DashboardContext.Provider>
+                            </UserKindContext.Provider>
+                        </BottomSheetModalProvider>
+                    </ThemeProvider>
+                </UnistylesProvider>
             </PersistQueryClientProvider>
         </GestureHandlerRootView>
     )

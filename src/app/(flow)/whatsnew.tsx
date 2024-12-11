@@ -1,19 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Elements/Flow/WhatsnewBox'
-import { type Colors } from '@/components/colors'
-import { FlowContext } from '@/components/contexts'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
 import changelogData from '@/data/changelog.json'
+import { useFlowStore } from '@/hooks/useFlowStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Changelog } from '@/types/data'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
 import { getContrastColor } from '@/utils/ui-utils'
-import { useTheme } from '@react-navigation/native'
 import * as Application from 'expo-application'
 import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
 import { router } from 'expo-router'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import Animated, {
     Easing,
     useAnimatedStyle,
@@ -22,15 +20,19 @@ import Animated, {
     withSequence,
     withTiming,
 } from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function WhatsNewScreen(): JSX.Element {
-    const colors = useTheme().colors as Colors
-    const flow = React.useContext(FlowContext)
-    const changelog: Changelog = changelogData
+    const { styles } = useStyles(stylesheet)
+    const changelog: Changelog = changelogData as Changelog
     const { t, i18n } = useTranslation('flow')
     const version = convertToMajorMinorPatch(
         Application.nativeApplicationVersion ?? '0.0.0'
     )
+    const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
+    if (changelog.version[version] === undefined) {
+        router.navigate('/(tabs)/(index)')
+    }
     const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
         (key) => changelog.version[key]
     ).length
@@ -84,26 +86,10 @@ export default function WhatsNewScreen(): JSX.Element {
     }, [])
 
     return (
-        <View style={{ ...styles.page, backgroundColor: colors.contrast }}>
+        <View style={styles.page}>
             <View style={styles.titleBox}>
-                <Text
-                    style={[
-                        styles.title,
-                        {
-                            color: colors.text,
-                        },
-                    ]}
-                >
-                    {t('whatsnew.title')}
-                </Text>
-                <Text
-                    style={[
-                        styles.subtitle,
-                        {
-                            color: colors.labelColor,
-                        },
-                    ]}
-                >
+                <Text style={styles.title}>{t('whatsnew.title')}</Text>
+                <Text style={styles.subtitle}>
                     {t('whatsnew.version', {
                         version,
                     })}
@@ -184,23 +170,13 @@ export default function WhatsNewScreen(): JSX.Element {
             </View>
             <View style={styles.buttonContainer}>
                 <Pressable
-                    style={[
-                        {
-                            backgroundColor: colors.primary,
-                        },
-                        styles.button,
-                    ]}
+                    style={styles.button}
                     onPress={() => {
-                        flow.setUpdated(true)
-                        router.navigate('(tabs)/(index)')
+                        toggleUpdated()
+                        router.navigate('/(tabs)/(index)')
                     }}
                 >
-                    <Text
-                        style={[
-                            { color: getContrastColor(colors.primary) },
-                            styles.buttonText,
-                        ]}
-                    >
+                    <Text style={styles.buttonText}>
                         {t('whatsnew.continue')}
                     </Text>
                 </Pressable>
@@ -209,47 +185,52 @@ export default function WhatsNewScreen(): JSX.Element {
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 40,
-        gap: 20,
-    },
-    titleBox: {
-        flex: 1,
-        justifyContent: 'flex-end',
-    },
-    buttonContainer: {
-        flex: 1,
+const stylesheet = createStyleSheet((theme) => ({
+    boxes: {
+        gap: 12,
     },
     boxesContainer: {
         flex: 4,
         justifyContent: 'center',
     },
-    boxes: {
-        gap: 12,
+    button: {
+        alignSelf: 'center',
+        backgroundColor: theme.colors.primary,
+        borderRadius: theme.radius.md,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        width: '50%',
     },
-    title: {
-        fontSize: 32,
-        paddingBottom: 10,
-        fontWeight: 'bold',
+    buttonContainer: {
+        flex: 1,
+    },
+    buttonText: {
+        color: getContrastColor(theme.colors.primary),
+        fontSize: 15,
+        fontWeight: '600',
         textAlign: 'center',
     },
+    page: {
+        backgroundColor: theme.colors.contrast,
+        flex: 1,
+        gap: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 40,
+    },
     subtitle: {
+        color: theme.colors.labelColor,
         fontSize: 14,
         textAlign: 'center',
     },
-    button: {
-        borderRadius: 7,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        width: '50%',
-        alignSelf: 'center',
-    },
-    buttonText: {
+    title: {
+        color: theme.colors.text,
+        fontSize: 32,
+        fontWeight: 'bold',
+        paddingBottom: 10,
         textAlign: 'center',
-        fontWeight: '600',
-        fontSize: 15,
     },
-})
+    titleBox: {
+        flex: 1,
+        justifyContent: 'flex-end',
+    },
+}))

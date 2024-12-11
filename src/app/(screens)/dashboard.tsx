@@ -1,15 +1,12 @@
-import Divider from '@/components/Elements/Universal/Divider'
-import PlatformIcon from '@/components/Elements/Universal/Icon'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
 import { type Card, type ExtendedCard } from '@/components/allCards'
-import { type Colors } from '@/components/colors'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { cardIcons } from '@/components/icons'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
 import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
-import { PAGE_PADDING } from '@/utils/style-utils'
-import { useTheme } from '@react-navigation/native'
 import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -20,13 +17,13 @@ import {
     LayoutAnimation,
     Platform,
     Pressable,
-    StyleSheet,
     Text,
     View,
 } from 'react-native'
 import { DragSortableView } from 'react-native-drag-sort'
 import { ScrollView } from 'react-native-gesture-handler'
 import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const { width } = Dimensions.get('window')
 
@@ -41,13 +38,12 @@ export default function DashboardEdit(): JSX.Element {
         resetOrder,
         updateDashboardOrder,
     } = useContext(DashboardContext)
-    const isDark = useTheme().dark
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
     const [draggedId, setDraggedId] = useState<number | null>(null)
     const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
-    const [defaultHiddenKeys, setDefaultHiddenKeys] = useState<string[]>([])
+    const [unavailableCards, setUnavailableCards] = useState<Card[]>([])
     const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
         useState<Card[]>([])
 
@@ -81,21 +77,15 @@ export default function DashboardEdit(): JSX.Element {
 
     useEffect(() => {
         setFilteredHiddenDashboardEntries(
-            hiddenDashboardEntries?.filter(
-                (item) =>
-                    item?.exclusive !== true ||
-                    item.default.includes(userKind ?? 'guest')
-            )
+            hiddenDashboardEntries.concat(unavailableCards)
         )
-    }, [hiddenDashboardEntries, userKind])
+    }, [hiddenDashboardEntries, userKind, unavailableCards])
 
     const renderItem = (params: ExtendedCard): JSX.Element => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             hideDashboardEntry(params.key)
         }
-        // To call this worklet from React (e.g., in an event handler or useEffect)
-
         const isLast =
             shownDashboardEntries?.[shownDashboardEntries.length - 1].key ===
             params.key
@@ -132,11 +122,9 @@ export default function DashboardEdit(): JSX.Element {
     }, [resetOrder])
 
     useEffect(() => {
-        const defaultHidden = getDefaultDashboardOrder(userKind).hidden.map(
-            (item) => item
-        )
-        const defaultShown =
-            getDefaultDashboardOrder(userKind).shown?.map((item) => item) ?? []
+        const { hidden, shown } = getDefaultDashboardOrder(userKind)
+        const defaultHidden = hidden.map((item) => item)
+        const defaultShown = shown.map((item) => item)
 
         if (shownDashboardEntries == null) {
             return
@@ -157,10 +145,22 @@ export default function DashboardEdit(): JSX.Element {
                         .map((item) => item.key) || []
                 )
         )
-
-        setDefaultHiddenKeys(defaultHidden)
     }, [shownDashboardEntries, hiddenDashboardEntries, userKind])
-    console.info(filteredHiddenDashboardEntries)
+
+    useEffect(() => {
+        const keys = getDefaultDashboardOrder(userKind).unavailable
+        const cards = keys.map((key) => {
+            return {
+                key,
+                removable: false,
+                initial: [],
+                allowed: [],
+                card: () => <></>,
+            }
+        })
+        setUnavailableCards(cards)
+    }, [userKind])
+
     return (
         <View>
             <ScrollView
@@ -172,18 +172,13 @@ export default function DashboardEdit(): JSX.Element {
                 <View style={styles.wrapper}>
                     {userKind === USER_GUEST && (
                         <Pressable
-                            style={[
-                                styles.card,
-                                styles.noteContainer,
-                                { backgroundColor: colors.card },
-                            ]}
+                            style={[styles.card, styles.noteContainer]}
                             onPress={() => {
-                                router.navigate('login')
+                                router.navigate('/login')
                             }}
                         >
                             <View style={styles.noteTextContainer}>
                                 <PlatformIcon
-                                    color={colors.primary}
                                     ios={{
                                         name: 'lock',
                                         size: 20,
@@ -193,60 +188,30 @@ export default function DashboardEdit(): JSX.Element {
                                         size: 24,
                                     }}
                                 />
-                                <Text
-                                    style={{
-                                        color: colors.primary,
-                                        ...styles.notesTitle,
-                                    }}
-                                >
+                                <Text style={styles.notesTitle}>
                                     {t('dashboard.unavailable.title')}
                                 </Text>
                             </View>
 
-                            <Text
-                                style={{
-                                    color: colors.text,
-                                    ...styles.notesMessage,
-                                }}
-                            >
+                            <Text style={styles.notesMessage}>
                                 {t('dashboard.unavailable.message')}
                             </Text>
                         </Pressable>
                     )}
                     <View style={styles.block}>
-                        <Text
-                            style={[
-                                styles.sectionHeaderText,
-                                { color: colors.labelSecondaryColor },
-                            ]}
-                        >
+                        <Text style={styles.sectionHeaderText}>
                             {t('dashboard.shown')}
                         </Text>
-                        <View
-                            style={[
-                                styles.card,
-                                {
-                                    backgroundColor: colors.background,
-                                },
-                            ]}
-                        >
+                        <View style={[styles.card, styles.shownBg]}>
                             {shownDashboardEntries?.length === 0 ? (
                                 <View
                                     style={{
                                         height: childrenHeight * 1.5,
-                                        backgroundColor: colors.card,
 
                                         ...styles.emptyContainer,
                                     }}
                                 >
-                                    <Text
-                                        style={[
-                                            styles.textEmpty,
-                                            {
-                                                color: colors.text,
-                                            },
-                                        ]}
-                                    >
+                                    <Text style={styles.textEmpty}>
                                         {t('dashboard.noShown')}
                                     </Text>
                                 </View>
@@ -278,7 +243,8 @@ export default function DashboardEdit(): JSX.Element {
                                                 icon: {
                                                     ios: {
                                                         name: 'hand.draw',
-                                                        color: colors.primary,
+                                                        color: theme.colors
+                                                            .primary,
                                                     },
                                                 },
                                             })
@@ -323,12 +289,7 @@ export default function DashboardEdit(): JSX.Element {
                     <View style={styles.block}>
                         {filteredHiddenDashboardEntries.filter(Boolean).length >
                             0 && (
-                            <Text
-                                style={[
-                                    styles.sectionHeaderText,
-                                    { color: colors.labelSecondaryColor },
-                                ]}
-                            >
+                            <Text style={styles.sectionHeaderText}>
                                 {t('dashboard.hidden')}
                             </Text>
                         )}
@@ -339,9 +300,7 @@ export default function DashboardEdit(): JSX.Element {
                                     return (
                                         <React.Fragment key={index}>
                                             <Pressable
-                                                disabled={defaultHiddenKeys.includes(
-                                                    item.key
-                                                )}
+                                                disabled={!item.removable}
                                                 onPress={() => {
                                                     handleRestore(item)
                                                 }}
@@ -357,17 +316,9 @@ export default function DashboardEdit(): JSX.Element {
                                                     },
                                                 ]}
                                             >
-                                                <View
-                                                    style={{
-                                                        ...styles.row,
-                                                        backgroundColor:
-                                                            colors.card,
-                                                    }}
-                                                >
+                                                <View style={styles.row}>
                                                     <PlatformIcon
-                                                        color={
-                                                            colors.labelSecondaryColor
-                                                        }
+                                                        style={styles.minusIcon}
                                                         ios={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
@@ -383,26 +334,17 @@ export default function DashboardEdit(): JSX.Element {
                                                             variant: 'outlined',
                                                         }}
                                                     />
-                                                    <Text
-                                                        style={[
-                                                            styles.text,
-                                                            {
-                                                                color: colors.text,
-                                                            },
-                                                        ]}
-                                                    >
+                                                    <Text style={styles.text}>
                                                         {t(
                                                             // @ts-expect-error cannot verify the type
                                                             `cards.titles.${item.key}`,
                                                             { ns: 'navigation' }
                                                         )}
                                                     </Text>
-                                                    {defaultHiddenKeys.includes(
-                                                        item.key
-                                                    ) ? (
+                                                    {!item.removable ? (
                                                         <PlatformIcon
-                                                            color={
-                                                                colors.labelColor
+                                                            style={
+                                                                styles.minusIcon
                                                             }
                                                             ios={{
                                                                 name: 'lock',
@@ -415,11 +357,6 @@ export default function DashboardEdit(): JSX.Element {
                                                         />
                                                     ) : (
                                                         <PlatformIcon
-                                                            color={
-                                                                isDark
-                                                                    ? 'white'
-                                                                    : 'black'
-                                                            }
                                                             ios={{
                                                                 name: 'plus.circle',
                                                                 variant: 'fill',
@@ -429,6 +366,9 @@ export default function DashboardEdit(): JSX.Element {
                                                                 name: 'add_circle',
                                                                 size: 24,
                                                             }}
+                                                            style={
+                                                                styles.restoreIcon
+                                                            }
                                                         />
                                                     )}
                                                 </View>
@@ -436,12 +376,7 @@ export default function DashboardEdit(): JSX.Element {
                                             {index !==
                                                 filteredHiddenDashboardEntries.length -
                                                     1 && (
-                                                <Divider
-                                                    color={
-                                                        colors.labelTertiaryColor
-                                                    }
-                                                    width={'100%'}
-                                                />
+                                                <Divider width={'100%'} />
                                             )}
                                         </React.Fragment>
                                     )
@@ -449,35 +384,18 @@ export default function DashboardEdit(): JSX.Element {
                         </View>
                     </View>
                     {!hasUserDefaultOrder && (
-                        <View
-                            style={[
-                                styles.card,
-                                styles.blockContainer,
-                                { backgroundColor: colors.card },
-                            ]}
-                        >
+                        <View style={[styles.card, styles.blockContainer]}>
                             <Pressable
                                 onPress={handleReset}
                                 disabled={hasUserDefaultOrder}
                             >
-                                <Text
-                                    style={[
-                                        styles.reset,
-                                        {
-                                            color: hasUserDefaultOrder
-                                                ? colors.labelColor
-                                                : colors.text,
-                                        },
-                                    ]}
-                                >
+                                <Text style={styles.reset(hasUserDefaultOrder)}>
                                     {t('dashboard.reset')}
                                 </Text>
                             </Pressable>
                         </View>
                     )}
-                    <Text style={[styles.footer, { color: colors.labelColor }]}>
-                        {t('dashboard.footer')}
-                    </Text>
+                    <Text style={styles.footer}>{t('dashboard.footer')}</Text>
                 </View>
             </ScrollView>
         </View>
@@ -497,7 +415,7 @@ function RowItem({
     isLast,
     isDragged,
 }: RowItemProps): JSX.Element {
-    const colors = useTheme().colors as Colors
+    const { styles, theme } = useStyles(stylesheet)
     const bottomWidth = isLast || isDragged ? 0 : 1
 
     return (
@@ -505,16 +423,14 @@ function RowItem({
             <View
                 style={[
                     styles.row,
+                    styles.outerRow,
                     {
-                        borderBottomColor: colors.border,
-                        backgroundColor: colors.card,
-                        width: width - PAGE_PADDING * 2,
+                        width: width - theme.margins.page * 2,
                         borderBottomWidth: bottomWidth,
                     },
                 ]}
             >
                 <PlatformIcon
-                    color={colors.primary}
                     ios={{
                         name: isDragged
                             ? 'line.3.horizontal'
@@ -532,9 +448,7 @@ function RowItem({
                     }}
                 />
 
-                <Text style={[styles.text, { color: colors.text }]}>
-                    {item.text}
-                </Text>
+                <Text style={styles.text}>{item.text}</Text>
                 <Pressable
                     onPress={onPressDelete}
                     disabled={!item.removable}
@@ -552,7 +466,6 @@ function RowItem({
                 >
                     {item.removable && (
                         <PlatformIcon
-                            color={colors.labelSecondaryColor}
                             ios={{
                                 name: 'minus.circle',
                                 size: 20,
@@ -562,6 +475,7 @@ function RowItem({
                                 variant: 'outlined',
                                 size: 24,
                             }}
+                            style={styles.minusIcon}
                         />
                     )}
                 </Pressable>
@@ -570,88 +484,112 @@ function RowItem({
     )
 }
 
-const styles = StyleSheet.create({
-    page: {
-        padding: PAGE_PADDING,
-    },
-    outer: {
-        flex: 1,
-        borderRadius: 8,
-        overflow: 'hidden',
-    },
-    wrapper: {
-        gap: 14,
-    },
+const stylesheet = createStyleSheet((theme) => ({
     block: {
-        width: '100%',
         alignSelf: 'center',
         gap: 6,
+        width: '100%',
     },
     blockContainer: {
+        backgroundColor: theme.colors.card,
         marginTop: 6,
     },
-    noteContainer: {
-        marginTop: 3,
-        paddingHorizontal: 12,
-    },
-    noteTextContainer: {
-        paddingTop: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        paddingVertical: 9,
-        justifyContent: 'flex-start',
-    },
-    notesTitle: {
-        fontSize: 17,
-        fontWeight: '600',
-        textAlign: 'left',
-    },
-    notesMessage: {
-        fontSize: 15,
-        textAlign: 'left',
-        marginBottom: 12,
-    },
     card: {
-        borderRadius: 8,
-        paddingHorizontal: 0,
+        borderRadius: theme.radius.md,
         overflow: 'hidden',
-    },
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 14,
-
-        minHeight: 48,
-        justifyContent: 'center',
-        paddingHorizontal: 16,
-    },
-    text: {
-        fontSize: 16,
-        flexGrow: 1,
-        flexShrink: 1,
-    },
-    textEmpty: {
-        fontSize: 16,
-        textAlign: 'center',
+        paddingHorizontal: 0,
     },
     emptyContainer: {
-        borderRadius: 8,
+        backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
         justifyContent: 'center',
     },
-    sectionHeaderText: {
-        fontSize: 13,
-        fontWeight: 'normal',
-        textTransform: 'uppercase',
-    },
     footer: {
+        color: theme.colors.labelColor,
         fontSize: 12,
         fontWeight: 'normal',
         textAlign: 'left',
     },
-    reset: {
+    minusIcon: {
+        color: theme.colors.labelSecondaryColor,
+    },
+    noteContainer: {
+        backgroundColor: theme.colors.card,
+        marginTop: 3,
+        paddingHorizontal: 12,
+    },
+    noteTextContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 8,
+        justifyContent: 'flex-start',
+        paddingTop: 12,
+        paddingVertical: 9,
+    },
+    notesMessage: {
+        color: theme.colors.text,
+        fontSize: 15,
+        marginBottom: 12,
+        textAlign: 'left',
+    },
+    notesTitle: {
+        color: theme.colors.primary,
+        fontSize: 17,
+        fontWeight: '600',
+        textAlign: 'left',
+    },
+    outer: {
+        borderRadius: theme.radius.md,
+        flex: 1,
+        overflow: 'hidden',
+    },
+    outerRow: {
+        borderColor: theme.colors.border,
+    },
+    page: {
+        padding: theme.margins.page,
+    },
+    reset: (hasUserDefaultOrder: boolean) => ({
         fontSize: 16,
         marginVertical: 13,
         alignSelf: 'center',
+        color: hasUserDefaultOrder
+            ? theme.colors.labelColor
+            : theme.colors.text,
+    }),
+    restoreIcon: {
+        color: theme.colors.text,
     },
-})
+    row: {
+        alignItems: 'center',
+        backgroundColor: theme.colors.card,
+        flexDirection: 'row',
+        gap: 14,
+        justifyContent: 'center',
+        minHeight: 48,
+        paddingHorizontal: 16,
+    },
+    sectionHeaderText: {
+        color: theme.colors.labelSecondaryColor,
+        fontSize: 13,
+        fontWeight: 'normal',
+        textTransform: 'uppercase',
+    },
+    shownBg: {
+        backgroundColor: theme.colors.background,
+    },
+    text: {
+        color: theme.colors.text,
+        flexGrow: 1,
+        flexShrink: 1,
+        fontSize: 16,
+    },
+    textEmpty: {
+        color: theme.colors.text,
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    wrapper: {
+        gap: 14,
+    },
+}))
