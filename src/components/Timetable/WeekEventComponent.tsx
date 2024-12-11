@@ -51,17 +51,19 @@ const EventComponent = ({
                 backgroundColor: background,
             }}
         >
-            <LinearGradient
-                colors={[
-                    theme.colors.primary,
-                    lineColor(theme.colors.primary, background, isDark),
-                ]}
-                start={[0, 0.2]}
-                end={[1, 0.8]}
-                style={{
-                    ...styles.eventLine,
-                }}
-            />
+            {isIOS && (
+                <LinearGradient
+                    colors={[
+                        theme.colors.primary,
+                        lineColor(theme.colors.primary, background, isDark),
+                    ]}
+                    start={[0, 0.2]}
+                    end={[1, 0.8]}
+                    style={{
+                        ...styles.eventLine,
+                    }}
+                />
+            )}
             <View style={styles.eventText}>
                 <View>
                     <Text
@@ -168,7 +170,7 @@ const stylesheet = createStyleSheet((theme) => ({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        paddingLeft: 3,
+        paddingLeft: isIOS ? 3 : 4,
         paddingRight: 2,
         paddingVertical: 3,
     },

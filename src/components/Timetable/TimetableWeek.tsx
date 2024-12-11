@@ -119,7 +119,6 @@ export default function TimetableWeek({
             )}
             <CalendarContainer
                 onLoad={() => {
-                    console.log('Calendar loaded')
                     setCalendarLoaded(true)
                 }}
                 allowPinchToZoom
@@ -140,6 +139,7 @@ export default function TimetableWeek({
                 rightEdgeSpacing={4}
                 overlapEventsSpacing={1}
                 minTimeIntervalHeight={55}
+                scrollToNow={false}
             >
                 <CalendarHeader />
                 <CalendarBody renderEvent={renderEvent} />

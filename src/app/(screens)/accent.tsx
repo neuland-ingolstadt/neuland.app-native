@@ -38,7 +38,7 @@ export default function Theme(): JSX.Element {
         return (
             <View style={styles.colorBoxContainer}>
                 <Pressable
-                    onPress={() => {
+                    onPressOut={() => {
                         setAccentColor(code)
                         if (Platform.OS === 'ios') {
                             void Haptics.selectionAsync()

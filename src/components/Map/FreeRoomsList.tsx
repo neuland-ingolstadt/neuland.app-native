@@ -3,7 +3,7 @@ import { formatFriendlyTime } from '@/utils/date-utils'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { InteractionManager, Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
@@ -23,16 +23,11 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
                 <View style={styles.rowEntry}>
                     <View>
                         <Pressable
-                            onPress={() => {
-                                router.dismissAll()
-                                void InteractionManager.runAfterInteractions(
-                                    () => {
-                                        router.navigate({
-                                            pathname: '/(tabs)/map',
-                                            params: { room: room.room },
-                                        })
-                                    }
-                                )
+                            onPressOut={() => {
+                                router.dismissTo({
+                                    pathname: '/(tabs)/map',
+                                    params: { room: room.room },
+                                })
                             }}
                         >
                             <Text style={styles.roomName}>{room.room}</Text>

@@ -37,13 +37,10 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
         <>
             <React.Fragment>
                 <Pressable
-                    onPress={() => {
+                    onPressOut={() => {
                         action(!selectedItem)
                     }}
-                    style={({ pressed }) => [
-                        { opacity: pressed ? 0.8 : 1 },
-                        { padding: 8 },
-                    ]}
+                    style={styles.button}
                 >
                     <View style={styles.container}>
                         <Text style={styles.text}>{title}</Text>
@@ -69,6 +66,9 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 export default SingleSectionPicker
 
 const stylesheet = createStyleSheet((theme) => ({
+    button: {
+        padding: 8,
+    },
     container: {
         alignItems: 'center',
         flexDirection: 'row',

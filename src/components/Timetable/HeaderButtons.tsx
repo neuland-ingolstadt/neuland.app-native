@@ -18,7 +18,7 @@ export function HeaderLeft(): JSX.Element {
 
     return (
         <Pressable
-            onPress={() => {
+            onPressOut={() => {
                 const mode = timetableMode === 'list' ? '3days' : 'list'
                 setTimetableMode(mode)
                 trackEvent('TimetableMode', {
@@ -59,7 +59,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     const { t } = useTranslation(['accessibility'])
     return (
         <Pressable
-            onPress={setToday}
+            onPressOut={setToday}
             hitSlop={10}
             accessibilityLabel={t('button.timetableBack')}
         >

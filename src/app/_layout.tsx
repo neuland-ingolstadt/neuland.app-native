@@ -368,7 +368,7 @@ function RootLayout(): JSX.Element {
 
                         headerRight: () => (
                             <Pressable
-                                onPress={() => {
+                                onPressOut={() => {
                                     router.navigate('/libraryCode')
                                 }}
                                 accessibilityLabel={t('button.libraryBarcode', {

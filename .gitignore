@@ -19,6 +19,11 @@
 # builds
 /dist
 *.aab
+*.apk
+*.app
+*.ipa
+*.zip
+
 
 # env
 .env.local

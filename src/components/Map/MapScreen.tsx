@@ -882,7 +882,7 @@ const MapScreen = (): JSX.Element => {
                     ]}
                 >
                     <Pressable
-                        onPress={() => {
+                        onPressOut={() => {
                             void Linking.openURL(
                                 'https://www.openstreetmap.org/copyright'
                             )
