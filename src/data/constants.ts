@@ -9,9 +9,10 @@ const moodleLink = 'https://moodle.thi.de/'
 const mailLink = 'https://outlook.office.com/'
 const studverLink = 'https://studverthi.de'
 const marketplaceLink = 'https://www.thi.de/service/marketplace/'
-const myThiLink = 'https://mythi.de'
 const libraryLink = 'https://opac.ku.de/index-hi.html'
 const thiLink = 'https://www.thi.de'
+const pressReaderLink =
+    'https://thi.idm.oclc.org/login?url=https://www.pressreader.com/catalog'
 
 export const quicklinks = [
     {
@@ -71,11 +72,11 @@ export const quicklinks = [
         },
     },
     {
-        key: 'myTHI',
-        url: myThiLink,
+        key: 'press',
+        url: pressReaderLink,
         icon: {
-            ios: 'circle.grid.2x2',
-            android: 'badge',
+            ios: 'newspaper',
+            android: 'newspaper',
         },
     },
 ]
