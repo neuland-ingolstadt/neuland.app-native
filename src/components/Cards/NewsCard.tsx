@@ -24,7 +24,7 @@ const NewsCard: React.FC = () => {
         enabled: userKind !== USER_GUEST,
     })
     const [cardWidth, setCardWidth] = React.useState(
-        Dimensions.get('window').width - 32
+        Dimensions.get('window').width
     )
     useLayoutEffect(() => {
         if (ref.current != null) {
@@ -62,18 +62,18 @@ const NewsCard: React.FC = () => {
                 {data != null && data.length > 0 && (
                     <Carousel
                         loop
-                        height={115}
-                        width={cardWidth * 0.87}
-                        style={styles.carousel}
+                        height={100}
+                        width={cardWidth}
+                        mode="parallax"
+                        modeConfig={{
+                            parallaxScrollingOffset: 105,
+                        }}
+                        containerStyle={styles.carousel}
                         data={data}
                         snapEnabled={true}
                         autoPlay={true}
                         autoPlayInterval={7500}
-                        renderItem={({ index }) => (
-                            <View style={styles.cardsFilled}>
-                                {renderEvent(data[index])}
-                            </View>
-                        )}
+                        renderItem={({ index }) => renderEvent(data[index])}
                     ></Carousel>
                 )}
                 {data != null && data.length > 2 && (
@@ -91,11 +91,12 @@ const NewsCard: React.FC = () => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    cardsFilled: { gap: 8, paddingTop: 12 },
+    cardsFilled: { paddingTop: 4 },
     carousel: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 4,
+        overflow: 'hidden',
+        paddingTop: 4,
         width: '100%',
     },
     description: {
@@ -109,13 +110,12 @@ const stylesheet = createStyleSheet((theme) => ({
         borderRadius: theme.radius.md,
         flexDirection: 'row',
         gap: 12,
-        marginHorizontal: 4,
         padding: 10,
     },
     eventTitle: {
         color: theme.colors.text,
         flexShrink: 1,
-        fontSize: 15,
+        fontSize: 18,
         fontWeight: '500',
     },
     imageContainer: {
