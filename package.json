@@ -25,11 +25,12 @@
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
     "@babel/runtime": "^7.26.0",
+    "@bottom-tabs/react-navigation": "^0.7.6",
     "@expo/vector-icons": "^14.0.4",
     "@gorhom/bottom-sheet": "^5.0.6",
     "@howljs/calendar-kit": "^2.2.1",
     "@kichiyaki/react-native-barcode-generator": "^0.6.7",
-    "@maplibre/maplibre-react-native": "10.0.0-alpha.28",
+    "@maplibre/maplibre-react-native": "^10.0.0-beta.8",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-community/netinfo": "11.4.1",
     "@react-navigation/native": "^7.0.14",
