@@ -2,7 +2,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { trackEvent } from '@aptabase/react-native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
@@ -13,7 +13,6 @@ export function HeaderLeft(): JSX.Element {
     const setTimetableMode = usePreferencesStore(
         (state) => state.setTimetableMode
     )
-    const marginRight = Platform.OS === 'ios' ? 0 : 10
     const { t } = useTranslation(['accessibility'])
 
     return (
@@ -26,7 +25,7 @@ export function HeaderLeft(): JSX.Element {
                 })
             }}
             hitSlop={10}
-            style={{ marginRight }}
+            style={styles.headerButton}
             accessibilityLabel={t('button.timetableMode')}
         >
             <PlatformIcon
@@ -60,6 +59,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
     return (
         <Pressable
             onPressOut={setToday}
+            style={styles.headerButton}
             hitSlop={10}
             accessibilityLabel={t('button.timetableBack')}
         >
@@ -79,6 +79,9 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    headerButton: {
+        marginHorizontal: 12,
+    },
     icon: {
         color: theme.colors.text,
     },

@@ -5,7 +5,6 @@ import { type FeatureCollection } from 'geojson'
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
     useAnimatedStyle,
@@ -61,7 +60,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }
 
     const width = t('misc.cancel').length * 11
-    const tabBarHeight = useBottomTabBarHeight()
     return (
         <BottomSheet
             ref={bottomSheetRef}
@@ -76,7 +74,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                     textInputRef.current?.blur()
                 }
             }}
-            bottomInset={tabBarHeight}
             enableDynamicSizing={false}
             handleIndicatorStyle={styles.indicator}
         >

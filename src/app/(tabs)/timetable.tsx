@@ -17,7 +17,7 @@ export default function FoodRootScreen(): JSX.Element {
             </Head>
             <WorkaroundStack
                 name={'dashboard'}
-                titleKey={'navigation.food'}
+                titleKey={'navigation.timetable'}
                 component={TimetableScreen}
                 fallback
             />

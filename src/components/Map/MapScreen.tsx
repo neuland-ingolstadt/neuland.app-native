@@ -63,6 +63,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import Animated, {
     runOnJS,
     useAnimatedStyle,
@@ -80,6 +81,7 @@ import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
 
 const MapScreen = (): JSX.Element => {
+    const tabBarHeight = useBottomTabBarHeight()
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const { styles, theme } = useStyles(stylesheet)
@@ -698,7 +700,7 @@ const MapScreen = (): JSX.Element => {
     }, [availableFilteredGeoJSON])
 
     return (
-        <>
+        <View style={{ ...styles.map, marginBottom: tabBarHeight }}>
             <>
                 {mapLoadState === LoadingState.ERROR && (
                     <View style={styles.errorContainer}>
@@ -918,7 +920,7 @@ const MapScreen = (): JSX.Element => {
                     userKind === USER_GUEST
                 )}
             />
-        </>
+        </View>
     )
 }
 
