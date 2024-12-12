@@ -1,74 +1,45 @@
+import ErrorView from '@/components/Error/ErrorView'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flagMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
-import { type Meal } from '@/types/neuland-api'
-import { formatPrice, mealName } from '@/utils/food-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
 import {
-    router,
-    useFocusEffect,
-    useLocalSearchParams,
-    useNavigation,
-} from 'expo-router'
-import { type i18n } from 'i18next'
+    formatPrice,
+    humanLocations,
+    mealName,
+    shareMeal,
+} from '@/utils/food-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export const humanLocations = {
-    IngolstadtMensa: 'Mensa Ingolstadt',
-    NeuburgMensa: 'Mensa Neuburg',
-    Reimanns: 'Reimanns',
-    Canisius: 'Canisius Konvikt',
-}
-
-export function shareMeal(
-    meal: Meal,
-    i18n: i18n,
-    userKind: 'guest' | 'employee' | 'student'
-): void {
-    trackEvent('Share', {
-        type: 'meal',
-    })
-    void Share.share({
-        message: i18n.t('details.share.message', {
-            ns: 'food',
-            meal: meal?.name[i18n.language as LanguageKey],
-            price: formatPrice(meal.prices[userKind ?? USER_GUEST]),
-            location:
-                meal?.restaurant != null
-                    ? humanLocations[
-                          meal.restaurant as keyof typeof humanLocations
-                      ]
-                    : i18n.t('misc.unknown', { ns: 'common' }),
-
-            id: meal?.id,
-        }),
-    })
-}
-
 export default function FoodDetail(): JSX.Element {
+    const meal = useRouteParamsStore((state) => state.selectedMeal)
     const { styles, theme } = useStyles(stylesheet)
-    const { foodEntry } = useLocalSearchParams<{ foodEntry: string }>()
-    const meal: Meal | undefined =
-        foodEntry != null
-            ? JSON.parse(Buffer.from(foodEntry, 'base64').toString())
-            : undefined
-    const {
-        preferencesSelection,
-        allergenSelection,
-        foodLanguage,
-        toggleSelectedAllergens,
-        toggleSelectedPreferences,
-    } = useContext(FoodFilterContext)
+
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+    const toggleSelectedPreferences = useFoodFilterStore(
+        (state) => state.toggleSelectedPreferences
+    )
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const navigation = useNavigation()
@@ -81,18 +52,32 @@ export default function FoodDetail(): JSX.Element {
 
     useFocusEffect(
         useCallback(() => {
-            if (meal === undefined) return
-            navigation.setOptions({
-                headerRight: () => (
-                    <ShareHeaderButton
-                        onPress={() => {
-                            shareMeal(meal, i18n, userKind)
-                        }}
-                    />
-                ),
-            })
+            if (meal === undefined) {
+                navigation.setOptions({
+                    headerRight: () => undefined,
+                })
+            } else {
+                navigation.setOptions({
+                    headerRight: () => (
+                        <ShareHeaderButton
+                            onPress={() => {
+                                shareMeal(meal, i18n, userKind)
+                            }}
+                        />
+                    ),
+                })
+            }
         }, [])
     )
+
+    if (meal === undefined) {
+        return (
+            <ErrorView
+                title={t('details.error.title')}
+                message={t('details.error.message')}
+            />
+        )
+    }
 
     interface Locations {
         IngolstadtMensa: string

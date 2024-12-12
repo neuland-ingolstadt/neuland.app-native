@@ -4,6 +4,8 @@ import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
@@ -22,6 +24,8 @@ export const IndexHeaderRight = (): JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
     const router = useRouter()
     const { styles, theme } = useStyles(stylesheet)
+    const resetPreferences = usePreferencesStore((state) => state.reset)
+    const resetFood = useFoodFilterStore((state) => state.reset)
 
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)
@@ -90,6 +94,8 @@ export const IndexHeaderRight = (): JSX.Element => {
                     text: t('profile.logout.alert.confirm', { ns: 'settings' }),
                     style: 'destructive',
                     onPress: () => {
+                        resetPreferences()
+                        resetFood()
                         performLogout(
                             toggleUserKind,
                             resetOrder,
@@ -229,18 +235,18 @@ export const IndexHeaderRight = (): JSX.Element => {
                 ]}
                 onPress={(e) => {
                     if (e.nativeEvent.name === t('navigation.profile')) {
-                        router.push('/profile')
+                        router.navigate('/profile')
                     } else if (e.nativeEvent.name === t('navigation.accent')) {
-                        router.push('/accent')
+                        router.navigate('/accent')
                     } else if (e.nativeEvent.name === t('navigation.about')) {
-                        router.push('/about')
+                        router.navigate('/about')
                     } else if (e.nativeEvent.name === 'Logout') {
                         logoutAlert()
                     } else if (
                         e.nativeEvent.name ===
                         t('menu.guest.title', { ns: 'settings' })
                     ) {
-                        router.push('/login')
+                        router.navigate('/login')
                     }
                 }}
                 onPreviewPress={() => {
@@ -254,7 +260,7 @@ export const IndexHeaderRight = (): JSX.Element => {
 
     return (
         <Pressable
-            onPress={() => {
+            onPressOut={() => {
                 router.navigate('/settings')
             }}
             delayLongPress={300}

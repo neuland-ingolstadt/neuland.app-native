@@ -15,16 +15,22 @@ import { useTranslation } from 'react-i18next'
 import { AppState, Platform, Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
+import { configureReanimatedLogger } from 'react-native-reanimated'
 import {
     UnistylesRuntime,
     createStyleSheet,
     useStyles,
 } from 'react-native-unistyles'
 
+configureReanimatedLogger({
+    strict: false,
+})
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
     initialRouteName: '(index)',
 }
+
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['navigation'])
@@ -78,7 +84,7 @@ function RootLayout(): JSX.Element {
             subscription.remove()
         }
     }, [])
-    const { styles, theme } = useStyles(stylesheet)
+    const { styles, theme: uniTheme } = useStyles(stylesheet)
     return (
         <>
             <Head>
@@ -95,14 +101,18 @@ function RootLayout(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <SystemBars
-                style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
-            />
+            {Platform.OS === 'android' && (
+                <SystemBars
+                    style={
+                        UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'
+                    }
+                />
+            )}
             <Stack
                 screenOptions={{
                     contentStyle: styles.background,
                     headerStyle: styles.headerBackground,
-                    headerTintColor: theme.colors.primary,
+                    headerTintColor: uniTheme.colors.primary,
                     headerTitleStyle: styles.headerTextStyle,
                 }}
             >
@@ -358,8 +368,8 @@ function RootLayout(): JSX.Element {
 
                         headerRight: () => (
                             <Pressable
-                                onPress={() => {
-                                    router.push('/libraryCode')
+                                onPressOut={() => {
+                                    router.navigate('/libraryCode')
                                 }}
                                 accessibilityLabel={t('button.libraryBarcode', {
                                     ns: 'accessibility',

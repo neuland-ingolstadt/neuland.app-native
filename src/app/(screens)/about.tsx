@@ -2,15 +2,16 @@ import FormList from '@/components/Universal/FormList'
 import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
-import { FlowContext, PreferencesContext } from '@/components/contexts'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { trackEvent } from '@aptabase/react-native'
 import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Alert,
@@ -28,10 +29,18 @@ export default function About(): JSX.Element {
     const router = useRouter()
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
-    const { analyticsAllowed, setAnalyticsAllowed } =
-        React.useContext(FlowContext)
-    const { unlockedAppIcons, addUnlockedAppIcon } =
-        useContext(PreferencesContext)
+
+    const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+    const setAnalyticsAllowed = useFlowStore(
+        (state) => state.setAnalyticsAllowed
+    )
+
+    const unlockedAppIcons = usePreferencesStore(
+        (state) => state.unlockedAppIcons
+    )
+    const addUnlockedAppIcon = usePreferencesStore(
+        (state) => state.addUnlockedAppIcon
+    )
     const version = `${Application.nativeApplicationVersion}`
     const versionWithCode = `${version} (${Application.nativeBuildVersion})`
     const [displayVersion, setDisplayVersion] = useState(version)
@@ -276,10 +285,8 @@ const stylesheet = createStyleSheet((theme) => ({
     logoIcon: {
         backgroundColor: theme.colors.card,
         borderRadius: 9,
+        boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
         shadowColor: theme.colors.text,
-        shadowOffset: { width: 2, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: theme.radius.md,
     },
     logoImage: {
         borderRadius: 9,

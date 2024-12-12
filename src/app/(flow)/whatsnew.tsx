@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import WhatsNewBox from '@/components/Flow/WhatsnewBox'
-import { FlowContext } from '@/components/contexts'
 import changelogData from '@/data/changelog.json'
+import { useFlowStore } from '@/hooks/useFlowStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Changelog } from '@/types/data'
 import { convertToMajorMinorPatch } from '@/utils/app-utils'
@@ -24,12 +24,12 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function WhatsNewScreen(): JSX.Element {
     const { styles } = useStyles(stylesheet)
-    const flow = React.useContext(FlowContext)
     const changelog: Changelog = changelogData as Changelog
     const { t, i18n } = useTranslation('flow')
     const version = convertToMajorMinorPatch(
         Application.nativeApplicationVersion ?? '0.0.0'
     )
+    const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
     if (changelog.version[version] === undefined) {
         router.navigate('/(tabs)/(index)')
     }
@@ -172,7 +172,7 @@ export default function WhatsNewScreen(): JSX.Element {
                 <Pressable
                     style={styles.button}
                     onPress={() => {
-                        flow.setUpdated(true)
+                        toggleUpdated()
                         router.navigate('/(tabs)/(index)')
                     }}
                 >

@@ -18,7 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { useHeaderHeight } from '@react-navigation/elements'
+import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -31,10 +31,10 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-    FlatList,
     Linking,
     Platform,
     RefreshControl,
+    SafeAreaView,
     SectionList,
     Text,
     View,
@@ -62,7 +62,6 @@ export default function LecturersCard(): JSX.Element {
     const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
     const [faculty, setFaculty] = useState<string | null>(null)
     const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
-    const headerHeight = useHeaderHeight()
 
     function setPage(page: number): void {
         pagerViewRef.current?.setPage(page)
@@ -89,7 +88,7 @@ export default function LecturersCard(): JSX.Element {
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
                 retry(failureCount: number, error: any) {
                     if (error instanceof NoSessionError) {
-                        router.push('/login')
+                        router.navigate('/login')
                         return false
                     }
                     return failureCount < 2
@@ -317,11 +316,11 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-            <FlatList
+            <FlashList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
                 contentContainerStyle={styles.loadedRows}
-                contentInsetAdjustmentBehavior="always"
+                estimatedItemSize={101}
                 refreshControl={
                     <RefreshControl
                         refreshing={
@@ -336,14 +335,31 @@ export default function LecturersCard(): JSX.Element {
                         }}
                     />
                 }
-                style={styles.pageBottom}
                 renderItem={({ item, index }) => (
-                    <React.Fragment key={index}>
+                    <View
+                        key={index}
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{
+                            overflow: 'hidden',
+                            borderTopStartRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderTopEndRadius:
+                                index === 0 ? theme.radius.md : 0,
+                            borderBottomStartRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                            borderBottomEndRadius:
+                                index === lecturers.length - 1
+                                    ? theme.radius.md
+                                    : 0,
+                        }}
+                    >
                         <LecturerRow item={item} />
                         {index !== lecturers.length - 1 && (
                             <Divider iosPaddingLeft={16} />
                         )}
-                    </React.Fragment>
+                    </View>
                 )}
             />
         ) : (
@@ -445,12 +461,9 @@ export default function LecturersCard(): JSX.Element {
     }
 
     return (
-        <View
+        <SafeAreaView
             // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-                ...styles.page,
-                marginTop: Platform.OS === 'ios' ? headerHeight + 10 : 10,
-            }}
+            style={styles.page}
         >
             {userKind === USER_GUEST ? (
                 <ErrorView title={guestError} />
@@ -496,7 +509,7 @@ export default function LecturersCard(): JSX.Element {
             ) : (
                 <FilterSectionList />
             )}
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -505,10 +518,10 @@ const stylesheet = createStyleSheet((theme) => ({
         marginHorizontal: theme.margins.page,
         paddingBottom: theme.margins.bottomSafeArea,
     },
+
     loadedRows: {
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.md,
-        marginHorizontal: theme.margins.page,
+        paddingBottom: theme.margins.bottomSafeArea,
+        paddingHorizontal: theme.margins.page,
     },
     loadingContainer: {
         alignItems: 'center',
@@ -517,9 +530,6 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     page: {
         flex: 1,
-    },
-    pageBottom: {
-        paddingBottom: theme.margins.bottomSafeArea,
     },
     pagePadding: {
         paddingHorizontal: theme.margins.page,
@@ -536,7 +546,7 @@ const stylesheet = createStyleSheet((theme) => ({
         right: 0,
         zIndex: 1,
     },
-    searchContainer: { flex: 1, gap: 10 },
+    searchContainer: { flex: 1, gap: 10, paddingTop: 10 },
     sectionHeader: {
         color: theme.colors.text,
         fontSize: 17,

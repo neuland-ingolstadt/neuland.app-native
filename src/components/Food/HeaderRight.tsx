@@ -11,8 +11,8 @@ export const FoodHeaderRight = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <Pressable
-            onPress={() => {
-                router.push('/foodPreferences')
+            onPressOut={() => {
+                router.navigate('/foodPreferences')
             }}
             hitSlop={10}
             style={styles.headerButton}

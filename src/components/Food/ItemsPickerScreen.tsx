@@ -1,10 +1,10 @@
 import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
-import { FoodFilterContext } from '@/components/contexts'
 import allergenMap from '@/data/allergens.json'
 import flapMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { useNavigation } from 'expo-router'
-import React, { useContext, useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import {
@@ -43,10 +43,18 @@ const ItemsPickerScreen = (params: {
         )
     }
 
-    const { preferencesSelection, toggleSelectedPreferences } =
-        useContext(FoodFilterContext)
-    const { allergenSelection, toggleSelectedAllergens } =
-        useContext(FoodFilterContext)
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const toggleSelectedPreferences = useFoodFilterStore(
+        (state) => state.toggleSelectedPreferences
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const toggleSelectedAllergens = useFoodFilterStore(
+        (state) => state.toggleSelectedAllergens
+    )
 
     filteredEntries.sort((a, b) => a.title.localeCompare(b.title))
 
@@ -75,7 +83,10 @@ const ItemsPickerScreen = (params: {
     }, [navigation, isDark])
 
     return (
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            contentContainerStyle={styles.contentContainer}
+        >
             <View style={styles.container}>
                 <MultiSectionPicker
                     elements={filteredEntries}
@@ -109,6 +120,9 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         justifyContent: 'center',
         width: '100%',
+    },
+    contentContainer: {
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     filteredText: {
         alignSelf: 'center',

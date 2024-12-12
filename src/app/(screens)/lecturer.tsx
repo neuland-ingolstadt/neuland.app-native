@@ -1,8 +1,7 @@
 import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections } from '@/types/components'
-import { type NormalizedLecturer } from '@/types/utils'
-import { Buffer } from 'buffer/'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
@@ -10,11 +9,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
-    const { lecturerEntry } = useLocalSearchParams<{ lecturerEntry: string }>()
-    const lecturer: NormalizedLecturer | undefined =
-        lecturerEntry != null
-            ? JSON.parse(Buffer.from(lecturerEntry, 'base64').toString())
-            : undefined
+    const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
     const { t } = useTranslation('common')
 
     const validEmail =

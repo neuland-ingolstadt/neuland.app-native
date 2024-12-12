@@ -1,13 +1,10 @@
 import { MapContext } from '@/contexts/map'
-import BottomSheet, {
-    BottomSheetTextInput,
-    BottomSheetView,
-} from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import Color from 'color'
 import { type FeatureCollection } from 'geojson'
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
     useAnimatedStyle,
@@ -81,8 +78,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             enableDynamicSizing={false}
             handleIndicatorStyle={styles.indicator}
         >
-            <BottomSheetView style={styles.page}>
-                <BottomSheetView style={styles.inputContainer}>
+            <View style={styles.page}>
+                <View style={styles.inputContainer}>
                     <BottomSheetTextInput
                         ref={textInputRef}
                         style={styles.textInput}
@@ -127,7 +124,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                             </Text>
                         </Pressable>
                     </Animated.View>
-                </BottomSheetView>
+                </View>
 
                 {searchFocused &&
                     localSearch === '' &&
@@ -161,7 +158,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
                         <AttributionLink />
                     </>
                 )}
-            </BottomSheetView>
+            </View>
         </BottomSheet>
     )
 }

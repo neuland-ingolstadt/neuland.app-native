@@ -1,11 +1,11 @@
 import FormList from '@/components/Universal/FormList'
-import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -13,7 +13,9 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 const LinkScreen = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const { addRecentQuicklink } = useContext(PreferencesContext)
+    const addRecentQuicklink = usePreferencesStore(
+        (state) => state.addRecentQuicklink
+    )
     const typedQuicklinks = quicklinks as Quicklink[]
 
     const linkPress = async (key: string, url: string): Promise<void> => {
@@ -51,7 +53,7 @@ const LinkScreen = (): JSX.Element => {
     const sections = generateSections(typedQuicklinks)
 
     return (
-        <>
+        <View>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>
                     {t('pages.quicklinks.title')}
@@ -60,7 +62,7 @@ const LinkScreen = (): JSX.Element => {
             <View style={styles.page}>
                 <FormList sections={sections} rowStyle={styles.formlistRow} />
             </View>
-        </>
+        </View>
     )
 }
 

@@ -80,9 +80,9 @@
         "webmail": "E-Mail",
         "studVer": "StudVer",
         "marketplace": "Marktplatz",
-        "myTHI": "MyTHI",
         "library": "Bibliothek",
-        "thi": "THI"
+        "thi": "THI",
+        "press": "PressReader"
     },
     "pages": {
         "quicklinks": {
@@ -94,9 +94,9 @@
                 "webmail": "E-Mail",
                 "studVer": "Studierendenvertretung",
                 "marketplace": "Marktplatz",
-                "myTHI": "MyTHI",
                 "library": "Bibliothekskatalog",
-                "thi": "THI Website"
+                "thi": "THI Website",
+                "press": "PressReader"
             },
             "more": "Mehr"
         },

@@ -1,7 +1,7 @@
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
-import PopUpCard from '@/components/Cards/PopUpCard'
+import PopUpCard from '@/components/Cards/AnnouncementCard'
 import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
@@ -12,17 +12,11 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, LayoutAnimation, Platform, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function HomeRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
-    const { styles } = useStyles(stylesheet)
-    const safeArea = useSafeAreaInsets()
-    const topInset = safeArea.top
-    const hasDynamicIsland = Platform.OS === 'ios' && topInset > 50
-    const paddingTop = hasDynamicIsland ? topInset : 0
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
@@ -37,22 +31,15 @@ export default function HomeRootScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
 
-            <View
-                style={{
-                    ...styles.header,
-                    paddingTop,
-                }}
-            >
-                <WorkaroundStack
-                    name={'dashboard'}
-                    titleKey={'navigation.dashboard'}
-                    component={isPageOpen ? HomeScreen : () => <></>}
-                    largeTitle={true}
-                    transparent={!hasDynamicIsland}
-                    headerRightElement={IndexHeaderRight}
-                    androidFallback
-                />
-            </View>
+            <WorkaroundStack
+                name={'dashboard'}
+                titleKey={'navigation.dashboard'}
+                component={isPageOpen ? HomeScreen : () => <></>}
+                largeTitle={true}
+                transparent={true}
+                headerRightElement={IndexHeaderRight}
+                androidFallback
+            />
         </>
     )
 }
@@ -158,11 +145,6 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingTop: 6,
     },
     errorContainer: { flex: 1, paddingTop: 110 },
-
-    header: {
-        backgroundColor: theme.colors.card,
-        flex: 1,
-    },
     item: {
         gap: 0,
         marginHorizontal: theme.margins.page,

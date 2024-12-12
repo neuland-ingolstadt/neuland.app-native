@@ -1,10 +1,11 @@
 import { type CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
+import { type CLEvents } from '@/types/neuland-api'
 import {
     formatFriendlyDateTimeRange,
     formatFriendlyRelativeTime,
 } from '@/utils/date-utils'
-import { Buffer } from 'buffer/'
 import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +20,9 @@ const CLEventRow = ({
     event: CampusLifeEventFieldsFragment
 }): JSX.Element => {
     const { styles } = useStyles(stylesheet)
+    const setSelectedClEvent = useCLParamsStore(
+        (state) => state.setSelectedClEvent
+    )
     const { t, i18n } = useTranslation('common')
     let begin = null
     if (event.startDateTime != null) {
@@ -27,12 +31,9 @@ const CLEventRow = ({
     const end = event.endDateTime != null ? new Date(event.endDateTime) : null
 
     const onPressRow = (): void => {
-        const base64Event = Buffer.from(JSON.stringify(event)).toString(
-            'base64'
-        )
+        setSelectedClEvent(event as CLEvents)
         router.navigate({
             pathname: '/clEvent',
-            params: { clEventEntry: base64Event },
         })
     }
     return (

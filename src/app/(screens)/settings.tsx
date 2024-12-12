@@ -1,4 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
+import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import { Avatar, NameBox } from '@/components/Settings'
 import GradesButton from '@/components/Settings/GradesButton'
@@ -11,6 +12,8 @@ import { queryClient } from '@/components/provider'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
 import { type MaterialIcon } from '@/types/material-icons'
 import {
@@ -49,7 +52,6 @@ import Animated, {
     withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Shimmer from 'react-native-shimmer'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Settings(): JSX.Element {
@@ -76,6 +78,8 @@ export default function Settings(): JSX.Element {
     const username =
         userKind === USER_EMPLOYEE && SecureStore.getItem('username')
     const { color, randomizeColor } = useRandomColor()
+    const resetPreferences = usePreferencesStore((state) => state.reset)
+    const resetFood = useFoodFilterStore((state) => state.reset)
 
     useEffect(() => {
         const { bottomBoundY, topBoundY } = getBounds()
@@ -157,6 +161,8 @@ export default function Settings(): JSX.Element {
                     text: t('profile.logout.alert.confirm'),
                     style: 'destructive',
                     onPress: () => {
+                        resetPreferences()
+                        resetFood()
                         performLogout(
                             toggleUserKind,
                             resetOrder,
@@ -334,28 +340,6 @@ export default function Settings(): JSX.Element {
     const logoInactiveOpacity = isBouncing ? 0 : 1
     const logoActiveOpacity = isBouncing ? 1 : 0
     const logoActiveHeight = isBouncing ? 18 : 0
-
-    const ShimmerEffect = (props: {
-        children: React.ReactNode
-    }): JSX.Element => {
-        return Platform.OS === 'ios' ? (
-            <Shimmer
-                style={{ ...styles.shimmerContainer }}
-                pauseDuration={5000}
-                duration={1500}
-                animationOpacity={0.8}
-                animating={true}
-            >
-                {props.children}
-            </Shimmer>
-        ) : (
-            <View
-                style={{ ...styles.shimmerContainer, ...styles.androidShimmer }}
-            >
-                {props.children}
-            </View>
-        )
-    }
 
     return (
         <ScrollView
@@ -631,9 +615,13 @@ export default function Settings(): JSX.Element {
                     })}
                     hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
                 >
-                    <ShimmerEffect>
-                        <LogoTextSVG size={15} color={theme.colors.text} />
-                    </ShimmerEffect>
+                    <AnimatedLogoText
+                        dimensions={{
+                            logoWidth,
+                            logoHeight,
+                        }}
+                        speed={3.5}
+                    />
                 </Pressable>
             </Animated.View>
         </ScrollView>
@@ -641,9 +629,6 @@ export default function Settings(): JSX.Element {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    androidShimmer: {
-        opacity: 0.6,
-    },
     avatarText: {
         color: getContrastColor(theme.colors.primary),
         fontSize: 20,
@@ -696,10 +681,7 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingVertical: 20,
     },
     nameOuterContainer: { flexDirection: 'column', flex: 1 },
-    shimmerContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-    },
+
     whobbleContainer: {
         alignItems: 'center',
         paddingTop: 20,

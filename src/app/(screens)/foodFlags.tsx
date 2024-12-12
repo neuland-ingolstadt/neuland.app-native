@@ -9,6 +9,7 @@ export default function Screen(): JSX.Element {
             titleKey={'navigation.flags'}
             component={ItemsPickerScreen}
             params={{ type: 'flags' }}
+            androidFallback
         />
     )
 }

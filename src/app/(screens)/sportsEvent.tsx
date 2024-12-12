@@ -1,19 +1,12 @@
-import {
-    type UniversitySportsFieldsFragment,
-    type WeekdayType,
-} from '@/__generated__/gql/graphql'
+import { type WeekdayType } from '@/__generated__/gql/graphql'
 import FormList from '@/components/Universal/FormList'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
-import {
-    useFocusEffect,
-    useLocalSearchParams,
-    useNavigation,
-} from 'expo-router'
+import { useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
@@ -21,13 +14,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
-    const { sportsEventEntry } = useLocalSearchParams<{
-        sportsEventEntry: string
-    }>()
-    const sportsEvent: UniversitySportsFieldsFragment | undefined =
-        sportsEventEntry != null
-            ? JSON.parse(Buffer.from(sportsEventEntry, 'base64').toString())
-            : undefined
+
+    const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
     const { t, i18n } = useTranslation('common')
     const navigation = useNavigation()
     useFocusEffect(

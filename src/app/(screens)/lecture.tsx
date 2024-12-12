@@ -7,18 +7,12 @@ import ShareCard from '@/components/Timetable/ShareCard'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections, type SectionGroup } from '@/types/components'
-import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
-import {
-    useFocusEffect,
-    useLocalSearchParams,
-    useNavigation,
-    useRouter,
-} from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment'
 import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,29 +24,27 @@ export default function TimetableDetails(): JSX.Element {
     const router = useRouter()
     const navigation = useNavigation()
     const { styles } = useStyles(stylesheet)
-    const { lecture: lectureParam } = useLocalSearchParams()
     const { t } = useTranslation('timetable')
-    const lectureString = Array.isArray(lectureParam)
-        ? lectureParam[0]
-        : lectureParam
     const shareRef = useRef<ViewShot>(null)
-    const lecture: FriendlyTimetableEntry | null =
-        lectureString === undefined
-            ? null
-            : JSON.parse(Buffer.from(lectureString, 'base64').toString())
+    const lecture = useRouteParamsStore((state) => state.selectedLecture)
 
     useFocusEffect(
         useCallback(() => {
-            if (lecture === null) {
-                return
+            if (lecture === undefined) {
+                navigation.setOptions({
+                    headerRight: () => undefined,
+                })
+            } else {
+                navigation.setOptions({
+                    headerRight: () => (
+                        <ShareHeaderButton onPress={shareEvent} />
+                    ),
+                })
             }
-            navigation.setOptions({
-                headerRight: () => <ShareHeaderButton onPress={shareEvent} />,
-            })
         }, [])
     )
 
-    if (lecture === null) {
+    if (lecture === undefined) {
         return <ErrorView title="Cannot display lecture" />
     }
 
@@ -96,7 +88,7 @@ export default function TimetableDetails(): JSX.Element {
                 title: t(titleKey),
                 icon: chevronIcon,
                 onPress: () => {
-                    router.push({
+                    router.navigate({
                         pathname: '/webView',
                         params: {
                             title: t(titleKey),
@@ -254,7 +246,7 @@ export default function TimetableDetails(): JSX.Element {
                                             return (
                                                 <React.Fragment key={i}>
                                                     <Pressable
-                                                        onPress={() => {
+                                                        onPressOut={() => {
                                                             router.dismissTo({
                                                                 pathname:
                                                                     '/(tabs)/map',

@@ -1,8 +1,8 @@
-import { PreferencesContext } from '@/components/contexts'
 import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -13,9 +13,13 @@ import BaseCard from './BaseCard'
 const LinkCard = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-    const { recentQuicklinks, addRecentQuicklink } =
-        useContext(PreferencesContext)
 
+    const recentQuicklinks = usePreferencesStore(
+        (state) => state.recentQuicklinks
+    )
+    const addRecentQuicklink = usePreferencesStore(
+        (state) => state.addRecentQuicklink
+    )
     const userQuicklinks = recentQuicklinks
         .map((title) => quicklinks.find((quicklink) => quicklink.key === title))
         .filter((quicklink) => quicklink !== undefined)

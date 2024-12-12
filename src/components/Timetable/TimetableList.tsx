@@ -3,6 +3,7 @@ import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types
 import DragDropView from '@/components/Exclusive/DragView'
 import Divider from '@/components/Universal/Divider'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,
@@ -12,7 +13,6 @@ import {
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { inverseColor } from '@/utils/ui-utils'
-import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
@@ -31,7 +31,7 @@ export type FlashListItems = FriendlyTimetableEntry | Date | string
 
 export default function TimetableList({
     // eslint-disable-next-line react/prop-types
-    friendlyTimetable,
+    timetable,
     // eslint-disable-next-line react/prop-types
     exams,
 }: ITimetableViewProps): JSX.Element {
@@ -40,7 +40,6 @@ export default function TimetableList({
      */
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    const timetable = friendlyTimetable
 
     /**
      * Hooks
@@ -50,6 +49,12 @@ export default function TimetableList({
     const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
     const { t } = useTranslation('timetable')
     const { styles, theme } = useStyles(stylesheet)
+    const setSelectedLecture = useRouteParamsStore(
+        (state) => state.setSelectedLecture
+    )
+    const setSelectedExam = useRouteParamsStore(
+        (state) => state.setSelectedExam
+    )
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -93,14 +98,8 @@ export default function TimetableList({
      * Functions
      */
     function showEventDetails(entry: FriendlyTimetableEntry): void {
-        const base64Event = Buffer.from(JSON.stringify(entry)).toString(
-            'base64'
-        )
-
-        router.navigate({
-            pathname: '/lecture',
-            params: { lecture: base64Event },
-        })
+        setSelectedLecture(entry)
+        router.navigate('/lecture')
     }
 
     function renderSectionHeader(title: Date): JSX.Element {
@@ -180,12 +179,9 @@ export default function TimetableList({
         )
     }
     function renderExamItem({ exam }: { exam: Exam }): JSX.Element {
-        const base64Event = Buffer.from(JSON.stringify(exam)).toString('base64')
         const navigateToPage = (): void => {
-            router.push({
-                pathname: '/exam',
-                params: { examEntry: base64Event },
-            })
+            setSelectedExam(exam)
+            router.navigate('/exam')
         }
         return (
             <DragDropView

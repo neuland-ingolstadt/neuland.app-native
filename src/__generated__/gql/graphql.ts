@@ -624,6 +624,8 @@ export type AnnouncementFieldsFragment = {
     endDateTime: Date
     priority: number
     url?: string | null
+    platform: Array<Platform>
+    userKind: Array<UserKind>
     title: {
         __typename?: 'MultiLanguageString'
         de?: string | null
@@ -855,6 +857,14 @@ export const AnnouncementFieldsFragmentDoc = {
                         name: { kind: 'Name', value: 'priority' },
                     },
                     { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'platform' },
+                    },
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userKind' },
+                    },
                 ],
             },
         },
@@ -1495,6 +1505,14 @@ export const AppAnnouncementsDocument = {
                         name: { kind: 'Name', value: 'priority' },
                     },
                     { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'platform' },
+                    },
+                    {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'userKind' },
+                    },
                 ],
             },
         },

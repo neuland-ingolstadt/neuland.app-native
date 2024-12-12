@@ -23,6 +23,8 @@ export const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
         endDateTime
         priority
         url
+        platform
+        userKind
     }
 `)
 

@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'https://api.dev.neuland.app/graphql'
+schema: 'https://api.neuland.app/graphql'
 documents: 'src/api/**/*.ts'
 generates:
     'src/__generated__/gql/':

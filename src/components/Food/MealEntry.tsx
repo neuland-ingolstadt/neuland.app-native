@@ -1,10 +1,11 @@
-import { humanLocations, shareMeal } from '@/app/(screens)/meal'
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import PlatformIcon from '@/components/Universal/Icon'
-import { FoodFilterContext, UserKindContext } from '@/components/contexts'
+import { UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Meal } from '@/types/neuland-api'
 import {
@@ -13,10 +14,11 @@ import {
     formatPrice,
     getUserSpecificLabel,
     getUserSpecificPrice,
+    humanLocations,
     mealName,
+    shareMeal,
 } from '@/utils/food-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Buffer } from 'buffer/'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
@@ -39,8 +41,13 @@ export const MealEntry = ({
     meal: Meal
     index: number
 }): JSX.Element => {
-    const { preferencesSelection, allergenSelection, foodLanguage } =
-        useContext(FoodFilterContext)
+    const preferencesSelection = useFoodFilterStore(
+        (state) => state.preferencesSelection
+    )
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
     const { t, i18n } = useTranslation('food')
     const { styles, theme } = useStyles(stylesheet)
     const userAllergens = convertRelevantAllergens(
@@ -55,7 +62,9 @@ export const MealEntry = ({
         preferencesSelection,
         i18n.language
     )
-
+    const setSelectedMeal = useRouteParamsStore(
+        (state) => state.setSelectedMeal
+    )
     useEffect(() => {}, [userKind])
     const price = getUserSpecificPrice(meal, userKind ?? 'guest')
     const label =
@@ -81,6 +90,12 @@ export const MealEntry = ({
 
     const [key, setKey] = useState(Math.random())
 
+    const itemPressed = (): void => {
+        setSelectedMeal(meal)
+        router.navigate({
+            pathname: '/meal',
+        })
+    }
     return (
         <DragDropView
             mode="drag"
@@ -126,17 +141,7 @@ export const MealEntry = ({
                                 : undefined,
                     },
                 ]}
-                onPreviewPress={() => {
-                    const base64Event = Buffer.from(
-                        JSON.stringify(meal)
-                    ).toString('base64')
-                    router.push({
-                        pathname: '/meal',
-                        params: {
-                            foodEntry: base64Event,
-                        },
-                    })
-                }}
+                onPreviewPress={itemPressed}
                 onPress={(e) => {
                     if (
                         e.nativeEvent.name === t('misc.share', { ns: 'common' })
@@ -150,17 +155,7 @@ export const MealEntry = ({
                 }}
             >
                 <Pressable
-                    onPress={() => {
-                        const base64Event = Buffer.from(
-                            JSON.stringify(meal)
-                        ).toString('base64')
-                        router.push({
-                            pathname: '/meal',
-                            params: {
-                                foodEntry: base64Event,
-                            },
-                        })
-                    }}
+                    onPress={itemPressed}
                     delayLongPress={300}
                     onLongPress={() => {}}
                     style={styles.pressable}

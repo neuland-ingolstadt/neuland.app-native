@@ -59,31 +59,32 @@ const BaseCard: React.FC<BaseCardProps> = ({
     const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
     const dynamicTitle = foodKeys.includes(title) ? 'food' : title
     return (
-        <Pressable
-            disabled={onPressRoute == null}
-            onPress={() => {
+        <ContextMenu
+            // @ts-expect-error cannot verify that title is a valid key
+            title={t('cards.titles.' + title)}
+            actions={actions}
+            onPress={(e) => {
+                e.nativeEvent.name === t('contextMenu.settings') &&
+                    router.navigate('/dashboard')
+                e.nativeEvent.name === t('contextMenu.hide') &&
+                    hideDashboardEntry(title)
+                e.nativeEvent.name === t('contextMenu.reset') &&
+                    resetOrder(userKind ?? 'guest')
+            }}
+            onPreviewPress={() => {
                 onPressRoute != null &&
                     router.navigate(onPressRoute as RelativePathString)
             }}
-            delayLongPress={300}
-            onLongPress={() => {}}
+            disabled={Platform.OS === 'android'}
         >
-            <ContextMenu
-                // @ts-expect-error cannot verify that title is a valid key
-                title={t('cards.titles.' + title)}
-                actions={actions}
-                onPress={(e) => {
-                    e.nativeEvent.name === t('contextMenu.settings') &&
-                        router.navigate('/dashboard')
-                    e.nativeEvent.name === t('contextMenu.hide') &&
-                        hideDashboardEntry(title)
-                    e.nativeEvent.name === t('contextMenu.reset') &&
-                        resetOrder(userKind ?? 'guest')
-                }}
-                onPreviewPress={() => {
+            <Pressable
+                disabled={onPressRoute == null}
+                onPress={() => {
                     onPressRoute != null &&
                         router.navigate(onPressRoute as RelativePathString)
                 }}
+                delayLongPress={300}
+                onLongPress={() => {}}
             >
                 <View style={styles.card}>
                     <View style={styles.titleView}>
@@ -122,8 +123,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
                     </View>
                     {children != null && <>{children}</>}
                 </View>
-            </ContextMenu>
-        </Pressable>
+            </Pressable>
+        </ContextMenu>
     )
 }
 

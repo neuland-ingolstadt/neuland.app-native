@@ -6,10 +6,10 @@ import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
 import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
-import { FoodFilterContext } from '@/components/contexts'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type FormListSections } from '@/types/components'
 import { useRouter } from 'expo-router'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -46,14 +46,18 @@ export default function FoodPreferences(): JSX.Element {
     const { styles } = useStyles(stylesheet)
     const router = useRouter()
 
-    const {
-        selectedRestaurants,
-        toggleSelectedRestaurant,
-        showStatic,
-        setShowStatic,
-        foodLanguage,
-        toggleFoodLanguage,
-    } = useContext(FoodFilterContext)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const toggleSelectedRestaurant = useFoodFilterStore(
+        (state) => state.toggleSelectedRestaurant
+    )
+    const showStatic = useFoodFilterStore((state) => state.showStatic)
+    const setShowStatic = useFoodFilterStore((state) => state.setShowStatic)
+    const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+    const toggleFoodLanguage = useFoodFilterStore(
+        (state) => state.toggleFoodLanguage
+    )
 
     const sections: FormListSections[] = [
         {
@@ -63,14 +67,14 @@ export default function FoodPreferences(): JSX.Element {
                     title: t('preferences.formlist.allergens'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('/foodAllergens')
+                        router.navigate('/foodAllergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.push('/foodFlags')
+                        router.navigate('/foodFlags')
                     },
                 },
             ],

@@ -57,7 +57,7 @@ export default function CalendarPage(): JSX.Element {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         retry(failureCount, error) {
             if (error instanceof NoSessionError) {
-                router.push('/login')
+                router.navigate('/login')
                 return false
             }
             return failureCount < 2
@@ -90,7 +90,7 @@ export default function CalendarPage(): JSX.Element {
     return (
         <View
             style={{
-                ...styles.viewVertical,
+                ...styles.viewTop,
                 ...styles.pagerContainer,
             }}
         >
@@ -261,6 +261,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     footerContainer: {
         marginVertical: 10,
+        paddingBottom: theme.margins.bottomSafeArea,
     },
     footerText1: {
         color: theme.colors.labelColor,
@@ -289,7 +290,7 @@ const stylesheet = createStyleSheet((theme) => ({
     viewHorizontal: {
         paddingHorizontal: theme.margins.page,
     },
-    viewVertical: {
-        paddingVertical: theme.margins.page,
+    viewTop: {
+        paddingTop: theme.margins.page,
     },
 }))

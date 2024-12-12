@@ -231,6 +231,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     itemBlock: {
         backgroundColor: theme.colors.card,
+        borderRadius: theme.radius.md,
         paddingHorizontal: 16,
         paddingVertical: 13,
     },

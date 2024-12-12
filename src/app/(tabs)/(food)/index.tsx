@@ -3,8 +3,8 @@ import { MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/AllergensBanner'
 import { FoodHeaderRight } from '@/components/Food/HeaderRight'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { FoodFilterContext } from '@/components/contexts'
 import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { type Food } from '@/types/neuland-api'
 import { networkError } from '@/utils/api-utils'
 import { loadFoodEntries } from '@/utils/food-utils'
@@ -13,13 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
-import React, {
-    useContext,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Animated,
@@ -38,8 +32,14 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export function FoodScreen(): JSX.Element {
     const { styles } = useStyles(stylesheet)
     const [selectedDay, setSelectedDay] = useState<number>(0)
-    const { selectedRestaurants, showStatic, allergenSelection } =
-        useContext(FoodFilterContext)
+    const selectedRestaurants = useFoodFilterStore(
+        (state) => state.selectedRestaurants
+    )
+    const showStatic = useFoodFilterStore((state) => state.showStatic)
+    const allergenSelection = useFoodFilterStore(
+        (state) => state.allergenSelection
+    )
+
     const [data, setData] = useState<Food[]>([])
     const { t, i18n } = useTranslation('common')
     const {
