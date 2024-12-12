@@ -37,7 +37,7 @@ export const FoodHeaderRight = (): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
-        marginHorizontal: 0,
+        marginHorizontal: 14,
     },
     icon: {
         color: theme.colors.text,

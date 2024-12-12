@@ -3,7 +3,13 @@ import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { type ThiNews } from '@/types/thi-api'
 import { useQuery } from '@tanstack/react-query'
-import React, { useContext, useLayoutEffect, useRef } from 'react'
+import React, {
+    useCallback,
+    useContext,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Image, Linking, Pressable, Text, View } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
@@ -23,17 +29,30 @@ const NewsCard: React.FC = () => {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
         enabled: userKind !== USER_GUEST,
     })
-    const [cardWidth, setCardWidth] = React.useState(
-        Dimensions.get('window').width
-    )
-    useLayoutEffect(() => {
-        if (ref.current != null) {
-            // @ts-expect-error unstable_getBoundingClientRect is not in the types
-            const width = ref.current.unstable_getBoundingClientRect()
-                .width as number
-            setCardWidth(width)
-        }
+
+    const getRelativeWidth = (width: number): number => {
+        return width < 800 ? width - 26 : width / 2 - 26
+    }
+
+    const getInitialWidth = (): number => {
+        const width = Dimensions.get('window').width
+        return getRelativeWidth(width)
+    }
+
+    const [cardWidth, setCardWidth] = useState(getInitialWidth)
+
+    const updateWidth = useCallback(() => {
+        const width = Dimensions.get('window').width
+        setCardWidth(getRelativeWidth(width))
     }, [])
+
+    useLayoutEffect(() => {
+        const subscription = Dimensions.addEventListener('change', updateWidth)
+
+        return () => {
+            subscription.remove()
+        }
+    }, [updateWidth])
 
     const renderEvent = (event: ThiNews): JSX.Element => {
         return (
@@ -120,9 +139,9 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     imageContainer: {
         borderRadius: theme.radius.sm,
-        height: 80,
+        height: 85,
         resizeMode: 'cover',
-        width: '35%',
+        width: '37%',
     },
 }))
 

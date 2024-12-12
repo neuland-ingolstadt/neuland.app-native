@@ -4,7 +4,6 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import { loadTimetable } from '@/app/(tabs)/(timetable)/timetable'
 import ErrorView from '@/components/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
@@ -27,6 +26,7 @@ import {
     getCenterSingle,
     getIcon,
 } from '@/utils/map-utils'
+import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
@@ -747,7 +747,6 @@ const MapScreen = (): JSX.Element => {
                             : undefined
                     }
                 >
-                    {/* @ts-expect-error - The type definitions are incorrect */}
                     <MapLibreGL.Images
                         nativeAssetImages={['pin']}
                         images={{
@@ -899,7 +898,6 @@ const MapScreen = (): JSX.Element => {
                     </Pressable>
                 </Animated.View>
             )}
-
             <MapBottomSheet
                 bottomSheetRef={bottomSheetRef}
                 currentPosition={currentPosition}

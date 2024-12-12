@@ -1,5 +1,5 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { type ITimetableViewProps } from '@/types/timetable'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import {
     CalendarBody,

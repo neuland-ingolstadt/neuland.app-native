@@ -6,7 +6,7 @@ import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
+import { type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
@@ -16,11 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { Linking, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export interface ITimetableViewProps {
-    timetable: FriendlyTimetableEntry[]
-    exams: Exam[]
-}
-export type CalendarMode = '3days' | 'list'
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
     const timetable = await getFriendlyTimetable(new Date(), true)
     if (timetable.length === 0) {
@@ -29,7 +24,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
     return timetable
 }
 
-export default function TimetableScreen(): JSX.Element {
+function TimetableScreen(): JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     const timetableMode = usePreferencesStore((state) => state.timetableMode)
@@ -141,6 +136,8 @@ export default function TimetableScreen(): JSX.Element {
         }
     }
 }
+
+export default TimetableScreen
 
 const stylesheet = createStyleSheet((theme) => ({
     loadingView: {

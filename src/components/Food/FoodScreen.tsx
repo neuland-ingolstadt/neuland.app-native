@@ -1,7 +1,6 @@
 import ErrorView from '@/components/Error/ErrorView'
 import { MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/AllergensBanner'
-import { FoodHeaderRight } from '@/components/Food/HeaderRight'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
@@ -11,9 +10,7 @@ import { loadFoodEntries } from '@/utils/food-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
-import { useNavigation } from 'expo-router'
-import Head from 'expo-router/head'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     Animated,
@@ -21,7 +18,6 @@ import {
     Platform,
     Pressable,
     RefreshControl,
-    SafeAreaView,
     ScrollView,
     Text,
     View,
@@ -29,7 +25,7 @@ import {
 import PagerView from 'react-native-pager-view'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export function FoodScreen(): JSX.Element {
+function FoodScreen(): JSX.Element {
     const { styles } = useStyles(stylesheet)
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const selectedRestaurants = useFoodFilterStore(
@@ -158,8 +154,9 @@ export function FoodScreen(): JSX.Element {
     const showAllergensBanner =
         allergenSelection.length === 1 &&
         allergenSelection[0] === 'not-configured'
+
     return (
-        <SafeAreaView style={{ ...styles.page }}>
+        <>
             {isLoading && !isRefetchingByUser ? (
                 <View style={styles.loadingContainer}>
                     <LoadingIndicator />
@@ -267,39 +264,13 @@ export function FoodScreen(): JSX.Element {
                     </PagerView>
                 </>
             ) : null}
-        </SafeAreaView>
-    )
-}
-
-export default function FoodRootScreen(): JSX.Element {
-    const [isPageOpen, setIsPageOpen] = useState(false)
-    const navigation = useNavigation()
-    const { t } = useTranslation('navigation')
-    useEffect(() => {
-        setIsPageOpen(true)
-    }, [])
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <FoodHeaderRight />,
-        })
-    }, [navigation])
-
-    return (
-        <>
-            <Head>
-                {/* eslint-disable-next-line react-native/no-raw-text */}
-                <title>{t('navigation.food')}</title>
-                <meta name="Food" content="Meal plan for the canteens" />
-                <meta property="expo:handoff" content="true" />
-                <meta property="expo:spotlight" content="true" />
-            </Head>
-            {isPageOpen ? <FoodScreen /> : <></>}
         </>
     )
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+export default FoodScreen
+
+export const stylesheet = createStyleSheet((theme) => ({
     animtedContainer: {
         borderBottomColor: theme.colors.border,
         width: '100%',

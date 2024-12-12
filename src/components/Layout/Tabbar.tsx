@@ -25,7 +25,7 @@ export default function TabLayout(): JSX.Element {
                               .hex()
                     : undefined
             }
-            translucent={false}
+            translucent
             // eslint-disable-next-line react-native/no-inline-styles
             tabLabelStyle={{
                 fontSize: 11,
@@ -59,7 +59,7 @@ export default function TabLayout(): JSX.Element {
                 }}
             />
             <Tabs.Screen
-                name="(timetable)"
+                name="timetable"
                 options={{
                     title: t('navigation.timetable'),
                     tabBarIcon: ({ focused }: { focused: boolean }) =>
@@ -83,7 +83,7 @@ export default function TabLayout(): JSX.Element {
                 }}
             />
             <Tabs.Screen
-                name="(food)"
+                name="food"
                 options={{
                     title: t('navigation.food'),
                     tabBarIcon: ({ focused }: { focused: boolean }) =>

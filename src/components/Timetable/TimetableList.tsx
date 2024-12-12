@@ -1,9 +1,9 @@
-import { type ITimetableViewProps } from '@/app/(tabs)/(timetable)/timetable'
 import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types
 import DragDropView from '@/components/Exclusive/DragView'
 import Divider from '@/components/Universal/Divider'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { type ITimetableViewProps } from '@/types/timetable'
 import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     formatFriendlyDate,

@@ -11,6 +11,12 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "@bottom-tabs/react-navigation@0.7.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "parents": "neuland"
+    },
     "@expo/vector-icons@14.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/vector-icons",
@@ -35,7 +41,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-alpha.28": {
+    "@maplibre/maplibre-react-native@10.0.0-beta.8": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -53,13 +59,13 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-navigation/native@7.0.13": {
+    "@react-navigation/native@7.0.14": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-navigation/stack@7.0.18": {
+    "@react-navigation/stack@7.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
@@ -233,7 +239,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@23.16.8": {
+    "i18next@24.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -269,10 +275,16 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@15.1.4": {
+    "react-i18next@15.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "react-native-bottom-tabs@0.7.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "parents": "neuland"
     },
     "react-native-calendars@1.1307.0": {
@@ -335,13 +347,7 @@
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-paper@5.12.5": {
-        "licenses": "MIT",
-        "repository": "https://github.com/callstack/react-native-paper",
-        "licenseUrl": "https://github.com/callstack/react-native-paper/raw/master/LICENSE.md",
-        "parents": "neuland"
-    },
-    "react-native-reanimated-carousel@3.5.1": {
+    "react-native-reanimated-carousel@4.0.0-canary.22": {
         "licenses": "MIT",
         "repository": "https://github.com/dohooo/react-native-reanimated-carousel",
         "licenseUrl": "https://github.com/dohooo/react-native-reanimated-carousel/raw/master/LICENSE",

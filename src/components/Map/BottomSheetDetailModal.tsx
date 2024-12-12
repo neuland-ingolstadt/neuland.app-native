@@ -10,6 +10,7 @@ import Color from 'color'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Share, Text, View } from 'react-native'
+import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import { type SharedValue } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -82,6 +83,7 @@ export const BottomSheetDetailModal = ({
     modalSection,
 }: BottomSheetDetailModalProps): JSX.Element => {
     const { styles } = useStyles(stylesheet)
+    const tabBarHeight = useBottomTabBarHeight()
     return (
         <BottomSheetModalProvider>
             <BottomSheetModal
@@ -92,6 +94,7 @@ export const BottomSheetDetailModal = ({
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPositionModal}
                 handleIndicatorStyle={styles.indicator}
+                bottomInset={tabBarHeight}
             >
                 <BottomSheetView style={styles.contentContainer}>
                     <View style={styles.modalSectionHeaderContainer}>

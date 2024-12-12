@@ -19,19 +19,12 @@ export interface WorkaroundStackProps {
     headerRightElement?: ((props: any) => ReactNode) | undefined
     params?: any
     androidFallback?: boolean
+    fallback?: boolean
 }
 
 /*
- * This is a generic stack used as workaround for missing or broken features in expo-router
- * We create a second (react-navigation) stack and nest it into the first (expo-router) hidden stack
- * This is needed to have a large title on iOS, search bar and other features
- * @param name - name of the stack
- * @param titleKey - translation key for the title
- * @param component - component to render
- * @param largeTitle - whether the header should be large
- * @param headerRightElement - element to render on the right side of the header
- * @param params - params to pass to the component
- * @returns JSX.Element
+ * This is a generic stack used as workaround for missing or broken features in expo-router or bottom-tabs.
+ * It can be used as a drop-in replacement for the native stack navigator.
  */
 function WorkaroundStack({
     name,
@@ -43,13 +36,13 @@ function WorkaroundStack({
     headerSearchBarOptions = undefined,
     params = {},
     androidFallback = false,
+    fallback = false,
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()
     const { styles, theme } = useStyles(stylesheet)
-    // When using the native stack on Android, the header button is invisible. This is another workaround in the workaround.
-    if (Platform.OS === 'android' && androidFallback) {
+    if ((Platform.OS === 'android' && androidFallback) || fallback) {
         return (
             <StackAndroid.Navigator>
                 <StackAndroid.Screen
@@ -66,7 +59,6 @@ function WorkaroundStack({
                             backgroundColor:
                                 styles.headerBackground.backgroundColor,
                         },
-
                         headerTitleStyle: { color: theme.colors.text },
                     }}
                     initialParams={params}
