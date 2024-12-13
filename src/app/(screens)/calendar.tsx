@@ -1,5 +1,6 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
+import PagerView from '@/components/Layout/PagerView'
 import { CalendarRow, ExamRow } from '@/components/Rows/CalendarRow'
 import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -23,7 +24,6 @@ import {
     View,
     useWindowDimensions,
 } from 'react-native'
-import PagerView from '@/components/Layout/PagerView'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function CalendarPage(): JSX.Element {

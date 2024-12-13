@@ -1,7 +1,7 @@
 import ClEventsPage from '@/components/Events/ClEventsPage'
 import ClSportsPage from '@/components/Events/ClSportsPage'
-import ToggleRow from '@/components/Universal/ToggleRow'
 import PagerView from '@/components/Layout/PagerView'
+import ToggleRow from '@/components/Universal/ToggleRow'
 import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,
