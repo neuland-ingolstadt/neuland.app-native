@@ -1,16 +1,24 @@
 import FoodScreen from '@/components/Food/FoodScreen'
 import { FoodHeaderRight } from '@/components/Food/HeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export default function FoodRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     const { t } = useTranslation('navigation')
+    const navigation = useNavigation()
     useEffect(() => {
         setIsPageOpen(true)
     }, [])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <FoodHeaderRight />,
+        })
+    }, [navigation])
 
     return (
         <>
@@ -26,7 +34,6 @@ export default function FoodRootScreen(): JSX.Element {
                 titleKey={'navigation.food'}
                 component={isPageOpen ? FoodScreen : () => <></>}
                 headerRightElement={FoodHeaderRight}
-                fallback
             />
         </>
     )

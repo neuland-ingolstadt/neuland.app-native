@@ -80,6 +80,8 @@ import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
 
+const isIpadOS = Platform.OS === 'ios' && Platform.isPad
+
 const MapScreen = (): JSX.Element => {
     const tabBarHeight = useBottomTabBarHeight()
     const navigation = useNavigation()
@@ -699,8 +701,17 @@ const MapScreen = (): JSX.Element => {
         )
     }, [availableFilteredGeoJSON])
 
+    // get is ipados using react native dvice info
+
+    console.log('isIpadOS', isIpadOS)
     return (
-        <View style={{ ...styles.map, marginBottom: tabBarHeight }}>
+        <View
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+                ...styles.map,
+                marginBottom: !isIpadOS ? tabBarHeight : 0,
+            }}
+        >
             <>
                 {mapLoadState === LoadingState.ERROR && (
                     <View style={styles.errorContainer}>

@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, View } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
@@ -76,65 +77,72 @@ function TimetableScreen(): JSX.Element {
         )
     }
 
-    if (isLoading) return <LoadingView />
-    else if (isSuccess && timetable !== undefined && timetable.length > 0) {
-        if (timetableMode === 'list') {
-            return <TimetableList timetable={timetable} exams={exams ?? []} />
-        } else {
-            return <TimetableWeek timetable={timetable} exams={exams ?? []} />
-        }
-    } else {
-        if (isPaused && !isSuccess) {
-            return (
-                <ErrorView
-                    title={networkError}
-                    refreshing={isRefetchingByUser}
-                    onRefresh={() => {
-                        void refetchByUser()
-                    }}
-                />
-            )
-        } else if (
-            error?.message === '"Time table does not exist" (-202)' ||
-            error?.message === 'Timetable is empty'
-        ) {
-            return (
-                <ErrorView
-                    title={
-                        error.message !== 'Timetable is empty'
-                            ? t('error.empty.title')
-                            : t('error.empty.title2')
-                    }
-                    message={t('error.empty.message')}
-                    buttonText={t('error.empty.button')}
-                    icon={{
-                        ios: 'calendar.badge.exclamationmark',
-                        android: 'edit_calendar',
-                    }}
-                    onButtonPress={() => {
-                        void Linking.openURL('https://hiplan.thi.de/')
-                    }}
-                    refreshing={isRefetchingByUser}
-                    onRefresh={() => {
-                        void refetchByUser()
-                    }}
-                    isCritical={false}
-                />
-            )
-        } else if (userKind === USER_GUEST) {
-            return <ErrorView title={guestError} />
-        } else {
-            return (
-                <ErrorView
-                    title={error?.message ?? t('error.title', { ns: 'common' })}
-                    refreshing={isRefetchingByUser}
-                    onRefresh={() => {
-                        void refetchByUser()
-                    }}
-                />
-            )
-        }
-    }
+    return (
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.page} edges={['top']}>
+                {isLoading ? (
+                    <LoadingView />
+                ) : isSuccess &&
+                  timetable !== undefined &&
+                  timetable.length > 0 ? (
+                    timetableMode === 'list' ? (
+                        <TimetableList
+                            timetable={timetable}
+                            exams={exams ?? []}
+                        />
+                    ) : (
+                        <TimetableWeek
+                            timetable={timetable}
+                            exams={exams ?? []}
+                        />
+                    )
+                ) : isPaused && !isSuccess ? (
+                    <ErrorView
+                        title={networkError}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                    />
+                ) : error?.message === '"Time table does not exist" (-202)' ||
+                  error?.message === 'Timetable is empty' ? (
+                    <ErrorView
+                        title={
+                            error.message !== 'Timetable is empty'
+                                ? t('error.empty.title')
+                                : t('error.empty.title2')
+                        }
+                        message={t('error.empty.message')}
+                        buttonText={t('error.empty.button')}
+                        icon={{
+                            ios: 'calendar.badge.exclamationmark',
+                            android: 'edit_calendar',
+                        }}
+                        onButtonPress={() => {
+                            void Linking.openURL('https://hiplan.thi.de/')
+                        }}
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                        isCritical={false}
+                    />
+                ) : userKind === USER_GUEST ? (
+                    <ErrorView title={guestError} />
+                ) : (
+                    <ErrorView
+                        title={
+                            error?.message ?? t('error.title', { ns: 'common' })
+                        }
+                        refreshing={isRefetchingByUser}
+                        onRefresh={() => {
+                            void refetchByUser()
+                        }}
+                    />
+                )}
+            </SafeAreaView>
+        </SafeAreaProvider>
+    )
 }
 
 export default TimetableScreen
@@ -148,5 +156,8 @@ const stylesheet = createStyleSheet((theme) => ({
         justifyContent: 'center',
         position: 'absolute',
         width: '100%',
+    },
+    page: {
+        flex: 1,
     },
 }))

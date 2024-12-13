@@ -2,7 +2,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { trackEvent } from '@aptabase/react-native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { Platform, Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
@@ -80,7 +80,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
-        marginHorizontal: 12,
+        marginHorizontal: Platform.OS === 'android' ? 14 : 0,
     },
     icon: {
         color: theme.colors.text,

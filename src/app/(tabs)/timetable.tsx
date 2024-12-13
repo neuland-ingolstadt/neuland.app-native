@@ -19,7 +19,6 @@ export default function FoodRootScreen(): JSX.Element {
                 name={'dashboard'}
                 titleKey={'navigation.timetable'}
                 component={TimetableScreen}
-                fallback
             />
         </>
     )

@@ -19,9 +19,7 @@ export interface WorkaroundStackProps {
     headerRightElement?: ((props: any) => ReactNode) | undefined
     params?: any
     androidFallback?: boolean
-    fallback?: boolean
 }
-
 /*
  * This is a generic stack used as workaround for missing or broken features in expo-router or bottom-tabs.
  * It can be used as a drop-in replacement for the native stack navigator.
@@ -36,13 +34,12 @@ function WorkaroundStack({
     headerSearchBarOptions = undefined,
     params = {},
     androidFallback = false,
-    fallback = false,
 }: WorkaroundStackProps): JSX.Element {
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()
     const { styles, theme } = useStyles(stylesheet)
-    if ((Platform.OS === 'android' && androidFallback) || fallback) {
+    if (Platform.OS === 'android' && androidFallback) {
         return (
             <StackAndroid.Navigator>
                 <StackAndroid.Screen
