@@ -68,6 +68,7 @@ export default function TimetableList({
                             viewPosition: 0,
                         })
                     }}
+                    type="list"
                 />
             ),
             headerLeft: () => <HeaderLeft />,

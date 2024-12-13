@@ -11,6 +11,7 @@ interface PreferencesStore {
     appIcon: string | undefined
     unlockedAppIcons: string[]
     timetableMode: string | undefined
+    timetableDays: number
     selectedDate: Date
     recentQuicklinks: string[]
     setAccentColor: (language: string) => void
@@ -18,6 +19,7 @@ interface PreferencesStore {
     setAppIcon: (name: string) => void
     addUnlockedAppIcon: (name: string) => void
     setTimetableMode: (mode: string) => void
+    setTimetableDays: (mode: number) => void
     setSelectedDate: (date: Date) => void
     addRecentQuicklink: (quicklink: string) => void
     reset: () => void
@@ -30,6 +32,7 @@ const initialState: Omit<
     | 'setAppIcon'
     | 'addUnlockedAppIcon'
     | 'setTimetableMode'
+    | 'setTimetableDays'
     | 'setSelectedDate'
     | 'addRecentQuicklink'
     | 'reset'
@@ -39,6 +42,7 @@ const initialState: Omit<
     theme: 'auto',
     unlockedAppIcons: [],
     timetableMode: undefined,
+    timetableDays: 3,
     selectedDate: new Date(),
     recentQuicklinks: defaultQuicklinks,
 }
@@ -67,6 +71,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
             },
             setTimetableMode: (timetableMode: string) => {
                 set({ timetableMode })
+            },
+            setTimetableDays: (timetableDays: number) => {
+                set({ timetableDays })
             },
             setSelectedDate: (selectedDate: Date) => {
                 set({ selectedDate })
