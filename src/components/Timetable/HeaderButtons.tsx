@@ -74,7 +74,7 @@ export function HeaderRight({ setToday, type }: HeaderRightProps): JSX.Element {
                             timetableDays: days,
                         })
                     }}
-                    style={[styles.headerButton, { marginRight: 10 }]}
+                    style={[styles.headerButton, styles.timetableDaysBtn]}
                     hitSlop={10}
                     accessibilityLabel={t('button.timetableBack')}
                 >
@@ -121,6 +121,9 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     headerButton: {
         marginHorizontal: Platform.OS === 'android' ? 14 : 0,
+    },
+    timetableDaysBtn: {
+        marginRight: 10,
     },
     icon: {
         color: theme.colors.text,
