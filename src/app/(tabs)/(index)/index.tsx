@@ -1,7 +1,7 @@
 import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
-import PopUpCard from '@/components/Cards/AnnouncementCard'
+import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
@@ -131,7 +131,7 @@ function HomeScreen(): JSX.Element {
             estimatedItemSize={114}
             ListHeaderComponent={() =>
                 announcements != null ? (
-                    <PopUpCard data={announcements} />
+                    <AnnouncementCard data={announcements} />
                 ) : (
                     <></>
                 )

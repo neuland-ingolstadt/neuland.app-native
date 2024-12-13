@@ -30,7 +30,7 @@ const LinkCard = (): JSX.Element => {
     }
 
     return (
-        <BaseCard title="links" onPressRoute="links">
+        <BaseCard title="links" onPressRoute="/links">
             <View style={styles.cardsFilled}>
                 {userQuicklinks.map((link, index) => {
                     if (link === undefined) {

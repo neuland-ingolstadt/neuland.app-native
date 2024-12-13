@@ -146,7 +146,7 @@ const FoodCard = (): JSX.Element => {
     }, [selectedRestaurants])
 
     return (
-        <BaseCard title={foodCardTitle} onPressRoute="(tabs)/(food)">
+        <BaseCard title={foodCardTitle} onPressRoute="/food">
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (

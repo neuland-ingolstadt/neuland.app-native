@@ -43,7 +43,7 @@ const LibraryCard = (): JSX.Element => {
     })
 
     return (
-        <BaseCard title="library" onPressRoute="library">
+        <BaseCard title="library" onPressRoute="/library">
             {isSuccess && data.length > 0 && (
                 <View
                     style={[

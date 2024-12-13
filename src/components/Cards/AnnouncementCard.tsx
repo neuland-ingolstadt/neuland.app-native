@@ -13,11 +13,11 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from '../Universal/Icon'
 import { DashboardContext, UserKindContext } from '../contexts'
 
-interface PopUpCardProps {
+interface AnnouncementCardProps {
     data: AnnouncementFieldsFragment[]
 }
 
-const PopUpCard: React.FC<PopUpCardProps> = ({ data }) => {
+const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
     const { hiddenAnnouncements, hideAnnouncement } =
         useContext(DashboardContext)
     const { t } = useTranslation('navigation')
@@ -146,4 +146,4 @@ const stylesheet = createStyleSheet((theme) => ({
     },
 }))
 
-export default PopUpCard
+export default AnnouncementCard

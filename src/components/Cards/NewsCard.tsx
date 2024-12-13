@@ -77,7 +77,7 @@ const NewsCard: React.FC = () => {
 
     return (
         <View ref={ref}>
-            <BaseCard title="news" onPressRoute="news">
+            <BaseCard title="news" onPressRoute="/news">
                 {data != null && data.length > 0 && (
                     <Carousel
                         loop
