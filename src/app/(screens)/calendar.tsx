@@ -23,7 +23,7 @@ import {
     View,
     useWindowDimensions,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
+import PagerView from '@/components/Layout/PagerView'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function CalendarPage(): JSX.Element {

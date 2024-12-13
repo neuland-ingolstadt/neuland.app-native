@@ -5,6 +5,7 @@ import LecturerRow from '@/components/Rows/LecturerRow'
 import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
+import PagerView from '@/components/Layout/PagerView'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
@@ -39,7 +40,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
 import {
     UnistylesRuntime,
     createStyleSheet,

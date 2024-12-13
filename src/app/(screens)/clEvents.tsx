@@ -1,6 +1,7 @@
 import ClEventsPage from '@/components/Events/ClEventsPage'
 import ClSportsPage from '@/components/Events/ClSportsPage'
 import ToggleRow from '@/components/Universal/ToggleRow'
+import PagerView from '@/components/Layout/PagerView'
 import {
     loadCampusLifeEvents,
     loadUniversitySportsEvents,
@@ -11,7 +12,6 @@ import { useQueries } from '@tanstack/react-query'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, View, useWindowDimensions } from 'react-native'
-import PagerView from 'react-native-pager-view'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): JSX.Element {
