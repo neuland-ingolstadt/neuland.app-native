@@ -36,7 +36,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 262
+            "versionCode": 265
         },
         "sdkVersion": "52.0.0",
         "experiments": {
@@ -44,7 +44,15 @@
             "typedRoutes": true
         },
         "plugins": [
-            ["react-native-edge-to-edge"],
+            [
+                "react-native-edge-to-edge",
+                {
+                    "android": {
+                        "parentTheme": "Material3"
+                    }
+                }
+            ],
+            "react-native-bottom-tabs",
             [
                 "expo-router",
                 {
@@ -65,7 +73,8 @@
                 "expo-build-properties",
                 {
                     "ios": {
-                        "deploymentTarget": "15.1"
+                        "deploymentTarget": "15.1",
+                        "useFrameworks": "static"
                     }
                 }
             ],

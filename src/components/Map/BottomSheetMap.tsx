@@ -60,7 +60,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }
 
     const width = t('misc.cancel').length * 11
-
     return (
         <BottomSheet
             ref={bottomSheetRef}

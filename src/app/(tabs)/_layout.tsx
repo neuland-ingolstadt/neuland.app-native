@@ -1,5 +1,4 @@
-import DefaultTabs from '@/components/Layout/DefaultTabs'
-import MaterialTabs from '@/components/Layout/MaterialTabs'
+import TabLayout from '@/components/Layout/Tabbar'
 import { UserKindContext } from '@/components/contexts'
 import changelog from '@/data/changelog.json'
 import { USER_GUEST } from '@/data/constants'
@@ -209,5 +208,5 @@ export default function HomeLayout(): JSX.Element {
         return <Redirect href={'/whatsnew'} />
     }
 
-    return Platform.OS === 'android' ? <MaterialTabs /> : <DefaultTabs />
+    return <TabLayout />
 }

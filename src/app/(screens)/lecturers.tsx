@@ -153,10 +153,8 @@ export default function LecturersCard(): JSX.Element {
         let filtered: NormalizedLecturer[] = []
         if (faculty !== null) {
             filtered =
-                allLecturersResult?.data?.filter(
-                    (lecturer: Lecturers) =>
-                        lecturer.organisation !== null &&
-                        lecturer.organisation.includes(faculty)
+                allLecturersResult?.data?.filter((lecturer: Lecturers) =>
+                    lecturer.organisation?.includes(faculty)
                 ) ?? []
             setDisplayedProfessors(false)
             setFacultyData(filtered)

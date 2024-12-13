@@ -128,7 +128,7 @@ const TimetableCard: React.FC = () => {
     }
 
     return (
-        <BaseCard title="timetable" onPressRoute="timetable">
+        <BaseCard title="timetable" onPressRoute="/timetable">
             {loadingState === LoadingState.LOADED && (
                 <View
                     style={[
