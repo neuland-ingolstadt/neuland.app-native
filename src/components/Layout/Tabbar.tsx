@@ -12,7 +12,7 @@ export default function TabLayout(): JSX.Element {
     const isAndroid = Platform.OS === 'android'
     return (
         <Tabs
-            sidebarAdaptable
+            sidebarAdaptable={false}
             tabBarActiveTintColor={theme.colors.primary}
             barTintColor={
                 isAndroid
@@ -30,7 +30,7 @@ export default function TabLayout(): JSX.Element {
             tabLabelStyle={{
                 fontSize: 11,
             }}
-            labeled={true}
+            labeled
             activeIndicatorColor={
                 isAndroid
                     ? UnistylesRuntime.themeName === 'dark'
