@@ -86,6 +86,10 @@ export default function HomeLayout(): JSX.Element {
         storage.delete('selectedUserAllergens')
     }
     useEffect(() => {
+        if (Platform.OS === 'web') {
+            return
+        }
+
         const shortcuts = [
             {
                 id: 'timetable',

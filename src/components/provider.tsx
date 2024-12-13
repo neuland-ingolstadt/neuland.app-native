@@ -238,17 +238,15 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-        if (theme === 'dark') {
-            Appearance.setColorScheme('dark')
-            UnistylesRuntime.setAdaptiveThemes(false)
-            UnistylesRuntime.setTheme('dark')
-        } else if (theme === 'light') {
-            Appearance.setColorScheme('light')
-            UnistylesRuntime.setAdaptiveThemes(false)
-            UnistylesRuntime.setTheme('light')
-        } else {
-            Appearance.setColorScheme(undefined)
-            UnistylesRuntime.setAdaptiveThemes(true)
+
+        const isFixedTheme = theme === 'dark' || theme === 'light'
+        if (Platform.OS !== 'web') {
+            Appearance.setColorScheme(isFixedTheme ? theme : undefined)
+        }
+
+        UnistylesRuntime.setAdaptiveThemes(!isFixedTheme)
+        if (isFixedTheme) {
+            UnistylesRuntime.setTheme(theme)
         }
 
         return () => {
