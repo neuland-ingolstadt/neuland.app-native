@@ -14,7 +14,7 @@ import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, Pressable, Text } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
+import ContextMenu from '@/components/Flow/ContextMenu'
 import { getDeviceType } from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
