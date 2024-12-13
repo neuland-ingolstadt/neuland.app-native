@@ -8,8 +8,9 @@ import {
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
 } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
@@ -94,10 +95,25 @@ export default function ClEventDetail(): JSX.Element {
                       ]),
                 ...(clEvent?.location != null && clEvent?.location !== ''
                     ? [
-                          {
-                              title: t('pages.event.location'),
-                              value: clEvent?.location,
-                          },
+                          Object.assign(
+                              {
+                                  title: t('pages.event.location'),
+                                  value: clEvent?.location,
+                              },
+                              isValidRoom(clEvent.location)
+                                  ? {
+                                        onPress: () => {
+                                            router.navigate({
+                                                pathname: '/map',
+                                                params: {
+                                                    room: clEvent?.location,
+                                                },
+                                            })
+                                        },
+                                        textColor: 'blue',
+                                    }
+                                  : {}
+                          ),
                       ]
                     : []),
 
