@@ -3,8 +3,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
 
 import { Tabs } from './NativeBottomTabs'
+
+export const useBottomTabBarHeight = _useBottomTabBarHeight
 
 export default function TabLayout(): JSX.Element {
     const { theme } = useStyles()

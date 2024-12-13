@@ -63,7 +63,7 @@ import {
     Text,
     View,
 } from 'react-native'
-import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
+import { useBottomTabBarHeight } from '@/components/Layout/Tabbar'
 import Animated, {
     runOnJS,
     useAnimatedStyle,
