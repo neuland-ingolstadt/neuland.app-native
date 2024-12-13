@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon from './Icon'
 
 interface ShareButtonProps {
-    onPress?: () => void | Promise<void>
+    onPress?: () => void
 }
 
 export default function ShareButton({

@@ -22,7 +22,6 @@ import {
     StyleSheet,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
 import { useDashboard, useUserKind } from '../contexts'
@@ -274,9 +273,7 @@ export default function Provider({
                         <BottomSheetModalProvider>
                             <UserKindContext.Provider value={userKind}>
                                 <DashboardContext.Provider value={dashboard}>
-                                    <SafeAreaProvider>
-                                        {children}
-                                    </SafeAreaProvider>
+                                    {children}
                                 </DashboardContext.Provider>
                             </UserKindContext.Provider>
                         </BottomSheetModalProvider>

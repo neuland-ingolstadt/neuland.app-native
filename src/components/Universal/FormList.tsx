@@ -62,12 +62,22 @@ const RenderSectionItems: React.FC<{
 }> = ({ items, privacyHidden, rowStyle }) => {
     const { styles, theme } = useStyles(stylesheet)
 
+    const handlePress = (onPress?: () => Promise<void> | void): void => {
+        if (onPress != null) {
+            Promise.resolve(onPress()).catch((error) => {
+                console.error(error)
+            })
+        }
+    }
+
     return (
         <View style={styles.blockCard}>
             {items.map((item, index) => (
                 <React.Fragment key={index}>
                     <Pressable
-                        onPress={item.onPress}
+                        onPress={() => {
+                            handlePress(item.onPress)
+                        }}
                         style={({ pressed }) => [
                             {
                                 opacity: pressed ? 0.9 : 1,

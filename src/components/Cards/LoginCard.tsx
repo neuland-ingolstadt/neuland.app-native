@@ -9,7 +9,7 @@ const LoginCard = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     return (
-        <BaseCard title="login" removable={false} onPressRoute="login">
+        <BaseCard title="login" removable={false} onPressRoute="/login">
             <View style={styles.calendarView}>
                 <View>
                     <Text style={styles.eventTitle}>

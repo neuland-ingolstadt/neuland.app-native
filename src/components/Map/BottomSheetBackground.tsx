@@ -10,7 +10,7 @@ import {
 const BottomSheetBackground = (): JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const dark = UnistylesRuntime.themeName === 'dark'
-    const darkIos = 'rgba(0, 0, 0, 0.55)'
+    const darkIos = 'rgba(0, 0, 0, 0.45)'
     const lightIos = 'rgba(200, 200, 200, 0.3)'
     return Platform.OS === 'ios' ? (
         <View

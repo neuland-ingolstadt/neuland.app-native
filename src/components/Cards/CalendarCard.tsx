@@ -80,7 +80,7 @@ const CalendarCard = (): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
 
     return (
-        <BaseCard title="calendar" onPressRoute="calendar">
+        <BaseCard title="calendar" onPressRoute="/calendar">
             <View
                 style={{
                     ...styles.calendarView,

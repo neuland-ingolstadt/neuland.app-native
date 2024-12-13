@@ -48,7 +48,7 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
                                 !isValidRoom(lecture.rooms[0])
                             }
                             style={styles.suggestionRow}
-                            onPressOut={() => {
+                            onPress={() => {
                                 const details = allRooms.features.find(
                                     (x) =>
                                         x.properties?.Raum === lecture.rooms[0]

@@ -87,7 +87,7 @@ export default function MapRootScreen(): JSX.Element {
                 <meta property="expo:handoff" content="true" />
                 <meta property="expo:spotlight" content="true" />
             </Head>
-            <View style={styles.page}>
+            <View style={{ ...styles.page }}>
                 {isPageOpen ? (
                     <MapContext.Provider value={contextValue}>
                         <MapScreen />

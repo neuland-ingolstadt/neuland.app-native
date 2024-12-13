@@ -204,3 +204,15 @@ export function generateKey(
 export const isValidRoom = (room: string): boolean => {
     return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room)
 }
+
+/**
+ * Load the timetable
+ * @returns
+ */
+export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
+    const timetable = await getFriendlyTimetable(new Date(), true)
+    if (timetable.length === 0) {
+        throw new Error('Timetable is empty')
+    }
+    return timetable
+}

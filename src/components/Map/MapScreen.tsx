@@ -4,7 +4,6 @@ import {
     NoSessionError,
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
-import { loadTimetable } from '@/app/(tabs)/(timetable)/timetable'
 import ErrorView from '@/components/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
@@ -27,6 +26,7 @@ import {
     getCenterSingle,
     getIcon,
 } from '@/utils/map-utils'
+import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
@@ -63,6 +63,7 @@ import {
     Text,
     View,
 } from 'react-native'
+import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import Animated, {
     runOnJS,
     useAnimatedStyle,
@@ -79,7 +80,10 @@ import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
 
+const isIpadOS = Platform.OS === 'ios' && Platform.isPad
+
 const MapScreen = (): JSX.Element => {
+    const tabBarHeight = useBottomTabBarHeight()
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const { styles, theme } = useStyles(stylesheet)
@@ -697,8 +701,17 @@ const MapScreen = (): JSX.Element => {
         )
     }, [availableFilteredGeoJSON])
 
+    // get is ipados using react native dvice info
+
+    console.log('isIpadOS', isIpadOS)
     return (
-        <View style={styles.container}>
+        <View
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+                ...styles.map,
+                marginBottom: !isIpadOS ? tabBarHeight : 0,
+            }}
+        >
             <>
                 {mapLoadState === LoadingState.ERROR && (
                     <View style={styles.errorContainer}>
@@ -747,7 +760,6 @@ const MapScreen = (): JSX.Element => {
                             : undefined
                     }
                 >
-                    {/* @ts-expect-error - The type definitions are incorrect */}
                     <MapLibreGL.Images
                         nativeAssetImages={['pin']}
                         images={{
@@ -899,7 +911,6 @@ const MapScreen = (): JSX.Element => {
                     </Pressable>
                 </Animated.View>
             )}
-
             <MapBottomSheet
                 bottomSheetRef={bottomSheetRef}
                 currentPosition={currentPosition}
@@ -927,9 +938,6 @@ const MapScreen = (): JSX.Element => {
 export default MapScreen
 
 const stylesheet = createStyleSheet((theme) => ({
-    container: {
-        flex: 1,
-    },
     errorContainer: {
         backgroundColor: theme.colors.background,
         flex: 1,

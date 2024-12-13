@@ -1,10 +1,10 @@
 import { getFragmentData } from '@/__generated__/gql'
 import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
-import { type FoodLanguage } from '@/contexts/foodFilter'
 import allergenMap from '@/data/allergens.json'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import flapMap from '@/data/mensa-flags.json'
+import { type FoodLanguage } from '@/hooks/useFoodFilterStore'
 import { type LanguageKey } from '@/localization/i18n'
 import { type Food, type Meal, type Name } from '@/types/neuland-api'
 import { type Labels, type Prices } from '@/types/utils'
@@ -157,9 +157,9 @@ export function mealName(
     i18nLang: LanguageKey
 ): string {
     if (foodLang !== 'default') {
-        return mealName[foodLang as LanguageKey]
+        return mealName[foodLang]
     } else {
-        return mealName[i18nLang as LanguageKey]
+        return mealName[i18nLang]
     }
 }
 
