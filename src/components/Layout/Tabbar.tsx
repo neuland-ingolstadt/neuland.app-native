@@ -30,6 +30,7 @@ export default function TabLayout(): JSX.Element {
             tabLabelStyle={{
                 fontSize: 11,
             }}
+            labeled={true}
             activeIndicatorColor={
                 isAndroid
                     ? UnistylesRuntime.themeName === 'dark'
