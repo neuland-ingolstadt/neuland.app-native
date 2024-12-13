@@ -51,7 +51,7 @@ const DefaultTabs = (): JSX.Element => {
                 />
 
                 <Tabs.Screen
-                    name="(timetable)"
+                    name="timetable"
                     options={{
                         headerShown: false,
                         title: t('navigation.timetable'),
@@ -101,7 +101,7 @@ const DefaultTabs = (): JSX.Element => {
                 />
 
                 <Tabs.Screen
-                    name="(food)"
+                    name="food"
                     options={{
                         title: t('navigation.food'),
                         headerShown: false,
