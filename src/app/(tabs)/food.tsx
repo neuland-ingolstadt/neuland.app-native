@@ -34,6 +34,7 @@ export default function FoodRootScreen(): JSX.Element {
                 titleKey={'navigation.food'}
                 component={isPageOpen ? FoodScreen : () => <></>}
                 headerRightElement={FoodHeaderRight}
+                androidFallback
             />
         </>
     )
