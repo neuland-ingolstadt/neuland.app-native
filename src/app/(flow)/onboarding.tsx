@@ -395,7 +395,7 @@ export default function OnboardingScreen(): JSX.Element {
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
     const scaleFontSize = (size: number): number => {
-        if (DeviceInfo.isTablet()) {
+        if (DeviceInfo.isTablet() || Platform.OS === 'web') {
             return size
         }
         const guidelineBaseWidth = 475
