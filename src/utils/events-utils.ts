@@ -29,13 +29,8 @@ export async function loadCampusLifeEvents(): Promise<
             begin: x.startDateTime != null ? new Date(x.startDateTime) : null,
             end: x.endDateTime != null ? new Date(x.endDateTime) : null,
         }))
-        .filter(
-            (x) =>
-                x.end === null ||
-                x.end > new Date() ||
-                x.titles.de !== '' ||
-                x.titles.en !== ''
-        )
+        .filter((x) => x.end == null || x.end > new Date())
+        .filter((x) => x.titles.de !== '' || x.titles.en !== '')
     return newEvents
 }
 
