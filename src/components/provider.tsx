@@ -13,6 +13,7 @@ import {
 } from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { Toaster } from 'burnt/web'
 import { useSegments } from 'expo-router'
 import React, { useEffect } from 'react'
 import {
@@ -271,6 +272,7 @@ export default function Provider({
                         <BottomSheetModalProvider>
                             <UserKindContext.Provider value={userKind}>
                                 <DashboardContext.Provider value={dashboard}>
+                                    <Toaster />
                                     {children}
                                 </DashboardContext.Provider>
                             </UserKindContext.Provider>

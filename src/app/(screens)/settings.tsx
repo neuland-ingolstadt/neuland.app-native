@@ -227,6 +227,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'rectangle.stack',
                         android: 'dashboard_customize',
+                        web: 'LayoutDashboard',
                     },
 
                     onPress: () => {
@@ -238,6 +239,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         android: 'restaurant',
                         ios: 'fork.knife',
+                        web: 'Utensils',
                     },
                     onPress: () => {
                         router.navigate('/foodPreferences')
@@ -248,6 +250,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'globe',
                         android: 'language',
+                        web: 'Globe',
                     },
 
                     onPress: async () => {
@@ -272,6 +275,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'paintpalette',
                         android: 'palette',
+                        web: 'Palette',
                     },
                     onPress: () => {
                         router.navigate('/accent')
@@ -282,6 +286,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'moon.stars',
                         android: 'routine',
+                        web: 'MoonStar',
                     },
                     onPress: () => {
                         router.navigate('/theme')
@@ -295,6 +300,7 @@ export default function Settings(): JSX.Element {
                               icon: {
                                   ios: 'star.square.on.square',
                                   android: '' as MaterialIcon,
+                                  web: 'StarSquare',
                               },
                               onPress: () => {
                                   router.navigate('/appIcon')
@@ -312,6 +318,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'chevron.forward',
                         android: 'chevron_right',
+                        web: 'ChevronRight',
                     },
                     onPress: () => {
                         router.navigate('/about')
@@ -323,6 +330,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'square.and.arrow.up',
                         android: 'share',
+                        web: 'Share',
                     },
                     onPress: () => {
                         trackEvent('Share', { type: 'app' })

@@ -102,6 +102,12 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 size: 24,
                                 variant: 'outlined',
                             }}
+                            web={{
+                                name: cardIcons[
+                                    dynamicTitle as keyof typeof cardIcons
+                                ]?.web,
+                                size: 24,
+                            }}
                         />
                         <Text style={styles.title}>
                             {/* @ts-expect-error cannot verify that title is a valid key */}
@@ -116,6 +122,10 @@ const BaseCard: React.FC<BaseCardProps> = ({
                                 android={{
                                     name: 'chevron_right',
                                     size: 26,
+                                }}
+                                web={{
+                                    name: 'ChevronRight',
+                                    size: 24,
                                 }}
                                 style={styles.labelColor}
                             />

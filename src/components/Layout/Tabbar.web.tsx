@@ -28,7 +28,6 @@ const DefaultTabs = (): JSX.Element => {
                     options={{
                         title: 'Home',
                         headerShown: false,
-
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 ios={{
@@ -39,6 +38,10 @@ const DefaultTabs = (): JSX.Element => {
                                 android={{
                                     name: 'home',
                                     size,
+                                }}
+                                web={{
+                                    name: 'House',
+                                    size: size - 2,
                                 }}
                                 style={{
                                     color,
@@ -66,6 +69,10 @@ const DefaultTabs = (): JSX.Element => {
                                     name: 'calendar_month',
                                     size,
                                 }}
+                                web={{
+                                    name: 'Clock',
+                                    size: size - 2,
+                                }}
                                 style={{
                                     color,
                                 }}
@@ -91,6 +98,10 @@ const DefaultTabs = (): JSX.Element => {
                                     name: 'map',
                                     size,
                                 }}
+                                web={{
+                                    name: 'Map',
+                                    size: size - 2,
+                                }}
                                 style={{
                                     color,
                                 }}
@@ -114,6 +125,10 @@ const DefaultTabs = (): JSX.Element => {
                                 android={{
                                     name: 'restaurant',
                                     size,
+                                }}
+                                web={{
+                                    name: 'Utensils',
+                                    size: size - 2,
                                 }}
                                 style={{
                                     color,

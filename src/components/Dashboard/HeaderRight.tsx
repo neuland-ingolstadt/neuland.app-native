@@ -135,6 +135,10 @@ export const IndexHeaderRight = (): JSX.Element => {
                             name: 'account_circle',
                             size: 26,
                         }}
+                        web={{
+                            name: 'CircleUser',
+                            size: 24,
+                        }}
                         style={styles.icon}
                     />
                 ) : userKind === USER_STUDENT &&
@@ -282,6 +286,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     icon: {
         color: theme.colors.text,
+        marginEnd: Platform.OS === 'web' ? 18 : 0,
     },
     iconText: {
         fontSize: 13,

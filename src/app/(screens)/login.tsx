@@ -136,7 +136,10 @@ export default function Login(): JSX.Element {
 
     return (
         <>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                disabled={Platform.OS === 'web'}
+            >
                 <View style={{ ...styles.container, paddingTop: insets.top }}>
                     <KeyboardAvoidingView
                         style={styles.keyboardContainer}

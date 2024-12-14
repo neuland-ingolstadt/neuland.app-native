@@ -55,6 +55,10 @@ const LinkCard = (): JSX.Element => {
                                     size: 21,
                                     variant: 'outlined',
                                 }}
+                                web={{
+                                    name: link.icon.web,
+                                    size: 21,
+                                }}
                             />
                             <Text
                                 style={styles.eventTitle}

@@ -1,11 +1,13 @@
 import { type MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { FileWarning, icons } from 'lucide-react-native'
 import React from 'react'
 import { Platform, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
+export type LucideIcon = keyof typeof icons
 interface PlatformIconProps {
     android: {
         name: MaterialIcon | CommunityIcon
@@ -36,25 +38,57 @@ interface PlatformIconProps {
         variableValue?: number | undefined
         additionalColor?: string
     }
+    web?: {
+        name: LucideIcon
+        size: number
+    }
     style?: any
 }
+
+export const lucidErrorIcon = {
+    name: 'error',
+    size: 24,
+    color: 'red',
+}
+
 export const linkIcon = {
     ios: 'safari',
     android: 'link' as MaterialIcon,
+    web: 'Link' as LucideIcon,
 }
 
 export const chevronIcon = {
     ios: 'chevron.forward',
     android: 'chevron_right' as MaterialIcon,
+    web: { name: 'chevron_right', size: 24 },
 }
 
 const PlatformIcon = ({
     android,
     ios,
+    web,
     style,
 }: PlatformIconProps): JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
-    if (Platform.OS === 'ios') {
+
+    const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />
+
+    if (Platform.OS === 'web') {
+        if (web != null) {
+            const LucideIcon = icons[web?.name]
+
+            return (
+                <LucideIcon
+                    name={web.name}
+                    size={web.size}
+                    color={style?.color ?? theme.colors.primary}
+                    style={style}
+                />
+            )
+        } else {
+            return lucidFallback
+        }
+    } else if (Platform.OS === 'ios') {
         return (ios.fallback ?? false) ? (
             <MaterialCommunityIcons
                 name={
@@ -75,21 +109,17 @@ const PlatformIcon = ({
                 size={ios.size}
                 colors={[
                     style?.color ?? theme.colors.primary,
-                    ...(ios.additionalColor != null
-                        ? [ios.additionalColor]
-                        : []),
+                    ...(ios.additionalColor ? [ios.additionalColor] : []),
                 ]}
                 weight={ios.weight ?? 'regular'}
-                style={{
-                    ...style,
-                }}
+                style={style}
                 variant={ios.variant as any}
                 variableValue={ios.variableValue}
                 renderingMode={ios.renderMode}
             />
         )
     } else {
-        return (
+        return android ? (
             <Text
                 style={{
                     ...styles.androidIcon,
@@ -113,6 +143,8 @@ const PlatformIcon = ({
                     android.name
                 )}
             </Text>
+        ) : (
+            lucidFallback
         )
     }
 }

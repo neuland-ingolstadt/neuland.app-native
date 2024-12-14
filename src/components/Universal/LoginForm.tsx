@@ -69,6 +69,8 @@ const LoginForm = ({
             })
             navigateHome()
         } catch (e) {
+            console.error('Failed to login', e)
+
             const error = e as Error
             const message = trimErrorMsg(error.message)
             setLoading(false)
@@ -93,27 +95,35 @@ const LoginForm = ({
             ) {
                 msg = t('login.alert.error.backend')
             }
-            Alert.alert(
-                title,
-                msg,
-                [
-                    { text: 'OK' },
-                    ...(showStatus
-                        ? [
-                              {
-                                  text: t('error.crash.status', {
-                                      ns: 'common',
-                                  }),
-                                  onPress: async () =>
-                                      await Linking.openURL(STATUS_URL),
-                              },
-                          ]
-                        : []),
-                ],
-                {
-                    cancelable: false,
-                }
-            )
+            if (Platform.OS === 'web') {
+                toast({
+                    title: msg,
+                    preset: 'error',
+                    duration: 2.5,
+                })
+            } else {
+                Alert.alert(
+                    title,
+                    msg,
+                    [
+                        { text: 'OK' },
+                        ...(showStatus
+                            ? [
+                                  {
+                                      text: t('error.crash.status', {
+                                          ns: 'common',
+                                      }),
+                                      onPress: async () =>
+                                          await Linking.openURL(STATUS_URL),
+                                  },
+                              ]
+                            : []),
+                    ],
+                    {
+                        cancelable: false,
+                    }
+                )
+            }
         }
     }
 
