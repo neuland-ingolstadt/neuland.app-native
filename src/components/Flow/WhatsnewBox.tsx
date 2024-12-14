@@ -3,12 +3,12 @@ import React, { type FC } from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 
 interface WhatsNewBoxProps {
     title: string
     description: string
-    icon: { ios: string; android: string }
+    icon: { ios: string; android: MaterialIcon; web: LucideIcon }
 }
 
 /**
@@ -31,7 +31,11 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
                     variableValue: 1,
                 }}
                 android={{
-                    name: icon.android as MaterialIcon,
+                    name: icon.android,
+                    size: 28,
+                }}
+                web={{
+                    name: icon.web,
                     size: 28,
                 }}
             />

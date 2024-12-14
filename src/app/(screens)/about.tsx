@@ -8,6 +8,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { trackEvent } from '@aptabase/react-native'
+import { alert } from 'burnt'
 import * as Application from 'expo-application'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
@@ -147,19 +148,27 @@ export default function About(): JSX.Element {
         setPressCount(pressCount + 1)
 
         if (pressCount === 7) {
-            Alert.alert(
-                t('about.easterEgg.title'),
-                Platform.OS === 'ios'
-                    ? t('about.easterEgg.message')
-                    : t('about.easterEgg.messageAndroid'),
-                [
-                    {
-                        text: t('about.easterEgg.confirm'),
-                        style: 'cancel',
-                    },
-                ],
-                { cancelable: false }
-            )
+            if (Platform.OS !== 'web') {
+                Alert.alert(
+                    t('about.easterEgg.title'),
+                    Platform.OS === 'ios'
+                        ? t('about.easterEgg.message')
+                        : t('about.easterEgg.messageAndroid'),
+                    [
+                        {
+                            text: t('about.easterEgg.confirm'),
+                            style: 'cancel',
+                        },
+                    ],
+                    { cancelable: false }
+                )
+            } else {
+                alert({
+                    title: t('about.easterEgg.title'),
+                    message: t('about.easterEgg.messageAndroid'),
+                    preset: 'done',
+                })
+            }
             const isCollected = unlockedAppIcons?.includes('cat')
             if (!isCollected) {
                 trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
@@ -192,9 +201,11 @@ export default function About(): JSX.Element {
                     <View style={styles.logoContainer}>
                         <Pressable
                             onPress={() => {
-                                void Haptics.impactAsync(
-                                    Haptics.ImpactFeedbackStyle.Medium
-                                )
+                                if (Platform.OS !== 'web') {
+                                    void Haptics.impactAsync(
+                                        Haptics.ImpactFeedbackStyle.Medium
+                                    )
+                                }
                                 handlePress()
                             }}
                         >

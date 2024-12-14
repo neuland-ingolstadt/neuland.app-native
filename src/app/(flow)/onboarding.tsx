@@ -3,9 +3,10 @@ import WhatsNewBox from '@/components/Flow/WhatsnewBox'
 import AnimatedText from '@/components/Flow/svgs/AnimatedText'
 import LogoSVG from '@/components/Flow/svgs/logo'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import { PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
+import { type MaterialIcon } from '@/types/material-icons'
 import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -40,13 +41,23 @@ export default function OnboardingScreen(): JSX.Element {
     const setAnalyticsAllowed = useFlowStore(
         (state) => state.setAnalyticsAllowed
     )
-    const data = [
+    interface Data {
+        title: string
+        description: string
+        icon: {
+            ios: string
+            android: MaterialIcon
+            web: LucideIcon
+        }
+    }
+    const data: Data[] = [
         {
             title: t('onboarding.cards.title1'),
             description: t('onboarding.cards.description1'),
             icon: {
                 ios: 'square.stack.3d.up',
                 android: 'hub',
+                web: 'Layers',
             },
         },
 
@@ -56,6 +67,7 @@ export default function OnboardingScreen(): JSX.Element {
             icon: {
                 ios: 'person.2.gobackward',
                 android: 'volunteer_activism',
+                web: 'Users',
             },
         },
         {
@@ -64,6 +76,7 @@ export default function OnboardingScreen(): JSX.Element {
             icon: {
                 ios: 'lock.app.dashed',
                 android: 'encrypted',
+                web: 'GlobeLock',
             },
         },
     ]
@@ -468,6 +481,10 @@ export default function OnboardingScreen(): JSX.Element {
                             name: 'help',
                             size: 25,
                             variant: 'outlined',
+                        }}
+                        web={{
+                            name: 'CircleHelp',
+                            size: 25,
                         }}
                     />
                 </Pressable>

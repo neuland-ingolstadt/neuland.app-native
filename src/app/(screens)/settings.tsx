@@ -22,12 +22,11 @@ import {
     withBouncing,
 } from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { storage } from '@/utils/storage'
+import { loadSecure, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -75,8 +74,7 @@ export default function Settings(): JSX.Element {
     const scrollY = useRef(0)
     const logoRotation = useSharedValue(0)
     const velocity = 110
-    const username =
-        userKind === USER_EMPLOYEE && SecureStore.getItem('username')
+    const username = userKind === USER_EMPLOYEE && loadSecure('username')
     const { color, randomizeColor } = useRandomColor()
     const resetPreferences = usePreferencesStore((state) => state.reset)
     const resetFood = useFoodFilterStore((state) => state.reset)

@@ -1,10 +1,41 @@
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import * as SecureStore from 'expo-secure-store'
+import { Platform } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
 import { type StateStorage } from 'zustand/middleware'
 
 export const storage = new MMKV({
     id: 'query-client-storage',
 })
+
+export const secureWebStorage = new MMKV({
+    id: 'secure-web-storage',
+})
+
+export async function saveSecure(key: string, value: string): Promise<void> {
+    if (Platform.OS === 'web') {
+        secureWebStorage.set(key, value)
+        await Promise.resolve()
+        return
+    }
+    await SecureStore.setItemAsync(key, value)
+}
+
+export function loadSecure(key: string): string | null {
+    if (Platform.OS === 'web') {
+        return secureWebStorage.getString(key) ?? null
+    }
+    return SecureStore.getItem(key)
+}
+
+export async function deleteSecure(key: string): Promise<void> {
+    if (Platform.OS === 'web') {
+        secureWebStorage.delete(key)
+        await Promise.resolve()
+        return
+    }
+    await SecureStore.deleteItemAsync(key)
+}
 
 const clientStorage = {
     setItem: (key: string, value: string | number | boolean | ArrayBuffer) => {

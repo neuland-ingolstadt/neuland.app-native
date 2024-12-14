@@ -41,10 +41,9 @@ export const FoodHeaderRight = (): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
-        marginHorizontal: Platform.OS === 'android' ? 14 : 0,
+        marginHorizontal: Platform.OS !== 'ios' ? 14 : 0,
     },
     icon: {
         color: theme.colors.text,
-        marginEnd: Platform.OS === 'web' ? 18 : 0,
     },
 }))

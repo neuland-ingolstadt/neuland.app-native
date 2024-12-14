@@ -3,7 +3,7 @@ import {
     extractFacultyFromPersonalData,
     getPersonalData,
 } from '@/utils/api-utils'
-import * as SecureStore from 'expo-secure-store'
+import { saveSecure } from '@/utils/storage'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useMMKVString } from 'react-native-mmkv'
 
@@ -76,7 +76,7 @@ export function useUserKind(): UserKindContextType {
             }
 
             setUserKind(userType)
-            void SecureStore.setItemAsync('userType', userType)
+            void saveSecure('userType', userType)
         },
         [setUserKind]
     )

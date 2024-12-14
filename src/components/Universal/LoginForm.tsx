@@ -7,11 +7,11 @@ import {
     USER_STUDENT,
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
+import { loadSecure } from '@/utils/storage'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -143,16 +143,12 @@ const LoginForm = ({
         setLoading(false)
     }
 
-    async function load(key: string): Promise<string | null> {
-        return SecureStore.getItem(key)
-    }
-
     useEffect(() => {
         // on iOS secure store is synced with iCloud, so we can prefill the login form
         if (Platform.OS === 'ios') {
             const loadSavedData = async (): Promise<void> => {
-                const savedUsername = await load('username')
-                const savedPassword = await load('password')
+                const savedUsername = loadSecure('username')
+                const savedPassword = loadSecure('password')
                 if (savedUsername !== null && savedPassword !== null) {
                     setUsername(savedUsername)
                     setPassword(savedPassword)

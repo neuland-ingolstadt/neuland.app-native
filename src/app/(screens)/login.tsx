@@ -96,10 +96,13 @@ export default function Login(): JSX.Element {
     const navigateHome = (): void => {
         if (fromOnboarding === 'true') {
             router.dismissAll()
-            router.replace('/(tabs)/(index)')
+            router.replace('/')
             return
         }
         router.dismissAll()
+        if (Platform.OS === 'web') {
+            router.replace('/')
+        }
     }
 
     useEffect(() => {

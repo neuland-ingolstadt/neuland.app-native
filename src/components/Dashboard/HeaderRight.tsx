@@ -8,10 +8,10 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
+import { loadSecure } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, Pressable, Text } from 'react-native'
@@ -31,11 +31,10 @@ export const IndexHeaderRight = (): JSX.Element => {
         useContext<UserKindContextType>(UserKindContext)
     const { toggleUserKind } = useContext(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
-    const username = userKind === USER_EMPLOYEE && getItem('username')
+    const username = userKind === USER_EMPLOYEE && loadSecure('username')
 
     const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
     const [initials, setInitials] = useState('')
-    const androidPadding = Platform.OS === 'android' ? 16 : 0
 
     const {
         data: persData,
@@ -274,9 +273,7 @@ export const IndexHeaderRight = (): JSX.Element => {
             delayLongPress={300}
             onLongPress={() => {}}
             accessibilityLabel={t('navigation.settings')}
-            style={{
-                paddingRight: androidPadding,
-            }}
+            style={styles.element}
         >
             {MemoIcon}
         </Pressable>
@@ -288,9 +285,11 @@ const stylesheet = createStyleSheet((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    element: {
+        marginEnd: Platform.OS !== 'ios' ? 14 : 0,
+    },
     icon: {
         color: theme.colors.text,
-        marginEnd: Platform.OS === 'web' ? 18 : 0,
     },
     iconText: {
         fontSize: 13,
