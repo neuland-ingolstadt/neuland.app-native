@@ -99,6 +99,23 @@ export default function Profile(): JSX.Element {
     }
 
     const logoutAlert = (): void => {
+        if (Platform.OS === 'web') {
+            if (!window.confirm(t('profile.logout.alert.message'))) {
+                return
+            } else {
+                setIsLoggingOut(true)
+                resetFood()
+                resetPreferences()
+                performLogout(toggleUserKind, resetOrder, queryClient)
+                    .catch((e) => {
+                        console.log(e)
+                    })
+                    .finally(() => {
+                        setIsLoggingOut(false)
+                    })
+                return
+            }
+        }
         Alert.alert(
             t('profile.logout.alert.title'),
             t('profile.logout.alert.message'),

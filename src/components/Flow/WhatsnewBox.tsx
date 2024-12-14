@@ -24,21 +24,24 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
     const { styles } = useStyles(stylesheet)
     return (
         <View style={styles.container}>
-            <PlatformIcon
-                ios={{
-                    name: icon.ios,
-                    size: 26,
-                    variableValue: 1,
-                }}
-                android={{
-                    name: icon.android,
-                    size: 28,
-                }}
-                web={{
-                    name: icon.web,
-                    size: 28,
-                }}
-            />
+            <View style={styles.iconContainer}>
+                <PlatformIcon
+                    ios={{
+                        name: icon.ios,
+                        size: 26,
+                        variableValue: 1,
+                    }}
+                    android={{
+                        name: icon.android,
+                        size: 28,
+                    }}
+                    web={{
+                        name: icon.web,
+                        size: 28,
+                    }}
+                />
+            </View>
+
             <View style={styles.textContainer}>
                 <Text style={styles.title} numberOfLines={2}>
                     {title}
@@ -72,8 +75,12 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 14.5,
         textAlign: 'left',
     },
+    iconContainer: {
+        flexShrink: 0,
+    },
     textContainer: {
         flexDirection: 'column',
+        flexShrink: 1,
         paddingRight: 40,
     },
     title: {
