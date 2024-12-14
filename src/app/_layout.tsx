@@ -387,6 +387,10 @@ function RootLayout(): JSX.Element {
                                         name: 'barcode_scanner',
                                         size: 24,
                                     }}
+                                    web={{
+                                        name: 'Barcode',
+                                        size: 22,
+                                    }}
                                 />
                             </Pressable>
                         ),

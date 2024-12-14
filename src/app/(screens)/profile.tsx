@@ -292,6 +292,7 @@ export default function Profile(): JSX.Element {
                             icon={{
                                 ios: 'person.crop.circle.badge.exclamationmark',
                                 android: 'account_circle_off',
+                                web: 'UserRoundX',
                             }}
                             isCritical={false}
                         />
@@ -313,6 +314,10 @@ export default function Profile(): JSX.Element {
                                 }}
                                 android={{
                                     name: 'logout',
+                                    size: 22,
+                                }}
+                                web={{
+                                    name: 'LogOut',
                                     size: 22,
                                 }}
                                 style={styles.notification}

@@ -5,7 +5,7 @@ import { Avatar, NameBox } from '@/components/Settings'
 import GradesButton from '@/components/Settings/GradesButton'
 import Divider from '@/components/Universal/Divider'
 import FormList from '@/components/Universal/FormList'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -300,7 +300,7 @@ export default function Settings(): JSX.Element {
                               icon: {
                                   ios: 'star.square.on.square',
                                   android: '' as MaterialIcon,
-                                  web: 'StarSquare',
+                                  web: 'StarSquare' as LucideIcon,
                               },
                               onPress: () => {
                                   router.navigate('/appIcon')
@@ -419,6 +419,10 @@ export default function Settings(): JSX.Element {
                                                 name: 'chevron_right',
                                                 size: 26,
                                             }}
+                                            web={{
+                                                name: 'ChevronRight',
+                                                size: 26,
+                                            }}
                                             style={styles.iconAlign}
                                         />
                                     </View>
@@ -455,6 +459,10 @@ export default function Settings(): JSX.Element {
                                                         name: 'warning',
                                                         size: 28,
                                                     }}
+                                                    web={{
+                                                        name: 'TriangleAlert',
+                                                        size: 28,
+                                                    }}
                                                     style={styles.iconGuest}
                                                 />
                                             </Avatar>
@@ -467,6 +475,10 @@ export default function Settings(): JSX.Element {
                                             }}
                                             android={{
                                                 name: 'chevron_right',
+                                                size: 26,
+                                            }}
+                                            web={{
+                                                name: 'ChevronRight',
                                                 size: 26,
                                             }}
                                             style={styles.iconAlign}
@@ -513,6 +525,10 @@ export default function Settings(): JSX.Element {
                                                     name: 'account_circle',
                                                     size: 32,
                                                 }}
+                                                web={{
+                                                    name: 'User',
+                                                    size: 32,
+                                                }}
                                                 style={styles.iconGuest}
                                             />
                                         </Avatar>
@@ -525,6 +541,10 @@ export default function Settings(): JSX.Element {
                                         }}
                                         android={{
                                             name: 'chevron_right',
+                                            size: 26,
+                                        }}
+                                        web={{
+                                            name: 'ChevronRight',
                                             size: 26,
                                         }}
                                         style={styles.iconAlign}
@@ -560,6 +580,10 @@ export default function Settings(): JSX.Element {
                                                 }}
                                                 android={{
                                                     name: 'warning',
+                                                    size: 28,
+                                                }}
+                                                web={{
+                                                    name: 'TriangleAlert',
                                                     size: 28,
                                                 }}
                                                 style={styles.iconGuest}

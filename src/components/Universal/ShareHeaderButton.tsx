@@ -30,6 +30,10 @@ export default function ShareHeaderButton({
                     name: 'share',
                     size: 20,
                 }}
+                web={{
+                    name: 'Share',
+                    size: 20,
+                }}
                 style={styles.icon}
             />
         </Pressable>

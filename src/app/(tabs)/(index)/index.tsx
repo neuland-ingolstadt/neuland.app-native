@@ -94,6 +94,7 @@ function HomeScreen(): JSX.Element {
                     ios: 'rainbow',
                     multiColor: true,
                     android: 'dashboard_customize',
+                    web: 'Cog',
                 }}
                 buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
                 onButtonPress={() => {

@@ -153,6 +153,10 @@ export const IndexHeaderRight = (): JSX.Element => {
                             name: 'account_circle_off',
                             size: 26,
                         }}
+                        web={{
+                            name: 'UserX',
+                            size: 24,
+                        }}
                         style={styles.icon}
                     />
                 ) : initials !== '' || !showLoadingIndicator ? (

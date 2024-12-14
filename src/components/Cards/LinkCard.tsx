@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import BaseCard from './BaseCard'
 
 const LinkCard = (): JSX.Element => {
@@ -56,7 +56,7 @@ const LinkCard = (): JSX.Element => {
                                     variant: 'outlined',
                                 }}
                                 web={{
-                                    name: link.icon.web,
+                                    name: link.icon.web as LucideIcon,
                                     size: 21,
                                 }}
                             />

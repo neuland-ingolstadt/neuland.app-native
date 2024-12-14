@@ -369,6 +369,7 @@ export default function LecturersCard(): JSX.Element {
                         icon={{
                             ios: 'calendar.badge.exclamationmark',
                             android: 'edit_calendar',
+                            web: 'CalendarCog',
                         }}
                         buttonText={t('error.empty.button', {
                             ns: 'timetable',

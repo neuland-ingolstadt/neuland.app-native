@@ -84,6 +84,7 @@ export const MealEntry = ({
         ? 'exclamationmark.triangle'
         : 'info.circle'
     const androidName = hasUserAllergens ? 'warning' : 'info'
+    const webName = hasUserAllergens ? 'TriangleAlert' : 'Info'
     const textContent = hasUserAllergens
         ? userAllergens
         : t('empty.noAllergens')
@@ -230,6 +231,10 @@ export const MealEntry = ({
                                                 name: androidName,
                                                 size: 16,
                                                 variant: 'outlined',
+                                            }}
+                                            web={{
+                                                name: webName,
+                                                size: 16,
                                             }}
                                             style={styles.icon}
                                         />

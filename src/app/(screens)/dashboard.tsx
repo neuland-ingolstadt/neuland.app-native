@@ -5,7 +5,6 @@ import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { cardIcons } from '@/components/icons'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
-import { type MaterialIcon } from '@/types/material-icons'
 import { arraysEqual } from '@/utils/app-utils'
 import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
@@ -187,6 +186,10 @@ export default function DashboardEdit(): JSX.Element {
                                         name: 'lock',
                                         size: 24,
                                     }}
+                                    web={{
+                                        name: 'Lock',
+                                        size: 24,
+                                    }}
                                 />
                                 <Text style={styles.notesTitle}>
                                     {t('dashboard.unavailable.title')}
@@ -328,10 +331,15 @@ export default function DashboardEdit(): JSX.Element {
                                                         android={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
-                                                            ]
-                                                                ?.android as MaterialIcon,
+                                                            ]?.android,
                                                             size: 21,
                                                             variant: 'outlined',
+                                                        }}
+                                                        web={{
+                                                            name: cardIcons[
+                                                                item.key as keyof typeof cardIcons
+                                                            ]?.web,
+                                                            size: 21,
                                                         }}
                                                     />
                                                     <Text style={styles.text}>
@@ -354,6 +362,10 @@ export default function DashboardEdit(): JSX.Element {
                                                                 name: 'lock',
                                                                 size: 24,
                                                             }}
+                                                            web={{
+                                                                name: 'Lock',
+                                                                size: 24,
+                                                            }}
                                                         />
                                                     ) : (
                                                         <PlatformIcon
@@ -364,6 +376,10 @@ export default function DashboardEdit(): JSX.Element {
                                                             }}
                                                             android={{
                                                                 name: 'add_circle',
+                                                                size: 24,
+                                                            }}
+                                                            web={{
+                                                                name: 'CirclePlus',
                                                                 size: 24,
                                                             }}
                                                             style={
@@ -441,10 +457,17 @@ function RowItem({
                     android={{
                         name: isDragged
                             ? 'drag_handle'
-                            : (cardIcons[item.key as keyof typeof cardIcons]
-                                  ?.android as MaterialIcon),
+                            : cardIcons[item.key as keyof typeof cardIcons]
+                                  ?.android,
                         size: 21,
                         variant: 'outlined',
+                    }}
+                    web={{
+                        name: isDragged
+                            ? 'GripHorizontal'
+                            : cardIcons[item.key as keyof typeof cardIcons]
+                                  ?.web,
+                        size: 21,
                     }}
                 />
 
@@ -473,6 +496,10 @@ function RowItem({
                             android={{
                                 name: 'do_not_disturb_on',
                                 variant: 'outlined',
+                                size: 24,
+                            }}
+                            web={{
+                                name: 'CircleMinus',
                                 size: 24,
                             }}
                             style={styles.minusIcon}

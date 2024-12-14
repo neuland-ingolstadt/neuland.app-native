@@ -234,6 +234,7 @@ export default function CalendarPage(): JSX.Element {
                                             icon={{
                                                 ios: 'calendar.badge.clock',
                                                 android: 'calendar_clock',
+                                                web: 'CalendarX2',
                                             }}
                                             buttonText="Primuss"
                                             onButtonPress={() => {

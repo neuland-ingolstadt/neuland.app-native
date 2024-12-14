@@ -1,7 +1,6 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import ContextMenu from '@/components/Flow/ContextMenu'
 import { USER_GUEST } from '@/data/constants'
-import { type MaterialIcon } from '@/types/material-icons'
 import { type RelativePathString, router } from 'expo-router'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -98,7 +97,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
                             android={{
                                 name: cardIcons[
                                     dynamicTitle as keyof typeof cardIcons
-                                ]?.android as MaterialIcon,
+                                ]?.android,
                                 size: 24,
                                 variant: 'outlined',
                             }}

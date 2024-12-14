@@ -38,7 +38,7 @@ interface PlatformIconProps {
         variableValue?: number | undefined
         additionalColor?: string
     }
-    web?: {
+    web: {
         name: LucideIcon
         size: number
     }
@@ -60,7 +60,7 @@ export const linkIcon = {
 export const chevronIcon = {
     ios: 'chevron.forward',
     android: 'chevron_right' as MaterialIcon,
-    web: { name: 'chevron_right', size: 24 },
+    web: 'ChevronRight' satisfies LucideIcon as LucideIcon,
 }
 
 const PlatformIcon = ({
@@ -79,7 +79,6 @@ const PlatformIcon = ({
 
             return (
                 <LucideIcon
-                    name={web.name}
                     size={web.size}
                     color={style?.color ?? theme.colors.primary}
                     style={style}
@@ -109,7 +108,9 @@ const PlatformIcon = ({
                 size={ios.size}
                 colors={[
                     style?.color ?? theme.colors.primary,
-                    ...(ios.additionalColor ? [ios.additionalColor] : []),
+                    ...(ios.additionalColor != null
+                        ? [ios.additionalColor]
+                        : []),
                 ]}
                 weight={ios.weight ?? 'regular'}
                 style={style}
@@ -119,7 +120,7 @@ const PlatformIcon = ({
             />
         )
     } else {
-        return android ? (
+        return (
             <Text
                 style={{
                     ...styles.androidIcon,
@@ -143,8 +144,6 @@ const PlatformIcon = ({
                     android.name
                 )}
             </Text>
-        ) : (
-            lucidFallback
         )
     }
 }

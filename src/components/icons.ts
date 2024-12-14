@@ -1,8 +1,12 @@
+import { type MaterialIcon } from '@/types/material-icons'
+
+import { type LucideIcon } from './Universal/Icon'
+
 // Define the type for individual platform icons
 interface PlatformIcon {
     ios: string
-    android: string
-    web: string
+    android: MaterialIcon
+    web: LucideIcon
 }
 
 // Define the type for the card icons object

@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import StatusBox from './ActionBox'
 
 export default function ErrorView({
@@ -31,7 +31,12 @@ export default function ErrorView({
 }: {
     title: string
     message?: string
-    icon?: { ios: string; android: string; multiColor?: boolean }
+    icon?: {
+        ios: string
+        android: string
+        web: LucideIcon
+        multiColor?: boolean
+    }
     buttonText?: string
     onButtonPress?: () => void
     onRefresh?: () => any

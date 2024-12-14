@@ -73,6 +73,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'bubble.left.and.exclamationmark.bubble.right',
                         android: 'troubleshoot',
+                        web: 'HeartPulse',
                     },
                     onPress: () => {
                         void Linking.openURL(STATUS_URL)
@@ -88,6 +89,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'envelope',
                         android: 'mail',
+                        web: 'Mail',
                     },
                     onPress: async () =>
                         await Linking.openURL(
@@ -110,6 +112,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'star',
                         android: 'star',
+                        web: 'Star',
                     },
                     onPress: () => {
                         if (Platform.OS === 'android') {
