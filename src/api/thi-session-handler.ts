@@ -1,4 +1,5 @@
 import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage'
+import { Platform } from 'react-native'
 
 import API from './anonymous-api'
 
@@ -44,8 +45,9 @@ export async function createSession(
     }
 
     storage.set('sessionCreated', Date.now().toString())
-
-    await saveSecure('session', session)
+    console.debug('Session created at', storage.getString('sessionCreated'))
+    await saveSecure('session', session, true)
+    console.debug('Session saved')
     if (stayLoggedIn) {
         await saveSecure('username', username)
         await saveSecure('password', password)
@@ -60,7 +62,7 @@ export async function createGuestSession(forget = true): Promise<void> {
     if (forget) {
         await forgetSession()
     }
-    await saveSecure('session', 'guest')
+    await saveSecure('session', 'guest', true)
 }
 
 /**
@@ -85,13 +87,19 @@ export async function callWithSession<T>(
     }
 
     const username = loadSecure('username')
-    if (username === null) {
-        throw new UnavailableSessionError()
-    }
-
     const password = loadSecure('password')
-    if (password === null) {
-        throw new UnavailableSessionError()
+    if (Platform.OS === 'web') {
+        if (session === 'guest' || session == null) {
+            throw new NoSessionError()
+        }
+    } else {
+        if (username === null) {
+            throw new UnavailableSessionError()
+        }
+
+        if (password === null) {
+            throw new UnavailableSessionError()
+        }
     }
     // log in if the session is older than SESSION_EXPIRES
     if (

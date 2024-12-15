@@ -12,8 +12,16 @@ export const secureWebStorage = new MMKV({
     id: 'secure-web-storage',
 })
 
-export async function saveSecure(key: string, value: string): Promise<void> {
+export async function saveSecure(
+    key: string,
+    value: string,
+    insecureWeb = false
+): Promise<void> {
     if (Platform.OS === 'web') {
+        if (!insecureWeb) {
+            // Saving secure data in a browser is not possible, so we do nothing here. The user needs to sign in again as long as we cannot use single sign-on.
+            return
+        }
         secureWebStorage.set(key, value)
         await Promise.resolve()
         return

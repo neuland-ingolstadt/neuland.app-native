@@ -16,6 +16,7 @@ import {
 } from './gql-documents'
 
 const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
+console.info('Using GraphQL endpoint:', GRAPHQL_ENDPOINT)
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 

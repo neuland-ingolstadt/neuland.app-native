@@ -18,9 +18,6 @@ const DefaultTabs = (): JSX.Element => {
             <Tabs
                 screenOptions={{
                     tabBarActiveTintColor: styleTheme.colors.primary,
-                    tabBarLabelStyle: {
-                        marginBottom: 2,
-                    },
                 }}
             >
                 <Tabs.Screen
@@ -116,6 +113,7 @@ const DefaultTabs = (): JSX.Element => {
                     options={{
                         title: t('navigation.food'),
                         headerShown: false,
+                        tabBarLabel: t('navigation.food'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
                                 ios={{
@@ -152,6 +150,7 @@ const stylesheet = createStyleSheet((theme) => ({
                 ? undefined
                 : theme.colors.card
             : theme.colors.card,
+        alignItems: 'stretch',
     }),
 }))
 
