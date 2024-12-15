@@ -708,9 +708,6 @@ const MapScreen = (): JSX.Element => {
         )
     }, [availableFilteredGeoJSON])
 
-    // get is ipados using react native dvice info
-
-    console.log('isIpadOS', isIpadOS)
     return (
         <View
             // eslint-disable-next-line react-native/no-inline-styles
