@@ -108,3 +108,13 @@ export interface Description {
     de: string
     en: string
 }
+
+export interface OnboardingCardData {
+    title: string
+    description: string
+    icon: {
+        ios: string
+        android: MaterialIcon
+        web: LucideIcon
+    }
+}
