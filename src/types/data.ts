@@ -1,3 +1,5 @@
+import { type LucideIcon } from '@/components/Universal/Icon'
+
 import { type MaterialIcon } from './material-icons'
 
 export interface Allergens {
@@ -99,10 +101,20 @@ export interface Changelog {
 export interface Version {
     title: Description
     description: Description
-    icon: { ios: string; android: MaterialIcon }
+    icon: { ios: string; android: MaterialIcon; web: LucideIcon }
 }
 
 export interface Description {
     de: string
     en: string
+}
+
+export interface OnboardingCardData {
+    title: string
+    description: string
+    icon: {
+        ios: string
+        android: MaterialIcon
+        web: LucideIcon
+    }
 }

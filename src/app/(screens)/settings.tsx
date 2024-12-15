@@ -5,7 +5,7 @@ import { Avatar, NameBox } from '@/components/Settings'
 import GradesButton from '@/components/Settings/GradesButton'
 import Divider from '@/components/Universal/Divider'
 import FormList from '@/components/Universal/FormList'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
@@ -22,12 +22,11 @@ import {
     withBouncing,
 } from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { storage } from '@/utils/storage'
+import { loadSecure, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -75,8 +74,7 @@ export default function Settings(): JSX.Element {
     const scrollY = useRef(0)
     const logoRotation = useSharedValue(0)
     const velocity = 110
-    const username =
-        userKind === USER_EMPLOYEE && SecureStore.getItem('username')
+    const username = userKind === USER_EMPLOYEE && loadSecure('username')
     const { color, randomizeColor } = useRandomColor()
     const resetPreferences = usePreferencesStore((state) => state.reset)
     const resetFood = useFoodFilterStore((state) => state.reset)
@@ -227,6 +225,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'rectangle.stack',
                         android: 'dashboard_customize',
+                        web: 'LayoutDashboard',
                     },
 
                     onPress: () => {
@@ -238,6 +237,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         android: 'restaurant',
                         ios: 'fork.knife',
+                        web: 'Utensils',
                     },
                     onPress: () => {
                         router.navigate('/foodPreferences')
@@ -248,6 +248,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'globe',
                         android: 'language',
+                        web: 'Globe',
                     },
 
                     onPress: async () => {
@@ -272,6 +273,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'paintpalette',
                         android: 'palette',
+                        web: 'Palette',
                     },
                     onPress: () => {
                         router.navigate('/accent')
@@ -282,6 +284,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'moon.stars',
                         android: 'routine',
+                        web: 'MoonStar',
                     },
                     onPress: () => {
                         router.navigate('/theme')
@@ -295,6 +298,7 @@ export default function Settings(): JSX.Element {
                               icon: {
                                   ios: 'star.square.on.square',
                                   android: '' as MaterialIcon,
+                                  web: 'StarSquare' as LucideIcon,
                               },
                               onPress: () => {
                                   router.navigate('/appIcon')
@@ -312,6 +316,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'chevron.forward',
                         android: 'chevron_right',
+                        web: 'ChevronRight',
                     },
                     onPress: () => {
                         router.navigate('/about')
@@ -323,6 +328,7 @@ export default function Settings(): JSX.Element {
                     icon: {
                         ios: 'square.and.arrow.up',
                         android: 'share',
+                        web: 'Share',
                     },
                     onPress: () => {
                         trackEvent('Share', { type: 'app' })
@@ -372,143 +378,32 @@ export default function Settings(): JSX.Element {
                             }
                         }
                     }}
+                    style={styles.container}
                 >
-                    <View style={styles.container}>
-                        <View style={styles.nameBox}>
-                            {isSuccess &&
-                            userKind === 'student' &&
-                            data?.mtknr !== undefined ? (
-                                <View style={styles.nameOuterContainer}>
-                                    <View style={styles.nameInnerContainer}>
-                                        <NameBox
-                                            title={
-                                                data?.vname + ' ' + data?.name
-                                            }
-                                            subTitle1={
-                                                (data?.stgru ?? '') +
-                                                '. Semester'
-                                            }
-                                            subTitle2={data?.fachrich ?? ''}
-                                        >
-                                            <Avatar>
-                                                <Text style={styles.avatarText}>
-                                                    {getInitials(
-                                                        data?.vname +
-                                                            ' ' +
-                                                            data?.name
-                                                    )}
-                                                </Text>
-                                            </Avatar>
-                                        </NameBox>
-
-                                        <PlatformIcon
-                                            ios={{
-                                                name: 'chevron.forward',
-
-                                                size: 16,
-                                            }}
-                                            android={{
-                                                name: 'chevron_right',
-                                                size: 26,
-                                            }}
-                                            style={styles.iconAlign}
-                                        />
-                                    </View>
-                                    <Divider iosPaddingLeft={16} />
-                                    <GradesButton />
-                                </View>
-                            ) : isSuccess &&
-                              userKind === 'student' &&
-                              data?.mtknr === undefined ? (
-                                <View style={styles.nameOuterContainer}>
-                                    <View style={styles.nameInnerContainer}>
-                                        <NameBox
-                                            title={t('menu.error.noData.title')}
-                                            subTitle1={t(
-                                                'menu.error.noData.subtitle1'
-                                            )}
-                                            subTitle2={t(
-                                                'menu.error.noData.subtitle2'
-                                            )}
-                                        >
-                                            <Avatar
-                                                background={
-                                                    theme.colors
-                                                        .labelTertiaryColor
-                                                }
-                                            >
-                                                <PlatformIcon
-                                                    ios={{
-                                                        name: 'exclamationmark.triangle',
-                                                        variant: 'fill',
-                                                        size: 26,
-                                                    }}
-                                                    android={{
-                                                        name: 'warning',
-                                                        size: 28,
-                                                    }}
-                                                    style={styles.iconGuest}
-                                                />
-                                            </Avatar>
-                                        </NameBox>
-                                        <PlatformIcon
-                                            ios={{
-                                                name: 'chevron.forward',
-
-                                                size: 16,
-                                            }}
-                                            android={{
-                                                name: 'chevron_right',
-                                                size: 26,
-                                            }}
-                                            style={styles.iconAlign}
-                                        />
-                                    </View>
-                                    <Divider iosPaddingLeft={16} />
-                                    <GradesButton />
-                                </View>
-                            ) : userKind === 'employee' ? (
+                    <View style={styles.nameBox}>
+                        {isSuccess &&
+                        userKind === 'student' &&
+                        data?.mtknr !== undefined ? (
+                            <View style={styles.nameOuterContainer}>
                                 <View style={styles.nameInnerContainer}>
                                     <NameBox
-                                        title={username as string}
-                                        subTitle1={t('menu.employee.subtitle1')}
-                                        subTitle2={t('menu.employee.subtitle2')}
+                                        title={data?.vname + ' ' + data?.name}
+                                        subTitle1={
+                                            (data?.stgru ?? '') + '. Semester'
+                                        }
+                                        subTitle2={data?.fachrich ?? ''}
                                     >
                                         <Avatar>
                                             <Text style={styles.avatarText}>
                                                 {getInitials(
-                                                    (username as string) ?? ''
+                                                    data?.vname +
+                                                        ' ' +
+                                                        data?.name
                                                 )}
                                             </Text>
                                         </Avatar>
                                     </NameBox>
-                                </View>
-                            ) : userKind === 'guest' ? (
-                                <View style={styles.nameInnerContainer}>
-                                    <NameBox
-                                        title={t('menu.guest.title')}
-                                        subTitle1={t('menu.guest.subtitle')}
-                                        subTitle2={''}
-                                    >
-                                        <Avatar
-                                            background={
-                                                theme.colors.labelTertiaryColor
-                                            }
-                                        >
-                                            <PlatformIcon
-                                                ios={{
-                                                    name: 'person',
-                                                    variant: 'fill',
-                                                    size: 26,
-                                                }}
-                                                android={{
-                                                    name: 'account_circle',
-                                                    size: 32,
-                                                }}
-                                                style={styles.iconGuest}
-                                            />
-                                        </Avatar>
-                                    </NameBox>
+
                                     <PlatformIcon
                                         ios={{
                                             name: 'chevron.forward',
@@ -519,25 +414,29 @@ export default function Settings(): JSX.Element {
                                             name: 'chevron_right',
                                             size: 26,
                                         }}
+                                        web={{
+                                            name: 'ChevronRight',
+                                            size: 26,
+                                        }}
                                         style={styles.iconAlign}
                                     />
                                 </View>
-                            ) : isLoading ? (
-                                <>
-                                    <View style={styles.nameInnerContainer}>
-                                        <View style={styles.loading}>
-                                            <LoadingIndicator />
-                                        </View>
-                                    </View>
-                                </>
-                            ) : (
-                                <>
+                                <Divider iosPaddingLeft={16} />
+                                <GradesButton />
+                            </View>
+                        ) : isSuccess &&
+                          userKind === 'student' &&
+                          data?.mtknr === undefined ? (
+                            <View style={styles.nameOuterContainer}>
+                                <View style={styles.nameInnerContainer}>
                                     <NameBox
-                                        title="Error"
-                                        subTitle1={
-                                            error?.message ?? 'Unknown error'
-                                        }
-                                        subTitle2={t('menu.error.subtitle2')}
+                                        title={t('menu.error.noData.title')}
+                                        subTitle1={t(
+                                            'menu.error.noData.subtitle1'
+                                        )}
+                                        subTitle2={t(
+                                            'menu.error.noData.subtitle2'
+                                        )}
                                     >
                                         <Avatar
                                             background={
@@ -554,13 +453,139 @@ export default function Settings(): JSX.Element {
                                                     name: 'warning',
                                                     size: 28,
                                                 }}
+                                                web={{
+                                                    name: 'TriangleAlert',
+                                                    size: 28,
+                                                }}
                                                 style={styles.iconGuest}
                                             />
                                         </Avatar>
                                     </NameBox>
-                                </>
-                            )}
-                        </View>
+                                    <PlatformIcon
+                                        ios={{
+                                            name: 'chevron.forward',
+
+                                            size: 16,
+                                        }}
+                                        android={{
+                                            name: 'chevron_right',
+                                            size: 26,
+                                        }}
+                                        web={{
+                                            name: 'ChevronRight',
+                                            size: 26,
+                                        }}
+                                        style={styles.iconAlign}
+                                    />
+                                </View>
+                                <Divider iosPaddingLeft={16} />
+                                <GradesButton />
+                            </View>
+                        ) : userKind === 'employee' ? (
+                            <View style={styles.nameInnerContainer}>
+                                <NameBox
+                                    title={username as string}
+                                    subTitle1={t('menu.employee.subtitle1')}
+                                    subTitle2={t('menu.employee.subtitle2')}
+                                >
+                                    <Avatar>
+                                        <Text style={styles.avatarText}>
+                                            {getInitials(
+                                                (username as string) ?? ''
+                                            )}
+                                        </Text>
+                                    </Avatar>
+                                </NameBox>
+                            </View>
+                        ) : userKind === 'guest' ? (
+                            <View style={styles.nameInnerContainer}>
+                                <NameBox
+                                    title={t('menu.guest.title')}
+                                    subTitle1={t('menu.guest.subtitle')}
+                                    subTitle2={''}
+                                >
+                                    <Avatar
+                                        background={
+                                            theme.colors.labelTertiaryColor
+                                        }
+                                    >
+                                        <PlatformIcon
+                                            ios={{
+                                                name: 'person',
+                                                variant: 'fill',
+                                                size: 26,
+                                            }}
+                                            android={{
+                                                name: 'account_circle',
+                                                size: 32,
+                                            }}
+                                            web={{
+                                                name: 'User',
+                                                size: 32,
+                                            }}
+                                            style={styles.iconGuest}
+                                        />
+                                    </Avatar>
+                                </NameBox>
+                                <PlatformIcon
+                                    ios={{
+                                        name: 'chevron.forward',
+
+                                        size: 16,
+                                    }}
+                                    android={{
+                                        name: 'chevron_right',
+                                        size: 26,
+                                    }}
+                                    web={{
+                                        name: 'ChevronRight',
+                                        size: 26,
+                                    }}
+                                    style={styles.iconAlign}
+                                />
+                            </View>
+                        ) : isLoading ? (
+                            <>
+                                <View style={styles.nameInnerContainer}>
+                                    <View style={styles.loading}>
+                                        <LoadingIndicator />
+                                    </View>
+                                </View>
+                            </>
+                        ) : (
+                            <>
+                                <NameBox
+                                    title="Error"
+                                    subTitle1={
+                                        error?.message ?? 'Unknown error'
+                                    }
+                                    subTitle2={t('menu.error.subtitle2')}
+                                >
+                                    <Avatar
+                                        background={
+                                            theme.colors.labelTertiaryColor
+                                        }
+                                    >
+                                        <PlatformIcon
+                                            ios={{
+                                                name: 'exclamationmark.triangle',
+                                                variant: 'fill',
+                                                size: 26,
+                                            }}
+                                            android={{
+                                                name: 'warning',
+                                                size: 28,
+                                            }}
+                                            web={{
+                                                name: 'TriangleAlert',
+                                                size: 28,
+                                            }}
+                                            style={styles.iconGuest}
+                                        />
+                                    </Avatar>
+                                </NameBox>
+                            </>
+                        )}
                     </View>
                 </Pressable>
                 <View style={styles.formlistContainer}>
@@ -571,59 +596,73 @@ export default function Settings(): JSX.Element {
             <Text style={styles.copyrigth}>
                 {t('menu.copyright', { year: new Date().getFullYear() })}
             </Text>
-            <Animated.View
-                style={[
-                    styles.bounceContainer,
-                    logoBounceAnimation,
+            {Platform.OS !== 'web' && (
+                <>
+                    <Animated.View
+                        style={[
+                            styles.bounceContainer,
+                            logoBounceAnimation,
 
-                    {
-                        opacity: logoActiveOpacity,
-                        height: logoActiveHeight,
-                    },
-                ]}
-            >
-                <Pressable
-                    onPress={() => {
-                        setTapCount(0)
-                    }}
-                    disabled={!isBouncing}
-                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                >
-                    <LogoTextSVG
-                        size={15}
-                        color={isBouncing ? color : theme.colors.text}
-                    />
-                </Pressable>
-            </Animated.View>
+                            {
+                                opacity: logoActiveOpacity,
+                                height: logoActiveHeight,
+                            },
+                        ]}
+                    >
+                        <Pressable
+                            onPress={() => {
+                                setTapCount(0)
+                            }}
+                            disabled={!isBouncing}
+                            hitSlop={{
+                                top: 10,
+                                right: 10,
+                                bottom: 10,
+                                left: 10,
+                            }}
+                        >
+                            <LogoTextSVG
+                                size={15}
+                                color={isBouncing ? color : theme.colors.text}
+                            />
+                        </Pressable>
+                    </Animated.View>
 
-            <Animated.View
-                style={[
-                    wobbleAnimation,
-                    styles.whobbleContainer,
-                    {
-                        opacity: logoInactiveOpacity,
-                    },
-                ]}
-            >
-                <Pressable
-                    onPress={() => {
-                        handlePress()
-                    }}
-                    disabled={isBouncing}
-                    accessibilityLabel={t('button.settingsLogo', {
-                        ns: 'accessibility',
-                    })}
-                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                >
-                    <AnimatedLogoText
-                        dimensions={{
-                            logoWidth,
-                            logoHeight,
-                        }}
-                        speed={3.5}
-                    />
-                </Pressable>
-            </Animated.View>
+                    <Animated.View
+                        style={[
+                            wobbleAnimation,
+                            styles.whobbleContainer,
+                            {
+                                opacity: logoInactiveOpacity,
+                            },
+                        ]}
+                    >
+                        <Pressable
+                            onPress={() => {
+                                handlePress()
+                            }}
+                            disabled={isBouncing}
+                            accessibilityLabel={t('button.settingsLogo', {
+                                ns: 'accessibility',
+                            })}
+                            hitSlop={{
+                                top: 10,
+                                right: 10,
+                                bottom: 10,
+                                left: 10,
+                            }}
+                        >
+                            <AnimatedLogoText
+                                dimensions={{
+                                    logoWidth,
+                                    logoHeight,
+                                }}
+                                speed={3.5}
+                            />
+                        </Pressable>
+                    </Animated.View>
+                </>
+            )}
         </ScrollView>
     )
 }
@@ -679,6 +718,7 @@ const stylesheet = createStyleSheet((theme) => ({
         flexDirection: 'row',
         paddingHorizontal: 14,
         paddingVertical: 20,
+        width: '100%',
     },
     nameOuterContainer: { flexDirection: 'column', flex: 1 },
 

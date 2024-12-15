@@ -90,6 +90,10 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
                                             name: 'school',
                                             size: 20,
                                         }}
+                                        web={{
+                                            name: 'Clock',
+                                            size: 20,
+                                        }}
                                         style={styles.primaryContrast}
                                     />
                                 </View>

@@ -75,6 +75,10 @@ const MealCategory = ({
                                 name: collapsed ? 'expand_more' : 'expand_less',
                                 size: 20,
                             }}
+                            web={{
+                                name: collapsed ? 'ChevronDown' : 'ChevronUp',
+                                size: 20,
+                            }}
                             style={styles.toggleIcon}
                         />
                     </View>

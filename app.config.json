@@ -103,6 +103,14 @@
             "eas": {
                 "projectId": "b0ef9e3f-3115-44b0-abc7-99dd75821353"
             }
+        },
+        "web": {
+            "favicon": "./src/assets/web/favicon.png",
+            "shortName": "Neuland Next",
+            "name": "Neuland Next - Deine inoffizielle App für die THI",
+            "description": "Neuland Next ist eine inoffizielle App für die Technische Hochschule Ingolstadt. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
+            "lang": "de",
+            "preferRelatedApplications": true
         }
     }
 }

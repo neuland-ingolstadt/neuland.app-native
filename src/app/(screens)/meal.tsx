@@ -239,6 +239,7 @@ export default function FoodDetail(): JSX.Element {
                         ? {
                               android: 'check_circle',
                               ios: 'checkmark.seal',
+                              web: 'BadgeCheck',
                           }
                         : undefined,
                     iconColor: theme.colors.success,
@@ -264,6 +265,7 @@ export default function FoodDetail(): JSX.Element {
                             ? {
                                   android: 'warning',
                                   ios: 'exclamationmark.triangle',
+                                  web: 'TriangleAlert',
                               }
                             : undefined,
                         iconColor: theme.colors.notification,
@@ -415,6 +417,10 @@ export default function FoodDetail(): JSX.Element {
                             }}
                             android={{
                                 name: 'warning',
+                                size: 24,
+                            }}
+                            web={{
+                                name: 'TriangleAlert',
                                 size: 24,
                             }}
                             style={styles.iconWarning}

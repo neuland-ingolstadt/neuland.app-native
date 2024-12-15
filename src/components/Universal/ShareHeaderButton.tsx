@@ -30,6 +30,10 @@ export default function ShareHeaderButton({
                     name: 'share',
                     size: 20,
                 }}
+                web={{
+                    name: 'Share',
+                    size: 20,
+                }}
                 style={styles.icon}
             />
         </Pressable>
@@ -61,7 +65,7 @@ const stylesheet = createStyleSheet((theme) => ({
         }),
         height: 34,
         justifyContent: 'center',
-        marginRight: -5,
+        marginEnd: Platform.OS === 'web' ? 14 : -5,
         padding: 7,
         width: 34,
     },

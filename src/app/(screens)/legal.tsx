@@ -50,6 +50,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'safari',
                         android: 'github',
+                        web: 'Github',
                     },
 
                     onPress: async () =>
@@ -61,7 +62,8 @@ export default function About(): JSX.Element {
                     title: t('legal.formlist.us.faq'),
                     icon: {
                         ios: 'safari',
-                        android: 'github',
+                        android: 'link',
+                        web: 'Link',
                     },
 
                     onPress: async () =>

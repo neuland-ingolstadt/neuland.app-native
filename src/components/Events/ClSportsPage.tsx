@@ -128,6 +128,10 @@ export default function ClSportsPage({
                                 name: collapsed ? 'expand_more' : 'expand_less',
                                 size: 20,
                             }}
+                            web={{
+                                name: collapsed ? 'ChevronDown' : 'ChevronUp',
+                                size: 20,
+                            }}
                             style={styles.toggleIcon}
                         />
                     </View>
@@ -241,6 +245,7 @@ export default function ClSportsPage({
                                     icon={{
                                         ios: 'sportscourt',
                                         android: 'sports_gymnastics',
+                                        web: 'Dumbbell',
                                     }}
                                     message={t(
                                         'pages.clEvents.sports.noEvents.subtitle'

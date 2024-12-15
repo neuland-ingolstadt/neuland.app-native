@@ -130,6 +130,10 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                                                 name: 'school',
                                                 size: 20,
                                             }}
+                                            web={{
+                                                name: 'Notebook',
+                                                size: 20,
+                                            }}
                                             style={styles.primaryContrast}
                                         />
                                     </View>

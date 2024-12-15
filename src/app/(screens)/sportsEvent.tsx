@@ -115,11 +115,13 @@ export default function SportsEventDetail(): JSX.Element {
                         ? {
                               ios: 'exclamationmark.triangle.fill',
                               android: 'warning',
+                              web: 'TriangleAlert',
                           }
                         : {
                               ios: 'checkmark.seal',
                               android: 'new_releases',
                               androidVariant: 'outlined',
+                              web: 'BadgeCheck',
                           },
                     iconColor: styles.warning(
                         sportsEvent?.requiresRegistration ?? false

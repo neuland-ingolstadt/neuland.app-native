@@ -6,7 +6,8 @@ import { type CourseShortNames } from '@/types/data'
 import { type PersDataDetails } from '@/types/thi-api'
 import { type QueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import { getItemAsync } from 'expo-secure-store'
+
+import { loadSecure } from './storage'
 
 export const networkError = 'Network request failed'
 export const guestError = 'User is logged in as guest'
@@ -32,7 +33,7 @@ export const trimErrorMsg = (str: string): string => {
 export async function getUsername(): Promise<string> {
     let username = ''
     try {
-        username = (await getItemAsync('username')) ?? ''
+        username = loadSecure('username') ?? ''
     } catch (e) {
         console.log(e)
     }

@@ -46,6 +46,10 @@ export const AllergensBanner = ({
                             name: 'close',
                             size: 20,
                         }}
+                        web={{
+                            name: 'X',
+                            size: 20,
+                        }}
                         style={styles.contrastColor}
                     />
                 </TouchableOpacity>

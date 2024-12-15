@@ -5,7 +5,7 @@ import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
 import { router } from 'expo-router'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
@@ -49,18 +49,27 @@ const SportsRow = ({
                 </>
             }
             icon={
-                <PlatformIcon
-                    ios={{
-                        name: sportsCategories[event.sportsCategory].iosIcon,
-                        size: 16,
-                    }}
-                    android={{
-                        name: sportsCategories[event.sportsCategory]
-                            .androidIcon,
-                        size: 22,
-                    }}
-                    style={styles.toggleIcon}
-                />
+                Platform.OS === 'web' ? (
+                    <></>
+                ) : (
+                    <PlatformIcon
+                        ios={{
+                            name: sportsCategories[event.sportsCategory]
+                                .iosIcon,
+                            size: 16,
+                        }}
+                        android={{
+                            name: sportsCategories[event.sportsCategory]
+                                .androidIcon,
+                            size: 22,
+                        }}
+                        web={{
+                            name: 'Dumbbell',
+                            size: 22,
+                        }}
+                        style={styles.toggleIcon}
+                    />
+                )
             }
             maxTitleWidth={'70%'}
         />

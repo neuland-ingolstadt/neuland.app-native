@@ -134,6 +134,10 @@ const RenderSectionItems: React.FC<{
                                         size: 18,
                                         variant: item.icon.androidVariant,
                                     }}
+                                    web={{
+                                        name: item.icon.web,
+                                        size: 18,
+                                    }}
                                     // eslint-disable-next-line react-native/no-inline-styles
                                     style={{
                                         marginLeft: item.value != null ? 6 : 0,

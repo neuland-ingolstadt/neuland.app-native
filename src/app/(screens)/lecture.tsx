@@ -174,6 +174,10 @@ export default function TimetableDetails(): JSX.Element {
                                     name: 'calendar_month',
                                     size: 24,
                                 }}
+                                web={{
+                                    name: 'Clock',
+                                    size: 24,
+                                }}
                             />
                         </DetailsSymbol>
 
@@ -200,6 +204,10 @@ export default function TimetableDetails(): JSX.Element {
                                             }}
                                             android={{
                                                 name: 'chevron_right',
+                                                size: 16,
+                                            }}
+                                            web={{
+                                                name: 'ChevronRight',
                                                 size: 16,
                                             }}
                                         />
@@ -233,6 +241,10 @@ export default function TimetableDetails(): JSX.Element {
                                         }}
                                         android={{
                                             name: 'place',
+                                            size: 24,
+                                        }}
+                                        web={{
+                                            name: 'MapPin',
                                             size: 24,
                                         }}
                                         style={styles.icon}
@@ -295,6 +307,10 @@ export default function TimetableDetails(): JSX.Element {
                                         }}
                                         android={{
                                             name: 'person',
+                                            size: 24,
+                                        }}
+                                        web={{
+                                            name: 'User',
                                             size: 24,
                                         }}
                                         style={styles.icon}

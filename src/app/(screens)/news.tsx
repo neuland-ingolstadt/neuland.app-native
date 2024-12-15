@@ -107,6 +107,10 @@ export default function NewsScreen(): JSX.Element {
                                             name: 'chevron_right',
                                             size: 16,
                                         }}
+                                        web={{
+                                            name: 'ChevronRight',
+                                            size: 16,
+                                        }}
                                         style={styles.icon}
                                     />
                                 </View>

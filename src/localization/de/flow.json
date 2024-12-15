@@ -7,6 +7,8 @@
     "onboarding": {
         "links": {
             "privacy": "Datenschutzerklärung",
+            "imprint": "Impressum",
+            "faq": "Mehr erfahren",
             "agree1": "Durch Fortfahren stimmst du der ",
             "agree2": " zu.",
             "safety": "Datensicherheit"
@@ -20,7 +22,9 @@
             "title2": "Von Studierenden entwickelt",
             "description2": "Diese App ist ein Open-Source-Projekt von Neuland Ingolstadt e.V. und ist eine Alternative zur offiziellen THI-App.",
             "title3": "Sicherheit an erster Stelle",
-            "description3": "Durch die Nutzung der offiziellen und verschlüsselten Dienste von der THI sind deine Daten streng geschützt und weder für uns noch für Dritte zugänglich."
+            "description3": "Durch die Nutzung der offiziellen und verschlüsselten Dienste von der THI sind deine Daten streng geschützt und weder für uns noch für Dritte zugänglich.",
+            "title4": "Noch besser in der App",
+            "description4": "Installiere Neuland Next auf deinem Smartphone, um alle Funktionen zu nutzen. Verfügbar für iOS, iPadOS, MacOS und Android."
         }
     },
     "login": {

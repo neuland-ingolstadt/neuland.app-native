@@ -60,6 +60,10 @@ export default function CrashView({
                             name: 'error',
                             size: 80,
                         }}
+                        web={{
+                            name: 'ServerCrash',
+                            size: 80,
+                        }}
                     />
                     <Text style={styles.errorTitle}>
                         {t('error.crash.title')}

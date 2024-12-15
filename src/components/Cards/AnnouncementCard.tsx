@@ -82,6 +82,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
                 <PlatformIcon
                     ios={{ name: 'megaphone.fill', size: 18 }}
                     android={{ name: 'campaign', size: 24 }}
+                    web={{ name: 'Megaphone', size: 24 }}
                 />
                 <Text style={styles.title}>
                     {/* @ts-expect-error cannot verify that title is a valid key */}
@@ -91,6 +92,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
                     <PlatformIcon
                         ios={{ name: 'xmark', size: 16 }}
                         android={{ name: 'close', size: 26 }}
+                        web={{ name: 'X', size: 26 }}
                         style={styles.closeIcon}
                     />
                 </Pressable>

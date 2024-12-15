@@ -1,3 +1,4 @@
+import ContextMenu from '@/components/Flow/ContextMenu'
 import { Avatar } from '@/components/Settings'
 import PlatformIcon from '@/components/Universal/Icon'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
@@ -7,14 +8,13 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { getPersonalData, getUsername, performLogout } from '@/utils/api-utils'
+import { loadSecure } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import { getItem } from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, Pressable, Text } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
 import { getDeviceType } from 'react-native-device-info'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -31,11 +31,10 @@ export const IndexHeaderRight = (): JSX.Element => {
         useContext<UserKindContextType>(UserKindContext)
     const { toggleUserKind } = useContext(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
-    const username = userKind === USER_EMPLOYEE && getItem('username')
+    const username = userKind === USER_EMPLOYEE && loadSecure('username')
 
     const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
     const [initials, setInitials] = useState('')
-    const androidPadding = Platform.OS === 'android' ? 16 : 0
 
     const {
         data: persData,
@@ -135,6 +134,10 @@ export const IndexHeaderRight = (): JSX.Element => {
                             name: 'account_circle',
                             size: 26,
                         }}
+                        web={{
+                            name: 'CircleUser',
+                            size: 24,
+                        }}
                         style={styles.icon}
                     />
                 ) : userKind === USER_STUDENT &&
@@ -148,6 +151,10 @@ export const IndexHeaderRight = (): JSX.Element => {
                         android={{
                             name: 'account_circle_off',
                             size: 26,
+                        }}
+                        web={{
+                            name: 'UserX',
+                            size: 24,
                         }}
                         style={styles.icon}
                     />
@@ -266,9 +273,7 @@ export const IndexHeaderRight = (): JSX.Element => {
             delayLongPress={300}
             onLongPress={() => {}}
             accessibilityLabel={t('navigation.settings')}
-            style={{
-                paddingRight: androidPadding,
-            }}
+            style={styles.element}
         >
             {MemoIcon}
         </Pressable>
@@ -279,6 +284,9 @@ const stylesheet = createStyleSheet((theme) => ({
     center: {
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    element: {
+        marginEnd: Platform.OS !== 'ios' ? 14 : 0,
     },
     icon: {
         color: theme.colors.text,

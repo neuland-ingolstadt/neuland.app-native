@@ -28,7 +28,7 @@ const ToggleRow = ({
                                         selectedElement === index
                                     )}
                                 >
-                                    {item}{' '}
+                                    {item}
                                 </Text>
                             </View>
                         </Pressable>

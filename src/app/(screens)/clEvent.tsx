@@ -9,7 +9,7 @@ import {
     formatFriendlyDateTimeRange,
 } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
@@ -129,6 +129,7 @@ export default function ClEventDetail(): JSX.Element {
                                     icon: {
                                         ios: 'instagram',
                                         android: 'instagram',
+                                        web: 'Instagram',
                                         iosFallback: true,
                                     },
                                     onPress: () => {
@@ -152,6 +153,9 @@ export default function ClEventDetail(): JSX.Element {
             : []),
     ]
 
+    if (clEvent == null) {
+        return <Redirect href={'/clEvents'} />
+    }
     return (
         <ScrollView
             style={styles.page}

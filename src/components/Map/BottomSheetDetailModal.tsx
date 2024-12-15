@@ -60,6 +60,10 @@ const ReportLink: React.FC = () => {
                         name: 'chevron_right',
                         size: 16,
                     }}
+                    web={{
+                        name: 'ChevronRight',
+                        size: 16,
+                    }}
                 />
             </Pressable>
         </View>
@@ -116,6 +120,10 @@ export const BottomSheetDetailModal = ({
                                             name: 'share',
                                             size: 16,
                                         }}
+                                        web={{
+                                            name: 'Share',
+                                            size: 16,
+                                        }}
                                         style={styles.shareIcon(Platform.OS)}
                                     />
                                 </Pressable>
@@ -134,6 +142,10 @@ export const BottomSheetDetailModal = ({
                                         }}
                                         android={{
                                             name: 'expand_more',
+                                            size: 22,
+                                        }}
+                                        web={{
+                                            name: 'X',
                                             size: 22,
                                         }}
                                         style={styles.xIcon(Platform.OS)}

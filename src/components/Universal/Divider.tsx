@@ -48,7 +48,8 @@ const stylesheet = createStyleSheet((theme) => ({
     line: ({ width, color }) => ({
         width: width ?? '100%',
         borderBottomColor: color ?? theme.colors.labelTertiaryColor,
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth:
+            Platform.OS !== 'web' ? StyleSheet.hairlineWidth : 0.1,
     }),
 }))
 

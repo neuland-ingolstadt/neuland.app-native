@@ -28,6 +28,10 @@ const GradesButton = (): JSX.Element => {
                     name: 'bar_chart_4_bars',
                     size: 18,
                 }}
+                web={{
+                    name: 'ChartColumnBig',
+                    size: 18,
+                }}
                 style={styles.icon}
             />
         </Pressable>

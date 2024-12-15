@@ -21,6 +21,7 @@ export const quicklinks = [
         icon: {
             ios: 'graduationcap',
             android: 'school',
+            web: 'GraduationCap',
         },
     },
     {
@@ -29,6 +30,7 @@ export const quicklinks = [
         icon: {
             ios: 'tray.full',
             android: 'note_stack',
+            web: 'FolderOpen',
         },
     },
     {
@@ -37,6 +39,7 @@ export const quicklinks = [
         icon: {
             ios: 'envelope',
             android: 'mail',
+            web: 'Mail',
         },
     },
     {
@@ -45,6 +48,7 @@ export const quicklinks = [
         icon: {
             ios: 'person.bubble',
             android: '3p',
+            web: 'CircleUser',
         },
     },
     {
@@ -53,6 +57,7 @@ export const quicklinks = [
         icon: {
             ios: 'globe',
             android: 'captive_portal',
+            web: 'Globe',
         },
     },
     {
@@ -61,6 +66,7 @@ export const quicklinks = [
         icon: {
             ios: 'cart',
             android: 'shopping_cart',
+            web: 'ShoppingCart',
         },
     },
     {
@@ -69,6 +75,7 @@ export const quicklinks = [
         icon: {
             ios: 'text.book.closed',
             android: 'book_4',
+            web: 'BookOpenText',
         },
     },
     {
@@ -77,6 +84,7 @@ export const quicklinks = [
         icon: {
             ios: 'newspaper',
             android: 'newspaper',
+            web: 'Newspaper',
         },
     },
 ]

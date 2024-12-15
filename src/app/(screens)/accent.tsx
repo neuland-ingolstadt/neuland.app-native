@@ -73,6 +73,10 @@ export default function Theme(): JSX.Element {
                                     name: 'check',
                                     size: 24,
                                 }}
+                                web={{
+                                    name: 'Check',
+                                    size: 24,
+                                }}
                                 style={{
                                     color: getContrastColor(themeAccentColor),
                                 }}

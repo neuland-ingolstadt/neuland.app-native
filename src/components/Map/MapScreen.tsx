@@ -5,6 +5,7 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
+import { useBottomTabBarHeight } from '@/components/Layout/Tabbar'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
@@ -31,6 +32,7 @@ import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
+import Maplibre from '@maplibre/maplibre-react-native'
 import MapLibreGL, {
     type CameraRef,
     type MapViewRef,
@@ -63,7 +65,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
 import Animated, {
     runOnJS,
     useAnimatedStyle,
@@ -79,6 +80,12 @@ import {
 import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
+
+export function requestPermission(): void {
+    if (Platform.OS === 'android') {
+        void Maplibre.requestAndroidLocationPermissions()
+    }
+}
 
 const isIpadOS = Platform.OS === 'ios' && Platform.isPad
 

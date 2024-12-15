@@ -43,6 +43,10 @@ export function HeaderLeft(): JSX.Element {
                             : 'event_note',
                     size: 24,
                 }}
+                web={{
+                    name: timetableMode === 'list' ? 'CalendarRange' : 'List',
+                    size: 24,
+                }}
                 style={styles.icon}
             />
         </Pressable>
@@ -72,6 +76,10 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
                     name: 'keyboard_return',
                     size: 24,
                 }}
+                web={{
+                    name: 'Undo2',
+                    size: 24,
+                }}
                 style={styles.icon}
             />
         </Pressable>
@@ -80,7 +88,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
-        marginHorizontal: Platform.OS === 'android' ? 14 : 0,
+        marginHorizontal: Platform.OS !== 'ios' ? 14 : 0,
     },
     icon: {
         color: theme.colors.text,

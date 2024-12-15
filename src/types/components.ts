@@ -1,4 +1,7 @@
-import { type CommunityIcon } from '@/components/Universal/Icon'
+import {
+    type CommunityIcon,
+    type LucideIcon,
+} from '@/components/Universal/Icon'
 import { type ColorValue } from 'react-native'
 
 import { type MaterialIcon } from './material-icons'
@@ -9,6 +12,7 @@ export interface SectionGroup {
     icon?: {
         ios: string
         android: MaterialIcon | CommunityIcon
+        web: LucideIcon
         iosFallback?: boolean
         androidVariant?: 'outlined' | 'filled'
     }

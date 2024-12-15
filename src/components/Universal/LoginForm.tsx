@@ -7,11 +7,11 @@ import {
     USER_STUDENT,
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
+import { loadSecure } from '@/utils/storage'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
-import * as SecureStore from 'expo-secure-store'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -69,6 +69,8 @@ const LoginForm = ({
             })
             navigateHome()
         } catch (e) {
+            console.error('Failed to login', e)
+
             const error = e as Error
             const message = trimErrorMsg(error.message)
             setLoading(false)
@@ -93,27 +95,35 @@ const LoginForm = ({
             ) {
                 msg = t('login.alert.error.backend')
             }
-            Alert.alert(
-                title,
-                msg,
-                [
-                    { text: 'OK' },
-                    ...(showStatus
-                        ? [
-                              {
-                                  text: t('error.crash.status', {
-                                      ns: 'common',
-                                  }),
-                                  onPress: async () =>
-                                      await Linking.openURL(STATUS_URL),
-                              },
-                          ]
-                        : []),
-                ],
-                {
-                    cancelable: false,
-                }
-            )
+            if (Platform.OS === 'web') {
+                toast({
+                    title: msg,
+                    preset: 'error',
+                    duration: 2.5,
+                })
+            } else {
+                Alert.alert(
+                    title,
+                    msg,
+                    [
+                        { text: 'OK' },
+                        ...(showStatus
+                            ? [
+                                  {
+                                      text: t('error.crash.status', {
+                                          ns: 'common',
+                                      }),
+                                      onPress: async () =>
+                                          await Linking.openURL(STATUS_URL),
+                                  },
+                              ]
+                            : []),
+                    ],
+                    {
+                        cancelable: false,
+                    }
+                )
+            }
         }
     }
 
@@ -133,16 +143,12 @@ const LoginForm = ({
         setLoading(false)
     }
 
-    async function load(key: string): Promise<string | null> {
-        return SecureStore.getItem(key)
-    }
-
     useEffect(() => {
         // on iOS secure store is synced with iCloud, so we can prefill the login form
         if (Platform.OS === 'ios') {
             const loadSavedData = async (): Promise<void> => {
-                const savedUsername = await load('username')
-                const savedPassword = await load('password')
+                const savedUsername = loadSecure('username')
+                const savedPassword = loadSecure('password')
                 if (savedUsername !== null && savedPassword !== null) {
                     setUsername(savedUsername)
                     setPassword(savedPassword)

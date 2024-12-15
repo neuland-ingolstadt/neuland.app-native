@@ -39,7 +39,7 @@ function WorkaroundStack({
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()
     const { styles, theme } = useStyles(stylesheet)
-    if (Platform.OS === 'android' && androidFallback) {
+    if (Platform.OS !== 'ios' && androidFallback) {
         return (
             <StackAndroid.Navigator>
                 <StackAndroid.Screen
