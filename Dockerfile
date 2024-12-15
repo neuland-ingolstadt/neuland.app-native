@@ -24,7 +24,7 @@ ENV EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT}
 ENV EXPO_PUBLIC_APTABASE_KEY=${EXPO_PUBLIC_APTABASE_KEY}
 ENV NODE_ENV=production
 
-RUN npx expo export -p web
+RUN npx expo export -p web -c
 
 # Final stage: Serve static files using npx serve
 FROM node:23 AS final

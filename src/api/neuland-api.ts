@@ -15,7 +15,9 @@ import {
     UNIVERSITY_SPORTS_QUERY,
 } from './gql-documents'
 
-const GRAPHQL_ENDPOINT: string = 'https://api.neuland.app/graphql'
+const GRAPHQL_ENDPOINT: string =
+    process.env.EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT ??
+    'https://api.neuland.app/graphql'
 console.info('Using GraphQL endpoint:', GRAPHQL_ENDPOINT)
 const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
