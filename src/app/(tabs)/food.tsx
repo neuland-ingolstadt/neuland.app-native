@@ -30,7 +30,7 @@ export default function FoodRootScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
             <WorkaroundStack
-                name={'dashboard'}
+                name={'food'}
                 titleKey={'navigation.food'}
                 component={isPageOpen ? FoodScreen : () => <></>}
                 headerRightElement={FoodHeaderRight}

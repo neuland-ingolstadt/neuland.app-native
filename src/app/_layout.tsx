@@ -37,7 +37,9 @@ function RootLayout(): JSX.Element {
     const isPad = DeviceInfo.isTablet()
 
     useEffect(() => {
-        if (isPad) {
+        if (Platform.OS === 'web') {
+            // do nothing
+        } else if (isPad) {
             void ScreenOrientation.unlockAsync()
         } else {
             void ScreenOrientation.lockAsync(
@@ -384,6 +386,10 @@ function RootLayout(): JSX.Element {
                                     android={{
                                         name: 'barcode_scanner',
                                         size: 24,
+                                    }}
+                                    web={{
+                                        name: 'Barcode',
+                                        size: 22,
                                     }}
                                 />
                             </Pressable>

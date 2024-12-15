@@ -1,4 +1,5 @@
 import FormList from '@/components/Universal/FormList'
+import { type LucideIcon } from '@/components/Universal/Icon'
 import { quicklinks } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FormListSections } from '@/types/components'
@@ -30,9 +31,11 @@ const LinkScreen = (): JSX.Element => {
         icon: {
             ios: string
             android: MaterialIcon
+            web: LucideIcon
         }
     }
     function generateSections(links: Quicklink[]): FormListSections[] {
+        console.log(links)
         return [
             {
                 items: links.map((link) => ({

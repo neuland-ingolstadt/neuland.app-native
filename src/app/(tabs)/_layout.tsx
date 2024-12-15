@@ -54,7 +54,8 @@ export default function HomeLayout(): JSX.Element {
         (state) => state.toggleSelectedAllergens
     )
     const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
-    const { userKind = USER_GUEST } = useContext(UserKindContext)
+    const { userKind: userKindInitial } = useContext(UserKindContext)
+    const userKind = userKindInitial ?? USER_GUEST
     const updatedVersion = useFlowStore((state) => state.updatedVersion)
     const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
     const [analyticsV1] = useMMKVBoolean('analytics')
@@ -85,7 +86,21 @@ export default function HomeLayout(): JSX.Element {
         }
         storage.delete('selectedUserAllergens')
     }
+
+    const version = Application.nativeApplicationVersion
+    const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
+    const isChangelogAvailable =
+        version != null
+            ? Object.keys(changelog.version).some(
+                  (changelogVersion) => changelogVersion === processedVersion
+              )
+            : false
+
     useEffect(() => {
+        if (Platform.OS === 'web') {
+            return
+        }
+
         const shortcuts = [
             {
                 id: 'timetable',
@@ -188,24 +203,22 @@ export default function HomeLayout(): JSX.Element {
         }
     }, [appIcon])
 
-    if (isOnboarded !== true) {
-        return <Redirect href={'/onboarding'} />
-    }
+    if (Platform.OS === 'web') {
+        if (userKindInitial === undefined) {
+            return <Redirect href={'/login'} />
+        }
+    } else {
+        if (isOnboarded !== true) {
+            return <Redirect href={'/onboarding'} />
+        }
 
-    const version = Application.nativeApplicationVersion
-    const processedVersion = convertToMajorMinorPatch(version ?? '0.0.0')
-    const isChangelogAvailable =
-        version != null
-            ? Object.keys(changelog.version).some(
-                  (changelogVersion) => changelogVersion === processedVersion
-              )
-            : false
-    if (
-        updatedVersion !== processedVersion &&
-        isChangelogAvailable &&
-        isOnboarded
-    ) {
-        return <Redirect href={'/whatsnew'} />
+        if (
+            updatedVersion !== processedVersion &&
+            isChangelogAvailable &&
+            isOnboarded
+        ) {
+            return <Redirect href={'/whatsnew'} />
+        }
     }
 
     return <TabLayout />

@@ -99,6 +99,23 @@ export default function Profile(): JSX.Element {
     }
 
     const logoutAlert = (): void => {
+        if (Platform.OS === 'web') {
+            if (!window.confirm(t('profile.logout.alert.message'))) {
+                return
+            } else {
+                setIsLoggingOut(true)
+                resetFood()
+                resetPreferences()
+                performLogout(toggleUserKind, resetOrder, queryClient)
+                    .catch((e) => {
+                        console.log(e)
+                    })
+                    .finally(() => {
+                        setIsLoggingOut(false)
+                    })
+                return
+            }
+        }
         Alert.alert(
             t('profile.logout.alert.title'),
             t('profile.logout.alert.message'),
@@ -292,6 +309,7 @@ export default function Profile(): JSX.Element {
                             icon={{
                                 ios: 'person.crop.circle.badge.exclamationmark',
                                 android: 'account_circle_off',
+                                web: 'UserRoundX',
                             }}
                             isCritical={false}
                         />
@@ -313,6 +331,10 @@ export default function Profile(): JSX.Element {
                                 }}
                                 android={{
                                     name: 'logout',
+                                    size: 22,
+                                }}
+                                web={{
+                                    name: 'LogOut',
                                     size: 22,
                                 }}
                                 style={styles.notification}

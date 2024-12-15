@@ -27,6 +27,10 @@ export default function ShareButton({
                         name: 'share',
                         size: 18,
                     }}
+                    web={{
+                        name: 'Share',
+                        size: 18,
+                    }}
                 />
 
                 <Text style={styles.shareText}>{t('misc.share')}</Text>

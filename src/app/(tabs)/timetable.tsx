@@ -16,7 +16,7 @@ export default function FoodRootScreen(): JSX.Element {
                 <meta property="expo:spotlight" content="true" />
             </Head>
             <WorkaroundStack
-                name={'dashboard'}
+                name={'timetable'}
                 titleKey={'navigation.timetable'}
                 component={TimetableScreen}
                 androidFallback

@@ -117,6 +117,7 @@ function TimetableScreen(): JSX.Element {
                         icon={{
                             ios: 'calendar.badge.exclamationmark',
                             android: 'edit_calendar',
+                            web: 'CalendarX2',
                         }}
                         onButtonPress={() => {
                             void Linking.openURL('https://hiplan.thi.de/')

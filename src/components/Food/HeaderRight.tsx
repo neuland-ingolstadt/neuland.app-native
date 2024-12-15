@@ -28,6 +28,10 @@ export const FoodHeaderRight = (): JSX.Element => {
                         name: 'filter_list',
                         size: 24,
                     }}
+                    web={{
+                        name: 'ListFilter',
+                        size: 24,
+                    }}
                     style={styles.icon}
                 />
             </View>
@@ -37,7 +41,7 @@ export const FoodHeaderRight = (): JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
     headerButton: {
-        marginHorizontal: Platform.OS === 'android' ? 14 : 0,
+        marginHorizontal: Platform.OS !== 'ios' ? 14 : 0,
     },
     icon: {
         color: theme.colors.text,

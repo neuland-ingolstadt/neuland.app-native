@@ -32,7 +32,7 @@ export default function HomeRootScreen(): JSX.Element {
             </Head>
 
             <WorkaroundStack
-                name={'dashboard'}
+                name={'index'}
                 titleKey={'navigation.dashboard'}
                 component={isPageOpen ? HomeScreen : () => <></>}
                 largeTitle={true}
@@ -94,6 +94,7 @@ function HomeScreen(): JSX.Element {
                     ios: 'rainbow',
                     multiColor: true,
                     android: 'dashboard_customize',
+                    web: 'Cog',
                 }}
                 buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
                 onButtonPress={() => {

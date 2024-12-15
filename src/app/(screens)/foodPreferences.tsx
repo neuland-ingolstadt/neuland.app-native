@@ -99,7 +99,7 @@ export default function FoodPreferences(): JSX.Element {
                         state={false}
                     />
                 </SectionView>
-                <View style={{ ...styles.sectionContainer }}>
+                <View style={styles.sectionContainer}>
                     <FormList sections={sections} />
                 </View>
                 <SectionView title={t('preferences.formlist.language')}>
@@ -120,6 +120,10 @@ export default function FoodPreferences(): JSX.Element {
                         }}
                         android={{
                             name: 'warning',
+                            size: 24,
+                        }}
+                        web={{
+                            name: 'TriangleAlert',
                             size: 24,
                         }}
                         style={styles.warningIcon}

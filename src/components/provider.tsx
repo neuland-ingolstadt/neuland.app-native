@@ -13,6 +13,7 @@ import {
 } from '@react-navigation/native'
 import { QueryClient, focusManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { Toaster } from 'burnt/web'
 import { useSegments } from 'expo-router'
 import React, { useEffect } from 'react'
 import {
@@ -238,17 +239,15 @@ export default function Provider({
 
     useEffect(() => {
         const subscription = Appearance.addChangeListener(() => {})
-        if (theme === 'dark') {
-            Appearance.setColorScheme('dark')
-            UnistylesRuntime.setAdaptiveThemes(false)
-            UnistylesRuntime.setTheme('dark')
-        } else if (theme === 'light') {
-            Appearance.setColorScheme('light')
-            UnistylesRuntime.setAdaptiveThemes(false)
-            UnistylesRuntime.setTheme('light')
-        } else {
-            Appearance.setColorScheme(undefined)
-            UnistylesRuntime.setAdaptiveThemes(true)
+
+        const isFixedTheme = theme === 'dark' || theme === 'light'
+        if (Platform.OS !== 'web') {
+            Appearance.setColorScheme(isFixedTheme ? theme : undefined)
+        }
+
+        UnistylesRuntime.setAdaptiveThemes(!isFixedTheme)
+        if (isFixedTheme) {
+            UnistylesRuntime.setTheme(theme)
         }
 
         return () => {
@@ -273,6 +272,7 @@ export default function Provider({
                         <BottomSheetModalProvider>
                             <UserKindContext.Provider value={userKind}>
                                 <DashboardContext.Provider value={dashboard}>
+                                    <Toaster />
                                     {children}
                                 </DashboardContext.Provider>
                             </UserKindContext.Provider>

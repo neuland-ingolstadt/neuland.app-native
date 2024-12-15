@@ -247,6 +247,7 @@ export default function TimetableList({
                     icon={{
                         ios: 'fireworks',
                         android: 'celebration',
+                        web: 'PartyPopper',
                     }}
                     isCritical={false}
                 />

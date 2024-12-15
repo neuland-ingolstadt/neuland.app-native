@@ -1,5 +1,6 @@
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
+import ContextMenu from '@/components/Flow/ContextMenu'
 import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
 import { type UserKindContextType } from '@/contexts/userKind'
@@ -25,7 +26,6 @@ import { router } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
-import ContextMenu from 'react-native-context-menu-view'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
@@ -84,6 +84,7 @@ export const MealEntry = ({
         ? 'exclamationmark.triangle'
         : 'info.circle'
     const androidName = hasUserAllergens ? 'warning' : 'info'
+    const webName = hasUserAllergens ? 'TriangleAlert' : 'Info'
     const textContent = hasUserAllergens
         ? userAllergens
         : t('empty.noAllergens')
@@ -230,6 +231,10 @@ export const MealEntry = ({
                                                 name: androidName,
                                                 size: 16,
                                                 variant: 'outlined',
+                                            }}
+                                            web={{
+                                                name: webName,
+                                                size: 16,
                                             }}
                                             style={styles.icon}
                                         />

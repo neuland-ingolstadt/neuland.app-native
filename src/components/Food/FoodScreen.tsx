@@ -1,6 +1,7 @@
 import ErrorView from '@/components/Error/ErrorView'
 import { MealDay } from '@/components/Food'
 import { AllergensBanner } from '@/components/Food/AllergensBanner'
+import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
@@ -22,7 +23,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
