@@ -71,6 +71,10 @@ const LibrarySlotRow = ({
                                         name: 'add',
                                         size: 26,
                                     }}
+                                    web={{
+                                        name: 'Plus',
+                                        size: 20,
+                                    }}
                                 />
                             ) : (
                                 <PlatformIcon
@@ -81,6 +85,10 @@ const LibrarySlotRow = ({
                                     android={{
                                         name: 'search_off',
                                         size: 26,
+                                    }}
+                                    web={{
+                                        name: 'SearchX',
+                                        size: 20,
                                     }}
                                 />
                             )}

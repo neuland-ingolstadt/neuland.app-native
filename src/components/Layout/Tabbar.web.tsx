@@ -53,7 +53,7 @@ const DefaultTabs = (): JSX.Element => {
                 <Tabs.Screen
                     name="timetable"
                     options={{
-                        headerShown: false,
+                        headerShown: Platform.OS === 'web',
                         title: t('navigation.timetable'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon
@@ -112,7 +112,7 @@ const DefaultTabs = (): JSX.Element => {
                     name="food"
                     options={{
                         title: t('navigation.food'),
-                        headerShown: false,
+                        headerShown: Platform.OS === 'web',
                         tabBarLabel: t('navigation.food'),
                         tabBarIcon: ({ color, size }) => (
                             <PlatformIcon

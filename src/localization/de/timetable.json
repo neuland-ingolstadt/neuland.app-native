@@ -29,6 +29,10 @@
         "filtered": {
             "title": "Keine Vorlesungen gefunden",
             "message": "Es scheint keine weiteren Vorlesungen in diesem Semester zu geben."
+        },
+        "web": {
+            "title": "Nicht verfügbar im Web",
+            "message": "Lade die App herunter, um die Details dieser Vorlesung anzuzeigen."
         }
     },
     "notificatons": {

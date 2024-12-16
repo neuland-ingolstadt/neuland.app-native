@@ -29,6 +29,10 @@
         "filtered": {
             "title": "No future lectures found",
             "message": "Looks like there are no more lectures this semester."
+        },
+        "web": {
+            "title": "Not available on web",
+            "message": "Download the app to view the details of this lecture."
         }
     },
     "notificatons": {

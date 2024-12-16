@@ -1,20 +1,3 @@
-/*
-ref={pagerViewRef}
-style={{
-    ...styles.pagerContainer,
-    height: screenHeight,
-}}
-initialPage={0}
-onPageSelected={(e) => {
-    const page = e.nativeEvent.position
-    setSelectedData(page)
-    trackEvent('Route', {
-        path: 'calendar/' + pages[page],
-    })
-}}
-scrollEnabled
-overdrag
-*/
 import {
     type Ref,
     forwardRef,
@@ -23,31 +6,32 @@ import {
     useState,
 } from 'react'
 
-function TabLayout(
-    {
-        initialPage,
-        onPageSelected,
-        children,
-    }: {
-        initialPage: number
-        onPageSelected: (e: any) => void
-        scrollEnabled: boolean
-        overdrag: boolean
-        children: JSX.Element[]
-    },
+interface TabLayoutProps {
+    initialPage: number
+    onPageSelected: (e: { nativeEvent: { position: number } }) => void
+    children: JSX.Element[]
+}
+
+const TabLayout = (
+    { initialPage, onPageSelected, children }: TabLayoutProps,
     ref: Ref<{ setPage: (i: number) => void }>
-): JSX.Element {
+): JSX.Element => {
     const [page, setPage] = useState<number>(initialPage)
 
-    useImperativeHandle(ref, () => {
-        return {
-            setPage,
-        }
-    }, [])
+    useImperativeHandle(
+        ref,
+        () => ({
+            setPage: (i: number) => {
+                setPage(i)
+                onPageSelected({ nativeEvent: { position: i } })
+            },
+        }),
+        [onPageSelected]
+    )
 
     useEffect(() => {
-        onPageSelected({ nativeEvent: { page } })
-    }, [page])
+        onPageSelected({ nativeEvent: { position: page } })
+    }, [page, onPageSelected])
 
     return children[page]
 }

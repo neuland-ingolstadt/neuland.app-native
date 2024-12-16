@@ -5,7 +5,6 @@ import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
 
 export default function FoodRootScreen(): JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
@@ -20,10 +19,6 @@ export default function FoodRootScreen(): JSX.Element {
             headerRight: () => <FoodHeaderRight />,
         })
     }, [navigation])
-
-    if (Platform.OS === 'web') {
-        return <FoodScreen />
-    }
 
     return (
         <>

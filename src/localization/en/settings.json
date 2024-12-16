@@ -36,7 +36,8 @@
                 "title": "App",
                 "about": "About",
                 "share": "Share the app",
-                "shareMessage": "Get Neuland Next for your phone! 🚀"
+                "shareMessage": "Get Neuland Next for your phone! 🚀",
+                "download": "Download the app"
             }
         },
         "copyright": "© {{year}} by Neuland Ingolstadt e.V."

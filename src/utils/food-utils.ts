@@ -78,7 +78,7 @@ export function convertRelevantAllergens(
     const convertedAllergens = relevantAllergens?.map(
         (allergen) =>
             allergenMap[allergen as keyof typeof allergenMap][
-                language as 'de' | 'en'
+                language as LanguageKey
             ]
     )
     return convertedAllergens?.join(' • ')

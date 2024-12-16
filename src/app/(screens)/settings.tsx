@@ -59,9 +59,9 @@ export default function Settings(): JSX.Element {
         useContext<UserKindContextType>(UserKindContext)
     const { resetOrder } = useContext(DashboardContext)
     const insets = useSafeAreaInsets()
-    const window = Dimensions.get('window')
-    const width = window.width - insets.left - insets.right
-    const height = window.height - insets.top - insets.bottom
+    const windowView = Dimensions.get('window')
+    const width = windowView.width - insets.left - insets.right
+    const height = windowView.height - insets.top - insets.bottom
     const router = useRouter()
     const { t, i18n } = useTranslation(['settings'])
     const bottomBoundX = 0
@@ -78,7 +78,7 @@ export default function Settings(): JSX.Element {
     const { color, randomizeColor } = useRandomColor()
     const resetPreferences = usePreferencesStore((state) => state.reset)
     const resetFood = useFoodFilterStore((state) => state.reset)
-
+    const setLanguage = usePreferencesStore((state) => state.setLanguage)
     useEffect(() => {
         const { bottomBoundY, topBoundY } = getBounds()
         if (isBouncing) {
@@ -125,25 +125,33 @@ export default function Settings(): JSX.Element {
 
     const languageAlert = (): void => {
         const newLocale = i18n.language === 'en' ? 'de' : 'en'
-
-        Alert.alert(
-            t('menu.formlist.language.title'),
-            t('menu.formlist.language.message'),
-            [
-                {
-                    text: t('profile.logout.alert.cancel'),
-                    style: 'default',
-                },
-                {
-                    text: t('menu.formlist.language.confirm'),
-                    style: 'destructive',
-                    onPress: () => {
-                        storage.set('language', newLocale)
-                        void i18n.changeLanguage(newLocale)
+        if (Platform.OS === 'web') {
+            if (!window.confirm(t('menu.formlist.language.message'))) {
+                /* empty */
+            } else {
+                setLanguage(newLocale)
+                void i18n.changeLanguage(newLocale)
+            }
+        } else {
+            Alert.alert(
+                t('menu.formlist.language.title'),
+                t('menu.formlist.language.message'),
+                [
+                    {
+                        text: t('profile.logout.alert.cancel'),
+                        style: 'default',
                     },
-                },
-            ]
-        )
+                    {
+                        text: t('menu.formlist.language.confirm'),
+                        style: 'destructive',
+                        onPress: () => {
+                            storage.set('language', newLocale)
+                            void i18n.changeLanguage(newLocale)
+                        },
+                    },
+                ]
+            )
+        }
     }
 
     const logoutAlert = (): void => {
@@ -322,7 +330,6 @@ export default function Settings(): JSX.Element {
                         router.navigate('/about')
                     },
                 },
-
                 {
                     title: t('menu.formlist.legal.share'),
                     icon: {
@@ -339,6 +346,23 @@ export default function Settings(): JSX.Element {
                         })
                     },
                 },
+                ...(Platform.OS === 'web'
+                    ? [
+                          {
+                              title: t('menu.formlist.legal.download'),
+                              icon: {
+                                  ios: 'square.and.arrow.up',
+                                  android: 'share' as MaterialIcon,
+                                  web: 'Download' as LucideIcon,
+                              },
+                              onPress: () => {
+                                  void Linking.openURL(
+                                      'https://next.neuland.app/get'
+                                  )
+                              },
+                          },
+                      ]
+                    : []),
             ],
         },
     ]

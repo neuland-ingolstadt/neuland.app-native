@@ -36,7 +36,8 @@
                 "title": "App",
                 "about": "Über",
                 "share": "Teile die App",
-                "shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀"
+                "shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀",
+                "download": "App herunterladen"
             }
         },
         "copyright": "© {{year}} von Neuland Ingolstadt e.V."
