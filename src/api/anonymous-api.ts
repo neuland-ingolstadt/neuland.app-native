@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 import packageInfo from '../../package.json'
 
 const ENDPOINT_HOST: string = 'hiplan.thi.de'
@@ -31,12 +33,14 @@ export class AnonymousAPIClient {
      */
     async request(params: Record<string, string>): Promise<any> {
         const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
-        const headers = new Headers({
+        const headersObj: Record<string, string> = {
             Host: ENDPOINT_HOST,
             'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': USER_AGENT,
             'X-API-KEY': apiKey,
-        })
+        }
+        if (Platform.OS !== 'web') headersObj['User-Agent'] = USER_AGENT
+
+        const headers = new Headers(headersObj)
 
         const resp = await fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
             method: 'POST',
