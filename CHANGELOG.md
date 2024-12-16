@@ -7,18 +7,20 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Features
 
 - _(announcements)_ Add analytics and improve logic - by @Robert27 ([f8245f7](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f8245f7549d2b1f3ebb7416abef8d011a0fc0f2f))
-- _(api)_ Add GraphQL code generation (#130) - by @Robert27 in [#130](https://github.com/neuland-ingolstadt/neuland.app-native/pull/130) ([e824635](https://github.com/neuland-ingolstadt/neuland.app-native/commit/e824635ab1d4dd6104ee6d5f0c7fcb27758b1dee))
+- _(api)_ Add GraphQL code generation ([#130](https://github.com/neuland-ingolstadt/neuland.app-native/issues/130)) - by @Robert27 ([e824635](https://github.com/neuland-ingolstadt/neuland.app-native/commit/e824635ab1d4dd6104ee6d5f0c7fcb27758b1dee))
 - _(api)_ Extend announcement popup with platform and userKind filter - by @Robert27 ([918026c](https://github.com/neuland-ingolstadt/neuland.app-native/commit/918026cea7faa694097deb1c9496cf19d4b00cbe))
-- _(app)_ Enable react native new arch (#131) - by @Robert27 in [#131](https://github.com/neuland-ingolstadt/neuland.app-native/pull/131) ([5f143fd](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5f143fda6487d088c74bfa0ab582b2f237161477))
+- _(app)_ Enable react native new arch ([#131](https://github.com/neuland-ingolstadt/neuland.app-native/issues/131)) - by @Robert27 ([5f143fd](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5f143fda6487d088c74bfa0ab582b2f237161477))
+- _(app)_ Add truly native tabbar ([#128](https://github.com/neuland-ingolstadt/neuland.app-native/issues/128)) - by @Robert27 ([a08e7f5](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a08e7f5950bb485cd477389083ee0e9fe1cf08c2))
 - _(error)_ Include current pathname in feedback email content - by @Robert27 ([442b861](https://github.com/neuland-ingolstadt/neuland.app-native/commit/442b86160993a2b80f08ca8ae3f26d935b5ce6d7))
 - _(events)_ Replace static club data with api data - by @Robert27 ([a17bd68](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a17bd68ca25e3a2d043adf310f32ac45829dee70))
 - _(grades, profile)_ Add app state handling for privacy visibility - by @Robert27 ([7e4b463](https://github.com/neuland-ingolstadt/neuland.app-native/commit/7e4b463425d2da5fccd6bf3745fa40361553b755))
-- _(links)_ Add pressreader link - by @Robert27 ([03eb8ce](https://github.com/neuland-ingolstadt/neuland.app-native/commit/03eb8ce5fdb35ba27baeaca9c71f359e592e8ff2))
+- _(links)_ Add pressreader link - by @Robert27 ([15e8b9a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/15e8b9a388f25f9123717072aba8c976f51d9034))
 - _(localization)_ Add missing error strings for unavailable app icons (german) - by @Robert27 ([1830bc7](https://github.com/neuland-ingolstadt/neuland.app-native/commit/1830bc7eee705e5d04aeb673d816f06ccd98d779))
 - _(news)_ Add NewsCard component with carousel - by @Robert27 ([7eeea3f](https://github.com/neuland-ingolstadt/neuland.app-native/commit/7eeea3facc0a62eff78902f2332cd14112869f5c))
 - _(store)_ Implement Zustand stores for session and route parameters management - by @Robert27 ([bd40f70](https://github.com/neuland-ingolstadt/neuland.app-native/commit/bd40f70bbdaeeb5339a70764c2fd9731fbbe90bd))
 - _(timetable)_ Migrate week view to new library - by @Robert27 ([4b2ce49](https://github.com/neuland-ingolstadt/neuland.app-native/commit/4b2ce49650181d18ff7ddcb6e6c680bb2ac1b830))
 - _(ui)_ Integrate edge-to-edge layout on android - by @Robert27 ([563f55e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/563f55e5799402a1b999f19d7144ebff218ee1e9))
+- Add react native web support ([#141](https://github.com/neuland-ingolstadt/neuland.app-native/issues/141)) - by @Robert27 ([c688528](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c688528d0e7e2a9b018f9362fa746623415841a7))
 
 ### 🐛 Bug Fixes
 
@@ -28,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - _(calendar)_ Enhance exam details display and improve date formatting - by @Robert27 ([3ed2340](https://github.com/neuland-ingolstadt/neuland.app-native/commit/3ed234089150465dfcd55718f227601efc308649))
 - _(cards)_ Correct sorting order of active announcements by priority - by @Robert27 ([b853961](https://github.com/neuland-ingolstadt/neuland.app-native/commit/b853961c21e870b36799c37ffd32030229e4093c))
 - _(events)_ Update event titles and descriptions structure - by @Robert27 ([4b8ea34](https://github.com/neuland-ingolstadt/neuland.app-native/commit/4b8ea34ce6b0e8677f6fcbcb2c1dbd1d0351b9f0))
+- _(events)_ Fix camus life event filtering logic - by @Robert27 ([4e543c1](https://github.com/neuland-ingolstadt/neuland.app-native/commit/4e543c134633dbe2b424d4af86d9b946432c29a2))
 - _(food)_ Add bottom padding to allergen and flag selection - by @Robert27 ([a9a720f](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a9a720fc9eb7a63b1be29d39206691189fa1f66f))
 - _(food)_ Fix translucent android header bar - by @Robert27 ([932ada9](https://github.com/neuland-ingolstadt/neuland.app-native/commit/932ada9421fa89d7f24dabeefedaa2d25b454f09))
 - _(lecture)_ Restore lecture detail navigation - by @Robert27 ([b3b235f](https://github.com/neuland-ingolstadt/neuland.app-native/commit/b3b235f076d29f925ba6b8e54822490dcb498739))
@@ -38,12 +41,17 @@ All notable changes to this project will be documented in this file.
 - _(map)_ Fix laggy map bottom sheet animation - by @Robert27 ([456a9db](https://github.com/neuland-ingolstadt/neuland.app-native/commit/456a9db68d9248b0b1c14a5ee458ce4a562a2998))
 - _(map)_ Room suggestion button not showing on android - by @Robert27 ([bf0dc22](https://github.com/neuland-ingolstadt/neuland.app-native/commit/bf0dc22bf0a3107e135168855cce8f9856b3bb92))
 - _(map)_ Conditionally render osm attribution based on map load state - by @Robert27 ([c4a0b70](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c4a0b705b4fddc814d2260203107307294ee554c))
+- _(news)_ Update carousel animation and improve layout styles - by @Robert27 ([157b217](https://github.com/neuland-ingolstadt/neuland.app-native/commit/157b217651a97ad911742f692ea961050d96a05b))
 - _(rooms)_ Disable map link for invalid rooms - by @Robert27 ([57c0b92](https://github.com/neuland-ingolstadt/neuland.app-native/commit/57c0b92db3a5600adb375d27614b13d19930bee2))
 - _(settings)_ Improve loading state handling - by @Robert27 ([8b8fd2f](https://github.com/neuland-ingolstadt/neuland.app-native/commit/8b8fd2f349b50ed6eca21571b294a6cbc28db997))
 - _(share)_ Add placeholder button to prevent flicker on load - by @Robert27 ([ddfd014](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ddfd014f71560ba96c0dc8a5873107293e53edbe))
 - _(store)_ Add reset functionality to preferences store and streamline initial state setup - by @Robert27 ([fdcc4ee](https://github.com/neuland-ingolstadt/neuland.app-native/commit/fdcc4eef14c2b2e96618cd0a8cb1b112ffd78a38))
+- _(tabs)_ Revert android header styles - by @Robert27 ([a180834](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a180834c253b1b85d4c5890e4be456ebb0e0310d))
 - _(timetable)_ Add end time for timetable week view - by @Robert27 ([5406bb2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5406bb2d7f916d34c888f9910485137cb527bd1a))
+- _(web)_ Enhance styling and add missing icons - by @Robert27 ([a806afb](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a806afb9ea611c45592087eebe7a2e330eb709fb))
 - Update Pressable components to use onPressOut for improved touch handling - by @Robert27 ([69d31ff](https://github.com/neuland-ingolstadt/neuland.app-native/commit/69d31ffe2272474e13b740da860b6bbdc922517f))
+- On web, do not send user agent to anonymous THI API (because of their CORS policy) - by @M4GNV5 ([1ce6147](https://github.com/neuland-ingolstadt/neuland.app-native/commit/1ce6147da57bcf634a34dbd955fc57dc62358d4a))
+- Allow bug reports for web issues - by @M4GNV5 ([5e1204a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5e1204ad50c4e9ba9603ed03d58c9bc087f889e0))
 
 ### 🚜 Refactor
 
@@ -64,13 +72,18 @@ All notable changes to this project will be documented in this file.
 
 - _(calendar)_ Improves semester dates section name - by @Robert27 ([7422009](https://github.com/neuland-ingolstadt/neuland.app-native/commit/7422009bb7f147e5afdd3cd3dd5a00f8878f90e0))
 - _(map)_ Add uniform indicator style for BottomSheet components - by @Robert27 ([3fa68d0](https://github.com/neuland-ingolstadt/neuland.app-native/commit/3fa68d073dd1b2466bb59053b0b6fb1609b01114))
-- Migrate to Unistyles for improved theming and code style (#119) - by @Robert27 in [#119](https://github.com/neuland-ingolstadt/neuland.app-native/pull/119) ([eb33b85](https://github.com/neuland-ingolstadt/neuland.app-native/commit/eb33b85fda148edd76aab84617df97da20037bec))
+- Migrate to Unistyles for improved theming and code style ([#119](https://github.com/neuland-ingolstadt/neuland.app-native/issues/119)) - by @Robert27 ([eb33b85](https://github.com/neuland-ingolstadt/neuland.app-native/commit/eb33b85fda148edd76aab84617df97da20037bec))
 
 ### ⚙️ Miscellaneous Tasks
 
 - _(changelog)_ Enhance changelog template with remote URL and contributor tracking - by @Robert27 ([b0c1b82](https://github.com/neuland-ingolstadt/neuland.app-native/commit/b0c1b824ad4a20ca0ef0cd4d100feb74ac1194d6))
 - _(git)_ Update issue templates - by @Robert27 ([c907232](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c9072328c7b98aa5b43deef4747bdddbaba424e5))
-- Upgrade to React Native 0.76 and Expo SDK 52 (#123) - by @Robert27 in [#123](https://github.com/neuland-ingolstadt/neuland.app-native/pull/123) ([ea90005](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ea900052c50347eafdc79fe65f4849415f15fe39))
+- Upgrade to React Native 0.76 and Expo SDK 52 ([#123](https://github.com/neuland-ingolstadt/neuland.app-native/issues/123)) - by @Robert27 ([ea90005](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ea900052c50347eafdc79fe65f4849415f15fe39))
+- Update deployment workflows to specify distinct image names for docs and webapp - by @Robert27 ([c47f73e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c47f73ef194ee8c392ff1c8d708fa8caae19c68b))
+
+### 💚 New Contributors
+
+- @M4GNV5 made their first contribution
 
 ## [0.10.1](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.10.0..0.10.1) - 2024-11-09
 
@@ -100,7 +113,7 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Features
 
 - _(analytics)_ Patch aptabase to detect MacOS sessions - by @Robert27 ([ca19292](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ca1929213fde6b845078a6d152d063f0831ab5a8))
-- _(app)_ Add university sports and bump version to 0.10.0 (#109) - by @Robert27 ([f85d292](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f85d2926357c3f838204aebc6e46143f023ceb19))
+- _(app)_ Add university sports and bump version to 0.10.0 ([#109](https://github.com/neuland-ingolstadt/neuland.app-native/issues/109)) - by @Robert27 ([f85d292](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f85d2926357c3f838204aebc6e46143f023ceb19))
 - _(foodPreferences)_ Add warning icon to highlight footer text - by @Robert27 ([616df20](https://github.com/neuland-ingolstadt/neuland.app-native/commit/616df20eaf6f1bd6fb96f327493adba9e6535c03))
 - _(map)_ Add report issue e-mail link - by @Robert27 ([d193a0c](https://github.com/neuland-ingolstadt/neuland.app-native/commit/d193a0ca79b70fe08a3ea7805c466163d5122ff2))
 - _(share)_ Create ShareHeaderButton and add share option to sports event - by @Robert27 ([2d653dc](https://github.com/neuland-ingolstadt/neuland.app-native/commit/2d653dc3ed4a9cc53c441a06413b78261f40067a))
@@ -124,7 +137,7 @@ All notable changes to this project will be documented in this file.
 
 ### ⚡ Performance
 
-- _(app)_ Various minor improvements for 0.10 (#114) - by @Robert27 in [#114](https://github.com/neuland-ingolstadt/neuland.app-native/pull/114) ([cd6d11a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/cd6d11aa9bf365b6448a994b4b1a271e9d62a9d2))
+- _(app)_ Various minor improvements for 0.10 ([#114](https://github.com/neuland-ingolstadt/neuland.app-native/issues/114)) - by @Robert27 ([cd6d11a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/cd6d11aa9bf365b6448a994b4b1a271e9d62a9d2))
 - _(dashboard)_ Improve card visibility logic and update state management - by @Robert27 ([e6fbd79](https://github.com/neuland-ingolstadt/neuland.app-native/commit/e6fbd79d1524dc66f3b463b138585c199ad6a02d))
 
 ### 🎨 Styling
@@ -142,11 +155,11 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
-- _(app)_ Linting, types and custom components (#4) - by @Robert27 ([f62e69e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f62e69efb2218e3ca0e9b5ab6885860c6deeccd1))
-- _(dashboard)_ Adds cards and pages (#9) - by @Robert27 in [#9](https://github.com/neuland-ingolstadt/neuland.app-native/pull/9) ([3e2b58c](https://github.com/neuland-ingolstadt/neuland.app-native/commit/3e2b58c492097074a2c221b5806064fed9b02d99))
-- _(food)_ Adds food page (#5) - by @Robert27 in [#5](https://github.com/neuland-ingolstadt/neuland.app-native/pull/5) ([c1e4f56](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c1e4f563978b602c496ecb75de11785a4404a17e))
-- _(map)_ Adds campus map (#7) - by @Robert27 in [#7](https://github.com/neuland-ingolstadt/neuland.app-native/pull/7) ([0560cc3](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0560cc392c7cacb4a2fb93a9dab38847e561d65f))
-- _(theme)_ Adds accent colors and themes (#6) - by @Robert27 in [#6](https://github.com/neuland-ingolstadt/neuland.app-native/pull/6) ([93de08a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/93de08a83084c6e5798fdcc23fd0b09675dc8a49))
+- _(app)_ Linting, types and custom components ([#4](https://github.com/neuland-ingolstadt/neuland.app-native/issues/4)) - by @Robert27 ([f62e69e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f62e69efb2218e3ca0e9b5ab6885860c6deeccd1))
+- _(dashboard)_ Adds cards and pages ([#9](https://github.com/neuland-ingolstadt/neuland.app-native/issues/9)) - by @Robert27 ([3e2b58c](https://github.com/neuland-ingolstadt/neuland.app-native/commit/3e2b58c492097074a2c221b5806064fed9b02d99))
+- _(food)_ Adds food page ([#5](https://github.com/neuland-ingolstadt/neuland.app-native/issues/5)) - by @Robert27 ([c1e4f56](https://github.com/neuland-ingolstadt/neuland.app-native/commit/c1e4f563978b602c496ecb75de11785a4404a17e))
+- _(map)_ Adds campus map ([#7](https://github.com/neuland-ingolstadt/neuland.app-native/issues/7)) - by @Robert27 ([0560cc3](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0560cc392c7cacb4a2fb93a9dab38847e561d65f))
+- _(theme)_ Adds accent colors and themes ([#6](https://github.com/neuland-ingolstadt/neuland.app-native/issues/6)) - by @Robert27 ([93de08a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/93de08a83084c6e5798fdcc23fd0b09675dc8a49))
 
 ### 💚 New Contributors
 
