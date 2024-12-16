@@ -1,7 +1,7 @@
 import FormList from '@/components/Universal/FormList'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections } from '@/types/components'
-import { router } from 'expo-router'
+import { Redirect, router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
@@ -12,6 +12,9 @@ export default function LecturerDetail(): JSX.Element {
     const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
     const { t } = useTranslation('common')
 
+    if (lecturer == null) {
+        return <Redirect href="/lecturers" />
+    }
     const validEmail =
         lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false)
 
@@ -30,7 +33,6 @@ export default function LecturerDetail(): JSX.Element {
                 {
                     title: t('pages.lecturer.details.organization'),
                     value: t(
-                        // @ts-expect-error cannot verify the TFunktion type
                         `lecturerOrganizations.${lecturer?.organisation}`,
                         {
                             defaultValue: lecturer?.organisation,
@@ -42,15 +44,11 @@ export default function LecturerDetail(): JSX.Element {
 
                 {
                     title: t('pages.lecturer.details.function'),
-                    value: t(
-                        // @ts-expect-error cannot verify the TFunktion type
-                        `lecturerFunctions.${lecturer?.funktion}`,
-                        {
-                            defaultValue: lecturer?.funktion,
-                            ns: 'api',
-                            fallbackLng: 'de',
-                        }
-                    ),
+                    value: t(`lecturerFunctions.${lecturer?.funktion}`, {
+                        defaultValue: lecturer?.funktion,
+                        ns: 'api',
+                        fallbackLng: 'de',
+                    }),
                 },
             ],
         },

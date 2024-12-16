@@ -300,7 +300,6 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderRadius: 9,
         boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
-        shadowColor: theme.colors.text,
     },
     logoImage: {
         borderRadius: 9,

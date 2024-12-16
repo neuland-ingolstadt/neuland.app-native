@@ -35,7 +35,6 @@ const LinkScreen = (): JSX.Element => {
         }
     }
     function generateSections(links: Quicklink[]): FormListSections[] {
-        console.log(links)
         return [
             {
                 items: links.map((link) => ({

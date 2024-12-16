@@ -129,127 +129,121 @@ export default function CalendarPage(): JSX.Element {
                 overdrag
             >
                 {/* Page 1: Events */}
-                <View>
-                    <ScrollView
-                        contentContainerStyle={styles.itemsContainer}
-                        style={styles.viewHorizontal}
-                        onScroll={
-                            Animated.event(
-                                [
-                                    {
-                                        nativeEvent: {
-                                            contentOffset: { y: scrollY },
-                                        },
+                <ScrollView
+                    contentContainerStyle={styles.itemsContainer}
+                    onScroll={
+                        Animated.event(
+                            [
+                                {
+                                    nativeEvent: {
+                                        contentOffset: { y: scrollY },
                                     },
-                                ],
-                                { useNativeDriver: false }
-                            ) as any
-                        }
-                        scrollEventThrottle={16}
-                    >
-                        <View style={styles.contentBorder}>
-                            {calendar?.length > 0 &&
-                                calendar.map((item, index) => (
-                                    <React.Fragment key={`event_${index}`}>
-                                        <CalendarRow event={item} />
-                                        {index !== calendar.length - 1 && (
-                                            <Divider iosPaddingLeft={16} />
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                        </View>
-                        <CalendarFooter />
-                    </ScrollView>
-                </View>
+                                },
+                            ],
+                            { useNativeDriver: false }
+                        ) as any
+                    }
+                    scrollEventThrottle={16}
+                >
+                    <View style={styles.contentBorder}>
+                        {calendar?.length > 0 &&
+                            calendar.map((item, index) => (
+                                <React.Fragment key={`event_${index}`}>
+                                    <CalendarRow event={item} />
+                                    {index !== calendar.length - 1 && (
+                                        <Divider iosPaddingLeft={16} />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                    </View>
+                    <CalendarFooter />
+                </ScrollView>
 
                 {/* Page 2: Exams */}
-                <View>
-                    <ScrollView
-                        contentContainerStyle={styles.itemsContainer}
-                        style={styles.viewHorizontal}
-                        onScroll={
-                            Animated.event(
-                                [
-                                    {
-                                        nativeEvent: {
-                                            contentOffset: { y: scrollY },
-                                        },
+
+                <ScrollView
+                    contentContainerStyle={styles.itemsContainer}
+                    onScroll={
+                        Animated.event(
+                            [
+                                {
+                                    nativeEvent: {
+                                        contentOffset: { y: scrollY },
                                     },
-                                ],
-                                { useNativeDriver: false }
-                            ) as any
-                        }
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={isRefetchingByUser}
-                                onRefresh={() => {
-                                    void refetchByUser()
-                                }}
-                            />
-                        }
-                        scrollEventThrottle={16}
-                        scrollEnabled={!isError}
-                    >
-                        {isLoading ? (
-                            <LoadingIndicator />
-                        ) : isError ? (
-                            <ErrorView
-                                title={error?.message ?? t('error.title')}
-                                onButtonPress={() => {
-                                    void refetchByUser()
-                                }}
-                                inModal
-                            />
-                        ) : isPaused && !isSuccess ? (
-                            <ErrorView title={networkError} inModal />
-                        ) : userKind === USER_GUEST ? (
-                            <ErrorView title={guestError} inModal />
-                        ) : (
-                            <View>
-                                <View style={styles.contentBorder}>
-                                    {exams != null && exams.length > 0 ? (
-                                        <>
-                                            {exams.map((item, index) => (
-                                                <React.Fragment
-                                                    key={`exam_${index}`}
-                                                >
-                                                    <ExamRow event={item} />
-                                                    {index !==
-                                                        exams.length - 1 && (
-                                                        <Divider
-                                                            iosPaddingLeft={16}
-                                                        />
-                                                    )}
-                                                </React.Fragment>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <ErrorView
-                                            title={t(
-                                                'pages.calendar.exams.noExams.title'
-                                            )}
-                                            message={t(
-                                                'pages.calendar.exams.noExams.subtitle'
-                                            )}
-                                            icon={{
-                                                ios: 'calendar.badge.clock',
-                                                android: 'calendar_clock',
-                                                web: 'CalendarX2',
-                                            }}
-                                            buttonText="Primuss"
-                                            onButtonPress={() => {
-                                                void Linking.openURL(primussUrl)
-                                            }}
-                                            inModal
-                                            isCritical={false}
-                                        />
-                                    )}
-                                </View>
-                                <CalendarFooter />
+                                },
+                            ],
+                            { useNativeDriver: false }
+                        ) as any
+                    }
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetchingByUser}
+                            onRefresh={() => {
+                                void refetchByUser()
+                            }}
+                        />
+                    }
+                    scrollEventThrottle={16}
+                    scrollEnabled={!isError}
+                >
+                    {isLoading ? (
+                        <LoadingIndicator />
+                    ) : isError ? (
+                        <ErrorView
+                            title={error?.message ?? t('error.title')}
+                            onButtonPress={() => {
+                                void refetchByUser()
+                            }}
+                            inModal
+                        />
+                    ) : isPaused && !isSuccess ? (
+                        <ErrorView title={networkError} inModal />
+                    ) : userKind === USER_GUEST ? (
+                        <ErrorView title={guestError} inModal />
+                    ) : (
+                        <View>
+                            <View style={styles.contentBorder}>
+                                {exams != null && exams.length > 0 ? (
+                                    <>
+                                        {exams.map((item, index) => (
+                                            <React.Fragment
+                                                key={`exam_${index}`}
+                                            >
+                                                <ExamRow event={item} />
+                                                {index !== exams.length - 1 && (
+                                                    <Divider
+                                                        iosPaddingLeft={16}
+                                                    />
+                                                )}
+                                            </React.Fragment>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <ErrorView
+                                        title={t(
+                                            'pages.calendar.exams.noExams.title'
+                                        )}
+                                        message={t(
+                                            'pages.calendar.exams.noExams.subtitle'
+                                        )}
+                                        icon={{
+                                            ios: 'calendar.badge.clock',
+                                            android: 'calendar_clock',
+                                            web: 'CalendarX2',
+                                        }}
+                                        buttonText="Primuss"
+                                        onButtonPress={() => {
+                                            void Linking.openURL(primussUrl)
+                                        }}
+                                        inModal
+                                        isCritical={false}
+                                    />
+                                )}
                             </View>
-                        )}
-                    </ScrollView>
-                </View>
+                            <CalendarFooter />
+                        </View>
+                    )}
+                </ScrollView>
             </PagerView>
         </View>
     )
@@ -279,6 +273,7 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         justifyContent: 'center',
         marginHorizontal: theme.margins.page,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     pagerContainer: {
@@ -287,9 +282,6 @@ const stylesheet = createStyleSheet((theme) => ({
     toggleContainer: {
         borderColor: theme.colors.border,
         paddingBottom: 12,
-    },
-    viewHorizontal: {
-        paddingHorizontal: theme.margins.page,
     },
     viewTop: {
         paddingTop: theme.margins.page,

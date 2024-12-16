@@ -48,6 +48,7 @@ export const resources = {
 
 export const defaultNS = 'en'
 export type LanguageKey = keyof typeof resources
+
 const languageCode = getLocales()[0].languageCode ?? ''
 const fallbackLanguage = defaultNS
 const language = Object.keys(resources).includes(languageCode)
@@ -57,7 +58,7 @@ const language = Object.keys(resources).includes(languageCode)
 void i18n.use(initReactI18next).init({
     fallbackLng: fallbackLanguage,
     lng: language,
-    compatibilityJSON: 'v3',
+    compatibilityJSON: 'v4',
     interpolation: {
         escapeValue: false,
     },

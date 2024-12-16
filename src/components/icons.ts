@@ -27,7 +27,7 @@ export const cardIcons: CardIcons = {
     timetable: {
         ios: 'clock.fill',
         android: 'calendar_month',
-        web: 'Calendar',
+        web: 'CalendarDays',
     },
     food: {
         ios: 'fork.knife',
@@ -37,7 +37,7 @@ export const cardIcons: CardIcons = {
     calendar: {
         ios: 'calendar',
         android: 'event',
-        web: 'Calendar',
+        web: 'Calendar1',
     },
     events: {
         ios: 'figure.2',
