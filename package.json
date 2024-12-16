@@ -44,7 +44,7 @@
     "@th3rdwave/react-navigation-bottom-sheet": "0.3.2",
     "burnt": "^0.12.2",
     "color": "^4.2.3",
-    "expo": "~52.0.18",
+    "expo": "~52.0.19",
     "expo-alternate-app-icons": "^1.1.0",
     "expo-application": "~6.0.1",
     "expo-blur": "~14.0.1",
@@ -58,7 +58,7 @@
     "expo-local-authentication": "~15.0.1",
     "expo-localization": "~16.0.0",
     "expo-navigation-bar": "~4.0.6",
-    "expo-router": "~4.0.12",
+    "expo-router": "~4.0.13",
     "expo-screen-orientation": "~8.0.1",
     "expo-secure-store": "~14.0.0",
     "expo-splash-screen": "~0.29.18",
@@ -122,7 +122,7 @@
     "@types/geojson": "^7946.0.15",
     "@types/node": "^22.10.2",
     "@types/prop-types": "^15.7.14",
-    "@types/react": "~18.3.16",
+    "@types/react": "~18.3.17",
     "@types/sanitize-html": "^2.13.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -149,7 +149,7 @@
     "typescript": "^5.7.2"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json,yml, md}": [
+    "**/*.{js,jsx,ts,tsx,json,yml,md}": [
       "bunx prettier --write"
     ],
     "*.{js,jsx,ts,tsx}": [

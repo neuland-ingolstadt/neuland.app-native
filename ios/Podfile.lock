@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.4):
     - ExpoModulesCore
-  - Expo (52.0.18):
+  - Expo (52.0.19):
     - ExpoModulesCore
   - expo-dev-client (5.0.6):
     - EXManifests
@@ -236,13 +236,13 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (14.0.1):
     - ExpoModulesCore
-  - ExpoFileSystem (18.0.5):
+  - ExpoFileSystem (18.0.6):
     - ExpoModulesCore
   - ExpoFont (13.0.1):
     - ExpoModulesCore
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
-  - ExpoHead (4.0.12):
+  - ExpoHead (4.0.13):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
@@ -254,7 +254,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (16.0.0):
     - ExpoModulesCore
-  - ExpoModulesCore (2.1.1):
+  - ExpoModulesCore (2.1.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2708,7 +2708,7 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: f30a0c5d3d6cad8db9c01bab579e0aa0df5d3cb2
-  Expo: dc7907584c3517c592315a59719180037703ff33
+  Expo: d901db29ffb24ccad280920f3c6de69febb89935
   expo-dev-client: 8bb4cc68d1c23b585dddd3169787e37337c5ab4a
   expo-dev-launcher: 8972c34d0946cc0fb1d6c1b0578dbf9e4bcff2c3
   expo-dev-menu: d770b290f8f3a4affb738fbdee371f085c4db287
@@ -2719,16 +2719,16 @@ SPEC CHECKSUMS:
   ExpoBrightness: ce777f6a365592f745428cb0acc9066b400182e8
   ExpoClipboard: 166ca8c13ca1041f5ba619a211f59427ab5da8a7
   ExpoCrypto: 8465f71eb3798c194c0a509d4a76e5c429656d83
-  ExpoFileSystem: 2161e16165279fb46e138d8ea8795c71cc6718be
+  ExpoFileSystem: 179a0661fd6d3c4e5d7e500a99a9cd8b295d9566
   ExpoFont: 7522d869d84ee2ee8093ee997fef5b86f85d856b
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
-  ExpoHead: b0da03ce1b2b4deb5d1833118823676cb5498ec2
+  ExpoHead: c1a593f9da8f4c09c633bf7494aac5ce590ef6ed
   ExpoKeepAwake: 783e68647b969b210a786047c3daa7b753dcac1f
   ExpoLinearGradient: 7ca3b1d1625a1ab85c129abce4a3cdc78a9500a3
   ExpoLinking: a8332a219379ba80f8e612d5a5de4a3da446886e
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
-  ExpoModulesCore: 62a6f1e14bbe4d61cf7d23cebda68090f9f6915f
+  ExpoModulesCore: 755e9c03bfe099eae7833d8f8b56118b2fc1107f
   ExpoScreenOrientation: 17df4d8b6da91424e338f4b223b8801d300ebc5a
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
   ExpoSplashScreen: 5818efe67bdbcc862b97fef589571c5b4d53fa7d
