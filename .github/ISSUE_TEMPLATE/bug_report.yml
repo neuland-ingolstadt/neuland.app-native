@@ -38,6 +38,7 @@ body:
               - iPadOS
               - MacOS
               - Android
+              - Web
           multiple: false
       validations:
           required: true
@@ -53,7 +54,7 @@ body:
       id: os-version
       attributes:
           label: OS version
-          description: Which version of the OS are you using?
+          description: Which version of the OS / Browser are you using?
           placeholder: 'x.x.x'
       validations:
           required: true
