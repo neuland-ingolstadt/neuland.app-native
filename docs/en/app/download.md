@@ -55,4 +55,10 @@ Also, the MacOS version is only available in the European Union.
 
 The app is not available for Windows and Linux.
 
-We recommend using the web version of Neuland App on your device. You can access the web version at [neuland.app](https://neuland.app).
+We recommend using the web version of the app on your device. See [Web Version](#web-version).
+
+## Web Version
+
+You can use the web version of Neuland Next on any device with a modern web browser. It can be accessed at [neuland.app](https://neuland.app).
+
+Note that the web version does not support all features of the native app. For the best experience, we recommend using the native app on your device.

@@ -1,5 +1,12 @@
 # Setup Development Environment
 
+::: tip Tip
+
+The following section describes the setup process for the native app development environment, as it is the main focus of the project.
+For testing purposes or web-only bug fixing, we recommend using the more lightweight [web development environment](/en/app/setup-web).
+
+:::
+
 ## Prerequisites
 
 1.  Fork the repository and clone it to your local machine.

@@ -57,4 +57,11 @@ Außerdem ist die MacOS-Version nur in der Europäischen Union verfügbar.
 
 Die App ist nicht für Windows und Linux verfügbar.
 
-Wir empfehlen, die Web-Version der neuland.app auf deinem Gerät zu verwenden. Du kannst die Web-Version unter [neuland.app](https://neuland.app) aufrufen.
+Wir empfehlen, die Web-Version der App auf deinem Gerät zu verwenden. Siehe [Web-Version](#web-version).
+
+## Web-Version
+
+Die Web-Version der App ist für alle gängigen Browser verfügbar.
+Du kannst die Web-Version unter [neuland.app](https://neuland.app) aufrufen.
+
+Beachte, dass es sich dabei nur ein Begleit-Web-App handelt und nicht alle Funktionen der nativen App unterstützt werden. Für die beste Erfahrung empfehlen wir, die native App zu verwenden.

@@ -35,3 +35,16 @@ Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [E-Mail](
 Wir empfehlen nicht, eine private Bewertung im Google Play Store zu hinterlassen, da wir sie nicht einsehen können.
 
 :::
+
+## Web
+
+Um die Beta-Version der Web-App zu verwenden, kannst du sie unter [dev.neuland.app](https://dev.neuland.app) aufrufen.
+Für die Verwendung der Beta-Version der Web-App ist keine Anmeldung erforderlich.
+
+Diese Version wird automatisch mit den neuesten Funktionen und Verbesserungen des Entwicklungszweigs aktualisiert, daher kann sie instabil sein.
+
+::: tip Feedback geben
+
+Bitte sende uns dein Feedback zur Beta-Version der App. Sende uns eine [email](mailto:app-feedback@informatik.sexy) mit deinen Vorschlägen, Ideen und Fehlerberichten.
+
+:::
