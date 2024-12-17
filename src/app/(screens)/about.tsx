@@ -10,6 +10,7 @@ import { type FormListSections } from '@/types/components'
 import { trackEvent } from '@aptabase/react-native'
 import { alert } from 'burnt'
 import * as Application from 'expo-application'
+import Constants from 'expo-constants'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
@@ -42,8 +43,11 @@ export default function About(): JSX.Element {
     const addUnlockedAppIcon = usePreferencesStore(
         (state) => state.addUnlockedAppIcon
     )
-    const version = `${Application.nativeApplicationVersion}`
-    const versionWithCode = `${version} (${Application.nativeBuildVersion})`
+    const version =
+        Application.nativeApplicationVersion ??
+        Constants.expoConfig?.version ??
+        'unknown'
+    const versionWithCode = `${version} (${Application.nativeBuildVersion ?? '0'})`
     const [displayVersion, setDisplayVersion] = useState(version)
 
     const toggleVersion = (): void => {

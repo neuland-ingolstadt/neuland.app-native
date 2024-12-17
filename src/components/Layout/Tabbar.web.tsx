@@ -13,6 +13,7 @@ const DefaultTabs = (): JSX.Element => {
     const { theme: styleTheme } = useStyles()
     const { t } = useTranslation('navigation')
     const isMobile = Dimensions.get('window').width < 900
+    const isPad = Dimensions.get('window').width < 1300
 
     return (
         <>
@@ -26,6 +27,12 @@ const DefaultTabs = (): JSX.Element => {
                     tabBarStyle: {
                         backgroundColor: styleTheme.colors.card,
                     },
+                    tabBarLabelPosition: isMobile
+                        ? undefined
+                        : isPad
+                          ? 'below-icon'
+                          : 'beside-icon',
+                    tabBarVariant: isMobile ? 'uikit' : 'material',
                 }}
             >
                 <Tabs.Screen
