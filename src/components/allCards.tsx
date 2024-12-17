@@ -38,13 +38,6 @@ export const AllCards: Card[] = [
         card: () => <EventsCard />,
     },
     {
-        key: 'food',
-        removable: true,
-        initial: [USER_GUEST],
-        allowed: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
-        card: () => <FoodCard />,
-    },
-    {
         key: 'library',
         removable: true,
         initial: [USER_STUDENT, USER_EMPLOYEE],
@@ -72,7 +65,13 @@ export const AllCards: Card[] = [
         allowed: [USER_STUDENT, USER_EMPLOYEE],
         card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />,
     },
-
+    {
+        key: 'food',
+        removable: true,
+        initial: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
+        allowed: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
+        card: () => <FoodCard />,
+    },
     {
         key: 'login',
         removable: false,
