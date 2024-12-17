@@ -2,22 +2,30 @@ import PlatformIcon from '@/components/Universal/Icon'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Dimensions, Platform } from 'react-native'
+import { useStyles } from 'react-native-unistyles'
 
 export function useBottomTabBarHeight(): number {
     return 60
 }
 
 const DefaultTabs = (): JSX.Element => {
-    const { styles, theme: styleTheme } = useStyles(stylesheet)
+    const { theme: styleTheme } = useStyles()
     const { t } = useTranslation('navigation')
+    const isMobile = Dimensions.get('window').width < 900
 
     return (
         <>
             <Tabs
                 screenOptions={{
+                    tabBarPosition: isMobile ? 'bottom' : 'left',
+                    tabBarActiveBackgroundColor: styleTheme.colors.card,
                     tabBarActiveTintColor: styleTheme.colors.primary,
+                    tabBarInactiveTintColor: styleTheme.colors.labelColor,
+                    tabBarInactiveBackgroundColor: styleTheme.colors.card,
+                    tabBarStyle: {
+                        backgroundColor: styleTheme.colors.card,
+                    },
                 }}
             >
                 <Tabs.Screen
@@ -45,8 +53,6 @@ const DefaultTabs = (): JSX.Element => {
                                 }}
                             />
                         ),
-
-                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -75,7 +81,6 @@ const DefaultTabs = (): JSX.Element => {
                                 }}
                             />
                         ),
-                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -104,7 +109,6 @@ const DefaultTabs = (): JSX.Element => {
                                 }}
                             />
                         ),
-                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
 
@@ -133,25 +137,11 @@ const DefaultTabs = (): JSX.Element => {
                                 }}
                             />
                         ),
-
-                        tabBarStyle: styles.tabbarStyle(false),
                     }}
                 />
             </Tabs>
         </>
     )
 }
-
-const stylesheet = createStyleSheet((theme) => ({
-    tabbarStyle: (blur: boolean) => ({
-        borderTopColor: theme.colors.border,
-        backgroundColor: blur
-            ? Platform.OS === 'ios'
-                ? undefined
-                : theme.colors.card
-            : theme.colors.card,
-        alignItems: 'stretch',
-    }),
-}))
 
 export default DefaultTabs
