@@ -148,8 +148,8 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderRadius: theme.radius.md,
         gap: 10,
+        maxWidth: 1000,
         padding: 14,
-        width: '80%',
     },
     innerContainer: {
         flexDirection: 'column',

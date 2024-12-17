@@ -6,6 +6,7 @@ import { type LanguageKey } from '@/localization/i18n'
 import { formatISODate } from '@/utils/date-utils'
 import {
     getUserSpecificPrice,
+    humanLocations,
     loadFoodEntries,
     mealName,
     userMealRating,
@@ -35,9 +36,8 @@ const FoodCard = (): JSX.Element => {
 
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
-        Array<{ name: string; price: string | null }>
+        Array<{ name: string; price: string | null; location: string | null }>
     >([])
-    const [foodCardTitle, setFoodCardTitle] = useState('food')
     const { data, isSuccess } = useQuery({
         queryKey: ['meals', selectedRestaurants, false],
         queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
@@ -91,6 +91,7 @@ const FoodCard = (): JSX.Element => {
                             i18n.language as LanguageKey
                         ),
                         price: getUserSpecificPrice(x, userKind ?? USER_GUEST),
+                        location: x.restaurant ?? null,
                     })),
                     ...(hiddenEntriesCount > 0
                         ? [
@@ -102,6 +103,7 @@ const FoodCard = (): JSX.Element => {
                                                 count: hiddenEntriesCount,
                                             }),
                                   price: null,
+                                  location: null,
                               },
                           ]
                         : []),
@@ -119,34 +121,8 @@ const FoodCard = (): JSX.Element => {
         userKind,
     ])
 
-    useEffect(() => {
-        const restaurants =
-            selectedRestaurants.length === 0 ? ['food'] : selectedRestaurants
-        if (restaurants.length !== 1) {
-            setFoodCardTitle('food')
-        } else {
-            switch (restaurants[0]) {
-                case 'IngolstadtMensa':
-                    setFoodCardTitle('mensa')
-                    break
-                case 'Reimanns':
-                    setFoodCardTitle('reimanns')
-                    break
-                case 'Canisius':
-                    setFoodCardTitle('canisius')
-                    break
-                case 'NeuburgMensa':
-                    setFoodCardTitle('mensaNeuburg')
-                    break
-                default:
-                    setFoodCardTitle('food')
-                    break
-            }
-        }
-    }, [selectedRestaurants])
-
     return (
-        <BaseCard title={foodCardTitle} onPressRoute="/food">
+        <BaseCard title={'food'} onPressRoute="/food">
             {Boolean(isSuccess) && data !== undefined && data.length > 0 && (
                 <View style={styles.listView}>
                     {foodEntries.length === 0 && (
@@ -169,6 +145,8 @@ const FoodCard = (): JSX.Element => {
                                         numberOfLines={1}
                                     >
                                         {meal.price}
+                                        {meal.location != null &&
+                                            ` - ${humanLocations[meal.location as keyof typeof humanLocations]}`}
                                     </Text>
                                 )}
                             </View>
@@ -197,17 +175,16 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingTop: 12,
     },
     mealEntry: {
-        flexDirection: 'row',
-        gap: 12,
+        flexDirection: 'column',
+        gap: 4,
     },
     mealPrice: {
         color: theme.colors.labelColor,
         fontSize: 15,
+        textAlign: 'left',
     },
     mealTitle: {
         color: theme.colors.text,
-        flexGrow: 1,
-        flexShrink: 1,
         fontSize: 16,
         fontWeight: '500',
     },
