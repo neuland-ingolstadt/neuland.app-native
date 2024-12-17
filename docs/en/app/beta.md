@@ -37,3 +37,15 @@ Please send us your feedback on the beta version of the app. Please send us an [
 We do not suggest leaving a private review on the Google Play Store, since we cannot read them.
 
 :::
+
+## Web
+
+To use the beta version of the web app, you can access it at [dev.neuland.app](https://dev.neuland.app). There is no sign-up required to use the beta version of the web app.
+
+This version is automatically updated with the latest features and improvements of the development branch, therefore it may be unstable.
+
+::: tip Provide Feedback
+
+Please send us your feedback on the beta version of the app. Please send us an [email](mailto:app-feedback@informatik.sexy) with your suggestions, ideas, and bug reports.
+
+:::

@@ -1,5 +1,12 @@
 # Entwicklungsumgebung einrichten
 
+::: tip Tipp
+
+Diese Anleitung beschreibt den Einrichtungsprozess für die native App-Entwicklungsumgebung, da dies der Hauptfokus des Projekts ist.
+Zum Testen oder zum Beheben von Fehlern in der Web-App empfehlen wir die Verwendung der leichtgewichtigeren [Web-Entwicklungsumgebung](/de/app/setup-web).
+
+:::
+
 ## Voraussetzungen
 
 1. Forke das Repository und klone es auf deinen lokalen Rechner.

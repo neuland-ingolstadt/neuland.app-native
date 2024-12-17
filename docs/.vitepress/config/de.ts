@@ -95,6 +95,7 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "Wege zur Mitarbeit", link: "contribute" },
         { text: "Entwicklungsumgebung einrichten", link: "setup" },
+        { text: "Webentwicklung einrichten", link: "setup-web" },
       ],
     },
   ];
