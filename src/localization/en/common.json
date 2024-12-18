@@ -265,7 +265,7 @@
                 "title": "Virtual Library Card",
                 "description": "Use the virtual library card to borrow books and other media."
             },
-            "note": "Due to the new V:Scout system it is no longer possible to book seats using the app."
+            "note": "Due to the new booking system it is no longer possible to book seats using the app."
         },
         "clEvents": {
             "sports": {

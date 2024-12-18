@@ -378,11 +378,8 @@ export const getIcon = (
     type: SEARCH_TYPES,
     properties?: { result: { item: { properties: GeoJsonProperties } } }
 ): { ios: string; android: MaterialIcon } => {
-    const {
-        Funktion_en: funktionEn,
-        Raum: raum,
-    }: { Funktion_en: string; Raum: string } = properties?.result.item
-        .properties as { Funktion_en: string; Raum: string }
+    const funktionEn = properties?.result?.item?.properties?.Funktion_en || ''
+    const raum = properties?.result?.item?.properties?.Raum || ''
     const food = ['M001', 'X001', 'F001']
     switch (type) {
         case SEARCH_TYPES.BUILDING:

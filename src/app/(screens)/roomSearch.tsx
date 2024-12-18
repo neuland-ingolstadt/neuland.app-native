@@ -44,7 +44,7 @@ const DURATIONS = [
 
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
-export default function AdvancedSearch(): React.React.JSX.Element {
+export default function AdvancedSearch(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')

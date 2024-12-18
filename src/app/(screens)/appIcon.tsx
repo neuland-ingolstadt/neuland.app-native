@@ -83,7 +83,6 @@ export default function AppIconPicker(): React.JSX.Element {
                             >
                                 <View style={styles.sectionContainer}>
                                     {value.map((icon) => {
-                                        console.log(icon)
                                         return (
                                             <React.Fragment key={icon}>
                                                 <Pressable

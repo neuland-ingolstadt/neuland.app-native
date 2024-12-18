@@ -34,8 +34,6 @@ export default function Theme(): React.JSX.Element {
             ),
     }
 
-    console.log(sorted)
-
     const sections: FormListSections[] = [
         ...Object.keys(sorted.version).map((key) => ({
             header: `Version ${key}`,
