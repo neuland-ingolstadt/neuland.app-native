@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { graphql } from '@/__generated__/gql'
 
 export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
@@ -8,7 +9,7 @@ export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-export const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
+const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
     fragment AnnouncementFields on Announcement {
         id
         title {
@@ -36,7 +37,7 @@ export const FOOD_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-export const FOOD_FRAGMENT = graphql(/* GraphQL */ `
+const FOOD_FRAGMENT = graphql(/* GraphQL */ `
     fragment FoodFields on FoodResponse {
         foodData {
             timestamp
@@ -107,7 +108,7 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-export const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
+const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
         host {
             name
@@ -136,7 +137,7 @@ export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-export const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
+const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment UniversitySportsFields on UniversitySports {
         id
         title {

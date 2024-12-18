@@ -7,7 +7,12 @@ generates:
         presetConfig:
             fragmentMasking:
                 unmaskFunctionName: 'getFragmentData'
-
+        config:
+            documentMode: 'string'
+    'src/__generated__/schema.graphql':
+        plugins: ['schema-ast']
+        config:
+            includeDirectives: true
 config:
     scalars:
         DateTime: 'Date'

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import { DocumentTypeDecoration } from '@graphql-typed-document-node/core'
 
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
@@ -796,1392 +796,303 @@ export type UniversitySportsFieldsFragment = {
     } | null
 } & { ' $fragmentName'?: 'UniversitySportsFieldsFragment' }
 
-export const AnnouncementFieldsFragmentDoc = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'AnnouncementFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'Announcement' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'title' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'description' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'endDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'priority' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'platform' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'userKind' },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<AnnouncementFieldsFragment, unknown>
-export const FoodFieldsFragmentDoc = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'FoodFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'FoodResponse' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'foodData' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'timestamp' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'meals' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'name',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'de',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'en',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'id',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'category',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'prices',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'student',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'employee',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'guest',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'allergens',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'flags',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'nutrition',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'kj',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'kcal',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fat',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fatSaturated',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'carbs',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'sugar',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fiber',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'protein',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'salt',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'variants',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'name',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'de',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'en',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'additional',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'id',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'allergens',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'flags',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'originalLanguage',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'static',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'restaurant',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'parent',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'id',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'category',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'prices',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'student',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'employee',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'guest',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'originalLanguage',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'static',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'restaurant',
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'errors' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'location' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'message' },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<FoodFieldsFragment, unknown>
-export const CampusLifeEventFieldsFragmentDoc = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'CampusLifeEventFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'ClEvent' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'host' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'website' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'instagram' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'titles' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'endDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'location' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'descriptions' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<CampusLifeEventFieldsFragment, unknown>
-export const UniversitySportsFieldsFragmentDoc = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'UniversitySportsFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'UniversitySports' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'title' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'description' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'campus' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'location' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'weekday' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startTime' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'endTime' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'requiresRegistration' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'invitationLink' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'eMail' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'sportsCategory' },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<UniversitySportsFieldsFragment, unknown>
-export const AppAnnouncementsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'AppAnnouncements' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'appAnnouncements' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'FragmentSpread',
-                                    name: {
-                                        kind: 'Name',
-                                        value: 'AnnouncementFields',
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'AnnouncementFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'Announcement' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'title' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'description' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'endDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'priority' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'platform' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'userKind' },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export class TypedDocumentString<TResult, TVariables>
+    extends String
+    implements DocumentTypeDecoration<TResult, TVariables>
+{
+    __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType']
+
+    constructor(
+        private value: string,
+        public __meta__?: Record<string, any> | undefined
+    ) {
+        super(value)
+    }
+
+    toString(): string & DocumentTypeDecoration<TResult, TVariables> {
+        return this.value
+    }
+}
+export const AnnouncementFieldsFragmentDoc = new TypedDocumentString(
+    `
+    fragment AnnouncementFields on Announcement {
+  id
+  title {
+    de
+    en
+  }
+  description {
+    de
+    en
+  }
+  startDateTime
+  endDateTime
+  priority
+  url
+  platform
+  userKind
+}
+    `,
+    { fragmentName: 'AnnouncementFields' }
+) as unknown as TypedDocumentString<AnnouncementFieldsFragment, unknown>
+export const FoodFieldsFragmentDoc = new TypedDocumentString(
+    `
+    fragment FoodFields on FoodResponse {
+  foodData {
+    timestamp
+    meals {
+      name {
+        de
+        en
+      }
+      id
+      category
+      prices {
+        student
+        employee
+        guest
+      }
+      allergens
+      flags
+      nutrition {
+        kj
+        kcal
+        fat
+        fatSaturated
+        carbs
+        sugar
+        fiber
+        protein
+        salt
+      }
+      variants {
+        name {
+          de
+          en
+        }
+        additional
+        id
+        allergens
+        flags
+        originalLanguage
+        static
+        restaurant
+        parent {
+          id
+          category
+        }
+        prices {
+          student
+          employee
+          guest
+        }
+      }
+      originalLanguage
+      static
+      restaurant
+    }
+  }
+  errors {
+    location
+    message
+  }
+}
+    `,
+    { fragmentName: 'FoodFields' }
+) as unknown as TypedDocumentString<FoodFieldsFragment, unknown>
+export const CampusLifeEventFieldsFragmentDoc = new TypedDocumentString(
+    `
+    fragment CampusLifeEventFields on ClEvent {
+  host {
+    name
+    website
+    instagram
+  }
+  titles {
+    de
+    en
+  }
+  startDateTime
+  endDateTime
+  location
+  descriptions {
+    de
+    en
+  }
+}
+    `,
+    { fragmentName: 'CampusLifeEventFields' }
+) as unknown as TypedDocumentString<CampusLifeEventFieldsFragment, unknown>
+export const UniversitySportsFieldsFragmentDoc = new TypedDocumentString(
+    `
+    fragment UniversitySportsFields on UniversitySports {
+  id
+  title {
+    de
+    en
+  }
+  description {
+    de
+    en
+  }
+  campus
+  location
+  weekday
+  startTime
+  endTime
+  requiresRegistration
+  invitationLink
+  eMail
+  sportsCategory
+}
+    `,
+    { fragmentName: 'UniversitySportsFields' }
+) as unknown as TypedDocumentString<UniversitySportsFieldsFragment, unknown>
+export const AppAnnouncementsDocument = new TypedDocumentString(`
+    query AppAnnouncements {
+  appAnnouncements {
+    ...AnnouncementFields
+  }
+}
+    fragment AnnouncementFields on Announcement {
+  id
+  title {
+    de
+    en
+  }
+  description {
+    de
+    en
+  }
+  startDateTime
+  endDateTime
+  priority
+  url
+  platform
+  userKind
+}`) as unknown as TypedDocumentString<
     AppAnnouncementsQuery,
     AppAnnouncementsQueryVariables
 >
-export const FoodPlanDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'FoodPlan' },
-            variableDefinitions: [
-                {
-                    kind: 'VariableDefinition',
-                    variable: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'locations' },
-                    },
-                    type: {
-                        kind: 'NonNullType',
-                        type: {
-                            kind: 'ListType',
-                            type: {
-                                kind: 'NonNullType',
-                                type: {
-                                    kind: 'NamedType',
-                                    name: {
-                                        kind: 'Name',
-                                        value: 'LocationInput',
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            ],
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'food' },
-                        arguments: [
-                            {
-                                kind: 'Argument',
-                                name: { kind: 'Name', value: 'locations' },
-                                value: {
-                                    kind: 'Variable',
-                                    name: { kind: 'Name', value: 'locations' },
-                                },
-                            },
-                        ],
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'FragmentSpread',
-                                    name: { kind: 'Name', value: 'FoodFields' },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'FoodFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'FoodResponse' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'foodData' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'timestamp' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'meals' },
-                                    selectionSet: {
-                                        kind: 'SelectionSet',
-                                        selections: [
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'name',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'de',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'en',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'id',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'category',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'prices',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'student',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'employee',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'guest',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'allergens',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'flags',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'nutrition',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'kj',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'kcal',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fat',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fatSaturated',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'carbs',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'sugar',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'fiber',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'protein',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'salt',
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'variants',
-                                                },
-                                                selectionSet: {
-                                                    kind: 'SelectionSet',
-                                                    selections: [
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'name',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'de',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'en',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'additional',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'id',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'allergens',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'flags',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'originalLanguage',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'static',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'restaurant',
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'parent',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'id',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'category',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                        {
-                                                            kind: 'Field',
-                                                            name: {
-                                                                kind: 'Name',
-                                                                value: 'prices',
-                                                            },
-                                                            selectionSet: {
-                                                                kind: 'SelectionSet',
-                                                                selections: [
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'student',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'employee',
-                                                                        },
-                                                                    },
-                                                                    {
-                                                                        kind: 'Field',
-                                                                        name: {
-                                                                            kind: 'Name',
-                                                                            value: 'guest',
-                                                                        },
-                                                                    },
-                                                                ],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'originalLanguage',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'static',
-                                                },
-                                            },
-                                            {
-                                                kind: 'Field',
-                                                name: {
-                                                    kind: 'Name',
-                                                    value: 'restaurant',
-                                                },
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'errors' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'location' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'message' },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<FoodPlanQuery, FoodPlanQueryVariables>
-export const CampusLifeEventsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'CampusLifeEvents' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'clEvents' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'FragmentSpread',
-                                    name: {
-                                        kind: 'Name',
-                                        value: 'CampusLifeEventFields',
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'CampusLifeEventFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'ClEvent' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'host' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'website' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'instagram' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'titles' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'endDateTime' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'location' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'descriptions' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const FoodPlanDocument = new TypedDocumentString(`
+    query FoodPlan($locations: [LocationInput!]!) {
+  food(locations: $locations) {
+    ...FoodFields
+  }
+}
+    fragment FoodFields on FoodResponse {
+  foodData {
+    timestamp
+    meals {
+      name {
+        de
+        en
+      }
+      id
+      category
+      prices {
+        student
+        employee
+        guest
+      }
+      allergens
+      flags
+      nutrition {
+        kj
+        kcal
+        fat
+        fatSaturated
+        carbs
+        sugar
+        fiber
+        protein
+        salt
+      }
+      variants {
+        name {
+          de
+          en
+        }
+        additional
+        id
+        allergens
+        flags
+        originalLanguage
+        static
+        restaurant
+        parent {
+          id
+          category
+        }
+        prices {
+          student
+          employee
+          guest
+        }
+      }
+      originalLanguage
+      static
+      restaurant
+    }
+  }
+  errors {
+    location
+    message
+  }
+}`) as unknown as TypedDocumentString<FoodPlanQuery, FoodPlanQueryVariables>
+export const CampusLifeEventsDocument = new TypedDocumentString(`
+    query CampusLifeEvents {
+  clEvents {
+    ...CampusLifeEventFields
+  }
+}
+    fragment CampusLifeEventFields on ClEvent {
+  host {
+    name
+    website
+    instagram
+  }
+  titles {
+    de
+    en
+  }
+  startDateTime
+  endDateTime
+  location
+  descriptions {
+    de
+    en
+  }
+}`) as unknown as TypedDocumentString<
     CampusLifeEventsQuery,
     CampusLifeEventsQueryVariables
 >
-export const UniversitySportsDocument = {
-    kind: 'Document',
-    definitions: [
-        {
-            kind: 'OperationDefinition',
-            operation: 'query',
-            name: { kind: 'Name', value: 'UniversitySports' },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'universitySports' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'FragmentSpread',
-                                    name: {
-                                        kind: 'Name',
-                                        value: 'UniversitySportsFields',
-                                    },
-                                },
-                            ],
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            kind: 'FragmentDefinition',
-            name: { kind: 'Name', value: 'UniversitySportsFields' },
-            typeCondition: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'UniversitySports' },
-            },
-            selectionSet: {
-                kind: 'SelectionSet',
-                selections: [
-                    { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'title' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'description' },
-                        selectionSet: {
-                            kind: 'SelectionSet',
-                            selections: [
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'de' },
-                                },
-                                {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'en' },
-                                },
-                            ],
-                        },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'campus' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'location' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'weekday' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'startTime' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'endTime' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'requiresRegistration' },
-                    },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'invitationLink' },
-                    },
-                    { kind: 'Field', name: { kind: 'Name', value: 'eMail' } },
-                    {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'sportsCategory' },
-                    },
-                ],
-            },
-        },
-    ],
-} as unknown as DocumentNode<
+export const UniversitySportsDocument = new TypedDocumentString(`
+    query UniversitySports {
+  universitySports {
+    ...UniversitySportsFields
+  }
+}
+    fragment UniversitySportsFields on UniversitySports {
+  id
+  title {
+    de
+    en
+  }
+  description {
+    de
+    en
+  }
+  campus
+  location
+  weekday
+  startTime
+  endTime
+  requiresRegistration
+  invitationLink
+  eMail
+  sportsCategory
+}`) as unknown as TypedDocumentString<
     UniversitySportsQuery,
     UniversitySportsQueryVariables
 >

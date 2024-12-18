@@ -288,6 +288,13 @@
                     "title": "No sports events found",
                     "subtitle": "Check back later."
                 }
+            },
+            "events": {
+                "title": "Events",
+                "noEvents": {
+                    "title": "No events found",
+                    "subtitle": "Check back later."
+                }
             }
         }
     },
