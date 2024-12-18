@@ -16,10 +16,19 @@ import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
-// @ts-expect-error no types
+// @ts-expect-error no types available
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { appIcons } from '../(screens)/appIcon'
+
+interface ShortcutsType {
+    onShortcutPressed: (callback: (item: ShortcutItem) => void) => {
+        remove: () => void
+    }
+    setShortcuts: (shortcuts: ShortcutItem[]) => void
+}
+
+const TypedShortcuts = Shortcuts as unknown as ShortcutsType
 
 declare const process: {
     env: {
@@ -27,7 +36,7 @@ declare const process: {
     }
 }
 
-export default function HomeLayout(): JSX.Element {
+export default function HomeLayout(): React.JSX.Element {
     const router = useRouter()
 
     const { t } = useTranslation('navigation')
@@ -79,7 +88,7 @@ export default function HomeLayout(): JSX.Element {
         if (allergens.length === 1 && allergens[0] === 'not-configured') {
             /* empty */
         } else {
-            allergens?.forEach((allergen: string) => {
+            allergens.forEach((allergen: string) => {
                 console.debug('Migrating allergen:', allergen)
                 toggleSelectedAllergens(allergen)
             })
@@ -161,14 +170,15 @@ export default function HomeLayout(): JSX.Element {
         ]
         function processShortcut(item: ShortcutItem): void {
             router.navigate({
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 pathname: item.data.path as RelativePathString,
                 params: { fromAppShortcut: 'true' },
             })
         }
 
         const shortcutSubscription =
-            Shortcuts.onShortcutPressed(processShortcut)
-        Shortcuts.setShortcuts(shortcuts)
+            TypedShortcuts.onShortcutPressed(processShortcut)
+        TypedShortcuts.setShortcuts(shortcuts)
 
         return () => {
             if (shortcutSubscription != null) shortcutSubscription.remove()

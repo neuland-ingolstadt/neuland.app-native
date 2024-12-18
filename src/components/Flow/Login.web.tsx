@@ -11,7 +11,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoginAnimatedText from './LoginAnimatedText'
 
-export default function Login(): JSX.Element {
+export default function Login(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('flow')
     const { fromOnboarding } = useLocalSearchParams<{

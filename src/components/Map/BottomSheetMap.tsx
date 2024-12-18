@@ -74,7 +74,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             keyboardBehavior="extend"
             onChange={(index) => {
                 if (index <= 1) {
-                    localSearch !== '' && setLocalSearch('')
+                    if (localSearch !== '') {
+                        setLocalSearch('')
+                    }
                     textInputRef.current?.blur()
                 }
             }}

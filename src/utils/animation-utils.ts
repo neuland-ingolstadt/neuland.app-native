@@ -35,7 +35,10 @@ export function withBouncing(
     bottomBound: number,
     topBound: number,
     randomizeColor: () => void
-): { onFrame: (state: AnimationState, now: number) => boolean; onStart: (state: AnimationState, _value: number, now: number) => void } {
+): {
+    onFrame: (state: AnimationState, now: number) => boolean
+    onStart: (state: AnimationState, _value: number, now: number) => void
+} {
     'worklet'
     return defineAnimation(
         {
@@ -43,7 +46,14 @@ export function withBouncing(
             lastTimestamp: Date.now(),
             direction: 1,
         },
-        (): { onFrame: (state: AnimationState, now: number) => boolean; onStart: (state: AnimationState, _value: number, now: number) => void } => {
+        (): {
+            onFrame: (state: AnimationState, now: number) => boolean
+            onStart: (
+                state: AnimationState,
+                _value: number,
+                now: number
+            ) => void
+        } => {
             'worklet'
             const onFrame = (state: AnimationState, now: number): boolean => {
                 const delta = (now - state.lastTimestamp) / 1000

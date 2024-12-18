@@ -118,7 +118,7 @@ export async function callWithSession<T>(
             await saveSecure('session', session)
             storage.set('sessionCreated', Date.now().toString())
             storage.set('isStudent', isStudent.toString())
-        } catch (e) {
+        } catch {
             throw new NoSessionError()
         }
     }
@@ -145,7 +145,7 @@ export async function callWithSession<T>(
                     await saveSecure('session', session)
                     storage.set('sessionCreated', Date.now().toString())
                     storage.set('isStudent', isStudent.toString())
-                } catch (e) {
+                } catch {
                     throw new NoSessionError()
                 }
                 return await method(session)

@@ -19,7 +19,7 @@ const RowEntry = ({
     maxTitleWidth?: DimensionValue
     backgroundColor?: string
     icon?: JSX.Element
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <Pressable onPress={onPress}>

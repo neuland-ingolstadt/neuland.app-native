@@ -11,6 +11,10 @@ export interface Announcements {
     announcement: string
 }
 
+export interface TypeStunde extends Stunde {
+    type: Raumtyp
+}
+
 export interface SessionClose {
     date: string
     time: string
@@ -141,7 +145,14 @@ export interface Rooms {
 
 export interface Rtype {
     raumtyp: Raumtyp
-    stunden: Stunden
+    stunden: Stunde[]
+}
+
+export interface Stunde {
+    type: Raumtyp
+    raeume: [string, string, number, number][]
+    von: string
+    bis: string
 }
 
 export enum Raumtyp {
@@ -149,8 +160,6 @@ export enum Raumtyp {
     PCPool = 'PC-Pool',
     Seminarraum40Plätze = 'Seminarraum (< 40 Plätze)',
 }
-
-export type Stunden = Record<number, RoomsStatus[]>
 
 export interface RoomsStatus {
     von: Date

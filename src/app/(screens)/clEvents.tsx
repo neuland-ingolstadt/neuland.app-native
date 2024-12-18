@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Animated, View, useWindowDimensions } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Events(): JSX.Element {
+export default function Events(): React.JSX.Element {
     const { t } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
     const results = useQueries({

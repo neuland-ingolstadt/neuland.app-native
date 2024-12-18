@@ -23,7 +23,7 @@ import { trackEvent } from '@aptabase/react-native'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -40,7 +40,7 @@ export const MealEntry = ({
 }: {
     meal: Meal
     index: number
-}): JSX.Element => {
+}): React.JSX.Element => {
     const preferencesSelection = useFoodFilterStore(
         (state) => state.preferencesSelection
     )
@@ -101,13 +101,13 @@ export const MealEntry = ({
             mode="drag"
             scope="system"
             dragValue={t('details.share.message', {
-                meal: meal?.name[i18n.language as LanguageKey],
-                price: formatPrice(meal?.prices[userKind ?? 'guest']),
+                meal: meal.name[i18n.language as LanguageKey],
+                price: formatPrice(meal.prices[userKind ?? 'guest']),
                 location:
                     humanLocations[
                         meal.restaurant as keyof typeof humanLocations
                     ],
-                id: meal?.id,
+                id: meal.id,
             })}
         >
             <ContextMenu
@@ -175,7 +175,7 @@ export const MealEntry = ({
                                     i18n.language as LanguageKey
                                 )}
                             </Text>
-                            {meal.variants?.length > 0 && (
+                            {meal.variants.length > 0 && (
                                 <LinearGradient
                                     style={styles.variantContainer}
                                     colors={[
@@ -196,7 +196,7 @@ export const MealEntry = ({
                         <View style={styles.detailsContainer}>
                             <View style={styles.detailsColumns}>
                                 <View style={styles.flags}>
-                                    {userFlags?.map(
+                                    {userFlags.map(
                                         (flag: string, index: number) => (
                                             <LinearGradient
                                                 key={index}

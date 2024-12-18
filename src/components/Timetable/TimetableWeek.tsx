@@ -26,7 +26,7 @@ import EventComponent from './WeekEventComponent'
 
 export default function TimetableWeek({
     timetable,
-}: ITimetableViewProps): JSX.Element {
+}: ITimetableViewProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const today = moment().startOf('day').toDate()
     const firstElementeDate = timetable.find(

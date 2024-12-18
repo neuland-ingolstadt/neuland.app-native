@@ -17,7 +17,7 @@ const MealGroup = ({
     group,
 }: {
     group: Record<string, Meal[]>
-}): JSX.Element => {
+}): React.JSX.Element => {
     return (
         <>
             {Object.entries(group).map(([key, value]) => (
@@ -39,7 +39,7 @@ const MealCategory = ({
 }: {
     category: string
     meals: Meal[]
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [collapsed, setCollapsed] = useState(false)
 
     /**
@@ -106,7 +106,7 @@ export const MealDay = ({
 }: {
     day: Food
     index: number
-}): JSX.Element => {
+}): React.JSX.Element => {
     /**
      * Filters an array of meals by restaurant name.
      * @param meals - An array of meals.
@@ -159,6 +159,7 @@ export const MealDay = ({
         restaurantName: string
         meals: Meal[]
         groupedMeals: Record<string, Meal[]>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         styles: any
     }
 
@@ -174,10 +175,11 @@ export const MealDay = ({
         meals,
         groupedMeals,
         styles,
-    }: RestaurantProps): JSX.Element | null => {
+    }: RestaurantProps): React.JSX.Element | null => {
         if (meals.length > 0) {
             return (
                 <View>
+                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/}
                     <Text style={styles.dayRestaurantTitles}>
                         {restaurantName}
                     </Text>
@@ -239,6 +241,7 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 15,
         fontWeight: '500',
     },
+    // eslint-disable-next-line react-native-unistyles/no-unused-styles
     dayRestaurantTitle: {
         color: theme.colors.text,
         fontSize: 18,

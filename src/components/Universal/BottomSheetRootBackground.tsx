@@ -11,7 +11,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-export const BottomSheetRootBackground = (): JSX.Element => {
+export const BottomSheetRootBackground = (): React.JSX.Element => {
     const darkIos = 'rgba(39, 39, 39, 0.4)'
     const lightIos = 'rgba(255, 255, 255, 0.5)'
     const { styles } = useStyles(stylesheet)
@@ -38,7 +38,7 @@ export const BottomSheetRootBackground = (): JSX.Element => {
 
 export const renderBackdrop = (
     props: BottomSheetBackdropProps
-): JSX.Element => (
+): React.JSX.Element => (
     <BottomSheetBackdrop
         {...props}
         appearsOnIndex={0}

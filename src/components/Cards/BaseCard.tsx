@@ -63,24 +63,29 @@ const BaseCard: React.FC<BaseCardProps> = ({
             title={t('cards.titles.' + title)}
             actions={actions}
             onPress={(e) => {
-                e.nativeEvent.name === t('contextMenu.settings') &&
+                if (e.nativeEvent.name === t('contextMenu.settings')) {
                     router.navigate('/dashboard')
-                e.nativeEvent.name === t('contextMenu.hide') &&
+                }
+                if (e.nativeEvent.name === t('contextMenu.hide')) {
                     hideDashboardEntry(title)
-                e.nativeEvent.name === t('contextMenu.reset') &&
+                }
+                if (e.nativeEvent.name === t('contextMenu.reset')) {
                     resetOrder(userKind ?? 'guest')
+                }
             }}
             onPreviewPress={() => {
-                onPressRoute != null &&
+                if (onPressRoute != null) {
                     router.navigate(onPressRoute as RelativePathString)
+                }
             }}
             disabled={Platform.OS === 'android'}
         >
             <Pressable
                 disabled={onPressRoute == null}
                 onPress={() => {
-                    onPressRoute != null &&
+                    if (onPressRoute != null) {
                         router.navigate(onPressRoute as RelativePathString)
+                    }
                 }}
                 delayLongPress={300}
                 onLongPress={() => {

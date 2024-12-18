@@ -44,7 +44,7 @@ export default function ErrorView({
     showPullLabel?: boolean
     inModal?: boolean
     isCritical?: boolean
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()
@@ -122,7 +122,7 @@ export default function ErrorView({
         }
     }
 
-    const ErrorButton = (): JSX.Element => {
+    const ErrorButton = (): React.JSX.Element => {
         const buttonAction = (): void => {
             switch (title) {
                 case guestError:
@@ -153,7 +153,7 @@ export default function ErrorView({
         return (buttonProps != null || title === guestError) &&
             title !== permissionError ? (
             <Pressable
-                style={styles.logoutContainer(inModal ?? false)}
+                style={styles.logoutContainer(inModal)}
                 onPress={buttonProps?.onPress}
             >
                 <View style={styles.refreshButton}>
@@ -172,19 +172,15 @@ export default function ErrorView({
             refreshControl={
                 refreshing != null && title !== guestError ? (
                     <RefreshControl
-                        refreshing={refreshing ?? false}
-                        onRefresh={() => {
-                            if (onRefresh) {
-                                onRefresh().catch(console.error)
-                            }
-                        }}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
                     />
                 ) : (
                     <></>
                 )
             }
             scrollEnabled={!inModal}
-            contentContainerStyle={styles.container(inModal ?? false)}
+            contentContainerStyle={styles.container(inModal)}
         >
             <View style={styles.errorContainer}>
                 <View style={styles.topContainer}>

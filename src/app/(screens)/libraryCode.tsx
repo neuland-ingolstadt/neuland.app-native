@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function LibraryCode(): JSX.Element {
+export default function LibraryCode(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
@@ -63,6 +63,7 @@ export default function LibraryCode(): JSX.Element {
         if (Platform.OS === 'ios') {
             void (async () => {
                 const { status } = await Brightness.requestPermissionsAsync()
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
                 if (status === 'granted') {
                     const value = await Brightness.getSystemBrightnessAsync()
                     setBrightness(value)
@@ -107,7 +108,8 @@ export default function LibraryCode(): JSX.Element {
                 </View>
             ) : isError ? (
                 <ErrorView
-                    title={error?.message ?? t('error.title')}
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    title={error.message ?? t('error.title')}
                     onRefresh={refetchByUser}
                     refreshing={isRefetchingByUser}
                 />
@@ -117,7 +119,7 @@ export default function LibraryCode(): JSX.Element {
                     onRefresh={refetchByUser}
                     refreshing={isRefetchingByUser}
                 />
-            ) : isSuccess && data?.bibnr !== null ? (
+            ) : isSuccess && data.bibnr !== null ? (
                 <View style={styles.container}>
                     <View>
                         <FormList sections={sections} />
@@ -133,7 +135,7 @@ export default function LibraryCode(): JSX.Element {
                     >
                         <Barcode
                             format="CODE39"
-                            value={data?.bibnr ?? ''}
+                            value={data.bibnr ?? ''}
                             maxWidth={Dimensions.get('window').width - 56}
                             width={5}
                             style={styles.barcodeStyle}
@@ -148,9 +150,9 @@ export default function LibraryCode(): JSX.Element {
             ) : (
                 <ErrorView
                     title={
-                        isError
+                        error?.message
                             ? // @ts-expect-error error is type never
-                              (error?.message ?? t('error.title'))
+                              ((error.message as string) ?? t('error.title'))
                             : t('error.title')
                     }
                     onRefresh={refetchByUser}

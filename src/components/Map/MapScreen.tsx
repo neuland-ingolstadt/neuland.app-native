@@ -42,13 +42,7 @@ import { ImageEntry } from '@maplibre/maplibre-react-native/lib/typescript/commo
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import {
-    type Feature,
-    type FeatureCollection,
-    type GeoJsonProperties,
-    type Geometry,
-    type Position,
-} from 'geojson'
+import { type Feature, type FeatureCollection, type Position } from 'geojson'
 import React, {
     useCallback,
     useContext,
@@ -91,7 +85,7 @@ export function requestPermission(): void {
 
 const isIpadOS = Platform.OS === 'ios' && Platform.isPad
 
-const MapScreen = (): JSX.Element => {
+const MapScreen = (): React.JSX.Element => {
     const tabBarHeight = useBottomTabBarHeight()
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
@@ -195,7 +189,7 @@ const MapScreen = (): JSX.Element => {
                 '"Time table does not exist" (-202)',
                 'Timetable is empty',
             ]
-            if (ignoreErrors.includes(error?.message)) {
+            if (ignoreErrors.includes(error.message)) {
                 return false
             }
             return failureCount < 2
@@ -297,7 +291,7 @@ const MapScreen = (): JSX.Element => {
             .flat()
         const buildings = BUILDINGS.map((building) => {
             const buildingRooms = rooms.filter(
-                (room) => room.properties.Gebaeude === building
+                (room) => room.properties.Gebaeude === (building as Gebaeude)
             )
             const floorCount = Array.from(
                 new Set(buildingRooms.map((room) => room.properties.Ebene))
@@ -405,7 +399,7 @@ const MapScreen = (): JSX.Element => {
     }, [userFaculty])
 
     useEffect(() => {
-        if (localSearch?.length === 1 && params.room != null) {
+        if (localSearch.length === 1 && params.room != null) {
             router.setParams(undefined)
         }
     }, [localSearch])
@@ -424,7 +418,7 @@ const MapScreen = (): JSX.Element => {
     })
 
     useEffect(() => {
-        async function load(): Promise<void> {
+        function load(): void {
             if (roomStatusData == null) {
                 console.debug('No room status data')
                 return
@@ -433,7 +427,7 @@ const MapScreen = (): JSX.Element => {
                 const dateObj = new Date()
                 const date = formatISODate(dateObj)
                 const time = formatISOTime(dateObj)
-                const rooms = await filterRooms(roomStatusData, date, time)
+                const rooms = filterRooms(roomStatusData, date, time)
                 setAvailableRooms(rooms)
             } catch (e) {
                 if (
@@ -447,7 +441,7 @@ const MapScreen = (): JSX.Element => {
             }
         }
         setAvailableRooms(null)
-        void load()
+        load()
     }, [userKind, roomStatusData])
 
     useEffect(() => {
@@ -462,7 +456,12 @@ const MapScreen = (): JSX.Element => {
                 ? allRooms.features
                 : Object.values(allRooms.features)
             )
-                .map((room: any) => room.properties?.Ebene?.toString())
+                .map((room) => {
+                    const properties = (room as RoomData).properties
+                    return typeof properties?.Ebene === 'string'
+                        ? properties.Ebene
+                        : ''
+                })
                 .filter((etage) => etage != null)
         )
     ).sort(
@@ -480,7 +479,7 @@ const MapScreen = (): JSX.Element => {
         // filter the filteredGeoJSON to only show available rooms
         const filterAvailableRooms = (
             rooms: FeatureCollection | undefined
-        ): Feature<Geometry, GeoJsonProperties>[] => {
+        ): Feature[] => {
             if (rooms == null) {
                 return []
             }
@@ -495,10 +494,7 @@ const MapScreen = (): JSX.Element => {
         }
         const filteredFeatures = filterAvailableRooms(filteredGeoJSON)
 
-        const availableFilteredGeoJSON: FeatureCollection<
-            Geometry,
-            GeoJsonProperties
-        > = {
+        const availableFilteredGeoJSON: FeatureCollection = {
             type: 'FeatureCollection',
             features: filteredFeatures,
         }
@@ -510,9 +506,7 @@ const MapScreen = (): JSX.Element => {
         if (mapOverlay == null) {
             return
         }
-        const filterEtage = (
-            etage: string
-        ): Feature<Geometry, GeoJsonProperties>[] => {
+        const filterEtage = (etage: string): Feature[] => {
             return allRooms.features.filter(
                 (feature) => feature.properties?.Ebene === etage
             )
@@ -520,7 +514,7 @@ const MapScreen = (): JSX.Element => {
 
         const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG')
 
-        const newGeoJSON: FeatureCollection<Geometry, GeoJsonProperties> = {
+        const newGeoJSON: FeatureCollection = {
             ...mapOverlay,
             features: filteredFeatures,
         }
@@ -552,19 +546,19 @@ const MapScreen = (): JSX.Element => {
         return roomData as RoomData
     }
 
-    const getBuildingData = (building: string): any => {
+    const getBuildingData = (building: string): RoomData => {
         const buildingDetails = allRooms.features.find(
             (x) =>
                 x.properties?.Gebaeude === building &&
-                x.properties?.rtype === SEARCH_TYPES.BUILDING
+                x.properties.rtype === SEARCH_TYPES.BUILDING
         )
-        const numberOfFreeRooms = availableRooms?.filter(
-            (x) => x.room[0] === building || x.room.slice(0, 1) === building
+        const numberOfFreeRooms = availableRooms?.filter((x) =>
+            x.room.startsWith(building)
         ).length
         const numberOfRooms = allRooms.features.filter(
             (x) =>
                 x.properties?.Gebaeude === building &&
-                x.properties?.rtype === SEARCH_TYPES.ROOM
+                x.properties.rtype === SEARCH_TYPES.ROOM
         ).length
         const buildingData = {
             title: building,
@@ -572,7 +566,7 @@ const MapScreen = (): JSX.Element => {
             properties: buildingDetails?.properties,
             occupancies: {
                 total: numberOfRooms,
-                available: numberOfFreeRooms,
+                available: numberOfFreeRooms ?? 0,
             },
             type: SEARCH_TYPES.BUILDING,
         }
@@ -589,9 +583,11 @@ const MapScreen = (): JSX.Element => {
             default:
                 return {
                     title: t('misc.unknown'),
+                    subtitle: t('misc.unknown'),
+                    type: SEARCH_TYPES.ROOM,
                     properties: null,
                     occupancies: null,
-                }
+                } as RoomData
         }
     }, [clickedElement])
 
@@ -774,7 +770,7 @@ const MapScreen = (): JSX.Element => {
                         images={{
                             // https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
                             'map-marker':
-                                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                                // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
                                 require('@/assets/map-marker.png') as ImageEntry,
                         }}
                     />
@@ -835,7 +831,8 @@ const MapScreen = (): JSX.Element => {
                             shape={filteredGeoJSON}
                             onPress={(e) => {
                                 setClickedElement({
-                                    data: e.features[0].properties?.Raum,
+                                    data: e.features[0].properties
+                                        ?.Raum as string,
                                     type: SEARCH_TYPES.ROOM,
                                     center: e.features[0].properties?.center as
                                         | Position
@@ -843,7 +840,8 @@ const MapScreen = (): JSX.Element => {
                                     manual: true,
                                 })
                                 trackEvent('Room', {
-                                    room: e.features[0].properties?.Raum,
+                                    room: e.features[0].properties
+                                        ?.Raum as string,
                                     origin: 'MapClick',
                                 })
                                 handlePresentModalPress()

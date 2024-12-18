@@ -20,7 +20,7 @@ import {
  */
 const ItemsPickerScreen = (params: {
     route: { params: { type: string } }
-}): JSX.Element => {
+}): React.JSX.Element => {
     const type = params.route.params.type
     const data = type === 'allergens' ? allergenMap : flapMap
     const placeholderKey =

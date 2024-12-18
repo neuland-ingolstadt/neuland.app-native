@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import { type PackedEvent } from '@howljs/calendar-kit'
@@ -20,7 +23,7 @@ const EventComponent = ({
     event: PackedEvent
     theme: UnistylesTheme
     isDark: boolean
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
     const { styles } = useStyles(stylesheet)
     if (
         event.start.dateTime === undefined ||
@@ -33,15 +36,15 @@ const EventComponent = ({
     const end = new Date(event.end.dateTime)
     const duration = end.getTime() - begin.getTime()
     const isOverflowing = duration < 1000 * 60 * 60
-    const nameParts = event.shortName?.split('_')?.slice(1)
+    const nameParts = event.shortName?.split('_')?.slice(1) as string[]
     const background = eventBackgroundColor(theme.colors.primary, isDark)
     const fontColor = textColor(theme.colors.primary, background, isDark)
-    const eventName = event.name ?? ''
+    const eventName = event.name as string
     const nameToDisplay =
         eventName.length > 20
             ? nameParts.join('_') !== ''
                 ? nameParts.join('_')
-                : event.shortName
+                : (event.shortName as string)
             : eventName
 
     return (
@@ -100,7 +103,7 @@ const EventComponent = ({
                                 color: fontColor,
                             }}
                         >
-                            {event.rooms?.join(', ')}
+                            {event.rooms?.join(', ') ?? ''}
                         </Text>
                     )}
                 </View>
@@ -152,7 +155,7 @@ const lineColor = (
               .hex()
         : eventBackgroundColor
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
     eventContainer: {
         borderRadius: 0,
         flex: 1,

@@ -27,7 +27,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function About(): JSX.Element {
+export default function About(): React.JSX.Element {
     const router = useRouter()
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
@@ -97,17 +97,17 @@ export default function About(): JSX.Element {
                         web: 'Mail',
                     },
                     onPress: async () =>
-                        await Linking.openURL(
+                        (await Linking.openURL(
                             'mailto:app-feedback@informatik.sexy?subject=Feedback%20Neuland-Next'
-                        ),
+                        )) as Promise<void>,
                 },
                 {
                     title: 'App Website',
                     icon: linkIcon,
                     onPress: async () =>
-                        await Linking.openURL(
+                        (await Linking.openURL(
                             `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}`
-                        ),
+                        )) as Promise<void>,
                 },
                 {
                     title:
@@ -173,7 +173,7 @@ export default function About(): JSX.Element {
                     preset: 'done',
                 })
             }
-            const isCollected = unlockedAppIcons?.includes('cat')
+            const isCollected = unlockedAppIcons.includes('cat')
             if (!isCollected) {
                 trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
                 if (Platform.OS === 'ios') addUnlockedAppIcon('cat')
@@ -184,9 +184,7 @@ export default function About(): JSX.Element {
     }
     const [pressCount, setPressCount] = useState(0)
     const handleWebsitePress = (): void => {
-        Linking.openURL('https://neuland-ingolstadt.de/').catch((err) => {
-            console.error('Failed to open URL:', err)
-        })
+        void Linking.openURL('https://neuland-ingolstadt.de/')
     }
 
     const handleContributorsPress = (): void => {
@@ -194,9 +192,7 @@ export default function About(): JSX.Element {
             'https://next.neuland.app/' +
             (i18n.language === 'en' ? 'en/' : '') +
             'about/contributors'
-        Linking.openURL(url).catch((err) => {
-            console.error('Failed to open URL:', err)
-        })
+        void Linking.openURL(url)
     }
     return (
         <>
@@ -215,6 +211,7 @@ export default function About(): JSX.Element {
                         >
                             <View style={styles.logoIcon}>
                                 <Image
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
                                     source={require('@/assets/appIcons/default.png')}
                                     alt="Neuland Next Logo"
                                     style={styles.logoImage}

@@ -20,7 +20,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
 
-export const IndexHeaderRight = (): JSX.Element => {
+export const IndexHeaderRight = (): React.JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
     const router = useRouter()
     const { styles, theme } = useStyles(stylesheet)
@@ -106,7 +106,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         )
     }
 
-    const IconComponent = (): JSX.Element => {
+    const IconComponent = (): React.JSX.Element => {
         return (
             <PlatformMenu>
                 {userKind === USER_EMPLOYEE ? (
@@ -184,7 +184,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         children,
     }: {
         children: JSX.Element
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         return (
             <ContextMenu
                 disabled={getDeviceType() === 'Desktop'}

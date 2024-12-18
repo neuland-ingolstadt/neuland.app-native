@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import i18n from '@/localization/i18n'
 import { type FriendlyDateOptions } from '@/types/utils'
 import moment from 'moment'
 import 'moment/locale/de'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function t(...args: any): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return i18n.t(args, { ns: 'common' })
@@ -204,7 +206,7 @@ export function formatRelativeMinutes(datetime: Date | string): string {
         Math.floor((datetime.getTime() - Date.now()) / 60000),
         0
     )
-    return `${minutes} min`
+    return `${minutes.toString()} min`
 }
 
 /**

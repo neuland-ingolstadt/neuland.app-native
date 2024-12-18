@@ -44,7 +44,7 @@ const DURATIONS = [
 
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
-export default function AdvancedSearch(): JSX.Element {
+export default function AdvancedSearch(): React.React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
@@ -77,7 +77,7 @@ export default function AdvancedSearch(): JSX.Element {
     const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
 
     useEffect(() => {
-        const fetchRooms = async (): Promise<void> => {
+        const fetchRooms = (): void => {
             try {
                 const validateDate = new Date(date)
                 if (isNaN(validateDate.getTime())) {
@@ -86,13 +86,7 @@ export default function AdvancedSearch(): JSX.Element {
                 if (data === undefined) {
                     return
                 }
-                const rooms = await filterRooms(
-                    data,
-                    date,
-                    time,
-                    building,
-                    duration
-                )
+                const rooms = filterRooms(data, date, time, building, duration)
                 if (rooms == null) {
                     throw new Error('Error while filtering rooms')
                 } else {
@@ -107,7 +101,7 @@ export default function AdvancedSearch(): JSX.Element {
 
         setFilterState(LoadingState.LOADING)
         setTimeout(() => {
-            void fetchRooms()
+            fetchRooms()
         })
     }, [date, time, building, duration, data])
 

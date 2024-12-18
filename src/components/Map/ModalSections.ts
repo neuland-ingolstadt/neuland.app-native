@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type FormListSections } from '@/types/components'
 import {
     type BuildingOccupancy,
@@ -28,6 +35,7 @@ export const modalSection = (
     if (
         roomData.type === SEARCH_TYPES.ROOM &&
         ((roomData.occupancies !== null &&
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             roomData.occupancies !== undefined) ||
             (roomData.properties !== null && roomData.properties !== undefined))
     ) {
@@ -70,9 +78,9 @@ export const modalSection = (
                                                 )
                                                 const formattedMinutes =
                                                     minutes < 10
-                                                        ? `0${minutes}`
+                                                        ? `0${minutes.toString()}`
                                                         : minutes
-                                                return `${hours}:${formattedMinutes}h`
+                                                return `${hours.toString()}:${formattedMinutes.toString()}h`
                                             })(),
                                         },
                                         {
@@ -94,39 +102,41 @@ export const modalSection = (
                       {
                           header: t('pages.map.details.room.details'),
                           items: [
+                              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                               ...(occupancies != null
                                   ? [
                                         {
                                             title: t(
                                                 'pages.map.details.room.capacity'
                                             ),
-                                            value: `${occupancies.capacity} ${t('pages.rooms.options.seats')}`,
+                                            value: `${occupancies.capacity.toString()} ${t('pages.rooms.options.seats')}`,
                                         },
                                     ]
                                   : []),
                               {
                                   title: t('pages.map.details.room.building'),
                                   value:
-                                      roomData?.properties?.Gebaeude ??
+                                      roomData.properties?.Gebaeude ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: t('pages.map.details.room.floor'),
                                   value:
-                                      roomData?.properties?.Ebene ??
+                                      roomData.properties?.Ebene ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: t('pages.map.details.room.type'),
                                   value:
-                                      roomData?.properties?.[roomTypeKey] ??
+                                      roomData.properties?.[roomTypeKey] ??
                                       t('misc.unknown'),
                               },
                               {
                                   title: 'Campus',
                                   value:
                                       locations[
-                                          roomData?.properties?.Standort
+                                          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                          roomData.properties?.Standort
                                       ] ?? t('misc.unknown'),
                               },
                           ],
@@ -153,17 +163,18 @@ export const modalSection = (
                     {
                         title: t('pages.map.details.building.free'),
                         value:
-                            occupancies.available?.toString() ??
+                            occupancies.available.toString() ??
                             t('misc.unknown'),
                     },
                     {
                         title: t('pages.map.details.building.floors'),
                         value:
-                            properties?.Etage.toString() ?? t('misc.unknown'),
+                            (properties.Etage as string | null)?.toString() ??
+                            t('misc.unknown'),
                     },
                     {
                         title: 'Campus',
-                        value: locations?.[properties?.Standort],
+                        value: locations?.[properties.Standort],
                     },
                 ],
             },

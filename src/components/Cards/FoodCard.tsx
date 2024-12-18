@@ -19,7 +19,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const FoodCard = (): JSX.Element => {
+const FoodCard = (): React.JSX.Element => {
     const { t, i18n } = useTranslation('food')
     const { styles, theme } = useStyles(stylesheet)
 

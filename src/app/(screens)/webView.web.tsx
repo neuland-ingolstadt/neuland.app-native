@@ -2,7 +2,7 @@ import ErrorView from '@/components/Error/ErrorView'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function NotesDetails(): JSX.Element {
+export default function NotesDetails(): React.JSX.Element {
     const { t } = useTranslation('timetable')
 
     return (

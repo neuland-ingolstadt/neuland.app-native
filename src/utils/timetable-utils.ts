@@ -122,7 +122,7 @@ export function getGroupedTimetable(
     exams: Exam[]
 ): TimetableSections[] {
     const combinedData = [
-        ...timetable,
+        ...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
         ...exams.map((exam) => ({ ...exam, eventType: 'exam' })),
     ]
     const dates = [
@@ -169,7 +169,7 @@ export function generateKey(
     startDate: Date | string,
     room: string
 ): string {
-    return `${lectureName}-${new Date(startDate).getTime()}-${room}`
+    return `${lectureName}-${new Date(startDate).getTime().toString()}-${room}`
 }
 
 // This function checks if a given room string is valid based on the following criteria:

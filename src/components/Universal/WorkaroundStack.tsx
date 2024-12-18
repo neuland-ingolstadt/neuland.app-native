@@ -35,7 +35,7 @@ function WorkaroundStack({
     headerSearchBarOptions = undefined,
     params = {},
     androidFallback = false,
-}: WorkaroundStackProps): JSX.Element {
+}: WorkaroundStackProps): React.JSX.Element {
     const { t } = useTranslation('navigation')
     const Stack = createNativeStackNavigator()
     const StackAndroid = createStackNavigator()

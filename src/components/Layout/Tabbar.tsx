@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import Color from 'color'
 import React from 'react'
@@ -10,7 +12,7 @@ import { Tabs } from './NativeBottomTabs'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
 
-export default function TabLayout(): JSX.Element {
+export default function TabLayout(): React.JSX.Element {
     const { theme } = useStyles()
     const { t } = useTranslation('navigation')
     const isAndroid = Platform.OS === 'android'

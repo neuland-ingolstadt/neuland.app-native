@@ -39,7 +39,7 @@ export default function ClSportsPage({
         }[],
         Error
     >
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { userCampus } = useContext(UserKindContext)
     const [selectedLocation, setSelectedLocation] =
@@ -81,7 +81,7 @@ export default function ClSportsPage({
             title: WeekdayType
             data: UniversitySportsFieldsFragment[]
         }[]
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         return (
             <View>
                 {data.map((section, index) => (
@@ -103,7 +103,7 @@ export default function ClSportsPage({
     }: {
         title: Lowercase<WeekdayType>
         data: UniversitySportsFieldsFragment[]
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const [collapsed, setCollapsed] = useState(false)
 
         return (
@@ -157,7 +157,7 @@ export default function ClSportsPage({
         location,
     }: {
         location: string
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const isSelected = selectedLocation === location
 
         return (

@@ -26,7 +26,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function CalendarPage(): JSX.Element {
+export default function CalendarPage(): React.JSX.Element {
     const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
@@ -73,7 +73,7 @@ export default function CalendarPage(): JSX.Element {
     const scrollY = new Animated.Value(0)
     const pages = ['events', 'exams']
 
-    const CalendarFooter = (): JSX.Element => {
+    const CalendarFooter = (): React.JSX.Element => {
         return (
             <View style={styles.footerContainer}>
                 <Text style={styles.footerText1}>

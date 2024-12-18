@@ -41,7 +41,7 @@ const useIsFloatingKeyboard = (): boolean => {
     return floating
 }
 
-export default function Login(): JSX.Element {
+export default function Login(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const floatingKeyboard = useIsFloatingKeyboard()
     const { t } = useTranslation('flow')

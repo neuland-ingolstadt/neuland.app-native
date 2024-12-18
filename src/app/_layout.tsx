@@ -30,7 +30,7 @@ export const unstable_settings = {
     initialRouteName: '/',
 }
 
-function RootLayout(): JSX.Element {
+function RootLayout(): React.JSX.Element {
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
     const savedLanguage = usePreferencesStore((state) => state.language)
@@ -429,7 +429,7 @@ function RootLayout(): JSX.Element {
     )
 }
 
-const ProviderComponent = (): JSX.Element => {
+const ProviderComponent = (): React.JSX.Element => {
     return (
         <Try catch={CrashView}>
             <Provider>

@@ -12,7 +12,7 @@ export const FeedbackButton = ({
 }: {
     error: Error
     crash: boolean
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { t } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
     const platform = Platform.OS
@@ -42,7 +42,7 @@ export const FeedbackButton = ({
     )
 }
 
-export const StatusButton = (): JSX.Element => {
+export const StatusButton = (): React.JSX.Element => {
     const { t } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
 

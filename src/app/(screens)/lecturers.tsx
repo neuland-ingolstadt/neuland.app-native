@@ -46,7 +46,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-export default function LecturersCard(): JSX.Element {
+export default function LecturersCard(): React.JSX.Element {
     const router = useRouter()
     const [filteredLecturers, setFilteredLecturers] = useState<
         NormalizedLecturer[]
@@ -273,7 +273,7 @@ export default function LecturersCard(): JSX.Element {
         error: Error | null
         isLoading: boolean
         isPersonal?: boolean
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         return isPaused && !isSuccess ? (
             <View style={styles.viewHorizontal}>
                 <ErrorView
@@ -395,7 +395,7 @@ export default function LecturersCard(): JSX.Element {
         )
     }
 
-    const FilterSectionList = (): JSX.Element => {
+    const FilterSectionList = (): React.JSX.Element => {
         return allLecturersResult.isLoading ? (
             <View style={styles.viewHorizontal}>
                 <LoadingIndicator style={styles.loadingContainer} />

@@ -32,7 +32,7 @@ const LibraryCard = ({
     iconProps,
     title,
     description,
-}: LibraryCardProps): JSX.Element => {
+}: LibraryCardProps): React.JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
     return (
         <Pressable style={styles.pressable} onPress={onPress}>

@@ -13,7 +13,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-export default function Theme(): JSX.Element {
+export default function Theme(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     const accentColor = usePreferencesStore((state) => state.accentColor)
@@ -31,7 +31,7 @@ export default function Theme(): JSX.Element {
     }: {
         color: ColorBoxColor
         code: string
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const { styles } = useStyles(stylesheet)
         const themeAccentColor =
             UnistylesRuntime.themeName === 'dark' ? color.dark : color.light
@@ -99,7 +99,9 @@ export default function Theme(): JSX.Element {
         }[]
     }
 
-    const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {
+    const ColorBoxMatrix = ({
+        colors,
+    }: ColorBoxMatrixProps): React.JSX.Element => {
         const { styles } = useStyles(stylesheet)
         return (
             <View style={styles.colorMatrixContainer}>

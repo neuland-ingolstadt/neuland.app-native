@@ -16,7 +16,7 @@ export default function ClEventsPage({
     clEventsResult,
 }: {
     clEventsResult: UseQueryResult<CampusLifeEventFieldsFragment[], Error>
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 

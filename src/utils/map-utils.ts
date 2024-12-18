@@ -1,6 +1,6 @@
 import { SEARCH_TYPES } from '@/types/map'
 import { type MaterialIcon } from '@/types/material-icons'
-import { type Rooms } from '@/types/thi-api'
+import { type Rooms, type TypeStunde } from '@/types/thi-api'
 import { type AvailableRoom } from '@/types/utils'
 import { trackEvent } from '@aptabase/react-native'
 import { type GeoJsonProperties, type Position } from 'geojson'
@@ -127,19 +127,19 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
         // flatten time slots
         .flatMap((rtype) =>
             Object.values(rtype.stunden).map((stunde) => ({
-                type: rtype.raumtyp,
                 ...stunde,
+                type: rtype.raumtyp,
             }))
         )
         // flatten room list
-        .flatMap((stunde: any) =>
+        .flatMap((stunde: TypeStunde) =>
             stunde.raeume.map(
                 ([, , room, capacity]: [string, string, number, number]) => ({
                     // 0 indicates that every room is free
                     room: room === 0 ? ROOMS_ALL : room.toString(),
-                    type: stunde.type.replace(/ \(.*\)$/, '').trim() ?? '',
-                    from: new Date(stunde.von as string),
-                    until: new Date(stunde.bis as string),
+                    type: stunde.type.replace(/ \(.*\)$/, '').trim(),
+                    from: new Date(stunde.von),
+                    until: new Date(stunde.bis),
                     capacity,
                 })
             )
@@ -219,13 +219,13 @@ export function getNextValidDate(): { startDate: Date; wasModified: boolean } {
  * @param {string} [duration] Minimum opening duration
  * @returns {Promise<object[]>}
  */
-export async function filterRooms(
+export function filterRooms(
     data: Rooms[],
     date: string,
     time: string,
     building: string = BUILDINGS_ALL,
     duration: string = DURATION_PRESET
-): Promise<AvailableRoom[]> {
+): AvailableRoom[] {
     const beginDate = new Date(date + 'T' + time)
     const [durationHours, durationMinutes] = duration
         .split(':')
@@ -239,7 +239,7 @@ export async function filterRooms(
         beginDate.getSeconds(),
         beginDate.getMilliseconds()
     )
-    return await searchRooms(data, beginDate, endDate, building)
+    return searchRooms(data, beginDate, endDate, building)
 }
 
 /**
@@ -249,12 +249,12 @@ export async function filterRooms(
  * @param {string} [building] Building name (e.g. `G`), defaults to all buildings
  * @returns {Promise<object[]>}
  */
-export async function searchRooms(
+export function searchRooms(
     data: Rooms[],
     beginDate: Date,
     endDate: Date,
     building: string = BUILDINGS_ALL
-): Promise<AvailableRoom[]> {
+): AvailableRoom[] {
     const openings = getRoomOpenings(data, beginDate)
     return Object.keys(openings)
         .flatMap((room) =>
@@ -283,12 +283,12 @@ export async function searchRooms(
  */
 export function getCenter(rooms: Position[][][]): Position {
     const getCenterPoint = (points: Position[][]): Position[] => {
-        const x = points[0].map((point: any) => point[0])
-        const y = points[0].map((point: any) => point[1])
-        const minX = Math.min(...(x as number[]))
-        const maxX = Math.max(...(x as number[]))
-        const minY = Math.min(...(y as number[]))
-        const maxY = Math.max(...(y as number[]))
+        const x = points[0].map((point: Position) => point[0])
+        const y = points[0].map((point: Position) => point[1])
+        const minX = Math.min(...x)
+        const maxX = Math.max(...x)
+        const minY = Math.min(...y)
+        const maxY = Math.max(...y)
         return [(minX + maxX) / 2, (minY + maxY) / 2] as unknown as Position[]
     }
 
@@ -381,11 +381,8 @@ export const getIcon = (
     const {
         Funktion_en: funktionEn,
         Raum: raum,
-    }: { Funktion_en: string; Raum: string } = (properties?.result.item
-        .properties as { Funktion_en: string; Raum: string }) ?? {
-        Funktion_en: '',
-        Raum: '',
-    }
+    }: { Funktion_en: string; Raum: string } = properties?.result.item
+        .properties as { Funktion_en: string; Raum: string }
     const food = ['M001', 'X001', 'F001']
     switch (type) {
         case SEARCH_TYPES.BUILDING:

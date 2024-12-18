@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Licenses(): JSX.Element {
+export default function Licenses(): React.JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['settings'])
     const { styles, theme } = useStyles(stylesheet)
@@ -43,7 +43,7 @@ export default function Licenses(): JSX.Element {
 
     const licensesStaticFiltered = Object.entries(licensesStatic)
         .filter(
-            ([_, license]) =>
+            ([, license]) =>
                 license.platform.includes(Platform.OS) ||
                 license.platform.includes('all')
         )
@@ -54,7 +54,7 @@ export default function Licenses(): JSX.Element {
     const licensesList = Object.entries(licensesCombined)
         .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
         // also sort by search
-        .filter(([key, value]) => {
+        .filter(([key]) => {
             if (localSearch === '') {
                 return true
             }

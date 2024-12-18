@@ -77,6 +77,10 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
                                                 name: 'delete',
                                                 size: 24,
                                             }}
+                                            web={{
+                                                name: 'Trash',
+                                                size: 24,
+                                            }}
                                             style={styles.toast}
                                         />
                                     </Pressable>

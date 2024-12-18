@@ -29,7 +29,7 @@ const AnimatedText = ({
     text: string
     textStyles: TextStyle
     disabled?: boolean
-}): JSX.Element => {
+}): React.JSX.Element => {
     const colorValue = useSharedValue(0)
     const { theme } = useStyles()
     useEffect(() => {

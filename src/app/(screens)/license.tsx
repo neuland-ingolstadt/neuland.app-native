@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function License(): JSX.Element {
+export default function License(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['settings'])
 

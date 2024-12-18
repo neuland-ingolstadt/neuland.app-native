@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Theme(): JSX.Element {
+export default function Theme(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const changelog = changelogData as Changelog
     const { t, i18n } = useTranslation(['settings'])

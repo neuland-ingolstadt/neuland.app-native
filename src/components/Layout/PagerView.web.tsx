@@ -15,7 +15,7 @@ interface TabLayoutProps {
 const TabLayout = (
     { initialPage, onPageSelected, children }: TabLayoutProps,
     ref: Ref<{ setPage: (i: number) => void }>
-): JSX.Element => {
+): React.JSX.Element => {
     const [page, setPage] = useState<number>(initialPage)
 
     useImperativeHandle(
