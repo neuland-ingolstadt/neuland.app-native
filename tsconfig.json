@@ -15,6 +15,7 @@
         ".expo/types/**/*.ts",
         "expo-env.d.ts",
         "babel.config.js",
-        "src/app/(screens)/meal.s"
+        "src/app/(screens)/meal.s",
+        "src/app/(tabs)/(index)/links.tsx"
     ]
 }
