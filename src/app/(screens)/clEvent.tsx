@@ -17,7 +17,7 @@ import { Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventDetail(): JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const navigation = useNavigation()
     const clEvent = useCLParamsStore((state) => state.selectedClEvent)
 
@@ -110,7 +110,7 @@ export default function ClEventDetail(): JSX.Element {
                                                 },
                                             })
                                         },
-                                        textColor: 'blue',
+                                        textColor: theme.colors.primary,
                                     }
                                   : {}
                           ),
