@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+    - name: Feature Request
+      url: https://github.com/neuland-ingolstadt/neuland.app-native/discussions/new?category=ideas
+      about: For feature requests, please create a new discussion in the ideas category. Once your feature request is accepted, an issue will be created.
     - name: Discussions and questions
-      url: https://github.com/neuland-ingolstadt/neuland.app-native
+      url: https://github.com/neuland-ingolstadt/neuland.app-native/discussions
       about: Please ask and answer questions here.
