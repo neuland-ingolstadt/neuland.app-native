@@ -1,3 +1,4 @@
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
 import { type FriendlyTimetableEntry } from '@/types/utils'
@@ -41,6 +42,7 @@ export default function TimetableWeek({
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
+    const timetableDays = usePreferencesStore((state) => state.timetableDays)
 
     const calendarTheme = {
         colors: {
@@ -95,6 +97,7 @@ export default function TimetableWeek({
                             calendarRef.current?.goToDate({ date: targetDate })
                         }
                     }}
+                    type="week"
                 />
             ),
             headerLeft: () => <HeaderLeft />,
@@ -125,7 +128,7 @@ export default function TimetableWeek({
                 start={450}
                 end={1290}
                 ref={calendarRef}
-                numberOfDays={3}
+                numberOfDays={timetableDays}
                 events={events}
                 theme={calendarTheme}
                 onPressEvent={(event) => {
