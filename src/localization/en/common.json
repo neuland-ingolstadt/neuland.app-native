@@ -266,21 +266,21 @@
                 "description": "Use the virtual library card to borrow books and other media."
             },
             "note": "Due to the new V:Scout system it is no longer possible to book seats using the app."
-        }
-    },
-    "clEvents": {
-        "sports": {
-            "title": "Sports",
-            "noEvents": {
-                "title": "No sports events found",
-                "subtitle": "Check back later."
-            }
         },
-        "events": {
-            "title": "Events",
-            "noEvents": {
-                "title": "No events found",
-                "subtitle": "Check back later."
+        "clEvents": {
+            "sports": {
+                "title": "Sports",
+                "noEvents": {
+                    "title": "No sports events found",
+                    "subtitle": "Check back later."
+                }
+            },
+            "events": {
+                "title": "Events",
+                "noEvents": {
+                    "title": "No events found",
+                    "subtitle": "Check back later."
+                }
             }
         }
     },

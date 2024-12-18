@@ -207,7 +207,7 @@ export default function TimetableWeek({
     )
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
     buttons: {
         flexDirection: 'row',
     },

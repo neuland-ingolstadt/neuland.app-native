@@ -93,10 +93,10 @@ export default function Theme(): JSX.Element {
     }
 
     interface ColorBoxMatrixProps {
-        colors: Array<{
+        colors: {
             code: string
             color: ColorBoxColor
-        }>
+        }[]
     }
 
     const ColorBoxMatrix = ({ colors }: ColorBoxMatrixProps): JSX.Element => {

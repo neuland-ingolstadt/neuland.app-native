@@ -61,7 +61,7 @@ export default function Licenses(): JSX.Element {
             return key.toLowerCase().includes(localSearch.toLowerCase())
         })
         .map(([key, value]) => {
-            const version = key.match(numberRegex)
+            const version = numberRegex.exec(key)
             const nameWithoutVersion = key
                 .replace(atRegex, '')
                 .replace(version != null ? version[0] : '', '')

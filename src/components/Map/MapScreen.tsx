@@ -13,7 +13,7 @@ import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
-import { type RoomData, SEARCH_TYPES } from '@/types/map'
+import { ClickedMapElement, type RoomData, SEARCH_TYPES } from '@/types/map'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
@@ -38,6 +38,7 @@ import MapLibreGL, {
     type MapViewRef,
     type UserLocationRef,
 } from '@maplibre/maplibre-react-native'
+import { ImageEntry } from '@maplibre/maplibre-react-native/lib/typescript/commonjs/src/components/Images'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
@@ -46,6 +47,7 @@ import {
     type FeatureCollection,
     type GeoJsonProperties,
     type Geometry,
+    type Position,
 } from 'geojson'
 import React, {
     useCallback,
@@ -272,7 +274,8 @@ const MapScreen = (): JSX.Element => {
                 }
 
                 if (properties.Ebene in FLOOR_SUBSTITUTES) {
-                    properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene]
+                    properties.Ebene =
+                        FLOOR_SUBSTITUTES[properties.Ebene as string]
                 }
                 if (!FLOOR_ORDER.includes(properties.Ebene as string)) {
                     FLOOR_ORDER.push(properties.Ebene as string)
@@ -332,7 +335,7 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         // @ts-expect-error - TabPress event is not defined in the type
-        const unsubscribe = navigation.addListener('tabPress', (e) => {
+        const unsubscribe = navigation.addListener('tabPress', () => {
             setDisableFollowUser(true)
             setTabBarPressed(true)
         })
@@ -377,7 +380,7 @@ const MapScreen = (): JSX.Element => {
         setClickedElement({
             data: params.room,
             type: SEARCH_TYPES.ROOM,
-            center: room.center,
+            center: room.center as Position | undefined,
             manual: false,
         })
         trackEvent('Room', {
@@ -385,7 +388,7 @@ const MapScreen = (): JSX.Element => {
             origin: 'InAppLink',
         })
         setCurrentFloor({
-            floor: room.Ebene,
+            floor: (room.Ebene as string) ?? 'EG',
             manual: false,
         })
         handlePresentModalPress()
@@ -477,7 +480,7 @@ const MapScreen = (): JSX.Element => {
         // filter the filteredGeoJSON to only show available rooms
         const filterAvailableRooms = (
             rooms: FeatureCollection | undefined
-        ): Array<Feature<Geometry, GeoJsonProperties>> => {
+        ): Feature<Geometry, GeoJsonProperties>[] => {
             if (rooms == null) {
                 return []
             }
@@ -507,7 +510,9 @@ const MapScreen = (): JSX.Element => {
         if (mapOverlay == null) {
             return
         }
-        const filterEtage = (etage: string): any => {
+        const filterEtage = (
+            etage: string
+        ): Feature<Geometry, GeoJsonProperties>[] => {
             return allRooms.features.filter(
                 (feature) => feature.properties?.Ebene === etage
             )
@@ -523,11 +528,11 @@ const MapScreen = (): JSX.Element => {
         setFilteredGeoJSON(newGeoJSON)
     }, [currentFloor, allRooms, mapOverlay]) // Ensure dependencies are correctly listed
 
-    const getRoomData = (room: string): any => {
+    const getRoomData = (room: string): RoomData => {
         const occupancies = availableRooms?.find((x) => x.room === room)
         const properties = allRooms.features.find(
             (x) => x.properties?.Raum === room
-        )?.properties
+        )?.properties as FeatureProperties | undefined
 
         const roomData = {
             title: room,
@@ -535,16 +540,16 @@ const MapScreen = (): JSX.Element => {
                 properties != null &&
                 (i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en') in
                     properties
-                    ? properties[
+                    ? (properties[
                           i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
-                      ]
+                      ] ?? t('misc.unknown'))
                     : t('misc.unknown'),
             properties,
 
             occupancies,
             type: SEARCH_TYPES.ROOM,
         }
-        return roomData
+        return roomData as RoomData
     }
 
     const getBuildingData = (building: string): any => {
@@ -590,8 +595,8 @@ const MapScreen = (): JSX.Element => {
         }
     }, [clickedElement])
 
-    function setView(clickedElement: any = null): void {
-        if (clickedElement == null) {
+    function setView(clickedElement: ClickedMapElement | null = null): void {
+        if (clickedElement?.center == null) {
             cameraRef.current?.setCamera({
                 centerCoordinate: mapCenter,
                 zoomLevel: 16.5,
@@ -676,7 +681,7 @@ const MapScreen = (): JSX.Element => {
 
     useEffect(() => {
         // As required by the OSM attribution, the attribution must be displayed until the user interacts with the map or 5 seconds after the map has loaded
-        let timer: any
+        let timer: ReturnType<typeof setTimeout>
         const startFadeOut = (): void => {
             opacity.value = withTiming(0, { duration: 500 }, () => {
                 runOnJS(setIsVisible)(false)
@@ -768,7 +773,9 @@ const MapScreen = (): JSX.Element => {
                         nativeAssetImages={['pin']}
                         images={{
                             // https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
-                            'map-marker': require('@/assets/map-marker.png'),
+                            'map-marker':
+                                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                                require('@/assets/map-marker.png') as ImageEntry,
                         }}
                     />
                     <MapLibreGL.Camera
@@ -830,7 +837,9 @@ const MapScreen = (): JSX.Element => {
                                 setClickedElement({
                                     data: e.features[0].properties?.Raum,
                                     type: SEARCH_TYPES.ROOM,
-                                    center: e.features[0].properties?.center,
+                                    center: e.features[0].properties?.center as
+                                        | Position
+                                        | undefined,
                                     manual: true,
                                 })
                                 trackEvent('Room', {

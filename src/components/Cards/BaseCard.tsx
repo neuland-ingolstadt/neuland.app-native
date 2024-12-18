@@ -83,7 +83,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
                         router.navigate(onPressRoute as RelativePathString)
                 }}
                 delayLongPress={300}
-                onLongPress={() => {}}
+                onLongPress={() => {
+                    /* nothing */
+                }}
             >
                 <View style={styles.card}>
                     <View style={styles.titleView}>

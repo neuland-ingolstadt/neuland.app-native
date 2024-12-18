@@ -120,7 +120,7 @@ export default function TimetableDetails(): JSX.Element {
                           {
                               title: t('details.exam'),
                               value: exam,
-                              layout: 'column' as 'column',
+                              layout: 'column' as const,
                           },
                       ]
                     : []),

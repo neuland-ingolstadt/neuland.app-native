@@ -75,7 +75,7 @@ export default function HomeLayout(): JSX.Element {
         storage.delete('accentColor')
     }
     if (oldAllergens != null) {
-        const allergens = JSON.parse(oldAllergens)
+        const allergens = JSON.parse(oldAllergens) as string[]
         if (allergens.length === 1 && allergens[0] === 'not-configured') {
             /* empty */
         } else {

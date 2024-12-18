@@ -28,7 +28,7 @@ export const humanLocations = {
  */
 export async function loadFoodEntries(
     restaurants: string[],
-    includeStatic: boolean = false
+    includeStatic = false
 ): Promise<Food[]> {
     const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
     const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
@@ -48,7 +48,7 @@ export async function loadFoodEntries(
     return isoDates.map((day) => {
         const dayEntries: Meal[] = data.flatMap(
             (r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
-        )
+        ) as Meal[]
         // remove static meals if includeStatic is false. otherwise return all meals
         const filteredDayEntries = dayEntries.filter(
             (meal) => includeStatic || !meal.static

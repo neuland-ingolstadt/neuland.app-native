@@ -7,6 +7,7 @@ import {
     Dimensions,
     Keyboard,
     KeyboardAvoidingView,
+    KeyboardEvent,
     Linking,
     Platform,
     Pressable,
@@ -24,7 +25,7 @@ const useIsFloatingKeyboard = (): boolean => {
     const [floating, setFloating] = useState(false)
 
     useEffect(() => {
-        const onKeyboardWillChangeFrame = (event: any): void => {
+        const onKeyboardWillChangeFrame = (event: KeyboardEvent): void => {
             setFloating(event.endCoordinates.width !== windowWidth)
         }
 

@@ -193,7 +193,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -207,7 +211,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -309,7 +317,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -323,7 +335,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />

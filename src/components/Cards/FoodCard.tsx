@@ -36,7 +36,7 @@ const FoodCard = (): JSX.Element => {
 
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
-        Array<{ name: string; price: string | null; location: string | null }>
+        { name: string; price: string | null; location: string | null }[]
     >([])
     const { data, isSuccess } = useQuery({
         queryKey: ['meals', selectedRestaurants, false],

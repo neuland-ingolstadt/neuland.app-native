@@ -266,21 +266,21 @@
                 "description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
             },
             "note": "Aufgrund des neuen V:Scout-Systems ist es nicht mehr möglich Sitzplätze über die App zu buchen."
-        }
-    },
-    "clEvents": {
-        "sports": {
-            "title": "Sport",
-            "noEvents": {
-                "title": "Keine Sportveranstaltungen",
-                "subtitle": "Bitte versuche es später erneut."
-            }
         },
-        "events": {
-            "title": "Veranstaltungen",
-            "noEvents": {
-                "title": "Keine anstehenden Veranstaltungen",
-                "subtitle": "Bitte versuche es später erneut."
+        "clEvents": {
+            "sports": {
+                "title": "Sport",
+                "noEvents": {
+                    "title": "Keine Sportveranstaltungen",
+                    "subtitle": "Bitte versuche es später erneut."
+                }
+            },
+            "events": {
+                "title": "Veranstaltungen",
+                "noEvents": {
+                    "title": "Keine anstehenden Veranstaltungen",
+                    "subtitle": "Bitte versuche es später erneut."
+                }
             }
         }
     },

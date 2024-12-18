@@ -32,12 +32,12 @@ export interface Prices {
 }
 
 export interface GradeAverage {
-    entries: Array<{
+    entries: {
         simpleName: string
         name: string
         weight: number | null
         grade: number | null
-    }>
+    }[]
     result: number
     resultMin: number
     resultMax: number

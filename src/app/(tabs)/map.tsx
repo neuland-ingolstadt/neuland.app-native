@@ -39,7 +39,7 @@ export default function MapRootScreen(): JSX.Element {
         storage.set('mapSearchHistory', jsonValue)
     }
 
-    const loadSearchHistory = async (): Promise<void> => {
+    const loadSearchHistory = (): void => {
         const jsonValue = storage.getString('mapSearchHistory')
         if (jsonValue != null) {
             try {

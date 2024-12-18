@@ -131,18 +131,16 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 1: Events */}
                 <ScrollView
                     contentContainerStyle={styles.itemsContainer}
-                    onScroll={
-                        Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: { y: scrollY },
-                                    },
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: { y: scrollY },
                                 },
-                            ],
-                            { useNativeDriver: false }
-                        ) as any
-                    }
+                            },
+                        ],
+                        { useNativeDriver: false }
+                    )}
                     scrollEventThrottle={16}
                 >
                     <View style={styles.contentBorder}>
@@ -163,18 +161,16 @@ export default function CalendarPage(): JSX.Element {
 
                 <ScrollView
                     contentContainerStyle={styles.itemsContainer}
-                    onScroll={
-                        Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: { y: scrollY },
-                                    },
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: { y: scrollY },
                                 },
-                            ],
-                            { useNativeDriver: false }
-                        ) as any
-                    }
+                            },
+                        ],
+                        { useNativeDriver: false }
+                    )}
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefetchingByUser}

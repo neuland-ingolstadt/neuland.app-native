@@ -2,7 +2,7 @@ export interface APIResponse {
     date: string
     time: string
     status: number
-    data: any[]
+    data: unknown[]
 }
 
 export interface Announcements {
@@ -22,7 +22,7 @@ export interface SessionCreate {
     date: string
     time: string
     status: number
-    data: Array<number | string>
+    data: (number | string)[]
 }
 
 export interface Exams {
@@ -57,7 +57,7 @@ export interface Jobs {
     date: string
     time: string
     status: number
-    data: Array<number | string>
+    data: (number | string)[]
 }
 
 export interface Lecturers {
@@ -184,12 +184,12 @@ export interface ThiWebinfo {
     date: string
     time: string
     status: number
-    data: Array<string[] | number>
+    data: (string[] | number)[]
 }
 
 export interface TimetableResponse {
-    semester: any[] // TODO: Add type
-    holidays: any[] // TODO: Add type
+    semester: unknown[] // TODO: Add type
+    holidays: unknown[] // TODO: Add type
     timetable: Timetable[]
 }
 

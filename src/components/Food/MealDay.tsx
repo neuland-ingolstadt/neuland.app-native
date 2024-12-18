@@ -84,7 +84,7 @@ const MealCategory = ({
                     </View>
                 </Pressable>
                 <Collapsible collapsed={collapsed}>
-                    {meals.map((meal: any, index: number) => (
+                    {meals.map((meal: Meal, index: number) => (
                         <MealEntry key={index} meal={meal} index={index} />
                     ))}
                 </Collapsible>
@@ -114,7 +114,7 @@ export const MealDay = ({
      * @returns An array of meals belonging to the specified restaurant.
      */
     const filterMealsByRestaurant = (
-        meals: any[],
+        meals: Meal[],
         restaurant: string
     ): Meal[] => {
         return meals.filter((meal: Meal) => meal.restaurant === restaurant)
@@ -178,7 +178,7 @@ export const MealDay = ({
         if (meals.length > 0) {
             return (
                 <View>
-                    <Text style={styles.dayRestaurantTitle}>
+                    <Text style={styles.dayRestaurantTitles}>
                         {restaurantName}
                     </Text>
                     <MealGroup group={groupedMeals} />

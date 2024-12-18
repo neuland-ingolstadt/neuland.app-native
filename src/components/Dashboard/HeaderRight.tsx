@@ -54,14 +54,14 @@ export const IndexHeaderRight = (): JSX.Element => {
     })
 
     useEffect(() => {
-        const fetchUsernameAndSetInitials = async (): Promise<void> => {
+        const fetchUsernameAndSetInitials = (): void => {
             if (userKind === USER_STUDENT && persData !== undefined) {
                 const initials = getInitials(
                     persData.vname + ' ' + persData.name
                 )
                 setInitials(initials)
             } else if (userKind === USER_EMPLOYEE) {
-                const username = await getUsername()
+                const username = getUsername()
                 if (username !== undefined) {
                     setInitials(getInitials(username))
                 }
@@ -69,9 +69,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                 setInitials('')
             }
         }
-        fetchUsernameAndSetInitials().catch((e) => {
-            console.log(e)
-        })
+        fetchUsernameAndSetInitials()
     }, [persData, userKind])
 
     const logoutAlert = (): void => {
@@ -271,7 +269,9 @@ export const IndexHeaderRight = (): JSX.Element => {
                 router.navigate('/settings')
             }}
             delayLongPress={300}
-            onLongPress={() => {}}
+            onLongPress={() => {
+                /* nothing */
+            }}
             accessibilityLabel={t('navigation.settings')}
             style={styles.element}
         >

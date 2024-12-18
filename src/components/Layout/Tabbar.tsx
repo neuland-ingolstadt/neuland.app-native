@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import Color from 'color'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

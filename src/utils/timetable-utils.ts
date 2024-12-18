@@ -5,8 +5,6 @@ import {
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
-import { type TFunction } from 'i18next'
-import { Alert, Linking } from 'react-native'
 
 import { combineDateTime } from './date-utils'
 
@@ -18,7 +16,7 @@ import { combineDateTime } from './date-utils'
  */
 export async function getFriendlyTimetable(
     date: Date,
-    detailed: boolean = false
+    detailed = false
 ): Promise<FriendlyTimetableEntry[]> {
     // if month is august or september, there are no lectures. Adjust the date to october
     if (date.getMonth() === 7 || date.getMonth() === 8) {
@@ -157,29 +155,6 @@ export function convertTimetableToWeekViewEvents(
             entry,
         }
     })
-}
-
-/**
- * Shows an alert to the user that they need to enable notifications.
- * @param t Translation function
- * @returns void
- */
-export function notificationAlert(t: TFunction<any>): void {
-    Alert.alert(
-        t('notification.permission.title', { ns: 'common' }),
-        t('notification.permission.description', { ns: 'common' }),
-        [
-            {
-                text: t('misc.cancel', { ns: 'common' }),
-            },
-            {
-                text: t('notification.permission.button', { ns: 'common' }),
-                onPress: () => {
-                    void Linking.openSettings()
-                },
-            },
-        ]
-    )
 }
 
 /**

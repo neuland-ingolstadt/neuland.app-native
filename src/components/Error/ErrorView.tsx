@@ -33,13 +33,13 @@ export default function ErrorView({
     message?: string
     icon?: {
         ios: string
-        android: string
+        android: MaterialIcon
         web: LucideIcon
         multiColor?: boolean
     }
     buttonText?: string
     onButtonPress?: () => void
-    onRefresh?: () => any
+    onRefresh?: () => unknown
     refreshing?: boolean
     showPullLabel?: boolean
     inModal?: boolean
@@ -48,36 +48,32 @@ export default function ErrorView({
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()
-    const getIcon = (): MaterialIcon | any => {
-        const ios = Platform.OS === 'ios'
-        const android = Platform.OS === 'android'
+
+    const getIconIos = (): string => {
         switch (title) {
             case networkError:
-                return ios ? 'wifi.slash' : android ? 'wifi_off' : 'WifiOff'
+                return 'wifi.slash'
             case guestError:
-                return ios
-                    ? 'person.crop.circle.badge.questionmark'
-                    : android
-                      ? 'person_cancel'
-                      : 'UserRoundX'
+                return 'person.crop.circle.badge.questionmark'
             case permissionError:
-                return ios
-                    ? 'person.crop.circle.badge.exclamationmark'
-                    : android
-                      ? 'person_slash'
-                      : 'UserRoundX'
+                return 'person.crop.circle.badge.exclamationmark'
             default:
                 return icon !== undefined
-                    ? ios
-                        ? icon.ios
-                        : android
-                          ? icon.android
-                          : icon.web
-                    : ios
-                      ? 'exclamationmark.triangle.fill'
-                      : android
-                        ? 'error'
-                        : 'TriangleAlert'
+                    ? icon.ios
+                    : 'exclamationmark.triangle.fill'
+        }
+    }
+
+    const getIconAndroid = (): MaterialIcon => {
+        switch (title) {
+            case networkError:
+                return 'wifi_off'
+            case guestError:
+                return 'person_cancel'
+            case permissionError:
+                return 'person_alert'
+            default:
+                return icon !== undefined ? icon.android : 'error'
         }
     }
 
@@ -177,7 +173,11 @@ export default function ErrorView({
                 refreshing != null && title !== guestError ? (
                     <RefreshControl
                         refreshing={refreshing ?? false}
-                        onRefresh={onRefresh}
+                        onRefresh={() => {
+                            if (onRefresh) {
+                                onRefresh().catch(console.error)
+                            }
+                        }}
                     />
                 ) : (
                     <></>
@@ -190,18 +190,18 @@ export default function ErrorView({
                 <View style={styles.topContainer}>
                     <PlatformIcon
                         ios={{
-                            name: getIcon(),
+                            name: getIconIos(),
                             size: 50,
                             ...((icon?.multiColor ?? false)
                                 ? { renderMode: 'multicolor', variableValue: 1 }
                                 : {}),
                         }}
                         android={{
-                            name: getIcon(),
+                            name: getIconAndroid(),
                             size: 64,
                         }}
                         web={{
-                            name: getIcon(),
+                            name: icon?.web ?? 'TriangleAlert',
                             size: 64,
                         }}
                     />

@@ -102,12 +102,12 @@ function isInBuilding(room: string, building: string): boolean {
  */
 type RoomOpenings = Record<
     string,
-    Array<{
+    {
         type: string
         from: Date
         until: Date
         capacity: number
-    }>
+    }[]
 >
 
 /**

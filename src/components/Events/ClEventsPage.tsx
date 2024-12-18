@@ -31,18 +31,16 @@ export default function ClEventsPage({
             <ScrollView
                 contentContainerStyle={styles.itemsContainer}
                 style={styles.page}
-                onScroll={
-                    Animated.event(
-                        [
-                            {
-                                nativeEvent: {
-                                    contentOffset: { y: scrollY },
-                                },
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { y: scrollY },
                             },
-                        ],
-                        { useNativeDriver: false }
-                    ) as any
-                }
+                        },
+                    ],
+                    { useNativeDriver: false }
+                )}
                 scrollEventThrottle={16}
                 refreshControl={
                     <RefreshControl

@@ -1,4 +1,5 @@
 import {
+    CampusType,
     type UniversitySportsFieldsFragment,
     type WeekdayType,
 } from '@/__generated__/gql/graphql'
@@ -32,10 +33,10 @@ export default function ClSportsPage({
     sportsResult,
 }: {
     sportsResult: UseQueryResult<
-        Array<{
+        {
             title: WeekdayType
             data: UniversitySportsFieldsFragment[]
-        }>,
+        }[],
         Error
     >
 }): JSX.Element {
@@ -58,7 +59,7 @@ export default function ClSportsPage({
             .map((section) => ({
                 ...section,
                 data: section.data.filter(
-                    (event) => event.campus === selectedLocation
+                    (event) => event.campus === (selectedLocation as CampusType)
                 ),
             }))
             .filter((section) => section.data.length > 0)
@@ -76,10 +77,10 @@ export default function ClSportsPage({
     const EventList = ({
         data,
     }: {
-        data: Array<{
+        data: {
             title: WeekdayType
             data: UniversitySportsFieldsFragment[]
-        }>
+        }[]
     }): JSX.Element => {
         return (
             <View>
@@ -185,18 +186,16 @@ export default function ClSportsPage({
             <ScrollView
                 contentContainerStyle={styles.itemsContainer}
                 style={styles.page}
-                onScroll={
-                    Animated.event(
-                        [
-                            {
-                                nativeEvent: {
-                                    contentOffset: { y: scrollY },
-                                },
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { y: scrollY },
                             },
-                        ],
-                        { useNativeDriver: false }
-                    ) as any
-                }
+                        },
+                    ],
+                    { useNativeDriver: false }
+                )}
                 scrollEventThrottle={16}
                 refreshControl={
                     <RefreshControl

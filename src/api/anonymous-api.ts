@@ -2,7 +2,7 @@ import { Platform } from 'react-native'
 
 import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST: string = 'hiplan.thi.de'
+const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 

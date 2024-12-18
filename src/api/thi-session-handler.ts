@@ -129,9 +129,9 @@ export async function callWithSession<T>(
         if (session !== null) {
             return await method(session)
         }
-    } catch (e: any) {
+    } catch (e: unknown) {
         // the backend can throw different errors such as 'No Session' or 'Session Is Over'
-        if (/session/i.test(e.message as string)) {
+        if (e instanceof Error && /session/i.test(e.message)) {
             if (username != null && password != null) {
                 console.debug(
                     'seems to have received a session error trying to get a new session!'
@@ -156,50 +156,7 @@ export async function callWithSession<T>(
             throw e
         }
     }
-    return undefined as any
-}
-
-/**
- * Obtains a session, either directly from localStorage or by logging in
- * using saved credentials.
- *
- * If a session cannot be obtained, the user is redirected to /login.
- *
- * @param {object} router Next.js router object
- */
-export async function obtainSession(router: object): Promise<string | null> {
-    let session = loadSecure('session')
-    const age = parseInt(storage.getString('sessionCreated') ?? '0')
-
-    const username = loadSecure('username')
-    const password = loadSecure('password')
-
-    // invalidate expired session
-    if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
-        console.debug('Invalidating session')
-
-        session = null
-    }
-
-    // try to log in again
-    if (session == null && username != null && password != null) {
-        try {
-            console.debug('Logging in again')
-            const { session: newSession, isStudent } = await API.login(
-                username,
-                password
-            )
-            session = newSession
-            await saveSecure('session', session)
-            storage.set('sessionCreated', Date.now().toString())
-            storage.set('isStudent', isStudent.toString())
-        } catch (e) {
-            console.debug('Failed to log in again')
-            console.error(e)
-        }
-    }
-
-    return session
+    return undefined as never
 }
 
 /**

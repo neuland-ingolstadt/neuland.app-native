@@ -7,7 +7,7 @@ export interface RoomsOverlay {
     numberMatched: number
     numberReturned: number
     timeStamp: Date
-    crs: any
+    crs: unknown
     bbox: number[]
 }
 

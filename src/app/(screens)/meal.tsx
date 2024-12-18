@@ -169,7 +169,9 @@ export default function FoodDetail(): JSX.Element {
                     },
                     {
                         text: t('misc.cancel', { ns: 'common' }),
-                        onPress: () => {},
+                        onPress: () => {
+                            /* empty */
+                        },
                         style: 'cancel',
                     },
                 ]

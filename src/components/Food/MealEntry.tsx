@@ -65,7 +65,6 @@ export const MealEntry = ({
     const setSelectedMeal = useRouteParamsStore(
         (state) => state.setSelectedMeal
     )
-    useEffect(() => {}, [userKind])
     const price = getUserSpecificPrice(meal, userKind ?? 'guest')
     const label =
         price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : ''
@@ -158,7 +157,9 @@ export const MealEntry = ({
                 <Pressable
                     onPress={itemPressed}
                     delayLongPress={300}
-                    onLongPress={() => {}}
+                    onLongPress={() => {
+                        /* nothing */
+                    }}
                     style={styles.pressable}
                 >
                     <View key={index} style={styles.container}>

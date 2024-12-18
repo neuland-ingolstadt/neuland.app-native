@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { SearchBarProps } from 'react-native-screens'
 import {
     UnistylesRuntime,
     createStyleSheet,
@@ -12,12 +13,12 @@ import {
 export interface WorkaroundStackProps {
     name: string
     titleKey: string
-    component: any
+    component: () => JSX.Element
     transparent?: boolean
     largeTitle?: boolean
-    headerSearchBarOptions?: any
-    headerRightElement?: ((props: any) => ReactNode) | undefined
-    params?: any
+    headerSearchBarOptions?: SearchBarProps
+    headerRightElement?: ((props: unknown) => ReactNode) | undefined
+    params?: Partial<object | undefined>
     androidFallback?: boolean
 }
 /*
@@ -51,7 +52,7 @@ function WorkaroundStack({
                             titleKey
                         ),
                         cardStyle: { backgroundColor: theme.colors.background },
-                        headerRight: headerRightElement as any,
+                        headerRight: headerRightElement,
                         headerStyle: {
                             backgroundColor:
                                 styles.headerBackground.backgroundColor,
