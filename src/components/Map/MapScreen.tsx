@@ -736,7 +736,7 @@ const MapScreen = (): JSX.Element => {
                         Platform.OS === 'ios' ? theme.colors.primary : undefined
                     }
                     logoEnabled={false}
-                    styleURL={
+                    mapStyle={
                         UnistylesRuntime.themeName === 'dark'
                             ? darkStyle
                             : lightStyle
