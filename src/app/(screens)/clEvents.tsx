@@ -103,7 +103,7 @@ export default function Events(): JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     page: {
         flex: 1,
-        paddingVertical: theme.margins.page,
+        margin: theme.margins.page,
     },
     pagerContainer: {
         flex: 1,

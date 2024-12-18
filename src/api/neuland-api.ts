@@ -2,10 +2,10 @@ import {
     type AppAnnouncementsQuery,
     type CampusLifeEventsQuery,
     type FoodPlanQuery,
+    type TypedDocumentString,
     type UniversitySportsQuery,
 } from '@/__generated__/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
-import { type DocumentNode, print } from 'graphql'
 
 import packageInfo from '../../package.json'
 import {
@@ -46,18 +46,27 @@ class NeulandAPIClient {
         }
     }
 
-    async performGraphQLQuery<T>(
-        query: DocumentNode,
-        variables?: Record<string, any>
-    ): Promise<T> {
+    /**
+     * Executes a GraphQL query against an endpoint
+     * @param query     The query to execute
+     * @param variables The variables to pass to the query
+     * @returns       The query result as a promise
+     */
+    async executeGql<TResult, TVariables>(
+        query: TypedDocumentString<TResult, TVariables>,
+        ...[variables]: TVariables extends Record<string, never>
+            ? []
+            : [TVariables]
+    ): Promise<TResult> {
         const resp = await fetch(GRAPHQL_ENDPOINT, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Accept: 'application/graphql-response+json',
                 'User-Agent': USER_AGENT,
             },
             body: JSON.stringify({
-                query: print(query),
+                query,
                 variables,
             }),
         })
@@ -65,7 +74,7 @@ class NeulandAPIClient {
         const json = await resp.json()
 
         if (resp.ok && json.errors == null) {
-            return json.data as T
+            return json.data as TResult
         } else {
             const errorMessage =
                 json.errors != null
@@ -80,11 +89,11 @@ class NeulandAPIClient {
      * @returns {Promise<AppAnnouncementsQuery>} A promise that resolves with the announcement data
      */
     async getAnnouncements(): Promise<AppAnnouncementsQuery> {
-        return await this.performGraphQLQuery(ANNOUNCEMENT_QUERY)
+        return await this.executeGql(ANNOUNCEMENT_QUERY)
     }
 
     async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
-        return await this.performGraphQLQuery(FOOD_QUERY, { locations })
+        return await this.executeGql(FOOD_QUERY, { locations })
     }
 
     /**
@@ -92,7 +101,7 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the campus life events data
      */
     async getCampusLifeEvents(): Promise<CampusLifeEventsQuery> {
-        return await this.performGraphQLQuery(CAMPUS_LIFE_EVENTS_QUERY)
+        return await this.executeGql(CAMPUS_LIFE_EVENTS_QUERY)
     }
 
     /**
@@ -100,7 +109,7 @@ class NeulandAPIClient {
      * @returns {Promise<GetUniversitySportsData>} A promise that resolves with the university sports events data
      */
     async getUniversitySports(): Promise<UniversitySportsQuery> {
-        return await this.performGraphQLQuery(UNIVERSITY_SPORTS_QUERY)
+        return await this.executeGql(UNIVERSITY_SPORTS_QUERY)
     }
 
     /**

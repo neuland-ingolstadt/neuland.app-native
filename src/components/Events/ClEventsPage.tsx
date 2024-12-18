@@ -84,9 +84,11 @@ export default function ClEventsPage({
                             </View>
                         ) : (
                             <ErrorView
-                                title={t('pages.calendar.exams.noExams.title')}
+                                title={t(
+                                    'pages.clEvents.events.noEvents.title'
+                                )}
                                 message={t(
-                                    'pages.calendar.exams.noExams.subtitle'
+                                    'pages.clEvents.events.noEvents.subtitle'
                                 )}
                                 icon={{
                                     ios: 'calendar.badge.clock',
@@ -116,7 +118,5 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingBottom: theme.margins.bottomSafeArea,
         width: '100%',
     },
-    page: {
-        paddingHorizontal: theme.margins.page,
-    },
+    page: {},
 }))

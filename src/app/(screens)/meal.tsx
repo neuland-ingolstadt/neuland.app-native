@@ -423,54 +423,52 @@ export default function FoodDetail(): JSX.Element {
             : [...priceSection, ...variantsSection, ...aboutSection]
 
     return (
-        <>
-            <ScrollView>
-                <View style={styles.titleContainer}>
-                    <Text
-                        style={styles.titleText}
-                        allowFontScaling={true}
-                        adjustsFontSizeToFit={true}
-                        numberOfLines={2}
-                        selectable={true}
-                    >
-                        {meal != null &&
-                            mealName(
-                                meal.name,
-                                foodLanguage,
-                                i18n.language as LanguageKey
-                            )}
+        <ScrollView contentContainerStyle={styles.page}>
+            <View style={styles.titleContainer}>
+                <Text
+                    style={styles.titleText}
+                    allowFontScaling={true}
+                    adjustsFontSizeToFit={true}
+                    numberOfLines={2}
+                    selectable={true}
+                >
+                    {meal != null &&
+                        mealName(
+                            meal.name,
+                            foodLanguage,
+                            i18n.language as LanguageKey
+                        )}
+                </Text>
+            </View>
+            <View style={styles.formList}>
+                <FormList sections={sections} />
+            </View>
+
+            <View style={styles.notesContainer}>
+                <View style={styles.notesBox}>
+                    <PlatformIcon
+                        ios={{
+                            name: 'exclamationmark.triangle',
+                            variant: 'fill',
+                            size: 21,
+                        }}
+                        android={{
+                            name: 'warning',
+                            size: 24,
+                        }}
+                        web={{
+                            name: 'TriangleAlert',
+                            size: 24,
+                        }}
+                        style={styles.iconWarning}
+                    />
+                    <Text style={styles.notesText}>
+                        {!isTranslated() ? t('details.translated') : ''}
+                        {t('details.footer')}
                     </Text>
                 </View>
-                <View style={styles.formList}>
-                    <FormList sections={sections} />
-                </View>
-
-                <View style={styles.notesContainer}>
-                    <View style={styles.notesBox}>
-                        <PlatformIcon
-                            ios={{
-                                name: 'exclamationmark.triangle',
-                                variant: 'fill',
-                                size: 21,
-                            }}
-                            android={{
-                                name: 'warning',
-                                size: 24,
-                            }}
-                            web={{
-                                name: 'TriangleAlert',
-                                size: 24,
-                            }}
-                            style={styles.iconWarning}
-                        />
-                        <Text style={styles.notesText}>
-                            {!isTranslated() ? t('details.translated') : ''}
-                            {t('details.footer')}
-                        </Text>
-                    </View>
-                </View>
-            </ScrollView>
-        </>
+            </View>
+        </ScrollView>
     )
 }
 
@@ -478,7 +476,6 @@ const stylesheet = createStyleSheet((theme) => ({
     formList: {
         alignSelf: 'center',
         marginVertical: 16,
-        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     iconWarning: {
@@ -510,15 +507,17 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: 'normal',
         textAlign: 'left',
     },
+    page: {
+        marginHorizontal: theme.margins.page,
+    },
     titleContainer: {
         alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: theme.colors.card,
         borderRadius: theme.radius.md,
         marginTop: 20,
-        paddingHorizontal: 5,
         paddingVertical: 10,
-        width: '92%',
+        width: '100%',
     },
     titleText: {
         color: theme.colors.text,
