@@ -27,7 +27,7 @@
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
     "@babel/runtime": "^7.26.0",
-    "@bottom-tabs/react-navigation": "^0.7.7",
+    "@bottom-tabs/react-navigation": "^0.7.8",
     "@expo/metro-runtime": "^4.0.0",
     "@expo/vector-icons": "^14.0.4",
     "@gorhom/bottom-sheet": "^5.0.6",
@@ -98,7 +98,7 @@
     "react-native-web": "^0.19.13",
     "react-native-webview": "13.12.5",
     "rn-quick-actions": "^0.0.3",
-    "sanitize-html": "^2.13.1",
+    "sanitize-html": "^2.14.0",
     "sweet-sfsymbols": "0.7.2",
     "swiftui-react-native": "^6.3.3",
     "zustand": "^5.0.2"

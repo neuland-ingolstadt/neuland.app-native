@@ -937,8 +937,6 @@ const MapScreen = (): React.JSX.Element => {
                 modalSection={modalSection(
                     roomData,
                     locations,
-                    t,
-                    i18n.language,
                     userKind === USER_GUEST
                 )}
             />

@@ -1,10 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import {
     type BuildingOccupancy,
@@ -13,7 +7,9 @@ import {
 } from '@/types/map'
 import { type AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { type TFunction } from 'i18next'
+import { t } from 'i18next'
+
+type LocationsType = Record<string, string>
 
 /**
  * Formats the content of the room details section
@@ -25,12 +21,10 @@ import { type TFunction } from 'i18next'
  * */
 export const modalSection = (
     roomData: RoomData,
-    locations: any,
-    t: TFunction<any>,
-    language: string,
+    locations: LocationsType,
     isGuest: boolean
 ): FormListSections[] => {
-    const roomTypeKey = language === 'de' ? 'Funktion_de' : 'Funktion_en'
+    const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 
     if (
         roomData.type === SEARCH_TYPES.ROOM &&
@@ -44,23 +38,28 @@ export const modalSection = (
             ...(!isGuest
                 ? [
                       {
-                          header: t('pages.map.details.room.availability'),
+                          header: t('pages.map.details.room.availability', {
+                              ns: 'common',
+                          }),
                           items:
                               roomData.occupancies == null
                                   ? [
                                         {
                                             title: t(
-                                                'pages.map.details.room.available'
+                                                'pages.map.details.room.available',
+                                                { ns: 'common' }
                                             ),
                                             value: t(
-                                                'pages.map.details.room.notAvailable'
+                                                'pages.map.details.room.notAvailable',
+                                                { ns: 'common' }
                                             ),
                                         },
                                     ]
                                   : [
                                         {
                                             title: t(
-                                                'pages.map.details.room.timeLeft'
+                                                'pages.map.details.room.timeLeft',
+                                                { ns: 'common' }
                                             ),
                                             value: (() => {
                                                 const timeLeft =
@@ -85,7 +84,8 @@ export const modalSection = (
                                         },
                                         {
                                             title: t(
-                                                'pages.map.details.room.timeSpan'
+                                                'pages.map.details.room.timeSpan',
+                                                { ns: 'common' }
                                             ),
                                             value: `${formatFriendlyTime(
                                                 occupancies.from
@@ -100,36 +100,45 @@ export const modalSection = (
             ...(roomData.properties !== null
                 ? [
                       {
-                          header: t('pages.map.details.room.details'),
+                          header: t('pages.map.details.room.details', {
+                              ns: 'common',
+                          }),
                           items: [
                               // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                               ...(occupancies != null
                                   ? [
                                         {
                                             title: t(
-                                                'pages.map.details.room.capacity'
+                                                'pages.map.details.room.capacity',
+                                                { ns: 'common' }
                                             ),
-                                            value: `${occupancies.capacity.toString()} ${t('pages.rooms.options.seats')}`,
+                                            value: `${occupancies.capacity.toString()} ${t('pages.rooms.options.seats', { ns: 'common' })}`,
                                         },
                                     ]
                                   : []),
                               {
-                                  title: t('pages.map.details.room.building'),
+                                  title: t('pages.map.details.room.building', {
+                                      ns: 'common',
+                                  }),
                                   value:
                                       roomData.properties?.Gebaeude ??
-                                      t('misc.unknown'),
+                                      t('misc.unknown', { ns: 'common' }),
                               },
                               {
-                                  title: t('pages.map.details.room.floor'),
+                                  title: t('pages.map.details.room.floor', {
+                                      ns: 'common',
+                                  }),
                                   value:
                                       roomData.properties?.Ebene ??
-                                      t('misc.unknown'),
+                                      t('misc.unknown', { ns: 'common' }),
                               },
                               {
-                                  title: t('pages.map.details.room.type'),
+                                  title: t('pages.map.details.room.type', {
+                                      ns: 'common',
+                                  }),
                                   value:
                                       roomData.properties?.[roomTypeKey] ??
-                                      t('misc.unknown'),
+                                      t('misc.unknown', { ns: 'common' }),
                               },
                               {
                                   title: 'Campus',
@@ -137,7 +146,7 @@ export const modalSection = (
                                       locations[
                                           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                                           roomData.properties?.Standort
-                                      ] ?? t('misc.unknown'),
+                                      ] ?? t('misc.unknown', { ns: 'common' }),
                               },
                           ],
                       },
@@ -153,24 +162,31 @@ export const modalSection = (
         const properties: RoomData['properties'] = roomData.properties
         return [
             {
-                header: t('pages.map.details.room.details'),
+                header: t('pages.map.details.room.details', { ns: 'common' }),
                 items: [
                     {
-                        title: t('pages.map.details.building.total'),
+                        title: t('pages.map.details.building.total', {
+                            ns: 'common',
+                        }),
                         value:
-                            occupancies.total.toString() ?? t('misc.unknown'),
+                            occupancies.total.toString() ??
+                            t('misc.unknown', { ns: 'common' }),
                     },
                     {
-                        title: t('pages.map.details.building.free'),
+                        title: t('pages.map.details.building.free', {
+                            ns: 'common',
+                        }),
                         value:
                             occupancies.available.toString() ??
-                            t('misc.unknown'),
+                            t('misc.unknown', { ns: 'common' }),
                     },
                     {
-                        title: t('pages.map.details.building.floors'),
+                        title: t('pages.map.details.building.floors', {
+                            ns: 'common',
+                        }),
                         value:
                             (properties.Etage as string | null)?.toString() ??
-                            t('misc.unknown'),
+                            t('misc.unknown', { ns: 'common' }),
                     },
                     {
                         title: 'Campus',

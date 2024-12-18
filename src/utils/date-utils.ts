@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import i18n from '@/localization/i18n'
 import { type FriendlyDateOptions } from '@/types/utils'
+import { t } from 'i18next'
 import moment from 'moment'
 import 'moment/locale/de'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function t(...args: any): any {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return i18n.t(args, { ns: 'common' })
-}
 
 /**
  * Formats a date like "Tue., 1.10.2020"
@@ -28,9 +23,9 @@ export function formatFriendlyDate(
     const tomorrow = moment().add(1, 'days')
 
     if (date.isSame(today, 'day') && options.relative !== false) {
-        return t('dates.today')
+        return t('dates.today', { ns: 'common' })
     } else if (date.isSame(tomorrow, 'day') && options.relative !== false) {
-        return t('dates.tomorrow')
+        return t('dates.tomorrow', { ns: 'common' })
     } else {
         // Format the weekday in English
         const weekday = date
@@ -150,9 +145,9 @@ export function formatNearDate(datetime: Date | string): string {
     const tomorrow = moment().add(1, 'days')
 
     if (date.isSame(today, 'day')) {
-        return t('dates.today')
+        return t('dates.today', { ns: 'common' })
     } else if (date.isSame(tomorrow, 'day')) {
-        return t('dates.tomorrow')
+        return t('dates.tomorrow', { ns: 'common' })
     } else {
         return date.format('dddd, D.M.')
     }
@@ -290,9 +285,9 @@ export function getFriendlyWeek(date: Date, lang: string): string {
     const [currStart, currEnd] = getWeek(new Date())
     const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
     if (date >= currStart && date < currEnd) {
-        return t('dates.thisWeek')
+        return t('dates.thisWeek', { ns: 'common' })
     } else if (date >= nextStart && date < nextEnd) {
-        return t('dates.nextWeek')
+        return t('dates.nextWeek', { ns: 'common' })
     } else {
         const monday = getMonday(date)
         const sunday = new Date(monday)

@@ -415,7 +415,7 @@
 
     "@babel/types": ["@babel/types@7.26.3", "", { "dependencies": { "@babel/helper-string-parser": "^7.25.9", "@babel/helper-validator-identifier": "^7.25.9" } }, "sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA=="],
 
-    "@bottom-tabs/react-navigation": ["@bottom-tabs/react-navigation@0.7.7", "", { "dependencies": { "color": "^4.2.3" }, "peerDependencies": { "@react-navigation/native": ">=7", "react": "*", "react-native": "*", "react-native-bottom-tabs": "*" } }, "sha512-Ljr6jlq80ozAt07m5jB2bBvg8sP9lE58f9AtHtKA6j9VFOrryo13bQAqk56wEM0B+2hqW/qYDH9xP6eeQybs8w=="],
+    "@bottom-tabs/react-navigation": ["@bottom-tabs/react-navigation@0.7.8", "", { "dependencies": { "color": "^4.2.3" }, "peerDependencies": { "@react-navigation/native": ">=7", "react": "*", "react-native": "*", "react-native-bottom-tabs": "*" } }, "sha512-dGt7h0SxnMGVVDjil+XyIxTUacTbHyu+CG8TXssctVv++eCGANJrVvuQk/ujODgUBFYBt0l0waQpic9JUKVJmQ=="],
 
     "@commitlint/cli": ["@commitlint/cli@19.6.1", "", { "dependencies": { "@commitlint/format": "^19.5.0", "@commitlint/lint": "^19.6.0", "@commitlint/load": "^19.6.1", "@commitlint/read": "^19.5.0", "@commitlint/types": "^19.5.0", "tinyexec": "^0.3.0", "yargs": "^17.0.0" }, "bin": { "commitlint": "cli.js" } }, "sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ=="],
 
@@ -2459,7 +2459,7 @@
 
     "safer-buffer": ["safer-buffer@2.1.2", "", {}, "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="],
 
-    "sanitize-html": ["sanitize-html@2.13.1", "", { "dependencies": { "deepmerge": "^4.2.2", "escape-string-regexp": "^4.0.0", "htmlparser2": "^8.0.0", "is-plain-object": "^5.0.0", "parse-srcset": "^1.0.2", "postcss": "^8.3.11" } }, "sha512-ZXtKq89oue4RP7abL9wp/9URJcqQNABB5GGJ2acW1sdO8JTVl92f4ygD7Yc9Ze09VAZhnt2zegeU0tbNsdcLYg=="],
+    "sanitize-html": ["sanitize-html@2.14.0", "", { "dependencies": { "deepmerge": "^4.2.2", "escape-string-regexp": "^4.0.0", "htmlparser2": "^8.0.0", "is-plain-object": "^5.0.0", "parse-srcset": "^1.0.2", "postcss": "^8.3.11" } }, "sha512-CafX+IUPxZshXqqRaG9ZClSlfPVjSxI0td7n07hk8QO2oO+9JDnlcL8iM8TWeOXOIBFgIOx6zioTzM53AOMn3g=="],
 
     "sax": ["sax@1.4.1", "", {}, "sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg=="],
 
