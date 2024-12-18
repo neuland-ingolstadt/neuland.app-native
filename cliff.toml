@@ -24,12 +24,12 @@ body = """
 {%- endmacro -%}
 
 {% macro print_commit(commit) -%}
-    - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
-        {% if commit.breaking %}[**breaking**] {% endif %}\
-        {{ commit.message | upper_first }} - \
-       
-          {% if commit.remote.username %} by @{{ commit.remote.username }}{%- endif %}\
-    {% if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}]({{ self::remote_url() }}/pull/{{ commit.remote.pr_number }}){%- endif %}  ([{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}))\
+  - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
+    {% if commit.breaking %}[**breaking**] {% endif %}\
+    {{ commit.message | upper_first }} - \
+     
+      {% if commit.remote.username %} by @{{ commit.remote.username }}{%- endif %} \
+  ([{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}))\
 {% endmacro -%}
 
 {% if version %}\
@@ -85,7 +85,7 @@ footer = """
 trim = true
 # postprocessors
 postprocessors = [
-  # { pattern = '<REPO>', replace = "https://github.com/orhun/git-cliff" }, # replace repository URL
+  { pattern = '<REPO>', replace = "https://github.com/neuland-ingolstadt/neuland.app-native" }, # replace repository URL
 ]
 # render body even when there are no releases to process
 # render_always = true
@@ -102,10 +102,12 @@ split_commits = false
 # regex for preprocessing the commit messages
 commit_preprocessors = [
   # Replace issue numbers
-  #{ pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](<REPO>/issues/${2}))"},
+  { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](<REPO>/issues/${2}))"},
   # Check spelling of the commit with https://github.com/crate-ci/typos
   # If the spelling is incorrect, it will be automatically fixed.
-  #{ pattern = '.*', replace_command = 'typos --write-changes -' },
+  # { pattern = '.*', replace_command = 'typos --write-changes -' },
+  # Remove gitmoji, both actual UTF emoji and :emoji:
+  { pattern = ' *(:\w+:|[\p{Emoji_Presentation}\p{Extended_Pictographic}](?:\u{FE0F})?\u{200D}?) *', replace = "" },
 ]
 # regex for parsing and grouping commits
 commit_parsers = [

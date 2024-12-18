@@ -8,7 +8,9 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { trackEvent } from '@aptabase/react-native'
+import { alert } from 'burnt'
 import * as Application from 'expo-application'
+import Constants from 'expo-constants'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
@@ -41,8 +43,11 @@ export default function About(): JSX.Element {
     const addUnlockedAppIcon = usePreferencesStore(
         (state) => state.addUnlockedAppIcon
     )
-    const version = `${Application.nativeApplicationVersion}`
-    const versionWithCode = `${version} (${Application.nativeBuildVersion})`
+    const version =
+        Application.nativeApplicationVersion ??
+        Constants.expoConfig?.version ??
+        'unknown'
+    const versionWithCode = `${version} (${Application.nativeBuildVersion ?? '0'})`
     const [displayVersion, setDisplayVersion] = useState(version)
 
     const toggleVersion = (): void => {
@@ -73,6 +78,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'bubble.left.and.exclamationmark.bubble.right',
                         android: 'troubleshoot',
+                        web: 'HeartPulse',
                     },
                     onPress: () => {
                         void Linking.openURL(STATUS_URL)
@@ -88,6 +94,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'envelope',
                         android: 'mail',
+                        web: 'Mail',
                     },
                     onPress: async () =>
                         await Linking.openURL(
@@ -110,6 +117,7 @@ export default function About(): JSX.Element {
                     icon: {
                         ios: 'star',
                         android: 'star',
+                        web: 'Star',
                     },
                     onPress: () => {
                         if (Platform.OS === 'android') {
@@ -144,19 +152,27 @@ export default function About(): JSX.Element {
         setPressCount(pressCount + 1)
 
         if (pressCount === 7) {
-            Alert.alert(
-                t('about.easterEgg.title'),
-                Platform.OS === 'ios'
-                    ? t('about.easterEgg.message')
-                    : t('about.easterEgg.messageAndroid'),
-                [
-                    {
-                        text: t('about.easterEgg.confirm'),
-                        style: 'cancel',
-                    },
-                ],
-                { cancelable: false }
-            )
+            if (Platform.OS !== 'web') {
+                Alert.alert(
+                    t('about.easterEgg.title'),
+                    Platform.OS === 'ios'
+                        ? t('about.easterEgg.message')
+                        : t('about.easterEgg.messageAndroid'),
+                    [
+                        {
+                            text: t('about.easterEgg.confirm'),
+                            style: 'cancel',
+                        },
+                    ],
+                    { cancelable: false }
+                )
+            } else {
+                alert({
+                    title: t('about.easterEgg.title'),
+                    message: t('about.easterEgg.messageAndroid'),
+                    preset: 'done',
+                })
+            }
             const isCollected = unlockedAppIcons?.includes('cat')
             if (!isCollected) {
                 trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
@@ -189,9 +205,11 @@ export default function About(): JSX.Element {
                     <View style={styles.logoContainer}>
                         <Pressable
                             onPress={() => {
-                                void Haptics.impactAsync(
-                                    Haptics.ImpactFeedbackStyle.Medium
-                                )
+                                if (Platform.OS !== 'web') {
+                                    void Haptics.impactAsync(
+                                        Haptics.ImpactFeedbackStyle.Medium
+                                    )
+                                }
                                 handlePress()
                             }}
                         >
@@ -286,7 +304,6 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.card,
         borderRadius: 9,
         boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`,
-        shadowColor: theme.colors.text,
     },
     logoImage: {
         borderRadius: 9,

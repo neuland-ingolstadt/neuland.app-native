@@ -1,6 +1,7 @@
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
+import PagerView from '@/components/Layout/PagerView'
 import LecturerRow from '@/components/Rows/LecturerRow'
 import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -39,7 +40,6 @@ import {
     Text,
     View,
 } from 'react-native'
-import PagerView from 'react-native-pager-view'
 import {
     UnistylesRuntime,
     createStyleSheet,
@@ -369,6 +369,7 @@ export default function LecturersCard(): JSX.Element {
                         icon={{
                             ios: 'calendar.badge.exclamationmark',
                             android: 'edit_calendar',
+                            web: 'CalendarCog',
                         }}
                         buttonText={t('error.empty.button', {
                             ns: 'timetable',

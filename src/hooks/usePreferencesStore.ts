@@ -8,6 +8,7 @@ const DEFAULT_ACCENT_COLOR = 'blue'
 interface PreferencesStore {
     accentColor: string
     theme: string
+    language: 'de' | 'en' | undefined
     appIcon: string | undefined
     unlockedAppIcons: string[]
     timetableMode: string | undefined
@@ -15,6 +16,7 @@ interface PreferencesStore {
     recentQuicklinks: string[]
     setAccentColor: (language: string) => void
     setTheme: (theme: string) => void
+    setLanguage: (language: 'en' | 'de') => void
     setAppIcon: (name: string) => void
     addUnlockedAppIcon: (name: string) => void
     setTimetableMode: (mode: string) => void
@@ -33,9 +35,11 @@ const initialState: Omit<
     | 'setSelectedDate'
     | 'addRecentQuicklink'
     | 'reset'
+    | 'setLanguage'
 > = {
     accentColor: DEFAULT_ACCENT_COLOR,
     appIcon: undefined,
+    language: undefined,
     theme: 'auto',
     unlockedAppIcons: [],
     timetableMode: undefined,
@@ -52,6 +56,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
             },
             setTheme: (theme: string) => {
                 set({ theme })
+            },
+            setLanguage: (language: 'de' | 'en') => {
+                set({ language })
             },
             setAppIcon: (appIcon: string) => {
                 set({ appIcon })

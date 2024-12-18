@@ -1,17 +1,9 @@
-import { storage } from '@/utils/storage'
-import * as SecureStore from 'expo-secure-store'
+import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage'
+import { Platform } from 'react-native'
 
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
-
-async function save(key: string, value: string): Promise<void> {
-    await SecureStore.setItemAsync(key, value)
-}
-
-function load(key: string): string | null {
-    return SecureStore.getItem(key)
-}
 
 /**
  * Thrown when the user is not logged in.
@@ -53,11 +45,12 @@ export async function createSession(
     }
 
     storage.set('sessionCreated', Date.now().toString())
-
-    await save('session', session)
+    console.debug('Session created at', storage.getString('sessionCreated'))
+    await saveSecure('session', session, true)
+    console.debug('Session saved')
     if (stayLoggedIn) {
-        await save('username', username)
-        await save('password', password)
+        await saveSecure('username', username)
+        await saveSecure('password', password)
     }
     return isStudent
 }
@@ -69,7 +62,7 @@ export async function createGuestSession(forget = true): Promise<void> {
     if (forget) {
         await forgetSession()
     }
-    await save('session', 'guest')
+    await saveSecure('session', 'guest', true)
 }
 
 /**
@@ -84,7 +77,7 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
     method: (session: string) => Promise<T>
 ): Promise<T> {
-    let session = load('session')
+    let session = loadSecure('session')
     const sessionCreated = parseInt(storage.getString('sessionCreated') ?? '0')
     // redirect user if he never had a session
     if (session == null) {
@@ -93,14 +86,20 @@ export async function callWithSession<T>(
         throw new UnavailableSessionError()
     }
 
-    const username = load('username')
-    if (username === null) {
-        throw new UnavailableSessionError()
-    }
+    const username = loadSecure('username')
+    const password = loadSecure('password')
+    if (Platform.OS === 'web') {
+        if (session === 'guest' || session == null) {
+            throw new NoSessionError()
+        }
+    } else {
+        if (username === null) {
+            throw new UnavailableSessionError()
+        }
 
-    const password = load('password')
-    if (password === null) {
-        throw new UnavailableSessionError()
+        if (password === null) {
+            throw new UnavailableSessionError()
+        }
     }
     // log in if the session is older than SESSION_EXPIRES
     if (
@@ -116,7 +115,7 @@ export async function callWithSession<T>(
             )
             session = newSession
 
-            await save('session', session)
+            await saveSecure('session', session)
             storage.set('sessionCreated', Date.now().toString())
             storage.set('isStudent', isStudent.toString())
         } catch (e) {
@@ -143,7 +142,7 @@ export async function callWithSession<T>(
                         password
                     )
                     session = newSession
-                    await save('session', session)
+                    await saveSecure('session', session)
                     storage.set('sessionCreated', Date.now().toString())
                     storage.set('isStudent', isStudent.toString())
                 } catch (e) {
@@ -169,11 +168,11 @@ export async function callWithSession<T>(
  * @param {object} router Next.js router object
  */
 export async function obtainSession(router: object): Promise<string | null> {
-    let session = load('session')
+    let session = loadSecure('session')
     const age = parseInt(storage.getString('sessionCreated') ?? '0')
 
-    const username = load('username')
-    const password = load('password')
+    const username = loadSecure('username')
+    const password = loadSecure('password')
 
     // invalidate expired session
     if (age + SESSION_EXPIRES < Date.now() || !(await API.isAlive(session))) {
@@ -191,7 +190,7 @@ export async function obtainSession(router: object): Promise<string | null> {
                 password
             )
             session = newSession
-            await save('session', session)
+            await saveSecure('session', session)
             storage.set('sessionCreated', Date.now().toString())
             storage.set('isStudent', isStudent.toString())
         } catch (e) {
@@ -207,7 +206,7 @@ export async function obtainSession(router: object): Promise<string | null> {
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-    const session = load('session')
+    const session = loadSecure('session')
     if (session === null) {
         console.debug('No session to forget')
     } else {
@@ -219,9 +218,9 @@ export async function forgetSession(): Promise<void> {
     }
 
     await Promise.all([
-        SecureStore.deleteItemAsync('session'),
-        SecureStore.deleteItemAsync('username'),
-        SecureStore.deleteItemAsync('password'),
+        deleteSecure('session'),
+        deleteSecure('username'),
+        deleteSecure('password'),
     ])
 
     // clear the general storage (cache)

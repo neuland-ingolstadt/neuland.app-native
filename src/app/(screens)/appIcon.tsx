@@ -56,9 +56,7 @@ export default function AppIconPicker(): JSX.Element {
     })
 
     const support = supportsAlternateIcons
-    console.log(`The device supports alternate icons: ${support}`)
     const iconName = getAppIconName()
-    console.log(`The active app icon is: ${iconName}`)
 
     if (!support) {
         return (
@@ -134,6 +132,10 @@ export default function AppIconPicker(): JSX.Element {
                                                             android={{
                                                                 name: 'check',
                                                                 size: 24,
+                                                            }}
+                                                            web={{
+                                                                name: 'Check',
+                                                                size: 20,
                                                             }}
                                                         />
                                                     )}

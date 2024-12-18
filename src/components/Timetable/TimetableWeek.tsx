@@ -12,13 +12,14 @@ import {
 import { useNavigation, useRouter } from 'expo-router'
 import moment from 'moment-timezone'
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { View } from 'react-native'
+import { Platform, Pressable, View } from 'react-native'
 import {
     UnistylesRuntime,
     createStyleSheet,
     useStyles,
 } from 'react-native-unistyles'
 
+import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 import EventComponent from './WeekEventComponent'
@@ -97,7 +98,57 @@ export default function TimetableWeek({
                     }}
                 />
             ),
-            headerLeft: () => <HeaderLeft />,
+            headerLeft: () => (
+                <View style={styles.buttons}>
+                    <HeaderLeft />
+                    {Platform.OS === 'web' && (
+                        <View style={styles.buttons}>
+                            <Pressable
+                                onPress={() => {
+                                    onPressPrevious()
+                                }}
+                            >
+                                <PlatformIcon
+                                    web={{
+                                        name: 'ChevronLeft',
+                                        size: 24,
+                                    }}
+                                    android={{
+                                        name: 'chevron_right',
+                                        size: 24,
+                                    }}
+                                    ios={{
+                                        name: 'chevron-left',
+                                        size: 24,
+                                    }}
+                                    style={{ color: theme.colors.text }}
+                                />
+                            </Pressable>
+                            <Pressable
+                                onPress={() => {
+                                    onPressNext()
+                                }}
+                            >
+                                <PlatformIcon
+                                    web={{
+                                        name: 'ChevronRight',
+                                        size: 24,
+                                    }}
+                                    android={{
+                                        name: 'chevron_right',
+                                        size: 24,
+                                    }}
+                                    ios={{
+                                        name: 'chevron-right',
+                                        size: 24,
+                                    }}
+                                    style={{ color: theme.colors.text }}
+                                />
+                            </Pressable>
+                        </View>
+                    )}
+                </View>
+            ),
         })
     }, [navigation])
 
@@ -109,6 +160,14 @@ export default function TimetableWeek({
         },
         [theme.colors.primary, events]
     )
+
+    const onPressPrevious = (): void => {
+        calendarRef.current?.goToPrevPage()
+    }
+
+    const onPressNext = (): void => {
+        calendarRef.current?.goToNextPage()
+    }
 
     return (
         <View style={styles.page}>
@@ -149,6 +208,9 @@ export default function TimetableWeek({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    buttons: {
+        flexDirection: 'row',
+    },
     loadingContainer: {
         alignItems: 'center',
         flex: 1,

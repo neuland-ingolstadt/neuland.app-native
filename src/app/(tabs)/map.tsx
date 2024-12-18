@@ -1,14 +1,13 @@
 /* eslint-disable react-native/no-color-literals */
-import MapScreen from '@/components/Map/MapScreen'
+import MapScreen, { requestPermission } from '@/components/Map/MapScreen'
 import { MapContext } from '@/contexts/map'
 import { type ClickedMapElement, type SearchResult } from '@/types/map'
 import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
 import { storage } from '@/utils/storage'
-import Maplibre from '@maplibre/maplibre-react-native'
 import Head from 'expo-router/head'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function MapRootScreen(): JSX.Element {
@@ -74,9 +73,7 @@ export default function MapRootScreen(): JSX.Element {
         updateSearchHistory,
     }
 
-    if (Platform.OS === 'android') {
-        void Maplibre.requestAndroidLocationPermissions()
-    }
+    requestPermission()
 
     return (
         <>

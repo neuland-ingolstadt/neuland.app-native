@@ -52,6 +52,10 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
                                         name: 'check',
                                         size: 18,
                                     }}
+                                    web={{
+                                        name: 'Check',
+                                        size: 18,
+                                    }}
                                 />
                             ) : (
                                 <></>

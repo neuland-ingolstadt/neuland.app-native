@@ -20,7 +20,15 @@ import { trackEvent } from '@aptabase/react-native'
 import { router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Linking, ScrollView, Share, Text, View } from 'react-native'
+import {
+    Alert,
+    Linking,
+    Platform,
+    ScrollView,
+    Share,
+    Text,
+    View,
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodDetail(): JSX.Element {
@@ -102,41 +110,71 @@ export default function FoodDetail(): JSX.Element {
             itemType === 'allergen' ? allergenSelection : preferencesSelection
         ).includes(item)
 
-        Alert.alert(
-            t(`details.formlist.alert.${itemType}.title`),
-            isItemSelected
-                ? t(
-                      // @ts-expect-error cannot verify the TFunktion type
-                      `details.formlist.alert.${itemType}.message.remove`,
-                      {
-                          [itemType]: friendlyItem,
-                      }
-                  )
-                : t(
-                      // @ts-expect-error cannot verify the TFunktion type
-                      `details.formlist.alert.${itemType}.message.add`,
-                      {
-                          [itemType]: friendlyItem,
-                      }
-                  ),
-            [
-                {
-                    text: t('misc.confirm', { ns: 'common' }),
-                    onPress: () => {
-                        if (itemType === 'allergen') {
-                            toggleSelectedAllergens(item)
-                        } else if (itemType === 'flag') {
-                            toggleSelectedPreferences(item)
-                        }
+        if (Platform.OS === 'web') {
+            if (
+                !window.confirm(
+                    isItemSelected
+                        ? t(
+                              // @ts-expect-error cannot verify the TFunktion type
+                              `details.formlist.alert.${itemType}.message.remove`,
+                              {
+                                  [itemType]: friendlyItem,
+                              }
+                          )
+                        : t(
+                              // @ts-expect-error cannot verify the TFunktion type
+                              `details.formlist.alert.${itemType}.message.add`,
+                              {
+                                  [itemType]: friendlyItem,
+                              }
+                          )
+                )
+            ) {
+                /* empty */
+            } else {
+                if (itemType === 'allergen') {
+                    toggleSelectedAllergens(item)
+                } else if (itemType === 'flag') {
+                    toggleSelectedPreferences(item)
+                }
+            }
+        } else {
+            Alert.alert(
+                t(`details.formlist.alert.${itemType}.title`),
+                isItemSelected
+                    ? t(
+                          // @ts-expect-error cannot verify the TFunktion type
+                          `details.formlist.alert.${itemType}.message.remove`,
+                          {
+                              [itemType]: friendlyItem,
+                          }
+                      )
+                    : t(
+                          // @ts-expect-error cannot verify the TFunktion type
+                          `details.formlist.alert.${itemType}.message.add`,
+                          {
+                              [itemType]: friendlyItem,
+                          }
+                      ),
+                [
+                    {
+                        text: t('misc.confirm', { ns: 'common' }),
+                        onPress: () => {
+                            if (itemType === 'allergen') {
+                                toggleSelectedAllergens(item)
+                            } else if (itemType === 'flag') {
+                                toggleSelectedPreferences(item)
+                            }
+                        },
                     },
-                },
-                {
-                    text: t('misc.cancel', { ns: 'common' }),
-                    onPress: () => {},
-                    style: 'cancel',
-                },
-            ]
-        )
+                    {
+                        text: t('misc.cancel', { ns: 'common' }),
+                        onPress: () => {},
+                        style: 'cancel',
+                    },
+                ]
+            )
+        }
     }
 
     const studentPrice = formatPrice(meal?.prices?.student)
@@ -239,6 +277,7 @@ export default function FoodDetail(): JSX.Element {
                         ? {
                               android: 'check_circle',
                               ios: 'checkmark.seal',
+                              web: 'BadgeCheck',
                           }
                         : undefined,
                     iconColor: theme.colors.success,
@@ -264,6 +303,7 @@ export default function FoodDetail(): JSX.Element {
                             ? {
                                   android: 'warning',
                                   ios: 'exclamationmark.triangle',
+                                  web: 'TriangleAlert',
                               }
                             : undefined,
                         iconColor: theme.colors.notification,
@@ -415,6 +455,10 @@ export default function FoodDetail(): JSX.Element {
                             }}
                             android={{
                                 name: 'warning',
+                                size: 24,
+                            }}
+                            web={{
+                                name: 'TriangleAlert',
                                 size: 24,
                             }}
                             style={styles.iconWarning}

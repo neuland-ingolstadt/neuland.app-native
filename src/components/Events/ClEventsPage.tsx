@@ -91,6 +91,7 @@ export default function ClEventsPage({
                                 icon={{
                                     ios: 'calendar.badge.clock',
                                     android: 'calendar_clock',
+                                    web: 'CalendarClock',
                                 }}
                                 inModal
                                 isCritical={false}

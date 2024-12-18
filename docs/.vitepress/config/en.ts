@@ -54,6 +54,7 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "Ways to Contribute", link: "contribute" },
         { text: "Setup Development Environment", link: "setup" },
+        { text: "Setup Web Development", link: "setup-web" }
       ],
     },
   ];

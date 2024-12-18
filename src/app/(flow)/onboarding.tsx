@@ -6,6 +6,7 @@ import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import PlatformIcon from '@/components/Universal/Icon'
 import { PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
+import { type OnboardingCardData } from '@/types/data'
 import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
@@ -40,13 +41,15 @@ export default function OnboardingScreen(): JSX.Element {
     const setAnalyticsAllowed = useFlowStore(
         (state) => state.setAnalyticsAllowed
     )
-    const data = [
+
+    const data: OnboardingCardData[] = [
         {
             title: t('onboarding.cards.title1'),
             description: t('onboarding.cards.description1'),
             icon: {
                 ios: 'square.stack.3d.up',
                 android: 'hub',
+                web: 'Layers',
             },
         },
 
@@ -56,6 +59,7 @@ export default function OnboardingScreen(): JSX.Element {
             icon: {
                 ios: 'person.2.gobackward',
                 android: 'volunteer_activism',
+                web: 'Users',
             },
         },
         {
@@ -64,6 +68,7 @@ export default function OnboardingScreen(): JSX.Element {
             icon: {
                 ios: 'lock.app.dashed',
                 android: 'encrypted',
+                web: 'GlobeLock',
             },
         },
     ]
@@ -382,7 +387,7 @@ export default function OnboardingScreen(): JSX.Element {
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
     const scaleFontSize = (size: number): number => {
-        if (DeviceInfo.isTablet()) {
+        if (DeviceInfo.isTablet() || Platform.OS === 'web') {
             return size
         }
         const guidelineBaseWidth = 475
@@ -468,6 +473,10 @@ export default function OnboardingScreen(): JSX.Element {
                             name: 'help',
                             size: 25,
                             variant: 'outlined',
+                        }}
+                        web={{
+                            name: 'CircleHelp',
+                            size: 25,
                         }}
                     />
                 </Pressable>

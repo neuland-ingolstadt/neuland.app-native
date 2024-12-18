@@ -13,6 +13,7 @@ import  StoreLinksEn  from '../../components/StoreLinksEn.vue';
 Neuland Next is an unofficial app for students of the Technische Hochschule Ingolstadt. It is developed by [Neuland Ingolstadt e.V.](/en/about/club.md) and is not affiliated with the university.
 
 The app brings together all important information for students in one place. It is available for iOS, Android, and MacOS.
+The web version of the app can also be used on all common browsers.
 
 <StoreLinksEn />
 

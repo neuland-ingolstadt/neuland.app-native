@@ -2,7 +2,7 @@ import { type Reservation } from '@/types/thi-api'
 import { formatFriendlyDateTimeRange } from '@/utils/date-utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Pressable, Text, View } from 'react-native'
+import { Alert, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
@@ -18,23 +18,33 @@ const LibraryReservationRow = ({
     const { t } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
     const deleteAlert = (): void => {
-        Alert.alert(
-            t('pages.library.reservations.alert.title'),
-            t('pages.library.reservations.alert.message'),
-            [
-                {
-                    text: t('misc.cancel'),
-                    style: 'cancel',
-                },
-                {
-                    text: t('misc.delete'),
-                    style: 'destructive',
-                    onPress: () => {
-                        void deleteReservation(reservation.reservation_id)
+        if (Platform.OS === 'web') {
+            if (
+                !window.confirm(t('pages.library.reservations.alert.message'))
+            ) {
+                /* empty */
+            } else {
+                void deleteReservation(reservation.reservation_id)
+            }
+        } else {
+            Alert.alert(
+                t('pages.library.reservations.alert.title'),
+                t('pages.library.reservations.alert.message'),
+                [
+                    {
+                        text: t('misc.cancel'),
+                        style: 'cancel',
                     },
-                },
-            ]
-        )
+                    {
+                        text: t('misc.delete'),
+                        style: 'destructive',
+                        onPress: () => {
+                            void deleteReservation(reservation.reservation_id)
+                        },
+                    },
+                ]
+            )
+        }
     }
 
     return (
@@ -78,6 +88,10 @@ const LibraryReservationRow = ({
                                     android={{
                                         name: 'delete',
                                         size: 24,
+                                    }}
+                                    web={{
+                                        name: 'Trash',
+                                        size: 18,
                                     }}
                                 />
                             </Pressable>

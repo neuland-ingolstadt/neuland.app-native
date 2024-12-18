@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import StatusBox from './ActionBox'
 
 export default function ErrorView({
@@ -31,7 +31,12 @@ export default function ErrorView({
 }: {
     title: string
     message?: string
-    icon?: { ios: string; android: string; multiColor?: boolean }
+    icon?: {
+        ios: string
+        android: string
+        web: LucideIcon
+        multiColor?: boolean
+    }
     buttonText?: string
     onButtonPress?: () => void
     onRefresh?: () => any
@@ -45,25 +50,34 @@ export default function ErrorView({
     const path = usePathname()
     const getIcon = (): MaterialIcon | any => {
         const ios = Platform.OS === 'ios'
+        const android = Platform.OS === 'android'
         switch (title) {
             case networkError:
-                return ios ? 'wifi.slash' : 'wifi_off'
+                return ios ? 'wifi.slash' : android ? 'wifi_off' : 'WifiOff'
             case guestError:
                 return ios
                     ? 'person.crop.circle.badge.questionmark'
-                    : 'person_cancel'
+                    : android
+                      ? 'person_cancel'
+                      : 'UserRoundX'
             case permissionError:
                 return ios
                     ? 'person.crop.circle.badge.exclamationmark'
-                    : 'person_slash'
+                    : android
+                      ? 'person_slash'
+                      : 'UserRoundX'
             default:
                 return icon !== undefined
                     ? ios
                         ? icon.ios
-                        : icon.android
+                        : android
+                          ? icon.android
+                          : icon.web
                     : ios
                       ? 'exclamationmark.triangle.fill'
-                      : 'error'
+                      : android
+                        ? 'error'
+                        : 'TriangleAlert'
         }
     }
 
@@ -183,6 +197,10 @@ export default function ErrorView({
                                 : {}),
                         }}
                         android={{
+                            name: getIcon(),
+                            size: 64,
+                        }}
+                        web={{
                             name: getIcon(),
                             size: 64,
                         }}

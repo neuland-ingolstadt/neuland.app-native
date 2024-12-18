@@ -57,6 +57,10 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
                                         name: 'check',
                                         size: 18,
                                     }}
+                                    web={{
+                                        name: 'Check',
+                                        size: 18,
+                                    }}
                                 />
                             ) : (
                                 <></>

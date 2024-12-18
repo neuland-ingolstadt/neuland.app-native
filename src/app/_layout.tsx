@@ -2,9 +2,9 @@ import CrashView from '@/components/Error/CrashView'
 import PlatformIcon from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
-import { storage } from '@/utils/storage'
 import { getLocales } from 'expo-localization'
 import { Stack, useRouter } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
@@ -28,16 +28,19 @@ configureReanimatedLogger({
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
-    initialRouteName: '(index)',
+    initialRouteName: '/',
 }
 
 function RootLayout(): JSX.Element {
     const router = useRouter()
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
+    const savedLanguage = usePreferencesStore((state) => state.language)
 
     useEffect(() => {
-        if (isPad) {
+        if (Platform.OS === 'web') {
+            // do nothing
+        } else if (isPad) {
             void ScreenOrientation.unlockAsync()
         } else {
             void ScreenOrientation.lockAsync(
@@ -48,11 +51,10 @@ function RootLayout(): JSX.Element {
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
-            const savedLanguage = storage.getString('language')
             if (
                 savedLanguage !== null &&
-                Platform.OS === 'android' &&
-                Platform.Version < 33
+                ((Platform.OS === 'android' && Platform.Version < 33) ||
+                    Platform.OS === 'web')
             ) {
                 await i18n.changeLanguage(savedLanguage)
             }
@@ -374,6 +376,7 @@ function RootLayout(): JSX.Element {
                                 accessibilityLabel={t('button.libraryBarcode', {
                                     ns: 'accessibility',
                                 })}
+                                style={styles.icon}
                             >
                                 <PlatformIcon
                                     style={styles.headerTextStyle}
@@ -384,6 +387,10 @@ function RootLayout(): JSX.Element {
                                     android={{
                                         name: 'barcode_scanner',
                                         size: 24,
+                                    }}
+                                    web={{
+                                        name: 'Barcode',
+                                        size: 22,
                                     }}
                                 />
                             </Pressable>
@@ -457,4 +464,5 @@ const stylesheet = createStyleSheet((theme) => ({
     background: { backgroundColor: theme.colors.background },
     headerBackground: { backgroundColor: theme.colors.card },
     headerTextStyle: { color: theme.colors.text },
+    icon: { marginEnd: Platform.OS === 'web' ? 14 : 0 },
 }))
