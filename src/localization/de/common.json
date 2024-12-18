@@ -275,6 +275,13 @@
                 "title": "Keine Sportveranstaltungen",
                 "subtitle": "Bitte versuche es später erneut."
             }
+        },
+        "events": {
+            "title": "Veranstaltungen",
+            "noEvents": {
+                "title": "Keine anstehenden Veranstaltungen",
+                "subtitle": "Bitte versuche es später erneut."
+            }
         }
     },
     "notification": {

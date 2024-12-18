@@ -62,7 +62,6 @@ const stylesheet = createStyleSheet((theme) => ({
         flexDirection: 'row',
         gap: 12,
         justifyContent: 'space-between',
-        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     buttonView: {
