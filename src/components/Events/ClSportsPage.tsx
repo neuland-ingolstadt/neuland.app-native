@@ -182,82 +182,76 @@ export default function ClSportsPage({
     }
 
     return (
-        <View>
-            <ScrollView
-                contentContainerStyle={styles.itemsContainer}
-                style={styles.page}
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: { y: scrollY },
-                            },
+        <ScrollView
+            contentContainerStyle={styles.itemsContainer}
+            onScroll={Animated.event(
+                [
+                    {
+                        nativeEvent: {
+                            contentOffset: { y: scrollY },
                         },
-                    ],
-                    { useNativeDriver: false }
-                )}
-                scrollEventThrottle={16}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isRefetchingByUserSports}
-                        onRefresh={() => {
-                            void refetchByUserSports()
-                        }}
-                    />
-                }
-            >
-                {sportsResult.isLoading ? (
-                    <LoadingIndicator />
-                ) : sportsResult.isError ? (
-                    <ErrorView
-                        title={sportsResult.error?.message ?? t('error.title')}
-                        onButtonPress={() => {
-                            void refetchByUserSports()
-                        }}
-                        inModal
-                    />
-                ) : sportsResult.isPaused && !sportsResult.isSuccess ? (
-                    <ErrorView title={networkError} inModal />
-                ) : (
-                    <View>
-                        <Text style={styles.campusHeader}>{'Campus'}</Text>
-                        <View style={styles.locationRow}>
-                            {locations.map((location, index) => (
-                                <LocationButton
-                                    location={location}
-                                    key={index}
-                                />
-                            ))}
-                        </View>
-                        <View
-                            style={{
-                                ...styles.contentBorder,
-                            }}
-                        >
-                            {sportsResult.data != null ? (
-                                <EventList data={sportsEvents} />
-                            ) : (
-                                <ErrorView
-                                    title={t(
-                                        'pages.clEvents.sports.noEvents.title'
-                                    )}
-                                    icon={{
-                                        ios: 'sportscourt',
-                                        android: 'sports_gymnastics',
-                                        web: 'Dumbbell',
-                                    }}
-                                    message={t(
-                                        'pages.clEvents.sports.noEvents.subtitle'
-                                    )}
-                                    inModal
-                                    isCritical={false}
-                                />
-                            )}
-                        </View>
+                    },
+                ],
+                { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefetchingByUserSports}
+                    onRefresh={() => {
+                        void refetchByUserSports()
+                    }}
+                />
+            }
+        >
+            {sportsResult.isLoading ? (
+                <LoadingIndicator />
+            ) : sportsResult.isError ? (
+                <ErrorView
+                    title={sportsResult.error?.message ?? t('error.title')}
+                    onButtonPress={() => {
+                        void refetchByUserSports()
+                    }}
+                    inModal
+                />
+            ) : sportsResult.isPaused && !sportsResult.isSuccess ? (
+                <ErrorView title={networkError} inModal />
+            ) : (
+                <View>
+                    <Text style={styles.campusHeader}>{'Campus'}</Text>
+                    <View style={styles.locationRow}>
+                        {locations.map((location, index) => (
+                            <LocationButton location={location} key={index} />
+                        ))}
                     </View>
-                )}
-            </ScrollView>
-        </View>
+                    <View
+                        style={{
+                            ...styles.contentBorder,
+                        }}
+                    >
+                        {sportsResult.data != null ? (
+                            <EventList data={sportsEvents} />
+                        ) : (
+                            <ErrorView
+                                title={t(
+                                    'pages.clEvents.sports.noEvents.title'
+                                )}
+                                icon={{
+                                    ios: 'sportscourt',
+                                    android: 'sports_gymnastics',
+                                    web: 'Dumbbell',
+                                }}
+                                message={t(
+                                    'pages.clEvents.sports.noEvents.subtitle'
+                                )}
+                                inModal
+                                isCritical={false}
+                            />
+                        )}
+                    </View>
+                </View>
+            )}
+        </ScrollView>
     )
 }
 
@@ -295,8 +289,8 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        marginHorizontal: theme.margins.page,
         paddingBottom: theme.margins.bottomSafeArea,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     locationButtonContainer: {
@@ -326,9 +320,6 @@ const stylesheet = createStyleSheet((theme) => ({
         color: isSelect ? theme.colors.primary : theme.colors.text,
     }),
     locationTextContainer: { alignItems: 'center', position: 'relative' },
-    page: {
-        paddingHorizontal: theme.margins.page,
-    },
     toggleIcon: {
         alignSelf: 'flex-end',
         marginRight: 4,
