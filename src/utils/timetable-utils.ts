@@ -127,13 +127,15 @@ export function getGroupedTimetable(
     ]
     const dates = [
         ...new Set(
-            combinedData.map((item) => item.date.toString().split('T')[0])
+            combinedData.map(
+                (item) => new Date(item.date).toISOString().split('T')[0]
+            )
         ),
     ]
     const groups = dates.map((date) => ({
         title: new Date(date),
         data: combinedData.filter(
-            (item) => item.date.toString().split('T')[0] === date
+            (item) => new Date(item.date).toISOString().split('T')[0] === date
         ),
     }))
     return groups as TimetableSections[]
