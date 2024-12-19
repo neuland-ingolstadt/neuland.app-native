@@ -77,6 +77,7 @@ function TimetableScreen(): React.JSX.Element {
         )
     }
 
+    console.warn('timetableMode', timetableMode)
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.page} edges={['top']}>

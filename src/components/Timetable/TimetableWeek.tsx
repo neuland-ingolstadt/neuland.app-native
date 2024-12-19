@@ -1,3 +1,4 @@
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
 import { Exam, type FriendlyTimetableEntry } from '@/types/utils'
@@ -21,7 +22,8 @@ import {
 
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderLeft, HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './HeaderButtons'
+import { MyMenu } from './Menu'
 import EventComponent from './WeekEventComponent'
 
 export default function TimetableWeek({
@@ -46,7 +48,9 @@ export default function TimetableWeek({
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
-
+    const imetableNumberDays = usePreferencesStore(
+        (state) => state.timetableNumberDays
+    )
     const calendarTheme = {
         colors: {
             primary: theme.colors.notification,
@@ -126,7 +130,7 @@ export default function TimetableWeek({
             ),
             headerLeft: () => (
                 <View style={styles.buttons}>
-                    <HeaderLeft />
+                    <MyMenu />
                     {Platform.OS === 'web' && (
                         <View style={styles.buttons}>
                             <Pressable
@@ -210,7 +214,7 @@ export default function TimetableWeek({
                 start={450}
                 end={1290}
                 ref={calendarRef}
-                numberOfDays={3}
+                numberOfDays={imetableNumberDays}
                 events={events}
                 theme={calendarTheme}
                 onPressEvent={(event) => {

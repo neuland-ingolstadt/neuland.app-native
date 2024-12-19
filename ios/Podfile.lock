@@ -6,6 +6,11 @@ PODS:
     - ExpoModulesCore
     - SPAlert (~> 4.2)
     - SPIndicator (~> 1.6)
+  - ComputableLayout (0.7.0):
+    - DGSwiftUtilities (~> 0.11)
+  - ContextMenuAuxiliaryPreview (0.5.2):
+    - DGSwiftUtilities (~> 0.29)
+  - DGSwiftUtilities (0.30.0)
   - DoubleConversion (1.1.6)
   - EXApplication (6.0.1):
     - ExpoModulesCore
@@ -1617,6 +1622,27 @@ PODS:
     - React-Core
     - React-RCTFabric
     - ReactCommon/turbomodule/core
+  - react-native-menu (1.1.7):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-mmkv (3.2.0):
     - DoubleConversion
     - glog
@@ -2079,6 +2105,15 @@ PODS:
     - React-logger (= 0.76.5)
     - React-perflogger (= 0.76.5)
     - React-utils (= 0.76.5)
+  - ReactNativeIosContextMenu (2.5.3):
+    - ContextMenuAuxiliaryPreview (~> 0.3)
+    - DGSwiftUtilities
+    - ExpoModulesCore
+    - ReactNativeIosUtilities
+  - ReactNativeIosUtilities (4.5.1):
+    - ComputableLayout (~> 0.7)
+    - DGSwiftUtilities (~> 0.27)
+    - ExpoModulesCore
   - rn-quick-actions (0.0.3):
     - React
   - RNDateTimePicker (8.2.0):
@@ -2411,6 +2446,7 @@ DEPENDENCIES:
   - react-native-bottom-tabs (from `../node_modules/react-native-bottom-tabs`)
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
   - react-native-drag-drop-ios (from `../node_modules/react-native-drag-drop-ios`)
+  - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -2445,6 +2481,8 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeIosContextMenu (from `../node_modules/react-native-ios-context-menu`)
+  - ReactNativeIosUtilities (from `../node_modules/react-native-ios-utilities`)
   - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -2459,6 +2497,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - ComputableLayout
+    - ContextMenuAuxiliaryPreview
+    - DGSwiftUtilities
     - React-Codegen
     - SDWebImage
     - SDWebImageSVGCoder
@@ -2613,6 +2654,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-context-menu-view"
   react-native-drag-drop-ios:
     :path: "../node_modules/react-native-drag-drop-ios"
+  react-native-menu:
+    :path: "../node_modules/@react-native-menu/menu"
   react-native-mmkv:
     :path: "../node_modules/react-native-mmkv"
   react-native-netinfo:
@@ -2681,6 +2724,10 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeIosContextMenu:
+    :path: "../node_modules/react-native-ios-context-menu"
+  ReactNativeIosUtilities:
+    :path: "../node_modules/react-native-ios-utilities"
   rn-quick-actions:
     :path: "../node_modules/rn-quick-actions"
   RNDateTimePicker:
@@ -2708,6 +2755,9 @@ SPEC CHECKSUMS:
   aptabase-react-native: 4b0d69af453e0b79e60b0bd926702ccb599cb681
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   Burnt: dde5dd245f124a4594098e3938ba71aae4ec83c3
+  ComputableLayout: c50faffac4ed9f8f05b0ce5e6f3a60df1f6042c8
+  ContextMenuAuxiliaryPreview: 20be0be795b783b68f8792732eed4bed9f202c1c
+  DGSwiftUtilities: b285f0dc917b39624cec380abb7674510139b3e4
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EXApplication: e1ad9c950c98b2b134578092c948b10b403f3ea7
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
@@ -2778,6 +2828,7 @@ SPEC CHECKSUMS:
   react-native-bottom-tabs: 7cf22416a098417feb16416c23dc122900a16050
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 0e229576f681f47e5a3555617fdbf977b26f785d
+  react-native-menu: 6d34c26741810d9998fb13757f0d36830509ee68
   react-native-mmkv: 35992c4170a4a46be095fd1b7fe17d2fd1d42124
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-pager-view: 90bde7996adffa8af7ce5d1b2255b45880bd1091
@@ -2812,6 +2863,8 @@ SPEC CHECKSUMS:
   React-utils: 36d56297591ca4a32b3f83d0ab9900aa4599c4c0
   ReactCodegen: 8d7f9f05befdeb108948bbaa18d149b25a964f72
   ReactCommon: 858d61cce81635d57be89348568b603e838b3cac
+  ReactNativeIosContextMenu: 4601cc5113ca45bc7295707bf5c76987caac8bd7
+  ReactNativeIosUtilities: 4980803356bff7906929d5d034da58bfc9bb824a
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da
   RNDeviceInfo: 3f2e5fcca3637f75c6d30ba287293c2f97206781

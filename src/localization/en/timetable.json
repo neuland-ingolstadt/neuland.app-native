@@ -44,5 +44,12 @@
         "thirty": "30 minutes before",
         "sixty": "60 minutes before",
         "body": "starts in {{mins}} minutes in room {{room}}."
+    },
+    "menu": {
+        "oneDay": "Single Day",
+        "threeDays": "Three Days",
+        "fiveDays": "Five Days",
+        "list": "List",
+        "timeline": "Timeline"
     }
 }
