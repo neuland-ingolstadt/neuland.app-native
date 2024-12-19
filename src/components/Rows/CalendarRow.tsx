@@ -129,6 +129,7 @@ const stylesheet = createStyleSheet((theme) => ({
         fontWeight: '400',
     },
     rightTextExam: {
+        color: theme.colors.labelColor,
         fontSize: 14,
         fontWeight: '400',
     },

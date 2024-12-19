@@ -14,7 +14,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.4):
     - ExpoModulesCore
-  - Expo (52.0.19):
+  - Expo (52.0.20):
     - ExpoModulesCore
   - expo-dev-client (5.0.6):
     - EXManifests
@@ -232,17 +232,19 @@ PODS:
     - ExpoModulesCore
   - ExpoBrightness (13.0.2):
     - ExpoModulesCore
+  - ExpoCalendar (14.0.5):
+    - ExpoModulesCore
   - ExpoClipboard (7.0.0):
     - ExpoModulesCore
   - ExpoCrypto (14.0.1):
     - ExpoModulesCore
   - ExpoFileSystem (18.0.6):
     - ExpoModulesCore
-  - ExpoFont (13.0.1):
+  - ExpoFont (13.0.2):
     - ExpoModulesCore
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
-  - ExpoHead (4.0.13):
+  - ExpoHead (4.0.14):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
@@ -277,7 +279,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoScreenOrientation (8.0.1):
+  - ExpoScreenOrientation (8.0.2):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -2352,6 +2354,7 @@ DEPENDENCIES:
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoBrightness (from `../node_modules/expo-brightness/ios`)
+  - ExpoCalendar (from `../node_modules/expo-calendar/ios`)
   - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
   - ExpoCrypto (from `../node_modules/expo-crypto/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -2499,6 +2502,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-blur/ios"
   ExpoBrightness:
     :path: "../node_modules/expo-brightness/ios"
+  ExpoCalendar:
+    :path: "../node_modules/expo-calendar/ios"
   ExpoClipboard:
     :path: "../node_modules/expo-clipboard/ios"
   ExpoCrypto:
@@ -2708,7 +2713,7 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: f30a0c5d3d6cad8db9c01bab579e0aa0df5d3cb2
-  Expo: d901db29ffb24ccad280920f3c6de69febb89935
+  Expo: f39be4210805cf1fdd2eba47cb43f743fb420e09
   expo-dev-client: 8bb4cc68d1c23b585dddd3169787e37337c5ab4a
   expo-dev-launcher: 8972c34d0946cc0fb1d6c1b0578dbf9e4bcff2c3
   expo-dev-menu: d770b290f8f3a4affb738fbdee371f085c4db287
@@ -2717,19 +2722,20 @@ SPEC CHECKSUMS:
   ExpoAsset: 8138f2a9ec55ae1ad7c3871448379f7d97692d15
   ExpoBlur: 562b3da84d3cd79016c411671eaf71a404266415
   ExpoBrightness: ce777f6a365592f745428cb0acc9066b400182e8
+  ExpoCalendar: 540f2576e76530bc46a1c93d9966fdf6b29d614f
   ExpoClipboard: 166ca8c13ca1041f5ba619a211f59427ab5da8a7
   ExpoCrypto: 8465f71eb3798c194c0a509d4a76e5c429656d83
   ExpoFileSystem: 179a0661fd6d3c4e5d7e500a99a9cd8b295d9566
-  ExpoFont: 7522d869d84ee2ee8093ee997fef5b86f85d856b
+  ExpoFont: 260fb85279912421894060d9aea453cee4ffc01c
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
-  ExpoHead: c1a593f9da8f4c09c633bf7494aac5ce590ef6ed
+  ExpoHead: 9d3c117373c48e147eee6f729b9afde1ccfa03df
   ExpoKeepAwake: 783e68647b969b210a786047c3daa7b753dcac1f
   ExpoLinearGradient: 7ca3b1d1625a1ab85c129abce4a3cdc78a9500a3
   ExpoLinking: a8332a219379ba80f8e612d5a5de4a3da446886e
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
   ExpoModulesCore: 755e9c03bfe099eae7833d8f8b56118b2fc1107f
-  ExpoScreenOrientation: 17df4d8b6da91424e338f4b223b8801d300ebc5a
+  ExpoScreenOrientation: 164a4d1c05122d0101c4e740eb7f675c5276e744
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
   ExpoSplashScreen: 5818efe67bdbcc862b97fef589571c5b4d53fa7d
   ExpoSystemUI: 2d729aea8219f03af1b1996c1d14488a01fea94a
