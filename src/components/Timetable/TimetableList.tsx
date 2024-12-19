@@ -5,7 +5,6 @@ import Divider from '@/components/Universal/Divider'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
 import {
-    type Exam,
     ExamEntry,
     type FriendlyTimetableEntry,
     TimetableEntry,
@@ -17,7 +16,6 @@ import {
     formatISODate,
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
-import { inverseColor } from '@/utils/ui-utils'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRouter } from 'expo-router'
@@ -179,7 +177,7 @@ export default function TimetableList({
             </DragDropView>
         )
     }
-    function renderExamItem({ exam }: { exam: Exam }): React.JSX.Element {
+    function renderExamItem({ exam }: { exam: ExamEntry }): React.JSX.Element {
         const navigateToPage = (): void => {
             setSelectedExam(exam)
             router.navigate('/exam')
@@ -199,10 +197,8 @@ export default function TimetableList({
                     <View style={styles.eventWrapper}>
                         <LinearGradient
                             colors={[
-                                inverseColor(theme.colors.primary),
-                                getLineColor(
-                                    inverseColor(theme.colors.primary)
-                                ),
+                                theme.colors.notification,
+                                getLineColor(theme.colors.notification),
                             ]}
                             start={[0, 0.9]}
                             end={[0.7, 0.25]}
@@ -224,6 +220,9 @@ export default function TimetableList({
                         <View>
                             <Text style={styles.time}>
                                 {formatFriendlyTime(exam.date)}
+                            </Text>
+                            <Text style={styles.time2}>
+                                {formatFriendlyTime(exam.endDate)}
                             </Text>
                         </View>
                     </View>

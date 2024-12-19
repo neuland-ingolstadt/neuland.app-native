@@ -14,6 +14,7 @@ export interface Exam {
 
 export interface ExamEntry extends Exam {
     eventType: 'exam'
+    endDate: Date
 }
 
 export interface FriendlyDateOptions {
