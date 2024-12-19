@@ -1,6 +1,6 @@
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+import { Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     CalendarBody,
     CalendarContainer,
@@ -26,6 +26,7 @@ import EventComponent from './WeekEventComponent'
 
 export default function TimetableWeek({
     timetable,
+    exams,
 }: ITimetableViewProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const today = moment().startOf('day').toDate()
@@ -36,6 +37,9 @@ export default function TimetableWeek({
     const calendarRef = useRef<CalendarKitHandle>(null)
     const setSelectedLecture = useRouteParamsStore(
         (state) => state.setSelectedLecture
+    )
+    const setSelectedExam = useRouteParamsStore(
+        (state) => state.setSelectedExam
     )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
@@ -59,12 +63,15 @@ export default function TimetableWeek({
         if (entry.eventType === 'lecture') {
             setSelectedLecture(entry as unknown as FriendlyTimetableEntry)
             router.navigate('/lecture')
+        } else if (entry.eventType === 'exam') {
+            setSelectedExam(entry as unknown as Exam)
+            router.navigate('/exam')
         }
     }
 
     useEffect(() => {
         if (timetable.length > 0) {
-            const friendlyTimetableWithColor = timetable.map(
+            const friendlyTimetable = timetable.map(
                 (entry: FriendlyTimetableEntry, index: number) => ({
                     ...entry,
                     eventType: 'lecture',
@@ -77,9 +84,28 @@ export default function TimetableWeek({
                     },
                 })
             )
-            setEvents(friendlyTimetableWithColor as unknown as PackedEvent[])
+            const friendlyExams = exams.map((entry, index) => {
+                const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
+                return {
+                    ...entry,
+                    eventType: 'exam',
+                    id: index.toString(),
+                    start: {
+                        dateTime: entry.date,
+                    },
+                    end: {
+                        dateTime: moment(entry.date)
+                            .add(duration, 'minutes')
+                            .toDate(),
+                    },
+                }
+            })
+            setEvents([
+                ...friendlyTimetable,
+                ...friendlyExams,
+            ] as unknown as PackedEvent[])
         }
-    }, [timetable])
+    }, [timetable, exams])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -210,6 +236,7 @@ export default function TimetableWeek({
 const stylesheet = createStyleSheet(() => ({
     buttons: {
         flexDirection: 'row',
+        gap: 4,
     },
     loadingContainer: {
         alignItems: 'center',
