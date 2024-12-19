@@ -103,7 +103,7 @@ export default function ClEventDetail(): JSX.Element {
                               isValidRoom(clEvent.location)
                                   ? {
                                         onPress: () => {
-                                            router.navigate({
+                                            router.dismissTo({
                                                 pathname: '/map',
                                                 params: {
                                                     room: clEvent?.location,
