@@ -103,13 +103,14 @@ export default function Events(): React.JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
     page: {
         flex: 1,
-        margin: theme.margins.page,
+        marginVertical: theme.margins.page,
     },
     pagerContainer: {
         flex: 1,
     },
     toggleContainer: {
         borderColor: theme.colors.border,
+        marginHorizontal: theme.margins.page,
         paddingBottom: 12,
     },
 }))

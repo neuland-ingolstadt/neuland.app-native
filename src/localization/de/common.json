@@ -72,7 +72,8 @@
         "more": "mehr",
         "unknown": "Unbekannt",
         "true": "Ja",
-        "false": "Nein"
+        "false": "Nein",
+        "continue": "Fortfahren"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -162,7 +163,16 @@
                 "registration": "Angemeldet",
                 "notes": "Notizen"
             },
-            "footer": "Alle Angaben ohne Gewähr. Verbindliche Informationen sind nur direkt von der THI erhältlich."
+            "footer": "Alle Angaben ohne Gewähr. Verbindliche Informationen sind nur direkt von der THI erhältlich.",
+            "calendar": {
+                "exam": "Klausur: {{title}}",
+                "warning": {
+                    "title": "Zum Kalender hinzufügen",
+                    "message": "Das exportierte Ereignis wird nicht automatisch aktualisiert. Konsultiere stets die offiziellen THI-Quellen für Änderungen und verbindliche Informationen."
+                },
+                "add": "In Kalender exportieren",
+                "note": "Dieses Ereignis wurde statisch aus Neuland Next exportiert und wird daher nicht automatisch aktualisiert und könnte veraltet sein. Konsultiere stets die offiziellen THI-Quellen für die neuesten Informationen. Keine Gewähr für die Richtigkeit."
+            }
         },
         "event": {
             "date": "Datum",
