@@ -10,7 +10,7 @@ interface ShareButtonProps {
 
 export default function ShareHeaderButton({
     onPress,
-}: ShareButtonProps): JSX.Element {
+}: ShareButtonProps): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     return (

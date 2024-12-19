@@ -31,6 +31,10 @@ const AttributionLink: React.FC = () => {
                         name: 'chevron_right',
                         size: 16,
                     }}
+                    web={{
+                        name: 'ChevronRight',
+                        size: 16,
+                    }}
                     style={styles.label}
                 />
             </Pressable>

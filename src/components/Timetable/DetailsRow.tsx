@@ -5,7 +5,7 @@ export default function DetailsRow({
     children,
 }: {
     children: JSX.Element[]
-}): JSX.Element {
+}): React.JSX.Element {
     return <View style={styles.detailsRow}>{children}</View>
 }
 

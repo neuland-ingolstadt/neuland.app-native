@@ -2,7 +2,7 @@ import React from 'react'
 import { G, Path, Svg } from 'react-native-svg'
 import { useStyles } from 'react-native-unistyles'
 
-export default function LogoSVG({ size }: { size: number }): JSX.Element {
+export default function LogoSVG({ size }: { size: number }): React.JSX.Element {
     const { theme } = useStyles()
 
     return (

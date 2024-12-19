@@ -9,7 +9,8 @@ const moodleLink = 'https://moodle.thi.de/'
 const mailLink = 'https://outlook.office.com/'
 const studverLink = 'https://studverthi.de'
 const marketplaceLink = 'https://www.thi.de/service/marketplace/'
-const libraryLink = 'https://opac.ku.de/index-hi.html'
+export const libraryLink = 'https://opac.ku.de/index-hi.html'
+export const vscoutLink = 'https://vscout.thi.de'
 const thiLink = 'https://www.thi.de'
 const pressReaderLink =
     'https://thi.idm.oclc.org/login?url=https://www.pressreader.com/catalog'
@@ -67,15 +68,6 @@ export const quicklinks = [
             ios: 'cart',
             android: 'shopping_cart',
             web: 'ShoppingCart',
-        },
-    },
-    {
-        key: 'library',
-        url: libraryLink,
-        icon: {
-            ios: 'text.book.closed',
-            android: 'book_4',
-            web: 'BookOpenText',
         },
     },
     {

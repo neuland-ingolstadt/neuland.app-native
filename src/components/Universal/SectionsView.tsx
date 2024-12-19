@@ -12,7 +12,7 @@ const SectionView = ({
     footer?: string
     children: JSX.Element
     link?: { text: string; destination: () => void }
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <>

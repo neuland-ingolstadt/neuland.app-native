@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-const LinkScreen = (): JSX.Element => {
+const LinkScreen = (): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const addRecentQuicklink = usePreferencesStore(

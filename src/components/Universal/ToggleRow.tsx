@@ -10,7 +10,7 @@ const ToggleRow = ({
     items: string[]
     selectedElement: number
     setSelectedElement: (element: number) => void
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <View style={styles.buttonRow}>

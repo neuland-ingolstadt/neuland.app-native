@@ -34,7 +34,7 @@ const LoginForm = ({
     navigateHome,
 }: {
     navigateHome: () => void
-}): JSX.Element => {
+}): React.JSX.Element => {
     const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
     const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
     const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
@@ -114,7 +114,9 @@ const LoginForm = ({
                                           ns: 'common',
                                       }),
                                       onPress: async () =>
-                                          await Linking.openURL(STATUS_URL),
+                                          (await Linking.openURL(
+                                              STATUS_URL
+                                          )) as Promise<void>,
                                   },
                               ]
                             : []),
@@ -146,7 +148,7 @@ const LoginForm = ({
     useEffect(() => {
         // on iOS secure store is synced with iCloud, so we can prefill the login form
         if (Platform.OS === 'ios') {
-            const loadSavedData = async (): Promise<void> => {
+            const loadSavedData = (): void => {
                 const savedUsername = loadSecure('username')
                 const savedPassword = loadSecure('password')
                 if (savedUsername !== null && savedPassword !== null) {
@@ -164,7 +166,7 @@ const LoginForm = ({
                 }
             }
 
-            void loadSavedData()
+            loadSavedData()
         }
     }, [])
 
@@ -217,7 +219,7 @@ const LoginForm = ({
                         }}
                         onSubmitEditing={() => {
                             if (username !== '') {
-                                login().catch((error: Error) => {
+                                login().catch((error: unknown) => {
                                     console.debug(error)
                                 })
                             }
@@ -235,7 +237,7 @@ const LoginForm = ({
                 <TouchableOpacity
                     disabled={signInDisabled}
                     onPress={() => {
-                        login().catch((error: Error) => {
+                        login().catch((error: unknown) => {
                             console.debug(error)
                         })
                     }}
@@ -255,7 +257,7 @@ const LoginForm = ({
                 <View style={styles.guestContainer}>
                     <TouchableOpacity
                         onPress={() => {
-                            guestLogin().catch((error: Error) => {
+                            guestLogin().catch((error: unknown) => {
                                 console.debug(error)
                             })
                         }}

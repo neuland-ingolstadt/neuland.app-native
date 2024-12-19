@@ -3,7 +3,7 @@ import { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import useCLParamsStore from '@/hooks/useCLParamsStore'
 import { type LanguageKey } from '@/localization/i18n'
-import { type FormListSections } from '@/types/components'
+import { type FormListSections, SectionGroup } from '@/types/components'
 import {
     formatFriendlyDateTime,
     formatFriendlyDateTimeRange,
@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function ClEventDetail(): JSX.Element {
+export default function ClEventDetail(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const navigation = useNavigation()
     const clEvent = useCLParamsStore((state) => state.selectedClEvent)
@@ -23,7 +23,7 @@ export default function ClEventDetail(): JSX.Element {
     const { t, i18n } = useTranslation('common')
     const isMultiDayEvent =
         clEvent?.startDateTime != null &&
-        clEvent?.endDateTime != null &&
+        clEvent.endDateTime != null &&
         new Date(clEvent.startDateTime).toDateString() !==
             new Date(clEvent.endDateTime).toDateString()
 
@@ -71,32 +71,35 @@ export default function ClEventDetail(): JSX.Element {
                           },
                       ]
                     : [
-                          ...(clEvent?.startDateTime != null
+                          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                          ...(clEvent.startDateTime != null
                               ? [
                                     {
                                         title: t('pages.event.begin'),
-                                        value: formatFriendlyDateTime(
-                                            new Date(clEvent.startDateTime)
-                                        ),
+                                        value:
+                                            formatFriendlyDateTime(
+                                                new Date(clEvent.startDateTime)
+                                            ) ?? undefined,
                                     },
                                 ]
                               : []),
-                          ...(clEvent?.endDateTime != null
+                          ...(clEvent.endDateTime != null
                               ? [
                                     {
                                         title: t('pages.event.end'),
-                                        value: formatFriendlyDateTime(
-                                            new Date(clEvent.endDateTime)
-                                        ),
+                                        value:
+                                            formatFriendlyDateTime(
+                                                new Date(clEvent.endDateTime)
+                                            ) ?? undefined,
                                     },
                                 ]
                               : []),
                       ]),
-                ...(clEvent?.location != null && clEvent?.location !== ''
+                ...(clEvent?.location != null && clEvent.location !== ''
                     ? [
                           {
                               title: t('pages.event.location'),
-                              value: clEvent?.location,
+                              value: clEvent.location,
                           },
                       ]
                     : []),
@@ -139,7 +142,7 @@ export default function ClEventDetail(): JSX.Element {
                                     },
                                 }
                               : null,
-                      ].filter((item) => item != null) as any,
+                      ].filter((item) => item != null) as SectionGroup[],
                   },
               ]
             : []),
@@ -147,7 +150,7 @@ export default function ClEventDetail(): JSX.Element {
             ? [
                   {
                       header: t('pages.event.description'),
-                      item: clEvent?.descriptions[i18n.language as LanguageKey],
+                      item: clEvent.descriptions[i18n.language as LanguageKey],
                   },
               ]
             : []),
@@ -168,7 +171,7 @@ export default function ClEventDetail(): JSX.Element {
                     adjustsFontSizeToFit={true}
                     numberOfLines={2}
                 >
-                    {clEvent?.titles[i18n.language as LanguageKey]}
+                    {clEvent.titles[i18n.language as LanguageKey]}
                 </Text>
             </View>
             <View style={styles.formList}>

@@ -17,7 +17,9 @@ interface ShareCardProps {
     event: FriendlyTimetableEntry
 }
 
-export default function ShareCard({ event }: ShareCardProps): JSX.Element {
+export default function ShareCard({
+    event,
+}: ShareCardProps): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     const { t } = useTranslation('timetable')

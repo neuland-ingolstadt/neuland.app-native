@@ -16,7 +16,7 @@ export default function ClEventsPage({
     clEventsResult,
 }: {
     clEventsResult: UseQueryResult<CampusLifeEventFieldsFragment[], Error>
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 
@@ -31,18 +31,16 @@ export default function ClEventsPage({
             <ScrollView
                 contentContainerStyle={styles.itemsContainer}
                 style={styles.page}
-                onScroll={
-                    Animated.event(
-                        [
-                            {
-                                nativeEvent: {
-                                    contentOffset: { y: scrollY },
-                                },
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { y: scrollY },
                             },
-                        ],
-                        { useNativeDriver: false }
-                    ) as any
-                }
+                        },
+                    ],
+                    { useNativeDriver: false }
+                )}
                 scrollEventThrottle={16}
                 refreshControl={
                     <RefreshControl

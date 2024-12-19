@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function ExamDetail(): JSX.Element {
+export default function ExamDetail(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const exam = useRouteParamsStore((state) => state.selectedExam)
     const { t } = useTranslation('common')

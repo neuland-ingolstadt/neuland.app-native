@@ -10,7 +10,6 @@ import {
     LoginCard,
     TimetableCard,
 } from './Cards'
-import LibraryCard from './Cards/LibraryCard'
 import NewsCard from './Cards/NewsCard'
 
 export const AllCards: Card[] = [
@@ -42,7 +41,7 @@ export const AllCards: Card[] = [
         removable: true,
         initial: [USER_STUDENT, USER_EMPLOYEE],
         allowed: [USER_STUDENT, USER_EMPLOYEE],
-        card: () => <LibraryCard />,
+        card: () => <BaseCard title="library" onPressRoute="library" />,
     },
     {
         key: 'links',

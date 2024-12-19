@@ -46,7 +46,7 @@ const Dropdown: React.FC<Props> = ({
             onSelect={(selectedItem: string) => {
                 onSelect(selectedItem)
             }}
-            renderButton={(selectedItem, isOpened) => {
+            renderButton={(selectedItem) => {
                 return (
                     <View
                         style={[
@@ -66,7 +66,7 @@ const Dropdown: React.FC<Props> = ({
                     </View>
                 )
             }}
-            renderItem={(item, index, isSelected) => {
+            renderItem={(item, _index, isSelected) => {
                 return (
                     <View style={styles.rowHeight}>
                         <Text

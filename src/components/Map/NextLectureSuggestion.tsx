@@ -5,6 +5,7 @@ import { isValidRoom } from '@/utils/timetable-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { type FeatureCollection } from 'geojson'
+import { type Position } from 'geojson'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -60,15 +61,19 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
                                     )
                                     return
                                 }
-                                const etage = details?.properties?.Ebene
+                                const etage =
+                                    (details?.properties?.Ebene as string) ??
+                                    'EG'
                                 setCurrentFloor({
-                                    floor: (etage as string) ?? 'EG',
+                                    floor: etage,
                                     manual: false,
                                 })
                                 setClickedElement({
                                     data: lecture.rooms[0],
                                     type: SEARCH_TYPES.ROOM,
-                                    center: details?.properties?.center,
+                                    center: details?.properties?.center as
+                                        | Position
+                                        | undefined,
                                     manual: false,
                                 })
                                 trackEvent('Room', {

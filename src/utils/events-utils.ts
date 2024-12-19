@@ -34,10 +34,10 @@ export async function loadCampusLifeEvents(): Promise<
     return newEvents
 }
 
-type GroupedSportsEvents = Array<{
+type GroupedSportsEvents = {
     title: WeekdayType
     data: UniversitySportsFieldsFragment[]
-}>
+}[]
 /**
  * Fetches and parses the university sports events
  */

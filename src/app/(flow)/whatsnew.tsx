@@ -22,7 +22,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function WhatsNewScreen(): JSX.Element {
+export default function WhatsNewScreen(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const changelog: Changelog = changelogData as Changelog
     const { t, i18n } = useTranslation('flow')

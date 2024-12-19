@@ -31,7 +31,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function FoodDetail(): JSX.Element {
+export default function FoodDetail(): React.JSX.Element {
     const meal = useRouteParamsStore((state) => state.selectedMeal)
     const { styles, theme } = useStyles(stylesheet)
 
@@ -169,7 +169,9 @@ export default function FoodDetail(): JSX.Element {
                     },
                     {
                         text: t('misc.cancel', { ns: 'common' }),
-                        onPress: () => {},
+                        onPress: () => {
+                            /* empty */
+                        },
                         style: 'cancel',
                     },
                 ]

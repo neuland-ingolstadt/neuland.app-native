@@ -2,9 +2,7 @@ import React from 'react'
 
 import ErrorView from '../Error/ErrorView'
 
-export function requestPermission(): void {}
-
-export default function MapScreen(): JSX.Element {
+export default function MapScreen(): React.JSX.Element {
     return (
         <ErrorView
             title="Map not available"

@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
-const GradesButton = (): JSX.Element => {
+const GradesButton = (): React.JSX.Element => {
     const { t } = useTranslation('settings')
     const { styles } = useStyles(stylesheet)
     return (

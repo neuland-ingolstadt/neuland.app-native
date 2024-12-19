@@ -6,16 +6,28 @@ export const UserKindContext = createContext<UserKindContextType>({
     userKind: 'student',
     userFaculty: undefined,
     userCampus: undefined,
-    toggleUserKind: () => {},
+    toggleUserKind: () => {
+        throw new Error('toggleUserKind not implemented')
+    },
 })
 
 export const DashboardContext = createContext<Dashboard>({
     shownDashboardEntries: [],
     hiddenDashboardEntries: [],
-    hideDashboardEntry: () => {},
-    bringBackDashboardEntry: () => {},
-    resetOrder: () => {},
-    updateDashboardOrder: () => {},
+    hideDashboardEntry: () => {
+        throw new Error('hideDashboardEntry not implemented')
+    },
+    bringBackDashboardEntry: () => {
+        throw new Error('bringBackDashboardEntry not implemented')
+    },
+    resetOrder: () => {
+        throw new Error('resetOrder not implemented')
+    },
+    updateDashboardOrder: () => {
+        throw new Error('updateDashboardOrder not implemented')
+    },
     hiddenAnnouncements: [],
-    hideAnnouncement: () => {},
+    hideAnnouncement: () => {
+        throw new Error('hideAnnouncement not implemented')
+    },
 })

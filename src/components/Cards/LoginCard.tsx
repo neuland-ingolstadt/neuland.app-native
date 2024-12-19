@@ -5,7 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const LoginCard = (): JSX.Element => {
+const LoginCard = (): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('navigation')
     return (

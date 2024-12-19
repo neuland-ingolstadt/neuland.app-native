@@ -17,7 +17,7 @@ const Avatar = ({
     size?: number
     background?: ColorValue
     children: JSX.Element
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
 
     return <View style={styles.avatar(size, background)}>{children}</View>
