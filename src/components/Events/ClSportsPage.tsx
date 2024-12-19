@@ -1,4 +1,5 @@
 import {
+    CampusType,
     type UniversitySportsFieldsFragment,
     type WeekdayType,
 } from '@/__generated__/gql/graphql'
@@ -32,13 +33,13 @@ export default function ClSportsPage({
     sportsResult,
 }: {
     sportsResult: UseQueryResult<
-        Array<{
+        {
             title: WeekdayType
             data: UniversitySportsFieldsFragment[]
-        }>,
+        }[],
         Error
     >
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { userCampus } = useContext(UserKindContext)
     const [selectedLocation, setSelectedLocation] =
@@ -58,7 +59,7 @@ export default function ClSportsPage({
             .map((section) => ({
                 ...section,
                 data: section.data.filter(
-                    (event) => event.campus === selectedLocation
+                    (event) => event.campus === (selectedLocation as CampusType)
                 ),
             }))
             .filter((section) => section.data.length > 0)
@@ -76,11 +77,11 @@ export default function ClSportsPage({
     const EventList = ({
         data,
     }: {
-        data: Array<{
+        data: {
             title: WeekdayType
             data: UniversitySportsFieldsFragment[]
-        }>
-    }): JSX.Element => {
+        }[]
+    }): React.JSX.Element => {
         return (
             <View>
                 {data.map((section, index) => (
@@ -102,7 +103,7 @@ export default function ClSportsPage({
     }: {
         title: Lowercase<WeekdayType>
         data: UniversitySportsFieldsFragment[]
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const [collapsed, setCollapsed] = useState(false)
 
         return (
@@ -156,7 +157,7 @@ export default function ClSportsPage({
         location,
     }: {
         location: string
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const isSelected = selectedLocation === location
 
         return (
@@ -185,18 +186,16 @@ export default function ClSportsPage({
             <ScrollView
                 contentContainerStyle={styles.itemsContainer}
                 style={styles.page}
-                onScroll={
-                    Animated.event(
-                        [
-                            {
-                                nativeEvent: {
-                                    contentOffset: { y: scrollY },
-                                },
+                onScroll={Animated.event(
+                    [
+                        {
+                            nativeEvent: {
+                                contentOffset: { y: scrollY },
                             },
-                        ],
-                        { useNativeDriver: false }
-                    ) as any
-                }
+                        },
+                    ],
+                    { useNativeDriver: false }
+                )}
                 scrollEventThrottle={16}
                 refreshControl={
                     <RefreshControl

@@ -22,7 +22,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
     showAllFloors,
     toggleShowAllFloors,
     setCameraTriggerKey,
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { currentFloor, setCurrentFloor } = useContext(MapContext)
 
@@ -79,6 +79,10 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                             }}
                             android={{
                                 name: 'cancel',
+                                size: 26,
+                            }}
+                            web={{
+                                name: 'X',
                                 size: 26,
                             }}
                             style={styles.xIcon}
@@ -144,6 +148,10 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
                                     name: 'near_me',
                                     size: 21,
                                     variant: 'outlined',
+                                }}
+                                web={{
+                                    name: 'Navigation',
+                                    size: 21,
                                 }}
                             />
                         </View>

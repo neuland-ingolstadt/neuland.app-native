@@ -9,7 +9,7 @@ export function useBottomTabBarHeight(): number {
     return 60
 }
 
-const DefaultTabs = (): JSX.Element => {
+const DefaultTabs = (): React.JSX.Element => {
     const { theme: styleTheme } = useStyles()
     const { t } = useTranslation('navigation')
     const isMobile = Dimensions.get('window').width < 900

@@ -15,7 +15,7 @@ export const calendar: Calendar[] = rawCalendar
             begin: new Date((x as Calendar).begin),
             end:
                 (x as Calendar).end != null
-                    ? new Date((x as any).end as string)
+                    ? new Date((x as Calendar).end as unknown as string)
                     : undefined,
         }
 

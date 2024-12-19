@@ -19,7 +19,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const FoodCard = (): JSX.Element => {
+const FoodCard = (): React.JSX.Element => {
     const { t, i18n } = useTranslation('food')
     const { styles, theme } = useStyles(stylesheet)
 
@@ -36,7 +36,7 @@ const FoodCard = (): JSX.Element => {
 
     const { userKind = USER_GUEST } = useContext(UserKindContext)
     const [foodEntries, setFoodEntries] = useState<
-        Array<{ name: string; price: string | null; location: string | null }>
+        { name: string; price: string | null; location: string | null }[]
     >([])
     const { data, isSuccess } = useQuery({
         queryKey: ['meals', selectedRestaurants, false],

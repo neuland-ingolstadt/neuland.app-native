@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { TextStyle } from 'react-native'
 import Animated, {
     Easing,
     interpolateColor,
@@ -26,9 +27,9 @@ const AnimatedText = ({
 }: {
     speed: number
     text: string
-    textStyles: any
+    textStyles: TextStyle
     disabled?: boolean
-}): JSX.Element => {
+}): React.JSX.Element => {
     const colorValue = useSharedValue(0)
     const { theme } = useStyles()
     useEffect(() => {

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function About(): JSX.Element {
+export default function About(): React.JSX.Element {
     const router = useRouter()
     const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation(['settings'])
@@ -20,12 +20,14 @@ export default function About(): JSX.Element {
                 {
                     title: t('legal.formlist.legal.privacy'),
                     icon: linkIcon,
-                    onPress: async () => await Linking.openURL(PRIVACY_URL),
+                    onPress: async () =>
+                        (await Linking.openURL(PRIVACY_URL)) as Promise<void>,
                 },
                 {
                     title: t('legal.formlist.legal.imprint'),
                     icon: linkIcon,
-                    onPress: async () => await Linking.openURL(IMPRINT_URL),
+                    onPress: async () =>
+                        (await Linking.openURL(IMPRINT_URL)) as Promise<void>,
                 },
                 {
                     title: t('navigation.licenses.title', { ns: 'navigation' }),
@@ -43,7 +45,9 @@ export default function About(): JSX.Element {
                     title: 'Neuland Ingolstadt e.V.',
                     icon: linkIcon,
                     onPress: async () =>
-                        await Linking.openURL('https://neuland-ingolstadt.de/'),
+                        (await Linking.openURL(
+                            'https://neuland-ingolstadt.de/'
+                        )) as Promise<void>,
                 },
                 {
                     title: t('legal.formlist.us.source'),
@@ -54,9 +58,9 @@ export default function About(): JSX.Element {
                     },
 
                     onPress: async () =>
-                        await Linking.openURL(
+                        (await Linking.openURL(
                             'https://github.com/neuland-ingolstadt/neuland.app-native'
-                        ),
+                        )) as Promise<void>,
                 },
                 {
                     title: t('legal.formlist.us.faq'),
@@ -67,9 +71,9 @@ export default function About(): JSX.Element {
                     },
 
                     onPress: async () =>
-                        await Linking.openURL(
+                        (await Linking.openURL(
                             `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}app/faq`
-                        ),
+                        )) as Promise<void>,
                 },
             ],
         },

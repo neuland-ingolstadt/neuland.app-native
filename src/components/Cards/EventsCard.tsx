@@ -9,7 +9,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const EventsCard = (): JSX.Element => {
+const EventsCard = (): React.JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('navigation')
 

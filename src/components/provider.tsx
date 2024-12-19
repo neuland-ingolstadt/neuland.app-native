@@ -56,8 +56,7 @@ export const queryClient = new QueryClient({
  */
 export default function Provider({
     children,
-    ...rest
-}: ProviderProps): JSX.Element {
+}: ProviderProps): React.JSX.Element {
     const userKind = useUserKind()
     const dashboard = useDashboard()
     const segments = useSegments()
@@ -108,7 +107,7 @@ export default function Provider({
             return
         }
         trackEvent('Theme', {
-            theme: theme ?? 'auto',
+            theme: theme,
         })
     }, [accentColor, analyticsInitialized])
 
@@ -148,9 +147,10 @@ export default function Provider({
         }
 
         const entries: Record<string, string> = {}
-        dashboard.shownDashboardEntries?.forEach((entry, index) => {
+        dashboard.shownDashboardEntries.forEach((entry, index) => {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (entry !== undefined) {
-                entries[entry.key] = `Position ${index + 1}`
+                entries[entry.key] = `Position ${(index + 1).toString()}`
             }
         })
 
@@ -166,7 +166,7 @@ export default function Provider({
 
         const entries: Record<string, string> = {}
 
-        dashboard.hiddenDashboardEntries?.forEach((entry) => {
+        dashboard.hiddenDashboardEntries.forEach((entry) => {
             if (entry !== undefined) {
                 entries[entry.key] = 'Card hidden'
             }
@@ -213,7 +213,7 @@ export default function Provider({
         try {
             const primary = accentColors[accentColor][scheme]
             return primary
-        } catch (e) {
+        } catch {
             return accentColors.blue[scheme]
         }
     }
@@ -238,7 +238,9 @@ export default function Provider({
     }, [accentColor])
 
     useEffect(() => {
-        const subscription = Appearance.addChangeListener(() => {})
+        const subscription = Appearance.addChangeListener(() => {
+            /* nothing to do here */
+        })
 
         const isFixedTheme = theme === 'dark' || theme === 'light'
         if (Platform.OS !== 'web') {

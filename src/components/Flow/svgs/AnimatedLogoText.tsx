@@ -9,7 +9,7 @@ const AnimatedLogoText = ({
 }: {
     dimensions: { logoWidth: number; logoHeight: number }
     speed: number
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { theme } = useStyles()
 
     return (

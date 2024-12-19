@@ -11,7 +11,7 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.7.7": {
+    "@bottom-tabs/react-navigation@0.7.8": {
         "licenses": "MIT",
         "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
@@ -437,7 +437,7 @@
         "licenseUrl": "https://github.com/yorickshan/rn-quick-actions/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "sanitize-html@2.13.1": {
+    "sanitize-html@2.14.0": {
         "licenses": "MIT",
         "repository": "https://github.com/apostrophecms/sanitize-html",
         "licenseUrl": "https://github.com/apostrophecms/sanitize-html/raw/master/LICENSE",

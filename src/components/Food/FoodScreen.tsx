@@ -26,7 +26,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-function FoodScreen(): JSX.Element {
+function FoodScreen(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const [selectedDay, setSelectedDay] = useState<number>(0)
     const selectedRestaurants = useFoodFilterStore(
@@ -97,7 +97,7 @@ function FoodScreen(): JSX.Element {
     }: {
         day: Food
         index: number
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         const date = new Date(day.timestamp)
         const { styles } = useStyles(stylesheet)
 
@@ -166,9 +166,9 @@ function FoodScreen(): JSX.Element {
                 ) : isError ? (
                     <ErrorView
                         title={
-                            error?.message === 'noMeals'
+                            error.message === 'noMeals'
                                 ? t('error.noMeals')
-                                : (error?.message ?? t('error.title'))
+                                : (error.message ?? t('error.title'))
                         }
                         onRefresh={refetchByUser}
                         refreshing={isRefetchingByUser}
@@ -228,7 +228,7 @@ function FoodScreen(): JSX.Element {
                             scrollEnabled
                             overdrag
                         >
-                            {data.map((_: any, index: number) => (
+                            {data.map((_: unknown, index: number) => (
                                 <ScrollView
                                     refreshControl={
                                         <RefreshControl

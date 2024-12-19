@@ -97,7 +97,8 @@ export const lighten = (percentage: number, color: string): string => {
     const rgb = color
         .replace(
             /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-            (_, r, g, b) => r + r + g + g + b + b
+            (_, r: string, g: string, b: string): string =>
+                r + r + g + g + b + b
         )
         .substring(1)
         .match(/.{2}/g)

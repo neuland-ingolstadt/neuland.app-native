@@ -6,6 +6,7 @@ import {
     type UniversitySportsQuery,
 } from '@/__generated__/gql/graphql'
 import { type SpoWeights } from '@/types/asset-api'
+import { FeatureCollection } from 'geojson'
 
 import packageInfo from '../../package.json'
 import {
@@ -19,7 +20,7 @@ const GRAPHQL_ENDPOINT: string =
     process.env.EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT ??
     'https://api.neuland.app/graphql'
 console.info('Using GraphQL endpoint:', GRAPHQL_ENDPOINT)
-const ASSET_ENDPOINT: string = 'https://assets.neuland.app'
+const ASSET_ENDPOINT = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
@@ -32,7 +33,7 @@ class NeulandAPIClient {
      * @returns {Promise<any>} A promise that resolves with the response data
      * @throws {Error} If the API returns an error
      */
-    async performRequest(url: string): Promise<any> {
+    async performRequest(url: string): Promise<unknown> {
         const resp = await fetch(`${url}`, {
             headers: {
                 'User-Agent': USER_AGENT,
@@ -40,7 +41,7 @@ class NeulandAPIClient {
         })
 
         if (resp.status === 200) {
-            return await resp.json()
+            return (await resp.json()) as unknown
         } else {
             throw new Error('API returned an error: ' + (await resp.text()))
         }
@@ -71,7 +72,7 @@ class NeulandAPIClient {
             }),
         })
 
-        const json = await resp.json()
+        const json = (await resp.json()) as { data?: TResult; errors?: unknown }
 
         if (resp.ok && json.errors == null) {
             return json.data as TResult
@@ -116,10 +117,10 @@ class NeulandAPIClient {
      * Gets the map overlay
      * @returns {Promise<any>} A promise that resolves with the map overlay data
      */
-    async getMapOverlay(): Promise<any> {
-        return await this.performRequest(
+    async getMapOverlay(): Promise<FeatureCollection> {
+        return (await this.performRequest(
             `${ASSET_ENDPOINT}/rooms_neuland_v2.4.geojson`
-        )
+        )) as FeatureCollection
     }
 
     /**
@@ -127,9 +128,9 @@ class NeulandAPIClient {
      * @returns {Promise<SpoWeights>} A promise that resolves with the course spo data
      */
     async getSpoWeights(): Promise<SpoWeights> {
-        return await this.performRequest(
+        return (await this.performRequest(
             `${ASSET_ENDPOINT}/generated/spo-grade-weights.json`
-        )
+        )) as SpoWeights
     }
 }
 

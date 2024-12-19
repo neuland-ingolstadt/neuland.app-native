@@ -10,7 +10,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import BaseCard from './BaseCard'
 
-const LinkCard = (): JSX.Element => {
+const LinkCard = (): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
 

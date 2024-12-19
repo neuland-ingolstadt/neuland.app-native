@@ -1,18 +1,17 @@
 import CrashView from '@/components/Error/CrashView'
-import PlatformIcon from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform, Pressable } from 'react-native'
+import { AppState, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
@@ -31,8 +30,7 @@ export const unstable_settings = {
     initialRouteName: '/',
 }
 
-function RootLayout(): JSX.Element {
-    const router = useRouter()
+function RootLayout(): React.JSX.Element {
     const { t } = useTranslation(['navigation'])
     const isPad = DeviceInfo.isTablet()
     const savedLanguage = usePreferencesStore((state) => state.language)
@@ -195,7 +193,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -209,7 +211,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -311,7 +317,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -325,7 +335,11 @@ function RootLayout(): JSX.Element {
                             },
                         }),
                         headerRight: () => (
-                            <ShareHeaderButton onPress={() => {}} />
+                            <ShareHeaderButton
+                                onPress={() => {
+                                    /* do nothing yet */
+                                }}
+                            />
                         ),
                     }}
                 />
@@ -361,40 +375,6 @@ function RootLayout(): JSX.Element {
                                 presentation: 'modal',
                             },
                         }),
-                    }}
-                />
-                <Stack.Screen
-                    name="(screens)/library"
-                    options={{
-                        title: t('navigation.library'),
-
-                        headerRight: () => (
-                            <Pressable
-                                onPressOut={() => {
-                                    router.navigate('/libraryCode')
-                                }}
-                                accessibilityLabel={t('button.libraryBarcode', {
-                                    ns: 'accessibility',
-                                })}
-                                style={styles.icon}
-                            >
-                                <PlatformIcon
-                                    style={styles.headerTextStyle}
-                                    ios={{
-                                        name: 'barcode',
-                                        size: 22,
-                                    }}
-                                    android={{
-                                        name: 'barcode_scanner',
-                                        size: 24,
-                                    }}
-                                    web={{
-                                        name: 'Barcode',
-                                        size: 22,
-                                    }}
-                                />
-                            </Pressable>
-                        ),
                     }}
                 />
                 <Stack.Screen
@@ -449,7 +429,7 @@ function RootLayout(): JSX.Element {
     )
 }
 
-const ProviderComponent = (): JSX.Element => {
+const ProviderComponent = (): React.JSX.Element => {
     return (
         <Try catch={CrashView}>
             <Provider>
@@ -464,5 +444,4 @@ const stylesheet = createStyleSheet((theme) => ({
     background: { backgroundColor: theme.colors.background },
     headerBackground: { backgroundColor: theme.colors.card },
     headerTextStyle: { color: theme.colors.text },
-    icon: { marginEnd: Platform.OS === 'web' ? 14 : 0 },
 }))

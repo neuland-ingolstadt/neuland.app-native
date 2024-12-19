@@ -7,7 +7,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
-export function HeaderLeft(): JSX.Element {
+export function HeaderLeft(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const timetableMode = usePreferencesStore((state) => state.timetableMode)
     const setTimetableMode = usePreferencesStore(
@@ -57,7 +57,7 @@ interface HeaderRightProps {
     setToday: () => void
 }
 
-export function HeaderRight({ setToday }: HeaderRightProps): JSX.Element {
+export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation(['accessibility'])
     return (

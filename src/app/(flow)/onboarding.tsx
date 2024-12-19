@@ -34,7 +34,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function OnboardingScreen(): JSX.Element {
+export default function OnboardingScreen(): React.JSX.Element {
     const { t, i18n } = useTranslation('flow')
     const setOnboarded = useFlowStore((state) => state.setOnboarded)
     const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
@@ -73,7 +73,7 @@ export default function OnboardingScreen(): JSX.Element {
         },
     ]
 
-    const ContinueButton = (): JSX.Element => {
+    const ContinueButton = (): React.JSX.Element => {
         const { styles } = useStyles(stylesheet)
         return (
             <Pressable
@@ -111,7 +111,7 @@ export default function OnboardingScreen(): JSX.Element {
     const [isWhobbleDisabled, setWhobbleDisabled] = useState(true)
     const window = Dimensions.get('window')
 
-    const CardsElement = (): JSX.Element => {
+    const CardsElement = (): React.JSX.Element => {
         const { styles } = useStyles(stylesheet)
         return (
             <Animated.View style={[styles.boxesContainer, styles.boxes]}>
@@ -183,7 +183,7 @@ export default function OnboardingScreen(): JSX.Element {
         )
     }
 
-    const LegalArea = (): JSX.Element => {
+    const LegalArea = (): React.JSX.Element => {
         const legalAnimatedStyle = useAnimatedStyle(() => ({
             opacity: legalOpacity.value,
             transform: [{ translateY: legalTranslateY.value }],

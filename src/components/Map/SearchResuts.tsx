@@ -70,12 +70,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
     const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
         const results = fuse.search(localSearch.trim().toUpperCase())
         const roomResults = results.map((result) => ({
-            title: result.item.properties?.Raum,
-            subtitle: result.item.properties?.Funktion_en,
+            title: result.item.properties?.Raum as string,
+            subtitle: result.item.properties?.Funktion_en as string,
             isExactMatch: Boolean(
-                result.item.properties?.Raum.toUpperCase().includes(
-                    localSearch.toUpperCase()
-                )
+                (result.item.properties?.Raum as string)
+                    .toUpperCase()
+                    .includes(localSearch.toUpperCase())
             ),
             item: result.item,
         }))
@@ -123,7 +123,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
                       ]
                     : []),
             ]}
-            keyExtractor={(item, index) => item.title + index}
+            keyExtractor={(item, index) => `${item.title}${index}`}
             renderItem={({ item, index }) => (
                 <ResultRow
                     result={item}

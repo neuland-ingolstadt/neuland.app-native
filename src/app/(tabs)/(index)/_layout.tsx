@@ -14,7 +14,7 @@ export const unstable_settings = {
     initialRouteName: '/',
 }
 
-export default function Layout(): JSX.Element {
+export default function Layout(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     if (typeof window === 'undefined') return <Slot />
 

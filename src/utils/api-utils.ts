@@ -18,7 +18,7 @@ export const permissionError = '"Service for user-group not defined" (-120)'
  * @returns The trimmed error message string.
  */
 export const trimErrorMsg = (str: string): string => {
-    const match = str.match(/"([^"]*)"/)
+    const match = /"([^"]*)"/.exec(str)
     if (match !== null) {
         return match[1].trim()
     } else {
@@ -30,7 +30,7 @@ export const trimErrorMsg = (str: string): string => {
  * Gets the username of the user from the secure store.
  * @returns The username of the user.
  */
-export async function getUsername(): Promise<string> {
+export function getUsername(): string {
     let username = ''
     try {
         username = loadSecure('username') ?? ''

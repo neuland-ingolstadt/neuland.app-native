@@ -16,7 +16,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
 
-const CalendarCard = (): JSX.Element => {
+const CalendarCard = (): React.JSX.Element => {
     type Combined = Calendar | CardExams
     const router = useRouter()
     const time = new Date()

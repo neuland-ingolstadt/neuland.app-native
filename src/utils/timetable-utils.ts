@@ -5,8 +5,6 @@ import {
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
-import { type TFunction } from 'i18next'
-import { Alert, Linking } from 'react-native'
 
 import { combineDateTime } from './date-utils'
 
@@ -18,7 +16,7 @@ import { combineDateTime } from './date-utils'
  */
 export async function getFriendlyTimetable(
     date: Date,
-    detailed: boolean = false
+    detailed = false
 ): Promise<FriendlyTimetableEntry[]> {
     // if month is august or september, there are no lectures. Adjust the date to october
     if (date.getMonth() === 7 || date.getMonth() === 8) {
@@ -124,7 +122,7 @@ export function getGroupedTimetable(
     exams: Exam[]
 ): TimetableSections[] {
     const combinedData = [
-        ...timetable,
+        ...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
         ...exams.map((exam) => ({ ...exam, eventType: 'exam' })),
     ]
     const dates = [
@@ -160,29 +158,6 @@ export function convertTimetableToWeekViewEvents(
 }
 
 /**
- * Shows an alert to the user that they need to enable notifications.
- * @param t Translation function
- * @returns void
- */
-export function notificationAlert(t: TFunction<any>): void {
-    Alert.alert(
-        t('notification.permission.title', { ns: 'common' }),
-        t('notification.permission.description', { ns: 'common' }),
-        [
-            {
-                text: t('misc.cancel', { ns: 'common' }),
-            },
-            {
-                text: t('notification.permission.button', { ns: 'common' }),
-                onPress: () => {
-                    void Linking.openSettings()
-                },
-            },
-        ]
-    )
-}
-
-/**
  * Generate a key for a lecture to be used for the notification hashmap
  * @param lectureName
  * @param startDate
@@ -194,7 +169,7 @@ export function generateKey(
     startDate: Date | string,
     room: string
 ): string {
-    return `${lectureName}-${new Date(startDate).getTime()}-${room}`
+    return `${lectureName}-${new Date(startDate).getTime().toString()}-${room}`
 }
 
 // This function checks if a given room string is valid based on the following criteria:

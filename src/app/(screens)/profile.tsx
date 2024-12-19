@@ -31,7 +31,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Profile(): JSX.Element {
+export default function Profile(): React.JSX.Element {
     const router = useRouter()
     const { styles } = useStyles(stylesheet)
     const { toggleUserKind, userKind } = useContext(UserKindContext)
@@ -185,7 +185,7 @@ export default function Profile(): JSX.Element {
                         data?.pvers === 'k.A.'
                             ? t('misc.unknown', { ns: 'common' })
                             : data?.pvers,
-                    onPress: async () => {
+                    onPress: () => {
                         if (
                             data?.po_url !== undefined &&
                             data.po_url !== '' &&
@@ -203,7 +203,7 @@ export default function Profile(): JSX.Element {
                     title: t('profile.formlist.user.status'),
                     value:
                         data?.rue === '1'
-                            ? data?.rue_sem
+                            ? data.rue_sem
                             : t('profile.formlist.user.statusInactive'),
                 },
             ],
@@ -287,7 +287,7 @@ export default function Profile(): JSX.Element {
                     />
                 )}
                 {isSuccess &&
-                    (data?.mtknr !== undefined ? (
+                    (data.mtknr !== undefined ? (
                         <View style={styles.container}>
                             <FormList
                                 sections={sections}

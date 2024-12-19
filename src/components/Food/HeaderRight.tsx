@@ -6,7 +6,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
 
-export const FoodHeaderRight = (): JSX.Element => {
+export const FoodHeaderRight = (): React.JSX.Element => {
     const { t } = useTranslation(['accessibility'])
     const { styles } = useStyles(stylesheet)
     return (

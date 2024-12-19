@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { MapContext } from '@/contexts/map'
-import { type SearchResult } from '@/types/map'
+import { SEARCH_TYPES, type SearchResult } from '@/types/map'
+import { MaterialIcon } from '@/types/material-icons'
 import { getContrastColor } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { type Position } from 'geojson'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -20,7 +23,7 @@ const ResultRow: React.FC<{
     index,
     handlePresentModalPress,
     updateSearchHistory,
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { setClickedElement, setLocalSearch, setCurrentFloor } =
         useContext(MapContext)
     const { styles } = useStyles(stylesheet)
@@ -31,11 +34,13 @@ const ResultRow: React.FC<{
             key={index}
             style={styles.searchRowContainer}
             onPressOut={() => {
-                const center = result.item.properties?.center
+                const center = result.item.properties?.center as
+                    | Position
+                    | undefined
                 updateSearchHistory(result)
                 setClickedElement({
                     data: result.title,
-                    type: result.item.properties?.rtype,
+                    type: result.item.properties?.rtype as SEARCH_TYPES,
                     center,
                     manual: false,
                 })
@@ -54,12 +59,17 @@ const ResultRow: React.FC<{
             <View style={styles.searchIconContainer}>
                 <PlatformIcon
                     ios={{
-                        name: result.item.properties?.icon.ios,
+                        name: result.item.properties?.icon.ios as string,
                         size: 18,
                     }}
                     android={{
-                        name: result.item.properties?.icon.android,
+                        name: result.item.properties?.icon
+                            .android as MaterialIcon,
                         variant: 'outlined',
+                        size: 21,
+                    }}
+                    web={{
+                        name: 'MapPin',
                         size: 21,
                     }}
                     style={styles.icon}

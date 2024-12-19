@@ -26,7 +26,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function CalendarPage(): JSX.Element {
+export default function CalendarPage(): React.JSX.Element {
     const { userKind = USER_GUEST } = React.useContext(UserKindContext)
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
@@ -73,7 +73,7 @@ export default function CalendarPage(): JSX.Element {
     const scrollY = new Animated.Value(0)
     const pages = ['events', 'exams']
 
-    const CalendarFooter = (): JSX.Element => {
+    const CalendarFooter = (): React.JSX.Element => {
         return (
             <View style={styles.footerContainer}>
                 <Text style={styles.footerText1}>
@@ -131,18 +131,16 @@ export default function CalendarPage(): JSX.Element {
                 {/* Page 1: Events */}
                 <ScrollView
                     contentContainerStyle={styles.itemsContainer}
-                    onScroll={
-                        Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: { y: scrollY },
-                                    },
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: { y: scrollY },
                                 },
-                            ],
-                            { useNativeDriver: false }
-                        ) as any
-                    }
+                            },
+                        ],
+                        { useNativeDriver: false }
+                    )}
                     scrollEventThrottle={16}
                 >
                     <View style={styles.contentBorder}>
@@ -163,18 +161,16 @@ export default function CalendarPage(): JSX.Element {
 
                 <ScrollView
                     contentContainerStyle={styles.itemsContainer}
-                    onScroll={
-                        Animated.event(
-                            [
-                                {
-                                    nativeEvent: {
-                                        contentOffset: { y: scrollY },
-                                    },
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: { y: scrollY },
                                 },
-                            ],
-                            { useNativeDriver: false }
-                        ) as any
-                    }
+                            },
+                        ],
+                        { useNativeDriver: false }
+                    )}
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefetchingByUser}

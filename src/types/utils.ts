@@ -12,6 +12,10 @@ export interface Exam {
     aids: string[]
 }
 
+export interface ExamEntry extends Exam {
+    eventType: 'exam'
+}
+
 export interface FriendlyDateOptions {
     weekday?: 'short' | 'long'
     relative?: boolean
@@ -32,12 +36,12 @@ export interface Prices {
 }
 
 export interface GradeAverage {
-    entries: Array<{
+    entries: {
         simpleName: string
         name: string
         weight: number | null
         grade: number | null
-    }>
+    }[]
     result: number
     resultMin: number
     resultMax: number
@@ -74,6 +78,9 @@ export interface FriendlyTimetableEntry {
     literature: string | null
 }
 
+export interface TimetableEntry extends FriendlyTimetableEntry {
+    eventType: 'timetable'
+}
 export interface CalendarTimetableEntry extends FriendlyTimetableEntry {
     eventType: string
     color: string
@@ -92,7 +99,7 @@ export interface ExamTimetableEntry extends Exam {
 
 export interface TimetableSections {
     title: Date
-    data: FriendlyTimetableEntry[] | Exam[]
+    data: TimetableEntry[] | ExamEntry[]
 }
 
 export interface CalendarEvent {

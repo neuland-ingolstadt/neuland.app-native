@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function SportsEventDetail(): JSX.Element {
+export default function SportsEventDetail(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
 
     const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)

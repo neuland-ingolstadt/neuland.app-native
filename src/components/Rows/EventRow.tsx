@@ -18,7 +18,7 @@ const CLEventRow = ({
     event,
 }: {
     event: CampusLifeEventFieldsFragment
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const setSelectedClEvent = useCLParamsStore(
         (state) => state.setSelectedClEvent

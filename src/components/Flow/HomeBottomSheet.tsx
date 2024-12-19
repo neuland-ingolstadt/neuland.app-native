@@ -3,7 +3,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export const HomeBottomSheet = (): JSX.Element => {
+export const HomeBottomSheet = (): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <BottomSheetView style={styles.contentContainer}>

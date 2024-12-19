@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-const OnboardingBox = ({ title }: { title: string }): JSX.Element => {
+const OnboardingBox = ({ title }: { title: string }): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
 
     return (

@@ -2,7 +2,7 @@ import { type MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { FileWarning, icons } from 'lucide-react-native'
 import React from 'react'
-import { Platform, Text } from 'react-native'
+import { Platform, Text, TextStyle, ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import { type SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
@@ -42,7 +42,7 @@ interface PlatformIconProps {
         name: LucideIcon
         size: number
     }
-    style?: any
+    style?: TextStyle
 }
 
 export const lucidErrorIcon = {
@@ -68,20 +68,20 @@ const PlatformIcon = ({
     ios,
     web,
     style,
-}: PlatformIconProps): JSX.Element => {
+}: PlatformIconProps): React.JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
 
     const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />
 
     if (Platform.OS === 'web') {
         if (web != null) {
-            const LucideIcon = icons[web?.name]
+            const LucideIcon = icons[web.name]
 
             return (
                 <LucideIcon
                     size={web.size}
                     color={style?.color ?? theme.colors.primary}
-                    style={style}
+                    style={style as ViewStyle}
                 />
             )
         } else {
@@ -90,9 +90,7 @@ const PlatformIcon = ({
     } else if (Platform.OS === 'ios') {
         return (ios.fallback ?? false) ? (
             <MaterialCommunityIcons
-                name={
-                    ios.name as typeof MaterialCommunityIcons.defaultProps.name
-                }
+                name={ios.name as keyof typeof MaterialCommunityIcons.glyphMap}
                 size={ios.size}
                 color={style?.color ?? theme.colors.primary}
                 style={{
@@ -113,8 +111,8 @@ const PlatformIcon = ({
                         : []),
                 ]}
                 weight={ios.weight ?? 'regular'}
-                style={style}
-                variant={ios.variant as any}
+                style={style as ViewStyle}
+                variant={ios.variant as never}
                 variableValue={ios.variableValue}
                 renderingMode={ios.renderMode}
             />
@@ -135,7 +133,9 @@ const PlatformIcon = ({
             >
                 {communityIcons.includes(android.name) ? (
                     <MaterialCommunityIcons
-                        name={android.name as any}
+                        name={
+                            android.name as keyof typeof MaterialCommunityIcons.glyphMap
+                        }
                         size={android.size}
                         color={style?.color ?? theme.colors.primary}
                         style={{ ...styles.communityIcon, ...style }}
@@ -154,7 +154,7 @@ const communityIcons: string[] = ['instagram', 'github']
 
 export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
     androidIcon: {
         paddingTop: 3,
     },

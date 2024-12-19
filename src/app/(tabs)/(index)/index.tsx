@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function HomeRootScreen(): JSX.Element {
+export default function HomeRootScreen(): React.JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)
@@ -44,7 +44,7 @@ export default function HomeRootScreen(): JSX.Element {
     )
 }
 
-function HomeScreen(): JSX.Element {
+function HomeScreen(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const { shownDashboardEntries } = React.useContext(DashboardContext)
     const [orientation, setOrientation] = useState(

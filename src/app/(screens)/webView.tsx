@@ -8,7 +8,7 @@ import sanitizeHtml from 'sanitize-html'
 
 const PADDING = 4
 
-export default function NotesDetails(): JSX.Element {
+export default function NotesDetails(): React.JSX.Element {
     const navigation = useNavigation()
     const { title, html } = useLocalSearchParams<{
         title: string
@@ -43,7 +43,7 @@ export default function NotesDetails(): JSX.Element {
             <WebView
                 source={{ html: styledHtml }}
                 scalesPageToFit
-                onLoadEnd={(e) => {
+                onLoadEnd={() => {
                     if (!loaded) {
                         setLoaded(true)
                     }

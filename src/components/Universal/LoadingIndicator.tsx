@@ -6,7 +6,9 @@ interface LoadingIndicatorProps {
     style?: ViewStyle
 }
 
-const LoadingIndicator = ({ style }: LoadingIndicatorProps): JSX.Element => {
+const LoadingIndicator = ({
+    style,
+}: LoadingIndicatorProps): React.JSX.Element => {
     const { theme } = useStyles()
     return (
         <ActivityIndicator

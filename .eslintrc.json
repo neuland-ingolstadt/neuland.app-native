@@ -5,23 +5,25 @@
     },
     "extends": [
         "eslint:recommended",
-        "standard-with-typescript",
+        "plugin:@typescript-eslint/strict",
+        "plugin:@typescript-eslint/stylistic",
         "plugin:react/recommended",
         "prettier"
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
         "project": "**/tsconfig.json",
-        "tsconfigRootDir": "./",
-        "noUnusedLocals": true
+        "tsconfigRootDir": "./"
     },
     "plugins": [
         "react",
         "react-native",
         "i18next",
         "react-hooks",
-        "react-native-unistyles"
+        "react-native-unistyles",
+        "@typescript-eslint"
     ],
     "settings": {
         "react": {

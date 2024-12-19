@@ -4,35 +4,61 @@ import { createContext } from 'react'
 
 interface MapContextType {
     localSearch: string
-    setLocalSearch: (_: string) => void
+    setLocalSearch: (value: string) => void
     clickedElement: ClickedMapElement | null
-    setClickedElement: (_: ClickedMapElement | null) => void
+    setClickedElement: (value: ClickedMapElement | null) => void
     availableRooms: AvailableRoom[] | null
-    setAvailableRooms: (_: AvailableRoom[] | null) => void
+    setAvailableRooms: (value: AvailableRoom[] | null) => void
     nextLecture: FriendlyTimetableEntry[] | null
-    setNextLecture: (_: FriendlyTimetableEntry[] | null) => void
+    setNextLecture: (value: FriendlyTimetableEntry[] | null) => void
     currentFloor: { floor: string; manual: boolean } | null
-    setCurrentFloor: (_: { floor: string; manual: boolean }) => void
+    setCurrentFloor: (value: { floor: string; manual: boolean }) => void
     searchHistory: SearchResult[]
-    updateSearchHistory: (_: SearchResult[]) => void
+    updateSearchHistory: (value: SearchResult[]) => void
+}
+interface MapContextType {
+    localSearch: string
+    setLocalSearch: (value: string) => void
+    clickedElement: ClickedMapElement | null
+    setClickedElement: (value: ClickedMapElement | null) => void
+    availableRooms: AvailableRoom[] | null
+    setAvailableRooms: (value: AvailableRoom[] | null) => void
+    nextLecture: FriendlyTimetableEntry[] | null
+    setNextLecture: (value: FriendlyTimetableEntry[] | null) => void
+    currentFloor: { floor: string; manual: boolean } | null
+    setCurrentFloor: (value: { floor: string; manual: boolean }) => void
+    searchHistory: SearchResult[]
+    updateSearchHistory: (value: SearchResult[]) => void
 }
 
 export const MapContext = createContext<MapContextType>({
     localSearch: '',
-    setLocalSearch: (_: string) => {},
+    setLocalSearch: () => {
+        throw new Error('setLocalSearch must be overridden')
+    },
 
     clickedElement: null,
-    setClickedElement: (_: ClickedMapElement | null) => {},
+    setClickedElement: () => {
+        throw new Error('setClickedElement must be overridden')
+    },
 
     availableRooms: null,
-    setAvailableRooms: (_: AvailableRoom[] | null) => {},
+    setAvailableRooms: () => {
+        throw new Error('setAvailableRooms must be overridden')
+    },
 
     currentFloor: null,
-    setCurrentFloor: (_: { floor: string; manual: boolean }) => {},
+    setCurrentFloor: () => {
+        throw new Error('setCurrentFloor must be overridden')
+    },
 
     nextLecture: null,
-    setNextLecture: (_: FriendlyTimetableEntry[] | null) => {},
+    setNextLecture: () => {
+        throw new Error('setNextLecture must be overridden')
+    },
 
     searchHistory: [],
-    updateSearchHistory: (_: SearchResult[]) => {},
+    updateSearchHistory: () => {
+        throw new Error('updateSearchHistory must be overridden')
+    },
 })

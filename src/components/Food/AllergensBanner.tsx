@@ -12,7 +12,7 @@ export const AllergensBanner = ({
     scrollY,
 }: {
     scrollY: Animated.Value
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { t } = useTranslation('common')
     const initAllergenSelection = useFoodFilterStore(
         (state) => state.initAllergenSelection

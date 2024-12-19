@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { MapContext } from '@/contexts/map'
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import Color from 'color'
@@ -42,6 +45,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     const { localSearch, setLocalSearch, searchHistory } =
         useContext(MapContext)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const textInputRef = useRef<any>(null)
     const [searchFocused, setSearchFocused] = React.useState(false)
     const cancelWidth = useSharedValue(0)
@@ -70,7 +74,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             keyboardBehavior="extend"
             onChange={(index) => {
                 if (index <= 1) {
-                    localSearch !== '' && setLocalSearch('')
+                    if (localSearch !== '') {
+                        setLocalSearch('')
+                    }
                     textInputRef.current?.blur()
                 }
             }}

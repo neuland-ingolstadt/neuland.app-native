@@ -25,7 +25,7 @@ Find **available rooms**, view buildings or explore the university campus. Use o
 
 ### Library
 
-**Reserve a seat** directly from the app, or use your library ID to check out and return books at the terminals.
+Use your **virtual library ID** to check out at the terminals to borrow and return books. Or book a **workplace** via the link in the app.
 
 ### Quick Links
 

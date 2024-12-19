@@ -15,7 +15,7 @@ const SportsRow = ({
     event,
 }: {
     event: UniversitySportsFieldsFragment
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
     const setSelectedSportsEvent = useCLParamsStore(
         (state) => state.setSelectedSportsEvent

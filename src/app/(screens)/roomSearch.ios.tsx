@@ -45,7 +45,7 @@ const DURATIONS = [
 
 const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
-export default function AdvancedSearch(): JSX.Element {
+export default function AdvancedSearch(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const router = useRouter()
     const { t } = useTranslation('common')
@@ -96,7 +96,7 @@ export default function AdvancedSearch(): JSX.Element {
     const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
 
     useEffect(() => {
-        const fetchRooms = async (): Promise<void> => {
+        const fetchRooms = (): void => {
             try {
                 const validateDate = new Date(date)
                 if (isNaN(validateDate.getTime())) {
@@ -106,7 +106,7 @@ export default function AdvancedSearch(): JSX.Element {
                     return
                 }
 
-                const rooms = await filterRooms(
+                const rooms = filterRooms(
                     data,
                     date,
                     time,
@@ -127,7 +127,7 @@ export default function AdvancedSearch(): JSX.Element {
 
         setFilterState(LoadingState.LOADING)
         setTimeout(() => {
-            void fetchRooms()
+            fetchRooms()
         })
     }, [date, time, building.value, duration.value, data])
 
@@ -228,6 +228,10 @@ export default function AdvancedSearch(): JSX.Element {
                                     }}
                                     android={{
                                         name: 'update',
+                                        size: 20,
+                                    }}
+                                    web={{
+                                        name: 'Sparkles',
                                         size: 20,
                                     }}
                                 />

@@ -1,9 +1,4 @@
-import {
-    type Feature,
-    type GeoJsonProperties,
-    type Geometry,
-    type Position,
-} from 'geojson'
+import { type Feature, type GeoJsonProperties, type Position } from 'geojson'
 
 import { type AvailableRoom } from './utils'
 
@@ -15,8 +10,8 @@ export enum SEARCH_TYPES {
 export interface RoomData {
     title: string
     subtitle: string
-    properties: GeoJsonProperties
-    occupancies: AvailableRoom | BuildingOccupancy
+    properties: GeoJsonProperties | undefined
+    occupancies: AvailableRoom | BuildingOccupancy | null
     type: SEARCH_TYPES
 }
 
@@ -35,5 +30,5 @@ export interface SearchResult {
     title: string
     subtitle: string
     isExactMatch?: boolean
-    item: Feature<Geometry, GeoJsonProperties>
+    item: Feature
 }

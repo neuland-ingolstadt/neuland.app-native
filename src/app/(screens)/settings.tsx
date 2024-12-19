@@ -53,7 +53,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Settings(): JSX.Element {
+export default function Settings(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const { userKind = USER_GUEST } =
         useContext<UserKindContextType>(UserKindContext)

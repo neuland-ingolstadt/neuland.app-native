@@ -42,6 +42,6 @@ features:
     link: /en/app/features#campus-map
   - title: Library
     icon: 📚
-    details: Reserve a seat directly from the app, or use your library ID to check out at the terminals.
+    details: Use your virtual library ID to check out at the terminals to borrow and return books.
     link: /en/app/features#library
 ---

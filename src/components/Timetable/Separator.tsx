@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function Separator(): JSX.Element {
+export default function Separator(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     return <View style={styles.separator} />

@@ -4,7 +4,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function Theme(): JSX.Element {
+export default function Theme(): React.JSX.Element {
     const theme = usePreferencesStore((state) => state.theme)
     const setTheme = usePreferencesStore((state) => state.setTheme)
     const { t } = useTranslation(['settings'])

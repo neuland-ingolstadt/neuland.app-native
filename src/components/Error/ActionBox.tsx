@@ -11,7 +11,7 @@ export default function StatusBox({
 }: {
     error: Error
     crash: boolean
-}): JSX.Element {
+}): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     return (

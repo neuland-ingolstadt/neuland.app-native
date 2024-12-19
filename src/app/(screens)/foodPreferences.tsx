@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function FoodPreferences(): JSX.Element {
+export default function FoodPreferences(): React.JSX.Element {
     const { t } = useTranslation('food')
     const elemtents = [
         {

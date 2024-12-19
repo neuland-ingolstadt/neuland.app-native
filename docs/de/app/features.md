@@ -26,7 +26,8 @@ Finde **verfügbare Räume**, checke Gebäude oder erkunde den Campus. Nutze uns
 
 ### Bibliothek
 
-**Reserviere einen Platz** direkt in der App oder nutze deine Bibliotheks-ID, um Bücher an den Terminals auszuleihen und zurückzugeben.
+Nutze deine **virtuelle Bibliotheks-ID**, um Bücher an den Terminals auszuleihen und zurückzugeben.
+Oder buche einen **Arbeitsplatz** über den Link in der App.
 
 ### Quick Links
 

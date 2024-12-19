@@ -6,7 +6,7 @@ import Head from 'expo-router/head'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function FoodRootScreen(): JSX.Element {
+export default function FoodRootScreen(): React.JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     const { t } = useTranslation('navigation')
     const navigation = useNavigation()

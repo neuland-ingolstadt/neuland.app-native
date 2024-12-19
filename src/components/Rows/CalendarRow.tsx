@@ -17,7 +17,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const CalendarRow = ({ event }: { event: Calendar }): JSX.Element => {
+const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
     const { t, i18n } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
     return (
@@ -55,7 +55,7 @@ const CalendarRow = ({ event }: { event: Calendar }): JSX.Element => {
     )
 }
 
-const ExamRow = ({ event }: { event: Exam }): JSX.Element => {
+const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
     const setExam = useRouteParamsStore((state) => state.setSelectedExam)
     const { styles } = useStyles(stylesheet)
 

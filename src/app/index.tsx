@@ -3,7 +3,7 @@ import Head from 'expo-router/head'
 import React from 'react'
 import { StyleSheet, View, useColorScheme } from 'react-native'
 
-export default function App(): JSX.Element {
+export default function App(): React.JSX.Element {
     // This initial page is only used to redirect to the actual app
     // This helps to avoid weird layout issues on Android where the tab bar is not displayed correctly
     const colorScheme = useColorScheme()

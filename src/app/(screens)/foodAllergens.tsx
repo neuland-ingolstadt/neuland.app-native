@@ -2,7 +2,7 @@ import ItemsPickerScreen from '@/components/Food/ItemsPickerScreen'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import React from 'react'
 
-export default function Screen(): JSX.Element {
+export default function Screen(): React.JSX.Element {
     return (
         <WorkaroundStack
             name={'Allergens'}

@@ -79,7 +79,7 @@ const TimetableCard: React.FC = () => {
         event: FriendlyTimetableEntry,
         index: number,
         currentTime: Date
-    ): JSX.Element => {
+    ): React.JSX.Element => {
         const isSoon =
             event.startDate > currentTime &&
             new Date(event.startDate) <=

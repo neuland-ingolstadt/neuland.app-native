@@ -39,13 +39,25 @@ const Divider: FC<DividerProps> = ({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-    container: ({ position, iosPaddingLeft }) => ({
+    container: ({
+        position,
+        iosPaddingLeft,
+    }: {
+        position?: FlexAlignType
+        iosPaddingLeft?: number
+    }) => ({
         width: '100%',
         alignSelf:
             position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
         paddingLeft: Platform.OS === 'android' ? 0 : (iosPaddingLeft ?? 0),
     }),
-    line: ({ width, color }) => ({
+    line: ({
+        width,
+        color,
+    }: {
+        width?: DimensionValue
+        color?: ColorValue
+    }) => ({
         width: width ?? '100%',
         borderBottomColor: color ?? theme.colors.labelTertiaryColor,
         borderBottomWidth:

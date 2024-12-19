@@ -54,7 +54,7 @@ const NewsCard: React.FC = () => {
         }
     }, [updateWidth])
 
-    const renderEvent = (event: ThiNews): JSX.Element => {
+    const renderEvent = (event: ThiNews): React.JSX.Element => {
         return (
             <Pressable
                 style={styles.eventContainer}

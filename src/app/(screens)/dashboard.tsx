@@ -26,7 +26,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const { width } = Dimensions.get('window')
 
-export default function DashboardEdit(): JSX.Element {
+export default function DashboardEdit(): React.JSX.Element {
     const childrenHeight = 48
 
     const {
@@ -47,7 +47,7 @@ export default function DashboardEdit(): JSX.Element {
         useState<Card[]>([])
 
     // add translation to shownDashboardEntries with new key transText
-    const transShownDashboardEntries = shownDashboardEntries?.map((item) => {
+    const transShownDashboardEntries = shownDashboardEntries.map((item) => {
         return {
             ...item,
             // @ts-expect-error cannot verify the type
@@ -80,13 +80,13 @@ export default function DashboardEdit(): JSX.Element {
         )
     }, [hiddenDashboardEntries, userKind, unavailableCards])
 
-    const renderItem = (params: ExtendedCard): JSX.Element => {
+    const renderItem = (params: ExtendedCard): React.JSX.Element => {
         const onPressDelete = (): void => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
             hideDashboardEntry(params.key)
         }
         const isLast =
-            shownDashboardEntries?.[shownDashboardEntries.length - 1].key ===
+            shownDashboardEntries[shownDashboardEntries.length - 1].key ===
             params.key
 
         return (
@@ -96,7 +96,7 @@ export default function DashboardEdit(): JSX.Element {
                 isLast={isLast}
                 isDragged={
                     draggedId !== null &&
-                    draggedId === transShownDashboardEntries?.indexOf(params)
+                    draggedId === transShownDashboardEntries.indexOf(params)
                 }
             />
         )
@@ -111,7 +111,7 @@ export default function DashboardEdit(): JSX.Element {
     )
 
     const handleReset = useCallback(() => {
-        resetOrder(userKind ?? 'guest')
+        resetOrder(userKind)
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         if (Platform.OS === 'ios') {
             void Haptics.notificationAsync(
@@ -133,14 +133,14 @@ export default function DashboardEdit(): JSX.Element {
                 defaultHidden,
                 // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                 hiddenDashboardEntries
-                    ?.filter(Boolean)
+                    .filter(Boolean)
                     .map((item) => item.key) || []
             ) &&
                 arraysEqual(
                     defaultShown,
                     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                     shownDashboardEntries
-                        ?.filter(Boolean)
+                        .filter(Boolean)
                         .map((item) => item.key) || []
                 )
         )
@@ -206,7 +206,7 @@ export default function DashboardEdit(): JSX.Element {
                             {t('dashboard.shown')}
                         </Text>
                         <View style={[styles.card, styles.shownBg]}>
-                            {shownDashboardEntries?.length === 0 ? (
+                            {shownDashboardEntries.length === 0 ? (
                                 <View
                                     style={{
                                         height: childrenHeight * 1.5,
@@ -221,7 +221,10 @@ export default function DashboardEdit(): JSX.Element {
                             ) : (
                                 <View style={styles.outer}>
                                     <DragSortableView
-                                        keyExtractor={(item) => item.key}
+                                        keyExtractor={(item) =>
+                                            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                            item.key as string
+                                        }
                                         dataSource={
                                             transShownDashboardEntries ?? []
                                         }
@@ -253,7 +256,7 @@ export default function DashboardEdit(): JSX.Element {
                                             })
                                         }}
                                         onDragging={(
-                                            _gestureState: any,
+                                            _gestureState: unknown,
                                             _left: number,
                                             _top: number,
                                             moveToIndex: number
@@ -325,20 +328,20 @@ export default function DashboardEdit(): JSX.Element {
                                                         ios={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
-                                                            ]?.ios,
+                                                            ].ios,
                                                             size: 17,
                                                         }}
                                                         android={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
-                                                            ]?.android,
+                                                            ].android,
                                                             size: 21,
                                                             variant: 'outlined',
                                                         }}
                                                         web={{
                                                             name: cardIcons[
                                                                 item.key as keyof typeof cardIcons
-                                                            ]?.web,
+                                                            ].web,
                                                             size: 21,
                                                         }}
                                                     />
@@ -430,7 +433,7 @@ function RowItem({
     onPressDelete,
     isLast,
     isDragged,
-}: RowItemProps): JSX.Element {
+}: RowItemProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const bottomWidth = isLast || isDragged ? 0 : 1
 
@@ -450,23 +453,21 @@ function RowItem({
                     ios={{
                         name: isDragged
                             ? 'line.3.horizontal'
-                            : cardIcons[item.key as keyof typeof cardIcons]
-                                  ?.ios,
+                            : cardIcons[item.key as keyof typeof cardIcons].ios,
                         size: 17,
                     }}
                     android={{
                         name: isDragged
                             ? 'drag_handle'
                             : cardIcons[item.key as keyof typeof cardIcons]
-                                  ?.android,
+                                  .android,
                         size: 21,
                         variant: 'outlined',
                     }}
                     web={{
                         name: isDragged
                             ? 'GripHorizontal'
-                            : cardIcons[item.key as keyof typeof cardIcons]
-                                  ?.web,
+                            : cardIcons[item.key as keyof typeof cardIcons].web,
                         size: 21,
                     }}
                 />

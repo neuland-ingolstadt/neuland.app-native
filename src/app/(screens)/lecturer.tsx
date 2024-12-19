@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function LecturerDetail(): JSX.Element {
+export default function LecturerDetail(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
     const { t } = useTranslation('common')

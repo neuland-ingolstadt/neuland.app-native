@@ -41,6 +41,6 @@ features:
     link: /app/features#campusplan
   - title: Bibliothek
     icon: 📚
-    details: Reserviere einen Platz direkt in der App oder nutze deinen Bibliotheksausweis, um Bücher an den Terminals auszuleihen.
+    details: Nutze deine virtuelle Bibliotheks-ID, um Bücher an den Terminals auszuleihen und zurückzugeben.
     link: /app/features#bibliothek
 ---

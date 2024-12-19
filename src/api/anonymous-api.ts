@@ -1,8 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Platform } from 'react-native'
 
 import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST: string = 'hiplan.thi.de'
+const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -14,7 +21,7 @@ export class APIError extends Error {
     public data: object
 
     constructor(status: number, data: object) {
-        super(`${JSON.stringify(data)} (${status})`)
+        super(`${JSON.stringify(data)} (${status.toString()})`)
         this.status = status
         this.data = data
     }
@@ -50,7 +57,7 @@ export class AnonymousAPIClient {
 
         try {
             return await resp.json()
-        } catch (e) {
+        } catch {
             throw new Error(`Response is not valid JSON (${await resp.text()})`)
         }
     }

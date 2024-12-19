@@ -21,7 +21,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function NewsScreen(): JSX.Element {
+export default function NewsScreen(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
         useQuery({

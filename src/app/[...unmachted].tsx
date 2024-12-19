@@ -4,7 +4,7 @@ import { router, useNavigation, usePathname } from 'expo-router'
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function Unmatched(): JSX.Element {
+export default function Unmatched(): React.JSX.Element {
     const navigation = useNavigation()
     const cleanedPathname = usePathname().replace('/', '')
     const pathname =

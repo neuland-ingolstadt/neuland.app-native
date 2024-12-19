@@ -6,6 +6,7 @@ import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import { type FeatureCollection } from 'geojson'
+import { type Position } from 'geojson'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
@@ -95,18 +96,20 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                                         return
                                     }
 
-                                    const etage = details?.properties?.Ebene
+                                    const etage = details?.properties?.Ebene as
+                                        | string
+                                        | undefined
 
                                     setCurrentFloor({
-                                        floor: (etage as string) ?? 'EG',
+                                        floor: etage ?? 'EG',
                                         manual: false,
                                     })
                                     setClickedElement({
                                         data: room.room,
                                         type: SEARCH_TYPES.ROOM,
-                                        center:
-                                            details?.properties?.center ??
-                                            undefined,
+                                        center: details?.properties?.center as
+                                            | Position
+                                            | undefined,
                                         manual: false,
                                     })
                                     trackEvent('Room', {

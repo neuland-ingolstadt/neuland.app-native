@@ -5,7 +5,7 @@ export default function DetailsSymbol({
     children,
 }: {
     children: JSX.Element
-}): JSX.Element {
+}): React.JSX.Element {
     return <View style={styles.detailsSymbol}>{children}</View>
 }
 

@@ -2100,7 +2100,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (14.0.1):
+  - RNDeviceInfo (14.0.2):
     - React-Core
   - RNFlashList (1.7.1):
     - DoubleConversion
@@ -2808,7 +2808,7 @@ SPEC CHECKSUMS:
   ReactCommon: 858d61cce81635d57be89348568b603e838b3cac
   rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da
-  RNDeviceInfo: 825f0d2f4381327317f12d1522720a8f76e6a19e
+  RNDeviceInfo: 3f2e5fcca3637f75c6d30ba287293c2f97206781
   RNFlashList: b85e7b9e77c3b6d9169f88d60ed6dca0a479a822
   RNGestureHandler: 598e45cedb905b157e9764acbef0b5e365693451
   RNReanimated: c1e1a4cfb360c774af62b1e45f5cd03e49394ad0
