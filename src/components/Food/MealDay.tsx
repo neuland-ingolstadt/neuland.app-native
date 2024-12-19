@@ -107,6 +107,8 @@ export const MealDay = ({
     day: Food
     index: number
 }): React.JSX.Element => {
+    const { styles } = useStyles(stylesheet)
+
     /**
      * Filters an array of meals by restaurant name.
      * @param meals - An array of meals.
@@ -159,8 +161,6 @@ export const MealDay = ({
         restaurantName: string
         meals: Meal[]
         groupedMeals: Record<string, Meal[]>
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        styles: any
     }
 
     /**
@@ -174,13 +174,11 @@ export const MealDay = ({
         restaurantName,
         meals,
         groupedMeals,
-        styles,
     }: RestaurantProps): React.JSX.Element | null => {
         if (meals.length > 0) {
             return (
                 <View>
-                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access*/}
-                    <Text style={styles.dayRestaurantTitles}>
+                    <Text style={styles.dayRestaurantTitle}>
                         {restaurantName}
                     </Text>
                     <MealGroup group={groupedMeals} />
@@ -190,7 +188,6 @@ export const MealDay = ({
         return null
     }
     const { t } = useTranslation('food')
-    const { styles } = useStyles(stylesheet)
     return isEmpty ? (
         <>
             <View style={styles.emptyContainer}>
@@ -203,25 +200,21 @@ export const MealDay = ({
                 restaurantName: 'Mensa Ingolstadt',
                 meals: ingolstadtMensa,
                 groupedMeals: ingolstadtMensaGrouped,
-                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Theke Neuburg',
                 meals: neuburgMensa,
                 groupedMeals: neuburgMensaGrouped,
-                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Reimanns',
                 meals: reimanns,
                 groupedMeals: reimannsGrouped,
-                styles,
             })}
             {renderRestaurantView({
                 restaurantName: 'Canisius Konvikt',
                 meals: canisius,
                 groupedMeals: canisiusGrouped,
-                styles,
             })}
         </View>
     )
@@ -241,7 +234,6 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 15,
         fontWeight: '500',
     },
-    // eslint-disable-next-line react-native-unistyles/no-unused-styles
     dayRestaurantTitle: {
         color: theme.colors.text,
         fontSize: 18,
