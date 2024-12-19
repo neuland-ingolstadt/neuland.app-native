@@ -2,13 +2,17 @@ export interface APIResponse {
     date: string
     time: string
     status: number
-    data: any[]
+    data: unknown[]
 }
 
 export interface Announcements {
     date: Date
     title: string
     announcement: string
+}
+
+export interface TypeStunde extends Stunde {
+    type: Raumtyp
 }
 
 export interface SessionClose {
@@ -22,7 +26,7 @@ export interface SessionCreate {
     date: string
     time: string
     status: number
-    data: Array<number | string>
+    data: (number | string)[]
 }
 
 export interface Exams {
@@ -57,7 +61,7 @@ export interface Jobs {
     date: string
     time: string
     status: number
-    data: Array<number | string>
+    data: (number | string)[]
 }
 
 export interface Lecturers {
@@ -141,7 +145,14 @@ export interface Rooms {
 
 export interface Rtype {
     raumtyp: Raumtyp
-    stunden: Stunden
+    stunden: Stunde[]
+}
+
+export interface Stunde {
+    type: Raumtyp
+    raeume: [string, string, number, number][]
+    von: string
+    bis: string
 }
 
 export enum Raumtyp {
@@ -149,8 +160,6 @@ export enum Raumtyp {
     PCPool = 'PC-Pool',
     Seminarraum40Plätze = 'Seminarraum (< 40 Plätze)',
 }
-
-export type Stunden = Record<number, RoomsStatus[]>
 
 export interface RoomsStatus {
     von: Date
@@ -184,12 +193,12 @@ export interface ThiWebinfo {
     date: string
     time: string
     status: number
-    data: Array<string[] | number>
+    data: (string[] | number)[]
 }
 
 export interface TimetableResponse {
-    semester: any[] // TODO: Add type
-    holidays: any[] // TODO: Add type
+    semester: unknown[] // TODO: Add type
+    holidays: unknown[] // TODO: Add type
     timetable: Timetable[]
 }
 
@@ -220,45 +229,4 @@ export interface Details {
     ziel: null | string
     inhalt: null | string
     literatur: null | string
-}
-
-export interface AvailableLibrarySeats {
-    date: string
-    reservationCount?: number
-    resource: AvailableRoomItem[]
-}
-
-export interface AvailableRoomItem {
-    hasReservation: boolean
-    from: Date
-    to: Date
-    resources: Record<string, AvailableRoom>
-}
-
-export interface AvailableRoom {
-    room_name: string
-    seats: string[] | Record<string, string>
-    num_seats: number
-    maxnum_seats: number
-}
-
-export enum RoomName {
-    LesesaalGalerie = 'Lesesaal Galerie',
-    LesesaalNordAlteBibliothek = 'Lesesaal Nord (alte Bibliothek)',
-    LesesaalSüdNeueBibliothek = 'Lesesaal Süd (neue Bibliothek)',
-}
-
-export interface Reservation {
-    deleted: string
-    end: Date
-    rcategory: string
-    reservation_begin: string
-    reservation_end: string
-    reservation_id: string
-    reserved_at: string
-    reserved_by: string
-    resource: string
-    resource_id: string
-    rsubtype: string
-    start: Date
 }

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function MapRootScreen(): JSX.Element {
+export default function MapRootScreen(): React.JSX.Element {
     const { t } = useTranslation(['navigation'])
     const { styles } = useStyles(stylesheet)
     const [isPageOpen, setIsPageOpen] = useState(false)
@@ -39,7 +39,7 @@ export default function MapRootScreen(): JSX.Element {
         storage.set('mapSearchHistory', jsonValue)
     }
 
-    const loadSearchHistory = async (): Promise<void> => {
+    const loadSearchHistory = (): void => {
         const jsonValue = storage.getString('mapSearchHistory')
         if (jsonValue != null) {
             try {

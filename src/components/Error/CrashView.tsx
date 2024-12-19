@@ -13,7 +13,7 @@ export const ErrorButton = ({
     onPress,
 }: {
     onPress: () => void
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { t } = useTranslation('common')
     const { styles } = useStyles(stylesheet)
     return (
@@ -30,7 +30,7 @@ export const ErrorButton = ({
 export default function CrashView({
     error,
     retry,
-}: ErrorBoundaryProps): JSX.Element {
+}: ErrorBoundaryProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const { t } = useTranslation('common')
     const path = usePathname()

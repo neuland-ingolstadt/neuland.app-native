@@ -25,7 +25,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
     return timetable
 }
 
-function TimetableScreen(): JSX.Element {
+function TimetableScreen(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
 
     const timetableMode = usePreferencesStore((state) => state.timetableMode)
@@ -69,7 +69,7 @@ function TimetableScreen(): JSX.Element {
 
     const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-    const LoadingView = (): JSX.Element => {
+    const LoadingView = (): React.JSX.Element => {
         return (
             <View style={styles.loadingView}>
                 <LoadingIndicator />

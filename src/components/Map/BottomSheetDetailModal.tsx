@@ -84,7 +84,7 @@ export const BottomSheetDetailModal = ({
     currentPositionModal,
     roomData,
     modalSection,
-}: BottomSheetDetailModalProps): JSX.Element => {
+}: BottomSheetDetailModalProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <BottomSheetModalProvider>

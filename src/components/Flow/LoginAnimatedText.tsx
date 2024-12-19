@@ -45,7 +45,7 @@ const textsDE = shuffleArray([
 ])
 const shouldVibrate = Platform.OS === 'ios'
 
-function LoginAnimatedText(): JSX.Element {
+function LoginAnimatedText(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const { t, i18n } = useTranslation('flow')
     const [currentTextIndex, setCurrentTextIndex] = useState(0)

@@ -7,7 +7,7 @@ export default function LogoTextFullSVG({
 }: {
     size: number
     color: string
-}): JSX.Element {
+}): React.JSX.Element {
     return (
         <Svg
             fill={color}

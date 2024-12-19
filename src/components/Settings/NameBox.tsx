@@ -24,7 +24,7 @@ const NameBox = ({
     title,
     subTitle1,
     subTitle2,
-}: NameBoxProps): JSX.Element => {
+}: NameBoxProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
 
     return (

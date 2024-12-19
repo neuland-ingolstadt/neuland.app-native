@@ -20,7 +20,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
 
-export const IndexHeaderRight = (): JSX.Element => {
+export const IndexHeaderRight = (): React.JSX.Element => {
     const { t } = useTranslation(['navigation', 'settings'])
     const router = useRouter()
     const { styles, theme } = useStyles(stylesheet)
@@ -54,14 +54,14 @@ export const IndexHeaderRight = (): JSX.Element => {
     })
 
     useEffect(() => {
-        const fetchUsernameAndSetInitials = async (): Promise<void> => {
+        const fetchUsernameAndSetInitials = (): void => {
             if (userKind === USER_STUDENT && persData !== undefined) {
                 const initials = getInitials(
                     persData.vname + ' ' + persData.name
                 )
                 setInitials(initials)
             } else if (userKind === USER_EMPLOYEE) {
-                const username = await getUsername()
+                const username = getUsername()
                 if (username !== undefined) {
                     setInitials(getInitials(username))
                 }
@@ -69,9 +69,7 @@ export const IndexHeaderRight = (): JSX.Element => {
                 setInitials('')
             }
         }
-        fetchUsernameAndSetInitials().catch((e) => {
-            console.log(e)
-        })
+        fetchUsernameAndSetInitials()
     }, [persData, userKind])
 
     const logoutAlert = (): void => {
@@ -108,7 +106,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         )
     }
 
-    const IconComponent = (): JSX.Element => {
+    const IconComponent = (): React.JSX.Element => {
         return (
             <PlatformMenu>
                 {userKind === USER_EMPLOYEE ? (
@@ -186,7 +184,7 @@ export const IndexHeaderRight = (): JSX.Element => {
         children,
     }: {
         children: JSX.Element
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         return (
             <ContextMenu
                 disabled={getDeviceType() === 'Desktop'}
@@ -271,7 +269,9 @@ export const IndexHeaderRight = (): JSX.Element => {
                 router.navigate('/settings')
             }}
             delayLongPress={300}
-            onLongPress={() => {}}
+            onLongPress={() => {
+                /* nothing */
+            }}
             accessibilityLabel={t('navigation.settings')}
             style={styles.element}
         >

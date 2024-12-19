@@ -10,7 +10,7 @@ const ToggleRow = ({
     items: string[]
     selectedElement: number
     setSelectedElement: (element: number) => void
-}): JSX.Element => {
+}): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     return (
         <View style={styles.buttonRow}>
@@ -62,7 +62,6 @@ const stylesheet = createStyleSheet((theme) => ({
         flexDirection: 'row',
         gap: 12,
         justifyContent: 'space-between',
-        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     buttonView: {

@@ -7,7 +7,13 @@
             "ios/*": ["./ios/NeulandNext/Images.xcassets/*"]
         },
         "project": "./tsconfig.json",
-        "strict": true
+        "strict": true,
+        "plugins": [
+            {
+                "name": "@0no-co/graphqlsp",
+                "schema": "src/__generated__/schema.graphql"
+            }
+        ]
     },
     "include": [
         "**/*.ts",
@@ -15,6 +21,7 @@
         ".expo/types/**/*.ts",
         "expo-env.d.ts",
         "babel.config.js",
-        "src/app/(screens)/meal.s"
+        "src/app/(screens)/meal.s",
+        "src/app/(tabs)/(index)/links.tsx"
     ]
 }

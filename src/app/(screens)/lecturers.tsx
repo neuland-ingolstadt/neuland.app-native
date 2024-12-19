@@ -9,7 +9,7 @@ import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
-import { type Lecturers } from '@/types/thi-api'
+import { Funktion, type Lecturers } from '@/types/thi-api'
 import { type NormalizedLecturer } from '@/types/utils'
 import {
     extractFacultyFromPersonal,
@@ -19,7 +19,6 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -32,6 +31,7 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+    FlatList,
     Linking,
     Platform,
     RefreshControl,
@@ -46,7 +46,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-export default function LecturersCard(): JSX.Element {
+export default function LecturersCard(): React.JSX.Element {
     const router = useRouter()
     const [filteredLecturers, setFilteredLecturers] = useState<
         NormalizedLecturer[]
@@ -86,7 +86,7 @@ export default function LecturersCard(): JSX.Element {
                 },
                 staleTime: 1000 * 60 * 30, // 30 minutes
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-                retry(failureCount: number, error: any) {
+                retry(failureCount: number, error: Error) {
                     if (error instanceof NoSessionError) {
                         router.navigate('/login')
                         return false
@@ -104,7 +104,7 @@ export default function LecturersCard(): JSX.Element {
                 },
                 staleTime: 1000 * 60 * 30, // 30 minutes
                 gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-                retry(failureCount: number, error: any) {
+                retry(failureCount: number, error: Error) {
                     if (error instanceof NoSessionError) {
                         router.navigate('/login')
                         return false
@@ -166,7 +166,7 @@ export default function LecturersCard(): JSX.Element {
                 allLecturersResult?.data?.filter(
                     (lecturer: Lecturers) =>
                         lecturer.funktion !== null &&
-                        lecturer.funktion === 'Professor(in)'
+                        lecturer.funktion === Funktion.ProfessorIn
                 ) ?? []
 
             setDisplayedProfessors(true)
@@ -176,14 +176,14 @@ export default function LecturersCard(): JSX.Element {
 
     const generateSections = (
         lecturers = allLecturersResult.data
-    ): Array<{
+    ): {
         title: string
         data: NormalizedLecturer[]
-    }> => {
-        const sections = [] as Array<{
+    }[] => {
+        const sections = [] as {
             title: string
             data: NormalizedLecturer[]
-        }>
+        }[]
         let currentLetter = ''
 
         lecturers?.forEach((lecturer) => {
@@ -273,7 +273,7 @@ export default function LecturersCard(): JSX.Element {
         error: Error | null
         isLoading: boolean
         isPersonal?: boolean
-    }): JSX.Element => {
+    }): React.JSX.Element => {
         return isPaused && !isSuccess ? (
             <View style={styles.viewHorizontal}>
                 <ErrorView
@@ -314,11 +314,10 @@ export default function LecturersCard(): JSX.Element {
                 />
             </View>
         ) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-            <FlashList
+            <FlatList
                 data={lecturers}
                 keyExtractor={(_, index) => index.toString()}
                 contentContainerStyle={styles.loadedRows}
-                estimatedItemSize={101}
                 refreshControl={
                     <RefreshControl
                         refreshing={
@@ -361,7 +360,7 @@ export default function LecturersCard(): JSX.Element {
                 )}
             />
         ) : (
-            <View style={styles.pagePadding}>
+            <View style={styles.viewHorizontal}>
                 {isPersonal ? (
                     <ErrorView
                         title={t('pages.lecturers.error.title')}
@@ -396,7 +395,7 @@ export default function LecturersCard(): JSX.Element {
         )
     }
 
-    const FilterSectionList = (): JSX.Element => {
+    const FilterSectionList = (): React.JSX.Element => {
         return allLecturersResult.isLoading ? (
             <View style={styles.viewHorizontal}>
                 <LoadingIndicator style={styles.loadingContainer} />
@@ -468,16 +467,18 @@ export default function LecturersCard(): JSX.Element {
                 <ErrorView title={guestError} />
             ) : !isSearchBarFocused ? (
                 <View style={styles.searchContainer}>
-                    <ToggleRow
-                        items={[
-                            t('pages.lecturers.personal'),
-                            displayesProfessors
-                                ? t('pages.lecturers.professors')
-                                : t('pages.lecturers.faculty'),
-                        ]}
-                        selectedElement={selectedPage}
-                        setSelectedElement={setPage}
-                    />
+                    <View style={styles.viewHorizontal}>
+                        <ToggleRow
+                            items={[
+                                t('pages.lecturers.personal'),
+                                displayesProfessors
+                                    ? t('pages.lecturers.professors')
+                                    : t('pages.lecturers.faculty'),
+                            ]}
+                            selectedElement={selectedPage}
+                            setSelectedElement={setPage}
+                        />
+                    </View>
                     <PagerView
                         style={styles.page}
                         initialPage={selectedPage}
@@ -530,9 +531,7 @@ const stylesheet = createStyleSheet((theme) => ({
     page: {
         flex: 1,
     },
-    pagePadding: {
-        paddingHorizontal: theme.margins.page,
-    },
+
     resultsCount: {
         color: theme.colors.labelColor,
         fontSize: 13,

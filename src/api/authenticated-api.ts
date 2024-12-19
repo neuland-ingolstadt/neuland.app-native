@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
-    type AvailableLibrarySeats,
     type Exams,
     type Grade,
     type Lecturers,
     type PersData,
-    type Reservation,
     type Rooms,
     type ThiNews,
     type TimetableResponse,
@@ -40,6 +48,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
      * @param {object} params Request data
      * @returns {object}
      */
+    // eslint-disable-next-line @typescript-eslint/require-await
     async requestAuthenticated(params: object): Promise<any> {
         console.debug(params)
         return this.sessionHandler(async (session: any) => {
@@ -204,121 +213,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         })
 
         return res
-    }
-
-    async getLibraryReservations(): Promise<Reservation[]> {
-        try {
-            const res = await this.requestAuthenticated({
-                service: 'thiapp',
-                method: 'reservations',
-                type: 1,
-                cmd: 'getreservations',
-                format: 'json',
-            })
-
-            return res[1]
-        } catch (e: any) {
-            // as of 2021-06 the API returns "Service not available" when the user has no reservations
-            // thus we dont alert the error here, but just silently set the reservations to none
-            if (
-                e.data === 'No reservation data' ||
-                e.data === 'Service not available'
-            ) {
-                return []
-            } else {
-                throw e
-            }
-        }
-    }
-
-    async getAvailableLibrarySeats(): Promise<AvailableLibrarySeats[]> {
-        try {
-            const res = await this.requestAuthenticated({
-                service: 'thiapp',
-                method: 'reservations',
-                type: 1,
-                subtype: 1,
-                cmd: 'getavailabilities',
-                format: 'json',
-            })
-
-            return res[1]
-        } catch (e: any) {
-            // Unbekannter Fehler means the user has already reserved a spot
-            // and can not reserve additional ones
-            if (e.data === 'Unbekannter Fehler') {
-                return []
-            } else {
-                throw e
-            }
-        }
-    }
-
-    /**
-     * Adds a library reservation for a specific room, day, start and end time, and place
-     * @param {string} roomId ID of the room to reserve
-     * @param {string} day Date of the reservation
-     * @param {string} start Start time of the reservation
-     * @param {string} end End time of the reservation
-     * @param {string} place Place of the reservation
-     * @returns {Promise<any>} Promise that resolves with the reservation ID
-     */
-    async addLibraryReservation(
-        roomId: string,
-        day: string,
-        start: string,
-        end: string,
-        place: string
-    ): Promise<any> {
-        const res = await this.requestAuthenticated({
-            service: 'thiapp',
-            method: 'reservations',
-            type: 1,
-            subtype: 1,
-            cmd: 'addreservation',
-            data: JSON.stringify({
-                resource: roomId,
-                at: day,
-                from: start,
-                to: end,
-                place,
-            }),
-            dblslots: 0,
-            format: 'json',
-        })
-
-        return res[0]
-    }
-
-    /**
-     * Removes a library reservation
-     * @param {string} reservationId Reservation ID returned by `getLibraryReservations`
-     */
-    async removeLibraryReservation(reservationId: string): Promise<boolean> {
-        try {
-            await this.requestAuthenticated({
-                service: 'thiapp',
-                method: 'reservations',
-                type: 1,
-                subtype: 1,
-                cmd: 'delreservation',
-                data: reservationId,
-                format: 'json',
-            })
-
-            return true
-        } catch (e: any) {
-            // as of 2021-06 the API returns "Service not available" when the user has no reservations
-            // thus we dont alert the error here, but just silently set the reservations to none
-            if (
-                e.data === 'No reservation data' ||
-                e.data === 'Service not available'
-            ) {
-                return true
-            } else {
-                throw e
-            }
-        }
     }
 
     /**

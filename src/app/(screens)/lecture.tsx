@@ -20,7 +20,7 @@ import { Pressable, ScrollView, Share, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
 
-export default function TimetableDetails(): JSX.Element {
+export default function TimetableDetails(): React.JSX.Element {
     const router = useRouter()
     const navigation = useNavigation()
     const { styles } = useStyles(stylesheet)
@@ -120,7 +120,7 @@ export default function TimetableDetails(): JSX.Element {
                           {
                               title: t('details.exam'),
                               value: exam,
-                              layout: 'column' as 'column',
+                              layout: 'column' as const,
                           },
                       ]
                     : []),

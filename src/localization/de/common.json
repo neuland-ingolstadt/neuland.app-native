@@ -80,7 +80,6 @@
         "webmail": "E-Mail",
         "studVer": "StudVer",
         "marketplace": "Marktplatz",
-        "library": "Bibliothek",
         "thi": "THI",
         "press": "PressReader"
     },
@@ -94,7 +93,6 @@
                 "webmail": "E-Mail",
                 "studVer": "Studierendenvertretung",
                 "marketplace": "Marktplatz",
-                "library": "Bibliothekskatalog",
                 "thi": "THI Website",
                 "press": "PressReader"
             },
@@ -250,42 +248,37 @@
             }
         },
         "library": {
-            "reservations": {
-                "title": "Reservierungen",
-                "seat": "Platz",
-                "id": "Reservierungsnummer",
-                "alert": {
-                    "title": "Reservierung löschen",
-                    "message": "Möchtest du diese Reservierung wirklich löschen?"
-                },
-                "error": {
-                    "delete": "Löschen fehlgeschlagen",
-                    "book": "Reservierung fehlgeschlagen"
-                }
-            },
-            "available": {
-                "available": "Verfügbar",
-                "title": "Verfügbare Plätze",
-                "reserve": "Reservieren",
-                "seatsAvailable": "{{available}} / {{total}} verfügbar",
-                "ratelimit": "Du kannst keine weiteren Plätze reservieren.",
-                "noSeats": "Keine weiteren Plätze verfügbar.",
-                "footer": "Bis zu 5 aktive Reservierungen innerhalb von sieben Tagen erlaubt. Stornierung ist vor Beginn der Reservierung möglich.",
-                "book": "Platz buchen",
-                "room": "Raum",
-                "seatReservation": "Platzreservierung"
-            },
             "code": {
                 "number": "Nummer",
                 "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
             },
-            "timeSlot": "Zeitfenster"
+            "timeSlot": "Zeitfenster",
+            "seatReservation": {
+                "title": "Sitzplatzreservierung",
+                "description": "Reserviere einen Sitzplatz oder einen Raum in der Bibliothek mit dem V:Scout-System."
+            },
+            "catalog": {
+                "title": "Bibliothekskatalog",
+                "description": "Suche nach Büchern, Zeitschriften und anderen Medien im Bibliothekskatalog."
+            },
+            "virtualCard": {
+                "title": "Virtuelle Bibliothekskarte",
+                "description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
+            },
+            "note": "Aufgrund des neuen Buchungs-Systems ist es nicht mehr möglich Sitzplätze über die App zu buchen."
         },
         "clEvents": {
             "sports": {
                 "title": "Sport",
                 "noEvents": {
                     "title": "Keine Sportveranstaltungen",
+                    "subtitle": "Bitte versuche es später erneut."
+                }
+            },
+            "events": {
+                "title": "Veranstaltungen",
+                "noEvents": {
+                    "title": "Keine anstehenden Veranstaltungen",
                     "subtitle": "Bitte versuche es später erneut."
                 }
             }

@@ -7,7 +7,7 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-const BottomSheetBackground = (): JSX.Element => {
+const BottomSheetBackground = (): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const dark = UnistylesRuntime.themeName === 'dark'
     const darkIos = 'rgba(0, 0, 0, 0.45)'

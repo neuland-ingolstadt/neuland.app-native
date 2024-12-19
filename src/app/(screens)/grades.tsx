@@ -30,7 +30,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import packageInfo from '../../../package.json'
 
-export default function GradesSCreen(): JSX.Element {
+export default function GradesSCreen(): React.JSX.Element {
     const { t } = useTranslation('settings')
     const { styles } = useStyles(stylesheet)
     const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
@@ -56,7 +56,7 @@ export default function GradesSCreen(): JSX.Element {
             } else {
                 throw new Error('Average grade is undefined or null')
             }
-        } catch (e: any) {
+        } catch {
             setAverageLoadingState(LoadingState.ERROR)
         }
     }
@@ -219,7 +219,7 @@ export default function GradesSCreen(): JSX.Element {
                             </SectionView>
                             <SectionView title={t('grades.finished')}>
                                 <React.Fragment>
-                                    {grades?.finished?.map((grade, index) => (
+                                    {grades.finished.map((grade, index) => (
                                         <React.Fragment key={index}>
                                             <GradesRow item={grade} />
                                             {index !==
@@ -235,7 +235,7 @@ export default function GradesSCreen(): JSX.Element {
                     {grades.missing.length !== 0 && (
                         <SectionView title={t('grades.open')}>
                             <React.Fragment>
-                                {grades?.missing?.map((grade, index) => (
+                                {grades.missing.map((grade, index) => (
                                     <React.Fragment key={index}>
                                         <GradesRow item={grade} />
                                         {index !==

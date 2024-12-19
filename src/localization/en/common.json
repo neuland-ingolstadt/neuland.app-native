@@ -80,7 +80,6 @@
         "webmail": "E-Mail",
         "studVer": "StudVer",
         "marketplace": "Marketplace",
-        "library": "Library",
         "thi": "THI",
         "press": "PressReader"
     },
@@ -94,7 +93,6 @@
                 "webmail": "E-Mail",
                 "studVer": "Student Representation",
                 "marketplace": "Marketplace",
-                "library": "Library Catalog",
                 "thi": "THI Website",
                 "press": "PressReader"
             },
@@ -250,42 +248,37 @@
             }
         },
         "library": {
-            "reservations": {
-                "title": "Reservations",
-                "seat": "Seat",
-                "id": "Reservation code",
-                "alert": {
-                    "title": "Delete reservation",
-                    "message": "Do you really want to delete this reservation?"
-                },
-                "error": {
-                    "delete": "Failed to delete",
-                    "book": "Reservation failed"
-                }
-            },
-            "available": {
-                "available": "Available",
-                "title": "Available seats",
-                "reserve": "Reserve",
-                "seatsAvailable": "{{available}} / {{total}} available",
-                "ratelimit": "You can not reserve more seats.",
-                "noSeats": "No more seats available.",
-                "footer": "Up to 5 active reservations are allowed per seven days. Cancelation is possible before the reservation starts.",
-                "book": "Reserve seat",
-                "room": "Room",
-                "seatReservation": "Seat reservation"
-            },
             "code": {
                 "number": "Number",
                 "footer": "Use this barcode to sign in at the library terminals to borrow books."
             },
-            "timeSlot": "Timeslot"
+            "timeSlot": "Timeslot",
+            "seatReservation": {
+                "title": "Seat Reservation",
+                "description": "Book a seat or a room in the library using the V:Scout system."
+            },
+            "catalog": {
+                "title": "Library Catalog",
+                "description": "Search for books, journals, and other media in the library catalog."
+            },
+            "virtualCard": {
+                "title": "Virtual Library Card",
+                "description": "Use the virtual library card to borrow books and other media."
+            },
+            "note": "Due to the new booking system it is no longer possible to book seats using the app."
         },
         "clEvents": {
             "sports": {
                 "title": "Sports",
                 "noEvents": {
                     "title": "No sports events found",
+                    "subtitle": "Check back later."
+                }
+            },
+            "events": {
+                "title": "Events",
+                "noEvents": {
+                    "title": "No events found",
                     "subtitle": "Check back later."
                 }
             }

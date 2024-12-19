@@ -1,4 +1,5 @@
 import {
+    SecurityLevel,
     authenticateAsync,
     getEnrolledLevelAsync,
 } from 'expo-local-authentication'
@@ -37,7 +38,7 @@ export function lowercaseFirstLetter(string: string): string {
  * @param arr2 - The second array.
  * @returns A boolean indicating whether the arrays are equal.
  */
-export function arraysEqual(arr1: any[], arr2: any[]): boolean {
+export function arraysEqual(arr1: unknown[], arr2: unknown[]): boolean {
     if (arr1.length !== arr2.length) return false
     for (let i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i]) return false
@@ -51,7 +52,7 @@ export function arraysEqual(arr1: any[], arr2: any[]): boolean {
  */
 export const handleBiometricAuth = async (path: string): Promise<void> => {
     const securityLevel = await getEnrolledLevelAsync()
-    if (securityLevel === 0) {
+    if (securityLevel === SecurityLevel.NONE) {
         // no passcode or biometric auth set up
         router.navigate(path as RelativePathString)
         return

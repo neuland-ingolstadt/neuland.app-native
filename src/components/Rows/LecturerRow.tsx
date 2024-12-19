@@ -8,7 +8,11 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import RowEntry from '../Universal/RowEntry'
 
-const LecturerRow = ({ item }: { item: NormalizedLecturer }): JSX.Element => {
+const LecturerRow = ({
+    item,
+}: {
+    item: NormalizedLecturer
+}): React.JSX.Element => {
     const { styles, theme } = useStyles(stylesheet)
     const setSelectedLecturer = useRouteParamsStore(
         (state) => state.setSelectedLecturer

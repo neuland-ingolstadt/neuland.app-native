@@ -5,7 +5,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 
-export default function FoodRootScreen(): JSX.Element {
+export default function FoodRootScreen(): React.JSX.Element {
     const { t } = useTranslation('navigation')
 
     if (Platform.OS === 'web') {

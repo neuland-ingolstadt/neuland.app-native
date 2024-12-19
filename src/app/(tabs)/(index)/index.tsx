@@ -6,7 +6,7 @@ import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
-import { MasonryFlashList } from '@shopify/flash-list'
+import { FlashList, MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function HomeRootScreen(): JSX.Element {
+export default function HomeRootScreen(): React.JSX.Element {
     const [isPageOpen, setIsPageOpen] = useState(false)
     useEffect(() => {
         setIsPageOpen(true)
@@ -44,7 +44,7 @@ export default function HomeRootScreen(): JSX.Element {
     )
 }
 
-function HomeScreen(): JSX.Element {
+function HomeScreen(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const { shownDashboardEntries } = React.useContext(DashboardContext)
     const [orientation, setOrientation] = useState(
@@ -84,6 +84,7 @@ function HomeScreen(): JSX.Element {
         AnnouncementFieldsFragmentDoc,
         data?.appAnnouncements
     )
+
     return shownDashboardEntries === null ||
         shownDashboardEntries.length === 0 ? (
         <View style={styles.errorContainer}>
@@ -103,6 +104,27 @@ function HomeScreen(): JSX.Element {
                 isCritical={false}
             />
         </View>
+    ) : columns === 1 ? (
+        <FlashList
+            estimatedItemSize={130}
+            key={orientation}
+            contentInsetAdjustmentBehavior="automatic"
+            contentInset={{ top: 0, bottom: theme.margins.bottomSafeArea }}
+            contentContainerStyle={{ ...styles.container, ...styles.page }}
+            showsVerticalScrollIndicator={false}
+            data={shownDashboardEntries}
+            renderItem={({ item }) => (
+                <View style={styles.item}>{item.card()}</View>
+            )}
+            keyExtractor={(item) => item.key}
+            ListHeaderComponent={() =>
+                announcements != null ? (
+                    <AnnouncementCard data={announcements} />
+                ) : (
+                    <></>
+                )
+            }
+        />
     ) : (
         <MasonryFlashList
             key={orientation}
@@ -113,13 +135,10 @@ function HomeScreen(): JSX.Element {
             data={shownDashboardEntries}
             renderItem={({ item, index }) => {
                 let paddingStyle = {}
-
-                if (columns !== 1) {
-                    paddingStyle =
-                        index % 2 === 0
-                            ? { marginRight: theme.margins.page / 2 }
-                            : { marginLeft: theme.margins.page / 2 }
-                }
+                paddingStyle =
+                    index % 2 === 0
+                        ? { marginRight: theme.margins.page / 2 }
+                        : { marginLeft: theme.margins.page / 2 }
 
                 return (
                     <View style={[styles.item, paddingStyle]}>
@@ -128,7 +147,7 @@ function HomeScreen(): JSX.Element {
                 )
             }}
             keyExtractor={(item) => item.key}
-            numColumns={columns}
+            numColumns={2}
             estimatedItemSize={114}
             ListHeaderComponent={() =>
                 announcements != null ? (

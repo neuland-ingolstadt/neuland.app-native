@@ -7,7 +7,7 @@ export default function LogoTextSVG({
 }: {
     size: number
     color: string
-}): JSX.Element {
+}): React.JSX.Element {
     return (
         <Svg
             viewBox="0 0 151.5 13.64"

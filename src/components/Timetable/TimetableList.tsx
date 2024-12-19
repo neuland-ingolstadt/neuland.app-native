@@ -1,10 +1,15 @@
 import ErrorView from '@/components/Error/ErrorView'
-// @ts-expect-error no types
+// @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import Divider from '@/components/Universal/Divider'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
-import { type Exam, type FriendlyTimetableEntry } from '@/types/utils'
+import {
+    type Exam,
+    ExamEntry,
+    type FriendlyTimetableEntry,
+    TimetableEntry,
+} from '@/types/utils'
 import {
     formatFriendlyDate,
     formatFriendlyDateTime,
@@ -34,7 +39,7 @@ export default function TimetableList({
     timetable,
     // eslint-disable-next-line react/prop-types
     exams,
-}: ITimetableViewProps): JSX.Element {
+}: ITimetableViewProps): React.JSX.Element {
     /**
      * Constants
      */
@@ -46,7 +51,7 @@ export default function TimetableList({
      */
     const router = useRouter()
     const navigation = useNavigation()
-    const listRef = useRef<SectionList<FriendlyTimetableEntry>>(null)
+    const listRef = useRef<SectionList<TimetableEntry | ExamEntry>>(null)
     const { t } = useTranslation('timetable')
     const { styles, theme } = useStyles(stylesheet)
     const setSelectedLecture = useRouteParamsStore(
@@ -75,10 +80,6 @@ export default function TimetableList({
     }, [navigation])
 
     /**
-     * Colors
-     */
-
-    /**
      * Constants
      */
 
@@ -102,7 +103,7 @@ export default function TimetableList({
         router.navigate('/lecture')
     }
 
-    function renderSectionHeader(title: Date): JSX.Element {
+    function renderSectionHeader(title: Date): React.JSX.Element {
         const isToday = formatISODate(title) === formatISODate(today)
 
         return (
@@ -115,23 +116,23 @@ export default function TimetableList({
         )
     }
 
-    function renderSectionFooter(): JSX.Element {
+    function renderSectionFooter(): React.JSX.Element {
         return <View style={styles.sectionFooter} />
     }
 
-    function renderItemSeparator(): JSX.Element {
+    function renderItemSeparator(): React.JSX.Element {
         return <Divider color={theme.colors.border} iosPaddingLeft={16} />
     }
     function renderTimetableItem({
         item,
     }: {
         item: FriendlyTimetableEntry
-    }): JSX.Element {
+    }): React.JSX.Element {
         return (
             <DragDropView
                 mode="drag"
                 scope="system"
-                dragValue={`${item.name} in ${item.rooms?.join(
+                dragValue={`${item.name} in ${item.rooms.join(
                     ', '
                 )} (${formatFriendlyDateTime(
                     item.startDate
@@ -161,7 +162,7 @@ export default function TimetableList({
                             </Text>
                             <View style={styles.itemRow}>
                                 <Text style={styles.descriptionText}>
-                                    {item.rooms?.join(', ')}
+                                    {item.rooms.join(', ')}
                                 </Text>
                             </View>
                         </View>
@@ -178,7 +179,7 @@ export default function TimetableList({
             </DragDropView>
         )
     }
-    function renderExamItem({ exam }: { exam: Exam }): JSX.Element {
+    function renderExamItem({ exam }: { exam: Exam }): React.JSX.Element {
         const navigateToPage = (): void => {
             setSelectedExam(exam)
             router.navigate('/exam')
@@ -231,7 +232,11 @@ export default function TimetableList({
         )
     }
 
-    function renderItem({ item }: { item: any }): JSX.Element {
+    function renderItem({
+        item,
+    }: {
+        item: ExamEntry | TimetableEntry
+    }): React.JSX.Element {
         if (item.eventType === 'exam') {
             return renderExamItem({ exam: item })
         }

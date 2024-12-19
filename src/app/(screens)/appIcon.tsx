@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/* eslint-disable @typescript-eslint/no-require-imports */
 import ErrorView from '@/components/Error/ErrorView'
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
@@ -35,7 +38,7 @@ iconImages = {
 
 export const appIcons = Object.keys(iconImages)
 
-export default function AppIconPicker(): JSX.Element {
+export default function AppIconPicker(): React.JSX.Element {
     const { styles } = useStyles(stylesheet)
     const unlockedAppIcons = usePreferencesStore(
         (state) => state.unlockedAppIcons
@@ -48,7 +51,7 @@ export default function AppIconPicker(): JSX.Element {
     }
 
     categories.exclusive = categories.exclusive.filter((icon) => {
-        if (unlockedAppIcons?.includes(icon)) {
+        if (unlockedAppIcons.includes(icon)) {
             return true
         } else {
             return false
@@ -80,7 +83,6 @@ export default function AppIconPicker(): JSX.Element {
                             >
                                 <View style={styles.sectionContainer}>
                                     {value.map((icon) => {
-                                        console.log(icon)
                                         return (
                                             <React.Fragment key={icon}>
                                                 <Pressable
