@@ -87,16 +87,16 @@ export default function ExamDetail(): React.JSX.Element {
         },
     ]
 
-    // async function checkPermissions() {
-    //     const { granted } = await Calendar.getCalendarPermissionsAsync()
+    async function checkPermissions() {
+        const { granted } = await Calendar.getCalendarPermissionsAsync()
 
-    //     if (!granted) {
-    //         const { status } = await Calendar.requestCalendarPermissionsAsync()
-    //         console.log(status)
-    //         return status === 'granted'
-    //     }
-    //     return granted
-    // }
+        if (!granted) {
+            const { status } = await Calendar.requestCalendarPermissionsAsync()
+            console.log(status)
+            return status === 'granted'
+        }
+        return granted
+    }
 
     const onPressExport = async () => {
         if (!exam?.date) {
@@ -113,10 +113,10 @@ export default function ExamDetail(): React.JSX.Element {
                 {
                     text: t('misc.continue'),
                     onPress: async () => {
-                        // const granted = await checkPermissions()
-                        // if (!granted) {
-                        //     return false
-                        // }
+                        const granted = await checkPermissions()
+                        if (!granted) {
+                            return false
+                        }
                         const duration = Number(type?.match(/\d+/)?.[0] ?? 90)
                         await Calendar.createEventInCalendarAsync({
                             title: t('pages.exam.calendar.exam', {
