@@ -72,7 +72,8 @@
         "more": "more",
         "unknown": "Unknown",
         "true": "Yes",
-        "false": "No"
+        "false": "No",
+        "continue": "Continue"
     },
     "quicklinks": {
         "primuss": "Primuss",
@@ -162,7 +163,16 @@
                 "registration": "Registered",
                 "notes": "Notes"
             },
-            "footer": "All information without guarantee. Binding information is only available directly from the THI."
+            "footer": "All information without guarantee. Binding information is only available directly from the THI.",
+            "calendar": {
+                "exam": "Exam: {{title}}",
+                "warning": {
+                    "title": "Add to Calendar",
+                    "message": "The exported calendar event will not update automatically. Please refer to official THI sources for the latest changes and binding information."
+                },
+                "add": "Export to Calendar",
+                "note": "This event was exported statically from Neuland Next, so it will not update automatically and might be outdated. Please refer to the official THI sources for the latest information. No warranty for correctness."
+            }
         },
         "event": {
             "date": "Date",

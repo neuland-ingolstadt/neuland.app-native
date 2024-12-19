@@ -27,80 +27,73 @@ export default function ClEventsPage({
 
     const scrollY = new Animated.Value(0)
     return (
-        <View>
-            <ScrollView
-                contentContainerStyle={styles.itemsContainer}
-                style={styles.page}
-                onScroll={Animated.event(
-                    [
-                        {
-                            nativeEvent: {
-                                contentOffset: { y: scrollY },
-                            },
+        <ScrollView
+            contentContainerStyle={styles.itemsContainer}
+            onScroll={Animated.event(
+                [
+                    {
+                        nativeEvent: {
+                            contentOffset: { y: scrollY },
                         },
-                    ],
-                    { useNativeDriver: false }
-                )}
-                scrollEventThrottle={16}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isRefetchingByUserClEvents}
-                        onRefresh={() => {
-                            void refetchByUserClEvents()
-                        }}
-                    />
-                }
-            >
-                {clEventsResult.isLoading ? (
-                    <LoadingIndicator />
-                ) : clEventsResult.isError ? (
-                    <ErrorView
-                        title={
-                            clEventsResult.error?.message ?? t('error.title')
-                        }
-                        onButtonPress={() => {
-                            void refetchByUserClEvents()
-                        }}
-                        inModal
-                    />
-                ) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
-                    <ErrorView title={networkError} inModal />
-                ) : (
-                    <View style={styles.contentBorder}>
-                        {clEventsResult.data != null &&
-                        clEventsResult.data.length > 0 ? (
-                            <View style={styles.contentBorder}>
-                                {clEventsResult.data?.map((event, index) => (
-                                    <React.Fragment key={index}>
-                                        <CLEventRow event={event} />
-                                        {index !==
-                                            clEventsResult.data.length - 1 && (
-                                            <Divider iosPaddingLeft={16} />
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                            </View>
-                        ) : (
-                            <ErrorView
-                                title={t(
-                                    'pages.clEvents.events.noEvents.title'
-                                )}
-                                message={t(
-                                    'pages.clEvents.events.noEvents.subtitle'
-                                )}
-                                icon={{
-                                    ios: 'calendar.badge.clock',
-                                    android: 'calendar_clock',
-                                    web: 'CalendarClock',
-                                }}
-                                inModal
-                                isCritical={false}
-                            />
-                        )}
-                    </View>
-                )}
-            </ScrollView>
-        </View>
+                    },
+                ],
+                { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefetchingByUserClEvents}
+                    onRefresh={() => {
+                        void refetchByUserClEvents()
+                    }}
+                />
+            }
+        >
+            {clEventsResult.isLoading ? (
+                <LoadingIndicator />
+            ) : clEventsResult.isError ? (
+                <ErrorView
+                    title={clEventsResult.error?.message ?? t('error.title')}
+                    onButtonPress={() => {
+                        void refetchByUserClEvents()
+                    }}
+                    inModal
+                />
+            ) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
+                <ErrorView title={networkError} inModal />
+            ) : (
+                <View style={styles.contentBorder}>
+                    {clEventsResult.data != null &&
+                    clEventsResult.data.length > 0 ? (
+                        <View style={styles.contentBorder}>
+                            {clEventsResult.data?.map((event, index) => (
+                                <React.Fragment key={index}>
+                                    <CLEventRow event={event} />
+                                    {index !==
+                                        clEventsResult.data.length - 1 && (
+                                        <Divider iosPaddingLeft={16} />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </View>
+                    ) : (
+                        <ErrorView
+                            title={t('pages.clEvents.events.noEvents.title')}
+                            message={t(
+                                'pages.clEvents.events.noEvents.subtitle'
+                            )}
+                            icon={{
+                                ios: 'calendar.badge.clock',
+                                android: 'calendar_clock',
+                                web: 'CalendarClock',
+                            }}
+                            inModal
+                            isCritical={false}
+                        />
+                    )}
+                </View>
+            )}
+        </ScrollView>
     )
 }
 
@@ -112,9 +105,8 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
-        marginHorizontal: theme.margins.page,
         paddingBottom: theme.margins.bottomSafeArea,
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
-    page: {},
 }))

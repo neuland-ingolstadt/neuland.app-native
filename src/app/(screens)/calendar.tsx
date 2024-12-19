@@ -268,14 +268,15 @@ const stylesheet = createStyleSheet((theme) => ({
     itemsContainer: {
         alignSelf: 'center',
         justifyContent: 'center',
+        paddingHorizontal: theme.margins.page,
         width: '100%',
     },
     pagerContainer: {
         flex: 1,
-        marginHorizontal: theme.margins.page,
     },
     toggleContainer: {
         borderColor: theme.colors.border,
+        marginHorizontal: theme.margins.page,
         paddingBottom: 12,
     },
     viewTop: {

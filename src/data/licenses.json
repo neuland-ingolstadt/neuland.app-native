@@ -149,6 +149,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "expo-calendar@14.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "expo-clipboard@7.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",

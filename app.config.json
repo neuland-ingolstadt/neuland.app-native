@@ -36,7 +36,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 271
+            "versionCode": 276
         },
         "sdkVersion": "52.0.0",
         "experiments": {
@@ -85,6 +85,12 @@
                 }
             ],
             [
+                "expo-calendar",
+                {
+                    "calendarPermission": "The app needs to access your calendar."
+                }
+            ],
+            [
                 "expo-splash-screen",
                 {
                     "backgroundColor": "#ffffff",
@@ -96,7 +102,6 @@
                     "imageWidth": 200
                 }
             ],
-            "react-native-edge-to-edge",
             "expo-alternate-app-icons"
         ],
         "extra": {

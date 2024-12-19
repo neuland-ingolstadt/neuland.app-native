@@ -232,6 +232,8 @@ PODS:
     - ExpoModulesCore
   - ExpoBrightness (13.0.2):
     - ExpoModulesCore
+  - ExpoCalendar (14.0.5):
+    - ExpoModulesCore
   - ExpoClipboard (7.0.0):
     - ExpoModulesCore
   - ExpoCrypto (14.0.1):
@@ -2352,6 +2354,7 @@ DEPENDENCIES:
   - ExpoAsset (from `../node_modules/expo-asset/ios`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
   - ExpoBrightness (from `../node_modules/expo-brightness/ios`)
+  - ExpoCalendar (from `../node_modules/expo-calendar/ios`)
   - ExpoClipboard (from `../node_modules/expo-clipboard/ios`)
   - ExpoCrypto (from `../node_modules/expo-crypto/ios`)
   - ExpoFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -2499,6 +2502,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-blur/ios"
   ExpoBrightness:
     :path: "../node_modules/expo-brightness/ios"
+  ExpoCalendar:
+    :path: "../node_modules/expo-calendar/ios"
   ExpoClipboard:
     :path: "../node_modules/expo-clipboard/ios"
   ExpoCrypto:
@@ -2717,6 +2722,7 @@ SPEC CHECKSUMS:
   ExpoAsset: 8138f2a9ec55ae1ad7c3871448379f7d97692d15
   ExpoBlur: 562b3da84d3cd79016c411671eaf71a404266415
   ExpoBrightness: ce777f6a365592f745428cb0acc9066b400182e8
+  ExpoCalendar: 540f2576e76530bc46a1c93d9966fdf6b29d614f
   ExpoClipboard: 166ca8c13ca1041f5ba619a211f59427ab5da8a7
   ExpoCrypto: 8465f71eb3798c194c0a509d4a76e5c429656d83
   ExpoFileSystem: 179a0661fd6d3c4e5d7e500a99a9cd8b295d9566
