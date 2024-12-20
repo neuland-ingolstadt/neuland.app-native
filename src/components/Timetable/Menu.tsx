@@ -5,6 +5,12 @@ import { Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
+import DropdownMenuCheckboxItem from '../Menu/DropdownMenuCheckboxItem'
+import DropdownMenuContent from '../Menu/DropdownMenuContent'
+import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
+import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
+import DropdownMenuSubContent from '../Menu/DropdownMenuSubContent'
+import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
 import PlatformIcon from '../Universal/Icon'
 
 export function MyMenu() {
@@ -19,11 +25,11 @@ export function MyMenu() {
     )
     const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
-    const { t } = useTranslation(['timetable'])
+    const { t } = useTranslation('timetable')
     const { styles } = useStyles(stylesheet)
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
+            <DropdownMenuTrigger>
                 <Pressable>
                     <PlatformIcon
                         ios={{
@@ -41,8 +47,8 @@ export function MyMenu() {
                         style={styles.trigger}
                     />
                 </Pressable>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
                 <DropdownMenu.Sub>
                     <DropdownMenu.ItemIcon
                         ios={{
@@ -53,8 +59,8 @@ export function MyMenu() {
                         {t('menu.timeline')}
                     </DropdownMenu.SubTrigger>
 
-                    <DropdownMenu.SubContent>
-                        <DropdownMenu.CheckboxItem
+                    <DropdownMenuSubContent>
+                        <DropdownMenuCheckboxItem
                             key="1"
                             value={
                                 timetableMode === 'timeline' &&
@@ -65,11 +71,12 @@ export function MyMenu() {
                                 setTimetableNumberDays(1)
                             }}
                         >
-                            <DropdownMenu.ItemTitle>
+                            <DropdownMenuItemTitle>
                                 {t('menu.oneDay')}
-                            </DropdownMenu.ItemTitle>
-                        </DropdownMenu.CheckboxItem>
-                        <DropdownMenu.CheckboxItem
+                            </DropdownMenuItemTitle>
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuCheckboxItem
                             key="3"
                             value={
                                 timetableMode === 'timeline' &&
@@ -80,11 +87,12 @@ export function MyMenu() {
                                 setTimetableNumberDays(3)
                             }}
                         >
-                            <DropdownMenu.ItemTitle>
+                            <DropdownMenuItemTitle>
                                 {t('menu.threeDays')}
-                            </DropdownMenu.ItemTitle>
-                        </DropdownMenu.CheckboxItem>
-                        <DropdownMenu.CheckboxItem
+                            </DropdownMenuItemTitle>
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuCheckboxItem
                             key="5"
                             value={
                                 timetableMode === 'timeline' &&
@@ -95,25 +103,25 @@ export function MyMenu() {
                                 setTimetableNumberDays(5)
                             }}
                         >
-                            <DropdownMenu.ItemTitle>
+                            <DropdownMenuItemTitle>
                                 {t('menu.fiveDays')}
-                            </DropdownMenu.ItemTitle>
-                        </DropdownMenu.CheckboxItem>
-                    </DropdownMenu.SubContent>
+                            </DropdownMenuItemTitle>
+                        </DropdownMenuCheckboxItem>
+                    </DropdownMenuSubContent>
                 </DropdownMenu.Sub>
 
-                <DropdownMenu.CheckboxItem
+                <DropdownMenuCheckboxItem
                     key="list"
                     value={timetableMode === 'list'}
                     onSelect={() => {
                         setTimetableMode('list')
                     }}
                 >
-                    <DropdownMenu.ItemTitle>
+                    <DropdownMenuItemTitle>
                         {t('menu.list')}
-                    </DropdownMenu.ItemTitle>
-                </DropdownMenu.CheckboxItem>
-            </DropdownMenu.Content>
+                    </DropdownMenuItemTitle>
+                </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
         </DropdownMenu.Root>
     )
 }
