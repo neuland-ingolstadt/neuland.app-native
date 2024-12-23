@@ -52,6 +52,7 @@ export default function TimetableWeek({
     )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
+    const [currentDate, setCurrentDate] = React.useState(today)
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
@@ -205,8 +206,15 @@ export default function TimetableWeek({
         calendarRef.current?.goToNextPage()
     }
 
-    const timetableNumberDays = timetableNumberDaysMap[timetableMode]
-
+    const [timetableNumberDays, setTimetableNumberDays] = React.useState(
+        timetableNumberDaysMap[timetableMode]
+    )
+    useEffect(() => {
+        if (calendarLoaded) {
+            setTimetableNumberDays(timetableNumberDaysMap[timetableMode])
+            calendarRef.current?.setVisibleDate(currentDate.toISOString())
+        }
+    }, [timetableMode])
     return (
         <View style={styles.page}>
             {!calendarLoaded && (
@@ -227,6 +235,9 @@ export default function TimetableWeek({
                 theme={calendarTheme}
                 onPressEvent={(event) => {
                     showEventDetails(event)
+                }}
+                onDateChanged={(date) => {
+                    setCurrentDate(new Date(date))
                 }}
                 initialDate={firstElementeDate ?? today}
                 onPressDayNumber={(date) => {
