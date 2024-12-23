@@ -2,8 +2,8 @@ import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
+import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
-import { MyMenu } from '@/components/Timetable/Menu'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
 import { FlashList, MasonryFlashList } from '@shopify/flash-list'
@@ -37,7 +37,7 @@ export default function HomeRootScreen(): React.JSX.Element {
                 component={isPageOpen ? HomeScreen : () => <></>}
                 largeTitle={true}
                 transparent={true}
-                headerRightElement={MyMenu}
+                headerRightElement={IndexHeaderRight}
                 androidFallback
             />
         </>
