@@ -65,6 +65,12 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "@react-native-menu/menu@1.1.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-native-menu/menu",
+        "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "@react-navigation/native@7.0.14": {
         "licenses": "MIT",
         "repository": "https://github.com/react-navigation/react-navigation",
@@ -119,7 +125,7 @@
         "licenseUrl": "https://github.com/Qix-/color/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "expo-alternate-app-icons@1.1.0": {
+    "expo-alternate-app-icons@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/pchalupa/expo-alternate-app-icons",
         "licenseUrl": "https://github.com/pchalupa/expo-alternate-app-icons/raw/master/LICENSE",
@@ -197,13 +203,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-router@4.0.13": {
+    "expo-router@4.0.14": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-screen-orientation@8.0.1": {
+    "expo-screen-orientation@8.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -227,7 +233,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.19": {
+    "expo@52.0.21": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -245,7 +251,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@24.1.2": {
+    "i18next@24.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -299,12 +305,6 @@
         "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "parents": "neuland"
     },
-    "react-native-calendars@1.1307.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/wix/react-native-calendars",
-        "licenseUrl": "https://github.com/wix/react-native-calendars/raw/master/LICENSE",
-        "parents": "neuland"
-    },
     "react-native-collapsible@1.6.1": {
         "licenses": "MIT",
         "repository": "https://oblador@github.com/oblador/react-native-collapsible",
@@ -347,6 +347,18 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "react-native-ios-context-menu@2.5.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dominicstop/react-native-ios-context-menu",
+        "licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "react-native-ios-utilities@4.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dominicstop/react-native-ios-utilities",
+        "licenseUrl": "https://github.com/dominicstop/react-native-ios-utilities/raw/master/LICENSE",
+        "parents": "neuland"
+    },
     "react-native-mmkv@3.2.0": {
         "licenses": "(MIT AND BSD-3-Clause)",
         "repository": "https://github.com/mrousavy/react-native-mmkv",
@@ -365,7 +377,7 @@
         "licenseUrl": "https://github.com/dohooo/react-native-reanimated-carousel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-reanimated@3.16.5": {
+    "react-native-reanimated@3.16.6": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-reanimated",
         "licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
@@ -453,6 +465,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/andrew-levy/swiftui-react-native",
         "licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "zeego@2.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nandorojo/zeego",
+        "licenseUrl": "https://github.com/nandorojo/zeego/raw/master/LICENSE",
         "parents": "neuland"
     },
     "zustand@5.0.2": {
