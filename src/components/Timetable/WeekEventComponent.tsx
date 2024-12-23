@@ -92,7 +92,7 @@ const EventComponent = ({
                 backgroundColor: background,
             }}
         >
-            {isIOS && isExam ? <ExamLine /> : <LectureLine />}
+            {isIOS && (isExam ? <ExamLine /> : <LectureLine />)}
             <View style={styles.eventText}>
                 <View>
                     <Text

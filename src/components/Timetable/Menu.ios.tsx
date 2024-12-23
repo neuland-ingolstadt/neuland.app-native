@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
-import DropdownMenuCheckIcon from '../Menu/DropdownMenuCheckIcon'
 import DropdownMenuContent from '../Menu/DropdownMenuContent'
-import DropdownMenuItem from '../Menu/DropdownMenuItem'
 import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
 import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
 import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
@@ -25,7 +23,7 @@ export function MyMenu() {
             <DropdownMenuTrigger>
                 <PlatformIcon
                     ios={{
-                        name: 'calendar',
+                        name: 'calendar.day.timeline.left',
                         size: 20,
                     }}
                     android={{
@@ -40,61 +38,72 @@ export function MyMenu() {
                 />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem
+                <DropdownMenu.CheckboxItem
                     key="1"
-                    onSelect={() => {
+                    value={timetableMode === TimetableMode.Timeline1}
+                    onValueChange={() => {
                         setTimetableMode(TimetableMode.Timeline1)
                     }}
                 >
                     <DropdownMenuItemTitle>
                         {t('menu.oneDay')}
                     </DropdownMenuItemTitle>
-                    {timetableMode === TimetableMode.Timeline1 && (
-                        <DropdownMenuCheckIcon />
-                    )}
-                </DropdownMenuItem>
+                    <DropdownMenu.ItemIcon
+                        ios={{
+                            name: '1.circle',
+                        }}
+                    />
+                </DropdownMenu.CheckboxItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
+                <DropdownMenu.CheckboxItem
                     key="3"
-                    onSelect={() => {
+                    value={timetableMode === TimetableMode.Timeline3}
+                    onValueChange={() => {
                         setTimetableMode(TimetableMode.Timeline3)
                     }}
                 >
                     <DropdownMenuItemTitle>
                         {t('menu.threeDays')}
                     </DropdownMenuItemTitle>
-                    {timetableMode === TimetableMode.Timeline3 && (
-                        <DropdownMenuCheckIcon />
-                    )}
-                </DropdownMenuItem>
+                    <DropdownMenu.ItemIcon
+                        ios={{
+                            name: '3.circle',
+                        }}
+                    />
+                </DropdownMenu.CheckboxItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
+                <DropdownMenu.CheckboxItem
                     key="5"
-                    onSelect={() => {
+                    value={timetableMode === TimetableMode.Timeline5}
+                    onValueChange={() => {
                         setTimetableMode(TimetableMode.Timeline5)
                     }}
                 >
                     <DropdownMenuItemTitle>
                         {t('menu.fiveDays')}
                     </DropdownMenuItemTitle>
-                    {timetableMode === TimetableMode.Timeline5 && (
-                        <DropdownMenuCheckIcon />
-                    )}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
+                    <DropdownMenu.ItemIcon
+                        ios={{
+                            name: '5.circle',
+                        }}
+                    />
+                </DropdownMenu.CheckboxItem>
+                <DropdownMenu.CheckboxItem
                     key="list"
-                    onSelect={() => {
+                    value={timetableMode === TimetableMode.List}
+                    onValueChange={() => {
                         setTimetableMode(TimetableMode.List)
                     }}
                 >
                     <DropdownMenuItemTitle>
                         {t('menu.list')}
                     </DropdownMenuItemTitle>
-                    {timetableMode === TimetableMode.List && (
-                        <DropdownMenuCheckIcon />
-                    )}
-                </DropdownMenuItem>
+                    <DropdownMenu.ItemIcon
+                        ios={{
+                            name: 'list.dash',
+                        }}
+                    />
+                </DropdownMenu.CheckboxItem>
             </DropdownMenuContent>
         </DropdownMenu.Root>
     )

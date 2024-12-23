@@ -47,9 +47,8 @@
     },
     "menu": {
         "oneDay": "Ein Tag",
-        "threeDays": "Drei Tage",
-        "fiveDays": "Fünf Tage",
-        "list": "Liste",
-        "timeline": "Zeitstrahl"
+        "threeDays": "Mehrtägig",
+        "fiveDays": "Woche",
+        "list": "Liste"
     }
 }

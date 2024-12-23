@@ -47,9 +47,8 @@
     },
     "menu": {
         "oneDay": "Single Day",
-        "threeDays": "Three Days",
-        "fiveDays": "Five Days",
-        "list": "List",
-        "timeline": "Timeline"
+        "threeDays": "Multi Day",
+        "fiveDays": "Week",
+        "list": "List"
     }
 }

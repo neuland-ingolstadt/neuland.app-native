@@ -20,7 +20,8 @@ const stylesheet = createStyleSheet((theme) => ({
         borderWidth: 0,
         fontSize: 18,
         outlineStyle: 'none',
-        paddingLeft: Platform.OS === 'web' ? 14 : 0,
+        paddingLeft:
+            Platform.OS === 'web' ? 14 : Platform.OS === 'android' ? 10 : 0,
         paddingVertical: 10,
     },
 }))

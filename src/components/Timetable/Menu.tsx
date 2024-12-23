@@ -1,4 +1,5 @@
 import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { Check } from 'lucide-react-native'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -8,7 +9,6 @@ import DropdownMenuContent from '../Menu/DropdownMenuContent'
 import DropdownMenuItem from '../Menu/DropdownMenuItem'
 import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
 import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
-import DropdownMenuSubContent from '../Menu/DropdownMenuSubContent'
 import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
 import PlatformIcon from '../Universal/Icon'
 
@@ -30,7 +30,7 @@ export function MyMenu() {
                     }}
                     android={{
                         name: 'calendar_month',
-                        size: 20,
+                        size: 22,
                     }}
                     web={{
                         name: 'Calendar',
@@ -40,68 +40,63 @@ export function MyMenu() {
                 />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenu.Sub>
-                    <DropdownMenu.SubTrigger key="timeline">
-                        {t('menu.timeline')}
-                    </DropdownMenu.SubTrigger>
-
-                    <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                            key="1"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline1)
-                            }}
+                <DropdownMenuItem
+                    key="1"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline1)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.oneDay')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline1 && (
+                        <DropdownMenu.ItemIcon
+                            androidIconName="check"
+                            style={styles.check}
                         >
-                            <DropdownMenuItemTitle>
-                                {t('menu.oneDay')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline1 && (
-                                <DropdownMenu.ItemIcon
-                                    ios={{
-                                        name: 'checkmark',
-                                    }}
-                                />
-                            )}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            key="3"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline3)
-                            }}
+                            <Check size={18} />
+                        </DropdownMenu.ItemIcon>
+                    )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    key="3"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline3)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.threeDays')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline3 && (
+                        <DropdownMenu.ItemIcon
+                            androidIconName="check"
+                            style={styles.check}
                         >
-                            <DropdownMenuItemTitle>
-                                {t('menu.threeDays')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline3 && (
-                                <DropdownMenu.ItemIcon
-                                    ios={{
-                                        name: 'checkmark',
-                                    }}
-                                />
-                            )}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            key="5"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline5)
-                            }}
+                            <Check size={18} />
+                        </DropdownMenu.ItemIcon>
+                    )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    key="5"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline5)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.fiveDays')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline5 && (
+                        <DropdownMenu.ItemIcon
+                            androidIconName="check"
+                            style={styles.check}
                         >
-                            <DropdownMenuItemTitle>
-                                {t('menu.fiveDays')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline5 && (
-                                <DropdownMenu.ItemIcon
-                                    ios={{
-                                        name: 'checkmark',
-                                    }}
-                                />
-                            )}
-                        </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                </DropdownMenu.Sub>
-
+                            <Check size={18} />
+                        </DropdownMenu.ItemIcon>
+                    )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                     key="list"
                     onSelect={() => {
@@ -113,10 +108,11 @@ export function MyMenu() {
                     </DropdownMenuItemTitle>
                     {timetableMode === TimetableMode.List && (
                         <DropdownMenu.ItemIcon
-                            ios={{
-                                name: 'checkmark',
-                            }}
-                        />
+                            androidIconName="check"
+                            style={styles.check}
+                        >
+                            <Check size={18} />
+                        </DropdownMenu.ItemIcon>
                     )}
                 </DropdownMenuItem>
             </DropdownMenuContent>
@@ -125,6 +121,9 @@ export function MyMenu() {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
+    check: {
+        color: theme.colors.labelColor,
+    },
     trigger: {
         color: theme.colors.text,
     },
