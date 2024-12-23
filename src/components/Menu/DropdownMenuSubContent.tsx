@@ -13,9 +13,10 @@ export default DropdownMenuSubContent
 
 const stylesheet = createStyleSheet((theme) => ({
     item: {
-        backgroundColor: theme.colors.card,
+        backgroundColor: theme.colors.cardContrast,
         borderColor: theme.colors.text,
-        borderRadius: 6,
+        borderRadius: 10,
+
         borderWidth: 1,
         fontSize: 18,
         margin: 10,

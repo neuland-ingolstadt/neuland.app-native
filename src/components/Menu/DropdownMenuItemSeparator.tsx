@@ -13,7 +13,9 @@ export default DropdownMenuSeparator
 
 const stylesheet = createStyleSheet((theme) => ({
     item: {
-        backgroundColor: theme.colors.border,
+        backgroundColor: theme.colors.labelTertiaryColor,
         height: 1,
+        marginBottom: 4,
+        marginTop: 4,
     },
 }))

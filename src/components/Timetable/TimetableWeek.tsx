@@ -1,4 +1,4 @@
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
 import { Exam, type FriendlyTimetableEntry } from '@/types/utils'
@@ -26,6 +26,13 @@ import { HeaderRight } from './HeaderButtons'
 import { MyMenu } from './Menu'
 import EventComponent from './WeekEventComponent'
 
+const timetableNumberDaysMap = {
+    [TimetableMode.List]: 1,
+    [TimetableMode.Timeline1]: 1,
+    [TimetableMode.Timeline3]: 3,
+    [TimetableMode.Timeline5]: 5,
+}
+
 export default function TimetableWeek({
     timetable,
     exams,
@@ -48,9 +55,8 @@ export default function TimetableWeek({
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
-    const imetableNumberDays = usePreferencesStore(
-        (state) => state.timetableNumberDays
-    )
+    const timetableMode = usePreferencesStore((state) => state.timetableMode)
+
     const calendarTheme = {
         colors: {
             primary: theme.colors.notification,
@@ -199,6 +205,8 @@ export default function TimetableWeek({
         calendarRef.current?.goToNextPage()
     }
 
+    const timetableNumberDays = timetableNumberDaysMap[timetableMode]
+
     return (
         <View style={styles.page}>
             {!calendarLoaded && (
@@ -214,7 +222,7 @@ export default function TimetableWeek({
                 start={450}
                 end={1290}
                 ref={calendarRef}
-                numberOfDays={imetableNumberDays}
+                numberOfDays={timetableNumberDays}
                 events={events}
                 theme={calendarTheme}
                 onPressEvent={(event) => {

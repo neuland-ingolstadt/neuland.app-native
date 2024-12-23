@@ -18,7 +18,7 @@ const stylesheet = createStyleSheet((theme) => ({
         borderRadius: 6,
         borderWidth: 0,
         fontSize: 18,
-        margin: 10,
-        padding: 5,
+        outlineStyle: 'none',
+        paddingVertical: 10,
     },
 }))

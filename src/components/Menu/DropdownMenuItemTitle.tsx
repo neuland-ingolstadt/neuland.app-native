@@ -11,9 +11,11 @@ const DropdownMenuItemTitle = DropdownMenu.create((props: ItemProps) => {
 
 export default DropdownMenuItemTitle
 
-const stylesheet = createStyleSheet(() => ({
+const stylesheet = createStyleSheet((theme) => ({
     item: {
-        fontFamily: 'Roboto',
-        fontSize: 20,
+        color: theme.colors.text,
+        fontSize: 16,
+        fontWeight: '500',
+        paddingRight: 10,
     },
 }))

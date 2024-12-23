@@ -9,7 +9,6 @@ import DropdownMenuContent from '../Menu/DropdownMenuContent'
 import DropdownMenuItem from '../Menu/DropdownMenuItem'
 import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
 import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
-import DropdownMenuSubContent from '../Menu/DropdownMenuSubContent'
 import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
 import PlatformIcon from '../Universal/Icon'
 
@@ -53,61 +52,47 @@ export function MyMenu() {
                 </Pressable>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenu.Sub>
-                    <DropdownMenu.ItemIcon
-                        ios={{
-                            name: 'checkmark', // required
-                        }}
-                    ></DropdownMenu.ItemIcon>
-                    <DropdownMenu.SubTrigger key="timeline">
-                        {t('menu.timeline')}
-                    </DropdownMenu.SubTrigger>
-
-                    <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                            key="1"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline1)
-                            }}
-                        >
-                            <DropdownMenuItemTitle>
-                                {t('menu.oneDay')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline1 && (
-                                <CheckMarkIcon />
-                            )}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            key="3"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline3)
-                            }}
-                        >
-                            <DropdownMenuItemTitle>
-                                {t('menu.threeDays')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline3 && (
-                                <CheckMarkIcon />
-                            )}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            key="5"
-                            onSelect={() => {
-                                setTimetableMode(TimetableMode.Timeline5)
-                            }}
-                        >
-                            <DropdownMenuItemTitle>
-                                {t('menu.fiveDays')}
-                            </DropdownMenuItemTitle>
-                            {timetableMode === TimetableMode.Timeline5 && (
-                                <CheckMarkIcon />
-                            )}
-                        </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                </DropdownMenu.Sub>
-
+                <DropdownMenuItem
+                    key="1"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline1)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.oneDay')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline1 && (
+                        <CheckMarkIcon />
+                    )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    key="3"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline3)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.threeDays')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline3 && (
+                        <CheckMarkIcon />
+                    )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    key="5"
+                    onSelect={() => {
+                        setTimetableMode(TimetableMode.Timeline5)
+                    }}
+                >
+                    <DropdownMenuItemTitle>
+                        {t('menu.fiveDays')}
+                    </DropdownMenuItemTitle>
+                    {timetableMode === TimetableMode.Timeline5 && (
+                        <CheckMarkIcon />
+                    )}
+                </DropdownMenuItem>
                 <DropdownMenuItem
                     key="list"
                     onSelect={() => {

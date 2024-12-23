@@ -13,12 +13,13 @@ export default DropdownMenuContent
 
 const stylesheet = createStyleSheet((theme) => ({
     item: {
-        backgroundColor: theme.colors.card,
-        borderColor: theme.colors.text,
-        borderRadius: 6,
-        borderWidth: 1,
-        fontSize: 18,
-        margin: 10,
-        padding: 5,
+        backgroundColor: theme.colors.cardButton,
+        borderRadius: 8,
+        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 5px 20px',
+        marginTop: 6,
+        paddingBottom: 4,
+        paddingLeft: 4,
+        paddingRight: 4,
+        paddingTop: 4,
     },
 }))

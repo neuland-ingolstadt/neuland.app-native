@@ -5,14 +5,20 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 const DEFAULT_ACCENT_COLOR = 'blue'
 
+export enum TimetableMode {
+    List = 'list',
+    Timeline1 = 'timeline-1',
+    Timeline3 = 'timeline-3',
+    Timeline5 = 'timeline-5',
+}
+
 interface PreferencesStore {
     accentColor: string
     theme: string
     language: 'de' | 'en' | undefined
     appIcon: string | undefined
     unlockedAppIcons: string[]
-    timetableMode: 'list' | 'timeline'
-    timetableNumberDays: 1 | 3 | 5
+    timetableMode: TimetableMode
     selectedDate: Date
     recentQuicklinks: string[]
     setAccentColor: (language: string) => void
@@ -20,8 +26,7 @@ interface PreferencesStore {
     setLanguage: (language: 'en' | 'de') => void
     setAppIcon: (name: string) => void
     addUnlockedAppIcon: (name: string) => void
-    setTimetableMode: (mode: 'list' | 'timeline') => void
-    setTimetableNumberDays: (days: 1 | 3 | 5) => void
+    setTimetableMode: (timetableMode: TimetableMode) => void
     setSelectedDate: (date: Date) => void
     addRecentQuicklink: (quicklink: string) => void
     reset: () => void
@@ -38,15 +43,13 @@ const initialState: Omit<
     | 'addRecentQuicklink'
     | 'reset'
     | 'setLanguage'
-    | 'setTimetableNumberDays'
 > = {
     accentColor: DEFAULT_ACCENT_COLOR,
     appIcon: undefined,
     language: undefined,
     theme: 'auto',
     unlockedAppIcons: [],
-    timetableMode: 'list',
-    timetableNumberDays: 3,
+    timetableMode: TimetableMode.List,
     selectedDate: new Date(),
     recentQuicklinks: defaultQuicklinks,
 }
@@ -76,11 +79,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
                     return { unlockedAppIcons: Array.from(newUnlockedAppIcons) }
                 })
             },
-            setTimetableMode: (timetableMode: 'list' | 'timeline') => {
+            setTimetableMode: (timetableMode: TimetableMode) => {
                 set({ timetableMode })
-            },
-            setTimetableNumberDays: (timetableNumberDays: 1 | 3 | 5) => {
-                set({ timetableNumberDays })
             },
             setSelectedDate: (selectedDate: Date) => {
                 set({ selectedDate })
