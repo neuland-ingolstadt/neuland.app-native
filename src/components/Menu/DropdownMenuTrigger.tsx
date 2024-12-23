@@ -1,4 +1,5 @@
 import React from 'react'
+import { Platform } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
@@ -19,6 +20,7 @@ const stylesheet = createStyleSheet((theme) => ({
         borderWidth: 0,
         fontSize: 18,
         outlineStyle: 'none',
+        paddingLeft: Platform.OS === 'web' ? 14 : 0,
         paddingVertical: 10,
     },
 }))

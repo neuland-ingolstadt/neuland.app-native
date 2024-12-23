@@ -16,6 +16,7 @@ const stylesheet = createStyleSheet((theme) => ({
         backgroundColor: theme.colors.cardButton,
         borderRadius: 8,
         boxShadow: 'rgba(0, 0, 0, 0.3) 0px 5px 20px',
+        marginLeft: 6,
         marginTop: 6,
         paddingBottom: 4,
         paddingLeft: 4,

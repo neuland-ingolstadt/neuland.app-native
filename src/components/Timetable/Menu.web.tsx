@@ -1,10 +1,10 @@
 import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
+import DropdownMenuCheckIcon from '../Menu/DropdownMenuCheckIcon'
 import DropdownMenuContent from '../Menu/DropdownMenuContent'
 import DropdownMenuItem from '../Menu/DropdownMenuItem'
 import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
@@ -12,16 +12,6 @@ import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
 import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
 import PlatformIcon from '../Universal/Icon'
 
-const CheckMarkIcon = () => {
-    return (
-        <DropdownMenu.ItemIcon
-            ios={{
-                name: 'checkmark', // required
-            }}
-            androidIconName="check"
-        />
-    )
-}
 export function MyMenu() {
     const setTimetableMode = usePreferencesStore(
         (state) => state.setTimetableMode
@@ -33,23 +23,21 @@ export function MyMenu() {
     return (
         <DropdownMenu.Root>
             <DropdownMenuTrigger>
-                <Pressable>
-                    <PlatformIcon
-                        ios={{
-                            name: 'calendar',
-                            size: 20,
-                        }}
-                        android={{
-                            name: 'calendar_month',
-                            size: 20,
-                        }}
-                        web={{
-                            name: 'Calendar',
-                            size: 20,
-                        }}
-                        style={styles.trigger}
-                    />
-                </Pressable>
+                <PlatformIcon
+                    ios={{
+                        name: 'calendar',
+                        size: 20,
+                    }}
+                    android={{
+                        name: 'calendar_month',
+                        size: 20,
+                    }}
+                    web={{
+                        name: 'Calendar',
+                        size: 20,
+                    }}
+                    style={styles.trigger}
+                />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem
@@ -62,7 +50,7 @@ export function MyMenu() {
                         {t('menu.oneDay')}
                     </DropdownMenuItemTitle>
                     {timetableMode === TimetableMode.Timeline1 && (
-                        <CheckMarkIcon />
+                        <DropdownMenuCheckIcon />
                     )}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -76,7 +64,7 @@ export function MyMenu() {
                         {t('menu.threeDays')}
                     </DropdownMenuItemTitle>
                     {timetableMode === TimetableMode.Timeline3 && (
-                        <CheckMarkIcon />
+                        <DropdownMenuCheckIcon />
                     )}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -90,9 +78,10 @@ export function MyMenu() {
                         {t('menu.fiveDays')}
                     </DropdownMenuItemTitle>
                     {timetableMode === TimetableMode.Timeline5 && (
-                        <CheckMarkIcon />
+                        <DropdownMenuCheckIcon />
                     )}
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                     key="list"
                     onSelect={() => {
@@ -102,7 +91,9 @@ export function MyMenu() {
                     <DropdownMenuItemTitle>
                         {t('menu.list')}
                     </DropdownMenuItemTitle>
-                    {timetableMode === TimetableMode.List && <CheckMarkIcon />}
+                    {timetableMode === TimetableMode.List && (
+                        <DropdownMenuCheckIcon />
+                    )}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu.Root>
