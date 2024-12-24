@@ -22,6 +22,7 @@ const stylesheet = createStyleSheet((theme) => ({
         outlineStyle: 'none',
         paddingLeft:
             Platform.OS === 'web' ? 14 : Platform.OS === 'android' ? 10 : 0,
+        paddingRight: Platform.OS === 'android' ? 10 : 0,
         paddingVertical: 10,
     },
 }))
