@@ -5,7 +5,7 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { type FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
@@ -85,7 +85,7 @@ function TimetableScreen(): React.JSX.Element {
                 ) : isSuccess &&
                   timetable !== undefined &&
                   timetable.length > 0 ? (
-                    timetableMode === 'list' ? (
+                    timetableMode === TimetableMode.List ? (
                         <TimetableList
                             timetable={timetable}
                             exams={exams ?? []}

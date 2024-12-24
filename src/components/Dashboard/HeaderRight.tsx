@@ -54,6 +54,12 @@ export const IndexHeaderRight = (): React.JSX.Element => {
     })
 
     useEffect(() => {
+        if (isError) {
+            setShowLoadingIndicator(false)
+        }
+    }, [isError])
+
+    useEffect(() => {
         const fetchUsernameAndSetInitials = (): void => {
             if (userKind === USER_STUDENT && persData !== undefined) {
                 const initials = getInitials(

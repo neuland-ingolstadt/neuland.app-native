@@ -28,7 +28,8 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-import { HeaderLeft, HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './HeaderButtons'
+import { MyMenu } from './Menu'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
@@ -73,7 +74,7 @@ export default function TimetableList({
                     }}
                 />
             ),
-            headerLeft: () => <HeaderLeft />,
+            headerLeft: () => <MyMenu />,
         })
     }, [navigation])
 

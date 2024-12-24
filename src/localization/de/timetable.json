@@ -44,5 +44,11 @@
         "thirty": "30 Minuten vorher",
         "sixty": "60 Minuten vorher",
         "body": "beginnt in {{mins}} Minuten in Raum {{room}}."
+    },
+    "menu": {
+        "oneDay": "Ein Tag",
+        "threeDays": "Mehrtägig",
+        "fiveDays": "Woche",
+        "list": "Liste"
     }
 }
