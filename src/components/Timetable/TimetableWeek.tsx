@@ -52,7 +52,9 @@ export default function TimetableWeek({
     )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
-    const [currentDate, setCurrentDate] = React.useState(today)
+    const [currentDate, setCurrentDate] = React.useState(
+        firstElementeDate ?? today
+    )
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
@@ -227,8 +229,8 @@ export default function TimetableWeek({
                     setCalendarLoaded(true)
                 }}
                 allowPinchToZoom
-                start={450}
-                end={1290}
+                start={420}
+                end={1320}
                 ref={calendarRef}
                 numberOfDays={timetableNumberDays}
                 events={events}
