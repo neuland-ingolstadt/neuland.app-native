@@ -5,13 +5,20 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 const DEFAULT_ACCENT_COLOR = 'blue'
 
+export enum TimetableMode {
+    List = 'list',
+    Timeline1 = 'timeline-1',
+    Timeline3 = 'timeline-3',
+    Timeline5 = 'timeline-5',
+}
+
 interface PreferencesStore {
     accentColor: string
     theme: string
     language: 'de' | 'en' | undefined
     appIcon: string | undefined
     unlockedAppIcons: string[]
-    timetableMode: string | undefined
+    timetableMode: TimetableMode
     selectedDate: Date
     recentQuicklinks: string[]
     setAccentColor: (language: string) => void
@@ -19,7 +26,7 @@ interface PreferencesStore {
     setLanguage: (language: 'en' | 'de') => void
     setAppIcon: (name: string) => void
     addUnlockedAppIcon: (name: string) => void
-    setTimetableMode: (mode: string) => void
+    setTimetableMode: (timetableMode: TimetableMode) => void
     setSelectedDate: (date: Date) => void
     addRecentQuicklink: (quicklink: string) => void
     reset: () => void
@@ -42,7 +49,7 @@ const initialState: Omit<
     language: undefined,
     theme: 'auto',
     unlockedAppIcons: [],
-    timetableMode: undefined,
+    timetableMode: TimetableMode.List,
     selectedDate: new Date(),
     recentQuicklinks: defaultQuicklinks,
 }
@@ -72,7 +79,7 @@ export const usePreferencesStore = create<PreferencesStore>()(
                     return { unlockedAppIcons: Array.from(newUnlockedAppIcons) }
                 })
             },
-            setTimetableMode: (timetableMode: string) => {
+            setTimetableMode: (timetableMode: TimetableMode) => {
                 set({ timetableMode })
             },
             setSelectedDate: (selectedDate: Date) => {
