@@ -14,7 +14,9 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-const isIOS = Platform.OS === 'ios'
+const isIOS =
+    Platform.OS === 'ios' ||
+    (Platform.OS === 'web' && navigator.userAgent.includes('Safari'))
 const EventComponent = ({
     event,
     theme,
@@ -90,7 +92,7 @@ const EventComponent = ({
                 backgroundColor: background,
             }}
         >
-            {isIOS && isExam ? <ExamLine /> : <LectureLine />}
+            {isIOS && (isExam ? <ExamLine /> : <LectureLine />)}
             <View style={styles.eventText}>
                 <View>
                     <Text

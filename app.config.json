@@ -7,7 +7,7 @@
         "version": "0.11.0",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
+        "newArchEnabled": false,
         "ios": {
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
             "buildNumber": "199",
@@ -36,7 +36,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 271
+            "versionCode": 273
         },
         "sdkVersion": "52.0.0",
         "experiments": {

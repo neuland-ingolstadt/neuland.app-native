@@ -6,8 +6,8 @@ echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
 brew install cocoapods
 echo "===== Installing Node.js ====="
-brew install node@22
-brew link node@22
+brew install node@23
+brew link node@23
 node -v
 npm -v
 
