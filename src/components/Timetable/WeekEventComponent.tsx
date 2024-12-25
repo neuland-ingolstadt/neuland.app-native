@@ -14,7 +14,9 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 
-const isIOS = Platform.OS === 'ios'
+const isIOS =
+    Platform.OS === 'ios' ||
+    (Platform.OS === 'web' && navigator.userAgent.includes('Safari'))
 const EventComponent = ({
     event,
     theme,
@@ -31,22 +33,58 @@ const EventComponent = ({
     ) {
         return null
     }
-
+    const isExam = event.eventType === 'exam'
     const begin = new Date(event.start.dateTime)
     const end = new Date(event.end.dateTime)
     const duration = end.getTime() - begin.getTime()
     const isOverflowing = duration < 1000 * 60 * 60
     const nameParts = event.shortName?.split('_')?.slice(1) as string[]
-    const background = eventBackgroundColor(theme.colors.primary, isDark)
-    const fontColor = textColor(theme.colors.primary, background, isDark)
+    const background = isExam
+        ? eventBackgroundColor(theme.colors.notification, isDark)
+        : eventBackgroundColor(theme.colors.primary, isDark)
+
+    const fontColor = isExam
+        ? textColor(theme.colors.notification, background, isDark)
+        : textColor(theme.colors.primary, background, isDark)
     const eventName = event.name as string
     const nameToDisplay =
         eventName.length > 20
-            ? nameParts.join('_') !== ''
-                ? nameParts.join('_')
+            ? nameParts?.join('_') !== ''
+                ? (nameParts?.join('_') ?? eventName)
                 : (event.shortName as string)
             : eventName
 
+    const LectureLine = () => {
+        return (
+            <LinearGradient
+                colors={[
+                    theme.colors.primary,
+                    lineColor(theme.colors.primary, background, isDark),
+                ]}
+                start={[0, 0.2]}
+                end={[1, 0.8]}
+                style={{
+                    ...styles.eventLine,
+                }}
+            />
+        )
+    }
+
+    const ExamLine = () => {
+        return (
+            <LinearGradient
+                colors={[
+                    theme.colors.notification,
+                    lineColor(theme.colors.notification, background, isDark),
+                ]}
+                start={[0, 0.2]}
+                end={[1, 0.8]}
+                style={{
+                    ...styles.eventLine,
+                }}
+            />
+        )
+    }
     return (
         <View
             style={{
@@ -54,19 +92,7 @@ const EventComponent = ({
                 backgroundColor: background,
             }}
         >
-            {isIOS && (
-                <LinearGradient
-                    colors={[
-                        theme.colors.primary,
-                        lineColor(theme.colors.primary, background, isDark),
-                    ]}
-                    start={[0, 0.2]}
-                    end={[1, 0.8]}
-                    style={{
-                        ...styles.eventLine,
-                    }}
-                />
-            )}
+            {isIOS && (isExam ? <ExamLine /> : <LectureLine />)}
             <View style={styles.eventText}>
                 <View>
                     <Text
@@ -103,7 +129,9 @@ const EventComponent = ({
                                 color: fontColor,
                             }}
                         >
-                            {event.rooms?.join(', ') ?? ''}
+                            {Array.isArray(event.rooms)
+                                ? event.rooms.join(', ')
+                                : (event.rooms ?? '')}
                         </Text>
                     )}
                 </View>

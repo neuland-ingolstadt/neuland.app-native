@@ -5,6 +5,7 @@ import {
     type FriendlyTimetableEntry,
     type TimetableSections,
 } from '@/types/utils'
+import moment from 'moment'
 
 import { combineDateTime } from './date-utils'
 
@@ -123,17 +124,26 @@ export function getGroupedTimetable(
 ): TimetableSections[] {
     const combinedData = [
         ...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
-        ...exams.map((exam) => ({ ...exam, eventType: 'exam' })),
+        ...exams.map((exam) => {
+            const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90)
+            return {
+                ...exam,
+                endDate: moment(exam.date).add(duration, 'minutes').toDate(),
+                eventType: 'exam',
+            }
+        }),
     ]
     const dates = [
         ...new Set(
-            combinedData.map((item) => item.date.toString().split('T')[0])
+            combinedData.map(
+                (item) => new Date(item.date).toISOString().split('T')[0]
+            )
         ),
     ]
     const groups = dates.map((date) => ({
         title: new Date(date),
         data: combinedData.filter(
-            (item) => item.date.toString().split('T')[0] === date
+            (item) => new Date(item.date).toISOString().split('T')[0] === date
         ),
     }))
     return groups as TimetableSections[]

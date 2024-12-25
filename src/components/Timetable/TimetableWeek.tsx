@@ -1,6 +1,7 @@
+import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type ITimetableViewProps } from '@/types/timetable'
-import { type FriendlyTimetableEntry } from '@/types/utils'
+import { Exam, type FriendlyTimetableEntry } from '@/types/utils'
 import {
     CalendarBody,
     CalendarContainer,
@@ -21,11 +22,20 @@ import {
 
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderLeft, HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './HeaderButtons'
+import { MyMenu } from './Menu'
 import EventComponent from './WeekEventComponent'
+
+const timetableNumberDaysMap = {
+    [TimetableMode.List]: 1,
+    [TimetableMode.Timeline1]: 1,
+    [TimetableMode.Timeline3]: 3,
+    [TimetableMode.Timeline5]: 5,
+}
 
 export default function TimetableWeek({
     timetable,
+    exams,
 }: ITimetableViewProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const today = moment().startOf('day').toDate()
@@ -37,11 +47,18 @@ export default function TimetableWeek({
     const setSelectedLecture = useRouteParamsStore(
         (state) => state.setSelectedLecture
     )
+    const setSelectedExam = useRouteParamsStore(
+        (state) => state.setSelectedExam
+    )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
+    const [currentDate, setCurrentDate] = React.useState(
+        firstElementeDate ?? today
+    )
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
+    const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
     const calendarTheme = {
         colors: {
@@ -59,12 +76,15 @@ export default function TimetableWeek({
         if (entry.eventType === 'lecture') {
             setSelectedLecture(entry as unknown as FriendlyTimetableEntry)
             router.navigate('/lecture')
+        } else if (entry.eventType === 'exam') {
+            setSelectedExam(entry as unknown as Exam)
+            router.navigate('/exam')
         }
     }
 
     useEffect(() => {
         if (timetable.length > 0) {
-            const friendlyTimetableWithColor = timetable.map(
+            const friendlyTimetable = timetable.map(
                 (entry: FriendlyTimetableEntry, index: number) => ({
                     ...entry,
                     eventType: 'lecture',
@@ -77,9 +97,28 @@ export default function TimetableWeek({
                     },
                 })
             )
-            setEvents(friendlyTimetableWithColor as unknown as PackedEvent[])
+            const friendlyExams = exams.map((entry, index) => {
+                const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
+                return {
+                    ...entry,
+                    eventType: 'exam',
+                    id: index.toString(),
+                    start: {
+                        dateTime: entry.date,
+                    },
+                    end: {
+                        dateTime: moment(entry.date)
+                            .add(duration, 'minutes')
+                            .toDate(),
+                    },
+                }
+            })
+            setEvents([
+                ...friendlyTimetable,
+                ...friendlyExams,
+            ] as unknown as PackedEvent[])
         }
-    }, [timetable])
+    }, [timetable, exams])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -100,7 +139,7 @@ export default function TimetableWeek({
             ),
             headerLeft: () => (
                 <View style={styles.buttons}>
-                    <HeaderLeft />
+                    <MyMenu />
                     {Platform.OS === 'web' && (
                         <View style={styles.buttons}>
                             <Pressable
@@ -169,6 +208,15 @@ export default function TimetableWeek({
         calendarRef.current?.goToNextPage()
     }
 
+    const [timetableNumberDays, setTimetableNumberDays] = React.useState(
+        timetableNumberDaysMap[timetableMode]
+    )
+    useEffect(() => {
+        if (calendarLoaded) {
+            setTimetableNumberDays(timetableNumberDaysMap[timetableMode])
+            calendarRef.current?.setVisibleDate(currentDate.toISOString())
+        }
+    }, [timetableMode])
     return (
         <View style={styles.page}>
             {!calendarLoaded && (
@@ -181,14 +229,17 @@ export default function TimetableWeek({
                     setCalendarLoaded(true)
                 }}
                 allowPinchToZoom
-                start={450}
-                end={1290}
+                start={420}
+                end={1320}
                 ref={calendarRef}
-                numberOfDays={3}
+                numberOfDays={timetableNumberDays}
                 events={events}
                 theme={calendarTheme}
                 onPressEvent={(event) => {
                     showEventDetails(event)
+                }}
+                onDateChanged={(date) => {
+                    setCurrentDate(new Date(date))
                 }}
                 initialDate={firstElementeDate ?? today}
                 onPressDayNumber={(date) => {
@@ -210,6 +261,7 @@ export default function TimetableWeek({
 const stylesheet = createStyleSheet(() => ({
     buttons: {
         flexDirection: 'row',
+        gap: 4,
     },
     loadingContainer: {
         alignItems: 'center',
