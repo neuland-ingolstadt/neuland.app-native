@@ -39,10 +39,12 @@ export default function TimetableWeek({
 }: ITimetableViewProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const today = moment().startOf('day').toDate()
-    const firstElementeDate = timetable.find(
-        (entry: FriendlyTimetableEntry) =>
-            moment(entry.startDate).startOf('day').toDate() >= today
-    )?.startDate
+    const firstElementeDate = new Date(
+        timetable.find(
+            (entry: FriendlyTimetableEntry) =>
+                moment(entry.startDate).startOf('day').toDate() >= today
+        )?.startDate ?? today
+    )
     const calendarRef = useRef<CalendarKitHandle>(null)
     const setSelectedLecture = useRouteParamsStore(
         (state) => state.setSelectedLecture
@@ -52,9 +54,7 @@ export default function TimetableWeek({
     )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
-    const [currentDate, setCurrentDate] = React.useState(
-        firstElementeDate ?? today
-    )
+    const [currentDate, setCurrentDate] = React.useState(firstElementeDate)
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()

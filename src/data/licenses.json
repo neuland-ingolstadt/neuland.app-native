@@ -47,7 +47,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0-beta.13": {
+    "@maplibre/maplibre-react-native@10.0.0-beta.15": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -65,7 +65,7 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-menu/menu@1.1.7": {
+    "@react-native-menu/menu@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-menu/menu",
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
@@ -95,13 +95,13 @@
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.62.10": {
+    "@tanstack/react-query-persist-client@5.62.11": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.62.10": {
+    "@tanstack/react-query@5.62.11": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
