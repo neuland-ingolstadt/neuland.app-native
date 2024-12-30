@@ -35,6 +35,7 @@ Access key university platforms such as moodle, PRIMUSS or your webmail with a s
 
 Stay up to date with the **latest news** from the THI.
 \
+\
 And more - regular updates based on feedback are on their way!
 
 ## Changelog

@@ -232,7 +232,7 @@ export default function TimetableWeek({
                 start={420}
                 end={1320}
                 ref={calendarRef}
-                numberOfDays={timetableNumberDays}
+                numberOfDays={timetableNumberDays ?? TimetableMode.Timeline3}
                 events={events}
                 theme={calendarTheme}
                 onPressEvent={(event) => {
