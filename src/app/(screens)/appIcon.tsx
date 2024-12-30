@@ -9,6 +9,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 import {
     getAppIconName,
+    resetAppIcon,
     setAlternateAppIcon,
     supportsAlternateIcons,
 } from 'expo-alternate-app-icons'
@@ -89,6 +90,12 @@ export default function AppIconPicker(): React.JSX.Element {
                                                     style={styles.rowContainer}
                                                     onPress={() => {
                                                         try {
+                                                            if (
+                                                                icon ===
+                                                                'default'
+                                                            ) {
+                                                                resetAppIcon()
+                                                            }
                                                             void setAlternateAppIcon(
                                                                 capitalizeFirstLetter(
                                                                     icon
