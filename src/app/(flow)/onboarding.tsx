@@ -429,6 +429,7 @@ export default function OnboardingScreen(): React.JSX.Element {
                         speed={800}
                         text="Neuland Next"
                         disabled={!buttonDisabled}
+                        // @ts-expect-error wrong types
                         textStyles={[
                             {
                                 fontSize: scaledHeading,

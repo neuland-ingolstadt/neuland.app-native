@@ -53,12 +53,12 @@ export default function Login(): React.JSX.Element {
     const navigateHome = (): void => {
         if (fromOnboarding === 'true') {
             router.dismissAll()
-            router.replace('/')
+            router.replace('/(tabs)')
             return
         }
         router.dismissAll()
         if (Platform.OS === 'web') {
-            router.replace('/')
+            router.replace('/(tabs)')
         }
     }
 
