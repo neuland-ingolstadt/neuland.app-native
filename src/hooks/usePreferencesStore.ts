@@ -49,7 +49,7 @@ const initialState: Omit<
     language: undefined,
     theme: 'auto',
     unlockedAppIcons: [],
-    timetableMode: TimetableMode.List,
+    timetableMode: TimetableMode.Timeline3,
     selectedDate: new Date(),
     recentQuicklinks: defaultQuicklinks,
 }

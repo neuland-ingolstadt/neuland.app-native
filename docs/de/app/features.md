@@ -37,6 +37,7 @@ Greife mit einem Tap auf wichtige Uni-Plattformen wie Moodle, PRIMUSS oder dein 
 
 Bleib up-to-date mit den neuesten News von der THI.
 \
+\
 Und vieles mehr – regelmäßige Updates basierend auf eurem Feedback sind schon in Arbeit!
 
 ## Änderungsprotokoll
