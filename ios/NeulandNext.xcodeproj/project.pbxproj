@@ -179,6 +179,8 @@
 				28E106C6BAB84F5988F34B8E /* Remove signature files (Xcode workaround) */,
 				A2D2C10D14CA58FA7F8CA7B2 /* [CP] Embed Pods Frameworks */,
 				0124471C30E892434097B081 /* [CP] Copy Pods Resources */,
+				595B2ACD5CF84BDFAF84A1B6 /* Remove signature files (Xcode workaround) */,
+				173600D85F854ADFBE5F9DD0 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -377,6 +379,40 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-NeulandNext/expo-configure-project.sh\"\n";
 		};
+		595B2ACD5CF84BDFAF84A1B6 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+    echo \"Remove signature files (Xcode workaround)\";
+    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+  ";
+		};
+		173600D85F854ADFBE5F9DD0 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Remove signature files (Xcode workaround)";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "
+    echo \"Remove signature files (Xcode workaround)\";
+    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";
+  ";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -425,13 +461,21 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Debug;
 		};
@@ -447,7 +491,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FSXB76X6V2;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64";
 				INFOPLIST_FILE = NeulandNext/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -462,12 +506,20 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.neuland-ingolstadt.neuland-app";
-				PRODUCT_NAME = NeulandNext;
+				PRODUCT_NAME = "NeulandNext";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "NeulandNext/NeulandNext-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Release;
 		};
@@ -542,6 +594,14 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Debug;
 		};
@@ -608,6 +668,14 @@
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = (
+					Cat,
+					RainbowNeon,
+					Retro,
+					ModernGreen,
+					ModernPink,
+					RainbowMoonLight,
+				);
 			};
 			name = Release;
 		};

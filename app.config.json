@@ -27,7 +27,11 @@
                 "UIViewControllerBasedStatusBarAppearance": false,
                 "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
             },
-            "icon": "./src/assets/appIcons/default.png"
+            "icon": {
+                "light": "./src/assets/appIcons/default.png",
+                "dark": "./src/assets/appIcons/dark/defaultDark.png",
+                "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+            }
         },
         "locales": {
             "en": "./src/localization/en/ios.json",
@@ -36,7 +40,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 274
+            "versionCode": 275
         },
         "sdkVersion": "52.0.0",
         "experiments": {
@@ -59,7 +63,47 @@
                     "headOrigin": "https://neuland.app"
                 }
             ],
-            ["expo-alternate-app-icons"],
+            [
+                "expo-alternate-app-icons",
+                [
+                    {
+                        "name": "Cat", // The name of the alternate icon
+                        "ios": "./src/assets/appIcons/cat.png" // Path to iOS ico
+                    },
+                    {
+                        "name": "RainbowNeon", // The name of the alternate icon
+                        "ios": "./src/assets/appIcons/rainbowNeon.png" // Path to iOS ico
+                    },
+                    {
+                        "name": "Retro", // The name of the alternate icon
+                        "ios": "./src/assets/appIcons/retro.png" // Path to iOS ico
+                    },
+                    {
+                        "name": "ModernGreen", // The name of the alternate icon
+                        "ios": {
+                            "light": "./src/assets/appIcons/modernGreen.png",
+                            "dark": "./src/assets/appIcons/dark/modernGreenDark.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    },
+                    {
+                        "name": "ModernPink", // The name of the alternate icon
+                        "ios": {
+                            "light": "./src/assets/appIcons/modernPurple.png",
+                            "dark": "./src/assets/appIcons/dark/purpleDark.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    },
+                    {
+                        "name": "RainbowMoonLight", // The name of the alternate icon
+                        "ios": {
+                            "light": "./src/assets/appIcons/rainbowMoonLight.png",
+                            "dark": "./src/assets/appIcons/dark/darkRainbow.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    }
+                ]
+            ],
             ["expo-secure-store"],
             ["expo-localization"],
             [
