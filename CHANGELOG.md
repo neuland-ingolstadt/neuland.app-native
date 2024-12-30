@@ -2,15 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
-
-### ⚙️ Miscellaneous Tasks
-
-- Update deployment triggers to include tag pushes - ([fe2178e](https://github.com///commit/fe2178e9460c77f33bd91e25762d6c78bf009cf4))
-- Update Docker actions to latest versions in deployment workflow - ([25b9177](https://github.com///commit/25b9177c42f1bf1047b2b5eef209d13951d9145d))
-- Set NODE_BINARY environment variable in ios post-clone script - ([0422ee2](https://github.com///commit/0422ee2475529634a5167cb87625248ae9cfc686))
-- Update version code and app icon filenames for iOS assets - ([40d4a65](https://github.com///commit/40d4a65305e101adc0a142912c1a051bce99daa6))
-
 ## [0.11.1](https://github.com///compare/0.11.0..0.11.1) - 2024-12-30
 
 ### 🐛 Bug Fixes
