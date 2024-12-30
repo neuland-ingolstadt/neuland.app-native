@@ -10,6 +10,8 @@ brew install node@23
 brew link node@23
 node -v
 npm -v
+export NODE_BINARY=$(which node)
+echo "NODE_BINARY is set to $NODE_BINARY"
 
 echo "===== Installing Bun ====="
 brew tap oven-sh/bun
