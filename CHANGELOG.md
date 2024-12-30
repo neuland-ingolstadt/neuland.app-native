@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.11.0](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.10.1..0.11.0) - 2024-12-26
+## [0.11.1](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.0..0.11.1) - 2024-12-30
+
+### 🐛 Bug Fixes
+
+- _(login)_ Prevent white screen during login redirect - by @Robert27 ([f6285b6](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f6285b6fe0b3e20f79a1020756daf23c0fa2fd6a))
+- _(timetable)_ Set default timetable mode in TimetableWeek component - by @Robert27 ([33cb8c6](https://github.com/neuland-ingolstadt/neuland.app-native/commit/33cb8c616f172a48192c6f10866ba85eea987f81))
+
+**Full Changelog**: https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.0...0.11.1
+
+## [0.11.0](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.10.1..0.11.0) - 2024-12-28
 
 ### 🚀 Features
 
@@ -53,7 +62,7 @@ All notable changes to this project will be documented in this file.
 - _(store)_ Add reset functionality to preferences store and streamline initial state setup - by @Robert27 ([fdcc4ee](https://github.com/neuland-ingolstadt/neuland.app-native/commit/fdcc4eef14c2b2e96618cd0a8cb1b112ffd78a38))
 - _(tabs)_ Revert android header styles - by @Robert27 ([a180834](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a180834c253b1b85d4c5890e4be456ebb0e0310d))
 - _(timetable)_ Add end time for timetable week view - by @Robert27 ([5406bb2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5406bb2d7f916d34c888f9910485137cb527bd1a))
-- _(timetable)_ Ensure current date fallback is correctly set in TimetableWeek component - by @Robert27 ([7ac14ff](https://github.com/neuland-ingolstadt/neuland.app-native/commit/7ac14ffd789c309fd06f4e73cef8dd858e8a056a))
+- _(timetable)_ Ensure current date fallback is correctly set in TimetableWeek component - by @Robert27 ([012b32f](https://github.com/neuland-ingolstadt/neuland.app-native/commit/012b32ff869c24c15701d224a9619dd2583f5a04))
 - _(web)_ Enhance styling and add missing icons - by @Robert27 ([a806afb](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a806afb9ea611c45592087eebe7a2e330eb709fb))
 - _(web)_ Add navigation buttons for week view - by @Robert27 ([760d2e8](https://github.com/neuland-ingolstadt/neuland.app-native/commit/760d2e8aab85552427b7b1d9f8431605ae6b4804))
 - Update Pressable components to use onPressOut for improved touch handling - by @Robert27 ([69d31ff](https://github.com/neuland-ingolstadt/neuland.app-native/commit/69d31ffe2272474e13b740da860b6bbdc922517f))
