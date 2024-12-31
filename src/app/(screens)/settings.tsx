@@ -89,13 +89,13 @@ export default function Settings(): React.JSX.Element {
                 bottomBoundX,
                 topBoundX,
                 randomizeColor
-            )
+            ) as unknown as number
             translateY.value = withBouncing(
                 velocity,
                 bottomBoundY,
                 topBoundY,
                 randomizeColor
-            )
+            ) as unknown as number
         } else {
             cancelAnimation(translateX)
             cancelAnimation(translateY)
@@ -341,8 +341,13 @@ export default function Settings(): React.JSX.Element {
                         trackEvent('Share', { type: 'app' })
 
                         void Share.share({
-                            url: 'https://next.neuland.app/get',
-                            message: t('menu.formlist.legal.shareMessage'),
+                            url: 'https://next.neuland.app/get', // url option is only available on iOS
+                            message:
+                                Platform.OS === 'ios'
+                                    ? t('menu.formlist.legal.shareMessage')
+                                    : t(
+                                          'menu.formlist.legal.shareMessageAndroid'
+                                      ),
                         })
                     },
                 },
