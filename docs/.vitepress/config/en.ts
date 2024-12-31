@@ -18,7 +18,7 @@ export const en = defineConfig({
     footer: {
       message:
         '<a href="/legal/imprint">Imprint</a> & <a href="/legal/privacy">Privacy</a>',
-      copyright: "Copyright © 2024 Neuland Ingolstadt e.V.",
+      copyright: "Copyright © 2025 Neuland Ingolstadt e.V.",
     },
     sidebar: {
       "/en/app/": { base: "/en/app/", items: sidebarApp() },
