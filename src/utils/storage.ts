@@ -30,10 +30,15 @@ export async function saveSecure(
 }
 
 export function loadSecure(key: string): string | null {
-    if (Platform.OS === 'web') {
-        return secureWebStorage.getString(key) ?? null
+    try {
+        if (Platform.OS === 'web') {
+            return secureWebStorage.getString(key) ?? null
+        }
+        return SecureStore.getItem(key)
+    } catch (error) {
+        console.error(`Failed to load secure item with key ${key}:`, error)
+        return null
     }
-    return SecureStore.getItem(key)
 }
 
 export async function deleteSecure(key: string): Promise<void> {
@@ -47,7 +52,11 @@ export async function deleteSecure(key: string): Promise<void> {
 
 const clientStorage = {
     setItem: (key: string, value: string | number | boolean | ArrayBuffer) => {
-        storage.set(key, value)
+        if (value instanceof ArrayBuffer) {
+            storage.set(key, new Uint8Array(value))
+        } else {
+            storage.set(key, value)
+        }
     },
     getItem: (key: string) => {
         const value = storage.getString(key)
