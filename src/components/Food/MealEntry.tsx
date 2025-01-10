@@ -175,7 +175,7 @@ export const MealEntry = ({
                                     i18n.language as LanguageKey
                                 )}
                             </Text>
-                            {meal.variants.length > 0 && (
+                            {meal.variants?.length > 0 && (
                                 <LinearGradient
                                     style={styles.variantContainer}
                                     colors={[
