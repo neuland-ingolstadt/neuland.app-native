@@ -19,7 +19,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.4):
     - ExpoModulesCore
-  - Expo (52.0.23):
+  - Expo (52.0.24):
     - ExpoModulesCore
   - expo-dev-client (5.0.8):
     - EXManifests
@@ -247,7 +247,7 @@ PODS:
     - ExpoModulesCore
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
-  - ExpoHead (4.0.15):
+  - ExpoHead (4.0.16):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
@@ -282,7 +282,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoScreenOrientation (8.0.2):
+  - ExpoScreenOrientation (8.0.3):
     - DoubleConversion
     - ExpoModulesCore
     - glog
@@ -306,7 +306,7 @@ PODS:
     - Yoga
   - ExpoSecureStore (14.0.0):
     - ExpoModulesCore
-  - ExpoSplashScreen (0.29.18):
+  - ExpoSplashScreen (0.29.19):
     - ExpoModulesCore
   - ExpoSystemUI (4.0.6):
     - ExpoModulesCore
@@ -318,11 +318,11 @@ PODS:
   - hermes-engine (0.76.5):
     - hermes-engine/Pre-built (= 0.76.5)
   - hermes-engine/Pre-built (0.76.5)
-  - maplibre-react-native (10.0.0-beta.17):
-    - maplibre-react-native/DynamicLibrary (= 10.0.0-beta.17)
+  - maplibre-react-native (10.0.0-beta.18):
+    - maplibre-react-native/DynamicLibrary (= 10.0.0-beta.18)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.0.0-beta.17):
+  - maplibre-react-native/DynamicLibrary (10.0.0-beta.18):
     - React
     - React-Core
   - MMKV (2.0.2):
@@ -2543,7 +2543,7 @@ SPEC CHECKSUMS:
   EXConstants: dd2fe64c6cdb1383b694c309a63028a8e9f2be6d
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: f30a0c5d3d6cad8db9c01bab579e0aa0df5d3cb2
-  Expo: 37cea4167605a3a1b88fa0caf8349ae76c0d389c
+  Expo: c754038e8ff39caaa945f88e937314818f64228f
   expo-dev-client: ec22c0535228bbf784a4fa7c40f90d3944d7724e
   expo-dev-launcher: 47c6da6d00c48be318e77134335b4619a810fb40
   expo-dev-menu: 9e2c8a4c01ed3d51859bd6375a14683f15e2ec30
@@ -2557,23 +2557,23 @@ SPEC CHECKSUMS:
   ExpoFileSystem: 179a0661fd6d3c4e5d7e500a99a9cd8b295d9566
   ExpoFont: 260fb85279912421894060d9aea453cee4ffc01c
   ExpoHaptics: e636188d1d5f7ccb79f3c1bfab47aaf5a1768c73
-  ExpoHead: 83465614d1af3df77a0db724a24a43648e3daefa
+  ExpoHead: 9ea4e125f3aafd23e56f7feb4942c7b595889610
   ExpoKeepAwake: 783e68647b969b210a786047c3daa7b753dcac1f
   ExpoLinearGradient: 7ca3b1d1625a1ab85c129abce4a3cdc78a9500a3
   ExpoLinking: a8332a219379ba80f8e612d5a5de4a3da446886e
   ExpoLocalAuthentication: fb519b5d39df0cc216e43fef3cc8e2db1930a01e
   ExpoLocalization: 8e37268a715b82b36fbb5e361efd5fe65a39c208
   ExpoModulesCore: 85dedea186bed150a8cc19bbfab85a600ddd6faf
-  ExpoScreenOrientation: 96f21d7aa247b06e4efc22fd64d2da4c86a9cbf0
+  ExpoScreenOrientation: cc7242aa9a19682f005acd5383f3795896975f02
   ExpoSecureStore: 06c3192d58ed167f619af3d53797c055f5ada785
-  ExpoSplashScreen: aa5c5eba706a5686b91861b53ced2996f1dd080d
+  ExpoSplashScreen: ef5749777f4ad078141f7d74fcb133eece17086e
   ExpoSystemUI: 2d729aea8219f03af1b1996c1d14488a01fea94a
   EXUpdatesInterface: 1dcebac98ac5dad4289e6ff2bd5616822e894397
   FBLazyVector: 1bf99bb46c6af9a2712592e707347315f23947aa
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 06a9c6900587420b90accc394199527c64259db4
-  maplibre-react-native: c0a3e12dc3b53d50713c0f0729fe4ad0ade00174
+  maplibre-react-native: 09b9863f276c76e9e7af9d89a7bc1827e1e09594
   MMKV: 3eacda84cd1c4fc95cf848d3ecb69d85ed56006c
   MMKVCore: 508b4d3a8ce031f1b5c8bd235f0517fb3f4c73a9
   RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
