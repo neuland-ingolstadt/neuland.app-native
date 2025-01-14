@@ -32,13 +32,21 @@ import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import Maplibre from '@maplibre/maplibre-react-native'
-import MapLibreGL, {
+import Maplibre, {
+    Camera,
+    FillLayer,
+    LineLayer,
+    MapView,
+    ShapeSource,
+    SymbolLayer,
+    UserLocation,
+    UserTrackingMode,
+} from '@maplibre/maplibre-react-native'
+import MapLibreRN, {
     type CameraRef,
     type MapViewRef,
     type UserLocationRef,
 } from '@maplibre/maplibre-react-native'
-import { ImageEntry } from '@maplibre/maplibre-react-native/lib/typescript/commonjs/src/components/Images'
 import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
@@ -128,8 +136,6 @@ const MapScreen = (): React.JSX.Element => {
     const [isVisible, setIsVisible] = useState(true)
     const [tabBarPressed, setTabBarPressed] = useState(false)
     const opacity = useSharedValue(1)
-    // required for android
-    void MapLibreGL.setAccessToken(null)
 
     const toggleShowAllFloors = (): void => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -731,7 +737,7 @@ const MapScreen = (): React.JSX.Element => {
             </>
 
             <View style={styles.map}>
-                <MapLibreGL.MapView
+                <MapView
                     style={styles.map}
                     tintColor={
                         Platform.OS === 'ios' ? theme.colors.primary : undefined
@@ -765,16 +771,16 @@ const MapScreen = (): React.JSX.Element => {
                             : undefined
                     }
                 >
-                    <MapLibreGL.Images
+                    <MapLibreRN.Images
                         nativeAssetImages={['pin']}
                         images={{
                             // https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
                             'map-marker':
                                 // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-                                require('@/assets/map-marker.png') as ImageEntry,
+                                require('@/assets/map-marker.png'),
                         }}
                     />
-                    <MapLibreGL.Camera
+                    <Camera
                         ref={cameraRef}
                         zoomLevel={16.5}
                         centerCoordinate={mapCenter}
@@ -786,16 +792,16 @@ const MapScreen = (): React.JSX.Element => {
                             clickedElement == null &&
                             !disableFollowUser
                         }
-                        followUserMode={MapLibreGL.UserTrackingMode.Follow}
+                        followUserMode={UserTrackingMode.Follow}
                     />
-                    <MapLibreGL.UserLocation
+                    <UserLocation
                         ref={locationRef}
                         renderMode="native"
                         animated={true}
                         showsUserHeadingIndicator
                     />
                     {clickedElement !== null && (
-                        <MapLibreGL.ShapeSource
+                        <ShapeSource
                             id="clickedElementSource"
                             shape={{
                                 type: 'FeatureCollection',
@@ -812,7 +818,7 @@ const MapScreen = (): React.JSX.Element => {
                                 ],
                             }}
                         >
-                            <MapLibreGL.SymbolLayer
+                            <SymbolLayer
                                 id="clickedElementMarker"
                                 // eslint-disable-next-line react-native/no-inline-styles
                                 style={{
@@ -823,10 +829,10 @@ const MapScreen = (): React.JSX.Element => {
                                 }}
                                 layerIndex={104} // Ensure this layer is above others
                             />
-                        </MapLibreGL.ShapeSource>
+                        </ShapeSource>
                     )}
                     {showFiltered() && (
-                        <MapLibreGL.ShapeSource
+                        <ShapeSource
                             id="allRoomsSource"
                             shape={filteredGeoJSON}
                             onPress={(e) => {
@@ -848,24 +854,24 @@ const MapScreen = (): React.JSX.Element => {
                             }}
                             hitbox={{ width: 0, height: 0 }}
                         >
-                            <MapLibreGL.FillLayer
+                            <FillLayer
                                 id="allRoomsFill"
                                 style={layerStyles.allRooms}
                                 layerIndex={100}
                             />
-                            <MapLibreGL.LineLayer
+                            <LineLayer
                                 id="allRoomsOutline"
                                 style={layerStyles.allRoomsOutline}
                                 layerIndex={101}
                             />
-                        </MapLibreGL.ShapeSource>
+                        </ShapeSource>
                     )}
                     {showAvailableFiltered() && (
-                        <MapLibreGL.ShapeSource
+                        <ShapeSource
                             id="availableRoomsSource"
                             shape={availableFilteredGeoJSON}
                         >
-                            <MapLibreGL.FillLayer
+                            <FillLayer
                                 id="availableRoomsFill"
                                 style={{
                                     ...layerStyles.availableRooms,
@@ -873,7 +879,7 @@ const MapScreen = (): React.JSX.Element => {
                                 }}
                                 layerIndex={102}
                             />
-                            <MapLibreGL.LineLayer
+                            <LineLayer
                                 id="availableRoomsOutline"
                                 style={{
                                     ...layerStyles.availableRoomsOutline,
@@ -881,9 +887,9 @@ const MapScreen = (): React.JSX.Element => {
                                 }}
                                 layerIndex={103}
                             />
-                        </MapLibreGL.ShapeSource>
+                        </ShapeSource>
                     )}
-                </MapLibreGL.MapView>
+                </MapView>
                 <>
                     {overlayError === null && (
                         <FloorPicker
