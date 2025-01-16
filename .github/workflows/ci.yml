@@ -34,7 +34,6 @@ jobs:
               with:
                   directory: ${{ github.action_path }}
                   token: ${{ secrets.CODECOV_TOKEN }}
-                  slug: getsentry/self-hosted
 
             - name: Upload test results to Codecov
               if: ${{ !cancelled() }}
