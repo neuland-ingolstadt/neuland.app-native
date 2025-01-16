@@ -156,6 +156,7 @@
     "husky": "^9.1.7",
     "jest": "~29.7.0",
     "jest-expo": "~52.0.3",
+    "jest-junit": "^16.0.0",
     "lint-staged": "^15.4.0",
     "prettier": "3.4.2",
     "prop-types": "^15.8.1",
@@ -175,19 +176,18 @@
     "react-native-drag-sort@2.4.4": "patches/react-native-drag-sort@2.4.4.patch"
   },
   "jest": {
-  "preset": "jest-expo",
-  "transformIgnorePatterns": [
-    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
-  ],
-  "collectCoverage": true,
-  "collectCoverageFrom": [
-    "**/*.{ts,tsx,js,jsx}",
-    "!**/coverage/**",
-    "!**/node_modules/**",
-    "!**/babel.config.js",
-    "!**/expo-env.d.ts",
-    "!**/.expo/**"
-  ]
-}
-
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx,js,jsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/babel.config.js",
+      "!**/expo-env.d.ts",
+      "!**/.expo/**"
+    ]
+  }
 }
