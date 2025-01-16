@@ -104,6 +104,9 @@ export interface TimetableSections {
 }
 
 export interface CalendarEvent {
+    start: Date
+    end: Date
+    title: string
     textColor: string
     color: string
     location?: string
