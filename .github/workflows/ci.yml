@@ -1,4 +1,4 @@
-name: CI
+name: CI - ESLint, Prettier, Jest, and Codecov
 on:
     push:
         branches: [develop, main]
