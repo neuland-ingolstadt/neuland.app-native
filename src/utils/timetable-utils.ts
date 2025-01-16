@@ -118,6 +118,7 @@ export async function getFriendlyTimetable(
  * //   ],
  * // }
  **/
+
 export function getGroupedTimetable(
     timetable: FriendlyTimetableEntry[],
     exams: Exam[]
@@ -133,6 +134,12 @@ export function getGroupedTimetable(
             }
         }),
     ]
+
+    // Sort combinedData by date
+    combinedData.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+
     const dates = [
         ...new Set(
             combinedData.map(
@@ -140,15 +147,16 @@ export function getGroupedTimetable(
             )
         ),
     ]
+
     const groups = dates.map((date) => ({
         title: new Date(date),
         data: combinedData.filter(
             (item) => new Date(item.date).toISOString().split('T')[0] === date
         ),
     }))
+
     return groups as TimetableSections[]
 }
-
 export function convertTimetableToWeekViewEvents(
     entries: FriendlyTimetableEntry[],
     color: string,
