@@ -1,7 +1,13 @@
-import { Exam, FriendlyTimetableEntry, TimetableSections } from '@/types/utils'
+import {
+    CalendarEvent,
+    Exam,
+    FriendlyTimetableEntry,
+    TimetableSections,
+} from '@/types/utils'
 import moment from 'moment'
 
 import {
+    convertTimetableToWeekViewEvents,
     generateKey,
     getGroupedTimetable,
     isValidRoom,
@@ -175,8 +181,79 @@ describe('isValidRoom', () => {
     it('should return false for invalid room strings', () => {
         expect(isValidRoom('101')).toBe(false)
         expect(isValidRoom('Online')).toBe(false)
+        expect(isValidRoom('Campuswiese')).toBe(false)
         expect(isValidRoom('AB1234')).toBe(false)
         expect(isValidRoom('A1U01')).toBe(false)
         expect(isValidRoom('')).toBe(false)
+    })
+})
+
+describe('convertTimetableToWeekViewEvents', () => {
+    it('should convert timetable entries to calendar events', () => {
+        const entries: FriendlyTimetableEntry[] = [
+            {
+                date: new Date('2023-10-01T10:00:00Z'),
+                startDate: new Date('2023-10-01T10:00:00Z'),
+                endDate: new Date('2023-10-01T11:00:00Z'),
+                name: 'Lecture 1',
+                shortName: 'Lec 1',
+                rooms: ['Room 1'],
+                lecturer: 'Dr. Smith',
+                course: 'Course 1',
+                studyGroup: 'Group 1',
+                sws: '2',
+                ects: '3',
+                goal: 'Goal 1',
+                contents: 'Contents 1',
+                literature: 'Literature 1',
+            },
+            {
+                date: new Date('2023-10-02T12:00:00Z'),
+                startDate: new Date('2023-10-02T12:00:00Z'),
+                endDate: new Date('2023-10-02T13:00:00Z'),
+                name: 'Lecture 2',
+                shortName: 'Lec 2',
+                rooms: ['Room 2'],
+                lecturer: 'Dr. Johnson',
+                course: 'Course 2',
+                studyGroup: 'Group 2',
+                sws: '2',
+                ects: '3',
+                goal: 'Goal 2',
+                contents: 'Contents 2',
+                literature: 'Literature 2',
+            },
+        ]
+
+        const color = 'blue'
+        const textColor = 'white'
+
+        const expectedOutput: CalendarEvent[] = [
+            {
+                start: entries[0].startDate,
+                end: entries[0].endDate,
+                title: entries[0].shortName,
+                color,
+                textColor,
+                location: 'Room 1',
+                entry: entries[0],
+            },
+            {
+                start: entries[1].startDate,
+                end: entries[1].endDate,
+                title: entries[1].shortName,
+                color,
+                textColor,
+                location: 'Room 2',
+                entry: entries[1],
+            },
+        ]
+
+        const result = convertTimetableToWeekViewEvents(
+            entries,
+            color,
+            textColor
+        )
+        expect(result).toEqual(expectedOutput)
     })
 })
