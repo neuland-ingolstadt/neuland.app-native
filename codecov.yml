@@ -1,0 +1,16 @@
+coverage:
+    status:
+        project:
+            default:
+                target: auto
+                threshold: 0%
+                base: auto
+                paths:
+                    - 'src'
+        patch:
+            default:
+                target: auto
+                threshold: 0%
+                base: auto
+                paths:
+                    - 'src'
