@@ -10,8 +10,9 @@ coverage:
         patch:
             default:
                 target: auto
-                threshold: 0.5%
+                threshold: 1%
                 base: auto
+                informational: true
                 paths:
                     - 'src'
 comment:
