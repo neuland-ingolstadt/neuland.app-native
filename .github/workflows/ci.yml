@@ -30,7 +30,7 @@ jobs:
               run: bunx jest --coverage --reporters=jest-junit
 
             - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v5
+              uses: codecov/codecov-action@v4
               with:
                   directory: ${{ github.action_path }}
                   token: ${{ secrets.CODECOV_TOKEN }}
