@@ -1,10 +1,16 @@
 coverage:
     status:
-        project: #add everything under here, more options at https://docs.codecov.com/docs/commit-status
+        project:
             default:
-                # basic
-                target: auto #default
+                target: auto
                 threshold: 0%
                 base: auto
-            comment:
-                enabled: true
+                paths:
+                    - 'src'
+        patch:
+            default:
+                target: auto
+                threshold: 0%
+                base: auto
+                paths:
+                    - 'src'
