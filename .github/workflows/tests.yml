@@ -31,7 +31,7 @@ jobs:
                   slug: getsentry/self-hosted
 
             - name: Upload test results to Codecov
-              if: !cancelled()
+              if: ${{ !cancelled() }}
               uses: codecov/test-results-action@v1
               with:
                   directory: ${{ github.action_path }}
