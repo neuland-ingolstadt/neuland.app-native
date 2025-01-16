@@ -21,9 +21,18 @@ jobs:
               run: bun install --frozen-lockfile
 
             - name: Run tests
-              run: bunx jest --coverage
+              run: bunx jest --coverage --reporters=jest-junit
 
-            - name: Upload results to Codecov
+            - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v5
               with:
+                  directory: ${{ github.action_path }}
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  slug: getsentry/self-hosted
+
+            - name: Upload test results to Codecov
+              if: !cancelled()
+              uses: codecov/test-results-action@v1
+              with:
+                  directory: ${{ github.action_path }}
                   token: ${{ secrets.CODECOV_TOKEN }}
