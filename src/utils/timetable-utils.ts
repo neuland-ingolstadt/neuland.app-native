@@ -1,4 +1,3 @@
-import API from '@/api/authenticated-api'
 import {
     type CalendarEvent,
     type Exam,
@@ -7,6 +6,7 @@ import {
 } from '@/types/utils'
 import moment from 'moment'
 
+import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
 
 /**

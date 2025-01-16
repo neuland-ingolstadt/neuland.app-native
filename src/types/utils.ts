@@ -100,7 +100,7 @@ export interface ExamTimetableEntry extends Exam {
 
 export interface TimetableSections {
     title: Date
-    data: TimetableEntry[] | ExamEntry[]
+    data: (TimetableEntry | ExamEntry)[]
 }
 
 export interface CalendarEvent {

@@ -49,7 +49,9 @@ export const resources = {
 export const defaultNS = 'en'
 export type LanguageKey = keyof typeof resources
 
-const languageCode = getLocales()[0].languageCode ?? ''
+const locales = getLocales()
+const languageCode =
+    (locales && locales.length > 0 ? locales[0].languageCode : '') ?? ''
 const fallbackLanguage = defaultNS
 const language = Object.keys(resources).includes(languageCode)
     ? languageCode
