@@ -1,4 +1,4 @@
-name: CI - ESLint, Prettier, Jest, and Codecov
+name: CI - ESLint, Prettier, Tests
 on:
     push:
         branches: [develop, main]
@@ -12,7 +12,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
+                  fetch-depth: 3
 
             - name: Set up Bun
               uses: oven-sh/setup-bun@v2
@@ -30,11 +30,10 @@ jobs:
               run: bunx jest --coverage --reporters=jest-junit
 
             - name: Upload coverage to Codecov
-              uses: codecov/codecov-action@v5
+              uses: codecov/codecov-action@v4
               with:
                   directory: ${{ github.action_path }}
                   token: ${{ secrets.CODECOV_TOKEN }}
-                  slug: getsentry/self-hosted
 
             - name: Upload test results to Codecov
               if: ${{ !cancelled() }}
