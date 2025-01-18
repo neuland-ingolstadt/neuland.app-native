@@ -2,12 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.2](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.1..0.11.2) - 2025-01-18
+
+### 🚀 Features
+
+- _(tests)_ Add unit tests for timetable utilities - by @Robert27 ([00f7cd9](https://github.com/neuland-ingolstadt/neuland.app-native/commit/00f7cd906fcc00f565f23c8bea0f1471298e2a1f))
+- _(tests)_ Enhance test coverage reporting with Jest JUnit integration ([#160](https://github.com/neuland-ingolstadt/neuland.app-native/issues/160)) - by @Robert27 ([e5e4d83](https://github.com/neuland-ingolstadt/neuland.app-native/commit/e5e4d83a2b32edb2fd02fc953351e4702f0ea0e3))
+- _(web)_ Add Root component for static HTML rendering - by @Robert27 ([63e0a3d](https://github.com/neuland-ingolstadt/neuland.app-native/commit/63e0a3db14b485cf2ff830b09a74d0919a9bd15b))
+
+### 🐛 Bug Fixes
+
+- _(food)_ Add optional chaining for meal variants length check - by @Robert27 ([86e8330](https://github.com/neuland-ingolstadt/neuland.app-native/commit/86e8330dc3a9975b099355df094859ce0c1607ff))
+- _(map)_ Update Maplibre import structure - by @Robert27 ([ba68bea](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ba68bea1a6971bc50356de8753bb70e664083896))
+- _(settings)_ Add missing share url on android - by @Robert27 ([ac53d5a](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ac53d5a88e02538f2ade4c5058d80c5f348b838e))
+- _(storage)_ Improve error handling and support ArrayBuffer in setItem - by @Robert27 ([26e2560](https://github.com/neuland-ingolstadt/neuland.app-native/commit/26e256052926fb01ce4291b35f8c8bea26fe9601))
+- _(timetable)_ Sort combined timetable data by date - by @Robert27 ([96d2b04](https://github.com/neuland-ingolstadt/neuland.app-native/commit/96d2b046c7b77ee07da1d9ea1e15e346f7077913))
+
+### 📚 Documentation
+
+- Update copyright year to 2025 in footer - by @Robert27 ([5279427](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5279427c3985fea0d8f1357a55fbdca88ddf207a))
+- Update readme - by @Robert27 ([92bd5d2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/92bd5d250e8c881e9317903fbb77a51bb3fb9395))
+
+### 🧪 Testing
+
+- Add more timetable tests ([#161](https://github.com/neuland-ingolstadt/neuland.app-native/issues/161)) - by @Robert27 ([6d8c508](https://github.com/neuland-ingolstadt/neuland.app-native/commit/6d8c5085d087f5318381b7781f398a77f6791595))
+- Adjust codecov thresholds to 0.5% - by @Robert27 ([36c2149](https://github.com/neuland-ingolstadt/neuland.app-native/commit/36c21495fa772219fa20cf125b7d91dfb3d821a8))
+
+### ⚙️ Miscellaneous Tasks
+
+- _(tests)_ Update configuration to include source paths for coverage reporting - by @Robert27 ([fce4fa5](https://github.com/neuland-ingolstadt/neuland.app-native/commit/fce4fa5179c5af40d742730b4365e324e4760aa8))
+- Update deployment triggers to include tag pushes - by @Robert27 ([fe2178e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/fe2178e9460c77f33bd91e25762d6c78bf009cf4))
+- Update Docker actions to latest versions in deployment workflow - by @Robert27 ([25b9177](https://github.com/neuland-ingolstadt/neuland.app-native/commit/25b9177c42f1bf1047b2b5eef209d13951d9145d))
+- Set NODE_BINARY environment variable in ios post-clone script - by @Robert27 ([0422ee2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0422ee2475529634a5167cb87625248ae9cfc686))
+
+**Full Changelog**: https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.1...0.12.0
+
 ## [0.11.1](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.0..0.11.1) - 2024-12-30
 
 ### 🐛 Bug Fixes
 
 - _(login)_ Prevent white screen during login redirect - by @Robert27 ([f6285b6](https://github.com/neuland-ingolstadt/neuland.app-native/commit/f6285b6fe0b3e20f79a1020756daf23c0fa2fd6a))
 - _(timetable)_ Set default timetable mode in TimetableWeek component - by @Robert27 ([33cb8c6](https://github.com/neuland-ingolstadt/neuland.app-native/commit/33cb8c616f172a48192c6f10866ba85eea987f81))
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump to version 0.11.1 - by @Robert27 ([a1905c3](https://github.com/neuland-ingolstadt/neuland.app-native/commit/a1905c3f43b6e732c2ccefe7468babe6cd3d3e5e))
 
 **Full Changelog**: https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.0...0.11.1
 
