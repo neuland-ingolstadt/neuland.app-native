@@ -20,8 +20,8 @@ export default function TabLayout(): React.JSX.Element {
         <Tabs
             sidebarAdaptable={false}
             tabBarActiveTintColor={theme.colors.primary}
-            barTintColor={
-                isAndroid
+            tabBarStyle={{
+                backgroundColor: isAndroid
                     ? UnistylesRuntime.themeName === 'dark'
                         ? Color(theme.colors.card)
                               .mix(Color(theme.colors.primary), 0.04)
@@ -29,13 +29,14 @@ export default function TabLayout(): React.JSX.Element {
                         : Color(theme.colors.card)
                               .mix(Color(theme.colors.primary), 0.1)
                               .hex()
-                    : undefined
-            }
+                    : undefined,
+            }}
             translucent
             // eslint-disable-next-line react-native/no-inline-styles
             tabLabelStyle={{
                 fontSize: 11,
             }}
+            labeled
             activeIndicatorColor={
                 isAndroid
                     ? UnistylesRuntime.themeName === 'dark'
