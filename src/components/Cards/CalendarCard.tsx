@@ -69,11 +69,21 @@ const CalendarCard = (): React.JSX.Element => {
 
     useEffect(() => {
         const combined = [...calendar, ...(exams ?? [])]
-            .map((item) => ({ ...item, begin: new Date(item.begin) })) // begin might a string due to JSON serialization in cache
-            .sort((a, b) => a.begin.getTime() - b.begin.getTime())
-            .filter(
-                (x) => x.begin > time || (x.end ?? '-1') > time
-            ) as Combined[]
+            .map((item) => ({ ...item, begin: new Date(item.begin) }))
+            .filter((x) => x.begin > time || (x.end ?? time) > time)
+            .sort((a, b) => {
+                // Prioritize single-day events (exams have no end date)
+                const aIsSingleDay = !a.end
+                const bIsSingleDay = !b.end
+
+                if (aIsSingleDay !== bIsSingleDay) {
+                    return aIsSingleDay ? -1 : 1
+                }
+
+                // If both same type, sort by start date
+                return a.begin.getTime() - b.begin.getTime()
+            }) as Combined[]
+
         setMixedCalendar(combined.slice(0, 2))
     }, [calendar, exams])
 
