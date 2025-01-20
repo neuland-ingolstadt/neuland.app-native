@@ -39,12 +39,6 @@ export default function TimetableWeek({
 }: ITimetableViewProps): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
     const today = moment().startOf('day').toDate()
-    const firstElementeDate = new Date(
-        timetable.find(
-            (entry: FriendlyTimetableEntry) =>
-                moment(entry.startDate).startOf('day').toDate() >= today
-        )?.startDate ?? today
-    )
     const calendarRef = useRef<CalendarKitHandle>(null)
     const setSelectedLecture = useRouteParamsStore(
         (state) => state.setSelectedLecture
@@ -54,7 +48,7 @@ export default function TimetableWeek({
     )
     const [events, setEvents] = React.useState<PackedEvent[]>([])
     const [calendarLoaded, setCalendarLoaded] = React.useState(false)
-    const [currentDate, setCurrentDate] = React.useState(firstElementeDate)
+    const [currentDate, setCurrentDate] = React.useState(today)
     const isDark = UnistylesRuntime.themeName === 'dark'
     const router = useRouter()
     const navigation = useNavigation()
@@ -113,10 +107,29 @@ export default function TimetableWeek({
                     },
                 }
             })
-            setEvents([
+
+            const combinedEvents = [
                 ...friendlyTimetable,
                 ...friendlyExams,
-            ] as unknown as PackedEvent[])
+            ] as unknown as PackedEvent[]
+            setEvents(combinedEvents)
+
+            // Find the first future event from the combined list
+            const firstFutureEvent = combinedEvents
+                .sort((a, b) =>
+                    moment(a.start.dateTime).diff(moment(b.start.dateTime))
+                )
+                .find(
+                    (event) =>
+                        moment(event.start.dateTime).startOf('day').toDate() >=
+                        today
+                )
+
+            if (firstFutureEvent) {
+                if (firstFutureEvent.start.dateTime) {
+                    setCurrentDate(new Date(firstFutureEvent.start.dateTime))
+                }
+            }
         }
     }, [timetable, exams])
 
@@ -130,7 +143,7 @@ export default function TimetableWeek({
                             const momentCalDate = moment(calDate).startOf('day')
                             const momentToday = moment().startOf('day')
                             const targetDate = momentCalDate.isSame(momentToday)
-                                ? (firstElementeDate ?? new Date())
+                                ? (currentDate ?? new Date())
                                 : new Date()
                             calendarRef.current?.goToDate({ date: targetDate })
                         }
@@ -241,7 +254,7 @@ export default function TimetableWeek({
                 onDateChanged={(date) => {
                     setCurrentDate(new Date(date))
                 }}
-                initialDate={firstElementeDate ?? today}
+                initialDate={currentDate}
                 onPressDayNumber={(date) => {
                     calendarRef.current?.goToDate({ date })
                 }}
