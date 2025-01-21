@@ -24,7 +24,10 @@
             "search": "Suche alle Dozenten"
         },
         "lecturer": "Dozenten-Details",
-        "grades": "Noten",
+        "grades": {
+            "title": "Noten",
+            "search": "Suche Fächer"
+        },
         "news": "THI Neuigkeiten",
         "library": "Bibliothek",
         "libraryCode": "Bibliotheksnummer",

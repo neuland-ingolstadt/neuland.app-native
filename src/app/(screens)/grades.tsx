@@ -15,12 +15,14 @@ import {
 import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
-import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { router, useNavigation } from 'expo-router'
+import Fuse from 'fuse.js'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
     AppState,
     type AppStateStatus,
+    Platform,
     RefreshControl,
     ScrollView,
     Text,
@@ -32,8 +34,33 @@ import packageInfo from '../../../package.json'
 
 export default function GradesSCreen(): React.JSX.Element {
     const { t } = useTranslation('settings')
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
+    const navigation = useNavigation()
+    const [localSearch, setLocalSearch] = React.useState('')
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: t('navigation.grades.search', {
+                    ns: 'navigation',
+                }),
+
+                ...Platform.select({
+                    android: {
+                        headerIconColor: theme.colors.text,
+                        hintTextColor: theme.colors.text,
+                        textColor: theme.colors.text,
+                    },
+                }),
+
+                onChangeText: (event: { nativeEvent: { text: string } }) => {
+                    const text = event.nativeEvent.text
+                    setLocalSearch(text)
+                },
+            },
+        })
+    }, [navigation])
 
     const [averageLoadingState, setAverageLoadingState] =
         useState<LoadingState>(LoadingState.LOADING)
@@ -121,6 +148,31 @@ export default function GradesSCreen(): React.JSX.Element {
         }
     }, [])
 
+    const fuseOptions = {
+        keys: ['titel'],
+        threshold: 0.3,
+        ignoreLocation: true,
+    }
+
+    const filteredGrades = React.useMemo(() => {
+        if (!grades) return null
+        if (localSearch === '') {
+            return grades
+        }
+
+        const finishedFuse = new Fuse(grades.finished, fuseOptions)
+        const missingFuse = new Fuse(grades.missing, fuseOptions)
+
+        return {
+            finished: finishedFuse
+                .search(localSearch)
+                .map((result) => result.item),
+            missing: missingFuse
+                .search(localSearch)
+                .map((result) => result.item),
+        }
+    }, [grades, localSearch])
+
     return (
         <ScrollView
             contentContainerStyle={styles.contentContainer}
@@ -162,84 +214,100 @@ export default function GradesSCreen(): React.JSX.Element {
             )}
             {isSuccess && grades !== null && (
                 <>
-                    {grades.finished.length !== 0 && (
-                        <>
-                            <SectionView title={t('grades.average')}>
-                                <View style={styles.loadedContainer}>
-                                    {averageLoadingState ===
-                                        LoadingState.LOADING && (
-                                        <LoadingIndicator />
-                                    )}
-                                    {averageLoadingState ===
-                                        LoadingState.ERROR && (
-                                        <Text style={styles.averageErrorText}>
-                                            {t('grades.averageError')}
-                                        </Text>
-                                    )}
-                                    {averageLoadingState ===
-                                        LoadingState.LOADED &&
-                                        gradeAverage !== undefined &&
-                                        gradeAverage !== null && (
-                                            <View
-                                                style={styles.averageContainer}
-                                            >
-                                                <Text
-                                                    style={styles.averageText}
-                                                >
-                                                    {gradeAverage.resultMin !==
-                                                        gradeAverage.resultMax &&
-                                                        '~ '}
-                                                    {gradeAverage.result}
-                                                </Text>
-
-                                                <Text
-                                                    style={styles.averageNote}
-                                                >
-                                                    {gradeAverage.resultMin ===
-                                                    gradeAverage.resultMax
-                                                        ? t(
-                                                              'grades.exactAverage',
-                                                              {
-                                                                  number: gradeAverage
-                                                                      .entries
-                                                                      .length,
-                                                              }
-                                                          )
-                                                        : t(
-                                                              'grades.missingAverage',
-                                                              {
-                                                                  min: gradeAverage.resultMin,
-                                                                  max: gradeAverage.resultMax,
-                                                              }
-                                                          )}
-                                                </Text>
-                                            </View>
+                    {filteredGrades?.finished.length !== 0 &&
+                        localSearch === '' && (
+                            <>
+                                <SectionView title={t('grades.average')}>
+                                    <View style={styles.loadedContainer}>
+                                        {averageLoadingState ===
+                                            LoadingState.LOADING && (
+                                            <LoadingIndicator />
                                         )}
-                                </View>
-                            </SectionView>
-                            <SectionView title={t('grades.finished')}>
-                                <React.Fragment>
-                                    {grades.finished.map((grade, index) => (
-                                        <React.Fragment key={index}>
-                                            <GradesRow item={grade} />
-                                            {index !==
-                                                grades.finished.length - 1 && (
-                                                <Divider iosPaddingLeft={16} />
+                                        {averageLoadingState ===
+                                            LoadingState.ERROR && (
+                                            <Text
+                                                style={styles.averageErrorText}
+                                            >
+                                                {t('grades.averageError')}
+                                            </Text>
+                                        )}
+                                        {averageLoadingState ===
+                                            LoadingState.LOADED &&
+                                            gradeAverage !== undefined &&
+                                            gradeAverage !== null && (
+                                                <View
+                                                    style={
+                                                        styles.averageContainer
+                                                    }
+                                                >
+                                                    <Text
+                                                        style={
+                                                            styles.averageText
+                                                        }
+                                                    >
+                                                        {gradeAverage.resultMin !==
+                                                            gradeAverage.resultMax &&
+                                                            '~ '}
+                                                        {gradeAverage.result}
+                                                    </Text>
+
+                                                    <Text
+                                                        style={
+                                                            styles.averageNote
+                                                        }
+                                                    >
+                                                        {gradeAverage.resultMin ===
+                                                        gradeAverage.resultMax
+                                                            ? t(
+                                                                  'grades.exactAverage',
+                                                                  {
+                                                                      number: gradeAverage
+                                                                          .entries
+                                                                          .length,
+                                                                  }
+                                                              )
+                                                            : t(
+                                                                  'grades.missingAverage',
+                                                                  {
+                                                                      min: gradeAverage.resultMin,
+                                                                      max: gradeAverage.resultMax,
+                                                                  }
+                                                              )}
+                                                    </Text>
+                                                </View>
                                             )}
-                                        </React.Fragment>
-                                    ))}
-                                </React.Fragment>
-                            </SectionView>
-                        </>
-                    )}
-                    {grades.missing.length !== 0 && (
+                                    </View>
+                                </SectionView>
+                                <SectionView title={t('grades.finished')}>
+                                    <React.Fragment>
+                                        {filteredGrades?.finished.map(
+                                            (grade, index) => (
+                                                <React.Fragment key={index}>
+                                                    <GradesRow item={grade} />
+                                                    {index !==
+                                                        filteredGrades.finished
+                                                            .length -
+                                                            1 && (
+                                                        <Divider
+                                                            iosPaddingLeft={16}
+                                                        />
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        )}
+                                    </React.Fragment>
+                                </SectionView>
+                            </>
+                        )}
+                    {filteredGrades?.missing.length !== 0 && (
                         <SectionView title={t('grades.open')}>
                             <React.Fragment>
-                                {grades.missing.map((grade, index) => (
+                                {filteredGrades?.missing.map((grade, index) => (
                                     <React.Fragment key={index}>
                                         <GradesRow item={grade} />
                                         {index !==
-                                            grades.missing.length - 1 && (
+                                            filteredGrades.missing.length -
+                                                1 && (
                                             <Divider iosPaddingLeft={16} />
                                         )}
                                     </React.Fragment>
