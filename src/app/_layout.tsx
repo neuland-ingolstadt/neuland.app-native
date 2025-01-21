@@ -292,7 +292,7 @@ function RootLayout(): React.JSX.Element {
                 <Stack.Screen
                     name="(screens)/grades"
                     options={{
-                        title: t('navigation.grades'),
+                        title: t('navigation.grades.title'),
                     }}
                 />
                 <Stack.Screen

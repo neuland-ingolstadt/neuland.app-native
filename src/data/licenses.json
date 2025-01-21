@@ -17,7 +17,7 @@
         "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
         "parents": "neuland"
     },
-    "@expo/metro-runtime@4.0.0": {
+    "@expo/metro-runtime@4.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -47,7 +47,7 @@
         "licenseUrl": "https://github.com/Kichiyaki/react-native-barcode-generator/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@maplibre/maplibre-react-native@10.0.0": {
+    "@maplibre/maplibre-react-native@10.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/maplibre/maplibre-react-native",
         "licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
@@ -89,19 +89,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.64.1": {
+    "@tanstack/query-sync-storage-persister@5.64.2": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.64.1": {
+    "@tanstack/react-query-persist-client@5.64.2": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.64.1": {
+    "@tanstack/react-query@5.64.2": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -203,7 +203,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-router@4.0.16": {
+    "expo-router@4.0.17": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -221,7 +221,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@0.29.20": {
+    "expo-splash-screen@0.29.21": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -233,7 +233,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.25": {
+    "expo@52.0.27": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -299,10 +299,10 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.7.8": {
+    "react-native-bottom-tabs@0.8.0": {
         "licenses": "MIT",
-        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
-        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "parents": "neuland"
     },
     "react-native-collapsible@1.6.1": {
@@ -335,7 +335,7 @@
         "licenseUrl": "https://github.com/mochixuan/react-native-drag-sort",
         "parents": "neuland"
     },
-    "react-native-edge-to-edge@1.4.0": {
+    "react-native-edge-to-edge@1.4.2": {
         "licenses": "MIT",
         "repository": "https://github.com/zoontek/react-native-edge-to-edge",
         "licenseUrl": "https://github.com/zoontek/react-native-edge-to-edge/raw/master/LICENSE",
