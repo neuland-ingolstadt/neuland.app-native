@@ -65,7 +65,7 @@
         "licenseUrl": "https://github.com/react-native-netinfo/react-native-netinfo/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@react-native-menu/menu@1.2.0": {
+    "@react-native-menu/menu@1.2.1": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-menu/menu",
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
@@ -299,7 +299,7 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.8.0": {
+    "react-native-bottom-tabs@0.8.1": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",

@@ -1563,7 +1563,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-bottom-tabs (0.8.0):
+  - react-native-bottom-tabs (0.8.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1591,7 +1591,7 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
-  - react-native-menu (1.2.0):
+  - react-native-menu (1.2.1):
     - React
   - react-native-mmkv (2.12.2):
     - DoubleConversion
@@ -2605,10 +2605,10 @@ SPEC CHECKSUMS:
   React-logger: 162c09cc432b02d4a0db31b1d98f6df5243a2679
   React-Mapbuffer: eab34f6d54d26931c5f70eb19da1e36162d87bbd
   React-microtasksnativemodule: 9866981c8f1e80bb819e34f4ea45870cb3e6afaa
-  react-native-bottom-tabs: 10605f434270b6dba5384d031d6f8de60f9b5521
+  react-native-bottom-tabs: 72a89e82edc688a560e25377ed8ce135ddc01dd5
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
-  react-native-menu: 2c06611b87dadf47192f20674978e8d195b23e91
+  react-native-menu: cc31fee92b3dcf3b34c17a7aa00d44398e8ae781
   react-native-mmkv: 54f5626371820ab9385821db1bbb03b6ab62c28a
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-pager-view: 3ae40be5b2700f3f2645c1fbc751a03a4323172d

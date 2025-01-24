@@ -5,7 +5,6 @@ import {
     UnavailableSessionError,
 } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
-import { useBottomTabBarHeight } from '@/components/Layout/Tabbar'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
@@ -91,10 +90,7 @@ export function requestPermission(): void {
     }
 }
 
-const isIpadOS = Platform.OS === 'ios' && Platform.isPad
-
 const MapScreen = (): React.JSX.Element => {
-    const tabBarHeight = useBottomTabBarHeight()
     const navigation = useNavigation()
     const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
     const { styles, theme } = useStyles(stylesheet)
@@ -716,13 +712,7 @@ const MapScreen = (): React.JSX.Element => {
     }, [availableFilteredGeoJSON])
 
     return (
-        <View
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-                ...styles.map,
-                marginBottom: !isIpadOS ? tabBarHeight : 0,
-            }}
-        >
+        <View style={styles.map}>
             <>
                 {mapLoadState === LoadingState.ERROR && (
                     <View style={styles.errorContainer}>
