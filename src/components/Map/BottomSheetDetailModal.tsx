@@ -86,12 +86,18 @@ export const BottomSheetDetailModal = ({
     modalSection,
 }: BottomSheetDetailModalProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
+    const IOS_SNAP_POINTS = ['35%', '55%', '80%']
+    const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
     return (
         <BottomSheetModalProvider>
             <BottomSheetModal
                 index={0}
                 ref={bottomSheetModalRef}
-                snapPoints={['30%', '45%', '70%']}
+                snapPoints={
+                    Platform.OS === 'ios'
+                        ? IOS_SNAP_POINTS
+                        : DEFAULT_SNAP_POINTS
+                }
                 onDismiss={handleSheetChangesModal}
                 backgroundComponent={BottomSheetBackground}
                 animatedPosition={currentPositionModal}

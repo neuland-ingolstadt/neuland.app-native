@@ -46,13 +46,8 @@
         "plugins": [
             [
                 "react-native-edge-to-edge",
-                {
-                    "android": {
-                        "parentTheme": "Material3"
-                    }
-                }
+                { "android": { "parentTheme": "Material3" } }
             ],
-            "react-native-bottom-tabs",
             [
                 "expo-router",
                 {
@@ -96,7 +91,6 @@
                     "imageWidth": 200
                 }
             ],
-            "react-native-edge-to-edge",
             "expo-alternate-app-icons"
         ],
         "extra": {
