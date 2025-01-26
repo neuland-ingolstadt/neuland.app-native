@@ -36,7 +36,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 280
+            "versionCode": 282
         },
         "sdkVersion": "52.0.0",
         "experiments": {
@@ -46,7 +46,11 @@
         "plugins": [
             [
                 "react-native-edge-to-edge",
-                { "android": { "parentTheme": "Material3" } }
+                {
+                    "android": {
+                        "parentTheme": "Material3"
+                    }
+                }
             ],
             [
                 "expo-router",

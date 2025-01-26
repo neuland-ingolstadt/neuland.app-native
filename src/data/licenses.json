@@ -5,16 +5,16 @@
         "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@babel/runtime@7.26.0": {
+    "@babel/runtime@7.26.7": {
         "licenses": "MIT",
         "repository": "https://github.com/babel/babel",
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.7.8": {
+    "@bottom-tabs/react-navigation@0.8.2": {
         "licenses": "MIT",
-        "repository": "https://github.com/okwasniewski/react-native-bottom-tabs",
-        "licenseUrl": "https://github.com/okwasniewski/react-native-bottom-tabs",
+        "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
+        "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "parents": "neuland"
     },
     "@expo/metro-runtime@4.0.1": {
@@ -69,6 +69,18 @@
         "licenses": "MIT",
         "repository": "https://github.com/react-native-menu/menu",
         "licenseUrl": "https://github.com/react-native-menu/menu/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "@react-navigation/elements@2.2.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
+        "parents": "neuland"
+    },
+    "@react-navigation/native-stack@7.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/react-navigation/react-navigation",
+        "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
     "@react-navigation/native@7.0.14": {
@@ -137,7 +149,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-blur@14.0.2": {
+    "expo-blur@14.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -251,7 +263,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@24.2.1": {
+    "i18next@24.2.2": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -299,7 +311,7 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.8.1": {
+    "react-native-bottom-tabs@0.8.2": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
