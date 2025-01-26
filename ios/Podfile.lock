@@ -233,7 +233,7 @@ PODS:
     - ExpoModulesCore
   - ExpoAsset (11.0.2):
     - ExpoModulesCore
-  - ExpoBlur (14.0.2):
+  - ExpoBlur (14.0.3):
     - ExpoModulesCore
   - ExpoBrightness (13.0.3):
     - ExpoModulesCore
@@ -253,7 +253,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLinearGradient (14.0.2):
     - ExpoModulesCore
-  - ExpoLinking (7.0.3):
+  - ExpoLinking (7.0.4):
     - ExpoModulesCore
   - ExpoLocalAuthentication (15.0.2):
     - ExpoModulesCore
@@ -1563,7 +1563,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-bottom-tabs (0.8.1):
+  - react-native-bottom-tabs (0.8.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2550,7 +2550,7 @@ SPEC CHECKSUMS:
   expo-dev-menu-interface: 00dc42302a72722fdecec3fa048de84a9133bcc4
   ExpoAlternateAppIcons: 671807310405004cc3e70238c465df88cc4c2f53
   ExpoAsset: 6cc988c426b5fc997859cc0f8f6728d1376bf53f
-  ExpoBlur: 5327b09a58e04e4066dd95fe994d8ef5539a1f26
+  ExpoBlur: 567af66164e3043a9a30069594aed1ddf0a88d97
   ExpoBrightness: d3f54a52ea62b6c4deb81bfb5569a8bc664487ab
   ExpoClipboard: 5250b207b6d545f4e9aac5ea3c6e61c4f16d0aed
   ExpoCrypto: 1eaf79360c8135af1f2ebb133394fd3513ca9a3d
@@ -2560,7 +2560,7 @@ SPEC CHECKSUMS:
   ExpoHead: 3d555eb5d0d68c478b9ea259337686c58de22c71
   ExpoKeepAwake: 1f74cdf53ab3b3aeb7110f18eb053c92e7c3e710
   ExpoLinearGradient: ee9efc5acb988b911320e964fab9b4cbdeb198c4
-  ExpoLinking: a8332a219379ba80f8e612d5a5de4a3da446886e
+  ExpoLinking: a9e64f08d2bb4fc42e7441174f15cc535bb390ba
   ExpoLocalAuthentication: 64bf2cbee456f5639d69a853684c285afc0602d8
   ExpoLocalization: e36b911e04d371c6c6624ef818e56229bf51c498
   ExpoModulesCore: ad56b61971cbf3a9fa28f52f53c27de9f181d05c
@@ -2605,7 +2605,7 @@ SPEC CHECKSUMS:
   React-logger: 162c09cc432b02d4a0db31b1d98f6df5243a2679
   React-Mapbuffer: eab34f6d54d26931c5f70eb19da1e36162d87bbd
   React-microtasksnativemodule: 9866981c8f1e80bb819e34f4ea45870cb3e6afaa
-  react-native-bottom-tabs: 72a89e82edc688a560e25377ed8ce135ddc01dd5
+  react-native-bottom-tabs: 7e1032f69cbebc0e6f2bdc0d53e94f5aaefcec35
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
   react-native-menu: cc31fee92b3dcf3b34c17a7aa00d44398e8ae781
