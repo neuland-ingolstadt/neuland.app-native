@@ -1,10 +1,3 @@
-//
-//  LaunchWidgetBundle.swift
-//  LaunchWidget
-//
-//  Created by Robert Eggl on 26.01.25.
-//
-
 import WidgetKit
 import SwiftUI
 
@@ -12,5 +5,6 @@ import SwiftUI
 struct LaunchWidgetBundle: WidgetBundle {
     var body: some Widget {
         LaunchWidgetControl()
+        TimetableWidgetControl()
     }
 }
