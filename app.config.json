@@ -15,7 +15,10 @@
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
                 "webcredentials:neuland.app",
-                "activitycontinuation:neuland.app"
+                "activitycontinuation:neuland.app",
+                "applinks:neuland.app",
+                "applinks:dev.neuland.app",
+                "activitycontinuation:dev.neuland.app"
             ],
             "config": {
                 "usesNonExemptEncryption": false
@@ -66,19 +69,19 @@
                 "expo-alternate-app-icons",
                 [
                     {
-                        "name": "Cat", // The name of the alternate icon
-                        "ios": "./src/assets/appIcons/cat.png" // Path to iOS ico
+                        "name": "Cat",
+                        "ios": "./src/assets/appIcons/cat.png"
                     },
                     {
-                        "name": "RainbowNeon", // The name of the alternate icon
-                        "ios": "./src/assets/appIcons/rainbowNeon.png" // Path to iOS ico
+                        "name": "RainbowNeon",
+                        "ios": "./src/assets/appIcons/rainbowNeon.png"
                     },
                     {
-                        "name": "Retro", // The name of the alternate icon
-                        "ios": "./src/assets/appIcons/retro.png" // Path to iOS ico
+                        "name": "Retro",
+                        "ios": "./src/assets/appIcons/retro.png"
                     },
                     {
-                        "name": "ModernGreen", // The name of the alternate icon
+                        "name": "ModernGreen",
                         "ios": {
                             "light": "./src/assets/appIcons/modernGreen.png",
                             "dark": "./src/assets/appIcons/dark/modernGreenDark.png",
@@ -86,7 +89,7 @@
                         }
                     },
                     {
-                        "name": "ModernPink", // The name of the alternate icon
+                        "name": "ModernPink",
                         "ios": {
                             "light": "./src/assets/appIcons/modernPurple.png",
                             "dark": "./src/assets/appIcons/dark/purpleDark.png",
@@ -94,7 +97,7 @@
                         }
                     },
                     {
-                        "name": "RainbowMoonLight", // The name of the alternate icon
+                        "name": "RainbowMoonLight",
                         "ios": {
                             "light": "./src/assets/appIcons/rainbowMoonLight.png",
                             "dark": "./src/assets/appIcons/dark/darkRainbow.png",

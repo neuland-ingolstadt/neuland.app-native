@@ -309,7 +309,7 @@ export default function Settings(): React.JSX.Element {
                                   web: 'StarSquare' as LucideIcon,
                               },
                               onPress: () => {
-                                  router.navigate('/appIcon')
+                                  router.navigate('/app-icon')
                               },
                           },
                       ]

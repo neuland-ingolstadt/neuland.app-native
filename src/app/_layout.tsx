@@ -264,7 +264,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/appIcon"
+                    name="(screens)/app-icon"
                     options={{
                         title: 'App Icon',
                     }}
