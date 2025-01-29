@@ -317,13 +317,13 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/roomSearch"
+                    name="(screens)/room-search"
                     options={{
                         title: t('navigation.advancedSearch'),
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/clEvents"
+                    name="(screens)/cl-events"
                     options={{
                         title: 'Campus Life Events',
                     }}
@@ -347,7 +347,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/clEvent"
+                    name="(screens)/cl-event"
                     options={{
                         title: 'Event Details',
                         ...Platform.select({

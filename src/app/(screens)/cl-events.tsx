@@ -87,7 +87,7 @@ export default function Events(): React.JSX.Element {
                     const page = e.nativeEvent.position
                     setSelectedData(page)
                     trackEvent('Route', {
-                        path: 'clEvents/' + pages[page],
+                        path: 'cl-events/' + pages[page],
                     })
                 }}
                 scrollEnabled

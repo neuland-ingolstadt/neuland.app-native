@@ -1,6 +1,6 @@
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
-import { type Card, type ExtendedCard } from '@/components/allCards'
+import { type Card, type ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { cardIcons } from '@/components/icons'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
