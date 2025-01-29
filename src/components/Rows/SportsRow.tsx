@@ -22,7 +22,7 @@ const SportsRow = ({
     )
     const onPressRow = (): void => {
         setSelectedSportsEvent(event)
-        router.navigate('/sportsEvent')
+        router.navigate('/sports-event')
     }
     const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
     return (

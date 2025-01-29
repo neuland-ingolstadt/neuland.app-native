@@ -177,13 +177,13 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodPreferences"
+                    name="(screens)/food-preferences"
                     options={{
                         title: t('navigation.preferences'),
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodFlags"
+                    name="(screens)/food-flags"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -194,7 +194,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodAllergens"
+                    name="(screens)/food-allergens"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -241,7 +241,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/webView"
+                    name="(screens)/webview"
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
@@ -329,7 +329,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/sportsEvent"
+                    name="(screens)/sports-event"
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
@@ -399,7 +399,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/libraryCode"
+                    name="(screens)/library-code"
                     options={{
                         title: t('navigation.libraryCode'),
                         ...Platform.select({

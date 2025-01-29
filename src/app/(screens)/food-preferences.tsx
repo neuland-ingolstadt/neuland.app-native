@@ -67,14 +67,14 @@ export default function FoodPreferences(): React.JSX.Element {
                     title: t('preferences.formlist.allergens'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('/foodAllergens')
+                        router.navigate('/food-allergens')
                     },
                 },
                 {
                     title: t('preferences.formlist.flags'),
                     icon: chevronIcon,
                     onPress: () => {
-                        router.navigate('/foodFlags')
+                        router.navigate('/food-flags')
                     },
                 },
             ],
