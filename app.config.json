@@ -4,7 +4,7 @@
         "slug": "neuland-app-native",
         "scheme": "neuland",
         "owner": "neuland-ingolstadt",
-        "version": "0.11.2",
+        "version": "0.11.3",
         "githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
         "userInterfaceStyle": "automatic",
         "newArchEnabled": false,
@@ -40,7 +40,7 @@
         "android": {
             "package": "app.neuland",
             "userInterfaceStyle": "automatic",
-            "versionCode": 279
+            "versionCode": 282
         },
         "sdkVersion": "52.0.0",
         "experiments": {
@@ -56,7 +56,6 @@
                     }
                 }
             ],
-            "react-native-bottom-tabs",
             [
                 "expo-router",
                 {
@@ -140,7 +139,6 @@
                     "imageWidth": 200
                 }
             ],
-            "react-native-edge-to-edge",
             "expo-alternate-app-icons"
         ],
         "extra": {

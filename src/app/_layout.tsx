@@ -5,13 +5,13 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
-import { Stack } from 'expo-router'
+import { Href, Stack, router } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Platform } from 'react-native'
+import { AppState, Linking, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
@@ -46,6 +46,27 @@ function RootLayout(): React.JSX.Element {
             )
         }
     }, [isPad])
+
+    useEffect(() => {
+        const handleOpenURL = (event: { url: string }) => {
+            const base = 'neuland://'
+            if (event.url.startsWith(base)) {
+                const fullPath = event.url.replace(base, '')
+                // Extract first path segment and remove query parameters
+                const firstPath = fullPath.split('/')[0].split('?')[0]
+                router.navigate(firstPath as Href)
+            }
+        }
+
+        const linkingSubscription = Linking.addEventListener(
+            'url',
+            handleOpenURL
+        )
+
+        return () => {
+            linkingSubscription.remove()
+        }
+    }, [])
 
     useEffect(() => {
         const loadLanguage = async (): Promise<void> => {
@@ -292,7 +313,7 @@ function RootLayout(): React.JSX.Element {
                 <Stack.Screen
                     name="(screens)/grades"
                     options={{
-                        title: t('navigation.grades'),
+                        title: t('navigation.grades.title'),
                     }}
                 />
                 <Stack.Screen

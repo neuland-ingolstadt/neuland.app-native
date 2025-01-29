@@ -2,12 +2,13 @@
 
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { MapContext } from '@/contexts/map'
-import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet'
+import BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import { type FeatureCollection } from 'geojson'
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
+import { TextInput } from 'react-native'
 import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
     useAnimatedStyle,
@@ -64,11 +65,15 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }
 
     const width = t('misc.cancel').length * 11
+    const IOS_SNAP_POINTS = ['20%', '38%', '87%']
+    const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
     return (
         <BottomSheet
             ref={bottomSheetRef}
             index={1}
-            snapPoints={['10%', '30%', '92%']}
+            snapPoints={
+                Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS
+            }
             backgroundComponent={BottomSheetBackground}
             animatedPosition={currentPosition}
             keyboardBehavior="extend"
@@ -85,7 +90,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         >
             <View style={styles.page}>
                 <View style={styles.inputContainer}>
-                    <BottomSheetTextInput
+                    <TextInput
                         ref={textInputRef}
                         style={styles.textInput}
                         placeholder={t('pages.map.search.hint')}

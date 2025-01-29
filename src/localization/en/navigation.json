@@ -23,7 +23,10 @@
             "search": "Search all lecturers"
         },
         "lecturer": "Lecturer Details",
-        "grades": "Grades",
+        "grades": {
+            "title": "Grades",
+            "search": "Search subjects"
+        },
         "news": "THI News",
         "library": "Library",
         "legal": "Legal",

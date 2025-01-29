@@ -1,0 +1,24 @@
+{
+    "webcredentials": {
+        "apps": [
+            "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
+        ]
+    },
+    "activitycontinuation": {
+        "apps": [
+            "FSXB76X6V2.de.neuland-ingolstadt.neuland-app"
+        ]
+    },
+    "applinks": {
+        "details": [
+            {
+                "appID": "FSXB76X6V2.de.neuland-ingolstadt.neuland-app",
+                "components": [
+                    {
+                        "/": "*"
+                    }
+                ]
+            }
+        ]
+    }
+}
