@@ -44,7 +44,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                 {userKind !== USER_GUEST && (
                     <Pressable
                         onPress={() => {
-                            router.navigate('/roomSearch')
+                            router.navigate('/room-search')
                         }}
                         hitSlop={{
                             bottom: 10,

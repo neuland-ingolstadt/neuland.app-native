@@ -177,13 +177,13 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodPreferences"
+                    name="(screens)/food-preferences"
                     options={{
                         title: t('navigation.preferences'),
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodFlags"
+                    name="(screens)/food-flags"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -194,7 +194,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/foodAllergens"
+                    name="(screens)/food-allergens"
                     options={{
                         headerShown: false,
                         ...Platform.select({
@@ -241,7 +241,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/webView"
+                    name="(screens)/webview"
                     options={{
                         title: t('navigation.details'),
                         ...Platform.select({
@@ -264,7 +264,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/appIcon"
+                    name="(screens)/app-icon"
                     options={{
                         title: 'App Icon',
                     }}
@@ -317,19 +317,19 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/roomSearch"
+                    name="(screens)/room-search"
                     options={{
                         title: t('navigation.advancedSearch'),
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/clEvents"
+                    name="(screens)/cl-events"
                     options={{
                         title: 'Campus Life Events',
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/sportsEvent"
+                    name="(screens)/sports-event"
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
@@ -347,7 +347,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/clEvent"
+                    name="(screens)/cl-event"
                     options={{
                         title: 'Event Details',
                         ...Platform.select({
@@ -399,7 +399,7 @@ function RootLayout(): React.JSX.Element {
                     }}
                 />
                 <Stack.Screen
-                    name="(screens)/libraryCode"
+                    name="(screens)/library-code"
                     options={{
                         title: t('navigation.libraryCode'),
                         ...Platform.select({

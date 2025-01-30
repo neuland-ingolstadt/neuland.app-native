@@ -60,7 +60,7 @@ export default function LibraryScreen(): React.JSX.Element {
                 <LibraryCard
                     onPress={() => {
                         router.dismiss()
-                        router.navigate('/libraryCode')
+                        router.navigate('/library-code')
                     }}
                     iconProps={{
                         ios: { name: 'barcode.viewfinder', size: 18 },

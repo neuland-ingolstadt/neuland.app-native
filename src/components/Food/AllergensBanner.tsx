@@ -56,7 +56,7 @@ export const AllergensBanner = ({
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            router.navigate('/foodAllergens')
+                            router.navigate('/food-allergens')
                         }}
                     >
                         <Text style={styles.bannerTitle}>

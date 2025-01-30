@@ -157,6 +157,7 @@ export function getGroupedTimetable(
 
     return groups as TimetableSections[]
 }
+
 export function convertTimetableToWeekViewEvents(
     entries: FriendlyTimetableEntry[],
     color: string,

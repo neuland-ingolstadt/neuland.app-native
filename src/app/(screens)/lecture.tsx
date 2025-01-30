@@ -89,7 +89,7 @@ export default function TimetableDetails(): React.JSX.Element {
                 icon: chevronIcon,
                 onPress: () => {
                     router.navigate({
-                        pathname: '/webView',
+                        pathname: '/webview',
                         params: {
                             title: t(titleKey),
                             html,

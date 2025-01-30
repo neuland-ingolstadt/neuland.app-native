@@ -248,7 +248,7 @@ export default function Settings(): React.JSX.Element {
                         web: 'Utensils',
                     },
                     onPress: () => {
-                        router.navigate('/foodPreferences')
+                        router.navigate('/food-preferences')
                     },
                 },
                 {
@@ -309,7 +309,7 @@ export default function Settings(): React.JSX.Element {
                                   web: 'StarSquare' as LucideIcon,
                               },
                               onPress: () => {
-                                  router.navigate('/appIcon')
+                                  router.navigate('/app-icon')
                               },
                           },
                       ]
