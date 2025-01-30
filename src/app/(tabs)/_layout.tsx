@@ -19,7 +19,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
 // @ts-expect-error no types available
 import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
-import { appIcons } from '../(screens)/appIcon'
+import { appIcons } from '../(screens)/app-icon'
 
 interface ShortcutsType {
     onShortcutPressed: (callback: (item: ShortcutItem) => void) => {

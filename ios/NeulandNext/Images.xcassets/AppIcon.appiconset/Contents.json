@@ -1,38 +1,38 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "default.png",
-      "idiom" : "universal",
-      "platform" : "ios",
-      "size" : "1024x1024"
+      "filename": "App-Icon-1024x1024@1x.png",
+      "idiom": "universal",
+      "platform": "ios",
+      "size": "1024x1024"
     },
     {
-      "appearances" : [
+      "filename": "App-Icon-dark-1024x1024@1x.png",
+      "idiom": "universal",
+      "platform": "ios",
+      "size": "1024x1024",
+      "appearances": [
         {
-          "appearance" : "luminosity",
-          "value" : "dark"
+          "appearance": "luminosity",
+          "value": "dark"
         }
-      ],
-      "filename" : "defaultDark.png",
-      "idiom" : "universal",
-      "platform" : "ios",
-      "size" : "1024x1024"
+      ]
     },
     {
-      "appearances" : [
+      "filename": "App-Icon-tinted-1024x1024@1x.png",
+      "idiom": "universal",
+      "platform": "ios",
+      "size": "1024x1024",
+      "appearances": [
         {
-          "appearance" : "luminosity",
-          "value" : "tinted"
+          "appearance": "luminosity",
+          "value": "tinted"
         }
-      ],
-      "filename" : "darkTinted.png",
-      "idiom" : "universal",
-      "platform" : "ios",
-      "size" : "1024x1024"
+      ]
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "version": 1,
+    "author": "expo"
   }
 }

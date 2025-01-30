@@ -9,6 +9,7 @@ import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 import {
     getAppIconName,
+    resetAppIcon,
     setAlternateAppIcon,
     supportsAlternateIcons,
 } from 'expo-alternate-app-icons'
@@ -44,6 +45,9 @@ export default function AppIconPicker(): React.JSX.Element {
         (state) => state.unlockedAppIcons
     )
     const { t } = useTranslation(['settings'])
+    const [currentIcon, setCurrentIcon] = React.useState<string>(
+        lowercaseFirstLetter(getAppIconName() ?? 'default')
+    )
     const categories: Record<string, string[]> = {
         exclusive: ['cat', 'retro'],
         default: ['default', 'modernGreen', 'modernPink'],
@@ -59,7 +63,6 @@ export default function AppIconPicker(): React.JSX.Element {
     })
 
     const support = supportsAlternateIcons
-    const iconName = getAppIconName()
 
     if (!support) {
         return (
@@ -87,13 +90,26 @@ export default function AppIconPicker(): React.JSX.Element {
                                             <React.Fragment key={icon}>
                                                 <Pressable
                                                     style={styles.rowContainer}
-                                                    onPress={() => {
+                                                    onPress={async () => {
                                                         try {
-                                                            void setAlternateAppIcon(
-                                                                capitalizeFirstLetter(
+                                                            if (
+                                                                icon ===
+                                                                'default'
+                                                            ) {
+                                                                await resetAppIcon()
+                                                                setCurrentIcon(
+                                                                    'default'
+                                                                )
+                                                            } else {
+                                                                await setAlternateAppIcon(
+                                                                    capitalizeFirstLetter(
+                                                                        icon
+                                                                    )
+                                                                )
+                                                                setCurrentIcon(
                                                                     icon
                                                                 )
-                                                            )
+                                                            }
                                                         } catch (e) {
                                                             console.log(e)
                                                         }
@@ -123,9 +139,7 @@ export default function AppIconPicker(): React.JSX.Element {
                                                             )}
                                                         </Text>
                                                     </View>
-                                                    {lowercaseFirstLetter(
-                                                        iconName ?? 'Default'
-                                                    ) === icon && (
+                                                    {currentIcon === icon && (
                                                         <PlatformIcon
                                                             ios={{
                                                                 name: 'checkmark',

@@ -1,14 +1,14 @@
 {
-    "images": [
-        {
-            "filename": "retro.png",
-            "idiom": "universal",
-            "platform": "ios",
-            "size": "1024x1024"
-        }
-    ],
-    "info": {
-        "author": "xcode",
-        "version": 1
+  "images": [
+    {
+      "filename": "retro.png",
+      "idiom": "universal",
+      "platform": "ios",
+      "size": "1024x1024"
     }
+  ],
+  "info": {
+    "author": "expo",
+    "version": 1
+  }
 }

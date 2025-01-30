@@ -33,7 +33,7 @@ const CLEventRow = ({
     const onPressRow = (): void => {
         setSelectedClEvent(event as CLEvents)
         router.navigate({
-            pathname: '/clEvent',
+            pathname: '/cl-event',
         })
     }
     return (

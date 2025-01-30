@@ -15,7 +15,10 @@
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
                 "webcredentials:neuland.app",
-                "activitycontinuation:neuland.app"
+                "activitycontinuation:neuland.app",
+                "applinks:neuland.app",
+                "applinks:dev.neuland.app",
+                "activitycontinuation:dev.neuland.app"
             ],
             "config": {
                 "usesNonExemptEncryption": false
@@ -27,7 +30,11 @@
                 "UIViewControllerBasedStatusBarAppearance": false,
                 "NSLocationWhenInUseUsageDescription": "Allow Neuland Next to access your location to show your location on the map."
             },
-            "icon": "./src/assets/appIcons/default.png"
+            "icon": {
+                "light": "./src/assets/appIcons/default.png",
+                "dark": "./src/assets/appIcons/dark/defaultDark.png",
+                "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+            }
         },
         "locales": {
             "en": "./src/localization/en/ios.json",
@@ -58,7 +65,47 @@
                     "headOrigin": "https://neuland.app"
                 }
             ],
-            ["expo-alternate-app-icons"],
+            [
+                "expo-alternate-app-icons",
+                [
+                    {
+                        "name": "Cat",
+                        "ios": "./src/assets/appIcons/cat.png"
+                    },
+                    {
+                        "name": "RainbowNeon",
+                        "ios": "./src/assets/appIcons/rainbowNeon.png"
+                    },
+                    {
+                        "name": "Retro",
+                        "ios": "./src/assets/appIcons/retro.png"
+                    },
+                    {
+                        "name": "ModernGreen",
+                        "ios": {
+                            "light": "./src/assets/appIcons/modernGreen.png",
+                            "dark": "./src/assets/appIcons/dark/modernGreenDark.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    },
+                    {
+                        "name": "ModernPink",
+                        "ios": {
+                            "light": "./src/assets/appIcons/modernPurple.png",
+                            "dark": "./src/assets/appIcons/dark/purpleDark.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    },
+                    {
+                        "name": "RainbowMoonLight",
+                        "ios": {
+                            "light": "./src/assets/appIcons/rainbowMoonLight.png",
+                            "dark": "./src/assets/appIcons/dark/darkRainbow.png",
+                            "tinted": "./src/assets/appIcons/tinted/darkTinted.png"
+                        }
+                    }
+                ]
+            ],
             ["expo-secure-store"],
             ["expo-localization"],
             [

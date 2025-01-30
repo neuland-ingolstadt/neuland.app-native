@@ -10,7 +10,7 @@ import {
 } from '@/utils/date-utils'
 import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { Redirect, useFocusEffect, useNavigation } from 'expo-router'
+import { Redirect, router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, Share, Text, View } from 'react-native'
@@ -173,7 +173,7 @@ export default function ClEventDetail(): React.JSX.Element {
     ]
 
     if (clEvent == null) {
-        return <Redirect href={'/clEvents'} />
+        return <Redirect href={'/cl-events'} />
     }
     return (
         <ScrollView

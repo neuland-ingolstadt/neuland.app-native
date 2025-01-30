@@ -229,7 +229,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoAlternateAppIcons (1.3.0):
+  - ExpoAlternateAppIcons (1.3.1):
     - ExpoModulesCore
   - ExpoAsset (11.0.2):
     - ExpoModulesCore
@@ -2548,7 +2548,7 @@ SPEC CHECKSUMS:
   expo-dev-launcher: c910ef23ccc0bb985a456f3a4c22e5ef233d5f4f
   expo-dev-menu: 2019134e1e53fb7495c19cc361aa8e11199656bc
   expo-dev-menu-interface: 00dc42302a72722fdecec3fa048de84a9133bcc4
-  ExpoAlternateAppIcons: 671807310405004cc3e70238c465df88cc4c2f53
+  ExpoAlternateAppIcons: 1ff2cee546728fdc95900eef057cc54b918580e3
   ExpoAsset: 6cc988c426b5fc997859cc0f8f6728d1376bf53f
   ExpoBlur: 567af66164e3043a9a30069594aed1ddf0a88d97
   ExpoBrightness: d3f54a52ea62b6c4deb81bfb5569a8bc664487ab

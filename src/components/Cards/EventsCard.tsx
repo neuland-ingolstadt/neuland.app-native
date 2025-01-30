@@ -21,7 +21,7 @@ const EventsCard = (): React.JSX.Element => {
     })
 
     return (
-        <BaseCard title="events" onPressRoute="/clEvents">
+        <BaseCard title="events" onPressRoute="/cl-events">
             {Boolean(isSuccess) && data !== undefined && (
                 <View
                     style={[

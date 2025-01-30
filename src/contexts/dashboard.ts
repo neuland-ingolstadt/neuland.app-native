@@ -1,4 +1,4 @@
-import { AllCards, type Card } from '@/components/allCards'
+import { AllCards, type Card } from '@/components/all-cards'
 import { USER_GUEST } from '@/data/constants'
 import { useCallback, useMemo } from 'react'
 import { useMMKVObject } from 'react-native-mmkv'
