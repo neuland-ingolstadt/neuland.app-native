@@ -267,6 +267,7 @@
 				EA2D14D4624E4AACAEF4E868 /* Remove signature files (Xcode workaround) */,
 				8F9A5944709E4AEB9F9FCEE3 /* Remove signature files (Xcode workaround) */,
 				F65CC7DFA5F44BDEBB78C03C /* Remove signature files (Xcode workaround) */,
+				3DC42C9A55454715B0E76AD3 /* Remove signature files (Xcode workaround) */,
 			);
 			buildRules = (
 			);
@@ -393,6 +394,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\n    echo \"Remove signature files (Xcode workaround)\";\n    rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n  ";
+		};
+		3DC42C9A55454715B0E76AD3 /* Remove signature files (Xcode workaround) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Remove signature files (Xcode workaround)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n          echo \"Remove signature files (Xcode workaround)\";\n          rm -rf \"$CONFIGURATION_BUILD_DIR/MapLibre.xcframework-ios.signature\";\n        ";
 		};
 		72DAF9D7A30A1B1C87B8BE03 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
