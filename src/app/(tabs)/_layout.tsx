@@ -116,7 +116,7 @@ export default function HomeLayout(): React.JSX.Element {
                               selectedRestaurants[0] as keyof typeof humanLocations
                           ],
                 icon: 'symbol:fork.knife',
-                params: { href: '(tabs)/(food)' },
+                params: { href: '(tabs)/food' },
             },
             ...(userKind === USER_GUEST
                 ? [
@@ -140,7 +140,6 @@ export default function HomeLayout(): React.JSX.Element {
         const subscription = QuickActions.addListener((action) => {
             if (action?.params?.href) {
                 router.navigate({
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                     pathname: action.params.href as RelativePathString,
                     params: { fromAppShortcut: 'true' },
                 })

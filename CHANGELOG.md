@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🚀 Features
+
+- _(grades)_ Adds subject search option - by @Robert27 ([2c522f3](https://github.com/neuland-ingolstadt/neuland.app-native/commit/2c522f3921ccfa36b25b0d3d63ea87ed18cd4626))
+- _(widget, ios)_ Add timetable control center widget - by @Robert27 ([57a0b54](https://github.com/neuland-ingolstadt/neuland.app-native/commit/57a0b5456d0e99b469092b1296f897c58fb11055))
+- _(widget,ios)_ Add control center widget - by @Robert27 ([2801b5d](https://github.com/neuland-ingolstadt/neuland.app-native/commit/2801b5dfdc7ef88a4042dd6feda2485b324fcda9))
+
+### 🐛 Bug Fixes
+
+- _(map)_ Remove bottom margin in map screen on iOS - by @Robert27 ([0d8b292](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0d8b2925241fd2a0ba5b6f0852cb9d724ec2c3ea))
+- _(quick-actions)_ Fix incorrect href params - by @Robert27 ([5fce464](https://github.com/neuland-ingolstadt/neuland.app-native/commit/5fce4648a76c88222fbc543190353d99dc79a09d))
+- _(web)_ Hide duplicate share button - by @Robert27 ([ec998e3](https://github.com/neuland-ingolstadt/neuland.app-native/commit/ec998e3c672ffdf722d7274f7be460c15532727c))
+- _(web)_ Switch to http-server to correctly serve public files - by @Robert27 ([181a8c2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/181a8c2221e1a4e50d3abd894770763cddfdb08d))
+- Include exam dates in first day timetable calculation - by @Robert27 ([0c633fc](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0c633fcb8e4973698404172a07be639e1c88fa11))
+- Improve event sorting in CalendarCard to prioritize single-day events - by @Robert27 ([2bac0dd](https://github.com/neuland-ingolstadt/neuland.app-native/commit/2bac0ddc2c55015a788fdc8d28ced048544d1215))
+
+### 🚜 Refactor
+
+- _(ios)_ Add alternative app icons to expo prebuild pipeline ([#158](https://github.com/neuland-ingolstadt/neuland.app-native/issues/158)) - by @Robert27 ([03e8e43](https://github.com/neuland-ingolstadt/neuland.app-native/commit/03e8e4347e3a4856aaf8d2224d9f6219348b0b33))
+
+### ⚡ Performance
+
+- Migrate to expo-quick-actions for improved shortcut handling - by @Robert27 ([10cd247](https://github.com/neuland-ingolstadt/neuland.app-native/commit/10cd2471831787301247b3b519ea748be61212c6))
+
+### 🎨 Styling
+
+- Update Tabbar component styles for better appearance on Android - by @Robert27 ([2fa777e](https://github.com/neuland-ingolstadt/neuland.app-native/commit/2fa777e30674a0acb4f1df38487b11cfe0b97b41))
+- Redesign detail pages and navigation behaviour - by @Robert27 ([bf30287](https://github.com/neuland-ingolstadt/neuland.app-native/commit/bf30287fb434a3a3a92b619c7b3682e6ed9d1918))
+
+### ⚙️ Miscellaneous Tasks
+
+- Revert migration to new bun.lock file - by @Robert27 ([8028070](https://github.com/neuland-ingolstadt/neuland.app-native/commit/8028070181045cf572af0fc1b56b6d10e8ea0961))
+- Update app image name to match cd pipeline - by @Robert27 ([27eace0](https://github.com/neuland-ingolstadt/neuland.app-native/commit/27eace0bbf91f427de83ff659c688e7270e44835))
+
 ## [0.11.2](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.1..0.11.2) - 2025-01-18
 
 ### 🚀 Features
@@ -35,7 +70,7 @@ All notable changes to this project will be documented in this file.
 - Update Docker actions to latest versions in deployment workflow - by @Robert27 ([25b9177](https://github.com/neuland-ingolstadt/neuland.app-native/commit/25b9177c42f1bf1047b2b5eef209d13951d9145d))
 - Set NODE_BINARY environment variable in ios post-clone script - by @Robert27 ([0422ee2](https://github.com/neuland-ingolstadt/neuland.app-native/commit/0422ee2475529634a5167cb87625248ae9cfc686))
 
-**Full Changelog**: https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.1...0.12.0
+**Full Changelog**: https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.1...0.11.2
 
 ## [0.11.1](https://github.com/neuland-ingolstadt/neuland.app-native/compare/0.11.0..0.11.1) - 2024-12-30
 
