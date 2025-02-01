@@ -1,5 +1,4 @@
 #import "AppDelegate.h"
-#import "RNShortcuts.h"
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
@@ -60,8 +59,6 @@
   return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
-- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
-  [RNShortcuts performActionForShortcutItem:shortcutItem completionHandler:completionHandler];
-}
+
 
 @end

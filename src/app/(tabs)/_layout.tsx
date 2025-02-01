@@ -11,30 +11,14 @@ import { humanLocations } from '@/utils/food-utils'
 import { storage } from '@/utils/storage'
 import Aptabase from '@aptabase/react-native'
 import * as Application from 'expo-application'
+import * as QuickActions from 'expo-quick-actions'
 import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
-// @ts-expect-error no types available
-import Shortcuts, { type ShortcutItem } from 'rn-quick-actions'
 
 import { appIcons } from '../(screens)/app-icon'
-
-interface ShortcutsType {
-    onShortcutPressed: (callback: (item: ShortcutItem) => void) => {
-        remove: () => void
-    }
-    setShortcuts: (shortcuts: ShortcutItem[]) => void
-}
-
-const TypedShortcuts = Shortcuts as unknown as ShortcutsType
-
-declare const process: {
-    env: {
-        EXPO_PUBLIC_APTABASE_KEY: string
-    }
-}
 
 export default function HomeLayout(): React.JSX.Element {
     const router = useRouter()
@@ -113,75 +97,59 @@ export default function HomeLayout(): React.JSX.Element {
         const shortcuts = [
             {
                 id: 'timetable',
-                type: 'timetable',
                 title: t('navigation.timetable'),
-                symbolName: 'calendar',
-                iconName: 'calendar_month',
-                data: {
-                    path: '(tabs)/timetable',
-                },
+                icon: 'symbol:calendar',
+                params: { href: '(tabs)/timetable' },
             },
             {
                 id: 'map',
-                type: 'map',
                 title: t('navigation.map'),
-                data: {
-                    path: '(tabs)/map',
-                },
-                symbolName: 'map',
-                iconName: 'map',
+                icon: 'symbol:map',
+                params: { href: '(tabs)/map' },
             },
             {
                 id: 'food',
-                type: 'food',
                 title:
                     selectedRestaurants.length !== 1
                         ? t('navigation.food')
                         : humanLocations[
                               selectedRestaurants[0] as keyof typeof humanLocations
                           ],
-                data: {
-                    path: '(tabs)/(food)',
-                },
-                symbolName: 'fork.knife',
-                iconName: 'silverware_fork_knife',
+                icon: 'symbol:fork.knife',
+                params: { href: '(tabs)/(food)' },
             },
             ...(userKind === USER_GUEST
                 ? [
                       {
                           id: 'login',
-                          type: 'login',
                           title: t('navigation.login'),
-                          data: { path: 'login' },
-                          symbolName: 'person.circle',
-                          iconName: 'account_circle',
+                          icon: 'symbol:person.circle',
+                          params: { href: 'login' },
                       },
                   ]
                 : [
                       {
                           id: 'profile',
-                          type: 'profile',
                           title: t('navigation.profile'),
-                          data: { path: 'profile' },
-                          symbolName: 'person.circle',
-                          iconName: 'account_circle',
+                          icon: 'symbol:person.circle',
+                          params: { href: 'profile' },
                       },
                   ]),
         ]
-        function processShortcut(item: ShortcutItem): void {
-            router.navigate({
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                pathname: item.data.path as RelativePathString,
-                params: { fromAppShortcut: 'true' },
-            })
-        }
 
-        const shortcutSubscription =
-            TypedShortcuts.onShortcutPressed(processShortcut)
-        TypedShortcuts.setShortcuts(shortcuts)
+        const subscription = QuickActions.addListener((action) => {
+            if (action?.params?.href) {
+                router.navigate({
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    pathname: action.params.href as RelativePathString,
+                    params: { fromAppShortcut: 'true' },
+                })
+            }
+        })
+        QuickActions.setItems(shortcuts).catch(console.error)
 
         return () => {
-            if (shortcutSubscription != null) shortcutSubscription.remove()
+            subscription.remove()
         }
     }, [selectedRestaurants, router, t, userKind])
 
