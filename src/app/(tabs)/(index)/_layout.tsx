@@ -33,6 +33,6 @@ export default function Layout(): React.JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
     indicator: {
-        backgroundColor: theme.colors.labelSecondaryColor,
+        backgroundColor: theme.colors.labelTertiaryColor,
     },
 }))

@@ -6,10 +6,17 @@ import { type LanguageKey } from '@/localization/i18n'
 import { type FormListSections } from '@/types/components'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useFocusEffect, useNavigation } from 'expo-router'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Share, Text, View } from 'react-native'
+import { Linking, Platform, Share, Text, View } from 'react-native'
+import Animated, {
+    interpolate,
+    useAnimatedRef,
+    useAnimatedStyle,
+    useScrollViewOffset,
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): React.JSX.Element {
@@ -17,6 +24,23 @@ export default function SportsEventDetail(): React.JSX.Element {
 
     const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
     const { t, i18n } = useTranslation('common')
+
+    const ref = useAnimatedRef<Animated.ScrollView>()
+    const scroll = useScrollViewOffset(ref)
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateY: interpolate(
+                        scroll.value,
+                        [0, 100],
+                        [20, 0],
+                        'clamp'
+                    ),
+                },
+            ],
+        }
+    })
     const navigation = useNavigation()
     useFocusEffect(
         useCallback(() => {
@@ -159,26 +183,44 @@ export default function SportsEventDetail(): React.JSX.Element {
         },
     ]
 
+    const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
     return (
-        <ScrollView
+        <Animated.ScrollView
             style={styles.page}
             contentContainerStyle={styles.container}
+            ref={ref}
         >
+            <Stack.Screen
+                options={{
+                    headerTitle: (props) => (
+                        <View style={styles.headerTitle}>
+                            <Animated.View style={headerStyle}>
+                                <HeaderTitle
+                                    {...props}
+                                    tintColor={theme.colors.text}
+                                >
+                                    {title}
+                                </HeaderTitle>
+                            </Animated.View>
+                        </View>
+                    ),
+                }}
+            />
+
             <View style={styles.titleContainer}>
                 <Text
                     style={styles.titleText}
                     allowFontScaling={true}
-                    adjustsFontSizeToFit={true}
+                    minimumFontScale={0.8}
                     numberOfLines={2}
                 >
-                    {sportsEvent?.title[i18n.language as LanguageKey]}
+                    {title}
                 </Text>
             </View>
             <View style={styles.formList}>
                 <FormList sections={sections} />
             </View>
-            {}
-        </ScrollView>
+        </Animated.ScrollView>
     )
 }
 
@@ -192,22 +234,26 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingBottom: 12,
         width: '100%',
     },
+    headerTitle: {
+        marginBottom: Platform.OS === 'ios' ? -10 : 0,
+        overflow: 'hidden',
+        paddingRight: Platform.OS === 'ios' ? 0 : 50,
+    },
     page: {
-        padding: theme.margins.page,
+        paddingHorizontal: theme.margins.page,
     },
     titleContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.md,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        width: '100%',
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     titleText: {
         color: theme.colors.text,
-        fontSize: 18,
-        textAlign: 'center',
+        flex: 1,
+        fontSize: 24,
+        fontWeight: '600',
+        paddingTop: 16,
+        textAlign: 'left',
     },
     warning: (active: boolean) => ({
         color: active ? theme.colors.warning : theme.colors.success,

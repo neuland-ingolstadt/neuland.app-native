@@ -86,7 +86,7 @@ export const BottomSheetDetailModal = ({
     modalSection,
 }: BottomSheetDetailModalProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
-    const IOS_SNAP_POINTS = ['35%', '55%', '80%']
+    const IOS_SNAP_POINTS = ['36%', '55%', '80%']
     const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
     return (
         <BottomSheetModalProvider>
@@ -186,7 +186,7 @@ const stylesheet = createStyleSheet((theme) => ({
         width: '100%',
     },
     indicator: {
-        backgroundColor: theme.colors.labelSecondaryColor,
+        backgroundColor: theme.colors.labelTertiaryColor,
     },
     modalSectionHeader: {
         color: theme.colors.text,

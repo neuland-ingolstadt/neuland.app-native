@@ -2,13 +2,21 @@ import FormList from '@/components/Universal/FormList'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { type FormListSections } from '@/types/components'
 import { formatFriendlyDateTime } from '@/utils/date-utils'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
+import Animated, {
+    interpolate,
+    useAnimatedRef,
+    useAnimatedStyle,
+    useScrollViewOffset,
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ExamDetail(): React.JSX.Element {
-    const { styles } = useStyles(stylesheet)
+    const { styles, theme } = useStyles(stylesheet)
     const exam = useRouteParamsStore((state) => state.selectedExam)
     const { t } = useTranslation('common')
     const typeSplit =
@@ -20,6 +28,22 @@ export default function ExamDetail(): React.JSX.Element {
             ? `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
             : exam?.type
     const examAids = exam?.aids ?? []
+    const ref = useAnimatedRef<Animated.ScrollView>()
+    const scroll = useScrollViewOffset(ref)
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateY: interpolate(
+                        scroll.value,
+                        [0, 100],
+                        [30, 0],
+                        'clamp'
+                    ),
+                },
+            ],
+        }
+    })
 
     const sections: FormListSections[] = [
         {
@@ -80,16 +104,34 @@ export default function ExamDetail(): React.JSX.Element {
     ]
 
     return (
-        <ScrollView
+        <Animated.ScrollView
             style={styles.page}
             contentContainerStyle={styles.container}
+            ref={ref}
         >
+            <Stack.Screen
+                options={{
+                    headerTitle: (props) => (
+                        <View style={styles.headerTitle}>
+                            <Animated.View style={headerStyle}>
+                                <HeaderTitle
+                                    {...props}
+                                    tintColor={theme.colors.text}
+                                >
+                                    {exam?.name}
+                                </HeaderTitle>
+                            </Animated.View>
+                        </View>
+                    ),
+                }}
+            />
             <View style={styles.titleContainer}>
                 <Text
                     style={styles.titleText}
-                    allowFontScaling={true}
                     adjustsFontSizeToFit={true}
-                    numberOfLines={2}
+                    numberOfLines={3}
+                    minimumFontScale={0.8}
+                    selectable={true}
                 >
                     {exam?.name}
                 </Text>
@@ -100,18 +142,23 @@ export default function ExamDetail(): React.JSX.Element {
             <View>
                 <Text style={styles.notesText}>{t('pages.exam.footer')}</Text>
             </View>
-        </ScrollView>
+        </Animated.ScrollView>
     )
 }
 
 const stylesheet = createStyleSheet((theme) => ({
     container: {
         gap: 12,
-        marginBottom: theme.margins.modalBottomMargin,
+        paddingBottom: theme.margins.modalBottomMargin,
     },
     formList: {
         alignSelf: 'center',
         width: '100%',
+    },
+    headerTitle: {
+        marginBottom: Platform.OS === 'ios' ? -10 : 0,
+        overflow: 'hidden',
+        paddingRight: Platform.OS === 'ios' ? 0 : 50,
     },
     notesText: {
         color: theme.colors.labelColor,
@@ -119,20 +166,21 @@ const stylesheet = createStyleSheet((theme) => ({
         textAlign: 'left',
     },
     page: {
-        padding: theme.margins.page,
+        paddingHorizontal: theme.margins.page,
     },
+
     titleContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.md,
-        paddingHorizontal: 5,
-        paddingVertical: 10,
-        width: '100%',
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 6,
     },
     titleText: {
         color: theme.colors.text,
-        fontSize: 18,
-        textAlign: 'center',
+        flex: 1,
+        fontSize: 24,
+        fontWeight: '600',
+        paddingTop: 16,
+        textAlign: 'left',
     },
 }))

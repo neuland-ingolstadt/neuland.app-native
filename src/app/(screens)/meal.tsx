@@ -17,18 +17,17 @@ import {
     shareMeal,
 } from '@/utils/food-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { router, useFocusEffect, useNavigation } from 'expo-router'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack, router, useFocusEffect, useNavigation } from 'expo-router'
 import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    Alert,
-    Linking,
-    Platform,
-    ScrollView,
-    Share,
-    Text,
-    View,
-} from 'react-native'
+import { Alert, Linking, Platform, Share, Text, View } from 'react-native'
+import Animated, {
+    interpolate,
+    useAnimatedRef,
+    useAnimatedStyle,
+    useScrollViewOffset,
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodDetail(): React.JSX.Element {
@@ -50,13 +49,31 @@ export default function FoodDetail(): React.JSX.Element {
     )
     const { t, i18n } = useTranslation('food')
     const { userKind = USER_GUEST } = useContext(UserKindContext)
-    const navigation = useNavigation()
     const dataSources = {
         IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
         NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
         Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
         Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf',
     }
+
+    const ref = useAnimatedRef<Animated.ScrollView>()
+    const scroll = useScrollViewOffset(ref)
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            transform: [
+                {
+                    translateY: interpolate(
+                        scroll.value,
+                        [0, 100],
+                        [30, 0],
+                        'clamp'
+                    ),
+                },
+            ],
+        }
+    })
+
+    const navigation = useNavigation()
 
     useFocusEffect(
         useCallback(() => {
@@ -337,6 +354,12 @@ export default function FoodDetail(): React.JSX.Element {
 
     const locationExists =
         restaurant !== undefined && locations[restaurant] !== undefined
+    const humanLocation =
+        humanLocations[restaurant as keyof typeof humanLocations]
+    const humanCategory = t(
+        // @ts-expect-error cannot verify the TFunction type
+        `categories.${meal?.category}`
+    ) as string
 
     const aboutSection: FormListSections[] = [
         {
@@ -344,9 +367,7 @@ export default function FoodDetail(): React.JSX.Element {
             items: [
                 {
                     title: 'Restaurant',
-                    value: humanLocations[
-                        restaurant as keyof typeof humanLocations
-                    ],
+                    value: humanLocation,
                     onPress: handlePress,
                     textColor: locationExists
                         ? theme.colors.primary
@@ -355,10 +376,7 @@ export default function FoodDetail(): React.JSX.Element {
                 },
                 {
                     title: t('details.formlist.about.category'),
-                    value: t(
-                        // @ts-expect-error cannot verify the TFunktion type
-                        `categories.${meal?.category}`
-                    ),
+                    value: humanCategory,
                 },
                 {
                     title: t('details.formlist.about.source'),
@@ -424,24 +442,43 @@ export default function FoodDetail(): React.JSX.Element {
               ]
             : [...priceSection, ...variantsSection, ...aboutSection]
 
+    const title = meal
+        ? mealName(meal.name, foodLanguage, i18n.language as LanguageKey)
+        : ''
+
     return (
-        <ScrollView contentContainerStyle={styles.page}>
+        <Animated.ScrollView contentContainerStyle={styles.page} ref={ref}>
+            <Stack.Screen
+                options={{
+                    headerTitle: (props) => (
+                        <View style={styles.headerTitle}>
+                            <Animated.View style={headerStyle}>
+                                <HeaderTitle
+                                    {...props}
+                                    tintColor={theme.colors.text}
+                                >
+                                    {title}
+                                </HeaderTitle>
+                            </Animated.View>
+                        </View>
+                    ),
+                }}
+            />
             <View style={styles.titleContainer}>
                 <Text
                     style={styles.titleText}
-                    allowFontScaling={true}
                     adjustsFontSizeToFit={true}
-                    numberOfLines={2}
+                    numberOfLines={3}
+                    minimumFontScale={0.8}
                     selectable={true}
                 >
-                    {meal != null &&
-                        mealName(
-                            meal.name,
-                            foodLanguage,
-                            i18n.language as LanguageKey
-                        )}
+                    {title}
                 </Text>
             </View>
+
+            <Text style={styles.subtitleText}>
+                {humanLocation} - {humanCategory}
+            </Text>
             <View style={styles.formList}>
                 <FormList sections={sections} />
             </View>
@@ -470,7 +507,7 @@ export default function FoodDetail(): React.JSX.Element {
                     </Text>
                 </View>
             </View>
-        </ScrollView>
+        </Animated.ScrollView>
     )
 }
 
@@ -479,6 +516,11 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         marginVertical: 16,
         width: '100%',
+    },
+    headerTitle: {
+        marginBottom: Platform.OS === 'ios' ? -10 : 0,
+        overflow: 'hidden',
+        paddingRight: Platform.OS === 'ios' ? 0 : 50,
     },
     iconWarning: {
         color: theme.colors.warning,
@@ -499,7 +541,6 @@ const stylesheet = createStyleSheet((theme) => ({
         alignSelf: 'center',
         marginBottom: theme.margins.bottomSafeArea,
         marginTop: 20,
-        paddingHorizontal: theme.margins.page,
     },
     notesText: {
         color: theme.colors.labelColor,
@@ -512,18 +553,23 @@ const stylesheet = createStyleSheet((theme) => ({
     page: {
         marginHorizontal: theme.margins.page,
     },
+    subtitleText: {
+        color: theme.colors.labelColor,
+        fontSize: 16,
+        fontWeight: '600',
+    },
     titleContainer: {
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.md,
-        marginTop: 20,
-        paddingVertical: 10,
-        width: '100%',
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 6,
     },
     titleText: {
         color: theme.colors.text,
-        fontSize: 18,
-        textAlign: 'center',
+        flex: 1,
+        fontSize: 22,
+        fontWeight: '700',
+        paddingTop: 16,
+        textAlign: 'left',
     },
 }))

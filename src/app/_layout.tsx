@@ -210,7 +210,14 @@ function RootLayout(): React.JSX.Element {
                         title: t('navigation.details'),
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                headerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                                presentation: 'formSheet',
+                                sheetAllowedDetents: [0.7, 1],
+                                sheetInitialDetentIndex: 0,
+                                sheetGrabberVisible: true,
+                                sheetCornerRadius: 16,
                             },
                         }),
                         headerRight: () => (
@@ -228,7 +235,14 @@ function RootLayout(): React.JSX.Element {
                         title: t('navigation.details'),
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                headerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                                presentation: 'formSheet',
+                                sheetAllowedDetents: [0.8, 1],
+                                sheetInitialDetentIndex: 0,
+                                sheetGrabberVisible: true,
+                                sheetCornerRadius: 16,
                             },
                         }),
                         headerRight: () => (
@@ -334,7 +348,14 @@ function RootLayout(): React.JSX.Element {
                         title: 'Event Details',
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                headerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                                presentation: 'formSheet',
+                                sheetAllowedDetents: [0.7, 1],
+                                sheetInitialDetentIndex: 0,
+                                sheetGrabberVisible: true,
+                                sheetCornerRadius: 16,
                             },
                         }),
                         headerRight: () => (
@@ -352,7 +373,15 @@ function RootLayout(): React.JSX.Element {
                         title: 'Event Details',
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                headerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                                presentation: 'formSheet',
+                                sheetAllowedDetents: [0.7, 1],
+                                sheetInitialDetentIndex: 0,
+                                sheetGrabberVisible: true,
+                                sheetCornerRadius: 16,
+                                headerTitleAlign: 'center',
                             },
                         }),
                         headerRight: () => (
@@ -376,7 +405,22 @@ function RootLayout(): React.JSX.Element {
                         title: t('navigation.examDetails'),
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                headerStyle: {
+                                    backgroundColor: 'transparent',
+                                },
+                                presentation: 'formSheet',
+                                sheetAllowedDetents: [0.8, 1],
+                                sheetInitialDetentIndex: 0,
+                                sheetGrabberVisible: true,
+                                sheetCornerRadius: 16,
+                                headerRight: () => (
+                                    <ShareHeaderButton
+                                        noShare
+                                        onPress={() => {
+                                            /* do nothing yet */
+                                        }}
+                                    />
+                                ),
                             },
                         }),
                     }}
