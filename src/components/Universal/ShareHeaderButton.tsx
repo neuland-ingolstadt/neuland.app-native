@@ -42,7 +42,7 @@ export default function ShareHeaderButton({
                     />
                 </Pressable>
             )}
-            {Platform.OS !== 'android' && (
+            {Platform.OS === 'ios' && (
                 <Pressable
                     onPressOut={() => {
                         router.back()
