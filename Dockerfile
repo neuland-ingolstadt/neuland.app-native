@@ -34,10 +34,10 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/dist ./dist
 
 # Install serve
-RUN npm install -g serve
+RUN npm install -g http-server
 
 # Expose the port
 EXPOSE 3000
 
 # Serve the static files
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["http-server", "./dist", "-p", "3000", "--cors"]
