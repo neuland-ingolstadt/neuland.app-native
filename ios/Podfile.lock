@@ -14,23 +14,23 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (6.0.2):
     - ExpoModulesCore
-  - EXConstants (17.0.4):
+  - EXConstants (17.0.5):
     - ExpoModulesCore
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.5):
     - ExpoModulesCore
-  - Expo (52.0.27):
+  - Expo (52.0.28):
     - ExpoModulesCore
-  - expo-dev-client (5.0.10):
+  - expo-dev-client (5.0.11):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (5.0.25):
+  - expo-dev-launcher (5.0.27):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 5.0.25)
+    - expo-dev-launcher/Main (= 5.0.27)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -56,7 +56,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (5.0.25):
+  - expo-dev-launcher/Main (5.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -85,7 +85,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (5.0.25):
+  - expo-dev-launcher/Unsafe (5.0.27):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -259,7 +259,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalization (16.0.1):
     - ExpoModulesCore
-  - ExpoModulesCore (2.1.4):
+  - ExpoModulesCore (2.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1563,7 +1563,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-bottom-tabs (0.8.2):
+  - react-native-bottom-tabs (0.8.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1591,7 +1591,7 @@ PODS:
     - React
   - react-native-drag-drop-ios (0.1.1):
     - React-Core
-  - react-native-menu (1.2.1):
+  - react-native-menu (1.2.2):
     - React
   - react-native-mmkv (2.12.2):
     - DoubleConversion
@@ -2540,12 +2540,12 @@ SPEC CHECKSUMS:
   DGSwiftUtilities: 2f0d35d5ff3d57bd70ccc42f15971460db202c41
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EXApplication: 27a524f5c3e671c6218220fba04752629466a1a9
-  EXConstants: cc788e18fb962b77999c16f6b90e551542b1bcf4
+  EXConstants: aa93a3e70f8b37c81a80931cfd23f860b1819167
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: 81324537a654111964f6e7994dbc351a4233dcfa
-  Expo: 7021c4880d0bbd02781e88e213b6786c1200ebdf
-  expo-dev-client: a02392060ef8016e11facebb6f81ff172b39775f
-  expo-dev-launcher: c910ef23ccc0bb985a456f3a4c22e5ef233d5f4f
+  Expo: c124b1c2129e79a181c16c364aec9add939bea24
+  expo-dev-client: 5271a230c19b164b0e42cb2c4986a690ad684990
+  expo-dev-launcher: 67dbdda6f04cab28b71caedf702ec2f129aceb7e
   expo-dev-menu: 2019134e1e53fb7495c19cc361aa8e11199656bc
   expo-dev-menu-interface: 00dc42302a72722fdecec3fa048de84a9133bcc4
   ExpoAlternateAppIcons: 1ff2cee546728fdc95900eef057cc54b918580e3
@@ -2563,7 +2563,7 @@ SPEC CHECKSUMS:
   ExpoLinking: a9e64f08d2bb4fc42e7441174f15cc535bb390ba
   ExpoLocalAuthentication: 64bf2cbee456f5639d69a853684c285afc0602d8
   ExpoLocalization: e36b911e04d371c6c6624ef818e56229bf51c498
-  ExpoModulesCore: ad56b61971cbf3a9fa28f52f53c27de9f181d05c
+  ExpoModulesCore: 666ca7c8f4b5d3f4d9bfc5e302de4cdbf2299a00
   ExpoScreenOrientation: eb2229ceeab36ce787ccae413d23273698b946fa
   ExpoSecureStore: d006eea5e316283099d46f80a6b10055b89a6008
   ExpoSplashScreen: 83f585abeb0506103f9309628634dbbcd9bc5573
@@ -2605,10 +2605,10 @@ SPEC CHECKSUMS:
   React-logger: 162c09cc432b02d4a0db31b1d98f6df5243a2679
   React-Mapbuffer: eab34f6d54d26931c5f70eb19da1e36162d87bbd
   React-microtasksnativemodule: 9866981c8f1e80bb819e34f4ea45870cb3e6afaa
-  react-native-bottom-tabs: 7e1032f69cbebc0e6f2bdc0d53e94f5aaefcec35
+  react-native-bottom-tabs: ace2d9ab5e31427b0b2846d320b2228780953a4d
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
-  react-native-menu: cc31fee92b3dcf3b34c17a7aa00d44398e8ae781
+  react-native-menu: 27f634374481525b27e2123611aa4c6477324f92
   react-native-mmkv: 54f5626371820ab9385821db1bbb03b6ab62c28a
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-pager-view: 3ae40be5b2700f3f2645c1fbc751a03a4323172d
@@ -2663,6 +2663,6 @@ SPEC CHECKSUMS:
   SwiftUIReactNative: 3241f6b3d9cf6dc29b3dc64f7d838770f19fd604
   Yoga: fd4ca32b81c4069b4175ad9460b042e17db94b66
 
-PODFILE CHECKSUM: 6c2556370bedef6d002e0772ec01149bbbb5c8ec
+PODFILE CHECKSUM: d66bcb89074bb099acbcbcc80c2f9f5caa83a513
 
 COCOAPODS: 1.16.2

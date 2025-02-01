@@ -31,17 +31,19 @@ import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import Maplibre, {
+import {
     Camera,
     FillLayer,
+    Images,
     LineLayer,
     MapView,
     ShapeSource,
     SymbolLayer,
     UserLocation,
     UserTrackingMode,
+    requestAndroidLocationPermissions,
 } from '@maplibre/maplibre-react-native'
-import MapLibreRN, {
+import {
     type CameraRef,
     type MapViewRef,
     type UserLocationRef,
@@ -86,7 +88,7 @@ import { modalSection } from './ModalSections'
 
 export function requestPermission(): void {
     if (Platform.OS === 'android') {
-        void Maplibre.requestAndroidLocationPermissions()
+        void requestAndroidLocationPermissions()
     }
 }
 
@@ -726,7 +728,13 @@ const MapScreen = (): React.JSX.Element => {
                 )}
             </>
 
-            <View style={styles.map}>
+            <View
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{
+                    ...styles.map,
+                    marginBottom: 0,
+                }}
+            >
                 <MapView
                     style={styles.map}
                     tintColor={
@@ -761,7 +769,7 @@ const MapScreen = (): React.JSX.Element => {
                             : undefined
                     }
                 >
-                    <MapLibreRN.Images
+                    <Images
                         nativeAssetImages={['pin']}
                         images={{
                             // https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal

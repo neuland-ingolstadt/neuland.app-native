@@ -13,7 +13,8 @@ import {
 export interface WorkaroundStackProps {
     name: string
     titleKey: string
-    component: () => JSX.Element
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    component: React.ComponentType<any>
     transparent?: boolean
     largeTitle?: boolean
     headerSearchBarOptions?: SearchBarProps
