@@ -1,4 +1,4 @@
-# Base stage: Install dependencies and build the project
+# Base stage: Install dependencies and build the project using Bun
 FROM oven/bun:1 AS bun
 WORKDIR /usr/src/app
 
@@ -26,18 +26,13 @@ ENV NODE_ENV=production
 
 RUN npx expo export -p web -c
 
-# Final stage: Serve static files using npx serve
-FROM node:23 AS final
-WORKDIR /usr/src/app
+# Final stage: Serve static files using NGINX
+FROM nginx:alpine AS final
 
-# Copy the build files
-COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
-# Install serve
-RUN npm install -g http-server
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose the port
 EXPOSE 3000
 
-# Serve the static files
-CMD ["http-server", "./dist", "-p", "3000", "--cors"]
+CMD ["nginx", "-g", "daemon off;"]
