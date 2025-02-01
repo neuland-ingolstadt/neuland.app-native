@@ -12,6 +12,8 @@
             "bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
             "buildNumber": "199",
             "supportsTablet": true,
+            "appleTeamId": "FSXB76X6V2",
+            "appStoreUrl": "https://apps.apple.com/us/app/neuland-next/id1617096811",
             "userInterfaceStyle": "automatic",
             "associatedDomains": [
                 "webcredentials:neuland.app",
