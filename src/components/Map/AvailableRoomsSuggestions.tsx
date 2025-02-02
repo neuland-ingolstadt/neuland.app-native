@@ -78,91 +78,121 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
                         {t('pages.map.noAvailableRooms')}
                     </Text>
                 ) : (
-                    availableRooms.slice(0, 3).map((room, key) => (
-                        <React.Fragment key={key}>
-                            <Pressable
-                                key={key}
-                                style={styles.suggestionRow}
-                                onPress={() => {
-                                    const details = allRooms.features.find(
-                                        (x) => x.properties?.Raum === room.room
-                                    )
-
-                                    if (details == null) {
-                                        roomNotFoundToast(
-                                            room.room,
-                                            theme.colors.notification
+                    (() => {
+                        const roomSuggestions = availableRooms.slice(0, 3)
+                        return roomSuggestions.map((room, key) => (
+                            <React.Fragment key={key}>
+                                <Pressable
+                                    style={styles.suggestionRow}
+                                    onPress={() => {
+                                        const details = allRooms.features.find(
+                                            (x) =>
+                                                x.properties?.Raum === room.room
                                         )
-                                        return
-                                    }
 
-                                    const etage = details?.properties?.Ebene as
-                                        | string
-                                        | undefined
+                                        if (details == null) {
+                                            roomNotFoundToast(
+                                                room.room,
+                                                theme.colors.notification
+                                            )
+                                            return
+                                        }
 
-                                    setCurrentFloor({
-                                        floor: etage ?? 'EG',
-                                        manual: false,
-                                    })
-                                    setClickedElement({
-                                        data: room.room,
-                                        type: SEARCH_TYPES.ROOM,
-                                        center: details?.properties?.center as
-                                            | Position
-                                            | undefined,
-                                        manual: false,
-                                    })
-                                    trackEvent('Room', {
-                                        room: room.room,
-                                        origin: 'AvailableRoomsSuggestion',
-                                    })
+                                        const etage = details?.properties
+                                            ?.Ebene as string | undefined
 
-                                    handlePresentModalPress()
-                                }}
-                            >
-                                <View style={styles.suggestionInnerRow}>
+                                        setCurrentFloor({
+                                            floor: etage ?? 'EG',
+                                            manual: false,
+                                        })
+                                        setClickedElement({
+                                            data: room.room,
+                                            type: SEARCH_TYPES.ROOM,
+                                            center: details?.properties
+                                                ?.center as
+                                                | Position
+                                                | undefined,
+                                            manual: false,
+                                        })
+                                        trackEvent('Room', {
+                                            room: room.room,
+                                            origin: 'AvailableRoomsSuggestion',
+                                        })
+
+                                        handlePresentModalPress()
+                                    }}
+                                >
+                                    <View style={styles.suggestionInnerRow}>
+                                        <View
+                                            style={
+                                                styles.suggestionIconContainer
+                                            }
+                                        >
+                                            <PlatformIcon
+                                                ios={{
+                                                    name: 'studentdesk',
+                                                    size: 18,
+                                                }}
+                                                android={{
+                                                    name: 'school',
+                                                    size: 20,
+                                                }}
+                                                web={{
+                                                    name: 'Notebook',
+                                                    size: 20,
+                                                }}
+                                                style={styles.primaryContrast}
+                                            />
+                                        </View>
+
+                                        <View style={styles.suggestionContent}>
+                                            <Text
+                                                style={styles.suggestionTitle}
+                                            >
+                                                {room.room}
+                                            </Text>
+                                            <Text
+                                                style={
+                                                    styles.suggestionSubtitle
+                                                }
+                                            >
+                                                <>
+                                                    {room.type}
+                                                    {room.capacity !==
+                                                        undefined && (
+                                                        <>
+                                                            {' '}
+                                                            ({
+                                                                room.capacity
+                                                            }{' '}
+                                                            {t(
+                                                                'pages.rooms.options.seats'
+                                                            )}
+                                                            )
+                                                        </>
+                                                    )}
+                                                </>
+                                            </Text>
+                                        </View>
+                                    </View>
                                     <View
-                                        style={styles.suggestionIconContainer}
+                                        style={styles.suggestionRightContainer}
                                     >
-                                        <PlatformIcon
-                                            ios={{
-                                                name: 'studentdesk',
-                                                size: 18,
-                                            }}
-                                            android={{
-                                                name: 'school',
-                                                size: 20,
-                                            }}
-                                            web={{
-                                                name: 'Notebook',
-                                                size: 20,
-                                            }}
-                                            style={styles.primaryContrast}
-                                        />
-                                    </View>
-
-                                    <View style={styles.suggestionContent}>
-                                        <Text style={styles.suggestionTitle}>
-                                            {room.room}
+                                        <Text style={styles.timeLabel}>
+                                            {formatFriendlyTime(room.from)}
                                         </Text>
-                                        <Text style={styles.suggestionSubtitle}>
-                                            {room.type} ({room.capacity}{' '}
-                                            {t('pages.rooms.options.seats')})
+                                        <Text style={styles.time}>
+                                            {formatFriendlyTime(room.until)}
                                         </Text>
                                     </View>
-                                </View>
-                                <View style={styles.suggestionRightContainer}>
-                                    <Text style={styles.timeLabel}>
-                                        {formatFriendlyTime(room.from)}
-                                    </Text>
-                                    <Text style={styles.time}>
-                                        {formatFriendlyTime(room.until)}
-                                    </Text>
-                                </View>
-                            </Pressable>
-                            {key !== 2 && <Divider />}
-                        </React.Fragment>
-                    ))
+                                </Pressable>
+                                {roomSuggestions.length > 1 &&
+                                    key < roomSuggestions.length - 1 && (
+                                        <Divider />
+                                    )}
+                            </React.Fragment>
+                        ))
+                    })()
                 )}
             </Pressable>
         </View>
