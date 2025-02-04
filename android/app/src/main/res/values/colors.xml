@@ -2,4 +2,8 @@
   <color name="splashscreen_background">#ffffff</color>
   <color name="colorPrimary">#023c69</color>
   <color name="colorPrimaryDark">#ffffff</color>
+  <color name="account_background_color">#ffffff</color>
+  <color name="link_background_color">#ffffff</color>
+  <color name="food_background_color">#ffffff</color>
+  <color name="calendar_background_color">#ffffff</color>
 </resources>

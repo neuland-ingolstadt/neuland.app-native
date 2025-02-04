@@ -98,14 +98,8 @@ export default function HomeLayout(): React.JSX.Element {
             {
                 id: 'timetable',
                 title: t('navigation.timetable'),
-                icon: 'symbol:calendar',
+                icon: Platform.OS === 'ios' ? 'symbol:calendar' : 'calendar',
                 params: { href: '(tabs)/timetable' },
-            },
-            {
-                id: 'map',
-                title: t('navigation.map'),
-                icon: 'symbol:map',
-                params: { href: '(tabs)/map' },
             },
             {
                 id: 'food',
@@ -115,15 +109,24 @@ export default function HomeLayout(): React.JSX.Element {
                         : humanLocations[
                               selectedRestaurants[0] as keyof typeof humanLocations
                           ],
-                icon: 'symbol:fork.knife',
+                icon: Platform.OS === 'ios' ? 'symbol:fork.knife' : 'food',
                 params: { href: '(tabs)/food' },
+            },
+            {
+                id: 'links',
+                title: t('cards.titles.links'),
+                icon: Platform.OS === 'ios' ? 'symbol:link' : 'link',
+                params: { href: '/links' },
             },
             ...(userKind === USER_GUEST
                 ? [
                       {
                           id: 'login',
                           title: t('navigation.login'),
-                          icon: 'symbol:person.circle',
+                          icon:
+                              Platform.OS === 'ios'
+                                  ? 'symbol:person.circle'
+                                  : 'account',
                           params: { href: 'login' },
                       },
                   ]
@@ -131,7 +134,10 @@ export default function HomeLayout(): React.JSX.Element {
                       {
                           id: 'profile',
                           title: t('navigation.profile'),
-                          icon: 'symbol:person.circle',
+                          icon:
+                              Platform.OS === 'ios'
+                                  ? 'symbol:person.crop.circle.badge.questionmark'
+                                  : 'account',
                           params: { href: 'profile' },
                       },
                   ]),
@@ -141,7 +147,6 @@ export default function HomeLayout(): React.JSX.Element {
             if (action?.params?.href) {
                 router.navigate({
                     pathname: action.params.href as RelativePathString,
-                    params: { fromAppShortcut: 'true' },
                 })
             }
         })

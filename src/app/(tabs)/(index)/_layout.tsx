@@ -21,7 +21,7 @@ export default function Layout(): React.JSX.Element {
     return (
         <BottomSheet
             screenOptions={{
-                snapPoints: ['55%', '80%'],
+                snapPoints: ['60%', '85%'],
                 backgroundComponent: () => <BottomSheetRootBackground />,
                 handleIndicatorStyle: styles.indicator,
                 backdropComponent: renderBackdrop,

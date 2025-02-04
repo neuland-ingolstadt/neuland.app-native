@@ -144,7 +144,30 @@
                     "imageWidth": 200
                 }
             ],
-            "expo-alternate-app-icons"
+            "expo-alternate-app-icons",
+            [
+                "expo-quick-actions",
+                {
+                    "androidIcons": {
+                        "account": {
+                            "foregroundImage": "src/assets/android/account.png",
+                            "backgroundColor": "#ffffff"
+                        },
+                        "calendar": {
+                            "foregroundImage": "src/assets/android/calendar.png",
+                            "backgroundColor": "#ffffff"
+                        },
+                        "food": {
+                            "foregroundImage": "src/assets/android/food.png",
+                            "backgroundColor": "#ffffff"
+                        },
+                        "link": {
+                            "foregroundImage": "src/assets/android/link.png",
+                            "backgroundColor": "#ffffff"
+                        }
+                    }
+                }
+            ]
         ],
         "extra": {
             "eas": {
