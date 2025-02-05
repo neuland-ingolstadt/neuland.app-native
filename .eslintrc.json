@@ -51,6 +51,7 @@
         "node_modules/",
         "ios/",
         "android/",
-        "dist/"
+        "dist/",
+        "plugins/"
     ]
 }
