@@ -11,7 +11,7 @@
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.8.3": {
+    "@bottom-tabs/react-navigation@0.8.4": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
@@ -250,13 +250,13 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.28": {
+    "expo@52.0.30": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "fuse.js@7.0.0": {
+    "fuse.js@7.1.0": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/krisk/Fuse",
         "licenseUrl": "https://github.com/krisk/Fuse/raw/master/LICENSE",
@@ -316,7 +316,7 @@
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.8.3": {
+    "react-native-bottom-tabs@0.8.4": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
@@ -334,7 +334,7 @@
         "licenseUrl": "https://github.com/mpiannucci/react-native-context-menu-view/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-device-info@14.0.2": {
+    "react-native-device-info@14.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-device-info/react-native-device-info",
         "licenseUrl": "https://github.com/react-native-device-info/react-native-device-info/raw/master/LICENSE",

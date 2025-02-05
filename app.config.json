@@ -144,7 +144,6 @@
                     "imageWidth": 200
                 }
             ],
-            "expo-alternate-app-icons",
             [
                 "expo-quick-actions",
                 {
@@ -167,6 +166,10 @@
                         }
                     }
                 }
+            ],
+            [
+                "./plugins/withDrawableAssets.js",
+                "./src/assets/android/check.xml"
             ]
         ],
         "extra": {
