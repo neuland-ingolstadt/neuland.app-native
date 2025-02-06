@@ -125,7 +125,7 @@ export default function HomeLayout(): React.JSX.Element {
                           title: t('navigation.login'),
                           icon:
                               Platform.OS === 'ios'
-                                  ? 'symbol:person.circle'
+                                  ? 'symbol:person.crop.circle.badge.questionmark'
                                   : 'account',
                           params: { href: 'login' },
                       },
@@ -136,7 +136,7 @@ export default function HomeLayout(): React.JSX.Element {
                           title: t('navigation.profile'),
                           icon:
                               Platform.OS === 'ios'
-                                  ? 'symbol:person.crop.circle.badge.questionmark'
+                                  ? 'symbol:person.circle'
                                   : 'account',
                           params: { href: 'profile' },
                       },
