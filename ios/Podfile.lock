@@ -19,7 +19,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.5):
     - ExpoModulesCore
-  - Expo (52.0.28):
+  - Expo (52.0.30):
     - ExpoModulesCore
   - expo-dev-client (5.0.11):
     - EXManifests
@@ -231,7 +231,7 @@ PODS:
     - Yoga
   - ExpoAlternateAppIcons (1.3.1):
     - ExpoModulesCore
-  - ExpoAsset (11.0.2):
+  - ExpoAsset (11.0.3):
     - ExpoModulesCore
   - ExpoBlur (14.0.3):
     - ExpoModulesCore
@@ -241,7 +241,7 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (14.0.2):
     - ExpoModulesCore
-  - ExpoFileSystem (18.0.7):
+  - ExpoFileSystem (18.0.9):
     - ExpoModulesCore
   - ExpoFont (13.0.3):
     - ExpoModulesCore
@@ -1567,7 +1567,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-bottom-tabs (0.8.3):
+  - react-native-bottom-tabs (0.8.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1974,6 +1974,8 @@ PODS:
     - React-logger (= 0.76.6)
     - React-perflogger (= 0.76.6)
     - React-utils (= 0.76.6)
+  - ReactNativeAppClip (0.5.1):
+    - ExpoModulesCore
   - ReactNativeIosContextMenu (2.5.3):
     - ContextMenuAuxiliaryPreview (~> 0.3)
     - DGSwiftUtilities
@@ -1983,11 +1985,9 @@ PODS:
     - ComputableLayout (~> 0.7)
     - DGSwiftUtilities (~> 0.46.3)
     - ExpoModulesCore
-  - rn-quick-actions (0.0.3):
-    - React
   - RNDateTimePicker (8.2.0):
     - React-Core
-  - RNDeviceInfo (14.0.2):
+  - RNDeviceInfo (14.0.4):
     - React-Core
   - RNFlashList (1.7.2):
     - DoubleConversion
@@ -2268,9 +2268,9 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeAppClip (from `../node_modules/react-native-app-clip/ios`)
   - ReactNativeIosContextMenu (from `../node_modules/react-native-ios-context-menu`)
   - ReactNativeIosUtilities (from `../node_modules/react-native-ios-utilities`)
-  - rn-quick-actions (from `../node_modules/rn-quick-actions`)
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
@@ -2514,12 +2514,12 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeAppClip:
+    :path: "../node_modules/react-native-app-clip/ios"
   ReactNativeIosContextMenu:
     :path: "../node_modules/react-native-ios-context-menu"
   ReactNativeIosUtilities:
     :path: "../node_modules/react-native-ios-utilities"
-  rn-quick-actions:
-    :path: "../node_modules/rn-quick-actions"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
@@ -2553,18 +2553,18 @@ SPEC CHECKSUMS:
   EXConstants: aa93a3e70f8b37c81a80931cfd23f860b1819167
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: 81324537a654111964f6e7994dbc351a4233dcfa
-  Expo: c124b1c2129e79a181c16c364aec9add939bea24
+  Expo: ff20e7bf6603d213f5bcb4076adadad772468a0e
   expo-dev-client: 5271a230c19b164b0e42cb2c4986a690ad684990
   expo-dev-launcher: 67dbdda6f04cab28b71caedf702ec2f129aceb7e
   expo-dev-menu: 2019134e1e53fb7495c19cc361aa8e11199656bc
   expo-dev-menu-interface: 00dc42302a72722fdecec3fa048de84a9133bcc4
   ExpoAlternateAppIcons: 1ff2cee546728fdc95900eef057cc54b918580e3
-  ExpoAsset: 6cc988c426b5fc997859cc0f8f6728d1376bf53f
+  ExpoAsset: 77e4579f19b48d6b3f4055c933e86ce45e80caeb
   ExpoBlur: 567af66164e3043a9a30069594aed1ddf0a88d97
   ExpoBrightness: d3f54a52ea62b6c4deb81bfb5569a8bc664487ab
   ExpoClipboard: 5250b207b6d545f4e9aac5ea3c6e61c4f16d0aed
   ExpoCrypto: 1eaf79360c8135af1f2ebb133394fd3513ca9a3d
-  ExpoFileSystem: a0a5c44d3d3e8a2aa54fe7c70c7690df03cf4dd8
+  ExpoFileSystem: 208cf862e5d0f4afcc37dc3958d54c7f0b5b7fc1
   ExpoFont: 8b14db1afebf62e9774613a082e402985f4e747c
   ExpoHaptics: e01cce0741d68c281853118eb0267f88d42c6b7a
   ExpoHead: 3d555eb5d0d68c478b9ea259337686c58de22c71
@@ -2617,7 +2617,7 @@ SPEC CHECKSUMS:
   React-logger: 162c09cc432b02d4a0db31b1d98f6df5243a2679
   React-Mapbuffer: eab34f6d54d26931c5f70eb19da1e36162d87bbd
   React-microtasksnativemodule: 9866981c8f1e80bb819e34f4ea45870cb3e6afaa
-  react-native-bottom-tabs: ace2d9ab5e31427b0b2846d320b2228780953a4d
+  react-native-bottom-tabs: 5b57bf73d40d513ee9dec7d0a97ce28a0e034621
   react-native-context-menu-view: 30915369a9b5887904c571b616653acf3f1c8edb
   react-native-drag-drop-ios: 099293de149185e9116a057a8b6b98f95ce9b56e
   react-native-menu: 27f634374481525b27e2123611aa4c6477324f92
@@ -2655,11 +2655,11 @@ SPEC CHECKSUMS:
   React-utils: 313aee0d3b79d0f43ddc9e8aebf789b56469aff8
   ReactCodegen: e61f5cbdd7d1c7144f3f9e07bc5f9fcbe7a71ccc
   ReactCommon: 407be731d21caa89dfb2f648868865b76c84d2d2
+  ReactNativeAppClip: 83310728e6485d7ecd760c65d98885c5f558cf5d
   ReactNativeIosContextMenu: 4601cc5113ca45bc7295707bf5c76987caac8bd7
   ReactNativeIosUtilities: 44fa1cb515396b7a73c22f56695aae19bdb76f09
-  rn-quick-actions: dbd80c5223df43389c11920e035d09f4b7694176
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
-  RNDeviceInfo: 3f2e5fcca3637f75c6d30ba287293c2f97206781
+  RNDeviceInfo: feea80a690d2bde1fe51461cf548039258bd03f2
   RNFlashList: 65cae4529e37bb9af1e6256117a2b9be60270db2
   RNGestureHandler: 4b397b156d173028ff97960b5ebacfbb21232081
   RNReanimated: ba079c678c27818176985f1c35400d4b923bbff3
