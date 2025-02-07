@@ -45,3 +45,6 @@ expo-env.d.ts
 coverage/**/*
 
 junit.xml
+
+# nvim
+.nvimlog
