@@ -245,6 +245,27 @@
             "noRooms": {
                 "title": "Keine Räume gefunden",
                 "subtitle": "Versuche die Filteroptionen zu ändern."
+            },
+            "report": {
+                "room": {
+                    "title": "Raum",
+                    "placeholder": "A123"
+                },
+                "description": {
+                    "title": "Beschreibung",
+                    "placeholder": "Problem beschreibung..."
+                },
+                "category": {
+                    "title": "Kategorie",
+                    "placeholder": "Problem Kategorie wählen...",
+                    "type": {
+                        "WRONG_DESCRIPTION": "Falsche Beschreibung",
+                        "WRONG_LOCATION": "Falscher Ort",
+                        "NOT_EXISTING": "Existiert nicht",
+                        "MISSING": "Fehlt",
+                        "OTHER": "Anderer"
+                    }
+                }
             }
         },
         "library": {

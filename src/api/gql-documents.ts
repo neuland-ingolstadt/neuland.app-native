@@ -159,3 +159,11 @@ const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
         sportsCategory
     }
 `)
+
+export const CREATE_ROOM_REPORT = graphql(/* GraphQL */ `
+    mutation CreateRoomReport($input: RoomReportInput!) {
+        createRoomReport(input: $input) {
+            id
+        }
+    }
+`)

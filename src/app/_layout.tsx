@@ -482,11 +482,23 @@ function RootLayout(): React.JSX.Element {
                 />
 
                 <Stack.Screen
-                    name="(flow)/whatsnew"
+                    name="(flow)/what snew"
                     options={{
                         headerShown: false,
                         gestureEnabled: false,
                         animation: 'fade_from_bottom',
+                    }}
+                />
+
+                <Stack.Screen
+                    name="(screens)/room-report"
+                    options={{
+                        title: t('navigation.roomReport'),
+                        ...Platform.select({
+                            ios: {
+                                presentation: 'modal',
+                            },
+                        }),
                     }}
                 />
             </Stack>
