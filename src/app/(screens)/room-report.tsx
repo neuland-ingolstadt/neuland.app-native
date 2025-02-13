@@ -7,7 +7,6 @@ import DropdownMenuTrigger from '@/components/Menu/DropdownMenuTrigger'
 import { useMutation } from '@tanstack/react-query'
 import Color from 'color'
 import { router, useLocalSearchParams } from 'expo-router'
-import { Check } from 'lucide-react-native'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text, View } from 'react-native'
@@ -34,13 +33,7 @@ export default function RoomReport(): React.JSX.Element {
         },
         onError: (error, variables, context) => {
             // An error happened!
-            console.log(`Error!!! ${error} ${variables} ${context}`)
-        },
-        onSuccess: (data, variables, context) => {
-            console.log(`Success____ ${data} ${variables} ${context}`)
-        },
-        onSettled: (data, error, variables, context) => {
-            console.log(`Settledüüüü ${data} ${error} ${variables} ${context}`)
+            console.error(`Error ${error} ${variables} ${context}`)
         },
     })
     const [reportCategory, setReportCategory] = useState<
@@ -48,7 +41,6 @@ export default function RoomReport(): React.JSX.Element {
     >()
     const [description, setDescription] = useState<string>('')
     const { room } = useLocalSearchParams<{ room: string }>()
-    console.log(room)
 
     const [roomTitle, setRoomTitle] = useState<string>(room)
     const roomCategories = Object.values(RoomReportCategory)
@@ -121,9 +113,6 @@ export default function RoomReport(): React.JSX.Element {
                                         `pages.rooms.report.category.type.${categroy}`
                                     )}
                                 </DropdownMenuItemTitle>
-                                <DropdownMenu.ItemIcon androidIconName="check">
-                                    <Check size={18} />
-                                </DropdownMenu.ItemIcon>
                             </DropdownMenuItem>
                         )
                     })}
@@ -196,6 +185,9 @@ const stylesheet = createStyleSheet((theme) => ({
         justifyContent: 'space-between',
         paddingBottom: 0,
     },
+    multilineTextInput: {
+        height: 200,
+    },
     submit: {
         borderColor: 'red',
         borderWidth: 3,
@@ -216,9 +208,6 @@ const stylesheet = createStyleSheet((theme) => ({
         height: 40,
         marginBottom: 10,
         paddingHorizontal: 10,
-    },
-    multilineTextInput: {
-        height: 200,
     },
     title: {
         fontSize: 18,
