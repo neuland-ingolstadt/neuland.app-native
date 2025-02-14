@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
 			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Liberation Sans", Helvetica, Arial, sans-serif',
 		// @ts-expect-error - no outline in RN
 		outline: 'none',
-		// @ts-expect-error - no outline in RN
 		outlineStyle: 'none'
 	}
 });
