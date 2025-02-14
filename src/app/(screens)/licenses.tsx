@@ -9,6 +9,13 @@ import { useTranslation } from 'react-i18next';
 import { Platform, ScrollView, Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+export interface LicenseEntry {
+	licenses: string;
+	repository?: string; // Make repository optional
+	licenseUrl: string;
+	parents: string;
+}
+
 export default function Licenses(): React.JSX.Element {
 	const router = useRouter();
 	const { t } = useTranslation(['settings']);
@@ -61,8 +68,9 @@ export default function Licenses(): React.JSX.Element {
 			}
 			return key.toLowerCase().includes(localSearch.toLowerCase());
 		})
-		.map(([key, value]) => {
+		.map(([key, value]: [string, LicenseEntry]) => {
 			const version = numberRegex.exec(key);
+			const repo = value.repository;
 			const nameWithoutVersion = key
 				.replace(atRegex, '')
 				.replace(version != null ? version[0] : '', '');
