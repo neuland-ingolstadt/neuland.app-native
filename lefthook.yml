@@ -6,4 +6,4 @@ pre-commit:
       stage_fixed: true
 commit-msg:
   commitlint:
-      run: bunx --no-install commitlint --edit
+      run: npx --no-install commitlint --edit $1
