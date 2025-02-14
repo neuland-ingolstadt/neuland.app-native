@@ -61,7 +61,6 @@ export default function LibraryCode(): React.JSX.Element {
 		if (Platform.OS === 'ios') {
 			void (async () => {
 				const { status } = await Brightness.requestPermissionsAsync();
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
 				if (status === 'granted') {
 					const value = await Brightness.getSystemBrightnessAsync();
 					setBrightness(value);
@@ -106,7 +105,6 @@ export default function LibraryCode(): React.JSX.Element {
 				</View>
 			) : isError ? (
 				<ErrorView
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					title={error.message ?? t('error.title')}
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
