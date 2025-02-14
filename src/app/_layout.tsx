@@ -496,7 +496,7 @@ function RootLayout(): React.JSX.Element {
                         title: t('navigation.roomReport'),
                         ...Platform.select({
                             ios: {
-                                presentation: 'modal',
+                                presentation: 'formSheet',
                             },
                         }),
                     }}

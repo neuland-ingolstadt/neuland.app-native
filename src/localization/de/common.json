@@ -247,6 +247,9 @@
                 "subtitle": "Versuche die Filteroptionen zu ändern."
             },
             "report": {
+                "title": "Fehler melden",
+                "reportSentSuccess": "Bericht gesendet",
+                "reportSentError": "Fehler beim Senden",
                 "room": {
                     "title": "Raum",
                     "placeholder": "A123"
@@ -311,5 +314,6 @@
             "description": "Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.",
             "button": "Einstellungen"
         }
-    }
+    },
+    "submit": "Absenden"
 }

@@ -247,6 +247,9 @@
                 "subtitle": "Try changing the filter options."
             },
             "report": {
+                "title": "Report an issue",
+                "reportSentSuccess": "Report sent",
+                "reportSentError": "Error while sending report",
                 "room": {
                     "title": "Room",
                     "placeholder": "A123"
@@ -311,5 +314,6 @@
             "description": "Open the system settings to enable notifications.",
             "button": "Settings"
         }
-    }
+    },
+    "submit": "Submit"
 }
