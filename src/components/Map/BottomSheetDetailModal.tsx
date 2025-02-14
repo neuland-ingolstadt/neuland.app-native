@@ -28,7 +28,6 @@ import BottomSheetBackground from './BottomSheetBackground'
 interface BottomSheetDetailModalProps {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>
     handleSheetChangesModal: () => void
-    handleReportRoom: () => void
     currentPositionModal: SharedValue<number>
     roomData: RoomData
     modalSection: FormListSections[]

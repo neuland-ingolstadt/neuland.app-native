@@ -947,7 +947,6 @@ const MapScreen = (): React.JSX.Element => {
         </View>
     )
 }
-// <RoomReport reportRoomErrorRef={reportRoomErrorRef} />
 
 export default MapScreen
 

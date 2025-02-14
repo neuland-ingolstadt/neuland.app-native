@@ -35,7 +35,7 @@ export default function RoomReport(): React.JSX.Element {
     const [reportCategory, setReportCategory] = useState<
         RoomReportCategory | undefined
     >()
-    const roomCategories = Object.values(RoomReportCategory)
+    const reportCategories = Object.values(RoomReportCategory)
     const { room } = useLocalSearchParams<{ room: string }>()
 
     const [description, setDescription] = useState<string>('')
@@ -62,6 +62,7 @@ export default function RoomReport(): React.JSX.Element {
                 duration: 2.5,
                 from: 'top',
             })
+            router.back()
         },
         onError: (error, variables, context) => {
             setLoading(false)
@@ -72,12 +73,20 @@ export default function RoomReport(): React.JSX.Element {
                 duration: 2.5,
                 from: 'top',
             })
-            console.error(`Error ${error} ${variables} ${context}`)
+            console.error(
+                `Error when sending report ${error} ${variables} ${context}`
+            )
         },
     })
 
     const submitDisabled =
-        reportCategory?.trim() == '' || description.trim() == ''
+        !(
+            reportCategory != undefined &&
+            reportCategories.includes(reportCategory)
+        ) ||
+        description.trim() == '' ||
+        room.trim() == '' ||
+        loading
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -138,7 +147,7 @@ export default function RoomReport(): React.JSX.Element {
                         </Text>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        {roomCategories.map((categroy) => {
+                        {reportCategories.map((categroy) => {
                             return (
                                 <DropdownMenuItem
                                     key={categroy}
@@ -181,11 +190,7 @@ export default function RoomReport(): React.JSX.Element {
                 <TouchableOpacity
                     disabled={submitDisabled}
                     onPress={() => {
-                        if (!reportCategory || !description) return
-                        console.log('reportCategory', reportCategory)
-                        console.log('description', description)
-                        console.log('room', room)
-
+                        if (!reportCategory || !description || !room) return
                         mutation.mutate({
                             reason: reportCategory,
                             description,
