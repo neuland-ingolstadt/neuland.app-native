@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		fontFamily:
 			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Liberation Sans", Helvetica, Arial, sans-serif',
+		// @ts-expect-error - no outline in RN
 		outline: 'none',
-		// @ts-expect-error web type used
+		// @ts-expect-error - no outline in RN
 		outlineStyle: 'none'
 	}
 });
