@@ -21,7 +21,7 @@ jobs:
               run: bun install --frozen-lockfile
 
             - name: Run Biome check
-              run: bunx biome check . --write --colors=off
+              run: bunx biome ci .
 
             - name: Run tests
               run: bunx jest --coverage --reporters=jest-junit
