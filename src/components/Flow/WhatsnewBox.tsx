@@ -1,5 +1,5 @@
 import type { MaterialIcon } from '@/types/material-icons';
-import React, { type FC } from 'react';
+import type { FC } from 'react';
 import { Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 

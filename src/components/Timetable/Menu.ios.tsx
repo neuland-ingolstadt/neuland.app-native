@@ -2,7 +2,6 @@ import {
 	TimetableMode,
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import * as DropdownMenu from 'zeego/dropdown-menu';

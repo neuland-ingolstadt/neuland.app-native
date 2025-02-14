@@ -1,5 +1,4 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
-import React from 'react';
 
 import {
 	BaseCard,

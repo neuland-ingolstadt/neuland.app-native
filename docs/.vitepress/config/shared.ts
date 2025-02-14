@@ -1,4 +1,4 @@
-import { type DefaultTheme, defineConfig } from 'vitepress';
+import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export const shared = defineConfig({

@@ -3,7 +3,6 @@ import {
 	usePreferencesStore
 } from '@/hooks/usePreferencesStore';
 import { Check } from 'lucide-react-native';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import * as DropdownMenu from 'zeego/dropdown-menu';
