@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { useStyles } from 'react-native-unistyles';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 
@@ -10,6 +9,7 @@ const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
 	const [focused, setFocused] = React.useState(false);
 	return (
 		<DropdownMenu.Item
+			// @ts-expect-error
 			style={{
 				...styles.item,
 				backgroundColor: focused ? theme.colors.background : undefined
@@ -27,7 +27,7 @@ const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
 
 export default DropdownMenuItem;
 
-const styles = StyleSheet.create({
+const styles = {
 	item: {
 		display: 'flex',
 		flexDirection: 'row',
@@ -42,8 +42,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		fontFamily:
 			'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Liberation Sans", Helvetica, Arial, sans-serif',
-		// @ts-expect-error - no outline in RN
 		outline: 'none',
 		outlineStyle: 'none'
 	}
-});
+};

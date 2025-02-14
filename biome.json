@@ -17,7 +17,8 @@
 			"./docs/.vitepress/cache/",
 			"patches/",
 			"coverage/",
-			"__generated__/"
+			"__generated__/",
+			".expo/"
 		]
 	},
 	"formatter": {
