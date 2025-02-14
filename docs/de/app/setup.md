@@ -22,7 +22,7 @@ Zum Testen oder zum Beheben von Fehlern in der Web-App empfehlen wir die Verwend
    - [Bun](https://bun.sh) oder nutze npm, wenn du die Abhängigkeiten nicht änderst
    - [Watchman](https://facebook.github.io/watchman/docs/install) (für Linux- oder macOS-Nutzer)
 
-4. Es wird empfohlen, die [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) und [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) Erweiterungen für deine IDE zu verwenden, um Echtzeit-Feedback zu deinem Code zu erhalten.
+4. Es wird empfohlen, die [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) Erweiterung für deine IDE zu verwenden, um Echtzeit-Feedback zu deinem Code zu erhalten.
 
 5. Installiere die Projektabhängigkeiten, indem du den folgenden Befehl im Projektverzeichnis ausführst:
 
@@ -105,12 +105,12 @@ Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build aus
 - Verwende aussagekräftige Variablen- und Funktionsnamen, um die Lesbarkeit des Codes zu verbessern.
 - Dokumentiere deinen Code bei Bedarf mit Inline-Kommentaren.
 
-Wir verwenden den **Husky** Git-Hook, um Commits automatisch gemäß den ESLint-Regeln zu korrigieren, sie mit Prettier zu formatieren und den Commit-Nachrichten-Stil zu überprüfen.
+Wir verwenden den **Lefthook** Git-Hook, um Commits automatisch gemäß den Biome-Regeln zu korrigieren und zu formatieren.
+Ebenso wird die Commit-Nachricht automatisch überprüft und muss dem Angular Commit-Nachricht-Stil entsprechen.
 Du kannst diese Befehle aber auch manuell ausführen:
 
 - `bun lint` um nach Linting-Fehlern zu suchen
-- `bun lint:fix` um Linting-Fehler automatisch zu beheben
-- `bun format` um den Code mit Prettier zu formatieren
+- `bun format` um den Code mit Biome zu formatieren
 
 ## Probleme und Diskussionen
 
