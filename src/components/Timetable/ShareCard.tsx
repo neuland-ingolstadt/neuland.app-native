@@ -56,6 +56,10 @@ export default function ShareCard({
 							name: 'calendar_month',
 							size: 24
 						}}
+						web={{
+							name: 'Clock',
+							size: 24
+						}}
 						style={styles.icon}
 					/>
 				</DetailsSymbol>
@@ -78,6 +82,10 @@ export default function ShareCard({
 							}}
 							android={{
 								name: 'chevron_right',
+								size: 16
+							}}
+							web={{
+								name: 'ChevronRight',
 								size: 16
 							}}
 							style={styles.icon}
@@ -108,6 +116,10 @@ export default function ShareCard({
 							name: 'place',
 							size: 24
 						}}
+						web={{
+							name: 'MapPin',
+							size: 24
+						}}
 						style={styles.icon}
 					/>
 				</DetailsSymbol>
@@ -134,6 +146,10 @@ export default function ShareCard({
 						}}
 						android={{
 							name: 'person',
+							size: 24
+						}}
+						web={{
+							name: 'User',
 							size: 24
 						}}
 						style={styles.icon}

@@ -146,6 +146,7 @@ export default function LibraryCode(): React.JSX.Element {
 			) : (
 				<ErrorView
 					title={
+						// @ts-expect-error error is type never
 						error?.message
 							? // @ts-expect-error error is type never
 								((error.message as string) ?? t('error.title'))
