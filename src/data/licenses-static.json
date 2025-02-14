@@ -1,23 +1,23 @@
 {
-    "google-material-design-icons@4.0.0": {
-        "licenses": "Apache-2.0",
-        "repository": "https://github.com/google/material-design-icons",
-        "licenseUrl": "https://github.com/google/material-design-icons/raw/master/LICENSE",
-        "parents": "neuland",
-        "platform": "android"
-    },
-    "apple-sf-symbols@6.0": {
-        "licenses": "Apple",
-        "repository": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
-        "licenseUrl": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
-        "parents": "neuland",
-        "platform": "ios"
-    },
-    "OpenStreetMap": {
-        "licenses": "ODbL",
-        "repository": "https://www.openstreetmap.org/",
-        "licenseUrl": "https://www.openstreetmap.org/copyright",
-        "parents": "neuland",
-        "platform": "all"
-    }
+	"google-material-design-icons@4.0.0": {
+		"licenses": "Apache-2.0",
+		"repository": "https://github.com/google/material-design-icons",
+		"licenseUrl": "https://github.com/google/material-design-icons/raw/master/LICENSE",
+		"parents": "neuland",
+		"platform": "android"
+	},
+	"apple-sf-symbols@6.0": {
+		"licenses": "Apple",
+		"repository": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
+		"licenseUrl": "https://developer.apple.com/design/human-interface-guidelines/sf-symbols/overview/",
+		"parents": "neuland",
+		"platform": "ios"
+	},
+	"OpenStreetMap": {
+		"licenses": "ODbL",
+		"repository": "https://www.openstreetmap.org/",
+		"licenseUrl": "https://www.openstreetmap.org/copyright",
+		"parents": "neuland",
+		"platform": "all"
+	}
 }

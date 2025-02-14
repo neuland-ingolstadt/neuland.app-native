@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const DragDropView = ({
-    children,
+	children
 }: {
-    children: React.ReactNode
+	children: React.ReactNode;
 }): React.ReactElement => {
-    return React.createElement(React.Fragment, null, children)
-}
+	return React.createElement(React.Fragment, null, children);
+};
 
-export default DragDropView
+export default DragDropView;
