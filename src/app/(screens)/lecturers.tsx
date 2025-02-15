@@ -432,6 +432,7 @@ export default function LecturersCard(): React.JSX.Element {
                             key={index}
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{
+                                overflow: 'hidden',
                                 backgroundColor: theme.colors.card,
                                 borderTopLeftRadius: index === 0 ? 8 : 0,
                                 borderTopRightRadius: index === 0 ? 8 : 0,
