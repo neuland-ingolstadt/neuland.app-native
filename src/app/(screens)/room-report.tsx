@@ -258,7 +258,7 @@ const stylesheet = createStyleSheet((theme) => ({
     },
     headerIconButton: {
         alignItems: 'center',
-        backgroundColor: theme.colors.card,
+        backgroundColor: theme.colors.background,
         borderRadius: 25,
         height: 34,
         justifyContent: 'center',

@@ -260,7 +260,7 @@
                 },
                 "category": {
                     "title": "Category",
-                    "placeholder": "Report category",
+                    "placeholder": "Choose report category...",
                     "type": {
                         "WRONG_DESCRIPTION": "Wrong description",
                         "WRONG_LOCATION": "Wrong location",
