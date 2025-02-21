@@ -143,8 +143,6 @@ class NeulandAPIClient {
     async createRoomReport(
         input: RoomReportInput
     ): Promise<CreateRoomReportMutation> {
-        console.log('Calling', GRAPHQL_ENDPOINT)
-
         return await this.executeGql(CREATE_ROOM_REPORT, { input })
     }
 }

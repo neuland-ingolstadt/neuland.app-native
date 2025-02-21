@@ -8,16 +8,9 @@ import {
 } from '@gorhom/bottom-sheet'
 import Color from 'color'
 import { router } from 'expo-router'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    /*  Linking, */
-    Platform,
-    Pressable,
-    Share,
-    Text,
-    View,
-} from 'react-native'
+import { Platform, Pressable, Share, Text, View } from 'react-native'
 import { type SharedValue } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -50,10 +43,6 @@ const handleShareModal = (room: string): void => {
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
-
-    useEffect(() => {
-        router.setParams({ room: roomTitle })
-    }, [roomTitle])
 
     const handleReportRoom = useCallback(() => {
         router.push({
