@@ -5,13 +5,13 @@
         "licenseUrl": "https://github.com/aptabase/aptabase-react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@babel/runtime@7.26.7": {
+    "@babel/runtime@7.26.9": {
         "licenses": "MIT",
         "repository": "https://github.com/babel/babel",
         "licenseUrl": "https://github.com/babel/babel/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@bottom-tabs/react-navigation@0.8.4": {
+    "@bottom-tabs/react-navigation@0.8.7": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
@@ -29,7 +29,7 @@
         "licenseUrl": "https://github.com/expo/vector-icons/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@gorhom/bottom-sheet@5.0.6": {
+    "@gorhom/bottom-sheet@5.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/gorhom/react-native-bottom-sheet",
         "licenseUrl": "https://github.com/gorhom/react-native-bottom-sheet/raw/master/LICENSE",
@@ -101,19 +101,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.66.0": {
+    "@tanstack/query-sync-storage-persister@5.66.4": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.66.0": {
+    "@tanstack/react-query-persist-client@5.66.7": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.66.0": {
+    "@tanstack/react-query@5.66.7": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -173,7 +173,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-constants@17.0.5": {
+    "expo-constants@17.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -209,7 +209,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-navigation-bar@4.0.7": {
+    "expo-navigation-bar@4.0.8": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -238,19 +238,19 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-splash-screen@0.29.21": {
+    "expo-splash-screen@0.29.22": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-system-ui@4.0.7": {
+    "expo-system-ui@4.0.8": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.30": {
+    "expo@52.0.35": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -310,13 +310,13 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@15.4.0": {
+    "react-i18next@15.4.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-bottom-tabs@0.8.4": {
+    "react-native-bottom-tabs@0.8.7": {
         "licenses": "MIT",
         "repository": "https://github.com/callstackincubator/react-native-bottom-tabs",
         "licenseUrl": "https://github.com/callstackincubator/react-native-bottom-tabs",
@@ -328,7 +328,7 @@
         "licenseUrl": "https://oblador@github.com/oblador/react-native-collapsible/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-context-menu-view@1.16.0": {
+    "react-native-context-menu-view@1.17.0": {
         "licenses": "MIT",
         "repository": "https://github.com/mpiannucci/react-native-context-menu-view",
         "licenseUrl": "https://github.com/mpiannucci/react-native-context-menu-view/raw/master/LICENSE",
@@ -424,7 +424,7 @@
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-unistyles@2.20.0": {
+    "react-native-unistyles@2.30.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jpudysz/react-native-unistyles",
         "licenseUrl": "https://github.com/jpudysz/react-native-unistyles/raw/master/LICENSE",
