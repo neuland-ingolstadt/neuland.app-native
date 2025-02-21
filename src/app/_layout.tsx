@@ -482,7 +482,7 @@ function RootLayout(): React.JSX.Element {
                 />
 
                 <Stack.Screen
-                    name="(flow)/what snew"
+                    name="(flow)/whatsnew"
                     options={{
                         headerShown: false,
                         gestureEnabled: false,
@@ -496,7 +496,7 @@ function RootLayout(): React.JSX.Element {
                         title: t('navigation.roomReport'),
                         ...Platform.select({
                             ios: {
-                                presentation: 'formSheet',
+                                presentation: 'modal',
                             },
                         }),
                     }}

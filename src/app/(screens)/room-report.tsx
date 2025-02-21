@@ -11,14 +11,7 @@ import Color from 'color'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-    ActivityIndicator,
-    Platform,
-    Pressable,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import {
     UnistylesRuntime,
@@ -26,8 +19,6 @@ import {
     useStyles,
 } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
-
-import PlatformIcon from '../../components/Universal/Icon'
 
 export default function RoomReport(): React.JSX.Element {
     const { styles, theme } = useStyles(stylesheet)
@@ -95,30 +86,6 @@ export default function RoomReport(): React.JSX.Element {
                     <Text style={styles.header}>
                         {t('pages.rooms.report.title')}
                     </Text>
-                    <Pressable
-                        onPress={() => {
-                            router.back()
-                        }}
-                    >
-                        <View style={styles.headerIconButton}>
-                            <PlatformIcon
-                                ios={{
-                                    name: 'xmark',
-                                    size: 13,
-                                    weight: 'bold',
-                                }}
-                                android={{
-                                    name: 'expand_more',
-                                    size: 22,
-                                }}
-                                web={{
-                                    name: 'AArrowUp',
-                                    size: 22,
-                                }}
-                                style={styles.xIcon(Platform.OS)}
-                            />
-                        </View>
-                    </Pressable>
                 </View>
 
                 <Text style={styles.inputLabel}>
@@ -234,20 +201,11 @@ const stylesheet = createStyleSheet((theme) => ({
         padding: theme.margins.card,
     },
     contentContainer: {
-        backgroundColor: theme.colors.card,
-        borderRadius: theme.radius.mg,
         justifyContent: 'center',
         maxWidth: 400,
         paddingBottom: 30,
-        paddingHorizontal: 25,
+        paddingHorizontal: theme.margins.page,
         paddingTop: 30,
-        shadowColor: '#000000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
         width: '100%',
     },
     header: {
@@ -255,15 +213,6 @@ const stylesheet = createStyleSheet((theme) => ({
         fontSize: 23,
         fontWeight: '600',
         marginBottom: 14,
-    },
-    headerIconButton: {
-        alignItems: 'center',
-        backgroundColor: theme.colors.background,
-        borderRadius: 25,
-        height: 34,
-        justifyContent: 'center',
-        padding: 7,
-        width: 34,
     },
     inputLabel: {
         color: theme.colors.text,
@@ -281,9 +230,9 @@ const stylesheet = createStyleSheet((theme) => ({
     submitButton: (disabled: boolean) => ({
         height: 40,
         justifyContent: 'center',
-        paddingHorizontal: 20,
+        paddingHorizontal: theme.margins.page,
         marginTop: 25,
-        borderRadius: 7,
+        borderRadius: theme.radius.md,
         alignItems: 'center',
         backgroundColor: disabled
             ? UnistylesRuntime.themeName === 'dark'
@@ -310,8 +259,4 @@ const stylesheet = createStyleSheet((theme) => ({
         color: theme.colors.text,
         fontSize: 17,
     },
-    xIcon: (platform) => ({
-        color: Color(theme.colors.text).darken(0.1).hex(),
-        marginTop: platform === 'ios' ? 1 : 0,
-    }),
 }))
