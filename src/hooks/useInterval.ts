@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 
 /**
  * Hook that calls a callback function at a given interval.
@@ -6,24 +6,24 @@ import { useEffect, useRef } from 'react'
  * @param delay
  */
 export function useInterval(callback: () => void, delay: number | null): void {
-    const savedCallback = useRef<(() => void) | null>(null)
+	const savedCallback = useRef<(() => void) | null>(null);
 
-    useEffect(() => {
-        savedCallback.current = callback
-    }, [callback])
+	useEffect(() => {
+		savedCallback.current = callback;
+	}, [callback]);
 
-    useEffect(() => {
-        function tick(): void {
-            if (savedCallback.current != null) {
-                savedCallback.current()
-            }
-        }
+	useEffect(() => {
+		function tick(): void {
+			if (savedCallback.current != null) {
+				savedCallback.current();
+			}
+		}
 
-        if (delay !== null) {
-            const id = setInterval(tick, delay)
-            return () => {
-                clearInterval(id)
-            }
-        }
-    }, [delay])
+		if (delay !== null) {
+			const id = setInterval(tick, delay);
+			return () => {
+				clearInterval(id);
+			};
+		}
+	}, [delay]);
 }

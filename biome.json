@@ -1,56 +1,50 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": false },
-  "files": {
-    "ignoreUnknown": false,
-    "ignore": [
-      "metro.config.js",
-      "node_modules/",
-      "ios/",
-      "android/",
-      "dist/",
-      "plugins/",
-      "docs/.vitepress/cache/",
-      "patches/",
-      "coverage/",
-      "__generated__/",
-      ".expo/"
-    ]
-  },
-  "formatter": {
-    "enabled": true,
-    "useEditorconfig": true,
-    "formatWithErrors": false,
-    "indentStyle": "space",
-    "indentWidth": 4,
-    "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto",
-    "bracketSpacing": true
-  },
-  "organizeImports": { "enabled": true },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "correctness": {
-        "noUnusedImports": "error",
-        "useExhaustiveDependencies": "off"
-      },
-      "suspicious": { "noArrayIndexKey": "off" }
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "es5",
-      "semicolons": "asNeeded",
-      "arrowParentheses": "always",
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "attributePosition": "auto",
-      "bracketSpacing": true
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"metro.config.js",
+			"node_modules/",
+			"ios/",
+			"android/",
+			"dist/",
+			"plugins/",
+			"docs/.vitepress/cache/",
+			"patches/",
+			"coverage/",
+			"__generated__/",
+			".expo/"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off",
+				"noUnusedImports": "error"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"trailingCommas": "none"
+		}
+	}
 }

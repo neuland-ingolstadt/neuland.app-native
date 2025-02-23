@@ -1,3 +1,3 @@
-import ContextMenu from 'react-native-context-menu-view'
+import ContextMenu from 'react-native-context-menu-view';
 
-export default ContextMenu
+export default ContextMenu;

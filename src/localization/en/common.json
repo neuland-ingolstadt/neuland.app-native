@@ -1,320 +1,320 @@
 {
-  "toast": {
-    "clipboard": "copied to clipboard",
-    "paused": {
-      "title": "No internet connection",
-      "description": "Data may be outdated"
-    },
-    "roomNotFound": "Room not found",
-    "mapOverlay": "Error while loading overlay",
-    "dashboard": "Drag & drop to reorder",
-    "tryAgain": "Please try again"
-  },
-  "error": {
-    "title": "An error occurred",
-    "description": "An error occurred while loading the data.",
-    "refreshPull": "An error occurred while loading the data.\nPull to refresh.",
-    "button": "Retry",
-    "noSession": "Not signed in.",
-    "pull": "Pull down to refresh",
-    "network": {
-      "title": "No internet connection",
-      "description": "Please check your internet connection."
-    },
-    "guest": {
-      "title": "Sign in required",
-      "description": "This feature requires you to sign in using your THI account.",
-      "button": "Sign in"
-    },
-    "permission": {
-      "title": "Feature not available",
-      "description": "This feature is not available for your user group."
-    },
-    "map": {
-      "mapLoadError": "Error while loading map",
-      "mapOverlay": "Error while loading overlay"
-    },
-    "noMeals": "No meals available",
-    "crash": {
-      "title": "Internal Error",
-      "description": "Neuland Next has encountered an internal error.",
-      "steps": "Please check the system status page and send us feedback to help us fix the issue.",
-      "reload": "Reload App",
-      "feedback": "Send Feedback",
-      "status": "Check System Status"
-    }
-  },
-  "dates": {
-    "until": "until",
-    "ends": "ends",
-    "today": "Today",
-    "notYet": "Date not yet available",
-    "tomorrow": "Tomorrow",
-    "thisWeek": "This Week",
-    "nextWeek": "Next Week",
-    "now": "Now",
-    "weekdays": {
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday",
-      "sunday": "Sunday"
-    }
-  },
-  "misc": {
-    "share": "Share",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "delete": "Delete",
-    "disable": "Disable",
-    "more": "more",
-    "unknown": "Unknown",
-    "true": "Yes",
-    "false": "No"
-  },
-  "quicklinks": {
-    "primuss": "Primuss",
-    "moodle": "Moodle",
-    "webmail": "E-Mail",
-    "studVer": "StudVer",
-    "marketplace": "Marketplace",
-    "thi": "THI",
-    "press": "PressReader"
-  },
-  "pages": {
-    "quicklinks": {
-      "title": "Quick Links",
-      "footer": "The dashboard card shows the most recently visited links.",
-      "links": {
-        "primuss": "Primuss",
-        "moodle": "Moodle",
-        "webmail": "E-Mail",
-        "studVer": "Student Representation",
-        "marketplace": "Marketplace",
-        "thi": "THI Website",
-        "press": "PressReader"
-      },
-      "more": "more links"
-    },
-    "calendar": {
-      "exams": {
-        "title": "Exams",
-        "error": "Not a student",
-        "errorSubtitle": "Sign in to see your exams.",
-        "noExams": {
-          "title": "No exams found",
-          "subtitle": "After registering for exams, they will appear here."
-        }
-      },
-      "events": {
-        "title": "Dates"
-      },
-      "calendar": {
-        "link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
-        "noData": {
-          "title": "No data found",
-          "subtitle": "Please try again later."
-        }
-      },
-      "footer": {
-        "part1": "All information without guarantee. Binding information is only available directly on the ",
-        "part2": "university website",
-        "part3": "."
-      }
-    },
-    "lecturers": {
-      "results": "Search results",
-      "personal": "Personal",
-      "faculty": "Faculty",
-      "professors": "Professors",
-      "error": {
-        "title": "No lecturers found",
-        "subtitle": "Setup your timetable to view your personal lecturers."
-      }
-    },
-    "lecturer": {
-      "details": {
-        "title": "Title",
-        "organization": "Organization",
-        "function": "Function"
-      },
-      "contact": {
-        "room": "Room",
-        "title": "Contact",
-        "phone": "Phone",
-        "office": "Office hours",
-        "exam": "Exam insights"
-      }
-    },
-    "exam": {
-      "details": {
-        "date": "Date",
-        "room": "Room",
-        "seat": "Seat",
-        "tools": "Tools"
-      },
-      "about": {
-        "title": "About",
-        "type": "Type",
-        "examiner": "Examiner",
-        "registration": "Registered",
-        "notes": "Notes"
-      },
-      "footer": "All information without guarantee. Binding information is only available directly from the THI."
-    },
-    "event": {
-      "date": "Date",
-      "time": "Time",
-      "weekday": "Weekday",
-      "location": "Location",
-      "organizer": "Organizer",
-      "description": "Description",
-      "begin": "Begin",
-      "end": "End",
-      "registration": "Registration",
-      "required": "Required",
-      "contact": "Contact",
-      "optional": "Optional",
-      "invitationLink": "Invitation link",
-      "eMail": "E-Mail",
-      "shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
-      "shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en"
-    },
-    "map": {
-      "search": {
-        "hint": "Search the campus...",
-        "placeholder": "Search for rooms, buildings or facilities",
-        "recent": "Recent searches",
-        "clear": "Clear history",
-        "noResults": "No search results",
-        "results": "Results",
-        "fuzzy": "Suggestions"
-      },
-      "easterEgg": {
-        "title": "Easter Egg",
-        "message": "You unlocked the exclusive retro app icon \"neuland.app\"!",
-        "confirm": "Nice!"
-      },
-      "noAvailableRooms": "No free rooms available",
-      "details": {
-        "room": {
-          "details": "Room details",
-          "title": "Room",
-          "capacity": "Capacity",
-          "availability": "Availability",
-          "timeLeft": "Time left",
-          "building": "Building",
-          "timeSpan": "Time span",
-          "floor": "Floor",
-          "type": "Type",
-          "equipment": "Equipment",
-          "available": "Available",
-          "notAvailable": "Not available",
-          "availableRooms": "Available rooms",
-          "nextLecture": "Next lecture",
-          "availableRoomsTitle": "Available rooms",
-          "history": "Recent searches",
-          "signIn": "Sign in to see available rooms",
-          "report": "Report an issue",
-          "reportMail": "mailto:app-feedback@informatik.sexy?subject=Report%20room%20issue&body=Room%3A%0D%0AIssue%3A%0D%0ASuggestion%3A"
-        },
-        "building": {
-          "free": "Free rooms",
-          "total": "Total rooms",
-          "floors": "Floors"
-        },
-        "osm": "Map data from OpenStreetMap"
-      }
-    },
-    "rooms": {
-      "options": {
-        "title": "Search options",
-        "building": "Building",
-        "date": "Date",
-        "time": "Time",
-        "duration": "Duration",
-        "seats": "seats"
-      },
-      "results": "Available rooms",
-      "modified": {
-        "title": "Filter adjusted",
-        "description": "THI is currently closed. The filter has been adjusted to the next valid opening time."
-      },
-      "noRooms": {
-        "title": "No available rooms found",
-        "subtitle": "Try changing the filter options."
-      },
-      "report": {
-        "title": "Report an issue",
-        "reportSentSuccess": "Report sent",
-        "reportSentError": "Error while sending report",
-        "room": {
-          "title": "Room",
-          "placeholder": "A123"
-        },
-        "description": {
-          "title": "Description",
-          "placeholder": "Problem description..."
-        },
-        "category": {
-          "title": "Category",
-          "placeholder": "Choose report category...",
-          "type": {
-            "WRONG_DESCRIPTION": "Wrong description",
-            "WRONG_LOCATION": "Wrong location",
-            "NOT_EXISTING": "Not existing",
-            "MISSING": "Missing",
-            "OTHER": "Other"
-          }
-        },
-        "footerText": "We do not collect any personal information. Only the room, category, and the description you provide are saved."
-      }
-    },
-    "library": {
-      "code": {
-        "number": "Number",
-        "footer": "Use this barcode to sign in at the library terminals to borrow books."
-      },
-      "timeSlot": "Timeslot",
-      "seatReservation": {
-        "title": "Seat Reservation",
-        "description": "Book a seat or a room in the library using the V:Scout system."
-      },
-      "catalog": {
-        "title": "Library Catalog",
-        "description": "Search for books, journals, and other media in the library catalog."
-      },
-      "virtualCard": {
-        "title": "Virtual Library Card",
-        "description": "Use the virtual library card to borrow books and other media."
-      },
-      "note": "Due to the new booking system it is no longer possible to book seats using the app."
-    },
-    "clEvents": {
-      "sports": {
-        "title": "Sports",
-        "noEvents": {
-          "title": "No sports events found",
-          "subtitle": "Check back later."
-        }
-      },
-      "events": {
-        "title": "Events",
-        "noEvents": {
-          "title": "No events found",
-          "subtitle": "Check back later."
-        }
-      }
-    }
-  },
-  "notification": {
-    "permission": {
-      "title": "Notifications",
-      "description": "Open the system settings to enable notifications.",
-      "button": "Settings"
-    }
-  },
-  "submit": "Submit"
+	"toast": {
+		"clipboard": "copied to clipboard",
+		"paused": {
+			"title": "No internet connection",
+			"description": "Data may be outdated"
+		},
+		"roomNotFound": "Room not found",
+		"mapOverlay": "Error while loading overlay",
+		"dashboard": "Drag & drop to reorder",
+		"tryAgain": "Please try again"
+	},
+	"error": {
+		"title": "An error occurred",
+		"description": "An error occurred while loading the data.",
+		"refreshPull": "An error occurred while loading the data.\nPull to refresh.",
+		"button": "Retry",
+		"noSession": "Not signed in.",
+		"pull": "Pull down to refresh",
+		"network": {
+			"title": "No internet connection",
+			"description": "Please check your internet connection."
+		},
+		"guest": {
+			"title": "Sign in required",
+			"description": "This feature requires you to sign in using your THI account.",
+			"button": "Sign in"
+		},
+		"permission": {
+			"title": "Feature not available",
+			"description": "This feature is not available for your user group."
+		},
+		"map": {
+			"mapLoadError": "Error while loading map",
+			"mapOverlay": "Error while loading overlay"
+		},
+		"noMeals": "No meals available",
+		"crash": {
+			"title": "Internal Error",
+			"description": "Neuland Next has encountered an internal error.",
+			"steps": "Please check the system status page and send us feedback to help us fix the issue.",
+			"reload": "Reload App",
+			"feedback": "Send Feedback",
+			"status": "Check System Status"
+		}
+	},
+	"dates": {
+		"until": "until",
+		"ends": "ends",
+		"today": "Today",
+		"notYet": "Date not yet available",
+		"tomorrow": "Tomorrow",
+		"thisWeek": "This Week",
+		"nextWeek": "Next Week",
+		"now": "Now",
+		"weekdays": {
+			"monday": "Monday",
+			"tuesday": "Tuesday",
+			"wednesday": "Wednesday",
+			"thursday": "Thursday",
+			"friday": "Friday",
+			"saturday": "Saturday",
+			"sunday": "Sunday"
+		}
+	},
+	"misc": {
+		"share": "Share",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"delete": "Delete",
+		"disable": "Disable",
+		"more": "more",
+		"unknown": "Unknown",
+		"true": "Yes",
+		"false": "No"
+	},
+	"quicklinks": {
+		"primuss": "Primuss",
+		"moodle": "Moodle",
+		"webmail": "E-Mail",
+		"studVer": "StudVer",
+		"marketplace": "Marketplace",
+		"thi": "THI",
+		"press": "PressReader"
+	},
+	"pages": {
+		"quicklinks": {
+			"title": "Quick Links",
+			"footer": "The dashboard card shows the most recently visited links.",
+			"links": {
+				"primuss": "Primuss",
+				"moodle": "Moodle",
+				"webmail": "E-Mail",
+				"studVer": "Student Representation",
+				"marketplace": "Marketplace",
+				"thi": "THI Website",
+				"press": "PressReader"
+			},
+			"more": "more links"
+		},
+		"calendar": {
+			"exams": {
+				"title": "Exams",
+				"error": "Not a student",
+				"errorSubtitle": "Sign in to see your exams.",
+				"noExams": {
+					"title": "No exams found",
+					"subtitle": "After registering for exams, they will appear here."
+				}
+			},
+			"events": {
+				"title": "Dates"
+			},
+			"calendar": {
+				"link": "https://www.thi.de/en/international/studies/examination/semester-dates/",
+				"noData": {
+					"title": "No data found",
+					"subtitle": "Please try again later."
+				}
+			},
+			"footer": {
+				"part1": "All information without guarantee. Binding information is only available directly on the ",
+				"part2": "university website",
+				"part3": "."
+			}
+		},
+		"lecturers": {
+			"results": "Search results",
+			"personal": "Personal",
+			"faculty": "Faculty",
+			"professors": "Professors",
+			"error": {
+				"title": "No lecturers found",
+				"subtitle": "Setup your timetable to view your personal lecturers."
+			}
+		},
+		"lecturer": {
+			"details": {
+				"title": "Title",
+				"organization": "Organization",
+				"function": "Function"
+			},
+			"contact": {
+				"room": "Room",
+				"title": "Contact",
+				"phone": "Phone",
+				"office": "Office hours",
+				"exam": "Exam insights"
+			}
+		},
+		"exam": {
+			"details": {
+				"date": "Date",
+				"room": "Room",
+				"seat": "Seat",
+				"tools": "Tools"
+			},
+			"about": {
+				"title": "About",
+				"type": "Type",
+				"examiner": "Examiner",
+				"registration": "Registered",
+				"notes": "Notes"
+			},
+			"footer": "All information without guarantee. Binding information is only available directly from the THI."
+		},
+		"event": {
+			"date": "Date",
+			"time": "Time",
+			"weekday": "Weekday",
+			"location": "Location",
+			"organizer": "Organizer",
+			"description": "Description",
+			"begin": "Begin",
+			"end": "End",
+			"registration": "Registration",
+			"required": "Required",
+			"contact": "Contact",
+			"optional": "Optional",
+			"invitationLink": "Invitation link",
+			"eMail": "E-Mail",
+			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
+			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en"
+		},
+		"map": {
+			"search": {
+				"hint": "Search the campus...",
+				"placeholder": "Search for rooms, buildings or facilities",
+				"recent": "Recent searches",
+				"clear": "Clear history",
+				"noResults": "No search results",
+				"results": "Results",
+				"fuzzy": "Suggestions"
+			},
+			"easterEgg": {
+				"title": "Easter Egg",
+				"message": "You unlocked the exclusive retro app icon \"neuland.app\"!",
+				"confirm": "Nice!"
+			},
+			"noAvailableRooms": "No free rooms available",
+			"details": {
+				"room": {
+					"details": "Room details",
+					"title": "Room",
+					"capacity": "Capacity",
+					"availability": "Availability",
+					"timeLeft": "Time left",
+					"building": "Building",
+					"timeSpan": "Time span",
+					"floor": "Floor",
+					"type": "Type",
+					"equipment": "Equipment",
+					"available": "Available",
+					"notAvailable": "Not available",
+					"availableRooms": "Available rooms",
+					"nextLecture": "Next lecture",
+					"availableRoomsTitle": "Available rooms",
+					"history": "Recent searches",
+					"signIn": "Sign in to see available rooms",
+					"report": "Report an issue",
+					"reportMail": "mailto:app-feedback@informatik.sexy?subject=Report%20room%20issue&body=Room%3A%0D%0AIssue%3A%0D%0ASuggestion%3A"
+				},
+				"building": {
+					"free": "Free rooms",
+					"total": "Total rooms",
+					"floors": "Floors"
+				},
+				"osm": "Map data from OpenStreetMap"
+			}
+		},
+		"rooms": {
+			"options": {
+				"title": "Search options",
+				"building": "Building",
+				"date": "Date",
+				"time": "Time",
+				"duration": "Duration",
+				"seats": "seats"
+			},
+			"results": "Available rooms",
+			"modified": {
+				"title": "Filter adjusted",
+				"description": "THI is currently closed. The filter has been adjusted to the next valid opening time."
+			},
+			"noRooms": {
+				"title": "No available rooms found",
+				"subtitle": "Try changing the filter options."
+			},
+			"report": {
+				"title": "Report an issue",
+				"reportSentSuccess": "Report sent",
+				"reportSentError": "Error while sending report",
+				"room": {
+					"title": "Room",
+					"placeholder": "A123"
+				},
+				"description": {
+					"title": "Description",
+					"placeholder": "Problem description..."
+				},
+				"category": {
+					"title": "Category",
+					"placeholder": "Choose report category...",
+					"type": {
+						"WRONG_DESCRIPTION": "Wrong description",
+						"WRONG_LOCATION": "Wrong location",
+						"NOT_EXISTING": "Not existing",
+						"MISSING": "Missing",
+						"OTHER": "Other"
+					}
+				},
+				"footerText": "We do not collect any personal information. Only the room, category, and the description you provide are saved."
+			}
+		},
+		"library": {
+			"code": {
+				"number": "Number",
+				"footer": "Use this barcode to sign in at the library terminals to borrow books."
+			},
+			"timeSlot": "Timeslot",
+			"seatReservation": {
+				"title": "Seat Reservation",
+				"description": "Book a seat or a room in the library using the V:Scout system."
+			},
+			"catalog": {
+				"title": "Library Catalog",
+				"description": "Search for books, journals, and other media in the library catalog."
+			},
+			"virtualCard": {
+				"title": "Virtual Library Card",
+				"description": "Use the virtual library card to borrow books and other media."
+			},
+			"note": "Due to the new booking system it is no longer possible to book seats using the app."
+		},
+		"clEvents": {
+			"sports": {
+				"title": "Sports",
+				"noEvents": {
+					"title": "No sports events found",
+					"subtitle": "Check back later."
+				}
+			},
+			"events": {
+				"title": "Events",
+				"noEvents": {
+					"title": "No events found",
+					"subtitle": "Check back later."
+				}
+			}
+		}
+	},
+	"notification": {
+		"permission": {
+			"title": "Notifications",
+			"description": "Open the system settings to enable notifications.",
+			"button": "Settings"
+		}
+	},
+	"submit": "Submit"
 }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import i18n from '@/localization/i18n'
-import type { FriendlyDateOptions } from '@/types/utils'
-import { t } from 'i18next'
-import moment from 'moment'
-import 'moment/locale/de'
+import i18n from '@/localization/i18n';
+import type { FriendlyDateOptions } from '@/types/utils';
+import { t } from 'i18next';
+import moment from 'moment';
+import 'moment/locale/de';
 
 /**
  * Formats a date like "Tue., 1.10.2020"
@@ -12,29 +12,29 @@ import 'moment/locale/de'
  * @returns {string}
  */
 export function formatFriendlyDate(
-    datetime: Date | string,
-    options: FriendlyDateOptions = {
-        weekday: 'short',
-        relative: true,
-    }
+	datetime: Date | string,
+	options: FriendlyDateOptions = {
+		weekday: 'short',
+		relative: true
+	}
 ): string {
-    const date = moment(datetime)
-    const today = moment()
-    const tomorrow = moment().add(1, 'days')
+	const date = moment(datetime);
+	const today = moment();
+	const tomorrow = moment().add(1, 'days');
 
-    if (date.isSame(today, 'day') && options.relative !== false) {
-        return t('dates.today', { ns: 'common' })
-    }
-    if (date.isSame(tomorrow, 'day') && options.relative !== false) {
-        return t('dates.tomorrow', { ns: 'common' })
-    }
-    // Format the weekday in English
-    const weekday = date
-        .locale(i18n.language)
-        .format(options.weekday === 'short' ? 'ddd' : 'dddd')
-    // Format the day, month, and year in German
-    const dayMonthYear = date.locale('de').format('D.M.YYYY')
-    return `${weekday}, ${dayMonthYear}`
+	if (date.isSame(today, 'day') && options.relative !== false) {
+		return t('dates.today', { ns: 'common' });
+	}
+	if (date.isSame(tomorrow, 'day') && options.relative !== false) {
+		return t('dates.tomorrow', { ns: 'common' });
+	}
+	// Format the weekday in English
+	const weekday = date
+		.locale(i18n.language)
+		.format(options.weekday === 'short' ? 'ddd' : 'dddd');
+	// Format the day, month, and year in German
+	const dayMonthYear = date.locale('de').format('D.M.YYYY');
+	return `${weekday}, ${dayMonthYear}`;
 }
 
 /**
@@ -44,11 +44,11 @@ export function formatFriendlyDate(
  * @returns {string}
  */
 export function formatFriendlyDateRange(begin: Date, end?: Date): string {
-    let str = formatFriendlyDate(begin)
-    if (end != null && begin.toDateString() !== end.toDateString()) {
-        str += ` – ${formatFriendlyDate(end)}`
-    }
-    return str
+	let str = formatFriendlyDate(begin);
+	if (end != null && begin.toDateString() !== end.toDateString()) {
+		str += ` – ${formatFriendlyDate(end)}`;
+	}
+	return str;
 }
 
 /**
@@ -57,10 +57,10 @@ export function formatFriendlyDateRange(begin: Date, end?: Date): string {
  * @returns {string}
  */
 export function formatFriendlyTime(datetime?: Date | string): string {
-    if (datetime == null || Number.isNaN(new Date(datetime).getTime())) {
-        return ''
-    }
-    return moment(datetime).locale('de').format('HH:mm')
+	if (datetime == null || Number.isNaN(new Date(datetime).getTime())) {
+		return '';
+	}
+	return moment(datetime).locale('de').format('HH:mm');
 }
 
 /**
@@ -69,7 +69,7 @@ export function formatFriendlyTime(datetime?: Date | string): string {
  * @returns {string}
  */
 export function formatFriendlyTimeString(time: string): string {
-    return time.slice(0, 5)
+	return time.slice(0, 5);
 }
 /**
  * Format a time range like "08:00 – 12:00" or "08:00" if end is null
@@ -78,14 +78,14 @@ export function formatFriendlyTimeString(time: string): string {
  * @returns {string}
  */
 export function formatFriendlyTimeRange(
-    begin: string,
-    end?: string | null
+	begin: string,
+	end?: string | null
 ): string {
-    let str = formatFriendlyTimeString(begin)
-    if (end != null) {
-        str += ` – ${formatFriendlyTimeString(end)}`
-    }
-    return str
+	let str = formatFriendlyTimeString(begin);
+	if (end != null) {
+		str += ` – ${formatFriendlyTimeString(end)}`;
+	}
+	return str;
 }
 
 /**
@@ -95,21 +95,21 @@ export function formatFriendlyTimeRange(
  * @returns {string}
  */
 export function formatFriendlyDateTimeRange(
-    begin: Date | null,
-    end: Date | null
+	begin: Date | null,
+	end: Date | null
 ): string {
-    if (begin == null) {
-        return ''
-    }
-    let str = `${formatFriendlyDate(begin)}, ${formatFriendlyTime(begin)}`
-    if (end != null) {
-        if (begin.toDateString() === end.toDateString()) {
-            str += ` – ${formatFriendlyTime(end)}`
-        } else {
-            str += ` – ${formatFriendlyDate(end)}, ${formatFriendlyTime(end)}`
-        }
-    }
-    return str
+	if (begin == null) {
+		return '';
+	}
+	let str = `${formatFriendlyDate(begin)}, ${formatFriendlyTime(begin)}`;
+	if (end != null) {
+		if (begin.toDateString() === end.toDateString()) {
+			str += ` – ${formatFriendlyTime(end)}`;
+		} else {
+			str += ` – ${formatFriendlyDate(end)}, ${formatFriendlyTime(end)}`;
+		}
+	}
+	return str;
 }
 
 /**
@@ -118,19 +118,19 @@ export function formatFriendlyDateTimeRange(
  * @returns {string}
  */
 export function formatFriendlyDateTime(
-    datetime?: Date | string
+	datetime?: Date | string
 ): string | null {
-    if (datetime == null || Number.isNaN(new Date(datetime).getTime())) {
-        return 'No date available'
-    }
-    // if year is 1970, it's probably not yet available
-    if (new Date(datetime).getFullYear() === 1970) {
-        return null
-    }
-    const date = formatFriendlyDate(datetime)
-    const time = formatFriendlyTime(datetime)
+	if (datetime == null || Number.isNaN(new Date(datetime).getTime())) {
+		return 'No date available';
+	}
+	// if year is 1970, it's probably not yet available
+	if (new Date(datetime).getFullYear() === 1970) {
+		return null;
+	}
+	const date = formatFriendlyDate(datetime);
+	const time = formatFriendlyTime(datetime);
 
-    return `${date}, ${time}`
+	return `${date}, ${time}`;
 }
 
 /**
@@ -139,17 +139,17 @@ export function formatFriendlyDateTime(
  * @returns {string}
  */
 export function formatNearDate(datetime: Date | string): string {
-    const date = moment(datetime)
-    const today = moment()
-    const tomorrow = moment().add(1, 'days')
+	const date = moment(datetime);
+	const today = moment();
+	const tomorrow = moment().add(1, 'days');
 
-    if (date.isSame(today, 'day')) {
-        return t('dates.today', { ns: 'common' })
-    }
-    if (date.isSame(tomorrow, 'day')) {
-        return t('dates.tomorrow', { ns: 'common' })
-    }
-    return date.format('dddd, D.M.')
+	if (date.isSame(today, 'day')) {
+		return t('dates.today', { ns: 'common' });
+	}
+	if (date.isSame(tomorrow, 'day')) {
+		return t('dates.tomorrow', { ns: 'common' });
+	}
+	return date.format('dddd, D.M.');
 }
 
 /**
@@ -158,12 +158,12 @@ export function formatNearDate(datetime: Date | string): string {
  * @returns {string}
  */
 function formatFriendlyTimeDelta(delta: number): string {
-    moment.relativeTimeThreshold('d', 13)
-    moment.relativeTimeThreshold('w', 4)
-    moment.locale(i18n.language)
-    const duration = moment.duration(delta)
-    const relative = moment().add(duration)
-    return relative.fromNow()
+	moment.relativeTimeThreshold('d', 13);
+	moment.relativeTimeThreshold('w', 4);
+	moment.locale(i18n.language);
+	const duration = moment.duration(delta);
+	const relative = moment().add(duration);
+	return relative.fromNow();
 }
 
 /**
@@ -172,18 +172,18 @@ function formatFriendlyTimeDelta(delta: number): string {
  * @returns {string}
  */
 export function formatFriendlyRelativeTime(date: Date): string {
-    // if date is 1.1.1970, it's probably null
-    if (date.getFullYear() === 1970) {
-        return ''
-    }
+	// if date is 1.1.1970, it's probably null
+	if (date.getFullYear() === 1970) {
+		return '';
+	}
 
-    if (Number.isNaN(date.getTime())) {
-        return ''
-    }
+	if (Number.isNaN(date.getTime())) {
+		return '';
+	}
 
-    const deltaFromNow = moment(date).diff(moment())
+	const deltaFromNow = moment(date).diff(moment());
 
-    return formatFriendlyTimeDelta(deltaFromNow)
+	return formatFriendlyTimeDelta(deltaFromNow);
 }
 
 /**
@@ -192,13 +192,13 @@ export function formatFriendlyRelativeTime(date: Date): string {
  * @returns {string}
  */
 export function formatRelativeMinutes(datetime: Date | string): string {
-    const date = typeof datetime === 'string' ? new Date(datetime) : datetime
+	const date = typeof datetime === 'string' ? new Date(datetime) : datetime;
 
-    const minutes = Math.max(
-        Math.floor((date.getTime() - Date.now()) / 60000),
-        0
-    )
-    return `${minutes.toString()} min`
+	const minutes = Math.max(
+		Math.floor((date.getTime() - Date.now()) / 60000),
+		0
+	);
+	return `${minutes.toString()} min`;
 }
 
 /**
@@ -207,10 +207,10 @@ export function formatRelativeMinutes(datetime: Date | string): string {
  * @returns {string}
  */
 export function formatISODate(date: Date | undefined): string {
-    if (date == null) {
-        return ''
-    }
-    return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+	if (date == null) {
+		return '';
+	}
+	return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }
 
 /**
@@ -219,10 +219,10 @@ export function formatISODate(date: Date | undefined): string {
  * @returns {string}
  */
 export function formatISOTime(date: Date | undefined): string {
-    if (date == null) {
-        return ''
-    }
-    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+	if (date == null) {
+		return '';
+	}
+	return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 }
 
 /**
@@ -232,11 +232,11 @@ export function formatISOTime(date: Date | undefined): string {
  * @returns {string}
  */
 export function getMonday(date: Date): Date {
-    const newDate = new Date(date)
-    const day = newDate.getDay()
-    newDate.setHours(0, 0, 0, 0)
-    newDate.setDate(newDate.getDate() - day + (day === 0 ? -6 : 1))
-    return date
+	const newDate = new Date(date);
+	const day = newDate.getDay();
+	newDate.setHours(0, 0, 0, 0);
+	newDate.setDate(newDate.getDate() - day + (day === 0 ? -6 : 1));
+	return date;
 }
 
 /**
@@ -245,10 +245,10 @@ export function getMonday(date: Date): Date {
  * @returns {string}
  */
 export function getWeek(date: Date): [Date, Date] {
-    const start = getMonday(date)
-    const end = getMonday(date)
-    end.setDate(end.getDate() + 7)
-    return [start, end]
+	const start = getMonday(date);
+	const end = getMonday(date);
+	end.setDate(end.getDate() + 7);
+	return [start, end];
 }
 
 /**
@@ -258,9 +258,9 @@ export function getWeek(date: Date): [Date, Date] {
  * @returns {Date}
  */
 export function addWeek(date: Date, delta: number): Date {
-    const newDate = new Date(date)
-    newDate.setDate(newDate.getDate() + delta * 7)
-    return newDate
+	const newDate = new Date(date);
+	newDate.setDate(newDate.getDate() + delta * 7);
+	return newDate;
 }
 
 /**
@@ -269,25 +269,25 @@ export function addWeek(date: Date, delta: number): Date {
  * @returns {string}
  */
 export function getFriendlyWeek(date: Date, lang: string): string {
-    const [currStart, currEnd] = getWeek(new Date())
-    const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
-    if (date >= currStart && date < currEnd) {
-        return t('dates.thisWeek', { ns: 'common' })
-    }
-    if (date >= nextStart && date < nextEnd) {
-        return t('dates.nextWeek', { ns: 'common' })
-    }
-    const monday = getMonday(date)
-    const sunday = new Date(monday)
-    sunday.setDate(sunday.getDate() + 6)
+	const [currStart, currEnd] = getWeek(new Date());
+	const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1));
+	if (date >= currStart && date < currEnd) {
+		return t('dates.thisWeek', { ns: 'common' });
+	}
+	if (date >= nextStart && date < nextEnd) {
+		return t('dates.nextWeek', { ns: 'common' });
+	}
+	const monday = getMonday(date);
+	const sunday = new Date(monday);
+	sunday.setDate(sunday.getDate() + 6);
 
-    return `${monday.toLocaleString(lang, {
-        day: 'numeric',
-        month: 'numeric',
-    })} – ${sunday.toLocaleString(lang, {
-        day: 'numeric',
-        month: 'numeric',
-    })}`
+	return `${monday.toLocaleString(lang, {
+		day: 'numeric',
+		month: 'numeric'
+	})} – ${sunday.toLocaleString(lang, {
+		day: 'numeric',
+		month: 'numeric'
+	})}`;
 }
 
 /**
@@ -296,7 +296,7 @@ export function getFriendlyWeek(date: Date, lang: string): string {
  * @returns {boolean}
  */
 export function isWeekend(date: Date): boolean {
-    return date.getDay() === 0 || date.getDay() === 6
+	return date.getDay() === 0 || date.getDay() === 6;
 }
 
 /**
@@ -305,10 +305,10 @@ export function isWeekend(date: Date): boolean {
  * @returns {Date}
  */
 export function getAdjustedDay(date: Date): Date {
-    if (isWeekend(date)) {
-        return getMonday(addWeek(date, 1))
-    }
-    return date
+	if (isWeekend(date)) {
+		return getMonday(addWeek(date, 1));
+	}
+	return date;
 }
 
 /**
@@ -318,11 +318,11 @@ export function getAdjustedDay(date: Date): Date {
  * @returns {boolean}
  **/
 export function isSameDay(a: Date, b: Date): boolean {
-    return (
-        a.getFullYear() === b.getFullYear() &&
-        a.getMonth() === b.getMonth() &&
-        a.getDate() === b.getDate()
-    )
+	return (
+		a.getFullYear() === b.getFullYear() &&
+		a.getMonth() === b.getMonth() &&
+		a.getDate() === b.getDate()
+	);
 }
 
 /**
@@ -332,27 +332,27 @@ export function isSameDay(a: Date, b: Date): boolean {
  * @returns {Date}
  */
 export function combineDateTime(
-    date: Date | string,
-    time: Date | string
+	date: Date | string,
+	time: Date | string
 ): Date {
-    const newDate = new Date(date)
-    const timeDate = new Date(time)
-    newDate.setHours(timeDate.getHours())
-    newDate.setMinutes(timeDate.getMinutes())
-    newDate.setSeconds(timeDate.getSeconds())
-    newDate.setMilliseconds(timeDate.getMilliseconds())
-    return newDate
+	const newDate = new Date(date);
+	const timeDate = new Date(time);
+	newDate.setHours(timeDate.getHours());
+	newDate.setMinutes(timeDate.getMinutes());
+	newDate.setSeconds(timeDate.getSeconds());
+	newDate.setMilliseconds(timeDate.getMilliseconds());
+	return newDate;
 }
 
 export function getDateRange(startDate: Date, delta: number): Date[] {
-    const dates = []
-    let currentDate = startDate
-    for (let i = 0; i < delta; i++) {
-        dates.push(currentDate)
-        currentDate = new Date(currentDate)
-        currentDate.setDate(currentDate.getDate() + 1)
-    }
-    return dates
+	const dates = [];
+	let currentDate = startDate;
+	for (let i = 0; i < delta; i++) {
+		dates.push(currentDate);
+		currentDate = new Date(currentDate);
+		currentDate.setDate(currentDate.getDate() + 1);
+	}
+	return dates;
 }
 
 /**
@@ -363,9 +363,9 @@ export function getDateRange(startDate: Date, delta: number): Date[] {
  * ignoreTime(new Date('2021-01-01T12:00:00')) // => new Date('2021-01-01T00:00:00')
  */
 export function ignoreTime(date: Date): Date {
-    const newDate = new Date(date)
-    newDate.setHours(0, 0, 0, 0)
-    return newDate
+	const newDate = new Date(date);
+	newDate.setHours(0, 0, 0, 0);
+	return newDate;
 }
 
 /**
@@ -375,9 +375,9 @@ export function ignoreTime(date: Date): Date {
  * @returns Date with x days added
  */
 export function addDays(date: Date, days: number): Date {
-    const newDate = new Date(date)
-    newDate.setDate(newDate.getDate() + days)
-    return newDate
+	const newDate = new Date(date);
+	newDate.setDate(newDate.getDate() + days);
+	return newDate;
 }
 
 /**
@@ -386,10 +386,10 @@ export function addDays(date: Date, days: number): Date {
  * @returns Date as string
  */
 export function formatDay(date: Date): string {
-    return date.toLocaleString(i18n.language, {
-        weekday: 'short',
-        day: '2-digit',
-    })
+	return date.toLocaleString(i18n.language, {
+		weekday: 'short',
+		day: '2-digit'
+	});
 }
 
 /**
@@ -399,38 +399,38 @@ export function formatDay(date: Date): string {
  * @returns A Date object with the specified time, or null if the input time is invalid.
  */
 export const convertTimeToDate = (
-    time: string | null,
-    baseDate: Date = new Date()
+	time: string | null,
+	baseDate: Date = new Date()
 ): Date | null => {
-    if (time == null) {
-        return null
-    }
+	if (time == null) {
+		return null;
+	}
 
-    const timeParts = time.split(':')
-    if (timeParts.length !== 3) {
-        console.error('Invalid time format. Expected "HH:mm:ss".')
-        return null
-    }
+	const timeParts = time.split(':');
+	if (timeParts.length !== 3) {
+		console.error('Invalid time format. Expected "HH:mm:ss".');
+		return null;
+	}
 
-    const [hours, minutes, seconds] = timeParts.map(Number)
-    if (
-        Number.isNaN(hours) ||
-        hours < 0 ||
-        hours > 23 ||
-        Number.isNaN(minutes) ||
-        minutes < 0 ||
-        minutes > 59 ||
-        Number.isNaN(seconds) ||
-        seconds < 0 ||
-        seconds > 59
-    ) {
-        console.error(
-            'Invalid time values. Expected "HH:mm:ss" with valid hour, minute, and second values.'
-        )
-        return null
-    }
+	const [hours, minutes, seconds] = timeParts.map(Number);
+	if (
+		Number.isNaN(hours) ||
+		hours < 0 ||
+		hours > 23 ||
+		Number.isNaN(minutes) ||
+		minutes < 0 ||
+		minutes > 59 ||
+		Number.isNaN(seconds) ||
+		seconds < 0 ||
+		seconds > 59
+	) {
+		console.error(
+			'Invalid time values. Expected "HH:mm:ss" with valid hour, minute, and second values.'
+		);
+		return null;
+	}
 
-    const date = new Date(baseDate)
-    date.setHours(hours, minutes, seconds, 0)
-    return date
-}
+	const date = new Date(baseDate);
+	date.setHours(hours, minutes, seconds, 0);
+	return date;
+};

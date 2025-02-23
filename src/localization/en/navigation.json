@@ -1,106 +1,106 @@
 {
-  "navigation": {
-    "timetable": "Timetable",
-    "map": "Map",
-    "campusMap": "Campus Map",
-    "food": "Food",
-    "settings": "Settings",
-    "preferences": "Preferences",
-    "flags": "Flags",
-    "flagsSearch": "Search flags",
-    "allergensSearch": "Search allergens",
-    "allergens": "Allergens",
-    "details": "Details",
-    "theme": "Design",
-    "accent": "Accent Color",
-    "profile": "Profile",
-    "about": "About",
-    "advancedSearch": "Advanced Search",
-    "calendar": "Calendar",
-    "examDetails": "Exam Details",
-    "lecturers": {
-      "title": "Lecturers",
-      "search": "Search all lecturers"
-    },
-    "lecturer": "Lecturer Details",
-    "grades": {
-      "title": "Grades",
-      "search": "Search subjects"
-    },
-    "news": "THI News",
-    "library": "Library",
-    "legal": "Legal",
-    "libraryCode": "Library Number",
-    "notifications": "Notifications",
-    "licenses": {
-      "title": "Licenses",
-      "search": "Search licenses"
-    },
-    "license": "License",
-    "login": "Sign in",
-    "dashboard": "Neuland Next",
-    "sports": "University Sports",
-    "roomReport": "Report Room Issue"
-  },
-  "cards": {
-    "titles": {
-      "timetable": "Timetable",
-      "calendar": "Calendar",
-      "rooms": "Rooms",
-      "lecturers": "Lecturers",
-      "news": "THI News",
-      "library": "Library",
-      "events": "Events & Sports",
-      "reimanns": "Reimanns",
-      "canisius": "Canisius Konvikt",
-      "mensa": "Mensa Ingolstadt",
-      "mensaNeuburg": "Theke Neuburg",
-      "food": "Food",
-      "login": "Sign in",
-      "links": "Quick Links",
-      "sports": "University Sports"
-    },
-    "announcements": {
-      "readMore": "Tap to learn more."
-    },
-    "events": {
-      "by": "by {{name}}"
-    },
-    "news": {
-      "more": "Read all {{count}} articles"
-    },
-    "calendar": {
-      "exam": "Exam: {{name}}",
-      "ends": "ends "
-    },
-    "timetable": {
-      "startingSoon": "starts in {{count}} min",
-      "startingSoon_plural": "starts in {{count}} mins",
-      "ongoing": "ends at {{time}}",
-      "endingSoon": "ends in {{count}} min",
-      "endingSoon_plural": "ends in {{count}} mins"
-    },
-    "login": {
-      "title": "Timetable, grades, room status and more",
-      "message": "Sign in to unlock all features."
-    }
-  },
-  "contextMenu": {
-    "reset": "Reset cards",
-    "hide": "Hide card",
-    "settings": "Dashboard settings"
-  },
-  "unmatched": {
-    "title": "Not found",
-    "error": {
-      "title": "not found",
-      "message": "The requested page is not available.",
-      "button": "Back"
-    }
-  },
-  "profile": {
-    "error": {
-      "button": "Primuss"
-    }
-  }
+	"navigation": {
+		"timetable": "Timetable",
+		"map": "Map",
+		"campusMap": "Campus Map",
+		"food": "Food",
+		"settings": "Settings",
+		"preferences": "Preferences",
+		"flags": "Flags",
+		"flagsSearch": "Search flags",
+		"allergensSearch": "Search allergens",
+		"allergens": "Allergens",
+		"details": "Details",
+		"theme": "Design",
+		"accent": "Accent Color",
+		"profile": "Profile",
+		"about": "About",
+		"advancedSearch": "Advanced Search",
+		"calendar": "Calendar",
+		"examDetails": "Exam Details",
+		"lecturers": {
+			"title": "Lecturers",
+			"search": "Search all lecturers"
+		},
+		"lecturer": "Lecturer Details",
+		"grades": {
+			"title": "Grades",
+			"search": "Search subjects"
+		},
+		"news": "THI News",
+		"library": "Library",
+		"legal": "Legal",
+		"libraryCode": "Library Number",
+		"notifications": "Notifications",
+		"licenses": {
+			"title": "Licenses",
+			"search": "Search licenses"
+		},
+		"license": "License",
+		"login": "Sign in",
+		"dashboard": "Neuland Next",
+		"sports": "University Sports",
+		"roomReport": "Report Room Issue"
+	},
+	"cards": {
+		"titles": {
+			"timetable": "Timetable",
+			"calendar": "Calendar",
+			"rooms": "Rooms",
+			"lecturers": "Lecturers",
+			"news": "THI News",
+			"library": "Library",
+			"events": "Events & Sports",
+			"reimanns": "Reimanns",
+			"canisius": "Canisius Konvikt",
+			"mensa": "Mensa Ingolstadt",
+			"mensaNeuburg": "Theke Neuburg",
+			"food": "Food",
+			"login": "Sign in",
+			"links": "Quick Links",
+			"sports": "University Sports"
+		},
+		"announcements": {
+			"readMore": "Tap to learn more."
+		},
+		"events": {
+			"by": "by {{name}}"
+		},
+		"news": {
+			"more": "Read all {{count}} articles"
+		},
+		"calendar": {
+			"exam": "Exam: {{name}}",
+			"ends": "ends "
+		},
+		"timetable": {
+			"startingSoon": "starts in {{count}} min",
+			"startingSoon_plural": "starts in {{count}} mins",
+			"ongoing": "ends at {{time}}",
+			"endingSoon": "ends in {{count}} min",
+			"endingSoon_plural": "ends in {{count}} mins"
+		},
+		"login": {
+			"title": "Timetable, grades, room status and more",
+			"message": "Sign in to unlock all features."
+		}
+	},
+	"contextMenu": {
+		"reset": "Reset cards",
+		"hide": "Hide card",
+		"settings": "Dashboard settings"
+	},
+	"unmatched": {
+		"title": "Not found",
+		"error": {
+			"title": "not found",
+			"message": "The requested page is not available.",
+			"button": "Back"
+		}
+	},
+	"profile": {
+		"error": {
+			"button": "Primuss"
+		}
+	}
 }

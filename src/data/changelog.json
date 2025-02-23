@@ -1,147 +1,147 @@
 {
-  "_note": "x.y = major.minor version. z versions are bugfixes and may not be listed here.",
-  "version": {
-    "0.8": [
-      {
-        "title": {
-          "de": "Karten Darkmode",
-          "en": "Map Darkmode"
-        },
-        "description": {
-          "de": "Aktiviere den Darkmode, um eine dunkle Kartenansicht zu erhalten. Zudem wurde auch die helle Ansicht komplett erneuert und optimiert.",
-          "en": "Enable dark mode to get a dark map view. In addition, the light view has also been completely renewed and optimized."
-        },
-        "icon": {
-          "ios": "moon.stars",
-          "android": "dark_mode",
-          "web": "MoonStar"
-        }
-      },
-      {
-        "title": {
-          "de": "Native Karten",
-          "en": "Native Map"
-        },
-        "description": {
-          "de": "Die Karte komplett neu geschrieben und verfügt nun über natives Rendering, Gesten und noch mehr Informationen.",
-          "en": "The map has been completely rewritten and now has native rendering, gestures and even more information."
-        },
-        "icon": {
-          "ios": "map",
-          "android": "map",
-          "web": "Map"
-        }
-      },
+	"_note": "x.y = major.minor version. z versions are bugfixes and may not be listed here.",
+	"version": {
+		"0.8": [
+			{
+				"title": {
+					"de": "Karten Darkmode",
+					"en": "Map Darkmode"
+				},
+				"description": {
+					"de": "Aktiviere den Darkmode, um eine dunkle Kartenansicht zu erhalten. Zudem wurde auch die helle Ansicht komplett erneuert und optimiert.",
+					"en": "Enable dark mode to get a dark map view. In addition, the light view has also been completely renewed and optimized."
+				},
+				"icon": {
+					"ios": "moon.stars",
+					"android": "dark_mode",
+					"web": "MoonStar"
+				}
+			},
+			{
+				"title": {
+					"de": "Native Karten",
+					"en": "Native Map"
+				},
+				"description": {
+					"de": "Die Karte komplett neu geschrieben und verfügt nun über natives Rendering, Gesten und noch mehr Informationen.",
+					"en": "The map has been completely rewritten and now has native rendering, gestures and even more information."
+				},
+				"icon": {
+					"ios": "map",
+					"android": "map",
+					"web": "Map"
+				}
+			},
 
-      {
-        "title": {
-          "de": "Event Details",
-          "en": "Event Details"
-        },
-        "description": {
-          "de": "Tippe auf ein Event, um mehr Informationen zu erhalten, wie zum Ort oder der Beschreibung.",
-          "en": "Tap on an event to get more information, such as the location or description."
-        },
-        "icon": {
-          "ios": "party.popper",
-          "android": "event",
-          "web": "PartyPopper"
-        }
-      }
-    ],
-    "0.9": [
-      {
-        "title": {
-          "de": "Quick Links",
-          "en": "Quick Links"
-        },
-        "description": {
-          "de": "Eine neue Dashboard Karte liefert dir schnellen Zugriff auf wichtige Links.",
-          "en": "A new dashboard card provides quick access to important links."
-        },
-        "icon": {
-          "ios": "link",
-          "android": "captive_portal",
-          "web": "Link"
-        }
-      },
-      {
-        "title": {
-          "de": "Performance Verbesserungen",
-          "en": "Performance Improvements"
-        },
-        "description": {
-          "de": "Die App ist nun schneller und flüssiger. Viele kleine Details wurden optimiert.",
-          "en": "The app is now faster and smoother. Many small details have been optimized."
-        },
-        "icon": {
-          "ios": "bolt",
-          "android": "bolt",
-          "web": "CircleGauge"
-        }
-      },
-      {
-        "title": {
-          "de": "Fehlerbehebungen",
-          "en": "Bug Fixes"
-        },
-        "description": {
-          "de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
-          "en": "Many small bugs have been fixed to make the app even better."
-        },
-        "icon": {
-          "ios": "hammer",
-          "android": "bug_report",
-          "web": "Bug"
-        }
-      }
-    ],
-    "0.10": [
-      {
-        "title": {
-          "de": "Hochschulsport",
-          "en": "University Sports"
-        },
-        "description": {
-          "de": "Finde alle Hochschulsport Angebote auf einen Blick in der neuen Events & Sport Ansicht.",
-          "en": "Find all university sports offers at a glance in the new Events & Sports view."
-        },
-        "icon": {
-          "ios": "dumbbell",
-          "android": "exercise",
-          "web": "Dumbbell"
-        }
-      },
-      {
-        "title": {
-          "de": "Weitere Quick Links",
-          "en": "More Quick Links"
-        },
-        "description": {
-          "de": "Klicke auf die Karte, um weitere Quick Links aufzurufen und deine Lieblingslinks anzupassen.",
-          "en": "Click on the card to access more quick links and customize your favorite links."
-        },
-        "icon": {
-          "ios": "link",
-          "android": "captive_portal",
-          "web": "Link"
-        }
-      },
-      {
-        "title": {
-          "de": "Fehlerbehebungen",
-          "en": "Bug Fixes"
-        },
-        "description": {
-          "de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
-          "en": "Many small bugs have been fixed to make the app even better."
-        },
-        "icon": {
-          "ios": "hammer",
-          "android": "bug_report",
-          "web": "Bug"
-        }
-      }
-    ]
-  }
+			{
+				"title": {
+					"de": "Event Details",
+					"en": "Event Details"
+				},
+				"description": {
+					"de": "Tippe auf ein Event, um mehr Informationen zu erhalten, wie zum Ort oder der Beschreibung.",
+					"en": "Tap on an event to get more information, such as the location or description."
+				},
+				"icon": {
+					"ios": "party.popper",
+					"android": "event",
+					"web": "PartyPopper"
+				}
+			}
+		],
+		"0.9": [
+			{
+				"title": {
+					"de": "Quick Links",
+					"en": "Quick Links"
+				},
+				"description": {
+					"de": "Eine neue Dashboard Karte liefert dir schnellen Zugriff auf wichtige Links.",
+					"en": "A new dashboard card provides quick access to important links."
+				},
+				"icon": {
+					"ios": "link",
+					"android": "captive_portal",
+					"web": "Link"
+				}
+			},
+			{
+				"title": {
+					"de": "Performance Verbesserungen",
+					"en": "Performance Improvements"
+				},
+				"description": {
+					"de": "Die App ist nun schneller und flüssiger. Viele kleine Details wurden optimiert.",
+					"en": "The app is now faster and smoother. Many small details have been optimized."
+				},
+				"icon": {
+					"ios": "bolt",
+					"android": "bolt",
+					"web": "CircleGauge"
+				}
+			},
+			{
+				"title": {
+					"de": "Fehlerbehebungen",
+					"en": "Bug Fixes"
+				},
+				"description": {
+					"de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
+					"en": "Many small bugs have been fixed to make the app even better."
+				},
+				"icon": {
+					"ios": "hammer",
+					"android": "bug_report",
+					"web": "Bug"
+				}
+			}
+		],
+		"0.10": [
+			{
+				"title": {
+					"de": "Hochschulsport",
+					"en": "University Sports"
+				},
+				"description": {
+					"de": "Finde alle Hochschulsport Angebote auf einen Blick in der neuen Events & Sport Ansicht.",
+					"en": "Find all university sports offers at a glance in the new Events & Sports view."
+				},
+				"icon": {
+					"ios": "dumbbell",
+					"android": "exercise",
+					"web": "Dumbbell"
+				}
+			},
+			{
+				"title": {
+					"de": "Weitere Quick Links",
+					"en": "More Quick Links"
+				},
+				"description": {
+					"de": "Klicke auf die Karte, um weitere Quick Links aufzurufen und deine Lieblingslinks anzupassen.",
+					"en": "Click on the card to access more quick links and customize your favorite links."
+				},
+				"icon": {
+					"ios": "link",
+					"android": "captive_portal",
+					"web": "Link"
+				}
+			},
+			{
+				"title": {
+					"de": "Fehlerbehebungen",
+					"en": "Bug Fixes"
+				},
+				"description": {
+					"de": "Viele kleine Fehler wurden behoben, um die App noch besser zu machen.",
+					"en": "Many small bugs have been fixed to make the app even better."
+				},
+				"icon": {
+					"ios": "hammer",
+					"android": "bug_report",
+					"web": "Bug"
+				}
+			}
+		]
+	}
 }

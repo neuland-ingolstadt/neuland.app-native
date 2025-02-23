@@ -1,320 +1,320 @@
 {
-  "toast": {
-    "clipboard": "in Zwischenablage kopiert",
-    "paused": {
-      "title": "Keine Internetverbindung",
-      "description": "Daten können veraltet sein"
-    },
-    "roomNotFound": "Raum nicht gefunden",
-    "mapOverlay": "Fehler beim Laden des Overlays",
-    "dashboard": "Drag & Drop zum Sortieren",
-    "tryAgain": "Versuche es erneut"
-  },
-  "error": {
-    "title": "Ein Fehler ist aufgetreten",
-    "description": "Beim Laden der Daten ist ein Fehler aufgetreten.",
-    "refreshPull": "Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.",
-    "button": "Erneut versuchen",
-    "noSession": "Nicht angemeldet.",
-    "pull": "Ziehe zum Aktualisieren nach unten",
-    "network": {
-      "title": "Keine Internetverbindung",
-      "description": "Bitte überprüfe deine Internetverbindung."
-    },
-    "guest": {
-      "title": "Anmeldung erforderlich",
-      "description": "Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.",
-      "button": "Anmelden"
-    },
-    "permission": {
-      "title": "Funktion nicht verfügbar",
-      "description": "Diese Funktion ist für deine Benutzergruppe nicht verfügbar."
-    },
-    "map": {
-      "mapLoadError": "Fehler beim Laden der Karte",
-      "mapOverlay": "Fehler beim Laden des Overlays"
-    },
-    "noMeals": "Keine Gerichte verfügbar",
-    "crash": {
-      "title": "Interner Fehler",
-      "description": "Es ist ein unerwarteter interner Fehler aufgetreten.",
-      "steps": "Prüfe die Systemstatusseite und sende uns Feedback, um uns bei der Fehlerbehebung zu unterstützen.",
-      "reload": "App neu laden",
-      "feedback": "Feedback senden",
-      "status": "Systemstatus prüfen"
-    }
-  },
-  "dates": {
-    "until": "bis",
-    "notYet": "Termin noch nicht bekannt",
-    "ends": "endet",
-    "today": "Heute",
-    "tomorrow": "Morgen",
-    "thisWeek": "Diese Woche",
-    "nextWeek": "Nächste Woche",
-    "now": "Jetzt",
-    "weekdays": {
-      "monday": "Montag",
-      "tuesday": "Dienstag",
-      "wednesday": "Mittwoch",
-      "thursday": "Donnerstag",
-      "friday": "Freitag",
-      "saturday": "Samstag",
-      "sunday": "Sonntag"
-    }
-  },
-  "misc": {
-    "share": "Teilen",
-    "cancel": "Abbrechen",
-    "confirm": "Bestätigen",
-    "delete": "Löschen",
-    "disable": "Deaktivieren",
-    "more": "mehr",
-    "unknown": "Unbekannt",
-    "true": "Ja",
-    "false": "Nein"
-  },
-  "quicklinks": {
-    "primuss": "Primuss",
-    "moodle": "Moodle",
-    "webmail": "E-Mail",
-    "studVer": "StudVer",
-    "marketplace": "Marktplatz",
-    "thi": "THI",
-    "press": "PressReader"
-  },
-  "pages": {
-    "quicklinks": {
-      "title": "Quick Links",
-      "footer": "Die Dashboard Karte zeigt die zuletzt besuchten Links an.",
-      "links": {
-        "primuss": "Primuss",
-        "moodle": "Moodle",
-        "webmail": "E-Mail",
-        "studVer": "Studierendenvertretung",
-        "marketplace": "Marktplatz",
-        "thi": "THI Website",
-        "press": "PressReader"
-      },
-      "more": "Mehr"
-    },
-    "calendar": {
-      "exams": {
-        "title": "Prüfungen",
-        "error": "Kein Studierender",
-        "errorSubtitle": "Melde dich an, um deine Prüfungen zu sehen.",
-        "noExams": {
-          "title": "Keine Prüfungen gefunden",
-          "subtitle": "Nach der Anmeldung zu Prüfungen werden sie hier angezeigt."
-        }
-      },
-      "events": {
-        "title": "Termine"
-      },
-      "calendar": {
-        "link": "https://www.thi.de/studium/pruefung/semestertermine/",
-        "noData": {
-          "title": "Keine Daten gefunden",
-          "subtitle": "Bitte versuche es später erneut."
-        }
-      },
-      "footer": {
-        "part1": "Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt auf der ",
-        "part2": "Universitätswebsite",
-        "part3": " verfügbar."
-      }
-    },
-    "lecturers": {
-      "results": "Suchergebnisse",
-      "personal": "Persönliche",
-      "faculty": "Fakultät",
-      "professors": "Professoren",
-      "error": {
-        "title": "Keine Dozenten gefunden",
-        "subtitle": "Konfiguriere deinen Stundenplan, um die persönlichen Dozenten anzuzeigen."
-      }
-    },
-    "lecturer": {
-      "details": {
-        "title": "Titel",
-        "organization": "Organisation",
-        "function": "Funktion"
-      },
-      "contact": {
-        "room": "Raum",
-        "title": "Kontakt",
-        "phone": "Telefon",
-        "office": "Sprechstunde",
-        "exam": "Einsichtnahme"
-      }
-    },
-    "exam": {
-      "details": {
-        "date": "Datum",
-        "room": "Raum",
-        "seat": "Platz",
-        "tools": "Hilfsmittel"
-      },
-      "about": {
-        "title": "Über",
-        "type": "Art",
-        "examiner": "Prüfer:in",
-        "registration": "Angemeldet",
-        "notes": "Notizen"
-      },
-      "footer": "Alle Angaben ohne Gewähr. Verbindliche Informationen sind nur direkt von der THI erhältlich."
-    },
-    "event": {
-      "date": "Datum",
-      "time": "Uhrzeit",
-      "weekday": "Wochentag",
-      "location": "Ort",
-      "organizer": "Veranstalter",
-      "description": "Beschreibung",
-      "begin": "Beginn",
-      "end": "Ende",
-      "registration": "Anmeldung",
-      "required": "Erforderlich",
-      "contact": "Kontakt",
-      "optional": "Optional",
-      "invitationLink": "Einladungslink",
-      "eMail": "E-Mail",
-      "shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://next.neuland.app/",
-      "shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\nhttps://next.neuland.app/"
-    },
-    "map": {
-      "search": {
-        "hint": "Campus durchsuchen...",
-        "placeholder": "Suche nach Räumen, Gebäuden oder Einrichtungen",
-        "recent": "Kürzlich gesucht",
-        "clear": "Verlauf löschen",
-        "noResults": "Keine Suchergebnisse",
-        "results": "Suchergebnisse",
-        "fuzzy": "Vorschläge"
-      },
-      "easterEgg": {
-        "title": "Easter Egg",
-        "message": "Du hast das exklusive retro App-Icon \"neuland.app\" freigeschaltet!",
-        "confirm": "Nice!"
-      },
-      "noAvailableRooms": "Keine freien Räume verfügbar",
-      "details": {
-        "room": {
-          "details": "Raumdetails",
-          "title": "Raum",
-          "capacity": "Kapazität",
-          "availability": "Verfügbarkeit",
-          "timeLeft": "Verbleibende Zeit",
-          "building": "Gebäude",
-          "timeSpan": "Zeitspanne",
-          "floor": "Etage",
-          "type": "Typ",
-          "available": "Verfügbar",
-          "notAvailable": "Nicht verfügbar",
-          "availableRooms": "Verfügbare Räume",
-          "nextLecture": "Nächste Vorlesung",
-          "availableRoomsTitle": "Verfügbare Räume",
-          "history": "Zuletzt gesucht",
-          "signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
-          "equipment": "Ausstattung",
-          "report": "Fehler melden",
-          "reportMail": "mailto:app-feedback@informatik.sexy?subject=Raum%20Fehler%20melden&body=Raum%3A%0D%0AProblem%3A%0D%0AVorschlag%3A"
-        },
-        "building": {
-          "free": "Freie Räume",
-          "total": "Räume insgesamt",
-          "floors": "Etagen"
-        },
-        "osm": "Karten Daten von OpenStreetMap"
-      }
-    },
-    "rooms": {
-      "options": {
-        "title": "Such Optionen",
-        "building": "Gebäude",
-        "date": "Datum",
-        "time": "Zeit",
-        "duration": "Dauer",
-        "seats": "Plätze"
-      },
-      "modified": {
-        "title": "Filter angepasst",
-        "description": "Die THI ist derzeit geschlossen. Daher wurden die Filter auf die nächste Öffnungszeit angepasst."
-      },
-      "results": "Verfügbare Räume",
-      "noRooms": {
-        "title": "Keine Räume gefunden",
-        "subtitle": "Versuche die Filteroptionen zu ändern."
-      },
-      "report": {
-        "title": "Fehler melden",
-        "reportSentSuccess": "Bericht gesendet",
-        "reportSentError": "Fehler beim Senden",
-        "room": {
-          "title": "Raum",
-          "placeholder": "A123"
-        },
-        "description": {
-          "title": "Beschreibung",
-          "placeholder": "Problem beschreibung..."
-        },
-        "category": {
-          "title": "Kategorie",
-          "placeholder": "Problem Kategorie wählen...",
-          "type": {
-            "WRONG_DESCRIPTION": "Falsche Beschreibung",
-            "WRONG_LOCATION": "Falscher Ort",
-            "NOT_EXISTING": "Existiert nicht",
-            "MISSING": "Fehlt",
-            "OTHER": "Anderer"
-          }
-        },
-        "footerText": "Wir sammeln keine persönlichen Daten. Nur der Raum, die Kategorie und die Beschreibung, die Du angibst, werden gespeichert."
-      }
-    },
-    "library": {
-      "code": {
-        "number": "Nummer",
-        "footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
-      },
-      "timeSlot": "Zeitfenster",
-      "seatReservation": {
-        "title": "Sitzplatzreservierung",
-        "description": "Reserviere einen Sitzplatz oder einen Raum in der Bibliothek mit dem V:Scout-System."
-      },
-      "catalog": {
-        "title": "Bibliothekskatalog",
-        "description": "Suche nach Büchern, Zeitschriften und anderen Medien im Bibliothekskatalog."
-      },
-      "virtualCard": {
-        "title": "Virtuelle Bibliothekskarte",
-        "description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
-      },
-      "note": "Aufgrund des neuen Buchungs-Systems ist es nicht mehr möglich Sitzplätze über die App zu buchen."
-    },
-    "clEvents": {
-      "sports": {
-        "title": "Sport",
-        "noEvents": {
-          "title": "Keine Sportveranstaltungen",
-          "subtitle": "Bitte versuche es später erneut."
-        }
-      },
-      "events": {
-        "title": "Veranstaltungen",
-        "noEvents": {
-          "title": "Keine anstehenden Veranstaltungen",
-          "subtitle": "Bitte versuche es später erneut."
-        }
-      }
-    }
-  },
-  "notification": {
-    "permission": {
-      "title": "Benachrichtigungen",
-      "description": "Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.",
-      "button": "Einstellungen"
-    }
-  },
-  "submit": "Absenden"
+	"toast": {
+		"clipboard": "in Zwischenablage kopiert",
+		"paused": {
+			"title": "Keine Internetverbindung",
+			"description": "Daten können veraltet sein"
+		},
+		"roomNotFound": "Raum nicht gefunden",
+		"mapOverlay": "Fehler beim Laden des Overlays",
+		"dashboard": "Drag & Drop zum Sortieren",
+		"tryAgain": "Versuche es erneut"
+	},
+	"error": {
+		"title": "Ein Fehler ist aufgetreten",
+		"description": "Beim Laden der Daten ist ein Fehler aufgetreten.",
+		"refreshPull": "Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.",
+		"button": "Erneut versuchen",
+		"noSession": "Nicht angemeldet.",
+		"pull": "Ziehe zum Aktualisieren nach unten",
+		"network": {
+			"title": "Keine Internetverbindung",
+			"description": "Bitte überprüfe deine Internetverbindung."
+		},
+		"guest": {
+			"title": "Anmeldung erforderlich",
+			"description": "Um diese Funktion zu nutzen, musst du dich mit deinem THI Account anmelden.",
+			"button": "Anmelden"
+		},
+		"permission": {
+			"title": "Funktion nicht verfügbar",
+			"description": "Diese Funktion ist für deine Benutzergruppe nicht verfügbar."
+		},
+		"map": {
+			"mapLoadError": "Fehler beim Laden der Karte",
+			"mapOverlay": "Fehler beim Laden des Overlays"
+		},
+		"noMeals": "Keine Gerichte verfügbar",
+		"crash": {
+			"title": "Interner Fehler",
+			"description": "Es ist ein unerwarteter interner Fehler aufgetreten.",
+			"steps": "Prüfe die Systemstatusseite und sende uns Feedback, um uns bei der Fehlerbehebung zu unterstützen.",
+			"reload": "App neu laden",
+			"feedback": "Feedback senden",
+			"status": "Systemstatus prüfen"
+		}
+	},
+	"dates": {
+		"until": "bis",
+		"notYet": "Termin noch nicht bekannt",
+		"ends": "endet",
+		"today": "Heute",
+		"tomorrow": "Morgen",
+		"thisWeek": "Diese Woche",
+		"nextWeek": "Nächste Woche",
+		"now": "Jetzt",
+		"weekdays": {
+			"monday": "Montag",
+			"tuesday": "Dienstag",
+			"wednesday": "Mittwoch",
+			"thursday": "Donnerstag",
+			"friday": "Freitag",
+			"saturday": "Samstag",
+			"sunday": "Sonntag"
+		}
+	},
+	"misc": {
+		"share": "Teilen",
+		"cancel": "Abbrechen",
+		"confirm": "Bestätigen",
+		"delete": "Löschen",
+		"disable": "Deaktivieren",
+		"more": "mehr",
+		"unknown": "Unbekannt",
+		"true": "Ja",
+		"false": "Nein"
+	},
+	"quicklinks": {
+		"primuss": "Primuss",
+		"moodle": "Moodle",
+		"webmail": "E-Mail",
+		"studVer": "StudVer",
+		"marketplace": "Marktplatz",
+		"thi": "THI",
+		"press": "PressReader"
+	},
+	"pages": {
+		"quicklinks": {
+			"title": "Quick Links",
+			"footer": "Die Dashboard Karte zeigt die zuletzt besuchten Links an.",
+			"links": {
+				"primuss": "Primuss",
+				"moodle": "Moodle",
+				"webmail": "E-Mail",
+				"studVer": "Studierendenvertretung",
+				"marketplace": "Marktplatz",
+				"thi": "THI Website",
+				"press": "PressReader"
+			},
+			"more": "Mehr"
+		},
+		"calendar": {
+			"exams": {
+				"title": "Prüfungen",
+				"error": "Kein Studierender",
+				"errorSubtitle": "Melde dich an, um deine Prüfungen zu sehen.",
+				"noExams": {
+					"title": "Keine Prüfungen gefunden",
+					"subtitle": "Nach der Anmeldung zu Prüfungen werden sie hier angezeigt."
+				}
+			},
+			"events": {
+				"title": "Termine"
+			},
+			"calendar": {
+				"link": "https://www.thi.de/studium/pruefung/semestertermine/",
+				"noData": {
+					"title": "Keine Daten gefunden",
+					"subtitle": "Bitte versuche es später erneut."
+				}
+			},
+			"footer": {
+				"part1": "Alle Informationen ohne Gewähr. Verbindliche Informationen sind direkt auf der ",
+				"part2": "Universitätswebsite",
+				"part3": " verfügbar."
+			}
+		},
+		"lecturers": {
+			"results": "Suchergebnisse",
+			"personal": "Persönliche",
+			"faculty": "Fakultät",
+			"professors": "Professoren",
+			"error": {
+				"title": "Keine Dozenten gefunden",
+				"subtitle": "Konfiguriere deinen Stundenplan, um die persönlichen Dozenten anzuzeigen."
+			}
+		},
+		"lecturer": {
+			"details": {
+				"title": "Titel",
+				"organization": "Organisation",
+				"function": "Funktion"
+			},
+			"contact": {
+				"room": "Raum",
+				"title": "Kontakt",
+				"phone": "Telefon",
+				"office": "Sprechstunde",
+				"exam": "Einsichtnahme"
+			}
+		},
+		"exam": {
+			"details": {
+				"date": "Datum",
+				"room": "Raum",
+				"seat": "Platz",
+				"tools": "Hilfsmittel"
+			},
+			"about": {
+				"title": "Über",
+				"type": "Art",
+				"examiner": "Prüfer:in",
+				"registration": "Angemeldet",
+				"notes": "Notizen"
+			},
+			"footer": "Alle Angaben ohne Gewähr. Verbindliche Informationen sind nur direkt von der THI erhältlich."
+		},
+		"event": {
+			"date": "Datum",
+			"time": "Uhrzeit",
+			"weekday": "Wochentag",
+			"location": "Ort",
+			"organizer": "Veranstalter",
+			"description": "Beschreibung",
+			"begin": "Beginn",
+			"end": "Ende",
+			"registration": "Anmeldung",
+			"required": "Erforderlich",
+			"contact": "Kontakt",
+			"optional": "Optional",
+			"invitationLink": "Einladungslink",
+			"eMail": "E-Mail",
+			"shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://next.neuland.app/",
+			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\nhttps://next.neuland.app/"
+		},
+		"map": {
+			"search": {
+				"hint": "Campus durchsuchen...",
+				"placeholder": "Suche nach Räumen, Gebäuden oder Einrichtungen",
+				"recent": "Kürzlich gesucht",
+				"clear": "Verlauf löschen",
+				"noResults": "Keine Suchergebnisse",
+				"results": "Suchergebnisse",
+				"fuzzy": "Vorschläge"
+			},
+			"easterEgg": {
+				"title": "Easter Egg",
+				"message": "Du hast das exklusive retro App-Icon \"neuland.app\" freigeschaltet!",
+				"confirm": "Nice!"
+			},
+			"noAvailableRooms": "Keine freien Räume verfügbar",
+			"details": {
+				"room": {
+					"details": "Raumdetails",
+					"title": "Raum",
+					"capacity": "Kapazität",
+					"availability": "Verfügbarkeit",
+					"timeLeft": "Verbleibende Zeit",
+					"building": "Gebäude",
+					"timeSpan": "Zeitspanne",
+					"floor": "Etage",
+					"type": "Typ",
+					"available": "Verfügbar",
+					"notAvailable": "Nicht verfügbar",
+					"availableRooms": "Verfügbare Räume",
+					"nextLecture": "Nächste Vorlesung",
+					"availableRoomsTitle": "Verfügbare Räume",
+					"history": "Zuletzt gesucht",
+					"signIn": "Melden dich an, um verfügbare Räume anzuzeigen",
+					"equipment": "Ausstattung",
+					"report": "Fehler melden",
+					"reportMail": "mailto:app-feedback@informatik.sexy?subject=Raum%20Fehler%20melden&body=Raum%3A%0D%0AProblem%3A%0D%0AVorschlag%3A"
+				},
+				"building": {
+					"free": "Freie Räume",
+					"total": "Räume insgesamt",
+					"floors": "Etagen"
+				},
+				"osm": "Karten Daten von OpenStreetMap"
+			}
+		},
+		"rooms": {
+			"options": {
+				"title": "Such Optionen",
+				"building": "Gebäude",
+				"date": "Datum",
+				"time": "Zeit",
+				"duration": "Dauer",
+				"seats": "Plätze"
+			},
+			"modified": {
+				"title": "Filter angepasst",
+				"description": "Die THI ist derzeit geschlossen. Daher wurden die Filter auf die nächste Öffnungszeit angepasst."
+			},
+			"results": "Verfügbare Räume",
+			"noRooms": {
+				"title": "Keine Räume gefunden",
+				"subtitle": "Versuche die Filteroptionen zu ändern."
+			},
+			"report": {
+				"title": "Fehler melden",
+				"reportSentSuccess": "Bericht gesendet",
+				"reportSentError": "Fehler beim Senden",
+				"room": {
+					"title": "Raum",
+					"placeholder": "A123"
+				},
+				"description": {
+					"title": "Beschreibung",
+					"placeholder": "Problem beschreibung..."
+				},
+				"category": {
+					"title": "Kategorie",
+					"placeholder": "Problem Kategorie wählen...",
+					"type": {
+						"WRONG_DESCRIPTION": "Falsche Beschreibung",
+						"WRONG_LOCATION": "Falscher Ort",
+						"NOT_EXISTING": "Existiert nicht",
+						"MISSING": "Fehlt",
+						"OTHER": "Anderer"
+					}
+				},
+				"footerText": "Wir sammeln keine persönlichen Daten. Nur der Raum, die Kategorie und die Beschreibung, die Du angibst, werden gespeichert."
+			}
+		},
+		"library": {
+			"code": {
+				"number": "Nummer",
+				"footer": "Verwende diesen Barcode, um dich an den Bibliotheksterminals anzumelden und Bücher auszuleihen."
+			},
+			"timeSlot": "Zeitfenster",
+			"seatReservation": {
+				"title": "Sitzplatzreservierung",
+				"description": "Reserviere einen Sitzplatz oder einen Raum in der Bibliothek mit dem V:Scout-System."
+			},
+			"catalog": {
+				"title": "Bibliothekskatalog",
+				"description": "Suche nach Büchern, Zeitschriften und anderen Medien im Bibliothekskatalog."
+			},
+			"virtualCard": {
+				"title": "Virtuelle Bibliothekskarte",
+				"description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
+			},
+			"note": "Aufgrund des neuen Buchungs-Systems ist es nicht mehr möglich Sitzplätze über die App zu buchen."
+		},
+		"clEvents": {
+			"sports": {
+				"title": "Sport",
+				"noEvents": {
+					"title": "Keine Sportveranstaltungen",
+					"subtitle": "Bitte versuche es später erneut."
+				}
+			},
+			"events": {
+				"title": "Veranstaltungen",
+				"noEvents": {
+					"title": "Keine anstehenden Veranstaltungen",
+					"subtitle": "Bitte versuche es später erneut."
+				}
+			}
+		}
+	},
+	"notification": {
+		"permission": {
+			"title": "Benachrichtigungen",
+			"description": "Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.",
+			"button": "Einstellungen"
+		}
+	},
+	"submit": "Absenden"
 }

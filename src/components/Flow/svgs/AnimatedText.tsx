@@ -1,15 +1,15 @@
-import type React from 'react'
-import { useEffect } from 'react'
-import type { TextStyle } from 'react-native'
+import type React from 'react';
+import { useEffect } from 'react';
+import type { TextStyle } from 'react-native';
 import Animated, {
-    Easing,
-    interpolateColor,
-    useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming,
-} from 'react-native-reanimated'
-import { useStyles } from 'react-native-unistyles'
+	Easing,
+	interpolateColor,
+	useAnimatedStyle,
+	useSharedValue,
+	withRepeat,
+	withTiming
+} from 'react-native-reanimated';
+import { useStyles } from 'react-native-unistyles';
 
 /**
  * Animated text component that changes color between two colors.
@@ -21,49 +21,47 @@ import { useStyles } from 'react-native-unistyles'
  * @returns {JSX.Element} - A React component that renders the animated text.
  */
 const AnimatedText = ({
-    speed,
-    text,
-    textStyles,
-    disabled = false,
+	speed,
+	text,
+	textStyles,
+	disabled = false
 }: {
-    speed: number
-    text: string
-    textStyles: TextStyle
-    disabled?: boolean
+	speed: number;
+	text: string;
+	textStyles: TextStyle;
+	disabled?: boolean;
 }): React.JSX.Element => {
-    const colorValue = useSharedValue(0)
-    const { theme } = useStyles()
-    useEffect(() => {
-        if (!disabled) {
-            colorValue.value = withRepeat(
-                withTiming(1, {
-                    duration: speed,
-                    easing: Easing.linear,
-                }),
-                -1,
-                true
-            )
-        } else {
-            colorValue.value = 0 // Reset to initial value if disabled
-        }
-    }, [colorValue, speed, disabled])
+	const colorValue = useSharedValue(0);
+	const { theme } = useStyles();
+	useEffect(() => {
+		if (!disabled) {
+			colorValue.value = withRepeat(
+				withTiming(1, {
+					duration: speed,
+					easing: Easing.linear
+				}),
+				-1,
+				true
+			);
+		} else {
+			colorValue.value = 0; // Reset to initial value if disabled
+		}
+	}, [colorValue, speed, disabled]);
 
-    const animatedStyle = useAnimatedStyle(() => {
-        const interpolatedColor = interpolateColor(
-            colorValue.value,
-            [0, 1],
-            [theme.colors.text, theme.colors.labelSecondaryColor] // Interpolating between text and secondary label colors
-        )
-        return {
-            color: interpolatedColor,
-        }
-    })
+	const animatedStyle = useAnimatedStyle(() => {
+		const interpolatedColor = interpolateColor(
+			colorValue.value,
+			[0, 1],
+			[theme.colors.text, theme.colors.labelSecondaryColor] // Interpolating between text and secondary label colors
+		);
+		return {
+			color: interpolatedColor
+		};
+	});
 
-    return (
-        <Animated.Text style={[animatedStyle, textStyles]}>
-            {text}
-        </Animated.Text>
-    )
-}
+	return (
+		<Animated.Text style={[animatedStyle, textStyles]}>{text}</Animated.Text>
+	);
+};
 
-export default AnimatedText
+export default AnimatedText;

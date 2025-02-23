@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { graphql } from '@/__generated__/gql'
+import { graphql } from '@/__generated__/gql';
 
 export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     query AppAnnouncements {
@@ -7,7 +7,7 @@ export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
             ...AnnouncementFields
         }
     }
-`)
+`);
 
 const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
     fragment AnnouncementFields on Announcement {
@@ -27,7 +27,7 @@ const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
         platform
         userKind
     }
-`)
+`);
 
 export const FOOD_QUERY = graphql(/* GraphQL */ `
     query FoodPlan($locations: [LocationInput!]!) {
@@ -35,7 +35,7 @@ export const FOOD_QUERY = graphql(/* GraphQL */ `
             ...FoodFields
         }
     }
-`)
+`);
 
 const FOOD_FRAGMENT = graphql(/* GraphQL */ `
     fragment FoodFields on FoodResponse {
@@ -98,7 +98,7 @@ const FOOD_FRAGMENT = graphql(/* GraphQL */ `
             message
         }
     }
-`)
+`);
 
 export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
     query CampusLifeEvents {
@@ -106,7 +106,7 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
             ...CampusLifeEventFields
         }
     }
-`)
+`);
 
 const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
@@ -127,7 +127,7 @@ const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
             en
         }
     }
-`)
+`);
 
 export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
     query UniversitySports {
@@ -135,7 +135,7 @@ export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
             ...UniversitySportsFields
         }
     }
-`)
+`);
 
 const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment UniversitySportsFields on UniversitySports {
@@ -158,7 +158,7 @@ const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
         eMail
         sportsCategory
     }
-`)
+`);
 
 export const CREATE_ROOM_REPORT = graphql(/* GraphQL */ `
     mutation CreateRoomReport($input: RoomReportInput!) {
@@ -166,4 +166,4 @@ export const CREATE_ROOM_REPORT = graphql(/* GraphQL */ `
             id
         }
     }
-`)
+`);

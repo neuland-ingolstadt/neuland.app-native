@@ -1,59 +1,59 @@
 {
-  "whatsnew": {
-    "title": "Was ist neu?",
-    "version": "in Version {{version}}",
-    "continue": "Weiter"
-  },
-  "onboarding": {
-    "links": {
-      "privacy": "Datenschutzerklärung",
-      "imprint": "Impressum",
-      "faq": "Mehr erfahren",
-      "agree1": "Durch Fortfahren stimmst du der ",
-      "agree2": " zu.",
-      "safety": "Datensicherheit"
-    },
-    "page1": {
-      "title": "Willkommen bei"
-    },
-    "cards": {
-      "title1": "Alles an einem Ort",
-      "description1": "Neuland Next vereint alles, was du für dein Studium brauchst, an einem Ort.",
-      "title2": "Von Studierenden entwickelt",
-      "description2": "Diese App ist ein Open-Source-Projekt von Neuland Ingolstadt e.V. und ist eine Alternative zur offiziellen THI-App.",
-      "title3": "Sicherheit an erster Stelle",
-      "description3": "Durch die Nutzung der offiziellen und verschlüsselten Dienste von der THI sind deine Daten streng geschützt und weder für uns noch für Dritte zugänglich.",
-      "title4": "Noch besser in der App",
-      "description4": "Installiere Neuland Next auf deinem Smartphone, um alle Funktionen zu nutzen. Verfügbar für iOS, iPadOS, MacOS und Android."
-    }
-  },
-  "login": {
-    "title1": "Anmelden",
-    "title2": "mit deinem THI-Account",
-    "toast": "Anmeldung erfolgreich",
-    "alert": {
-      "error": {
-        "title": "Anmeldung fehlgeschlagen",
-        "wrongCredentials": {
-          "title": "Falsche Anmeldedaten",
-          "message": "Deine Anmeldedaten sind falsch. Bitte versuche es erneut."
-        },
-        "missing": "Bitte fülle alle Felder aus.",
-        "generic": "Beim Verbinden mit dem Server ist ein Fehler aufgetreten.",
-        "backend": "Das THI-Backend ist derzeit nicht verfügbar. Bitte versuche es später erneut.",
-        "noConnection": {
-          "title": "Keine Netzwerkverbindung",
-          "message": "Bitte überprüfe deine Internetverbindung und versuche es erneut."
-        }
-      },
-      "restored": {
-        "title": "Anmeldedaten wiederhergestellt",
-        "message": "Frühere Anmeldedaten wurden im iOS-Schlüsselbund gefunden."
-      }
-    },
-    "username": "Benutzername",
-    "password": "Passwort",
-    "button": "Anmelden",
-    "guest": "oder als Gast fortfahren"
-  }
+	"whatsnew": {
+		"title": "Was ist neu?",
+		"version": "in Version {{version}}",
+		"continue": "Weiter"
+	},
+	"onboarding": {
+		"links": {
+			"privacy": "Datenschutzerklärung",
+			"imprint": "Impressum",
+			"faq": "Mehr erfahren",
+			"agree1": "Durch Fortfahren stimmst du der ",
+			"agree2": " zu.",
+			"safety": "Datensicherheit"
+		},
+		"page1": {
+			"title": "Willkommen bei"
+		},
+		"cards": {
+			"title1": "Alles an einem Ort",
+			"description1": "Neuland Next vereint alles, was du für dein Studium brauchst, an einem Ort.",
+			"title2": "Von Studierenden entwickelt",
+			"description2": "Diese App ist ein Open-Source-Projekt von Neuland Ingolstadt e.V. und ist eine Alternative zur offiziellen THI-App.",
+			"title3": "Sicherheit an erster Stelle",
+			"description3": "Durch die Nutzung der offiziellen und verschlüsselten Dienste von der THI sind deine Daten streng geschützt und weder für uns noch für Dritte zugänglich.",
+			"title4": "Noch besser in der App",
+			"description4": "Installiere Neuland Next auf deinem Smartphone, um alle Funktionen zu nutzen. Verfügbar für iOS, iPadOS, MacOS und Android."
+		}
+	},
+	"login": {
+		"title1": "Anmelden",
+		"title2": "mit deinem THI-Account",
+		"toast": "Anmeldung erfolgreich",
+		"alert": {
+			"error": {
+				"title": "Anmeldung fehlgeschlagen",
+				"wrongCredentials": {
+					"title": "Falsche Anmeldedaten",
+					"message": "Deine Anmeldedaten sind falsch. Bitte versuche es erneut."
+				},
+				"missing": "Bitte fülle alle Felder aus.",
+				"generic": "Beim Verbinden mit dem Server ist ein Fehler aufgetreten.",
+				"backend": "Das THI-Backend ist derzeit nicht verfügbar. Bitte versuche es später erneut.",
+				"noConnection": {
+					"title": "Keine Netzwerkverbindung",
+					"message": "Bitte überprüfe deine Internetverbindung und versuche es erneut."
+				}
+			},
+			"restored": {
+				"title": "Anmeldedaten wiederhergestellt",
+				"message": "Frühere Anmeldedaten wurden im iOS-Schlüsselbund gefunden."
+			}
+		},
+		"username": "Benutzername",
+		"password": "Passwort",
+		"button": "Anmelden",
+		"guest": "oder als Gast fortfahren"
+	}
 }

@@ -1,59 +1,59 @@
 {
-  "whatsnew": {
-    "title": "What's new?",
-    "version": "in version {{version}}",
-    "continue": "Continue"
-  },
-  "onboarding": {
-    "links": {
-      "privacy": "Privacy Policy",
-      "faq": "Learn more",
-      "imprint": "Imprint",
-      "agree1": "By continuing, you agree to the ",
-      "agree2": ".",
-      "safety": "Data Safety"
-    },
-    "page1": {
-      "title": "Welcome to"
-    },
-    "cards": {
-      "title1": "Everything in one place",
-      "description1": "This app combines everything you need for your studies in one place.",
-      "title2": "Developed by students",
-      "description2": "Neuland Next is an open-source project by Neuland Ingolstadt e.V. and is an alternative to the official THI app.",
-      "title3": "Security comes first",
-      "description3": "Your data is strictly protected by using the official and encrypted services of THI and is never accessible to us or third parties.",
-      "title4": "Even better in the app",
-      "description4": "Install Neuland Next on your smartphone to use all features. Available for iOS, iPadOS, MacOS, and Android."
-    }
-  },
-  "login": {
-    "title1": "Sign in",
-    "title2": "with your THI account",
-    "toast": "Login successful",
-    "alert": {
-      "error": {
-        "title": "Login failed",
-        "wrongCredentials": {
-          "title": "Wrong credentials",
-          "message": "Your login credentials are incorrect. Please try again."
-        },
-        "missing": "Please fill out all fields.",
-        "generic": "An error occurred while connecting to the server.",
-        "backend": "The THI backend is currently unavailable. Please try again later.",
-        "noConnection": {
-          "title": "Network request failed",
-          "message": "Please check your internet connection and try again."
-        }
-      },
-      "restored": {
-        "title": "Credentials restored",
-        "message": "Previous login data was found in the iOS keychain."
-      }
-    },
-    "username": "Username",
-    "password": "Password",
-    "button": "Sign in",
-    "guest": "or continue as guest"
-  }
+	"whatsnew": {
+		"title": "What's new?",
+		"version": "in version {{version}}",
+		"continue": "Continue"
+	},
+	"onboarding": {
+		"links": {
+			"privacy": "Privacy Policy",
+			"faq": "Learn more",
+			"imprint": "Imprint",
+			"agree1": "By continuing, you agree to the ",
+			"agree2": ".",
+			"safety": "Data Safety"
+		},
+		"page1": {
+			"title": "Welcome to"
+		},
+		"cards": {
+			"title1": "Everything in one place",
+			"description1": "This app combines everything you need for your studies in one place.",
+			"title2": "Developed by students",
+			"description2": "Neuland Next is an open-source project by Neuland Ingolstadt e.V. and is an alternative to the official THI app.",
+			"title3": "Security comes first",
+			"description3": "Your data is strictly protected by using the official and encrypted services of THI and is never accessible to us or third parties.",
+			"title4": "Even better in the app",
+			"description4": "Install Neuland Next on your smartphone to use all features. Available for iOS, iPadOS, MacOS, and Android."
+		}
+	},
+	"login": {
+		"title1": "Sign in",
+		"title2": "with your THI account",
+		"toast": "Login successful",
+		"alert": {
+			"error": {
+				"title": "Login failed",
+				"wrongCredentials": {
+					"title": "Wrong credentials",
+					"message": "Your login credentials are incorrect. Please try again."
+				},
+				"missing": "Please fill out all fields.",
+				"generic": "An error occurred while connecting to the server.",
+				"backend": "The THI backend is currently unavailable. Please try again later.",
+				"noConnection": {
+					"title": "Network request failed",
+					"message": "Please check your internet connection and try again."
+				}
+			},
+			"restored": {
+				"title": "Credentials restored",
+				"message": "Previous login data was found in the iOS keychain."
+			}
+		},
+		"username": "Username",
+		"password": "Password",
+		"button": "Sign in",
+		"guest": "or continue as guest"
+	}
 }
