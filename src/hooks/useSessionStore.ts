@@ -1,18 +1,18 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
 interface SessionStore {
-	analyticsInitialized: boolean;
-	initializeAnalytics: () => void;
+    analyticsInitialized: boolean
+    initializeAnalytics: () => void
 }
 
 export const useSessionStore = create<SessionStore>((set) => ({
-	analyticsInitialized: false,
-	initializeAnalytics: () => {
-		set((state) => {
-			if (!state.analyticsInitialized) {
-				return { analyticsInitialized: true };
-			}
-			return state;
-		});
-	}
-}));
+    analyticsInitialized: false,
+    initializeAnalytics: () => {
+        set((state) => {
+            if (!state.analyticsInitialized) {
+                return { analyticsInitialized: true }
+            }
+            return state
+        })
+    },
+}))

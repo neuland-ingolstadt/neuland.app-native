@@ -1,9 +1,9 @@
 import {
-	SecurityLevel,
-	authenticateAsync,
-	getEnrolledLevelAsync
-} from 'expo-local-authentication';
-import { type RelativePathString, router } from 'expo-router';
+    SecurityLevel,
+    authenticateAsync,
+    getEnrolledLevelAsync,
+} from 'expo-local-authentication'
+import { type RelativePathString, router } from 'expo-router'
 
 /**
  * Converts a version string in the format x.y.z to x.y.
@@ -11,8 +11,8 @@ import { type RelativePathString, router } from 'expo-router';
  * @returns The major.minor version string.
  */
 export const convertToMajorMinorPatch = (version: string): string => {
-	return version.split('.').slice(0, 2).join('.');
-};
+    return version.split('.').slice(0, 2).join('.')
+}
 
 /**
  * Capitalizes the first letter of a string.
@@ -20,7 +20,7 @@ export const convertToMajorMinorPatch = (version: string): string => {
  * @returns The capitalized string.
  */
 export function capitalizeFirstLetter(string: string): string {
-	return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
 /**
@@ -29,7 +29,7 @@ export function capitalizeFirstLetter(string: string): string {
  * @returns The string with the first letter lowercased.
  */
 export function lowercaseFirstLetter(string: string): string {
-	return string.charAt(0).toLowerCase() + string.slice(1);
+    return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
 /**
@@ -39,11 +39,11 @@ export function lowercaseFirstLetter(string: string): string {
  * @returns A boolean indicating whether the arrays are equal.
  */
 export function arraysEqual(arr1: unknown[], arr2: unknown[]): boolean {
-	if (arr1.length !== arr2.length) return false;
-	for (let i = 0; i < arr1.length; i++) {
-		if (arr1[i] !== arr2[i]) return false;
-	}
-	return true;
+    if (arr1.length !== arr2.length) return false
+    for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) return false
+    }
+    return true
 }
 
 /**
@@ -51,19 +51,19 @@ export function arraysEqual(arr1: unknown[], arr2: unknown[]): boolean {
  * @param path - The path to navigate to after successful authentication.
  */
 export const handleBiometricAuth = async (path: string): Promise<void> => {
-	const securityLevel = await getEnrolledLevelAsync();
-	if (securityLevel === SecurityLevel.NONE) {
-		// no passcode or biometric auth set up
-		router.navigate(path as RelativePathString);
-		return;
-	}
+    const securityLevel = await getEnrolledLevelAsync()
+    if (securityLevel === SecurityLevel.NONE) {
+        // no passcode or biometric auth set up
+        router.navigate(path as RelativePathString)
+        return
+    }
 
-	const biometricAuth = await authenticateAsync({
-		promptMessage: 'Verify your identity to show your grades',
-		fallbackLabel: 'Enter Passcode'
-	});
+    const biometricAuth = await authenticateAsync({
+        promptMessage: 'Verify your identity to show your grades',
+        fallbackLabel: 'Enter Passcode',
+    })
 
-	if (biometricAuth.success) {
-		router.navigate(path as RelativePathString);
-	}
-};
+    if (biometricAuth.success) {
+        router.navigate(path as RelativePathString)
+    }
+}

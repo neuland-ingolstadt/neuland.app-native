@@ -1,14 +1,14 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import React from 'react'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon';
+import PlatformIcon from './Icon'
 
 interface SectionPickerProps {
-	title: string;
-	selectedItem: boolean;
-	action: (state: boolean) => void;
-	state: boolean;
+    title: string
+    selectedItem: boolean
+    action: (state: boolean) => void
+    state: boolean
 }
 
 /**
@@ -28,62 +28,62 @@ interface SectionPickerProps {
  * />
  */
 const SingleSectionPicker: React.FC<SectionPickerProps> = ({
-	title,
-	selectedItem,
-	action
+    title,
+    selectedItem,
+    action,
 }) => {
-	const { styles } = useStyles(stylesheet);
-	return (
-		<>
-			<React.Fragment>
-				<Pressable
-					onPressOut={() => {
-						action(!selectedItem);
-					}}
-					style={styles.button}
-				>
-					<View style={styles.container}>
-						<Text style={styles.text}>{title}</Text>
-						{selectedItem ? (
-							<PlatformIcon
-								ios={{
-									name: 'checkmark',
-									size: 15
-								}}
-								android={{
-									name: 'check',
-									size: 18
-								}}
-								web={{
-									name: 'Check',
-									size: 18
-								}}
-							/>
-						) : null}
-					</View>
-				</Pressable>
-			</React.Fragment>
-		</>
-	);
-};
+    const { styles } = useStyles(stylesheet)
+    return (
+        <>
+            <React.Fragment>
+                <Pressable
+                    onPressOut={() => {
+                        action(!selectedItem)
+                    }}
+                    style={styles.button}
+                >
+                    <View style={styles.container}>
+                        <Text style={styles.text}>{title}</Text>
+                        {selectedItem ? (
+                            <PlatformIcon
+                                ios={{
+                                    name: 'checkmark',
+                                    size: 15,
+                                }}
+                                android={{
+                                    name: 'check',
+                                    size: 18,
+                                }}
+                                web={{
+                                    name: 'Check',
+                                    size: 18,
+                                }}
+                            />
+                        ) : null}
+                    </View>
+                </Pressable>
+            </React.Fragment>
+        </>
+    )
+}
 
-export default SingleSectionPicker;
+export default SingleSectionPicker
 
 const stylesheet = createStyleSheet((theme) => ({
-	button: {
-		padding: 8
-	},
-	container: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginRight: 8,
-		paddingHorizontal: 6,
-		paddingVertical: 4
-	},
-	text: {
-		color: theme.colors.text,
-		fontSize: 16,
-		paddingVertical: 1
-	}
-}));
+    button: {
+        padding: 8,
+    },
+    container: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginRight: 8,
+        paddingHorizontal: 6,
+        paddingVertical: 4,
+    },
+    text: {
+        color: theme.colors.text,
+        fontSize: 16,
+        paddingVertical: 1,
+    },
+}))
