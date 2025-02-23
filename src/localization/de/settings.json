@@ -1,208 +1,208 @@
 {
-    "menu": {
-        "guest": {
-            "title": "Anmelden",
-            "subtitle": "Melde dich an, um alle Funktionen der App freizuschalten."
-        },
-        "employee": {
-            "subtitle1": "Mitarbeitenden Account",
-            "subtitle2": "Tippe zum Abmelden"
-        },
-        "error": {
-            "subtitle2": "Ziehe zum Aktualisieren oder tippe zum Abmelden",
-            "noData": {
-                "title": "Keine Daten vorhanden",
-                "subtitle1": "Es scheint als seist du nicht länger immatrikuliert.",
-                "subtitle2": "Bitte überprüfe deinen Primuss-Account."
-            }
-        },
-        "formlist": {
-            "preferences": {
-                "title": "Einstellungen",
-                "food": "Essen",
-                "language": "Sprache"
-            },
-            "appearance": {
-                "title": "Darstellung",
-                "accent": "Akzentfarbe",
-                "theme": "Design"
-            },
-            "language": {
-                "title": "Sprache wechseln",
-                "message": "Bestätige, um die Sprache der App auf Englisch zu ändern.",
-                "confirm": "Bestätigen"
-            },
-            "legal": {
-                "title": "App",
-                "about": "Über",
-                "share": "Teile die App",
-                "shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀",
-                "shareMessageAndroid": "Hol dir Neuland Next für dein Smartphone! 🚀\n\nhttps://next.neuland.app/get",
-                "download": "App herunterladen"
-            }
-        },
-        "copyright": "© {{year}} von Neuland Ingolstadt e.V."
-    },
-    "about": {
-        "header": {
-            "developed": "Entwickelt von"
-        },
-        "formlist": {
-            "legal": {
-                "title": "Rechtliches",
-                "button": "Rechtliche Infos"
-            },
-            "contact": {
-                "title": "Kontakt",
-                "feedback": "Feedback",
-                "rateAndroid": "Bewerte im Play Store",
-                "rateiOS": "Bewerte im App Store"
-            }
-        },
-        "easterEgg": {
-            "title": "Easter Egg",
-            "message": "Du hast das exklusive App-Icon \"Paradies Katze\" freigeschaltet! 😻",
-            "messageAndroid": "Du hast ein Easter Egg gefunden! 🐣",
-            "confirm": "Nice!"
-        },
-        "analytics": {
-            "title": "Analytics",
-            "toggle": "Anonyme Nutzungsdaten Sammeln",
-            "message": "Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich.",
-            "link": "Über Analytics"
-        }
-    },
-    "legal": {
-        "formlist": {
-            "legal": {
-                "title": "Rechtliches",
-                "privacy": "Datenschutzerklärung",
-                "imprint": "Impressum"
-            },
-            "us": {
-                "title": "Sonstiges",
-                "source": "Quellcode",
-                "faq": "FAQ"
-            }
-        }
-    },
-    "changelog": {
-        "footer": "Um alle detaillierten Änderungen zu sehen, öffne die Commits auf "
-    },
-    "licenses": {
-        "footer": "Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten."
-    },
-    "profile": {
-        "error": {
-            "title": "Keine Daten vorhanden",
-            "message": "Es scheint als seist du nicht länger immatrikuliert. Bitte überprüfe deinen Primuss-Account.",
-            "button": "Primuss"
-        },
-        "formlist": {
-            "grades": {
-                "title": "Noten",
-                "button": "Noten und Fächer"
-            },
-            "user": {
-                "title": "Benutzer",
-                "matrical": "Matrikelnummer",
-                "library": "Bibliotheksnummer",
-                "printer": "Druckguthaben",
-                "status": "Rückmeldung",
-                "statusInactive": "Fehlend"
-            },
-            "study": {
-                "title": "Studium",
-                "degree": "Abschluss",
-                "spo": "Prüfungsordnung",
-                "group": "Studiengruppe"
-            },
-            "contact": {
-                "title": "Kontakt",
-                "phone": "Telefon",
-                "street": "Straße",
-                "city": "Stadt"
-            }
-        },
-        "logout": {
-            "button": "Abmelden",
-            "alert": {
-                "title": "Bestätigen",
-                "message": "Das wird dich aus der App abmelden und alle deine Daten löschen.",
-                "cancel": "Abbrechen",
-                "confirm": "Abmelden"
-            }
-        }
-    },
-    "theme": {
-        "accent": {
-            "title": "Akzentfarbe"
-        },
-        "colors": {
-            "teal": "Türkis",
-            "blue": "Blau",
-            "contrast": "Kontrast",
-            "pink": "Pink",
-            "brown": "Braun",
-            "purple": "Lila",
-            "yellow": "Gelb",
-            "orange": "Orange",
-            "green": "Neuland"
-        },
-        "footer": "Das ändert die Farbe der Symbole und Schaltflächen in der App.",
-        "themes": {
-            "title": "Design",
-            "default": "Automatisch",
-            "dark": "Dunkel",
-            "light": "Hell",
-            "footer": "Ändere das Farbschema der App. Dies ermöglicht es dir, die Systemeinstellungen zu überschreiben."
-        }
-    },
-    "dashboard": {
-        "shown": "Angezeigte Karten",
-        "hidden": "Ausgeblendete Karten",
-        "noShown": "Dashboard ist leer",
-        "noShownButton": "Konfigurieren",
-        "noShownDescription": "Füge Karten zu deinem Dashboard hinzu, um loszulegen.",
-        "reset": "Reihenfolge zurücksetzen",
-        "footer": "Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.",
-        "unavailable": {
-            "title": "Nicht verfügbare Karten",
-            "message": "Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren."
-        }
-    },
-    "grades": {
-        "grade": "Note",
-        "none": "(keine)",
-        "finished": "Noten",
-        "open": "Offen",
-        "average": "Durchschnitt",
-        "exactAverage": "Basierend auf {{number}} gewichteten Noten.",
-        "missingAverage": "Der genaue Durchschnitt kann nicht berechnet werden und liegt zwischen {{min}} und {{max}}.",
-        "averageError": "Noten-Durchschnitt ist derzeit nicht verfügbar.",
-        "temporarilyUnavailable": "Noten sind vorübergehend nicht verfügbar.",
-        "footer": "Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss."
-    },
-    "appIcon": {
-        "error": {
-            "title": "Nicht verfügbar",
-            "message": "Alternative App-Icons sind auf diesem Gerät nicht verfügbar."
-        },
-        "names": {
-            "default": "Neuland Next",
-            "retro": "neuland.app",
-            "modernGreen": "Modern Grün",
-            "modernPink": "Modern Pink",
-            "rainbowMoonLight": "Regenbogen Hell",
-            "rainbowNeon": "Regenbogen Neon",
-            "cat": "Paradies Katze"
-        },
-        "categories": {
-            "default": "Standard",
-            "neon": "Neon",
-            "rainbow": "Regenbogen",
-            "exclusive": "Exklusiv"
-        },
-        "exclusive": "Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten."
-    }
+	"menu": {
+		"guest": {
+			"title": "Anmelden",
+			"subtitle": "Melde dich an, um alle Funktionen der App freizuschalten."
+		},
+		"employee": {
+			"subtitle1": "Mitarbeitenden Account",
+			"subtitle2": "Tippe zum Abmelden"
+		},
+		"error": {
+			"subtitle2": "Ziehe zum Aktualisieren oder tippe zum Abmelden",
+			"noData": {
+				"title": "Keine Daten vorhanden",
+				"subtitle1": "Es scheint als seist du nicht länger immatrikuliert.",
+				"subtitle2": "Bitte überprüfe deinen Primuss-Account."
+			}
+		},
+		"formlist": {
+			"preferences": {
+				"title": "Einstellungen",
+				"food": "Essen",
+				"language": "Sprache"
+			},
+			"appearance": {
+				"title": "Darstellung",
+				"accent": "Akzentfarbe",
+				"theme": "Design"
+			},
+			"language": {
+				"title": "Sprache wechseln",
+				"message": "Bestätige, um die Sprache der App auf Englisch zu ändern.",
+				"confirm": "Bestätigen"
+			},
+			"legal": {
+				"title": "App",
+				"about": "Über",
+				"share": "Teile die App",
+				"shareMessage": "Hol dir Neuland Next für dein Smartphone! 🚀",
+				"shareMessageAndroid": "Hol dir Neuland Next für dein Smartphone! 🚀\n\nhttps://next.neuland.app/get",
+				"download": "App herunterladen"
+			}
+		},
+		"copyright": "© {{year}} von Neuland Ingolstadt e.V."
+	},
+	"about": {
+		"header": {
+			"developed": "Entwickelt von"
+		},
+		"formlist": {
+			"legal": {
+				"title": "Rechtliches",
+				"button": "Rechtliche Infos"
+			},
+			"contact": {
+				"title": "Kontakt",
+				"feedback": "Feedback",
+				"rateAndroid": "Bewerte im Play Store",
+				"rateiOS": "Bewerte im App Store"
+			}
+		},
+		"easterEgg": {
+			"title": "Easter Egg",
+			"message": "Du hast das exklusive App-Icon \"Paradies Katze\" freigeschaltet! 😻",
+			"messageAndroid": "Du hast ein Easter Egg gefunden! 🐣",
+			"confirm": "Nice!"
+		},
+		"analytics": {
+			"title": "Analytics",
+			"toggle": "Anonyme Nutzungsdaten Sammeln",
+			"message": "Hilf uns, die App zu verbessern, indem du anonyme Nutzungsdaten sendest. Ein Rückschluss auf deine Identität ist zu keinem Zeitpunkt möglich.",
+			"link": "Über Analytics"
+		}
+	},
+	"legal": {
+		"formlist": {
+			"legal": {
+				"title": "Rechtliches",
+				"privacy": "Datenschutzerklärung",
+				"imprint": "Impressum"
+			},
+			"us": {
+				"title": "Sonstiges",
+				"source": "Quellcode",
+				"faq": "FAQ"
+			}
+		}
+	},
+	"changelog": {
+		"footer": "Um alle detaillierten Änderungen zu sehen, öffne die Commits auf "
+	},
+	"licenses": {
+		"footer": "Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten."
+	},
+	"profile": {
+		"error": {
+			"title": "Keine Daten vorhanden",
+			"message": "Es scheint als seist du nicht länger immatrikuliert. Bitte überprüfe deinen Primuss-Account.",
+			"button": "Primuss"
+		},
+		"formlist": {
+			"grades": {
+				"title": "Noten",
+				"button": "Noten und Fächer"
+			},
+			"user": {
+				"title": "Benutzer",
+				"matrical": "Matrikelnummer",
+				"library": "Bibliotheksnummer",
+				"printer": "Druckguthaben",
+				"status": "Rückmeldung",
+				"statusInactive": "Fehlend"
+			},
+			"study": {
+				"title": "Studium",
+				"degree": "Abschluss",
+				"spo": "Prüfungsordnung",
+				"group": "Studiengruppe"
+			},
+			"contact": {
+				"title": "Kontakt",
+				"phone": "Telefon",
+				"street": "Straße",
+				"city": "Stadt"
+			}
+		},
+		"logout": {
+			"button": "Abmelden",
+			"alert": {
+				"title": "Bestätigen",
+				"message": "Das wird dich aus der App abmelden und alle deine Daten löschen.",
+				"cancel": "Abbrechen",
+				"confirm": "Abmelden"
+			}
+		}
+	},
+	"theme": {
+		"accent": {
+			"title": "Akzentfarbe"
+		},
+		"colors": {
+			"teal": "Türkis",
+			"blue": "Blau",
+			"contrast": "Kontrast",
+			"pink": "Pink",
+			"brown": "Braun",
+			"purple": "Lila",
+			"yellow": "Gelb",
+			"orange": "Orange",
+			"green": "Neuland"
+		},
+		"footer": "Das ändert die Farbe der Symbole und Schaltflächen in der App.",
+		"themes": {
+			"title": "Design",
+			"default": "Automatisch",
+			"dark": "Dunkel",
+			"light": "Hell",
+			"footer": "Ändere das Farbschema der App. Dies ermöglicht es dir, die Systemeinstellungen zu überschreiben."
+		}
+	},
+	"dashboard": {
+		"shown": "Angezeigte Karten",
+		"hidden": "Ausgeblendete Karten",
+		"noShown": "Dashboard ist leer",
+		"noShownButton": "Konfigurieren",
+		"noShownDescription": "Füge Karten zu deinem Dashboard hinzu, um loszulegen.",
+		"reset": "Reihenfolge zurücksetzen",
+		"footer": "Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.",
+		"unavailable": {
+			"title": "Nicht verfügbare Karten",
+			"message": "Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren."
+		}
+	},
+	"grades": {
+		"grade": "Note",
+		"none": "(keine)",
+		"finished": "Noten",
+		"open": "Offen",
+		"average": "Durchschnitt",
+		"exactAverage": "Basierend auf {{number}} gewichteten Noten.",
+		"missingAverage": "Der genaue Durchschnitt kann nicht berechnet werden und liegt zwischen {{min}} und {{max}}.",
+		"averageError": "Noten-Durchschnitt ist derzeit nicht verfügbar.",
+		"temporarilyUnavailable": "Noten sind vorübergehend nicht verfügbar.",
+		"footer": "Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss."
+	},
+	"appIcon": {
+		"error": {
+			"title": "Nicht verfügbar",
+			"message": "Alternative App-Icons sind auf diesem Gerät nicht verfügbar."
+		},
+		"names": {
+			"default": "Neuland Next",
+			"retro": "neuland.app",
+			"modernGreen": "Modern Grün",
+			"modernPink": "Modern Pink",
+			"rainbowMoonLight": "Regenbogen Hell",
+			"rainbowNeon": "Regenbogen Neon",
+			"cat": "Paradies Katze"
+		},
+		"categories": {
+			"default": "Standard",
+			"neon": "Neon",
+			"rainbow": "Regenbogen",
+			"exclusive": "Exklusiv"
+		},
+		"exclusive": "Besuche unsere Veranstaltungen und finde Easter-Eggs, um exklusive App-Icons freizuschalten."
+	}
 }
