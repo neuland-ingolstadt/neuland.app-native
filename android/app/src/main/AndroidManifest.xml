@@ -34,4 +34,5 @@
         <data android:scheme="exp+neuland-app-native"/>
       </intent-filter>
     </activity>
+  </application>
 </manifest>
