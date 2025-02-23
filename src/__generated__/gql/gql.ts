@@ -1,5 +1,7 @@
 /* eslint-disable */
-import * as types from './graphql'
+import * as types from './graphql';
+
+
 
 /**
  * Map of all GraphQL operations in the project.
@@ -13,73 +15,55 @@ import * as types from './graphql'
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    '\n    query AppAnnouncements {\n        appAnnouncements {\n            ...AnnouncementFields\n        }\n    }\n':
-        types.AppAnnouncementsDocument,
-    '\n    fragment AnnouncementFields on Announcement {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        priority\n        url\n        platform\n        userKind\n    }\n':
-        types.AnnouncementFieldsFragmentDoc,
-    '\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n':
-        types.FoodPlanDocument,
-    '\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n':
-        types.FoodFieldsFragmentDoc,
-    '\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n':
-        types.CampusLifeEventsDocument,
-    '\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n':
-        types.CampusLifeEventFieldsFragmentDoc,
-    '\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n':
-        types.UniversitySportsDocument,
-    '\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n':
-        types.UniversitySportsFieldsFragmentDoc,
-}
+  "\n    query AppAnnouncements {\n        appAnnouncements {\n            ...AnnouncementFields\n        }\n    }\n": types.AppAnnouncementsDocument,
+  "\n    fragment AnnouncementFields on Announcement {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        priority\n        url\n        platform\n        userKind\n    }\n": types.AnnouncementFieldsFragmentDoc,
+  "\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n": types.FoodPlanDocument,
+  "\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n": types.FoodFieldsFragmentDoc,
+  "\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n": types.CampusLifeEventsDocument,
+  "\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n": types.CampusLifeEventFieldsFragmentDoc,
+  "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n": types.UniversitySportsDocument,
+  "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n": types.UniversitySportsFieldsFragmentDoc,
+  "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n": types.CreateRoomReportDocument,
+};
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    query AppAnnouncements {\n        appAnnouncements {\n            ...AnnouncementFields\n        }\n    }\n'
-): typeof import('./graphql').AppAnnouncementsDocument
+export function graphql(source: "\n    query AppAnnouncements {\n        appAnnouncements {\n            ...AnnouncementFields\n        }\n    }\n"): typeof import('./graphql').AppAnnouncementsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    fragment AnnouncementFields on Announcement {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        priority\n        url\n        platform\n        userKind\n    }\n'
-): typeof import('./graphql').AnnouncementFieldsFragmentDoc
+export function graphql(source: "\n    fragment AnnouncementFields on Announcement {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        priority\n        url\n        platform\n        userKind\n    }\n"): typeof import('./graphql').AnnouncementFieldsFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n'
-): typeof import('./graphql').FoodPlanDocument
+export function graphql(source: "\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n"): typeof import('./graphql').FoodPlanDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n'
-): typeof import('./graphql').FoodFieldsFragmentDoc
+export function graphql(source: "\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n"): typeof import('./graphql').FoodFieldsFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n'
-): typeof import('./graphql').CampusLifeEventsDocument
+export function graphql(source: "\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n"): typeof import('./graphql').CampusLifeEventsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n'
-): typeof import('./graphql').CampusLifeEventFieldsFragmentDoc
+export function graphql(source: "\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n"): typeof import('./graphql').CampusLifeEventFieldsFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n'
-): typeof import('./graphql').UniversitySportsDocument
+export function graphql(source: "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n"): typeof import('./graphql').UniversitySportsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(
-    source: '\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n'
-): typeof import('./graphql').UniversitySportsFieldsFragmentDoc
+export function graphql(source: "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n"): typeof import('./graphql').UniversitySportsFieldsFragmentDoc;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n"): typeof import('./graphql').CreateRoomReportDocument;
+
 
 export function graphql(source: string) {
-    return (documents as any)[source] ?? {}
+  return (documents as any)[source] ?? {};
 }

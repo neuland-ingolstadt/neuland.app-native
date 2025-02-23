@@ -245,6 +245,31 @@
             "noRooms": {
                 "title": "No available rooms found",
                 "subtitle": "Try changing the filter options."
+            },
+            "report": {
+                "title": "Report an issue",
+                "reportSentSuccess": "Report sent",
+                "reportSentError": "Error while sending report",
+                "room": {
+                    "title": "Room",
+                    "placeholder": "A123"
+                },
+                "description": {
+                    "title": "Description",
+                    "placeholder": "Problem description..."
+                },
+                "category": {
+                    "title": "Category",
+                    "placeholder": "Choose report category...",
+                    "type": {
+                        "WRONG_DESCRIPTION": "Wrong description",
+                        "WRONG_LOCATION": "Wrong location",
+                        "NOT_EXISTING": "Not existing",
+                        "MISSING": "Missing",
+                        "OTHER": "Other"
+                    }
+                },
+                "footerText": "We do not collect any personal information. Only the room, category, and the description you provide are saved."
             }
         },
         "library": {
@@ -290,5 +315,6 @@
             "description": "Open the system settings to enable notifications.",
             "button": "Settings"
         }
-    }
+    },
+    "submit": "Submit"
 }

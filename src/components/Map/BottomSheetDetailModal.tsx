@@ -7,9 +7,10 @@ import {
     BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import Color from 'color'
-import React from 'react'
+import { router } from 'expo-router'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Pressable, Share, Text, View } from 'react-native'
+import { Platform, Pressable, Share, Text, View } from 'react-native'
 import { type SharedValue } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -25,6 +26,10 @@ interface BottomSheetDetailModalProps {
     modalSection: FormListSections[]
 }
 
+interface ReportLinkProps {
+    roomTitle: string
+}
+
 const handleShareModal = (room: string): void => {
     const payload = 'https://neuland.app/rooms/?highlight=' + room
     trackEvent('Share', {
@@ -35,16 +40,21 @@ const handleShareModal = (room: string): void => {
     )
 }
 
-const ReportLink: React.FC = () => {
+const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
     const { styles } = useStyles(stylesheet)
     const { t } = useTranslation('common')
+
+    const handleReportRoom = useCallback(() => {
+        router.push({
+            pathname: '/room-report',
+            params: { room: roomTitle },
+        })
+    }, [roomTitle])
 
     return (
         <View style={styles.reportContainer}>
             <Pressable
-                onPress={() => {
-                    void Linking.openURL(t('pages.map.details.room.reportMail'))
-                }}
+                onPress={() => handleReportRoom()}
                 style={styles.reportLink}
             >
                 <Text style={styles.reportText}>
@@ -164,7 +174,7 @@ export const BottomSheetDetailModal = ({
                     <View style={styles.formList}>
                         <FormList sections={modalSection} />
                     </View>
-                    <ReportLink />
+                    <ReportLink roomTitle={roomData.title} />
                 </BottomSheetView>
             </BottomSheetModal>
         </BottomSheetModalProvider>

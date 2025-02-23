@@ -245,7 +245,7 @@ type Mutation {
   """
   Resolve a room report by ID. Note: This mutation is only available for authenticated users.
   """
-  resolveRoomReport(id: ID!): UpsertResponse
+  resolveRoomReport(id: ID!, resolved: Boolean): UpsertResponse
   """
   Create or update an announcement. If an ID is provided, the announcement is updated, otherwise a new announcement is created. Note: This mutation is only available for authenticated users.
   """
