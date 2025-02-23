@@ -31,21 +31,18 @@ export default function RoomReport(): React.JSX.Element {
 
     const [description, setDescription] = useState<string>('')
     const [roomTitle, setRoomTitle] = useState<string>(room)
-    const [loading, setLoading] = useState<boolean>(false)
 
     const { t } = useTranslation('common')
 
-    const mutation = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: async (input: {
             room: string
             description: string
             reason: RoomReportCategory
         }) => {
-            setLoading(true)
             return await neulandApi.createRoomReport(input)
         },
         onSuccess: () => {
-            setLoading(false)
             toast({
                 title: t('pages.rooms.report.reportSentSuccess'),
                 preset: 'done',
@@ -56,7 +53,6 @@ export default function RoomReport(): React.JSX.Element {
             router.back()
         },
         onError: (error, variables, context) => {
-            setLoading(false)
             toast({
                 title: t('pages.rooms.report.reportSentError'),
                 preset: 'error',
@@ -77,7 +73,7 @@ export default function RoomReport(): React.JSX.Element {
         ) ||
         description.trim() == '' ||
         room.trim() == '' ||
-        loading
+        isPending
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -158,7 +154,7 @@ export default function RoomReport(): React.JSX.Element {
                     disabled={submitDisabled}
                     onPress={() => {
                         if (!reportCategory || !description || !room) return
-                        mutation.mutate({
+                        mutate({
                             reason: reportCategory,
                             description,
                             room: room,
@@ -166,7 +162,7 @@ export default function RoomReport(): React.JSX.Element {
                     }}
                     style={styles.submitButton(submitDisabled)}
                 >
-                    {loading ? (
+                    {isPending ? (
                         <ActivityIndicator
                             color={getContrastColor(theme.colors.primary)}
                             size={15}
@@ -198,11 +194,10 @@ const stylesheet = createStyleSheet((theme) => ({
     }),
     container: {
         backgroundColor: theme.colors.background,
-        padding: theme.margins.card,
+        padding: theme.margins.page,
     },
     contentContainer: {
         justifyContent: 'center',
-        maxWidth: 400,
         paddingBottom: 30,
         paddingHorizontal: theme.margins.page,
         paddingTop: 30,
