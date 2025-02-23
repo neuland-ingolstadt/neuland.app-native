@@ -1,7 +1,9 @@
 import {
     type AppAnnouncementsQuery,
     type CampusLifeEventsQuery,
+    CreateRoomReportMutation,
     type FoodPlanQuery,
+    RoomReportInput,
     type TypedDocumentString,
     type UniversitySportsQuery,
 } from '@/__generated__/gql/graphql'
@@ -12,6 +14,7 @@ import packageInfo from '../../package.json'
 import {
     ANNOUNCEMENT_QUERY,
     CAMPUS_LIFE_EVENTS_QUERY,
+    CREATE_ROOM_REPORT,
     FOOD_QUERY,
     UNIVERSITY_SPORTS_QUERY,
 } from './gql-documents'
@@ -131,6 +134,16 @@ class NeulandAPIClient {
         return (await this.performRequest(
             `${ASSET_ENDPOINT}/generated/spo-grade-weights.json`
         )) as SpoWeights
+    }
+
+    /**
+     * Create a new room report
+     * @returns {Promise<CreateRoomReportMutation>} A promise that resolves with the created report id
+     */
+    async createRoomReport(
+        input: RoomReportInput
+    ): Promise<CreateRoomReportMutation> {
+        return await this.executeGql(CREATE_ROOM_REPORT, { input })
     }
 }
 

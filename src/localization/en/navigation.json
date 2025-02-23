@@ -39,7 +39,8 @@
         "license": "License",
         "login": "Sign in",
         "dashboard": "Neuland Next",
-        "sports": "University Sports"
+        "sports": "University Sports",
+        "roomReport": "Report Room Issue"
     },
     "cards": {
         "titles": {

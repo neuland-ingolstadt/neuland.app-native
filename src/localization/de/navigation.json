@@ -39,7 +39,8 @@
         "license": "Lizenz",
         "login": "Anmelden",
         "legal": "Rechtliches",
-        "sports": "Hochschulsport"
+        "sports": "Hochschulsport",
+        "roomReport": "Problem mit einem Raum melden"
     },
     "cards": {
         "titles": {

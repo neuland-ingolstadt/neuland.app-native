@@ -245,6 +245,31 @@
             "noRooms": {
                 "title": "Keine Räume gefunden",
                 "subtitle": "Versuche die Filteroptionen zu ändern."
+            },
+            "report": {
+                "title": "Fehler melden",
+                "reportSentSuccess": "Bericht gesendet",
+                "reportSentError": "Fehler beim Senden",
+                "room": {
+                    "title": "Raum",
+                    "placeholder": "A123"
+                },
+                "description": {
+                    "title": "Beschreibung",
+                    "placeholder": "Problem beschreibung..."
+                },
+                "category": {
+                    "title": "Kategorie",
+                    "placeholder": "Problem Kategorie wählen...",
+                    "type": {
+                        "WRONG_DESCRIPTION": "Falsche Beschreibung",
+                        "WRONG_LOCATION": "Falscher Ort",
+                        "NOT_EXISTING": "Existiert nicht",
+                        "MISSING": "Fehlt",
+                        "OTHER": "Anderer"
+                    }
+                },
+                "footerText": "Wir sammeln keine persönlichen Daten. Nur der Raum, die Kategorie und die Beschreibung, die Du angibst, werden gespeichert."
             }
         },
         "library": {
@@ -290,5 +315,6 @@
             "description": "Öffne die System-Einstellungen, um Benachrichtigungen zu aktivieren.",
             "button": "Einstellungen"
         }
-    }
+    },
+    "submit": "Absenden"
 }
