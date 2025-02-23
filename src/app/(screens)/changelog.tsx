@@ -28,8 +28,8 @@ export default function Theme(): React.JSX.Element {
                 }
                 return 0
             })
-            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
             .reduce(
+                // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
                 (obj, key) => ({ ...obj, [key]: changelog.version[key] }),
                 {}
             ),
