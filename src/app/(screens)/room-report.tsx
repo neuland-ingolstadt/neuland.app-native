@@ -187,15 +187,13 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	contentContainer: {
 		justifyContent: 'center',
-		paddingBottom: 30,
-		paddingHorizontal: theme.margins.page,
-		paddingTop: 30,
-		width: '100%'
+		paddingBottom: 20,
+		paddingTop: 10,
 	},
 	footerText: {
 		color: theme.colors.labelColor,
-		fontSize: 15,
-		textAlign: 'center'
+		fontSize: 14,
+		textAlign: 'left',
 	},
 	header: {
 		color: theme.colors.text,
