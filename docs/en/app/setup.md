@@ -109,8 +109,7 @@ Step 8 is required every time the dependencies are updated.
 - Use meaningful variable and function names to improve code readability.
 - Document your code when necessary using inline comments.
 
-We use the **Lefthook** git hook to automatically check and fix the code style before committing using Biome. The commit message will also be checked for compliance with the Angular commit message style.
-But you can also run these commands manually:
+You can use the following commands to check and format the code:
 
 - `bun lint` to check for linting errors
 - `bun format` to format the code using Biome

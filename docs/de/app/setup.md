@@ -105,9 +105,7 @@ Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build aus
 - Verwende aussagekräftige Variablen- und Funktionsnamen, um die Lesbarkeit des Codes zu verbessern.
 - Dokumentiere deinen Code bei Bedarf mit Inline-Kommentaren.
 
-Wir verwenden den **Lefthook** Git-Hook, um Commits automatisch gemäß den Biome-Regeln zu korrigieren und zu formatieren.
-Ebenso wird die Commit-Nachricht automatisch überprüft und muss dem Angular Commit-Nachricht-Stil entsprechen.
-Du kannst diese Befehle aber auch manuell ausführen:
+Du kannst diese Befehle zur Code-Überprüfung verwenden:
 
 - `bun lint` um nach Linting-Fehlern zu suchen
 - `bun format` um den Code mit Biome zu formatieren

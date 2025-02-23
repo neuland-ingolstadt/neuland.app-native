@@ -69,10 +69,10 @@ export default function RoomReport(): React.JSX.Element {
 
 	const submitDisabled =
 		!(
-			reportCategory != undefined && reportCategories.includes(reportCategory)
+			reportCategory !== undefined && reportCategories.includes(reportCategory)
 		) ||
-		description.trim() == '' ||
-		room.trim() == '' ||
+		description.trim() === '' ||
+		room.trim() === '' ||
 		isPending;
 
 	return (

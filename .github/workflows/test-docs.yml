@@ -1,15 +1,15 @@
 name: Lint docs
 on:
-    pull_request:
-        paths:
-            - 'docs/**'
+  pull_request:
+    paths:
+      - "docs/**"
 jobs:
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: oven-sh/setup-bun@v2
-              with:
-                  bun-version: latest
-            - name: Try to build docker image
-              run: docker build -t docs ./docs
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Try to build docker image
+        run: docker build -t docs ./docs

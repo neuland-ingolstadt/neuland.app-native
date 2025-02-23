@@ -14,7 +14,7 @@
 			"android/",
 			"dist/",
 			"plugins/",
-			"./docs/.vitepress/cache/",
+			"docs/.vitepress/cache/",
 			"patches/",
 			"coverage/",
 			"__generated__/",
