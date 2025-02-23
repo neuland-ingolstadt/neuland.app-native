@@ -11,7 +11,7 @@ import Color from 'color'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Pressable, Text, View } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import {
     UnistylesRuntime,
@@ -150,7 +150,7 @@ export default function RoomReport(): React.JSX.Element {
                     onChangeText={(text) => setDescription(text)}
                 />
 
-                <TouchableOpacity
+                <Pressable
                     disabled={submitDisabled}
                     onPress={() => {
                         if (!reportCategory || !description || !room) return
@@ -172,7 +172,12 @@ export default function RoomReport(): React.JSX.Element {
                             {t('submit')}
                         </Text>
                     )}
-                </TouchableOpacity>
+                </Pressable>
+            </View>
+            <View>
+                <Text style={styles.footerText}>
+                    {t('pages.rooms.report.footerText')}
+                </Text>
             </View>
         </ScrollView>
     )
@@ -202,6 +207,11 @@ const stylesheet = createStyleSheet((theme) => ({
         paddingHorizontal: theme.margins.page,
         paddingTop: 30,
         width: '100%',
+    },
+    footerText: {
+        color: theme.colors.labelColor,
+        fontSize: 15,
+        textAlign: 'center',
     },
     header: {
         color: theme.colors.text,

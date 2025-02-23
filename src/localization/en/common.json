@@ -268,7 +268,8 @@
                         "MISSING": "Missing",
                         "OTHER": "Other"
                     }
-                }
+                },
+                "footerText": "We do not collect any personal information. Only the room, category, and the description you provide are saved."
             }
         },
         "library": {
