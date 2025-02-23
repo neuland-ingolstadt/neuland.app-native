@@ -476,29 +476,29 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 
-                <Stack.Screen
-                    name="(flow)/whatsnew"
-                    options={{
-                        headerShown: false,
-                        gestureEnabled: false,
-                        animation: 'fade_from_bottom',
-                    }}
-                />
+				<Stack.Screen
+					name="(flow)/whatsnew"
+					options={{
+						headerShown: false,
+						gestureEnabled: false,
+						animation: 'fade_from_bottom'
+					}}
+				/>
 
-                <Stack.Screen
-                    name="(screens)/room-report"
-                    options={{
-                        title: t('navigation.roomReport'),
-                        ...Platform.select({
-                            ios: {
-                                presentation: 'modal',
-                            },
-                        }),
-                    }}
-                />
-            </Stack>
-        </>
-    )
+				<Stack.Screen
+					name="(screens)/room-report"
+					options={{
+						title: t('navigation.roomReport'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+			</Stack>
+		</>
+	);
 }
 
 const ProviderComponent = (): React.JSX.Element => {

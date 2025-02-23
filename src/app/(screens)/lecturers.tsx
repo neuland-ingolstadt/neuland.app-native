@@ -379,69 +379,68 @@ export default function LecturersCard(): React.JSX.Element {
 		);
 	};
 
-    const FilterSectionList = (): React.JSX.Element => {
-        return allLecturersResult.isLoading ? (
-            <View style={styles.viewHorizontal}>
-                <LoadingIndicator style={styles.loadingContainer} />
-            </View>
-        ) : allLecturersResult.isPaused ? (
-            <ErrorView
-                title={networkError}
-                refreshing={isRefetchingByUserAll}
-                onRefresh={() => {
-                    void refetchByUserAll()
-                }}
-            />
-        ) : allLecturersResult.isError ? (
-            <ErrorView
-                title={allLecturersResult.error.message}
-                refreshing={isRefetchingByUserAll}
-                onRefresh={() => {
-                    void refetchByUserAll()
-                }}
-            />
-        ) : (
-            <>
-                <View style={styles.resultsCountContainer}>
-                    <Text style={styles.resultsCount}>
-                        {filteredLecturers.length}{' '}
-                        {t('pages.lecturers.results')}
-                    </Text>
-                </View>
-                <SectionList
-                    sections={sections}
-                    keyExtractor={(_, index) => index.toString()}
-                    renderItem={({ item, index, section }) => (
-                        <View
-                            key={index}
-                            // eslint-disable-next-line react-native/no-inline-styles
-                            style={{
-                                overflow: 'hidden',
-                                backgroundColor: theme.colors.card,
-                                borderTopLeftRadius: index === 0 ? 8 : 0,
-                                borderTopRightRadius: index === 0 ? 8 : 0,
-                                borderBottomLeftRadius:
-                                    index === section.data.length - 1 ? 8 : 0,
-                                borderBottomRightRadius:
-                                    index === section.data.length - 1 ? 8 : 0,
-                            }}
-                        >
-                            <LecturerRow item={item} />
-                            {index !== section.data.length - 1 && (
-                                <Divider iosPaddingLeft={16} />
-                            )}
-                        </View>
-                    )}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <View style={styles.sectionHeaderContainer}>
-                            <Text style={styles.sectionHeader}>{title}</Text>
-                        </View>
-                    )}
-                    contentContainerStyle={styles.contentContainer}
-                />
-            </>
-        )
-    }
+	const FilterSectionList = (): React.JSX.Element => {
+		return allLecturersResult.isLoading ? (
+			<View style={styles.viewHorizontal}>
+				<LoadingIndicator style={styles.loadingContainer} />
+			</View>
+		) : allLecturersResult.isPaused ? (
+			<ErrorView
+				title={networkError}
+				refreshing={isRefetchingByUserAll}
+				onRefresh={() => {
+					void refetchByUserAll();
+				}}
+			/>
+		) : allLecturersResult.isError ? (
+			<ErrorView
+				title={allLecturersResult.error.message}
+				refreshing={isRefetchingByUserAll}
+				onRefresh={() => {
+					void refetchByUserAll();
+				}}
+			/>
+		) : (
+			<>
+				<View style={styles.resultsCountContainer}>
+					<Text style={styles.resultsCount}>
+						{filteredLecturers.length} {t('pages.lecturers.results')}
+					</Text>
+				</View>
+				<SectionList
+					sections={sections}
+					keyExtractor={(_, index) => index.toString()}
+					renderItem={({ item, index, section }) => (
+						<View
+							key={index}
+							// eslint-disable-next-line react-native/no-inline-styles
+							style={{
+								overflow: 'hidden',
+								backgroundColor: theme.colors.card,
+								borderTopLeftRadius: index === 0 ? 8 : 0,
+								borderTopRightRadius: index === 0 ? 8 : 0,
+								borderBottomLeftRadius:
+									index === section.data.length - 1 ? 8 : 0,
+								borderBottomRightRadius:
+									index === section.data.length - 1 ? 8 : 0
+							}}
+						>
+							<LecturerRow item={item} />
+							{index !== section.data.length - 1 && (
+								<Divider iosPaddingLeft={16} />
+							)}
+						</View>
+					)}
+					renderSectionHeader={({ section: { title } }) => (
+						<View style={styles.sectionHeaderContainer}>
+							<Text style={styles.sectionHeader}>{title}</Text>
+						</View>
+					)}
+					contentContainerStyle={styles.contentContainer}
+				/>
+			</>
+		);
+	};
 
 	return (
 		<SafeAreaView

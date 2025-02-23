@@ -2,17 +2,18 @@ import type { FormListSections } from '@/types/components';
 import { type RoomData, SEARCH_TYPES } from '@/types/map';
 import { trackEvent } from '@aptabase/react-native';
 import {
-    BottomSheetModal,
-    BottomSheetModalProvider,
-    BottomSheetView,
-} from '@gorhom/bottom-sheet'
-import Color from 'color'
-import { router } from 'expo-router'
-import React, { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Share, Text, View } from 'react-native'
-import { type SharedValue } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+	BottomSheetModal,
+	BottomSheetModalProvider,
+	BottomSheetView
+} from '@gorhom/bottom-sheet';
+import Color from 'color';
+import { router } from 'expo-router';
+import type React from 'react';
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Platform, Pressable, Share, Text, View } from 'react-native';
+import type { SharedValue } from 'react-native-reanimated';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import FormList from '../Universal/FormList';
 import PlatformIcon from '../Universal/Icon';
@@ -27,7 +28,7 @@ interface BottomSheetDetailModalProps {
 }
 
 interface ReportLinkProps {
-    roomTitle: string
+	roomTitle: string;
 }
 
 const handleShareModal = (room: string): void => {
@@ -41,44 +42,41 @@ const handleShareModal = (room: string): void => {
 };
 
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
-    const { styles } = useStyles(stylesheet)
-    const { t } = useTranslation('common')
+	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('common');
 
-    const handleReportRoom = useCallback(() => {
-        router.push({
-            pathname: '/room-report',
-            params: { room: roomTitle },
-        })
-    }, [roomTitle])
+	const handleReportRoom = useCallback(() => {
+		router.push({
+			pathname: '/room-report',
+			params: { room: roomTitle }
+		});
+	}, [roomTitle]);
 
-    return (
-        <View style={styles.reportContainer}>
-            <Pressable
-                onPress={() => handleReportRoom()}
-                style={styles.reportLink}
-            >
-                <Text style={styles.reportText}>
-                    {t('pages.map.details.room.report')}
-                </Text>
-                <PlatformIcon
-                    style={styles.chevronIcon}
-                    ios={{
-                        name: 'chevron.forward',
-                        size: 11,
-                    }}
-                    android={{
-                        name: 'chevron_right',
-                        size: 16,
-                    }}
-                    web={{
-                        name: 'ChevronRight',
-                        size: 16,
-                    }}
-                />
-            </Pressable>
-        </View>
-    )
-}
+	return (
+		<View style={styles.reportContainer}>
+			<Pressable onPress={() => handleReportRoom()} style={styles.reportLink}>
+				<Text style={styles.reportText}>
+					{t('pages.map.details.room.report')}
+				</Text>
+				<PlatformIcon
+					style={styles.chevronIcon}
+					ios={{
+						name: 'chevron.forward',
+						size: 11
+					}}
+					android={{
+						name: 'chevron_right',
+						size: 16
+					}}
+					web={{
+						name: 'ChevronRight',
+						size: 16
+					}}
+				/>
+			</Pressable>
+		</View>
+	);
+};
 
 /**
  * BottomSheetDetailModal component for displaying room details
@@ -95,91 +93,87 @@ export const BottomSheetDetailModal = ({
 	roomData,
 	modalSection
 }: BottomSheetDetailModalProps): React.JSX.Element => {
-    const { styles } = useStyles(stylesheet)
-    const IOS_SNAP_POINTS = ['36%', '55%', '80%']
-    const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
-    return (
-        <BottomSheetModalProvider>
-            <BottomSheetModal
-                index={0}
-                ref={bottomSheetModalRef}
-                snapPoints={
-                    Platform.OS === 'ios'
-                        ? IOS_SNAP_POINTS
-                        : DEFAULT_SNAP_POINTS
-                }
-                onDismiss={handleSheetChangesModal}
-                backgroundComponent={BottomSheetBackground}
-                animatedPosition={currentPositionModal}
-                handleIndicatorStyle={styles.indicator}
-            >
-                <BottomSheetView style={styles.contentContainer}>
-                    <View style={styles.modalSectionHeaderContainer}>
-                        <Text style={styles.modalSectionHeader}>
-                            {roomData.title}
-                        </Text>
-                        <View style={styles.buttonsContainer}>
-                            {roomData.type === SEARCH_TYPES.ROOM && (
-                                <Pressable
-                                    onPress={() => {
-                                        handleShareModal(roomData.title)
-                                    }}
-                                    style={styles.roomDetailButton}
-                                >
-                                    <PlatformIcon
-                                        ios={{
-                                            name: 'square.and.arrow.up',
-                                            size: 14,
-                                            weight: 'bold',
-                                        }}
-                                        android={{
-                                            name: 'share',
-                                            size: 16,
-                                        }}
-                                        web={{
-                                            name: 'Share',
-                                            size: 16,
-                                        }}
-                                        style={styles.shareIcon(Platform.OS)}
-                                    />
-                                </Pressable>
-                            )}
-                            <Pressable
-                                onPress={() => {
-                                    bottomSheetModalRef.current?.close()
-                                }}
-                            >
-                                <View style={styles.roomDetailButton}>
-                                    <PlatformIcon
-                                        ios={{
-                                            name: 'xmark',
-                                            size: 13,
-                                            weight: 'bold',
-                                        }}
-                                        android={{
-                                            name: 'expand_more',
-                                            size: 22,
-                                        }}
-                                        web={{
-                                            name: 'X',
-                                            size: 22,
-                                        }}
-                                        style={styles.xIcon(Platform.OS)}
-                                    />
-                                </View>
-                            </Pressable>
-                        </View>
-                    </View>
-                    <Text style={styles.roomSubtitle}>{roomData.subtitle}</Text>
-                    <View style={styles.formList}>
-                        <FormList sections={modalSection} />
-                    </View>
-                    <ReportLink roomTitle={roomData.title} />
-                </BottomSheetView>
-            </BottomSheetModal>
-        </BottomSheetModalProvider>
-    )
-}
+	const { styles } = useStyles(stylesheet);
+	const IOS_SNAP_POINTS = ['36%', '55%', '80%'];
+	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%'];
+	return (
+		<BottomSheetModalProvider>
+			<BottomSheetModal
+				index={0}
+				ref={bottomSheetModalRef}
+				snapPoints={
+					Platform.OS === 'ios' ? IOS_SNAP_POINTS : DEFAULT_SNAP_POINTS
+				}
+				onDismiss={handleSheetChangesModal}
+				backgroundComponent={BottomSheetBackground}
+				animatedPosition={currentPositionModal}
+				handleIndicatorStyle={styles.indicator}
+			>
+				<BottomSheetView style={styles.contentContainer}>
+					<View style={styles.modalSectionHeaderContainer}>
+						<Text style={styles.modalSectionHeader}>{roomData.title}</Text>
+						<View style={styles.buttonsContainer}>
+							{roomData.type === SEARCH_TYPES.ROOM && (
+								<Pressable
+									onPress={() => {
+										handleShareModal(roomData.title);
+									}}
+									style={styles.roomDetailButton}
+								>
+									<PlatformIcon
+										ios={{
+											name: 'square.and.arrow.up',
+											size: 14,
+											weight: 'bold'
+										}}
+										android={{
+											name: 'share',
+											size: 16
+										}}
+										web={{
+											name: 'Share',
+											size: 16
+										}}
+										style={styles.shareIcon(Platform.OS)}
+									/>
+								</Pressable>
+							)}
+							<Pressable
+								onPress={() => {
+									bottomSheetModalRef.current?.close();
+								}}
+							>
+								<View style={styles.roomDetailButton}>
+									<PlatformIcon
+										ios={{
+											name: 'xmark',
+											size: 13,
+											weight: 'bold'
+										}}
+										android={{
+											name: 'expand_more',
+											size: 22
+										}}
+										web={{
+											name: 'X',
+											size: 22
+										}}
+										style={styles.xIcon(Platform.OS)}
+									/>
+								</View>
+							</Pressable>
+						</View>
+					</View>
+					<Text style={styles.roomSubtitle}>{roomData.subtitle}</Text>
+					<View style={styles.formList}>
+						<FormList sections={modalSection} />
+					</View>
+					<ReportLink roomTitle={roomData.title} />
+				</BottomSheetView>
+			</BottomSheetModal>
+		</BottomSheetModalProvider>
+	);
+};
 
 const stylesheet = createStyleSheet((theme) => ({
 	buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
