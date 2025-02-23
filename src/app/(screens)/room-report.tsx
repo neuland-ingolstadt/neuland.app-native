@@ -188,12 +188,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
 		justifyContent: 'center',
 		paddingBottom: 20,
-		paddingTop: 10,
+		paddingTop: 10
 	},
 	footerText: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
-		textAlign: 'left',
+		textAlign: 'left'
 	},
 	header: {
 		color: theme.colors.text,
