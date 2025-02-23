@@ -22,7 +22,7 @@ Für native Funktionen und nicht webbezogene Fehlerbehebungen, siehe den [vollst
    - [Bun](https://bun.sh) oder nutze npm, wenn du die Abhängigkeiten nicht änderst
    - [Watchman](https://facebook.github.io/watchman/docs/install) (für Linux- oder macOS-Nutzer)
 
-4. Es wird empfohlen, die [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) und [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) Erweiterungen für deine IDE zu verwenden, um Echtzeit-Feedback zu deinem Code zu erhalten.
+4. Es wird empfohlen, die [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) Erweiterung für deine IDE zu verwenden, um Echtzeit-Feedback zu deinem Code zu erhalten.
 
 5. Installiere die Projektabhängigkeiten, indem du den folgenden Befehl im Projektverzeichnis ausführst:
 

@@ -22,7 +22,7 @@ For testing purposes or web-only bug fixing, we recommend using the more lightwe
     - [Bun](https://bun.sh) or use npm if you dont't change dependencies
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
-4.  In addition is recommended to use the [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions for your IDE to get real-time feedback on your code.
+4.  In addition is recommended to use the [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) extension for your IDE to get real-time feedback on your code.
 
 5.  Install project dependencies by running the following command in the project directory:
 
@@ -109,12 +109,10 @@ Step 8 is required every time the dependencies are updated.
 - Use meaningful variable and function names to improve code readability.
 - Document your code when necessary using inline comments.
 
-We use the **Husky** git hook to automatically fix commits according to ESLint rules, format them using Prettier and to enforce the commit message style.
-But you can also run these commands manually:
+You can use the following commands to check and format the code:
 
 - `bun lint` to check for linting errors
-- `bun lint:fix` to automatically fix linting errors
-- `bun format` to format the code using Prettier
+- `bun format` to format the code using Biome
 
 ## Issues and Discussions
 

@@ -1,3 +1,3 @@
-import DragDropView from 'react-native-drag-drop-ios'
+import DragDropView from 'react-native-drag-drop-ios';
 
-export default DragDropView
+export default DragDropView;

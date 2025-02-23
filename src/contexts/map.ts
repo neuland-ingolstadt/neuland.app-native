@@ -1,64 +1,64 @@
-import { type ClickedMapElement, type SearchResult } from '@/types/map'
-import { type AvailableRoom, type FriendlyTimetableEntry } from '@/types/utils'
-import { createContext } from 'react'
+import type { ClickedMapElement, SearchResult } from '@/types/map';
+import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils';
+import { createContext } from 'react';
 
 interface MapContextType {
-    localSearch: string
-    setLocalSearch: (value: string) => void
-    clickedElement: ClickedMapElement | null
-    setClickedElement: (value: ClickedMapElement | null) => void
-    availableRooms: AvailableRoom[] | null
-    setAvailableRooms: (value: AvailableRoom[] | null) => void
-    nextLecture: FriendlyTimetableEntry[] | null
-    setNextLecture: (value: FriendlyTimetableEntry[] | null) => void
-    currentFloor: { floor: string; manual: boolean } | null
-    setCurrentFloor: (value: { floor: string; manual: boolean }) => void
-    searchHistory: SearchResult[]
-    updateSearchHistory: (value: SearchResult[]) => void
+	localSearch: string;
+	setLocalSearch: (value: string) => void;
+	clickedElement: ClickedMapElement | null;
+	setClickedElement: (value: ClickedMapElement | null) => void;
+	availableRooms: AvailableRoom[] | null;
+	setAvailableRooms: (value: AvailableRoom[] | null) => void;
+	nextLecture: FriendlyTimetableEntry[] | null;
+	setNextLecture: (value: FriendlyTimetableEntry[] | null) => void;
+	currentFloor: { floor: string; manual: boolean } | null;
+	setCurrentFloor: (value: { floor: string; manual: boolean }) => void;
+	searchHistory: SearchResult[];
+	updateSearchHistory: (value: SearchResult[]) => void;
 }
 interface MapContextType {
-    localSearch: string
-    setLocalSearch: (value: string) => void
-    clickedElement: ClickedMapElement | null
-    setClickedElement: (value: ClickedMapElement | null) => void
-    availableRooms: AvailableRoom[] | null
-    setAvailableRooms: (value: AvailableRoom[] | null) => void
-    nextLecture: FriendlyTimetableEntry[] | null
-    setNextLecture: (value: FriendlyTimetableEntry[] | null) => void
-    currentFloor: { floor: string; manual: boolean } | null
-    setCurrentFloor: (value: { floor: string; manual: boolean }) => void
-    searchHistory: SearchResult[]
-    updateSearchHistory: (value: SearchResult[]) => void
+	localSearch: string;
+	setLocalSearch: (value: string) => void;
+	clickedElement: ClickedMapElement | null;
+	setClickedElement: (value: ClickedMapElement | null) => void;
+	availableRooms: AvailableRoom[] | null;
+	setAvailableRooms: (value: AvailableRoom[] | null) => void;
+	nextLecture: FriendlyTimetableEntry[] | null;
+	setNextLecture: (value: FriendlyTimetableEntry[] | null) => void;
+	currentFloor: { floor: string; manual: boolean } | null;
+	setCurrentFloor: (value: { floor: string; manual: boolean }) => void;
+	searchHistory: SearchResult[];
+	updateSearchHistory: (value: SearchResult[]) => void;
 }
 
 export const MapContext = createContext<MapContextType>({
-    localSearch: '',
-    setLocalSearch: () => {
-        throw new Error('setLocalSearch must be overridden')
-    },
+	localSearch: '',
+	setLocalSearch: () => {
+		throw new Error('setLocalSearch must be overridden');
+	},
 
-    clickedElement: null,
-    setClickedElement: () => {
-        throw new Error('setClickedElement must be overridden')
-    },
+	clickedElement: null,
+	setClickedElement: () => {
+		throw new Error('setClickedElement must be overridden');
+	},
 
-    availableRooms: null,
-    setAvailableRooms: () => {
-        throw new Error('setAvailableRooms must be overridden')
-    },
+	availableRooms: null,
+	setAvailableRooms: () => {
+		throw new Error('setAvailableRooms must be overridden');
+	},
 
-    currentFloor: null,
-    setCurrentFloor: () => {
-        throw new Error('setCurrentFloor must be overridden')
-    },
+	currentFloor: null,
+	setCurrentFloor: () => {
+		throw new Error('setCurrentFloor must be overridden');
+	},
 
-    nextLecture: null,
-    setNextLecture: () => {
-        throw new Error('setNextLecture must be overridden')
-    },
+	nextLecture: null,
+	setNextLecture: () => {
+		throw new Error('setNextLecture must be overridden');
+	},
 
-    searchHistory: [],
-    updateSearchHistory: () => {
-        throw new Error('updateSearchHistory must be overridden')
-    },
-})
+	searchHistory: [],
+	updateSearchHistory: () => {
+		throw new Error('updateSearchHistory must be overridden');
+	}
+});
