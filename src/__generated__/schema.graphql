@@ -377,41 +377,36 @@ input MultiLanguageStringInput {
 Mutation type to update data.
 """
 type Mutation {
-	"""
-	Create a new room report.
-	"""
-	createRoomReport(input: RoomReportInput!): UpsertResponse
-	"""
-	Delete an announcement by ID. Note: This mutation is only available for authenticated users.
-	"""
-	deleteAppAnnouncement(id: ID!): Boolean
-	"""
-	Delete a manual campus life event by ID. Note: This mutation is only available for authenticated users.
-	"""
-	deleteManualClEvent(id: ID!): Boolean
-	"""
-	Delete a university sports event by ID. Note: This mutation is only available for authenticated users.
-	"""
-	deleteUniversitySport(id: ID!): Boolean
-	"""
-	Resolve a room report by ID. Note: This mutation is only available for authenticated users.
-	"""
-	resolveRoomReport(id: ID!): UpsertResponse
-	"""
-	Create or update an announcement. If an ID is provided, the announcement is updated, otherwise a new announcement is created. Note: This mutation is only available for authenticated users.
-	"""
-	upsertAppAnnouncement(id: ID, input: AnnouncementInput!): UpsertResponse
-	"""
-	Create or update a manual campus life event. Note: This mutation is only available for authenticated users.
-	"""
-	upsertManualClEvent(
-		id: ID
-		input: ManualCampusLifeEventInput!
-	): UpsertResponse
-	"""
-	Create or update a university sports event. If an ID is provided, the event is updated, otherwise a new event is created. Note: This mutation is only available for authenticated users.
-	"""
-	upsertUniversitySport(id: ID, input: UniversitySportsInput!): UpsertResponse
+  """Create a new room report."""
+  createRoomReport(input: RoomReportInput!): UpsertResponse
+  """
+  Delete an announcement by ID. Note: This mutation is only available for authenticated users.
+  """
+  deleteAppAnnouncement(id: ID!): Boolean
+  """
+  Delete a manual campus life event by ID. Note: This mutation is only available for authenticated users.
+  """
+  deleteManualClEvent(id: ID!): Boolean
+  """
+  Delete a university sports event by ID. Note: This mutation is only available for authenticated users.
+  """
+  deleteUniversitySport(id: ID!): Boolean
+  """
+  Resolve a room report by ID. Note: This mutation is only available for authenticated users.
+  """
+  resolveRoomReport(id: ID!, resolved: Boolean): UpsertResponse
+  """
+  Create or update an announcement. If an ID is provided, the announcement is updated, otherwise a new announcement is created. Note: This mutation is only available for authenticated users.
+  """
+  upsertAppAnnouncement(id: ID, input: AnnouncementInput!): UpsertResponse
+  """
+  Create or update a manual campus life event. Note: This mutation is only available for authenticated users.
+  """
+  upsertManualClEvent(id: ID, input: ManualCampusLifeEventInput!): UpsertResponse
+  """
+  Create or update a university sports event. If an ID is provided, the event is updated, otherwise a new event is created. Note: This mutation is only available for authenticated users.
+  """
+  upsertUniversitySport(id: ID, input: UniversitySportsInput!): UpsertResponse
 }
 
 """

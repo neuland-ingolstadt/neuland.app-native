@@ -67,22 +67,30 @@ const CalendarCard = (): React.JSX.Element => {
 		enabled: userKind === USER_STUDENT
 	});
 
-	useEffect(() => {
-		const combined = [...calendar, ...(exams ?? [])]
-			.map((item) => ({ ...item, begin: new Date(item.begin) }))
-			.filter((x) => x.begin > time || (x.end ?? time) > time)
-			.sort((a, b) => {
-				// Prioritize single-day events (exams have no end date)
-				const aIsSingleDay = !a.end;
-				const bIsSingleDay = !b.end;
+    useEffect(() => {
+        const combined = [...calendar, ...(exams ?? [])]
+            .map((item) => ({ ...item, begin: new Date(item.begin) }))
+            .filter((x) => x.begin > time || (x.end ?? time) > time)
+            .sort((a, b) => {
+                // Check if events are currently ongoing
+                const aIsNow = a.begin <= time && (a.end ?? time) > time
+                const bIsNow = b.begin <= time && (b.end ?? time) > time
 
-				if (aIsSingleDay !== bIsSingleDay) {
-					return aIsSingleDay ? -1 : 1;
-				}
+                // Prioritize current events
+                if (aIsNow !== bIsNow) {
+                    return aIsNow ? -1 : 1
+                }
 
-				// If both same type, sort by start date
-				return a.begin.getTime() - b.begin.getTime();
-			}) as Combined[];
+                // For events with same current status, prioritize single-day events
+                const aIsSingleDay = !a.end
+                const bIsSingleDay = !b.end
+                if (aIsSingleDay !== bIsSingleDay) {
+                    return aIsSingleDay ? -1 : 1
+                }
+
+                // If both same type and current status, sort by start date
+                return a.begin.getTime() - b.begin.getTime()
+            }) as Combined[]
 
 		setMixedCalendar(combined.slice(0, 2));
 	}, [calendar, exams]);
