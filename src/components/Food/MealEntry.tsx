@@ -24,7 +24,7 @@ import Color from 'color';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import type React from 'react';
-import { useContext, useState } from 'react';
+import { memo, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -35,198 +35,212 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
  * @param index - The index of the meal in the list.
  * @returns A JSX element representing the meal entry.
  */
-export const MealEntry = ({
-	meal,
-	index
-}: {
-	meal: Meal;
-	index: number;
-}): React.JSX.Element => {
-	const preferencesSelection = useFoodFilterStore(
-		(state) => state.preferencesSelection
-	);
-	const allergenSelection = useFoodFilterStore(
-		(state) => state.allergenSelection
-	);
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
-	const { t, i18n } = useTranslation('food');
-	const { styles, theme } = useStyles(stylesheet);
-	const userAllergens = convertRelevantAllergens(
-		meal.allergens ?? [],
-		allergenSelection,
-		i18n.language
-	);
-	const { userKind = USER_GUEST } =
-		useContext<UserKindContextType>(UserKindContext);
-	const userFlags = convertRelevantFlags(
-		meal.flags ?? [],
-		preferencesSelection,
-		i18n.language
-	);
-	const setSelectedMeal = useRouteParamsStore((state) => state.setSelectedMeal);
-	const price = getUserSpecificPrice(meal, userKind ?? 'guest');
-	const label =
-		price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : '';
+export const MealEntry = memo(
+	({ meal, index }: { meal: Meal; index: number }): React.JSX.Element => {
+		const preferencesSelection = useFoodFilterStore(
+			(state) => state.preferencesSelection
+		);
+		const allergenSelection = useFoodFilterStore(
+			(state) => state.allergenSelection
+		);
+		const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
+		const { t, i18n } = useTranslation('food');
+		const { styles, theme } = useStyles(stylesheet);
+		const userAllergens = useMemo(
+			() =>
+				convertRelevantAllergens(
+					meal.allergens ?? [],
+					allergenSelection,
+					i18n.language
+				),
+			[meal.allergens, allergenSelection, i18n.language]
+		);
+		const { userKind = USER_GUEST } =
+			useContext<UserKindContextType>(UserKindContext);
+		const userFlags = useMemo(
+			() =>
+				convertRelevantFlags(
+					meal.flags ?? [],
+					preferencesSelection,
+					i18n.language
+				),
+			[meal.flags, preferencesSelection, i18n.language]
+		);
+		const setSelectedMeal = useRouteParamsStore(
+			(state) => state.setSelectedMeal
+		);
+		const price = getUserSpecificPrice(meal, userKind ?? 'guest');
+		const label =
+			price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : '';
 
-	const isNotConfigured =
-		allergenSelection.length === 1 && allergenSelection[0] === 'not-configured';
-	const hasSelectedAllergens = allergenSelection.length > 0 && !isNotConfigured;
-	const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured;
-	const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null;
+		const isNotConfigured =
+			allergenSelection.length === 1 &&
+			allergenSelection[0] === 'not-configured';
+		const hasSelectedAllergens =
+			allergenSelection.length > 0 && !isNotConfigured;
+		const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured;
+		const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null;
 
-	const shouldShowAllergens = hasUserAllergens || hasNoMealAllergens;
+		const shouldShowAllergens = hasUserAllergens || hasNoMealAllergens;
 
-	const iconName = hasUserAllergens
-		? 'exclamationmark.triangle'
-		: 'info.circle';
-	const androidName = hasUserAllergens ? 'warning' : 'info';
-	const webName = hasUserAllergens ? 'TriangleAlert' : 'Info';
-	const textContent = hasUserAllergens ? userAllergens : t('empty.noAllergens');
+		const iconName = hasUserAllergens
+			? 'exclamationmark.triangle'
+			: 'info.circle';
+		const androidName = hasUserAllergens ? 'warning' : 'info';
+		const webName = hasUserAllergens ? 'TriangleAlert' : 'Info';
+		const textContent = hasUserAllergens
+			? userAllergens
+			: t('empty.noAllergens');
 
-	const [key, setKey] = useState(Math.random());
+		const [key, setKey] = useState(Math.random());
 
-	const itemPressed = (): void => {
-		setSelectedMeal(meal);
-		router.navigate({
-			pathname: '/meal'
-		});
-	};
-	return (
-		<DragDropView
-			mode="drag"
-			scope="system"
-			dragValue={t('details.share.message', {
-				meal: meal.name[i18n.language as LanguageKey],
-				price: formatPrice(meal.prices[userKind ?? 'guest']),
-				location:
-					humanLocations[meal.restaurant as keyof typeof humanLocations],
-				id: meal.id
-			})}
-		>
-			<ContextMenu
-				title={humanLocations[meal.restaurant as keyof typeof humanLocations]}
-				key={key}
-				style={styles.contextMenu}
-				actions={[
-					{
-						title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
-						subtitle:
-							meal.allergens !== null
-								? t('preferences.formlist.allergens')
-								: undefined,
-						systemIcon:
-							Platform.OS === 'ios' ? 'exclamationmark.triangle' : undefined,
-						disabled: true
-					},
-					{
-						title: t('misc.share', { ns: 'common' }),
-						systemIcon:
-							Platform.OS === 'ios' ? 'square.and.arrow.up' : undefined
-					}
-				]}
-				onPreviewPress={itemPressed}
-				onPress={(e) => {
-					if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
-						trackEvent('Share', {
-							type: 'meal'
-						});
-						shareMeal(meal, i18n, userKind);
-					}
-					setKey(Math.random());
-				}}
+		const itemPressed = (): void => {
+			setSelectedMeal(meal);
+			router.navigate({
+				pathname: '/meal'
+			});
+		};
+		return (
+			<DragDropView
+				mode="drag"
+				scope="system"
+				dragValue={t('details.share.message', {
+					meal: meal.name[i18n.language as LanguageKey],
+					price: formatPrice(meal.prices[userKind ?? 'guest']),
+					location:
+						humanLocations[meal.restaurant as keyof typeof humanLocations],
+					id: meal.id
+				})}
 			>
-				<Pressable
-					onPress={itemPressed}
-					delayLongPress={300}
-					onLongPress={() => {
-						/* nothing */
+				<ContextMenu
+					title={humanLocations[meal.restaurant as keyof typeof humanLocations]}
+					key={key}
+					style={styles.contextMenu}
+					actions={[
+						{
+							title: meal.allergens?.join(', ') ?? t('empty.noAllergens'),
+							subtitle:
+								meal.allergens !== null
+									? t('preferences.formlist.allergens')
+									: undefined,
+							systemIcon:
+								Platform.OS === 'ios' ? 'exclamationmark.triangle' : undefined,
+							disabled: true
+						},
+						{
+							title: t('misc.share', { ns: 'common' }),
+							systemIcon:
+								Platform.OS === 'ios' ? 'square.and.arrow.up' : undefined
+						}
+					]}
+					onPreviewPress={itemPressed}
+					onPress={(e) => {
+						if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
+							trackEvent('Share', {
+								type: 'meal'
+							});
+							shareMeal(meal, i18n, userKind);
+						}
+						setKey(Math.random());
 					}}
-					style={styles.pressable}
 				>
-					<View key={index} style={styles.container}>
-						<View style={styles.innerContainer}>
-							<Text
-								style={styles.title}
-								adjustsFontSizeToFit={true}
-								numberOfLines={2}
-							>
-								{mealName(
-									meal.name,
-									foodLanguage,
-									i18n.language as LanguageKey
-								)}
-							</Text>
-							{meal.variants?.length > 0 && (
-								<LinearGradient
-									style={styles.variantContainer}
-									colors={[
-										theme.colors.labelBackground,
-										Color(theme.colors.labelBackground).lighten(0.15).hex()
-									]}
-									start={[0, 1]}
-									end={[1, 0]}
+					<Pressable
+						onPress={itemPressed}
+						delayLongPress={300}
+						onLongPress={() => {
+							/* nothing */
+						}}
+						style={styles.pressable}
+					>
+						<View key={index} style={styles.container}>
+							<View style={styles.innerContainer}>
+								<Text
+									style={styles.title}
+									adjustsFontSizeToFit={true}
+									numberOfLines={2}
 								>
-									<Text style={styles.variantText}>
-										{`+ ${meal.variants.length}`}
-									</Text>
-								</LinearGradient>
-							)}
-						</View>
-						<View style={styles.detailsContainer}>
-							<View style={styles.detailsColumns}>
-								<View style={styles.flags}>
-									{userFlags.map((flag: string, index: number) => (
-										<LinearGradient
-											key={index}
-											style={styles.flagsBox}
-											colors={[
-												theme.colors.labelBackground,
-												Color(theme.colors.labelBackground).lighten(0.13).hex()
-											]}
-											start={[0, 0]}
-											end={[1, 0]}
-										>
-											<Text style={styles.flagsText}>{flag}</Text>
-										</LinearGradient>
-									))}
-								</View>
-								{shouldShowAllergens && (
-									<View style={styles.allergensContainer}>
-										<PlatformIcon
-											ios={{
-												name: iconName,
-												size: 13
-											}}
-											android={{
-												name: androidName,
-												size: 16,
-												variant: 'outlined'
-											}}
-											web={{
-												name: webName,
-												size: 16
-											}}
-											style={styles.icon}
-										/>
-										<Text style={styles.allergene} numberOfLines={3}>
-											{textContent}
+									{mealName(
+										meal.name,
+										foodLanguage,
+										i18n.language as LanguageKey
+									)}
+								</Text>
+								{meal.variants?.length > 0 && (
+									<LinearGradient
+										style={styles.variantContainer}
+										colors={[
+											theme.colors.labelBackground,
+											Color(theme.colors.labelBackground).lighten(0.15).hex()
+										]}
+										start={[0, 1]}
+										end={[1, 0]}
+									>
+										<Text style={styles.variantText}>
+											{`+ ${meal.variants.length}`}
 										</Text>
-									</View>
+									</LinearGradient>
 								)}
 							</View>
-							<View style={styles.priceContainer}>
-								<Text style={styles.price}>
-									{getUserSpecificPrice(meal, userKind ?? 'guest')}
-								</Text>
-								{label !== '' && <Text style={styles.priceLabel}>{label}</Text>}
+							<View style={styles.detailsContainer}>
+								<View style={styles.detailsColumns}>
+									<View style={styles.flags}>
+										{userFlags.map((flag: string, index: number) => (
+											<LinearGradient
+												key={index}
+												style={styles.flagsBox}
+												colors={[
+													theme.colors.labelBackground,
+													Color(theme.colors.labelBackground)
+														.lighten(0.13)
+														.hex()
+												]}
+												start={[0, 0]}
+												end={[1, 0]}
+											>
+												<Text style={styles.flagsText}>{flag}</Text>
+											</LinearGradient>
+										))}
+									</View>
+									{shouldShowAllergens && (
+										<View style={styles.allergensContainer}>
+											<PlatformIcon
+												ios={{
+													name: iconName,
+													size: 13
+												}}
+												android={{
+													name: androidName,
+													size: 16,
+													variant: 'outlined'
+												}}
+												web={{
+													name: webName,
+													size: 16
+												}}
+												style={styles.icon}
+											/>
+											<Text style={styles.allergene} numberOfLines={3}>
+												{textContent}
+											</Text>
+										</View>
+									)}
+								</View>
+								<View style={styles.priceContainer}>
+									<Text style={styles.price}>
+										{getUserSpecificPrice(meal, userKind ?? 'guest')}
+									</Text>
+									{label !== '' && (
+										<Text style={styles.priceLabel}>{label}</Text>
+									)}
+								</View>
 							</View>
 						</View>
-					</View>
-				</Pressable>
-			</ContextMenu>
-		</DragDropView>
-	);
-};
+					</Pressable>
+				</ContextMenu>
+			</DragDropView>
+		);
+	}
+);
 
 const stylesheet = createStyleSheet((theme) => ({
 	allergene: {

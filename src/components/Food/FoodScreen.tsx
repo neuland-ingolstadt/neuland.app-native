@@ -12,7 +12,7 @@ import { pausedToast } from '@/utils/ui-utils';
 import { useQuery } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	Animated,
@@ -90,64 +90,74 @@ function FoodScreen(): React.JSX.Element {
 	 * @param {number} index - The index of the day in the list of days.
 	 * @returns {JSX.Element} - The rendered button component.
 	 */
-	const DayButton = ({
-		day,
-		index
-	}: {
-		day: Food;
-		index: number;
-	}): React.JSX.Element => {
-		const date = new Date(day.timestamp);
-		const { styles } = useStyles(stylesheet);
+	const DayButton = memo(
+		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
+			const date = new Date(day.timestamp);
+			const { styles } = useStyles(stylesheet);
 
-		const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0;
-		const isFirstDay = index === 0;
-		const isLastDay = index === daysCnt - 1;
+			const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0;
+			const isFirstDay = index === 0;
+			const isLastDay = index === daysCnt - 1;
 
-		const buttonStyle = [
-			{ flex: 1, marginHorizontal: 4 },
-			isFirstDay ? { marginLeft: 0 } : null,
-			isLastDay ? { marginRight: 0 } : null
-		];
-		return (
-			<View style={buttonStyle} key={index}>
-				<Pressable
-					onPress={() => {
-						// only vibrate on iOS
-						if (Platform.OS === 'ios' && index !== selectedDay) {
-							void Haptics.selectionAsync();
-						}
-						setSelectedDay(index);
-						setPage(index);
-					}}
-				>
-					<View style={styles.dayButtonContainer}>
-						<Text
-							style={styles.dayText2(selectedDay === index)}
-							adjustsFontSizeToFit={true}
-							numberOfLines={1}
-						>
-							{date
-								.toLocaleDateString(i18n.language, {
-									weekday: 'short'
-								})
-								.slice(0, 2)}
-						</Text>
-						<Text
-							style={styles.dayText(selectedDay === index)}
-							adjustsFontSizeToFit={true}
-							numberOfLines={1}
-						>
-							{date.toLocaleDateString('de-DE', {
-								day: 'numeric',
-								month: 'numeric'
-							})}
-						</Text>
-					</View>
-				</Pressable>
-			</View>
-		);
-	};
+			const buttonStyle = [
+				{ flex: 1, marginHorizontal: 4 },
+				isFirstDay ? { marginLeft: 0 } : null,
+				isLastDay ? { marginRight: 0 } : null
+			];
+
+			const setPage = useCallback((page: number): void => {
+				pagerViewRef.current?.setPage(page);
+			}, []);
+
+			const handleDayPress = useCallback(
+				(index: number) => {
+					if (Platform.OS === 'ios' && index !== selectedDay) {
+						void Haptics.selectionAsync();
+					}
+					setSelectedDay(index);
+					setPage(index);
+				},
+				[selectedDay, setPage]
+			);
+			const getStyleMemoized = useCallback(
+				(isSelected: boolean) => styles.dayText2(isSelected),
+				[]
+			);
+			return (
+				<View style={buttonStyle} key={index}>
+					<Pressable
+						onPress={() => {
+							handleDayPress(index);
+						}}
+					>
+						<View style={styles.dayButtonContainer}>
+							<Text
+								style={getStyleMemoized(selectedDay === index)}
+								adjustsFontSizeToFit={true}
+								numberOfLines={1}
+							>
+								{date
+									.toLocaleDateString(i18n.language, {
+										weekday: 'short'
+									})
+									.slice(0, 2)}
+							</Text>
+							<Text
+								style={styles.dayText(selectedDay === index)}
+								adjustsFontSizeToFit={true}
+								numberOfLines={1}
+							>
+								{date.toLocaleDateString('de-DE', {
+									day: 'numeric',
+									month: 'numeric'
+								})}
+							</Text>
+						</View>
+					</Pressable>
+				</View>
+			);
+		}
+	);
 
 	const screenHeight = Dimensions.get('window').height;
 	const scrollY = new Animated.Value(0);
