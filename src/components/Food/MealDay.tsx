@@ -1,7 +1,7 @@
 import PlatformIcon from '@/components/Universal/Icon';
 import type { Food, Meal } from '@/types/neuland-api';
 import type React from 'react';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import Collapsible from 'react-native-collapsible';
@@ -95,6 +95,28 @@ const MealCategory = ({
 };
 
 /**
+ * Filters an array of meals by restaurant name.
+ */
+const filterMealsByRestaurant = (meals: Meal[], restaurant: string): Meal[] => {
+	return meals.filter((meal: Meal) => meal.restaurant === restaurant);
+};
+
+/**
+ * Groups an array of meals by category.
+ */
+const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
+	return meals.reduce((r: Record<string, Meal[]>, a: Meal) => {
+		const category = a.category;
+		if (Object.prototype.hasOwnProperty.call(r, category)) {
+			r[category].push(a);
+		} else {
+			r[category] = [a];
+		}
+		return r;
+	}, {});
+};
+
+/**
  * Renders a day's worth of meals.
  * @param day - An object containing meals for a given day.
  * @param index - The index of the day.
@@ -109,51 +131,33 @@ export const MealDay = ({
 	index: number;
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('food');
 
-	/**
-	 * Filters an array of meals by restaurant name.
-	 * @param meals - An array of meals.
-	 * @param restaurant - The name of the restaurant to filter by.
-	 * @returns An array of meals belonging to the specified restaurant.
-	 */
-	const filterMealsByRestaurant = (
-		meals: Meal[],
-		restaurant: string
-	): Meal[] => {
-		return meals.filter((meal: Meal) => meal.restaurant === restaurant);
-	};
-	/**
-	 * Groups an array of meals by category.
-	 * @param meals - An array of meals.
-	 * @returns An object containing meals grouped by category.
-	 */
-	const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
-		return meals.reduce((r: Record<string, Meal[]>, a: Meal) => {
-			const category = a.category;
-			if (Object.prototype.hasOwnProperty.call(r, category)) {
-				r[category].push(a);
-			} else {
-				r[category] = [a];
-			}
-			return r;
-		}, {});
-	};
+	const mealData = useMemo(() => {
+		const ingolstadtMensa = filterMealsByRestaurant(
+			day.meals,
+			'IngolstadtMensa'
+		);
+		const neuburgMensa = filterMealsByRestaurant(day.meals, 'NeuburgMensa');
+		const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns');
+		const canisius = filterMealsByRestaurant(day.meals, 'Canisius');
 
-	const ingolstadtMensa = filterMealsByRestaurant(day.meals, 'IngolstadtMensa');
-	const neuburgMensa = filterMealsByRestaurant(day.meals, 'NeuburgMensa');
-	const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns');
-	const canisius = filterMealsByRestaurant(day.meals, 'Canisius');
-
-	const ingolstadtMensaGrouped = groupMealsByCategory(ingolstadtMensa);
-	const neuburgMensaGrouped = groupMealsByCategory(neuburgMensa);
-	const reimannsGrouped = groupMealsByCategory(reimanns);
-	const canisiusGrouped = groupMealsByCategory(canisius);
-
-	const isEmpty =
-		ingolstadtMensa.length === 0 &&
-		reimanns.length === 0 &&
-		canisius.length === 0 &&
-		neuburgMensa.length === 0;
+		return {
+			ingolstadtMensa,
+			neuburgMensa,
+			reimanns,
+			canisius,
+			ingolstadtMensaGrouped: groupMealsByCategory(ingolstadtMensa),
+			neuburgMensaGrouped: groupMealsByCategory(neuburgMensa),
+			reimannsGrouped: groupMealsByCategory(reimanns),
+			canisiusGrouped: groupMealsByCategory(canisius),
+			isEmpty:
+				ingolstadtMensa.length === 0 &&
+				reimanns.length === 0 &&
+				canisius.length === 0 &&
+				neuburgMensa.length === 0
+		};
+	}, [day.meals]);
 
 	interface RestaurantProps {
 		restaurantName: string;
@@ -168,49 +172,46 @@ export const MealDay = ({
 	 * @param groupedMeals - An object containing meals grouped by category.
 	 * @returns A JSX element representing the restaurant's meals.
 	 */
-	const renderRestaurantView = ({
-		restaurantName,
-		meals,
-		groupedMeals
-	}: RestaurantProps): React.JSX.Element | null => {
-		if (meals.length > 0) {
-			return (
-				<View>
-					<Text style={styles.dayRestaurantTitle}>{restaurantName}</Text>
-					<MealGroup group={groupedMeals} />
-				</View>
-			);
-		}
-		return null;
-	};
-	const { t } = useTranslation('food');
-	return isEmpty ? (
-		<>
-			<View style={styles.emptyContainer}>
-				<Text style={styles.emptyText}>{t('dashboard.empty')}</Text>
-			</View>
-		</>
+	const renderRestaurantView = useCallback(
+		({ restaurantName, meals, groupedMeals }: RestaurantProps) => {
+			if (meals.length > 0) {
+				return (
+					<View>
+						<Text style={styles.dayRestaurantTitle}>{restaurantName}</Text>
+						<MealGroup group={groupedMeals} />
+					</View>
+				);
+			}
+			return null;
+		},
+		[styles.dayRestaurantTitle]
+	);
+
+	return mealData.isEmpty ? (
+		<View style={styles.emptyContainer}>
+			<Text style={styles.emptyText}>{t('dashboard.empty')}</Text>
+		</View>
 	) : (
 		<View key={index}>
 			{renderRestaurantView({
 				restaurantName: 'Mensa Ingolstadt',
-				meals: ingolstadtMensa,
-				groupedMeals: ingolstadtMensaGrouped
+				meals: mealData.ingolstadtMensa,
+				groupedMeals: mealData.ingolstadtMensaGrouped
 			})}
 			{renderRestaurantView({
 				restaurantName: 'Theke Neuburg',
-				meals: neuburgMensa,
-				groupedMeals: neuburgMensaGrouped
+				meals: mealData.neuburgMensa,
+				groupedMeals: mealData.neuburgMensaGrouped
 			})}
 			{renderRestaurantView({
 				restaurantName: 'Reimanns',
-				meals: reimanns,
-				groupedMeals: reimannsGrouped
+				meals: mealData.reimanns,
+				groupedMeals: mealData.reimannsGrouped
 			})}
 			{renderRestaurantView({
 				restaurantName: 'Canisius Konvikt',
-				meals: canisius,
-				groupedMeals: canisiusGrouped
+				meals: mealData.canisius,
+				groupedMeals: mealData.canisiusGrouped
 			})}
 		</View>
 	);
