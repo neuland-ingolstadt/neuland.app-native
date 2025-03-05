@@ -5,12 +5,14 @@ import Divider from '@/components/Universal/Divider';
 import { useRefreshByUser } from '@/hooks';
 import { networkError } from '@/utils/api-utils';
 import type { UseQueryResult } from '@tanstack/react-query';
-import React from 'react';
+import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, RefreshControl, ScrollView, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import LoadingIndicator from '../Universal/LoadingIndicator';
+
+const MemoizedEventRow = memo(CLEventRow);
 
 export default function ClEventsPage({
 	clEventsResult
@@ -67,7 +69,7 @@ export default function ClEventsPage({
 						<View style={styles.contentBorder}>
 							{clEventsResult.data?.map((event, index) => (
 								<React.Fragment key={index}>
-									<CLEventRow event={event} />
+									<MemoizedEventRow event={event} />
 									{index !== clEventsResult.data.length - 1 && (
 										<Divider iosPaddingLeft={16} />
 									)}

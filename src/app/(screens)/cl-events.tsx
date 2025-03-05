@@ -38,7 +38,7 @@ export default function Events(): React.JSX.Element {
 	const clEventsResult = results[0];
 	const sportsResult = results[1];
 
-	const scrollY = new Animated.Value(0);
+	const scrollY = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
 		if (

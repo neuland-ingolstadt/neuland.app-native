@@ -10,7 +10,7 @@ import { FlashList, MasonryFlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import Head from 'expo-router/head';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, LayoutAnimation, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -44,7 +44,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 	);
 }
 
-function HomeScreen(): React.JSX.Element {
+const HomeScreen = memo(function HomeScreen() {
 	const { styles, theme } = useStyles(stylesheet);
 	const { shownDashboardEntries } = React.useContext(DashboardContext);
 	const [orientation, setOrientation] = useState(
@@ -85,6 +85,28 @@ function HomeScreen(): React.JSX.Element {
 		data?.appAnnouncements
 	);
 
+	const renderSingleColumnItem = useCallback(
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		({ item }: { item: any }) => <View style={styles.item}>{item.card()}</View>,
+		[styles.item]
+	);
+
+	const renderMasonryItem = useCallback(
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		({ item, index }: { item: any; index: number }) => {
+			const paddingStyle =
+				index % 2 === 0
+					? { marginRight: theme.margins.page / 2 }
+					: { marginLeft: theme.margins.page / 2 };
+
+			return <View style={[styles.item, paddingStyle]}>{item.card()}</View>;
+		},
+		[styles.item, theme.margins.page]
+	);
+
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	const keyExtractor = useCallback((item: { key: any }) => item.key, []);
+
 	return shownDashboardEntries === null ||
 		shownDashboardEntries.length === 0 ? (
 		<View style={styles.errorContainer}>
@@ -113,8 +135,8 @@ function HomeScreen(): React.JSX.Element {
 			contentContainerStyle={{ ...styles.container, ...styles.page }}
 			showsVerticalScrollIndicator={false}
 			data={shownDashboardEntries}
-			renderItem={({ item }) => <View style={styles.item}>{item.card()}</View>}
-			keyExtractor={(item) => item.key}
+			renderItem={renderSingleColumnItem}
+			keyExtractor={keyExtractor}
 			ListHeaderComponent={() =>
 				announcements != null ? (
 					<AnnouncementCard data={announcements} />
@@ -131,16 +153,8 @@ function HomeScreen(): React.JSX.Element {
 			contentContainerStyle={{ ...styles.container, ...styles.page }}
 			showsVerticalScrollIndicator={false}
 			data={shownDashboardEntries}
-			renderItem={({ item, index }) => {
-				let paddingStyle = {};
-				paddingStyle =
-					index % 2 === 0
-						? { marginRight: theme.margins.page / 2 }
-						: { marginLeft: theme.margins.page / 2 };
-
-				return <View style={[styles.item, paddingStyle]}>{item.card()}</View>;
-			}}
-			keyExtractor={(item) => item.key}
+			renderItem={renderMasonryItem}
+			keyExtractor={keyExtractor}
 			numColumns={2}
 			estimatedItemSize={114}
 			ListHeaderComponent={() =>
@@ -152,7 +166,7 @@ function HomeScreen(): React.JSX.Element {
 			}
 		/>
 	);
-}
+});
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {

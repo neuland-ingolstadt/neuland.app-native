@@ -17,7 +17,7 @@ PODS:
   - EXConstants (17.0.7):
     - ExpoModulesCore
   - EXJSONUtils (0.14.0)
-  - EXManifests (0.15.6):
+  - EXManifests (0.15.7):
     - ExpoModulesCore
   - Expo (52.0.37):
     - ExpoModulesCore
@@ -2542,7 +2542,7 @@ SPEC CHECKSUMS:
   EXApplication: 4c72f6017a14a65e338c5e74fca418f35141e819
   EXConstants: 30c43b9ca8391c31bab9cc45c97f16eddcf11042
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
-  EXManifests: 6bcc8c0997fc00831f2aa874d563004cfc509af0
+  EXManifests: 807ab5394ca9f8dd5e64283f02876b2f85c4eb72
   Expo: 63515728b6f238842dc95702eb0fb385f00d7c5a
   expo-dev-client: 6f30fa7fbf4aa6cb5765b983da2411bf63f665bb
   expo-dev-launcher: 9fa862d9789f2f1637c5a18e261c34785f069ee3
