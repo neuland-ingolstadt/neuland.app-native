@@ -1,6 +1,7 @@
 import ClEventsPage from '@/components/Events/ClEventsPage';
 import ClSportsPage from '@/components/Events/ClSportsPage';
 import PagerView from '@/components/Layout/PagerView';
+import LoadingIndicator from '@/components/Universal/LoadingIndicator';
 import ToggleRow from '@/components/Universal/ToggleRow';
 import {
 	loadCampusLifeEvents,
@@ -10,7 +11,7 @@ import { pausedToast } from '@/utils/ui-utils';
 import { trackEvent } from '@aptabase/react-native';
 import { useQueries } from '@tanstack/react-query';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, View, useWindowDimensions } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -39,6 +40,10 @@ export default function Events(): React.JSX.Element {
 	const sportsResult = results[1];
 
 	const scrollY = useRef(new Animated.Value(0)).current;
+	const [selectedData, setSelectedData] = useState<number>(0);
+	const screenHeight = useWindowDimensions().height;
+
+	const [viewedPages, setViewedPages] = useState<Set<number>>(new Set([0]));
 
 	useEffect(() => {
 		if (
@@ -48,8 +53,6 @@ export default function Events(): React.JSX.Element {
 			pausedToast();
 		}
 	}, [sportsResult.isPaused, clEventsResult.isPaused]);
-	const [selectedData, setSelectedData] = useState<number>(0);
-	const screenHeight = useWindowDimensions().height;
 
 	const pagerViewRef = useRef<PagerView>(null);
 	function setPage(page: number): void {
@@ -57,6 +60,30 @@ export default function Events(): React.JSX.Element {
 	}
 	const displayTypes = ['Events', t('pages.clEvents.sports.title')];
 	const pages = ['events', 'sports'];
+
+	const renderPage = (index: number) => {
+		if (!viewedPages.has(index)) {
+			return <LoadingIndicator />;
+		}
+
+		return (
+			<View style={styles.pageContainer}>
+				<Suspense
+					fallback={
+						<View style={styles.centerContainer}>
+							<LoadingIndicator />
+						</View>
+					}
+				>
+					{index === 0 ? (
+						<ClEventsPage clEventsResult={results[0]} />
+					) : (
+						<ClSportsPage sportsResult={results[1]} />
+					)}
+				</Suspense>
+			</View>
+		);
+	};
 
 	return (
 		<View style={styles.page}>
@@ -87,6 +114,14 @@ export default function Events(): React.JSX.Element {
 				onPageSelected={(e) => {
 					const page = e.nativeEvent.position;
 					setSelectedData(page);
+
+					// Mark this page as viewed for future renders
+					setViewedPages((prev) => {
+						const newSet = new Set(prev);
+						newSet.add(page);
+						return newSet;
+					});
+
 					trackEvent('Route', {
 						path: `cl-events/${pages[page]}`
 					});
@@ -94,8 +129,8 @@ export default function Events(): React.JSX.Element {
 				scrollEnabled
 				overdrag
 			>
-				<ClEventsPage clEventsResult={results[0]} />
-				<ClSportsPage sportsResult={results[1]} />
+				{renderPage(0)}
+				{renderPage(1)}
 			</PagerView>
 		</View>
 	);
@@ -113,5 +148,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border,
 		paddingBottom: 12,
 		paddingHorizontal: theme.margins.page
+	},
+	pageContainer: {
+		flex: 1
+	},
+	centerContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 }));
