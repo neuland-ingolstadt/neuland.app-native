@@ -1,5 +1,6 @@
+import { selectionAsync } from 'expo-haptics';
 import type React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 const ToggleRow = ({
@@ -12,6 +13,14 @@ const ToggleRow = ({
 	setSelectedElement: (element: number) => void;
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet);
+
+	const pressHandler = (index: number) => {
+		setSelectedElement(index);
+		if (Platform.OS === 'ios') {
+			void selectionAsync();
+		}
+	};
+
 	return (
 		<View style={styles.buttonRow}>
 			{items.map((item, index) => {
@@ -19,7 +28,7 @@ const ToggleRow = ({
 					<View key={index} style={styles.buttonView}>
 						<Pressable
 							onPress={() => {
-								setSelectedElement(index);
+								pressHandler(index);
 							}}
 						>
 							<View style={styles.buttonContainer}>
