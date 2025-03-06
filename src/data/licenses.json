@@ -53,7 +53,7 @@
 		"licenseUrl": "https://github.com/maplibre/maplibre-react-native/raw/master/LICENSE.md",
 		"parents": "neuland"
 	},
-	"@react-native-community/datetimepicker@8.2.0": {
+	"@react-native-community/datetimepicker@8.3.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/react-native-community/datetimepicker",
 		"licenseUrl": "https://github.com/react-native-community/datetimepicker/raw/master/LICENSE.md",
@@ -274,7 +274,7 @@
 		"licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"lucide-react-native@0.471.0": {
+	"lucide-react-native@0.477.0": {
 		"licenses": "ISC",
 		"repository": "https://github.com/lucide-icons/lucide",
 		"licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",
@@ -364,13 +364,13 @@
 		"licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-ios-context-menu@2.5.3": {
+	"react-native-ios-context-menu@3.1.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/dominicstop/react-native-ios-context-menu",
 		"licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-ios-utilities@4.5.3": {
+	"react-native-ios-utilities@5.1.2": {
 		"licenses": "MIT",
 		"repository": "https://github.com/dominicstop/react-native-ios-utilities",
 		"licenseUrl": "https://github.com/dominicstop/react-native-ios-utilities/raw/master/LICENSE",
@@ -478,7 +478,7 @@
 		"licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"zeego@2.0.4": {
+	"zeego@3.0.3": {
 		"licenses": "MIT",
 		"repository": "https://github.com/nandorojo/zeego",
 		"licenseUrl": "https://github.com/nandorojo/zeego/raw/master/LICENSE",

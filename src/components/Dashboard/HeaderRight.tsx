@@ -15,7 +15,6 @@ import { useRouter } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Platform, Pressable, Text } from 'react-native';
-import { getDeviceType } from 'react-native-device-info';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 import LoadingIndicator from '../Universal/LoadingIndicator';
@@ -189,7 +188,7 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	}): React.JSX.Element => {
 		return (
 			<ContextMenu
-				disabled={getDeviceType() === 'Desktop'}
+				disabled={true} // TODO: renable after migrating to zeego
 				actions={[
 					...(userKind === 'student'
 						? [
