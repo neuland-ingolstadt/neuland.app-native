@@ -6,8 +6,8 @@
 # See documentation for more information on available options.
 
 # [remote.github]
-# owner = "neuland-ingolstadt"
-# repo = "neuland-app.native"
+owner = "neuland-ingolstadt"
+repo = "neuland-app.native"
 # token = ""
 
 [changelog]
