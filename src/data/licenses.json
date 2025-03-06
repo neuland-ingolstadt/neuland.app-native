@@ -388,7 +388,7 @@
 		"licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-reanimated-carousel@4.0.0-canary.22": {
+	"react-native-reanimated-carousel@4.0.2": {
 		"licenses": "MIT",
 		"repository": "https://github.com/dohooo/react-native-reanimated-carousel",
 		"licenseUrl": "https://github.com/dohooo/react-native-reanimated-carousel/raw/master/LICENSE",

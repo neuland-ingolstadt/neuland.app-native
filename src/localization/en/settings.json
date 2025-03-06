@@ -88,7 +88,7 @@
 		}
 	},
 	"changelog": {
-		"footer": "To see the full changelog, check out the commits on "
+		"footer": "To see the full changelog, check out the releases on "
 	},
 	"licenses": {
 		"footer": "These libraries were used to create this app. Some are platform-specific and therefore may not be included in your build."

@@ -42,4 +42,4 @@ Und vieles mehr – regelmäßige Updates basierend auf eurem Feedback sind scho
 
 ## Änderungsprotokoll
 
-Jedes Update bringt neue Funktionen, Verbesserungen und Fehlerbehebungen. Schau dir das [Änderungsprotokoll](https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md) auf GitHub an, um eine detaillierte Übersicht über die Änderungen in jeder Version zu erhalten.
+Jedes Update bringt neue Funktionen, Verbesserungen und Fehlerbehebungen. Schau dir das [Änderungsprotokoll](https://github.com/neuland-ingolstadt/neuland.app-native/releases) auf GitHub an, um eine detaillierte Übersicht über die Änderungen in jeder Version zu erhalten.

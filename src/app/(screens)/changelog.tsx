@@ -51,7 +51,7 @@ export default function Theme(): React.JSX.Element {
 							style={styles.text}
 							onPress={() => {
 								void Linking.openURL(
-									'https://github.com/neuland-ingolstadt/neuland.app-native/blob/main/CHANGELOG.md'
+									'https://github.com/neuland-ingolstadt/neuland.app-native/releases'
 								);
 							}}
 						>
