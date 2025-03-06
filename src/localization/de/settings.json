@@ -87,7 +87,7 @@
 		}
 	},
 	"changelog": {
-		"footer": "Um alle detaillierten Änderungen zu sehen, öffne die Commits auf "
+		"footer": "Um alle Änderungen zu sehen, besuche die Veröffentlichungen auf "
 	},
 	"licenses": {
 		"footer": "Diese Bibliotheken wurden zur Erstellung dieser App verwendet. Einige sind plattformspezifisch und sind daher in deinem Build nicht enthalten."
