@@ -43,7 +43,7 @@ jobs:
         run: bun install -g eas-cli
 
       - name: Build with EAS
-        run: bunx expo build:android --non-interactive --release-channel production
+        run: eas build --platform android --profile production --non-interactive --platform android --local
 
       - name: Upload artifacts to Github
         uses: actions/upload-artifact@v4.3.6
