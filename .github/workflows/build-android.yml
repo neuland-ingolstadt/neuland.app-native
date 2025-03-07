@@ -43,6 +43,8 @@ jobs:
         run: bun install -g eas-cli
 
       - name: Build with EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas build --platform android --profile production --non-interactive --platform android --local
 
       - name: Upload artifacts to Github
