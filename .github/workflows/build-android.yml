@@ -1,0 +1,52 @@
+name: "Build Android apk"
+
+on:
+  push:
+    branches:
+      - cd
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Node JS environment
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: "20"
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Bun cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      - name: Install project dependencies
+        run: bun install
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.2.2
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Build in Production flavour Release mode
+        run: |
+          cd android
+          ./gradlew assembleProductionRelease
+
+      - name: Upload artifacts to Github
+        uses: actions/upload-artifact@v4.3.6
+        with:
+          name: aptster-prod-release
+          path: android/app/build/outputs/apk/production/release/app-production-release.apk
+          retention-days: 90
