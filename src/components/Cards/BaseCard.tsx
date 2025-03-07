@@ -3,7 +3,7 @@ import ContextMenu from '@/components/Flow/ContextMenu';
 import { USER_GUEST } from '@/data/constants';
 import { type RelativePathString, router } from 'expo-router';
 import type React from 'react';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -163,4 +163,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }));
 
-export default BaseCard;
+export default memo(BaseCard, (prev, next) => {
+	return (
+		prev.title === next.title &&
+		prev.onPressRoute === next.onPressRoute &&
+		prev.removable === next.removable
+	);
+});
