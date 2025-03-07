@@ -1,9 +1,7 @@
 name: "Build Android apk"
 
 on:
-  push:
-    branches:
-      - cd
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,6 +14,12 @@ jobs:
         uses: actions/setup-node@v4.0.3
         with:
           node-version: "20"
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install Bun
         uses: oven-sh/setup-bun@v1
@@ -38,10 +42,13 @@ jobs:
         with:
           distribution: "zulu"
           java-version: "17"
-
-      - name: Install EAS CLI
-        run: bun install -g eas-cli
-
+    
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+  
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
@@ -50,15 +57,13 @@ jobs:
       - name: Submit to Google Play
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas submit --platform android --profile beta --non-interactive --path neuland-next.aab
+        run: eas submit --platform android --profile preview --non-interactive --path neuland-next.aab
 
       - name: Convert to APKs
         run: bundletool build-apks --bundle=neuland-next.aab --output=neuland-next.apks
-    
+
       - name: Upload artifacts to Github
         uses: actions/upload-artifact@v4
         with:
           name: neuland-next-android
           path: neuland-next.apks
-            
-            

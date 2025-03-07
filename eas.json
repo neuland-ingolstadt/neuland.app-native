@@ -1,27 +1,31 @@
 {
-	"cli": {
-		"version": ">= 9.2.0",
-		"appVersionSource": "local"
-	},
-	"build": {
-		"development": {
-			"developmentClient": true,
-			"distribution": "internal"
-		},
-		"preview": {
-			"distribution": "internal"
-		},
-		"production": {
-			"autoIncrement": true,
-			"distribution": "store",
-			"releaseChannel": "beta"
-		}
-	},
-	"submit": {
-		"production": {
-			"android": {
-				"track": "beta"
-			}
-		}
+  "cli": {
+    "version": ">= 9.2.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true,
+      "distribution": "store"
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "production"
+      }
+    },
+	"preview": {
+	  "android": {
+		"track": "beta"
+	  }
 	}
+  }
 }
