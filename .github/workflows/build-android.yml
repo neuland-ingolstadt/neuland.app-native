@@ -39,10 +39,11 @@ jobs:
           distribution: "zulu"
           java-version: "17"
 
-      - name: Build in Production flavour Release mode
-        run: |
-          cd android
-          ./gradlew assembleProductionRelease
+      - name: Install EAS CLI
+        run: bun install -g eas-cli
+
+      - name: Build with EAS
+        run: eas build --local -p android
 
       - name: Upload artifacts to Github
         uses: actions/upload-artifact@v4.3.6
