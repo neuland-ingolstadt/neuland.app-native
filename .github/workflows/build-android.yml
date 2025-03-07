@@ -45,11 +45,20 @@ jobs:
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile production --non-interactive --platform android --local
+        run: eas build --platform android --profile production --non-interactive --platform android --local --output neuland-next.aab
 
+      - name: Submit to Google Play
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas submit --platform android --profile beta --non-interactive --path neuland-next.aab
+
+      - name: Convert to APKs
+        run: bundletool build-apks --bundle=neuland-next.aab --output=neuland-next.apks
+    
       - name: Upload artifacts to Github
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4
         with:
-          name: aptster-prod-release
-          path: android/app/build/outputs/apk/production/release/app-production-release.apk
-          retention-days: 90
+          name: neuland-next-android
+          path: neuland-next.apks
+            
+            

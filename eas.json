@@ -20,7 +20,6 @@
 	"submit": {
 		"production": {
 			"android": {
-				"serviceAccountKeyPath": "./service.json",
 				"track": "beta"
 			}
 		}
