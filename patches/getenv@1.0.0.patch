@@ -1,5 +1,8 @@
+diff --git a/node_modules/getenv/.bun-tag-38bd63c345b8dacf b/.bun-tag-38bd63c345b8dacf
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/index.js b/index.js
-index 5e83c8f8ce74cade53466fc82bd6809358762a58..72eb7065f3eb723f41b9fb9c496d8c8c25731fe8 100644
+index 5e83c8f8ce74cade53466fc82bd6809358762a58..c0f2dc37e00a1b8c8b4142bc541aee150248da1a 100644
 --- a/index.js
 +++ b/index.js
 @@ -54,18 +54,18 @@ const convert = {
@@ -20,7 +23,7 @@ index 5e83c8f8ce74cade53466fc82bd6809358762a58..72eb7065f3eb723f41b9fb9c496d8c8c
        return convert.bool(value);
      } catch (err) {
 -      const isBool = value === '1' || value === '0';
-+      const isBool = value === 'true' || value === 'false' || value === 'TRUE' || value === 'FALSE';
++      const isBool = value === 'true' || value === 'false' || value === 'TRUE' || value === 'FALSE' || value === '1' || value === '0';
        if (!isBool) {
          throw new Error('GetEnv.NoBoolean: ' + value + ' is not a boolean.');
        }
