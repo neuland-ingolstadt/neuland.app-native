@@ -1,7 +1,9 @@
 name: "Build Android apk"
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - cd
 
 jobs:
   build:
