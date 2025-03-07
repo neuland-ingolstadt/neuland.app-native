@@ -1,0 +1,28 @@
+{
+	"cli": {
+		"version": ">= 9.2.0",
+		"appVersionSource": "local"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal"
+		},
+		"preview": {
+			"distribution": "internal"
+		},
+		"production": {
+			"autoIncrement": true,
+			"distribution": "store",
+			"releaseChannel": "beta"
+		}
+	},
+	"submit": {
+		"production": {
+			"android": {
+				"serviceAccountKeyPath": "./service.json",
+				"track": "beta"
+			}
+		}
+	}
+}
