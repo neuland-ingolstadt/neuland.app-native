@@ -1,6 +1,13 @@
-name: "Build Android apk"
+name: "Build Android (Beta)"
 
 on:
+  workflow_dispatch:
+    inputs:
+      internal:
+        description: "Submit as internal build"
+        type: boolean
+        default: false
+
   push:
     branches:
       - cd
@@ -15,7 +22,7 @@ jobs:
       - name: Setup Node JS environment
         uses: actions/setup-node@v4.0.3
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
@@ -28,14 +35,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Setup Bun cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.bun/install/cache
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-
       - name: Install project dependencies
         run: bun install
 
@@ -44,28 +43,27 @@ jobs:
         with:
           distribution: "zulu"
           java-version: "17"
-    
+
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-  
+
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas build --platform android --profile production --non-interactive --platform android --local --output neuland-next.aab
 
+      - name: Determine submission profile
+        run: |
+          if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
+            echo "SUBMIT_PROFILE=internal" >> $GITHUB_ENV
+          else
+            echo "SUBMIT_PROFILE=preview" >> $GITHUB_ENV
+          fi
+
       - name: Submit to Google Play
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas submit --platform android --profile preview --non-interactive --path neuland-next.aab
-
-      - name: Convert to APKs
-        run: bundletool build-apks --bundle=neuland-next.aab --output=neuland-next.apks
-
-      - name: Upload artifacts to Github
-        uses: actions/upload-artifact@v4
-        with:
-          name: neuland-next-android
-          path: neuland-next.apks
+        run: eas submit --platform android --profile ${{ env.SUBMIT_PROFILE }} --non-interactive --path neuland-next.aab
