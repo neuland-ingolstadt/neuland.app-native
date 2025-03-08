@@ -14,7 +14,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
 	const { t } = useTranslation(['accessibility']);
 	return (
 		<Pressable
-			onPressOut={setToday}
+			onPress={setToday}
 			style={styles.headerButton}
 			hitSlop={10}
 			accessibilityLabel={t('button.timetableBack')}

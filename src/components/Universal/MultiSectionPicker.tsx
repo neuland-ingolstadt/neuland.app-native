@@ -35,7 +35,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
 					<Pressable
-						onPressOut={() => {
+						onPress={() => {
 							action(item.key);
 						}}
 						style={styles.button}

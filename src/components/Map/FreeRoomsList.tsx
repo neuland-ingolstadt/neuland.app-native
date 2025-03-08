@@ -23,7 +23,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 				<View style={styles.rowEntry}>
 					<View>
 						<Pressable
-							onPressOut={() => {
+							onPress={() => {
 								router.dismissTo({
 									pathname: '/(tabs)/map',
 									params: { room: room.room }

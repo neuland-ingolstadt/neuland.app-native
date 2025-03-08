@@ -37,7 +37,7 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 		<>
 			<React.Fragment>
 				<Pressable
-					onPressOut={() => {
+					onPress={() => {
 						action(!selectedItem);
 					}}
 					style={styles.button}

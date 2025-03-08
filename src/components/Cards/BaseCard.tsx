@@ -1,16 +1,16 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import ContextMenu from '@/components/Flow/ContextMenu';
 import { USER_GUEST } from '@/data/constants';
-import { type RelativePathString, router } from 'expo-router';
 import type React from 'react';
-import { memo, useContext } from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { type RelativePathString, router } from 'expo-router';
 import PlatformIcon from '../Universal/Icon';
 import { DashboardContext, UserKindContext } from '../contexts';
 import { cardIcons } from '../icons';
+import { CardContextMenu } from './CardContextMenu';
 
 interface BaseCardProps {
 	title: string;
@@ -31,110 +31,75 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext);
 	const { userKind = USER_GUEST } = useContext(UserKindContext);
 
-	const actions = [];
-
-	// Settings action
-	actions.push({
-		title: t('contextMenu.settings'),
-		systemIcon: Platform.OS === 'ios' ? 'gear' : undefined
-	});
-
-	// Hide action (conditionally pushed)
-	if (removable) {
-		actions.push({
-			title: t('contextMenu.hide'),
-			systemIcon: Platform.OS === 'ios' ? 'eye.slash' : undefined,
-			destructive: true
-		});
-	}
-
-	// Reset action
-	actions.push({
-		title: t('contextMenu.reset'),
-		systemIcon: Platform.OS === 'ios' ? 'arrow.counterclockwise' : undefined,
-		destructive: true
-	});
-
 	const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns'];
 	const dynamicTitle = foodKeys.includes(title) ? 'food' : title;
+
+	const cardContent = (
+		<View style={styles.card}>
+			<View style={styles.titleView}>
+				<PlatformIcon
+					ios={{
+						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.ios,
+						size: 18
+					}}
+					android={{
+						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.android,
+						size: 24,
+						variant: 'outlined'
+					}}
+					web={{
+						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.web,
+						size: 24
+					}}
+				/>
+				<Text style={styles.title}>
+					{/* @ts-expect-error cannot verify that title is a valid key */}
+					{t(`cards.titles.${title}`)}
+				</Text>
+				{onPressRoute != null && (
+					<PlatformIcon
+						ios={{
+							name: 'chevron.forward',
+							size: 16
+						}}
+						android={{
+							name: 'chevron_right',
+							size: 26
+						}}
+						web={{
+							name: 'ChevronRight',
+							size: 24
+						}}
+						style={styles.labelColor}
+					/>
+				)}
+			</View>
+			{children != null && <>{children}</>}
+		</View>
+	);
+
 	return (
-		<ContextMenu
-			// @ts-expect-error cannot verify that title is a valid key
-			title={t(`cards.titles.${title}`)}
-			actions={actions}
-			onPress={(e) => {
-				if (e.nativeEvent.name === t('contextMenu.settings')) {
-					router.navigate('/dashboard');
-				}
-				if (e.nativeEvent.name === t('contextMenu.hide')) {
-					hideDashboardEntry(title);
-				}
-				if (e.nativeEvent.name === t('contextMenu.reset')) {
-					resetOrder(userKind ?? 'guest');
-				}
-			}}
-			onPreviewPress={() => {
-				if (onPressRoute != null) {
-					router.navigate(onPressRoute as RelativePathString);
-				}
-			}}
-		>
-			<Pressable
-				disabled={onPressRoute == null}
-				onPress={() => {
-					if (onPressRoute != null) {
-						router.navigate(onPressRoute as RelativePathString);
-					}
-				}}
-				delayLongPress={300}
-				onLongPress={() => {
-					/* nothing */
-				}}
-			>
-				<View style={styles.card}>
-					<View style={styles.titleView}>
-						<PlatformIcon
-							ios={{
-								name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.ios,
-								size: 18
-							}}
-							android={{
-								name: cardIcons[dynamicTitle as keyof typeof cardIcons]
-									?.android,
-								size: 24,
-								variant: 'outlined'
-							}}
-							web={{
-								name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.web,
-								size: 24
-							}}
-						/>
-						<Text style={styles.title}>
-							{/* @ts-expect-error cannot verify that title is a valid key */}
-							{t(`cards.titles.${title}`)}
-						</Text>
-						{onPressRoute != null && (
-							<PlatformIcon
-								ios={{
-									name: 'chevron.forward',
-									size: 16
-								}}
-								android={{
-									name: 'chevron_right',
-									size: 26
-								}}
-								web={{
-									name: 'ChevronRight',
-									size: 24
-								}}
-								style={styles.labelColor}
-							/>
-						)}
-					</View>
-					{children != null && <>{children}</>}
-				</View>
-			</Pressable>
-		</ContextMenu>
+		<CardContextMenu
+			card={
+				<Pressable
+					disabled={onPressRoute == null}
+					onPress={() => {
+						if (onPressRoute != null) {
+							router.navigate(onPressRoute as RelativePathString);
+						}
+					}}
+					delayLongPress={300}
+				>
+					{cardContent}
+				</Pressable>
+			}
+			title={title}
+			onPressRoute={onPressRoute}
+			removable={removable}
+			hideDashboardEntry={hideDashboardEntry}
+			resetOrder={resetOrder}
+			userKind={userKind}
+		/>
 	);
 };
 
@@ -143,7 +108,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
 		borderRadius: theme.radius.md,
-		padding: theme.margins.card
+		padding: theme.margins.card,
+		width: '100%'
 	},
 	labelColor: {
 		color: theme.colors.labelColor
@@ -163,10 +129,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }));
 
-export default memo(BaseCard, (prev, next) => {
-	return (
-		prev.title === next.title &&
-		prev.onPressRoute === next.onPressRoute &&
-		prev.removable === next.removable
-	);
-});
+export default BaseCard;

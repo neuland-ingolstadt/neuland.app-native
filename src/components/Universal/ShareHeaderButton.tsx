@@ -19,7 +19,7 @@ export default function ShareHeaderButton({
 		<View style={styles.shareRow}>
 			{!noShare && (
 				<Pressable
-					onPressOut={() => {
+					onPress={() => {
 						void onPress();
 					}}
 					style={styles.shareButton}
@@ -44,7 +44,7 @@ export default function ShareHeaderButton({
 			)}
 			{Platform.OS === 'ios' && (
 				<Pressable
-					onPressOut={() => {
+					onPress={() => {
 						router.back();
 					}}
 					style={styles.shareButton}
