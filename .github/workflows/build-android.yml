@@ -50,8 +50,7 @@ jobs:
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile production --non-interactive --platform android --local --output neuland-next.aab
-
+        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
       - name: Determine submission profile
         run: |
           if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
