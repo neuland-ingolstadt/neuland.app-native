@@ -6,6 +6,7 @@
 
 # vs code
 .VSCodeCounter/
+.vscode/
 
 # idea
 .idea/
