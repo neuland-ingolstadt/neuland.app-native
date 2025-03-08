@@ -44,8 +44,7 @@
 		},
 		"android": {
 			"package": "app.neuland",
-			"userInterfaceStyle": "automatic",
-			"versionCode": 292
+			"userInterfaceStyle": "automatic"
 		},
 		"sdkVersion": "52.0.0",
 		"experiments": {

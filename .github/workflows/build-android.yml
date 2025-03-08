@@ -1,0 +1,65 @@
+name: "Build Android (Beta)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      internal:
+        description: "Submit as internal build"
+        type: boolean
+        default: false
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Node JS environment
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: "22"
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install project dependencies
+        run: bun install
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.2.2
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build with EAS
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
+      - name: Determine submission profile
+        run: |
+          if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
+            echo "SUBMIT_PROFILE=internal" >> $GITHUB_ENV
+          else
+            echo "SUBMIT_PROFILE=preview" >> $GITHUB_ENV
+          fi
+
+      - name: Submit to Google Play
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas submit --platform android --profile ${{ env.SUBMIT_PROFILE }} --non-interactive --path neuland-next.aab
