@@ -11,7 +11,7 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet);
 	return (
 		<Pressable
-			onPressOut={() => {
+			onPress={() => {
 				router.navigate('/food-preferences');
 			}}
 			hitSlop={10}

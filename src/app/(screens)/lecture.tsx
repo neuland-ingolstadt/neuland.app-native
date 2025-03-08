@@ -283,7 +283,7 @@ export default function TimetableDetails(): React.JSX.Element {
 										return (
 											<React.Fragment key={i}>
 												<Pressable
-													onPressOut={() => {
+													onPress={() => {
 														router.dismissTo({
 															pathname: '/(tabs)/map',
 															params: {
