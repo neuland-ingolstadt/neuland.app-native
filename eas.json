@@ -1,36 +1,36 @@
 {
-  "cli": {
-    "version": ">= 9.2.0",
-    "appVersionSource": "remote"
-  },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {
-      "autoIncrement": true,
-      "distribution": "store"
-    }
-  },
-  "submit": {
-    "production": {
-      "android": {
-        "track": "production"
-      }
-    },
-    "preview": {
-      "android": {
-        "track": "beta"
-      }
-    },
-    "internal": {
-      "android": {
-        "track": "internal"
-      }
-    }
-  }
+	"cli": {
+		"version": ">= 9.2.0",
+		"appVersionSource": "remote"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal"
+		},
+		"preview": {
+			"distribution": "internal"
+		},
+		"production": {
+			"autoIncrement": true,
+			"distribution": "store"
+		}
+	},
+	"submit": {
+		"production": {
+			"android": {
+				"track": "production"
+			}
+		},
+		"preview": {
+			"android": {
+				"track": "beta"
+			}
+		},
+		"internal": {
+			"android": {
+				"track": "internal"
+			}
+		}
+	}
 }
