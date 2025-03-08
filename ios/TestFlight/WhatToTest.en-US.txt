@@ -1,3 +1,1 @@
-In this update, we implemented some improvements for you so that you can use the app even more smoothly and conveniently.
-We've worked on performance in the background, fixed small bugs and optimized the overall user experience.
-Stay tuned so you don't miss any more updates!
+This update includes various improvements and bug fixes to enhance stability and performance.

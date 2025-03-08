@@ -1,3 +1,1 @@
-In diesem Update haben wir einige Verbesserungen für dich umgesetzt, damit du die App noch flüssiger und angenehmer nutzen kannst.
-Wir haben im Hintergrund an der Performance geschraubt, kleine Fehler behoben und das gesamte Nutzererlebnis optimiert.
-Bleib dran, um keine weiteren Updates zu verpassen!
+Dieses Update enthält verschiedene Verbesserungen und Fehlerbehebungen, um die Stabilität und Leistung zu verbessern.
