@@ -8,9 +8,6 @@ on:
         type: boolean
         default: false
 
-  push:
-    branches:
-      - cd
 
 jobs:
   build:
