@@ -32,7 +32,6 @@
 .env.production.local
 
 # expo
-eas.json
 credentials.json
 credentials/
 
@@ -48,3 +47,6 @@ junit.xml
 
 # nvim
 .nvimlog
+
+# google
+service.json
