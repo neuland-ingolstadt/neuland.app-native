@@ -7,11 +7,17 @@ type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Trigger']>;
 
 const DropdownMenuTrigger = DropdownMenu.create((props: ItemProps) => {
 	const { styles } = useStyles(stylesheet);
-	return <DropdownMenu.Trigger style={styles.item} {...props} />;
+	return (
+		<DropdownMenu.Trigger
+			style={styles.item as React.CSSProperties}
+			{...props}
+		/>
+	);
 }, 'Trigger');
 
 export default DropdownMenuTrigger;
 
+// @ts-expect-error - Contains some web specific code
 const stylesheet = createStyleSheet((theme) => ({
 	item: {
 		backgroundColor: theme.colors.card,

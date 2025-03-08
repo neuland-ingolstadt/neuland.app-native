@@ -5,7 +5,7 @@
 # Configuration options are organized into tables and keys.
 # See documentation for more information on available options.
 
-# [remote.github]
+[remote.github]
 owner = "neuland-ingolstadt"
 repo = "neuland-app.native"
 # token = ""
