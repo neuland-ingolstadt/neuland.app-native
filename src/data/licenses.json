@@ -358,7 +358,7 @@
 		"licenseUrl": "https://github.com/zoontek/react-native-edge-to-edge/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-gesture-handler@2.20.2": {
+	"react-native-gesture-handler@2.24.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/software-mansion/react-native-gesture-handler",
 		"licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
@@ -394,19 +394,19 @@
 		"licenseUrl": "https://github.com/dohooo/react-native-reanimated-carousel/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-reanimated@3.16.7": {
+	"react-native-reanimated@3.17.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/software-mansion/react-native-reanimated",
 		"licenseUrl": "https://github.com/software-mansion/react-native-reanimated/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-safe-area-context@4.12.0": {
+	"react-native-safe-area-context@5.3.0": {
 		"licenses": "MIT",
 		"repository": "https://github.com/th3rdwave/react-native-safe-area-context",
 		"licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
 		"parents": "neuland"
 	},
-	"react-native-screens@4.4.0": {
+	"react-native-screens@4.9.1": {
 		"licenses": "MIT",
 		"repository": "https://github.com/software-mansion/react-native-screens",
 		"licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
