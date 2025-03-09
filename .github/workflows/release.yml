@@ -99,6 +99,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
 
+      - name: Setup Node JS environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install project dependencies
+        run: bun install
+
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
