@@ -1,6 +1,10 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as ContextMenu from 'zeego/context-menu';
+import ContextMenuContent from '../ContextMenu/ContextMenuContent';
+import ContextMenuItem from '../ContextMenu/ContextMenuItem';
+import ContextMenuSeparator from '../ContextMenu/ContextMenuItemSeparator';
+import ContextMenuItemTitle from '../ContextMenu/ContextMenuItemTitle';
 
 interface CardContextMenuProps {
 	card: JSX.Element;
@@ -37,8 +41,8 @@ export function CardContextMenu({
 		<ContextMenu.Root>
 			<ContextMenu.Trigger>{card}</ContextMenu.Trigger>
 
-			<ContextMenu.Content>
-				<ContextMenu.Item
+			<ContextMenuContent>
+				<ContextMenuItem
 					key="settings"
 					onSelect={() => {
 						handleItemPress(t('contextMenu.settings'));
@@ -49,29 +53,32 @@ export function CardContextMenu({
 							name: 'gear'
 						}}
 					/>
-					<ContextMenu.ItemTitle>
+					<ContextMenuItemTitle>
 						{t('contextMenu.settings')}
-					</ContextMenu.ItemTitle>
-				</ContextMenu.Item>
+					</ContextMenuItemTitle>
+				</ContextMenuItem>
 
 				{removable && (
-					<ContextMenu.Item
-						key="hide"
-						destructive
-						onSelect={() => handleItemPress(t('contextMenu.hide'))}
-					>
-						<ContextMenu.ItemIcon
-							ios={{
-								name: 'eye.slash'
-							}}
-						/>
-						<ContextMenu.ItemTitle>
-							{t('contextMenu.hide')}
-						</ContextMenu.ItemTitle>
-					</ContextMenu.Item>
+					<>
+						<ContextMenuSeparator />
+						<ContextMenuItem
+							key="hide"
+							destructive
+							onSelect={() => handleItemPress(t('contextMenu.hide'))}
+						>
+							<ContextMenu.ItemIcon
+								ios={{
+									name: 'eye.slash'
+								}}
+							/>
+							<ContextMenuItemTitle destructive>
+								{t('contextMenu.hide')}
+							</ContextMenuItemTitle>
+						</ContextMenuItem>
+					</>
 				)}
-
-				<ContextMenu.Item
+				<ContextMenuSeparator />
+				<ContextMenuItem
 					key="reset"
 					destructive
 					onSelect={() => handleItemPress(t('contextMenu.reset'))}
@@ -81,11 +88,11 @@ export function CardContextMenu({
 							name: 'arrow.counterclockwise'
 						}}
 					/>
-					<ContextMenu.ItemTitle>
+					<ContextMenuItemTitle destructive>
 						{t('contextMenu.reset')}
-					</ContextMenu.ItemTitle>
-				</ContextMenu.Item>
-			</ContextMenu.Content>
+					</ContextMenuItemTitle>
+				</ContextMenuItem>
+			</ContextMenuContent>
 		</ContextMenu.Root>
 	);
 }
