@@ -9,8 +9,11 @@ import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 import * as ContextMenu from 'zeego/context-menu';
+import ContextMenuContent from '../ContextMenu/ContextMenuContent';
+import ContextMenuItem from '../ContextMenu/ContextMenuItem';
+import ContextMenuSeparator from '../ContextMenu/ContextMenuItemSeparator';
+import ContextMenuItemTitle from '../ContextMenu/ContextMenuItemTitle';
 import { DashboardContext, UserKindContext } from '../contexts';
-
 interface HeaderContextMenuProps {
 	children: JSX.Element;
 	personName?: string;
@@ -81,29 +84,32 @@ export function HeaderContextMenu({
 		<ContextMenu.Root>
 			<ContextMenu.Trigger>{children}</ContextMenu.Trigger>
 
-			<ContextMenu.Content>
+			<ContextMenuContent>
 				<ContextMenu.Preview onPress={handlePreviewPress}>
 					{children}
 				</ContextMenu.Preview>
 
 				{userKind === 'student' && personName && (
-					<ContextMenu.Item
-						key="profile"
-						onSelect={() => handleItemPress(t('navigation.profile'))}
-					>
-						<ContextMenu.ItemIcon
-							ios={{
-								name: 'person.crop.circle'
-							}}
-						/>
-						<ContextMenu.ItemTitle>
-							{t('navigation.profile')}
-						</ContextMenu.ItemTitle>
-						<ContextMenu.ItemSubtitle>{personName}</ContextMenu.ItemSubtitle>
-					</ContextMenu.Item>
+					<>
+						<ContextMenuItem
+							key="profile"
+							onSelect={() => handleItemPress(t('navigation.profile'))}
+						>
+							<ContextMenu.ItemIcon
+								ios={{
+									name: 'person.crop.circle'
+								}}
+							/>
+							<ContextMenuItemTitle>
+								{t('navigation.profile')}
+							</ContextMenuItemTitle>
+							<ContextMenu.ItemSubtitle>{personName}</ContextMenu.ItemSubtitle>
+						</ContextMenuItem>
+						<ContextMenuSeparator />
+					</>
 				)}
 
-				<ContextMenu.Item
+				<ContextMenuItem
 					key="accent"
 					onSelect={() => handleItemPress(t('navigation.accent'))}
 				>
@@ -112,12 +118,12 @@ export function HeaderContextMenu({
 							name: 'paintpalette'
 						}}
 					/>
-					<ContextMenu.ItemTitle>
-						{t('navigation.accent')}
-					</ContextMenu.ItemTitle>
-				</ContextMenu.Item>
+					<ContextMenuItemTitle>{t('navigation.accent')}</ContextMenuItemTitle>
+				</ContextMenuItem>
 
-				<ContextMenu.Item
+				<ContextMenuSeparator />
+
+				<ContextMenuItem
 					key="about"
 					onSelect={() => handleItemPress(t('navigation.about'))}
 				>
@@ -126,11 +132,13 @@ export function HeaderContextMenu({
 							name: 'info.circle'
 						}}
 					/>
-					<ContextMenu.ItemTitle>{t('navigation.about')}</ContextMenu.ItemTitle>
-				</ContextMenu.Item>
+					<ContextMenuItemTitle>{t('navigation.about')}</ContextMenuItemTitle>
+				</ContextMenuItem>
+
+				<ContextMenuSeparator />
 
 				{userKind !== USER_GUEST && (
-					<ContextMenu.Item
+					<ContextMenuItem
 						key="logout"
 						destructive
 						onSelect={() => handleItemPress('Logout')}
@@ -140,12 +148,12 @@ export function HeaderContextMenu({
 								name: 'person.fill.xmark'
 							}}
 						/>
-						<ContextMenu.ItemTitle>Logout</ContextMenu.ItemTitle>
-					</ContextMenu.Item>
+						<ContextMenuItemTitle>Logout</ContextMenuItemTitle>
+					</ContextMenuItem>
 				)}
 
 				{userKind === USER_GUEST && (
-					<ContextMenu.Item
+					<ContextMenuItem
 						key="login"
 						onSelect={() =>
 							handleItemPress(t('menu.guest.title', { ns: 'settings' }))
@@ -156,12 +164,12 @@ export function HeaderContextMenu({
 								name: 'person.fill.questionmark'
 							}}
 						/>
-						<ContextMenu.ItemTitle>
+						<ContextMenuItemTitle>
 							{t('menu.guest.title', { ns: 'settings' })}
-						</ContextMenu.ItemTitle>
-					</ContextMenu.Item>
+						</ContextMenuItemTitle>
+					</ContextMenuItem>
 				)}
-			</ContextMenu.Content>
+			</ContextMenuContent>
 		</ContextMenu.Root>
 	);
 }
