@@ -16,20 +16,6 @@ interface MapContextType {
 	searchHistory: SearchResult[];
 	updateSearchHistory: (value: SearchResult[]) => void;
 }
-interface MapContextType {
-	localSearch: string;
-	setLocalSearch: (value: string) => void;
-	clickedElement: ClickedMapElement | null;
-	setClickedElement: (value: ClickedMapElement | null) => void;
-	availableRooms: AvailableRoom[] | null;
-	setAvailableRooms: (value: AvailableRoom[] | null) => void;
-	nextLecture: FriendlyTimetableEntry[] | null;
-	setNextLecture: (value: FriendlyTimetableEntry[] | null) => void;
-	currentFloor: { floor: string; manual: boolean } | null;
-	setCurrentFloor: (value: { floor: string; manual: boolean }) => void;
-	searchHistory: SearchResult[];
-	updateSearchHistory: (value: SearchResult[]) => void;
-}
 
 export const MapContext = createContext<MapContextType>({
 	localSearch: '',

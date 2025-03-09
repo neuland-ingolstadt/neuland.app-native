@@ -1,10 +1,8 @@
 import { Avatar } from '@/components/Settings';
 import PlatformIcon from '@/components/Universal/Icon';
-import { DashboardContext, UserKindContext } from '@/components/contexts';
+import { UserKindContext } from '@/components/contexts';
 import type { UserKindContextType } from '@/contexts/userKind';
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
 import { getPersonalData, getUsername } from '@/utils/api-utils';
 import { loadSecure } from '@/utils/storage';
 import { getContrastColor, getInitials } from '@/utils/ui-utils';
@@ -22,13 +20,8 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	const { t } = useTranslation(['navigation', 'settings']);
 	const router = useRouter();
 	const { styles, theme } = useStyles(stylesheet);
-	const resetPreferences = usePreferencesStore((state) => state.reset);
-	const resetFood = useFoodFilterStore((state) => state.reset);
-
 	const { userKind = USER_GUEST } =
 		useContext<UserKindContextType>(UserKindContext);
-	const { toggleUserKind } = useContext(UserKindContext);
-	const { resetOrder } = useContext(DashboardContext);
 	const username = userKind === USER_EMPLOYEE && loadSecure('username');
 
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);

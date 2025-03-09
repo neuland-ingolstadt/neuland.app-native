@@ -89,12 +89,14 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						}
 					}}
 					delayLongPress={300}
+					onLongPress={() => {
+						/* nothing */
+					}}
 				>
 					{cardContent}
 				</Pressable>
 			}
 			title={title}
-			onPressRoute={onPressRoute}
 			removable={removable}
 			hideDashboardEntry={hideDashboardEntry}
 			resetOrder={resetOrder}

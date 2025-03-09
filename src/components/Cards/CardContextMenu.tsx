@@ -1,11 +1,10 @@
-import { type RelativePathString, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as ContextMenu from 'zeego/context-menu';
 
 interface CardContextMenuProps {
 	card: JSX.Element;
 	title: string;
-	onPressRoute?: string;
 	removable?: boolean;
 	hideDashboardEntry?: (title: string) => void;
 	resetOrder?: (userKind: string) => void;
@@ -15,7 +14,6 @@ interface CardContextMenuProps {
 export function CardContextMenu({
 	card,
 	title,
-	onPressRoute,
 	removable = true,
 	hideDashboardEntry,
 	resetOrder,
@@ -35,12 +33,6 @@ export function CardContextMenu({
 		}
 	};
 
-	const handlePreviewPress = () => {
-		if (onPressRoute != null) {
-			router.navigate(onPressRoute as RelativePathString);
-		}
-	};
-
 	return (
 		<ContextMenu.Root>
 			<ContextMenu.Trigger>{card}</ContextMenu.Trigger>
@@ -48,7 +40,9 @@ export function CardContextMenu({
 			<ContextMenu.Content>
 				<ContextMenu.Item
 					key="settings"
-					onSelect={() => handleItemPress(t('contextMenu.settings'))}
+					onSelect={() => {
+						handleItemPress(t('contextMenu.settings'));
+					}}
 				>
 					<ContextMenu.ItemIcon
 						ios={{

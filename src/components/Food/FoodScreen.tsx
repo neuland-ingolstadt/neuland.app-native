@@ -80,9 +80,6 @@ function FoodScreen(): React.JSX.Element {
 	}, [data, isPaused, t]);
 
 	const pagerViewRef = useRef<PagerView>(null);
-	function setPage(page: number): void {
-		pagerViewRef.current?.setPage(page);
-	}
 
 	/**
 	 * Renders a button for a specific day's food data.
