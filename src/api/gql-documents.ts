@@ -9,6 +9,7 @@ export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     }
 `);
 
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
     fragment AnnouncementFields on Announcement {
         id
@@ -37,6 +38,7 @@ export const FOOD_QUERY = graphql(/* GraphQL */ `
     }
 `);
 
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const FOOD_FRAGMENT = graphql(/* GraphQL */ `
     fragment FoodFields on FoodResponse {
         foodData {
@@ -108,6 +110,7 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `);
 
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
         host {
@@ -137,6 +140,7 @@ export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
     }
 `);
 
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment UniversitySportsFields on UniversitySports {
         id

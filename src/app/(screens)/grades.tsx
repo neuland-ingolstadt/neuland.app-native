@@ -108,7 +108,7 @@ export default function GradesSCreen(): React.JSX.Element {
 		queryFn: loadGrades,
 		staleTime: 1000 * 60 * 30, // 30 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-		retry(failureCount, error) {
+		retry(_failureCount, error) {
 			if (error instanceof NoSessionError) {
 				router.replace('/login');
 			}

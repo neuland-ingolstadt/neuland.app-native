@@ -70,7 +70,6 @@ export default function Licenses(): React.JSX.Element {
 		})
 		.map(([key, value]: [string, LicenseEntry]) => {
 			const version = numberRegex.exec(key);
-			const repo = value.repository;
 			const nameWithoutVersion = key
 				.replace(atRegex, '')
 				.replace(version != null ? version[0] : '', '');
