@@ -235,7 +235,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 17,
 		height: 40,
 		marginBottom: 10,
-		paddingHorizontal: 10
+		paddingHorizontal: 10,
+		borderColor: theme.colors.border,
+		borderWidth: 1
 	},
 	trigger: {
 		backgroundColor: theme.colors.inputBackground,
