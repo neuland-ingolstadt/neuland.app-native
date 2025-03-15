@@ -5,7 +5,7 @@ import { trackEvent } from '@aptabase/react-native';
 import Fuse from 'fuse.js';
 import type { FeatureCollection } from 'geojson';
 import type React from 'react';
-import { useContext, useEffect, useMemo } from 'react';
+import { memo, useCallback, useContext, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Platform, SectionList, Text } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -57,17 +57,24 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 			addUnlockedAppIcon('retro');
 		}
 	}, [localSearch]);
-	const fuse = new Fuse(allRooms.features, {
-		keys: [
-			'properties.Raum',
-			i18n.language === 'de'
-				? 'properties.Funktion_de'
-				: 'properties.Funktion_en',
-			'properties.Gebaeude'
-		],
-		threshold: 0.4,
-		useExtendedSearch: true
-	});
+
+	// Memoize fuse instance to avoid recreation on each render
+	const fuse = useMemo(
+		() =>
+			new Fuse(allRooms.features, {
+				keys: [
+					'properties.Raum',
+					i18n.language === 'de'
+						? 'properties.Funktion_de'
+						: 'properties.Funktion_en',
+					'properties.Gebaeude'
+				],
+				threshold: 0.4,
+				useExtendedSearch: true
+			}),
+		[allRooms.features, i18n.language]
+	);
+
 	const [searchResultsExact, searchResultsFuzzy] = useMemo(() => {
 		const results = fuse.search(localSearch.trim().toUpperCase());
 		const roomResults = results.map((result) => ({
@@ -100,6 +107,40 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 
 		updateSearchHistory(newSearchHistory);
 	}
+
+	const renderItem = useCallback(
+		({ item, index }: { item: SearchResult; index: number }) => (
+			<ResultRow
+				result={item}
+				index={index}
+				handlePresentModalPress={handlePresentModalPress}
+				updateSearchHistory={addToSearchHistory}
+			/>
+		),
+		[handlePresentModalPress, addToSearchHistory]
+	);
+
+	const renderSectionHeader = useCallback(
+		({ section }: { section: { title: string; data: SearchResult[] } }) => (
+			<Text style={styles.header}>{section.title}</Text>
+		),
+		[styles.header]
+	);
+
+	const itemSeparator = useCallback(() => <Divider iosPaddingLeft={50} />, []);
+
+	// Performance optimization props for SectionList
+	const sectionListProps = useMemo(
+		() => ({
+			windowSize: 5,
+			maxToRenderPerBatch: 10,
+			updateCellsBatchingPeriod: 50,
+			removeClippedSubviews: true,
+			initialNumToRender: 10
+		}),
+		[]
+	);
+
 	return searchResultsExact.length > 0 || searchResultsFuzzy.length > 0 ? (
 		<SectionList
 			contentContainerStyle={styles.contentContainer}
@@ -123,24 +164,19 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 					: [])
 			]}
 			keyExtractor={(item, index) => `${item.title}${index}`}
-			renderItem={({ item, index }) => (
-				<ResultRow
-					result={item}
-					index={index}
-					handlePresentModalPress={handlePresentModalPress}
-					updateSearchHistory={addToSearchHistory}
-				/>
-			)}
-			ItemSeparatorComponent={() => <Divider iosPaddingLeft={50} />}
+			renderItem={renderItem}
+			ItemSeparatorComponent={itemSeparator}
 			stickySectionHeadersEnabled={false}
-			renderSectionHeader={({ section: { title } }) => (
-				<Text style={styles.header}>{title}</Text>
-			)}
+			renderSectionHeader={renderSectionHeader}
+			{...sectionListProps}
 		/>
 	) : (
 		<Text style={styles.noResults}>{t('pages.map.search.noResults')}</Text>
 	);
 };
+
+// Memoize the component to prevent unnecessary re-renders from parent
+export default memo(SearchResults);
 
 const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
@@ -161,5 +197,3 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'center'
 	}
 }));
-
-export default SearchResults;

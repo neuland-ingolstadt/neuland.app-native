@@ -159,9 +159,8 @@ const MapScreen = (): React.JSX.Element => {
 
 	const handleSheetChangesModal = useCallback(() => {
 		setClickedElement(null);
-
 		bottomSheetRef.current?.snapToIndex(1);
-	}, []);
+	}, [setClickedElement]);
 
 	const handlePresentModalPress = useCallback(() => {
 		bottomSheetRef.current?.close();
@@ -474,24 +473,34 @@ const MapScreen = (): React.JSX.Element => {
 	const [availableFilteredGeoJSON, setAvailableFilteredGeoJSON] =
 		useState<FeatureCollection>();
 
+	const filterAvailableRooms = useCallback(
+		(rooms: FeatureCollection | undefined): Feature[] => {
+			if (rooms == null) {
+				return [];
+			}
+			return rooms.features.filter(
+				(feature) =>
+					feature.properties != null &&
+					availableRooms?.find((x) => x.room === feature.properties?.Raum)
+			);
+		},
+		[availableRooms]
+	);
+
+	const filterEtage = useCallback(
+		(etage: string): Feature[] => {
+			return allRooms.features.filter(
+				(feature) => feature.properties?.Ebene === etage
+			);
+		},
+		[allRooms.features]
+	);
+
 	useEffect(() => {
 		if (mapOverlay == null) {
 			return;
 		}
 		// filter the filteredGeoJSON to only show available rooms
-		const filterAvailableRooms = (
-			rooms: FeatureCollection | undefined
-		): Feature[] => {
-			if (rooms == null) {
-				return [];
-			}
-			const result = rooms.features.filter(
-				(feature) =>
-					feature.properties != null &&
-					availableRooms?.find((x) => x.room === feature.properties?.Raum)
-			);
-			return result;
-		};
 		const filteredFeatures = filterAvailableRooms(filteredGeoJSON);
 
 		const availableFilteredGeoJSON: FeatureCollection = {
@@ -500,18 +509,12 @@ const MapScreen = (): React.JSX.Element => {
 		};
 
 		setAvailableFilteredGeoJSON(availableFilteredGeoJSON);
-	}, [availableRooms, filteredGeoJSON, mapOverlay]);
+	}, [availableRooms, filteredGeoJSON, mapOverlay, filterAvailableRooms]);
 
 	useEffect(() => {
 		if (mapOverlay == null) {
 			return;
 		}
-		const filterEtage = (etage: string): Feature[] => {
-			return allRooms.features.filter(
-				(feature) => feature.properties?.Ebene === etage
-			);
-		};
-
 		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG');
 
 		const newGeoJSON: FeatureCollection = {
@@ -520,57 +523,61 @@ const MapScreen = (): React.JSX.Element => {
 		};
 
 		setFilteredGeoJSON(newGeoJSON);
-	}, [currentFloor, allRooms, mapOverlay]); // Ensure dependencies are correctly listed
+	}, [currentFloor, allRooms, mapOverlay, filterEtage]); // Ensure dependencies are correctly listed
 
-	const getRoomData = (room: string): RoomData => {
-		const occupancies = availableRooms?.find((x) => x.room === room);
-		const properties = allRooms.features.find(
-			(x) => x.properties?.Raum === room
-		)?.properties as FeatureProperties | undefined;
+	const getRoomData = useCallback(
+		(room: string): RoomData => {
+			const occupancies = availableRooms?.find((x) => x.room === room);
+			const properties = allRooms.features.find(
+				(x) => x.properties?.Raum === room
+			)?.properties as FeatureProperties | undefined;
 
-		const roomData = {
-			title: room,
-			subtitle:
-				properties != null &&
-				(i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en') in properties
-					? (properties[
-							i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
-						] ?? t('misc.unknown'))
-					: t('misc.unknown'),
-			properties,
+			return {
+				title: room,
+				subtitle:
+					properties != null &&
+					(i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en') in properties
+						? (properties[
+								i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
+							] ?? t('misc.unknown'))
+						: t('misc.unknown'),
+				properties,
+				occupancies,
+				type: SEARCH_TYPES.ROOM
+			} as RoomData;
+		},
+		[availableRooms, allRooms.features, i18n.language, t]
+	);
 
-			occupancies,
-			type: SEARCH_TYPES.ROOM
-		};
-		return roomData as RoomData;
-	};
+	const getBuildingData = useCallback(
+		(building: string): RoomData => {
+			const buildingDetails = allRooms.features.find(
+				(x) =>
+					x.properties?.Gebaeude === building &&
+					x.properties.rtype === SEARCH_TYPES.BUILDING
+			);
+			const numberOfFreeRooms = availableRooms?.filter((x) =>
+				x.room.startsWith(building)
+			).length;
+			const numberOfRooms = allRooms.features.filter(
+				(x) =>
+					x.properties?.Gebaeude === building &&
+					x.properties.rtype === SEARCH_TYPES.ROOM
+			).length;
 
-	const getBuildingData = (building: string): RoomData => {
-		const buildingDetails = allRooms.features.find(
-			(x) =>
-				x.properties?.Gebaeude === building &&
-				x.properties.rtype === SEARCH_TYPES.BUILDING
-		);
-		const numberOfFreeRooms = availableRooms?.filter((x) =>
-			x.room.startsWith(building)
-		).length;
-		const numberOfRooms = allRooms.features.filter(
-			(x) =>
-				x.properties?.Gebaeude === building &&
-				x.properties.rtype === SEARCH_TYPES.ROOM
-		).length;
-		const buildingData = {
-			title: building,
-			subtitle: t('pages.map.details.room.building'),
-			properties: buildingDetails?.properties,
-			occupancies: {
-				total: numberOfRooms,
-				available: numberOfFreeRooms ?? 0
-			},
-			type: SEARCH_TYPES.BUILDING
-		};
-		return buildingData;
-	};
+			return {
+				title: building,
+				subtitle: t('pages.map.details.room.building'),
+				properties: buildingDetails?.properties,
+				occupancies: {
+					total: numberOfRooms,
+					available: numberOfFreeRooms ?? 0
+				},
+				type: SEARCH_TYPES.BUILDING
+			};
+		},
+		[allRooms.features, availableRooms, t]
+	);
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
