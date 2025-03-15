@@ -108,9 +108,9 @@ export default function LecturerDetail(): React.JSX.Element {
 			<View style={styles.titleContainer}>
 				<Text
 					style={styles.titleText}
-					allowFontScaling={true}
-					adjustsFontSizeToFit={true}
-					numberOfLines={2}
+					adjustsFontSizeToFit
+					minimumFontScale={0.8}
+					numberOfLines={3}
 				>
 					{`${[lecturer?.titel, lecturer?.vorname, lecturer?.name]
 						.join(' ')

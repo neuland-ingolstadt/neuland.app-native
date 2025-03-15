@@ -217,9 +217,9 @@ export default function ClEventDetail(): React.JSX.Element {
 			<View style={styles.titleContainer}>
 				<Text
 					style={styles.titleText}
-					allowFontScaling={true}
-					adjustsFontSizeToFit={true}
-					numberOfLines={2}
+					adjustsFontSizeToFit
+					minimumFontScale={0.8}
+					numberOfLines={3}
 				>
 					{clEvent.titles[i18n.language as LanguageKey]}
 				</Text>

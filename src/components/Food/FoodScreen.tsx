@@ -130,7 +130,8 @@ function FoodScreen(): React.JSX.Element {
 						<View style={styles.dayButtonContainer}>
 							<Text
 								style={getStyleMemoized(selectedDay === index)}
-								adjustsFontSizeToFit={true}
+								adjustsFontSizeToFit
+								minimumFontScale={0.8}
 								numberOfLines={1}
 							>
 								{date
@@ -141,7 +142,8 @@ function FoodScreen(): React.JSX.Element {
 							</Text>
 							<Text
 								style={styles.dayText(selectedDay === index)}
-								adjustsFontSizeToFit={true}
+								adjustsFontSizeToFit
+								minimumFontScale={0.8}
 								numberOfLines={1}
 							>
 								{date.toLocaleDateString('de-DE', {
