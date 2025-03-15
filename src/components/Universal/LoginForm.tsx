@@ -197,7 +197,7 @@ const LoginForm = ({
 						selectionColor={theme.colors.primary}
 						autoCapitalize="none"
 						autoCorrect={false}
-						textContentType="oneTimeCode"
+						textContentType="username"
 					/>
 				</View>
 				<View style={styles.passwordContainer}>
