@@ -48,7 +48,6 @@ jobs:
   build-android:
     name: Build Android app
     runs-on: ubuntu-latest
-    needs: changelog
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -70,7 +69,12 @@ jobs:
           bun-version: latest
 
       - name: Install project dependencies
-        run: bun install
+        run: bun install --frozen-lockfile --ignore-scripts -p
+
+      - name: Update license list
+        run: |
+          bun i npm-license-crawler -g
+          bun licenses
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.2
@@ -91,10 +95,10 @@ jobs:
             neuland-next.aab
           retention-days: 1
 
-  submit-and-publish:
+  publish-android:
     name: Submit and Publish
     runs-on: ubuntu-latest
-    needs: [changelog, build-android]
+    needs: build-android
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
