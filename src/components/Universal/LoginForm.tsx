@@ -176,7 +176,8 @@ const LoginForm = ({
 			<View style={styles.loginContainer}>
 				<Text
 					style={styles.header}
-					adjustsFontSizeToFit={true}
+					adjustsFontSizeToFit
+					minimumFontScale={0.8}
 					numberOfLines={1}
 				>
 					{'THI Account'}

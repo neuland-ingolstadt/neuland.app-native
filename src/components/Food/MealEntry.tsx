@@ -154,11 +154,7 @@ export const MealEntry = memo(
 					>
 						<View key={index} style={styles.container}>
 							<View style={styles.innerContainer}>
-								<Text
-									style={styles.title}
-									adjustsFontSizeToFit={true}
-									numberOfLines={2}
-								>
+								<Text style={styles.title} numberOfLines={2}>
 									{mealName(
 										meal.name,
 										foodLanguage,
@@ -311,7 +307,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		width: '100%'
 	},
-
 	pressable: {
 		marginTop: 8
 	},
