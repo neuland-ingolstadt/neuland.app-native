@@ -3,7 +3,7 @@ import { MapContext } from '@/contexts/map';
 import { getContrastColor } from '@/utils/ui-utils';
 import * as Haptics from 'expo-haptics';
 import type React from 'react';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { Platform, Pressable, Text, View } from 'react-native';
 import {
 	UnistylesRuntime,
@@ -153,7 +153,8 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	);
 };
 
-export default FloorPicker;
+// Memoize FloorPicker to prevent re-renders when parent re-renders
+export default memo(FloorPicker);
 
 const stylesheet = createStyleSheet((theme) => ({
 	ButtonArea: {

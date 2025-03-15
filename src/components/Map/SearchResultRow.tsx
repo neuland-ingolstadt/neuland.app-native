@@ -7,7 +7,7 @@ import { trackEvent } from '@aptabase/react-native';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import type { Position } from 'geojson';
 import type React from 'react';
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -118,4 +118,5 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600'
 	}
 }));
-export default ResultRow;
+
+export default memo(ResultRow);
