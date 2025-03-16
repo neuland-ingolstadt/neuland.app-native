@@ -12,7 +12,7 @@
         "@gorhom/bottom-sheet": "^5.1.2",
         "@howljs/calendar-kit": "^2.2.1",
         "@kichiyaki/react-native-barcode-generator": "^0.6.7",
-        "@maplibre/maplibre-react-native": "10.0.1",
+        "@maplibre/maplibre-react-native": "10.1.4",
         "@react-native-community/datetimepicker": "8.2.0",
         "@react-native-community/netinfo": "11.4.1",
         "@react-native-menu/menu": "^1.2.2",
@@ -70,7 +70,7 @@
         "react-native-ios-context-menu": "3.1.0",
         "react-native-ios-utilities": "^5.1.2",
         "react-native-mmkv": "^2.12.2",
-        "react-native-pager-view": "6.5.1",
+        "react-native-pager-view": "6.7.0",
         "react-native-reanimated": "~3.17.1",
         "react-native-reanimated-carousel": "4.0.2",
         "react-native-safe-area-context": "5.3.0",
@@ -649,7 +649,7 @@
 
     "@kichiyaki/react-native-barcode-generator": ["@kichiyaki/react-native-barcode-generator@0.6.7", "", { "dependencies": { "jsbarcode": "^3.8.0" }, "peerDependencies": { "prop-types": ">=15.5.0", "react-native": ">=0.62.0", "react-native-svg": ">=12.1.0" } }, "sha512-tBrL5rtOVYV1Y9vc6mUNFhC4J9KiWWwmo0yqb78dnVQ9Pn/r7OOwoWwbw1ZGA9OLbhEII83BQI0k8GmoDaU+BQ=="],
 
-    "@maplibre/maplibre-react-native": ["@maplibre/maplibre-react-native@10.0.1", "", { "dependencies": { "@turf/distance": "^7.1.0", "@turf/helpers": "^7.1.0", "@turf/length": "^7.1.0", "@turf/nearest-point-on-line": "^7.1.0", "debounce": "^2.2.0" }, "peerDependencies": { "@expo/config-plugins": ">=7", "@types/geojson": "^7946.0.0", "@types/react": ">=16.6.1", "react": ">=16.6.1", "react-native": ">=0.59.9" }, "optionalPeers": ["@expo/config-plugins", "@types/geojson", "@types/react"] }, "sha512-i39jbjArl0dvbv9UIfj03ouU+PQMxWeg2yZs8i2PY3ct38pS4FxaPHrRQCYxXUtbYlWg50LQ9Jjug0dckNQS/Q=="],
+    "@maplibre/maplibre-react-native": ["@maplibre/maplibre-react-native@10.1.4", "", { "dependencies": { "@turf/distance": "^7.1.0", "@turf/helpers": "^7.1.0", "@turf/length": "^7.1.0", "@turf/nearest-point-on-line": "^7.1.0", "debounce": "^2.2.0" }, "peerDependencies": { "@expo/config-plugins": ">=7", "@types/geojson": "^7946.0.0", "@types/react": ">=16.6.1", "react": ">=16.6.1", "react-native": ">=0.59.9" }, "optionalPeers": ["@expo/config-plugins", "@types/geojson", "@types/react"] }, "sha512-Y+1FBOmTomyUFbkHCrIcDrScGxWUIINAiJnLq7WYr6D1v1+IdPrnhdsmif+YrXNLMTAgQB+bTtqDn8j4LNgwrQ=="],
 
     "@nodelib/fs.scandir": ["@nodelib/fs.scandir@2.1.5", "", { "dependencies": { "@nodelib/fs.stat": "2.0.5", "run-parallel": "^1.1.9" } }, "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="],
 
@@ -2249,7 +2249,7 @@
 
     "react-native-mmkv": ["react-native-mmkv@2.12.2", "", { "peerDependencies": { "react": "*", "react-native": ">=0.71.0" } }, "sha512-6058Aq0p57chPrUutLGe9fYoiDVDNMU2PKV+lLFUJ3GhoHvUrLdsS1PDSCLr00yqzL4WJQ7TTzH+V8cpyrNcfg=="],
 
-    "react-native-pager-view": ["react-native-pager-view@6.5.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-YdX7bP+rPYvATMU7HzlMq9JaG3ui/+cVRbFZFGW+QshDULANFg9ECR1BA7H7JTIcO/ZgWCwF+1aVmYG5yBA9Og=="],
+    "react-native-pager-view": ["react-native-pager-view@6.7.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-sutxKiMqBuQrEyt4mLaLNzy8taIC7IuYpxfcwQBXfSYBSSpAa0qE9G1FXlP/iXqTSlFgBXyK7BESsl9umOjECQ=="],
 
     "react-native-reanimated": ["react-native-reanimated@3.17.1", "", { "dependencies": { "@babel/plugin-transform-arrow-functions": "^7.0.0-0", "@babel/plugin-transform-class-properties": "^7.0.0-0", "@babel/plugin-transform-classes": "^7.0.0-0", "@babel/plugin-transform-nullish-coalescing-operator": "^7.0.0-0", "@babel/plugin-transform-optional-chaining": "^7.0.0-0", "@babel/plugin-transform-shorthand-properties": "^7.0.0-0", "@babel/plugin-transform-template-literals": "^7.0.0-0", "@babel/plugin-transform-unicode-regex": "^7.0.0-0", "@babel/preset-typescript": "^7.16.7", "convert-source-map": "^2.0.0", "invariant": "^2.2.4", "react-native-is-edge-to-edge": "1.1.6" }, "peerDependencies": { "@babel/core": "^7.0.0-0", "react": "*", "react-native": "*" } }, "sha512-ECzLhLxMKLifv34a8799/MHqIazQZV9fLMNSMdixXQlzX71RyL3/ah3cz/h3ERoyhJAYRC2ySLLZho6pXSqMFQ=="],
 

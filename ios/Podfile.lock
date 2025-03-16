@@ -2,7 +2,7 @@ PODS:
   - aptabase-react-native (0.3.10):
     - React
   - boost (1.84.0)
-  - Burnt (0.12.2):
+  - Burnt (0.13.0):
     - ExpoModulesCore
     - SPAlert (~> 4.2)
     - SPIndicator (~> 1.6)
@@ -322,11 +322,11 @@ PODS:
   - hermes-engine (0.77.1):
     - hermes-engine/Pre-built (= 0.77.1)
   - hermes-engine/Pre-built (0.77.1)
-  - maplibre-react-native (10.0.1):
-    - maplibre-react-native/DynamicLibrary (= 10.0.1)
+  - maplibre-react-native (10.1.4):
+    - maplibre-react-native/DynamicLibrary (= 10.1.4)
     - React
     - React-Core
-  - maplibre-react-native/DynamicLibrary (10.0.1):
+  - maplibre-react-native/DynamicLibrary (10.1.4):
     - React
     - React-Core
   - MMKV (2.1.0):
@@ -1637,7 +1637,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-pager-view (6.5.1):
+  - react-native-pager-view (6.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2605,12 +2605,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aptabase-react-native: 423bc1190aef4b5ff5ed25656dbde0ff671ff4e4
-  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
-  Burnt: e3a3397e26172fca31a59bb27421475a58068836
+  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  Burnt: 0616363a206ed96ba9af3e2eb0e184dc97be1458
   ComputableLayout: c50faffac4ed9f8f05b0ce5e6f3a60df1f6042c8
   ContextMenuAuxiliaryPreview: 20be0be795b783b68f8792732eed4bed9f202c1c
   DGSwiftUtilities: 2f0d35d5ff3d57bd70ccc42f15971460db202c41
-  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   EXApplication: 4c72f6017a14a65e338c5e74fca418f35141e819
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
@@ -2645,9 +2645,9 @@ SPEC CHECKSUMS:
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 79c4b7ec726447eec5f8593379466bd9fde1aa14
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
+  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
-  maplibre-react-native: 9d2c610deb198bde6ca2efabc72aa55dd4b7de79
+  maplibre-react-native: a47ec64b793ca59f145df029c754a91f0ef4ece6
   MMKV: ce484c1ac40bf76d5f09a0195d2ec5b3d3840d55
   MMKVCore: 1eb661c6c498ab88e3df9ce5d8ff94d05fcc0567
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
@@ -2687,7 +2687,7 @@ SPEC CHECKSUMS:
   react-native-menu: c394bbb3578281165d0025e500c9711f164e8fe1
   react-native-mmkv: 95606f6223bb1381b945d7835e92ce416a48b69d
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-pager-view: 579e7437999d803e4e70fc3d79e3bf0dfde349d0
+  react-native-pager-view: 2a1551c495e10f60573750bf82f9716a2a4a339a
   react-native-safe-area-context: fdb0a66feac038cb6eb1edafcf2ccee2b5cf0284
   react-native-unistyles: 30e37ff742f30c5e9f224ae1b11f859a37d363a5
   react-native-view-shot: 4ec5c3a378bbbafd6fc1827285bcced97ed0b648
@@ -2738,6 +2738,6 @@ SPEC CHECKSUMS:
   SwiftUIReactNative: 6af1ddbecf2c93011a8047f9897907b741c3f0df
   Yoga: 28b8cda182ee3092ff80203da66dcb3ffc8cf401
 
-PODFILE CHECKSUM: d66bcb89074bb099acbcbcc80c2f9f5caa83a513
+PODFILE CHECKSUM: 73d0606f0914f25da49b6852560ff3e90f1d06da
 
 COCOAPODS: 1.16.2
