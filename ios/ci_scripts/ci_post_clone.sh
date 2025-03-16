@@ -23,7 +23,7 @@ echo "===== Running bun install ====="
 cd ../..
 bun i npm-license-crawler -g
 bun install --frozen-lockfile --ignore-scripts -p
-bun licenses
+bun run licences
 
 echo "===== Running pod install ====="
 cd ios
