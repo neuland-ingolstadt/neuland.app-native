@@ -18,7 +18,8 @@
 			"patches/",
 			"coverage/",
 			"__generated__/",
-			".expo/"
+			".expo/",
+			"src/data/licenses.json"
 		]
 	},
 	"formatter": {

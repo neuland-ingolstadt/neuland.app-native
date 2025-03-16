@@ -48,9 +48,6 @@ target 'NeulandNext' do
 # @generated begin @maplibre/maplibre-react-native:post-install - expo prebuild (DO NOT MODIFY) sync-6e76c80af0d70c0003d06822dd59b7c729fca472
     $MLRN.post_install(installer)
 # @generated end @maplibre/maplibre-react-native:post-install
-# @generated begin @maplibre/maplibre-react-native-post_installer - expo prebuild (DO NOT MODIFY) sync-6e76c80af0d70c0003d06822dd59b7c729fca472
-    $MLRN.post_install(installer)
-# @generated end @maplibre/maplibre-react-native-post_installer
     react_native_post_install(
       installer,
       config[:reactNativePath],
