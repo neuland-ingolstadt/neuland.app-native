@@ -21,9 +21,9 @@ bun -v
 # Install dependencies
 echo "===== Running bun install ====="
 cd ../..
-bun i npm-license-crawler -g
 bun install --frozen-lockfile --ignore-scripts -p
-bun run licences
+npm install npm-license-crawler -g
+npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/
 
 echo "===== Running pod install ====="
 cd ios
