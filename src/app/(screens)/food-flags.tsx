@@ -5,7 +5,7 @@ import type React from 'react';
 export default function Screen(): React.JSX.Element {
 	return (
 		<WorkaroundStack
-			name={'Flags'}
+			name={'flags'}
 			titleKey={'navigation.flags'}
 			component={ItemsPickerScreen}
 			params={{ type: 'flags' }}
