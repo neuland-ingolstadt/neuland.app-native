@@ -47,7 +47,7 @@ export default function TimetableDetails(): React.JSX.Element {
 	});
 	useFocusEffect(
 		useCallback(() => {
-			if (lecture === undefined) {
+			if (lecture === undefined || Platform.OS === 'web') {
 				navigation.setOptions({
 					headerRight: () => undefined
 				});
