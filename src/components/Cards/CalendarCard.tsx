@@ -72,24 +72,17 @@ const CalendarCard = (): React.JSX.Element => {
 			.map((item) => ({ ...item, begin: new Date(item.begin) }))
 			.filter((x) => x.begin > time || (x.end ?? time) > time)
 			.sort((a, b) => {
-				// Check if events are currently ongoing
-				const aIsNow = a.begin <= time && (a.end ?? time) > time;
-				const bIsNow = b.begin <= time && (b.end ?? time) > time;
+				// First compare by start date
+				const dateComparison = a.begin.getTime() - b.begin.getTime();
 
-				// Prioritize current events
-				if (aIsNow !== bIsNow) {
-					return aIsNow ? -1 : 1;
+				// If events start on the same day, prioritize single-day events
+				if (dateComparison === 0) {
+					const aIsSingleDay = !a.end;
+					const bIsSingleDay = !b.end;
+					return aIsSingleDay ? -1 : bIsSingleDay ? 1 : 0;
 				}
 
-				// For events with same current status, prioritize single-day events
-				const aIsSingleDay = !a.end;
-				const bIsSingleDay = !b.end;
-				if (aIsSingleDay !== bIsSingleDay) {
-					return aIsSingleDay ? -1 : 1;
-				}
-
-				// If both same type and current status, sort by start date
-				return a.begin.getTime() - b.begin.getTime();
+				return dateComparison;
 			}) as Combined[];
 
 		setMixedCalendar(combined.slice(0, 2));
