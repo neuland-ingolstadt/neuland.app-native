@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import { usePreferencesStore } from '@/hooks/usePreferencesStore';
 import { formatFriendlyTime } from '@/utils/date-utils';
 import { getContrastColor } from '@/utils/ui-utils';
 import type { PackedEvent } from '@howljs/calendar-kit';
@@ -30,6 +31,8 @@ const EventComponent = ({
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
 		return null;
 	}
+	const timetableMode = usePreferencesStore((state) => state.timetableMode);
+
 	const isExam = event.eventType === 'exam';
 	const begin = new Date(event.start.dateTime);
 	const end = new Date(event.end.dateTime);
@@ -45,11 +48,13 @@ const EventComponent = ({
 		: textColor(theme.colors.primary, background, isDark);
 	const eventName = event.name as string;
 	const nameToDisplay =
-		eventName.length > 20
-			? nameParts?.join('_') !== ''
-				? (nameParts?.join('_') ?? eventName)
-				: (event.shortName as string)
-			: eventName;
+		timetableMode === 'timeline-1'
+			? eventName
+			: eventName.length > 20
+				? nameParts?.join('_') !== ''
+					? (nameParts?.join('_') ?? eventName)
+					: (event.shortName as string)
+				: eventName;
 
 	const LectureLine = () => {
 		return (
