@@ -47,8 +47,9 @@
 	},
 	"menu": {
 		"oneDay": "Ein Tag",
-		"threeDays": "Mehrtägig",
-		"fiveDays": "Woche",
+		"threeDays": "Drei Tage",
+		"fiveDays": "Montag bis Freitag",
+		"sevenDays": "Woche",
 		"list": "Liste"
 	}
 }

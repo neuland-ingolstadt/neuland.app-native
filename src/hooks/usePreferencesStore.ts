@@ -9,7 +9,9 @@ export enum TimetableMode {
 	List = 'list',
 	Timeline1 = 'timeline-1',
 	Timeline3 = 'timeline-3',
-	Timeline5 = 'timeline-5'
+	// 5 mode scrolls by 5 at a time
+	Timeline5 = 'timeline-5',
+	Timeline7 = 'timeline-7'
 }
 
 interface PreferencesStore {

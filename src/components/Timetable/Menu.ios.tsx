@@ -85,6 +85,20 @@ export function MyMenu() {
 					/>
 				</DropdownMenu.CheckboxItem>
 				<DropdownMenu.CheckboxItem
+					key="7"
+					value={timetableMode === TimetableMode.Timeline7}
+					onValueChange={() => {
+						setTimetableMode(TimetableMode.Timeline7);
+					}}
+				>
+					<DropdownMenuItemTitle>{t('menu.sevenDays')}</DropdownMenuItemTitle>
+					<DropdownMenu.ItemIcon
+						ios={{
+							name: '7.circle'
+						}}
+					/>
+				</DropdownMenu.CheckboxItem>
+				<DropdownMenu.CheckboxItem
 					key="list"
 					value={timetableMode === TimetableMode.List}
 					onValueChange={() => {

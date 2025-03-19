@@ -50,11 +50,16 @@ const EventComponent = ({
 	const nameToDisplay =
 		timetableMode === 'timeline-1'
 			? eventName
-			: eventName.length > 20
+			: eventName.length > 15
 				? nameParts?.join('_') !== ''
 					? (nameParts?.join('_') ?? eventName)
 					: (event.shortName as string)
 				: eventName;
+    // hide ' - ' between time to prevent the date from using 3 lines
+	const timeToDisplay =
+		timetableMode === 'timeline-7'
+			? `${formatFriendlyTime(begin)} ${formatFriendlyTime(end)}`
+			: `${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`;
 
 	const LectureLine = () => {
 		return (
@@ -115,7 +120,7 @@ const EventComponent = ({
 								fontVariant: ['tabular-nums']
 							}}
 						>
-							{`${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`}
+							{timeToDisplay}
 						</Text>
 					)}
 				</View>

@@ -85,6 +85,20 @@ export function MyMenu() {
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
+					key="7"
+					onSelect={() => {
+						setTimetableMode(TimetableMode.Timeline7);
+					}}
+				>
+					<DropdownMenuItemTitle>{t('menu.sevenDays')}</DropdownMenuItemTitle>
+					{timetableMode === TimetableMode.Timeline7 && (
+						<DropdownMenu.ItemIcon androidIconName="check" style={styles.check}>
+							<Check size={18} />
+						</DropdownMenu.ItemIcon>
+					)}
+				</DropdownMenuItem>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
 					key="list"
 					onSelect={() => {
 						setTimetableMode(TimetableMode.List);
