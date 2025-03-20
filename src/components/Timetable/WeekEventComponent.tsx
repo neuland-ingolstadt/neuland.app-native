@@ -55,7 +55,7 @@ const EventComponent = ({
 					? (nameParts?.join('_') ?? eventName)
 					: (event.shortName as string)
 				: eventName;
-    // hide ' - ' between time to prevent the date from using 3 lines
+	// hide ' - ' between time to prevent the date from using 3 lines
 	const timeToDisplay =
 		timetableMode === 'timeline-7'
 			? `${formatFriendlyTime(begin)} ${formatFriendlyTime(end)}`
