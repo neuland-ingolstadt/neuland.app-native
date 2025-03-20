@@ -87,18 +87,21 @@ export function convertRelevantAllergens(
  * Converts an array of flags to an array of relevant flags
  * @param {string[]} flags Array of flags
  * @param {string[]} selectedFlags Array of selected flags
+ * @param {string} language selected language from `i18n.language`
  * @returns {string[]} Array of relevant flags
  */
 export function convertRelevantFlags(
 	flags: string[],
 	selectedFlags: string[],
 	language: string
-): string[] {
+): { name: string; isVeg: boolean }[] {
 	const relevantFlags = flags?.filter((flag) => selectedFlags?.includes(flag));
-	const convertedFlags = relevantFlags?.map(
-		(flag) => flapMap[flag as keyof typeof flapMap][language as LanguageKey]
-	);
-	return convertedFlags;
+	return relevantFlags?.map((flag) => ({
+		isVeg:
+			(flag as keyof typeof flapMap) === 'veg' ||
+			(flag as keyof typeof flapMap) === 'V',
+		name: flapMap[flag as keyof typeof flapMap][language as LanguageKey]
+	}));
 }
 
 /**
