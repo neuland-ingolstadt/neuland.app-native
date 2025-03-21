@@ -50,10 +50,14 @@ export class AnonymousAPIClient {
 			headers
 		});
 
+		const respClone = resp.clone();
+
 		try {
 			return await resp.json();
 		} catch {
-			throw new Error(`Response is not valid JSON (${await resp.text()})`);
+			throw new Error(
+				`API returned malformed JSON: (${await respClone.text()})`
+			);
 		}
 	}
 
