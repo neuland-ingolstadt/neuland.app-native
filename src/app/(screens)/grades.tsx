@@ -116,6 +116,15 @@ export default function GradesSCreen(): React.JSX.Element {
 		}
 	});
 
+	const UNAVAILABLE_ERRORS = [
+		'Student cannot be identified',
+		'No grade data available'
+	];
+
+	const isUnavailableError = UNAVAILABLE_ERRORS.some((errMsg) =>
+		error?.message.includes(errMsg)
+	);
+
 	const { data: personalData } = useQuery({
 		queryKey: ['personalData'],
 		queryFn: getPersonalData,
@@ -191,10 +200,14 @@ export default function GradesSCreen(): React.JSX.Element {
 			{isError && (
 				<View style={styles.loadingContainer}>
 					<ErrorView
-						title={error.message}
+						title={
+							isUnavailableError
+								? t('grades.temporarilyUnavailable')
+								: error.message
+						}
 						onRefresh={refetchByUser}
 						refreshing={isRefetchingByUser}
-						isCritical={!error.message.includes('No grade data available')}
+						isCritical={!isUnavailableError}
 					/>
 				</View>
 			)}
