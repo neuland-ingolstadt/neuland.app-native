@@ -19,18 +19,18 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.7):
     - ExpoModulesCore
-  - Expo (52.0.39):
+  - Expo (52.0.40):
     - ExpoModulesCore
-  - expo-dev-client (5.0.14):
+  - expo-dev-client (5.0.15):
     - EXManifests
     - expo-dev-launcher
     - expo-dev-menu
     - expo-dev-menu-interface
     - EXUpdatesInterface
-  - expo-dev-launcher (5.0.30):
+  - expo-dev-launcher (5.0.31):
     - DoubleConversion
     - EXManifests
-    - expo-dev-launcher/Main (= 5.0.30)
+    - expo-dev-launcher/Main (= 5.0.31)
     - expo-dev-menu
     - expo-dev-menu-interface
     - ExpoModulesCore
@@ -56,7 +56,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Main (5.0.30):
+  - expo-dev-launcher/Main (5.0.31):
     - DoubleConversion
     - EXManifests
     - expo-dev-launcher/Unsafe
@@ -85,7 +85,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - expo-dev-launcher/Unsafe (5.0.30):
+  - expo-dev-launcher/Unsafe (5.0.31):
     - DoubleConversion
     - EXManifests
     - expo-dev-menu
@@ -231,7 +231,7 @@ PODS:
     - Yoga
   - ExpoAlternateAppIcons (1.3.1):
     - ExpoModulesCore
-  - ExpoAsset (11.0.4):
+  - ExpoAsset (11.0.5):
     - ExpoModulesCore
   - ExpoBlur (14.0.3):
     - ExpoModulesCore
@@ -241,7 +241,7 @@ PODS:
     - ExpoModulesCore
   - ExpoCrypto (14.0.2):
     - ExpoModulesCore
-  - ExpoFileSystem (18.0.11):
+  - ExpoFileSystem (18.0.12):
     - ExpoModulesCore
   - ExpoFont (13.0.4):
     - ExpoModulesCore
@@ -1611,7 +1611,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-menu (1.2.2):
+  - react-native-menu (1.2.3):
     - React
   - react-native-mmkv (2.12.2):
     - DoubleConversion
@@ -2199,7 +2199,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.8.0):
+  - RNSVG (15.11.2):
     - React-Core
   - SDWebImage (5.21.0):
     - SDWebImage/Core (= 5.21.0)
@@ -2615,18 +2615,18 @@ SPEC CHECKSUMS:
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: 807ab5394ca9f8dd5e64283f02876b2f85c4eb72
-  Expo: dc113fa18a3212dfdab60fc543b052ef4299f8a9
-  expo-dev-client: 0f17f24f8b4878744c9b2a8bf9a895f3e219e2ce
-  expo-dev-launcher: 67d3146572c85fead6fdbbeec9f3ee432306ad31
+  Expo: 4f645fc381f88e6acacfb0dcb63b45fb9eff25b9
+  expo-dev-client: 8ddff983ea32604dc57248d40568add68ce8ea45
+  expo-dev-launcher: eafe29dc8c42add6ee64945125ff3801c98719b4
   expo-dev-menu: bd49f77b6e31fb6acdb7aa652d09ae0f08580789
   expo-dev-menu-interface: 00dc42302a72722fdecec3fa048de84a9133bcc4
   ExpoAlternateAppIcons: 572e3900de856e1636c3a8e7118bda7436c00f35
-  ExpoAsset: 4033893dfb333b444bf45e951351254137b658d5
+  ExpoAsset: 48386d40d53a8c1738929b3ed509bcad595b5516
   ExpoBlur: 392c1207f71d0ecf22371621c1fbd44ba84d9742
   ExpoBrightness: c0011699a3225c869666e266326774a6fb6a9075
   ExpoClipboard: 44fd1c8959ee8f6175d059dc011b154c9709a969
   ExpoCrypto: e97e864c8d7b9ce4a000bca45dddb93544a1b2b4
-  ExpoFileSystem: 2d804c73034c0d65eb2a640e0a77627033b69edc
+  ExpoFileSystem: 42d363d3b96f9afab980dcef60d5657a4443c655
   ExpoFont: f354e926f8feae5e831ec8087f36652b44a0b188
   ExpoHaptics: 8d199b2f33245ea85289ff6c954c7ee7c00a5b5d
   ExpoHead: caaccab2474a1b1f3be62eb1d493f9d30c704f94
@@ -2684,7 +2684,7 @@ SPEC CHECKSUMS:
   react-native-drag-drop-ios: ddadc130a754bd9feb2249440a49baf983fa8296
   react-native-ios-context-menu: c57dff66f795f52848ab3b9ce89c71013bc32a6e
   react-native-ios-utilities: ee3738e201e6acdf8961205276d21b2f75901d80
-  react-native-menu: c394bbb3578281165d0025e500c9711f164e8fe1
+  react-native-menu: 70a2aeaeb0a6da0db4e08d8531cdf1d20b702cbf
   react-native-mmkv: 95606f6223bb1381b945d7835e92ce416a48b69d
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-pager-view: 2a1551c495e10f60573750bf82f9716a2a4a339a
@@ -2727,7 +2727,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: b64463a3d975bda9abc7dc1bbd7875c8217c1f40
   RNReanimated: 5b4caeabb7a57867f79d9fbc3a74371a21a34144
   RNScreens: d7a433214a7afd1c858747d8aceb5ae551bdda43
-  RNSVG: 8542aa11770b27563714bbd8494a8436385fc85f
+  RNSVG: 67de7abef81f367387b708ba6d2acefe7d4f5895
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageSVGCoder: 8e10c8f6cc879c7dfb317b284e13dd589379f01c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
