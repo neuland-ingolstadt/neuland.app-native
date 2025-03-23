@@ -140,7 +140,7 @@ export default function Events(): React.JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		flex: 1,
-		marginVertical: theme.margins.page
+		marginTop: theme.margins.page
 	},
 	pagerContainer: {
 		flex: 1
