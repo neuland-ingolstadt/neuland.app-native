@@ -115,8 +115,9 @@ export default function Events(): React.JSX.Element {
 					const page = e.nativeEvent.position;
 					setSelectedData(page);
 
-					// Mark this page as viewed for future renders
+					// Only update state if the page is not already viewed.
 					setViewedPages((prev) => {
+						if (prev.has(page)) return prev;
 						const newSet = new Set(prev);
 						newSet.add(page);
 						return newSet;
