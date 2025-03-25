@@ -104,6 +104,7 @@ android {
     }
     buildTypes {
         debug {
+            applicationIdSuffix ".dev" // This makes the debug app ID "app.neuland.dev"
             signingConfig signingConfigs.debug
         }
         release {
