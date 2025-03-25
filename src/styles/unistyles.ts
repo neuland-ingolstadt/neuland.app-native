@@ -24,12 +24,12 @@ declare module 'react-native-unistyles' {
 UnistylesRegistry.addBreakpoints(breakpoints)
 	.addThemes({
 		dark: darkTheme,
-		light: lightTheme,
+		light: lightTheme
 		// register other themes with unique names
 	})
 	.addConfig({
 		// you can pass here optional config described below
-		adaptiveThemes: true,
+		adaptiveThemes: true
 		// switch default theme when reloading theme changes on android (ignores the theme set in settings)
 		// initialTheme: 'light',
 	});
