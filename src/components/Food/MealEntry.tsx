@@ -180,22 +180,36 @@ export const MealEntry = memo(
 							<View style={styles.detailsContainer}>
 								<View style={styles.detailsColumns}>
 									<View style={styles.flags}>
-										{userFlags.map((flag: string, index: number) => (
-											<LinearGradient
-												key={index}
-												style={styles.flagsBox}
-												colors={[
-													theme.colors.labelBackground,
-													Color(theme.colors.labelBackground)
-														.lighten(0.13)
-														.hex()
-												]}
-												start={[0, 0]}
-												end={[1, 0]}
-											>
-												<Text style={styles.flagsText}>{flag}</Text>
-											</LinearGradient>
-										))}
+										{userFlags.map(
+											(
+												flag: { name: string; isVeg: boolean },
+												index: number
+											) => (
+												<LinearGradient
+													key={index}
+													style={styles.flagsBox}
+													colors={
+														flag.isVeg
+															? [
+																	theme.colors.vegGreen,
+																	Color(theme.colors.vegGreen)
+																		.lighten(0.15)
+																		.hex()
+																]
+															: [
+																	theme.colors.labelBackground,
+																	Color(theme.colors.labelBackground)
+																		.lighten(0.15)
+																		.hex()
+																]
+													}
+													start={[0, 0]}
+													end={[1, 0]}
+												>
+													<Text style={styles.flagsText}>{flag.name}</Text>
+												</LinearGradient>
+											)
+										)}
 									</View>
 									{shouldShowAllergens && (
 										<View style={styles.allergensContainer}>

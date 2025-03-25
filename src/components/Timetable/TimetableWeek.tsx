@@ -33,7 +33,8 @@ const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,
 	[TimetableMode.Timeline1]: 1,
 	[TimetableMode.Timeline3]: 3,
-	[TimetableMode.Timeline5]: 5
+	[TimetableMode.Timeline5]: 5,
+	[TimetableMode.Timeline7]: 7
 };
 
 export default function TimetableWeek({
@@ -216,7 +217,7 @@ export default function TimetableWeek({
 	};
 
 	const [timetableNumberDays, setTimetableNumberDays] = React.useState(
-		timetableNumberDaysMap[timetableMode]
+		timetableNumberDaysMap[timetableMode] ?? 3
 	);
 	useEffect(() => {
 		if (calendarLoaded) {
@@ -235,11 +236,16 @@ export default function TimetableWeek({
 				onLoad={() => {
 					setCalendarLoaded(true);
 				}}
-				allowPinchToZoom
+				allowPinchToZoom={true}
 				start={420}
 				end={1320}
 				ref={calendarRef}
-				numberOfDays={timetableNumberDays ?? TimetableMode.Timeline3}
+				numberOfDays={timetableNumberDays}
+				scrollByDay={
+					timetableMode !== TimetableMode.Timeline5 &&
+					timetableMode !== TimetableMode.Timeline7
+				}
+				hideWeekDays={timetableMode === TimetableMode.Timeline5 ? [6, 7] : []}
 				events={events}
 				theme={calendarTheme}
 				onPressEvent={(event) => {
@@ -253,7 +259,7 @@ export default function TimetableWeek({
 					calendarRef.current?.goToDate({ date });
 				}}
 				showWeekNumber
-				rightEdgeSpacing={4}
+				rightEdgeSpacing={3}
 				overlapEventsSpacing={1}
 				minTimeIntervalHeight={55}
 				scrollToNow={false}

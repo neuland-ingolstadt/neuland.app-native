@@ -32,7 +32,12 @@ export default function SportsEventDetail(): React.JSX.Element {
 		return {
 			transform: [
 				{
-					translateY: interpolate(scroll.value, [0, 100], [20, 0], 'clamp')
+					translateY: interpolate(
+						scroll.value,
+						[0, 30, 65],
+						[25, 25, 0],
+						'clamp'
+					)
 				}
 			]
 		};
