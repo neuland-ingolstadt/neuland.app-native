@@ -8,6 +8,7 @@ const DEFAULT_ACCENT_COLOR = 'blue';
 export enum TimetableMode {
 	List = 'list',
 	Timeline1 = 'timeline-1',
+	// 3 Mode scrolls by 1 at a time
 	Timeline3 = 'timeline-3',
 	// 5 mode scrolls by 5 at a time and hides WE
 	Timeline5 = 'timeline-5',

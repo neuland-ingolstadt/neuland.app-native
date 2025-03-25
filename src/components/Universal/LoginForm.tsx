@@ -197,7 +197,6 @@ const LoginForm = ({
 						autoCapitalize="none"
 						clearButtonMode="while-editing"
 						autoComplete="email"
-						keyboardType="email-address"
 						textContentType="emailAddress"
 						autoCorrect={false}
 					/>
@@ -227,7 +226,6 @@ const LoginForm = ({
 						autoCapitalize="none"
 						clearButtonMode="while-editing"
 						autoComplete="current-password"
-						keyboardType="default"
 						textContentType="password"
 						autoCorrect={false}
 					/>
