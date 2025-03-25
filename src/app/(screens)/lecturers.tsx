@@ -36,18 +36,18 @@ import {
 	Linking,
 	Platform,
 	RefreshControl,
-	SafeAreaView,
 	SectionList,
 	Text,
 	View
 } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
 } from 'react-native-unistyles';
 
-export default function LecturersCard(): React.JSX.Element {
+export default function LecturersScreen(): React.JSX.Element {
 	const router = useRouter();
 	const [filteredLecturers, setFilteredLecturers] = useState<
 		NormalizedLecturer[]
@@ -443,57 +443,56 @@ export default function LecturersCard(): React.JSX.Element {
 	};
 
 	return (
-		<SafeAreaView
-			// eslint-disable-next-line react-native/no-inline-styles
-			style={styles.page}
-		>
-			{userKind === USER_GUEST ? (
-				<ErrorView title={guestError} />
-			) : !isSearchBarFocused ? (
-				<View style={styles.searchContainer}>
-					<View style={styles.viewHorizontal}>
-						<ToggleRow
-							items={[
-								t('pages.lecturers.personal'),
-								displayesProfessors
-									? t('pages.lecturers.professors')
-									: t('pages.lecturers.faculty')
-							]}
-							selectedElement={selectedPage}
-							setSelectedElement={setPage}
-						/>
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.page} edges={['top']}>
+				{userKind === USER_GUEST ? (
+					<ErrorView title={guestError} />
+				) : !isSearchBarFocused ? (
+					<View style={styles.searchContainer}>
+						<View style={styles.viewHorizontal}>
+							<ToggleRow
+								items={[
+									t('pages.lecturers.personal'),
+									displayesProfessors
+										? t('pages.lecturers.professors')
+										: t('pages.lecturers.faculty')
+								]}
+								selectedElement={selectedPage}
+								setSelectedElement={setPage}
+							/>
+						</View>
+						<PagerView
+							style={styles.page}
+							initialPage={selectedPage}
+							onPageSelected={(e) => {
+								setSelectedPage(e.nativeEvent.position);
+							}}
+							ref={pagerViewRef}
+						>
+							<LecturerList
+								lecturers={personalLecturersResult.data}
+								isPaused={personalLecturersResult.isPaused}
+								isError={personalLecturersResult.isError}
+								isSuccess={personalLecturersResult.isSuccess}
+								error={personalLecturersResult.error}
+								isLoading={personalLecturersResult.isLoading}
+								isPersonal
+							/>
+							<LecturerList
+								lecturers={facultyData}
+								isPaused={allLecturersResult.isPaused}
+								isError={allLecturersResult.isError}
+								isSuccess={allLecturersResult.isSuccess}
+								error={allLecturersResult.error}
+								isLoading={allLecturersResult.isLoading}
+							/>
+						</PagerView>
 					</View>
-					<PagerView
-						style={styles.page}
-						initialPage={selectedPage}
-						onPageSelected={(e) => {
-							setSelectedPage(e.nativeEvent.position);
-						}}
-						ref={pagerViewRef}
-					>
-						<LecturerList
-							lecturers={personalLecturersResult.data}
-							isPaused={personalLecturersResult.isPaused}
-							isError={personalLecturersResult.isError}
-							isSuccess={personalLecturersResult.isSuccess}
-							error={personalLecturersResult.error}
-							isLoading={personalLecturersResult.isLoading}
-							isPersonal
-						/>
-						<LecturerList
-							lecturers={facultyData}
-							isPaused={allLecturersResult.isPaused}
-							isError={allLecturersResult.isError}
-							isSuccess={allLecturersResult.isSuccess}
-							error={allLecturersResult.error}
-							isLoading={allLecturersResult.isLoading}
-						/>
-					</PagerView>
-				</View>
-			) : (
-				<FilterSectionList />
-			)}
-		</SafeAreaView>
+				) : (
+					<FilterSectionList />
+				)}
+			</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }
 
