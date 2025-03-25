@@ -19,7 +19,7 @@ export const lightTheme = {
 		text: 'rgb(28, 28, 30)',
 		primary: '#0079fa', // default blue, updated dynamically in provider
 		sheetButton: '#ffffff',
-		vegGreen: '#3de744'
+		vegGreen: '#39b73f'
 	},
 	margins: {
 		page: 12,
@@ -58,7 +58,7 @@ export const darkTheme = {
 		text: 'rgb(229, 229, 231)',
 		primary: '#0b83ff',
 		sheetButton: '#262626',
-		vegGreen: '#037e09'
+		vegGreen: '#0a6210'
 	},
 	margins: {
 		page: 12,

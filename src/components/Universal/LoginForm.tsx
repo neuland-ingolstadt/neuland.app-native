@@ -186,18 +186,20 @@ const LoginForm = ({
 					<Text style={styles.userNameLabel}>{t('login.username')}</Text>
 					<TextInput
 						style={styles.textInput}
+						selectionColor={theme.colors.primary}
 						placeholderTextColor={theme.colors.labelColor}
 						defaultValue={username}
-						returnKeyType="next"
 						placeholder="abc1234"
+						returnKeyType="next"
 						onChangeText={(text) => {
 							setUsername(text);
 						}}
-						clearButtonMode="while-editing"
-						selectionColor={theme.colors.primary}
 						autoCapitalize="none"
+						clearButtonMode="while-editing"
+						autoComplete="email"
+						keyboardType="email-address"
+						textContentType="emailAddress"
 						autoCorrect={false}
-						textContentType="username"
 					/>
 				</View>
 				<View style={styles.passwordContainer}>
@@ -205,6 +207,7 @@ const LoginForm = ({
 
 					<TextInput
 						style={styles.textInput}
+						selectionColor={theme.colors.primary}
 						placeholderTextColor={theme.colors.labelColor}
 						placeholder={t('login.password')}
 						defaultValue={password}
@@ -219,12 +222,12 @@ const LoginForm = ({
 								});
 							}
 						}}
-						selectionColor={theme.colors.primary}
 						selectTextOnFocus={true}
-						autoCapitalize="none"
 						secureTextEntry={true}
+						autoCapitalize="none"
 						clearButtonMode="while-editing"
 						autoComplete="current-password"
+						keyboardType="default"
 						textContentType="password"
 						autoCorrect={false}
 					/>

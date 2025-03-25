@@ -9,8 +9,9 @@ export enum TimetableMode {
 	List = 'list',
 	Timeline1 = 'timeline-1',
 	Timeline3 = 'timeline-3',
-	// 5 mode scrolls by 5 at a time
+	// 5 mode scrolls by 5 at a time and hides WE
 	Timeline5 = 'timeline-5',
+	// 7 mode scrolls by 7 at a time
 	Timeline7 = 'timeline-7'
 }
 
