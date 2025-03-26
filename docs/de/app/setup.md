@@ -69,7 +69,7 @@ Schritt 8 ist jedes Mal erforderlich, wenn die Abhängigkeiten aktualisiert werd
 3. Starte die App lokal mit Expo, indem du folgenden Befehl im Projektverzeichnis ausführst:
 
    ```sh
-   bun start
+   bun dev
    ```
 
 Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build auszuführen. Expo Go wird für die Entwicklung nicht unterstützt.

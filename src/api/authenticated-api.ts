@@ -8,6 +8,7 @@ import type {
 	TimetableResponse
 } from '@/types/thi-api';
 
+import { toast } from 'burnt';
 import { APIError, AnonymousAPIClient } from './anonymous-api';
 import { callWithSession } from './thi-session-handler';
 
@@ -99,7 +100,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 				holidays: res[1],
 				timetable: res[2]
 			};
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: e is any
 		} catch (e: any) {
 			// when the user did not select any classes, the timetable returns 'Query not possible'
 			if (e.data === 'Query not possible') {
@@ -108,6 +109,17 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 					holidays: [],
 					semester: []
 				};
+			}
+			// If the error indicates malformed JSON and we requested detailed info, try again with details = 0
+			if (e.message?.includes('API returned malformed JSON:') && detailed) {
+				const timetable = await this.getTimetable(date, false);
+				toast({
+					message: 'Lecture details unavailable',
+					title: 'THI API Error',
+					preset: 'error',
+					haptic: 'warning'
+				});
+				return timetable;
 			}
 			throw e;
 		}
