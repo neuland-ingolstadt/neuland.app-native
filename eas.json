@@ -19,17 +19,20 @@
 	"submit": {
 		"production": {
 			"android": {
-				"track": "production"
+				"track": "production",
+				"applicationId": "app.neuland"
 			}
 		},
 		"preview": {
 			"android": {
-				"track": "beta"
+				"track": "beta",
+				"applicationId": "app.neuland"
 			}
 		},
 		"internal": {
 			"android": {
-				"track": "internal"
+				"track": "internal",
+				"applicationId": "app.neuland"
 			}
 		}
 	}
