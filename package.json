@@ -8,7 +8,7 @@
 		"start": "EXPO_USE_FAST_RESOLVER=1 expo",
 		"atlas": "EXPO_UNSTABLE_ATLAS=true npx expo export --platform all",
 		"web": "expo start --web --port 3000",
-		"android": "expo run:android --device",
+		"android": "expo run:android --device --variant=developmentDebug",
 		"ios": "expo run:ios --device",
 		"build:android": "bun licences && eas build --platform android --local",
 		"build:ios": "xcodebuild archive -workspace ios/NeulandNext.xcworkspace -scheme NeulandNext -configuration Release -archivePath ios/build/NeulandNext.xcarchive",
