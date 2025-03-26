@@ -42,8 +42,6 @@ credentials/
 expo-env.d.ts
 # @end expo-cli
 
-coverage/**/*
-
 junit.xml
 
 # nvim

@@ -16,7 +16,6 @@
 			"plugins/",
 			"docs/.vitepress/cache/",
 			"patches/",
-			"coverage/",
 			"__generated__/",
 			".expo/",
 			"src/data/licenses.json"
