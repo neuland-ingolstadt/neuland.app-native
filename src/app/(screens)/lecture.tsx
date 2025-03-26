@@ -259,9 +259,9 @@ export default function TimetableDetails(): React.JSX.Element {
 					</DetailsBody>
 				</DetailsRow>
 
-				<Separator />
 				{lecture.rooms.length > 0 ? (
 					<>
+						<Separator />
 						<DetailsRow>
 							<DetailsSymbol>
 								<PlatformIcon
