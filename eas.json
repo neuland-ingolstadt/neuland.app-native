@@ -1,19 +1,21 @@
 {
 	"cli": {
-		"version": ">= 9.2.0",
+		"version": ">= 15.0.15",
 		"appVersionSource": "remote"
 	},
 	"build": {
 		"development": {
 			"developmentClient": true,
-			"distribution": "internal"
+			"distribution": "internal",
+			"android": { "gradleCommand": ":app:assembleDevelopmentDebug" }
 		},
 		"preview": {
 			"distribution": "internal"
 		},
 		"production": {
 			"autoIncrement": true,
-			"distribution": "store"
+			"distribution": "store",
+			"android": { "gradleCommand": ":app:bundleProductionRelease" }
 		}
 	},
 	"submit": {
