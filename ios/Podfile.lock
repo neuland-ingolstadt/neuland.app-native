@@ -1534,7 +1534,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-bottom-tabs (0.8.9):
+  - react-native-bottom-tabs (0.9.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2679,7 +2679,7 @@ SPEC CHECKSUMS:
   React-logger: e7eeebaed32b88dcc29b10901aa8c5822dc397c4
   React-Mapbuffer: 3d1aadd7587192dd863aa5348122e2a0812c44dd
   React-microtasksnativemodule: c5c04ce22b6437388c02d277cdfc7cffc3103da9
-  react-native-bottom-tabs: 46e98631dab41c59aaf2960fdbc9691827c474ef
+  react-native-bottom-tabs: 5462e448d8ff889d353c032339bc246c305b39a1
   react-native-context-menu-view: d8269d7c754ecfaa0034e514d419115ac3774f7f
   react-native-drag-drop-ios: ddadc130a754bd9feb2249440a49baf983fa8296
   react-native-ios-context-menu: c57dff66f795f52848ab3b9ce89c71013bc32a6e

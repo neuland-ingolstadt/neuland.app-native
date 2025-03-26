@@ -69,7 +69,7 @@ Step 8 is required every time the dependencies are updated.
 3. Run the app locally with Expo by running the following command in the project directory:
 
    ```sh
-   bun start
+   bun dev
    ```
 
    This allows you to run the app one the previously created development build. Expo Go is not supported for development.
