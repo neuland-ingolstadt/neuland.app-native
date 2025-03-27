@@ -1,19 +1,19 @@
-import { handleBiometricAuth } from '@/utils/app-utils';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { handleBiometricAuth } from '@/utils/app-utils'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import PlatformIcon from '../Universal/Icon';
+import { Pressable } from 'react-native-gesture-handler'
+import PlatformIcon from '../Universal/Icon'
 
 const GradesButton = (): React.JSX.Element => {
-	const { t } = useTranslation('settings');
-	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('settings')
+	const { styles } = useStyles(stylesheet)
 	return (
 		<Pressable
 			onPress={() => {
-				void handleBiometricAuth('grades');
+				void handleBiometricAuth('grades')
 			}}
 			style={styles.gradesRow}
 		>
@@ -36,8 +36,8 @@ const GradesButton = (): React.JSX.Element => {
 				style={styles.icon}
 			/>
 		</Pressable>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	gradesRow: {
@@ -55,6 +55,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		color: theme.colors.labelSecondaryColor
 	}
-}));
+}))
 
-export default GradesButton;
+export default GradesButton

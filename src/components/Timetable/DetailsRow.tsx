@@ -1,12 +1,12 @@
-import type React from 'react';
-import { StyleSheet, View } from 'react-native';
+import type React from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function DetailsRow({
 	children
 }: {
-	children: JSX.Element[];
+	children: JSX.Element[]
 }): React.JSX.Element {
-	return <View style={styles.detailsRow}>{children}</View>;
+	return <View style={styles.detailsRow}>{children}</View>
 }
 
 const styles = StyleSheet.create({
@@ -15,4 +15,4 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		gap: 12
 	}
-});
+})

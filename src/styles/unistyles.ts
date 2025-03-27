@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { UnistylesRegistry } from 'react-native-unistyles';
+import { UnistylesRegistry } from 'react-native-unistyles'
 
-import { breakpoints } from './breakpoints';
-import { darkTheme, lightTheme } from './themes';
+import { breakpoints } from './breakpoints'
+import { darkTheme, lightTheme } from './themes'
 
 // if you defined breakpoints
-type AppBreakpoints = typeof breakpoints;
+type AppBreakpoints = typeof breakpoints
 
 // if you defined themes
 interface AppThemes {
-	light: typeof lightTheme;
-	dark: typeof darkTheme;
+	light: typeof lightTheme
+	dark: typeof darkTheme
 }
 
 // override library types
@@ -32,4 +32,4 @@ UnistylesRegistry.addBreakpoints(breakpoints)
 		adaptiveThemes: true
 		// switch default theme when reloading theme changes on android (ignores the theme set in settings)
 		// initialTheme: 'light',
-	});
+	})

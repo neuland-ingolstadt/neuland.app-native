@@ -1,24 +1,24 @@
-import NeulandAPI from '@/api/neuland-api';
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import GradesRow from '@/components/Rows/GradesRow';
-import Divider from '@/components/Universal/Divider';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import SectionView from '@/components/Universal/SectionsView';
-import { useRefreshByUser } from '@/hooks';
-import type { GradeAverage } from '@/types/utils';
+import NeulandAPI from '@/api/neuland-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import GradesRow from '@/components/Rows/GradesRow'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import SectionView from '@/components/Universal/SectionsView'
+import { useRefreshByUser } from '@/hooks'
+import type { GradeAverage } from '@/types/utils'
 import {
 	extractSpoName,
 	getPersonalData,
 	networkError
-} from '@/utils/api-utils';
-import { loadGradeAverage, loadGrades } from '@/utils/grades-utils';
-import { LoadingState } from '@/utils/ui-utils';
-import { useQuery } from '@tanstack/react-query';
-import { router, useNavigation } from 'expo-router';
-import Fuse from 'fuse.js';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@/utils/api-utils'
+import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
+import { LoadingState } from '@/utils/ui-utils'
+import { useQuery } from '@tanstack/react-query'
+import { router, useNavigation } from 'expo-router'
+import Fuse from 'fuse.js'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	AppState,
 	type AppStateStatus,
@@ -27,17 +27,17 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import packageInfo from '../../../package.json';
+import packageInfo from '../../../package.json'
 
 export default function GradesSCreen(): React.JSX.Element {
-	const { t } = useTranslation('settings');
-	const { styles, theme } = useStyles(stylesheet);
-	const [gradeAverage, setGradeAverage] = useState<GradeAverage>();
-	const navigation = useNavigation();
-	const [localSearch, setLocalSearch] = React.useState('');
+	const { t } = useTranslation('settings')
+	const { styles, theme } = useStyles(stylesheet)
+	const [gradeAverage, setGradeAverage] = useState<GradeAverage>()
+	const navigation = useNavigation()
+	const [localSearch, setLocalSearch] = React.useState('')
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -55,16 +55,16 @@ export default function GradesSCreen(): React.JSX.Element {
 				}),
 
 				onChangeText: (event: { nativeEvent: { text: string } }) => {
-					const text = event.nativeEvent.text;
-					setLocalSearch(text);
+					const text = event.nativeEvent.text
+					setLocalSearch(text)
 				}
 			}
-		});
-	}, [navigation]);
+		})
+	}, [navigation])
 
 	const [averageLoadingState, setAverageLoadingState] = useState<LoadingState>(
 		LoadingState.LOADING
-	);
+	)
 
 	/**
 	 * Loads the average grade from the API and sets the state accordingly.
@@ -72,18 +72,18 @@ export default function GradesSCreen(): React.JSX.Element {
 	 */
 	async function loadAverageGrade(spoName: string | undefined): Promise<void> {
 		if (isSpoLoading) {
-			return;
+			return
 		}
 		try {
-			const average = await loadGradeAverage(spoWeights, spoName);
+			const average = await loadGradeAverage(spoWeights, spoName)
 			if (average.result !== undefined && average.result !== null) {
-				setGradeAverage(average);
-				setAverageLoadingState(LoadingState.LOADED);
+				setGradeAverage(average)
+				setAverageLoadingState(LoadingState.LOADED)
 			} else {
-				throw new Error('Average grade is undefined or null');
+				throw new Error('Average grade is undefined or null')
 			}
 		} catch {
-			setAverageLoadingState(LoadingState.ERROR);
+			setAverageLoadingState(LoadingState.ERROR)
 		}
 	}
 
@@ -93,7 +93,7 @@ export default function GradesSCreen(): React.JSX.Element {
 		queryFn: async () => await NeulandAPI.getSpoWeights(),
 		staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
 		gcTime: 1000 * 60 * 60 * 24 * 14 // 2 weeks
-	});
+	})
 
 	const {
 		data: grades,
@@ -110,72 +110,72 @@ export default function GradesSCreen(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
 		retry(_failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.replace('/login');
+				router.replace('/login')
 			}
-			return false;
+			return false
 		}
-	});
+	})
 
 	const UNAVAILABLE_ERRORS = [
 		'Student cannot be identified',
 		'No grade data available'
-	];
+	]
 
 	const isUnavailableError = UNAVAILABLE_ERRORS.some((errMsg) =>
 		error?.message.includes(errMsg)
-	);
+	)
 
 	const { data: personalData } = useQuery({
 		queryKey: ['personalData'],
 		queryFn: getPersonalData,
 		staleTime: 1000 * 60 * 60 * 12, // 12 hours
 		gcTime: 1000 * 60 * 60 * 24 * 60 // 60 days
-	});
+	})
 
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 	useEffect(() => {
-		if (personalData === undefined) return;
-		const spoName = extractSpoName(personalData);
-		void loadAverageGrade(spoName ?? undefined);
-	}, [spoWeights, grades?.finished]);
+		if (personalData === undefined) return
+		const spoName = extractSpoName(personalData)
+		void loadAverageGrade(spoName ?? undefined)
+	}, [spoWeights, grades?.finished])
 
 	useEffect(() => {
 		const handleAppStateChange = (nextAppState: AppStateStatus): void => {
 			if (nextAppState === 'inactive' || nextAppState === 'background') {
-				router.back();
+				router.back()
 			}
-		};
+		}
 
 		const subscription = AppState.addEventListener(
 			'change',
 			handleAppStateChange
-		);
+		)
 
 		return () => {
-			subscription.remove();
-		};
-	}, []);
+			subscription.remove()
+		}
+	}, [])
 
 	const fuseOptions = {
 		keys: ['titel'],
 		threshold: 0.3,
 		ignoreLocation: true
-	};
+	}
 
 	const filteredGrades = React.useMemo(() => {
-		if (!grades) return null;
+		if (!grades) return null
 		if (localSearch === '') {
-			return grades;
+			return grades
 		}
 
-		const finishedFuse = new Fuse(grades.finished, fuseOptions);
-		const missingFuse = new Fuse(grades.missing, fuseOptions);
+		const finishedFuse = new Fuse(grades.finished, fuseOptions)
+		const missingFuse = new Fuse(grades.missing, fuseOptions)
 
 		return {
 			finished: finishedFuse.search(localSearch).map((result) => result.item),
 			missing: missingFuse.search(localSearch).map((result) => result.item)
-		};
-	}, [grades, localSearch]);
+		}
+	}, [grades, localSearch])
 
 	return (
 		<ScrollView
@@ -186,7 +186,7 @@ export default function GradesSCreen(): React.JSX.Element {
 					<RefreshControl
 						refreshing={isRefetchingByUser}
 						onRefresh={() => {
-							void refetchByUser();
+							void refetchByUser()
 						}}
 					/>
 				) : undefined
@@ -290,7 +290,7 @@ export default function GradesSCreen(): React.JSX.Element {
 				</>
 			)}
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -346,4 +346,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 8,
 		textAlign: 'left'
 	}
-}));
+}))

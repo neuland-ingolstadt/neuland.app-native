@@ -1,15 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import LibraryCard from '@/components/Library/LibraryCard';
-import { libraryLink, vscoutLink } from '@/data/constants';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import LibraryCard from '@/components/Library/LibraryCard'
+import { libraryLink, vscoutLink } from '@/data/constants'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibraryScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 
 	return (
 		<View style={styles.container}>
@@ -24,8 +24,8 @@ export default function LibraryScreen(): React.JSX.Element {
 				<LibraryCard
 					onPress={() => {
 						Linking.openURL(vscoutLink).catch((err) => {
-							console.error(err);
-						});
+							console.error(err)
+						})
 					}}
 					iconProps={{
 						ios: { name: 'chair', size: 18 },
@@ -42,8 +42,8 @@ export default function LibraryScreen(): React.JSX.Element {
 				<LibraryCard
 					onPress={() => {
 						Linking.openURL(libraryLink).catch((err) => {
-							console.error(err);
-						});
+							console.error(err)
+						})
 					}}
 					iconProps={{
 						ios: { name: 'text.magnifyingglass', size: 18 },
@@ -59,8 +59,8 @@ export default function LibraryScreen(): React.JSX.Element {
 				/>
 				<LibraryCard
 					onPress={() => {
-						router.dismiss();
-						router.navigate('/library-code');
+						router.dismiss()
+						router.navigate('/library-code')
 					}}
 					iconProps={{
 						ios: { name: 'barcode.viewfinder', size: 18 },
@@ -73,7 +73,7 @@ export default function LibraryScreen(): React.JSX.Element {
 			</View>
 			<Text style={styles.notesText}>{t('pages.library.note')}</Text>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -101,4 +101,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 12,
 		marginTop: 8
 	}
-}));
+}))

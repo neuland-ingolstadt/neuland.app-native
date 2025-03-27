@@ -1,15 +1,15 @@
-import i18n from '@/localization/i18n';
-import type { FormListSections } from '@/types/components';
+import i18n from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
 import {
 	type BuildingOccupancy,
 	type RoomData,
 	SEARCH_TYPES
-} from '@/types/map';
-import type { AvailableRoom } from '@/types/utils';
-import { formatFriendlyTime } from '@/utils/date-utils';
-import { t } from 'i18next';
+} from '@/types/map'
+import type { AvailableRoom } from '@/types/utils'
+import { formatFriendlyTime } from '@/utils/date-utils'
+import { t } from 'i18next'
 
-type LocationsType = Record<string, string>;
+type LocationsType = Record<string, string>
 
 /**
  * Formats the content of the room details section
@@ -24,7 +24,7 @@ export const modalSection = (
 	locations: LocationsType,
 	isGuest: boolean
 ): FormListSections[] => {
-	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en';
+	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 
 	if (
 		roomData.type === SEARCH_TYPES.ROOM &&
@@ -33,7 +33,7 @@ export const modalSection = (
 			roomData.occupancies !== undefined) ||
 			(roomData.properties !== null && roomData.properties !== undefined))
 	) {
-		const occupancies = roomData.occupancies as AvailableRoom;
+		const occupancies = roomData.occupancies as AvailableRoom
 		return [
 			...(!isGuest
 				? [
@@ -61,16 +61,16 @@ export const modalSection = (
 												value: (() => {
 													const timeLeft =
 														new Date(occupancies.until).getTime() -
-														new Date().getTime();
+														new Date().getTime()
 													const minutes = Math.floor(
 														(timeLeft / 1000 / 60) % 60
-													);
+													)
 													const hours = Math.floor(
 														(timeLeft / (1000 * 60 * 60)) % 24
-													);
+													)
 													const formattedMinutes =
-														minutes < 10 ? `0${minutes.toString()}` : minutes;
-													return `${hours.toString()}:${formattedMinutes.toString()}h`;
+														minutes < 10 ? `0${minutes.toString()}` : minutes
+													return `${hours.toString()}:${formattedMinutes.toString()}h`
 												})()
 											},
 											{
@@ -139,15 +139,15 @@ export const modalSection = (
 						}
 					]
 				: [])
-		];
+		]
 	}
 	if (
 		roomData.type === SEARCH_TYPES.BUILDING &&
 		roomData.properties != null &&
 		roomData.occupancies != null
 	) {
-		const occupancies = roomData.occupancies as BuildingOccupancy;
-		const properties: RoomData['properties'] = roomData.properties;
+		const occupancies = roomData.occupancies as BuildingOccupancy
+		const properties: RoomData['properties'] = roomData.properties
 		return [
 			{
 				header: t('pages.map.details.room.details', { ns: 'common' }),
@@ -182,8 +182,8 @@ export const modalSection = (
 					}
 				]
 			}
-		];
+		]
 	}
 
-	return [];
-};
+	return []
+}

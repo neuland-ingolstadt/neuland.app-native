@@ -1,6 +1,6 @@
-import type React from 'react';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const SectionView = ({
 	title,
@@ -8,12 +8,12 @@ const SectionView = ({
 	children,
 	link
 }: {
-	title?: string;
-	footer?: string;
-	children: JSX.Element;
-	link?: { text: string; destination: () => void };
+	title?: string
+	footer?: string
+	children: JSX.Element
+	link?: { text: string; destination: () => void }
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			<View style={styles.sectionContainer}>
@@ -34,8 +34,8 @@ const SectionView = ({
 				</Text>
 			)}
 		</>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	footerText: (isLink: boolean) => ({
@@ -65,6 +65,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: theme.margins.page,
 		width: '100%'
 	}
-}));
+}))
 
-export default SectionView;
+export default SectionView

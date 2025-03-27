@@ -1,25 +1,25 @@
-import type { MaterialIcon } from '@/types/material-icons';
+import type { MaterialIcon } from '@/types/material-icons'
 
-import type { LucideIcon } from './Universal/Icon';
+import type { LucideIcon } from './Universal/Icon'
 
 // Define the type for individual platform icons
 interface PlatformIcon {
-	ios: string;
-	android: MaterialIcon;
-	web: LucideIcon;
+	ios: string
+	android: MaterialIcon
+	web: LucideIcon
 }
 
 // Define the type for the card icons object
 interface CardIcons {
-	timetable: PlatformIcon;
-	food: PlatformIcon;
-	calendar: PlatformIcon;
-	events: PlatformIcon;
-	library: PlatformIcon;
-	lecturers: PlatformIcon;
-	news: PlatformIcon;
-	login: PlatformIcon;
-	links: PlatformIcon;
+	timetable: PlatformIcon
+	food: PlatformIcon
+	calendar: PlatformIcon
+	events: PlatformIcon
+	library: PlatformIcon
+	lecturers: PlatformIcon
+	news: PlatformIcon
+	login: PlatformIcon
+	links: PlatformIcon
 }
 
 // Define the card icons object with the specified type
@@ -69,4 +69,4 @@ export const cardIcons: CardIcons = {
 		android: 'link',
 		web: 'Link'
 	}
-};
+}

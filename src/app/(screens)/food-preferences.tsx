@@ -1,21 +1,21 @@
 import MultiSectionRadio, {
 	type FoodLanguageElement
-} from '@/components/Food/FoodLanguageSection';
-import FormList from '@/components/Universal/FormList';
-import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon';
-import MultiSectionPicker from '@/components/Universal/MultiSectionPicker';
-import SectionView from '@/components/Universal/SectionsView';
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import type { FormListSections } from '@/types/components';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/components/Food/FoodLanguageSection'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { FormListSections } from '@/types/components'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodPreferences(): React.JSX.Element {
-	const { t } = useTranslation('food');
+	const { t } = useTranslation('food')
 	const elemtents = [
 		{
 			key: 'IngolstadtMensa',
@@ -33,7 +33,7 @@ export default function FoodPreferences(): React.JSX.Element {
 			key: 'NeuburgMensa',
 			title: t('cards.titles.mensaNeuburg', { ns: 'navigation' })
 		}
-	];
+	]
 
 	const languages: FoodLanguageElement[] = [
 		{
@@ -42,22 +42,22 @@ export default function FoodPreferences(): React.JSX.Element {
 		},
 		{ key: 'de', title: t('preferences.languages.de') },
 		{ key: 'en', title: t('preferences.languages.en') }
-	];
-	const { styles } = useStyles(stylesheet);
-	const router = useRouter();
+	]
+	const { styles } = useStyles(stylesheet)
+	const router = useRouter()
 
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
-	);
+	)
 	const toggleSelectedRestaurant = useFoodFilterStore(
 		(state) => state.toggleSelectedRestaurant
-	);
-	const showStatic = useFoodFilterStore((state) => state.showStatic);
-	const setShowStatic = useFoodFilterStore((state) => state.setShowStatic);
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
+	)
+	const showStatic = useFoodFilterStore((state) => state.showStatic)
+	const setShowStatic = useFoodFilterStore((state) => state.setShowStatic)
+	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 	const toggleFoodLanguage = useFoodFilterStore(
 		(state) => state.toggleFoodLanguage
-	);
+	)
 
 	const sections: FormListSections[] = [
 		{
@@ -67,19 +67,19 @@ export default function FoodPreferences(): React.JSX.Element {
 					title: t('preferences.formlist.allergens'),
 					icon: chevronIcon,
 					onPress: () => {
-						router.navigate('/food-allergens');
+						router.navigate('/food-allergens')
 					}
 				},
 				{
 					title: t('preferences.formlist.flags'),
 					icon: chevronIcon,
 					onPress: () => {
-						router.navigate('/food-flags');
+						router.navigate('/food-flags')
 					}
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<ScrollView>
@@ -132,7 +132,7 @@ export default function FoodPreferences(): React.JSX.Element {
 				</View>
 			</View>
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -166,4 +166,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	warningIcon: {
 		color: theme.colors.warning
 	}
-}));
+}))

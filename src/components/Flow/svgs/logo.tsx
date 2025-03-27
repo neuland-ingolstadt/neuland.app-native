@@ -1,9 +1,9 @@
-import type React from 'react';
-import { G, Path, Svg } from 'react-native-svg';
-import { useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { G, Path, Svg } from 'react-native-svg'
+import { useStyles } from 'react-native-unistyles'
 
 export default function LogoSVG({ size }: { size: number }): React.JSX.Element {
-	const { theme } = useStyles();
+	const { theme } = useStyles()
 
 	return (
 		<Svg viewBox="0 0 75.09 95.05" fill={theme.colors.text} height={size}>
@@ -18,5 +18,5 @@ export default function LogoSVG({ size }: { size: number }): React.JSX.Element {
 				</G>
 			</G>
 		</Svg>
-	);
+	)
 }

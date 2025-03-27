@@ -1,47 +1,47 @@
-import { RoomReportCategory } from '@/__generated__/gql/graphql';
-import neulandApi from '@/api/neuland-api';
-import DropdownMenuContent from '@/components/Menu/DropdownMenuContent';
-import DropdownMenuItem from '@/components/Menu/DropdownMenuItem';
-import DropdownMenuItemTitle from '@/components/Menu/DropdownMenuItemTitle';
-import DropdownMenuTrigger from '@/components/Menu/DropdownMenuTrigger';
-import { getContrastColor } from '@/utils/ui-utils';
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'burnt';
-import Color from 'color';
-import { router, useLocalSearchParams } from 'expo-router';
-import type React from 'react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { RoomReportCategory } from '@/__generated__/gql/graphql'
+import neulandApi from '@/api/neuland-api'
+import DropdownMenuContent from '@/components/Menu/DropdownMenuContent'
+import DropdownMenuItem from '@/components/Menu/DropdownMenuItem'
+import DropdownMenuItemTitle from '@/components/Menu/DropdownMenuItemTitle'
+import DropdownMenuTrigger from '@/components/Menu/DropdownMenuTrigger'
+import { getContrastColor } from '@/utils/ui-utils'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'burnt'
+import Color from 'color'
+import { router, useLocalSearchParams } from 'expo-router'
+import type React from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ActivityIndicator, Pressable, Text, View } from 'react-native'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+} from 'react-native-unistyles'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
 export default function RoomReport(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 
 	const [reportCategory, setReportCategory] = useState<
 		RoomReportCategory | undefined
-	>();
-	const reportCategories = Object.values(RoomReportCategory);
-	const { room } = useLocalSearchParams<{ room: string }>();
+	>()
+	const reportCategories = Object.values(RoomReportCategory)
+	const { room } = useLocalSearchParams<{ room: string }>()
 
-	const [description, setDescription] = useState<string>('');
-	const [roomTitle, setRoomTitle] = useState<string>(room);
+	const [description, setDescription] = useState<string>('')
+	const [roomTitle, setRoomTitle] = useState<string>(room)
 
-	const { t } = useTranslation('common');
+	const { t } = useTranslation('common')
 
 	const { mutate, isPending } = useMutation({
 		mutationFn: async (input: {
-			room: string;
-			description: string;
-			reason: RoomReportCategory;
+			room: string
+			description: string
+			reason: RoomReportCategory
 		}) => {
-			return await neulandApi.createRoomReport(input);
+			return await neulandApi.createRoomReport(input)
 		},
 		onSuccess: () => {
 			toast({
@@ -50,8 +50,8 @@ export default function RoomReport(): React.JSX.Element {
 				haptic: 'success',
 				duration: 2.5,
 				from: 'top'
-			});
-			router.back();
+			})
+			router.back()
 		},
 		onError: (error, variables, context) => {
 			toast({
@@ -60,12 +60,12 @@ export default function RoomReport(): React.JSX.Element {
 				haptic: 'error',
 				duration: 2.5,
 				from: 'top'
-			});
+			})
 			console.error(
 				`Error when sending report ${error} ${variables} ${context}`
-			);
+			)
 		}
-	});
+	})
 
 	const submitDisabled =
 		!(
@@ -73,7 +73,7 @@ export default function RoomReport(): React.JSX.Element {
 		) ||
 		description.trim() === '' ||
 		room.trim() === '' ||
-		isPending;
+		isPending
 
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
@@ -111,14 +111,14 @@ export default function RoomReport(): React.JSX.Element {
 								<DropdownMenuItem
 									key={categroy}
 									onSelect={() => {
-										setReportCategory(categroy);
+										setReportCategory(categroy)
 									}}
 								>
 									<DropdownMenuItemTitle style={styles.inputLabel}>
 										{t(`pages.rooms.report.category.type.${categroy}`)}
 									</DropdownMenuItemTitle>
 								</DropdownMenuItem>
-							);
+							)
 						})}
 					</DropdownMenuContent>
 				</DropdownMenu.Root>
@@ -143,12 +143,12 @@ export default function RoomReport(): React.JSX.Element {
 				<Pressable
 					disabled={submitDisabled}
 					onPress={() => {
-						if (!reportCategory || !description || !room) return;
+						if (!reportCategory || !description || !room) return
 						mutate({
 							reason: reportCategory,
 							description,
 							room: room
-						});
+						})
 					}}
 					style={styles.submitButton(submitDisabled)}
 				>
@@ -168,7 +168,7 @@ export default function RoomReport(): React.JSX.Element {
 				</Text>
 			</View>
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -248,4 +248,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 17
 	}
-}));
+}))

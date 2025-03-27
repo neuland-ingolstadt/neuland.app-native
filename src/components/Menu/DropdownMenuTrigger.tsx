@@ -1,21 +1,21 @@
-import type React from 'react';
-import { Platform } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+import type React from 'react'
+import { Platform } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
-type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Trigger']>;
+type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Trigger']>
 
 const DropdownMenuTrigger = DropdownMenu.create((props: ItemProps) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<DropdownMenu.Trigger
 			style={styles.item as React.CSSProperties}
 			{...props}
 		/>
-	);
-}, 'Trigger');
+	)
+}, 'Trigger')
 
-export default DropdownMenuTrigger;
+export default DropdownMenuTrigger
 
 // @ts-expect-error - Contains some web specific code
 const stylesheet = createStyleSheet((theme) => ({
@@ -31,4 +31,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingRight: Platform.OS === 'android' ? 10 : 0,
 		paddingVertical: 10
 	}
-}));
+}))

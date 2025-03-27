@@ -1,17 +1,17 @@
-import FormList from '@/components/Universal/FormList';
-import { chevronIcon, linkIcon } from '@/components/Universal/Icon';
-import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants';
-import type { FormListSections } from '@/types/components';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, ScrollView, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
+import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
+import type { FormListSections } from '@/types/components'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, ScrollView, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): React.JSX.Element {
-	const router = useRouter();
-	const { styles } = useStyles(stylesheet);
-	const { t, i18n } = useTranslation(['settings']);
+	const router = useRouter()
+	const { styles } = useStyles(stylesheet)
+	const { t, i18n } = useTranslation(['settings'])
 
 	const sections: FormListSections[] = [
 		{
@@ -33,7 +33,7 @@ export default function About(): React.JSX.Element {
 					title: t('navigation.licenses.title', { ns: 'navigation' }),
 					icon: chevronIcon,
 					onPress: () => {
-						router.navigate('/licenses');
+						router.navigate('/licenses')
 					}
 				}
 			]
@@ -77,7 +77,7 @@ export default function About(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<>
@@ -87,7 +87,7 @@ export default function About(): React.JSX.Element {
 				</View>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -100,4 +100,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: theme.margins.page,
 		width: '100%'
 	}
-}));
+}))

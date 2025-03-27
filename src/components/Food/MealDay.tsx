@@ -1,13 +1,13 @@
-import PlatformIcon from '@/components/Universal/Icon';
-import type { Food, Meal } from '@/types/neuland-api';
-import type React from 'react';
-import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
-import Collapsible from 'react-native-collapsible';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import PlatformIcon from '@/components/Universal/Icon'
+import type { Food, Meal } from '@/types/neuland-api'
+import type React from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, Text, View } from 'react-native'
+import Collapsible from 'react-native-collapsible'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { MealEntry } from './MealEntry';
+import { MealEntry } from './MealEntry'
 
 /**
  * Renders a group of meals for a given category.
@@ -17,7 +17,7 @@ import { MealEntry } from './MealEntry';
 const MealGroup = ({
 	group
 }: {
-	group: Record<string, Meal[]>;
+	group: Record<string, Meal[]>
 }): React.JSX.Element => {
 	return (
 		<>
@@ -25,8 +25,8 @@ const MealGroup = ({
 				<MealCategory key={key} category={key} meals={value} />
 			))}
 		</>
-	);
-};
+	)
+}
 
 /**
  * Renders a category of meals.
@@ -38,26 +38,26 @@ const MealCategory = ({
 	category,
 	meals
 }: {
-	category: string;
-	meals: Meal[];
+	category: string
+	meals: Meal[]
 }): React.JSX.Element => {
-	const [collapsed, setCollapsed] = useState(false);
+	const [collapsed, setCollapsed] = useState(false)
 
 	/**
 	 * Toggles the collapsed state of the category.
 	 */
 	const toggleCollapsed = (): void => {
-		setCollapsed(!collapsed);
-	};
-	const { t } = useTranslation('food');
+		setCollapsed(!collapsed)
+	}
+	const { t } = useTranslation('food')
 
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			<View key={category} style={styles.categoryContainerCollapsed}>
 				<Pressable
 					onPress={() => {
-						toggleCollapsed();
+						toggleCollapsed()
 					}}
 					style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
 					hitSlop={{ top: 6, bottom: 6 }}
@@ -91,30 +91,30 @@ const MealCategory = ({
 				</Collapsible>
 			</View>
 		</>
-	);
-};
+	)
+}
 
 /**
  * Filters an array of meals by restaurant name.
  */
 const filterMealsByRestaurant = (meals: Meal[], restaurant: string): Meal[] => {
-	return meals.filter((meal: Meal) => meal.restaurant === restaurant);
-};
+	return meals.filter((meal: Meal) => meal.restaurant === restaurant)
+}
 
 /**
  * Groups an array of meals by category.
  */
 const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	return meals.reduce((r: Record<string, Meal[]>, a: Meal) => {
-		const category = a.category;
+		const category = a.category
 		if (Object.prototype.hasOwnProperty.call(r, category)) {
-			r[category].push(a);
+			r[category].push(a)
 		} else {
-			r[category] = [a];
+			r[category] = [a]
 		}
-		return r;
-	}, {});
-};
+		return r
+	}, {})
+}
 
 /**
  * Renders a day's worth of meals.
@@ -127,20 +127,20 @@ export const MealDay = ({
 	day,
 	index
 }: {
-	day: Food;
-	index: number;
+	day: Food
+	index: number
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('food');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('food')
 
 	const mealData = useMemo(() => {
 		const ingolstadtMensa = filterMealsByRestaurant(
 			day.meals,
 			'IngolstadtMensa'
-		);
-		const neuburgMensa = filterMealsByRestaurant(day.meals, 'NeuburgMensa');
-		const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns');
-		const canisius = filterMealsByRestaurant(day.meals, 'Canisius');
+		)
+		const neuburgMensa = filterMealsByRestaurant(day.meals, 'NeuburgMensa')
+		const reimanns = filterMealsByRestaurant(day.meals, 'Reimanns')
+		const canisius = filterMealsByRestaurant(day.meals, 'Canisius')
 
 		return {
 			ingolstadtMensa,
@@ -156,13 +156,13 @@ export const MealDay = ({
 				reimanns.length === 0 &&
 				canisius.length === 0 &&
 				neuburgMensa.length === 0
-		};
-	}, [day.meals]);
+		}
+	}, [day.meals])
 
 	interface RestaurantProps {
-		restaurantName: string;
-		meals: Meal[];
-		groupedMeals: Record<string, Meal[]>;
+		restaurantName: string
+		meals: Meal[]
+		groupedMeals: Record<string, Meal[]>
 	}
 
 	/**
@@ -180,12 +180,12 @@ export const MealDay = ({
 						<Text style={styles.dayRestaurantTitle}>{restaurantName}</Text>
 						<MealGroup group={groupedMeals} />
 					</View>
-				);
+				)
 			}
-			return null;
+			return null
 		},
 		[styles.dayRestaurantTitle]
-	);
+	)
 
 	return mealData.isEmpty ? (
 		<View style={styles.emptyContainer}>
@@ -214,8 +214,8 @@ export const MealDay = ({
 				groupedMeals: mealData.canisiusGrouped
 			})}
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	categoryContainer: {
@@ -248,4 +248,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.primary,
 		marginRight: 4
 	}
-}));
+}))

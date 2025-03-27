@@ -1,48 +1,48 @@
-import { trackEvent } from '@aptabase/react-native';
-import { type ErrorBoundaryProps, usePathname } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { trackEvent } from '@aptabase/react-native'
+import { type ErrorBoundaryProps, usePathname } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import LogoTextSVG from '../Flow/svgs/logoText';
-import PlatformIcon from '../Universal/Icon';
-import StatusBox from './ActionBox';
+import LogoTextSVG from '../Flow/svgs/logoText'
+import PlatformIcon from '../Universal/Icon'
+import StatusBox from './ActionBox'
 
 export const ErrorButton = ({
 	onPress
 }: {
-	onPress: () => void;
+	onPress: () => void
 }): React.JSX.Element => {
-	const { t } = useTranslation('common');
-	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('common')
+	const { styles } = useStyles(stylesheet)
 	return (
 		<Pressable style={styles.logoutContainer} onPress={onPress}>
 			<View style={styles.refreshButton}>
 				<Text style={styles.refreshButtonText}>{t('error.crash.reload')}</Text>
 			</View>
 		</Pressable>
-	);
-};
+	)
+}
 
 export default function CrashView({
 	error,
 	retry
 }: ErrorBoundaryProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const path = usePathname();
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const path = usePathname()
 	trackEvent('ErrorView', {
 		title: error.message,
 		path,
 		crash: true
-	});
+	})
 
 	const handlePress = (): void => {
 		retry().catch((error) => {
-			console.info('Error while retrying', error);
-		});
-	};
+			console.info('Error while retrying', error)
+		})
+	}
 
 	return (
 		<View style={styles.flex}>
@@ -74,7 +74,7 @@ export default function CrashView({
 				<LogoTextSVG size={15} color={theme.colors.labelSecondaryColor} />
 			</View>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -127,4 +127,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600'
 	},
 	topContainer: { alignItems: 'center', gap: 20 }
-}));
+}))

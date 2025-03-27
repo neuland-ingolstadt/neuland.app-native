@@ -1,39 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { MapContext } from '@/contexts/map';
-import BottomSheet from '@gorhom/bottom-sheet';
-import Color from 'color';
-import type { FeatureCollection } from 'geojson';
-import React, { useContext, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Text, View } from 'react-native';
-import { TextInput } from 'react-native';
-import Animated, { type SharedValue } from 'react-native-reanimated';
+import { MapContext } from '@/contexts/map'
+import BottomSheet from '@gorhom/bottom-sheet'
+import Color from 'color'
+import type { FeatureCollection } from 'geojson'
+import React, { useContext, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Text, View } from 'react-native'
+import { TextInput } from 'react-native'
+import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import AttributionLink from './AttributionLink';
-import AvailableRoomsSuggestions from './AvailableRoomsSuggestions';
-import BottomSheetBackground from './BottomSheetBackground';
-import NextLectureSuggestion from './NextLectureSuggestion';
-import SearchHistory from './SearchHistory';
-import SearchResults from './SearchResuts';
+import { Pressable } from 'react-native-gesture-handler'
+import AttributionLink from './AttributionLink'
+import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'
+import BottomSheetBackground from './BottomSheetBackground'
+import NextLectureSuggestion from './NextLectureSuggestion'
+import SearchHistory from './SearchHistory'
+import SearchResults from './SearchResuts'
 
 interface MapBottomSheetProps {
-	bottomSheetRef: React.RefObject<BottomSheet>;
-	currentPosition: SharedValue<number>;
-	handlePresentModalPress: () => void;
-	allRooms: FeatureCollection;
+	bottomSheetRef: React.RefObject<BottomSheet>
+	currentPosition: SharedValue<number>
+	handlePresentModalPress: () => void
+	allRooms: FeatureCollection
 }
 
 const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
@@ -42,31 +42,31 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 	handlePresentModalPress,
 	allRooms
 }) => {
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const { localSearch, setLocalSearch, searchHistory } = useContext(MapContext);
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const { localSearch, setLocalSearch, searchHistory } = useContext(MapContext)
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const textInputRef = useRef<any>(null);
-	const [searchFocused, setSearchFocused] = React.useState(false);
-	const cancelWidth = useSharedValue(0);
-	const cancelOpacity = useSharedValue(0);
+	const textInputRef = useRef<any>(null)
+	const [searchFocused, setSearchFocused] = React.useState(false)
+	const cancelWidth = useSharedValue(0)
+	const cancelOpacity = useSharedValue(0)
 
 	const animatedCancelStyle = useAnimatedStyle(() => ({
 		width: cancelWidth.value,
 		opacity: cancelOpacity.value
-	}));
+	}))
 
 	const animate = (toValue: number): void => {
-		cancelWidth.value = withTiming(toValue, { duration: 200 });
+		cancelWidth.value = withTiming(toValue, { duration: 200 })
 		cancelOpacity.value = withTiming(toValue === 0 ? 0 : 1, {
 			duration: 250
-		});
-	};
+		})
+	}
 
-	const width = t('misc.cancel').length * 11;
-	const IOS_SNAP_POINTS = ['20%', '35%', '87%'];
-	const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%'];
+	const width = t('misc.cancel').length * 11
+	const IOS_SNAP_POINTS = ['20%', '35%', '87%']
+	const DEFAULT_SNAP_POINTS = ['10%', '30%', '92%']
 	return (
 		<BottomSheet
 			ref={bottomSheetRef}
@@ -78,9 +78,9 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 			onChange={(index) => {
 				if (index <= 1) {
 					if (localSearch !== '') {
-						setLocalSearch('');
+						setLocalSearch('')
 					}
-					textInputRef.current?.blur();
+					textInputRef.current?.blur()
 				}
 			}}
 			enableDynamicSizing={false}
@@ -98,25 +98,25 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 						clearButtonMode="always"
 						enterKeyHint="search"
 						onChangeText={(text) => {
-							setLocalSearch(text);
+							setLocalSearch(text)
 						}}
 						onFocus={() => {
-							setSearchFocused(true);
-							animate(width);
-							bottomSheetRef.current?.expand();
+							setSearchFocused(true)
+							animate(width)
+							bottomSheetRef.current?.expand()
 						}}
 						onBlur={() => {
-							setSearchFocused(false);
-							animate(0);
+							setSearchFocused(false)
+							animate(0)
 						}}
 					/>
 
 					<Animated.View style={[styles.cancelContainer, animatedCancelStyle]}>
 						<Pressable
 							onPress={() => {
-								setLocalSearch('');
-								textInputRef.current?.blur();
-								bottomSheetRef.current?.snapToIndex(1);
+								setLocalSearch('')
+								textInputRef.current?.blur()
+								bottomSheetRef.current?.snapToIndex(1)
 							}}
 							style={styles.cancelButton}
 						>
@@ -162,10 +162,10 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 				)}
 			</View>
 		</BottomSheet>
-	);
-};
+	)
+}
 
-export default MapBottomSheet;
+export default MapBottomSheet
 
 const stylesheet = createStyleSheet((theme) => ({
 	cancelButton: {
@@ -219,4 +219,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 10,
 		paddingHorizontal: 10
 	}
-}));
+}))

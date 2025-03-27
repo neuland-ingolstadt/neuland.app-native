@@ -1,22 +1,22 @@
-import type { MaterialIcon } from '@/types/material-icons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { FileWarning, icons } from 'lucide-react-native';
-import type React from 'react';
-import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import SweetSFSymbol from 'sweet-sfsymbols';
-import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types';
+import type { MaterialIcon } from '@/types/material-icons'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { FileWarning, icons } from 'lucide-react-native'
+import type React from 'react'
+import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import SweetSFSymbol from 'sweet-sfsymbols'
+import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
-export type LucideIcon = keyof typeof icons;
+export type LucideIcon = keyof typeof icons
 interface PlatformIconProps {
 	android: {
-		name: MaterialIcon | CommunityIcon;
-		size: number;
-		variant?: 'filled' | 'outlined';
-	};
+		name: MaterialIcon | CommunityIcon
+		size: number
+		variant?: 'filled' | 'outlined'
+	}
 	ios: {
-		name: string;
-		size: number;
+		name: string
+		size: number
 		weight?:
 			| 'ultraLight'
 			| 'thin'
@@ -26,43 +26,43 @@ interface PlatformIconProps {
 			| 'semibold'
 			| 'bold'
 			| 'heavy'
-			| 'black';
-		variant?: string;
-		fallback?: boolean;
+			| 'black'
+		variant?: string
+		fallback?: boolean
 		renderMode?:
 			| 'multicolor'
 			| 'monochrome'
 			| 'hierarchical'
 			| 'palette'
-			| undefined;
-		variableValue?: number | undefined;
-		additionalColor?: string;
-	};
+			| undefined
+		variableValue?: number | undefined
+		additionalColor?: string
+	}
 	web: {
-		name: LucideIcon;
-		size: number;
-		variant?: 'filled' | 'outlined';
-	};
-	style?: TextStyle;
+		name: LucideIcon
+		size: number
+		variant?: 'filled' | 'outlined'
+	}
+	style?: TextStyle
 }
 
 export const lucidErrorIcon = {
 	name: 'error',
 	size: 24,
 	color: 'red'
-};
+}
 
 export const linkIcon = {
 	ios: 'safari',
 	android: 'link' as MaterialIcon,
 	web: 'Link' as LucideIcon
-};
+}
 
 export const chevronIcon = {
 	ios: 'chevron.forward',
 	android: 'chevron_right' as MaterialIcon,
 	web: 'ChevronRight' satisfies LucideIcon as LucideIcon
-};
+}
 
 const PlatformIcon = ({
 	android,
@@ -70,13 +70,13 @@ const PlatformIcon = ({
 	web,
 	style
 }: PlatformIconProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 
-	const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />;
+	const lucidFallback = <FileWarning size={24} color={lucidErrorIcon.color} />
 
 	if (Platform.OS === 'web') {
 		if (web != null) {
-			const LucideIcon = icons[web.name];
+			const LucideIcon = icons[web.name]
 
 			return (
 				<LucideIcon
@@ -86,9 +86,9 @@ const PlatformIcon = ({
 					fill={web.variant === 'filled' ? 'currentColor' : 'none'}
 					fillRule="evenodd"
 				/>
-			);
+			)
 		}
-		return lucidFallback;
+		return lucidFallback
 	}
 	if (Platform.OS === 'ios') {
 		return (ios.fallback ?? false) ? (
@@ -117,7 +117,7 @@ const PlatformIcon = ({
 				variableValue={ios.variableValue}
 				renderingMode={ios.renderMode}
 			/>
-		);
+		)
 	}
 	return (
 		<Text
@@ -142,14 +142,14 @@ const PlatformIcon = ({
 				android.name
 			)}
 		</Text>
-	);
-};
+	)
+}
 
-export default PlatformIcon;
+export default PlatformIcon
 
-const communityIcons: string[] = ['instagram', 'github'];
+const communityIcons: string[] = ['instagram', 'github']
 
-export type CommunityIcon = 'instagram' | 'github' | 'map-marker';
+export type CommunityIcon = 'instagram' | 'github' | 'map-marker'
 
 const stylesheet = createStyleSheet(() => ({
 	androidIconFilled: {
@@ -164,4 +164,4 @@ const stylesheet = createStyleSheet(() => ({
 	iosFallbackOffset: {
 		marginRight: -2
 	}
-}));
+}))

@@ -1,13 +1,13 @@
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard';
+import BaseCard from './BaseCard'
 
 const LoginCard = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('navigation');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('navigation')
 	return (
 		<BaseCard title="login" removable={false} onPressRoute="/login">
 			<View style={styles.calendarView}>
@@ -17,8 +17,8 @@ const LoginCard = (): React.JSX.Element => {
 				</View>
 			</View>
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarView: {
@@ -34,6 +34,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '500'
 	}
-}));
+}))
 
-export default LoginCard;
+export default LoginCard

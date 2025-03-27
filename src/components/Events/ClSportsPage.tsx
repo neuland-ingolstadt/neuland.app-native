@@ -2,17 +2,17 @@ import type {
 	CampusType,
 	UniversitySportsFieldsFragment,
 	WeekdayType
-} from '@/__generated__/gql/graphql';
-import ErrorView from '@/components/Error/ErrorView';
-import SportsRow from '@/components/Rows/SportsRow';
-import PlatformIcon from '@/components/Universal/Icon';
-import { UserKindContext } from '@/components/contexts';
-import { useRefreshByUser } from '@/hooks';
-import { networkError } from '@/utils/api-utils';
-import type { UseQueryResult } from '@tanstack/react-query';
-import { selectionAsync } from 'expo-haptics';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@/__generated__/gql/graphql'
+import ErrorView from '@/components/Error/ErrorView'
+import SportsRow from '@/components/Rows/SportsRow'
+import PlatformIcon from '@/components/Universal/Icon'
+import { UserKindContext } from '@/components/contexts'
+import { useRefreshByUser } from '@/hooks'
+import { networkError } from '@/utils/api-utils'
+import type { UseQueryResult } from '@tanstack/react-query'
+import { selectionAsync } from 'expo-haptics'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Animated,
 	Platform,
@@ -22,38 +22,37 @@ import {
 	StyleSheet,
 	Text,
 	View
-} from 'react-native';
-import Collapsible from 'react-native-collapsible';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import Collapsible from 'react-native-collapsible'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import Divider from '../Universal/Divider';
-import LoadingIndicator from '../Universal/LoadingIndicator';
+import Divider from '../Universal/Divider'
+import LoadingIndicator from '../Universal/LoadingIndicator'
 
 export default function ClSportsPage({
 	sportsResult
 }: {
 	sportsResult: UseQueryResult<
 		{
-			title: WeekdayType;
-			data: UniversitySportsFieldsFragment[];
+			title: WeekdayType
+			data: UniversitySportsFieldsFragment[]
 		}[],
 		Error
-	>;
+	>
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { userCampus } = useContext(UserKindContext);
-	const [selectedLocation, setSelectedLocation] =
-		useState<string>('Ingolstadt');
+	const { styles } = useStyles(stylesheet)
+	const { userCampus } = useContext(UserKindContext)
+	const [selectedLocation, setSelectedLocation] = useState<string>('Ingolstadt')
 
 	useEffect(() => {
 		if (userCampus != null) {
-			setSelectedLocation(userCampus);
+			setSelectedLocation(userCampus)
 		}
-	}, [userCampus]);
+	}, [userCampus])
 
 	const sportsEvents = useMemo(() => {
 		if (sportsResult.data == null) {
-			return [];
+			return []
 		}
 		return sportsResult.data
 			.map((section) => ({
@@ -62,25 +61,25 @@ export default function ClSportsPage({
 					(event) => event.campus === (selectedLocation as CampusType)
 				)
 			}))
-			.filter((section) => section.data.length > 0);
-	}, [sportsResult.data, selectedLocation]);
+			.filter((section) => section.data.length > 0)
+	}, [sportsResult.data, selectedLocation])
 
-	const { t } = useTranslation('common');
-	const locations = ['Ingolstadt', 'Neuburg'];
+	const { t } = useTranslation('common')
+	const locations = ['Ingolstadt', 'Neuburg']
 
 	const {
 		isRefetchingByUser: isRefetchingByUserSports,
 		refetchByUser: refetchByUserSports
-	} = useRefreshByUser(sportsResult.refetch);
-	const scrollY = new Animated.Value(0);
+	} = useRefreshByUser(sportsResult.refetch)
+	const scrollY = new Animated.Value(0)
 
 	const EventList = ({
 		data
 	}: {
 		data: {
-			title: WeekdayType;
-			data: UniversitySportsFieldsFragment[];
-		}[];
+			title: WeekdayType
+			data: UniversitySportsFieldsFragment[]
+		}[]
 	}): React.JSX.Element => {
 		return (
 			<View>
@@ -92,23 +91,23 @@ export default function ClSportsPage({
 					/>
 				))}
 			</View>
-		);
-	};
+		)
+	}
 
 	const SportsWeekday = ({
 		title,
 		data
 	}: {
-		title: Lowercase<WeekdayType>;
-		data: UniversitySportsFieldsFragment[];
+		title: Lowercase<WeekdayType>
+		data: UniversitySportsFieldsFragment[]
 	}): React.JSX.Element => {
-		const [collapsed, setCollapsed] = useState(false);
+		const [collapsed, setCollapsed] = useState(false)
 
 		return (
 			<View style={styles.weekdaysContainer}>
 				<Pressable
 					onPress={() => {
-						setCollapsed(!collapsed);
+						setCollapsed(!collapsed)
 					}}
 					style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
 					hitSlop={{ top: 6, bottom: 6 }}
@@ -146,23 +145,23 @@ export default function ClSportsPage({
 					</View>
 				</Collapsible>
 			</View>
-		);
-	};
+		)
+	}
 
 	const LocationButton = ({
 		location
 	}: {
-		location: string;
+		location: string
 	}): React.JSX.Element => {
-		const isSelected = selectedLocation === location;
+		const isSelected = selectedLocation === location
 
 		return (
 			<Pressable
 				style={styles.locationButtonContainer}
 				onPress={() => {
-					setSelectedLocation(location);
+					setSelectedLocation(location)
 					if (Platform.OS === 'ios') {
-						void selectionAsync();
+						void selectionAsync()
 					}
 				}}
 			>
@@ -172,8 +171,8 @@ export default function ClSportsPage({
 					<Text style={styles.locationText(isSelected)}>{location}</Text>
 				</View>
 			</Pressable>
-		);
-	};
+		)
+	}
 
 	return (
 		<ScrollView
@@ -193,7 +192,7 @@ export default function ClSportsPage({
 				<RefreshControl
 					refreshing={isRefetchingByUserSports}
 					onRefresh={() => {
-						void refetchByUserSports();
+						void refetchByUserSports()
 					}}
 				/>
 			}
@@ -204,7 +203,7 @@ export default function ClSportsPage({
 				<ErrorView
 					title={sportsResult.error?.message ?? t('error.title')}
 					onButtonPress={() => {
-						void refetchByUserSports();
+						void refetchByUserSports()
 					}}
 					inModal
 				/>
@@ -242,7 +241,7 @@ export default function ClSportsPage({
 				</View>
 			)}
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -315,4 +314,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 4
 	},
 	weekdaysContainer: { marginBottom: 10 }
-}));
+}))

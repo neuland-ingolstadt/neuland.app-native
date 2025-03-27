@@ -1,19 +1,19 @@
-export const PRIVACY_URL = 'https://next.neuland.app/legal/privacy';
-export const IMPRINT_URL = 'https://next.neuland.app/legal/imprint';
-export const STATUS_URL = 'https://status.neuland.app/status/app';
-export const USER_STUDENT = 'student';
-export const USER_EMPLOYEE = 'employee';
-export const USER_GUEST = 'guest';
-const primussLink = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin';
-const moodleLink = 'https://moodle.thi.de/';
-const mailLink = 'https://outlook.office.com/';
-const studverLink = 'https://studverthi.de';
-const marketplaceLink = 'https://www.thi.de/service/marketplace/';
-export const libraryLink = 'https://opac.ku.de/index-hi.html';
-export const vscoutLink = 'https://vscout.thi.de';
-const thiLink = 'https://www.thi.de';
+export const PRIVACY_URL = 'https://next.neuland.app/legal/privacy'
+export const IMPRINT_URL = 'https://next.neuland.app/legal/imprint'
+export const STATUS_URL = 'https://status.neuland.app/status/app'
+export const USER_STUDENT = 'student'
+export const USER_EMPLOYEE = 'employee'
+export const USER_GUEST = 'guest'
+const primussLink = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
+const moodleLink = 'https://moodle.thi.de/'
+const mailLink = 'https://outlook.office.com/'
+const studverLink = 'https://studverthi.de'
+const marketplaceLink = 'https://www.thi.de/service/marketplace/'
+export const libraryLink = 'https://opac.ku.de/index-hi.html'
+export const vscoutLink = 'https://vscout.thi.de'
+const thiLink = 'https://www.thi.de'
 const pressReaderLink =
-	'https://thi.idm.oclc.org/login?url=https://www.pressreader.com/catalog';
+	'https://thi.idm.oclc.org/login?url=https://www.pressreader.com/catalog'
 
 export const quicklinks = [
 	{
@@ -79,6 +79,6 @@ export const quicklinks = [
 			web: 'Newspaper'
 		}
 	}
-];
+]
 
-export const defaultQuicklinks = ['primuss', 'moodle', 'webmail'];
+export const defaultQuicklinks = ['primuss', 'moodle', 'webmail']

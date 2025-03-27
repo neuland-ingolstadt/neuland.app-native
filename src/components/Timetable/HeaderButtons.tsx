@@ -1,17 +1,17 @@
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 interface HeaderRightProps {
-	setToday: () => void;
+	setToday: () => void
 }
 
 export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation(['accessibility']);
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation(['accessibility'])
 	return (
 		<Pressable
 			onPress={setToday}
@@ -35,7 +35,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
 				style={styles.icon}
 			/>
 		</Pressable>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -45,4 +45,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	icon: {
 		color: theme.colors.text
 	}
-}));
+}))

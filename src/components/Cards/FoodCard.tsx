@@ -1,56 +1,56 @@
-import Divider from '@/components/Universal/Divider';
-import { UserKindContext } from '@/components/contexts';
-import { USER_GUEST } from '@/data/constants';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import type { LanguageKey } from '@/localization/i18n';
-import { formatISODate } from '@/utils/date-utils';
+import Divider from '@/components/Universal/Divider'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { LanguageKey } from '@/localization/i18n'
+import { formatISODate } from '@/utils/date-utils'
 import {
 	getUserSpecificPrice,
 	humanLocations,
 	loadFoodEntries,
 	mealName,
 	userMealRating
-} from '@/utils/food-utils';
-import { useQuery } from '@tanstack/react-query';
-import React, { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/food-utils'
+import { useQuery } from '@tanstack/react-query'
+import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard';
+import BaseCard from './BaseCard'
 
 const FoodCard = (): React.JSX.Element => {
-	const { t, i18n } = useTranslation('food');
-	const { styles, theme } = useStyles(stylesheet);
+	const { t, i18n } = useTranslation('food')
+	const { styles, theme } = useStyles(stylesheet)
 
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
-	);
+	)
 	const allergenSelection = useFoodFilterStore(
 		(state) => state.allergenSelection
-	);
+	)
 	const preferencesSelection = useFoodFilterStore(
 		(state) => state.preferencesSelection
-	);
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
+	)
+	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const [foodEntries, setFoodEntries] = useState<
 		{ name: string; price: string | null; location: string | null }[]
-	>([]);
+	>([])
 	const { data, isSuccess } = useQuery({
 		queryKey: ['meals', selectedRestaurants, false],
 		queryFn: async () => await loadFoodEntries(selectedRestaurants, false),
 		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hourss
-	});
+	})
 
 	useEffect(() => {
 		if (!isSuccess) {
 			// if data is not loaded yet, do nothing
-			return;
+			return
 		}
-		const today = formatISODate(new Date());
+		const today = formatISODate(new Date())
 		const todayEntries = data
 			.find((x) => x.timestamp === today)
 			?.meals.filter(
@@ -60,20 +60,20 @@ const FoodCard = (): React.JSX.Element => {
 					x.category !== 'salad' &&
 					x.restaurant != null &&
 					selectedRestaurants.includes(x.restaurant)
-			);
+			)
 
 		// Calculate userMealRating and update foodEntries
 		const updateFoodEntries = (): void => {
 			if (todayEntries == null) {
-				setFoodEntries([]);
+				setFoodEntries([])
 			} else {
 				todayEntries?.sort(
 					(a, b) =>
 						userMealRating(b, allergenSelection, preferencesSelection) -
 						userMealRating(a, allergenSelection, preferencesSelection)
-				);
-				const shownEntries = todayEntries.slice(0, 2);
-				const hiddenEntriesCount = todayEntries.length - shownEntries.length;
+				)
+				const shownEntries = todayEntries.slice(0, 2)
+				const hiddenEntriesCount = todayEntries.length - shownEntries.length
 				setFoodEntries([
 					...shownEntries.map((x) => ({
 						name: mealName(x.name, foodLanguage, i18n.language as LanguageKey),
@@ -94,11 +94,11 @@ const FoodCard = (): React.JSX.Element => {
 								}
 							]
 						: [])
-				]);
+				])
 			}
-		};
+		}
 
-		updateFoodEntries();
+		updateFoodEntries()
 	}, [
 		allergenSelection,
 		preferencesSelection,
@@ -106,7 +106,7 @@ const FoodCard = (): React.JSX.Element => {
 		foodLanguage,
 		i18n.language,
 		userKind
-	]);
+	])
 
 	return (
 		<BaseCard title={'food'} onPressRoute="/food">
@@ -137,8 +137,8 @@ const FoodCard = (): React.JSX.Element => {
 				</View>
 			)}
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	emptyMenu: {
@@ -164,6 +164,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '500'
 	}
-}));
+}))
 
-export default FoodCard;
+export default FoodCard

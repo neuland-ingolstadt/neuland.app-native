@@ -1,41 +1,41 @@
-import ErrorView from '@/components/Error/ErrorView';
-import DetailsBody from '@/components/Timetable/DetailsBody';
-import DetailsRow from '@/components/Timetable/DetailsRow';
-import DetailsSymbol from '@/components/Timetable/DetailsSymbol';
-import Separator from '@/components/Timetable/Separator';
-import ShareCard from '@/components/Timetable/ShareCard';
-import FormList from '@/components/Universal/FormList';
-import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon';
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { FormListSections, SectionGroup } from '@/types/components';
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils';
-import { isValidRoom } from '@/utils/timetable-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { HeaderTitle } from '@react-navigation/elements';
-import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router';
-import moment from 'moment';
-import React, { useCallback, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Share, Text, View } from 'react-native';
+import ErrorView from '@/components/Error/ErrorView'
+import DetailsBody from '@/components/Timetable/DetailsBody'
+import DetailsRow from '@/components/Timetable/DetailsRow'
+import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
+import Separator from '@/components/Timetable/Separator'
+import ShareCard from '@/components/Timetable/ShareCard'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections, SectionGroup } from '@/types/components'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import moment from 'moment'
+import React, { useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import ViewShot, { captureRef } from 'react-native-view-shot';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ViewShot, { captureRef } from 'react-native-view-shot'
 
 export default function TimetableDetails(): React.JSX.Element {
-	const router = useRouter();
-	const navigation = useNavigation();
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('timetable');
-	const shareRef = useRef<ViewShot>(null);
-	const lecture = useRouteParamsStore((state) => state.selectedLecture);
-	const ref = useAnimatedRef<Animated.ScrollView>();
-	const scroll = useScrollViewOffset(ref);
+	const router = useRouter()
+	const navigation = useNavigation()
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('timetable')
+	const shareRef = useRef<ViewShot>(null)
+	const lecture = useRouteParamsStore((state) => state.selectedLecture)
+	const ref = useAnimatedRef<Animated.ScrollView>()
+	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -48,55 +48,55 @@ export default function TimetableDetails(): React.JSX.Element {
 					)
 				}
 			]
-		};
-	});
+		}
+	})
 	useFocusEffect(
 		useCallback(() => {
 			if (lecture === undefined || Platform.OS === 'web') {
 				navigation.setOptions({
 					headerRight: () => undefined
-				});
+				})
 			} else {
 				navigation.setOptions({
 					headerRight: () => <ShareHeaderButton onPress={shareEvent} />
-				});
+				})
 			}
 		}, [])
-	);
+	)
 
 	if (lecture === undefined) {
-		return <ErrorView title="Cannot display lecture" />;
+		return <ErrorView title="Cannot display lecture" />
 	}
 
-	const startDate = new Date(lecture.startDate);
-	const endDate = new Date(lecture.endDate);
+	const startDate = new Date(lecture.startDate)
+	const endDate = new Date(lecture.endDate)
 
 	const exam =
 		lecture.exam != null
 			? `${lecture.exam.split('-').slice(-1)[0].trim()[0].toUpperCase()}${lecture.exam.split('-').slice(-1)[0].trim().slice(1)}`
-			: null;
+			: null
 
 	async function shareEvent(): Promise<void> {
 		try {
 			const uri = await captureRef(shareRef, {
 				format: 'png',
 				quality: 1
-			});
+			})
 			trackEvent('Share', {
 				type: 'lecture'
-			});
+			})
 
 			await Share.share({
 				url: uri
-			});
+			})
 		} catch (e) {
-			console.log(e);
+			console.log(e)
 		}
 	}
 
 	interface HtmlItem {
-		title: 'overview.goal' | 'overview.content' | 'overview.literature';
-		html: string | null;
+		title: 'overview.goal' | 'overview.content' | 'overview.literature'
+		html: string | null
 	}
 
 	const createItem = (
@@ -114,18 +114,18 @@ export default function TimetableDetails(): React.JSX.Element {
 							title: t(titleKey),
 							html
 						}
-					});
+					})
 				}
-			};
+			}
 		}
-		return null;
-	};
+		return null
+	}
 
 	const items = [
 		createItem('overview.goal', lecture.goal),
 		createItem('overview.content', lecture.contents),
 		createItem('overview.literature', lecture.literature)
-	].filter(Boolean) as SectionGroup[];
+	].filter(Boolean) as SectionGroup[]
 
 	const detailsList: FormListSections[] = [
 		{
@@ -158,7 +158,7 @@ export default function TimetableDetails(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<Animated.ScrollView ref={ref} contentContainerStyle={styles.page}>
@@ -284,7 +284,7 @@ export default function TimetableDetails(): React.JSX.Element {
 							<DetailsBody>
 								<View style={styles.roomContainer}>
 									{lecture.rooms.map((room, i) => {
-										const isValid = isValidRoom(room);
+										const isValid = isValidRoom(room)
 										return (
 											<React.Fragment key={i}>
 												<Pressable
@@ -294,7 +294,7 @@ export default function TimetableDetails(): React.JSX.Element {
 															params: {
 																room
 															}
-														});
+														})
 													}}
 													disabled={!isValid}
 												>
@@ -304,7 +304,7 @@ export default function TimetableDetails(): React.JSX.Element {
 													<Text style={styles.text1}>{', '}</Text>
 												)}
 											</React.Fragment>
-										);
+										)
 									})}
 								</View>
 							</DetailsBody>
@@ -348,7 +348,7 @@ export default function TimetableDetails(): React.JSX.Element {
 				</ViewShot>
 			</View>
 		</Animated.ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -424,4 +424,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		transform: [{ translateX: -1000 }],
 		zIndex: -1
 	}
-}));
+}))

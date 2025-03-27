@@ -1,17 +1,17 @@
-import { BlurView } from 'expo-blur';
-import type React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { BlurView } from 'expo-blur'
+import type React from 'react'
+import { Platform, StyleSheet, View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 const BottomSheetBackground = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const dark = UnistylesRuntime.themeName === 'dark';
-	const darkIos = 'rgba(0, 0, 0, 0.45)';
-	const lightIos = 'rgba(200, 200, 200, 0.3)';
+	const { styles } = useStyles(stylesheet)
+	const dark = UnistylesRuntime.themeName === 'dark'
+	const darkIos = 'rgba(0, 0, 0, 0.45)'
+	const lightIos = 'rgba(200, 200, 200, 0.3)'
 	return Platform.OS === 'ios' ? (
 		<View
 			style={[
@@ -29,8 +29,8 @@ const BottomSheetBackground = (): React.JSX.Element => {
 		</View>
 	) : (
 		<View style={styles.bottomSheet} />
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	bottomSheet: {
@@ -40,6 +40,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderTopRightRadius: theme.radius.lg,
 		overflow: 'hidden'
 	}
-}));
+}))
 
-export default BottomSheetBackground;
+export default BottomSheetBackground

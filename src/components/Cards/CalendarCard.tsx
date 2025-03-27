@@ -1,55 +1,55 @@
-import { NoSessionError } from '@/api/thi-session-handler';
-import Divider from '@/components/Universal/Divider';
-import { UserKindContext } from '@/components/contexts';
-import { USER_GUEST, USER_STUDENT } from '@/data/constants';
-import { useFlowStore } from '@/hooks/useFlowStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Calendar } from '@/types/data';
-import { calendar, loadExamList } from '@/utils/calendar-utils';
-import { formatFriendlyRelativeTime } from '@/utils/date-utils';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { NoSessionError } from '@/api/thi-session-handler'
+import Divider from '@/components/Universal/Divider'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Calendar } from '@/types/data'
+import { calendar, loadExamList } from '@/utils/calendar-utils'
+import { formatFriendlyRelativeTime } from '@/utils/date-utils'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard';
+import BaseCard from './BaseCard'
 
 const CalendarCard = (): React.JSX.Element => {
-	type Combined = Calendar | CardExams;
-	const router = useRouter();
-	const time = new Date();
-	const { i18n, t } = useTranslation('navigation');
-	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([]);
-	const isOnboarded = useFlowStore((state) => state.isOnboarded);
-	const { userKind = USER_GUEST } = React.useContext(UserKindContext);
+	type Combined = Calendar | CardExams
+	const router = useRouter()
+	const time = new Date()
+	const { i18n, t } = useTranslation('navigation')
+	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
+	const isOnboarded = useFlowStore((state) => state.isOnboarded)
+	const { userKind = USER_GUEST } = React.useContext(UserKindContext)
 	interface CardExams {
-		name: string;
-		begin: Date;
-		end?: Date;
+		name: string
+		begin: Date
+		end?: Date
 	}
 
 	async function loadExams(): Promise<CardExams[]> {
-		let exams: CardExams[] = [];
+		let exams: CardExams[] = []
 		try {
 			// TODO: extract the fetch logic into a separate function to improve caching
 			exams = (await loadExamList()).map((x) => ({
 				name: t('cards.calendar.exam', { name: x.name }),
 				begin: new Date(x.date)
-			}));
+			}))
 		} catch (e) {
 			if (e instanceof NoSessionError) {
 				if (isOnboarded === true) {
-					router.navigate('/login');
+					router.navigate('/login')
 				}
 			} else if ((e as Error).message === 'Query not possible') {
 				// ignore, leaving examList empty
 			} else {
-				console.log(e as Error);
+				console.log(e as Error)
 			}
 		}
-		return exams;
+		return exams
 	}
 
 	const { data: exams } = useQuery({
@@ -59,13 +59,13 @@ const CalendarCard = (): React.JSX.Element => {
 		gcTime: 1000 * 60 * 60 * 24, // 24 hours
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.navigate('/login');
-				return false;
+				router.navigate('/login')
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		},
 		enabled: userKind === USER_STUDENT
-	});
+	})
 
 	useEffect(() => {
 		const combined = [...calendar, ...(exams ?? [])]
@@ -73,22 +73,22 @@ const CalendarCard = (): React.JSX.Element => {
 			.filter((x) => x.begin > time || (x.end ?? time) > time)
 			.sort((a, b) => {
 				// First compare by start date
-				const dateComparison = a.begin.getTime() - b.begin.getTime();
+				const dateComparison = a.begin.getTime() - b.begin.getTime()
 
 				// If events start on the same day, prioritize single-day events
 				if (dateComparison === 0) {
-					const aIsSingleDay = !a.end;
-					const bIsSingleDay = !b.end;
-					return aIsSingleDay ? -1 : bIsSingleDay ? 1 : 0;
+					const aIsSingleDay = !a.end
+					const bIsSingleDay = !b.end
+					return aIsSingleDay ? -1 : bIsSingleDay ? 1 : 0
 				}
 
-				return dateComparison;
-			}) as Combined[];
+				return dateComparison
+			}) as Combined[]
 
-		setMixedCalendar(combined.slice(0, 2));
-	}, [calendar, exams]);
+		setMixedCalendar(combined.slice(0, 2))
+	}, [calendar, exams])
 
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 
 	return (
 		<BaseCard title="calendar" onPressRoute="/calendar">
@@ -120,8 +120,8 @@ const CalendarCard = (): React.JSX.Element => {
 				))}
 			</View>
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarView: {
@@ -139,6 +139,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '500'
 	}
-}));
+}))
 
-export default CalendarCard;
+export default CalendarCard

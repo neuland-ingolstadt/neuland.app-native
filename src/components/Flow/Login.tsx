@@ -1,9 +1,9 @@
-import LoginForm from '@/components/Universal/LoginForm';
-import { PRIVACY_URL } from '@/data/constants';
-import { router, useLocalSearchParams } from 'expo-router';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import LoginForm from '@/components/Universal/LoginForm'
+import { PRIVACY_URL } from '@/data/constants'
+import { router, useLocalSearchParams } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Dimensions,
 	Keyboard,
@@ -15,52 +15,52 @@ import {
 	Text,
 	TouchableWithoutFeedback,
 	View
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import LoginAnimatedText from './LoginAnimatedText';
+import LoginAnimatedText from './LoginAnimatedText'
 
 const useIsFloatingKeyboard = (): boolean => {
-	const windowWidth = Dimensions.get('window').width;
-	const [floating, setFloating] = useState(false);
+	const windowWidth = Dimensions.get('window').width
+	const [floating, setFloating] = useState(false)
 
 	useEffect(() => {
 		const onKeyboardWillChangeFrame = (event: KeyboardEvent): void => {
-			setFloating(event.endCoordinates.width !== windowWidth);
-		};
+			setFloating(event.endCoordinates.width !== windowWidth)
+		}
 
-		Keyboard.addListener('keyboardWillChangeFrame', onKeyboardWillChangeFrame);
+		Keyboard.addListener('keyboardWillChangeFrame', onKeyboardWillChangeFrame)
 		return () => {
-			Keyboard.removeAllListeners('keyboardWillChangeFrame');
-		};
-	}, [windowWidth]);
+			Keyboard.removeAllListeners('keyboardWillChangeFrame')
+		}
+	}, [windowWidth])
 
-	return floating;
-};
+	return floating
+}
 
 export default function Login(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const floatingKeyboard = useIsFloatingKeyboard();
-	const { t } = useTranslation('flow');
+	const { styles } = useStyles(stylesheet)
+	const floatingKeyboard = useIsFloatingKeyboard()
+	const { t } = useTranslation('flow')
 
 	const { fromOnboarding } = useLocalSearchParams<{
-		fromOnboarding: string;
-	}>();
+		fromOnboarding: string
+	}>()
 
 	const navigateHome = (): void => {
 		if (fromOnboarding === 'true') {
-			router.dismissAll();
-			router.replace('/(tabs)');
-			return;
+			router.dismissAll()
+			router.replace('/(tabs)')
+			return
 		}
-		router.dismissAll();
+		router.dismissAll()
 		if (Platform.OS === 'web') {
-			router.replace('/(tabs)');
+			router.replace('/(tabs)')
 		}
-	};
+	}
 
-	const insets = useSafeAreaInsets();
+	const insets = useSafeAreaInsets()
 
 	return (
 		<>
@@ -82,7 +82,7 @@ export default function Login(): React.JSX.Element {
 					<View style={styles.linkContainer}>
 						<Pressable
 							onPress={() => {
-								void Linking.openURL(PRIVACY_URL);
+								void Linking.openURL(PRIVACY_URL)
 							}}
 						>
 							<Text style={styles.privacyLink}>
@@ -93,7 +93,7 @@ export default function Login(): React.JSX.Element {
 				</View>
 			</TouchableWithoutFeedback>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -119,4 +119,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		textAlign: 'center'
 	}
-}));
+}))

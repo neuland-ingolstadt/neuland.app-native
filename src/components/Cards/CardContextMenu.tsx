@@ -1,18 +1,18 @@
-import { router } from 'expo-router';
-import { useTranslation } from 'react-i18next';
-import * as ContextMenu from 'zeego/context-menu';
-import ContextMenuContent from '../ContextMenu/ContextMenuContent';
-import ContextMenuItem from '../ContextMenu/ContextMenuItem';
-import ContextMenuSeparator from '../ContextMenu/ContextMenuItemSeparator';
-import ContextMenuItemTitle from '../ContextMenu/ContextMenuItemTitle';
+import { router } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import * as ContextMenu from 'zeego/context-menu'
+import ContextMenuContent from '../ContextMenu/ContextMenuContent'
+import ContextMenuItem from '../ContextMenu/ContextMenuItem'
+import ContextMenuSeparator from '../ContextMenu/ContextMenuItemSeparator'
+import ContextMenuItemTitle from '../ContextMenu/ContextMenuItemTitle'
 
 interface CardContextMenuProps {
-	card: JSX.Element;
-	title: string;
-	removable?: boolean;
-	hideDashboardEntry?: (title: string) => void;
-	resetOrder?: (userKind: string) => void;
-	userKind?: string;
+	card: JSX.Element
+	title: string
+	removable?: boolean
+	hideDashboardEntry?: (title: string) => void
+	resetOrder?: (userKind: string) => void
+	userKind?: string
 }
 
 export function CardContextMenu({
@@ -23,19 +23,19 @@ export function CardContextMenu({
 	resetOrder,
 	userKind
 }: CardContextMenuProps): JSX.Element {
-	const { t } = useTranslation('navigation');
+	const { t } = useTranslation('navigation')
 
 	const handleItemPress = (action: string) => {
 		if (action === t('contextMenu.settings')) {
-			router.navigate('/dashboard');
+			router.navigate('/dashboard')
 		}
 		if (action === t('contextMenu.hide') && hideDashboardEntry) {
-			hideDashboardEntry(title);
+			hideDashboardEntry(title)
 		}
 		if (action === t('contextMenu.reset') && resetOrder && userKind) {
-			resetOrder(userKind);
+			resetOrder(userKind)
 		}
-	};
+	}
 
 	return (
 		<ContextMenu.Root>
@@ -45,7 +45,7 @@ export function CardContextMenu({
 				<ContextMenuItem
 					key="settings"
 					onSelect={() => {
-						handleItemPress(t('contextMenu.settings'));
+						handleItemPress(t('contextMenu.settings'))
 					}}
 				>
 					<ContextMenu.ItemIcon
@@ -94,5 +94,5 @@ export function CardContextMenu({
 				</ContextMenuItem>
 			</ContextMenuContent>
 		</ContextMenu.Root>
-	);
+	)
 }

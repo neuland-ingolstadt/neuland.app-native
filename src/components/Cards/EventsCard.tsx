@@ -1,24 +1,24 @@
-import Divider from '@/components/Universal/Divider';
-import type { LanguageKey } from '@/localization/i18n';
-import { loadCampusLifeEvents } from '@/utils/events-utils';
-import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Divider from '@/components/Universal/Divider'
+import type { LanguageKey } from '@/localization/i18n'
+import { loadCampusLifeEvents } from '@/utils/events-utils'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard';
+import BaseCard from './BaseCard'
 
 const EventsCard = (): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet);
-	const { t, i18n } = useTranslation('navigation');
+	const { styles, theme } = useStyles(stylesheet)
+	const { t, i18n } = useTranslation('navigation')
 
 	const { data, isSuccess } = useQuery({
 		queryKey: ['campusLifeEventsV2'],
 		queryFn: loadCampusLifeEvents,
 		staleTime: 1000 * 60 * 5, // 5 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
-	});
+	})
 
 	return (
 		<BaseCard title="events" onPressRoute="/cl-events">
@@ -52,8 +52,8 @@ const EventsCard = (): React.JSX.Element => {
 				</View>
 			)}
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarFilled: {
@@ -72,6 +72,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '500'
 	}
-}));
+}))
 
-export default EventsCard;
+export default EventsCard

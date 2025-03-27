@@ -1,57 +1,57 @@
-import type { FormListSections } from '@/types/components';
-import { type RoomData, SEARCH_TYPES } from '@/types/map';
-import { trackEvent } from '@aptabase/react-native';
+import type { FormListSections } from '@/types/components'
+import { type RoomData, SEARCH_TYPES } from '@/types/map'
+import { trackEvent } from '@aptabase/react-native'
 import {
 	BottomSheetModal,
 	BottomSheetModalProvider,
 	BottomSheetView
-} from '@gorhom/bottom-sheet';
-import Color from 'color';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Share, Text, View } from 'react-native';
-import type { SharedValue } from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@gorhom/bottom-sheet'
+import Color from 'color'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Share, Text, View } from 'react-native'
+import type { SharedValue } from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import FormList from '../Universal/FormList';
-import PlatformIcon from '../Universal/Icon';
-import BottomSheetBackground from './BottomSheetBackground';
+import { Pressable } from 'react-native-gesture-handler'
+import FormList from '../Universal/FormList'
+import PlatformIcon from '../Universal/Icon'
+import BottomSheetBackground from './BottomSheetBackground'
 
 interface BottomSheetDetailModalProps {
-	bottomSheetModalRef: React.RefObject<BottomSheetModal>;
-	handleSheetChangesModal: () => void;
-	currentPositionModal: SharedValue<number>;
-	roomData: RoomData;
-	modalSection: FormListSections[];
+	bottomSheetModalRef: React.RefObject<BottomSheetModal>
+	handleSheetChangesModal: () => void
+	currentPositionModal: SharedValue<number>
+	roomData: RoomData
+	modalSection: FormListSections[]
 }
 
 interface ReportLinkProps {
-	roomTitle: string;
+	roomTitle: string
 }
 
 const handleShareModal = (room: string): void => {
-	const payload = `https://neuland.app/rooms/?highlight=${room}`;
+	const payload = `https://neuland.app/rooms/?highlight=${room}`
 	trackEvent('Share', {
 		type: 'room'
-	});
+	})
 	void Share.share(
 		Platform.OS === 'android' ? { message: payload } : { url: payload }
-	);
-};
+	)
+}
 
 const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 
 	const handleReportRoom = useCallback(() => {
 		router.push({
 			pathname: '/room-report',
 			params: { room: roomTitle }
-		});
-	}, [roomTitle]);
+		})
+	}, [roomTitle])
 
 	return (
 		<View style={styles.reportContainer}>
@@ -76,8 +76,8 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 				/>
 			</Pressable>
 		</View>
-	);
-};
+	)
+}
 
 /**
  * BottomSheetDetailModal component for displaying room details
@@ -94,9 +94,9 @@ export const BottomSheetDetailModal = ({
 	roomData,
 	modalSection
 }: BottomSheetDetailModalProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const IOS_SNAP_POINTS = ['36%', '55%', '80%'];
-	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%'];
+	const { styles } = useStyles(stylesheet)
+	const IOS_SNAP_POINTS = ['36%', '55%', '80%']
+	const DEFAULT_SNAP_POINTS = ['30%', '40%', '70%']
 	return (
 		<BottomSheetModalProvider>
 			<BottomSheetModal
@@ -117,7 +117,7 @@ export const BottomSheetDetailModal = ({
 							{roomData.type === SEARCH_TYPES.ROOM && (
 								<Pressable
 									onPress={() => {
-										handleShareModal(roomData.title);
+										handleShareModal(roomData.title)
 									}}
 									style={styles.roomDetailButton}
 								>
@@ -141,7 +141,7 @@ export const BottomSheetDetailModal = ({
 							)}
 							<Pressable
 								onPress={() => {
-									bottomSheetModalRef.current?.close();
+									bottomSheetModalRef.current?.close()
 								}}
 							>
 								<View style={styles.roomDetailButton}>
@@ -173,8 +173,8 @@ export const BottomSheetDetailModal = ({
 				</BottomSheetView>
 			</BottomSheetModal>
 		</BottomSheetModalProvider>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	buttonsContainer: { flexDirection: 'row', gap: 10, marginBottom: 3 },
@@ -237,4 +237,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: Color(theme.colors.text).darken(0.1).hex(),
 		marginTop: platform === 'ios' ? 1 : 0
 	})
-}));
+}))

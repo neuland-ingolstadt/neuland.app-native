@@ -1,19 +1,19 @@
-import PlatformIcon from '@/components/Universal/Icon';
-import { Tabs } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Dimensions, Platform } from 'react-native';
-import { useStyles } from 'react-native-unistyles';
+import PlatformIcon from '@/components/Universal/Icon'
+import { Tabs } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Dimensions, Platform } from 'react-native'
+import { useStyles } from 'react-native-unistyles'
 
 export function useBottomTabBarHeight(): number {
-	return 60;
+	return 60
 }
 
 const DefaultTabs = (): React.JSX.Element => {
-	const { theme: styleTheme } = useStyles();
-	const { t } = useTranslation('navigation');
-	const isMobile = Dimensions.get('window').width < 900;
-	const isPad = Dimensions.get('window').width < 1300;
+	const { theme: styleTheme } = useStyles()
+	const { t } = useTranslation('navigation')
+	const isMobile = Dimensions.get('window').width < 900
+	const isPad = Dimensions.get('window').width < 1300
 
 	return (
 		<>
@@ -148,7 +148,7 @@ const DefaultTabs = (): React.JSX.Element => {
 				/>
 			</Tabs>
 		</>
-	);
-};
+	)
+}
 
-export default DefaultTabs;
+export default DefaultTabs

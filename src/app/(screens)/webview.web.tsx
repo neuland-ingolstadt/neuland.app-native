@@ -1,9 +1,9 @@
-import ErrorView from '@/components/Error/ErrorView';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
+import ErrorView from '@/components/Error/ErrorView'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function NotesDetails(): React.JSX.Element {
-	const { t } = useTranslation('timetable');
+	const { t } = useTranslation('timetable')
 
 	return (
 		<>
@@ -13,5 +13,5 @@ export default function NotesDetails(): React.JSX.Element {
 				isCritical={false}
 			/>
 		</>
-	);
+	)
 }

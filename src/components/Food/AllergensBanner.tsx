@@ -1,23 +1,23 @@
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import { getContrastColor } from '@/utils/ui-utils';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { getContrastColor } from '@/utils/ui-utils'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Animated, Text, TouchableOpacity, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 export const AllergensBanner = ({
 	scrollY
 }: {
-	scrollY: Animated.Value;
+	scrollY: Animated.Value
 }): React.JSX.Element => {
-	const { t } = useTranslation('common');
+	const { t } = useTranslation('common')
 	const initAllergenSelection = useFoodFilterStore(
 		(state) => state.initAllergenSelection
-	);
-	const { styles } = useStyles(stylesheet);
+	)
+	const { styles } = useStyles(stylesheet)
 	return (
 		<Animated.View
 			style={{
@@ -32,7 +32,7 @@ export const AllergensBanner = ({
 			<View style={styles.bannerContainer}>
 				<TouchableOpacity
 					onPress={() => {
-						initAllergenSelection();
+						initAllergenSelection()
 					}}
 					hitSlop={6}
 					style={styles.dismissButton}
@@ -56,7 +56,7 @@ export const AllergensBanner = ({
 				<View>
 					<TouchableOpacity
 						onPress={() => {
-							router.navigate('/food-allergens');
+							router.navigate('/food-allergens')
 						}}
 					>
 						<Text style={styles.bannerTitle}>
@@ -72,8 +72,8 @@ export const AllergensBanner = ({
 				</View>
 			</View>
 		</Animated.View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	bannerContainer: {
@@ -109,4 +109,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderBottomWidth: 0.5,
 		paddingHorizontal: 12
 	}
-}));
+}))

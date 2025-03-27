@@ -1,13 +1,13 @@
-import Divider from '@/components/Universal/Divider';
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Divider from '@/components/Universal/Divider'
+import React from 'react'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 export interface FoodLanguageElement {
-	title: string;
-	key: string;
+	title: string
+	key: string
 }
 
 /**
@@ -18,9 +18,9 @@ export interface FoodLanguageElement {
  * @returns {JSX.Element} - The MultiSectionPicker component.
  */
 export interface FoodLanguagePickerProps {
-	elements: FoodLanguageElement[];
-	selectedItem: string;
-	action: (item: string) => void;
+	elements: FoodLanguageElement[]
+	selectedItem: string
+	action: (item: string) => void
 }
 
 // ...
@@ -30,14 +30,14 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 	selectedItem,
 	action
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			{elements.map((item, index) => (
 				<React.Fragment key={index}>
 					<Pressable
 						onPress={() => {
-							action(item.key);
+							action(item.key)
 						}}
 						style={({ pressed }) => [
 							{ opacity: pressed ? 0.8 : 1 },
@@ -71,8 +71,8 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 				</React.Fragment>
 			))}
 		</>
-	);
-};
+	)
+}
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		alignItems: 'center',
@@ -87,6 +87,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		paddingVertical: 1
 	}
-}));
+}))
 
-export default MultiSectionRadio;
+export default MultiSectionRadio

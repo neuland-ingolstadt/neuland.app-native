@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import Color from 'color';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform } from 'react-native';
-import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs';
-import { UnistylesRuntime, useStyles } from 'react-native-unistyles';
+import Color from 'color'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
+import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
+import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
 
-import { Tabs } from './NativeBottomTabs';
+import { Tabs } from './NativeBottomTabs'
 
-export const useBottomTabBarHeight = _useBottomTabBarHeight;
+export const useBottomTabBarHeight = _useBottomTabBarHeight
 
 export default function TabLayout(): React.JSX.Element {
-	const { theme } = useStyles();
-	const { t } = useTranslation('navigation');
-	const isAndroid = Platform.OS === 'android';
+	const { theme } = useStyles()
+	const { t } = useTranslation('navigation')
+	const isAndroid = Platform.OS === 'android'
 	return (
 		<Tabs
 			sidebarAdaptable={false}
@@ -103,5 +103,5 @@ export default function TabLayout(): React.JSX.Element {
 				}}
 			/>
 		</Tabs>
-	);
+	)
 }

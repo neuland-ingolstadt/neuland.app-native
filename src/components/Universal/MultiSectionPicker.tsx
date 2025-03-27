@@ -1,19 +1,19 @@
-import Divider from '@/components/Universal/Divider';
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Divider from '@/components/Universal/Divider'
+import React from 'react'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon';
+import PlatformIcon from './Icon'
 
 interface Element {
-	title: string;
-	key: string;
+	title: string
+	key: string
 }
 
 interface SectionPickerProps {
-	elements: Element[];
-	selectedItems: string[];
-	action: (item: string) => void;
+	elements: Element[]
+	selectedItems: string[]
+	action: (item: string) => void
 }
 
 /**
@@ -28,7 +28,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 	selectedItems,
 	action
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<>
@@ -36,7 +36,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 				<React.Fragment key={index}>
 					<Pressable
 						onPress={() => {
-							action(item.key);
+							action(item.key)
 						}}
 						style={styles.button}
 					>
@@ -66,8 +66,8 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 				</React.Fragment>
 			))}
 		</>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	button: {
@@ -86,6 +86,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		paddingVertical: 1
 	}
-}));
+}))
 
-export default MultiSectionPicker;
+export default MultiSectionPicker

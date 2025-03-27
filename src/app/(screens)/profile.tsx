@@ -1,26 +1,22 @@
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import FormList from '@/components/Universal/FormList';
-import PlatformIcon from '@/components/Universal/Icon';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { DashboardContext, UserKindContext } from '@/components/contexts';
-import { queryClient } from '@/components/provider';
-import { USER_STUDENT } from '@/data/constants';
-import { useRefreshByUser } from '@/hooks';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import type { FormListSections } from '@/types/components';
-import {
-	getPersonalData,
-	networkError,
-	performLogout
-} from '@/utils/api-utils';
-import { useQuery } from '@tanstack/react-query';
-import { toast } from 'burnt';
-import * as Clipboard from 'expo-clipboard';
-import { useRouter } from 'expo-router';
-import React, { useContext, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
+import { USER_STUDENT } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { FormListSections } from '@/types/components'
+import { getPersonalData, networkError, performLogout } from '@/utils/api-utils'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'burnt'
+import * as Clipboard from 'expo-clipboard'
+import { useRouter } from 'expo-router'
+import React, { useContext, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	AppState,
@@ -32,18 +28,18 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Profile(): React.JSX.Element {
-	const router = useRouter();
-	const { styles } = useStyles(stylesheet);
-	const { toggleUserKind, userKind } = useContext(UserKindContext);
-	const { resetOrder } = useContext(DashboardContext);
-	const { t } = useTranslation('settings');
-	const [isLoggingOut, setIsLoggingOut] = React.useState(false);
-	const resetPreferences = usePreferencesStore((state) => state.reset);
-	const resetFood = useFoodFilterStore((state) => state.reset);
+	const router = useRouter()
+	const { styles } = useStyles(stylesheet)
+	const { toggleUserKind, userKind } = useContext(UserKindContext)
+	const { resetOrder } = useContext(DashboardContext)
+	const { t } = useTranslation('settings')
+	const [isLoggingOut, setIsLoggingOut] = React.useState(false)
+	const resetPreferences = usePreferencesStore((state) => state.reset)
+	const resetFood = useFoodFilterStore((state) => state.reset)
 	const { data, error, isLoading, isPaused, isSuccess, refetch, isError } =
 		useQuery({
 			queryKey: ['personalData'],
@@ -53,41 +49,41 @@ export default function Profile(): React.JSX.Element {
 			enabled: userKind === USER_STUDENT,
 			retry(failureCount, error) {
 				if (error instanceof NoSessionError) {
-					router.replace('/login');
-					return false;
+					router.replace('/login')
+					return false
 				}
-				return failureCount < 2;
+				return failureCount < 2
 			}
-		});
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
-	const [isBackground, setIsBackground] = React.useState(false);
+		})
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+	const [isBackground, setIsBackground] = React.useState(false)
 	useEffect(() => {
 		const handleAppStateChange = (nextAppState: AppStateStatus): void => {
 			if (nextAppState === 'inactive' || nextAppState === 'background') {
-				setIsBackground(true);
+				setIsBackground(true)
 			} else {
-				setIsBackground(false);
+				setIsBackground(false)
 			}
-		};
+		}
 
 		const subscription = AppState.addEventListener(
 			'change',
 			handleAppStateChange
-		);
+		)
 
 		return () => {
-			subscription.remove();
-		};
-	}, []);
+			subscription.remove()
+		}
+	}, [])
 
 	const copyToClipboard = async (text: string): Promise<void> => {
 		if (text.length === 0) {
-			return;
+			return
 		}
-		await Clipboard.setStringAsync(text);
+		await Clipboard.setStringAsync(text)
 		// Android shows clipboard toast by default so we don't need to show it
 		if (Platform.OS === 'android') {
-			return;
+			return
 		}
 
 		toast({
@@ -99,25 +95,25 @@ export default function Profile(): React.JSX.Element {
 			haptic: 'success',
 			duration: 2,
 			from: 'top'
-		});
-	};
+		})
+	}
 
 	const logoutAlert = (): void => {
 		if (Platform.OS === 'web') {
 			if (!window.confirm(t('profile.logout.alert.message'))) {
-				return;
+				return
 			}
-			setIsLoggingOut(true);
-			resetFood();
-			resetPreferences();
+			setIsLoggingOut(true)
+			resetFood()
+			resetPreferences()
 			performLogout(toggleUserKind, resetOrder, queryClient)
 				.catch((e) => {
-					console.log(e);
+					console.log(e)
 				})
 				.finally(() => {
-					setIsLoggingOut(false);
-				});
-			return;
+					setIsLoggingOut(false)
+				})
+			return
 		}
 		Alert.alert(
 			t('profile.logout.alert.title'),
@@ -131,21 +127,21 @@ export default function Profile(): React.JSX.Element {
 					text: t('profile.logout.alert.confirm'),
 					style: 'destructive',
 					onPress: () => {
-						setIsLoggingOut(true);
-						resetFood();
-						resetPreferences();
+						setIsLoggingOut(true)
+						resetFood()
+						resetPreferences()
 						performLogout(toggleUserKind, resetOrder, queryClient)
 							.catch((e) => {
-								console.log(e);
+								console.log(e)
 							})
 							.finally(() => {
-								setIsLoggingOut(false);
-							});
+								setIsLoggingOut(false)
+							})
 					}
 				}
 			]
-		);
-	};
+		)
+	}
 
 	const sections: FormListSections[] = [
 		{
@@ -159,14 +155,14 @@ export default function Profile(): React.JSX.Element {
 					title: t('profile.formlist.user.matrical'),
 					value: data?.mtknr,
 					onPress: async () => {
-						await copyToClipboard(data?.mtknr ?? '');
+						await copyToClipboard(data?.mtknr ?? '')
 					}
 				},
 				{
 					title: t('profile.formlist.user.library'),
 					value: data?.bibnr,
 					onPress: async () => {
-						await copyToClipboard(data?.bibnr ?? '');
+						await copyToClipboard(data?.bibnr ?? '')
 					}
 				},
 				{
@@ -194,7 +190,7 @@ export default function Profile(): React.JSX.Element {
 							data.po_url !== '' &&
 							data.po_url !== 'http://www.thi.de'
 						) {
-							void Linking.openURL(data.po_url);
+							void Linking.openURL(data.po_url)
 						}
 					}
 				},
@@ -218,7 +214,7 @@ export default function Profile(): React.JSX.Element {
 					title: 'THI Email',
 					value: data?.fhmail,
 					onPress: async () => {
-						await copyToClipboard(data?.fhmail ?? '');
+						await copyToClipboard(data?.fhmail ?? '')
 					}
 				},
 				...(data?.email === ''
@@ -228,7 +224,7 @@ export default function Profile(): React.JSX.Element {
 								title: 'Email',
 								value: data?.email,
 								onPress: async () => {
-									await copyToClipboard(data?.email ?? '');
+									await copyToClipboard(data?.email ?? '')
 								}
 							}
 						]),
@@ -239,7 +235,7 @@ export default function Profile(): React.JSX.Element {
 								title: t('profile.formlist.contact.phone'),
 								value: data?.telefon,
 								onPress: async () => {
-									await copyToClipboard(data?.telefon ?? '');
+									await copyToClipboard(data?.telefon ?? '')
 								}
 							}
 						]),
@@ -253,7 +249,7 @@ export default function Profile(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<>
@@ -264,7 +260,7 @@ export default function Profile(): React.JSX.Element {
 						<RefreshControl
 							refreshing={isRefetchingByUser}
 							onRefresh={() => {
-								void refetchByUser();
+								void refetchByUser()
 							}}
 						/>
 					) : undefined
@@ -302,7 +298,7 @@ export default function Profile(): React.JSX.Element {
 							onButtonPress={() => {
 								void Linking.openURL(
 									'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
-								);
+								)
 							}}
 							refreshing={isRefetchingByUser}
 							onRefresh={refetchByUser}
@@ -347,7 +343,7 @@ export default function Profile(): React.JSX.Element {
 				</Pressable>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -384,4 +380,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	notification: {
 		color: theme.colors.notification
 	}
-}));
+}))

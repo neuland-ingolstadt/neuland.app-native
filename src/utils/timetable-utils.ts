@@ -3,11 +3,11 @@ import type {
 	Exam,
 	FriendlyTimetableEntry,
 	TimetableSections
-} from '@/types/utils';
-import moment from 'moment';
+} from '@/types/utils'
+import moment from 'moment'
 
-import API from '../api/authenticated-api';
-import { combineDateTime } from './date-utils';
+import API from '../api/authenticated-api'
+import { combineDateTime } from './date-utils'
 
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
@@ -21,7 +21,7 @@ export async function getFriendlyTimetable(
 ): Promise<FriendlyTimetableEntry[]> {
 	// if month is august or september, there are no lectures. Adjust the date to october
 	if (date.getMonth() === 7 || date.getMonth() === 8) {
-		date.setMonth(9);
+		date.setMonth(9)
 	}
 	const [rawTimetableResponse, rawTimetableNextMonthResponse] =
 		await Promise.all([
@@ -30,31 +30,31 @@ export async function getFriendlyTimetable(
 				new Date(date.getFullYear(), date.getMonth() + 1),
 				detailed
 			)
-		]);
+		])
 
-	const rawTimetable = rawTimetableResponse.timetable;
-	const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable;
+	const rawTimetable = rawTimetableResponse.timetable
+	const rawTimetableNextMonth = rawTimetableNextMonthResponse.timetable
 	// the reduce is need to merge the two timetables with potentially overlapping dates
 	const mergedTimetable = [...rawTimetable, ...rawTimetableNextMonth].reduce<
 		typeof rawTimetable
 	>((acc, curr) => {
-		if (curr == null) return acc;
+		if (curr == null) return acc
 
 		const existingIndex = acc.findIndex(
 			(item) => item != null && item.date === curr.date
-		);
+		)
 
 		if (existingIndex > -1) {
 			acc[existingIndex].hours = {
 				...acc[existingIndex].hours,
 				...curr.hours
-			};
+			}
 		} else {
-			acc.push(curr);
+			acc.push(curr)
 		}
 
-		return acc;
-	}, []);
+		return acc
+	}, [])
 	return mergedTimetable
 		.filter((day) => day !== null)
 		.flatMap((day) =>
@@ -66,15 +66,15 @@ export async function getFriendlyTimetable(
 			)
 		)
 		.map((lecture) => {
-			const startDate = combineDateTime(lecture.date, lecture.von);
-			const endDate = combineDateTime(lecture.date, lecture.bis);
+			const startDate = combineDateTime(lecture.date, lecture.von)
+			const endDate = combineDateTime(lecture.date, lecture.bis)
 
-			let rooms = [] as string[];
+			let rooms = [] as string[]
 			if (lecture.details.raum !== '' && lecture.details.raum !== null) {
 				rooms = lecture.details.raum
 					.split(', ')
 					.map((room) => room.trim().toUpperCase())
-					.sort();
+					.sort()
 			}
 
 			return {
@@ -93,8 +93,8 @@ export async function getFriendlyTimetable(
 				goal: lecture.details.ziel,
 				contents: lecture.details.inhalt,
 				literature: lecture.details.literatur
-			};
-		});
+			}
+		})
 }
 
 /**
@@ -126,19 +126,19 @@ export function getGroupedTimetable(
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
 		...exams.map((exam) => {
-			const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90);
+			const duration = Number(exam?.type?.match(/\d+/)?.[0] ?? 90)
 			return {
 				...exam,
 				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
 				eventType: 'exam'
-			};
+			}
 		})
-	];
+	]
 
 	// Sort combinedData by date
 	combinedData.sort(
 		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-	);
+	)
 
 	const dates = [
 		...new Set(
@@ -146,16 +146,16 @@ export function getGroupedTimetable(
 				(item) => new Date(item.date).toISOString().split('T')[0]
 			)
 		)
-	];
+	]
 
 	const groups = dates.map((date) => ({
 		title: new Date(date),
 		data: combinedData.filter(
 			(item) => new Date(item.date).toISOString().split('T')[0] === date
 		)
-	}));
+	}))
 
-	return groups as TimetableSections[];
+	return groups as TimetableSections[]
 }
 
 export function convertTimetableToWeekViewEvents(
@@ -172,8 +172,8 @@ export function convertTimetableToWeekViewEvents(
 			textColor,
 			location: entry.rooms?.[0],
 			entry
-		};
-	});
+		}
+	})
 }
 
 /**
@@ -188,7 +188,7 @@ export function generateKey(
 	startDate: Date | string,
 	room: string
 ): string {
-	return `${lectureName}-${new Date(startDate).getTime().toString()}-${room}`;
+	return `${lectureName}-${new Date(startDate).getTime().toString()}-${room}`
 }
 
 // This function checks if a given room string is valid based on the following criteria:
@@ -196,17 +196,17 @@ export function generateKey(
 // - Followed by 3 numeric digits (0-9).
 // - Optionally, it can have a 'U' in place of the first digit for basement rooms.
 export const isValidRoom = (room: string): boolean => {
-	return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room);
-};
+	return /^[A-Za-z]{1,2}U?\d{2,3}$/.test(room)
+}
 
 /**
  * Load the timetable
  * @returns
  */
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
-	const timetable = await getFriendlyTimetable(new Date(), true);
+	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {
-		throw new Error('Timetable is empty');
+		throw new Error('Timetable is empty')
 	}
-	return timetable;
-};
+	return timetable
+}

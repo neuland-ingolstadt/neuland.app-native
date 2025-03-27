@@ -1,14 +1,14 @@
 // @ts-expect-error - no types available
-import DragDropView from '@/components/Exclusive/DragView';
-import ContextMenu from '@/components/Flow/ContextMenu';
-import PlatformIcon from '@/components/Universal/Icon';
-import { UserKindContext } from '@/components/contexts';
-import type { UserKindContextType } from '@/contexts/userKind';
-import { USER_GUEST } from '@/data/constants';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Meal } from '@/types/neuland-api';
+import DragDropView from '@/components/Exclusive/DragView'
+import ContextMenu from '@/components/Flow/ContextMenu'
+import PlatformIcon from '@/components/Universal/Icon'
+import { UserKindContext } from '@/components/contexts'
+import type { UserKindContextType } from '@/contexts/userKind'
+import { USER_GUEST } from '@/data/constants'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Meal } from '@/types/neuland-api'
 import {
 	convertRelevantAllergens,
 	convertRelevantFlags,
@@ -18,16 +18,16 @@ import {
 	humanLocations,
 	mealName,
 	shareMeal
-} from '@/utils/food-utils';
-import { trackEvent } from '@aptabase/react-native';
-import Color from 'color';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import type React from 'react';
-import { memo, useContext, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/food-utils'
+import { trackEvent } from '@aptabase/react-native'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
+import { router } from 'expo-router'
+import type React from 'react'
+import { memo, useContext, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
  * Renders a single meal entry in the food menu.
@@ -39,13 +39,13 @@ export const MealEntry = memo(
 	({ meal, index }: { meal: Meal; index: number }): React.JSX.Element => {
 		const preferencesSelection = useFoodFilterStore(
 			(state) => state.preferencesSelection
-		);
+		)
 		const allergenSelection = useFoodFilterStore(
 			(state) => state.allergenSelection
-		);
-		const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
-		const { t, i18n } = useTranslation('food');
-		const { styles, theme } = useStyles(stylesheet);
+		)
+		const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+		const { t, i18n } = useTranslation('food')
+		const { styles, theme } = useStyles(stylesheet)
 		const userAllergens = useMemo(
 			() =>
 				convertRelevantAllergens(
@@ -54,9 +54,9 @@ export const MealEntry = memo(
 					i18n.language
 				),
 			[meal.allergens, allergenSelection, i18n.language]
-		);
+		)
 		const { userKind = USER_GUEST } =
-			useContext<UserKindContextType>(UserKindContext);
+			useContext<UserKindContextType>(UserKindContext)
 		const userFlags = useMemo(
 			() =>
 				convertRelevantFlags(
@@ -65,41 +65,41 @@ export const MealEntry = memo(
 					i18n.language
 				),
 			[meal.flags, preferencesSelection, i18n.language]
-		);
+		)
 		const setSelectedMeal = useRouteParamsStore(
 			(state) => state.setSelectedMeal
-		);
-		const price = getUserSpecificPrice(meal, userKind ?? 'guest');
+		)
+		const price = getUserSpecificPrice(meal, userKind ?? 'guest')
 		const label =
-			price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : '';
+			price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : ''
 
 		const isNotConfigured =
 			allergenSelection.length === 1 &&
-			allergenSelection[0] === 'not-configured';
+			allergenSelection[0] === 'not-configured'
 		const hasSelectedAllergens =
-			allergenSelection.length > 0 && !isNotConfigured;
-		const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured;
-		const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null;
+			allergenSelection.length > 0 && !isNotConfigured
+		const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured
+		const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null
 
-		const shouldShowAllergens = hasUserAllergens || hasNoMealAllergens;
+		const shouldShowAllergens = hasUserAllergens || hasNoMealAllergens
 
 		const iconName = hasUserAllergens
 			? 'exclamationmark.triangle'
-			: 'info.circle';
-		const androidName = hasUserAllergens ? 'warning' : 'info';
-		const webName = hasUserAllergens ? 'TriangleAlert' : 'Info';
+			: 'info.circle'
+		const androidName = hasUserAllergens ? 'warning' : 'info'
+		const webName = hasUserAllergens ? 'TriangleAlert' : 'Info'
 		const textContent = hasUserAllergens
 			? userAllergens
-			: t('empty.noAllergens');
+			: t('empty.noAllergens')
 
-		const [key, setKey] = useState(Math.random());
+		const [key, setKey] = useState(Math.random())
 
 		const itemPressed = (): void => {
-			setSelectedMeal(meal);
+			setSelectedMeal(meal)
 			router.navigate({
 				pathname: '/meal'
-			});
-		};
+			})
+		}
 		return (
 			<DragDropView
 				mode="drag"
@@ -138,10 +138,10 @@ export const MealEntry = memo(
 						if (e.nativeEvent.name === t('misc.share', { ns: 'common' })) {
 							trackEvent('Share', {
 								type: 'meal'
-							});
-							shareMeal(meal, i18n, userKind);
+							})
+							shareMeal(meal, i18n, userKind)
 						}
-						setKey(Math.random());
+						setKey(Math.random())
 					}}
 				>
 					<Pressable
@@ -259,9 +259,9 @@ export const MealEntry = memo(
 					</Pressable>
 				</ContextMenu>
 			</DragDropView>
-		);
+		)
 	}
-);
+)
 
 const stylesheet = createStyleSheet((theme) => ({
 	allergene: {
@@ -376,4 +376,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'center',
 		textAlignVertical: 'center'
 	}
-}));
+}))

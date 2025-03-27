@@ -1,69 +1,69 @@
-import CrashView from '@/components/Error/CrashView';
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton';
-import Provider from '@/components/provider';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import i18n from '@/localization/i18n';
-import '@/styles/unistyles';
-import { getLocales } from 'expo-localization';
-import { type Href, Stack, router } from 'expo-router';
-import { Try } from 'expo-router/build/views/Try';
-import Head from 'expo-router/head';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { AppState, Linking, Platform } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import { SystemBars } from 'react-native-edge-to-edge';
-import { configureReanimatedLogger } from 'react-native-reanimated';
+import CrashView from '@/components/Error/CrashView'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import Provider from '@/components/provider'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import i18n from '@/localization/i18n'
+import '@/styles/unistyles'
+import { getLocales } from 'expo-localization'
+import { type Href, Stack, router } from 'expo-router'
+import { Try } from 'expo-router/build/views/Try'
+import Head from 'expo-router/head'
+import * as ScreenOrientation from 'expo-screen-orientation'
+import type React from 'react'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { AppState, Linking, Platform } from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+import { SystemBars } from 'react-native-edge-to-edge'
+import { configureReanimatedLogger } from 'react-native-reanimated'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 configureReanimatedLogger({
 	strict: false
-});
+})
 
 export const unstable_settings = {
 	initialRouteName: '/'
-};
+}
 
 function RootLayout(): React.JSX.Element {
-	const { t } = useTranslation(['navigation']);
-	const isPad = DeviceInfo.isTablet();
-	const savedLanguage = usePreferencesStore((state) => state.language);
+	const { t } = useTranslation(['navigation'])
+	const isPad = DeviceInfo.isTablet()
+	const savedLanguage = usePreferencesStore((state) => state.language)
 
 	useEffect(() => {
 		if (Platform.OS === 'web') {
 			// do nothing
 		} else if (isPad) {
-			void ScreenOrientation.unlockAsync();
+			void ScreenOrientation.unlockAsync()
 		} else {
 			void ScreenOrientation.lockAsync(
 				ScreenOrientation.OrientationLock.PORTRAIT_UP
-			);
+			)
 		}
-	}, [isPad]);
+	}, [isPad])
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {
-			const base = 'neuland://';
+			const base = 'neuland://'
 			if (event.url.startsWith(base)) {
-				const fullPath = event.url.replace(base, '');
+				const fullPath = event.url.replace(base, '')
 				// Extract first path segment and remove query parameters
-				const firstPath = fullPath.split('/')[0].split('?')[0];
-				router.navigate(firstPath as Href);
+				const firstPath = fullPath.split('/')[0].split('?')[0]
+				router.navigate(firstPath as Href)
 			}
-		};
+		}
 
-		const linkingSubscription = Linking.addEventListener('url', handleOpenURL);
+		const linkingSubscription = Linking.addEventListener('url', handleOpenURL)
 
 		return () => {
-			linkingSubscription.remove();
-		};
-	}, []);
+			linkingSubscription.remove()
+		}
+	}, [])
 
 	useEffect(() => {
 		const loadLanguage = async (): Promise<void> => {
@@ -72,37 +72,37 @@ function RootLayout(): React.JSX.Element {
 				((Platform.OS === 'android' && Platform.Version < 33) ||
 					Platform.OS === 'web')
 			) {
-				await i18n.changeLanguage(savedLanguage);
+				await i18n.changeLanguage(savedLanguage)
 			}
-		};
+		}
 
-		void loadLanguage();
-	}, []);
+		void loadLanguage()
+	}, [])
 
 	useEffect(() => {
 		const changeLanguage = async (): Promise<void> => {
-			const locale = getLocales()[0];
-			const language = locale.languageCode;
+			const locale = getLocales()[0]
+			const language = locale.languageCode
 			if (language === 'de' || language === 'en')
-				await i18n.changeLanguage(language);
-		};
+				await i18n.changeLanguage(language)
+		}
 
 		const handleAppStateChange = (nextAppState: string): void => {
 			if (nextAppState === 'active') {
-				void changeLanguage();
+				void changeLanguage()
 			}
-		};
+		}
 
 		const subscription = AppState.addEventListener(
 			'change',
 			handleAppStateChange
-		);
+		)
 
 		return () => {
-			subscription.remove();
-		};
-	}, []);
-	const { styles, theme: uniTheme } = useStyles(stylesheet);
+			subscription.remove()
+		}
+	}, [])
+	const { styles, theme: uniTheme } = useStyles(stylesheet)
 	return (
 		<>
 			<Head>
@@ -498,7 +498,7 @@ function RootLayout(): React.JSX.Element {
 				/>
 			</Stack>
 		</>
-	);
+	)
 }
 
 const ProviderComponent = (): React.JSX.Element => {
@@ -508,12 +508,12 @@ const ProviderComponent = (): React.JSX.Element => {
 				<RootLayout />
 			</Provider>
 		</Try>
-	);
-};
+	)
+}
 
-export default ProviderComponent;
+export default ProviderComponent
 const stylesheet = createStyleSheet((theme) => ({
 	background: { backgroundColor: theme.colors.background },
 	headerBackground: { backgroundColor: theme.colors.card },
 	headerTextStyle: { color: theme.colors.text }
-}));
+}))

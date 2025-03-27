@@ -1,34 +1,34 @@
-import { NoSessionError } from '@/api/thi-session-handler';
-import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText';
-import LogoTextSVG from '@/components/Flow/svgs/logoText';
-import { Avatar, NameBox } from '@/components/Settings';
-import GradesButton from '@/components/Settings/GradesButton';
-import Divider from '@/components/Universal/Divider';
-import FormList from '@/components/Universal/FormList';
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { DashboardContext, UserKindContext } from '@/components/contexts';
-import { queryClient } from '@/components/provider';
-import type { UserKindContextType } from '@/contexts/userKind';
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
-import { useRefreshByUser } from '@/hooks';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import type { FormListSections } from '@/types/components';
-import type { MaterialIcon } from '@/types/material-icons';
+import { NoSessionError } from '@/api/thi-session-handler'
+import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import { Avatar, NameBox } from '@/components/Settings'
+import GradesButton from '@/components/Settings/GradesButton'
+import Divider from '@/components/Universal/Divider'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
+import type { UserKindContextType } from '@/contexts/userKind'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 import {
 	animatedHapticFeedback,
 	useRandomColor,
 	withBouncing
-} from '@/utils/animation-utils';
-import { getPersonalData, performLogout } from '@/utils/api-utils';
-import { loadSecure, storage } from '@/utils/storage';
-import { getContrastColor, getInitials } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@/utils/animation-utils'
+import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { loadSecure, storage } from '@/utils/storage'
+import { getContrastColor, getInitials } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'expo-router'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	Dimensions,
@@ -40,67 +40,67 @@ import {
 	Share,
 	Text,
 	View
-} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import { Pressable } from 'react-native-gesture-handler';
+} from 'react-native'
+import DeviceInfo from 'react-native-device-info'
+import { Pressable } from 'react-native-gesture-handler'
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,
 	useSharedValue,
 	withSequence,
 	withTiming
-} from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Settings(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
-		useContext<UserKindContextType>(UserKindContext);
-	const { resetOrder } = useContext(DashboardContext);
-	const insets = useSafeAreaInsets();
-	const windowView = Dimensions.get('window');
-	const width = windowView.width - insets.left - insets.right;
-	const height = windowView.height - insets.top - insets.bottom;
-	const router = useRouter();
-	const { t, i18n } = useTranslation(['settings']);
-	const bottomBoundX = 0;
-	const logoWidth = 159;
-	const logoHeight = 15;
-	const topBoundX = width - logoWidth;
-	const [tapCount, setTapCount] = useState(0);
-	const translateX = useSharedValue(0);
-	const translateY = useSharedValue(0);
-	const scrollY = useRef(0);
-	const logoRotation = useSharedValue(0);
-	const velocity = 110;
-	const username = userKind === USER_EMPLOYEE && loadSecure('username');
-	const { color, randomizeColor } = useRandomColor();
-	const resetPreferences = usePreferencesStore((state) => state.reset);
-	const resetFood = useFoodFilterStore((state) => state.reset);
-	const setLanguage = usePreferencesStore((state) => state.setLanguage);
+		useContext<UserKindContextType>(UserKindContext)
+	const { resetOrder } = useContext(DashboardContext)
+	const insets = useSafeAreaInsets()
+	const windowView = Dimensions.get('window')
+	const width = windowView.width - insets.left - insets.right
+	const height = windowView.height - insets.top - insets.bottom
+	const router = useRouter()
+	const { t, i18n } = useTranslation(['settings'])
+	const bottomBoundX = 0
+	const logoWidth = 159
+	const logoHeight = 15
+	const topBoundX = width - logoWidth
+	const [tapCount, setTapCount] = useState(0)
+	const translateX = useSharedValue(0)
+	const translateY = useSharedValue(0)
+	const scrollY = useRef(0)
+	const logoRotation = useSharedValue(0)
+	const velocity = 110
+	const username = userKind === USER_EMPLOYEE && loadSecure('username')
+	const { color, randomizeColor } = useRandomColor()
+	const resetPreferences = usePreferencesStore((state) => state.reset)
+	const resetFood = useFoodFilterStore((state) => state.reset)
+	const setLanguage = usePreferencesStore((state) => state.setLanguage)
 	useEffect(() => {
-		const { bottomBoundY, topBoundY } = getBounds();
+		const { bottomBoundY, topBoundY } = getBounds()
 		if (isBouncing) {
-			trackEvent('EasterEgg', { easterEgg: 'settingsLogoBounce' });
+			trackEvent('EasterEgg', { easterEgg: 'settingsLogoBounce' })
 
 			translateX.value = withBouncing(
 				velocity,
 				bottomBoundX,
 				topBoundX,
 				randomizeColor
-			) as unknown as number;
+			) as unknown as number
 			translateY.value = withBouncing(
 				velocity,
 				bottomBoundY,
 				topBoundY,
 				randomizeColor
-			) as unknown as number;
+			) as unknown as number
 		} else {
-			cancelAnimation(translateX);
-			cancelAnimation(translateY);
+			cancelAnimation(translateX)
+			cancelAnimation(translateY)
 		}
-	}, [tapCount]);
+	}, [tapCount])
 
 	const logoBounceAnimation = useAnimatedStyle(() => {
 		return {
@@ -108,29 +108,29 @@ export default function Settings(): React.JSX.Element {
 				{ translateX: translateX.value },
 				{ translateY: translateY.value }
 			]
-		};
-	});
+		}
+	})
 
 	const wobbleAnimation = useAnimatedStyle(() => {
 		return {
 			transform: [{ rotateZ: `${logoRotation.value}deg` }]
-		};
-	});
+		}
+	})
 
 	const getBounds = (): { topBoundY: number; bottomBoundY: number } => {
-		const topBoundY = height - logoHeight + scrollY.current - 5;
-		const bottomBoundY = scrollY.current;
-		return { topBoundY, bottomBoundY };
-	};
+		const topBoundY = height - logoHeight + scrollY.current - 5
+		const bottomBoundY = scrollY.current
+		return { topBoundY, bottomBoundY }
+	}
 
 	const languageAlert = (): void => {
-		const newLocale = i18n.language === 'en' ? 'de' : 'en';
+		const newLocale = i18n.language === 'en' ? 'de' : 'en'
 		if (Platform.OS === 'web') {
 			if (!window.confirm(t('menu.formlist.language.message'))) {
 				/* empty */
 			} else {
-				setLanguage(newLocale);
-				void i18n.changeLanguage(newLocale);
+				setLanguage(newLocale)
+				void i18n.changeLanguage(newLocale)
 			}
 		} else {
 			Alert.alert(
@@ -145,14 +145,14 @@ export default function Settings(): React.JSX.Element {
 						text: t('menu.formlist.language.confirm'),
 						style: 'destructive',
 						onPress: () => {
-							storage.set('language', newLocale);
-							void i18n.changeLanguage(newLocale);
+							storage.set('language', newLocale)
+							void i18n.changeLanguage(newLocale)
 						}
 					}
 				]
-			);
+			)
 		}
-	};
+	}
 
 	const logoutAlert = (): void => {
 		Alert.alert(
@@ -167,18 +167,18 @@ export default function Settings(): React.JSX.Element {
 					text: t('profile.logout.alert.confirm'),
 					style: 'destructive',
 					onPress: () => {
-						resetPreferences();
-						resetFood();
+						resetPreferences()
+						resetFood()
 						performLogout(toggleUserKind, resetOrder, queryClient).catch(
 							(e) => {
-								console.log(e);
+								console.log(e)
 							}
-						);
+						)
 					}
 				}
 			]
-		);
-	};
+		)
+	}
 
 	const { data, error, isLoading, isSuccess, refetch, isError } = useQuery({
 		queryKey: ['personalData'],
@@ -187,41 +187,41 @@ export default function Settings(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 * 60,
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.replace('/login');
-				return false;
+				router.replace('/login')
+				return false
 			}
 			if (userKind !== 'student') {
-				return false;
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		},
 		enabled: userKind === USER_STUDENT
-	});
+	})
 
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-	const { toggleUserKind } = React.useContext(UserKindContext);
+	const { toggleUserKind } = React.useContext(UserKindContext)
 	const handlePress = (): void => {
-		setTapCount(tapCount + 1);
-		animatedHapticFeedback();
+		setTapCount(tapCount + 1)
+		animatedHapticFeedback()
 		if (tapCount < 1) {
-			const rotationDegree = 5;
+			const rotationDegree = 5
 
 			logoRotation.value = withSequence(
 				withTiming(-rotationDegree, { duration: 50 }),
 				withTiming(rotationDegree, { duration: 100 }),
 				withTiming(0, { duration: 50 })
-			);
+			)
 		}
-	};
+	}
 
 	useEffect(() => {
 		if (isLoading || isSuccess) {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 		}
-	}, [isLoading, isSuccess]);
+	}, [isLoading, isSuccess])
 
-	const isBouncing = tapCount === 2;
+	const isBouncing = tapCount === 2
 
 	const sections: FormListSections[] = [
 		{
@@ -236,7 +236,7 @@ export default function Settings(): React.JSX.Element {
 					},
 
 					onPress: () => {
-						router.navigate('/dashboard');
+						router.navigate('/dashboard')
 					}
 				},
 				{
@@ -247,7 +247,7 @@ export default function Settings(): React.JSX.Element {
 						web: 'Utensils'
 					},
 					onPress: () => {
-						router.navigate('/food-preferences');
+						router.navigate('/food-preferences')
 					}
 				},
 				{
@@ -263,9 +263,9 @@ export default function Settings(): React.JSX.Element {
 							Platform.OS === 'ios' ||
 							(Platform.OS === 'android' && Platform.Version >= 33)
 						) {
-							await Linking.openSettings();
+							await Linking.openSettings()
 						} else {
-							languageAlert();
+							languageAlert()
 						}
 					}
 				}
@@ -282,7 +282,7 @@ export default function Settings(): React.JSX.Element {
 						web: 'Palette'
 					},
 					onPress: () => {
-						router.navigate('/accent');
+						router.navigate('/accent')
 					}
 				},
 				{
@@ -293,7 +293,7 @@ export default function Settings(): React.JSX.Element {
 						web: 'MoonStar'
 					},
 					onPress: () => {
-						router.navigate('/theme');
+						router.navigate('/theme')
 					}
 				},
 				...(Platform.OS === 'ios' && DeviceInfo.getDeviceType() !== 'Desktop'
@@ -306,7 +306,7 @@ export default function Settings(): React.JSX.Element {
 									web: 'StarSquare' as LucideIcon
 								},
 								onPress: () => {
-									router.navigate('/app-icon');
+									router.navigate('/app-icon')
 								}
 							}
 						]
@@ -324,7 +324,7 @@ export default function Settings(): React.JSX.Element {
 						web: 'ChevronRight'
 					},
 					onPress: () => {
-						router.navigate('/about');
+						router.navigate('/about')
 					}
 				},
 				{
@@ -335,7 +335,7 @@ export default function Settings(): React.JSX.Element {
 						web: 'Share'
 					},
 					onPress: () => {
-						trackEvent('Share', { type: 'app' });
+						trackEvent('Share', { type: 'app' })
 
 						void Share.share({
 							url: 'https://next.neuland.app/get', // url option is only available on iOS
@@ -343,7 +343,7 @@ export default function Settings(): React.JSX.Element {
 								Platform.OS === 'ios'
 									? t('menu.formlist.legal.shareMessage')
 									: t('menu.formlist.legal.shareMessageAndroid')
-						});
+						})
 					}
 				},
 				...(Platform.OS === 'web'
@@ -356,18 +356,18 @@ export default function Settings(): React.JSX.Element {
 									web: 'Download' as LucideIcon
 								},
 								onPress: () => {
-									void Linking.openURL('https://next.neuland.app/get');
+									void Linking.openURL('https://next.neuland.app/get')
 								}
 							}
 						]
 					: [])
 			]
 		}
-	];
+	]
 
-	const logoInactiveOpacity = isBouncing ? 0 : 1;
-	const logoActiveOpacity = isBouncing ? 1 : 0;
-	const logoActiveHeight = isBouncing ? 18 : 0;
+	const logoInactiveOpacity = isBouncing ? 0 : 1
+	const logoActiveOpacity = isBouncing ? 1 : 0
+	const logoActiveHeight = isBouncing ? 18 : 0
 
 	return (
 		<ScrollView
@@ -376,14 +376,14 @@ export default function Settings(): React.JSX.Element {
 					<RefreshControl
 						refreshing={isRefetchingByUser}
 						onRefresh={() => {
-							void refetchByUser();
+							void refetchByUser()
 						}}
 					/>
 				) : undefined
 			}
 			onScroll={(event) => {
-				scrollY.current = event.nativeEvent.contentOffset.y;
-				setTapCount(0);
+				scrollY.current = event.nativeEvent.contentOffset.y
+				setTapCount(0)
 			}}
 			contentContainerStyle={styles.contentContainer}
 		>
@@ -392,7 +392,7 @@ export default function Settings(): React.JSX.Element {
 					<View style={styles.container}>
 						<Pressable
 							onPress={() => {
-								router.navigate('/profile');
+								router.navigate('/profile')
 							}}
 							// Keep the white background and rounded top corners
 							style={{
@@ -486,10 +486,10 @@ export default function Settings(): React.JSX.Element {
 					<Pressable
 						onPress={() => {
 							if (userKind === 'employee') {
-								logoutAlert();
+								logoutAlert()
 							} else {
 								if (userKind === 'guest') {
-									router.navigate('/login');
+									router.navigate('/login')
 								}
 							}
 						}}
@@ -560,7 +560,7 @@ export default function Settings(): React.JSX.Element {
 					>
 						<Pressable
 							onPress={() => {
-								setTapCount(0);
+								setTapCount(0)
 							}}
 							disabled={!isBouncing}
 							hitSlop={{
@@ -588,7 +588,7 @@ export default function Settings(): React.JSX.Element {
 					>
 						<Pressable
 							onPress={() => {
-								handlePress();
+								handlePress()
 							}}
 							disabled={isBouncing}
 							accessibilityLabel={t('button.settingsLogo', {
@@ -613,7 +613,7 @@ export default function Settings(): React.JSX.Element {
 				</>
 			)}
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -676,4 +676,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 20
 	},
 	wrapper: { paddingHorizontal: 16, paddingTop: 20 }
-}));
+}))

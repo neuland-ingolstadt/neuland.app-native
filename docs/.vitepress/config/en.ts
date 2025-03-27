@@ -1,4 +1,4 @@
-import { type DefaultTheme, defineConfig } from 'vitepress';
+import { type DefaultTheme, defineConfig } from 'vitepress'
 
 export const en = defineConfig({
 	lang: 'en-US',
@@ -22,7 +22,7 @@ export const en = defineConfig({
 			'/en/about/': { base: '/en/about/', items: sidebarAbout() }
 		}
 	}
-});
+})
 
 function sidebarApp(): DefaultTheme.SidebarItem[] {
 	return [
@@ -54,7 +54,7 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
 				{ text: 'Setup Web Development', link: 'setup-web' }
 			]
 		}
-	];
+	]
 }
 function sidebarAbout(): DefaultTheme.SidebarItem[] {
 	return [
@@ -65,5 +65,5 @@ function sidebarAbout(): DefaultTheme.SidebarItem[] {
 				{ text: 'Contributors', link: 'contributors' }
 			]
 		}
-	];
+	]
 }

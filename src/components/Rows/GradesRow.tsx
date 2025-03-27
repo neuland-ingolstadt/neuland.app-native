@@ -1,16 +1,16 @@
-import type { Grade } from '@/types/thi-api';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type { Grade } from '@/types/thi-api'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import RowEntry from '../Universal/RowEntry';
+import RowEntry from '../Universal/RowEntry'
 
 const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('settings');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('settings')
 	if (item.titel === null || item.titel === '') {
-		return <></>;
+		return <></>
 	}
 
 	return (
@@ -36,8 +36,8 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 			}
 			maxTitleWidth={'75%'}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	leftContainer: { paddingTop: 3 },
@@ -67,6 +67,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		fontWeight: '400'
 	}
-}));
+}))
 
-export default GradesRow;
+export default GradesRow

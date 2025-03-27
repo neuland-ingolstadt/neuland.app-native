@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import SelectDropdown from 'react-native-select-dropdown';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import React, { useEffect } from 'react'
+import { Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import SelectDropdown from 'react-native-select-dropdown'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface Props {
-	data: string[];
-	defaultValue: string;
-	onSelect: (selectedItem: string) => void;
-	reset?: boolean;
-	width?: number;
+	data: string[]
+	defaultValue: string
+	onSelect: (selectedItem: string) => void
+	reset?: boolean
+	width?: number
 }
 
 /**
@@ -28,14 +28,14 @@ const Dropdown: React.FC<Props> = ({
 	reset = false,
 	width = 100
 }) => {
-	const { styles } = useStyles(stylesheet);
-	const ref = React.createRef<SelectDropdown>();
+	const { styles } = useStyles(stylesheet)
+	const ref = React.createRef<SelectDropdown>()
 
 	useEffect(() => {
 		if (ref.current != null && reset) {
-			ref.current?.selectIndex(0);
+			ref.current?.selectIndex(0)
 		}
-	}, [reset]);
+	}, [reset])
 
 	return (
 		<SelectDropdown
@@ -44,7 +44,7 @@ const Dropdown: React.FC<Props> = ({
 			defaultValue={defaultValue}
 			dropdownStyle={styles.dropdown}
 			onSelect={(selectedItem: string) => {
-				onSelect(selectedItem);
+				onSelect(selectedItem)
 			}}
 			renderButton={(selectedItem) => {
 				return (
@@ -64,7 +64,7 @@ const Dropdown: React.FC<Props> = ({
 							{selectedItem}
 						</Text>
 					</View>
-				);
+				)
 			}}
 			renderItem={(item, _index, isSelected) => {
 				return (
@@ -78,19 +78,19 @@ const Dropdown: React.FC<Props> = ({
 							{item}
 						</Text>
 					</View>
-				);
+				)
 			}}
 		/>
-	);
-};
+	)
+}
 
-export default Dropdown;
+export default Dropdown
 
 export const DropdownButton: React.FC<{
-	children: React.ReactNode;
-	onPress: () => void;
+	children: React.ReactNode
+	onPress: () => void
 }> = ({ children, onPress }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<View style={styles.dropdownButton}>
@@ -99,8 +99,8 @@ export const DropdownButton: React.FC<{
 				</Text>
 			</View>
 		</TouchableOpacity>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	buttonText: {
@@ -138,4 +138,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	text: {
 		color: theme.colors.text
 	}
-}));
+}))

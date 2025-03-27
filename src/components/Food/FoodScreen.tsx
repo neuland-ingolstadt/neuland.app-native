@@ -1,19 +1,19 @@
-import ErrorView from '@/components/Error/ErrorView';
-import { MealDay } from '@/components/Food';
-import { AllergensBanner } from '@/components/Food/AllergensBanner';
-import PagerView from '@/components/Layout/PagerView';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { useRefreshByUser } from '@/hooks';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import type { Food } from '@/types/neuland-api';
-import { networkError } from '@/utils/api-utils';
-import { loadFoodEntries } from '@/utils/food-utils';
-import { pausedToast } from '@/utils/ui-utils';
-import { useQuery } from '@tanstack/react-query';
-import * as Haptics from 'expo-haptics';
-import type React from 'react';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import ErrorView from '@/components/Error/ErrorView'
+import { MealDay } from '@/components/Food'
+import { AllergensBanner } from '@/components/Food/AllergensBanner'
+import PagerView from '@/components/Layout/PagerView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { Food } from '@/types/neuland-api'
+import { networkError } from '@/utils/api-utils'
+import { loadFoodEntries } from '@/utils/food-utils'
+import { pausedToast } from '@/utils/ui-utils'
+import { useQuery } from '@tanstack/react-query'
+import * as Haptics from 'expo-haptics'
+import type React from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Animated,
 	Dimensions,
@@ -23,23 +23,23 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 function FoodScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const [selectedDay, setSelectedDay] = useState<number>(0);
+	const { styles } = useStyles(stylesheet)
+	const [selectedDay, setSelectedDay] = useState<number>(0)
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
-	);
-	const showStatic = useFoodFilterStore((state) => state.showStatic);
+	)
+	const showStatic = useFoodFilterStore((state) => state.showStatic)
 	const allergenSelection = useFoodFilterStore(
 		(state) => state.allergenSelection
-	);
+	)
 
-	const [data, setData] = useState<Food[]>([]);
-	const { t, i18n } = useTranslation('common');
+	const [data, setData] = useState<Food[]>([])
+	const { t, i18n } = useTranslation('common')
 	const {
 		data: foodData,
 		error,
@@ -53,33 +53,33 @@ function FoodScreen(): React.JSX.Element {
 		queryFn: async () => await loadFoodEntries(selectedRestaurants, showStatic),
 		staleTime: 1000 * 60 * 0, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
-	});
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+	})
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	useEffect(() => {
 		if (foodData == null) {
-			return;
+			return
 		}
 		const filteredDays = foodData
 			.filter(
 				(day) =>
 					new Date(day.timestamp).getTime() >= new Date().setHours(0, 0, 0, 0)
 			) // filter again in case of yesterday's cached data
-			.slice(0, 5);
+			.slice(0, 5)
 		if (filteredDays.length === 0) {
-			throw new Error('noMeals');
+			throw new Error('noMeals')
 		}
 
-		setData(filteredDays);
-	}, [foodData]);
+		setData(filteredDays)
+	}, [foodData])
 
 	useEffect(() => {
 		if (isPaused && data != null) {
-			pausedToast();
+			pausedToast()
 		}
-	}, [data, isPaused, t]);
+	}, [data, isPaused, t])
 
-	const pagerViewRef = useRef<PagerView>(null);
+	const pagerViewRef = useRef<PagerView>(null)
 
 	/**
 	 * Renders a button for a specific day's food data.
@@ -89,42 +89,42 @@ function FoodScreen(): React.JSX.Element {
 	 */
 	const DayButton = memo(
 		({ day, index }: { day: Food; index: number }): React.JSX.Element => {
-			const date = new Date(day.timestamp);
-			const { styles } = useStyles(stylesheet);
+			const date = new Date(day.timestamp)
+			const { styles } = useStyles(stylesheet)
 
-			const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0;
-			const isFirstDay = index === 0;
-			const isLastDay = index === daysCnt - 1;
+			const daysCnt = data != null ? (data.length < 5 ? data.length : 5) : 0
+			const isFirstDay = index === 0
+			const isLastDay = index === daysCnt - 1
 
 			const buttonStyle = [
 				{ flex: 1, marginHorizontal: 4 },
 				isFirstDay ? { marginLeft: 0 } : null,
 				isLastDay ? { marginRight: 0 } : null
-			];
+			]
 
 			const setPage = useCallback((page: number): void => {
-				pagerViewRef.current?.setPage(page);
-			}, []);
+				pagerViewRef.current?.setPage(page)
+			}, [])
 
 			const handleDayPress = useCallback(
 				(index: number) => {
 					if (Platform.OS === 'ios' && index !== selectedDay) {
-						void Haptics.selectionAsync();
+						void Haptics.selectionAsync()
 					}
-					setSelectedDay(index);
-					setPage(index);
+					setSelectedDay(index)
+					setPage(index)
 				},
 				[selectedDay, setPage]
-			);
+			)
 			const getStyleMemoized = useCallback(
 				(isSelected: boolean) => styles.dayText2(isSelected),
 				[]
-			);
+			)
 			return (
 				<View style={buttonStyle} key={index}>
 					<Pressable
 						onPress={() => {
-							handleDayPress(index);
+							handleDayPress(index)
 						}}
 					>
 						<View style={styles.dayButtonContainer}>
@@ -154,14 +154,14 @@ function FoodScreen(): React.JSX.Element {
 						</View>
 					</Pressable>
 				</View>
-			);
+			)
 		}
-	);
+	)
 
-	const screenHeight = Dimensions.get('window').height;
-	const scrollY = new Animated.Value(0);
+	const screenHeight = Dimensions.get('window').height
+	const scrollY = new Animated.Value(0)
 	const showAllergensBanner =
-		allergenSelection.length === 1 && allergenSelection[0] === 'not-configured';
+		allergenSelection.length === 1 && allergenSelection[0] === 'not-configured'
 
 	return (
 		<SafeAreaProvider>
@@ -221,8 +221,8 @@ function FoodScreen(): React.JSX.Element {
 							}}
 							initialPage={0}
 							onPageSelected={(e) => {
-								const page = e.nativeEvent.position;
-								setSelectedDay(page);
+								const page = e.nativeEvent.position
+								setSelectedDay(page)
 							}}
 							scrollEnabled
 							overdrag
@@ -233,7 +233,7 @@ function FoodScreen(): React.JSX.Element {
 										<RefreshControl
 											refreshing={isRefetchingByUser}
 											onRefresh={() => {
-												void refetchByUser();
+												void refetchByUser()
 											}}
 										/>
 									}
@@ -261,10 +261,10 @@ function FoodScreen(): React.JSX.Element {
 				) : null}
 			</SafeAreaView>
 		</SafeAreaProvider>
-	);
+	)
 }
 
-export default FoodScreen;
+export default FoodScreen
 
 export const stylesheet = createStyleSheet((theme) => ({
 	animtedContainer: {
@@ -318,4 +318,4 @@ export const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		flex: 1
 	}
-}));
+}))

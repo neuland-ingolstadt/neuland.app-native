@@ -1,5 +1,5 @@
-import type { Lecturers } from '@/types/thi-api';
-import type { NormalizedLecturer } from '@/types/utils';
+import type { Lecturers } from '@/types/thi-api'
+import type { NormalizedLecturer } from '@/types/utils'
 
 /**
  * Normalizes lecturer data.
@@ -26,5 +26,5 @@ export function normalizeLecturers(entries: Lecturers[]): NormalizedLecturer[] {
 				''
 			)
 		}))
-		.sort((a, b) => a.name.localeCompare(b.name));
+		.sort((a, b) => a.name.localeCompare(b.name))
 }

@@ -1,16 +1,16 @@
-import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage';
-import { Platform } from 'react-native';
+import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage'
+import { Platform } from 'react-native'
 
-import API from './anonymous-api';
+import API from './anonymous-api'
 
-const SESSION_EXPIRES = 3 * 60 * 60 * 1000;
+const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
 /**
  * Thrown when the user is not logged in.
  */
 export class NoSessionError extends Error {
 	constructor() {
-		super('User is not logged in');
+		super('User is not logged in')
 	}
 }
 
@@ -19,7 +19,7 @@ export class NoSessionError extends Error {
  */
 export class UnavailableSessionError extends Error {
 	constructor() {
-		super('User is logged in as guest');
+		super('User is logged in as guest')
 	}
 }
 
@@ -33,26 +33,26 @@ export async function createSession(
 ): Promise<boolean> {
 	// convert to lowercase just to be safe
 	// (the API used to show weird behavior when using upper case usernames)
-	let modifiedUsername = username.toLowerCase();
+	let modifiedUsername = username.toLowerCase()
 	// strip domain if user entered an email address
-	modifiedUsername = modifiedUsername.replace(/@thi\.de$/, '');
+	modifiedUsername = modifiedUsername.replace(/@thi\.de$/, '')
 	// strip username to remove whitespaces
-	modifiedUsername = modifiedUsername.replace(/\s/g, '');
-	const { session, isStudent } = await API.login(modifiedUsername, password);
+	modifiedUsername = modifiedUsername.replace(/\s/g, '')
+	const { session, isStudent } = await API.login(modifiedUsername, password)
 
 	if (typeof session !== 'string') {
-		throw new Error('Session is not a string');
+		throw new Error('Session is not a string')
 	}
 
-	storage.set('sessionCreated', Date.now().toString());
-	console.debug('Session created at', storage.getString('sessionCreated'));
-	await saveSecure('session', session, true);
-	console.debug('Session saved');
+	storage.set('sessionCreated', Date.now().toString())
+	console.debug('Session created at', storage.getString('sessionCreated'))
+	await saveSecure('session', session, true)
+	console.debug('Session saved')
 	if (stayLoggedIn) {
-		await saveSecure('username', username);
-		await saveSecure('password', password);
+		await saveSecure('username', username)
+		await saveSecure('password', password)
 	}
-	return isStudent;
+	return isStudent
 }
 
 /**
@@ -60,9 +60,9 @@ export async function createSession(
  */
 export async function createGuestSession(forget = true): Promise<void> {
 	if (forget) {
-		await forgetSession();
+		await forgetSession()
 	}
-	await saveSecure('session', 'guest', true);
+	await saveSecure('session', 'guest', true)
 }
 
 /**
@@ -77,31 +77,31 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
 	method: (session: string) => Promise<T>
 ): Promise<T> {
-	let session = loadSecure('session');
+	let session = loadSecure('session')
 	const sessionCreated = Number.parseInt(
 		storage.getString('sessionCreated') ?? '0'
-	);
+	)
 	// redirect user if he never had a session
 	if (session == null) {
-		throw new NoSessionError();
+		throw new NoSessionError()
 	}
 	if (session === 'guest') {
-		throw new UnavailableSessionError();
+		throw new UnavailableSessionError()
 	}
 
-	const username = loadSecure('username');
-	const password = loadSecure('password');
+	const username = loadSecure('username')
+	const password = loadSecure('password')
 	if (Platform.OS === 'web') {
 		if (session === 'guest' || session == null) {
-			throw new NoSessionError();
+			throw new NoSessionError()
 		}
 	} else {
 		if (username === null) {
-			throw new UnavailableSessionError();
+			throw new UnavailableSessionError()
 		}
 
 		if (password === null) {
-			throw new UnavailableSessionError();
+			throw new UnavailableSessionError()
 		}
 	}
 	// log in if the session is older than SESSION_EXPIRES
@@ -111,18 +111,18 @@ export async function callWithSession<T>(
 		password != null
 	) {
 		try {
-			console.debug('old session, logging in...');
+			console.debug('old session, logging in...')
 			const { session: newSession, isStudent } = await API.login(
 				username,
 				password
-			);
-			session = newSession;
+			)
+			session = newSession
 
-			await saveSecure('session', session);
-			storage.set('sessionCreated', Date.now().toString());
-			storage.set('isStudent', isStudent.toString());
+			await saveSecure('session', session)
+			storage.set('sessionCreated', Date.now().toString())
+			storage.set('isStudent', isStudent.toString())
 		} catch {
-			throw new NoSessionError();
+			throw new NoSessionError()
 		}
 	}
 
@@ -130,7 +130,7 @@ export async function callWithSession<T>(
 
 	try {
 		if (session !== null) {
-			return await method(session);
+			return await method(session)
 		}
 	} catch (e: unknown) {
 		// the backend can throw different errors such as 'No Session' or 'Session Is Over'
@@ -138,40 +138,40 @@ export async function callWithSession<T>(
 			if (username != null && password != null) {
 				console.debug(
 					'seems to have received a session error trying to get a new session!'
-				);
+				)
 				try {
 					const { session: newSession, isStudent } = await API.login(
 						username,
 						password
-					);
-					session = newSession;
-					await saveSecure('session', session);
-					storage.set('sessionCreated', Date.now().toString());
-					storage.set('isStudent', isStudent.toString());
+					)
+					session = newSession
+					await saveSecure('session', session)
+					storage.set('sessionCreated', Date.now().toString())
+					storage.set('isStudent', isStudent.toString())
 				} catch {
-					throw new NoSessionError();
+					throw new NoSessionError()
 				}
-				return await method(session);
+				return await method(session)
 			}
-			throw new NoSessionError();
+			throw new NoSessionError()
 		}
-		throw e;
+		throw e
 	}
-	return undefined as never;
+	return undefined as never
 }
 
 /**
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-	const session = loadSecure('session');
+	const session = loadSecure('session')
 	if (session === null) {
-		console.debug('No session to forget');
+		console.debug('No session to forget')
 	} else {
 		try {
-			await API.logout(session);
+			await API.logout(session)
 		} catch (e) {
-			console.error(e);
+			console.error(e)
 		}
 	}
 
@@ -179,12 +179,12 @@ export async function forgetSession(): Promise<void> {
 		deleteSecure('session'),
 		deleteSecure('username'),
 		deleteSecure('password')
-	]);
+	])
 
 	// clear the general storage (cache)
 	try {
-		storage.clearAll();
+		storage.clearAll()
 	} catch (e) {
-		console.error(e);
+		console.error(e)
 	}
 }

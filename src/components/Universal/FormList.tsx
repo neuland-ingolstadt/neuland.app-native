@@ -1,43 +1,43 @@
-import Divider from '@/components/Universal/Divider';
-import type { FormListSections, SectionGroup } from '@/types/components';
-import React from 'react';
-import { Platform, Text, View, type ViewStyle } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Divider from '@/components/Universal/Divider'
+import type { FormListSections, SectionGroup } from '@/types/components'
+import React from 'react'
+import { Platform, Text, View, type ViewStyle } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import PlatformIcon from './Icon';
+import { Pressable } from 'react-native-gesture-handler'
+import PlatformIcon from './Icon'
 
 interface FormListProps {
-	sections: FormListSections[];
-	rowStyle?: ViewStyle;
-	privacyHidden?: boolean;
+	sections: FormListSections[]
+	rowStyle?: ViewStyle
+	privacyHidden?: boolean
 }
 
 interface RenderSectionFrameProps {
-	sectionIndex: number;
-	children: React.ReactNode;
-	footer?: string;
-	header?: string;
+	sectionIndex: number
+	children: React.ReactNode
+	footer?: string
+	header?: string
 }
 
 interface RenderSectionItemProps {
-	sectionIndex: number;
-	section: FormListSections;
+	sectionIndex: number
+	section: FormListSections
 }
 
 const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
 	sectionIndex,
 	section
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<View key={sectionIndex} style={styles.block}>
 			<View style={[styles.blockCard, styles.itemBlock]}>
 				<Text style={styles.columnDetails}>{section.item}</Text>
 			</View>
 		</View>
-	);
-};
+	)
+}
 
 const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
 	sectionIndex,
@@ -45,7 +45,7 @@ const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
 	footer,
 	header
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<View key={sectionIndex} style={styles.block}>
@@ -53,23 +53,23 @@ const RenderSectionFrame: React.FC<RenderSectionFrameProps> = ({
 			{children}
 			{footer != null && <Text style={styles.blockFooter}>{footer}</Text>}
 		</View>
-	);
-};
+	)
+}
 
 const RenderSectionItems: React.FC<{
-	items: SectionGroup[];
-	privacyHidden: boolean;
-	rowStyle?: ViewStyle;
+	items: SectionGroup[]
+	privacyHidden: boolean
+	rowStyle?: ViewStyle
 }> = ({ items, privacyHidden, rowStyle }) => {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 
 	const handlePress = (onPress?: () => Promise<void> | void): void => {
 		if (onPress != null) {
 			Promise.resolve(onPress()).catch((error) => {
-				console.error(error);
-			});
+				console.error(error)
+			})
 		}
-	};
+	}
 
 	return (
 		<View style={styles.blockCard}>
@@ -77,7 +77,7 @@ const RenderSectionItems: React.FC<{
 				<React.Fragment key={index}>
 					<Pressable
 						onPress={() => {
-							handlePress(item.onPress);
+							handlePress(item.onPress)
 						}}
 						style={({ pressed }) => [
 							{
@@ -146,8 +146,8 @@ const RenderSectionItems: React.FC<{
 				</React.Fragment>
 			))}
 		</View>
-	);
-};
+	)
+}
 /**
  * A component that renders a list of forms with headers and footers.
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
@@ -158,7 +158,7 @@ const FormList: React.FC<FormListProps> = ({
 	rowStyle,
 	privacyHidden
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<View style={styles.wrapper}>
@@ -188,8 +188,8 @@ const FormList: React.FC<FormListProps> = ({
 				) : null
 			)}
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	block: {
@@ -250,6 +250,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 16,
 		width: '100%'
 	}
-}));
+}))
 
-export default FormList;
+export default FormList

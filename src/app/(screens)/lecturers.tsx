@@ -1,36 +1,30 @@
-import API from '@/api/authenticated-api';
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import PagerView from '@/components/Layout/PagerView';
-import LecturerRow from '@/components/Rows/LecturerRow';
-import Divider from '@/components/Universal/Divider';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import ToggleRow from '@/components/Universal/ToggleRow';
-import { UserKindContext } from '@/components/contexts';
-import { USER_GUEST, USER_STUDENT } from '@/data/constants';
-import { useRefreshByUser } from '@/hooks';
-import { Funktion, type Lecturers } from '@/types/thi-api';
-import type { NormalizedLecturer } from '@/types/utils';
+import API from '@/api/authenticated-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import PagerView from '@/components/Layout/PagerView'
+import LecturerRow from '@/components/Rows/LecturerRow'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { Funktion, type Lecturers } from '@/types/thi-api'
+import type { NormalizedLecturer } from '@/types/utils'
 import {
 	extractFacultyFromPersonal,
 	getPersonalData,
 	guestError,
 	networkError
-} from '@/utils/api-utils';
-import { normalizeLecturers } from '@/utils/lecturers-utils';
-import { pausedToast } from '@/utils/ui-utils';
-import { useQueries, useQuery } from '@tanstack/react-query';
-import { useNavigation, useRouter } from 'expo-router';
-import Fuse from 'fuse.js';
-import type React from 'react';
-import {
-	useContext,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState
-} from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@/utils/api-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
+import { pausedToast } from '@/utils/ui-utils'
+import { useQueries, useQuery } from '@tanstack/react-query'
+import { useNavigation, useRouter } from 'expo-router'
+import Fuse from 'fuse.js'
+import type React from 'react'
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	FlatList,
 	Linking,
@@ -39,33 +33,33 @@ import {
 	SectionList,
 	Text,
 	View
-} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 export default function LecturersScreen(): React.JSX.Element {
-	const router = useRouter();
+	const router = useRouter()
 	const [filteredLecturers, setFilteredLecturers] = useState<
 		NormalizedLecturer[]
-	>([]);
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
-	const navigation = useNavigation();
-	const [selectedPage, setSelectedPage] = useState(0);
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const pagerViewRef = useRef<PagerView>(null);
-	const [displayesProfessors, setDisplayedProfessors] = useState(false);
-	const [localSearch, setLocalSearch] = useState('');
-	const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false);
-	const [faculty, setFaculty] = useState<string | null>(null);
-	const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([]);
+	>([])
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const navigation = useNavigation()
+	const [selectedPage, setSelectedPage] = useState(0)
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const pagerViewRef = useRef<PagerView>(null)
+	const [displayesProfessors, setDisplayedProfessors] = useState(false)
+	const [localSearch, setLocalSearch] = useState('')
+	const [isSearchBarFocused, setLocalSearchBarFocused] = useState(false)
+	const [faculty, setFaculty] = useState<string | null>(null)
+	const [facultyData, setFacultyData] = useState<NormalizedLecturer[]>([])
 
 	function setPage(page: number): void {
-		pagerViewRef.current?.setPage(page);
+		pagerViewRef.current?.setPage(page)
 	}
 
 	const { data } = useQuery({
@@ -74,66 +68,66 @@ export default function LecturersScreen(): React.JSX.Element {
 		staleTime: 1000 * 60 * 60 * 12, // 12 hours
 		gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
 		enabled: userKind === USER_STUDENT
-	});
+	})
 
 	const results = useQueries({
 		queries: [
 			{
 				queryKey: ['allLecturers'],
 				queryFn: async () => {
-					const rawData = await API.getLecturers('0', 'z');
-					const data = normalizeLecturers(rawData);
-					return data;
+					const rawData = await API.getLecturers('0', 'z')
+					const data = normalizeLecturers(rawData)
+					return data
 				},
 				staleTime: 1000 * 60 * 30, // 30 minutes
 				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
 				retry(failureCount: number, error: Error) {
 					if (error instanceof NoSessionError) {
-						router.navigate('/login');
-						return false;
+						router.navigate('/login')
+						return false
 					}
-					return failureCount < 2;
+					return failureCount < 2
 				},
 				enabled: userKind !== USER_GUEST
 			},
 			{
 				queryKey: ['personalLecturers'],
 				queryFn: async () => {
-					const rawData = await API.getPersonalLecturers();
-					const data = normalizeLecturers(rawData);
-					return data;
+					const rawData = await API.getPersonalLecturers()
+					const data = normalizeLecturers(rawData)
+					return data
 				},
 				staleTime: 1000 * 60 * 30, // 30 minutes
 				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
 				retry(failureCount: number, error: Error) {
 					if (error instanceof NoSessionError) {
-						router.navigate('/login');
-						return false;
+						router.navigate('/login')
+						return false
 					}
-					return failureCount < 2;
+					return failureCount < 2
 				},
 				enabled: userKind !== USER_GUEST
 			}
 		]
-	});
+	})
 
-	const allLecturersResult = results[0];
-	const personalLecturersResult = results[1];
+	const allLecturersResult = results[0]
+	const personalLecturersResult = results[1]
 	const {
 		isRefetchingByUser: isRefetchingByUserPersonal,
 		refetchByUser: refetchByUserPersonal
-	} = useRefreshByUser(personalLecturersResult.refetch);
+	} = useRefreshByUser(personalLecturersResult.refetch)
 	const {
 		isRefetchingByUser: isRefetchingByUserAll,
 		refetchByUser: refetchByUserAll
-	} = useRefreshByUser(allLecturersResult.refetch);
+	} = useRefreshByUser(allLecturersResult.refetch)
 
 	useEffect(() => {
 		if (data !== null && data !== undefined) {
-			const faculty = extractFacultyFromPersonal(data);
-			setFaculty(faculty ?? null);
+			const faculty = extractFacultyFromPersonal(data)
+			setFaculty(faculty ?? null)
 		}
-	}, [data]);
+	}, [data])
 
 	useEffect(() => {
 		if (localSearch !== '') {
@@ -141,25 +135,25 @@ export default function LecturersScreen(): React.JSX.Element {
 				keys: ['name', 'vorname', 'tel_dienst', 'raum'],
 				threshold: 0.4,
 				useExtendedSearch: true
-			};
+			}
 
-			const fuse = new Fuse(allLecturersResult?.data ?? [], options);
-			const result = fuse.search(localSearch);
-			const filtered = result.map((item) => item.item);
+			const fuse = new Fuse(allLecturersResult?.data ?? [], options)
+			const result = fuse.search(localSearch)
+			const filtered = result.map((item) => item.item)
 
-			setFilteredLecturers(filtered);
+			setFilteredLecturers(filtered)
 		}
-	}, [allLecturersResult?.data, localSearch]);
+	}, [allLecturersResult?.data, localSearch])
 	useEffect(() => {
-		let filtered: NormalizedLecturer[] = [];
+		let filtered: NormalizedLecturer[] = []
 		if (faculty !== null) {
 			filtered =
 				allLecturersResult?.data?.filter((lecturer: Lecturers) =>
 					lecturer.organisation?.includes(faculty)
-				) ?? [];
-			setDisplayedProfessors(false);
-			setFacultyData(filtered);
-			return;
+				) ?? []
+			setDisplayedProfessors(false)
+			setFacultyData(filtered)
+			return
 		}
 
 		if (faculty === null || filtered.length === 0) {
@@ -168,54 +162,54 @@ export default function LecturersScreen(): React.JSX.Element {
 					(lecturer: Lecturers) =>
 						lecturer.funktion !== null &&
 						lecturer.funktion === Funktion.ProfessorIn
-				) ?? [];
+				) ?? []
 
-			setDisplayedProfessors(true);
-			setFacultyData(filtered);
+			setDisplayedProfessors(true)
+			setFacultyData(filtered)
 		}
-	}, [faculty, allLecturersResult.data]);
+	}, [faculty, allLecturersResult.data])
 
 	const generateSections = (
 		lecturers = allLecturersResult.data
 	): {
-		title: string;
-		data: NormalizedLecturer[];
+		title: string
+		data: NormalizedLecturer[]
 	}[] => {
 		const sections = [] as {
-			title: string;
-			data: NormalizedLecturer[];
-		}[];
-		let currentLetter = '';
+			title: string
+			data: NormalizedLecturer[]
+		}[]
+		let currentLetter = ''
 
 		if (lecturers) {
 			for (const lecturer of lecturers) {
-				const firstLetter = lecturer.name.charAt(0).toUpperCase();
+				const firstLetter = lecturer.name.charAt(0).toUpperCase()
 				if (firstLetter !== currentLetter) {
-					currentLetter = firstLetter;
-					sections.push({ title: currentLetter, data: [lecturer] });
+					currentLetter = firstLetter
+					sections.push({ title: currentLetter, data: [lecturer] })
 				} else {
-					sections[sections.length - 1].data.push(lecturer);
+					sections[sections.length - 1].data.push(lecturer)
 				}
 			}
 		}
 
-		return sections;
-	};
+		return sections
+	}
 
-	const sections = generateSections(filteredLecturers);
+	const sections = generateSections(filteredLecturers)
 
 	useEffect(() => {
 		if (localSearch.length === 0 && allLecturersResult.data != null) {
-			setFilteredLecturers(allLecturersResult.data);
+			setFilteredLecturers(allLecturersResult.data)
 		}
-	}, [allLecturersResult.data, localSearch]);
+	}, [allLecturersResult.data, localSearch])
 
 	useEffect(() => {
 		if (
 			(allLecturersResult.isPaused && allLecturersResult.data != null) ||
 			(personalLecturersResult.isPaused && personalLecturersResult.data != null)
 		) {
-			pausedToast();
+			pausedToast()
 		}
 	}, [
 		allLecturersResult.data,
@@ -223,7 +217,7 @@ export default function LecturersScreen(): React.JSX.Element {
 		personalLecturersResult.data,
 		personalLecturersResult.isPaused,
 		t
-	]);
+	])
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -243,21 +237,21 @@ export default function LecturersScreen(): React.JSX.Element {
 				hideWhenScrolling: false,
 				hideNavigationBar: false,
 				onChangeText: (event: { nativeEvent: { text: string } }) => {
-					const text = event.nativeEvent.text;
-					setLocalSearch(text);
+					const text = event.nativeEvent.text
+					setLocalSearch(text)
 				},
 				onFocus: () => {
-					setLocalSearchBarFocused(true);
+					setLocalSearchBarFocused(true)
 				},
 				onClose: () => {
-					setLocalSearchBarFocused(false);
+					setLocalSearchBarFocused(false)
 				},
 				onCancelButtonPress: () => {
-					setLocalSearchBarFocused(false);
+					setLocalSearchBarFocused(false)
 				}
 			}
-		});
-	}, [UnistylesRuntime.themeName, navigation, t]);
+		})
+	}, [UnistylesRuntime.themeName, navigation, t])
 
 	const LecturerList = ({
 		lecturers,
@@ -268,13 +262,13 @@ export default function LecturersScreen(): React.JSX.Element {
 		isLoading,
 		isPersonal = false
 	}: {
-		lecturers: NormalizedLecturer[] | undefined;
-		isPaused: boolean;
-		isError: boolean;
-		isSuccess: boolean;
-		error: Error | null;
-		isLoading: boolean;
-		isPersonal?: boolean;
+		lecturers: NormalizedLecturer[] | undefined
+		isPaused: boolean
+		isError: boolean
+		isSuccess: boolean
+		error: Error | null
+		isLoading: boolean
+		isPersonal?: boolean
 	}): React.JSX.Element => {
 		return isPaused && !isSuccess ? (
 			<View style={styles.viewHorizontal}>
@@ -284,7 +278,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						isPersonal ? isRefetchingByUserPersonal : isRefetchingByUserAll
 					}
 					onRefresh={() => {
-						void (isPersonal ? refetchByUserPersonal() : refetchByUserAll());
+						void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
 					}}
 				/>
 			</View>
@@ -303,7 +297,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						isPersonal ? isRefetchingByUserPersonal : isRefetchingByUserAll
 					}
 					onRefresh={() => {
-						void (isPersonal ? refetchByUserPersonal() : refetchByUserAll());
+						void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
 					}}
 				/>
 			</View>
@@ -320,7 +314,7 @@ export default function LecturersScreen(): React.JSX.Element {
 								: allLecturersResult.isRefetching
 						}
 						onRefresh={() => {
-							void (isPersonal ? refetchByUserPersonal() : refetchByUserAll());
+							void (isPersonal ? refetchByUserPersonal() : refetchByUserAll())
 						}}
 					/>
 				}
@@ -358,11 +352,11 @@ export default function LecturersScreen(): React.JSX.Element {
 							ns: 'timetable'
 						})}
 						onButtonPress={() => {
-							void Linking.openURL('https://hiplan.thi.de/');
+							void Linking.openURL('https://hiplan.thi.de/')
 						}}
 						refreshing={isRefetchingByUserPersonal}
 						onRefresh={() => {
-							void refetchByUserPersonal();
+							void refetchByUserPersonal()
 						}}
 						isCritical={false}
 					/>
@@ -371,13 +365,13 @@ export default function LecturersScreen(): React.JSX.Element {
 						title={t('error.title')}
 						refreshing={isRefetchingByUserAll}
 						onRefresh={() => {
-							void refetchByUserAll();
+							void refetchByUserAll()
 						}}
 					/>
 				)}
 			</View>
-		);
-	};
+		)
+	}
 
 	const FilterSectionList = (): React.JSX.Element => {
 		return allLecturersResult.isLoading ? (
@@ -389,7 +383,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				title={networkError}
 				refreshing={isRefetchingByUserAll}
 				onRefresh={() => {
-					void refetchByUserAll();
+					void refetchByUserAll()
 				}}
 			/>
 		) : allLecturersResult.isError ? (
@@ -397,7 +391,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				title={allLecturersResult.error.message}
 				refreshing={isRefetchingByUserAll}
 				onRefresh={() => {
-					void refetchByUserAll();
+					void refetchByUserAll()
 				}}
 			/>
 		) : (
@@ -439,8 +433,8 @@ export default function LecturersScreen(): React.JSX.Element {
 					contentContainerStyle={styles.contentContainer}
 				/>
 			</>
-		);
-	};
+		)
+	}
 
 	return (
 		<SafeAreaProvider>
@@ -465,7 +459,7 @@ export default function LecturersScreen(): React.JSX.Element {
 							style={styles.page}
 							initialPage={selectedPage}
 							onPageSelected={(e) => {
-								setSelectedPage(e.nativeEvent.position);
+								setSelectedPage(e.nativeEvent.position)
 							}}
 							ref={pagerViewRef}
 						>
@@ -493,7 +487,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				)}
 			</SafeAreaView>
 		</SafeAreaProvider>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -542,4 +536,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	viewHorizontal: {
 		paddingHorizontal: theme.margins.page
 	}
-}));
+}))

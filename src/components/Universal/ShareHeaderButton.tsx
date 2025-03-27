@@ -1,26 +1,26 @@
-import { router } from 'expo-router';
-import type React from 'react';
-import { Platform, Pressable, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { router } from 'expo-router'
+import type React from 'react'
+import { Platform, Pressable, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon';
+import PlatformIcon from './Icon'
 
 interface ShareButtonProps {
-	onPress: () => void | Promise<void>;
-	noShare?: boolean;
+	onPress: () => void | Promise<void>
+	noShare?: boolean
 }
 
 export default function ShareHeaderButton({
 	onPress,
 	noShare = false
 }: ShareButtonProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<View style={styles.shareRow}>
 			{!noShare && (
 				<Pressable
 					onPress={() => {
-						void onPress();
+						void onPress()
 					}}
 					style={styles.shareButton}
 				>
@@ -45,7 +45,7 @@ export default function ShareHeaderButton({
 			{Platform.OS === 'ios' && (
 				<Pressable
 					onPress={() => {
-						router.back();
+						router.back()
 					}}
 					style={styles.shareButton}
 				>
@@ -68,7 +68,7 @@ export default function ShareHeaderButton({
 				</Pressable>
 			)}
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -115,4 +115,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 20,
 		paddingStart: 12
 	}
-}));
+}))

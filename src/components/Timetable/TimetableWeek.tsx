@@ -1,10 +1,7 @@
-import {
-	TimetableMode,
-	usePreferencesStore
-} from '@/hooks/usePreferencesStore';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { ITimetableViewProps } from '@/types/timetable';
-import type { Exam, FriendlyTimetableEntry } from '@/types/utils';
+import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { ITimetableViewProps } from '@/types/timetable'
+import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
 import {
 	CalendarBody,
 	CalendarContainer,
@@ -12,22 +9,22 @@ import {
 	type CalendarKitHandle,
 	type OnEventResponse,
 	type PackedEvent
-} from '@howljs/calendar-kit';
-import { useNavigation, useRouter } from 'expo-router';
-import moment from 'moment-timezone';
-import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+} from '@howljs/calendar-kit'
+import { useNavigation, useRouter } from 'expo-router'
+import moment from 'moment-timezone'
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { Platform, Pressable, View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
-import LoadingIndicator from '../Universal/LoadingIndicator';
-import { HeaderRight } from './HeaderButtons';
-import { MyMenu } from './Menu';
-import EventComponent from './WeekEventComponent';
+import PlatformIcon from '../Universal/Icon'
+import LoadingIndicator from '../Universal/LoadingIndicator'
+import { HeaderRight } from './HeaderButtons'
+import { MyMenu } from './Menu'
+import EventComponent from './WeekEventComponent'
 
 const timetableNumberDaysMap = {
 	[TimetableMode.List]: 1,
@@ -35,26 +32,26 @@ const timetableNumberDaysMap = {
 	[TimetableMode.Timeline3]: 3,
 	[TimetableMode.Timeline5]: 5,
 	[TimetableMode.Timeline7]: 7
-};
+}
 
 export default function TimetableWeek({
 	timetable,
 	exams
 }: ITimetableViewProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const today = moment().startOf('day').toDate();
-	const calendarRef = useRef<CalendarKitHandle>(null);
+	const { styles, theme } = useStyles(stylesheet)
+	const today = moment().startOf('day').toDate()
+	const calendarRef = useRef<CalendarKitHandle>(null)
 	const setSelectedLecture = useRouteParamsStore(
 		(state) => state.setSelectedLecture
-	);
-	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam);
-	const [events, setEvents] = React.useState<PackedEvent[]>([]);
-	const [calendarLoaded, setCalendarLoaded] = React.useState(false);
-	const [currentDate, setCurrentDate] = React.useState(today);
-	const isDark = UnistylesRuntime.themeName === 'dark';
-	const router = useRouter();
-	const navigation = useNavigation();
-	const timetableMode = usePreferencesStore((state) => state.timetableMode);
+	)
+	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
+	const [events, setEvents] = React.useState<PackedEvent[]>([])
+	const [calendarLoaded, setCalendarLoaded] = React.useState(false)
+	const [currentDate, setCurrentDate] = React.useState(today)
+	const isDark = UnistylesRuntime.themeName === 'dark'
+	const router = useRouter()
+	const navigation = useNavigation()
+	const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
 	const calendarTheme = {
 		colors: {
@@ -66,15 +63,15 @@ export default function TimetableWeek({
 			text: theme.colors.text,
 			surface: theme.colors.labelBackground
 		}
-	};
+	}
 
 	function showEventDetails(entry: OnEventResponse): void {
 		if (entry.eventType === 'lecture') {
-			setSelectedLecture(entry as unknown as FriendlyTimetableEntry);
-			router.navigate('/lecture');
+			setSelectedLecture(entry as unknown as FriendlyTimetableEntry)
+			router.navigate('/lecture')
 		} else if (entry.eventType === 'exam') {
-			setSelectedExam(entry as unknown as Exam);
-			router.navigate('/exam');
+			setSelectedExam(entry as unknown as Exam)
+			router.navigate('/exam')
 		}
 	}
 
@@ -92,9 +89,9 @@ export default function TimetableWeek({
 						dateTime: entry.endDate
 					}
 				})
-			);
+			)
 			const friendlyExams = exams.map((entry, index) => {
-				const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90);
+				const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
 				return {
 					...entry,
 					eventType: 'exam',
@@ -105,14 +102,14 @@ export default function TimetableWeek({
 					end: {
 						dateTime: moment(entry.date).add(duration, 'minutes').toDate()
 					}
-				};
-			});
+				}
+			})
 
 			const combinedEvents = [
 				...friendlyTimetable,
 				...friendlyExams
-			] as unknown as PackedEvent[];
-			setEvents(combinedEvents);
+			] as unknown as PackedEvent[]
+			setEvents(combinedEvents)
 
 			// Find the first future event from the combined list
 			const firstFutureEvent = combinedEvents
@@ -120,29 +117,29 @@ export default function TimetableWeek({
 				.find(
 					(event) =>
 						moment(event.start.dateTime).startOf('day').toDate() >= today
-				);
+				)
 
 			if (firstFutureEvent) {
 				if (firstFutureEvent.start.dateTime) {
-					setCurrentDate(new Date(firstFutureEvent.start.dateTime));
+					setCurrentDate(new Date(firstFutureEvent.start.dateTime))
 				}
 			}
 		}
-	}, [timetable, exams]);
+	}, [timetable, exams])
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
 				<HeaderRight
 					setToday={() => {
-						const calDate = calendarRef.current?.getVisibleStart();
+						const calDate = calendarRef.current?.getVisibleStart()
 						if (calDate != null) {
-							const momentCalDate = moment(calDate).startOf('day');
-							const momentToday = moment().startOf('day');
+							const momentCalDate = moment(calDate).startOf('day')
+							const momentToday = moment().startOf('day')
 							const targetDate = momentCalDate.isSame(momentToday)
 								? (currentDate ?? new Date())
-								: new Date();
-							calendarRef.current?.goToDate({ date: targetDate });
+								: new Date()
+							calendarRef.current?.goToDate({ date: targetDate })
 						}
 					}}
 				/>
@@ -154,7 +151,7 @@ export default function TimetableWeek({
 						<View style={styles.buttons}>
 							<Pressable
 								onPress={() => {
-									onPressPrevious();
+									onPressPrevious()
 								}}
 							>
 								<PlatformIcon
@@ -175,7 +172,7 @@ export default function TimetableWeek({
 							</Pressable>
 							<Pressable
 								onPress={() => {
-									onPressNext();
+									onPressNext()
 								}}
 							>
 								<PlatformIcon
@@ -198,33 +195,33 @@ export default function TimetableWeek({
 					)}
 				</View>
 			)
-		});
-	}, [navigation]);
+		})
+	}, [navigation])
 
 	const renderEvent = useCallback(
 		(event: PackedEvent) => {
-			return <EventComponent event={event} theme={theme} isDark={isDark} />;
+			return <EventComponent event={event} theme={theme} isDark={isDark} />
 		},
 		[theme.colors.primary, events]
-	);
+	)
 
 	const onPressPrevious = (): void => {
-		calendarRef.current?.goToPrevPage();
-	};
+		calendarRef.current?.goToPrevPage()
+	}
 
 	const onPressNext = (): void => {
-		calendarRef.current?.goToNextPage();
-	};
+		calendarRef.current?.goToNextPage()
+	}
 
 	const [timetableNumberDays, setTimetableNumberDays] = React.useState(
 		timetableNumberDaysMap[timetableMode] ?? 3
-	);
+	)
 	useEffect(() => {
 		if (calendarLoaded) {
-			setTimetableNumberDays(timetableNumberDaysMap[timetableMode]);
-			calendarRef.current?.setVisibleDate(currentDate.toISOString());
+			setTimetableNumberDays(timetableNumberDaysMap[timetableMode])
+			calendarRef.current?.setVisibleDate(currentDate.toISOString())
 		}
-	}, [timetableMode]);
+	}, [timetableMode])
 	return (
 		<View style={styles.page}>
 			{!calendarLoaded && (
@@ -234,7 +231,7 @@ export default function TimetableWeek({
 			)}
 			<CalendarContainer
 				onLoad={() => {
-					setCalendarLoaded(true);
+					setCalendarLoaded(true)
 				}}
 				allowPinchToZoom={true}
 				start={420}
@@ -249,14 +246,14 @@ export default function TimetableWeek({
 				events={events}
 				theme={calendarTheme}
 				onPressEvent={(event) => {
-					showEventDetails(event);
+					showEventDetails(event)
 				}}
 				onDateChanged={(date) => {
-					setCurrentDate(new Date(date));
+					setCurrentDate(new Date(date))
 				}}
 				initialDate={currentDate}
 				onPressDayNumber={(date) => {
-					calendarRef.current?.goToDate({ date });
+					calendarRef.current?.goToDate({ date })
 				}}
 				showWeekNumber
 				rightEdgeSpacing={3}
@@ -268,7 +265,7 @@ export default function TimetableWeek({
 				<CalendarBody renderEvent={renderEvent} />
 			</CalendarContainer>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet(() => ({
@@ -288,4 +285,4 @@ const stylesheet = createStyleSheet(() => ({
 	page: {
 		flex: 1
 	}
-}));
+}))

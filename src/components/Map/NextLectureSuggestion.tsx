@@ -1,23 +1,23 @@
-import { MapContext } from '@/contexts/map';
-import { SEARCH_TYPES } from '@/types/map';
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils';
-import { isValidRoom } from '@/utils/timetable-utils';
-import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import type { FeatureCollection } from 'geojson';
-import type { Position } from 'geojson';
-import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { MapContext } from '@/contexts/map'
+import { SEARCH_TYPES } from '@/types/map'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
+import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import type { FeatureCollection } from 'geojson'
+import type { Position } from 'geojson'
+import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import Divider from '../Universal/Divider';
-import PlatformIcon from '../Universal/Icon';
+import { Pressable } from 'react-native-gesture-handler'
+import Divider from '../Universal/Divider'
+import PlatformIcon from '../Universal/Icon'
 
 interface NextLectureSuggestionsProps {
-	allRooms: FeatureCollection;
-	handlePresentModalPress: () => void;
+	allRooms: FeatureCollection
+	handlePresentModalPress: () => void
 }
 
 const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
@@ -25,11 +25,11 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
 	handlePresentModalPress
 }) => {
 	const { setClickedElement, nextLecture, setCurrentFloor } =
-		useContext(MapContext);
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+		useContext(MapContext)
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 	if (nextLecture == null || nextLecture.length === 0) {
-		return null;
+		return null
 	}
 	return (
 		<View style={styles.suggestionContainer}>
@@ -52,31 +52,28 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
 							onPress={() => {
 								const details = allRooms.features.find(
 									(x) => x.properties?.Raum === lecture.rooms[0]
-								);
+								)
 								if (details == null) {
-									roomNotFoundToast(
-										lecture.rooms[0],
-										theme.colors.notification
-									);
-									return;
+									roomNotFoundToast(lecture.rooms[0], theme.colors.notification)
+									return
 								}
-								const etage = (details?.properties?.Ebene as string) ?? 'EG';
+								const etage = (details?.properties?.Ebene as string) ?? 'EG'
 								setCurrentFloor({
 									floor: etage,
 									manual: false
-								});
+								})
 								setClickedElement({
 									data: lecture.rooms[0],
 									type: SEARCH_TYPES.ROOM,
 									center: details?.properties?.center as Position | undefined,
 									manual: false
-								});
+								})
 								trackEvent('Room', {
 									room: lecture.rooms[0],
 									origin: 'NextLecture'
-								});
+								})
 
-								handlePresentModalPress();
+								handlePresentModalPress()
 							}}
 						>
 							<View style={styles.suggestionInnerRow}>
@@ -121,10 +118,10 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
 				))}
 			</View>
 		</View>
-	);
-};
+	)
+}
 
-export default NextLectureSuggestion;
+export default NextLectureSuggestion
 
 const stylesheet = createStyleSheet((theme) => ({
 	primaryContrast: {
@@ -207,4 +204,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontVariant: ['tabular-nums']
 	}
-}));
+}))

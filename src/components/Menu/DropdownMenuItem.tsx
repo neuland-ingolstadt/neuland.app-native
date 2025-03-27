@@ -1,12 +1,12 @@
-import React from 'react';
-import { useStyles } from 'react-native-unistyles';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+import React from 'react'
+import { useStyles } from 'react-native-unistyles'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
-type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Item']>;
+type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Item']>
 
 const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
-	const { theme } = useStyles();
-	const [focused, setFocused] = React.useState(false);
+	const { theme } = useStyles()
+	const [focused, setFocused] = React.useState(false)
 	return (
 		<DropdownMenu.Item
 			// @ts-expect-error
@@ -16,16 +16,16 @@ const DropdownMenuItem = DropdownMenu.create((props: ItemProps) => {
 			}}
 			{...props}
 			onFocus={() => {
-				setFocused(true);
+				setFocused(true)
 			}}
 			onBlur={() => {
-				setFocused(false);
+				setFocused(false)
 			}}
 		/>
-	);
-}, 'CheckboxItem');
+	)
+}, 'CheckboxItem')
 
-export default DropdownMenuItem;
+export default DropdownMenuItem
 
 const styles = {
 	item: {
@@ -45,4 +45,4 @@ const styles = {
 		outline: 'none',
 		outlineStyle: 'none'
 	}
-};
+}

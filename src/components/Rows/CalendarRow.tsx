@@ -1,25 +1,25 @@
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Calendar } from '@/types/data';
-import type { Exam } from '@/types/utils';
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Calendar } from '@/types/data'
+import type { Exam } from '@/types/utils'
 import {
 	formatFriendlyDate,
 	formatFriendlyDateRange,
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
-} from '@/utils/date-utils';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/date-utils'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import RowEntry from '../Universal/RowEntry';
+import RowEntry from '../Universal/RowEntry'
 
 const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
-	const { t, i18n } = useTranslation('common');
-	const { styles } = useStyles(stylesheet);
+	const { t, i18n } = useTranslation('common')
+	const { styles } = useStyles(stylesheet)
 	return (
 		<RowEntry
 			title={event.name[i18n.language as LanguageKey]}
@@ -42,23 +42,23 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 			}
 			maxTitleWidth={'60%'}
 		/>
-	);
-};
+	)
+}
 
 const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
-	const setExam = useRouteParamsStore((state) => state.setSelectedExam);
-	const { styles } = useStyles(stylesheet);
+	const setExam = useRouteParamsStore((state) => state.setSelectedExam)
+	const { styles } = useStyles(stylesheet)
 
 	const navigateToPage = (): void => {
-		setExam(event);
-		router.navigate('/exam');
-	};
+		setExam(event)
+		router.navigate('/exam')
+	}
 
-	const { t } = useTranslation('common');
+	const { t } = useTranslation('common')
 	const showDetails =
 		formatFriendlyDateTime(event.date) != null ||
 		event.rooms !== '' ||
-		event.seat != null;
+		event.seat != null
 
 	return (
 		<RowEntry
@@ -92,8 +92,8 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 			onPress={navigateToPage}
 			maxTitleWidth={'70%'}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	leftText: {
@@ -123,6 +123,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		fontWeight: '400'
 	}
-}));
+}))
 
-export { CalendarRow, ExamRow };
+export { CalendarRow, ExamRow }

@@ -1,18 +1,18 @@
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 export const FoodHeaderRight = (): React.JSX.Element => {
-	const { t } = useTranslation(['accessibility']);
-	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation(['accessibility'])
+	const { styles } = useStyles(stylesheet)
 	return (
 		<Pressable
 			onPress={() => {
-				router.navigate('/food-preferences');
+				router.navigate('/food-preferences')
 			}}
 			hitSlop={10}
 			style={styles.headerButton}
@@ -36,8 +36,8 @@ export const FoodHeaderRight = (): React.JSX.Element => {
 				/>
 			</View>
 		</Pressable>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	headerButton: {
@@ -46,4 +46,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	icon: {
 		color: theme.colors.text
 	}
-}));
+}))

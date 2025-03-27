@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { AppState, type AppStateStatus } from 'react-native';
+import { useEffect } from 'react'
+import { AppState, type AppStateStatus } from 'react-native'
 
 /**
  * Hook to subscribe to app state changes
@@ -7,9 +7,9 @@ import { AppState, type AppStateStatus } from 'react-native';
  */
 export function useAppState(onChange: (status: AppStateStatus) => void): void {
 	useEffect(() => {
-		const subscription = AppState.addEventListener('change', onChange);
+		const subscription = AppState.addEventListener('change', onChange)
 		return () => {
-			subscription.remove();
-		};
-	}, [onChange]);
+			subscription.remove()
+		}
+	}, [onChange])
 }

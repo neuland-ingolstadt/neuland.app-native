@@ -6,17 +6,17 @@ import type {
 	Rooms,
 	ThiNews,
 	TimetableResponse
-} from '@/types/thi-api';
+} from '@/types/thi-api'
 
-import { toast } from 'burnt';
-import { APIError, AnonymousAPIClient } from './anonymous-api';
-import { callWithSession } from './thi-session-handler';
+import { toast } from 'burnt'
+import { APIError, AnonymousAPIClient } from './anonymous-api'
+import { callWithSession } from './thi-session-handler'
 
 export interface PersonalData {
 	persdata?: {
-		stg?: string;
-		po_url?: string;
-	};
+		stg?: string
+		po_url?: string
+	}
 }
 
 /**
@@ -26,12 +26,12 @@ export interface PersonalData {
  */
 export class AuthenticatedAPIClient extends AnonymousAPIClient {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	private readonly sessionHandler: any;
+	private readonly sessionHandler: any
 
 	constructor() {
-		super();
+		super()
 
-		this.sessionHandler = callWithSession;
+		this.sessionHandler = callWithSession
 	}
 
 	/**
@@ -43,24 +43,24 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	async requestAuthenticated(params: object): Promise<any> {
-		console.debug(params);
+		console.debug(params)
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		return this.sessionHandler(async (session: any) => {
 			const res = await this.request({
 				session,
 				...params
-			});
+			})
 			// old status format
 			if (res.status !== 0) {
-				throw new APIError(res.status, res.data);
+				throw new APIError(res.status, res.data)
 			}
 			// new status format
 			if (res.data[0] !== 0) {
-				throw new APIError(res.data[0], res.data[1]);
+				throw new APIError(res.data[0], res.data[1])
 			}
 
-			return res.data[1];
-		});
+			return res.data[1]
+		})
 	}
 
 	/**
@@ -72,9 +72,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			service: 'thiapp',
 			method: 'persdata',
 			format: 'json'
-		});
+		})
 
-		return res;
+		return res
 	}
 
 	/**
@@ -93,13 +93,13 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 				month: date.getMonth() + 1,
 				year: date.getFullYear(),
 				details: detailed ? 1 : 0
-			});
+			})
 
 			return {
 				semester: res[0],
 				holidays: res[1],
 				timetable: res[2]
-			};
+			}
 			// biome-ignore lint/suspicious/noExplicitAny: e is any
 		} catch (e: any) {
 			// when the user did not select any classes, the timetable returns 'Query not possible'
@@ -108,20 +108,20 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 					timetable: [],
 					holidays: [],
 					semester: []
-				};
+				}
 			}
 			// If the error indicates malformed JSON and we requested detailed info, try again with details = 0
 			if (e.message?.includes('API returned malformed JSON:') && detailed) {
-				const timetable = await this.getTimetable(date, false);
+				const timetable = await this.getTimetable(date, false)
 				toast({
 					message: 'Lecture details unavailable',
 					title: 'THI API Error',
 					preset: 'error',
 					haptic: 'warning'
-				});
-				return timetable;
+				})
+				return timetable
 			}
-			throw e;
+			throw e
 		}
 	}
 
@@ -136,13 +136,13 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 				method: 'exams',
 				format: 'json',
 				modus: '1' // what does this mean? if only we knew
-			});
+			})
 
 			if (!Array.isArray(res)) {
-				throw new Error('Response is not an array');
+				throw new Error('Response is not an array')
 			}
 
-			return res;
+			return res
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		} catch (e: any) {
 			// when you have no exams the API sometimes returns "No exam data available"
@@ -150,9 +150,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 				e.data === 'No exam data available' ||
 				e.data === 'Query not possible'
 			) {
-				return [];
+				return []
 			}
-			throw e;
+			throw e
 		}
 	}
 
@@ -165,9 +165,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			service: 'thiapp',
 			method: 'grades',
 			format: 'json'
-		});
+		})
 
-		return res;
+		return res
 	}
 
 	/**
@@ -182,8 +182,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			day: date.getDate(),
 			month: date.getMonth() + 1,
 			year: date.getFullYear()
-		});
-		return res;
+		})
+		return res
 	}
 
 	/**
@@ -195,9 +195,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			service: 'thiapp',
 			method: 'stpllecturers',
 			format: 'json'
-		});
+		})
 
-		return res;
+		return res
 	}
 
 	/**
@@ -212,9 +212,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			format: 'json',
 			from,
 			to
-		});
+		})
 
-		return res;
+		return res
 	}
 
 	/**
@@ -226,10 +226,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			service: 'thiapp',
 			method: 'thinews',
 			format: 'json'
-		});
+		})
 
-		return res;
+		return res
 	}
 }
 
-export default new AuthenticatedAPIClient();
+export default new AuthenticatedAPIClient()

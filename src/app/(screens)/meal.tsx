@@ -1,64 +1,64 @@
-import ErrorView from '@/components/Error/ErrorView';
-import FormList from '@/components/Universal/FormList';
-import PlatformIcon, { linkIcon } from '@/components/Universal/Icon';
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton';
-import { UserKindContext } from '@/components/contexts';
-import allergenMap from '@/data/allergens.json';
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
-import flagMap from '@/data/mensa-flags.json';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { FormListSections } from '@/types/components';
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import { UserKindContext } from '@/components/contexts'
+import allergenMap from '@/data/allergens.json'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import flagMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
 import {
 	formatPrice,
 	humanLocations,
 	mealName,
 	shareMeal
-} from '@/utils/food-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { HeaderTitle } from '@react-navigation/elements';
-import { Stack, router, useFocusEffect, useNavigation } from 'expo-router';
-import type React from 'react';
-import { useCallback, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Alert, Linking, Platform, Share, Text, View } from 'react-native';
+} from '@/utils/food-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack, router, useFocusEffect, useNavigation } from 'expo-router'
+import type React from 'react'
+import { useCallback, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Alert, Linking, Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function FoodDetail(): React.JSX.Element {
-	const meal = useRouteParamsStore((state) => state.selectedMeal);
-	const { styles, theme } = useStyles(stylesheet);
+	const meal = useRouteParamsStore((state) => state.selectedMeal)
+	const { styles, theme } = useStyles(stylesheet)
 
 	const preferencesSelection = useFoodFilterStore(
 		(state) => state.preferencesSelection
-	);
+	)
 	const allergenSelection = useFoodFilterStore(
 		(state) => state.allergenSelection
-	);
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
+	)
+	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 	const toggleSelectedPreferences = useFoodFilterStore(
 		(state) => state.toggleSelectedPreferences
-	);
+	)
 	const toggleSelectedAllergens = useFoodFilterStore(
 		(state) => state.toggleSelectedAllergens
-	);
-	const { t, i18n } = useTranslation('food');
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
+	)
+	const { t, i18n } = useTranslation('food')
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const dataSources = {
 		IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
 		NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',
 		Reimanns: 'http://reimanns.in/mittagsgerichte-wochenkarte/',
 		Canisius: 'http://www.canisiusstiftung.de/upload/speiseplan.pdf'
-	};
+	}
 
-	const ref = useAnimatedRef<Animated.ScrollView>();
-	const scroll = useScrollViewOffset(ref);
+	const ref = useAnimatedRef<Animated.ScrollView>()
+	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -71,30 +71,30 @@ export default function FoodDetail(): React.JSX.Element {
 					)
 				}
 			]
-		};
-	});
+		}
+	})
 
-	const navigation = useNavigation();
+	const navigation = useNavigation()
 
 	useFocusEffect(
 		useCallback(() => {
 			if (meal === undefined) {
 				navigation.setOptions({
 					headerRight: () => undefined
-				});
+				})
 			} else {
 				navigation.setOptions({
 					headerRight: () => (
 						<ShareHeaderButton
 							onPress={() => {
-								shareMeal(meal, i18n, userKind);
+								shareMeal(meal, i18n, userKind)
 							}}
 						/>
 					)
-				});
+				})
 			}
 		}, [])
-	);
+	)
 
 	if (meal === undefined) {
 		return (
@@ -102,30 +102,30 @@ export default function FoodDetail(): React.JSX.Element {
 				title={t('details.error.title')}
 				message={t('details.error.message')}
 			/>
-		);
+		)
 	}
 
 	interface Locations {
-		IngolstadtMensa: string;
-		Reimanns: string;
-		Canisius: string;
-		[key: string]: string;
+		IngolstadtMensa: string
+		Reimanns: string
+		Canisius: string
+		[key: string]: string
 	}
 
 	const locations: Locations = {
 		IngolstadtMensa: 'M001',
 		Reimanns: 'F001',
 		Canisius: 'X001'
-	};
+	}
 
 	function itemAlert(item: string, itemType: 'allergen' | 'flag'): void {
-		const itemMap = itemType === 'allergen' ? allergenMap : flagMap;
+		const itemMap = itemType === 'allergen' ? allergenMap : flagMap
 		const friendlyItem =
 			itemMap[item as keyof typeof itemMap]?.[i18n.language as LanguageKey] ??
-			item;
+			item
 		const isItemSelected = (
 			itemType === 'allergen' ? allergenSelection : preferencesSelection
-		).includes(item);
+		).includes(item)
 
 		if (Platform.OS === 'web') {
 			if (
@@ -150,9 +150,9 @@ export default function FoodDetail(): React.JSX.Element {
 				/* empty */
 			} else {
 				if (itemType === 'allergen') {
-					toggleSelectedAllergens(item);
+					toggleSelectedAllergens(item)
 				} else if (itemType === 'flag') {
-					toggleSelectedPreferences(item);
+					toggleSelectedPreferences(item)
 				}
 			}
 		} else {
@@ -178,9 +178,9 @@ export default function FoodDetail(): React.JSX.Element {
 						text: t('misc.confirm', { ns: 'common' }),
 						onPress: () => {
 							if (itemType === 'allergen') {
-								toggleSelectedAllergens(item);
+								toggleSelectedAllergens(item)
 							} else if (itemType === 'flag') {
-								toggleSelectedPreferences(item);
+								toggleSelectedPreferences(item)
 							}
 						}
 					},
@@ -192,15 +192,15 @@ export default function FoodDetail(): React.JSX.Element {
 						style: 'cancel'
 					}
 				]
-			);
+			)
 		}
 	}
 
-	const studentPrice = formatPrice(meal?.prices?.student);
-	const employeePrice = formatPrice(meal?.prices?.employee);
-	const guestPrice = formatPrice(meal?.prices?.guest);
+	const studentPrice = formatPrice(meal?.prices?.student)
+	const employeePrice = formatPrice(meal?.prices?.employee)
+	const guestPrice = formatPrice(meal?.prices?.guest)
 	const isPriceAvailable =
-		studentPrice !== '' && employeePrice !== '' && guestPrice !== '';
+		studentPrice !== '' && employeePrice !== '' && guestPrice !== ''
 	const priceSection: FormListSections[] = isPriceAvailable
 		? [
 				{
@@ -224,11 +224,11 @@ export default function FoodDetail(): React.JSX.Element {
 					]
 				}
 			]
-		: [];
+		: []
 
 	const isNutritionAvailable =
 		meal?.nutrition != null &&
-		Object.values(meal.nutrition).every((value) => value !== '' && value !== 0);
+		Object.values(meal.nutrition).every((value) => value !== '' && value !== 0)
 
 	const nutritionSection: FormListSections[] = [
 		{
@@ -270,7 +270,7 @@ export default function FoodDetail(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 	const mensaSection: FormListSections[] = [
 		{
 			header: t('preferences.formlist.flags'),
@@ -289,7 +289,7 @@ export default function FoodDetail(): React.JSX.Element {
 						: undefined,
 					iconColor: theme.colors.success,
 					onPress: () => {
-						itemAlert(flag, 'flag');
+						itemAlert(flag, 'flag')
 					}
 				})) ?? [],
 			footer: t('details.formlist.flagsFooter')
@@ -315,7 +315,7 @@ export default function FoodDetail(): React.JSX.Element {
 							: undefined,
 						iconColor: theme.colors.notification,
 						onPress: () => {
-							itemAlert(allergen, 'allergen');
+							itemAlert(allergen, 'allergen')
 						}
 					})) ?? [],
 			footer: t('details.formlist.allergenFooter', {
@@ -323,31 +323,31 @@ export default function FoodDetail(): React.JSX.Element {
 			})
 		},
 		...(isNutritionAvailable ? nutritionSection : [])
-	];
+	]
 
 	const restaurant =
 		meal?.restaurant != null
 			? meal.restaurant.charAt(0).toUpperCase() + meal.restaurant.slice(1)
-			: '';
+			: ''
 	const handlePress = (): void => {
-		const location = locations[restaurant as keyof typeof locations];
+		const location = locations[restaurant as keyof typeof locations]
 
 		if (restaurant != null && location !== undefined) {
 			router.dismissTo({
 				pathname: '/(tabs)/map',
 				params: { room: location }
-			});
+			})
 		}
-	};
+	}
 
 	const locationExists =
-		restaurant !== undefined && locations[restaurant] !== undefined;
+		restaurant !== undefined && locations[restaurant] !== undefined
 	const humanLocation =
-		humanLocations[restaurant as keyof typeof humanLocations];
+		humanLocations[restaurant as keyof typeof humanLocations]
 	const humanCategory = t(
 		// @ts-expect-error cannot verify the TFunction type
 		`categories.${meal?.category}`
-	) as string;
+	) as string
 
 	const aboutSection: FormListSections[] = [
 		{
@@ -369,14 +369,14 @@ export default function FoodDetail(): React.JSX.Element {
 					icon: linkIcon,
 					onPress: () => {
 						if (meal?.restaurant !== null) {
-							const restaurant = meal?.restaurant as keyof typeof dataSources;
-							void Linking.openURL(dataSources[restaurant]);
+							const restaurant = meal?.restaurant as keyof typeof dataSources
+							void Linking.openURL(dataSources[restaurant])
 						}
 					}
 				}
 			]
 		}
-	];
+	]
 
 	const variantsSection: FormListSections[] = [
 		{
@@ -390,7 +390,7 @@ export default function FoodDetail(): React.JSX.Element {
 					onPress: () => {
 						trackEvent('Share', {
 							type: 'mealVariant'
-						});
+						})
 						void Share.share({
 							message: t('details.share.message', {
 								meal: variant.name[i18n.language as LanguageKey],
@@ -398,28 +398,28 @@ export default function FoodDetail(): React.JSX.Element {
 								location: restaurant,
 								id: variant?.id
 							})
-						});
+						})
 					}
 				})) ?? []
 		}
-	];
+	]
 
 	const isTranslated = (): boolean => {
 		if (foodLanguage !== 'default') {
-			return foodLanguage === 'de';
+			return foodLanguage === 'de'
 		}
-		return i18n.language === 'de';
-	};
+		return i18n.language === 'de'
+	}
 
 	const sections: FormListSections[] =
 		meal?.restaurant === 'IngolstadtMensa' ||
 		meal?.restaurant === 'NeuburgMensa'
 			? [...priceSection, ...variantsSection, ...mensaSection, ...aboutSection]
-			: [...priceSection, ...variantsSection, ...aboutSection];
+			: [...priceSection, ...variantsSection, ...aboutSection]
 
 	const title = meal
 		? mealName(meal.name, foodLanguage, i18n.language as LanguageKey)
-		: '';
+		: ''
 
 	return (
 		<Animated.ScrollView contentContainerStyle={styles.page} ref={ref}>
@@ -480,7 +480,7 @@ export default function FoodDetail(): React.JSX.Element {
 				</View>
 			</View>
 		</Animated.ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -544,4 +544,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 16,
 		textAlign: 'left'
 	}
-}));
+}))
