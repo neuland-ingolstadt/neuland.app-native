@@ -4,7 +4,8 @@ import { getContrastColor } from '@/utils/ui-utils';
 import * as Haptics from 'expo-haptics';
 import type React from 'react';
 import { memo, useContext } from 'react';
-import { Platform, Pressable, Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
+import { Pressable } from 'react-native-gesture-handler';
 import {
 	UnistylesRuntime,
 	createStyleSheet,

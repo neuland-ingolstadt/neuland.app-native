@@ -11,10 +11,11 @@ import { router } from 'expo-router';
 import type React from 'react';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Share, Text, View } from 'react-native';
+import { Platform, Share, Text, View } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import FormList from '../Universal/FormList';
 import PlatformIcon from '../Universal/Icon';
 import BottomSheetBackground from './BottomSheetBackground';

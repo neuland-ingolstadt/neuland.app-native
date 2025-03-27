@@ -3,10 +3,11 @@ import type { SearchResult } from '@/types/map';
 import { selectionAsync } from 'expo-haptics';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutAnimation, Platform, Pressable, Text, View } from 'react-native';
+import { LayoutAnimation, Platform, Text, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import Divider from '../Universal/Divider';
 import PlatformIcon from '../Universal/Icon';
 import ResultRow from './SearchResultRow';

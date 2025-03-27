@@ -7,7 +7,7 @@ import Color from 'color';
 import type { FeatureCollection } from 'geojson';
 import React, { useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import { TextInput } from 'react-native';
 import Animated, { type SharedValue } from 'react-native-reanimated';
 import {
@@ -21,6 +21,7 @@ import {
 	useStyles
 } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import AttributionLink from './AttributionLink';
 import AvailableRoomsSuggestions from './AvailableRoomsSuggestions';
 import BottomSheetBackground from './BottomSheetBackground';
