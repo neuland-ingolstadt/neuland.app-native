@@ -49,38 +49,6 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
-
-      - name: Upload AAB artifact for next job
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-build-artifacts
-          path: |
-            neuland-next.aab
-          retention-days: 1
-
-  submit:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4.1.7
-
-      - name: Setup Node JS environment
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version: "22"
-
-      - name: Setup Expo and EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Download AAB from previous job
-        uses: actions/download-artifact@v4
-        with:
-          name: android-build-artifacts
-
       - name: Determine submission profile
         run: |
           if [[ "${{ github.event.inputs.internal }}" == "true" ]]; then
