@@ -10,7 +10,7 @@ import { FlashList, MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -83,6 +83,12 @@ const HomeScreen = memo(function HomeScreen() {
 		data?.appAnnouncements
 	)
 
+	const announcementHeader = useMemo(
+		() =>
+			announcements != null ? <AnnouncementCard data={announcements} /> : null,
+		[announcements]
+	)
+
 	const renderSingleColumnItem = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		({ item }: { item: any }) => <View style={styles.item}>{item.card()}</View>,
@@ -135,13 +141,7 @@ const HomeScreen = memo(function HomeScreen() {
 			data={shownDashboardEntries}
 			renderItem={renderSingleColumnItem}
 			keyExtractor={keyExtractor}
-			ListHeaderComponent={() =>
-				announcements != null ? (
-					<AnnouncementCard data={announcements} />
-				) : (
-					<></>
-				)
-			}
+			ListHeaderComponent={announcementHeader}
 		/>
 	) : (
 		<MasonryFlashList
@@ -155,13 +155,7 @@ const HomeScreen = memo(function HomeScreen() {
 			keyExtractor={keyExtractor}
 			numColumns={2}
 			estimatedItemSize={114}
-			ListHeaderComponent={() =>
-				announcements != null ? (
-					<AnnouncementCard data={announcements} />
-				) : (
-					<></>
-				)
-			}
+			ListHeaderComponent={announcementHeader}
 		/>
 	)
 })
