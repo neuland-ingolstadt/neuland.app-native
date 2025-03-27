@@ -250,7 +250,7 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo@52.0.40": {
+    "expo@52.0.41": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -274,7 +274,7 @@
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "lucide-react-native@0.482.0": {
+    "lucide-react-native@0.484.0": {
         "licenses": "ISC",
         "repository": "https://github.com/lucide-icons/lucide",
         "licenseUrl": "https://github.com/lucide-icons/lucide/raw/master/LICENSE",

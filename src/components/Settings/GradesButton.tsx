@@ -1,9 +1,10 @@
 import { handleBiometricAuth } from '@/utils/app-utils';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text } from 'react-native';
+import { Text } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import PlatformIcon from '../Universal/Icon';
 
 const GradesButton = (): React.JSX.Element => {
