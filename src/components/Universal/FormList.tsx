@@ -1,9 +1,10 @@
 import Divider from '@/components/Universal/Divider';
 import type { FormListSections, SectionGroup } from '@/types/components';
 import React from 'react';
-import { Platform, Pressable, Text, View, type ViewStyle } from 'react-native';
+import { Platform, Text, View, type ViewStyle } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import PlatformIcon from './Icon';
 
 interface FormListProps {

@@ -24,14 +24,16 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 					</Text>
 				</View>
 			}
-			rightChildren=<View style={styles.rightContainer}>
-				{item.note !== null && item.note !== '' && (
-					<View style={styles.rightInnerContainer}>
-						<Text style={styles.rightText1}>{item.note}</Text>
-						<Text style={styles.rightText2}>{t('grades.grade')}</Text>
-					</View>
-				)}
-			</View>
+			rightChildren={
+				<View style={styles.rightContainer}>
+					{item.note !== null && item.note !== '' && (
+						<View style={styles.rightInnerContainer}>
+							<Text style={styles.rightText1}>{item.note}</Text>
+							<Text style={styles.rightText2}>{t('grades.grade')}</Text>
+						</View>
+					)}
+				</View>
+			}
 			maxTitleWidth={'75%'}
 		/>
 	);
