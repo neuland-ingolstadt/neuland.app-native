@@ -41,6 +41,7 @@ interface PlatformIconProps {
 	web: {
 		name: LucideIcon;
 		size: number;
+		variant?: 'filled' | 'outlined';
 	};
 	style?: TextStyle;
 }
@@ -82,6 +83,8 @@ const PlatformIcon = ({
 					size={web.size}
 					color={style?.color ?? theme.colors.primary}
 					style={style as ViewStyle}
+					fill={web.variant === 'filled' ? 'currentColor' : 'none'}
+					fillRule="evenodd"
 				/>
 			);
 		}
@@ -119,7 +122,6 @@ const PlatformIcon = ({
 	return (
 		<Text
 			style={{
-				...styles.androidIcon,
 				...(android.variant === 'outlined'
 					? styles.androidIconOutlined
 					: styles.androidIconFilled),
@@ -150,9 +152,6 @@ const communityIcons: string[] = ['instagram', 'github'];
 export type CommunityIcon = 'instagram' | 'github' | 'map-marker';
 
 const stylesheet = createStyleSheet(() => ({
-	androidIcon: {
-		paddingTop: 3
-	},
 	androidIconFilled: {
 		fontFamily: 'MaterialSymbolsRoundedFill'
 	},
