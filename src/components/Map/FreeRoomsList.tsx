@@ -3,9 +3,10 @@ import { formatFriendlyTime } from '@/utils/date-utils';
 import { useRouter } from 'expo-router';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import Divider from '../Universal/Divider';
 
 interface FreeRoomsListProps {

@@ -9,9 +9,10 @@ import type { FeatureCollection } from 'geojson';
 import type { Position } from 'geojson';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
+import { Pressable } from 'react-native-gesture-handler';
 import Divider from '../Universal/Divider';
 import PlatformIcon from '../Universal/Icon';
 import LoadingIndicator from '../Universal/LoadingIndicator';
