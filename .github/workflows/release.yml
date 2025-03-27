@@ -85,6 +85,7 @@ jobs:
       - name: Build with EAS
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_PUBLIC_GIT_COMMIT_HASH: ${{ github.sha }}
         run: eas build --platform android --profile production --non-interactive --local --output neuland-next.aab
 
       - name: Upload AAB artifact for next job

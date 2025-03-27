@@ -48,11 +48,33 @@ export default function About(): React.JSX.Element {
 		Application.nativeApplicationVersion ??
 		Constants.expoConfig?.version ??
 		'unknown';
-	const versionWithCode = `${version} (${Application.nativeBuildVersion ?? '0'})`;
-	const [displayVersion, setDisplayVersion] = useState(version);
+	const commitHash = process.env.EXPO_PUBLIC_GIT_COMMIT_HASH;
+	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`;
+	const commitHashShort = commitHash?.substring(0, 7);
 
 	const toggleVersion = (): void => {
-		setDisplayVersion((prev) => (prev === version ? versionWithCode : version));
+		let message = `Version: ${version}\nBuild: ${Application.nativeBuildVersion ?? '0'}`;
+		const buttons = [];
+		if (commitHash) {
+			message += `\nCommit: ${commitHashShort}`;
+			buttons.push({
+				text: 'View Commit',
+				onPress: () => {
+					void Linking.openURL(commitUrl);
+				}
+			});
+		}
+		buttons.push({ text: 'OK', style: 'cancel' as const });
+
+		if (Platform.OS === 'web') {
+			const confirmMessage = `Version Info\n${message}`;
+			if (window.confirm(confirmMessage) && commitHash) {
+				void Linking.openURL(commitUrl);
+			}
+			return;
+		}
+
+		Alert.alert('Version Info', message, buttons);
 	};
 
 	const sections: FormListSections[] = [
@@ -61,7 +83,7 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: 'Version',
-					value: displayVersion,
+					value: version,
 					onPress: toggleVersion,
 					selectable: true
 				},
@@ -191,69 +213,67 @@ export default function About(): React.JSX.Element {
 		void Linking.openURL(url);
 	};
 	return (
-		<>
-			<ScrollView contentContainerStyle={styles.contentContainer}>
-				<View style={styles.container}>
-					<View style={styles.logoContainer}>
-						<Pressable
-							onPress={() => {
-								if (Platform.OS !== 'web') {
-									void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-								}
-								handlePress();
-							}}
-						>
-							<View style={styles.logoIcon}>
-								<Image
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
-									source={require('@/assets/appIcons/default.png')}
-									alt="Neuland Next Logo"
-									style={styles.logoImage}
-								/>
-							</View>
-						</Pressable>
+		<ScrollView contentContainerStyle={styles.contentContainer}>
+			<View style={styles.container}>
+				<View style={styles.logoContainer}>
+					<Pressable
+						onPress={() => {
+							if (Platform.OS !== 'web') {
+								void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+							}
+							handlePress();
+						}}
+					>
+						<View style={styles.logoIcon}>
+							<Image
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
+								source={require('@/assets/appIcons/default.png')}
+								alt="Neuland Next Logo"
+								style={styles.logoImage}
+							/>
+						</View>
+					</Pressable>
 
-						<View style={styles.logoTextContainer}>
-							<View style={styles.appTitleContainer}>
-								<Text style={styles.header}>{'Neuland Next'}</Text>
-								<Text style={styles.text}>{'Native Version'}</Text>
-							</View>
-							<View>
-								<Text style={styles.subHeader}>
-									{t('about.header.developed')}
+					<View style={styles.logoTextContainer}>
+						<View style={styles.appTitleContainer}>
+							<Text style={styles.header}>{'Neuland Next'}</Text>
+							<Text style={styles.text}>{'Native Version'}</Text>
+						</View>
+						<View>
+							<Text style={styles.subHeader}>
+								{t('about.header.developed')}
+							</Text>
+							<Pressable onPress={handleWebsitePress}>
+								<Text style={styles.text} onPress={handleContributorsPress}>
+									{'Neuland Ingolstadt e.V.'}
 								</Text>
-								<Pressable onPress={handleWebsitePress}>
-									<Text style={styles.text} onPress={handleContributorsPress}>
-										{'Neuland Ingolstadt e.V.'}
-									</Text>
-								</Pressable>
-							</View>
+							</Pressable>
 						</View>
 					</View>
 				</View>
+			</View>
 
-				<View style={styles.formlistContainer}>
-					<FormList sections={sections} />
-				</View>
-				<SectionView
-					title={t('about.analytics.title')}
-					footer={t('about.analytics.message')}
-					link={{
-						text: t('about.analytics.link'),
-						destination: () => {
-							void Linking.openURL(`${PRIVACY_URL}#Analytics`);
-						}
-					}}
-				>
-					<SingleSectionPicker
-						title={t('about.analytics.toggle')}
-						selectedItem={analyticsAllowed ?? false}
-						action={setAnalyticsAllowed}
-						state={analyticsAllowed ?? false}
-					/>
-				</SectionView>
-			</ScrollView>
-		</>
+			<View style={styles.formlistContainer}>
+				<FormList sections={sections} />
+			</View>
+			<SectionView
+				title={t('about.analytics.title')}
+				footer={t('about.analytics.message')}
+				link={{
+					text: t('about.analytics.link'),
+					destination: () => {
+						void Linking.openURL(`${PRIVACY_URL}#Analytics`);
+					}
+				}}
+			>
+				<SingleSectionPicker
+					title={t('about.analytics.toggle')}
+					selectedItem={analyticsAllowed ?? false}
+					action={setAnalyticsAllowed}
+					state={analyticsAllowed ?? false}
+				/>
+			</SectionView>
+		</ScrollView>
 	);
 }
 
