@@ -188,24 +188,35 @@ export const MealEntry = memo(
 												<LinearGradient
 													key={index}
 													style={styles.flagsBox}
-													colors={
-														flag.isVeg
-															? [
-																	theme.colors.vegGreen,
-																	Color(theme.colors.vegGreen)
-																		.lighten(0.15)
-																		.hex()
-																]
-															: [
-																	theme.colors.labelBackground,
-																	Color(theme.colors.labelBackground)
-																		.lighten(0.15)
-																		.hex()
-																]
-													}
+													colors={[
+														theme.colors.labelBackground,
+														Color(theme.colors.labelBackground)
+															.lighten(0.15)
+															.hex()
+													]}
 													start={[0, 0]}
 													end={[1, 0]}
 												>
+													{flag.isVeg && (
+														<PlatformIcon
+															ios={{
+																name: 'leaf.fill',
+																size: 13
+															}}
+															android={{
+																name: 'eco',
+																size: 13,
+																variant: 'filled'
+															}}
+															web={{
+																name: 'Leaf',
+																size: 13,
+																variant: 'filled'
+															}}
+															style={styles.vegIcon}
+														/>
+													)}
+
 													<Text style={styles.flagsText}>{flag.name}</Text>
 												</LinearGradient>
 											)
@@ -314,6 +325,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		color: theme.colors.notification,
 		marginRight: 4
+	},
+	vegIcon: {
+		alignSelf: 'center',
+		color: theme.colors.vegGreen,
+		marginLeft: 5
 	},
 	innerContainer: {
 		alignItems: 'flex-start',
