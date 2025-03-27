@@ -6,7 +6,7 @@ import type {
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
-import { useCallback, useContext, useMemo } from 'react'
+import { memo, useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -146,4 +146,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }))
 
-export default AnnouncementCard
+export default memo(AnnouncementCard)
