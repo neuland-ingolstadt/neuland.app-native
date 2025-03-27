@@ -1,13 +1,13 @@
-import API from '@/api/authenticated-api';
-import ErrorView from '@/components/Error/ErrorView';
-import Divider from '@/components/Universal/Divider';
-import PlatformIcon from '@/components/Universal/Icon';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { useRefreshByUser } from '@/hooks';
-import { networkError } from '@/utils/api-utils';
-import { formatFriendlyDate } from '@/utils/date-utils';
-import { useQuery } from '@tanstack/react-query';
-import type React from 'react';
+import API from '@/api/authenticated-api'
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import { networkError } from '@/utils/api-utils'
+import { formatFriendlyDate } from '@/utils/date-utils'
+import { useQuery } from '@tanstack/react-query'
+import type React from 'react'
 import {
 	FlatList,
 	Image,
@@ -18,19 +18,19 @@ import {
 	StyleSheet,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function NewsScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
 		useQuery({
 			queryKey: ['thiNews'],
 			queryFn: async () => await API.getThiNews(),
 			staleTime: 1000 * 60 * 10, // 10 minutes
 			gcTime: 1000 * 60 * 60 * 24 // 24 hours
-		});
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
+		})
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	return (
 		<View>
@@ -43,7 +43,7 @@ export default function NewsScreen(): React.JSX.Element {
 					<ErrorView
 						title={error.message}
 						onRefresh={() => {
-							void refetchByUser();
+							void refetchByUser()
 						}}
 						refreshing={false}
 					/>
@@ -53,7 +53,7 @@ export default function NewsScreen(): React.JSX.Element {
 					<ErrorView
 						title={networkError}
 						onRefresh={() => {
-							void refetchByUser();
+							void refetchByUser()
 						}}
 						refreshing={false}
 					/>
@@ -66,7 +66,7 @@ export default function NewsScreen(): React.JSX.Element {
 							<RefreshControl
 								refreshing={isRefetchingByUser}
 								onRefresh={() => {
-									void refetchByUser();
+									void refetchByUser()
 								}}
 							/>
 						) : undefined
@@ -81,7 +81,7 @@ export default function NewsScreen(): React.JSX.Element {
 							<Pressable
 								style={styles.sectionBox}
 								onPress={() => {
-									void Linking.openURL(item.href);
+									void Linking.openURL(item.href)
 								}}
 							>
 								<Image
@@ -119,7 +119,7 @@ export default function NewsScreen(): React.JSX.Element {
 				/>
 			) : null}
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -189,4 +189,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginVertical: 8,
 		textAlign: 'left'
 	}
-}));
+}))

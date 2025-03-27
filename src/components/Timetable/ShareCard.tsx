@@ -1,31 +1,31 @@
-import LogoSVG from '@/components/Flow/svgs/logo';
-import PlatformIcon from '@/components/Universal/Icon';
-import type { FriendlyTimetableEntry } from '@/types/utils';
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils';
-import moment from 'moment';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import LogoSVG from '@/components/Flow/svgs/logo'
+import PlatformIcon from '@/components/Universal/Icon'
+import type { FriendlyTimetableEntry } from '@/types/utils'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import moment from 'moment'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import DetailsBody from './DetailsBody';
-import DetailsRow from './DetailsRow';
-import DetailsSymbol from './DetailsSymbol';
-import Separator from './Separator';
+import DetailsBody from './DetailsBody'
+import DetailsRow from './DetailsRow'
+import DetailsSymbol from './DetailsSymbol'
+import Separator from './Separator'
 
 interface ShareCardProps {
-	event: FriendlyTimetableEntry;
+	event: FriendlyTimetableEntry
 }
 
 export default function ShareCard({
 	event
 }: ShareCardProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
-	const { t } = useTranslation('timetable');
+	const { t } = useTranslation('timetable')
 
-	const startDate = new Date(event.startDate);
-	const endDate = new Date(event.endDate);
+	const startDate = new Date(event.startDate)
+	const endDate = new Date(event.endDate)
 
 	return (
 		<View style={styles.wrapper}>
@@ -166,7 +166,7 @@ export default function ShareCard({
 				<Text style={styles.waterMarkText}>{'Neuland Next'}</Text>
 			</View>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -235,4 +235,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingRight: 24,
 		paddingTop: 24
 	}
-}));
+}))

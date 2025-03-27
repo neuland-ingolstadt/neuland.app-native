@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC } from 'react'
 import {
 	type ColorValue,
 	type DimensionValue,
@@ -6,14 +6,14 @@ import {
 	Platform,
 	StyleSheet,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface DividerProps {
-	width?: DimensionValue;
-	color?: ColorValue;
-	position?: FlexAlignType;
-	iosPaddingLeft?: number;
+	width?: DimensionValue
+	color?: ColorValue
+	position?: FlexAlignType
+	iosPaddingLeft?: number
 }
 
 /**
@@ -29,22 +29,22 @@ const Divider: FC<DividerProps> = ({
 	position,
 	iosPaddingLeft
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<View style={styles.container({ position, iosPaddingLeft })}>
 			<View style={styles.line({ width, color })} />
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: ({
 		position,
 		iosPaddingLeft
 	}: {
-		position?: FlexAlignType;
-		iosPaddingLeft?: number;
+		position?: FlexAlignType
+		iosPaddingLeft?: number
 	}) => ({
 		width: '100%',
 		alignSelf: position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
@@ -54,13 +54,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		width,
 		color
 	}: {
-		width?: DimensionValue;
-		color?: ColorValue;
+		width?: DimensionValue
+		color?: ColorValue
 	}) => ({
 		width: width ?? '100%',
 		borderBottomColor: color ?? theme.colors.labelTertiaryColor,
 		borderBottomWidth: Platform.OS !== 'web' ? StyleSheet.hairlineWidth : 0.1
 	})
-}));
+}))
 
-export default Divider;
+export default Divider

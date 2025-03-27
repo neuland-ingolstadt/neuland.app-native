@@ -1,22 +1,22 @@
 // BaseCard Component to show the card on the dashboard to navigate to the corresponding page
-import { USER_GUEST } from '@/data/constants';
-import type React from 'react';
-import { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { USER_GUEST } from '@/data/constants'
+import type React from 'react'
+import { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { type RelativePathString, router } from 'expo-router';
-import PlatformIcon from '../Universal/Icon';
-import { DashboardContext, UserKindContext } from '../contexts';
-import { cardIcons } from '../icons';
-import { CardContextMenu } from './CardContextMenu';
+import { type RelativePathString, router } from 'expo-router'
+import PlatformIcon from '../Universal/Icon'
+import { DashboardContext, UserKindContext } from '../contexts'
+import { cardIcons } from '../icons'
+import { CardContextMenu } from './CardContextMenu'
 
 interface BaseCardProps {
-	title: string;
-	onPressRoute?: string;
-	removable?: boolean;
-	children?: React.ReactNode;
+	title: string
+	onPressRoute?: string
+	removable?: boolean
+	children?: React.ReactNode
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
@@ -25,14 +25,14 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	children,
 	removable = true // ugly but more efficient than iterating over all cards
 }) => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('navigation');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('navigation')
 
-	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext);
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
+	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
 
-	const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns'];
-	const dynamicTitle = foodKeys.includes(title) ? 'food' : title;
+	const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
+	const dynamicTitle = foodKeys.includes(title) ? 'food' : title
 
 	const cardContent = (
 		<View style={styles.card}>
@@ -76,7 +76,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 			</View>
 			{children != null && <>{children}</>}
 		</View>
-	);
+	)
 
 	return (
 		<CardContextMenu
@@ -85,7 +85,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 					disabled={onPressRoute == null}
 					onPress={() => {
 						if (onPressRoute != null) {
-							router.navigate(onPressRoute as RelativePathString);
+							router.navigate(onPressRoute as RelativePathString)
 						}
 					}}
 					delayLongPress={300}
@@ -102,8 +102,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
 			resetOrder={resetOrder}
 			userKind={userKind}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	card: {
@@ -129,6 +129,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		gap: 10
 	}
-}));
+}))
 
-export default BaseCard;
+export default BaseCard

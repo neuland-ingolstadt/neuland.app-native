@@ -1,25 +1,25 @@
-import { getFragmentData } from '@/__generated__/gql';
-import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql';
-import NeulandAPI from '@/api/neuland-api';
-import allergenMap from '@/data/allergens.json';
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
-import flapMap from '@/data/mensa-flags.json';
-import type { FoodLanguage } from '@/hooks/useFoodFilterStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Food, Meal, Name } from '@/types/neuland-api';
-import type { Labels, Prices } from '@/types/utils';
-import { trackEvent } from '@aptabase/react-native';
-import type { TFunction, i18n } from 'i18next';
-import { Share } from 'react-native';
+import { getFragmentData } from '@/__generated__/gql'
+import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
+import NeulandAPI from '@/api/neuland-api'
+import allergenMap from '@/data/allergens.json'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import flapMap from '@/data/mensa-flags.json'
+import type { FoodLanguage } from '@/hooks/useFoodFilterStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Food, Meal, Name } from '@/types/neuland-api'
+import type { Labels, Prices } from '@/types/utils'
+import { trackEvent } from '@aptabase/react-native'
+import type { TFunction, i18n } from 'i18next'
+import { Share } from 'react-native'
 
-import { formatISODate } from './date-utils';
+import { formatISODate } from './date-utils'
 
 export const humanLocations = {
 	IngolstadtMensa: 'Mensa Ingolstadt',
 	NeuburgMensa: 'Mensa Neuburg',
 	Reimanns: 'Reimanns',
 	Canisius: 'Canisius Konvikt'
-};
+}
 
 /**
  * Fetches and parses the meal plan
@@ -30,36 +30,36 @@ export async function loadFoodEntries(
 	restaurants: string[],
 	includeStatic = false
 ): Promise<Food[]> {
-	const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food;
-	const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData];
+	const foodData = (await NeulandAPI.getFoodPlan(restaurants)).food
+	const data = [getFragmentData(FoodFieldsFragmentDoc, foodData).foodData]
 
 	// create day entries for next 7 days (current and next week including the weekend) starting from monday
 	let days: Date[] = Array.from({ length: 7 }, (_, i) => {
-		const date = new Date();
-		date.setDate(date.getDate() + i);
-		return date;
-	});
+		const date = new Date()
+		date.setDate(date.getDate() + i)
+		return date
+	})
 
 	// remove weekend
-	days = days.filter((x) => x.getDay() !== 0 && x.getDay() !== 6);
+	days = days.filter((x) => x.getDay() !== 0 && x.getDay() !== 6)
 
 	// map to ISO date
-	const isoDates = days.map((x) => formatISODate(x));
+	const isoDates = days.map((x) => formatISODate(x))
 	return isoDates.map((day) => {
 		const dayEntries: Meal[] = data.flatMap(
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			(r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
-		) as Meal[];
+		) as Meal[]
 		// remove static meals if includeStatic is false. otherwise return all meals
 		const filteredDayEntries = dayEntries.filter(
 			(meal) => includeStatic || !meal.static
-		);
+		)
 		const x = {
 			timestamp: day,
 			meals: filteredDayEntries
-		};
-		return x;
-	});
+		}
+		return x
+	})
 }
 
 /**
@@ -75,12 +75,12 @@ export function convertRelevantAllergens(
 ): string {
 	const relevantAllergens = allergens?.filter((allergen) =>
 		selectedAllergens?.includes(allergen)
-	);
+	)
 	const convertedAllergens = relevantAllergens?.map(
 		(allergen) =>
 			allergenMap[allergen as keyof typeof allergenMap][language as LanguageKey]
-	);
-	return convertedAllergens?.join(' • ');
+	)
+	return convertedAllergens?.join(' • ')
 }
 
 /**
@@ -95,13 +95,13 @@ export function convertRelevantFlags(
 	selectedFlags: string[],
 	language: string
 ): { name: string; isVeg: boolean }[] {
-	const relevantFlags = flags?.filter((flag) => selectedFlags?.includes(flag));
+	const relevantFlags = flags?.filter((flag) => selectedFlags?.includes(flag))
 	return relevantFlags?.map((flag) => ({
 		isVeg:
 			(flag as keyof typeof flapMap) === 'veg' ||
 			(flag as keyof typeof flapMap) === 'V',
 		name: flapMap[flag as keyof typeof flapMap][language as LanguageKey]
-	}));
+	}))
 }
 
 /**
@@ -110,7 +110,7 @@ export function convertRelevantFlags(
  * @returns {string} Formatted price string
  */
 export function formatPrice(price?: number): string {
-	return price != null ? `${price.toFixed(2)} €` : '';
+	return price != null ? `${price.toFixed(2)} €` : ''
 }
 
 /**
@@ -124,8 +124,8 @@ export function getUserSpecificPrice(meal: Meal, userKind: string): string {
 		guest: meal.prices.guest,
 		employee: meal.prices.employee,
 		student: meal.prices.student
-	};
-	return formatPrice(prices[userKind]);
+	}
+	return formatPrice(prices[userKind])
 }
 
 /**
@@ -142,8 +142,8 @@ export function getUserSpecificLabel(
 		[USER_GUEST]: t('price.guests', { ns: 'food' }),
 		[USER_EMPLOYEE]: t('price.employees', { ns: 'food' }),
 		[USER_STUDENT]: t('price.students', { ns: 'food' })
-	};
-	return labels[userKind];
+	}
+	return labels[userKind]
 }
 
 /**
@@ -159,9 +159,9 @@ export function mealName(
 	i18nLang: LanguageKey
 ): string {
 	if (foodLang !== 'default') {
-		return mealName[foodLang];
+		return mealName[foodLang]
 	}
-	return mealName[i18nLang];
+	return mealName[i18nLang]
 }
 
 /**
@@ -175,15 +175,15 @@ export function userMealRating(
 	preferencesSelection: string[]
 ): number {
 	if (meal.allergens?.some((x) => allergenSelection.includes(x)) ?? false) {
-		return -1;
+		return -1
 	}
 	if (meal.flags?.some((x) => preferencesSelection.includes(x)) ?? false) {
-		return 2;
+		return 2
 	}
 	if (meal.allergens == null && allergenSelection !== null) {
-		return 0;
+		return 0
 	}
-	return 1;
+	return 1
 }
 
 export function shareMeal(
@@ -193,7 +193,7 @@ export function shareMeal(
 ): void {
 	trackEvent('Share', {
 		type: 'meal'
-	});
+	})
 	void Share.share({
 		message: i18n.t('details.share.message', {
 			ns: 'food',
@@ -206,5 +206,5 @@ export function shareMeal(
 
 			id: meal?.id
 		})
-	});
+	})
 }

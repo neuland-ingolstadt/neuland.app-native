@@ -1,16 +1,16 @@
-import Divider from '@/components/Universal/Divider';
-import PlatformIcon from '@/components/Universal/Icon';
-import type { Card, ExtendedCard } from '@/components/all-cards';
-import { DashboardContext, UserKindContext } from '@/components/contexts';
-import { cardIcons } from '@/components/icons';
-import { getDefaultDashboardOrder } from '@/contexts/dashboard';
-import { USER_GUEST } from '@/data/constants';
-import { arraysEqual } from '@/utils/app-utils';
-import { toast } from 'burnt';
-import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import type { Card, ExtendedCard } from '@/components/all-cards'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { cardIcons } from '@/components/icons'
+import { getDefaultDashboardOrder } from '@/contexts/dashboard'
+import { USER_GUEST } from '@/data/constants'
+import { arraysEqual } from '@/utils/app-utils'
+import { toast } from 'burnt'
+import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Dimensions,
 	LayoutAnimation,
@@ -18,16 +18,16 @@ import {
 	Pressable,
 	Text,
 	View
-} from 'react-native';
-import { DragSortableView } from 'react-native-drag-sort';
-import { ScrollView } from 'react-native-gesture-handler';
-import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { DragSortableView } from 'react-native-drag-sort'
+import { ScrollView } from 'react-native-gesture-handler'
+import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window')
 
 export default function DashboardEdit(): React.JSX.Element {
-	const childrenHeight = 48;
+	const childrenHeight = 48
 
 	const {
 		shownDashboardEntries,
@@ -36,15 +36,15 @@ export default function DashboardEdit(): React.JSX.Element {
 		bringBackDashboardEntry,
 		resetOrder,
 		updateDashboardOrder
-	} = useContext(DashboardContext);
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation(['settings']);
-	const [draggedId, setDraggedId] = useState<number | null>(null);
-	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true);
-	const [unavailableCards, setUnavailableCards] = useState<Card[]>([]);
+	} = useContext(DashboardContext)
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation(['settings'])
+	const [draggedId, setDraggedId] = useState<number | null>(null)
+	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
+	const [unavailableCards, setUnavailableCards] = useState<Card[]>([])
 	const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
-		useState<Card[]>([]);
+		useState<Card[]>([])
 
 	// add translation to shownDashboardEntries with new key transText
 	const transShownDashboardEntries = shownDashboardEntries.map((item) => {
@@ -55,39 +55,38 @@ export default function DashboardEdit(): React.JSX.Element {
 			text: t(`cards.titles.${item.key}`, {
 				ns: 'navigation'
 			}) as string
-		};
-	});
+		}
+	})
 
-	const newHoveredKeyShared = useSharedValue(-1);
+	const newHoveredKeyShared = useSharedValue(-1)
 
 	const updateHoveredKeyWorklet = (newKey: number): void => {
-		'worklet';
+		'worklet'
 		if (newHoveredKeyShared.value !== newKey) {
 			if (Platform.OS === 'ios' && newHoveredKeyShared.value !== -1) {
-				runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light);
+				runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
 			}
-			newHoveredKeyShared.value = newKey;
+			newHoveredKeyShared.value = newKey
 		}
-	};
+	}
 
 	const resetHoveredKey = (): void => {
-		newHoveredKeyShared.value = -1;
-	};
+		newHoveredKeyShared.value = -1
+	}
 
 	useEffect(() => {
 		setFilteredHiddenDashboardEntries(
 			hiddenDashboardEntries.concat(unavailableCards)
-		);
-	}, [hiddenDashboardEntries, userKind, unavailableCards]);
+		)
+	}, [hiddenDashboardEntries, userKind, unavailableCards])
 
 	const renderItem = (params: ExtendedCard): React.JSX.Element => {
 		const onPressDelete = (): void => {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-			hideDashboardEntry(params.key);
-		};
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+			hideDashboardEntry(params.key)
+		}
 		const isLast =
-			shownDashboardEntries[shownDashboardEntries.length - 1].key ===
-			params.key;
+			shownDashboardEntries[shownDashboardEntries.length - 1].key === params.key
 
 		return (
 			<RowItem
@@ -99,32 +98,32 @@ export default function DashboardEdit(): React.JSX.Element {
 					draggedId === transShownDashboardEntries.indexOf(params)
 				}
 			/>
-		);
-	};
+		)
+	}
 
 	const handleRestore = useCallback(
 		(item: Card) => {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-			bringBackDashboardEntry(item.key);
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+			bringBackDashboardEntry(item.key)
 		},
 		[bringBackDashboardEntry]
-	);
+	)
 
 	const handleReset = useCallback(() => {
-		resetOrder(userKind);
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		resetOrder(userKind)
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 		if (Platform.OS === 'ios') {
-			void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+			void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 		}
-	}, [resetOrder]);
+	}, [resetOrder])
 
 	useEffect(() => {
-		const { hidden, shown } = getDefaultDashboardOrder(userKind);
-		const defaultHidden = hidden.map((item) => item);
-		const defaultShown = shown.map((item) => item);
+		const { hidden, shown } = getDefaultDashboardOrder(userKind)
+		const defaultHidden = hidden.map((item) => item)
+		const defaultShown = shown.map((item) => item)
 
 		if (shownDashboardEntries == null) {
-			return;
+			return
 		}
 		setHasUserDefaultOrder(
 			arraysEqual(
@@ -137,11 +136,11 @@ export default function DashboardEdit(): React.JSX.Element {
 					// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 					shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
 				)
-		);
-	}, [shownDashboardEntries, hiddenDashboardEntries, userKind]);
+		)
+	}, [shownDashboardEntries, hiddenDashboardEntries, userKind])
 
 	useEffect(() => {
-		const keys = getDefaultDashboardOrder(userKind).unavailable;
+		const keys = getDefaultDashboardOrder(userKind).unavailable
 		const cards = keys.map((key) => {
 			return {
 				key,
@@ -149,10 +148,10 @@ export default function DashboardEdit(): React.JSX.Element {
 				initial: [],
 				allowed: [],
 				card: () => <></>
-			};
-		});
-		setUnavailableCards(cards);
-	}, [userKind]);
+			}
+		})
+		setUnavailableCards(cards)
+	}, [userKind])
 
 	return (
 		<View>
@@ -167,7 +166,7 @@ export default function DashboardEdit(): React.JSX.Element {
 						<Pressable
 							style={[styles.card, styles.noteContainer]}
 							onPress={() => {
-								router.navigate('/login');
+								router.navigate('/login')
 							}}
 						>
 							<View style={styles.noteTextContainer}>
@@ -221,7 +220,7 @@ export default function DashboardEdit(): React.JSX.Element {
 										parentWidth={width}
 										renderItem={renderItem}
 										onDataChange={(data: Card[]) => {
-											updateDashboardOrder(data.map((x) => x.key));
+											updateDashboardOrder(data.map((x) => x.key))
 										}}
 										onClickItem={() => {
 											toast({
@@ -238,7 +237,7 @@ export default function DashboardEdit(): React.JSX.Element {
 														color: theme.colors.primary
 													}
 												}
-											});
+											})
 										}}
 										onDragging={(
 											_gestureState: unknown,
@@ -246,23 +245,23 @@ export default function DashboardEdit(): React.JSX.Element {
 											_top: number,
 											moveToIndex: number
 										) => {
-											runOnUI(updateHoveredKeyWorklet)(moveToIndex);
+											runOnUI(updateHoveredKeyWorklet)(moveToIndex)
 										}}
 										onDragStart={(index: number) => {
-											setDraggedId(index);
+											setDraggedId(index)
 											if (Platform.OS === 'ios') {
 												void Haptics.impactAsync(
 													Haptics.ImpactFeedbackStyle.Rigid
-												);
+												)
 											}
 										}}
 										onDragEnd={() => {
-											resetHoveredKey();
-											setDraggedId(null);
+											resetHoveredKey()
+											setDraggedId(null)
 											if (Platform.OS === 'ios') {
 												void Haptics.impactAsync(
 													Haptics.ImpactFeedbackStyle.Soft
-												);
+												)
 											}
 										}}
 										maxScale={1.05}
@@ -288,7 +287,7 @@ export default function DashboardEdit(): React.JSX.Element {
 											<Pressable
 												disabled={!item.removable}
 												onPress={() => {
-													handleRestore(item);
+													handleRestore(item)
 												}}
 												hitSlop={10}
 												style={({ pressed }) => [
@@ -369,7 +368,7 @@ export default function DashboardEdit(): React.JSX.Element {
 												<Divider width={'100%'} />
 											)}
 										</React.Fragment>
-									);
+									)
 								})}
 						</View>
 					</View>
@@ -386,14 +385,14 @@ export default function DashboardEdit(): React.JSX.Element {
 				</View>
 			</ScrollView>
 		</View>
-	);
+	)
 }
 
 interface RowItemProps {
-	item: ExtendedCard;
-	onPressDelete: () => void;
-	isLast: boolean;
-	isDragged: boolean;
+	item: ExtendedCard
+	onPressDelete: () => void
+	isLast: boolean
+	isDragged: boolean
 }
 
 function RowItem({
@@ -402,8 +401,8 @@ function RowItem({
 	isLast,
 	isDragged
 }: RowItemProps): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const bottomWidth = isLast || isDragged ? 0 : 1;
+	const { styles, theme } = useStyles(stylesheet)
+	const bottomWidth = isLast || isDragged ? 0 : 1
 
 	return (
 		<View>
@@ -476,7 +475,7 @@ function RowItem({
 				</Pressable>
 			</View>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -585,4 +584,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	wrapper: {
 		gap: 14
 	}
-}));
+}))

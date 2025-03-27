@@ -1,43 +1,43 @@
-import { useAppState, useOnlineManager } from '@/hooks';
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import { useSessionStore } from '@/hooks/useSessionStore';
-import i18n from '@/localization/i18n';
-import { syncStoragePersister } from '@/utils/storage';
-import { trackEvent } from '@aptabase/react-native';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { useAppState, useOnlineManager } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
+import i18n from '@/localization/i18n'
+import { syncStoragePersister } from '@/utils/storage'
+import { trackEvent } from '@aptabase/react-native'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
 	DarkTheme,
 	DefaultTheme,
 	ThemeProvider
-} from '@react-navigation/native';
-import { QueryClient, focusManager } from '@tanstack/react-query';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { Toaster } from 'burnt/web';
-import { useSegments } from 'expo-router';
-import type React from 'react';
-import { useEffect } from 'react';
+} from '@react-navigation/native'
+import { QueryClient, focusManager } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { Toaster } from 'burnt/web'
+import { useSegments } from 'expo-router'
+import type React from 'react'
+import { useEffect } from 'react'
 import {
 	type AppStateStatus,
 	Appearance,
 	Platform,
 	StyleSheet
-} from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles';
+} from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
-import { useDashboard, useUserKind } from '../contexts';
-import { accentColors } from './colors';
-import { DashboardContext, UserKindContext } from './contexts';
+import { useDashboard, useUserKind } from '../contexts'
+import { accentColors } from './colors'
+import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
-	children: React.ReactNode;
+	children: React.ReactNode
 }
 
 function onAppStateChange(status: AppStateStatus): void {
 	// React Query already supports in web browser refetch on window focus by default
 	if (Platform.OS !== 'web') {
-		focusManager.setFocused(status === 'active');
+		focusManager.setFocused(status === 'active')
 	}
 }
 
@@ -47,7 +47,7 @@ export const queryClient = new QueryClient({
 			retry: 2
 		}
 	}
-});
+})
 
 /**
  * Provider component that wraps the entire app and provides context for theme, user kind, and food filter.
@@ -58,152 +58,152 @@ export const queryClient = new QueryClient({
 export default function Provider({
 	children
 }: ProviderProps): React.JSX.Element {
-	const userKind = useUserKind();
-	const dashboard = useDashboard();
-	const segments = useSegments();
+	const userKind = useUserKind()
+	const dashboard = useDashboard()
+	const segments = useSegments()
 
-	useOnlineManager();
-	useAppState(onAppStateChange);
-	const theme = usePreferencesStore((state) => state.theme);
-	const accentColor = usePreferencesStore((state) => state.accentColor);
-	const timetableMode = usePreferencesStore((state) => state.timetableMode);
-	const appIcon = usePreferencesStore((state) => state.appIcon);
+	useOnlineManager()
+	useAppState(onAppStateChange)
+	const theme = usePreferencesStore((state) => state.theme)
+	const accentColor = usePreferencesStore((state) => state.accentColor)
+	const timetableMode = usePreferencesStore((state) => state.timetableMode)
+	const appIcon = usePreferencesStore((state) => state.appIcon)
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants
-	);
+	)
 	const analyticsInitialized = useSessionStore(
 		(state) => state.analyticsInitialized
-	);
-	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage);
+	)
+	const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
 
 	useEffect(() => {
 		// This effect uses segments instead of usePathname which resolves some issues with the router.
 		if (!analyticsInitialized || !Array.isArray(segments)) {
-			return;
+			return
 		}
 
-		const lastSegment = segments[segments.length - 1];
+		const lastSegment = segments[segments.length - 1]
 
 		const path =
 			typeof lastSegment === 'string'
 				? `/${lastSegment.replace(/[()]/g, '')}`
-				: '/';
+				: '/'
 
 		requestAnimationFrame(() => {
-			trackEvent('Route', { path });
-		});
-	}, [segments, analyticsInitialized]);
+			trackEvent('Route', { path })
+		})
+	}, [segments, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		trackEvent('AccentColor', {
 			color: accentColor
-		});
-	}, [accentColor, analyticsInitialized]);
+		})
+	}, [accentColor, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		trackEvent('Theme', {
 			theme: theme
-		});
-	}, [accentColor, analyticsInitialized]);
+		})
+	}, [accentColor, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		if (Platform.OS === 'ios') {
 			trackEvent('AppIcon', {
 				appIcon: appIcon ?? 'default'
-			});
+			})
 		}
-	}, [appIcon, analyticsInitialized]);
+	}, [appIcon, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized || userKind.userKind === undefined) {
-			return;
+			return
 		}
 		trackEvent('UserKind', {
 			userKind: userKind.userKind
-		});
-	}, [userKind.userKind, analyticsInitialized]);
+		})
+	}, [userKind.userKind, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 
 		trackEvent('SelectedRestaurants', {
 			selectedRestaurants: selectedRestaurants.join(',')
-		});
-	}, [selectedRestaurants, analyticsInitialized]);
+		})
+	}, [selectedRestaurants, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 
-		const entries: Record<string, string> = {};
+		const entries: Record<string, string> = {}
 		dashboard.shownDashboardEntries.forEach((entry, index) => {
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (entry !== undefined) {
-				entries[entry.key] = `Position ${(index + 1).toString()}`;
+				entries[entry.key] = `Position ${(index + 1).toString()}`
 			}
-		});
+		})
 
 		if (Object.keys(entries).length > 0) {
-			trackEvent('Dashboard', entries);
+			trackEvent('Dashboard', entries)
 		}
-	}, [dashboard.shownDashboardEntries, analyticsInitialized]);
+	}, [dashboard.shownDashboardEntries, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 
-		const entries: Record<string, string> = {};
+		const entries: Record<string, string> = {}
 
 		for (const entry of dashboard.hiddenDashboardEntries) {
 			if (entry !== undefined) {
-				entries[entry.key] = 'Card hidden';
+				entries[entry.key] = 'Card hidden'
 			}
 		}
 
 		if (Object.keys(entries).length > 0) {
-			trackEvent('Dashboard', entries);
+			trackEvent('Dashboard', entries)
 		}
-	}, [dashboard.hiddenDashboardEntries, analyticsInitialized]);
+	}, [dashboard.hiddenDashboardEntries, analyticsInitialized])
 
 	useEffect((): void => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		trackEvent('Language', {
 			food: foodLanguage
-		});
-	}, [foodLanguage, analyticsInitialized]);
+		})
+	}, [foodLanguage, analyticsInitialized])
 
 	useEffect((): void => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		trackEvent('Language', {
 			app: i18n.language
-		});
-	}, [i18n.language, analyticsInitialized]);
+		})
+	}, [i18n.language, analyticsInitialized])
 
 	useEffect((): void => {
 		if (!analyticsInitialized) {
-			return;
+			return
 		}
 		trackEvent('TimetableMode', {
 			timetableMode: timetableMode ?? 'list'
-		});
-	}, [timetableMode, analyticsInitialized]);
+		})
+	}, [timetableMode, analyticsInitialized])
 
 	/**
 	 * Returns the primary color for a given color scheme.
@@ -212,12 +212,12 @@ export default function Provider({
 	 */
 	const getPrimary = (scheme: 'light' | 'dark'): string => {
 		try {
-			const primary = accentColors[accentColor][scheme];
-			return primary;
+			const primary = accentColors[accentColor][scheme]
+			return primary
 		} catch {
-			return accentColors.blue[scheme];
+			return accentColors.blue[scheme]
 		}
-	};
+	}
 
 	useEffect(() => {
 		UnistylesRuntime.updateTheme('dark', (currentTheme) => ({
@@ -227,7 +227,7 @@ export default function Provider({
 				// @ts-expect-error cannot verify that the new primary color is valid
 				primary: getPrimary('dark')
 			}
-		}));
+		}))
 		UnistylesRuntime.updateTheme('light', (currentTheme) => ({
 			...currentTheme,
 			colors: {
@@ -235,28 +235,28 @@ export default function Provider({
 				// @ts-expect-error cannot verify that the new primary color is valid
 				primary: getPrimary('light')
 			}
-		}));
-	}, [accentColor]);
+		}))
+	}, [accentColor])
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
 			/* nothing to do here */
-		});
+		})
 
-		const isFixedTheme = theme === 'dark' || theme === 'light';
+		const isFixedTheme = theme === 'dark' || theme === 'light'
 		if (Platform.OS !== 'web') {
-			Appearance.setColorScheme(isFixedTheme ? theme : undefined);
+			Appearance.setColorScheme(isFixedTheme ? theme : undefined)
 		}
 
-		UnistylesRuntime.setAdaptiveThemes(!isFixedTheme);
+		UnistylesRuntime.setAdaptiveThemes(!isFixedTheme)
 		if (isFixedTheme) {
-			UnistylesRuntime.setTheme(theme);
+			UnistylesRuntime.setTheme(theme)
 		}
 
 		return () => {
-			subscription.remove();
-		};
-	}, [theme]);
+			subscription.remove()
+		}
+	}, [theme])
 
 	return (
 		<GestureHandlerRootView style={styles.container}>
@@ -282,11 +282,11 @@ export default function Provider({
 				</UnistylesProvider>
 			</PersistQueryClientProvider>
 		</GestureHandlerRootView>
-	);
+	)
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1
 	}
-});
+})

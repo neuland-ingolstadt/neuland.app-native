@@ -3174,4 +3174,4 @@ export type MaterialIcon =
 	| 'home_app_logo'
 	| 'flutter'
 	| 'google_wifi'
-	| 'brand_family';
+	| 'brand_family'

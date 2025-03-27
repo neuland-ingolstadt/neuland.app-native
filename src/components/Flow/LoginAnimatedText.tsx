@@ -1,22 +1,22 @@
-import { selectionAsync } from 'expo-haptics';
-import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { selectionAsync } from 'expo-haptics'
+import type React from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Text, TouchableWithoutFeedback, View } from 'react-native'
 import Animated, {
 	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 function shuffleArray(array: string[]): string[] {
 	for (let i = array.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]]; // Swap elements
+		const j = Math.floor(Math.random() * (i + 1))
+		;[array[i], array[j]] = [array[j], array[i]] // Swap elements
 	}
-	return array;
+	return array
 }
 
 const textsEN = shuffleArray([
@@ -30,7 +30,7 @@ const textsEN = shuffleArray([
 	'to view your lectureres',
 	'to view the latest THI news',
 	'to check your printer balance'
-]);
+])
 
 const textsDE = shuffleArray([
 	'um deine Noten zu sehen',
@@ -43,55 +43,55 @@ const textsDE = shuffleArray([
 	'um deine Dozenten zu sehen',
 	'um die THI-News anzuzeigen',
 	'um dein Drucker Guthaben zu prüfen'
-]);
-const shouldVibrate = Platform.OS === 'ios';
+])
+const shouldVibrate = Platform.OS === 'ios'
 
 function LoginAnimatedText(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t, i18n } = useTranslation('flow');
-	const [currentTextIndex, setCurrentTextIndex] = useState(0);
-	const currentTextIndexRef = useRef(currentTextIndex);
-	const textOpacity = useSharedValue(1);
-	const textTranslateY = useSharedValue(0);
-	const texts3 = i18n.language === 'de' ? textsDE : textsEN;
+	const { styles } = useStyles(stylesheet)
+	const { t, i18n } = useTranslation('flow')
+	const [currentTextIndex, setCurrentTextIndex] = useState(0)
+	const currentTextIndexRef = useRef(currentTextIndex)
+	const textOpacity = useSharedValue(1)
+	const textTranslateY = useSharedValue(0)
+	const texts3 = i18n.language === 'de' ? textsDE : textsEN
 
 	useEffect(() => {
-		currentTextIndexRef.current = currentTextIndex;
-	}, [currentTextIndex]);
+		currentTextIndexRef.current = currentTextIndex
+	}, [currentTextIndex])
 
 	const goToNextText = (): void => {
 		textOpacity.value = withTiming(0, { duration: 300 }, () => {
-			const nextIndex = (currentTextIndex + 1) % texts3.length;
-			runOnJS(setCurrentTextIndex)(nextIndex);
+			const nextIndex = (currentTextIndex + 1) % texts3.length
+			runOnJS(setCurrentTextIndex)(nextIndex)
 
-			textTranslateY.value = 5;
-			textOpacity.value = withTiming(1, { duration: 300 });
-			textTranslateY.value = withTiming(0, { duration: 600 });
-		});
-	};
+			textTranslateY.value = 5
+			textOpacity.value = withTiming(1, { duration: 300 })
+			textTranslateY.value = withTiming(0, { duration: 600 })
+		})
+	}
 
 	useEffect(() => {
-		const interval = setInterval(goToNextText, 3500);
+		const interval = setInterval(goToNextText, 3500)
 
 		return () => {
-			clearInterval(interval);
-		};
-	}, [currentTextIndex, texts3, textOpacity, textTranslateY]);
+			clearInterval(interval)
+		}
+	}, [currentTextIndex, texts3, textOpacity, textTranslateY])
 
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
 			opacity: textOpacity.value,
 			transform: [{ translateY: textTranslateY.value }]
-		};
-	});
+		}
+	})
 	return (
 		<View>
 			<Text style={styles.header1}>{t('login.title1')}</Text>
 			<TouchableWithoutFeedback
 				onPress={() => {
-					goToNextText();
+					goToNextText()
 					if (shouldVibrate) {
-						void selectionAsync();
+						void selectionAsync()
 					}
 				}}
 			>
@@ -102,10 +102,10 @@ function LoginAnimatedText(): React.JSX.Element {
 				</Animated.View>
 			</TouchableWithoutFeedback>
 		</View>
-	);
+	)
 }
 
-export default LoginAnimatedText;
+export default LoginAnimatedText
 
 const stylesheet = createStyleSheet((theme) => ({
 	header1: {
@@ -123,4 +123,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		minHeight: 30,
 		textAlign: 'left'
 	}
-}));
+}))

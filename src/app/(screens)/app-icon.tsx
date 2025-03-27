@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 /* eslint-disable @typescript-eslint/no-require-imports */
-import ErrorView from '@/components/Error/ErrorView';
-import Divider from '@/components/Universal/Divider';
-import PlatformIcon from '@/components/Universal/Icon';
-import SectionView from '@/components/Universal/SectionsView';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils';
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { capitalizeFirstLetter, lowercaseFirstLetter } from '@/utils/app-utils'
 import {
 	getAppIconName,
 	resetAppIcon,
 	setAlternateAppIcon,
 	supportsAlternateIcons
-} from 'expo-alternate-app-icons';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+} from 'expo-alternate-app-icons'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Image,
 	type ImageProps,
@@ -22,10 +22,10 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-let iconImages: Record<string, ImageProps> = {};
+let iconImages: Record<string, ImageProps> = {}
 
 iconImages = {
 	default: require('@/assets/appIcons/default.png'),
@@ -35,33 +35,33 @@ iconImages = {
 	rainbowNeon: require('@/assets/appIcons/rainbowNeon.png'),
 	rainbowMoonLight: require('@/assets/appIcons/rainbowMoonLight.png'),
 	cat: require('@/assets/appIcons/cat.png')
-};
+}
 
-export const appIcons = Object.keys(iconImages);
+export const appIcons = Object.keys(iconImages)
 
 export default function AppIconPicker(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
-	);
-	const { t } = useTranslation(['settings']);
+	)
+	const { t } = useTranslation(['settings'])
 	const [currentIcon, setCurrentIcon] = React.useState<string>(
 		lowercaseFirstLetter(getAppIconName() ?? 'default')
-	);
+	)
 	const categories: Record<string, string[]> = {
 		exclusive: ['cat', 'retro'],
 		default: ['default', 'modernGreen', 'modernPink'],
 		rainbow: ['rainbowNeon', 'rainbowMoonLight']
-	};
+	}
 
 	categories.exclusive = categories.exclusive.filter((icon) => {
 		if (unlockedAppIcons.includes(icon)) {
-			return true;
+			return true
 		}
-		return false;
-	});
+		return false
+	})
 
-	const support = supportsAlternateIcons;
+	const support = supportsAlternateIcons
 
 	if (!support) {
 		return (
@@ -70,7 +70,7 @@ export default function AppIconPicker(): React.JSX.Element {
 				title={t('appIcon.error.title')}
 				isCritical={false}
 			/>
-		);
+		)
 	}
 	return (
 		<>
@@ -92,16 +92,16 @@ export default function AppIconPicker(): React.JSX.Element {
 													onPress={async () => {
 														try {
 															if (icon === 'default') {
-																await resetAppIcon();
-																setCurrentIcon('default');
+																await resetAppIcon()
+																setCurrentIcon('default')
 															} else {
 																await setAlternateAppIcon(
 																	capitalizeFirstLetter(icon)
-																);
-																setCurrentIcon(icon);
+																)
+																setCurrentIcon(icon)
 															}
 														} catch (e) {
-															console.log(e);
+															console.log(e)
 														}
 													}}
 												>
@@ -139,7 +139,7 @@ export default function AppIconPicker(): React.JSX.Element {
 													<Divider iosPaddingLeft={110} />
 												)}
 											</React.Fragment>
-										);
+										)
 									})}
 									{key === 'exclusive' && categories.exclusive.length === 0 && (
 										<View style={styles.exclusiveContainer}>
@@ -150,12 +150,12 @@ export default function AppIconPicker(): React.JSX.Element {
 									)}
 								</View>
 							</SectionView>
-						);
+						)
 					})}
 				</View>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -209,4 +209,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderRadius: theme.radius.md,
 		justifyContent: 'center'
 	}
-}));
+}))

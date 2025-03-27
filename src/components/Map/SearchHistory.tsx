@@ -1,47 +1,47 @@
-import { MapContext } from '@/contexts/map';
-import type { SearchResult } from '@/types/map';
-import { selectionAsync } from 'expo-haptics';
-import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { LayoutAnimation, Platform, Text, View } from 'react-native';
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { MapContext } from '@/contexts/map'
+import type { SearchResult } from '@/types/map'
+import { selectionAsync } from 'expo-haptics'
+import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LayoutAnimation, Platform, Text, View } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import Divider from '../Universal/Divider';
-import PlatformIcon from '../Universal/Icon';
-import ResultRow from './SearchResultRow';
+import { Pressable } from 'react-native-gesture-handler'
+import Divider from '../Universal/Divider'
+import PlatformIcon from '../Universal/Icon'
+import ResultRow from './SearchResultRow'
 
 interface SearchHistoryProps {
-	handlePresentModalPress: () => void;
+	handlePresentModalPress: () => void
 }
 
 const SearchHistory: React.FC<SearchHistoryProps> = ({
 	handlePresentModalPress
 }) => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const { searchHistory, updateSearchHistory } = useContext(MapContext);
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const { searchHistory, updateSearchHistory } = useContext(MapContext)
 
 	function addToSearchHistory(newHistory: SearchResult): void {
 		const newSearchHistory = searchHistory.filter(
 			(history) => history.title !== newHistory.title
-		);
+		)
 
-		newSearchHistory.unshift(newHistory);
+		newSearchHistory.unshift(newHistory)
 
 		if (newSearchHistory.length > 5) {
-			newSearchHistory.length = 5;
+			newSearchHistory.length = 5
 		}
 
-		updateSearchHistory(newSearchHistory);
+		updateSearchHistory(newSearchHistory)
 	}
 
 	function deleteSearchHistoryItem(element: SearchResult): void {
 		const newSearchHistory = searchHistory.filter(
 			(history) => history.title !== element.title
-		);
-		updateSearchHistory(newSearchHistory);
+		)
+		updateSearchHistory(newSearchHistory)
 	}
 	return (
 		<>
@@ -61,11 +61,11 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
 										onPress={() => {
 											LayoutAnimation.configureNext(
 												LayoutAnimation.Presets.easeInEaseOut
-											);
+											)
 											if (Platform.OS === 'ios') {
-												void selectionAsync();
+												void selectionAsync()
 											}
-											deleteSearchHistoryItem(history);
+											deleteSearchHistoryItem(history)
 										}}
 									>
 										<PlatformIcon
@@ -103,10 +103,10 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
 				</View>
 			</View>
 		</>
-	);
-};
+	)
+}
 
-export default SearchHistory;
+export default SearchHistory
 
 const stylesheet = createStyleSheet((theme) => ({
 	historyRow: {
@@ -149,4 +149,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	toast: {
 		color: theme.colors.notification
 	}
-}));
+}))

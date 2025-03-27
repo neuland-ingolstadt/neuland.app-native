@@ -1,47 +1,47 @@
-import PlatformIcon from '@/components/Universal/Icon';
-import SectionView from '@/components/Universal/SectionsView';
-import { accentColors } from '@/components/colors';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import { getContrastColor } from '@/utils/ui-utils';
-import * as Haptics from 'expo-haptics';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
+import PlatformIcon from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import { accentColors } from '@/components/colors'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { getContrastColor } from '@/utils/ui-utils'
+import * as Haptics from 'expo-haptics'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 export default function Theme(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
-	const accentColor = usePreferencesStore((state) => state.accentColor);
-	const setAccentColor = usePreferencesStore((state) => state.setAccentColor);
-	const { t } = useTranslation(['settings']);
+	const accentColor = usePreferencesStore((state) => state.accentColor)
+	const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
+	const { t } = useTranslation(['settings'])
 
 	interface ColorBoxColor {
-		light: string;
-		dark: string;
+		light: string
+		dark: string
 	}
 
 	const ColorBox = ({
 		color,
 		code
 	}: {
-		color: ColorBoxColor;
-		code: string;
+		color: ColorBoxColor
+		code: string
 	}): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet);
+		const { styles } = useStyles(stylesheet)
 		const themeAccentColor =
-			UnistylesRuntime.themeName === 'dark' ? color.dark : color.light;
+			UnistylesRuntime.themeName === 'dark' ? color.dark : color.light
 		return (
 			<View style={styles.colorBoxContainer}>
 				<Pressable
 					onPress={() => {
-						setAccentColor(code);
+						setAccentColor(code)
 						if (Platform.OS === 'ios') {
-							void Haptics.selectionAsync();
+							void Haptics.selectionAsync()
 						}
 					}}
 					style={({ pressed }) => [
@@ -89,28 +89,28 @@ export default function Theme(): React.JSX.Element {
 					{t(`theme.colors.${code}`)}
 				</Text>
 			</View>
-		);
-	};
+		)
+	}
 
 	interface ColorBoxMatrixProps {
 		colors: {
-			code: string;
-			color: ColorBoxColor;
-		}[];
+			code: string
+			color: ColorBoxColor
+		}[]
 	}
 
 	const ColorBoxMatrix = ({
 		colors
 	}: ColorBoxMatrixProps): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet);
+		const { styles } = useStyles(stylesheet)
 		return (
 			<View style={styles.colorMatrixContainer}>
 				{colors.map((color, index) => (
 					<ColorBox color={color.color} code={color.code} key={index} />
 				))}
 			</View>
-		);
-	};
+		)
+	}
 
 	const colorRows = Array.from({ length: 3 }, (_, rowIndex) =>
 		Object.entries(accentColors)
@@ -119,7 +119,7 @@ export default function Theme(): React.JSX.Element {
 				code: key,
 				color: value
 			}))
-	);
+	)
 
 	return (
 		<>
@@ -133,7 +133,7 @@ export default function Theme(): React.JSX.Element {
 				</SectionView>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -175,4 +175,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center',
 		paddingVertical: 18
 	}
-}));
+}))

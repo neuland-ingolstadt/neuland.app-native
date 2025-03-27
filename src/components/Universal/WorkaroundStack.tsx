@@ -1,27 +1,27 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createStackNavigator } from '@react-navigation/stack';
-import type React from 'react';
-import type { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform } from 'react-native';
-import type { SearchBarProps } from 'react-native-screens';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createStackNavigator } from '@react-navigation/stack'
+import type React from 'react'
+import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
+import type { SearchBarProps } from 'react-native-screens'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 export interface WorkaroundStackProps {
-	name: string;
-	titleKey: string;
+	name: string
+	titleKey: string
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	component: React.ComponentType<any>;
-	transparent?: boolean;
-	largeTitle?: boolean;
-	headerSearchBarOptions?: SearchBarProps;
-	headerRightElement?: ((props: unknown) => ReactNode) | undefined;
-	params?: Partial<object | undefined>;
-	androidFallback?: boolean;
+	component: React.ComponentType<any>
+	transparent?: boolean
+	largeTitle?: boolean
+	headerSearchBarOptions?: SearchBarProps
+	headerRightElement?: ((props: unknown) => ReactNode) | undefined
+	params?: Partial<object | undefined>
+	androidFallback?: boolean
 }
 /*
  * This is a generic stack used as workaround for missing or broken features in expo-router or bottom-tabs.
@@ -38,10 +38,10 @@ function WorkaroundStack({
 	params = {},
 	androidFallback = false
 }: WorkaroundStackProps): React.JSX.Element {
-	const { t } = useTranslation('navigation');
-	const Stack = createNativeStackNavigator();
-	const StackAndroid = createStackNavigator();
-	const { styles, theme } = useStyles(stylesheet);
+	const { t } = useTranslation('navigation')
+	const Stack = createNativeStackNavigator()
+	const StackAndroid = createStackNavigator()
+	const { styles, theme } = useStyles(stylesheet)
 	if (Platform.OS !== 'ios' && androidFallback) {
 		return (
 			<StackAndroid.Navigator>
@@ -63,7 +63,7 @@ function WorkaroundStack({
 					initialParams={params}
 				/>
 			</StackAndroid.Navigator>
-		);
+		)
 	}
 	return (
 		<Stack.Navigator>
@@ -93,10 +93,10 @@ function WorkaroundStack({
 				initialParams={params}
 			/>
 		</Stack.Navigator>
-	);
+	)
 }
 const stylesheet = createStyleSheet((theme) => ({
 	background: { backgroundColor: theme.colors.background },
 	headerBackground: { backgroundColor: theme.colors.card }
-}));
-export default WorkaroundStack;
+}))
+export default WorkaroundStack

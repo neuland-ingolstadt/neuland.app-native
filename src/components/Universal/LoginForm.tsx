@@ -1,19 +1,19 @@
-import { createGuestSession, createSession } from '@/api/thi-session-handler';
-import { DashboardContext, UserKindContext } from '@/components/contexts';
+import { createGuestSession, createSession } from '@/api/thi-session-handler'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
 import {
 	STATUS_URL,
 	USER_EMPLOYEE,
 	USER_GUEST,
 	USER_STUDENT
-} from '@/data/constants';
-import { trimErrorMsg } from '@/utils/api-utils';
-import { loadSecure } from '@/utils/storage';
-import { getContrastColor } from '@/utils/ui-utils';
-import { toast } from 'burnt';
-import Color from 'color';
-import * as Haptics from 'expo-haptics';
-import React, { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@/data/constants'
+import { trimErrorMsg } from '@/utils/api-utils'
+import { loadSecure } from '@/utils/storage'
+import { getContrastColor } from '@/utils/ui-utils'
+import { toast } from 'burnt'
+import Color from 'color'
+import * as Haptics from 'expo-haptics'
+import React, { useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
 	Alert,
@@ -23,42 +23,40 @@ import {
 	TextInput,
 	TouchableOpacity,
 	View
-} from 'react-native';
+} from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 const LoginForm = ({
 	navigateHome
 }: {
-	navigateHome: () => void;
+	navigateHome: () => void
 }): React.JSX.Element => {
-	const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials';
-	const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter';
-	const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON'];
-	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed';
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const { styles, theme } = useStyles(stylesheet);
+	const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+	const ORGINAL_ERROR_MISSING = 'Wrong or missing parameter'
+	const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
+	const ORIGINAL_ERROR_NO_CONNECTION = 'Network request failed'
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
+	const { styles, theme } = useStyles(stylesheet)
 	// No guest fallback is provided, so the guest session will be created correctly
-	const { userKind, toggleUserKind } = React.useContext(UserKindContext);
-	const [loading, setLoading] = useState(false);
-	const { t } = useTranslation('flow');
-	const { resetOrder } = useContext(DashboardContext);
+	const { userKind, toggleUserKind } = React.useContext(UserKindContext)
+	const [loading, setLoading] = useState(false)
+	const { t } = useTranslation('flow')
+	const { resetOrder } = useContext(DashboardContext)
 
 	async function login(): Promise<void> {
-		let showStatus = true;
+		let showStatus = true
 		try {
-			setLoading(true);
-			const userKind = await createSession(username, password, true);
-			toggleUserKind(userKind);
-			resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE);
+			setLoading(true)
+			const userKind = await createSession(username, password, true)
+			toggleUserKind(userKind)
+			resetOrder(userKind ? USER_STUDENT : USER_EMPLOYEE)
 			if (Platform.OS === 'ios') {
-				void Haptics.notificationAsync(
-					Haptics.NotificationFeedbackType.Success
-				);
+				void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 			}
 			toast({
 				title: t('login.toast'),
@@ -66,41 +64,41 @@ const LoginForm = ({
 				haptic: 'success',
 				duration: 2.5,
 				from: 'top'
-			});
-			navigateHome();
+			})
+			navigateHome()
 		} catch (e) {
-			console.error('Failed to login', e);
+			console.error('Failed to login', e)
 
-			const error = e as Error;
-			const message = trimErrorMsg(error.message);
-			setLoading(false);
+			const error = e as Error
+			const message = trimErrorMsg(error.message)
+			setLoading(false)
 
-			let title = t('login.alert.error.title');
-			let msg = t('login.alert.error.generic');
+			let title = t('login.alert.error.title')
+			let msg = t('login.alert.error.generic')
 
 			if (message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
-				title = t('login.alert.error.wrongCredentials.title');
-				msg = t('login.alert.error.wrongCredentials.message');
-				showStatus = false;
-				setPassword('');
+				title = t('login.alert.error.wrongCredentials.title')
+				msg = t('login.alert.error.wrongCredentials.message')
+				showStatus = false
+				setPassword('')
 			} else if (message.includes(ORIGINAL_ERROR_NO_CONNECTION)) {
-				title = t('login.alert.error.noConnection.title');
-				msg = t('login.alert.error.noConnection.message');
-				showStatus = false;
+				title = t('login.alert.error.noConnection.title')
+				msg = t('login.alert.error.noConnection.message')
+				showStatus = false
 			} else if (message.includes(ORGINAL_ERROR_MISSING)) {
-				msg = t('login.alert.error.missing');
-				showStatus = false;
+				msg = t('login.alert.error.missing')
+				showStatus = false
 			} else if (
 				KNOWN_BACKEND_ERRORS.some((error) => message.includes(error))
 			) {
-				msg = t('login.alert.error.backend');
+				msg = t('login.alert.error.backend')
 			}
 			if (Platform.OS === 'web') {
 				toast({
 					title: msg,
 					preset: 'error',
 					duration: 2.5
-				});
+				})
 			} else {
 				Alert.alert(
 					title,
@@ -122,36 +120,36 @@ const LoginForm = ({
 					{
 						cancelable: false
 					}
-				);
+				)
 			}
 		}
 	}
 
 	async function guestLogin(): Promise<void> {
-		setLoading(true);
-		setUsername('');
-		setPassword('');
+		setLoading(true)
+		setUsername('')
+		setPassword('')
 
 		try {
-			await createGuestSession(userKind !== USER_GUEST);
+			await createGuestSession(userKind !== USER_GUEST)
 		} catch (error) {
-			console.error('Failed to create guest session', error);
+			console.error('Failed to create guest session', error)
 		}
 
-		toggleUserKind(undefined);
-		navigateHome();
-		setLoading(false);
+		toggleUserKind(undefined)
+		navigateHome()
+		setLoading(false)
 	}
 
 	useEffect(() => {
 		// on iOS secure store is synced with iCloud, so we can prefill the login form
 		if (Platform.OS === 'ios') {
 			const loadSavedData = (): void => {
-				const savedUsername = loadSecure('username');
-				const savedPassword = loadSecure('password');
+				const savedUsername = loadSecure('username')
+				const savedPassword = loadSecure('password')
 				if (savedUsername !== null && savedPassword !== null) {
-					setUsername(savedUsername);
-					setPassword(savedPassword);
+					setUsername(savedUsername)
+					setPassword(savedPassword)
 
 					Alert.alert(
 						t('login.alert.restored.title'),
@@ -160,16 +158,16 @@ const LoginForm = ({
 						{
 							cancelable: false
 						}
-					);
+					)
 				}
-			};
+			}
 
-			loadSavedData();
+			loadSavedData()
 		}
-	}, []);
+	}, [])
 
 	const signInDisabled =
-		username.trim() === '' || password.trim() === '' || loading;
+		username.trim() === '' || password.trim() === '' || loading
 
 	return (
 		<View style={styles.container}>
@@ -192,7 +190,7 @@ const LoginForm = ({
 						placeholder="abc1234"
 						returnKeyType="next"
 						onChangeText={(text) => {
-							setUsername(text);
+							setUsername(text)
 						}}
 						autoCapitalize="none"
 						clearButtonMode="while-editing"
@@ -212,13 +210,13 @@ const LoginForm = ({
 						defaultValue={password}
 						returnKeyType="done"
 						onChangeText={(text) => {
-							setPassword(text);
+							setPassword(text)
 						}}
 						onSubmitEditing={() => {
 							if (username !== '') {
 								login().catch((error: unknown) => {
-									console.debug(error);
-								});
+									console.debug(error)
+								})
 							}
 						}}
 						selectTextOnFocus={true}
@@ -234,8 +232,8 @@ const LoginForm = ({
 					disabled={signInDisabled}
 					onPress={() => {
 						login().catch((error: unknown) => {
-							console.debug(error);
-						});
+							console.debug(error)
+						})
 					}}
 					style={styles.loginButton(signInDisabled)}
 				>
@@ -254,8 +252,8 @@ const LoginForm = ({
 					<TouchableOpacity
 						onPress={() => {
 							guestLogin().catch((error: unknown) => {
-								console.debug(error);
-							});
+								console.debug(error)
+							})
 						}}
 					>
 						<Text style={styles.guestText}>{t('login.guest')}</Text>
@@ -263,10 +261,10 @@ const LoginForm = ({
 				</View>
 			</View>
 		</View>
-	);
-};
+	)
+}
 
-const black = '#000000';
+const black = '#000000'
 const stylesheet = createStyleSheet((theme) => ({
 	buttonText: (disabled: boolean) => ({
 		fontWeight: 'bold',
@@ -346,6 +344,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 15,
 		paddingBottom: 5
 	}
-}));
+}))
 
-export default LoginForm;
+export default LoginForm

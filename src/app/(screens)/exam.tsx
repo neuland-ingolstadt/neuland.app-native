@@ -1,33 +1,33 @@
-import FormList from '@/components/Universal/FormList';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { FormListSections } from '@/types/components';
-import { formatFriendlyDateTime } from '@/utils/date-utils';
-import { HeaderTitle } from '@react-navigation/elements';
-import { Stack } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Text, View } from 'react-native';
+import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections } from '@/types/components'
+import { formatFriendlyDateTime } from '@/utils/date-utils'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ExamDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const exam = useRouteParamsStore((state) => state.selectedExam);
-	const { t } = useTranslation('common');
+	const { styles, theme } = useStyles(stylesheet)
+	const exam = useRouteParamsStore((state) => state.selectedExam)
+	const { t } = useTranslation('common')
 	const typeSplit =
-		exam?.type !== undefined ? exam?.type.split('-').slice(-1)[0].trim() : '';
+		exam?.type !== undefined ? exam?.type.split('-').slice(-1)[0].trim() : ''
 	const type =
 		typeSplit.length > 1
 			? `${typeSplit[0].toUpperCase()}${typeSplit.slice(1)}`
-			: exam?.type;
-	const examAids = exam?.aids ?? [];
-	const ref = useAnimatedRef<Animated.ScrollView>();
-	const scroll = useScrollViewOffset(ref);
+			: exam?.type
+	const examAids = exam?.aids ?? []
+	const ref = useAnimatedRef<Animated.ScrollView>()
+	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -40,8 +40,8 @@ export default function ExamDetail(): React.JSX.Element {
 					)
 				}
 			]
-		};
-	});
+		}
+	})
 
 	const sections: FormListSections[] = [
 		{
@@ -65,7 +65,7 @@ export default function ExamDetail(): React.JSX.Element {
 					title: t('pages.exam.details.tools'),
 					value: (examAids.length > 1
 						? examAids.map((aid) => {
-								return `- ${aid}`;
+								return `- ${aid}`
 							})
 						: examAids
 					).join('\n'),
@@ -96,7 +96,7 @@ export default function ExamDetail(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<Animated.ScrollView
@@ -135,7 +135,7 @@ export default function ExamDetail(): React.JSX.Element {
 				<Text style={styles.notesText}>{t('pages.exam.footer')}</Text>
 			</View>
 		</Animated.ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -175,4 +175,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 16,
 		textAlign: 'left'
 	}
-}));
+}))

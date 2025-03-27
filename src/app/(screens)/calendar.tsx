@@ -1,20 +1,20 @@
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import PagerView from '@/components/Layout/PagerView';
-import { CalendarRow, ExamRow } from '@/components/Rows/CalendarRow';
-import Divider from '@/components/Universal/Divider';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import ToggleRow from '@/components/Universal/ToggleRow';
-import { UserKindContext } from '@/components/contexts';
-import { USER_GUEST } from '@/data/constants';
-import { useRefreshByUser } from '@/hooks';
-import { guestError, networkError } from '@/utils/api-utils';
-import { calendar, loadExamList } from '@/utils/calendar-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { useQuery } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import PagerView from '@/components/Layout/PagerView'
+import { CalendarRow, ExamRow } from '@/components/Rows/CalendarRow'
+import Divider from '@/components/Universal/Divider'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { guestError, networkError } from '@/utils/api-utils'
+import { calendar, loadExamList } from '@/utils/calendar-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Animated,
 	Linking,
@@ -23,24 +23,24 @@ import {
 	Text,
 	View,
 	useWindowDimensions
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function CalendarPage(): React.JSX.Element {
-	const { userKind = USER_GUEST } = React.useContext(UserKindContext);
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { userKind = USER_GUEST } = React.useContext(UserKindContext)
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 	const displayTypes = [
 		t('pages.calendar.events.title'),
 		t('pages.calendar.exams.title')
-	];
-	const [selectedData, setSelectedData] = useState<number>(0);
-	const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin';
+	]
+	const [selectedData, setSelectedData] = useState<number>(0)
+	const primussUrl = 'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin'
 	const handleLinkPress = (): void => {
 		void Linking.openURL(
 			selectedData === 0 ? t('pages.calendar.calendar.link') : primussUrl
-		);
-	};
+		)
+	}
 
 	const {
 		data: exams,
@@ -57,21 +57,21 @@ export default function CalendarPage(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24, // 24 hours
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.navigate('/login');
-				return false;
+				router.navigate('/login')
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		},
 		enabled: userKind !== USER_GUEST
-	});
-	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch);
-	const screenHeight = useWindowDimensions().height;
-	const pagerViewRef = useRef<PagerView>(null);
+	})
+	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
+	const screenHeight = useWindowDimensions().height
+	const pagerViewRef = useRef<PagerView>(null)
 	function setPage(page: number): void {
-		pagerViewRef.current?.setPage(page);
+		pagerViewRef.current?.setPage(page)
 	}
-	const scrollY = new Animated.Value(0);
-	const pages = ['events', 'exams'];
+	const scrollY = new Animated.Value(0)
+	const pages = ['events', 'exams']
 
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
@@ -84,8 +84,8 @@ export default function CalendarPage(): React.JSX.Element {
 					{t('pages.calendar.footer.part3')}
 				</Text>
 			</View>
-		);
-	};
+		)
+	}
 
 	return (
 		<View
@@ -119,11 +119,11 @@ export default function CalendarPage(): React.JSX.Element {
 				}}
 				initialPage={0}
 				onPageSelected={(e) => {
-					const page = e.nativeEvent.position;
-					setSelectedData(page);
+					const page = e.nativeEvent.position
+					setSelectedData(page)
 					trackEvent('Route', {
 						path: `calendar/${pages[page]}`
-					});
+					})
 				}}
 				scrollEnabled
 				overdrag
@@ -175,7 +175,7 @@ export default function CalendarPage(): React.JSX.Element {
 						<RefreshControl
 							refreshing={isRefetchingByUser}
 							onRefresh={() => {
-								void refetchByUser();
+								void refetchByUser()
 							}}
 						/>
 					}
@@ -188,7 +188,7 @@ export default function CalendarPage(): React.JSX.Element {
 						<ErrorView
 							title={error?.message ?? t('error.title')}
 							onButtonPress={() => {
-								void refetchByUser();
+								void refetchByUser()
 							}}
 							inModal
 						/>
@@ -221,7 +221,7 @@ export default function CalendarPage(): React.JSX.Element {
 										}}
 										buttonText="Primuss"
 										onButtonPress={() => {
-											void Linking.openURL(primussUrl);
+											void Linking.openURL(primussUrl)
 										}}
 										inModal
 										isCritical={false}
@@ -234,7 +234,7 @@ export default function CalendarPage(): React.JSX.Element {
 				</ScrollView>
 			</PagerView>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -274,4 +274,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	viewTop: {
 		paddingTop: theme.margins.page
 	}
-}));
+}))

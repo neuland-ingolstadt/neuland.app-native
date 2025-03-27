@@ -1,19 +1,19 @@
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon';
+import PlatformIcon from './Icon'
 
 interface ShareButtonProps {
-	onPress?: () => void;
+	onPress?: () => void
 }
 
 export default function ShareButton({
 	onPress
 }: ShareButtonProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 
 	return (
 		<Pressable style={styles.shareButton} onPress={onPress}>
@@ -36,7 +36,7 @@ export default function ShareButton({
 				<Text style={styles.shareText}>{t('misc.share')}</Text>
 			</View>
 		</Pressable>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -58,4 +58,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.primary,
 		fontSize: 17
 	}
-}));
+}))

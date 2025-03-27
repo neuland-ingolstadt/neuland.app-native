@@ -1,41 +1,41 @@
-import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql';
-import useCLParamsStore from '@/hooks/useCLParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { CLEvents } from '@/types/neuland-api';
+import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { CLEvents } from '@/types/neuland-api'
 import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
-} from '@/utils/date-utils';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/date-utils'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import RowEntry from '../Universal/RowEntry';
+import RowEntry from '../Universal/RowEntry'
 
 const CLEventRow = ({
 	event
 }: {
-	event: CampusLifeEventFieldsFragment;
+	event: CampusLifeEventFieldsFragment
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	const setSelectedClEvent = useCLParamsStore(
 		(state) => state.setSelectedClEvent
-	);
-	const { t, i18n } = useTranslation('common');
-	let begin = null;
+	)
+	const { t, i18n } = useTranslation('common')
+	let begin = null
 	if (event.startDateTime != null) {
-		begin = new Date(event.startDateTime);
+		begin = new Date(event.startDateTime)
 	}
-	const end = event.endDateTime != null ? new Date(event.endDateTime) : null;
+	const end = event.endDateTime != null ? new Date(event.endDateTime) : null
 
 	const onPressRow = (): void => {
-		setSelectedClEvent(event as CLEvents);
+		setSelectedClEvent(event as CLEvents)
 		router.navigate({
 			pathname: '/cl-event'
-		});
-	};
+		})
+	}
 	return (
 		<RowEntry
 			title={event.titles[i18n.language as LanguageKey] ?? ''}
@@ -60,8 +60,8 @@ const CLEventRow = ({
 			</View>
 			maxTitleWidth={'70%'}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	leftText1: {
@@ -84,6 +84,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		fontWeight: '400'
 	}
-}));
+}))
 
-export default CLEventRow;
+export default CLEventRow

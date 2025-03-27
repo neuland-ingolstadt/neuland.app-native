@@ -1,9 +1,9 @@
-import type { MaterialIcon } from '@/types/material-icons';
-import { guestError, networkError, permissionError } from '@/utils/api-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { router, usePathname } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
+import type { MaterialIcon } from '@/types/material-icons'
+import { guestError, networkError, permissionError } from '@/utils/api-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { router, usePathname } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Platform,
 	Pressable,
@@ -11,11 +11,11 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon';
-import StatusBox from './ActionBox';
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
+import StatusBox from './ActionBox'
 
 export default function ErrorView({
 	title,
@@ -29,123 +29,123 @@ export default function ErrorView({
 	inModal = false,
 	isCritical = true
 }: {
-	title: string;
-	message?: string;
+	title: string
+	message?: string
 	icon?: {
-		ios: string;
-		android: MaterialIcon;
-		web: LucideIcon;
-		multiColor?: boolean;
-	};
-	buttonText?: string;
-	onButtonPress?: () => void;
-	onRefresh?: () => unknown;
-	refreshing?: boolean;
-	showPullLabel?: boolean;
-	inModal?: boolean;
-	isCritical?: boolean;
+		ios: string
+		android: MaterialIcon
+		web: LucideIcon
+		multiColor?: boolean
+	}
+	buttonText?: string
+	onButtonPress?: () => void
+	onRefresh?: () => unknown
+	refreshing?: boolean
+	showPullLabel?: boolean
+	inModal?: boolean
+	isCritical?: boolean
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const path = usePathname();
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const path = usePathname()
 
 	const getIconIos = (): string => {
 		switch (title) {
 			case networkError:
-				return 'wifi.slash';
+				return 'wifi.slash'
 			case guestError:
-				return 'person.crop.circle.badge.questionmark';
+				return 'person.crop.circle.badge.questionmark'
 			case permissionError:
-				return 'person.crop.circle.badge.exclamationmark';
+				return 'person.crop.circle.badge.exclamationmark'
 			default:
-				return icon !== undefined ? icon.ios : 'exclamationmark.triangle.fill';
+				return icon !== undefined ? icon.ios : 'exclamationmark.triangle.fill'
 		}
-	};
+	}
 
 	const getIconAndroid = (): MaterialIcon => {
 		switch (title) {
 			case networkError:
-				return 'wifi_off';
+				return 'wifi_off'
 			case guestError:
-				return 'person_cancel';
+				return 'person_cancel'
 			case permissionError:
-				return 'person_alert';
+				return 'person_alert'
 			default:
-				return icon !== undefined ? icon.android : 'error';
+				return icon !== undefined ? icon.android : 'error'
 		}
-	};
+	}
 
 	const shouldTrack =
 		!(
 			networkError === title ||
 			guestError === title ||
 			permissionError === title
-		) && isCritical;
+		) && isCritical
 
-	const showBox = !inModal && shouldTrack;
+	const showBox = !inModal && shouldTrack
 	if (shouldTrack) {
 		trackEvent('ErrorView', {
 			title,
 			path,
 			crash: false
-		});
+		})
 	}
 
 	const getTitle = (): string => {
 		switch (title) {
 			case networkError:
-				return t('error.network.title');
+				return t('error.network.title')
 			case guestError:
-				return t('error.guest.title');
+				return t('error.guest.title')
 			case permissionError:
-				return t('error.permission.title');
+				return t('error.permission.title')
 			default:
-				return title;
+				return title
 		}
-	};
+	}
 
 	const getMessage = (): string => {
 		switch (title) {
 			case networkError:
-				return t('error.network.description');
+				return t('error.network.description')
 			case guestError:
-				return t('error.guest.description');
+				return t('error.guest.description')
 			case permissionError:
-				return t('error.permission.description');
+				return t('error.permission.description')
 			default:
 				if (message != null) {
-					return message;
+					return message
 				}
-				return t('error.description');
+				return t('error.description')
 		}
-	};
+	}
 
 	const ErrorButton = (): React.JSX.Element => {
 		const buttonAction = (): void => {
 			switch (title) {
 				case guestError:
-					router.navigate('/login');
-					break;
+					router.navigate('/login')
+					break
 				default:
 					if (onButtonPress != null) {
-						onButtonPress();
+						onButtonPress()
 					}
-					break;
+					break
 			}
-		};
-		let buttonProps = null;
+		}
+		let buttonProps = null
 
 		if (title === guestError) {
 			buttonProps = {
 				onPress: () => {
-					router.navigate('/login');
+					router.navigate('/login')
 				},
 				text: t('error.guest.button')
-			};
+			}
 		} else if (onButtonPress != null && buttonText === undefined) {
-			buttonProps = { onPress: buttonAction, text: t('error.button') };
+			buttonProps = { onPress: buttonAction, text: t('error.button') }
 		} else if (onButtonPress != null && buttonText !== undefined) {
-			buttonProps = { onPress: buttonAction, text: buttonText };
+			buttonProps = { onPress: buttonAction, text: buttonText }
 		}
 
 		return (buttonProps != null || title === guestError) &&
@@ -160,8 +160,8 @@ export default function ErrorView({
 			</Pressable>
 		) : (
 			<></>
-		);
-	};
+		)
+	}
 
 	return (
 		<ScrollView
@@ -208,7 +208,7 @@ export default function ErrorView({
 				{showBox && <StatusBox error={new Error(title)} crash={false} />}
 			</View>
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -268,4 +268,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600'
 	},
 	topContainer: { alignItems: 'center', gap: 20 }
-}));
+}))

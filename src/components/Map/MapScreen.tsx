@@ -1,24 +1,24 @@
-import API from '@/api/authenticated-api';
-import NeulandAPI from '@/api/neuland-api';
+import API from '@/api/authenticated-api'
+import NeulandAPI from '@/api/neuland-api'
 import {
 	NoSessionError,
 	UnavailableSessionError
-} from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal';
-import MapBottomSheet from '@/components/Map/BottomSheetMap';
-import FloorPicker from '@/components/Map/FloorPicker';
-import { UserKindContext } from '@/components/contexts';
-import { MapContext } from '@/contexts/map';
-import { USER_GUEST } from '@/data/constants';
-import { type FeatureProperties, Gebaeude } from '@/types/asset-api';
+} from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
+import MapBottomSheet from '@/components/Map/BottomSheetMap'
+import FloorPicker from '@/components/Map/FloorPicker'
+import { UserKindContext } from '@/components/contexts'
+import { MapContext } from '@/contexts/map'
+import { USER_GUEST } from '@/data/constants'
+import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
 import {
 	type ClickedMapElement,
 	type RoomData,
 	SEARCH_TYPES
-} from '@/types/map';
-import type { FriendlyTimetableEntry } from '@/types/utils';
-import { formatISODate, formatISOTime } from '@/utils/date-utils';
+} from '@/types/map'
+import type { FriendlyTimetableEntry } from '@/types/utils'
+import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
 	BUILDINGS,
 	FLOOR_ORDER,
@@ -29,12 +29,12 @@ import {
 	getCenter,
 	getCenterSingle,
 	getIcon
-} from '@/utils/map-utils';
-import { loadTimetable } from '@/utils/timetable-utils';
-import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import type BottomSheet from '@gorhom/bottom-sheet';
-import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+} from '@/utils/map-utils'
+import { loadTimetable } from '@/utils/timetable-utils'
+import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import type BottomSheet from '@gorhom/bottom-sheet'
+import type { BottomSheetModal } from '@gorhom/bottom-sheet'
 import {
 	Camera,
 	FillLayer,
@@ -46,17 +46,17 @@ import {
 	UserLocation,
 	UserTrackingMode,
 	requestAndroidLocationPermissions
-} from '@maplibre/maplibre-react-native';
+} from '@maplibre/maplibre-react-native'
 import type {
 	CameraRef,
 	MapViewRef,
 	UserLocationRef
-} from '@maplibre/maplibre-react-native';
-import { useQuery } from '@tanstack/react-query';
-import { toast } from 'burnt';
-import { router, useLocalSearchParams, useNavigation } from 'expo-router';
-import type { Feature, FeatureCollection, Position } from 'geojson';
-import type React from 'react';
+} from '@maplibre/maplibre-react-native'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'burnt'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import type { Feature, FeatureCollection, Position } from 'geojson'
+import type React from 'react'
 import {
 	useCallback,
 	useContext,
@@ -64,8 +64,8 @@ import {
 	useMemo,
 	useRef,
 	useState
-} from 'react';
-import { useTranslation } from 'react-i18next';
+} from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Appearance,
 	LayoutAnimation,
@@ -73,43 +73,43 @@ import {
 	Platform,
 	Text,
 	View
-} from 'react-native';
+} from 'react-native'
 import Animated, {
 	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import packageInfo from '../../../package.json';
-import LoadingIndicator from '../Universal/LoadingIndicator';
-import { modalSection } from './ModalSections';
+import { Pressable } from 'react-native-gesture-handler'
+import packageInfo from '../../../package.json'
+import LoadingIndicator from '../Universal/LoadingIndicator'
+import { modalSection } from './ModalSections'
 
 export function requestPermission(): void {
 	if (Platform.OS === 'android') {
-		void requestAndroidLocationPermissions();
+		void requestAndroidLocationPermissions()
 	}
 }
 
 const MapScreen = (): React.JSX.Element => {
-	const navigation = useNavigation();
-	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING);
-	const { styles, theme } = useStyles(stylesheet);
-	const isDark = UnistylesRuntime.themeName === 'dark';
-	const params = useLocalSearchParams<{ room: string }>();
-	const { userKind, userFaculty } = useContext(UserKindContext);
-	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER);
-	const { t, i18n } = useTranslation('common');
-	const bottomSheetRef = useRef<BottomSheet>(null);
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-	const currentPosition = useSharedValue(0);
-	const currentPositionModal = useSharedValue(0);
+	const navigation = useNavigation()
+	const [mapLoadState, setMapLoadState] = useState(LoadingState.LOADING)
+	const { styles, theme } = useStyles(stylesheet)
+	const isDark = UnistylesRuntime.themeName === 'dark'
+	const params = useLocalSearchParams<{ room: string }>()
+	const { userKind, userFaculty } = useContext(UserKindContext)
+	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
+	const { t, i18n } = useTranslation('common')
+	const bottomSheetRef = useRef<BottomSheet>(null)
+	const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+	const currentPosition = useSharedValue(0)
+	const currentPositionModal = useSharedValue(0)
 	const {
 		localSearch,
 		clickedElement,
@@ -119,53 +119,53 @@ const MapScreen = (): React.JSX.Element => {
 		currentFloor,
 		setCurrentFloor,
 		setNextLecture
-	} = useContext(MapContext);
-	const [disableFollowUser, setDisableFollowUser] = useState(false);
-	const [showAllFloors, setShowAllFloors] = useState(false);
-	const mapRef = useRef<MapViewRef>(null);
-	const cameraRef = useRef<CameraRef>(null);
-	const locationRef = useRef<UserLocationRef>(null);
-	const currentDate = new Date();
+	} = useContext(MapContext)
+	const [disableFollowUser, setDisableFollowUser] = useState(false)
+	const [showAllFloors, setShowAllFloors] = useState(false)
+	const mapRef = useRef<MapViewRef>(null)
+	const cameraRef = useRef<CameraRef>(null)
+	const locationRef = useRef<UserLocationRef>(null)
+	const currentDate = new Date()
 
 	enum Locations {
 		IN = 'Ingolstadt',
 		ND = 'Neuburg'
 	}
-	const lightStyle = 'https://tile.neuland.app/styles/light/style.json';
-	const darkStyle = 'https://tile.neuland.app/styles/dark/style.json';
+	const lightStyle = 'https://tile.neuland.app/styles/light/style.json'
+	const darkStyle = 'https://tile.neuland.app/styles/dark/style.json'
 
-	type LocationsType = Record<string, string>;
-	const locations: LocationsType = Locations;
-	const [isVisible, setIsVisible] = useState(true);
-	const [tabBarPressed, setTabBarPressed] = useState(false);
-	const opacity = useSharedValue(1);
+	type LocationsType = Record<string, string>
+	const locations: LocationsType = Locations
+	const [isVisible, setIsVisible] = useState(true)
+	const [tabBarPressed, setTabBarPressed] = useState(false)
+	const opacity = useSharedValue(1)
 
 	const toggleShowAllFloors = (): void => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-		setShowAllFloors(!showAllFloors);
-	};
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+		setShowAllFloors(!showAllFloors)
+	}
 	const animatedStyles = useAnimatedStyle(() => {
 		const bottom =
 			clickedElement != null
 				? currentPositionModal.value
-				: currentPosition.value;
+				: currentPosition.value
 
 		return {
 			transform: [{ translateY: bottom }],
 			height: opacity.value === 0 ? 0 : 'auto',
 			opacity: opacity.value
-		};
-	});
+		}
+	})
 
 	const handleSheetChangesModal = useCallback(() => {
-		setClickedElement(null);
-		bottomSheetRef.current?.snapToIndex(1);
-	}, [setClickedElement]);
+		setClickedElement(null)
+		bottomSheetRef.current?.snapToIndex(1)
+	}, [setClickedElement])
 
 	const handlePresentModalPress = useCallback(() => {
-		bottomSheetRef.current?.close();
-		bottomSheetModalRef.current?.present();
-	}, []);
+		bottomSheetRef.current?.close()
+		bottomSheetModalRef.current?.present()
+	}, [])
 
 	const { data: mapOverlay, error: overlayError } = useQuery<FeatureCollection>(
 		{
@@ -175,7 +175,7 @@ const MapScreen = (): React.JSX.Element => {
 			gcTime: 1000 * 60 * 60 * 24 * 60, // 60 days
 			networkMode: 'always'
 		}
-	);
+	)
 
 	useEffect(() => {
 		if (overlayError != null) {
@@ -184,9 +184,9 @@ const MapScreen = (): React.JSX.Element => {
 				preset: 'error',
 				duration: 3,
 				from: 'top'
-			});
+			})
 		}
-	}, [overlayError]);
+	}, [overlayError])
 
 	const { data: timetable } = useQuery({
 		queryKey: ['timetableV2', userKind],
@@ -197,87 +197,87 @@ const MapScreen = (): React.JSX.Element => {
 			const ignoreErrors = [
 				'"Time table does not exist" (-202)',
 				'Timetable is empty'
-			];
+			]
 			if (ignoreErrors.includes(error.message)) {
-				return false;
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		},
 		enabled: userKind !== USER_GUEST
-	});
+	})
 
 	const getOngoingOrNextEvent = (
 		timetable: FriendlyTimetableEntry[]
 	): FriendlyTimetableEntry[] => {
-		const now = new Date();
+		const now = new Date()
 
 		// Filter out past events
 		const futureEvents = timetable.filter(
 			(entry) => new Date(entry.endDate) > now
-		);
+		)
 
 		// Find currently ongoing events
 		const ongoingEvents = futureEvents.filter(
 			(entry) =>
 				new Date(entry.startDate) <= now && new Date(entry.endDate) >= now
-		);
+		)
 
 		if (ongoingEvents.length > 0) {
-			return ongoingEvents;
+			return ongoingEvents
 		}
 
 		// If no ongoing events, find the next event
 		futureEvents.sort(
 			(a, b) =>
 				new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-		);
-		const nextEvent = futureEvents.length > 0 ? futureEvents[0] : null;
+		)
+		const nextEvent = futureEvents.length > 0 ? futureEvents[0] : null
 
-		return nextEvent != null ? [nextEvent] : [];
-	};
+		return nextEvent != null ? [nextEvent] : []
+	}
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
-			bottomSheetModalRef.current?.close();
-		});
+			bottomSheetModalRef.current?.close()
+		})
 
 		return () => {
-			subscription.remove();
-		};
-	});
+			subscription.remove()
+		}
+	})
 
 	useEffect(() => {
 		if (timetable == null) {
-			setNextLecture([]);
-			return;
+			setNextLecture([])
+			return
 		}
-		const ongoingOrNextEvent = getOngoingOrNextEvent(timetable);
+		const ongoingOrNextEvent = getOngoingOrNextEvent(timetable)
 		if (ongoingOrNextEvent.length > 0) {
-			setNextLecture(ongoingOrNextEvent);
+			setNextLecture(ongoingOrNextEvent)
 		}
-	}, [timetable, userKind]);
+	}, [timetable, userKind])
 
 	const allRooms: FeatureCollection = useMemo(() => {
 		if (mapOverlay == null) {
-			console.debug('No map overlay data');
-			return { type: 'FeatureCollection', features: [] };
+			console.debug('No map overlay data')
+			return { type: 'FeatureCollection', features: [] }
 		}
 
 		const rooms = mapOverlay.features.flatMap((feature) => {
-			const { type, id, geometry, properties } = feature;
+			const { type, id, geometry, properties } = feature
 
 			if (
 				geometry == null ||
 				properties == null ||
 				geometry.type !== 'Polygon'
 			) {
-				return [];
+				return []
 			}
 
 			if (properties.Ebene in FLOOR_SUBSTITUTES) {
-				properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene as string];
+				properties.Ebene = FLOOR_SUBSTITUTES[properties.Ebene as string]
 			}
 			if (!FLOOR_ORDER.includes(properties.Ebene as string)) {
-				FLOOR_ORDER.push(properties.Ebene as string);
+				FLOOR_ORDER.push(properties.Ebene as string)
 			}
 			return {
 				type,
@@ -291,19 +291,17 @@ const MapScreen = (): React.JSX.Element => {
 					})
 				} as unknown as FeatureProperties,
 				geometry
-			};
-		});
+			}
+		})
 		const buildings = BUILDINGS.map((building) => {
 			const buildingRooms = rooms.filter(
 				(room) => room.properties.Gebaeude === (building as Gebaeude)
-			);
+			)
 			const floorCount = Array.from(
 				new Set(buildingRooms.map((room) => room.properties.Ebene))
-			).length;
-			const location = buildingRooms[0].properties.Standort;
-			const center = getCenter(
-				buildingRooms.map((x) => x.geometry.coordinates)
-			);
+			).length
+			const location = buildingRooms[0].properties.Standort
+			const center = getCenter(buildingRooms.map((x) => x.geometry.coordinates))
 			return {
 				type: 'Feature',
 				id: building,
@@ -323,31 +321,31 @@ const MapScreen = (): React.JSX.Element => {
 					type: 'Point',
 					coordinates: center
 				}
-			} satisfies Feature;
-		});
+			} satisfies Feature
+		})
 		return {
 			type: 'FeatureCollection',
 			features: [...rooms, ...buildings]
-		};
-	}, [mapOverlay]);
+		}
+	}, [mapOverlay])
 
 	useEffect(() => {
 		// @ts-expect-error - TabPress event is not defined in the type
 		const unsubscribe = navigation.addListener('tabPress', () => {
-			setDisableFollowUser(true);
-			setTabBarPressed(true);
-		});
+			setDisableFollowUser(true)
+			setTabBarPressed(true)
+		})
 
-		return unsubscribe;
-	}, [navigation]);
+		return unsubscribe
+	}, [navigation])
 
 	useEffect(() => {
 		if (tabBarPressed) {
-			bottomSheetModalRef.current?.close();
-			setView();
-			setTabBarPressed(false);
+			bottomSheetModalRef.current?.close()
+			setView()
+			setTabBarPressed(false)
 		}
-	}, [tabBarPressed]);
+	}, [tabBarPressed])
 
 	useEffect(() => {
 		if (
@@ -355,58 +353,58 @@ const MapScreen = (): React.JSX.Element => {
 			params.room === '' ||
 			params.room === undefined
 		) {
-			return;
+			return
 		}
 		if (
 			allRooms == null ||
 			allRooms.features.length === 0 ||
 			mapLoadState !== LoadingState.LOADED
 		) {
-			return;
+			return
 		}
 
 		const room = allRooms.features.find(
 			(x) => x.properties?.Raum === params.room
-		)?.properties;
+		)?.properties
 
 		if (room == null) {
-			roomNotFoundToast(params.room, theme.colors.notification);
-			router.setParams({ room: '' });
-			return;
+			roomNotFoundToast(params.room, theme.colors.notification)
+			router.setParams({ room: '' })
+			return
 		}
-		bottomSheetRef.current?.close();
+		bottomSheetRef.current?.close()
 		setClickedElement({
 			data: params.room,
 			type: SEARCH_TYPES.ROOM,
 			center: room.center as Position | undefined,
 			manual: false
-		});
+		})
 		trackEvent('Room', {
 			room: params.room,
 			origin: 'InAppLink'
-		});
+		})
 		setCurrentFloor({
 			floor: (room.Ebene as string) ?? 'EG',
 			manual: false
-		});
-		handlePresentModalPress();
+		})
+		handlePresentModalPress()
 
-		router.setParams({ room: '' });
-	}, [params, mapLoadState, allRooms]);
+		router.setParams({ room: '' })
+	}, [params, mapLoadState, allRooms])
 
 	useEffect(() => {
 		setMapCenter(
 			userFaculty === 'Nachhaltige Infrastruktur'
 				? NEUBURG_CENTER
 				: INGOLSTADT_CENTER
-		);
-	}, [userFaculty]);
+		)
+	}, [userFaculty])
 
 	useEffect(() => {
 		if (localSearch.length === 1 && params.room != null) {
-			router.setParams(undefined);
+			router.setParams(undefined)
 		}
-	}, [localSearch]);
+	}, [localSearch])
 
 	const { data: roomStatusData } = useQuery({
 		queryKey: ['freeRooms', formatISODate(currentDate)],
@@ -415,44 +413,44 @@ const MapScreen = (): React.JSX.Element => {
 		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				return false;
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		}
-	});
+	})
 
 	useEffect(() => {
 		function load(): void {
 			if (roomStatusData == null) {
-				console.debug('No room status data');
-				return;
+				console.debug('No room status data')
+				return
 			}
 			try {
-				const dateObj = new Date();
-				const date = formatISODate(dateObj);
-				const time = formatISOTime(dateObj);
-				const rooms = filterRooms(roomStatusData, date, time);
-				setAvailableRooms(rooms);
+				const dateObj = new Date()
+				const date = formatISODate(dateObj)
+				const time = formatISOTime(dateObj)
+				const rooms = filterRooms(roomStatusData, date, time)
+				setAvailableRooms(rooms)
 			} catch (e) {
 				if (
 					e instanceof NoSessionError ||
 					e instanceof UnavailableSessionError
 				) {
-					setAvailableRooms([]);
+					setAvailableRooms([])
 				} else {
-					console.error(e);
+					console.error(e)
 				}
 			}
 		}
-		setAvailableRooms(null);
-		load();
-	}, [userKind, roomStatusData]);
+		setAvailableRooms(null)
+		load()
+	}, [userKind, roomStatusData])
 
 	useEffect(() => {
 		if (clickedElement != null && currentFloor?.manual === true) {
-			bottomSheetModalRef.current?.close();
+			bottomSheetModalRef.current?.close()
 		}
-	}, [currentFloor]);
+	}, [currentFloor])
 
 	const uniqueEtages = Array.from(
 		new Set(
@@ -461,76 +459,76 @@ const MapScreen = (): React.JSX.Element => {
 				: Object.values(allRooms.features)
 			)
 				.map((room) => {
-					const properties = (room as RoomData).properties;
-					return typeof properties?.Ebene === 'string' ? properties.Ebene : '';
+					const properties = (room as RoomData).properties
+					return typeof properties?.Ebene === 'string' ? properties.Ebene : ''
 				})
 				.filter((etage) => etage != null)
 		)
 	).sort(
 		(a: string, b: string) => FLOOR_ORDER.indexOf(a) - FLOOR_ORDER.indexOf(b)
-	);
-	const [filteredGeoJSON, setFilteredGeoJSON] = useState<FeatureCollection>();
+	)
+	const [filteredGeoJSON, setFilteredGeoJSON] = useState<FeatureCollection>()
 	const [availableFilteredGeoJSON, setAvailableFilteredGeoJSON] =
-		useState<FeatureCollection>();
+		useState<FeatureCollection>()
 
 	const filterAvailableRooms = useCallback(
 		(rooms: FeatureCollection | undefined): Feature[] => {
 			if (rooms == null) {
-				return [];
+				return []
 			}
 			return rooms.features.filter(
 				(feature) =>
 					feature.properties != null &&
 					availableRooms?.find((x) => x.room === feature.properties?.Raum)
-			);
+			)
 		},
 		[availableRooms]
-	);
+	)
 
 	const filterEtage = useCallback(
 		(etage: string): Feature[] => {
 			return allRooms.features.filter(
 				(feature) => feature.properties?.Ebene === etage
-			);
+			)
 		},
 		[allRooms.features]
-	);
+	)
 
 	useEffect(() => {
 		if (mapOverlay == null) {
-			return;
+			return
 		}
 		// filter the filteredGeoJSON to only show available rooms
-		const filteredFeatures = filterAvailableRooms(filteredGeoJSON);
+		const filteredFeatures = filterAvailableRooms(filteredGeoJSON)
 
 		const availableFilteredGeoJSON: FeatureCollection = {
 			type: 'FeatureCollection',
 			features: filteredFeatures
-		};
+		}
 
-		setAvailableFilteredGeoJSON(availableFilteredGeoJSON);
-	}, [availableRooms, filteredGeoJSON, mapOverlay, filterAvailableRooms]);
+		setAvailableFilteredGeoJSON(availableFilteredGeoJSON)
+	}, [availableRooms, filteredGeoJSON, mapOverlay, filterAvailableRooms])
 
 	useEffect(() => {
 		if (mapOverlay == null) {
-			return;
+			return
 		}
-		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG');
+		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG')
 
 		const newGeoJSON: FeatureCollection = {
 			...mapOverlay,
 			features: filteredFeatures
-		};
+		}
 
-		setFilteredGeoJSON(newGeoJSON);
-	}, [currentFloor, allRooms, mapOverlay, filterEtage]); // Ensure dependencies are correctly listed
+		setFilteredGeoJSON(newGeoJSON)
+	}, [currentFloor, allRooms, mapOverlay, filterEtage]) // Ensure dependencies are correctly listed
 
 	const getRoomData = useCallback(
 		(room: string): RoomData => {
-			const occupancies = availableRooms?.find((x) => x.room === room);
+			const occupancies = availableRooms?.find((x) => x.room === room)
 			const properties = allRooms.features.find(
 				(x) => x.properties?.Raum === room
-			)?.properties as FeatureProperties | undefined;
+			)?.properties as FeatureProperties | undefined
 
 			return {
 				title: room,
@@ -544,10 +542,10 @@ const MapScreen = (): React.JSX.Element => {
 				properties,
 				occupancies,
 				type: SEARCH_TYPES.ROOM
-			} as RoomData;
+			} as RoomData
 		},
 		[availableRooms, allRooms.features, i18n.language, t]
-	);
+	)
 
 	const getBuildingData = useCallback(
 		(building: string): RoomData => {
@@ -555,15 +553,15 @@ const MapScreen = (): React.JSX.Element => {
 				(x) =>
 					x.properties?.Gebaeude === building &&
 					x.properties.rtype === SEARCH_TYPES.BUILDING
-			);
+			)
 			const numberOfFreeRooms = availableRooms?.filter((x) =>
 				x.room.startsWith(building)
-			).length;
+			).length
 			const numberOfRooms = allRooms.features.filter(
 				(x) =>
 					x.properties?.Gebaeude === building &&
 					x.properties.rtype === SEARCH_TYPES.ROOM
-			).length;
+			).length
 
 			return {
 				title: building,
@@ -574,17 +572,17 @@ const MapScreen = (): React.JSX.Element => {
 					available: numberOfFreeRooms ?? 0
 				},
 				type: SEARCH_TYPES.BUILDING
-			};
+			}
 		},
 		[allRooms.features, availableRooms, t]
-	);
+	)
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
 			case SEARCH_TYPES.ROOM:
-				return getRoomData(clickedElement.data);
+				return getRoomData(clickedElement.data)
 			case SEARCH_TYPES.BUILDING:
-				return getBuildingData(clickedElement.data);
+				return getBuildingData(clickedElement.data)
 
 			default:
 				return {
@@ -593,9 +591,9 @@ const MapScreen = (): React.JSX.Element => {
 					type: SEARCH_TYPES.ROOM,
 					properties: null,
 					occupancies: null
-				} as RoomData;
+				} as RoomData
 		}
-	}, [clickedElement]);
+	}, [clickedElement])
 
 	function setView(clickedElement: ClickedMapElement | null = null): void {
 		if (clickedElement?.center == null) {
@@ -605,30 +603,30 @@ const MapScreen = (): React.JSX.Element => {
 				animationDuration: 400,
 				heading: 0,
 				animationMode: 'flyTo'
-			});
-			return;
+			})
+			return
 		}
 
-		const [longitude, latitude] = clickedElement.center;
-		const adjustedLatitude = latitude - 0.0003;
+		const [longitude, latitude] = clickedElement.center
+		const adjustedLatitude = latitude - 0.0003
 		// Use the adjusted center for flyTo
 		cameraRef.current?.setCamera({
 			centerCoordinate: [longitude, adjustedLatitude],
 			zoomLevel: 17,
 			animationDuration: 500,
 			animationMode: 'flyTo'
-		});
+		})
 	}
 
-	const [cameraTriggerKey, setCameraTriggerKey] = useState(0);
+	const [cameraTriggerKey, setCameraTriggerKey] = useState(0)
 
 	useEffect(() => {
 		if (mapOverlay == null) {
-			return;
+			return
 		}
 		if (clickedElement == null) {
 			if (currentFloor?.manual !== true) {
-				setCurrentFloor({ floor: 'EG', manual: false });
+				setCurrentFloor({ floor: 'EG', manual: false })
 			}
 			cameraRef.current?.setCamera({
 				centerCoordinate: mapCenter,
@@ -636,22 +634,22 @@ const MapScreen = (): React.JSX.Element => {
 				animationDuration: 500,
 				heading: 0,
 				animationMode: 'flyTo'
-			});
+			})
 		} else if (clickedElement !== null) {
-			setView(clickedElement);
+			setView(clickedElement)
 		}
-	}, [clickedElement]);
+	}, [clickedElement])
 
 	useEffect(() => {
-		setDisableFollowUser(false);
-		bottomSheetModalRef.current?.close();
-	}, [cameraTriggerKey]);
+		setDisableFollowUser(false)
+		bottomSheetModalRef.current?.close()
+	}, [cameraTriggerKey])
 
 	useEffect(() => {
 		if (clickedElement !== null) {
-			setDisableFollowUser(true);
+			setDisableFollowUser(true)
 		}
-	}, [clickedElement]);
+	}, [clickedElement])
 
 	const layerStyles = {
 		allRooms: {
@@ -677,43 +675,43 @@ const MapScreen = (): React.JSX.Element => {
 			paddingHorizontal: 4,
 			borderRadius: theme.radius.sm
 		}
-	};
+	}
 
-	const [regionChange, setRegionChange] = useState<boolean>(false);
+	const [regionChange, setRegionChange] = useState<boolean>(false)
 
 	useEffect(() => {
 		// As required by the OSM attribution, the attribution must be displayed until the user interacts with the map or 5 seconds after the map has loaded
-		let timer: ReturnType<typeof setTimeout>;
+		let timer: ReturnType<typeof setTimeout>
 		const startFadeOut = (): void => {
 			opacity.value = withTiming(0, { duration: 500 }, () => {
-				runOnJS(setIsVisible)(false);
-			});
-		};
+				runOnJS(setIsVisible)(false)
+			})
+		}
 
 		if (regionChange) {
-			startFadeOut();
+			startFadeOut()
 		} else if (!regionChange && isVisible) {
 			timer = setTimeout(() => {
-				startFadeOut();
-			}, 5000);
+				startFadeOut()
+			}, 5000)
 		}
 
 		return () => {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-			clearTimeout(timer);
-		};
-	}, [regionChange, isVisible, opacity]);
+			clearTimeout(timer)
+		}
+	}, [regionChange, isVisible, opacity])
 
 	const showFiltered = useCallback(() => {
-		return filteredGeoJSON != null && filteredGeoJSON.features.length > 0;
-	}, [filteredGeoJSON]);
+		return filteredGeoJSON != null && filteredGeoJSON.features.length > 0
+	}, [filteredGeoJSON])
 
 	const showAvailableFiltered = useCallback(() => {
 		return (
 			availableFilteredGeoJSON != null &&
 			availableFilteredGeoJSON.features.length > 0
-		);
-	}, [availableFilteredGeoJSON]);
+		)
+	}, [availableFilteredGeoJSON])
 
 	return (
 		<View style={styles.map}>
@@ -746,17 +744,17 @@ const MapScreen = (): React.JSX.Element => {
 					}
 					attributionEnabled={false}
 					onDidFailLoadingMap={() => {
-						setMapLoadState(LoadingState.ERROR);
+						setMapLoadState(LoadingState.ERROR)
 					}}
 					onDidFinishLoadingMap={() => {
-						setMapLoadState(LoadingState.LOADED);
+						setMapLoadState(LoadingState.LOADED)
 					}}
 					ref={mapRef}
 					onDidFinishRenderingMapFully={() => {
-						setRegionChange(false);
+						setRegionChange(false)
 					}}
 					onRegionIsChanging={() => {
-						setRegionChange(true);
+						setRegionChange(true)
 					}}
 					compassViewMargins={
 						Platform.OS === 'android'
@@ -838,12 +836,12 @@ const MapScreen = (): React.JSX.Element => {
 										| Position
 										| undefined,
 									manual: true
-								});
+								})
 								trackEvent('Room', {
 									room: e.features[0].properties?.Raum as string,
 									origin: 'MapClick'
-								});
-								handlePresentModalPress();
+								})
+								handlePresentModalPress()
 							}}
 							hitbox={{ width: 0, height: 0 }}
 						>
@@ -903,7 +901,7 @@ const MapScreen = (): React.JSX.Element => {
 				>
 					<Pressable
 						onPress={() => {
-							void Linking.openURL('https://www.openstreetmap.org/copyright');
+							void Linking.openURL('https://www.openstreetmap.org/copyright')
 						}}
 						style={layerStyles.osmBackground}
 					>
@@ -936,10 +934,10 @@ const MapScreen = (): React.JSX.Element => {
 				)}
 			/>
 		</View>
-	);
-};
+	)
+}
 
-export default MapScreen;
+export default MapScreen
 
 const stylesheet = createStyleSheet((theme) => ({
 	errorContainer: {
@@ -964,4 +962,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		top: -24,
 		zIndex: 99
 	}
-}));
+}))

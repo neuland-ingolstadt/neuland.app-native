@@ -1,8 +1,8 @@
-import { trackEvent } from '@aptabase/react-native';
-import { toast } from 'burnt';
-import Color from 'color';
-import { t } from 'i18next';
-import type { ColorValue } from 'react-native';
+import { trackEvent } from '@aptabase/react-native'
+import { toast } from 'burnt'
+import Color from 'color'
+import { t } from 'i18next'
+import type { ColorValue } from 'react-native'
 
 export enum LoadingState {
 	LOADING = 0,
@@ -20,11 +20,11 @@ export enum LoadingState {
  * const initials = getInitials('John Doe')
  */
 export function getInitials(name: string): string {
-	const names = name.split(' ');
+	const names = name.split(' ')
 	if (names.length < 2) {
-		return names[0].charAt(0).toUpperCase();
+		return names[0].charAt(0).toUpperCase()
 	}
-	return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+	return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase()
 }
 
 /**
@@ -36,13 +36,13 @@ export function getInitials(name: string): string {
  * const textColor = getContrastColor('#ff0000')
  */
 export const getContrastColor = (background: string): string => {
-	const hex = background.replace('#', '');
-	const r = Number.parseInt(hex.substring(0, 2), 16);
-	const g = Number.parseInt(hex.substring(2, 4), 16);
-	const b = Number.parseInt(hex.substring(4, 6), 16);
-	const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-	return yiq >= 128 ? '#000000' : '#ffffff';
-};
+	const hex = background.replace('#', '')
+	const r = Number.parseInt(hex.substring(0, 2), 16)
+	const g = Number.parseInt(hex.substring(2, 4), 16)
+	const b = Number.parseInt(hex.substring(4, 6), 16)
+	const yiq = (r * 299 + g * 587 + b * 114) / 1000
+	return yiq >= 128 ? '#000000' : '#ffffff'
+}
 
 /**
  * Lightens a color by the given percentage.
@@ -61,19 +61,19 @@ export const lighten = (percentage: number, color: string): string => {
 		)
 		.substring(1)
 		.match(/.{2}/g)
-		?.map((x) => Number.parseInt(x, 16)) ?? [0, 0, 0];
+		?.map((x) => Number.parseInt(x, 16)) ?? [0, 0, 0]
 
-	const newRgb = rgb.map((c) => Math.round(c + (255 - c) * percentage));
+	const newRgb = rgb.map((c) => Math.round(c + (255 - c) * percentage))
 
 	const newColor = `#${newRgb
 		.map((c) => c.toString(16).padStart(2, '0'))
-		.join('')}`;
+		.join('')}`
 
-	return newColor;
-};
+	return newColor
+}
 
 export const roomNotFoundToast = (room: string, color: string): void => {
-	trackEvent('RoomNotFound', { room });
+	trackEvent('RoomNotFound', { room })
 	toast({
 		title: t('toast.roomNotFound', { ns: 'common' }),
 		message: room,
@@ -87,8 +87,8 @@ export const roomNotFoundToast = (room: string, color: string): void => {
 				color
 			}
 		}
-	});
-};
+	})
+}
 export const pausedToast = (): void => {
 	toast({
 		title: t('toast.paused.title', { ns: 'common' }),
@@ -102,8 +102,8 @@ export const pausedToast = (): void => {
 				color: '#ed8422'
 			}
 		}
-	});
-};
+	})
+}
 export const getStatusBarStyle = (
 	theme: 'light' | 'dark' | 'auto',
 	isAndroid: boolean,
@@ -111,26 +111,26 @@ export const getStatusBarStyle = (
 ): 'light' | 'dark' | 'auto' => {
 	switch (theme) {
 		case 'light':
-			return 'dark';
+			return 'dark'
 		case 'dark':
-			return 'light';
+			return 'light'
 		default:
-			return isAndroid ? (isDark ? 'light' : 'dark') : 'auto';
+			return isAndroid ? (isDark ? 'light' : 'dark') : 'auto'
 	}
-};
+}
 
 export const inverseColor = (color: ColorValue): string => {
-	let inverseColor: string;
+	let inverseColor: string
 
 	if (color === '#ffffff' || color === '#000000') {
 		// If primary color is white or black, adjust it slightly instead of inverting
-		inverseColor = color === '#ffffff' ? '#c3edff' : '#4c8eaa';
+		inverseColor = color === '#ffffff' ? '#c3edff' : '#4c8eaa'
 	} else {
 		// Otherwise, invert the color
-		inverseColor = Color(color).negate().string();
+		inverseColor = Color(color).negate().string()
 	}
-	return inverseColor;
-};
+	return inverseColor
+}
 
 /**
  * Generates a random HSL color, which is vibrant and visible.
@@ -138,11 +138,11 @@ export const inverseColor = (color: ColorValue): string => {
  */
 export function getRandomHSLColor(): string {
 	function rand(min: number, max: number): number {
-		return min + Math.random() * (max - min);
+		return min + Math.random() * (max - min)
 	}
 
-	const h = rand(1, 360); // hue
-	const s = rand(60, 100); // saturation
-	const l = rand(30, 70); // lightness
-	return `hsl(${h},${s}%,${l}%)`;
+	const h = rand(1, 360) // hue
+	const s = rand(60, 100) // saturation
+	const l = rand(30, 70) // lightness
+	return `hsl(${h},${s}%,${l}%)`
 }

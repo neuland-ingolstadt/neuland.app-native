@@ -1,24 +1,24 @@
-import ClEventsPage from '@/components/Events/ClEventsPage';
-import ClSportsPage from '@/components/Events/ClSportsPage';
-import PagerView from '@/components/Layout/PagerView';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import ToggleRow from '@/components/Universal/ToggleRow';
+import ClEventsPage from '@/components/Events/ClEventsPage'
+import ClSportsPage from '@/components/Events/ClSportsPage'
+import PagerView from '@/components/Layout/PagerView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
 import {
 	loadCampusLifeEvents,
 	loadUniversitySportsEvents
-} from '@/utils/events-utils';
-import { pausedToast } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { useQueries } from '@tanstack/react-query';
-import type React from 'react';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Animated, View, useWindowDimensions } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/events-utils'
+import { pausedToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { useQueries } from '@tanstack/react-query'
+import type React from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Animated, View, useWindowDimensions } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): React.JSX.Element {
-	const { t } = useTranslation('common');
-	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('common')
+	const { styles } = useStyles(stylesheet)
 	const results = useQueries({
 		queries: [
 			{
@@ -34,36 +34,36 @@ export default function Events(): React.JSX.Element {
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours
 			}
 		]
-	});
+	})
 
-	const clEventsResult = results[0];
-	const sportsResult = results[1];
+	const clEventsResult = results[0]
+	const sportsResult = results[1]
 
-	const scrollY = useRef(new Animated.Value(0)).current;
-	const [selectedData, setSelectedData] = useState<number>(0);
-	const screenHeight = useWindowDimensions().height;
+	const scrollY = useRef(new Animated.Value(0)).current
+	const [selectedData, setSelectedData] = useState<number>(0)
+	const screenHeight = useWindowDimensions().height
 
-	const [viewedPages, setViewedPages] = useState<Set<number>>(new Set([0]));
+	const [viewedPages, setViewedPages] = useState<Set<number>>(new Set([0]))
 
 	useEffect(() => {
 		if (
 			(clEventsResult.isPaused && clEventsResult.data != null) ||
 			(sportsResult.isPaused && sportsResult.data != null)
 		) {
-			pausedToast();
+			pausedToast()
 		}
-	}, [sportsResult.isPaused, clEventsResult.isPaused]);
+	}, [sportsResult.isPaused, clEventsResult.isPaused])
 
-	const pagerViewRef = useRef<PagerView>(null);
+	const pagerViewRef = useRef<PagerView>(null)
 	function setPage(page: number): void {
-		pagerViewRef.current?.setPage(page);
+		pagerViewRef.current?.setPage(page)
 	}
-	const displayTypes = ['Events', t('pages.clEvents.sports.title')];
-	const pages = ['events', 'sports'];
+	const displayTypes = ['Events', t('pages.clEvents.sports.title')]
+	const pages = ['events', 'sports']
 
 	const renderPage = (index: number) => {
 		if (!viewedPages.has(index)) {
-			return <LoadingIndicator />;
+			return <LoadingIndicator />
 		}
 
 		return (
@@ -82,8 +82,8 @@ export default function Events(): React.JSX.Element {
 					)}
 				</Suspense>
 			</View>
-		);
-	};
+		)
+	}
 
 	return (
 		<View style={styles.page}>
@@ -112,20 +112,20 @@ export default function Events(): React.JSX.Element {
 				}}
 				initialPage={0}
 				onPageSelected={(e) => {
-					const page = e.nativeEvent.position;
-					setSelectedData(page);
+					const page = e.nativeEvent.position
+					setSelectedData(page)
 
 					// Only update state if the page is not already viewed.
 					setViewedPages((prev) => {
-						if (prev.has(page)) return prev;
-						const newSet = new Set(prev);
-						newSet.add(page);
-						return newSet;
-					});
+						if (prev.has(page)) return prev
+						const newSet = new Set(prev)
+						newSet.add(page)
+						return newSet
+					})
 
 					trackEvent('Route', {
 						path: `cl-events/${pages[page]}`
-					});
+					})
 				}}
 				scrollEnabled
 				overdrag
@@ -134,7 +134,7 @@ export default function Events(): React.JSX.Element {
 				{renderPage(1)}
 			</PagerView>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -158,4 +158,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center',
 		alignItems: 'center'
 	}
-}));
+}))

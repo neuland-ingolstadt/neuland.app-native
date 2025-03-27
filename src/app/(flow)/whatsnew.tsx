@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Flow/WhatsnewBox';
-import changelogData from '@/data/changelog.json';
-import { useFlowStore } from '@/hooks/useFlowStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Changelog } from '@/types/data';
-import { convertToMajorMinorPatch } from '@/utils/app-utils';
-import { getContrastColor } from '@/utils/ui-utils';
-import * as Application from 'expo-application';
-import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, Text, View } from 'react-native';
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import changelogData from '@/data/changelog.json'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Changelog } from '@/types/data'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { getContrastColor } from '@/utils/ui-utils'
+import * as Application from 'expo-application'
+import { ImpactFeedbackStyle, impactAsync } from 'expo-haptics'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, Text, View } from 'react-native'
 import Animated, {
 	Easing,
 	useAnimatedStyle,
@@ -20,35 +20,35 @@ import Animated, {
 	withDelay,
 	withSequence,
 	withTiming
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function WhatsNewScreen(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const changelog: Changelog = changelogData as Changelog;
-	const { t, i18n } = useTranslation('flow');
+	const { styles } = useStyles(stylesheet)
+	const changelog: Changelog = changelogData as Changelog
+	const { t, i18n } = useTranslation('flow')
 	const version = convertToMajorMinorPatch(
 		Application.nativeApplicationVersion ?? '0.0.0'
-	);
-	const toggleUpdated = useFlowStore((state) => state.toggleUpdated);
+	)
+	const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
 	if (changelog.version[version] === undefined) {
-		router.navigate('/(tabs)/(index)');
+		router.navigate('/(tabs)/(index)')
 	}
 	const totalItems = Object.keys(changelog.version[version] ?? []).flatMap(
 		(key) => changelog.version[key]
-	).length;
+	).length
 
-	const opacityValues = changelog.version[version].map(() => useSharedValue(0));
+	const opacityValues = changelog.version[version].map(() => useSharedValue(0))
 	const rotationValues = Array.from({ length: totalItems }, () =>
 		useSharedValue(0)
-	);
+	)
 
 	const handlePress = (index: number): void => {
 		if (Platform.OS === 'ios') {
-			void impactAsync(ImpactFeedbackStyle.Light);
+			void impactAsync(ImpactFeedbackStyle.Light)
 		}
-		const direction = Math.random() > 0.5 ? 1 : -1;
-		const rotation = rotationValues[index];
+		const direction = Math.random() > 0.5 ? 1 : -1
+		const rotation = rotationValues[index]
 		rotation.value = withSequence(
 			withTiming(direction * -1.5, {
 				duration: 100,
@@ -66,11 +66,11 @@ export default function WhatsNewScreen(): React.JSX.Element {
 				duration: 100,
 				easing: Easing.linear
 			})
-		);
-	};
+		)
+	}
 
 	useEffect(() => {
-		const delay = 200;
+		const delay = 200
 		setTimeout(() => {
 			opacityValues.forEach((opacity, index) => {
 				opacity.value = withDelay(
@@ -79,10 +79,10 @@ export default function WhatsNewScreen(): React.JSX.Element {
 						duration: 800,
 						easing: Easing.linear
 					})
-				);
-			});
-		}, delay);
-	}, []);
+				)
+			})
+		}, delay)
+	}, [])
 
 	return (
 		<View style={styles.page}>
@@ -103,13 +103,13 @@ export default function WhatsNewScreen(): React.JSX.Element {
 							{changelog.version[key].map(
 								({ title, description, icon }, index) => {
 									const overallIndex =
-										boxIndex * changelog.version[key].length + index;
+										boxIndex * changelog.version[key].length + index
 
 									const opacityStyle = useAnimatedStyle(() => {
 										return {
 											opacity: opacityValues[overallIndex].value
-										};
-									});
+										}
+									})
 
 									const rotationStyle = useAnimatedStyle(() => {
 										return {
@@ -118,8 +118,8 @@ export default function WhatsNewScreen(): React.JSX.Element {
 													rotateZ: `${rotationValues[overallIndex].value}deg`
 												}
 											]
-										};
-									});
+										}
+									})
 
 									return (
 										<Animated.View
@@ -128,7 +128,7 @@ export default function WhatsNewScreen(): React.JSX.Element {
 										>
 											<Pressable
 												onPress={() => {
-													handlePress(overallIndex);
+													handlePress(overallIndex)
 												}}
 											>
 												<WhatsNewBox
@@ -140,7 +140,7 @@ export default function WhatsNewScreen(): React.JSX.Element {
 												/>
 											</Pressable>
 										</Animated.View>
-									);
+									)
 								}
 							)}
 						</View>
@@ -150,15 +150,15 @@ export default function WhatsNewScreen(): React.JSX.Element {
 				<Pressable
 					style={styles.button}
 					onPress={() => {
-						toggleUpdated();
-						router.navigate('/(tabs)/(index)');
+						toggleUpdated()
+						router.navigate('/(tabs)/(index)')
 					}}
 				>
 					<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>
 				</Pressable>
 			</View>
 		</View>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -209,4 +209,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		flex: 1,
 		justifyContent: 'flex-end'
 	}
-}));
+}))

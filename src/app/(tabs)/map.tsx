@@ -1,63 +1,63 @@
 /* eslint-disable react-native/no-color-literals */
-import MapScreen, { requestPermission } from '@/components/Map/MapScreen';
-import { MapContext } from '@/contexts/map';
-import type { ClickedMapElement, SearchResult } from '@/types/map';
-import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils';
-import { storage } from '@/utils/storage';
-import Head from 'expo-router/head';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import MapScreen, { requestPermission } from '@/components/Map/MapScreen'
+import { MapContext } from '@/contexts/map'
+import type { ClickedMapElement, SearchResult } from '@/types/map'
+import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
+import { storage } from '@/utils/storage'
+import Head from 'expo-router/head'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function MapRootScreen(): React.JSX.Element {
-	const { t } = useTranslation(['navigation']);
-	const { styles } = useStyles(stylesheet);
-	const [isPageOpen, setIsPageOpen] = useState(false);
+	const { t } = useTranslation(['navigation'])
+	const { styles } = useStyles(stylesheet)
+	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
-		setIsPageOpen(true);
-	}, []);
-	const [localSearch, setLocalSearch] = useState<string>('');
+		setIsPageOpen(true)
+	}, [])
+	const [localSearch, setLocalSearch] = useState<string>('')
 	const [clickedElement, setClickedElement] =
-		useState<ClickedMapElement | null>(null);
+		useState<ClickedMapElement | null>(null)
 	const [availableRooms, setAvailableRooms] = useState<AvailableRoom[] | null>(
 		null
-	);
+	)
 	const [currentFloor, setCurrentFloor] = useState({
 		floor: 'EG',
 		manual: false
-	});
+	})
 	const [nextLecture, setNextLecture] = useState<
 		FriendlyTimetableEntry[] | null
-	>(null);
+	>(null)
 
-	const [searchHistory, setSearchHistory] = useState<SearchResult[]>([]);
+	const [searchHistory, setSearchHistory] = useState<SearchResult[]>([])
 	const updateSearchHistory = (newHistory: SearchResult[]): void => {
-		setSearchHistory(newHistory);
+		setSearchHistory(newHistory)
 
-		const jsonValue = JSON.stringify(newHistory);
-		storage.set('mapSearchHistory', jsonValue);
-	};
+		const jsonValue = JSON.stringify(newHistory)
+		storage.set('mapSearchHistory', jsonValue)
+	}
 
 	const loadSearchHistory = (): void => {
-		const jsonValue = storage.getString('mapSearchHistory');
+		const jsonValue = storage.getString('mapSearchHistory')
 		if (jsonValue != null) {
 			try {
-				const parsedValue = JSON.parse(jsonValue) as SearchResult[];
-				setSearchHistory(parsedValue);
+				const parsedValue = JSON.parse(jsonValue) as SearchResult[]
+				setSearchHistory(parsedValue)
 			} catch (error) {
-				console.info('Failed to parse search history:', error);
+				console.info('Failed to parse search history:', error)
 			}
 		} else {
-			setSearchHistory([]);
+			setSearchHistory([])
 		}
-	};
+	}
 	// Load search history on component mount
 	useEffect(() => {
-		void loadSearchHistory();
-	}, []);
+		void loadSearchHistory()
+	}, [])
 
 	const contextValue = {
 		localSearch,
@@ -73,10 +73,10 @@ export default function MapRootScreen(): React.JSX.Element {
 		searchHistory,
 		setSearchHistory,
 		updateSearchHistory
-	};
+	}
 
 	if (Platform.OS === 'android') {
-		void requestPermission();
+		void requestPermission()
 	}
 
 	return (
@@ -98,7 +98,7 @@ export default function MapRootScreen(): React.JSX.Element {
 				)}
 			</SafeAreaView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -106,4 +106,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.background,
 		flex: 1
 	}
-}));
+}))

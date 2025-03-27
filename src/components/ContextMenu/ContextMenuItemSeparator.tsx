@@ -1,15 +1,15 @@
-import type React from 'react';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import * as ContextMenu from 'zeego/dropdown-menu';
+import type React from 'react'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import * as ContextMenu from 'zeego/dropdown-menu'
 
-type ItemProps = React.ComponentProps<(typeof ContextMenu)['Separator']>;
+type ItemProps = React.ComponentProps<(typeof ContextMenu)['Separator']>
 
 const ContextMenuSeparator = ContextMenu.create((props: ItemProps) => {
-	const { styles } = useStyles(stylesheet);
-	return <ContextMenu.Separator style={styles.item} {...props} />;
-}, 'Separator');
+	const { styles } = useStyles(stylesheet)
+	return <ContextMenu.Separator style={styles.item} {...props} />
+}, 'Separator')
 
-export default ContextMenuSeparator;
+export default ContextMenuSeparator
 
 const stylesheet = createStyleSheet((theme) => ({
 	item: {
@@ -18,4 +18,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 4,
 		marginTop: 4
 	}
-}));
+}))

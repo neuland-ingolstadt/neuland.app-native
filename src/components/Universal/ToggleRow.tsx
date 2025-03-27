@@ -1,25 +1,25 @@
-import { selectionAsync } from 'expo-haptics';
-import type React from 'react';
-import { Platform, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { selectionAsync } from 'expo-haptics'
+import type React from 'react'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const ToggleRow = ({
 	items,
 	selectedElement,
 	setSelectedElement
 }: {
-	items: string[];
-	selectedElement: number;
-	setSelectedElement: (element: number) => void;
+	items: string[]
+	selectedElement: number
+	setSelectedElement: (element: number) => void
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	const pressHandler = (index: number) => {
-		setSelectedElement(index);
+		setSelectedElement(index)
 		if (Platform.OS === 'ios') {
-			void selectionAsync();
+			void selectionAsync()
 		}
-	};
+	}
 
 	return (
 		<View style={styles.buttonRow}>
@@ -28,7 +28,7 @@ const ToggleRow = ({
 					<View key={index} style={styles.buttonView}>
 						<Pressable
 							onPress={() => {
-								pressHandler(index);
+								pressHandler(index)
 							}}
 						>
 							<View style={styles.buttonContainer}>
@@ -38,11 +38,11 @@ const ToggleRow = ({
 							</View>
 						</Pressable>
 					</View>
-				);
+				)
 			})}
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	buttonContainer: {
@@ -77,8 +77,8 @@ const stylesheet = createStyleSheet((theme) => ({
 			fontWeight: selected ? '500' : 'normal',
 			color: selected ? theme.colors.primary : theme.colors.text,
 			fontSize: 15
-		};
+		}
 	}
-}));
+}))
 
-export default ToggleRow;
+export default ToggleRow

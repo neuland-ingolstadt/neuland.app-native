@@ -1,30 +1,30 @@
-import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql';
-import useCLParamsStore from '@/hooks/useCLParamsStore';
-import i18n, { type LanguageKey } from '@/localization/i18n';
-import { formatFriendlyTimeRange } from '@/utils/date-utils';
-import { sportsCategories } from '@/utils/events-utils';
-import { router } from 'expo-router';
-import type React from 'react';
-import { Platform, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
+import i18n, { type LanguageKey } from '@/localization/i18n'
+import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { sportsCategories } from '@/utils/events-utils'
+import { router } from 'expo-router'
+import type React from 'react'
+import { Platform, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
-import RowEntry from '../Universal/RowEntry';
+import PlatformIcon from '../Universal/Icon'
+import RowEntry from '../Universal/RowEntry'
 
 const SportsRow = ({
 	event
 }: {
-	event: UniversitySportsFieldsFragment;
+	event: UniversitySportsFieldsFragment
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 	const setSelectedSportsEvent = useCLParamsStore(
 		(state) => state.setSelectedSportsEvent
-	);
+	)
 	const onPressRow = (): void => {
-		setSelectedSportsEvent(event);
-		router.navigate('/sports-event');
-	};
-	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime);
+		setSelectedSportsEvent(event)
+		router.navigate('/sports-event')
+	}
+	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
 	return (
 		<RowEntry
 			title={event.title[i18n.language as LanguageKey] ?? ''}
@@ -67,8 +67,8 @@ const SportsRow = ({
 			}
 			maxTitleWidth={'70%'}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	leftText1: {
@@ -95,6 +95,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		marginRight: 4
 	}
-}));
+}))
 
-export default SportsRow;
+export default SportsRow

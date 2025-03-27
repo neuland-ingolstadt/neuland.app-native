@@ -1,38 +1,38 @@
-import FormList from '@/components/Universal/FormList';
-import type { LucideIcon } from '@/components/Universal/Icon';
-import { quicklinks } from '@/data/constants';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import type { FormListSections } from '@/types/components';
-import type { MaterialIcon } from '@/types/material-icons';
-import { trackEvent } from '@aptabase/react-native';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import FormList from '@/components/Universal/FormList'
+import type { LucideIcon } from '@/components/Universal/Icon'
+import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
+import { trackEvent } from '@aptabase/react-native'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const LinkScreen = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 	const addRecentQuicklink = usePreferencesStore(
 		(state) => state.addRecentQuicklink
-	);
-	const typedQuicklinks = quicklinks as Quicklink[];
+	)
+	const typedQuicklinks = quicklinks as Quicklink[]
 
 	const linkPress = async (key: string, url: string): Promise<void> => {
-		addRecentQuicklink(key);
-		router.back();
-		trackEvent('Quicklink', { link: key });
-		await Linking.openURL(url);
-	};
+		addRecentQuicklink(key)
+		router.back()
+		trackEvent('Quicklink', { link: key })
+		await Linking.openURL(url)
+	}
 	interface Quicklink {
-		key: string;
-		url: string;
+		key: string
+		url: string
 		icon: {
-			ios: string;
-			android: MaterialIcon;
-			web: LucideIcon;
-		};
+			ios: string
+			android: MaterialIcon
+			web: LucideIcon
+		}
 	}
 	function generateSections(links: Quicklink[]): FormListSections[] {
 		return [
@@ -44,15 +44,15 @@ const LinkScreen = (): React.JSX.Element => {
 					icon: { ...link.icon, androidVariant: 'outlined' },
 
 					onPress: async () => {
-						await linkPress(link.key, link.url);
+						await linkPress(link.key, link.url)
 					}
 				})),
 				footer: t('pages.quicklinks.footer')
 			}
-		];
+		]
 	}
 
-	const sections = generateSections(typedQuicklinks);
+	const sections = generateSections(typedQuicklinks)
 
 	return (
 		<View>
@@ -63,8 +63,8 @@ const LinkScreen = (): React.JSX.Element => {
 				<FormList sections={sections} rowStyle={styles.formlistRow} />
 			</View>
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	formlistRow: { marginVertical: 13.5 },
@@ -84,6 +84,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		paddingHorizontal: theme.margins.page
 	}
-}));
+}))
 
-export default LinkScreen;
+export default LinkScreen

@@ -1,22 +1,22 @@
-import { Platform } from 'react-native';
+import { Platform } from 'react-native'
 
-import packageInfo from '../../package.json';
+import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST = 'hiplan.thi.de';
-const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php';
-const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`;
+const ENDPOINT_HOST = 'hiplan.thi.de'
+const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
+const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
  * Error that is thrown when the API indicates an error.
  */
 export class APIError extends Error {
-	public status: number;
-	public data: object;
+	public status: number
+	public data: object
 
 	constructor(status: number, data: object) {
-		super(`${JSON.stringify(data)} (${status.toString()})`);
-		this.status = status;
-		this.data = data;
+		super(`${JSON.stringify(data)} (${status.toString()})`)
+		this.status = status
+		this.data = data
 	}
 }
 
@@ -34,30 +34,30 @@ export class AnonymousAPIClient {
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	async request(params: Record<string, string>): Promise<any> {
-		const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? '';
+		const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
 		const headersObj: Record<string, string> = {
 			Host: ENDPOINT_HOST,
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'X-API-KEY': apiKey
-		};
-		if (Platform.OS !== 'web') headersObj['User-Agent'] = USER_AGENT;
+		}
+		if (Platform.OS !== 'web') headersObj['User-Agent'] = USER_AGENT
 
-		const headers = new Headers(headersObj);
+		const headers = new Headers(headersObj)
 
 		const resp = await fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
 			method: 'POST',
 			body: new URLSearchParams(params).toString(),
 			headers
-		});
+		})
 
-		const respClone = resp.clone();
+		const respClone = resp.clone()
 
 		try {
-			return await resp.json();
+			return await resp.json()
 		} catch {
 			throw new Error(
 				`API returned malformed JSON: (${await respClone.text()})`
-			);
+			)
 		}
 	}
 
@@ -74,17 +74,17 @@ export class AnonymousAPIClient {
 			format: 'json',
 			username,
 			passwd
-		});
+		})
 
 		if (res.status !== 0) {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-			throw new APIError(res.status, res.data);
+			throw new APIError(res.status, res.data)
 		}
 
 		return {
 			session: res.data[0],
 			isStudent: res.data[2] === 3
-		};
+		}
 	}
 
 	/**
@@ -94,16 +94,16 @@ export class AnonymousAPIClient {
 	 */
 	async isAlive(session: string | null): Promise<boolean> {
 		if (session == null) {
-			return false;
+			return false
 		}
 		const res = await this.request({
 			service: 'session',
 			method: 'isalive',
 			format: 'json',
 			session
-		});
+		})
 
-		return res.data === 'STATUS_OK';
+		return res.data === 'STATUS_OK'
 	}
 
 	/**
@@ -117,10 +117,10 @@ export class AnonymousAPIClient {
 			method: 'close',
 			format: 'json',
 			session
-		});
+		})
 
-		return res.data === 'STATUS_OK';
+		return res.data === 'STATUS_OK'
 	}
 }
 
-export default new AnonymousAPIClient();
+export default new AnonymousAPIClient()

@@ -1,12 +1,12 @@
-import type React from 'react';
-import { StyleSheet, View } from 'react-native';
+import type React from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function DetailsBody({
 	children
 }: {
-	children: React.JSX.Element | JSX.Element[];
+	children: React.JSX.Element | JSX.Element[]
 }): React.JSX.Element {
-	return <View style={styles.detailsBody}>{children}</View>;
+	return <View style={styles.detailsBody}>{children}</View>
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
 		flexShrink: 1,
 		gap: 4
 	}
-});
+})

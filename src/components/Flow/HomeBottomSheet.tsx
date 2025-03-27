@@ -1,18 +1,18 @@
-import { BottomSheetView } from '@gorhom/bottom-sheet';
-import type React from 'react';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { BottomSheetView } from '@gorhom/bottom-sheet'
+import type React from 'react'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export const HomeBottomSheet = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<BottomSheetView style={styles.contentContainer}>
 			<View>
 				<Text style={styles.text}>{'Report a problem'}</Text>
 			</View>
 		</BottomSheetView>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
@@ -24,4 +24,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 21,
 		fontWeight: 'bold'
 	}
-}));
+}))

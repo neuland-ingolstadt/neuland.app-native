@@ -2,34 +2,33 @@ import type {
 	AnnouncementFieldsFragment,
 	Platform as AppPlatform,
 	UserKind
-} from '@/__generated__/gql/graphql';
-import i18n from '@/localization/i18n';
-import { trackEvent } from '@aptabase/react-native';
-import type React from 'react';
-import { useCallback, useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Platform, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/__generated__/gql/graphql'
+import i18n from '@/localization/i18n'
+import { trackEvent } from '@aptabase/react-native'
+import type React from 'react'
+import { useCallback, useContext, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
-import { DashboardContext, UserKindContext } from '../contexts';
+import PlatformIcon from '../Universal/Icon'
+import { DashboardContext, UserKindContext } from '../contexts'
 
 interface AnnouncementCardProps {
-	data: AnnouncementFieldsFragment[];
+	data: AnnouncementFieldsFragment[]
 }
 
 const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
-	const { hiddenAnnouncements, hideAnnouncement } =
-		useContext(DashboardContext);
-	const { t } = useTranslation('navigation');
-	const { userKind = 'guest' } = useContext(UserKindContext);
-	const { styles } = useStyles(stylesheet);
+	const { hiddenAnnouncements, hideAnnouncement } = useContext(DashboardContext)
+	const { t } = useTranslation('navigation')
+	const { userKind = 'guest' } = useContext(UserKindContext)
+	const { styles } = useStyles(stylesheet)
 
 	const filterAnnouncements = useCallback(
 		(
 			announcements: AnnouncementFieldsFragment[]
 		): AnnouncementFieldsFragment[] => {
-			const now = Date.now();
+			const now = Date.now()
 			return announcements
 				.filter(
 					(announcement) =>
@@ -43,39 +42,39 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 						new Date(announcement.endDateTime).getTime() > now &&
 						!hiddenAnnouncements.includes(announcement.id)
 				)
-				.sort((a, b) => a.priority - b.priority);
+				.sort((a, b) => a.priority - b.priority)
 		},
 		[hiddenAnnouncements, userKind]
-	);
+	)
 
 	const filteredAnnouncements = useMemo(
 		() => filterAnnouncements(data),
 		[data, filterAnnouncements]
-	);
+	)
 
 	const handlePressClose = useCallback(
 		(id: string) => () => {
-			trackEvent('Announcement', { close: id });
-			hideAnnouncement(id);
+			trackEvent('Announcement', { close: id })
+			hideAnnouncement(id)
 		},
 		[hideAnnouncement]
-	);
+	)
 
 	const handlePressLink = useCallback(
 		(url: string | null | undefined, id: string) => () => {
 			if (url != null) {
-				trackEvent('Announcement', { link: id });
-				void Linking.openURL(url);
+				trackEvent('Announcement', { link: id })
+				void Linking.openURL(url)
 			}
 		},
 		[]
-	);
+	)
 
 	if (filteredAnnouncements.length === 0) {
-		return null;
+		return null
 	}
 
-	const { id, title, description, url } = filteredAnnouncements[0];
+	const { id, title, description, url } = filteredAnnouncements[0]
 
 	return (
 		<Pressable onPress={handlePressLink(url, id)} style={styles.card}>
@@ -106,8 +105,8 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 				<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
 			)}
 		</Pressable>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	card: {
@@ -145,6 +144,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		gap: 10
 	}
-}));
+}))
 
-export default AnnouncementCard;
+export default AnnouncementCard

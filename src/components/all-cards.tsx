@@ -1,4 +1,4 @@
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants';
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
 import {
 	BaseCard,
@@ -8,8 +8,8 @@ import {
 	LinkCard,
 	LoginCard,
 	TimetableCard
-} from './Cards';
-import NewsCard from './Cards/NewsCard';
+} from './Cards'
+import NewsCard from './Cards/NewsCard'
 
 export const AllCards: Card[] = [
 	{
@@ -78,17 +78,17 @@ export const AllCards: Card[] = [
 		allowed: [USER_GUEST],
 		card: () => <LoginCard />
 	}
-];
+]
 
 export interface Card {
-	key: string;
-	removable: boolean; // can the card be removed
-	stillVisible?: boolean; // is the card visible to not allowed users
-	initial: string[]; // for which user kind is the card shown by default
-	allowed: string[]; // for which user kind is the card allowed
-	card: () => JSX.Element;
+	key: string
+	removable: boolean // can the card be removed
+	stillVisible?: boolean // is the card visible to not allowed users
+	initial: string[] // for which user kind is the card shown by default
+	allowed: string[] // for which user kind is the card allowed
+	card: () => JSX.Element
 }
 
 export interface ExtendedCard extends Card {
-	text: string;
+	text: string
 }

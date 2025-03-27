@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { MapContext } from '@/contexts/map';
-import type { SEARCH_TYPES, SearchResult } from '@/types/map';
-import type { MaterialIcon } from '@/types/material-icons';
-import { getContrastColor } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { TouchableOpacity } from '@gorhom/bottom-sheet';
-import type { Position } from 'geojson';
-import type React from 'react';
-import { memo, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { MapContext } from '@/contexts/map'
+import type { SEARCH_TYPES, SearchResult } from '@/types/map'
+import type { MaterialIcon } from '@/types/material-icons'
+import { getContrastColor } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import type { Position } from 'geojson'
+import type React from 'react'
+import { memo, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 const ResultRow: React.FC<{
-	result: SearchResult;
-	index: number;
-	handlePresentModalPress: () => void;
-	updateSearchHistory: (result: SearchResult) => void;
+	result: SearchResult
+	index: number
+	handlePresentModalPress: () => void
+	updateSearchHistory: (result: SearchResult) => void
 }> = ({
 	result,
 	index,
@@ -26,33 +26,33 @@ const ResultRow: React.FC<{
 	updateSearchHistory
 }): React.JSX.Element => {
 	const { setClickedElement, setLocalSearch, setCurrentFloor } =
-		useContext(MapContext);
-	const { styles } = useStyles(stylesheet);
-	const { i18n } = useTranslation();
-	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en';
+		useContext(MapContext)
+	const { styles } = useStyles(stylesheet)
+	const { i18n } = useTranslation()
+	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
 	return (
 		<TouchableOpacity
 			key={index}
 			style={styles.searchRowContainer}
 			onPress={() => {
-				const center = result.item.properties?.center as Position | undefined;
-				updateSearchHistory(result);
+				const center = result.item.properties?.center as Position | undefined
+				updateSearchHistory(result)
 				setClickedElement({
 					data: result.title,
 					type: result.item.properties?.rtype as SEARCH_TYPES,
 					center,
 					manual: false
-				});
+				})
 				setCurrentFloor({
 					floor: (result.item.properties?.Ebene as string) ?? 'EG',
 					manual: false
-				});
+				})
 				trackEvent('Room', {
 					room: result.title,
 					origin: 'Search'
-				});
-				handlePresentModalPress();
-				setLocalSearch('');
+				})
+				handlePresentModalPress()
+				setLocalSearch('')
 			}}
 		>
 			<View style={styles.searchIconContainer}>
@@ -81,8 +81,8 @@ const ResultRow: React.FC<{
 				</Text>
 			</View>
 		</TouchableOpacity>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	flex: {
@@ -117,6 +117,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: '600'
 	}
-}));
+}))
 
-export default memo(ResultRow);
+export default memo(ResultRow)

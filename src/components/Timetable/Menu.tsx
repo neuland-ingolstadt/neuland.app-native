@@ -1,27 +1,24 @@
-import {
-	TimetableMode,
-	usePreferencesStore
-} from '@/hooks/usePreferencesStore';
-import { Check } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { Check } from 'lucide-react-native'
+import { useTranslation } from 'react-i18next'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
-import DropdownMenuContent from '../Menu/DropdownMenuContent';
-import DropdownMenuItem from '../Menu/DropdownMenuItem';
-import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator';
-import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle';
-import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger';
-import PlatformIcon from '../Universal/Icon';
+import DropdownMenuContent from '../Menu/DropdownMenuContent'
+import DropdownMenuItem from '../Menu/DropdownMenuItem'
+import DropdownMenuSeparator from '../Menu/DropdownMenuItemSeparator'
+import DropdownMenuItemTitle from '../Menu/DropdownMenuItemTitle'
+import DropdownMenuTrigger from '../Menu/DropdownMenuTrigger'
+import PlatformIcon from '../Universal/Icon'
 
 export function MyMenu() {
 	const setTimetableMode = usePreferencesStore(
 		(state) => state.setTimetableMode
-	);
-	const timetableMode = usePreferencesStore((state) => state.timetableMode);
+	)
+	const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
-	const { t } = useTranslation('timetable');
-	const { styles } = useStyles(stylesheet);
+	const { t } = useTranslation('timetable')
+	const { styles } = useStyles(stylesheet)
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenuTrigger>
@@ -45,7 +42,7 @@ export function MyMenu() {
 				<DropdownMenuItem
 					key="1"
 					onSelect={() => {
-						setTimetableMode(TimetableMode.Timeline1);
+						setTimetableMode(TimetableMode.Timeline1)
 					}}
 				>
 					<DropdownMenuItemTitle>{t('menu.oneDay')}</DropdownMenuItemTitle>
@@ -59,7 +56,7 @@ export function MyMenu() {
 				<DropdownMenuItem
 					key="3"
 					onSelect={() => {
-						setTimetableMode(TimetableMode.Timeline3);
+						setTimetableMode(TimetableMode.Timeline3)
 					}}
 				>
 					<DropdownMenuItemTitle>{t('menu.threeDays')}</DropdownMenuItemTitle>
@@ -73,7 +70,7 @@ export function MyMenu() {
 				<DropdownMenuItem
 					key="5"
 					onSelect={() => {
-						setTimetableMode(TimetableMode.Timeline5);
+						setTimetableMode(TimetableMode.Timeline5)
 					}}
 				>
 					<DropdownMenuItemTitle>{t('menu.fiveDays')}</DropdownMenuItemTitle>
@@ -87,7 +84,7 @@ export function MyMenu() {
 				<DropdownMenuItem
 					key="7"
 					onSelect={() => {
-						setTimetableMode(TimetableMode.Timeline7);
+						setTimetableMode(TimetableMode.Timeline7)
 					}}
 				>
 					<DropdownMenuItemTitle>{t('menu.sevenDays')}</DropdownMenuItemTitle>
@@ -101,7 +98,7 @@ export function MyMenu() {
 				<DropdownMenuItem
 					key="list"
 					onSelect={() => {
-						setTimetableMode(TimetableMode.List);
+						setTimetableMode(TimetableMode.List)
 					}}
 				>
 					<DropdownMenuItemTitle>{t('menu.list')}</DropdownMenuItemTitle>
@@ -113,7 +110,7 @@ export function MyMenu() {
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu.Root>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -123,4 +120,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	trigger: {
 		color: theme.colors.text
 	}
-}));
+}))

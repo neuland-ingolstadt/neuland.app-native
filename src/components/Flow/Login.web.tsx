@@ -1,34 +1,34 @@
-import WhatsNewBox from '@/components/Flow/WhatsnewBox';
-import LoginForm from '@/components/Universal/LoginForm';
-import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants';
-import type { OnboardingCardData } from '@/types/data';
-import { router, useLocalSearchParams } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Platform, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import LoginForm from '@/components/Universal/LoginForm'
+import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
+import type { OnboardingCardData } from '@/types/data'
+import { router, useLocalSearchParams } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Text, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import LoginAnimatedText from './LoginAnimatedText';
+import LoginAnimatedText from './LoginAnimatedText'
 
 export default function Login(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('flow');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('flow')
 	const { fromOnboarding } = useLocalSearchParams<{
-		fromOnboarding: string;
-	}>();
+		fromOnboarding: string
+	}>()
 
 	const navigateHome = (): void => {
 		if (fromOnboarding === 'true') {
-			router.dismissAll();
-			router.replace('/');
-			return;
+			router.dismissAll()
+			router.replace('/')
+			return
 		}
-		router.dismissAll();
+		router.dismissAll()
 		if (Platform.OS === 'web') {
-			router.replace('/');
+			router.replace('/')
 		}
-	};
+	}
 
 	const data: OnboardingCardData[] = [
 		{
@@ -67,7 +67,7 @@ export default function Login(): React.JSX.Element {
 				web: 'GlobeLock'
 			}
 		}
-	];
+	]
 
 	return (
 		<>
@@ -83,7 +83,7 @@ export default function Login(): React.JSX.Element {
 							<Text
 								style={styles.privacyLinkButton}
 								onPress={() => {
-									void Linking.openURL(PRIVACY_URL);
+									void Linking.openURL(PRIVACY_URL)
 								}}
 							>
 								{t('onboarding.links.privacy')}
@@ -108,7 +108,7 @@ export default function Login(): React.JSX.Element {
 						<Text
 							style={styles.privacyLink}
 							onPress={() => {
-								void Linking.openURL(PRIVACY_URL);
+								void Linking.openURL(PRIVACY_URL)
 							}}
 						>
 							{t('onboarding.links.faq')}
@@ -116,7 +116,7 @@ export default function Login(): React.JSX.Element {
 						<Text
 							style={styles.privacyLink}
 							onPress={() => {
-								void Linking.openURL(IMPRINT_URL);
+								void Linking.openURL(IMPRINT_URL)
 							}}
 						>
 							{t('onboarding.links.imprint')}
@@ -125,7 +125,7 @@ export default function Login(): React.JSX.Element {
 				</View>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -174,4 +174,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		frontWeight: '800',
 		textAlign: 'center'
 	}
-}));
+}))

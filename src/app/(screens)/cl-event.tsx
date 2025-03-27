@@ -1,41 +1,41 @@
-import FormList from '@/components/Universal/FormList';
-import { linkIcon } from '@/components/Universal/Icon';
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton';
-import useCLParamsStore from '@/hooks/useCLParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { FormListSections, SectionGroup } from '@/types/components';
+import FormList from '@/components/Universal/FormList'
+import { linkIcon } from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
-} from '@/utils/date-utils';
-import { isValidRoom } from '@/utils/timetable-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { HeaderTitle } from '@react-navigation/elements';
+} from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
 import {
 	Redirect,
 	Stack,
 	router,
 	useFocusEffect,
 	useNavigation
-} from 'expo-router';
-import type React from 'react';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Platform, Share, Text, View } from 'react-native';
+} from 'expo-router'
+import type React from 'react'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function ClEventDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const clEvent = useCLParamsStore((state) => state.selectedClEvent);
+	const { styles, theme } = useStyles(stylesheet)
+	const clEvent = useCLParamsStore((state) => state.selectedClEvent)
 
-	const ref = useAnimatedRef<Animated.ScrollView>();
-	const scroll = useScrollViewOffset(ref);
+	const ref = useAnimatedRef<Animated.ScrollView>()
+	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -48,23 +48,23 @@ export default function ClEventDetail(): React.JSX.Element {
 					)
 				}
 			]
-		};
-	});
-	const { t, i18n } = useTranslation('common');
+		}
+	})
+	const { t, i18n } = useTranslation('common')
 	const isMultiDayEvent =
 		clEvent?.startDateTime != null &&
 		clEvent.endDateTime != null &&
 		new Date(clEvent.startDateTime).toDateString() !==
-			new Date(clEvent.endDateTime).toDateString();
+			new Date(clEvent.endDateTime).toDateString()
 
-	const isWebsiteAvailable = clEvent?.host.website != null;
-	const isInstagramAvailable = clEvent?.host.instagram != null;
+	const isWebsiteAvailable = clEvent?.host.website != null
+	const isInstagramAvailable = clEvent?.host.instagram != null
 
 	const dateRange = formatFriendlyDateTimeRange(
 		clEvent?.startDateTime != null ? new Date(clEvent.startDateTime) : null,
 		clEvent?.endDateTime != null ? new Date(clEvent.endDateTime) : null
-	);
-	const navigation = useNavigation();
+	)
+	const navigation = useNavigation()
 
 	useFocusEffect(
 		useCallback(() => {
@@ -74,20 +74,20 @@ export default function ClEventDetail(): React.JSX.Element {
 						onPress={async () => {
 							trackEvent('Share', {
 								type: 'clEvent'
-							});
+							})
 							await Share.share({
 								message: t('pages.event.shareMessage', {
 									title: clEvent?.titles[i18n.language as LanguageKey],
 									organizer: clEvent?.host.name,
 									date: dateRange
 								})
-							});
+							})
 						}}
 					/>
 				)
-			});
+			})
 		}, [])
-	);
+	)
 
 	const sections: FormListSections[] = [
 		{
@@ -139,7 +139,7 @@ export default function ClEventDetail(): React.JSX.Element {
 													params: {
 														room: clEvent?.location
 													}
-												});
+												})
 											},
 											textColor: theme.colors.primary
 										}
@@ -164,7 +164,7 @@ export default function ClEventDetail(): React.JSX.Element {
 										title: 'Website',
 										icon: linkIcon,
 										onPress: () => {
-											void Linking.openURL(clEvent.host.website);
+											void Linking.openURL(clEvent.host.website)
 										}
 									}
 								: null,
@@ -178,7 +178,7 @@ export default function ClEventDetail(): React.JSX.Element {
 											iosFallback: true
 										},
 										onPress: () => {
-											void Linking.openURL(clEvent.host.instagram);
+											void Linking.openURL(clEvent.host.instagram)
 										}
 									}
 								: null
@@ -194,10 +194,10 @@ export default function ClEventDetail(): React.JSX.Element {
 					}
 				]
 			: [])
-	];
+	]
 
 	if (clEvent == null) {
-		return <Redirect href={'/cl-events'} />;
+		return <Redirect href={'/cl-events'} />
 	}
 	return (
 		<Animated.ScrollView
@@ -233,7 +233,7 @@ export default function ClEventDetail(): React.JSX.Element {
 				<FormList sections={sections} />
 			</View>
 		</Animated.ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -267,4 +267,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingTop: 16,
 		textAlign: 'left'
 	}
-}));
+}))

@@ -1,52 +1,52 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import { formatFriendlyTime } from '@/utils/date-utils';
-import { getContrastColor } from '@/utils/ui-utils';
-import type { PackedEvent } from '@howljs/calendar-kit';
-import Color from 'color';
-import { LinearGradient } from 'expo-linear-gradient';
-import type React from 'react';
-import { Platform, Text, View } from 'react-native';
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { formatFriendlyTime } from '@/utils/date-utils'
+import { getContrastColor } from '@/utils/ui-utils'
+import type { PackedEvent } from '@howljs/calendar-kit'
+import Color from 'color'
+import { LinearGradient } from 'expo-linear-gradient'
+import type React from 'react'
+import { Platform, Text, View } from 'react-native'
 import {
 	type UnistylesTheme,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 const isIOS =
 	Platform.OS === 'ios' ||
-	(Platform.OS === 'web' && navigator.userAgent.includes('Safari'));
+	(Platform.OS === 'web' && navigator.userAgent.includes('Safari'))
 const EventComponent = ({
 	event,
 	theme,
 	isDark
 }: {
-	event: PackedEvent;
-	theme: UnistylesTheme;
-	isDark: boolean;
+	event: PackedEvent
+	theme: UnistylesTheme
+	isDark: boolean
 }): React.JSX.Element | null => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
-		return null;
+		return null
 	}
-	const timetableMode = usePreferencesStore((state) => state.timetableMode);
+	const timetableMode = usePreferencesStore((state) => state.timetableMode)
 
-	const isExam = event.eventType === 'exam';
-	const begin = new Date(event.start.dateTime);
-	const end = new Date(event.end.dateTime);
-	const duration = end.getTime() - begin.getTime();
-	const isOverflowing = duration < 1000 * 60 * 60;
-	const nameParts = event.shortName?.split('_')?.slice(1) as string[];
+	const isExam = event.eventType === 'exam'
+	const begin = new Date(event.start.dateTime)
+	const end = new Date(event.end.dateTime)
+	const duration = end.getTime() - begin.getTime()
+	const isOverflowing = duration < 1000 * 60 * 60
+	const nameParts = event.shortName?.split('_')?.slice(1) as string[]
 	const background = isExam
 		? eventBackgroundColor(theme.colors.notification, isDark)
-		: eventBackgroundColor(theme.colors.primary, isDark);
+		: eventBackgroundColor(theme.colors.primary, isDark)
 
 	const fontColor = isExam
 		? textColor(theme.colors.notification, background, isDark)
-		: textColor(theme.colors.primary, background, isDark);
-	const eventName = event.name as string;
+		: textColor(theme.colors.primary, background, isDark)
+	const eventName = event.name as string
 	const nameToDisplay =
 		timetableMode === 'timeline-1'
 			? eventName
@@ -54,12 +54,12 @@ const EventComponent = ({
 				? nameParts?.join('_') !== ''
 					? (nameParts?.join('_') ?? eventName)
 					: (event.shortName as string)
-				: eventName;
+				: eventName
 	// hide ' - ' between time to prevent the date from using 3 lines
 	const timeToDisplay =
 		timetableMode === 'timeline-7'
 			? `${formatFriendlyTime(begin)} ${formatFriendlyTime(end)}`
-			: `${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`;
+			: `${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`
 
 	const LectureLine = () => {
 		return (
@@ -74,8 +74,8 @@ const EventComponent = ({
 					...styles.eventLine
 				}}
 			/>
-		);
-	};
+		)
+	}
 
 	const ExamLine = () => {
 		return (
@@ -90,8 +90,8 @@ const EventComponent = ({
 					...styles.eventLine
 				}}
 			/>
-		);
-	};
+		)
+	}
 	return (
 		<View
 			style={{
@@ -142,8 +142,8 @@ const EventComponent = ({
 				</View>
 			</View>
 		</View>
-	);
-};
+	)
+}
 
 const eventBackgroundColor = (color: string, isDark: boolean): string =>
 	isIOS
@@ -153,7 +153,7 @@ const eventBackgroundColor = (color: string, isDark: boolean): string =>
 				.darken(isDark ? 0.65 : 0)
 				.rgb()
 				.string()
-		: color;
+		: color
 
 const textColor = (
 	color: string,
@@ -166,15 +166,15 @@ const textColor = (
 				.lighten(isDark ? 0.65 : 0)
 				.saturate(0.5)
 				.hex()
-		: getContrastColor(background);
+		: getContrastColor(background)
 
-	const contrast = Color(background).contrast(Color(textColor));
+	const contrast = Color(background).contrast(Color(textColor))
 
 	if (contrast < 3.5 && isIOS) {
-		textColor = Color(background).isLight() ? '#000000' : '#FFFFFF';
+		textColor = Color(background).isLight() ? '#000000' : '#FFFFFF'
 	}
-	return textColor;
-};
+	return textColor
+}
 
 const lineColor = (
 	color: string,
@@ -186,7 +186,7 @@ const lineColor = (
 				.darken(isDark ? 0.2 : 0)
 				.lighten(isDark ? 0 : 0.2)
 				.hex()
-		: eventBackgroundColor;
+		: eventBackgroundColor
 
 const stylesheet = createStyleSheet(() => ({
 	eventContainer: {
@@ -224,6 +224,6 @@ const stylesheet = createStyleSheet(() => ({
 		flexDirection: 'row',
 		gap: 4
 	}
-}));
+}))
 
-export default EventComponent;
+export default EventComponent

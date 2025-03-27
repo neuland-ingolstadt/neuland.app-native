@@ -1,33 +1,33 @@
-import type { WeekdayType } from '@/__generated__/gql/graphql';
-import FormList from '@/components/Universal/FormList';
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton';
-import useCLParamsStore from '@/hooks/useCLParamsStore';
-import type { LanguageKey } from '@/localization/i18n';
-import type { FormListSections } from '@/types/components';
-import { formatFriendlyTimeRange } from '@/utils/date-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { HeaderTitle } from '@react-navigation/elements';
-import { Stack, useFocusEffect, useNavigation } from 'expo-router';
-import type React from 'react';
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Platform, Share, Text, View } from 'react-native';
+import type { WeekdayType } from '@/__generated__/gql/graphql'
+import FormList from '@/components/Universal/FormList'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useCLParamsStore from '@/hooks/useCLParamsStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
+import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
+import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import type React from 'react'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
-} from 'react-native-reanimated';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 
-	const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent);
-	const { t, i18n } = useTranslation('common');
+	const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
+	const { t, i18n } = useTranslation('common')
 
-	const ref = useAnimatedRef<Animated.ScrollView>();
-	const scroll = useScrollViewOffset(ref);
+	const ref = useAnimatedRef<Animated.ScrollView>()
+	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
@@ -40,13 +40,13 @@ export default function SportsEventDetail(): React.JSX.Element {
 					)
 				}
 			]
-		};
-	});
-	const navigation = useNavigation();
+		}
+	})
+	const navigation = useNavigation()
 	useFocusEffect(
 		useCallback(() => {
 			if (sportsEvent == null) {
-				return;
+				return
 			}
 			navigation.setOptions({
 				headerRight: () => (
@@ -54,7 +54,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 						onPress={async () => {
 							trackEvent('Share', {
 								type: 'sportsEvent'
-							});
+							})
 							await Share.share({
 								message: t('pages.event.shareSports', {
 									title: sportsEvent?.title[i18n.language as LanguageKey],
@@ -68,23 +68,23 @@ export default function SportsEventDetail(): React.JSX.Element {
 										sportsEvent.endTime
 									)
 								})
-							});
+							})
 						}}
 					/>
 				)
-			});
+			})
 		}, [])
-	);
+	)
 
 	if (sportsEvent == null) {
-		return <></>;
+		return <></>
 	}
 
 	const isDescriptionAvailable =
 		!((sportsEvent?.description?.de ?? '') === '') ||
-		!((sportsEvent?.description?.en ?? '') === '');
-	const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '');
-	const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null;
+		!((sportsEvent?.description?.en ?? '') === '')
+	const isEmailAvailable = !((sportsEvent?.eMail ?? '') === '')
+	const isInvitationLinkAvailable = sportsEvent?.invitationLink !== null
 
 	const sections: FormListSections[] = [
 		{
@@ -154,7 +154,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 								title: t('pages.event.eMail'),
 								value: sportsEvent.eMail ?? undefined,
 								onPress: () => {
-									void Linking.openURL(`mailto:${sportsEvent.eMail}`);
+									void Linking.openURL(`mailto:${sportsEvent.eMail}`)
 								},
 								textColor: theme.colors.primary
 							}
@@ -166,7 +166,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 								title: t('pages.event.invitationLink'),
 								value: 'Link',
 								onPress: () => {
-									void Linking.openURL(sportsEvent.invitationLink ?? '');
+									void Linking.openURL(sportsEvent.invitationLink ?? '')
 								},
 								textColor: theme.colors.primary
 							}
@@ -174,9 +174,9 @@ export default function SportsEventDetail(): React.JSX.Element {
 					: [])
 			]
 		}
-	];
+	]
 
-	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? '';
+	const title = sportsEvent?.title[i18n.language as LanguageKey] ?? ''
 	return (
 		<Animated.ScrollView
 			style={styles.page}
@@ -211,7 +211,7 @@ export default function SportsEventDetail(): React.JSX.Element {
 				<FormList sections={sections} />
 			</View>
 		</Animated.ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -248,4 +248,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	warning: (active: boolean) => ({
 		color: active ? theme.colors.warning : theme.colors.success
 	})
-}));
+}))

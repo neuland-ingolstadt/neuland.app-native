@@ -1,12 +1,12 @@
-import type * as React from 'react';
-import Svg, { G, Path, Rect } from 'react-native-svg';
+import type * as React from 'react'
+import Svg, { G, Path, Rect } from 'react-native-svg'
 
 export default function LogoTextSVG({
 	size,
 	color
 }: {
-	size: number;
-	color: string;
+	size: number
+	color: string
 }): React.JSX.Element {
 	return (
 		<Svg
@@ -33,5 +33,5 @@ export default function LogoTextSVG({
 				</G>
 			</G>
 		</Svg>
-	);
+	)
 }

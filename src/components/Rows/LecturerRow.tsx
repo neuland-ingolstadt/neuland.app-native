@@ -1,34 +1,34 @@
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { NormalizedLecturer } from '@/types/utils';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { NormalizedLecturer } from '@/types/utils'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import RowEntry from '../Universal/RowEntry';
+import RowEntry from '../Universal/RowEntry'
 
 const LecturerRow = ({
 	item
 }: {
-	item: NormalizedLecturer;
+	item: NormalizedLecturer
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 	const setSelectedLecturer = useRouteParamsStore(
 		(state) => state.setSelectedLecturer
-	);
+	)
 	const onPressRoom = (): void => {
 		router.dismissTo({
 			pathname: '/(tabs)/map',
 			params: { room: item.room_short ?? '' }
-		});
-	};
+		})
+	}
 	const onPressRow = (): void => {
-		setSelectedLecturer(item);
-		router.navigate('/lecturer');
-	};
+		setSelectedLecturer(item)
+		router.navigate('/lecturer')
+	}
 
-	const { t } = useTranslation('api');
+	const { t } = useTranslation('api')
 	return (
 		<RowEntry
 			title={`${[item.titel, item.vorname, item.name].join(' ').trim()}`}
@@ -68,8 +68,8 @@ const LecturerRow = ({
 			onPress={onPressRow}
 			maxTitleWidth={'75%'}
 		/>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: { flexDirection: 'row' },
@@ -99,6 +99,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		fontWeight: '400'
 	}
-}));
+}))
 
-export default LecturerRow;
+export default LecturerRow

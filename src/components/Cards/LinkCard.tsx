@@ -1,46 +1,46 @@
-import { quicklinks } from '@/data/constants';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import type { MaterialIcon } from '@/types/material-icons';
-import { trackEvent } from '@aptabase/react-native';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Platform, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { MaterialIcon } from '@/types/material-icons'
+import { trackEvent } from '@aptabase/react-native'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon';
-import BaseCard from './BaseCard';
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
+import BaseCard from './BaseCard'
 
 const LinkCard = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 
 	const recentQuicklinks = usePreferencesStore(
 		(state) => state.recentQuicklinks
-	);
+	)
 	const addRecentQuicklink = usePreferencesStore(
 		(state) => state.addRecentQuicklink
-	);
+	)
 	const userQuicklinks = recentQuicklinks
 		.map((title) => quicklinks.find((quicklink) => quicklink.key === title))
-		.filter((quicklink) => quicklink !== undefined);
+		.filter((quicklink) => quicklink !== undefined)
 	const linkPress = async (key: string, url: string): Promise<void> => {
-		addRecentQuicklink(key);
-		trackEvent('Quicklink', { link: key });
-		await Linking.openURL(url);
-	};
+		addRecentQuicklink(key)
+		trackEvent('Quicklink', { link: key })
+		await Linking.openURL(url)
+	}
 
 	return (
 		<BaseCard title="links" onPressRoute="/links">
 			<View style={styles.cardsFilled}>
 				{userQuicklinks.map((link, index) => {
 					if (link === undefined) {
-						return null;
+						return null
 					}
 					return (
 						<Pressable
 							key={index}
 							onPress={() => {
-								void linkPress(link.key, link.url);
+								void linkPress(link.key, link.url)
 							}}
 							style={styles.linkBox}
 						>
@@ -73,12 +73,12 @@ const LinkCard = (): React.JSX.Element => {
 								)}
 							</Text>
 						</Pressable>
-					);
+					)
 				})}
 			</View>
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	cardsFilled: {
@@ -104,6 +104,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 8,
 		paddingTop: 12
 	}
-}));
+}))
 
-export default LinkCard;
+export default LinkCard

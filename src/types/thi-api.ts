@@ -1,82 +1,82 @@
 export interface APIResponse {
-	date: string;
-	time: string;
-	status: number;
-	data: unknown[];
+	date: string
+	time: string
+	status: number
+	data: unknown[]
 }
 
 export interface Announcements {
-	date: Date;
-	title: string;
-	announcement: string;
+	date: Date
+	title: string
+	announcement: string
 }
 
 export interface TypeStunde extends Stunde {
-	type: Raumtyp;
+	type: Raumtyp
 }
 
 export interface SessionClose {
-	date: string;
-	time: string;
-	status: number;
-	data: string[];
+	date: string
+	time: string
+	status: number
+	data: string[]
 }
 
 export interface SessionCreate {
-	date: string;
-	time: string;
-	status: number;
-	data: (number | string)[];
+	date: string
+	time: string
+	status: number
+	data: (number | string)[]
 }
 
 export interface Exams {
-	exam_ts: Date;
-	exm_date: Date;
-	exam_time: Date;
-	titel: string;
-	exam_rooms: string;
-	exam_seat: string;
-	pruefer_namen: string[];
-	anmerkung: string;
-	pruefungs_art: string;
-	modus: string;
-	hilfsmittel: string[];
-	anm_ts: Date;
-	ancode: string;
+	exam_ts: Date
+	exm_date: Date
+	exam_time: Date
+	titel: string
+	exam_rooms: string
+	exam_seat: string
+	pruefer_namen: string[]
+	anmerkung: string
+	pruefungs_art: string
+	modus: string
+	hilfsmittel: string[]
+	anm_ts: Date
+	ancode: string
 }
 
 export interface Grade {
-	stg: string;
-	kztn: string;
-	pon: string;
-	titel: string;
-	ects: string;
-	fristsem: string;
-	note: string;
-	frwpf: string;
-	anrech: string;
+	stg: string
+	kztn: string
+	pon: string
+	titel: string
+	ects: string
+	fristsem: string
+	note: string
+	frwpf: string
+	anrech: string
 }
 
 export interface Jobs {
-	date: string;
-	time: string;
-	status: number;
-	data: (number | string)[];
+	date: string
+	time: string
+	status: number
+	data: (number | string)[]
 }
 
 export interface Lecturers {
-	id: string;
-	name: string;
-	vorname: string;
-	titel: string;
-	raum: string;
-	email: string;
-	tel_dienst: string;
-	sprechstunde: string;
-	einsichtnahme: string;
-	ist_intern: IstIntern;
-	organisation: Organisation;
-	funktion: Funktion;
+	id: string
+	name: string
+	vorname: string
+	titel: string
+	raum: string
+	email: string
+	tel_dienst: string
+	sprechstunde: string
+	einsichtnahme: string
+	ist_intern: IstIntern
+	organisation: Organisation
+	funktion: Funktion
 }
 
 export enum Funktion {
@@ -108,51 +108,51 @@ export enum Organisation {
 }
 
 export interface PersData {
-	persdata: PersDataDetails;
-	pcounter: string;
+	persdata: PersDataDetails
+	pcounter: string
 }
 
 export interface PersDataDetails {
-	mtknr: string;
-	bibnr: string;
-	user: string;
-	name: string;
-	vname: string;
-	plz: string;
-	ort: string;
-	str: string;
-	telefon: string;
-	email: string;
-	fhmail: string;
-	rue: string;
-	rue_sem: string;
-	stg: string;
-	fachrich: string;
-	pvers: string;
-	po_url: string;
-	stgru: string;
-	rchtg: null;
-	swpkt: string;
-	aaspf_echt: string;
-	pcounter?: string;
-	faculty: string | null; // This is being added when the User opens the Map
+	mtknr: string
+	bibnr: string
+	user: string
+	name: string
+	vname: string
+	plz: string
+	ort: string
+	str: string
+	telefon: string
+	email: string
+	fhmail: string
+	rue: string
+	rue_sem: string
+	stg: string
+	fachrich: string
+	pvers: string
+	po_url: string
+	stgru: string
+	rchtg: null
+	swpkt: string
+	aaspf_echt: string
+	pcounter?: string
+	faculty: string | null // This is being added when the User opens the Map
 }
 
 export interface Rooms {
-	datum: string;
-	rtypes: Rtype[];
+	datum: string
+	rtypes: Rtype[]
 }
 
 export interface Rtype {
-	raumtyp: Raumtyp;
-	stunden: Stunde[];
+	raumtyp: Raumtyp
+	stunden: Stunde[]
 }
 
 export interface Stunde {
-	type: Raumtyp;
-	raeume: [string, string, number, number][];
-	von: string;
-	bis: string;
+	type: Raumtyp
+	raeume: [string, string, number, number][]
+	von: string
+	bis: string
 }
 
 export enum Raumtyp {
@@ -162,71 +162,71 @@ export enum Raumtyp {
 }
 
 export interface RoomsStatus {
-	von: Date;
-	bis: Date;
-	raeume: string[];
+	von: Date
+	bis: Date
+	raeume: string[]
 }
 
 export interface SpecialPeriods {
-	von: Date;
-	bis: Date;
-	intervall: string;
+	von: Date
+	bis: Date
+	intervall: string
 }
 
 export interface ThiEvents {
-	date: Date;
-	title: string;
-	href: string;
-	teaser: string;
-	img: string;
+	date: Date
+	title: string
+	href: string
+	teaser: string
+	img: string
 }
 
 export interface ThiNews {
-	img: string;
-	title: string;
-	href: string;
-	teaser: string;
-	date: Date;
+	img: string
+	title: string
+	href: string
+	teaser: string
+	date: Date
 }
 
 export interface ThiWebinfo {
-	date: string;
-	time: string;
-	status: number;
-	data: (string[] | number)[];
+	date: string
+	time: string
+	status: number
+	data: (string[] | number)[]
 }
 
 export interface TimetableResponse {
-	semester: unknown[]; // TODO: Add type
-	holidays: unknown[]; // TODO: Add type
-	timetable: Timetable[];
+	semester: unknown[] // TODO: Add type
+	holidays: unknown[] // TODO: Add type
+	timetable: Timetable[]
 }
 
 export interface Timetable {
-	date: Date;
-	hours: Hours;
+	date: Date
+	hours: Hours
 }
-export type Hours = Record<number, Lecture[]>;
+export type Hours = Record<number, Lecture[]>
 
 export interface Lecture {
-	von: Date;
-	bis: Date;
-	lvId: string;
-	details: Details;
+	von: Date
+	bis: Date
+	lvId: string
+	details: Details
 }
 
 export interface Details {
-	raum: string;
-	fach: string;
-	veranstaltung: string;
-	dozent: string;
-	stg: string;
-	stgru: string;
-	teilgruppe: string;
-	sws: string;
-	ectspoints: string;
-	pruefung: string;
-	ziel: null | string;
-	inhalt: null | string;
-	literatur: null | string;
+	raum: string
+	fach: string
+	veranstaltung: string
+	dozent: string
+	stg: string
+	stgru: string
+	teilgruppe: string
+	sws: string
+	ectspoints: string
+	pruefung: string
+	ziel: null | string
+	inhalt: null | string
+	literatur: null | string
 }

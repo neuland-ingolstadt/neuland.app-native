@@ -1,16 +1,16 @@
-import type React from 'react';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const OnboardingBox = ({ title }: { title: string }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.text}>{title}</Text>
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
@@ -24,6 +24,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		textAlign: 'left'
 	}
-}));
+}))
 
-export default OnboardingBox;
+export default OnboardingBox

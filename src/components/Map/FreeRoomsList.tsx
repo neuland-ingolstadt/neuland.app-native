@@ -1,22 +1,22 @@
-import type { AvailableRoom } from '@/types/utils';
-import { formatFriendlyTime } from '@/utils/date-utils';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type { AvailableRoom } from '@/types/utils'
+import { formatFriendlyTime } from '@/utils/date-utils'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import Divider from '../Universal/Divider';
+import { Pressable } from 'react-native-gesture-handler'
+import Divider from '../Universal/Divider'
 
 interface FreeRoomsListProps {
-	rooms: AvailableRoom[] | null;
+	rooms: AvailableRoom[] | null
 }
 
 export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
-	const { styles } = useStyles(stylesheet);
-	const router = useRouter();
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const router = useRouter()
+	const { t } = useTranslation('common')
 
 	return rooms !== null && rooms.length > 0 ? (
 		rooms.map((room, index) => (
@@ -28,7 +28,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 								router.dismissTo({
 									pathname: '/(tabs)/map',
 									params: { room: room.room }
-								});
+								})
 							}}
 						>
 							<Text style={styles.roomName}>{room.room}</Text>
@@ -57,8 +57,8 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 			<Text style={styles.errorMessage}>{t('pages.rooms.noRooms.title')}</Text>
 			<Text style={styles.errorInfo}>{t('pages.rooms.noRooms.subtitle')}</Text>
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	errorInfo: {
@@ -97,4 +97,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 16,
 		paddingVertical: 8
 	}
-}));
+}))

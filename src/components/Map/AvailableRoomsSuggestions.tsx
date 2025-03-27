@@ -1,41 +1,41 @@
-import { MapContext } from '@/contexts/map';
-import { USER_GUEST } from '@/data/constants';
-import { SEARCH_TYPES } from '@/types/map';
-import { formatFriendlyTime } from '@/utils/date-utils';
-import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils';
-import { trackEvent } from '@aptabase/react-native';
-import { router } from 'expo-router';
-import type { FeatureCollection } from 'geojson';
-import type { Position } from 'geojson';
-import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { MapContext } from '@/contexts/map'
+import { USER_GUEST } from '@/data/constants'
+import { SEARCH_TYPES } from '@/types/map'
+import { formatFriendlyTime } from '@/utils/date-utils'
+import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
+import { trackEvent } from '@aptabase/react-native'
+import { router } from 'expo-router'
+import type { FeatureCollection } from 'geojson'
+import type { Position } from 'geojson'
+import React, { useContext } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler';
-import Divider from '../Universal/Divider';
-import PlatformIcon from '../Universal/Icon';
-import LoadingIndicator from '../Universal/LoadingIndicator';
-import { UserKindContext } from '../contexts';
+import { Pressable } from 'react-native-gesture-handler'
+import Divider from '../Universal/Divider'
+import PlatformIcon from '../Universal/Icon'
+import LoadingIndicator from '../Universal/LoadingIndicator'
+import { UserKindContext } from '../contexts'
 
 interface AvailableRoomsSuggestionsProps {
-	allRooms: FeatureCollection;
-	handlePresentModalPress: () => void;
+	allRooms: FeatureCollection
+	handlePresentModalPress: () => void
 }
 
 const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 	allRooms,
 	handlePresentModalPress
 }) => {
-	const { styles, theme } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
+	const { styles, theme } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const {
 		setClickedElement,
 		availableRooms,
 
 		setCurrentFloor
-	} = useContext(MapContext);
+	} = useContext(MapContext)
 	return (
 		<View>
 			<View style={styles.suggestionSectionHeaderContainer}>
@@ -45,7 +45,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 				{userKind !== USER_GUEST && (
 					<Pressable
 						onPress={() => {
-							router.navigate('/room-search');
+							router.navigate('/room-search')
 						}}
 						hitSlop={{
 							bottom: 10,
@@ -64,7 +64,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 			<Pressable
 				style={styles.radiusBg}
 				onPress={() => {
-					router.navigate('/login');
+					router.navigate('/login')
 				}}
 				disabled={userKind !== USER_GUEST}
 			>
@@ -80,7 +80,7 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 					</Text>
 				) : (
 					(() => {
-						const roomSuggestions = availableRooms.slice(0, 3);
+						const roomSuggestions = availableRooms.slice(0, 3)
 						return roomSuggestions.map((room, key) => (
 							<React.Fragment key={key}>
 								<Pressable
@@ -88,21 +88,21 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 									onPress={() => {
 										const details = allRooms.features.find(
 											(x) => x.properties?.Raum === room.room
-										);
+										)
 
 										if (details == null) {
-											roomNotFoundToast(room.room, theme.colors.notification);
-											return;
+											roomNotFoundToast(room.room, theme.colors.notification)
+											return
 										}
 
 										const etage = details?.properties?.Ebene as
 											| string
-											| undefined;
+											| undefined
 
 										setCurrentFloor({
 											floor: etage ?? 'EG',
 											manual: false
-										});
+										})
 										setClickedElement({
 											data: room.room,
 											type: SEARCH_TYPES.ROOM,
@@ -110,13 +110,13 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 												| Position
 												| undefined,
 											manual: false
-										});
+										})
 										trackEvent('Room', {
 											room: room.room,
 											origin: 'AvailableRoomsSuggestion'
-										});
+										})
 
-										handlePresentModalPress();
+										handlePresentModalPress()
 									}}
 								>
 									<View style={styles.suggestionInnerRow}>
@@ -165,13 +165,13 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 								{roomSuggestions.length > 1 &&
 									key < roomSuggestions.length - 1 && <Divider />}
 							</React.Fragment>
-						));
+						))
 					})()
 				)}
 			</Pressable>
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	loadingMargin: {
@@ -262,6 +262,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontVariant: ['tabular-nums']
 	}
-}));
+}))
 
-export default AvailableRoomsSuggestions;
+export default AvailableRoomsSuggestions

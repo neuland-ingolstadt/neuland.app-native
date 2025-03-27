@@ -1,13 +1,13 @@
-import type React from 'react';
-import type { ReactNode } from 'react';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import type { ReactNode } from 'react'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface NameBoxProps {
-	children: ReactNode;
-	title: string;
-	subTitle1: string;
-	subTitle2?: string;
+	children: ReactNode
+	title: string
+	subTitle1: string
+	subTitle2?: string
 }
 
 /**
@@ -26,7 +26,7 @@ const NameBox = ({
 	subTitle1,
 	subTitle2
 }: NameBoxProps): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<>
@@ -47,10 +47,10 @@ const NameBox = ({
 				)}
 			</View>
 		</>
-	);
-};
+	)
+}
 
-export default NameBox;
+export default NameBox
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
@@ -72,4 +72,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: 'bold',
 		overflow: 'hidden'
 	}
-}));
+}))

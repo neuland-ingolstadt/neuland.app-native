@@ -1,16 +1,16 @@
-import type React from 'react';
-import ContentLoader from 'react-content-loader/native';
-import { G, Path, Rect } from 'react-native-svg';
-import { useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import ContentLoader from 'react-content-loader/native'
+import { G, Path, Rect } from 'react-native-svg'
+import { useStyles } from 'react-native-unistyles'
 
 const AnimatedLogoText = ({
 	dimensions,
 	speed
 }: {
-	dimensions: { logoWidth: number; logoHeight: number };
-	speed: number;
+	dimensions: { logoWidth: number; logoHeight: number }
+	speed: number
 }): React.JSX.Element => {
-	const { theme } = useStyles();
+	const { theme } = useStyles()
 
 	return (
 		<ContentLoader
@@ -37,7 +37,7 @@ const AnimatedLogoText = ({
 				</G>
 			</G>
 		</ContentLoader>
-	);
-};
+	)
+}
 
-export default AnimatedLogoText;
+export default AnimatedLogoText

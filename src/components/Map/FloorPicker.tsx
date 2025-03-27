@@ -1,22 +1,22 @@
-import PlatformIcon from '@/components/Universal/Icon';
-import { MapContext } from '@/contexts/map';
-import { getContrastColor } from '@/utils/ui-utils';
-import * as Haptics from 'expo-haptics';
-import type React from 'react';
-import { memo, useContext } from 'react';
-import { Platform, Text, View } from 'react-native';
-import { Pressable } from 'react-native-gesture-handler';
+import PlatformIcon from '@/components/Universal/Icon'
+import { MapContext } from '@/contexts/map'
+import { getContrastColor } from '@/utils/ui-utils'
+import * as Haptics from 'expo-haptics'
+import type React from 'react'
+import { memo, useContext } from 'react'
+import { Platform, Text, View } from 'react-native'
+import { Pressable } from 'react-native-gesture-handler'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
 	useStyles
-} from 'react-native-unistyles';
+} from 'react-native-unistyles'
 
 interface FloorPickerProps {
-	floors: string[];
-	showAllFloors: boolean;
-	toggleShowAllFloors: () => void;
-	setCameraTriggerKey: React.Dispatch<React.SetStateAction<number>>;
+	floors: string[]
+	showAllFloors: boolean
+	toggleShowAllFloors: () => void
+	setCameraTriggerKey: React.Dispatch<React.SetStateAction<number>>
 }
 
 const FloorPicker: React.FC<FloorPickerProps> = ({
@@ -25,23 +25,23 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	toggleShowAllFloors,
 	setCameraTriggerKey
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
-	const { currentFloor, setCurrentFloor } = useContext(MapContext);
+	const { styles } = useStyles(stylesheet)
+	const { currentFloor, setCurrentFloor } = useContext(MapContext)
 
 	return (
 		<View style={styles.ButtonArea}>
 			{!showAllFloors && (
 				<Pressable
 					onPress={() => {
-						toggleShowAllFloors();
+						toggleShowAllFloors()
 					}}
 					onLongPress={() => {
 						if (currentFloor?.floor === 'EG') {
-							toggleShowAllFloors();
+							toggleShowAllFloors()
 						} else {
-							setCurrentFloor({ floor: 'EG', manual: true });
+							setCurrentFloor({ floor: 'EG', manual: true })
 							if (Platform.OS === 'ios' && currentFloor?.floor !== 'EG') {
-								void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+								void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
 							}
 						}
 					}}
@@ -63,7 +63,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 			{showAllFloors && (
 				<Pressable
 					onPress={() => {
-						toggleShowAllFloors();
+						toggleShowAllFloors()
 					}}
 				>
 					<View style={styles.button}>
@@ -91,9 +91,9 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 						<Pressable
 							onPress={() => {
 								if (Platform.OS === 'ios') {
-									void Haptics.selectionAsync();
+									void Haptics.selectionAsync()
 								}
-								setCurrentFloor({ floor, manual: true });
+								setCurrentFloor({ floor, manual: true })
 							}}
 							key={index}
 						>
@@ -119,7 +119,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 			{
 				<Pressable
 					onPress={() => {
-						setCameraTriggerKey((prev) => prev + 1);
+						setCameraTriggerKey((prev) => prev + 1)
 					}}
 					accessibilityLabel="Center on current location"
 				>
@@ -151,11 +151,11 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 				</Pressable>
 			}
 		</View>
-	);
-};
+	)
+}
 
 // Memoize FloorPicker to prevent re-renders when parent re-renders
-export default memo(FloorPicker);
+export default memo(FloorPicker)
 
 const stylesheet = createStyleSheet((theme) => ({
 	ButtonArea: {
@@ -200,4 +200,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	xIcon: {
 		color: UnistylesRuntime.colorScheme === 'dark' ? '#b6b6b6ff' : '#4a4a4aff'
 	}
-}));
+}))

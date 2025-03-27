@@ -1,19 +1,19 @@
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from '../Universal/Icon';
+import PlatformIcon from '../Universal/Icon'
 
 const AttributionLink: React.FC = () => {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation('common');
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('common')
 
 	return (
 		<View style={styles.attributionContainer}>
 			<Pressable
 				onPress={() => {
-					void Linking.openURL('https://www.openstreetmap.org/copyright');
+					void Linking.openURL('https://www.openstreetmap.org/copyright')
 				}}
 				style={styles.attributionLink}
 			>
@@ -35,10 +35,10 @@ const AttributionLink: React.FC = () => {
 				/>
 			</Pressable>
 		</View>
-	);
-};
+	)
+}
 
-export default AttributionLink;
+export default AttributionLink
 
 const stylesheet = createStyleSheet((theme) => ({
 	attributionContainer: { paddingVertical: 40 },
@@ -55,4 +55,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	label: {
 		color: theme.colors.labelColor
 	}
-}));
+}))

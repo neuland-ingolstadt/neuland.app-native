@@ -1,21 +1,21 @@
-import FormList from '@/components/Universal/FormList';
-import { chevronIcon, linkIcon } from '@/components/Universal/Icon';
-import SectionView from '@/components/Universal/SectionsView';
-import SingleSectionPicker from '@/components/Universal/SingleSectionPicker';
-import { PRIVACY_URL, STATUS_URL } from '@/data/constants';
-import { useFlowStore } from '@/hooks/useFlowStore';
-import { usePreferencesStore } from '@/hooks/usePreferencesStore';
-import i18n from '@/localization/i18n';
-import type { FormListSections } from '@/types/components';
-import { trackEvent } from '@aptabase/react-native';
-import { alert } from 'burnt';
-import * as Application from 'expo-application';
-import Constants from 'expo-constants';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import FormList from '@/components/Universal/FormList'
+import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
+import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import i18n from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
+import { trackEvent } from '@aptabase/react-native'
+import { alert } from 'burnt'
+import * as Application from 'expo-application'
+import Constants from 'expo-constants'
+import * as Haptics from 'expo-haptics'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Alert,
 	Image,
@@ -25,57 +25,61 @@ import {
 	ScrollView,
 	Text,
 	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function About(): React.JSX.Element {
-	const router = useRouter();
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation(['settings']);
+	const router = useRouter()
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation(['settings'])
 
-	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed);
-	const setAnalyticsAllowed = useFlowStore(
-		(state) => state.setAnalyticsAllowed
-	);
+	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
 
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
-	);
+	)
 	const addUnlockedAppIcon = usePreferencesStore(
 		(state) => state.addUnlockedAppIcon
-	);
+	)
 	const version =
 		Application.nativeApplicationVersion ??
 		Constants.expoConfig?.version ??
-		'unknown';
-	const commitHash = process.env.EXPO_PUBLIC_GIT_COMMIT_HASH;
-	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`;
-	const commitHashShort = commitHash?.substring(0, 7);
+		'unknown'
+	const commitHash = process.env.EXPO_PUBLIC_GIT_COMMIT_HASH
+	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`
+	const commitHashShort = commitHash?.substring(0, 7)
 
 	const toggleVersion = (): void => {
-		let message = `Version: ${version}\nBuild: ${Application.nativeBuildVersion ?? '0'}`;
-		const buttons = [];
-		if (commitHash) {
-			message += `\nCommit: ${commitHashShort}`;
-			buttons.push({
-				text: 'View Commit',
-				onPress: () => {
-					void Linking.openURL(commitUrl);
-				}
-			});
-		}
-		buttons.push({ text: 'OK', style: 'cancel' as const });
-
-		if (Platform.OS === 'web') {
-			const confirmMessage = `Version Info\n${message}`;
-			if (window.confirm(confirmMessage) && commitHash) {
-				void Linking.openURL(commitUrl);
+		let message = `Version: ${version}`
+		if (Platform.OS !== 'web') {
+			message += `\nBuild: ${Application.nativeBuildVersion ?? '0'}`
+			if (commitHash) {
+				message += `\nCommit: ${commitHashShort}`
 			}
-			return;
+		} else {
+			if (commitHash) {
+				message += `\nCommit: ${commitHashShort}`
+				message += '\nPress OK to open the commit link.'
+			}
 		}
-
-		Alert.alert('Version Info', message, buttons);
-	};
+		if (Platform.OS === 'web') {
+			if (window.confirm(message)) {
+				if (commitHash) void Linking.openURL(commitUrl)
+			}
+			return
+		}
+		const buttons = commitHash
+			? [
+					{ text: 'Cancel', style: 'cancel' as const },
+					{
+						text: 'Open Commit',
+						onPress: () => void Linking.openURL(commitUrl)
+					}
+				]
+			: [{ text: 'Cancel', style: 'cancel' as const }]
+		Alert.alert('Version Info', message, buttons)
+	}
 
 	const sections: FormListSections[] = [
 		{
@@ -91,7 +95,7 @@ export default function About(): React.JSX.Element {
 					title: 'Changelog',
 					icon: chevronIcon,
 					onPress: () => {
-						router.navigate('/changelog');
+						router.navigate('/changelog')
 					}
 				},
 				{
@@ -102,7 +106,7 @@ export default function About(): React.JSX.Element {
 						web: 'HeartPulse'
 					},
 					onPress: () => {
-						void Linking.openURL(STATUS_URL);
+						void Linking.openURL(STATUS_URL)
 					}
 				}
 			]
@@ -144,11 +148,11 @@ export default function About(): React.JSX.Element {
 						if (Platform.OS === 'android') {
 							void Linking.openURL(
 								'market://details?id=app.neuland&showAllReviews=true'
-							);
+							)
 						} else {
 							void Linking.openURL(
 								'itms-apps://apps.apple.com/app/neuland-next/id1617096811?action=write-review'
-							);
+							)
 						}
 					}
 				}
@@ -162,15 +166,15 @@ export default function About(): React.JSX.Element {
 					title: t('about.formlist.legal.button'),
 					icon: chevronIcon,
 					onPress: () => {
-						router.navigate('/legal');
+						router.navigate('/legal')
 					}
 				}
 			]
 		}
-	];
+	]
 
 	const handlePress = (): void => {
-		setPressCount(pressCount + 1);
+		setPressCount(pressCount + 1)
 
 		if (pressCount === 7) {
 			if (Platform.OS !== 'web') {
@@ -186,32 +190,32 @@ export default function About(): React.JSX.Element {
 						}
 					],
 					{ cancelable: false }
-				);
+				)
 			} else {
 				alert({
 					title: t('about.easterEgg.title'),
 					message: t('about.easterEgg.messageAndroid'),
 					preset: 'done'
-				});
+				})
 			}
-			const isCollected = unlockedAppIcons.includes('cat');
+			const isCollected = unlockedAppIcons.includes('cat')
 			if (!isCollected) {
-				trackEvent('EasterEgg', { easterEgg: 'aboutLogo' });
-				if (Platform.OS === 'ios') addUnlockedAppIcon('cat');
+				trackEvent('EasterEgg', { easterEgg: 'aboutLogo' })
+				if (Platform.OS === 'ios') addUnlockedAppIcon('cat')
 			}
 
-			setPressCount(0);
+			setPressCount(0)
 		}
-	};
-	const [pressCount, setPressCount] = useState(0);
+	}
+	const [pressCount, setPressCount] = useState(0)
 	const handleWebsitePress = (): void => {
-		void Linking.openURL('https://neuland-ingolstadt.de/');
-	};
+		void Linking.openURL('https://neuland-ingolstadt.de/')
+	}
 
 	const handleContributorsPress = (): void => {
-		const url = `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}about/contributors`;
-		void Linking.openURL(url);
-	};
+		const url = `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}about/contributors`
+		void Linking.openURL(url)
+	}
 	return (
 		<ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
@@ -219,9 +223,9 @@ export default function About(): React.JSX.Element {
 					<Pressable
 						onPress={() => {
 							if (Platform.OS !== 'web') {
-								void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+								void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 							}
-							handlePress();
+							handlePress()
 						}}
 					>
 						<View style={styles.logoIcon}>
@@ -262,7 +266,7 @@ export default function About(): React.JSX.Element {
 				link={{
 					text: t('about.analytics.link'),
 					destination: () => {
-						void Linking.openURL(`${PRIVACY_URL}#Analytics`);
+						void Linking.openURL(`${PRIVACY_URL}#Analytics`)
 					}
 				}}
 			>
@@ -274,7 +278,7 @@ export default function About(): React.JSX.Element {
 				/>
 			</SectionView>
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -328,4 +332,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 16
 	}
-}));
+}))

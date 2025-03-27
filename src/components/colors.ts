@@ -1,39 +1,39 @@
-import type { Theme } from '@react-navigation/native';
+import type { Theme } from '@react-navigation/native'
 
 type AccentColors = Record<
 	string,
 	{
-		light: string;
-		dark: string;
+		light: string
+		dark: string
 	}
->;
+>
 
 interface StaticThemeColors {
-	labelTertiaryColor: string;
-	labelSecondaryColor: string;
-	labelColor: string;
-	labelBackground: string;
-	success: string;
-	datePickerBackground: string;
-	card: string;
-	cardButton: string;
-	notification: string;
-	warning: string;
-	inputBackground: string;
-	contrast: string;
-	cardContrast: string;
+	labelTertiaryColor: string
+	labelSecondaryColor: string
+	labelColor: string
+	labelBackground: string
+	success: string
+	datePickerBackground: string
+	card: string
+	cardButton: string
+	notification: string
+	warning: string
+	inputBackground: string
+	contrast: string
+	cardContrast: string
 }
 
 export interface Colors extends StaticThemeColors {
-	text: string;
-	primary: string;
-	card: string;
-	border: string;
-	background: string;
+	text: string
+	primary: string
+	card: string
+	border: string
+	background: string
 }
 
 export interface AppTheme extends Theme {
-	colors: Colors;
+	colors: Colors
 }
 
 export const accentColors: AccentColors = {
@@ -73,4 +73,4 @@ export const accentColors: AccentColors = {
 		light: '#9b7d5c',
 		dark: '#a58463'
 	}
-};
+}

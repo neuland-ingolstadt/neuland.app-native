@@ -1,39 +1,39 @@
-import type { Meal } from '@/types/neuland-api';
+import type { Meal } from '@/types/neuland-api'
 import type {
 	Exam,
 	FriendlyTimetableEntry,
 	NormalizedLecturer
-} from '@/types/utils';
-import { create } from 'zustand';
+} from '@/types/utils'
+import { create } from 'zustand'
 
 interface RouteParamsStore {
-	selectedMeal: Meal | undefined;
-	setSelectedMeal: (selectedMeal: Meal) => void;
-	selectedLecture: FriendlyTimetableEntry | undefined;
-	setSelectedLecture: (selectedLecture: FriendlyTimetableEntry) => void;
-	selectedExam: Exam | undefined;
-	setSelectedExam: (selectedExam: Exam) => void;
-	selectedLecturer: NormalizedLecturer | undefined;
-	setSelectedLecturer: (selectedLecturer: NormalizedLecturer) => void;
+	selectedMeal: Meal | undefined
+	setSelectedMeal: (selectedMeal: Meal) => void
+	selectedLecture: FriendlyTimetableEntry | undefined
+	setSelectedLecture: (selectedLecture: FriendlyTimetableEntry) => void
+	selectedExam: Exam | undefined
+	setSelectedExam: (selectedExam: Exam) => void
+	selectedLecturer: NormalizedLecturer | undefined
+	setSelectedLecturer: (selectedLecturer: NormalizedLecturer) => void
 }
 
 const useRouteParamsStore = create<RouteParamsStore>((set) => ({
 	selectedMeal: undefined,
 	setSelectedMeal: (selectedMeal: Meal) => {
-		set({ selectedMeal });
+		set({ selectedMeal })
 	},
 	selectedLecture: undefined,
 	setSelectedLecture: (selectedLecture: FriendlyTimetableEntry) => {
-		set({ selectedLecture });
+		set({ selectedLecture })
 	},
 	selectedExam: undefined,
 	setSelectedExam: (selectedExam: Exam) => {
-		set({ selectedExam });
+		set({ selectedExam })
 	},
 	selectedLecturer: undefined,
 	setSelectedLecturer: (selectedLecturer: NormalizedLecturer) => {
-		set({ selectedLecturer });
+		set({ selectedLecturer })
 	}
-}));
+}))
 
-export default useRouteParamsStore;
+export default useRouteParamsStore

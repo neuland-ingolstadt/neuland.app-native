@@ -1,31 +1,31 @@
-import API from '@/api/authenticated-api';
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import { FreeRoomsList } from '@/components/Map/FreeRoomsList';
-import Divider from '@/components/Universal/Divider';
-import PlatformIcon from '@/components/Universal/Icon';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { useRefreshByUser } from '@/hooks';
-import type { AvailableRoom } from '@/types/utils';
-import { networkError } from '@/utils/api-utils';
-import { formatISODate, formatISOTime } from '@/utils/date-utils';
+import API from '@/api/authenticated-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import type { AvailableRoom } from '@/types/utils'
+import { networkError } from '@/utils/api-utils'
+import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
 	BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
 	filterRooms,
 	getNextValidDate
-} from '@/utils/map-utils';
-import { LoadingState } from '@/utils/ui-utils';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ScrollView, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { Picker, useBinding } from 'swiftui-react-native';
+} from '@/utils/map-utils'
+import { LoadingState } from '@/utils/ui-utils'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Picker, useBinding } from 'swiftui-react-native'
 
 const DURATIONS = [
 	'00:15',
@@ -42,20 +42,20 @@ const DURATIONS = [
 	'05:00',
 	'05:30',
 	'06:00'
-];
+]
 
-const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS];
+const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const router = useRouter();
-	const { t } = useTranslation('common');
+	const { styles, theme } = useStyles(stylesheet)
+	const router = useRouter()
+	const { t } = useTranslation('common')
 
-	const { startDate, wasModified } = getNextValidDate();
-	const building = useBinding(BUILDINGS_ALL);
-	const [date, setDate] = useState(formatISODate(startDate));
+	const { startDate, wasModified } = getNextValidDate()
+	const building = useBinding(BUILDINGS_ALL)
+	const [date, setDate] = useState(formatISODate(startDate))
 
-	const [time, setTime] = useState(formatISOTime(startDate));
+	const [time, setTime] = useState(formatISOTime(startDate))
 
 	/**
 	 * Checks if the provided date and time are equal to the start date.
@@ -72,14 +72,14 @@ export default function AdvancedSearch(): React.JSX.Element {
 			startDate.getHours() === Number.parseInt(time.split(':')[0], 10) &&
 			startDate.getMinutes() === Number.parseInt(time.split(':')[1], 10) &&
 			startDate.toISOString().split('T')[0] === date
-		);
-	};
+		)
+	}
 
-	const duration = useBinding(DURATION_PRESET);
+	const duration = useBinding(DURATION_PRESET)
 
 	const [filterState, setFilterState] = useState<LoadingState>(
 		LoadingState.LOADING
-	);
+	)
 	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
 		queryKey: ['freeRooms', date],
 		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
@@ -87,23 +87,23 @@ export default function AdvancedSearch(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.replace('/login');
-				return false;
+				router.replace('/login')
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		}
-	});
-	const [rooms, setRooms] = useState<AvailableRoom[] | null>(null);
+	})
+	const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
 
 	useEffect(() => {
 		const fetchRooms = (): void => {
 			try {
-				const validateDate = new Date(date);
+				const validateDate = new Date(date)
 				if (Number.isNaN(validateDate.getTime())) {
-					throw new Error('Invalid date');
+					throw new Error('Invalid date')
 				}
 				if (data === undefined) {
-					return;
+					return
 				}
 
 				const rooms = filterRooms(
@@ -112,25 +112,25 @@ export default function AdvancedSearch(): React.JSX.Element {
 					time,
 					building.value,
 					duration.value
-				);
+				)
 				if (rooms == null) {
-					throw new Error('Error while filtering rooms');
+					throw new Error('Error while filtering rooms')
 				}
-				setRooms(rooms);
-				setFilterState(LoadingState.LOADED);
+				setRooms(rooms)
+				setFilterState(LoadingState.LOADED)
 			} catch (error) {
-				setFilterState(LoadingState.ERROR);
-				console.error(error);
+				setFilterState(LoadingState.ERROR)
+				console.error(error)
 			}
-		};
+		}
 
-		setFilterState(LoadingState.LOADING);
+		setFilterState(LoadingState.LOADING)
 		setTimeout(() => {
-			fetchRooms();
-		});
-	}, [date, time, building.value, duration.value, data]);
+			fetchRooms()
+		})
+	}, [date, time, building.value, duration.value, data])
 
-	const { refetchByUser } = useRefreshByUser(refetch);
+	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
 		<>
@@ -151,7 +151,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								accentColor={theme.colors.primary}
 								locale="de-DE"
 								onChange={(_event, selectedDate) => {
-									setDate(formatISODate(selectedDate));
+									setDate(formatISODate(selectedDate))
 								}}
 								minimumDate={new Date()}
 								maximumDate={
@@ -174,7 +174,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								locale="de-DE"
 								minuteInterval={5}
 								onChange={(_event, selectedDate) => {
-									setTime(formatISOTime(selectedDate));
+									setTime(formatISOTime(selectedDate))
 								}}
 							/>
 						</View>
@@ -252,7 +252,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								<ErrorView
 									title={networkError}
 									onButtonPress={() => {
-										void refetchByUser();
+										void refetchByUser()
 									}}
 									inModal
 								/>
@@ -260,7 +260,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								<ErrorView
 									title={error?.message ?? t('error.title')}
 									onButtonPress={() => {
-										void refetchByUser();
+										void refetchByUser()
 									}}
 									inModal
 								/>
@@ -272,7 +272,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 				</View>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -329,4 +329,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 4,
 		textTransform: 'uppercase'
 	}
-}));
+}))

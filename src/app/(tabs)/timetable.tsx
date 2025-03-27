@@ -1,15 +1,15 @@
-import TimetableScreen from '@/components/Timetable/TimetableScreen';
-import WorkaroundStack from '@/components/Universal/WorkaroundStack';
-import Head from 'expo-router/head';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform } from 'react-native';
+import TimetableScreen from '@/components/Timetable/TimetableScreen'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import Head from 'expo-router/head'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
 
 export default function TimetableRootScreen(): React.JSX.Element {
-	const { t } = useTranslation('navigation');
+	const { t } = useTranslation('navigation')
 
 	if (Platform.OS === 'web') {
-		return <TimetableScreen />;
+		return <TimetableScreen />
 	}
 	return (
 		<>
@@ -26,5 +26,5 @@ export default function TimetableRootScreen(): React.JSX.Element {
 				androidFallback
 			/>
 		</>
-	);
+	)
 }

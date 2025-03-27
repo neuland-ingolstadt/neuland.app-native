@@ -1,47 +1,47 @@
-import FormList from '@/components/Universal/FormList';
-import { linkIcon } from '@/components/Universal/Icon';
-import SectionView from '@/components/Universal/SectionsView';
-import type { FormListSections } from '@/types/components';
-import { useGlobalSearchParams } from 'expo-router';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, ScrollView, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import FormList from '@/components/Universal/FormList'
+import { linkIcon } from '@/components/Universal/Icon'
+import SectionView from '@/components/Universal/SectionsView'
+import type { FormListSections } from '@/types/components'
+import { useGlobalSearchParams } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function License(): React.JSX.Element {
-	const { styles } = useStyles(stylesheet);
-	const { t } = useTranslation(['settings']);
+	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation(['settings'])
 
 	const { license, version, licenseUrl, repository, name } =
 		useGlobalSearchParams<{
-			license: string;
-			version: string;
-			licenseUrl: string;
-			repository: string;
-			name: string;
-		}>();
+			license: string
+			version: string
+			licenseUrl: string
+			repository: string
+			name: string
+		}>()
 
-	const [licenseText, setLicenseText] = useState('');
+	const [licenseText, setLicenseText] = useState('')
 
 	useEffect(() => {
 		if (licenseUrl === undefined || licenseUrl === '') {
-			return;
+			return
 		}
 		fetch(licenseUrl)
 			.then(async (res) => await res.text())
 			.then((text) => {
 				// sometimes the license is not a text file, but the whole repo page
 				if (text.includes('<!DOCTYPE html>')) {
-					setLicenseText('');
+					setLicenseText('')
 				} else {
-					setLicenseText(text);
+					setLicenseText(text)
 				}
 			})
 			.catch((error) => {
-				console.warn('Failed to fetch license text:', error);
-			});
-	}, [licenseUrl]);
+				console.warn('Failed to fetch license text:', error)
+			})
+	}, [licenseUrl])
 
 	const sections: FormListSections[] = [
 		{
@@ -61,7 +61,7 @@ export default function License(): React.JSX.Element {
 					value: license,
 					onPress: async () => {
 						if (licenseUrl !== undefined) {
-							await Linking.openURL(licenseUrl);
+							await Linking.openURL(licenseUrl)
 						}
 					},
 					disabled: licenseUrl === ''
@@ -71,14 +71,14 @@ export default function License(): React.JSX.Element {
 					icon: linkIcon,
 					onPress: async () => {
 						if (repository !== undefined) {
-							await Linking.openURL(repository);
+							await Linking.openURL(repository)
 						}
 					},
 					disabled: repository === ''
 				}
 			]
 		}
-	];
+	]
 	return (
 		<>
 			<ScrollView contentContainerStyle={styles.container}>
@@ -93,7 +93,7 @@ export default function License(): React.JSX.Element {
 				)}
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -112,4 +112,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 13,
 		padding: 16
 	}
-}));
+}))

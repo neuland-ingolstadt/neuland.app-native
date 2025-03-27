@@ -1,22 +1,22 @@
-import FormList from '@/components/Universal/FormList';
-import useRouteParamsStore from '@/hooks/useRouteParamsStore';
-import type { FormListSections } from '@/types/components';
-import { Redirect, router } from 'expo-router';
-import type React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Linking, ScrollView, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections } from '@/types/components'
+import { Redirect, router } from 'expo-router'
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const lecturer = useRouteParamsStore((state) => state.selectedLecturer);
-	const { t } = useTranslation('common');
+	const { styles, theme } = useStyles(stylesheet)
+	const lecturer = useRouteParamsStore((state) => state.selectedLecturer)
+	const { t } = useTranslation('common')
 
 	if (lecturer == null) {
-		return <Redirect href="/lecturers" />;
+		return <Redirect href="/lecturers" />
 	}
 	const validEmail =
-		lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false);
+		lecturer?.email === '' || !(lecturer?.email.includes('@') ?? false)
 
 	const sections: FormListSections[] = [
 		{
@@ -61,7 +61,7 @@ export default function LecturerDetail(): React.JSX.Element {
 						router.dismissTo({
 							pathname: '/(tabs)/map',
 							params: { room: lecturer?.room_short ?? '' }
-						});
+						})
 					}
 				},
 				{
@@ -72,7 +72,7 @@ export default function LecturerDetail(): React.JSX.Element {
 					onPress: () => {
 						void Linking.openURL(
 							`tel:${lecturer?.tel_dienst?.replace(/\s+/g, '') ?? ''}`
-						);
+						)
 					}
 				},
 				{
@@ -85,7 +85,7 @@ export default function LecturerDetail(): React.JSX.Element {
 							? theme.colors.primary
 							: undefined,
 					onPress: () => {
-						void Linking.openURL(`mailto:${lecturer?.email ?? ''}`);
+						void Linking.openURL(`mailto:${lecturer?.email ?? ''}`)
 					}
 				},
 				{
@@ -101,7 +101,7 @@ export default function LecturerDetail(): React.JSX.Element {
 				}
 			]
 		}
-	];
+	]
 
 	return (
 		<ScrollView style={styles.page}>
@@ -121,7 +121,7 @@ export default function LecturerDetail(): React.JSX.Element {
 				<FormList sections={sections} />
 			</View>
 		</ScrollView>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -147,4 +147,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 18,
 		textAlign: 'center'
 	}
-}));
+}))

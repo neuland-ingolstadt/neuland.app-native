@@ -1,37 +1,37 @@
-import Divider from '@/components/Universal/Divider';
-import { UserKindContext } from '@/components/contexts';
-import { USER_GUEST } from '@/data/constants';
-import { useInterval } from '@/hooks/useInterval';
-import type { FriendlyTimetableEntry } from '@/types/utils';
-import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils';
-import { getFriendlyTimetable } from '@/utils/timetable-utils';
-import { LoadingState } from '@/utils/ui-utils';
-import { useQuery } from '@tanstack/react-query';
-import { useFocusEffect } from 'expo-router';
-import type React from 'react';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import Divider from '@/components/Universal/Divider'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
+import { useInterval } from '@/hooks/useInterval'
+import type { FriendlyTimetableEntry } from '@/types/utils'
+import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
+import { getFriendlyTimetable } from '@/utils/timetable-utils'
+import { LoadingState } from '@/utils/ui-utils'
+import { useQuery } from '@tanstack/react-query'
+import { useFocusEffect } from 'expo-router'
+import type React from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import BaseCard from './BaseCard';
+import BaseCard from './BaseCard'
 
 const TimetableCard: React.FC = () => {
-	const { styles, theme } = useStyles(stylesheet);
-	const { userKind = USER_GUEST } = useContext(UserKindContext);
-	const [loadingState, setLoadingState] = useState(LoadingState.LOADING);
+	const { styles, theme } = useStyles(stylesheet)
+	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
 	const [filteredTimetable, setFilteredTimetable] = useState<
 		FriendlyTimetableEntry[]
-	>([]);
-	const { t } = useTranslation('navigation');
+	>([])
+	const { t } = useTranslation('navigation')
 
 	const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
-		const timetable = await getFriendlyTimetable(new Date(), true);
+		const timetable = await getFriendlyTimetable(new Date(), true)
 		if (timetable.length === 0) {
-			throw new Error('Timetable is empty');
+			throw new Error('Timetable is empty')
 		}
-		return timetable;
-	};
+		return timetable
+	}
 
 	const { data: timetable } = useQuery({
 		queryKey: ['timetableV2', userKind],
@@ -42,36 +42,36 @@ const TimetableCard: React.FC = () => {
 			const ignoreErrors = [
 				'"Time table does not exist" (-202)',
 				'Timetable is empty'
-			];
-			return !ignoreErrors.includes(error?.message) && failureCount < 2;
+			]
+			return !ignoreErrors.includes(error?.message) && failureCount < 2
 		}
-	});
+	})
 
 	const filterData = useCallback(() => {
-		if (timetable == null) return;
-		const now = new Date();
+		if (timetable == null) return
+		const now = new Date()
 		const upcomingEvents = timetable
 			.filter((item) => new Date(item.endDate) > now)
-			.slice(0, 2);
-		setFilteredTimetable(upcomingEvents);
-		setLoadingState(LoadingState.LOADED);
-	}, [timetable]);
+			.slice(0, 2)
+		setFilteredTimetable(upcomingEvents)
+		setLoadingState(LoadingState.LOADED)
+	}, [timetable])
 
-	useInterval(filterData, 60 * 1000);
+	useInterval(filterData, 60 * 1000)
 
 	useFocusEffect(
 		useCallback(() => {
 			if (userKind !== USER_GUEST && loadingState !== LoadingState.LOADED) {
-				filterData();
+				filterData()
 			} else if (userKind === USER_GUEST) {
-				setLoadingState(LoadingState.ERROR);
+				setLoadingState(LoadingState.ERROR)
 			}
 		}, [userKind, loadingState, filterData])
-	);
+	)
 
 	useEffect(() => {
-		if (timetable != null) filterData();
-	}, [timetable, filterData]);
+		if (timetable != null) filterData()
+	}, [timetable, filterData])
 
 	const renderEvent = (
 		event: FriendlyTimetableEntry,
@@ -81,32 +81,32 @@ const TimetableCard: React.FC = () => {
 		const isSoon =
 			event.startDate > currentTime &&
 			new Date(event.startDate) <=
-				new Date(currentTime.getTime() + 30 * 60 * 1000);
+				new Date(currentTime.getTime() + 30 * 60 * 1000)
 		const isOngoing =
-			event.startDate < currentTime && event.endDate > currentTime;
+			event.startDate < currentTime && event.endDate > currentTime
 		const isEndingSoon =
 			isOngoing &&
-			event.endDate.getTime() - currentTime.getTime() <= 30 * 60 * 1000;
+			event.endDate.getTime() - currentTime.getTime() <= 30 * 60 * 1000
 
-		let eventText: string | null = null;
+		let eventText: string | null = null
 		if (isSoon) {
 			eventText = t('cards.timetable.startingSoon', {
 				count: Math.ceil(
 					(event.startDate.getTime() - currentTime.getTime()) / 60000
 				)
-			});
+			})
 		} else if (isEndingSoon) {
 			eventText = t('cards.timetable.endingSoon', {
 				count: Math.ceil(
 					(event.endDate.getTime() - currentTime.getTime()) / 60000
 				)
-			});
+			})
 		} else if (isOngoing) {
 			eventText = t('cards.timetable.ongoing', {
 				time: formatFriendlyTime(event.endDate)
-			});
+			})
 		} else {
-			eventText = formatFriendlyDateTime(event.startDate);
+			eventText = formatFriendlyDateTime(event.startDate)
 		}
 
 		return (
@@ -122,8 +122,8 @@ const TimetableCard: React.FC = () => {
 					</>
 				)}
 			</View>
-		);
-	};
+		)
+	}
 
 	return (
 		<BaseCard title="timetable" onPressRoute="/timetable">
@@ -140,8 +140,8 @@ const TimetableCard: React.FC = () => {
 				</View>
 			)}
 		</BaseCard>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarView: { gap: 8 },
@@ -149,6 +149,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	divider: { height: 10 },
 	eventDetails: { color: theme.colors.labelColor, fontSize: 15 },
 	eventTitle: { color: theme.colors.text, fontSize: 16, fontWeight: '500' }
-}));
+}))
 
-export default TimetableCard;
+export default TimetableCard

@@ -1,25 +1,25 @@
-import { getFragmentData } from '@/__generated__/gql';
-import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql';
-import NeulandAPI from '@/api/neuland-api';
-import AnnouncementCard from '@/components/Cards/AnnouncementCard';
-import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight';
-import ErrorView from '@/components/Error/ErrorView';
-import WorkaroundStack from '@/components/Universal/WorkaroundStack';
-import { DashboardContext } from '@/components/contexts';
-import { FlashList, MasonryFlashList } from '@shopify/flash-list';
-import { useQuery } from '@tanstack/react-query';
-import { router } from 'expo-router';
-import Head from 'expo-router/head';
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Dimensions, LayoutAnimation, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { getFragmentData } from '@/__generated__/gql'
+import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
+import NeulandAPI from '@/api/neuland-api'
+import AnnouncementCard from '@/components/Cards/AnnouncementCard'
+import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
+import ErrorView from '@/components/Error/ErrorView'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
+import { DashboardContext } from '@/components/contexts'
+import { FlashList, MasonryFlashList } from '@shopify/flash-list'
+import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
+import Head from 'expo-router/head'
+import React, { memo, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Dimensions, LayoutAnimation, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function HomeRootScreen(): React.JSX.Element {
-	const [isPageOpen, setIsPageOpen] = useState(false);
+	const [isPageOpen, setIsPageOpen] = useState(false)
 	useEffect(() => {
-		setIsPageOpen(true);
-	}, []);
+		setIsPageOpen(true)
+	}, [])
 
 	return (
 		<>
@@ -41,55 +41,53 @@ export default function HomeRootScreen(): React.JSX.Element {
 				androidFallback
 			/>
 		</>
-	);
+	)
 }
 
 const HomeScreen = memo(function HomeScreen() {
-	const { styles, theme } = useStyles(stylesheet);
-	const { shownDashboardEntries } = React.useContext(DashboardContext);
-	const [orientation, setOrientation] = useState(
-		Dimensions.get('window').width
-	);
+	const { styles, theme } = useStyles(stylesheet)
+	const { shownDashboardEntries } = React.useContext(DashboardContext)
+	const [orientation, setOrientation] = useState(Dimensions.get('window').width)
 	const [columns, setColumns] = useState(
 		Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
-	);
-	const { t } = useTranslation(['navigation', 'settings']);
+	)
+	const { t } = useTranslation(['navigation', 'settings'])
 	const { data } = useQuery({
 		queryKey: ['announcements'],
 		queryFn: async () => await NeulandAPI.getAnnouncements(),
 		staleTime: 1000 * 60 * 30, // 30 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7 // 7 days
-	});
+	})
 
 	useEffect(() => {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-	}, [shownDashboardEntries]);
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+	}, [shownDashboardEntries])
 
 	useEffect(() => {
 		const handleOrientationChange = (): void => {
-			setOrientation(Dimensions.get('window').width);
-			setColumns(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2));
-		};
+			setOrientation(Dimensions.get('window').width)
+			setColumns(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2))
+		}
 
 		const subscription = Dimensions.addEventListener(
 			'change',
 			handleOrientationChange
-		);
+		)
 
 		return () => {
-			subscription.remove();
-		};
-	}, []);
+			subscription.remove()
+		}
+	}, [])
 	const announcements = getFragmentData(
 		AnnouncementFieldsFragmentDoc,
 		data?.appAnnouncements
-	);
+	)
 
 	const renderSingleColumnItem = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		({ item }: { item: any }) => <View style={styles.item}>{item.card()}</View>,
 		[styles.item]
-	);
+	)
 
 	const renderMasonryItem = useCallback(
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -97,15 +95,15 @@ const HomeScreen = memo(function HomeScreen() {
 			const paddingStyle =
 				index % 2 === 0
 					? { marginRight: theme.margins.page / 2 }
-					: { marginLeft: theme.margins.page / 2 };
+					: { marginLeft: theme.margins.page / 2 }
 
-			return <View style={[styles.item, paddingStyle]}>{item.card()}</View>;
+			return <View style={[styles.item, paddingStyle]}>{item.card()}</View>
 		},
 		[styles.item, theme.margins.page]
-	);
+	)
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const keyExtractor = useCallback((item: { key: any }) => item.key, []);
+	const keyExtractor = useCallback((item: { key: any }) => item.key, [])
 
 	return shownDashboardEntries === null ||
 		shownDashboardEntries.length === 0 ? (
@@ -121,7 +119,7 @@ const HomeScreen = memo(function HomeScreen() {
 				}}
 				buttonText={t('dashboard.noShownButton', { ns: 'settings' })}
 				onButtonPress={() => {
-					router.navigate('/dashboard');
+					router.navigate('/dashboard')
 				}}
 				isCritical={false}
 			/>
@@ -165,8 +163,8 @@ const HomeScreen = memo(function HomeScreen() {
 				)
 			}
 		/>
-	);
-});
+	)
+})
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
@@ -181,4 +179,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	page: {
 		backgroundColor: theme.colors.background
 	}
-}));
+}))

@@ -1,15 +1,15 @@
-import type React from 'react';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+import type React from 'react'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import * as DropdownMenu from 'zeego/dropdown-menu'
 
-type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Content']>;
+type ItemProps = React.ComponentProps<(typeof DropdownMenu)['Content']>
 
 const DropdownMenuContent = DropdownMenu.create((props: ItemProps) => {
-	const { styles } = useStyles(stylesheet);
-	return <DropdownMenu.Content style={styles.item} {...props} />;
-}, 'Content');
+	const { styles } = useStyles(stylesheet)
+	return <DropdownMenu.Content style={styles.item} {...props} />
+}, 'Content')
 
-export default DropdownMenuContent;
+export default DropdownMenuContent
 
 const stylesheet = createStyleSheet((theme) => ({
 	item: {
@@ -23,4 +23,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingRight: 4,
 		paddingTop: 4
 	}
-}));
+}))

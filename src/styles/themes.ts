@@ -35,7 +35,7 @@ export const lightTheme = {
 		lg: 12,
 		infinite: 9999
 	}
-} as const;
+} as const
 
 export const darkTheme = {
 	colors: {
@@ -74,4 +74,4 @@ export const darkTheme = {
 		lg: 12,
 		infinite: 9999
 	}
-} as const;
+} as const

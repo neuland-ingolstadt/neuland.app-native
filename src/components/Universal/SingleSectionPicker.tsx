@@ -1,14 +1,14 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import React from 'react'
+import { Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon from './Icon';
+import PlatformIcon from './Icon'
 
 interface SectionPickerProps {
-	title: string;
-	selectedItem: boolean;
-	action: (state: boolean) => void;
-	state: boolean;
+	title: string
+	selectedItem: boolean
+	action: (state: boolean) => void
+	state: boolean
 }
 
 /**
@@ -32,13 +32,13 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 	selectedItem,
 	action
 }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			<React.Fragment>
 				<Pressable
 					onPress={() => {
-						action(!selectedItem);
+						action(!selectedItem)
 					}}
 					style={styles.button}
 				>
@@ -64,10 +64,10 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 				</Pressable>
 			</React.Fragment>
 		</>
-	);
-};
+	)
+}
 
-export default SingleSectionPicker;
+export default SingleSectionPicker
 
 const stylesheet = createStyleSheet((theme) => ({
 	button: {
@@ -86,4 +86,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		paddingVertical: 1
 	}
-}));
+}))

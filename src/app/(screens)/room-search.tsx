@@ -1,30 +1,30 @@
-import API from '@/api/authenticated-api';
-import { NoSessionError } from '@/api/thi-session-handler';
-import ErrorView from '@/components/Error/ErrorView';
-import { FreeRoomsList } from '@/components/Map/FreeRoomsList';
-import Divider from '@/components/Universal/Divider';
-import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown';
-import LoadingIndicator from '@/components/Universal/LoadingIndicator';
-import { useRefreshByUser } from '@/hooks';
-import type { AvailableRoom } from '@/types/utils';
-import { networkError } from '@/utils/api-utils';
-import { formatISODate, formatISOTime } from '@/utils/date-utils';
+import API from '@/api/authenticated-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import { FreeRoomsList } from '@/components/Map/FreeRoomsList'
+import Divider from '@/components/Universal/Divider'
+import Dropdown, { DropdownButton } from '@/components/Universal/Dropdown'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import type { AvailableRoom } from '@/types/utils'
+import { networkError } from '@/utils/api-utils'
+import { formatISODate, formatISOTime } from '@/utils/date-utils'
 import {
 	BUILDINGS,
 	BUILDINGS_ALL,
 	DURATION_PRESET,
 	filterRooms,
 	getNextValidDate
-} from '@/utils/map-utils';
-import { LoadingState } from '@/utils/ui-utils';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Platform, ScrollView, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from '@/utils/map-utils'
+import { LoadingState } from '@/utils/ui-utils'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const DURATIONS = [
 	'00:15',
@@ -41,26 +41,26 @@ const DURATIONS = [
 	'05:00',
 	'05:30',
 	'06:00'
-];
+]
 
-const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS];
+const ALL_BUILDINGS = [BUILDINGS_ALL, ...BUILDINGS]
 
 export default function AdvancedSearch(): React.JSX.Element {
-	const { styles, theme } = useStyles(stylesheet);
-	const router = useRouter();
-	const { t } = useTranslation('common');
+	const { styles, theme } = useStyles(stylesheet)
+	const router = useRouter()
+	const { t } = useTranslation('common')
 
-	const startDate = getNextValidDate();
-	const [building, setBuilding] = useState(BUILDINGS_ALL);
-	const [date, setDate] = useState(formatISODate(startDate.startDate));
-	const [time, setTime] = useState(formatISOTime(startDate.startDate));
-	const [duration, setDuration] = useState(DURATION_PRESET);
+	const startDate = getNextValidDate()
+	const [building, setBuilding] = useState(BUILDINGS_ALL)
+	const [date, setDate] = useState(formatISODate(startDate.startDate))
+	const [time, setTime] = useState(formatISOTime(startDate.startDate))
+	const [duration, setDuration] = useState(DURATION_PRESET)
 
-	const [showDate, setShowDate] = useState(Platform.OS === 'ios');
-	const [showTime, setShowTime] = useState(Platform.OS === 'ios');
+	const [showDate, setShowDate] = useState(Platform.OS === 'ios')
+	const [showTime, setShowTime] = useState(Platform.OS === 'ios')
 	const [filterState, setFilterState] = useState<LoadingState>(
 		LoadingState.LOADING
-	);
+	)
 	const { data, error, isLoading, isError, isPaused, refetch } = useQuery({
 		queryKey: ['freeRooms', date],
 		queryFn: async () => await API.getFreeRooms(new Date(`${date}T${time}`)),
@@ -68,43 +68,43 @@ export default function AdvancedSearch(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 * 4, // 4 days
 		retry(failureCount, error) {
 			if (error instanceof NoSessionError) {
-				router.replace('/login');
-				return false;
+				router.replace('/login')
+				return false
 			}
-			return failureCount < 2;
+			return failureCount < 2
 		}
-	});
-	const [rooms, setRooms] = useState<AvailableRoom[] | null>(null);
+	})
+	const [rooms, setRooms] = useState<AvailableRoom[] | null>(null)
 
 	useEffect(() => {
 		const fetchRooms = (): void => {
 			try {
-				const validateDate = new Date(date);
+				const validateDate = new Date(date)
 				if (Number.isNaN(validateDate.getTime())) {
-					throw new Error('Invalid date');
+					throw new Error('Invalid date')
 				}
 				if (data === undefined) {
-					return;
+					return
 				}
-				const rooms = filterRooms(data, date, time, building, duration);
+				const rooms = filterRooms(data, date, time, building, duration)
 				if (rooms == null) {
-					throw new Error('Error while filtering rooms');
+					throw new Error('Error while filtering rooms')
 				}
-				setRooms(rooms);
-				setFilterState(LoadingState.LOADED);
+				setRooms(rooms)
+				setFilterState(LoadingState.LOADED)
 			} catch (error) {
-				setFilterState(LoadingState.ERROR);
-				console.error(error);
+				setFilterState(LoadingState.ERROR)
+				console.error(error)
 			}
-		};
+		}
 
-		setFilterState(LoadingState.LOADING);
+		setFilterState(LoadingState.LOADING)
 		setTimeout(() => {
-			fetchRooms();
-		});
-	}, [date, time, building, duration, data]);
+			fetchRooms()
+		})
+	}, [date, time, building, duration, data])
 
-	const { refetchByUser } = useRefreshByUser(refetch);
+	const { refetchByUser } = useRefreshByUser(refetch)
 
 	return (
 		<>
@@ -122,7 +122,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{Platform.OS === 'android' && (
 								<DropdownButton
 									onPress={() => {
-										setShowDate(true);
+										setShowDate(true)
 									}}
 								>
 									{date.split('-').reverse().join('.')}
@@ -136,8 +136,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 									accentColor={theme.colors.primary}
 									locale="de-DE"
 									onChange={(_event, selectedDate) => {
-										setShowDate(Platform.OS !== 'android');
-										setDate(formatISODate(selectedDate));
+										setShowDate(Platform.OS !== 'android')
+										setDate(formatISODate(selectedDate))
 									}}
 									minimumDate={new Date()}
 									maximumDate={
@@ -155,7 +155,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 							{Platform.OS === 'android' && (
 								<DropdownButton
 									onPress={() => {
-										setShowTime(true);
+										setShowTime(true)
 									}}
 								>
 									{time}
@@ -171,8 +171,8 @@ export default function AdvancedSearch(): React.JSX.Element {
 									locale="de-DE"
 									minuteInterval={5}
 									onChange={(_event, selectedDate) => {
-										setShowTime(Platform.OS !== 'android');
-										setTime(formatISOTime(selectedDate));
+										setShowTime(Platform.OS !== 'android')
+										setTime(formatISOTime(selectedDate))
 									}}
 								/>
 							)}
@@ -209,7 +209,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								<ErrorView
 									title={networkError}
 									onButtonPress={() => {
-										void refetchByUser();
+										void refetchByUser()
 									}}
 									inModal
 								/>
@@ -217,7 +217,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								<ErrorView
 									title={error?.message ?? t('error.title')}
 									onButtonPress={() => {
-										void refetchByUser();
+										void refetchByUser()
 									}}
 									inModal
 								/>
@@ -229,7 +229,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 				</View>
 			</ScrollView>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -265,4 +265,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 4,
 		textTransform: 'uppercase'
 	}
-}));
+}))

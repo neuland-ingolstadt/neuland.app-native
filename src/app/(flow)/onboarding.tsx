@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Flow/WhatsnewBox';
-import AnimatedText from '@/components/Flow/svgs/AnimatedText';
-import LogoSVG from '@/components/Flow/svgs/logo';
-import LogoTextSVG from '@/components/Flow/svgs/logoText';
-import PlatformIcon from '@/components/Universal/Icon';
-import { PRIVACY_URL } from '@/data/constants';
-import { useFlowStore } from '@/hooks/useFlowStore';
-import type { OnboardingCardData } from '@/types/data';
-import { getContrastColor } from '@/utils/ui-utils';
-import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import AnimatedText from '@/components/Flow/svgs/AnimatedText'
+import LogoSVG from '@/components/Flow/svgs/logo'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import PlatformIcon from '@/components/Universal/Icon'
+import { PRIVACY_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import type { OnboardingCardData } from '@/types/data'
+import { getContrastColor } from '@/utils/ui-utils'
+import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
 	Dimensions,
 	Linking,
@@ -21,8 +21,8 @@ import {
 	Text,
 	View,
 	useWindowDimensions
-} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
+} from 'react-native'
+import DeviceInfo from 'react-native-device-info'
 import Animated, {
 	Easing,
 	runOnJS,
@@ -31,17 +31,15 @@ import Animated, {
 	withDelay,
 	withSequence,
 	withTiming
-} from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function OnboardingScreen(): React.JSX.Element {
-	const { t, i18n } = useTranslation('flow');
-	const setOnboarded = useFlowStore((state) => state.setOnboarded);
-	const toggleUpdated = useFlowStore((state) => state.toggleUpdated);
-	const setAnalyticsAllowed = useFlowStore(
-		(state) => state.setAnalyticsAllowed
-	);
+	const { t, i18n } = useTranslation('flow')
+	const setOnboarded = useFlowStore((state) => state.setOnboarded)
+	const toggleUpdated = useFlowStore((state) => state.toggleUpdated)
+	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
 
 	const data: OnboardingCardData[] = [
 		{
@@ -72,64 +70,64 @@ export default function OnboardingScreen(): React.JSX.Element {
 				web: 'GlobeLock'
 			}
 		}
-	];
+	]
 
 	const ContinueButton = (): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet);
+		const { styles } = useStyles(stylesheet)
 		return (
 			<Pressable
 				style={styles.button}
 				onPress={() => {
 					if (Platform.OS === 'ios') {
-						void Haptics.selectionAsync();
+						void Haptics.selectionAsync()
 					}
-					setOnboarded();
-					toggleUpdated();
-					setAnalyticsAllowed(true);
+					setOnboarded()
+					toggleUpdated()
+					setAnalyticsAllowed(true)
 					router.navigate({
 						pathname: '/login',
 						params: { fromOnboarding: 'true' }
-					});
+					})
 				}}
 				disabled={buttonDisabled}
 			>
 				<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>
 			</Pressable>
-		);
-	};
+		)
+	}
 
-	const cardsOpacity = data.map(() => useSharedValue(0));
-	const cardsTranslateY = data.map(() => useSharedValue(20));
-	const legalOpacity = useSharedValue(0);
-	const legalTranslateY = useSharedValue(20);
-	const logoOpacity = useSharedValue(0);
-	const textTranslateY = useSharedValue(20);
-	const textOpacity = useSharedValue(0);
-	const cardsViewHeight = useSharedValue(0);
-	const textLogoOpacity = useSharedValue(1);
-	const logoMargin = useSharedValue(1);
-	const helpOpacity = useSharedValue(0);
-	const [isWhobbleDisabled, setWhobbleDisabled] = useState(true);
-	const window = Dimensions.get('window');
+	const cardsOpacity = data.map(() => useSharedValue(0))
+	const cardsTranslateY = data.map(() => useSharedValue(20))
+	const legalOpacity = useSharedValue(0)
+	const legalTranslateY = useSharedValue(20)
+	const logoOpacity = useSharedValue(0)
+	const textTranslateY = useSharedValue(20)
+	const textOpacity = useSharedValue(0)
+	const cardsViewHeight = useSharedValue(0)
+	const textLogoOpacity = useSharedValue(1)
+	const logoMargin = useSharedValue(1)
+	const helpOpacity = useSharedValue(0)
+	const [isWhobbleDisabled, setWhobbleDisabled] = useState(true)
+	const window = Dimensions.get('window')
 
 	const CardsElement = (): React.JSX.Element => {
-		const { styles } = useStyles(stylesheet);
+		const { styles } = useStyles(stylesheet)
 		return (
 			<Animated.View style={[styles.boxesContainer, styles.boxes]}>
 				{data.map(({ title, description, icon }, index) => {
-					const rotation = useSharedValue(0);
+					const rotation = useSharedValue(0)
 
 					const animatedStyles = useAnimatedStyle(() => {
 						return {
 							transform: [{ rotateZ: `${rotation.value}deg` }]
-						};
-					});
+						}
+					})
 
 					const handlePress = (): void => {
 						if (Platform.OS === 'ios') {
-							void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+							void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 						}
-						const direction = Math.random() > 0.5 ? 1 : -1;
+						const direction = Math.random() > 0.5 ? 1 : -1
 						rotation.value = withSequence(
 							withTiming(direction * -1.5, {
 								duration: 100,
@@ -147,19 +145,19 @@ export default function OnboardingScreen(): React.JSX.Element {
 								duration: 100,
 								easing: Easing.linear
 							})
-						);
-					};
+						)
+					}
 
 					const animatedStyle = useAnimatedStyle(() => ({
 						opacity: cardsOpacity[index].value,
 						transform: [{ translateY: cardsTranslateY[index].value }]
-					}));
+					}))
 
 					return (
 						<Pressable
 							onPress={() => {
 								if (!isWhobbleDisabled) {
-									handlePress();
+									handlePress()
 								}
 							}}
 							key={index}
@@ -174,18 +172,18 @@ export default function OnboardingScreen(): React.JSX.Element {
 								</Animated.View>
 							</Animated.View>
 						</Pressable>
-					);
+					)
 				})}
 			</Animated.View>
-		);
-	};
+		)
+	}
 
 	const LegalArea = (): React.JSX.Element => {
 		const legalAnimatedStyle = useAnimatedStyle(() => ({
 			opacity: legalOpacity.value,
 			transform: [{ translateY: legalTranslateY.value }]
-		}));
-		const { styles } = useStyles(stylesheet);
+		}))
+		const { styles } = useStyles(stylesheet)
 		return (
 			<Animated.View style={{ ...legalAnimatedStyle }}>
 				<View
@@ -208,7 +206,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 							disabled={buttonDisabled}
 							style={styles.linkPrivacy}
 							onPress={() => {
-								void Linking.openURL(PRIVACY_URL);
+								void Linking.openURL(PRIVACY_URL)
 							}}
 						>
 							{t('onboarding.links.privacy')}
@@ -218,29 +216,29 @@ export default function OnboardingScreen(): React.JSX.Element {
 				</View>
 				<ContinueButton />
 			</Animated.View>
-		);
-	};
+		)
+	}
 
-	const insets = useSafeAreaInsets();
+	const insets = useSafeAreaInsets()
 
 	const textLogoAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			opacity: textLogoOpacity.value
-		};
-	});
+		}
+	})
 
 	const logoAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			opacity: logoOpacity.value
-		};
-	});
+		}
+	})
 
 	const textAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			transform: [{ translateY: textTranslateY.value }],
 			opacity: textOpacity.value
-		};
-	});
+		}
+	})
 
 	const helpAnimatedStyle = useAnimatedStyle(() => {
 		return {
@@ -248,8 +246,8 @@ export default function OnboardingScreen(): React.JSX.Element {
 			top: insets.top + 15,
 			right: 18,
 			opacity: helpOpacity.value
-		};
-	});
+		}
+	})
 
 	useEffect(() => {
 		logoOpacity.value = withDelay(
@@ -258,7 +256,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 				textTranslateY.value = withTiming(0, {
 					duration: 800,
 					easing: Easing.out(Easing.quad)
-				});
+				})
 
 				textOpacity.value = withTiming(
 					1,
@@ -273,14 +271,14 @@ export default function OnboardingScreen(): React.JSX.Element {
 								duration: 1200,
 								easing: Easing.out(Easing.quad)
 							})
-						);
+						)
 						textLogoOpacity.value = withDelay(
 							1250,
 							withTiming(0, {
 								duration: 600,
 								easing: Easing.out(Easing.quad)
 							})
-						);
+						)
 						logoOpacity.value = withDelay(
 							800,
 							withTiming(
@@ -296,40 +294,40 @@ export default function OnboardingScreen(): React.JSX.Element {
 											duration: 50,
 											easing: Easing.out(Easing.quad)
 										}
-									);
-									const initialDelay = 800;
+									)
+									const initialDelay = 800
 									data.forEach((_, index) => {
-										const delay = initialDelay + index * 100;
+										const delay = initialDelay + index * 100
 
 										cardsOpacity[index].value = withDelay(
 											delay,
 											withTiming(1, {
 												duration: 500
 											})
-										);
+										)
 
 										cardsTranslateY[index].value = withDelay(
 											delay,
 											withTiming(0, {
 												duration: 500
 											})
-										);
-									});
-									runOnJS(setWhobbleDisabled)(false);
+										)
+									})
+									runOnJS(setWhobbleDisabled)(false)
 									helpOpacity.value = withDelay(
 										1400,
 										withTiming(1, {
 											duration: 500,
 											easing: Easing.out(Easing.quad)
 										})
-									);
+									)
 									legalOpacity.value = withDelay(
 										1400,
 										withTiming(1, {
 											duration: 500,
 											easing: Easing.out(Easing.quad)
 										})
-									);
+									)
 
 									legalTranslateY.value = withDelay(
 										1400,
@@ -341,46 +339,46 @@ export default function OnboardingScreen(): React.JSX.Element {
 											},
 											(isFinished) => {
 												if (isFinished === true) {
-													runOnJS(setButtonDisabled)(false);
+													runOnJS(setButtonDisabled)(false)
 												}
 											}
 										)
-									);
+									)
 								}
 							)
-						);
+						)
 					}
-				);
+				)
 			})
-		);
-	}, []);
+		)
+	}, [])
 
-	const reanimatedWindow = useWindowDimensions();
+	const reanimatedWindow = useWindowDimensions()
 	const logoFadeOutAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			opacity: logoOpacity.value,
 			height: 150 * logoMargin.value,
 			marginTop: logoMargin.value * reanimatedWindow.height * 0.5,
 			marginBottom: logoMargin.value * 40
-		};
-	});
+		}
+	})
 
 	const cardsViewAnimatedStyle = useAnimatedStyle(() => {
 		return {
 			minHeight: cardsViewHeight.value
-		};
-	});
+		}
+	})
 
-	const [buttonDisabled, setButtonDisabled] = useState(true);
+	const [buttonDisabled, setButtonDisabled] = useState(true)
 	const scaleFontSize = (size: number): number => {
 		if (DeviceInfo.isTablet() || Platform.OS === 'web') {
-			return size;
+			return size
 		}
-		const guidelineBaseWidth = 475;
-		return size * (window.width / guidelineBaseWidth);
-	};
-	const scaledHeading = scaleFontSize(33);
-	const { styles } = useStyles(stylesheet);
+		const guidelineBaseWidth = 475
+		return size * (window.width / guidelineBaseWidth)
+	}
+	const scaledHeading = scaleFontSize(33)
+	const { styles } = useStyles(stylesheet)
 	return (
 		<>
 			<View
@@ -443,7 +441,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 					onPress={() => {
 						void Linking.openURL(
 							`https://next.neuland.app/${i18n.language === 'de' ? '' : 'en/'}app/faq`
-						);
+						)
 					}}
 					style={{}}
 				>
@@ -467,7 +465,7 @@ export default function OnboardingScreen(): React.JSX.Element {
 				</Pressable>
 			</Animated.View>
 		</>
-	);
+	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
@@ -544,4 +542,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexShrink: 1,
 		textAlign: 'center'
 	}
-}));
+}))

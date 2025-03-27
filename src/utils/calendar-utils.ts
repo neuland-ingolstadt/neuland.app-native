@@ -1,13 +1,13 @@
-import API from '@/api/authenticated-api';
-import rawCalendar from '@/data/calendar.json';
-import type { LanguageKey } from '@/localization/i18n';
-import type { Calendar } from '@/types/data';
-import type { CalendarEvent, Exam } from '@/types/utils';
-import type { i18n } from 'i18next';
+import API from '@/api/authenticated-api'
+import rawCalendar from '@/data/calendar.json'
+import type { LanguageKey } from '@/localization/i18n'
+import type { Calendar } from '@/types/data'
+import type { CalendarEvent, Exam } from '@/types/utils'
+import type { i18n } from 'i18next'
 
-import { ignoreTime } from './date-utils';
+import { ignoreTime } from './date-utils'
 
-export const compileTime = new Date();
+export const compileTime = new Date()
 export const calendar: Calendar[] = rawCalendar
 	.map((x: unknown) => {
 		const event: Calendar = {
@@ -17,24 +17,24 @@ export const calendar: Calendar[] = rawCalendar
 				(x as Calendar).end != null
 					? new Date((x as Calendar).end as unknown as string)
 					: undefined
-		};
+		}
 
-		return event;
+		return event
 	})
 	.filter(
 		(x) => (x.end != null && x.end > compileTime) || x.begin > compileTime
 	)
 	.sort((a, b) => (a.end?.getTime() ?? 0) - (b.end?.getTime() ?? 0))
-	.sort((a, b) => a.begin.getTime() - b.begin.getTime());
+	.sort((a, b) => a.begin.getTime() - b.begin.getTime())
 
 /**
  * Fetches and parses the exam list
  * @returns {object[]}
  */
 export async function loadExamList(): Promise<Exam[]> {
-	const examList = await API.getExams();
+	const examList = await API.getExams()
 	if (examList.length === 0) {
-		return [];
+		return []
 	}
 	return (
 		examList
@@ -53,7 +53,7 @@ export async function loadExamList(): Promise<Exam[]> {
 			}))
 			// sort list in chronologically order
 			.sort((a, b) => a.date.getTime() - b.date.getTime())
-	);
+	)
 }
 
 export function convertCalendarToWeekViewEvents(
@@ -63,8 +63,8 @@ export function convertCalendarToWeekViewEvents(
 	textColor: string
 ): CalendarEvent[] {
 	return entries.map((entry) => {
-		const allDay = entry.hasHours === false || !entry.hasHours;
-		const endDate = entry.end ?? entry.begin;
+		const allDay = entry.hasHours === false || !entry.hasHours
+		const endDate = entry.end ?? entry.begin
 
 		return {
 			start: allDay ? ignoreTime(entry.begin) : entry.begin,
@@ -72,6 +72,6 @@ export function convertCalendarToWeekViewEvents(
 			title: entry?.name[i18n.language as LanguageKey],
 			color,
 			textColor
-		};
-	});
+		}
+	})
 }

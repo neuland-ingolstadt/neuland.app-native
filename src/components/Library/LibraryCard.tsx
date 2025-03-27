@@ -1,27 +1,22 @@
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon';
-import type { MaterialIcon } from '@/types/material-icons';
-import type React from 'react';
-import {
-	type GestureResponderEvent,
-	Pressable,
-	Text,
-	View
-} from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import type { MaterialIcon } from '@/types/material-icons'
+import type React from 'react'
+import { type GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface LibraryCardProps {
-	onPress: ((event: GestureResponderEvent) => void) | null | undefined;
+	onPress: ((event: GestureResponderEvent) => void) | null | undefined
 	iconProps: {
-		ios: { name: string; size: number };
+		ios: { name: string; size: number }
 		android: {
-			name: MaterialIcon;
-			size: number;
-			variant?: 'outlined' | 'filled';
-		};
-		web: { name: LucideIcon; size: number };
-	};
-	title: string;
-	description: string;
+			name: MaterialIcon
+			size: number
+			variant?: 'outlined' | 'filled'
+		}
+		web: { name: LucideIcon; size: number }
+	}
+	title: string
+	description: string
 }
 
 /**
@@ -38,7 +33,7 @@ const LibraryCard = ({
 	title,
 	description
 }: LibraryCardProps): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet);
+	const { styles, theme } = useStyles(stylesheet)
 	return (
 		<Pressable style={styles.pressable} onPress={onPress}>
 			<View style={styles.container}>
@@ -60,10 +55,10 @@ const LibraryCard = ({
 				style={{ color: theme.colors.labelColor }}
 			/>
 		</Pressable>
-	);
-};
+	)
+}
 
-export default LibraryCard;
+export default LibraryCard
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
@@ -92,4 +87,4 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		fontWeight: 'bold'
 	}
-}));
+}))

@@ -1,12 +1,12 @@
-import React from 'react';
-import { useStyles } from 'react-native-unistyles';
-import * as ContextMenu from 'zeego/context-menu';
+import React from 'react'
+import { useStyles } from 'react-native-unistyles'
+import * as ContextMenu from 'zeego/context-menu'
 
-type ItemProps = React.ComponentProps<(typeof ContextMenu)['Item']>;
+type ItemProps = React.ComponentProps<(typeof ContextMenu)['Item']>
 
 const ContextMenuItem = ContextMenu.create((props: ItemProps) => {
-	const { theme } = useStyles();
-	const [focused, setFocused] = React.useState(false);
+	const { theme } = useStyles()
+	const [focused, setFocused] = React.useState(false)
 	return (
 		<ContextMenu.Item
 			// @ts-expect-error
@@ -16,16 +16,16 @@ const ContextMenuItem = ContextMenu.create((props: ItemProps) => {
 			}}
 			{...props}
 			onFocus={() => {
-				setFocused(true);
+				setFocused(true)
 			}}
 			onBlur={() => {
-				setFocused(false);
+				setFocused(false)
 			}}
 		/>
-	);
-}, 'CheckboxItem');
+	)
+}, 'CheckboxItem')
 
-export default ContextMenuItem;
+export default ContextMenuItem
 
 const styles = {
 	item: {
@@ -45,4 +45,4 @@ const styles = {
 		outline: 'none',
 		outlineStyle: 'none'
 	}
-};
+}

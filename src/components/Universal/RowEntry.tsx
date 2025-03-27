@@ -1,6 +1,6 @@
-import type React from 'react';
-import { type DimensionValue, Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type React from 'react'
+import { type DimensionValue, Pressable, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
 	title,
@@ -11,16 +11,16 @@ const RowEntry = ({
 	backgroundColor,
 	icon
 }: {
-	title: string;
-	leftChildren: JSX.Element;
-	rightChildren: JSX.Element;
-	onPress?: () => void;
-	isExamCard?: boolean;
-	maxTitleWidth?: DimensionValue;
-	backgroundColor?: string;
-	icon?: JSX.Element;
+	title: string
+	leftChildren: JSX.Element
+	rightChildren: JSX.Element
+	onPress?: () => void
+	isExamCard?: boolean
+	maxTitleWidth?: DimensionValue
+	backgroundColor?: string
+	icon?: JSX.Element
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<Pressable onPress={onPress}>
 			<View style={{ ...styles.eventContainer, backgroundColor }}>
@@ -41,8 +41,8 @@ const RowEntry = ({
 				{rightChildren}
 			</View>
 		</Pressable>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	detailsContainer: {
@@ -65,6 +65,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600',
 		marginBottom: 1
 	}
-}));
+}))
 
-export default RowEntry;
+export default RowEntry

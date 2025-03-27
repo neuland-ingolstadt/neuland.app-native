@@ -1,14 +1,14 @@
-import type { MaterialIcon } from '@/types/material-icons';
-import type { FC } from 'react';
-import { Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import type { MaterialIcon } from '@/types/material-icons'
+import type { FC } from 'react'
+import { Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import PlatformIcon, { type LucideIcon } from '../Universal/Icon';
+import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 
 interface WhatsNewBoxProps {
-	title: string;
-	description: string;
-	icon: { ios: string; android: MaterialIcon; web: LucideIcon };
+	title: string
+	description: string
+	icon: { ios: string; android: MaterialIcon; web: LucideIcon }
 }
 
 /**
@@ -21,7 +21,7 @@ interface WhatsNewBoxProps {
  * <WhatsNewBox title="Title" description="Description" icon="chevron-forward-circle" />
  */
 const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
-	const { styles } = useStyles(stylesheet);
+	const { styles } = useStyles(stylesheet)
 	return (
 		<View style={styles.container}>
 			<View style={styles.iconContainer}>
@@ -56,8 +56,8 @@ const WhatsNewBox: FC<WhatsNewBoxProps> = ({ title, description, icon }) => {
 				</Text>
 			</View>
 		</View>
-	);
-};
+	)
+}
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
@@ -89,6 +89,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: 'bold',
 		textAlign: 'left'
 	}
-}));
+}))
 
-export default WhatsNewBox;
+export default WhatsNewBox
