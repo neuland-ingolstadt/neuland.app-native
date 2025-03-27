@@ -7,6 +7,7 @@ import {
 	CalendarContainer,
 	CalendarHeader,
 	type CalendarKitHandle,
+	type LocaleConfigsProps,
 	type OnEventResponse,
 	type PackedEvent
 } from '@howljs/calendar-kit'
@@ -20,6 +21,7 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
+import { useTranslation } from 'react-i18next'
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
@@ -39,6 +41,7 @@ export default function TimetableWeek({
 	exams
 }: ITimetableViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
+	const { i18n } = useTranslation()
 	const today = moment().startOf('day').toDate()
 	const calendarRef = useRef<CalendarKitHandle>(null)
 	const setSelectedLecture = useRouteParamsStore(
@@ -62,6 +65,19 @@ export default function TimetableWeek({
 			border: theme.colors.border,
 			text: theme.colors.text,
 			surface: theme.colors.labelBackground
+		}
+	}
+
+	const initialLocales: Record<string, Partial<LocaleConfigsProps>> = {
+		en: {
+			weekDayShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+			meridiem: { ante: 'am', post: 'pm' },
+			more: 'more'
+		},
+		de: {
+			weekDayShort: 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),
+			meridiem: { ante: '', post: '' },
+			more: 'mehr'
 		}
 	}
 
@@ -245,6 +261,8 @@ export default function TimetableWeek({
 				hideWeekDays={timetableMode === TimetableMode.Timeline5 ? [6, 7] : []}
 				events={events}
 				theme={calendarTheme}
+				initialLocales={initialLocales}
+				locale={i18n.language}
 				onPressEvent={(event) => {
 					showEventDetails(event)
 				}}
@@ -262,7 +280,7 @@ export default function TimetableWeek({
 				scrollToNow={false}
 			>
 				<CalendarHeader />
-				<CalendarBody renderEvent={renderEvent} />
+				<CalendarBody renderEvent={renderEvent} hourFormat="HH:mm" />
 			</CalendarContainer>
 		</View>
 	)
