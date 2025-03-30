@@ -19,7 +19,7 @@ PODS:
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.7):
     - ExpoModulesCore
-  - Expo (52.0.40):
+  - Expo (52.0.41):
     - ExpoModulesCore
   - expo-dev-client (5.0.15):
     - EXManifests
@@ -1587,7 +1587,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-ios-utilities (5.1.2):
+  - react-native-ios-utilities (5.1.3):
     - ComputableLayout (~> 0.7)
     - DGSwiftUtilities (~> 0.46)
     - DoubleConversion
@@ -2177,7 +2177,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.9.2):
+  - RNScreens (4.10.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2615,7 +2615,7 @@ SPEC CHECKSUMS:
   EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: 807ab5394ca9f8dd5e64283f02876b2f85c4eb72
-  Expo: 4f645fc381f88e6acacfb0dcb63b45fb9eff25b9
+  Expo: 73171149d69a436153195f72d7b0fef4d82ae380
   expo-dev-client: 8ddff983ea32604dc57248d40568add68ce8ea45
   expo-dev-launcher: eafe29dc8c42add6ee64945125ff3801c98719b4
   expo-dev-menu: bd49f77b6e31fb6acdb7aa652d09ae0f08580789
@@ -2683,7 +2683,7 @@ SPEC CHECKSUMS:
   react-native-context-menu-view: d8269d7c754ecfaa0034e514d419115ac3774f7f
   react-native-drag-drop-ios: ddadc130a754bd9feb2249440a49baf983fa8296
   react-native-ios-context-menu: c57dff66f795f52848ab3b9ce89c71013bc32a6e
-  react-native-ios-utilities: ee3738e201e6acdf8961205276d21b2f75901d80
+  react-native-ios-utilities: e024fd4d57a358f6e7de46569ca5206f065ff47d
   react-native-menu: 70a2aeaeb0a6da0db4e08d8531cdf1d20b702cbf
   react-native-mmkv: 95606f6223bb1381b945d7835e92ce416a48b69d
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
@@ -2726,7 +2726,7 @@ SPEC CHECKSUMS:
   RNFlashList: 47e2bc4b0d46ef85ea166c4ca3039ae02e2f95ca
   RNGestureHandler: b64463a3d975bda9abc7dc1bbd7875c8217c1f40
   RNReanimated: 5b4caeabb7a57867f79d9fbc3a74371a21a34144
-  RNScreens: d7a433214a7afd1c858747d8aceb5ae551bdda43
+  RNScreens: 661aef92de15fa9e6ab205ebcddcd1298e720371
   RNSVG: 67de7abef81f367387b708ba6d2acefe7d4f5895
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageSVGCoder: 8e10c8f6cc879c7dfb317b284e13dd589379f01c

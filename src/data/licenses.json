@@ -101,19 +101,19 @@
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.69.0": {
+    "@tanstack/query-sync-storage-persister@5.71.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.69.0": {
+    "@tanstack/react-query-persist-client@5.71.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.69.0": {
+    "@tanstack/react-query@5.71.0": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -352,7 +352,7 @@
         "licenseUrl": "https://github.com/mochixuan/react-native-drag-sort",
         "parents": "neuland"
     },
-    "react-native-edge-to-edge@1.4.3": {
+    "react-native-edge-to-edge@1.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/zoontek/react-native-edge-to-edge",
         "licenseUrl": "https://github.com/zoontek/react-native-edge-to-edge/raw/master/LICENSE",
@@ -370,7 +370,7 @@
         "licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-ios-utilities@5.1.2": {
+    "react-native-ios-utilities@5.1.3": {
         "licenses": "MIT",
         "repository": "https://github.com/dominicstop/react-native-ios-utilities",
         "licenseUrl": "https://github.com/dominicstop/react-native-ios-utilities/raw/master/LICENSE",
@@ -406,7 +406,7 @@
         "licenseUrl": "https://github.com/th3rdwave/react-native-safe-area-context/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-screens@4.9.2": {
+    "react-native-screens@4.10.0": {
         "licenses": "MIT",
         "repository": "https://github.com/software-mansion/react-native-screens",
         "licenseUrl": "https://github.com/software-mansion/react-native-screens/raw/master/LICENSE",
