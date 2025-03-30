@@ -13,8 +13,6 @@ npm -v
 export NODE_BINARY=$(which node)
 echo "NODE_BINARY is set to $NODE_BINARY"
 
-export EXPO_PUBLIC_GIT_COMMIT_HASH="${CI_COMMIT:-$XCS_GIT_SHA}"
-
 echo "===== Installing Bun ====="
 brew tap oven-sh/bun
 brew install bun 
