@@ -46,7 +46,8 @@ export default function About(): React.JSX.Element {
 		Application.nativeApplicationVersion ??
 		Constants.expoConfig?.version ??
 		'unknown'
-	const commitHash = process.env.EXPO_PUBLIC_GIT_COMMIT_HASH
+	const commitHash =
+		process.env.EXPO_PUBLIC_GIT_COMMIT_HASH ?? process.env.GIT_COMMIT_HASH
 	const commitUrl = `https://github.com/neuland-ingolstadt/neuland.app-native/commit/${commitHash}`
 	const commitHashShort = commitHash?.substring(0, 7)
 
