@@ -8,8 +8,7 @@ import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Platform, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function MapRootScreen(): React.JSX.Element {
@@ -88,7 +87,7 @@ export default function MapRootScreen(): React.JSX.Element {
 				<meta property="expo:handoff" content="true" />
 				<meta property="expo:spotlight" content="true" />
 			</Head>
-			<SafeAreaView style={styles.page} edges={['bottom']}>
+			<View style={styles.page}>
 				{isPageOpen ? (
 					<MapContext.Provider value={contextValue}>
 						<MapScreen />
@@ -96,7 +95,7 @@ export default function MapRootScreen(): React.JSX.Element {
 				) : (
 					<></>
 				)}
-			</SafeAreaView>
+			</View>
 		</>
 	)
 }

@@ -4,8 +4,7 @@ import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, useContext } from 'react'
-import { Platform, Text, View } from 'react-native'
-import { Pressable } from 'react-native-gesture-handler'
+import { Platform, Pressable, Text, View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
@@ -65,24 +64,23 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 					onPress={() => {
 						toggleShowAllFloors()
 					}}
+					style={styles.button}
 				>
-					<View style={styles.button}>
-						<PlatformIcon
-							ios={{
-								name: 'xmark.circle.fill',
-								size: 26
-							}}
-							android={{
-								name: 'cancel',
-								size: 26
-							}}
-							web={{
-								name: 'X',
-								size: 26
-							}}
-							style={styles.xIcon}
-						/>
-					</View>
+					<PlatformIcon
+						ios={{
+							name: 'xmark.circle.fill',
+							size: 26
+						}}
+						android={{
+							name: 'cancel',
+							size: 26
+						}}
+						web={{
+							name: 'X',
+							size: 26
+						}}
+						style={styles.xIcon}
+					/>
 				</Pressable>
 			)}
 			{showAllFloors && (
