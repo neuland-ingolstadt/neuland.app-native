@@ -52,7 +52,11 @@ export default function TimetableDetails(): React.JSX.Element {
 	})
 	useFocusEffect(
 		useCallback(() => {
-			if (lecture === undefined || Platform.OS === 'web') {
+			if (
+				lecture === undefined ||
+				Platform.OS === 'web' ||
+				Platform.OS === 'android'
+			) {
 				navigation.setOptions({
 					headerRight: () => undefined
 				})
