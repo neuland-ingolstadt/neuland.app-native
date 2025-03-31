@@ -220,7 +220,7 @@ export default function GradesSCreen(): React.JSX.Element {
 			)}
 			{isSuccess && grades !== null && (
 				<>
-					{filteredGrades?.finished.length !== 0 && localSearch === '' && (
+					{filteredGrades?.finished.length !== 0 && (
 						<>
 							<SectionView title={t('grades.average')}>
 								<View style={styles.loadedContainer}>
