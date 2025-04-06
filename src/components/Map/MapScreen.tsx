@@ -330,7 +330,6 @@ const MapScreen = (): React.JSX.Element => {
 	}, [mapOverlay])
 
 	useEffect(() => {
-		// @ts-expect-error - TabPress event is not defined in the type
 		const unsubscribe = navigation.addListener('tabPress', () => {
 			setDisableFollowUser(true)
 			setTabBarPressed(true)
