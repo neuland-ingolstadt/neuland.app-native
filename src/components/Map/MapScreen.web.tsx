@@ -17,8 +17,14 @@ import {
 	type RoomData,
 	SEARCH_TYPES
 } from '@/types/map'
-import type { FriendlyTimetableEntry } from '@/types/utils'
 import { formatISODate, formatISOTime } from '@/utils/date-utils'
+import {
+	filterAvailableRooms,
+	filterEtage,
+	getBuildingData,
+	getOngoingOrNextEvent,
+	getRoomData
+} from '@/utils/map-screen-utils'
 import {
 	BUILDINGS,
 	FLOOR_ORDER,
@@ -189,36 +195,6 @@ const MapScreen = (): React.JSX.Element => {
 		},
 		enabled: userKind !== USER_GUEST
 	})
-
-	const getOngoingOrNextEvent = (
-		timetable: FriendlyTimetableEntry[]
-	): FriendlyTimetableEntry[] => {
-		const now = new Date()
-
-		// Filter out past events
-		const futureEvents = timetable.filter(
-			(entry) => new Date(entry.endDate) > now
-		)
-
-		// Find currently ongoing events
-		const ongoingEvents = futureEvents.filter(
-			(entry) =>
-				new Date(entry.startDate) <= now && new Date(entry.endDate) >= now
-		)
-
-		if (ongoingEvents.length > 0) {
-			return ongoingEvents
-		}
-
-		// If no ongoing events, find the next event
-		futureEvents.sort(
-			(a, b) =>
-				new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-		)
-		const nextEvent = futureEvents.length > 0 ? [futureEvents[0]] : []
-
-		return nextEvent
-	}
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {
@@ -455,35 +431,15 @@ const MapScreen = (): React.JSX.Element => {
 	const [availableFilteredGeoJSON, setAvailableFilteredGeoJSON] =
 		useState<FeatureCollection>()
 
-	const filterAvailableRooms = useCallback(
-		(rooms: FeatureCollection | undefined): Feature[] => {
-			if (rooms == null) {
-				return []
-			}
-			return rooms.features.filter(
-				(feature) =>
-					feature.properties != null &&
-					availableRooms?.find((x) => x.room === feature.properties?.Raum)
-			)
-		},
-		[availableRooms]
-	)
-
-	const filterEtage = useCallback(
-		(etage: string): Feature[] => {
-			return allRooms.features.filter(
-				(feature) => feature.properties?.Ebene === etage
-			)
-		},
-		[allRooms.features]
-	)
-
 	useEffect(() => {
 		if (mapOverlay == null) {
 			return
 		}
 		// filter the filteredGeoJSON to only show available rooms
-		const filteredFeatures = filterAvailableRooms(filteredGeoJSON)
+		const filteredFeatures = filterAvailableRooms(
+			filteredGeoJSON,
+			availableRooms
+		)
 
 		const availableFilteredGeoJSON: FeatureCollection = {
 			type: 'FeatureCollection',
@@ -491,13 +447,13 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		setAvailableFilteredGeoJSON(availableFilteredGeoJSON)
-	}, [availableRooms, filteredGeoJSON, mapOverlay, filterAvailableRooms])
+	}, [availableRooms, filteredGeoJSON, mapOverlay])
 
 	useEffect(() => {
 		if (mapOverlay == null) {
 			return
 		}
-		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG')
+		const filteredFeatures = filterEtage(currentFloor?.floor ?? 'EG', allRooms)
 
 		const newGeoJSON: FeatureCollection = {
 			...mapOverlay,
@@ -505,68 +461,20 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		setFilteredGeoJSON(newGeoJSON)
-	}, [currentFloor, allRooms, mapOverlay, filterEtage]) // Ensure dependencies are correctly listed
-
-	const getRoomData = useCallback(
-		(room: string): RoomData => {
-			const occupancies = availableRooms?.find((x) => x.room === room)
-			const properties = allRooms.features.find(
-				(x) => x.properties?.Raum === room
-			)?.properties as FeatureProperties | undefined
-
-			return {
-				title: room,
-				subtitle:
-					properties != null &&
-					(i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en') in properties
-						? (properties[
-								i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'
-							] ?? t('misc.unknown'))
-						: t('misc.unknown'),
-				properties,
-				occupancies,
-				type: SEARCH_TYPES.ROOM
-			} as RoomData
-		},
-		[availableRooms, allRooms.features, i18n.language, t]
-	)
-
-	const getBuildingData = useCallback(
-		(building: string): RoomData => {
-			const buildingDetails = allRooms.features.find(
-				(x) =>
-					x.properties?.Gebaeude === building &&
-					x.properties.rtype === SEARCH_TYPES.BUILDING
-			)
-			const numberOfFreeRooms = availableRooms?.filter((x) =>
-				x.room.startsWith(building)
-			).length
-			const numberOfRooms = allRooms.features.filter(
-				(x) =>
-					x.properties?.Gebaeude === building &&
-					x.properties.rtype === SEARCH_TYPES.ROOM
-			).length
-
-			return {
-				title: building,
-				subtitle: t('pages.map.details.room.building'),
-				properties: buildingDetails?.properties,
-				occupancies: {
-					total: numberOfRooms,
-					available: numberOfFreeRooms ?? 0
-				},
-				type: SEARCH_TYPES.BUILDING
-			}
-		},
-		[allRooms.features, availableRooms, t]
-	)
+	}, [currentFloor, allRooms, mapOverlay]) // Ensure dependencies are correctly listed
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {
 			case SEARCH_TYPES.ROOM:
-				return getRoomData(clickedElement.data)
+				return getRoomData(
+					clickedElement.data,
+					availableRooms,
+					allRooms,
+					i18n,
+					t
+				)
 			case SEARCH_TYPES.BUILDING:
-				return getBuildingData(clickedElement.data)
+				return getBuildingData(clickedElement.data, allRooms, availableRooms, t)
 
 			default:
 				return {
