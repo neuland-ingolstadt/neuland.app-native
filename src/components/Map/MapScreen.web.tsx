@@ -291,6 +291,7 @@ const MapScreen = (): React.JSX.Element => {
 	}, [mapOverlay])
 
 	useEffect(() => {
+		// @ts-expect-error wrong type
 		const unsubscribe = navigation.addListener('tabPress', () => {
 			setDisableFollowUser(true)
 			setTabBarPressed(true)
@@ -298,7 +299,6 @@ const MapScreen = (): React.JSX.Element => {
 
 		return unsubscribe
 	}, [navigation])
-
 	useEffect(() => {
 		if (tabBarPressed) {
 			bottomSheetModalRef.current?.close()
