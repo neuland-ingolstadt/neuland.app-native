@@ -21,7 +21,7 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
 import AttributionLink from './AttributionLink'
 import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'
 import BottomSheetBackground from './BottomSheetBackground'

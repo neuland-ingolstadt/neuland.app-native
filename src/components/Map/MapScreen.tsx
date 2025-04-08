@@ -92,7 +92,8 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
+
 import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { modalSection } from './ModalSections'
