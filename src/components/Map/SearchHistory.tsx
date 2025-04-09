@@ -7,7 +7,8 @@ import { LayoutAnimation, Platform, Text, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
+
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 import ResultRow from './SearchResultRow'

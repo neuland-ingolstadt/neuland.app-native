@@ -15,7 +15,8 @@ import { Platform, Share, Text, View } from 'react-native'
 import type { SharedValue } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
+
 import FormList from '../Universal/FormList'
 import PlatformIcon from '../Universal/Icon'
 import BottomSheetBackground from './BottomSheetBackground'

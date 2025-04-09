@@ -11,7 +11,8 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
+
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 

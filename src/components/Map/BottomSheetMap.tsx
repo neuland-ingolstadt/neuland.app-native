@@ -21,7 +21,7 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native-gesture-handler'
+import { Pressable } from 'react-native'
 import AttributionLink from './AttributionLink'
 import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'
 import BottomSheetBackground from './BottomSheetBackground'
@@ -51,6 +51,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 	const [searchFocused, setSearchFocused] = React.useState(false)
 	const cancelWidth = useSharedValue(0)
 	const cancelOpacity = useSharedValue(0)
+	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const animatedCancelStyle = useAnimatedStyle(() => ({
 		width: cancelWidth.value,
@@ -63,6 +64,15 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 			duration: 250
 		})
 	}
+
+	// Clear any existing blur timeout when component unmounts
+	React.useEffect(() => {
+		return () => {
+			if (blurTimeoutRef.current) {
+				clearTimeout(blurTimeoutRef.current)
+			}
+		}
+	}, [])
 
 	const width = t('misc.cancel').length * 11
 	const IOS_SNAP_POINTS = ['20%', '35%', '87%']
@@ -106,8 +116,18 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 							bottomSheetRef.current?.expand()
 						}}
 						onBlur={() => {
-							setSearchFocused(false)
-							animate(0)
+							// Add delay before hiding search history to allow clicks to complete
+							if (blurTimeoutRef.current) {
+								clearTimeout(blurTimeoutRef.current)
+							}
+
+							blurTimeoutRef.current = setTimeout(
+								() => {
+									setSearchFocused(false)
+									animate(0)
+								},
+								Platform.OS === 'web' ? 200 : 0
+							)
 						}}
 					/>
 
