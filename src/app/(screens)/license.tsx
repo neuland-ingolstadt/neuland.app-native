@@ -6,7 +6,7 @@ import { useGlobalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Text, View } from 'react-native'
+import { Linking, Platform, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function License(): React.JSX.Element {
@@ -25,7 +25,13 @@ export default function License(): React.JSX.Element {
 	const [licenseText, setLicenseText] = useState('')
 
 	useEffect(() => {
-		if (licenseUrl === undefined || licenseUrl === '') {
+		if (
+			licenseUrl === undefined ||
+			licenseUrl === '' ||
+			Platform.OS === 'web'
+		) {
+			// Fetching from GitHub fails because of CORS issues, so we don't fetch the license text on web
+			// and just show the link to the license
 			return
 		}
 		fetch(licenseUrl)
