@@ -51,7 +51,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 	const [searchFocused, setSearchFocused] = React.useState(false)
 	const cancelWidth = useSharedValue(0)
 	const cancelOpacity = useSharedValue(0)
-	const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+	const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const animatedCancelStyle = useAnimatedStyle(() => ({
 		width: cancelWidth.value,
