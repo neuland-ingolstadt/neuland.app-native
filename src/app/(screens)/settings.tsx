@@ -41,8 +41,9 @@ import {
 	Text,
 	View
 } from 'react-native'
+import { Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { Pressable } from 'react-native-gesture-handler'
+
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,

@@ -114,7 +114,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 					))}
 				</View>
 			)}
-			{
+			{Platform.OS !== 'web' && (
 				<Pressable
 					onPress={() => {
 						setCameraTriggerKey((prev) => prev + 1)
@@ -140,14 +140,14 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 									variant: 'outlined'
 								}}
 								web={{
-									name: 'Navigation',
-									size: 21
+									name: 'Locate',
+									size: 18
 								}}
 							/>
 						</View>
 					</View>
 				</Pressable>
-			}
+			)}
 		</View>
 	)
 }
