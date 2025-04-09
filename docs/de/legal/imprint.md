@@ -15,5 +15,5 @@ Telefon: 015678 384646
 Registergericht: Amtsgericht Ingolstadt\
 Registernummer: VR 201088
 
-Vertreten durch: Alexander Horn, Timo Weese, Paulina Mair\
-Inhaltlich verantwortlich: Alexander Horn
+Vertreten durch: Felix Weber, Timo Weese, Philipp Opheys\
+Inhaltlich verantwortlich: Felix Weber
