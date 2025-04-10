@@ -30,7 +30,7 @@ export default function DashboardEdit(): React.JSX.Element {
 		updateDashboardOrder
 	} = useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
-	const { styles } = useStyles(dashboardStyles)
+	const { styles, theme } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
 	const [unavailableCards, setUnavailableCards] = useState<Card[]>([])
@@ -196,7 +196,10 @@ export default function DashboardEdit(): React.JSX.Element {
 												}
 											/>
 											{index !== transShownDashboardEntries.length - 1 && (
-												<Divider width={'100%'} />
+												<Divider
+													width={'100%'}
+													color={theme.colors.labelBackground}
+												/>
 											)}
 										</React.Fragment>
 									))}
