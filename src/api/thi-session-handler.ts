@@ -1,4 +1,9 @@
-import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage'
+import {
+	deleteSecure,
+	loadSecureAsync,
+	saveSecureAsync,
+	storage
+} from '@/utils/storage'
 import { Platform } from 'react-native'
 
 import API from './anonymous-api'
@@ -45,12 +50,10 @@ export async function createSession(
 	}
 
 	storage.set('sessionCreated', Date.now().toString())
-	console.debug('Session created at', storage.getString('sessionCreated'))
-	await saveSecure('session', session, true)
-	console.debug('Session saved')
+	await saveSecureAsync('session', session)
 	if (stayLoggedIn) {
-		await saveSecure('username', username)
-		await saveSecure('password', password)
+		await saveSecureAsync('username', username)
+		await saveSecureAsync('password', password)
 	}
 	return isStudent
 }
@@ -62,7 +65,7 @@ export async function createGuestSession(forget = true): Promise<void> {
 	if (forget) {
 		await forgetSession()
 	}
-	await saveSecure('session', 'guest', true)
+	await saveSecureAsync('session', 'guest')
 }
 
 /**
@@ -77,10 +80,14 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
 	method: (session: string) => Promise<T>
 ): Promise<T> {
-	let session = loadSecure('session')
+	const sessionPromise = loadSecureAsync('session')
 	const sessionCreated = Number.parseInt(
 		storage.getString('sessionCreated') ?? '0'
 	)
+
+	// Await the session Promise
+	const session = await sessionPromise
+
 	// redirect user if he never had a session
 	if (session == null) {
 		throw new NoSessionError()
@@ -89,8 +96,13 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	const username = loadSecure('username')
-	const password = loadSecure('password')
+	const usernamePromise = loadSecureAsync('username')
+	const passwordPromise = loadSecureAsync('password')
+
+	// Await the username and password Promises
+	const username = await usernamePromise
+	const password = await passwordPromise
+
 	if (Platform.OS === 'web') {
 		if (session === 'guest' || session == null) {
 			throw new NoSessionError()
@@ -116,18 +128,20 @@ export async function callWithSession<T>(
 				username,
 				password
 			)
-			session = newSession
+			const updatedSession = newSession
 
-			await saveSecure('session', session)
+			await saveSecureAsync('session', updatedSession)
 			storage.set('sessionCreated', Date.now().toString())
 			storage.set('isStudent', isStudent.toString())
+
+			// Use the updated session
+			return await method(updatedSession)
 		} catch {
 			throw new NoSessionError()
 		}
 	}
 
 	// otherwise attempt to call the method and see if it throws a session error
-
 	try {
 		if (session !== null) {
 			return await method(session)
@@ -144,14 +158,15 @@ export async function callWithSession<T>(
 						username,
 						password
 					)
-					session = newSession
-					await saveSecure('session', session)
+					const updatedSession = newSession
+					await saveSecureAsync('session', updatedSession)
 					storage.set('sessionCreated', Date.now().toString())
 					storage.set('isStudent', isStudent.toString())
+
+					return await method(updatedSession)
 				} catch {
 					throw new NoSessionError()
 				}
-				return await method(session)
 			}
 			throw new NoSessionError()
 		}
@@ -164,7 +179,9 @@ export async function callWithSession<T>(
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-	const session = loadSecure('session')
+	const sessionPromise = loadSecureAsync('session')
+	const session = await sessionPromise
+
 	if (session === null) {
 		console.debug('No session to forget')
 	} else {

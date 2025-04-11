@@ -7,7 +7,7 @@ import {
 	USER_STUDENT
 } from '@/data/constants'
 import { trimErrorMsg } from '@/utils/api-utils'
-import { loadSecure } from '@/utils/storage'
+import { loadSecureAsync } from '@/utils/storage'
 import { getContrastColor } from '@/utils/ui-utils'
 import { toast } from 'burnt'
 import Color from 'color'
@@ -144,27 +144,31 @@ const LoginForm = ({
 	useEffect(() => {
 		// on iOS secure store is synced with iCloud, so we can prefill the login form
 		if (Platform.OS === 'ios') {
-			const loadSavedData = (): void => {
-				const savedUsername = loadSecure('username')
-				const savedPassword = loadSecure('password')
-				if (savedUsername !== null && savedPassword !== null) {
-					setUsername(savedUsername)
-					setPassword(savedPassword)
+			const loadSavedData = async (): Promise<void> => {
+				try {
+					const savedUsername = await loadSecureAsync('username')
+					const savedPassword = await loadSecureAsync('password')
+					if (savedUsername !== null && savedPassword !== null) {
+						setUsername(savedUsername)
+						setPassword(savedPassword)
 
-					Alert.alert(
-						t('login.alert.restored.title'),
-						t('login.alert.restored.message'),
-						[{ text: 'OK' }],
-						{
-							cancelable: false
-						}
-					)
+						Alert.alert(
+							t('login.alert.restored.title'),
+							t('login.alert.restored.message'),
+							[{ text: 'OK' }],
+							{
+								cancelable: false
+							}
+						)
+					}
+				} catch (error) {
+					console.error('Error loading saved credentials:', error)
 				}
 			}
 
-			loadSavedData()
+			void loadSavedData()
 		}
-	}, [])
+	}, [t])
 
 	const signInDisabled =
 		username.trim() === '' || password.trim() === '' || loading

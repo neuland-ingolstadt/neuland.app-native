@@ -7,7 +7,7 @@ import type { PersDataDetails } from '@/types/thi-api'
 import type { QueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
 
-import { loadSecure } from './storage'
+import { loadSecureAsync } from './storage'
 
 export const networkError = 'Network request failed'
 export const guestError = 'User is logged in as guest'
@@ -27,16 +27,16 @@ export const trimErrorMsg = (str: string): string => {
 
 /**
  * Gets the username of the user from the secure store.
- * @returns The username of the user.
+ * @returns A Promise that resolves to the username of the user.
  */
-export function getUsername(): string {
-	let username = ''
+export async function getUsername(): Promise<string> {
 	try {
-		username = loadSecure('username') ?? ''
+		const username = await loadSecureAsync('username')
+		return username ?? ''
 	} catch (e) {
 		console.log(e)
+		return ''
 	}
-	return username
 }
 
 export const performLogout = async (

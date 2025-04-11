@@ -3,38 +3,57 @@ import * as SecureStore from 'expo-secure-store'
 import { Platform } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
 import type { StateStorage } from 'zustand/middleware'
+import CredentialStorage from './credentialStorage'
 
 export const storage = new MMKV({
 	id: 'query-client-storage'
 })
 
-export const secureWebStorage = new MMKV({
-	id: 'secure-web-storage'
-})
+// Initialize the credential storage for web
+let webCredentialStorage: CredentialStorage | null = null
+if (Platform.OS === 'web' && typeof window !== 'undefined') {
+	try {
+		webCredentialStorage = new CredentialStorage('neuland-secure-storage')
+	} catch (error) {
+		console.error('Failed to initialize IndexedDB credential storage:', error)
+	}
+}
 
-export async function saveSecure(
+export async function saveSecureAsync(
 	key: string,
-	value: string,
-	insecureWeb = false
+	value: string
 ): Promise<void> {
 	if (Platform.OS === 'web') {
-		if (!insecureWeb) {
-			// Saving secure data in a browser is not possible, so we do nothing here. The user needs to sign in again as long as we cannot use single sign-on.
-			return
+		if (webCredentialStorage) {
+			try {
+				await webCredentialStorage.write(key, { value })
+				return
+			} catch (error) {
+				console.error('Failed to write to IndexedDB:', error)
+			}
 		}
-		secureWebStorage.set(key, value)
-		await Promise.resolve()
+		// Don't save at all if webCredentialStorage is not available
 		return
 	}
 	await SecureStore.setItemAsync(key, value)
 }
 
-export function loadSecure(key: string): string | null {
+export async function loadSecureAsync(key: string): Promise<string | null> {
 	try {
 		if (Platform.OS === 'web') {
-			return secureWebStorage.getString(key) ?? null
+			if (webCredentialStorage) {
+				try {
+					const data = await webCredentialStorage.read(key)
+					if (data && 'value' in data) {
+						return (data as { value: string }).value
+					}
+				} catch (error) {
+					console.error('Failed to read from IndexedDB:', error)
+				}
+			}
+			return null
 		}
-		return SecureStore.getItem(key)
+		return await SecureStore.getItemAsync(key)
 	} catch (error) {
 		console.error(`Failed to load secure item with key ${key}:`, error)
 		return null
@@ -43,7 +62,13 @@ export function loadSecure(key: string): string | null {
 
 export async function deleteSecure(key: string): Promise<void> {
 	if (Platform.OS === 'web') {
-		secureWebStorage.delete(key)
+		if (webCredentialStorage) {
+			try {
+				await webCredentialStorage.delete(key)
+			} catch (error) {
+				console.error('Failed to delete from IndexedDB:', error)
+			}
+		}
 		await Promise.resolve()
 		return
 	}
