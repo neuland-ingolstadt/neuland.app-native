@@ -80,13 +80,10 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
 	method: (session: string) => Promise<T>
 ): Promise<T> {
-	const sessionPromise = loadSecureAsync('session')
+	const session = await loadSecureAsync('session')
 	const sessionCreated = Number.parseInt(
 		storage.getString('sessionCreated') ?? '0'
 	)
-
-	// Await the session Promise
-	const session = await sessionPromise
 
 	// redirect user if he never had a session
 	if (session == null) {
@@ -96,12 +93,8 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	const usernamePromise = loadSecureAsync('username')
-	const passwordPromise = loadSecureAsync('password')
-
-	// Await the username and password Promises
-	const username = await usernamePromise
-	const password = await passwordPromise
+	const username = await loadSecureAsync('username')
+	const password = await loadSecureAsync('password')
 
 	if (Platform.OS === 'web') {
 		if (session === 'guest' || session == null) {
@@ -179,8 +172,7 @@ export async function callWithSession<T>(
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-	const sessionPromise = loadSecureAsync('session')
-	const session = await sessionPromise
+	const session = await loadSecureAsync('session')
 
 	if (session === null) {
 		console.debug('No session to forget')
