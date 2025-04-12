@@ -168,7 +168,7 @@ const LoginForm = ({
 
 			void loadSavedData()
 		}
-	}, [t])
+	}, [])
 
 	const signInDisabled =
 		username.trim() === '' || password.trim() === '' || loading
