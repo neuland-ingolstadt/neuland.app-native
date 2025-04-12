@@ -204,4 +204,36 @@ export async function forgetSession(): Promise<void> {
 	} catch (e) {
 		console.error(e)
 	}
+
+	// Clean up IndexedDB on web platforms
+	if (Platform.OS === 'web' && typeof window !== 'undefined') {
+		try {
+			// Clean up the credential storage database
+			if (window.indexedDB) {
+				// Get all databases and delete any related to our app
+				if (window.indexedDB.databases) {
+					const databases = await window.indexedDB.databases()
+					for (const db of databases) {
+						if (
+							db.name &&
+							(db.name.includes('neuland') ||
+								db.name.includes('secure-storage'))
+						) {
+							window.indexedDB.deleteDatabase(db.name)
+							console.debug(`Deleted IndexedDB database: ${db.name}`)
+						}
+					}
+				} else {
+					// Fallback for browsers without databases() support
+					const knownDBs = ['neuland-secure-storage']
+					for (const dbName of knownDBs) {
+						window.indexedDB.deleteDatabase(dbName)
+						console.debug(`Deleted IndexedDB database: ${dbName}`)
+					}
+				}
+			}
+		} catch (error) {
+			console.error('Failed to clean up IndexedDB:', error)
+		}
+	}
 }
