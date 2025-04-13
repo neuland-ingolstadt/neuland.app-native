@@ -24,15 +24,18 @@ export async function saveSecureAsync(
 	value: string
 ): Promise<void> {
 	if (Platform.OS === 'web') {
-		if (webCredentialStorage) {
-			try {
-				await webCredentialStorage.write(key, { value })
-				return
-			} catch (error) {
-				console.error('Failed to write to IndexedDB:', error)
-			}
+		if (!webCredentialStorage) {
+			// Don't save at all if webCredentialStorage is not available
+			console.error('Web credential storage is not initialized.')
+			return
 		}
-		// Don't save at all if webCredentialStorage is not available
+
+		try {
+			await webCredentialStorage.write(key, { value })
+		} catch (error) {
+			console.error('Failed to write to IndexedDB:', error)
+		}
+
 		return
 	}
 	await SecureStore.setItemAsync(key, value)
@@ -41,16 +44,22 @@ export async function saveSecureAsync(
 export async function loadSecureAsync(key: string): Promise<string | null> {
 	try {
 		if (Platform.OS === 'web') {
-			if (webCredentialStorage) {
-				try {
-					const data = await webCredentialStorage.read(key)
-					if (data && 'value' in data) {
-						return (data as { value: string }).value
-					}
-				} catch (error) {
-					console.error('Failed to read from IndexedDB:', error)
-				}
+			if (!webCredentialStorage) {
+				console.error('Web credential storage is not initialized.')
+				return null
 			}
+
+			try {
+				const data = await webCredentialStorage.read(key)
+				if (!data || 'value' in data === false) {
+					return null
+				}
+
+				return data.value as string
+			} catch (error) {
+				console.error('Failed to read from IndexedDB:', error)
+			}
+
 			return null
 		}
 		return await SecureStore.getItemAsync(key)
@@ -62,14 +71,17 @@ export async function loadSecureAsync(key: string): Promise<string | null> {
 
 export async function deleteSecure(key: string): Promise<void> {
 	if (Platform.OS === 'web') {
-		if (webCredentialStorage) {
-			try {
-				await webCredentialStorage.delete(key)
-			} catch (error) {
-				console.error('Failed to delete from IndexedDB:', error)
-			}
+		if (!webCredentialStorage) {
+			console.error('Web credential storage is not initialized.')
+			return
 		}
-		await Promise.resolve()
+
+		try {
+			await webCredentialStorage.delete(key)
+		} catch (error) {
+			console.error('Failed to delete from IndexedDB:', error)
+		}
+		
 		return
 	}
 	await SecureStore.deleteItemAsync(key)
