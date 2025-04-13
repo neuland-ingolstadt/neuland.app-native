@@ -2,8 +2,10 @@ import { Platform } from 'react-native'
 
 import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST = 'hiplan.thi.de'
-const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
+const ENDPOINT_HOST =
+	process.env.EXPO_PUBLIC_ENDPOINT_HOST ?? 'https://hiplan.thi.de'
+const ENDPOINT_URL =
+	process.env.EXPO_PUBLIC_ENDPOINT_URL ?? '/webservice/zits_s_40_test/index.php'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
@@ -44,7 +46,8 @@ export class AnonymousAPIClient {
 
 		const headers = new Headers(headersObj)
 
-		const resp = await fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
+		const apiUrl = new URL(ENDPOINT_URL, ENDPOINT_HOST)
+		const resp = await fetch(apiUrl, {
 			method: 'POST',
 			body: new URLSearchParams(params).toString(),
 			headers

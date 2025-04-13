@@ -150,5 +150,6 @@
 				"react-native-webview@~13.12.5"
 			]
 		}
-	}
+	},
+	"trustedDependencies": ["@biomejs/biome"]
 }
