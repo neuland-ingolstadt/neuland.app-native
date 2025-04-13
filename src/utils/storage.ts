@@ -81,7 +81,7 @@ export async function deleteSecure(key: string): Promise<void> {
 		} catch (error) {
 			console.error('Failed to delete from IndexedDB:', error)
 		}
-		
+
 		return
 	}
 	await SecureStore.deleteItemAsync(key)
