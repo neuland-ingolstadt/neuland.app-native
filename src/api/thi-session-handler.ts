@@ -52,7 +52,7 @@ export async function createSession(
 	storage.set('sessionCreated', Date.now().toString())
 	await saveSecureAsync('session', session)
 	if (stayLoggedIn) {
-		await saveSecureAsync('username', username)
+		await saveSecureAsync('username', modifiedUsername)
 		await saveSecureAsync('password', password)
 	}
 	return isStudent
