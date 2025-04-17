@@ -1,9 +1,30 @@
-import { deleteSecure, loadSecure, saveSecure, storage } from '@/utils/storage'
+import {
+	deleteSecure,
+	loadSecureAsync,
+	saveSecureAsync,
+	storage
+} from '@/utils/storage'
 import { Platform } from 'react-native'
 
 import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
+
+// List of known session-related error messages for more precise detection
+const SESSION_ERROR_PATTERNS = [
+	/session/i,
+	/login/i,
+	/authentication/i,
+	/not authorized/i,
+	/unauthorized/i
+]
+
+/**
+ * Checks if an error is related to session issues
+ */
+const isSessionError = (error: Error): boolean => {
+	return SESSION_ERROR_PATTERNS.some((pattern) => pattern.test(error.message))
+}
 
 /**
  * Thrown when the user is not logged in.
@@ -45,12 +66,10 @@ export async function createSession(
 	}
 
 	storage.set('sessionCreated', Date.now().toString())
-	console.debug('Session created at', storage.getString('sessionCreated'))
-	await saveSecure('session', session, true)
-	console.debug('Session saved')
+	await saveSecureAsync('session', session)
 	if (stayLoggedIn) {
-		await saveSecure('username', username)
-		await saveSecure('password', password)
+		await saveSecureAsync('username', modifiedUsername)
+		await saveSecureAsync('password', password)
 	}
 	return isStudent
 }
@@ -62,7 +81,7 @@ export async function createGuestSession(forget = true): Promise<void> {
 	if (forget) {
 		await forgetSession()
 	}
-	await saveSecure('session', 'guest', true)
+	await saveSecureAsync('session', 'guest')
 }
 
 /**
@@ -77,11 +96,11 @@ export async function createGuestSession(forget = true): Promise<void> {
 export async function callWithSession<T>(
 	method: (session: string) => Promise<T>
 ): Promise<T> {
-	let session = loadSecure('session')
+	const session = await loadSecureAsync('session')
 	const sessionCreated = Number.parseInt(
 		storage.getString('sessionCreated') ?? '0'
 	)
-	// redirect user if he never had a session
+
 	if (session == null) {
 		throw new NoSessionError()
 	}
@@ -89,8 +108,9 @@ export async function callWithSession<T>(
 		throw new UnavailableSessionError()
 	}
 
-	const username = loadSecure('username')
-	const password = loadSecure('password')
+	const username = await loadSecureAsync('username')
+	const password = await loadSecureAsync('password')
+
 	if (Platform.OS === 'web') {
 		if (session === 'guest' || session == null) {
 			throw new NoSessionError()
@@ -111,47 +131,53 @@ export async function callWithSession<T>(
 		password != null
 	) {
 		try {
-			console.debug('old session, logging in...')
+			console.debug('Old session expired, logging in again...')
 			const { session: newSession, isStudent } = await API.login(
 				username,
 				password
 			)
-			session = newSession
+			const updatedSession = newSession
 
-			await saveSecure('session', session)
+			await saveSecureAsync('session', updatedSession)
 			storage.set('sessionCreated', Date.now().toString())
 			storage.set('isStudent', isStudent.toString())
-		} catch {
-			throw new NoSessionError()
+
+			return await method(updatedSession)
+		} catch (loginError) {
+			if (loginError instanceof Error && isSessionError(loginError)) {
+				throw new NoSessionError()
+			}
+			throw loginError // Re-throw the original error
 		}
 	}
 
 	// otherwise attempt to call the method and see if it throws a session error
-
 	try {
 		if (session !== null) {
 			return await method(session)
 		}
 	} catch (e: unknown) {
 		// the backend can throw different errors such as 'No Session' or 'Session Is Over'
-		if (e instanceof Error && /session/i.test(e.message)) {
+		if (e instanceof Error && isSessionError(e)) {
 			if (username != null && password != null) {
-				console.debug(
-					'seems to have received a session error trying to get a new session!'
-				)
+				console.debug('Received a session error, trying to get a new session!')
 				try {
 					const { session: newSession, isStudent } = await API.login(
 						username,
 						password
 					)
-					session = newSession
-					await saveSecure('session', session)
+					const updatedSession = newSession
+					await saveSecureAsync('session', updatedSession)
 					storage.set('sessionCreated', Date.now().toString())
 					storage.set('isStudent', isStudent.toString())
-				} catch {
-					throw new NoSessionError()
+
+					return await method(updatedSession)
+				} catch (loginError) {
+					if (loginError instanceof Error && isSessionError(loginError)) {
+						throw new NoSessionError()
+					}
+					throw loginError
 				}
-				return await method(session)
 			}
 			throw new NoSessionError()
 		}
@@ -164,7 +190,8 @@ export async function callWithSession<T>(
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession(): Promise<void> {
-	const session = loadSecure('session')
+	const session = await loadSecureAsync('session')
+
 	if (session === null) {
 		console.debug('No session to forget')
 	} else {
@@ -186,5 +213,37 @@ export async function forgetSession(): Promise<void> {
 		storage.clearAll()
 	} catch (e) {
 		console.error(e)
+	}
+
+	// Clean up IndexedDB on web platforms
+	if (Platform.OS === 'web' && typeof window !== 'undefined') {
+		try {
+			// Clean up the credential storage database
+			if (window.indexedDB) {
+				// Get all databases and delete any related to our app
+				if (window.indexedDB.databases) {
+					const databases = await window.indexedDB.databases()
+					for (const db of databases) {
+						if (
+							db.name &&
+							(db.name.includes('neuland') ||
+								db.name.includes('secure-storage'))
+						) {
+							window.indexedDB.deleteDatabase(db.name)
+							console.debug(`Deleted IndexedDB database: ${db.name}`)
+						}
+					}
+				} else {
+					// Fallback for browsers without databases() support
+					const knownDBs = ['neuland-secure-storage']
+					for (const dbName of knownDBs) {
+						window.indexedDB.deleteDatabase(dbName)
+						console.debug(`Deleted IndexedDB database: ${dbName}`)
+					}
+				}
+			}
+		} catch (error) {
+			console.error('Failed to clean up IndexedDB:', error)
+		}
 	}
 }

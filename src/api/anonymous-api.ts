@@ -2,8 +2,10 @@ import { Platform } from 'react-native'
 
 import packageInfo from '../../package.json'
 
-const ENDPOINT_HOST = 'hiplan.thi.de'
-const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
+const ENDPOINT_HOST =
+	process.env.EXPO_PUBLIC_ENDPOINT_HOST ?? 'https://hiplan.thi.de'
+const ENDPOINT_URL =
+	process.env.EXPO_PUBLIC_ENDPOINT_URL ?? '/webservice/zits_s_40_test/index.php'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
 /**
@@ -36,28 +38,35 @@ export class AnonymousAPIClient {
 	async request(params: Record<string, string>): Promise<any> {
 		const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
 		const headersObj: Record<string, string> = {
-			Host: ENDPOINT_HOST,
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'X-API-KEY': apiKey
+			'X-API-KEY': apiKey,
+			Accept: 'application/json'
 		}
 		if (Platform.OS !== 'web') headersObj['User-Agent'] = USER_AGENT
 
 		const headers = new Headers(headersObj)
-
-		const resp = await fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
+		const apiUrl = new URL(ENDPOINT_URL, ENDPOINT_HOST)
+		const resp = await fetch(apiUrl, {
 			method: 'POST',
 			body: new URLSearchParams(params).toString(),
 			headers
 		})
+
+		// Check for non-200 responses
+		if (!resp.ok) {
+			const errorText = await resp.text()
+			throw new Error(
+				`API request failed with status ${resp.status}: ${errorText}`
+			)
+		}
 
 		const respClone = resp.clone()
 
 		try {
 			return await resp.json()
 		} catch {
-			throw new Error(
-				`API returned malformed JSON: (${await respClone.text()})`
-			)
+			const textResponse = await respClone.text()
+			throw new Error(`API returned malformed JSON: (${textResponse})`)
 		}
 	}
 
