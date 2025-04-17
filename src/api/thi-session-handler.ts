@@ -10,6 +10,22 @@ import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
+// List of known session-related error messages for more precise detection
+const SESSION_ERROR_PATTERNS = [
+	/session/i,
+	/login/i,
+	/authentication/i,
+	/not authorized/i,
+	/unauthorized/i
+]
+
+/**
+ * Checks if an error is related to session issues
+ */
+const isSessionError = (error: Error): boolean => {
+	return SESSION_ERROR_PATTERNS.some((pattern) => pattern.test(error.message))
+}
+
 /**
  * Thrown when the user is not logged in.
  */
@@ -85,7 +101,6 @@ export async function callWithSession<T>(
 		storage.getString('sessionCreated') ?? '0'
 	)
 
-	// redirect user if he never had a session
 	if (session == null) {
 		throw new NoSessionError()
 	}
@@ -116,7 +131,7 @@ export async function callWithSession<T>(
 		password != null
 	) {
 		try {
-			console.debug('old session, logging in...')
+			console.debug('Old session expired, logging in again...')
 			const { session: newSession, isStudent } = await API.login(
 				username,
 				password
@@ -127,10 +142,12 @@ export async function callWithSession<T>(
 			storage.set('sessionCreated', Date.now().toString())
 			storage.set('isStudent', isStudent.toString())
 
-			// Use the updated session
 			return await method(updatedSession)
-		} catch {
-			throw new NoSessionError()
+		} catch (loginError) {
+			if (loginError instanceof Error && isSessionError(loginError)) {
+				throw new NoSessionError()
+			}
+			throw loginError // Re-throw the original error
 		}
 	}
 
@@ -141,11 +158,9 @@ export async function callWithSession<T>(
 		}
 	} catch (e: unknown) {
 		// the backend can throw different errors such as 'No Session' or 'Session Is Over'
-		if (e instanceof Error && /session/i.test(e.message)) {
+		if (e instanceof Error && isSessionError(e)) {
 			if (username != null && password != null) {
-				console.debug(
-					'seems to have received a session error trying to get a new session!'
-				)
+				console.debug('Received a session error, trying to get a new session!')
 				try {
 					const { session: newSession, isStudent } = await API.login(
 						username,
@@ -157,8 +172,11 @@ export async function callWithSession<T>(
 					storage.set('isStudent', isStudent.toString())
 
 					return await method(updatedSession)
-				} catch {
-					throw new NoSessionError()
+				} catch (loginError) {
+					if (loginError instanceof Error && isSessionError(loginError)) {
+						throw new NoSessionError()
+					}
+					throw loginError
 				}
 			}
 			throw new NoSessionError()
