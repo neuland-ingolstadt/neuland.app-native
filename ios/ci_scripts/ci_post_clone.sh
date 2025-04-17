@@ -21,7 +21,7 @@ bun -v
 # Install dependencies
 echo "===== Running bun install ====="
 cd ../..
-bun install --frozen-lockfile --ignore-scripts -p
+bun install --frozen-lockfile --ignore-scripts
 npm install npm-license-crawler -g
 npx npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/
 

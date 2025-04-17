@@ -3,8 +3,8 @@ import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { getPersonalData, getUsername } from '@/utils/api-utils'
-import { loadSecure } from '@/utils/storage'
+import { getPersonalData } from '@/utils/api-utils'
+import { loadSecureAsync } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
@@ -22,10 +22,20 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
 		useContext<UserKindContextType>(UserKindContext)
-	const username = userKind === USER_EMPLOYEE && loadSecure('username')
 
+	const [username, setUsername] = useState<string>('')
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
 	const [initials, setInitials] = useState('')
+
+	useEffect(() => {
+		const loadUsername = async (): Promise<void> => {
+			if (userKind === USER_EMPLOYEE) {
+				const loadedUsername = await loadSecureAsync('username')
+				setUsername(loadedUsername ?? '')
+			}
+		}
+		void loadUsername()
+	}, [userKind])
 
 	const {
 		data: persData,
@@ -51,12 +61,11 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	}, [isError])
 
 	useEffect(() => {
-		const fetchUsernameAndSetInitials = (): void => {
+		const fetchUsernameAndSetInitials = async (): Promise<void> => {
 			if (userKind === USER_STUDENT && persData !== undefined) {
 				const initials = getInitials(`${persData.vname} ${persData.name}`)
 				setInitials(initials)
 			} else if (userKind === USER_EMPLOYEE) {
-				const username = getUsername()
 				if (username !== undefined) {
 					setInitials(getInitials(username))
 				}
@@ -64,8 +73,8 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 				setInitials('')
 			}
 		}
-		fetchUsernameAndSetInitials()
-	}, [persData, userKind])
+		void fetchUsernameAndSetInitials()
+	}, [persData, userKind, username])
 
 	const IconComponent = (): React.JSX.Element => {
 		return userKind === USER_EMPLOYEE ? (

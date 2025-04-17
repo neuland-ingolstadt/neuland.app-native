@@ -39,11 +39,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 	 * @param {object} params Request data
 	 * @returns {object}
 	 */
-	// eslint-disable-next-line @typescript-eslint/require-await
-
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	async requestAuthenticated(params: object): Promise<any> {
-		console.debug(params)
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		return this.sessionHandler(async (session: any) => {
 			const res = await this.request({

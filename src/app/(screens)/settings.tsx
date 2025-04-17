@@ -22,7 +22,7 @@ import {
 	withBouncing
 } from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { loadSecure, storage } from '@/utils/storage'
+import { loadSecureAsync, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQuery } from '@tanstack/react-query'
@@ -75,11 +75,23 @@ export default function Settings(): React.JSX.Element {
 	const scrollY = useRef(0)
 	const logoRotation = useSharedValue(0)
 	const velocity = 110
-	const username = userKind === USER_EMPLOYEE && loadSecure('username')
+	const [username, setUsername] = useState<string>('')
 	const { color, randomizeColor } = useRandomColor()
 	const resetPreferences = usePreferencesStore((state) => state.reset)
 	const resetFood = useFoodFilterStore((state) => state.reset)
 	const setLanguage = usePreferencesStore((state) => state.setLanguage)
+
+	// Load employee username when component mounts
+	useEffect(() => {
+		const loadUsername = async (): Promise<void> => {
+			if (userKind === USER_EMPLOYEE) {
+				const loadedUsername = await loadSecureAsync('username')
+				setUsername(loadedUsername ?? '')
+			}
+		}
+		void loadUsername()
+	}, [userKind])
+
 	useEffect(() => {
 		const { bottomBoundY, topBoundY } = getBounds()
 		if (isBouncing) {
