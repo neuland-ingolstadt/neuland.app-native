@@ -49,8 +49,7 @@ export class AnonymousAPIClient {
 		const resp = await fetch(apiUrl, {
 			method: 'POST',
 			body: new URLSearchParams(params).toString(),
-			headers,
-			credentials: 'include'
+			headers
 		})
 
 		// Check for non-200 responses
