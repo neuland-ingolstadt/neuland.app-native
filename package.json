@@ -16,7 +16,8 @@
 		"ship:ios": "bun licences && bun build:ios && bun export:ios",
 		"build:all": "bun licences && bun build:ios && bun build:android",
 		"lint": "biome check",
-		"format": "biome check --fix",
+		"fmt": "biome check --fix",
+		"fmt:unsafe": "biome check --fix --unsafe",
 		"licences": "npm-license-crawler -onlyDirectDependencies -json src/data/licenses.json --exclude docs/",
 		"codegen": "graphql-codegen --config codegen.yml",
 		"changelog": "git cliff --output CHANGELOG.md"
@@ -93,7 +94,6 @@
 		"react-native-mmkv": "^2.12.2",
 		"react-native-pager-view": "6.7.0",
 		"react-native-reanimated": "~3.17.3",
-		"react-native-reanimated-carousel": "4.0.2",
 		"react-native-safe-area-context": "5.3.0",
 		"react-native-screens": "^4.10.0",
 		"react-native-select-dropdown": "^4.0.1",
