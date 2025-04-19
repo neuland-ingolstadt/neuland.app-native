@@ -1,19 +1,11 @@
 import API from '@/api/authenticated-api'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
-import type { ThiNews } from '@/types/thi-api'
 import { useQuery } from '@tanstack/react-query'
-import type React from 'react'
-import {
-	useCallback,
-	useContext,
-	useLayoutEffect,
-	useRef,
-	useState
-} from 'react'
+import React from 'react'
+import { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Image, Linking, Pressable, Text, View } from 'react-native'
-import Carousel from 'react-native-reanimated-carousel'
+import { Image, Linking, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
@@ -31,74 +23,36 @@ const NewsCard: React.FC = () => {
 		enabled: userKind !== USER_GUEST
 	})
 
-	const getRelativeWidth = (width: number): number => {
-		return width < 800 ? width - 26 : width / 2 - 26
-	}
-
-	const getInitialWidth = (): number => {
-		const width = Dimensions.get('window').width
-		return getRelativeWidth(width)
-	}
-
-	const [cardWidth, setCardWidth] = useState(getInitialWidth)
-
-	const updateWidth = useCallback(() => {
-		const width = Dimensions.get('window').width
-		setCardWidth(getRelativeWidth(width))
-	}, [])
-
-	useLayoutEffect(() => {
-		const subscription = Dimensions.addEventListener('change', updateWidth)
-
-		return () => {
-			subscription.remove()
-		}
-	}, [updateWidth])
-
-	const renderEvent = (event: ThiNews): React.JSX.Element => {
-		return (
-			<Pressable
-				style={styles.eventContainer}
-				onPress={() => {
-					void Linking.openURL(event.href)
-				}}
-			>
-				<Image
-					style={styles.imageContainer}
-					source={{
-						uri: event.img
-					}}
-				/>
-				<Text style={styles.eventTitle} numberOfLines={3}>
-					{event.title}
-				</Text>
-			</Pressable>
-		)
-	}
-
 	return (
 		<View ref={ref}>
 			<BaseCard title="news" onPressRoute="/news">
 				{data != null && data.length > 0 && (
-					<Carousel
-						loop
-						height={100}
-						width={cardWidth}
-						mode="parallax"
-						modeConfig={{
-							parallaxScrollingOffset: 105
-						}}
-						containerStyle={styles.carousel}
-						data={data}
-						snapEnabled={true}
-						autoPlay={true}
-						autoPlayInterval={7500}
-						renderItem={({ index }) => renderEvent(data[index])}
-					/>
+					<View style={styles.newsContainer}>
+						{data.slice(0, 2).map((newsItem, index) => (
+							<React.Fragment key={index}>
+								<Pressable
+									style={styles.newsItemContainer}
+									onPress={() => {
+										void Linking.openURL(newsItem.href)
+									}}
+								>
+									<Image
+										style={styles.thumbnail}
+										source={{
+											uri: newsItem.img
+										}}
+									/>
+									<Text style={styles.newsTitle} numberOfLines={2}>
+										{newsItem.title}
+									</Text>
+								</Pressable>
+							</React.Fragment>
+						))}
+					</View>
 				)}
-				{data != null && data.length > 2 && (
+				{data != null && data.length > 3 && (
 					<View style={styles.cardsFilled}>
-						<Text style={styles.description} numberOfLines={3}>
+						<Text style={styles.description}>
 							{t('cards.news.more', {
 								count: data.length
 							})}
@@ -112,37 +66,35 @@ const NewsCard: React.FC = () => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	cardsFilled: { paddingTop: 4 },
-	carousel: {
+	newsContainer: {
+		marginTop: 5,
+		paddingVertical: 10,
+		gap: 10
+	},
+	newsItemContainer: {
+		flexDirection: 'row',
+		padding: 8,
+		borderRadius: theme.radius.md,
 		alignItems: 'center',
-		justifyContent: 'center',
-		overflow: 'hidden',
-		paddingTop: 4,
-		width: '100%'
+		backgroundColor: theme.colors.cardButton
+	},
+	thumbnail: {
+		width: '30%',
+		maxWidth: 200,
+		height: 65,
+		borderRadius: theme.radius.sm,
+		marginRight: 12
+	},
+	newsTitle: {
+		color: theme.colors.text,
+		fontSize: 16,
+		fontWeight: '500',
+		flex: 1
 	},
 	description: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
 		fontWeight: '500'
-	},
-	eventContainer: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.cardButton,
-		borderRadius: theme.radius.md,
-		flexDirection: 'row',
-		gap: 12,
-		padding: 10
-	},
-	eventTitle: {
-		color: theme.colors.text,
-		flexShrink: 1,
-		fontSize: 18,
-		fontWeight: '500'
-	},
-	imageContainer: {
-		borderRadius: theme.radius.sm,
-		height: 85,
-		resizeMode: 'cover',
-		width: '37%'
 	}
 }))
 
