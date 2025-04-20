@@ -25,7 +25,8 @@ const DefaultTabs = (): React.JSX.Element => {
 					tabBarInactiveTintColor: styleTheme.colors.labelColor,
 					tabBarInactiveBackgroundColor: styleTheme.colors.card,
 					tabBarStyle: {
-						backgroundColor: styleTheme.colors.card
+						backgroundColor: styleTheme.colors.card,
+						height: isMobile ? 50 : undefined
 					},
 					tabBarLabelPosition: isMobile
 						? undefined

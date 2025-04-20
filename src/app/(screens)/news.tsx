@@ -37,7 +37,7 @@ export default function NewsScreen(): React.JSX.Element {
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<View>
+		<View style={styles.rootContainer}>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
 					<LoadingIndicator />
@@ -210,6 +210,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingTop: Platform.OS === 'ios' ? 140 : 40
+	},
+	rootContainer: {
+		flex: 1,
+		height: Platform.OS === 'web' ? '100%' : 'auto'
 	},
 	sectionBox: {
 		alignSelf: 'center',
