@@ -9,6 +9,7 @@ interface SectionPickerProps {
 	selectedItem: boolean
 	action: (state: boolean) => void
 	state: boolean
+	disabled?: boolean
 }
 
 /**
@@ -17,6 +18,7 @@ interface SectionPickerProps {
  * @param {boolean} selectedItem - Whether the item is selected.
  * @param {() => void} action - The function to be called when the item is selected.
  * @param {boolean} state - The state of the item.
+ * @param {boolean} disabled - Whether the item is disabled.
  * @returns {JSX.Element} - The MultiSectionPicker component.
  * @example
  * <SingleSectionPicker
@@ -25,12 +27,14 @@ interface SectionPickerProps {
  *      action={() => {
  *         setSelected(!selected)
  *    }}
+ *    disabled={false}
  * />
  */
 const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 	title,
 	selectedItem,
-	action
+	action,
+	disabled = false
 }) => {
 	const { styles } = useStyles(stylesheet)
 	return (
@@ -38,12 +42,21 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 			<React.Fragment>
 				<Pressable
 					onPress={() => {
-						action(!selectedItem)
+						if (!disabled) {
+							action(!selectedItem)
+						}
 					}}
-					style={styles.button}
+					style={({ pressed }) => [
+						styles.button,
+						disabled && styles.disabled,
+						pressed && !disabled && { opacity: 0.8 }
+					]}
+					disabled={disabled}
 				>
 					<View style={styles.container}>
-						<Text style={styles.text}>{title}</Text>
+						<Text style={[styles.text, disabled && styles.textDisabled]}>
+							{title}
+						</Text>
 						{selectedItem ? (
 							<PlatformIcon
 								ios={{
@@ -58,6 +71,7 @@ const SingleSectionPicker: React.FC<SectionPickerProps> = ({
 									name: 'Check',
 									size: 18
 								}}
+								style={disabled ? styles.iconDisabled : undefined}
 							/>
 						) : null}
 					</View>
@@ -85,5 +99,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 16,
 		paddingVertical: 1
+	},
+	disabled: {
+		opacity: 0.5
+	},
+	textDisabled: {
+		color: theme.colors.labelColor
+	},
+	iconDisabled: {
+		color: theme.colors.labelColor
 	}
 }))

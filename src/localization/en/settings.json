@@ -20,7 +20,8 @@
 			"preferences": {
 				"title": "Preferences",
 				"food": "Food",
-				"language": "Language"
+				"language": "Language",
+				"timetable": "Timetable"
 			},
 			"appearance": {
 				"title": "Appearance",

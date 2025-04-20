@@ -32,8 +32,8 @@ const EventComponent = ({
 		return null
 	}
 	const timetableMode = usePreferencesStore((state) => state.timetableMode)
-
 	const isExam = event.eventType === 'exam'
+	const isCalendar = event.eventType === 'calendar'
 	const begin = new Date(event.start.dateTime)
 	const end = new Date(event.end.dateTime)
 	const duration = end.getTime() - begin.getTime()
@@ -41,12 +41,20 @@ const EventComponent = ({
 	const nameParts = event.shortName?.split('_')?.slice(1) as string[]
 	const background = isExam
 		? eventBackgroundColor(theme.colors.notification, isDark)
-		: eventBackgroundColor(theme.colors.primary, isDark)
+		: isCalendar
+			? eventBackgroundColor(theme.colors.calendarItem, isDark)
+			: eventBackgroundColor(theme.colors.primary, isDark)
 
 	const fontColor = isExam
 		? textColor(theme.colors.notification, background, isDark)
-		: textColor(theme.colors.primary, background, isDark)
-	const eventName = event.name as string
+		: isCalendar
+			? textColor(theme.colors.calendarItem, background, isDark)
+			: textColor(theme.colors.primary, background, isDark)
+	const eventName = event?.name as string
+	if (!eventName) {
+		console.log('Event name is empty')
+		return null
+	}
 	const nameToDisplay =
 		timetableMode === 'timeline-1'
 			? eventName
@@ -56,42 +64,29 @@ const EventComponent = ({
 					: (event.shortName as string)
 				: eventName
 	// hide ' - ' between time to prevent the date from using 3 lines
+
 	const timeToDisplay =
 		timetableMode === 'timeline-7'
 			? `${formatFriendlyTime(begin)} ${formatFriendlyTime(end)}`
 			: `${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`
 
-	const LectureLine = () => {
+	const EventLine = ({ color }: { color: string }) => {
 		return (
 			<LinearGradient
-				colors={[
-					theme.colors.primary,
-					lineColor(theme.colors.primary, background, isDark)
-				]}
+				colors={[color, lineColor(color, background, isDark)]}
 				start={[0, 0.2]}
 				end={[1, 0.8]}
-				style={{
-					...styles.eventLine
-				}}
+				style={styles.eventLine}
 			/>
 		)
 	}
 
-	const ExamLine = () => {
-		return (
-			<LinearGradient
-				colors={[
-					theme.colors.notification,
-					lineColor(theme.colors.notification, background, isDark)
-				]}
-				start={[0, 0.2]}
-				end={[1, 0.8]}
-				style={{
-					...styles.eventLine
-				}}
-			/>
-		)
-	}
+	const lineColorByType = isExam
+		? theme.colors.notification
+		: isCalendar
+			? theme.colors.calendarItem
+			: theme.colors.primary
+
 	return (
 		<View
 			style={{
@@ -99,7 +94,7 @@ const EventComponent = ({
 				backgroundColor: background
 			}}
 		>
-			{isIOS && (isExam ? <ExamLine /> : <LectureLine />)}
+			{isIOS && <EventLine color={lineColorByType} />}
 			<View style={styles.eventText}>
 				<View>
 					<Text
@@ -112,7 +107,7 @@ const EventComponent = ({
 						{nameToDisplay}
 					</Text>
 
-					{isOverflowing ? null : (
+					{!isOverflowing && (
 						<Text
 							style={{
 								...styles.eventTime,

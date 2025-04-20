@@ -8,6 +8,7 @@ import PlatformIcon from './Icon'
 interface Element {
 	title: string
 	key: string
+	disabled?: boolean
 }
 
 interface SectionPickerProps {
@@ -36,12 +37,21 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 				<React.Fragment key={index}>
 					<Pressable
 						onPress={() => {
-							action(item.key)
+							if (!item.disabled) {
+								action(item.key)
+							}
 						}}
-						style={styles.button}
+						style={({ pressed }) => [
+							styles.button,
+							item.disabled && styles.disabled,
+							pressed && !item.disabled && { opacity: 0.8 }
+						]}
+						disabled={item.disabled}
 					>
 						<View style={styles.container}>
-							<Text style={styles.text}>{item.title}</Text>
+							<Text style={[styles.text, item.disabled && styles.textDisabled]}>
+								{item.title}
+							</Text>
 							{selectedItems.includes(item.key) ? (
 								<PlatformIcon
 									ios={{
@@ -56,6 +66,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 										name: 'Check',
 										size: 18
 									}}
+									style={item.disabled ? styles.iconDisabled : undefined}
 								/>
 							) : (
 								<></>
@@ -85,6 +96,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 16,
 		paddingVertical: 1
+	},
+	disabled: {
+		opacity: 0.5
+	},
+	textDisabled: {
+		color: theme.colors.labelColor
+	},
+	iconDisabled: {
+		color: theme.colors.labelColor
 	}
 }))
 

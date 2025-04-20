@@ -45,11 +45,19 @@
 		"sixty": "60 Minuten vorher",
 		"body": "beginnt in {{mins}} Minuten in Raum {{room}}."
 	},
-	"menu": {
+	"viewModes": {
+		"list": "Listenansicht",
 		"oneDay": "Ein Tag",
 		"threeDays": "Drei Tage",
-		"fiveDays": "Montag bis Freitag",
-		"sevenDays": "Woche",
-		"list": "Liste"
+		"fiveDays": "Wochentage (Mo-Fr)",
+		"sevenDays": "Vollständige Woche"
+	},
+	"preferences": {
+		"title": "Ansicht",
+		"preview": "Vorschau",
+		"showCalendarEvents": "THI Events anzeigen",
+		"additionalContent": "Zusätzliche Inhalte",
+		"showExams": "Prüfungen anzeigen",
+		"calendarEventsListModeNote": "THI Events werden in der Listenansicht nicht unterstützt."
 	}
 }

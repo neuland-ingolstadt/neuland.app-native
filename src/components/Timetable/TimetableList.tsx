@@ -2,6 +2,7 @@ import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import Divider from '@/components/Universal/Divider'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
@@ -18,9 +19,10 @@ import {
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useNavigation, useRouter } from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import type React from 'react'
-import { useLayoutEffect, useRef } from 'react'
+import { startTransition, useCallback, useLayoutEffect, useRef } from 'react'
+import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, SectionList, Text, View } from 'react-native'
 import {
@@ -29,8 +31,9 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
+import PlatformIcon from '../Universal/Icon'
+import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
-import { MyMenu } from './Menu'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
@@ -54,10 +57,32 @@ export default function TimetableList({
 	const listRef = useRef<SectionList<TimetableEntry | ExamEntry>>(null)
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
+	const showExams = usePreferencesStore((state) => state.showExams)
+	const hasPendingUpdate = usePreferencesStore(
+		(state) => state.hasPendingTimetableUpdate
+	)
+	const setHasPendingUpdate = usePreferencesStore(
+		(state) => state.setHasPendingTimetableUpdate
+	)
 	const setSelectedLecture = useRouteParamsStore(
 		(state) => state.setSelectedLecture
 	)
 	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
+
+	// Defer value changes
+	const deferredShowExams = useDeferredValue(showExams)
+	const effectiveShowExams = hasPendingUpdate ? showExams : deferredShowExams
+
+	// Reset pending update state when returning to the screen
+	useFocusEffect(
+		useCallback(() => {
+			if (hasPendingUpdate) {
+				startTransition(() => {
+					setHasPendingUpdate(false)
+				})
+			}
+		}, [hasPendingUpdate])
+	)
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -73,15 +98,45 @@ export default function TimetableList({
 					}}
 				/>
 			),
-			headerLeft: () => <MyMenu />
+			headerLeft: () => (
+				<Pressable
+					onPress={() => {
+						router.navigate('/timetable-preferences')
+					}}
+				>
+					<PlatformIcon
+						web={{
+							name: 'Settings',
+							size: 24
+						}}
+						android={{
+							name: 'settings',
+							size: 24
+						}}
+						ios={{
+							name: 'gear',
+							size: 22
+						}}
+						style={{ color: theme.colors.text }}
+					/>
+				</Pressable>
+			)
 		})
 	}, [navigation])
 
 	/**
 	 * Constants
 	 */
+	if (hasPendingUpdate) {
+		return (
+			<View style={styles.pendingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
 
-	const groupedTimetable = getGroupedTimetable(timetable, exams)
+	const examsList = effectiveShowExams ? exams : []
+	const groupedTimetable = getGroupedTimetable(timetable, examsList)
 	const filteredTimetable = groupedTimetable.filter(
 		(section) => section.title >= today
 	)
@@ -339,5 +394,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 16,
 		fontWeight: '500'
+	},
+	pendingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	pendingText: {
+		color: theme.colors.text,
+		fontSize: 16
 	}
 }))

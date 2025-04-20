@@ -45,11 +45,19 @@
 		"sixty": "60 minutes before",
 		"body": "starts in {{mins}} minutes in room {{room}}."
 	},
-	"menu": {
+	"viewModes": {
+		"list": "List View",
 		"oneDay": "Single Day",
 		"threeDays": "Three Days",
-		"fiveDays": "Monday to Friday",
-		"sevenDays": "Week",
-		"list": "List"
+		"fiveDays": "Weekdays (Mon-Fri)",
+		"sevenDays": "Full Week"
+	},
+	"preferences": {
+		"title": "View Mode",
+		"preview": "Preview",
+		"showCalendarEvents": "Show THI Events",
+		"additionalContent": "Additional Content",
+		"showExams": "Show Exams",
+		"calendarEventsListModeNote": "THI events are not supported in List view mode."
 	}
 }

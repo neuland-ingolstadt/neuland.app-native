@@ -23,16 +23,22 @@ interface PreferencesStore {
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
 	timetableMode: TimetableMode
+	showCalendarEvents: boolean
+	showExams: boolean
 	selectedDate: Date
 	recentQuicklinks: string[]
+	hasPendingTimetableUpdate: boolean
 	setAccentColor: (language: string) => void
 	setTheme: (theme: string) => void
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
 	addUnlockedAppIcon: (name: string) => void
 	setTimetableMode: (timetableMode: TimetableMode) => void
+	setShowCalendarEvents: (show: boolean) => void
+	setShowExams: (show: boolean) => void
 	setSelectedDate: (date: Date) => void
 	addRecentQuicklink: (quicklink: string) => void
+	setHasPendingTimetableUpdate: (value: boolean) => void
 	reset: () => void
 }
 
@@ -43,10 +49,13 @@ const initialState: Omit<
 	| 'setAppIcon'
 	| 'addUnlockedAppIcon'
 	| 'setTimetableMode'
+	| 'setShowCalendarEvents'
+	| 'setShowExams'
 	| 'setSelectedDate'
 	| 'addRecentQuicklink'
 	| 'reset'
 	| 'setLanguage'
+	| 'setHasPendingTimetableUpdate'
 > = {
 	accentColor: DEFAULT_ACCENT_COLOR,
 	appIcon: undefined,
@@ -54,8 +63,11 @@ const initialState: Omit<
 	theme: 'auto',
 	unlockedAppIcons: [],
 	timetableMode: TimetableMode.Timeline3,
+	showCalendarEvents: true,
+	showExams: true,
 	selectedDate: new Date(),
-	recentQuicklinks: defaultQuicklinks
+	recentQuicklinks: defaultQuicklinks,
+	hasPendingTimetableUpdate: false
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -81,7 +93,13 @@ export const usePreferencesStore = create<PreferencesStore>()(
 				})
 			},
 			setTimetableMode: (timetableMode: TimetableMode) => {
-				set({ timetableMode })
+				set({ timetableMode, hasPendingTimetableUpdate: true })
+			},
+			setShowCalendarEvents: (showCalendarEvents: boolean) => {
+				set({ showCalendarEvents, hasPendingTimetableUpdate: true })
+			},
+			setShowExams: (showExams: boolean) => {
+				set({ showExams, hasPendingTimetableUpdate: true })
 			},
 			setSelectedDate: (selectedDate: Date) => {
 				set({ selectedDate })
@@ -105,6 +123,9 @@ export const usePreferencesStore = create<PreferencesStore>()(
 					].slice(0, 3)
 					return { recentQuicklinks: finalQuicklinks }
 				})
+			},
+			setHasPendingTimetableUpdate: (value: boolean) => {
+				set({ hasPendingTimetableUpdate: value })
 			},
 			reset: () => {
 				set(initialState)
