@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next'
 import { Linking, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {

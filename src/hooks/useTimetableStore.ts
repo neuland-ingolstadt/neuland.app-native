@@ -35,7 +35,7 @@ const initialState: Omit<
 	| 'setHasPendingTimetableUpdate'
 > = {
 	timetableMode: TimetableMode.Timeline3,
-	showCalendarEvents: true,
+	showCalendarEvents: false,
 	showExams: true,
 	selectedDate: new Date(),
 	hasPendingTimetableUpdate: false

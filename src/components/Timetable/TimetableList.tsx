@@ -424,6 +424,19 @@ export default function TimetableList({
 					contentContainerStyle={styles.container}
 					stickySectionHeadersEnabled={true}
 					initialNumToRender={20}
+					keyExtractor={(item, index) => {
+						// Add index to keyExtractor for more robustness
+						return `${item.name}${index}${item.date.toString()}`
+					}}
+					// Remove maintainVisibleContentPosition for testing
+					// maintainVisibleContentPosition={{
+					// 	minIndexForVisible: 1,
+					// 	autoscrollToTopThreshold: null
+					// }}
+					viewabilityConfig={{
+						// Adjust viewability config - maybe require less visibility
+						itemVisiblePercentThreshold: 10
+					}}
 				/>
 			)}
 		</>
