@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor } from '@/utils/ui-utils'
 import type { PackedEvent } from '@howljs/calendar-kit'
@@ -31,7 +28,7 @@ const EventComponent = ({
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
 		return null
 	}
-	const timetableMode = usePreferencesStore((state) => state.timetableMode)
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const isExam = event.eventType === 'exam'
 	const isCalendar = event.eventType === 'calendar'
 	const begin = new Date(event.start.dateTime)
@@ -65,10 +62,7 @@ const EventComponent = ({
 				: eventName
 	// hide ' - ' between time to prevent the date from using 3 lines
 
-	const timeToDisplay =
-		timetableMode === 'timeline-7'
-			? `${formatFriendlyTime(begin)} ${formatFriendlyTime(end)}`
-			: `${formatFriendlyTime(begin)} - ${formatFriendlyTime(end)}`
+	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
 	const EventLine = ({ color }: { color: string }) => {
 		return (

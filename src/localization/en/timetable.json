@@ -35,16 +35,6 @@
 			"message": "Download the app to view the details of this lecture."
 		}
 	},
-	"notificatons": {
-		"title": "Notifications",
-		"description": "Receive notifications before this lecture starts. These repeat until you deactivate them here.",
-		"active": "Notifications enabled. You will be notified {{mins}} minutes before the lecture starts.",
-		"five": "5 minutes before",
-		"fifteen": "15 minutes before",
-		"thirty": "30 minutes before",
-		"sixty": "60 minutes before",
-		"body": "starts in {{mins}} minutes in room {{room}}."
-	},
 	"viewModes": {
 		"list": "List View",
 		"oneDay": "Single Day",
@@ -57,7 +47,9 @@
 		"preview": "Preview",
 		"showCalendarEvents": "Show THI Events",
 		"additionalContent": "Additional Content",
-		"showExams": "Show Exams",
-		"calendarEventsListModeNote": "THI events are not supported in List view mode."
+		"showExams": "Show Exams"
+	},
+	"calendar": {
+		"thiCalendar": "THI Calendar"
 	}
 }

@@ -5,7 +5,7 @@ import TimetablePreview from '@/components/Timetable/TimetablePreview'
 import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
-import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -14,18 +14,16 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])
 	const { styles } = useStyles(stylesheet)
 
-	const timetableMode = usePreferencesStore((state) => state.timetableMode)
-	const setTimetableMode = usePreferencesStore(
-		(state) => state.setTimetableMode
-	)
-	const showCalendarEvents = usePreferencesStore(
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
+	const setTimetableMode = useTimetableStore((state) => state.setTimetableMode)
+	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
 	)
-	const setShowCalendarEvents = usePreferencesStore(
+	const setShowCalendarEvents = useTimetableStore(
 		(state) => state.setShowCalendarEvents
 	)
-	const showExams = usePreferencesStore((state) => state.showExams)
-	const setShowExams = usePreferencesStore((state) => state.setShowExams)
+	const showExams = useTimetableStore((state) => state.showExams)
+	const setShowExams = useTimetableStore((state) => state.setShowExams)
 
 	// Create timeline view mode elements for radio selection
 	const timelineModeElements: FoodLanguageElement[] = [
@@ -63,8 +61,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const additionalContentElements = [
 		{
 			key: 'showCalendarEvents',
-			title: t('preferences.showCalendarEvents', { ns: 'timetable' }),
-			disabled: timetableMode === TimetableMode.List
+			title: t('preferences.showCalendarEvents', { ns: 'timetable' })
 		},
 		{
 			key: 'showExams',
@@ -106,14 +103,7 @@ export default function TimetablePreferences(): React.JSX.Element {
 					/>
 				</SectionView>
 
-				<SectionView
-					title={t('timetable:preferences.additionalContent')}
-					footer={
-						timetableMode === TimetableMode.List
-							? t('timetable:preferences.calendarEventsListModeNote')
-							: '' // to preserve the space
-					}
-				>
+				<SectionView title={t('timetable:preferences.additionalContent')}>
 					<MultiSectionPicker
 						elements={additionalContentElements}
 						selectedItems={selectedAdditionalContent}

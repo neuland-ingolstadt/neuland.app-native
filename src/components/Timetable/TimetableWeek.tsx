@@ -1,5 +1,5 @@
-import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
 import { calendar } from '@/utils/calendar-utils'
@@ -77,22 +77,20 @@ export default function TimetableWeek({
 	const isDark = UnistylesRuntime.themeName === 'dark'
 	const router = useRouter()
 	const navigation = useNavigation()
-	const timetableMode = usePreferencesStore((state) => state.timetableMode)
-	const showCalendarEvents = usePreferencesStore(
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
+	const showCalendarEvents = useTimetableStore(
 		(state) => state.showCalendarEvents
 	)
-	const showExams = usePreferencesStore((state) => state.showExams)
-	const hasPendingUpdate = usePreferencesStore(
+	const showExams = useTimetableStore((state) => state.showExams)
+	const hasPendingUpdate = useTimetableStore(
 		(state) => state.hasPendingTimetableUpdate
 	)
-	const setHasPendingUpdate = usePreferencesStore(
+	const setHasPendingUpdate = useTimetableStore(
 		(state) => state.setHasPendingTimetableUpdate
 	)
 
-	// Defer the updates of these values when there's a pending update
+	// Defer the updates of timetableMode when there's a pending update
 	const deferredTimetableMode = useDeferredValue(timetableMode)
-	const deferredShowCalendarEvents = useDeferredValue(showCalendarEvents)
-	const deferredShowExams = useDeferredValue(showExams)
 
 	// Apply pending updates when returning to the screen
 	useFocusEffect(
@@ -105,14 +103,10 @@ export default function TimetableWeek({
 		}, [hasPendingUpdate])
 	)
 
-	// Use the deferred values when there's no pending update
+	// Use the deferred value only for timetable mode when there's no pending update
 	const effectiveTimetableMode = hasPendingUpdate
 		? timetableMode
 		: deferredTimetableMode
-	const effectiveShowCalendarEvents = hasPendingUpdate
-		? showCalendarEvents
-		: deferredShowCalendarEvents
-	const effectiveShowExams = hasPendingUpdate ? showExams : deferredShowExams
 
 	const calendarTheme = {
 		colors: {
@@ -167,7 +161,7 @@ export default function TimetableWeek({
 		// Process exams (only if showExams is true)
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		let friendlyExams: any[] = []
-		if (effectiveShowExams && exams.length > 0) {
+		if (showExams && exams.length > 0) {
 			friendlyExams = exams.map((entry, index) => {
 				const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
 				return {
@@ -184,7 +178,7 @@ export default function TimetableWeek({
 
 		// Process calendar events if enabled
 		let calendarEvents: CalendarEvent[] = []
-		if (effectiveShowCalendarEvents && calendar?.length > 0) {
+		if (showCalendarEvents && calendar?.length > 0) {
 			calendarEvents = calendar
 				.filter((event) => event.begin) // Filter out events without a date
 				.map((event, index) => {
@@ -225,13 +219,7 @@ export default function TimetableWeek({
 			...friendlyExams,
 			...calendarEvents
 		] as unknown as PackedEvent[]
-	}, [
-		timetable,
-		exams,
-		effectiveShowCalendarEvents,
-		effectiveShowExams,
-		i18n.language
-	])
+	}, [timetable, exams, showCalendarEvents, showExams, i18n.language])
 
 	useEffect(() => {
 		startTransition(() => {

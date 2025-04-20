@@ -1,4 +1,4 @@
-import { TimetableMode } from '@/hooks/usePreferencesStore'
+import { TimetableMode } from '@/hooks/useTimetableStore'
 import { t } from 'i18next'
 import type React from 'react'
 import { useEffect, useState } from 'react'

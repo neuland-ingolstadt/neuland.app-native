@@ -5,7 +5,7 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
-import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
 import type { FriendlyTimetableEntry } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { loadExamList } from '@/utils/calendar-utils'
@@ -29,7 +29,7 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 function TimetableScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 
-	const timetableMode = usePreferencesStore((state) => state.timetableMode)
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
 
 	const { t } = useTranslation(['timetable'])
 
