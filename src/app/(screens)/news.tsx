@@ -4,6 +4,7 @@ import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { useRefreshByUser } from '@/hooks'
+import { breakpoints } from '@/styles/breakpoints'
 import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { useQuery } from '@tanstack/react-query'
@@ -17,12 +18,15 @@ import {
 	RefreshControl,
 	StyleSheet,
 	Text,
-	View
+	View,
+	useWindowDimensions
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function NewsScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
+	const { width } = useWindowDimensions()
+	const isLargeScreen = width >= breakpoints.md
 	const { data, error, isLoading, isError, isPaused, isSuccess, refetch } =
 		useQuery({
 			queryKey: ['thiNews'],
@@ -33,7 +37,7 @@ export default function NewsScreen(): React.JSX.Element {
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
 	return (
-		<View>
+		<View style={styles.rootContainer}>
 			{isLoading ? (
 				<View style={styles.loadingContainer}>
 					<LoadingIndicator />
@@ -84,35 +88,72 @@ export default function NewsScreen(): React.JSX.Element {
 									void Linking.openURL(item.href)
 								}}
 							>
-								<Image
-									style={styles.imageContainer}
-									source={{
-										uri: item.img
-									}}
-								/>
+								{isLargeScreen ? (
+									<View style={styles.largeScreenLayout}>
+										<Image
+											style={styles.largeScreenImage}
+											source={{
+												uri: item.img
+											}}
+										/>
+										<View style={styles.largeScreenContent}>
+											<View style={styles.titleContainer}>
+												<Text style={styles.titleText} numberOfLines={2}>
+													{item.title}
+												</Text>
+												<PlatformIcon
+													ios={{
+														name: 'chevron.forward',
+														size: 15
+													}}
+													android={{
+														name: 'chevron_right',
+														size: 16
+													}}
+													web={{
+														name: 'ChevronRight',
+														size: 16
+													}}
+													style={styles.icon}
+												/>
+											</View>
+											<Divider width={'100%'} />
+											<Text style={styles.teaserText}>{item.teaser}</Text>
+										</View>
+									</View>
+								) : (
+									<>
+										<Image
+											style={styles.imageContainer}
+											source={{
+												uri: item.img
+											}}
+										/>
 
-								<View style={styles.titleContainer}>
-									<Text style={styles.titleText} numberOfLines={2}>
-										{item.title}
-									</Text>
-									<PlatformIcon
-										ios={{
-											name: 'chevron.forward',
-											size: 15
-										}}
-										android={{
-											name: 'chevron_right',
-											size: 16
-										}}
-										web={{
-											name: 'ChevronRight',
-											size: 16
-										}}
-										style={styles.icon}
-									/>
-								</View>
-								<Divider width={'100%'} />
-								<Text style={styles.teaserText}>{item.teaser}</Text>
+										<View style={styles.titleContainer}>
+											<Text style={styles.titleText} numberOfLines={2}>
+												{item.title}
+											</Text>
+											<PlatformIcon
+												ios={{
+													name: 'chevron.forward',
+													size: 15
+												}}
+												android={{
+													name: 'chevron_right',
+													size: 16
+												}}
+												web={{
+													name: 'ChevronRight',
+													size: 16
+												}}
+												style={styles.icon}
+											/>
+										</View>
+										<Divider width={'100%'} />
+										<Text style={styles.teaserText}>{item.teaser}</Text>
+									</>
+								)}
 							</Pressable>
 						</View>
 					)}
@@ -149,10 +190,30 @@ const stylesheet = createStyleSheet((theme) => ({
 		height: 200,
 		objectFit: 'cover'
 	},
+	largeScreenLayout: {
+		flexDirection: 'row',
+		height: 200
+	},
+	largeScreenImage: {
+		borderTopLeftRadius: theme.radius.md,
+		borderBottomLeftRadius: theme.radius.md,
+		height: '100%',
+		aspectRatio: 16 / 9,
+		objectFit: 'cover'
+	},
+	largeScreenContent: {
+		flex: 1,
+		justifyContent: 'space-between',
+		padding: 8
+	},
 	loadingContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingTop: Platform.OS === 'ios' ? 140 : 40
+	},
+	rootContainer: {
+		flex: 1,
+		height: Platform.OS === 'web' ? '100%' : 'auto'
 	},
 	sectionBox: {
 		alignSelf: 'center',
