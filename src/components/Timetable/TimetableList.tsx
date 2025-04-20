@@ -33,9 +33,8 @@ import {
 
 import i18n from '@/localization/i18n'
 import { calendar } from '@/utils/calendar-utils'
-import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderRight } from './HeaderButtons'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 // Define CalendarEntry type for calendar events
 export type CalendarEntry = {
@@ -119,27 +118,9 @@ export default function TimetableList({
 				/>
 			),
 			headerLeft: () => (
-				<Pressable
-					onPress={() => {
-						router.navigate('/timetable-preferences')
-					}}
-				>
-					<PlatformIcon
-						web={{
-							name: 'Settings',
-							size: 24
-						}}
-						android={{
-							name: 'settings',
-							size: 24
-						}}
-						ios={{
-							name: 'gear',
-							size: 22
-						}}
-						style={{ color: theme.colors.text }}
-					/>
-				</Pressable>
+				<HeaderLeft
+					onPressPreferences={() => router.navigate('/timetable-preferences')}
+				/>
 			)
 		})
 	}, [navigation])

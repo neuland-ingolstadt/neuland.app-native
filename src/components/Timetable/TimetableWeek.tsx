@@ -22,7 +22,7 @@ import React, {
 	useRef,
 	useDeferredValue
 } from 'react'
-import { Platform, Pressable, View } from 'react-native'
+import { View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
@@ -30,9 +30,8 @@ import {
 } from 'react-native-unistyles'
 
 import { useTranslation } from 'react-i18next'
-import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderRight } from './HeaderButtons'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
 import EventComponent from './WeekEventComponent'
 import WeekHeaderEvent from './WeekHeaderEvent'
 
@@ -254,75 +253,11 @@ export default function TimetableWeek({
 				/>
 			),
 			headerLeft: () => (
-				<View style={styles.buttons}>
-					<Pressable
-						onPress={() => {
-							router.navigate('/timetable-preferences')
-						}}
-					>
-						<PlatformIcon
-							web={{
-								name: 'Settings',
-								size: 24
-							}}
-							android={{
-								name: 'settings',
-								size: 24
-							}}
-							ios={{
-								name: 'gear',
-								size: 22
-							}}
-							style={{ color: theme.colors.text }}
-						/>
-					</Pressable>
-					{Platform.OS === 'web' && (
-						<View style={styles.buttons}>
-							<Pressable
-								onPress={() => {
-									onPressPrevious()
-								}}
-							>
-								<PlatformIcon
-									web={{
-										name: 'ChevronLeft',
-										size: 24
-									}}
-									android={{
-										name: 'chevron_right',
-										size: 24
-									}}
-									ios={{
-										name: 'chevron-left',
-										size: 24
-									}}
-									style={{ color: theme.colors.text }}
-								/>
-							</Pressable>
-							<Pressable
-								onPress={() => {
-									onPressNext()
-								}}
-							>
-								<PlatformIcon
-									web={{
-										name: 'ChevronRight',
-										size: 24
-									}}
-									android={{
-										name: 'chevron_right',
-										size: 24
-									}}
-									ios={{
-										name: 'chevron-right',
-										size: 24
-									}}
-									style={{ color: theme.colors.text }}
-								/>
-							</Pressable>
-						</View>
-					)}
-				</View>
+				<HeaderLeft
+					onPressPreferences={() => router.navigate('/timetable-preferences')}
+					onPressPrevious={onPressPrevious}
+					onPressNext={onPressNext}
+				/>
 			)
 		})
 	}, [navigation])
