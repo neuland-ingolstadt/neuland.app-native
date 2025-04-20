@@ -10,6 +10,7 @@ import type {
 	FriendlyTimetableEntry,
 	TimetableEntry
 } from '@/types/utils'
+import { calendar } from '@/utils/calendar-utils'
 import {
 	formatFriendlyDate,
 	formatFriendlyDateTime,
@@ -19,9 +20,10 @@ import {
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
+import moment from 'moment-timezone'
 import type React from 'react'
-import { startTransition, useCallback, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { useDeferredValue } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, SectionList, Text, View } from 'react-native'
@@ -32,57 +34,47 @@ import {
 } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
-import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
+// Interface for calendar event handling
+interface CalendarEventEntry {
+	eventType: 'calendar'
+	title: string
+	name: string
+	startDate: Date
+	endDate: Date
+	date: Date
+	rooms: string[]
+	allDay?: boolean
+}
+
 export default function TimetableList({
-	// eslint-disable-next-line react/prop-types
 	timetable,
-	// eslint-disable-next-line react/prop-types
 	exams
 }: ITimetableViewProps): React.JSX.Element {
-	/**
-	 * Constants
-	 */
+	const { styles, theme } = useStyles(stylesheet)
 	const today = new Date()
 	today.setHours(0, 0, 0, 0)
 
-	/**
-	 * Hooks
-	 */
 	const router = useRouter()
 	const navigation = useNavigation()
-	const listRef = useRef<SectionList<TimetableEntry | ExamEntry>>(null)
-	const { t } = useTranslation('timetable')
-	const { styles, theme } = useStyles(stylesheet)
+	const listRef =
+		useRef<SectionList<TimetableEntry | ExamEntry | CalendarEventEntry>>(null)
+	const { t, i18n } = useTranslation('timetable')
 	const showExams = usePreferencesStore((state) => state.showExams)
-	const hasPendingUpdate = usePreferencesStore(
-		(state) => state.hasPendingTimetableUpdate
-	)
-	const setHasPendingUpdate = usePreferencesStore(
-		(state) => state.setHasPendingTimetableUpdate
+	const showCalendarEvents = usePreferencesStore(
+		(state) => state.showCalendarEvents
 	)
 	const setSelectedLecture = useRouteParamsStore(
 		(state) => state.setSelectedLecture
 	)
 	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
 
-	// Defer value changes
+	// Use deferred value for smoother UI
 	const deferredShowExams = useDeferredValue(showExams)
-	const effectiveShowExams = hasPendingUpdate ? showExams : deferredShowExams
-
-	// Reset pending update state when returning to the screen
-	useFocusEffect(
-		useCallback(() => {
-			if (hasPendingUpdate) {
-				startTransition(() => {
-					setHasPendingUpdate(false)
-				})
-			}
-		}, [hasPendingUpdate])
-	)
+	const deferredShowCalendarEvents = useDeferredValue(showCalendarEvents)
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -124,19 +116,94 @@ export default function TimetableList({
 		})
 	}, [navigation])
 
-	/**
-	 * Constants
-	 */
-	if (hasPendingUpdate) {
-		return (
-			<View style={styles.pendingContainer}>
-				<LoadingIndicator />
-			</View>
-		)
+	const examsList = deferredShowExams ? exams : []
+
+	// Process calendar events if enabled
+	let calendarEvents: CalendarEventEntry[] = []
+	if (deferredShowCalendarEvents && calendar?.length > 0) {
+		calendarEvents = calendar
+			.filter((event) => event.begin) // Filter out events without a date
+			.flatMap((event) => {
+				let startDate: Date
+				let endDate: Date
+				const isAllDay = !event.hasHours
+
+				if (isAllDay) {
+					startDate = moment(event.begin).startOf('day').toDate()
+					endDate = event.end
+						? moment(event.end).endOf('day').toDate()
+						: moment(startDate).endOf('day').toDate()
+
+					// For multi-day all-day events, create an entry for each day
+					if (event.end && !moment(startDate).isSame(event.end, 'day')) {
+						// Calculate number of days between start and end
+						const start = moment(startDate)
+						const end = moment(endDate)
+						const daysDiff = end.diff(start, 'days') + 1 // +1 to include the end date
+
+						// Create an array of entries, one for each day of the event
+						return Array.from({ length: daysDiff }, (_, i) => {
+							const currentDate = moment(startDate).add(i, 'days').toDate()
+							const eventName =
+								typeof event.name === 'object'
+									? event.name[i18n.language as 'de' | 'en'] ||
+										event.name.de ||
+										event.name.en
+									: event.name
+
+							return {
+								title: eventName,
+								name: eventName,
+								eventType: 'calendar',
+								startDate: startDate,
+								endDate: endDate,
+								date: currentDate,
+								rooms: [],
+								allDay: true
+							}
+						})
+					}
+				}
+
+				// Handle regular events or single-day all-day events
+				startDate = isAllDay
+					? moment(event.begin).startOf('day').toDate()
+					: moment(event.begin).toDate()
+				endDate = event.end
+					? isAllDay
+						? moment(event.end).endOf('day').toDate()
+						: moment(event.end).toDate()
+					: isAllDay
+						? moment(startDate).endOf('day').toDate()
+						: moment(startDate).add(2, 'hours').toDate()
+
+				const eventName =
+					typeof event.name === 'object'
+						? event.name[i18n.language as 'de' | 'en'] ||
+							event.name.de ||
+							event.name.en
+						: event.name
+
+				return [
+					{
+						title: eventName,
+						name: eventName,
+						eventType: 'calendar',
+						startDate: startDate,
+						endDate: endDate,
+						date: startDate,
+						rooms: [],
+						allDay: isAllDay
+					}
+				]
+			})
 	}
 
-	const examsList = effectiveShowExams ? exams : []
-	const groupedTimetable = getGroupedTimetable(timetable, examsList)
+	const groupedTimetable = getGroupedTimetable(
+		timetable,
+		examsList,
+		calendarEvents
+	)
 	const filteredTimetable = groupedTimetable.filter(
 		(section) => section.title >= today
 	)
@@ -154,6 +221,10 @@ export default function TimetableList({
 	function showEventDetails(entry: FriendlyTimetableEntry): void {
 		setSelectedLecture(entry)
 		router.navigate('/lecture')
+	}
+
+	function navigateToCalendar(): void {
+		router.navigate('/calendar')
 	}
 
 	function renderSectionHeader(title: Date): React.JSX.Element {
@@ -284,15 +355,74 @@ export default function TimetableList({
 		)
 	}
 
+	function renderCalendarItem({
+		item
+	}: { item: CalendarEventEntry }): React.JSX.Element {
+		return (
+			<DragDropView
+				mode="drag"
+				scope="system"
+				dragValue={`${item.name} (${formatFriendlyDateTime(item.startDate)}${item.allDay ? ' All day' : ''})`}
+			>
+				<Pressable
+					onPress={() => {
+						navigateToCalendar()
+					}}
+					style={styles.pressable}
+				>
+					<View style={styles.eventWrapper}>
+						<LinearGradient
+							colors={[
+								theme.colors.calendarItem,
+								getLineColor(theme.colors.calendarItem)
+							]}
+							start={[0, 0.9]}
+							end={[0.7, 0.25]}
+							style={styles.indicator}
+						/>
+						<View style={styles.nameView}>
+							<Text style={styles.titleText} numberOfLines={2}>
+								{item.name}
+							</Text>
+							<View style={styles.itemRow}>
+								<Text style={styles.descriptionText}>
+									{/* Removed the all-day label from here */}
+								</Text>
+							</View>
+						</View>
+						<View>
+							{!item.allDay && (
+								<>
+									<Text style={styles.time}>
+										{formatFriendlyTime(item.startDate)}
+									</Text>
+									<Text style={styles.time2}>
+										{formatFriendlyTime(item.endDate)}
+									</Text>
+								</>
+							)}
+							{item.allDay && (
+								<Text style={styles.calendarAllDay}>{t('time.allDay')}</Text>
+							)}
+						</View>
+					</View>
+				</Pressable>
+			</DragDropView>
+		)
+	}
+
 	function renderItem({
 		item
 	}: {
-		item: ExamEntry | TimetableEntry
+		item: ExamEntry | TimetableEntry | CalendarEventEntry
 	}): React.JSX.Element {
 		if (item.eventType === 'exam') {
-			return renderExamItem({ exam: item })
+			return renderExamItem({ exam: item as ExamEntry })
 		}
-		return renderTimetableItem({ item })
+		if (item.eventType === 'calendar') {
+			return renderCalendarItem({ item: item as CalendarEventEntry })
+		}
+		return renderTimetableItem({ item: item as FriendlyTimetableEntry })
 	}
 
 	return (
@@ -389,6 +519,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontSize: 15,
 		fontVariant: ['tabular-nums']
+	},
+	calendarAllDay: {
+		color: theme.colors.text,
+		fontSize: 15
 	},
 	titleText: {
 		color: theme.colors.text,

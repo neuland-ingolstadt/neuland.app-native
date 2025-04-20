@@ -17,7 +17,8 @@
 		"literature": "Literatur"
 	},
 	"time": {
-		"minutes": "Minuten"
+		"minutes": "Minuten",
+		"allDay": "Ganztägig"
 	},
 	"error": {
 		"empty": {
@@ -57,7 +58,6 @@
 		"preview": "Vorschau",
 		"showCalendarEvents": "THI Events anzeigen",
 		"additionalContent": "Zusätzliche Inhalte",
-		"showExams": "Prüfungen anzeigen",
-		"calendarEventsListModeNote": "THI Events werden in der Listenansicht nicht unterstützt."
+		"showExams": "Prüfungen anzeigen"
 	}
 }

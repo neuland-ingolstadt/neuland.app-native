@@ -17,7 +17,8 @@
 		"literature": "Literature"
 	},
 	"time": {
-		"minutes": "minutes"
+		"minutes": "minutes",
+		"allDay": "All day"
 	},
 	"error": {
 		"empty": {
@@ -57,7 +58,6 @@
 		"preview": "Preview",
 		"showCalendarEvents": "Show THI Events",
 		"additionalContent": "Additional Content",
-		"showExams": "Show Exams",
-		"calendarEventsListModeNote": "THI events are not supported in List view mode."
+		"showExams": "Show Exams"
 	}
 }

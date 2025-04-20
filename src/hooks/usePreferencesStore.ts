@@ -27,7 +27,6 @@ interface PreferencesStore {
 	showExams: boolean
 	selectedDate: Date
 	recentQuicklinks: string[]
-	hasPendingTimetableUpdate: boolean
 	setAccentColor: (language: string) => void
 	setTheme: (theme: string) => void
 	setLanguage: (language: 'en' | 'de') => void
@@ -38,7 +37,6 @@ interface PreferencesStore {
 	setShowExams: (show: boolean) => void
 	setSelectedDate: (date: Date) => void
 	addRecentQuicklink: (quicklink: string) => void
-	setHasPendingTimetableUpdate: (value: boolean) => void
 	reset: () => void
 }
 
@@ -55,7 +53,6 @@ const initialState: Omit<
 	| 'addRecentQuicklink'
 	| 'reset'
 	| 'setLanguage'
-	| 'setHasPendingTimetableUpdate'
 > = {
 	accentColor: DEFAULT_ACCENT_COLOR,
 	appIcon: undefined,
@@ -66,8 +63,7 @@ const initialState: Omit<
 	showCalendarEvents: true,
 	showExams: true,
 	selectedDate: new Date(),
-	recentQuicklinks: defaultQuicklinks,
-	hasPendingTimetableUpdate: false
+	recentQuicklinks: defaultQuicklinks
 }
 
 export const usePreferencesStore = create<PreferencesStore>()(
@@ -93,13 +89,13 @@ export const usePreferencesStore = create<PreferencesStore>()(
 				})
 			},
 			setTimetableMode: (timetableMode: TimetableMode) => {
-				set({ timetableMode, hasPendingTimetableUpdate: true })
+				set({ timetableMode })
 			},
 			setShowCalendarEvents: (showCalendarEvents: boolean) => {
-				set({ showCalendarEvents, hasPendingTimetableUpdate: true })
+				set({ showCalendarEvents })
 			},
 			setShowExams: (showExams: boolean) => {
-				set({ showExams, hasPendingTimetableUpdate: true })
+				set({ showExams })
 			},
 			setSelectedDate: (selectedDate: Date) => {
 				set({ selectedDate })
@@ -123,9 +119,6 @@ export const usePreferencesStore = create<PreferencesStore>()(
 					].slice(0, 3)
 					return { recentQuicklinks: finalQuicklinks }
 				})
-			},
-			setHasPendingTimetableUpdate: (value: boolean) => {
-				set({ hasPendingTimetableUpdate: value })
 			},
 			reset: () => {
 				set(initialState)

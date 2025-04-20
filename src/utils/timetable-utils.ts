@@ -9,6 +9,21 @@ import moment from 'moment'
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
 
+interface CalendarEventItem {
+	eventType: 'calendar'
+	title?: string
+	name: string | { de: string; en: string }
+	startDate?: Date
+	endDate?: Date
+	date?: Date
+	start?: { dateTime: Date }
+	end?: { dateTime: Date }
+	rooms?: string[]
+	allDay?: boolean
+	begin?: Date // From raw calendar data
+	hasHours?: boolean // From raw calendar data
+}
+
 /**
  * Retrieves the users timetable for a given date and returns it in a friendly format.
  * @param date Date to get the timetable for
@@ -100,6 +115,8 @@ export async function getFriendlyTimetable(
 /**
  * Groups the given timetable by date.
  * @param timetable Timetable to group
+ * @param exams Exams to include
+ * @param calendarEvents Calendar events to include
  * @returns Timetable grouped by date
  * @example
  * const timetable = [
@@ -121,7 +138,8 @@ export async function getFriendlyTimetable(
 
 export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
-	exams: Exam[]
+	exams: Exam[],
+	calendarEvents: CalendarEventItem[] = []
 ): TimetableSections[] {
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
@@ -132,27 +150,35 @@ export function getGroupedTimetable(
 				endDate: moment(exam.date).add(duration, 'minutes').toDate(),
 				eventType: 'exam'
 			}
-		})
+		}),
+		// Add calendar events
+		...(calendarEvents || [])
 	]
 
 	// Sort combinedData by date
-	combinedData.sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-	)
+	combinedData.sort((a, b) => {
+		const dateA = a.date instanceof Date ? a.date : new Date(a.date || 0)
+		const dateB = b.date instanceof Date ? b.date : new Date(b.date || 0)
+		return dateA.getTime() - dateB.getTime()
+	})
 
 	const dates = [
 		...new Set(
-			combinedData.map(
-				(item) => new Date(item.date).toISOString().split('T')[0]
-			)
+			combinedData.map((item) => {
+				const itemDate =
+					item.date instanceof Date ? item.date : new Date(item.date || 0)
+				return itemDate.toISOString().split('T')[0]
+			})
 		)
 	]
 
 	const groups = dates.map((date) => ({
 		title: new Date(date),
-		data: combinedData.filter(
-			(item) => new Date(item.date).toISOString().split('T')[0] === date
-		)
+		data: combinedData.filter((item) => {
+			const itemDate =
+				item.date instanceof Date ? item.date : new Date(item.date || 0)
+			return itemDate.toISOString().split('T')[0] === date
+		})
 	}))
 
 	return groups as TimetableSections[]
