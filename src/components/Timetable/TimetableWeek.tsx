@@ -12,7 +12,7 @@ import {
 	type OnEventResponse,
 	type PackedEvent
 } from '@howljs/calendar-kit'
-import { useNavigation, useRouter } from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import moment from 'moment-timezone'
 import React, {
 	startTransition,
@@ -77,17 +77,42 @@ export default function TimetableWeek({
 	const isDark = UnistylesRuntime.themeName === 'dark'
 	const router = useRouter()
 	const navigation = useNavigation()
-
 	const timetableMode = usePreferencesStore((state) => state.timetableMode)
 	const showCalendarEvents = usePreferencesStore(
 		(state) => state.showCalendarEvents
 	)
 	const showExams = usePreferencesStore((state) => state.showExams)
+	const hasPendingUpdate = usePreferencesStore(
+		(state) => state.hasPendingTimetableUpdate
+	)
+	const setHasPendingUpdate = usePreferencesStore(
+		(state) => state.setHasPendingTimetableUpdate
+	)
 
-	// Use deferred values for smoother UI
+	// Defer the updates of these values when there's a pending update
 	const deferredTimetableMode = useDeferredValue(timetableMode)
 	const deferredShowCalendarEvents = useDeferredValue(showCalendarEvents)
 	const deferredShowExams = useDeferredValue(showExams)
+
+	// Apply pending updates when returning to the screen
+	useFocusEffect(
+		useCallback(() => {
+			if (hasPendingUpdate) {
+				startTransition(() => {
+					setHasPendingUpdate(false)
+				})
+			}
+		}, [hasPendingUpdate])
+	)
+
+	// Use the deferred values when there's no pending update
+	const effectiveTimetableMode = hasPendingUpdate
+		? timetableMode
+		: deferredTimetableMode
+	const effectiveShowCalendarEvents = hasPendingUpdate
+		? showCalendarEvents
+		: deferredShowCalendarEvents
+	const effectiveShowExams = hasPendingUpdate ? showExams : deferredShowExams
 
 	const calendarTheme = {
 		colors: {
@@ -128,8 +153,7 @@ export default function TimetableWeek({
 
 	const combinedEvents = React.useMemo(() => {
 		if (timetable.length === 0) return []
-
-		// Process timetable entries
+		// Process timetable lectures
 		const friendlyTimetable = timetable.map(
 			(entry: FriendlyTimetableEntry, index: number) => ({
 				...entry,
@@ -140,10 +164,10 @@ export default function TimetableWeek({
 			})
 		)
 
-		// Process exams if enabled
+		// Process exams (only if showExams is true)
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		let friendlyExams: any[] = []
-		if (deferredShowExams && exams.length > 0) {
+		if (effectiveShowExams && exams.length > 0) {
 			friendlyExams = exams.map((entry, index) => {
 				const duration = Number(entry?.type?.match(/\d+/)?.[0] ?? 90)
 				return {
@@ -160,7 +184,7 @@ export default function TimetableWeek({
 
 		// Process calendar events if enabled
 		let calendarEvents: CalendarEvent[] = []
-		if (deferredShowCalendarEvents && calendar?.length > 0) {
+		if (effectiveShowCalendarEvents && calendar?.length > 0) {
 			calendarEvents = calendar
 				.filter((event) => event.begin) // Filter out events without a date
 				.map((event, index) => {
@@ -204,8 +228,8 @@ export default function TimetableWeek({
 	}, [
 		timetable,
 		exams,
-		deferredShowCalendarEvents,
-		deferredShowExams,
+		effectiveShowCalendarEvents,
+		effectiveShowExams,
 		i18n.language
 	])
 
@@ -338,19 +362,23 @@ export default function TimetableWeek({
 	}
 
 	const [timetableNumberDays, setTimetableNumberDays] = React.useState(
-		timetableNumberDaysMap[deferredTimetableMode] ?? 3
+		timetableNumberDaysMap[effectiveTimetableMode] ?? 3
 	)
-
 	useEffect(() => {
 		if (calendarLoaded) {
-			startTransition(() => {
-				setTimetableNumberDays(timetableNumberDaysMap[deferredTimetableMode])
-				calendarRef.current?.goToDate({
-					date: currentDate
-				})
+			React.startTransition(() => {
+				setTimetableNumberDays(timetableNumberDaysMap[effectiveTimetableMode])
 			})
 		}
-	}, [deferredTimetableMode])
+	}, [effectiveTimetableMode])
+
+	if (hasPendingUpdate) {
+		return (
+			<View style={styles.pendingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
 
 	return (
 		<View style={styles.page}>
@@ -370,11 +398,11 @@ export default function TimetableWeek({
 				ref={calendarRef}
 				numberOfDays={timetableNumberDays}
 				scrollByDay={
-					deferredTimetableMode !== TimetableMode.Timeline5 &&
-					deferredTimetableMode !== TimetableMode.Timeline7
+					effectiveTimetableMode !== TimetableMode.Timeline5 &&
+					effectiveTimetableMode !== TimetableMode.Timeline7
 				}
 				hideWeekDays={
-					deferredTimetableMode === TimetableMode.Timeline5 ? [6, 7] : []
+					effectiveTimetableMode === TimetableMode.Timeline5 ? [6, 7] : []
 				}
 				events={events}
 				theme={calendarTheme}

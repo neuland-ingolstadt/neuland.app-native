@@ -6,7 +6,6 @@ import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { TimetableMode, usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -51,24 +50,21 @@ export default function TimetablePreferences(): React.JSX.Element {
 	// Helper function to set timetable mode for the list view option
 	const toggleListMode = (isSelected: boolean) => {
 		if (isSelected) {
-			startTransition(() => {
-				setTimetableMode(TimetableMode.List)
-			})
+			setTimetableMode(TimetableMode.List)
 		}
 	}
 
 	// Helper function to handle timeline mode changes
 	const setTimelineMode = (mode: string) => {
-		startTransition(() => {
-			setTimetableMode(mode as TimetableMode)
-		})
+		setTimetableMode(mode as TimetableMode)
 	}
 
 	// Create additional content elements for MultiSectionPicker
 	const additionalContentElements = [
 		{
 			key: 'showCalendarEvents',
-			title: t('preferences.showCalendarEvents', { ns: 'timetable' })
+			title: t('preferences.showCalendarEvents', { ns: 'timetable' }),
+			disabled: timetableMode === TimetableMode.List
 		},
 		{
 			key: 'showExams',
@@ -83,13 +79,11 @@ export default function TimetablePreferences(): React.JSX.Element {
 
 	// Handle toggling additional content options
 	const toggleAdditionalContent = (key: string) => {
-		startTransition(() => {
-			if (key === 'showCalendarEvents') {
-				setShowCalendarEvents(!showCalendarEvents)
-			} else if (key === 'showExams') {
-				setShowExams(!showExams)
-			}
-		})
+		if (key === 'showCalendarEvents') {
+			setShowCalendarEvents(!showCalendarEvents)
+		} else if (key === 'showExams') {
+			setShowExams(!showExams)
+		}
 	}
 
 	return (
@@ -112,7 +106,14 @@ export default function TimetablePreferences(): React.JSX.Element {
 					/>
 				</SectionView>
 
-				<SectionView title={t('timetable:preferences.additionalContent')}>
+				<SectionView
+					title={t('timetable:preferences.additionalContent')}
+					footer={
+						timetableMode === TimetableMode.List
+							? t('timetable:preferences.calendarEventsListModeNote')
+							: '' // to preserve the space
+					}
+				>
 					<MultiSectionPicker
 						elements={additionalContentElements}
 						selectedItems={selectedAdditionalContent}
