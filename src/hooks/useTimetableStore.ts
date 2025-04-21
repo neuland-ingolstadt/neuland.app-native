@@ -57,6 +57,7 @@ export const useTimetableStore = create<TimetableStore>()(
 			setSelectedDate: (selectedDate: Date) => {
 				set({ selectedDate })
 			},
+			// This is the best way to handle mode changes to handle the heavy UI update and trigger a clean render, as the timetable sometimes fails to keep the current data when changing modes.
 			setHasPendingTimetableUpdate: (value: boolean) => {
 				set({ hasPendingTimetableUpdate: value })
 			}
