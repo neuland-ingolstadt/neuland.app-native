@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import i18n from '@/localization/i18n'
 import type { FriendlyDateOptions } from '@/types/utils'
 import { t } from 'i18next'

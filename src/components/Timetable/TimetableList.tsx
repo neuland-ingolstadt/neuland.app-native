@@ -58,9 +58,7 @@ export type CalendarEntry = {
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
 export default function TimetableList({
-	// eslint-disable-next-line react/prop-types
 	timetable,
-	// eslint-disable-next-line react/prop-types
 	exams
 }: ITimetableViewProps): React.JSX.Element {
 	/**
@@ -406,16 +404,9 @@ export default function TimetableList({
 					stickySectionHeadersEnabled={true}
 					initialNumToRender={20}
 					keyExtractor={(item, index) => {
-						// Add index to keyExtractor for more robustness
 						return `${item.name}${index}${item.date.toString()}`
 					}}
-					// Remove maintainVisibleContentPosition for testing
-					// maintainVisibleContentPosition={{
-					// 	minIndexForVisible: 1,
-					// 	autoscrollToTopThreshold: null
-					// }}
 					viewabilityConfig={{
-						// Adjust viewability config - maybe require less visibility
 						itemVisiblePercentThreshold: 10
 					}}
 				/>
