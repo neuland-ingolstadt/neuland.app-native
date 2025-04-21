@@ -22,14 +22,12 @@ const WeekHeaderEvent = ({
 
 	return (
 		<View
-			style={{
-				...styles.headerEventContainer
-			}}
+			style={styles.headerEventContainer
+			}
 		>
 			<Text
-				style={{
-					...styles.headerEventTitle
-				}}
+				style={styles.headerEventTitle
+				}
 				numberOfLines={1}
 				ellipsizeMode="tail"
 			>

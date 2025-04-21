@@ -102,22 +102,6 @@ export async function getFriendlyTimetable(
  * Groups the given timetable by date.
  * @param timetable Timetable to group
  * @returns Timetable grouped by date
- * @example
- * const timetable = [
- *    { date: '2021-01-01', name: 'Lecture 1' },
- *   { date: '2021-01-01', name: 'Lecture 2' },
- *   { date: '2021-01-02', name: 'Lecture 3' },
- * ]
- * const groupedTimetable = getGroupedTimetable(timetable)
- * // groupedTimetable = {
- * //   '2021-01-01': [
- * //     { date: '2021-01-01', name: 'Lecture 1' },
- * //     { date: '2021-01-01', name: 'Lecture 2' },
- * //   ],
- * //   '2021-01-02': [
- * //     { date: '2021-01-02', name: 'Lecture 3' },
- * //   ],
- * // }
  **/
 
 export function getGroupedTimetable(
@@ -138,10 +122,8 @@ export function getGroupedTimetable(
 		})
 	]
 
-	// Add calendar events if enabled
 	if (includeCalendar && calendarEvents.length > 0) {
 		const processedCalendarEvents = calendarEvents.map((event) => {
-			// Store original dates for display purposes
 			const originalStartDate = new Date(event.begin)
 			const originalEndDate = event.end ? new Date(event.end) : null
 
@@ -157,16 +139,14 @@ export function getGroupedTimetable(
 				// If no end date, use start date + 2h for events with time, or same day for all-day events
 				endDate = new Date(startDate)
 				if (event.hasHours) {
-					endDate.setHours(endDate.getHours() + 2) // Add 2 hours for timed events
+					endDate.setHours(endDate.getHours() + 2)
 				}
 			}
 
-			// Check if it's an all-day event or not
 			const isAllDay = event.hasHours !== true
 
 			// Handle multi-day all-day events differently from events with specific times
 			if (isAllDay && originalEndDate) {
-				// For multi-day all-day events, create an entry for each day
 				const eventDays = []
 				const currentDate = new Date(startDate)
 				currentDate.setHours(0, 0, 0, 0)
@@ -184,12 +164,10 @@ export function getGroupedTimetable(
 						eventType: 'calendar'
 					})
 
-					// Move to next day
 					currentDate.setDate(currentDate.getDate() + 1)
 				}
 				return eventDays
 			}
-			// For events with specific times or single-day all-day events
 			return [
 				{
 					date: startDate,
