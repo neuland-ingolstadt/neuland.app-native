@@ -41,7 +41,7 @@ const TimetablePreview = ({
 			})
 			setPrevMode(mode)
 		}
-	}, [mode])
+	}, [mode, animationProgress, prevMode])
 
 	// Create animation styles
 	const animatedContainerStyle = useAnimatedStyle(() => {
@@ -54,8 +54,15 @@ const TimetablePreview = ({
 		}
 	})
 
-	// Different preview layouts based on mode
 	const renderPreview = () => {
+		const weekdaysShort = t('timetable:weekdays.short', {
+			returnObjects: true
+		}) as string[]
+		const weekdaysSingle = t('timetable:weekdays.single', {
+			returnObjects: true
+		}) as string[]
+		const mondayLong = t('timetable:weekdays.long.0')
+
 		switch (visibleMode) {
 			case TimetableMode.List:
 				return (
@@ -90,7 +97,7 @@ const TimetablePreview = ({
 						style={[styles.timelinePreview, animatedContainerStyle]}
 					>
 						<View style={styles.dayHeader}>
-							<Text style={styles.dayText}>Monday</Text>
+							<Text style={styles.dayText}>{mondayLong}</Text>
 						</View>
 						<View style={styles.timelineEvents}>
 							<View
@@ -135,9 +142,9 @@ const TimetablePreview = ({
 					<Animated.View
 						style={[styles.timelinePreviewMultiDay, animatedContainerStyle]}
 					>
-						{['Mon', 'Tue', 'Wed'].map((day, idx) => (
+						{weekdaysShort.slice(0, 3).map((day, idx) => (
 							<View
-								key={day}
+								key={`${day}-${idx}`}
 								style={[styles.dayColumn, idx === 2 && styles.lastDayColumn]}
 							>
 								<Text style={styles.dayColumnHeader}>{day}</Text>
@@ -191,9 +198,9 @@ const TimetablePreview = ({
 					<Animated.View
 						style={[styles.timelinePreviewMultiDay, animatedContainerStyle]}
 					>
-						{['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, idx) => (
+						{weekdaysShort.slice(0, 5).map((day, idx) => (
 							<View
-								key={day}
+								key={`${day}-${idx}`}
 								style={[styles.dayColumn, idx === 4 && styles.lastDayColumn]}
 							>
 								<Text style={styles.dayColumnHeader}>{day}</Text>
@@ -246,9 +253,9 @@ const TimetablePreview = ({
 					<Animated.View
 						style={[styles.timelinePreviewMultiDay, animatedContainerStyle]}
 					>
-						{['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, idx) => (
+						{weekdaysSingle.map((day, idx) => (
 							<View
-								key={idx}
+								key={`${day}-${idx}`}
 								style={[styles.dayColumn, idx === 6 && styles.lastDayColumn]}
 							>
 								<Text style={styles.dayColumnHeader}>{day}</Text>

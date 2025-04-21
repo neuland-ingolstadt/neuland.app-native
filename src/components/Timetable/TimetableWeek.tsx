@@ -63,7 +63,7 @@ export default function TimetableWeek({
 	exams
 }: ITimetableViewProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-	const { i18n } = useTranslation()
+	const { i18n, t } = useTranslation()
 	const today = moment().startOf('day').toDate()
 	const calendarRef = useRef<CalendarKitHandle>(null)
 	const setSelectedLecture = useRouteParamsStore(
@@ -121,14 +121,20 @@ export default function TimetableWeek({
 
 	const initialLocales: Record<string, Partial<LocaleConfigsProps>> = {
 		en: {
-			weekDayShort: 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_'),
+			weekDayShort: t('timetable:calendar.weekDayShort', {
+				returnObjects: true,
+				lng: 'en'
+			}) as string[],
 			meridiem: { ante: 'am', post: 'pm' },
-			more: 'more'
+			more: t('timetable:calendar.more', { lng: 'en' })
 		},
 		de: {
-			weekDayShort: 'So_Mo_Di_Mi_Do_Fr_Sa'.split('_'),
+			weekDayShort: t('timetable:calendar.weekDayShort', {
+				returnObjects: true,
+				lng: 'de'
+			}) as string[],
 			meridiem: { ante: '', post: '' },
-			more: 'mehr'
+			more: t('timetable:calendar.more', { lng: 'de' })
 		}
 	}
 
@@ -157,7 +163,6 @@ export default function TimetableWeek({
 			})
 		)
 
-		// Process exams (only if showExams is true)
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		let friendlyExams: any[] = []
 		if (showExams && exams.length > 0) {

@@ -50,6 +50,21 @@
 		"showExams": "Show Exams"
 	},
 	"calendar": {
-		"thiCalendar": "THI Events"
+		"thiCalendar": "THI Events",
+		"weekDayShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+		"more": "more"
+	},
+	"weekdays": {
+		"short": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+		"single": ["M", "T", "W", "T", "F", "S", "S"],
+		"long": [
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+			"Sunday"
+		]
 	}
 }
