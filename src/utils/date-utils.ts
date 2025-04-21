@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import i18n from '@/localization/i18n'
 import type { FriendlyDateOptions } from '@/types/utils'
 import { t } from 'i18next'
@@ -207,7 +206,11 @@ export function formatISODate(date: Date | undefined): string {
 	if (date == null) {
 		return ''
 	}
-	return `${date.getFullYear().toString().padStart(4, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+	return `${date.getFullYear().toString().padStart(4, '0')}-${(
+		date.getMonth() + 1
+	)
+		.toString()
+		.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 }
 
 /**
@@ -219,7 +222,10 @@ export function formatISOTime(date: Date | undefined): string {
 	if (date == null) {
 		return ''
 	}
-	return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+	return `${date.getHours().toString().padStart(2, '0')}:${date
+		.getMinutes()
+		.toString()
+		.padStart(2, '0')}`
 }
 
 /**
@@ -430,4 +436,29 @@ export const convertTimeToDate = (
 	const date = new Date(baseDate)
 	date.setHours(hours, minutes, seconds, 0)
 	return date
+}
+
+/**
+ * Formats a date range in a compact format like "1.10 - 5.10" or just "1.10" if start and end are the same
+ * @param {Date|string} startDate - Start date of the range
+ * @param {Date|string} endDate - Optional end date of the range
+ * @returns {string} Formatted date range string
+ */
+export function formatCompactDateRange(
+	startDate: Date | string,
+	endDate?: Date | string | null
+): string {
+	const start = moment(startDate)
+	const end = endDate ? moment(endDate) : null
+
+	// Format just the day and month (1.10)
+	const formatDayMonth = (date: moment.Moment): string => date.format('D.M')
+
+	// If no end date or start and end are the same day
+	if (!end || (end && start.isSame(end, 'day'))) {
+		return formatDayMonth(start)
+	}
+
+	// Format as "1.10 - 5.10"
+	return `${formatDayMonth(start)} - ${formatDayMonth(end)}`
 }

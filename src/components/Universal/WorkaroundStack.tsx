@@ -22,6 +22,7 @@ export interface WorkaroundStackProps {
 	headerRightElement?: ((props: unknown) => ReactNode) | undefined
 	params?: Partial<object | undefined>
 	androidFallback?: boolean
+	freezeOnBlur?: boolean
 }
 /*
  * This is a generic stack used as workaround for missing or broken features in expo-router or bottom-tabs.
@@ -36,7 +37,8 @@ function WorkaroundStack({
 	headerRightElement = undefined,
 	headerSearchBarOptions = undefined,
 	params = {},
-	androidFallback = false
+	androidFallback = false,
+	freezeOnBlur = false
 }: WorkaroundStackProps): React.JSX.Element {
 	const { t } = useTranslation('navigation')
 	const Stack = createNativeStackNavigator()
@@ -49,6 +51,7 @@ function WorkaroundStack({
 					name={name}
 					component={component}
 					options={{
+						freezeOnBlur: freezeOnBlur,
 						title: t(
 							// @ts-expect-error Type not checked
 							titleKey
@@ -70,6 +73,7 @@ function WorkaroundStack({
 			<Stack.Screen
 				name={name}
 				options={{
+					freezeOnBlur: freezeOnBlur,
 					title: t(
 						// @ts-expect-error Type not checked
 						titleKey

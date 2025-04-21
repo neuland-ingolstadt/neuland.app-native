@@ -264,6 +264,17 @@ export default function Settings(): React.JSX.Element {
 					}
 				},
 				{
+					title: t('menu.formlist.preferences.timetable'),
+					icon: {
+						ios: 'calendar',
+						android: 'event',
+						web: 'Calendar'
+					},
+					onPress: () => {
+						router.navigate('/timetable-preferences')
+					}
+				},
+				{
 					title: t('menu.formlist.preferences.language'),
 					icon: {
 						ios: 'globe',

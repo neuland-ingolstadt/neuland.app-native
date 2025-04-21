@@ -4,6 +4,8 @@
 		"timetableMode": "Switch Timetable View",
 		"timetableBack": "Jump to today",
 		"settingsLogo": "Neuland Logo",
-		"libraryBarcode": "Library Number as Barcode"
+		"libraryBarcode": "Library Number as Barcode",
+		"previous": "Previous",
+		"next": "Next"
 	}
 }

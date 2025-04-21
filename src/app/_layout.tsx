@@ -273,6 +273,12 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
+					name="(screens)/timetable-preferences"
+					options={{
+						title: t('navigation.timetablePreferences')
+					}}
+				/>
+				<Stack.Screen
 					name="(screens)/app-icon"
 					options={{
 						title: 'App Icon'

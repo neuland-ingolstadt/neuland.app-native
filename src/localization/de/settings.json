@@ -20,7 +20,8 @@
 			"preferences": {
 				"title": "Einstellungen",
 				"food": "Essen",
-				"language": "Sprache"
+				"language": "Sprache",
+				"timetable": "Stundenplan"
 			},
 			"appearance": {
 				"title": "Darstellung",
