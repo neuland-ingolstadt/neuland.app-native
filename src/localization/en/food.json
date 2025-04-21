@@ -8,7 +8,7 @@
 		"description": "There are no meals available for the selected restaurants or day.",
 		"tip1": "Check if you have selected the right restaurants",
 		"tip2": "Try selecting a different day",
-		"buttonSettings": "Check Restaurant Settings"
+		"buttonSettings": "Check Settings"
 	},
 	"preferences": {
 		"formlist": {

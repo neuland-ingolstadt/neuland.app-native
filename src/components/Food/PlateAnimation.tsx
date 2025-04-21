@@ -2,7 +2,8 @@ import PlatformIcon from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import type React from 'react'
 import { useEffect } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
@@ -13,23 +14,23 @@ import Animated, {
 	withSequence
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import CurvedText from './CurvedText'
 
 interface PlateAnimationProps {
 	size?: number
 }
 
-// Custom positions for icons to avoid circular pattern
 const FOOD_ICONS = [
 	{
 		ios: 'carrot',
-		android: 'restaurant',
-		web: 'Soup',
+		android: 'ramen_dining',
+		web: 'Ham',
 		delay: 0,
 		position: { x: 0.8, y: -0.6 }
 	},
 	{
 		ios: 'takeoutbag.and.cup.and.straw',
-		android: 'restaurant_menu',
+		android: 'lunch_dining',
 		web: 'Pizza',
 		delay: 400,
 		position: { x: -0.85, y: -0.45 }
@@ -41,82 +42,25 @@ const FOOD_ICONS = [
 		delay: 800,
 		position: { x: 0.45, y: 0.9 }
 	}
-	// Removed fourth and fifth icons
 ]
-
-// Component for creating curved text along the plate rim
-const CurvedText = ({
-	text,
-	radius,
-	size,
-	startAngle = 90
-}: {
-	text: string
-	radius: number
-	size: number
-	startAngle?: number
-}) => {
-	const characters = text.split('')
-	const anglePerChar = 5 // Angle between characters in degrees
-	const startAngleRad = (startAngle * Math.PI) / 180
-	const { theme } = useStyles()
-	return (
-		<View
-			style={{ width: radius * 2, height: radius * 2, position: 'absolute' }}
-		>
-			{characters.map((char, index) => {
-				// Fixed angle calculation to display text in correct order
-				const angle =
-					startAngleRad -
-					((characters.length - 1) / 2 - index) *
-						((anglePerChar * Math.PI) / 180)
-
-				return (
-					<View
-						key={index}
-						style={{
-							position: 'absolute',
-							left: radius + radius * Math.cos(angle) - size / 2 + 1,
-							top: radius + radius * Math.sin(angle) - size / 2,
-							width: size,
-							height: size,
-							transform: [{ rotate: `${angle + Math.PI / 2}rad` }],
-							alignItems: 'center',
-							justifyContent: 'center'
-						}}
-					>
-						<Text
-							style={{
-								fontSize: size * 0.7,
-								color: theme.colors.text,
-								fontWeight: '300',
-								opacity: 0.7
-							}}
-						>
-							{char}
-						</Text>
-					</View>
-				)
-			})}
-		</View>
-	)
-}
 
 export const PlateAnimation = ({
 	size = 120
 }: PlateAnimationProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	// Plate animation values
 	const plateScale = useSharedValue(0.9)
 	const plateLift = useSharedValue(0)
 	const plateOpacity = useSharedValue(0)
 	const plateGlowIntensity = useSharedValue(0)
 
-	// Empty plate icon animation values
+	// New values for tap animation
+	const platePressPulse = useSharedValue(0)
+	const plateRotation = useSharedValue(0)
+	const isAnimatingTap = useSharedValue(false)
+
 	const emptyIconOpacity = useSharedValue(0)
 	const emptyIconScale = useSharedValue(0.8)
 
-	// Icon animation values
 	const iconsArray = FOOD_ICONS.map(() => ({
 		opacity: useSharedValue(0),
 		scale: useSharedValue(0.6),
@@ -124,15 +68,53 @@ export const PlateAnimation = ({
 		rotation: useSharedValue(Math.random() * 0.05 - 0.025) // Reduced random initial rotation
 	}))
 
-	// Start animations on component mount
+	// Create a tap gesture using the modern Gesture API
+	const tapGesture = Gesture.Tap().onBegin(() => {
+		// When tap begins
+		isAnimatingTap.value = true
+		platePressPulse.value = withSequence(
+			withTiming(1, { duration: 150, easing: Easing.out(Easing.quad) }),
+			withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) })
+		)
+
+		plateRotation.value = withSequence(
+			withTiming(-0.03, { duration: 200, easing: Easing.inOut(Easing.quad) }),
+			withTiming(0.03, { duration: 400, easing: Easing.inOut(Easing.quad) }),
+			withTiming(
+				0,
+				{ duration: 300, easing: Easing.inOut(Easing.quad) },
+				(finished) => {
+					if (finished) {
+						isAnimatingTap.value = false
+					}
+				}
+			)
+		)
+
+		plateGlowIntensity.value = withSequence(
+			withTiming(1.5, { duration: 150, easing: Easing.out(Easing.quad) }),
+			withTiming(0.3, { duration: 800, easing: Easing.out(Easing.quad) })
+		)
+
+		// Let's make icons jump a bit in response to the tap
+		iconsArray.forEach((icon, index) => {
+			const randomDelay = index * 50
+			icon.floatY.value = withDelay(
+				randomDelay,
+				withSequence(
+					withTiming(-8, { duration: 300, easing: Easing.out(Easing.quad) }),
+					withTiming(0, { duration: 500, easing: Easing.bounce })
+				)
+			)
+		})
+	})
+
 	useEffect(() => {
-		// Animate plate appearing
 		plateOpacity.value = withTiming(1, {
 			duration: 800,
 			easing: Easing.out(Easing.quad)
 		})
 
-		// Continuous subtle plate animation
 		plateScale.value = withRepeat(
 			withSequence(
 				withTiming(1, { duration: 2200, easing: Easing.inOut(Easing.sin) }),
@@ -194,11 +176,11 @@ export const PlateAnimation = ({
 				withRepeat(
 					withSequence(
 						withTiming(4, {
-							duration: 3000 + Math.random() * 1000, // Slower animation speed
+							duration: 3000 + Math.random() * 1000,
 							easing: Easing.inOut(Easing.sin)
 						}),
 						withTiming(-4, {
-							duration: 3000 + Math.random() * 1000, // Slower animation speed
+							duration: 3000 + Math.random() * 1000,
 							easing: Easing.inOut(Easing.sin)
 						})
 					),
@@ -213,11 +195,11 @@ export const PlateAnimation = ({
 				withRepeat(
 					withSequence(
 						withTiming(0.025, {
-							duration: 4000 + Math.random() * 1000, // Slower rotation speed
+							duration: 4000 + Math.random() * 1000,
 							easing: Easing.inOut(Easing.sin)
 						}),
 						withTiming(-0.025, {
-							duration: 4000 + Math.random() * 1000, // Slower rotation speed
+							duration: 4000 + Math.random() * 1000,
 							easing: Easing.inOut(Easing.sin)
 						})
 					),
@@ -230,8 +212,14 @@ export const PlateAnimation = ({
 
 	// Animated styles for plate
 	const plateAnimatedStyle = useAnimatedStyle(() => {
+		const tapScale = 1 - platePressPulse.value * 0.05
+
 		return {
-			transform: [{ scale: plateScale.value }, { translateY: plateLift.value }],
+			transform: [
+				{ scale: plateScale.value * tapScale },
+				{ translateY: plateLift.value },
+				{ rotate: `${plateRotation.value}rad` }
+			],
 			opacity: plateOpacity.value,
 			shadowOpacity: 0.2 + plateGlowIntensity.value * 0.15
 		}
@@ -285,7 +273,8 @@ export const PlateAnimation = ({
 						}}
 						android={{
 							name: foodIcon.android as MaterialIcon,
-							size: size * 0.25
+							size: size * 0.25,
+							variant: 'outlined'
 						}}
 						web={{
 							// biome-ignore lint/suspicious/noExplicitAny:
@@ -297,61 +286,77 @@ export const PlateAnimation = ({
 				</Animated.View>
 			))}
 
-			{/* Plate */}
-			<Animated.View style={[styles.plateContainer, plateAnimatedStyle]}>
-				{/* Main plate */}
-				<View
-					style={[styles.plateOuter, { width: size * 1.3, height: size * 1.3 }]}
-				>
-					{/* Engraved text */}
-					<CurvedText
-						text="NEULAND"
-						radius={size * 0.63 - 3}
-						size={size * 0.07}
-						startAngle={25}
-					/>
-
-					{/* Plate rim */}
+			{/* Plate with modern gesture detector */}
+			<GestureDetector gesture={tapGesture}>
+				<Animated.View style={[styles.plateContainer, plateAnimatedStyle]}>
+					{/* Main plate */}
 					<View
 						style={[
-							styles.plateRim,
-							{ width: size * 1.17, height: size * 1.17 }
+							styles.plateOuter,
+							{ width: size * 1.3, height: size * 1.3 }
 						]}
 					>
-						{/* Plate inner circle */}
-						<Animated.View
+						{/* Engraved text */}
+						<CurvedText
+							text="NEULAND NEXT"
+							radius={size * 0.63 - 3}
+							size={size * 0.07}
+							startAngle={20}
+						/>
+
+						{/* Plate rim */}
+						<View
 							style={[
-								styles.plateInner,
-								{ width: size * 0.8, height: size * 0.8 },
-								plateInnerAnimatedStyle
+								styles.plateRim,
+								{ width: size * 1.17, height: size * 1.17 }
 							]}
 						>
-							{/* Empty plate icon */}
+							{/* Plate inner circle */}
 							<Animated.View
-								style={[styles.emptyContainer, emptyIconAnimatedStyle]}
+								style={[
+									styles.plateInner,
+									{ width: size * 0.8, height: size * 0.8 },
+									plateInnerAnimatedStyle
+								]}
 							>
-								<PlatformIcon
-									ios={{
-										name: 'fork.knife',
-										size: size * 0.35,
-										weight: 'light',
-										renderMode: 'monochrome'
-									}}
-									android={{
-										name: 'restaurant_menu',
-										size: size * 0.35
-									}}
-									web={{
-										name: 'Utensils',
-										size: size * 0.35
-									}}
-									style={styles.emptyIcon}
+								{/* Pulse overlay for tap animation */}
+								<Animated.View
+									style={[
+										styles.platePulse,
+										useAnimatedStyle(() => ({
+											opacity: platePressPulse.value * 0.3,
+											transform: [{ scale: 1 + platePressPulse.value * 0.2 }]
+										}))
+									]}
 								/>
+
+								{/* Empty plate icon */}
+								<Animated.View
+									style={[styles.emptyContainer, emptyIconAnimatedStyle]}
+								>
+									<PlatformIcon
+										ios={{
+											name: 'fork.knife',
+											size: size * 0.35,
+											weight: 'light',
+											renderMode: 'monochrome'
+										}}
+										android={{
+											name: 'restaurant',
+											size: size * 0.35
+										}}
+										web={{
+											name: 'Utensils',
+											size: size * 0.35
+										}}
+										style={styles.emptyIcon}
+									/>
+								</Animated.View>
 							</Animated.View>
-						</Animated.View>
+						</View>
 					</View>
-				</View>
-			</Animated.View>
+				</Animated.View>
+			</GestureDetector>
 		</View>
 	)
 }
@@ -361,7 +366,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		position: 'relative',
-		paddingVertical: 0 // Ensuring no extra padding
+		paddingVertical: 0
 	},
 	plateContainer: {
 		alignItems: 'center',
@@ -409,7 +414,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: 0.5,
 		borderColor: theme.colors.plateInnerBorder
 	},
-
+	platePulse: {
+		position: 'absolute',
+		width: '100%',
+		height: '100%',
+		borderRadius: 999,
+		backgroundColor: theme.colors.primary,
+		opacity: 0,
+		zIndex: 0
+	},
 	emptyContainer: {
 		width: '60%',
 		height: '60%',

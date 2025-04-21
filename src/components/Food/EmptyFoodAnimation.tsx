@@ -110,7 +110,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center',
 		width: '100%',
 		paddingHorizontal: 20,
-		paddingVertical: 24
+		paddingVertical: 10
 	},
 	contentWrapper: {
 		width: '100%',
@@ -145,6 +145,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%',
 		alignSelf: 'center',
 		marginBottom: 40,
+		marginTop: 8,
 		gap: 16,
 		paddingHorizontal: 16
 	},

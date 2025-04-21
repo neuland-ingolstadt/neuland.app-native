@@ -69,7 +69,7 @@ export const darkTheme = {
 		vegGreen: '#1ccd22',
 		plateOuter: '#2a2a2b',
 		plateOuterBorder: '#303032',
-		plateRim: '#3b3b3d',
+		plateRim: '#373739',
 		plateRimBorder: '#444448',
 		plateInner: '#262626',
 		plateInnerBorder: '#474749',

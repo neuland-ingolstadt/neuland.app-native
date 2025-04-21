@@ -8,7 +8,7 @@
 		"description": "Es sind keine Gerichte für den gewählten Tag verfügbar.",
 		"tip1": "Prüfe, ob du die richtigen Restaurants ausgewählt hast",
 		"tip2": "Versuche, einen anderen Tag auszuwählen",
-		"buttonSettings": "Restaurant-Einstellungen prüfen"
+		"buttonSettings": "Einstellungen prüfen"
 	},
 	"preferences": {
 		"formlist": {

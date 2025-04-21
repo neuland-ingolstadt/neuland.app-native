@@ -159,7 +159,7 @@ const stylesheet = createStyleSheet(() => ({
 		fontFamily: 'MaterialSymbolsRoundedOutline'
 	},
 	communityIcon: {
-		// Removing the incorrect paddingTop that causes misalignment
+		paddingTop: 50
 	},
 	iosFallbackOffset: {
 		marginRight: -2
