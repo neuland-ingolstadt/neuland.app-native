@@ -25,7 +25,6 @@ export default function TimetablePreferences(): React.JSX.Element {
 	const showExams = useTimetableStore((state) => state.showExams)
 	const setShowExams = useTimetableStore((state) => state.setShowExams)
 
-	// Create timeline view mode elements for radio selection
 	const timelineModeElements: FoodLanguageElement[] = [
 		{
 			key: TimetableMode.Timeline1,
@@ -45,19 +44,16 @@ export default function TimetablePreferences(): React.JSX.Element {
 		}
 	]
 
-	// Helper function to set timetable mode for the list view option
 	const toggleListMode = (isSelected: boolean) => {
 		if (isSelected) {
 			setTimetableMode(TimetableMode.List)
 		}
 	}
 
-	// Helper function to handle timeline mode changes
 	const setTimelineMode = (mode: string) => {
 		setTimetableMode(mode as TimetableMode)
 	}
 
-	// Create additional content elements for MultiSectionPicker
 	const additionalContentElements = [
 		{
 			key: 'showCalendarEvents',
@@ -69,7 +65,6 @@ export default function TimetablePreferences(): React.JSX.Element {
 		}
 	]
 
-	// Generate selected items array for MultiSectionPicker
 	const selectedAdditionalContent = []
 	if (showCalendarEvents) selectedAdditionalContent.push('showCalendarEvents')
 	if (showExams) selectedAdditionalContent.push('showExams')

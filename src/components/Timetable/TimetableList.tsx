@@ -36,7 +36,6 @@ import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
-// Define CalendarEntry type for calendar events
 export type CalendarEntry = {
 	date: Date
 	startDate: Date
@@ -50,7 +49,6 @@ export type CalendarEntry = {
 		| string
 	isAllDay: boolean
 	eventType: 'calendar'
-	// Properties for original date range (for multi-day events)
 	originalStartDate?: Date
 	originalEndDate?: Date | null
 }

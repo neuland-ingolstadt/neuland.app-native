@@ -43,7 +43,6 @@ const timetableNumberDaysMap = {
 	[TimetableMode.Timeline7]: 7
 }
 
-// Add interface for calendar event structure
 interface CalendarEvent {
 	title: string
 	name: string

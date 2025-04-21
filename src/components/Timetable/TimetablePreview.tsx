@@ -18,6 +18,13 @@ interface TimetablePreviewProps {
 	showExams?: boolean
 }
 
+/**
+ * Renders a fancy and unnecessary preview of the timetable based on the selected mode.
+ * @param mode - The current timetable mode.
+ * @param showCalendarEvents - Whether to show calendar events in the preview.
+ * @param showExams - Whether to show exams in the preview.
+ * @returns A JSX element representing the timetable preview.
+ */
 const TimetablePreview = ({
 	mode,
 	showCalendarEvents = false,
@@ -28,12 +35,9 @@ const TimetablePreview = ({
 	const [visibleMode, setVisibleMode] = useState<TimetableMode>(mode)
 	const animationProgress = useSharedValue(1)
 
-	// Handle mode transitions immediately
 	useEffect(() => {
 		if (mode !== prevMode) {
-			// Immediately update visible mode
 			setVisibleMode(mode)
-			// Reset animation progress to 0 and start entry animation
 			animationProgress.value = 0
 			animationProgress.value = withTiming(1, {
 				duration: 300,
@@ -434,7 +438,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 		borderRightColor: theme.colors.border
 	},
 	lastDayColumn: {
-		borderRightWidth: 0 // Remove right border for the last column
+		borderRightWidth: 0
 	},
 	dayColumnHeader: {
 		fontSize: 13,

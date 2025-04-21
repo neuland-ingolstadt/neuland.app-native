@@ -127,16 +127,12 @@ export function getGroupedTimetable(
 			const originalStartDate = new Date(event.begin)
 			const originalEndDate = event.end ? new Date(event.end) : null
 
-			// Get start and end dates based on if event has times or not
 			const startDate = new Date(event.begin)
 
-			// Calculate end date with different strategies for different event types
 			let endDate: Date
 			if (event.end) {
-				// Use the provided end date if it exists
 				endDate = new Date(event.end)
 			} else {
-				// If no end date, use start date + 2h for events with time, or same day for all-day events
 				endDate = new Date(startDate)
 				if (event.hasHours) {
 					endDate.setHours(endDate.getHours() + 2)
@@ -145,13 +141,11 @@ export function getGroupedTimetable(
 
 			const isAllDay = event.hasHours !== true
 
-			// Handle multi-day all-day events differently from events with specific times
 			if (isAllDay && originalEndDate) {
 				const eventDays = []
 				const currentDate = new Date(startDate)
 				currentDate.setHours(0, 0, 0, 0)
 
-				// Loop through each day in the range
 				while (currentDate <= endDate) {
 					eventDays.push({
 						date: new Date(currentDate),

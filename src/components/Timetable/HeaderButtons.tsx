@@ -56,11 +56,10 @@ export function HeaderLeft({
 				onPress={onPressPreferences}
 				style={styles.headerButton}
 				hitSlop={10}
-				accessibilityLabel={t('button.timetableBack')}
 			>
 				<PlatformIcon
 					ios={{ name: 'gear', size: 22 }}
-					android={{ name: 'settings', size: 24 }}
+					android={{ name: 'settings', size: 24, variant: 'outlined' }}
 					web={{ name: 'Settings', size: 24 }}
 					style={styles.icon}
 				/>
@@ -101,7 +100,7 @@ export function HeaderLeft({
 
 const stylesheet = createStyleSheet((theme) => ({
 	headerButton: {
-		marginHorizontal: Platform.OS !== 'ios' ? 14 : 0
+		marginHorizontal: Platform.OS !== 'ios' ? 10 : 0
 	},
 	icon: {
 		color: theme.colors.text
@@ -111,7 +110,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 8
 	},
 	subButtons: {
-		flexDirection: 'row',
-		gap: 8
+		flexDirection: 'row'
 	}
 }))
