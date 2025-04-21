@@ -31,24 +31,21 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 
-	const foodKeys = ['mensa', 'mensaNeuburg', 'canisius', 'reimanns']
-	const dynamicTitle = foodKeys.includes(title) ? 'food' : title
-
 	const cardContent = (
 		<View style={styles.card}>
 			<View style={styles.titleView}>
 				<PlatformIcon
 					ios={{
-						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.ios,
+						name: cardIcons[title as keyof typeof cardIcons]?.ios,
 						size: 18
 					}}
 					android={{
-						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.android,
+						name: cardIcons[title as keyof typeof cardIcons]?.android,
 						size: 24,
 						variant: 'outlined'
 					}}
 					web={{
-						name: cardIcons[dynamicTitle as keyof typeof cardIcons]?.web,
+						name: cardIcons[title as keyof typeof cardIcons]?.web,
 						size: 24
 					}}
 				/>

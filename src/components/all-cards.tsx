@@ -4,7 +4,6 @@ import {
 	BaseCard,
 	CalendarCard,
 	EventsCard,
-	FoodCard,
 	LinkCard,
 	LoginCard,
 	TimetableCard
@@ -62,13 +61,6 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE],
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
 		card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />
-	},
-	{
-		key: 'food',
-		removable: true,
-		initial: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_GUEST, USER_STUDENT, USER_EMPLOYEE],
-		card: () => <FoodCard />
 	},
 	{
 		key: 'login',

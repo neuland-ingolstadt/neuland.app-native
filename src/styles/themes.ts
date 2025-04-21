@@ -17,9 +17,17 @@ export const lightTheme = {
 		cardContrast: '#eeeeee',
 		border: 'rgb(216, 216, 216)',
 		text: 'rgb(28, 28, 30)',
-		primary: '#0079fa', // default blue, updated dynamically in provider
+		primary: '#0079fa',
 		sheetButton: '#ffffff',
 		vegGreen: '#18b91e',
+		plateOuter: '#edebeb',
+		plateOuterBorder: '#D0D0D0',
+		plateRim: '#F5F5F5',
+		plateRimBorder: '#d1d1d1',
+		plateInner: '#eaeaea',
+		plateInnerBorder: '#cccccc',
+		plateShadow: '#444',
+		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d'
 	},
 	margins: {
@@ -60,6 +68,14 @@ export const darkTheme = {
 		primary: '#0b83ff',
 		sheetButton: '#262626',
 		vegGreen: '#1ccd22',
+		plateOuter: '#2a2a2b',
+		plateOuterBorder: '#303032',
+		plateRim: '#373739',
+		plateRimBorder: '#444448',
+		plateInner: '#262626',
+		plateInnerBorder: '#474749',
+		plateShadow: '#777777',
+		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767'
 	},
 	margins: {

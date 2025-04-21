@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { EmptyFoodAnimation } from './EmptyFoodAnimation'
 
 import { MealEntry } from './MealEntry'
 
@@ -131,7 +132,6 @@ export const MealDay = ({
 	index: number
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('food')
 
 	const mealData = useMemo(() => {
 		const ingolstadtMensa = filterMealsByRestaurant(
@@ -188,9 +188,7 @@ export const MealDay = ({
 	)
 
 	return mealData.isEmpty ? (
-		<View style={styles.emptyContainer}>
-			<Text style={styles.emptyText}>{t('dashboard.empty')}</Text>
-		</View>
+		<EmptyFoodAnimation />
 	) : (
 		<View key={index}>
 			{renderRestaurantView({
@@ -236,7 +234,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 18,
 		fontWeight: 'bold',
 		paddingBottom: 3,
-		paddingTop: 5
+		paddingTop: 12
 	},
 	emptyContainer: {
 		alignItems: 'center',
