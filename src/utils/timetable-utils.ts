@@ -1,3 +1,4 @@
+import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
 	Exam,
@@ -101,27 +102,13 @@ export async function getFriendlyTimetable(
  * Groups the given timetable by date.
  * @param timetable Timetable to group
  * @returns Timetable grouped by date
- * @example
- * const timetable = [
- *    { date: '2021-01-01', name: 'Lecture 1' },
- *   { date: '2021-01-01', name: 'Lecture 2' },
- *   { date: '2021-01-02', name: 'Lecture 3' },
- * ]
- * const groupedTimetable = getGroupedTimetable(timetable)
- * // groupedTimetable = {
- * //   '2021-01-01': [
- * //     { date: '2021-01-01', name: 'Lecture 1' },
- * //     { date: '2021-01-01', name: 'Lecture 2' },
- * //   ],
- * //   '2021-01-02': [
- * //     { date: '2021-01-02', name: 'Lecture 3' },
- * //   ],
- * // }
  **/
 
 export function getGroupedTimetable(
 	timetable: FriendlyTimetableEntry[],
-	exams: Exam[]
+	exams: Exam[],
+	includeCalendar = false,
+	calendarEvents: Calendar[] = []
 ): TimetableSections[] {
 	const combinedData = [
 		...timetable.map((lecture) => ({ ...lecture, eventType: 'timetable' })),
@@ -134,6 +121,65 @@ export function getGroupedTimetable(
 			}
 		})
 	]
+
+	if (includeCalendar && calendarEvents.length > 0) {
+		const processedCalendarEvents = calendarEvents.map((event) => {
+			const originalStartDate = new Date(event.begin)
+			const originalEndDate = event.end ? new Date(event.end) : null
+
+			const startDate = new Date(event.begin)
+
+			let endDate: Date
+			if (event.end) {
+				endDate = new Date(event.end)
+			} else {
+				endDate = new Date(startDate)
+				if (event.hasHours) {
+					endDate.setHours(endDate.getHours() + 2)
+				}
+			}
+
+			const isAllDay = event.hasHours !== true
+
+			if (isAllDay && originalEndDate) {
+				const eventDays = []
+				const currentDate = new Date(startDate)
+				currentDate.setHours(0, 0, 0, 0)
+
+				while (currentDate <= endDate) {
+					eventDays.push({
+						date: new Date(currentDate),
+						startDate: new Date(currentDate),
+						endDate: null,
+						originalStartDate,
+						originalEndDate,
+						name: event.name,
+						isAllDay: true,
+						eventType: 'calendar'
+					})
+
+					currentDate.setDate(currentDate.getDate() + 1)
+				}
+				return eventDays
+			}
+			return [
+				{
+					date: startDate,
+					startDate,
+					endDate: isAllDay ? null : endDate,
+					originalStartDate,
+					originalEndDate,
+					name: event.name,
+					isAllDay,
+					eventType: 'calendar'
+				}
+			]
+		})
+
+		const flattenedCalendarEvents = processedCalendarEvents.flat()
+		// biome-ignore lint/suspicious/noExplicitAny:
+		combinedData.push(...(flattenedCalendarEvents as any))
+	}
 
 	// Sort combinedData by date
 	combinedData.sort(

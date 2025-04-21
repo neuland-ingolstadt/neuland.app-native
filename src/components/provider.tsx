@@ -26,6 +26,7 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
+import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { useDashboard, useUserKind } from '../contexts'
 import { accentColors } from './colors'
 import { DashboardContext, UserKindContext } from './contexts'
@@ -66,7 +67,7 @@ export default function Provider({
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
 	const accentColor = usePreferencesStore((state) => state.accentColor)
-	const timetableMode = usePreferencesStore((state) => state.timetableMode)
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const appIcon = usePreferencesStore((state) => state.appIcon)
 	const selectedRestaurants = useFoodFilterStore(
 		(state) => state.selectedRestaurants

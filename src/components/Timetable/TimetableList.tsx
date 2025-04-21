@@ -3,6 +3,7 @@ import ErrorView from '@/components/Error/ErrorView'
 import DragDropView from '@/components/Exclusive/DragView'
 import Divider from '@/components/Universal/Divider'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
@@ -10,6 +11,7 @@ import type {
 	TimetableEntry
 } from '@/types/utils'
 import {
+	formatCompactDateRange,
 	formatFriendlyDate,
 	formatFriendlyDateTime,
 	formatFriendlyTime,
@@ -18,9 +20,9 @@ import {
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useNavigation, useRouter } from 'expo-router'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import type React from 'react'
-import { useLayoutEffect, useRef } from 'react'
+import { startTransition, useCallback, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, SectionList, Text, View } from 'react-native'
 import {
@@ -29,15 +31,32 @@ import {
 	useStyles
 } from 'react-native-unistyles'
 
-import { HeaderRight } from './HeaderButtons'
-import { MyMenu } from './Menu'
+import i18n from '@/localization/i18n'
+import { calendar } from '@/utils/calendar-utils'
+import LoadingIndicator from '../Universal/LoadingIndicator'
+import { HeaderLeft, HeaderRight } from './HeaderButtons'
+
+export type CalendarEntry = {
+	date: Date
+	startDate: Date
+	endDate: Date | null
+	name:
+		| {
+				en?: string
+				de?: string
+				[key: string]: string | undefined
+		  }
+		| string
+	isAllDay: boolean
+	eventType: 'calendar'
+	originalStartDate?: Date
+	originalEndDate?: Date | null
+}
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
 export default function TimetableList({
-	// eslint-disable-next-line react/prop-types
 	timetable,
-	// eslint-disable-next-line react/prop-types
 	exams
 }: ITimetableViewProps): React.JSX.Element {
 	/**
@@ -54,10 +73,31 @@ export default function TimetableList({
 	const listRef = useRef<SectionList<TimetableEntry | ExamEntry>>(null)
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
+	const showExams = useTimetableStore((state) => state.showExams)
+	const showCalendarEvents = useTimetableStore(
+		(state) => state.showCalendarEvents
+	)
+	const hasPendingUpdate = useTimetableStore(
+		(state) => state.hasPendingTimetableUpdate
+	)
+	const setHasPendingUpdate = useTimetableStore(
+		(state) => state.setHasPendingTimetableUpdate
+	)
 	const setSelectedLecture = useRouteParamsStore(
 		(state) => state.setSelectedLecture
 	)
 	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
+
+	// Reset pending update state when returning to the screen
+	useFocusEffect(
+		useCallback(() => {
+			if (hasPendingUpdate) {
+				startTransition(() => {
+					setHasPendingUpdate(false)
+				})
+			}
+		}, [hasPendingUpdate])
+	)
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -73,15 +113,32 @@ export default function TimetableList({
 					}}
 				/>
 			),
-			headerLeft: () => <MyMenu />
+			headerLeft: () => (
+				<HeaderLeft
+					onPressPreferences={() => router.navigate('/timetable-preferences')}
+				/>
+			)
 		})
 	}, [navigation])
 
 	/**
 	 * Constants
 	 */
+	if (hasPendingUpdate) {
+		return (
+			<View style={styles.pendingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
 
-	const groupedTimetable = getGroupedTimetable(timetable, exams)
+	const examsList = showExams ? exams : []
+	const groupedTimetable = getGroupedTimetable(
+		timetable,
+		examsList,
+		showCalendarEvents,
+		calendar
+	)
 	const filteredTimetable = groupedTimetable.filter(
 		(section) => section.title >= today
 	)
@@ -121,6 +178,77 @@ export default function TimetableList({
 	function renderItemSeparator(): React.JSX.Element {
 		return <Divider color={theme.colors.border} iosPaddingLeft={16} />
 	}
+
+	function renderCalendarItem({
+		item
+	}: { item: CalendarEntry }): React.JSX.Element {
+		// Get proper name value as a string
+		const eventName =
+			typeof item.name === 'object'
+				? item.name[i18n.language as 'en' | 'de'] ||
+					item.name.en ||
+					item.name.de ||
+					''
+				: String(item.name || '')
+
+		// Check if this is a multi-day event
+		const isMultiDayEvent =
+			item.originalEndDate &&
+			item.originalStartDate &&
+			new Date(item.originalEndDate).getTime() !==
+				new Date(item.originalStartDate).getTime()
+
+		// Format date for the info text using original dates for full span
+		// Only show date range for multi-day events
+		const infoText =
+			isMultiDayEvent && item.originalStartDate
+				? `${t('calendar.thiCalendar')}: ${formatCompactDateRange(item.originalStartDate || item.startDate, item.originalEndDate || null)}`
+				: t('calendar.thiCalendar')
+
+		return (
+			<Pressable
+				onPress={() => router.navigate('/calendar')}
+				style={styles.pressable}
+			>
+				<View style={styles.eventWrapper}>
+					<LinearGradient
+						colors={[
+							theme.colors.calendarItem,
+							getLineColor(theme.colors.calendarItem)
+						]}
+						start={[0, 0.9]}
+						end={[0.7, 0.25]}
+						style={styles.indicator}
+					/>
+					<View style={styles.nameView}>
+						<Text style={styles.titleText} numberOfLines={1}>
+							{eventName}
+						</Text>
+						<Text style={styles.calendarInfoText}>{infoText}</Text>
+					</View>
+					{item.isAllDay ? (
+						<View style={styles.allDayContainer}>
+							<Text style={styles.allDayText}>
+								{t('dates.allDay', { ns: 'common' })}
+							</Text>
+						</View>
+					) : (
+						<View>
+							<Text style={styles.time}>
+								{formatFriendlyTime(item.startDate)}
+							</Text>
+							{item.endDate && (
+								<Text style={styles.time2}>
+									{formatFriendlyTime(item.endDate)}
+								</Text>
+							)}
+						</View>
+					)}
+				</View>
+			</Pressable>
+		)
+	}
+
 	function renderTimetableItem({
 		item
 	}: {
@@ -232,12 +360,15 @@ export default function TimetableList({
 	function renderItem({
 		item
 	}: {
-		item: ExamEntry | TimetableEntry
+		item: ExamEntry | TimetableEntry | CalendarEntry
 	}): React.JSX.Element {
 		if (item.eventType === 'exam') {
 			return renderExamItem({ exam: item })
 		}
-		return renderTimetableItem({ item })
+		if (item.eventType === 'calendar') {
+			return renderCalendarItem({ item })
+		}
+		return renderTimetableItem({ item: item as FriendlyTimetableEntry })
 	}
 
 	return (
@@ -270,6 +401,12 @@ export default function TimetableList({
 					contentContainerStyle={styles.container}
 					stickySectionHeadersEnabled={true}
 					initialNumToRender={20}
+					keyExtractor={(item, index) => {
+						return `${item.name}${index}${item.date.toString()}`
+					}}
+					viewabilityConfig={{
+						itemVisiblePercentThreshold: 10
+					}}
 				/>
 			)}
 		</>
@@ -339,5 +476,25 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 16,
 		fontWeight: '500'
+	},
+	pendingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	pendingText: {
+		color: theme.colors.text,
+		fontSize: 16
+	},
+	allDayContainer: {
+		justifyContent: 'center'
+	},
+	allDayText: {
+		color: theme.colors.labelColor,
+		fontSize: 14
+	},
+	calendarInfoText: {
+		color: theme.colors.labelColor,
+		fontSize: 14
 	}
 }))
