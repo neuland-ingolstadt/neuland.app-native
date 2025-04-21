@@ -45,6 +45,7 @@
 		}
 	},
 	"dates": {
+		"allDay": "Ganztägig",
 		"until": "bis",
 		"notYet": "Termin noch nicht bekannt",
 		"ends": "endet",

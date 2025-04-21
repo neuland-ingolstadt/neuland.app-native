@@ -27,7 +27,8 @@ export const lightTheme = {
 		plateInner: '#eaeaea',
 		plateInnerBorder: '#cccccc',
 		plateShadow: '#444',
-		plateInnerShadow: '#777'
+		plateInnerShadow: '#777',
+		calendarItem: '#5d5d5d'
 	},
 	margins: {
 		page: 12,
@@ -74,7 +75,8 @@ export const darkTheme = {
 		plateInner: '#262626',
 		plateInnerBorder: '#474749',
 		plateShadow: '#777777',
-		plateInnerShadow: '#3d3d3d'
+		plateInnerShadow: '#3d3d3d',
+		calendarItem: '#676767'
 	},
 	margins: {
 		page: 12,

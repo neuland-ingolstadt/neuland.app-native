@@ -95,7 +95,7 @@ const CalendarCard = (): React.JSX.Element => {
 			<View
 				style={{
 					...styles.calendarView,
-					...(mixedCalendar.length > 0 && styles.calenderFilled)
+					...(mixedCalendar.length > 0 && styles.calendarFilled)
 				}}
 			>
 				{mixedCalendar.map((event, index) => (
@@ -127,7 +127,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	calendarView: {
 		gap: 8
 	},
-	calenderFilled: {
+	calendarFilled: {
 		paddingTop: 12
 	},
 	eventDetails: {

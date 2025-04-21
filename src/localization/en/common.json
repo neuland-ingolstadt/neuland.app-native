@@ -45,6 +45,7 @@
 		}
 	},
 	"dates": {
+		"allDay": "All day",
 		"until": "until",
 		"ends": "ends",
 		"today": "Today",

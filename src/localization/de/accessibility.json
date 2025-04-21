@@ -4,6 +4,8 @@
 		"timetableMode": "Stundenplanansicht wechseln",
 		"timetableBack": "Zu heute springen",
 		"settingsLogo": "Neuland Logo",
-		"libraryBarcode": "Bibliotheksnummer als Barcode"
+		"libraryBarcode": "Bibliotheksnummer als Barcode",
+		"previous": "Zurück",
+		"next": "Weiter"
 	}
 }

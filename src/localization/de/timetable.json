@@ -35,21 +35,36 @@
 			"message": "Lade die App herunter, um die Details dieser Vorlesung anzuzeigen."
 		}
 	},
-	"notificatons": {
-		"title": "Benachrichtigungen",
-		"description": "Erhalte Benachrichtigungen bevor diese Vorlesung beginnt. Diese wiederholen sich bis du sie hier deaktivierst.",
-		"active": "Benachrichtigungen aktiviert. Du wirst {{mins}} Minuten vor Beginn der Vorlesung benachrichtigt.",
-		"five": "5 Minuten vorher",
-		"fifteen": "15 Minuten vorher",
-		"thirty": "30 Minuten vorher",
-		"sixty": "60 Minuten vorher",
-		"body": "beginnt in {{mins}} Minuten in Raum {{room}}."
-	},
-	"menu": {
+	"viewModes": {
+		"list": "Listenansicht",
 		"oneDay": "Ein Tag",
 		"threeDays": "Drei Tage",
-		"fiveDays": "Montag bis Freitag",
-		"sevenDays": "Woche",
-		"list": "Liste"
+		"fiveDays": "Wochentage (Mo-Fr)",
+		"sevenDays": "Vollständige Woche"
+	},
+	"preferences": {
+		"title": "Ansicht",
+		"preview": "Vorschau",
+		"showCalendarEvents": "THI Events anzeigen",
+		"additionalContent": "Zusätzliche Inhalte",
+		"showExams": "Prüfungen anzeigen"
+	},
+	"calendar": {
+		"thiCalendar": "THI Events",
+		"weekDayShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+		"more": "mehr"
+	},
+	"weekdays": {
+		"short": ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+		"single": ["M", "D", "M", "D", "F", "S", "S"],
+		"long": [
+			"Montag",
+			"Dienstag",
+			"Mittwoch",
+			"Donnerstag",
+			"Freitag",
+			"Samstag",
+			"Sonntag"
+		]
 	}
 }
