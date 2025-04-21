@@ -3,7 +3,12 @@
 		"allergens": "Keine passenden Allergene gefunden.",
 		"noAllergens": "Allergene nicht verfügbar",
 		"flags": "Keine passenden Vorlieben gefunden.",
-		"config": "Keine Allergene festgelegt. Tippe hier zum Konfigurieren deiner Allergien, um nicht verbindliche Informationen über Allergene anzuzeigen."
+		"config": "Keine Allergene festgelegt. Tippe hier zum Konfigurieren deiner Allergien, um nicht verbindliche Informationen über Allergene anzuzeigen.",
+		"title": "Keine Gerichte verfügbar",
+		"description": "Es sind keine Gerichte für den gewählten Tag verfügbar.",
+		"tip1": "Prüfe, ob du die richtigen Restaurants ausgewählt hast",
+		"tip2": "Versuche, einen anderen Tag auszuwählen",
+		"buttonSettings": "Restaurant-Einstellungen prüfen"
 	},
 	"preferences": {
 		"formlist": {

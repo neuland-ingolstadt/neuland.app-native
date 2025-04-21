@@ -3,7 +3,12 @@
 		"allergens": "No matching allergens found.",
 		"noAllergens": "Allergens not available",
 		"flags": "No matching flags found.",
-		"config": "No allergens set up yet. Tap to configure your allergies to display not binding information about allergens."
+		"config": "No allergens set up yet. Tap to configure your allergies to display not binding information about allergens.",
+		"title": "No meals available",
+		"description": "There are no meals available for the selected restaurants or day.",
+		"tip1": "Check if you have selected the right restaurants",
+		"tip2": "Try selecting a different day",
+		"buttonSettings": "Check Restaurant Settings"
 	},
 	"preferences": {
 		"formlist": {

@@ -12,7 +12,6 @@ interface PlatformIcon {
 // Define the type for the card icons object
 interface CardIcons {
 	timetable: PlatformIcon
-	food: PlatformIcon
 	calendar: PlatformIcon
 	events: PlatformIcon
 	library: PlatformIcon
@@ -28,11 +27,6 @@ export const cardIcons: CardIcons = {
 		ios: 'clock.fill',
 		android: 'calendar_month',
 		web: 'CalendarDays'
-	},
-	food: {
-		ios: 'fork.knife',
-		android: 'fastfood',
-		web: 'Utensils'
 	},
 	calendar: {
 		ios: 'calendar',
