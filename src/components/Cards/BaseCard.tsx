@@ -34,11 +34,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
 
-	// Use shared values for UI thread animations
 	const scale = useSharedValue(1)
 	const rotation = useSharedValue(0)
 
-	// Create animated style using worklets
 	const animatedIconStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
