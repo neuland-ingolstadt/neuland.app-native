@@ -1,4 +1,5 @@
 import CrashView from '@/components/Error/CrashView'
+import Splash from '@/components/Splash'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -10,9 +11,9 @@ import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
 import type React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Linking, Platform } from 'react-native'
+import { AppState, Linking, Platform, View, StyleSheet } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
@@ -34,6 +35,11 @@ function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
 	const isPad = DeviceInfo.isTablet()
 	const savedLanguage = usePreferencesStore((state) => state.language)
+	const [showAnimation, setShowAnimation] = useState(true)
+
+	const handleAnimationEnd = async () => {
+		setShowAnimation(false);
+	};
 
 	useEffect(() => {
 		if (Platform.OS === 'web') {
@@ -503,6 +509,12 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 			</Stack>
+			{showAnimation && (
+				<View style={StyleSheet.absoluteFill}>
+					<Splash handleAnimationEnd={handleAnimationEnd} />
+				</View>
+			)}
+
 		</>
 	)
 }

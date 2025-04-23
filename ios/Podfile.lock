@@ -2012,6 +2012,10 @@ PODS:
     - React-logger (= 0.77.2)
     - React-perflogger (= 0.77.2)
     - React-utils (= 0.77.2)
+  - rive-react-native (9.2.1):
+    - React-Core
+    - RiveRuntime (= 6.7.4)
+  - RiveRuntime (6.7.4)
   - RNDateTimePicker (8.2.0):
     - React-Core
   - RNDeviceInfo (14.0.4):
@@ -2331,6 +2335,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rive-react-native (from `../node_modules/rive-react-native`)
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
@@ -2349,6 +2354,7 @@ SPEC REPOS:
     - DGSwiftUtilities
     - MMKV
     - MMKVCore
+    - RiveRuntime
     - SDWebImage
     - SDWebImageSVGCoder
     - SocketRocket
@@ -2582,6 +2588,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rive-react-native:
+    :path: "../node_modules/rive-react-native"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
@@ -2645,7 +2653,7 @@ SPEC CHECKSUMS:
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 4c16dde959a9d6b24f2aa32cb87cb919a1ace3f3
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: 8eb265241fa1d7095d3a40d51fd90f7dce68217c
   maplibre-react-native: a47ec64b793ca59f145df029c754a91f0ef4ece6
   MMKV: ce484c1ac40bf76d5f09a0195d2ec5b3d3840d55
@@ -2721,6 +2729,8 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: f334cebc0beed0a72490492e978007082c03d533
   ReactCodegen: 1466ae25af11c6bd80bf007f278b12216f40ed53
   ReactCommon: 454d8d052ee8d5620e0b62c30eaf8b6bc8392f8d
+  rive-react-native: 7d5145e9581744c0849f3153320b8a24f96f07f3
+  RiveRuntime: 1748a5e12764dbb732894ac719691f6abd4cad22
   RNDateTimePicker: 818460dc31b0dc5ec58289003e27dd8d022fb79c
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNFlashList: 47e2bc4b0d46ef85ea166c4ca3039ae02e2f95ca

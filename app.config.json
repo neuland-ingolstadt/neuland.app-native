@@ -53,6 +53,12 @@
 		},
 		"plugins": [
 			[
+				"expo-custom-assets",
+				{
+				  "assetsPaths": ["./src/assets/"]
+				}
+			],
+			[
 				"react-native-edge-to-edge",
 				{
 					"android": {
@@ -129,18 +135,6 @@
 				"expo-screen-orientation",
 				{
 					"initialOrientation": "DEFAULT"
-				}
-			],
-			[
-				"expo-splash-screen",
-				{
-					"backgroundColor": "#ffffff",
-					"image": "./src/assets/splash/splashIconDark.png",
-					"dark": {
-						"image": "./src/assets/splash/splashIconLight.png",
-						"backgroundColor": "#000000"
-					},
-					"imageWidth": 200
 				}
 			],
 			[
