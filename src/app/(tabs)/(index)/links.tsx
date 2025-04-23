@@ -67,7 +67,7 @@ const LinkScreen = (): React.JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	formlistRow: { marginVertical: 13.5 },
+	formlistRow: { marginVertical: 1 },
 	headerContainer: {
 		alignItems: 'center',
 		flexDirection: 'row',
