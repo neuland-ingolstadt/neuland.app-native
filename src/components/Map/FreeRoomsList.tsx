@@ -50,7 +50,7 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 					</Text>
 				</View>
 
-				{index !== rooms.length - 1 ? <Divider iosPaddingLeft={16} /> : null}
+				{index !== rooms.length - 1 ? <Divider paddingLeft={16} /> : null}
 			</View>
 		))
 	) : (
@@ -96,6 +96,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 15,
 		justifyContent: 'space-between',
 		paddingHorizontal: 16,
-		paddingVertical: 8
+		paddingVertical: 9
 	}
 }))

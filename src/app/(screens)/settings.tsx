@@ -503,7 +503,7 @@ export default function Settings(): React.JSX.Element {
 								)}
 							</View>
 						</Pressable>
-						<Divider iosPaddingLeft={16} />
+						<Divider paddingLeft={60} />
 						<GradesButton />
 					</View>
 				) : (

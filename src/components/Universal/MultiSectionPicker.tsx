@@ -73,7 +73,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 							)}
 						</View>
 					</Pressable>
-					{index < elements.length - 1 && <Divider iosPaddingLeft={16} />}
+					{index < elements.length - 1 && <Divider paddingLeft={16} />}
 				</React.Fragment>
 			))}
 		</>

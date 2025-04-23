@@ -146,7 +146,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								/>
 							)}
 						</View>
-						<Divider iosPaddingLeft={16} />
+						<Divider paddingLeft={16} />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.time')}
@@ -177,7 +177,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								/>
 							)}
 						</View>
-						<Divider iosPaddingLeft={16} />
+						<Divider paddingLeft={16} />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.duration')}
@@ -188,7 +188,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								onSelect={setDuration}
 							/>
 						</View>
-						<Divider iosPaddingLeft={16} />
+						<Divider paddingLeft={16} />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.building')}
@@ -245,7 +245,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingHorizontal: 15,
-		paddingVertical: 6
+		paddingVertical: 8
 	},
 	scrollView: {
 		padding: 12

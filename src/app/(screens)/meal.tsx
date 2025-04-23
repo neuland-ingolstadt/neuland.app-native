@@ -358,11 +358,21 @@ export default function FoodDetail(): React.JSX.Element {
 					value: humanLocation,
 					onPress: handlePress,
 					textColor: locationExists ? theme.colors.primary : undefined,
-					disabled: !locationExists
+					disabled: !locationExists,
+					icon: {
+						ios: 'mappin.and.ellipse',
+						android: 'place',
+						web: 'MapPin'
+					}
 				},
 				{
 					title: t('details.formlist.about.category'),
-					value: humanCategory
+					value: humanCategory,
+					icon: {
+						ios: 'tag',
+						android: 'sell',
+						web: 'Tag'
+					}
 				},
 				{
 					title: t('details.formlist.about.source'),

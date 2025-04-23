@@ -71,7 +71,7 @@ export default function ClEventsPage({
 								<React.Fragment key={index}>
 									<MemoizedEventRow event={event} />
 									{index !== clEventsResult.data.length - 1 && (
-										<Divider iosPaddingLeft={16} />
+										<Divider paddingLeft={16} />
 									)}
 								</React.Fragment>
 							))}

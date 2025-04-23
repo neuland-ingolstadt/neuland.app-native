@@ -136,7 +136,7 @@ export default function AppIconPicker(): React.JSX.Element {
 												</Pressable>
 
 												{value.indexOf(icon) !== value.length - 1 && (
-													<Divider iosPaddingLeft={110} />
+													<Divider paddingLeft={110} />
 												)}
 											</React.Fragment>
 										)

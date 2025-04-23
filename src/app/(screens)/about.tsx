@@ -176,8 +176,8 @@ export default function About(): React.JSX.Element {
 					title: t('about.formlist.legal.button'),
 					icon: {
 						ios: 'shield',
-						android: 'shield',
-						web: 'Shield'
+						android: 'privacy_tip',
+						web: 'ShieldEllipsis'
 					},
 					onPress: () => {
 						router.navigate('/legal')

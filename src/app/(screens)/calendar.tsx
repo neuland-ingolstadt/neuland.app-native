@@ -149,7 +149,7 @@ export default function CalendarPage(): React.JSX.Element {
 								<React.Fragment key={`event_${index}`}>
 									<CalendarRow event={item} />
 									{index !== calendar.length - 1 && (
-										<Divider iosPaddingLeft={16} />
+										<Divider paddingLeft={16} />
 									)}
 								</React.Fragment>
 							))}
@@ -205,7 +205,7 @@ export default function CalendarPage(): React.JSX.Element {
 											<React.Fragment key={`exam_${index}`}>
 												<ExamRow event={item} />
 												{index !== exams.length - 1 && (
-													<Divider iosPaddingLeft={16} />
+													<Divider paddingLeft={16} />
 												)}
 											</React.Fragment>
 										))}

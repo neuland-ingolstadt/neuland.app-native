@@ -333,7 +333,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						}}
 					>
 						<LecturerRow item={item} />
-						{index !== lecturers.length - 1 && <Divider iosPaddingLeft={16} />}
+						{index !== lecturers.length - 1 && <Divider paddingLeft={16} />}
 					</View>
 				)}
 			/>
@@ -421,7 +421,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						>
 							<LecturerRow item={item} />
 							{index !== section.data.length - 1 && (
-								<Divider iosPaddingLeft={16} />
+								<Divider paddingLeft={16} />
 							)}
 						</View>
 					)}

@@ -107,7 +107,7 @@ const RenderSectionItems: React.FC<{
 										android={{
 											name: item.icon.android,
 											size: 20,
-											variant: item.icon.androidVariant
+											variant: item.icon.androidVariant ?? 'outlined'
 										}}
 										web={{
 											name: item.icon.web,
@@ -123,7 +123,8 @@ const RenderSectionItems: React.FC<{
 							<View
 								style={[
 									styles.contentContainer,
-									!item.icon && styles.contentWithoutIcon
+									!item.icon && styles.contentWithoutIcon,
+									item.layout === 'column' && styles.columnContentContainer
 								]}
 							>
 								{item.title != null && (
@@ -178,7 +179,7 @@ const RenderSectionItems: React.FC<{
 
 					{index < items.length - 1 && (
 						<View style={styles.dividerContainer}>
-							<Divider iosPaddingLeft={item.icon ? 60 : 16} />
+							<Divider paddingLeft={item.icon ? 60 : 16} />
 						</View>
 					)}
 				</React.Fragment>
@@ -276,7 +277,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	rowDetails: {
 		fontSize: 16,
 		textAlign: 'right',
-		paddingLeft: 8,
+		paddingLeft: 1,
 		flexShrink: 1
 	},
 	rowTitle: {
@@ -307,6 +308,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	contentWithoutIcon: {
 		paddingLeft: 16
+	},
+	columnContentContainer: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		gap: 4
 	},
 	rightPaddingContainer: {
 		marginRight: 12
