@@ -1,9 +1,15 @@
-// BaseCard Component to show the card on the dashboard to navigate to the corresponding page
 import { USER_GUEST } from '@/data/constants'
 import type React from 'react'
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+	withTiming,
+	interpolate
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { type RelativePathString, router } from 'expo-router'
@@ -23,55 +29,95 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	title,
 	onPressRoute,
 	children,
-	removable = true // ugly but more efficient than iterating over all cards
+	removable = true
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
 
+	// Use shared values for UI thread animations
+	const scale = useSharedValue(1)
+	const rotation = useSharedValue(0)
+
+	// Create animated style using worklets
+	const animatedIconStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{ scale: scale.value },
+				{ rotate: `${interpolate(rotation.value, [0, 1], [0, 3.5])}deg` }
+			]
+		}
+	})
+
+	const handlePressIn = () => {
+		scale.value = withSpring(1.1, { damping: 10, stiffness: 100 })
+		rotation.value = withTiming(1, { duration: 175 })
+	}
+
+	const handlePressOut = () => {
+		scale.value = withSpring(1, { damping: 10, stiffness: 100 })
+		rotation.value = withTiming(0, { duration: 300 })
+	}
+
 	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 
+	const cardStyle = [styles.card, onPressRoute == null && styles.cardDisabled]
+
 	const cardContent = (
-		<View style={styles.card}>
-			<View style={styles.titleView}>
-				<PlatformIcon
-					ios={{
-						name: cardIcons[title as keyof typeof cardIcons]?.ios,
-						size: 18
-					}}
-					android={{
-						name: cardIcons[title as keyof typeof cardIcons]?.android,
-						size: 24,
-						variant: 'outlined'
-					}}
-					web={{
-						name: cardIcons[title as keyof typeof cardIcons]?.web,
-						size: 24
-					}}
-				/>
-				<Text style={styles.title}>
-					{/* @ts-expect-error cannot verify that title is a valid key */}
-					{t(`cards.titles.${title}`)}
-				</Text>
-				{onPressRoute != null && (
-					<PlatformIcon
-						ios={{
-							name: 'chevron.forward',
-							size: 16
-						}}
-						android={{
-							name: 'chevron_right',
-							size: 26
-						}}
-						web={{
-							name: 'ChevronRight',
-							size: 24
-						}}
-						style={styles.labelColor}
-					/>
+		<View style={cardStyle}>
+			<View style={styles.contentWrapper}>
+				<View style={styles.titleView}>
+					<View style={styles.iconContainer}>
+						<Animated.View style={animatedIconStyle}>
+							<PlatformIcon
+								ios={{
+									name: cardIcons[title as keyof typeof cardIcons]?.ios,
+									size:
+										16.5 *
+										(cardIcons[title as keyof typeof cardIcons]?.iosScale ?? 1)
+								}}
+								android={{
+									name: cardIcons[title as keyof typeof cardIcons]?.android,
+									size: 23,
+									variant: 'outlined'
+								}}
+								web={{
+									name: cardIcons[title as keyof typeof cardIcons]?.web,
+									size: 20
+								}}
+								style={styles.cardIcon}
+							/>
+						</Animated.View>
+					</View>
+
+					<Text style={styles.title}>
+						{
+							// @ts-expect-error type check
+							t(`cards.titles.${title}`)
+						}
+					</Text>
+					{onPressRoute != null && (
+						<PlatformIcon
+							ios={{
+								name: 'chevron.forward',
+								size: 16
+							}}
+							android={{
+								name: 'chevron_right',
+								size: 26
+							}}
+							web={{
+								name: 'ChevronRight',
+								size: 24
+							}}
+							style={styles.chevronIcon}
+						/>
+					)}
+				</View>
+				{children != null && (
+					<View style={styles.childrenContainer}>{children}</View>
 				)}
 			</View>
-			{children != null && <>{children}</>}
 		</View>
 	)
 
@@ -86,9 +132,10 @@ const BaseCard: React.FC<BaseCardProps> = ({
 						}
 					}}
 					delayLongPress={300}
-					onLongPress={() => {
-						/* nothing */
-					}}
+					onPressIn={handlePressIn}
+					onPressOut={handlePressOut}
+					onLongPress={() => {}}
+					style={styles.pressable}
 				>
 					{cardContent}
 				</Pressable>
@@ -105,10 +152,38 @@ const BaseCard: React.FC<BaseCardProps> = ({
 const stylesheet = createStyleSheet((theme) => ({
 	card: {
 		backgroundColor: theme.colors.card,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderRadius: theme.radius.lg,
 		borderColor: theme.colors.border,
-		borderRadius: theme.radius.md,
+		width: '100%',
+		overflow: 'hidden'
+	},
+	contentWrapper: {
 		padding: theme.margins.card,
+		marginVertical: 2
+	},
+	pressable: {
 		width: '100%'
+	},
+
+	cardDisabled: {
+		opacity: 0.8
+	},
+	iconContainer: {
+		width: 36,
+		height: 36,
+		borderRadius: 18,
+		backgroundColor: theme.colors.cardIconBackground,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginRight: 4
+	},
+	cardIcon: {
+		color: theme.colors.primary
+	},
+	chevronIcon: {
+		color: theme.colors.labelColor,
+		opacity: 0.7
 	},
 	labelColor: {
 		color: theme.colors.labelColor
@@ -116,15 +191,17 @@ const stylesheet = createStyleSheet((theme) => ({
 	title: {
 		color: theme.colors.text,
 		flex: 1,
-		fontSize: 16,
-		fontWeight: '500',
-		paddingBottom: Platform.OS === 'android' ? 2 : 0
+		fontSize: 17,
+		fontWeight: '600'
 	},
 	titleView: {
 		alignItems: 'center',
 		color: theme.colors.text,
 		flexDirection: 'row',
 		gap: 10
+	},
+	childrenContainer: {
+		marginTop: 6
 	}
 }))
 

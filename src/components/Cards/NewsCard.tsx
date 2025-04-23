@@ -67,8 +67,7 @@ const NewsCard: React.FC = () => {
 const stylesheet = createStyleSheet((theme) => ({
 	cardsFilled: { paddingTop: 4 },
 	newsContainer: {
-		marginTop: 5,
-		paddingVertical: 10,
+		paddingVertical: 12,
 		gap: 10
 	},
 	newsItemContainer: {
