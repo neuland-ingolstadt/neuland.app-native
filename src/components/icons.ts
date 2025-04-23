@@ -31,9 +31,9 @@ export const cardIcons: CardIcons = {
 		web: 'CalendarDays'
 	},
 	calendar: {
-		ios: 'calendar',
-		android: 'event',
-		web: 'Calendar1'
+		ios: 'graduationcap.fill',
+		android: 'school',
+		web: 'GraduationCap'
 	},
 	events: {
 		ios: 'figure.2',
