@@ -299,7 +299,7 @@ export const PlateAnimation = ({
 						{/* Engraved text */}
 						<CurvedText
 							text="NEULAND NEXT"
-							radius={size * 0.63 - 3}
+							radius={size * 0.63 - 1.3}
 							size={size * 0.07}
 							startAngle={20}
 						/>

@@ -14,7 +14,7 @@ export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
 	return (
 		<Pressable
 			onPress={setToday}
-			style={styles.headerButton}
+			style={styles.container}
 			hitSlop={10}
 			accessibilityLabel={t('button.timetableBack')}
 		>
@@ -52,11 +52,7 @@ export function HeaderLeft({
 	const { t } = useTranslation('accessibility')
 	return (
 		<View style={styles.container}>
-			<Pressable
-				onPress={onPressPreferences}
-				style={styles.headerButton}
-				hitSlop={10}
-			>
+			<Pressable onPress={onPressPreferences} hitSlop={10}>
 				<PlatformIcon
 					ios={{ name: 'gear', size: 22 }}
 					android={{ name: 'settings', size: 24, variant: 'outlined' }}
@@ -68,7 +64,6 @@ export function HeaderLeft({
 				<View style={styles.subButtons}>
 					<Pressable
 						onPress={onPressPrevious}
-						style={styles.headerButton}
 						hitSlop={10}
 						accessibilityLabel={t('button.previous')}
 					>
@@ -81,7 +76,6 @@ export function HeaderLeft({
 					</Pressable>
 					<Pressable
 						onPress={onPressNext}
-						style={styles.headerButton}
 						hitSlop={10}
 						accessibilityLabel={t('button.next')}
 					>
@@ -99,17 +93,17 @@ export function HeaderLeft({
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	headerButton: {
-		marginHorizontal: Platform.OS !== 'ios' ? 10 : 0
-	},
 	icon: {
 		color: theme.colors.text
 	},
 	container: {
 		flexDirection: 'row',
-		gap: 8
+		gap: 8,
+		marginHorizontal: Platform.OS !== 'ios' ? 14 : 0
 	},
 	subButtons: {
+		marginLeft: 8,
+		gap: 8,
 		flexDirection: 'row'
 	}
 }))
