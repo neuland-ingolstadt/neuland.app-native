@@ -17,7 +17,7 @@
 		"profile": "Profile",
 		"about": "About",
 		"advancedSearch": "Advanced Search",
-		"calendar": "Calendar",
+		"calendar": "THI Calendar",
 		"examDetails": "Exam Details",
 		"lecturers": {
 			"title": "Lecturers",
@@ -46,7 +46,7 @@
 	"cards": {
 		"titles": {
 			"timetable": "Timetable",
-			"calendar": "Calendar",
+			"calendar": "THI Calendar",
 			"rooms": "Rooms",
 			"lecturers": "Lecturers",
 			"news": "THI News",

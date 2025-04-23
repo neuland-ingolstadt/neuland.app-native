@@ -17,7 +17,7 @@
 		"profile": "Profil",
 		"about": "Über",
 		"advancedSearch": "Erweiterte Suche",
-		"calendar": "Kalender",
+		"calendar": "THI Kalender",
 		"examDetails": "Prüfungsdetails",
 		"lecturers": {
 			"title": "Dozenten",
@@ -45,7 +45,7 @@
 	"cards": {
 		"titles": {
 			"timetable": "Stundenplan",
-			"calendar": "Kalender",
+			"calendar": "THI Kalender",
 			"rooms": "Räume",
 			"lecturers": "Dozenten",
 			"news": "THI Neuigkeiten",
