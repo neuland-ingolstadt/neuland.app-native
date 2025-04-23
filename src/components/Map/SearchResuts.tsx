@@ -127,7 +127,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 		[styles.header]
 	)
 
-	const itemSeparator = useCallback(() => <Divider iosPaddingLeft={50} />, [])
+	const itemSeparator = useCallback(() => <Divider paddingLeft={50} />, [])
 
 	// Performance optimization props for SectionList
 	const sectionListProps = useMemo(

@@ -1,9 +1,11 @@
 import type { WeekdayType } from '@/__generated__/gql/graphql'
 import FormList from '@/components/Universal/FormList'
+import type { LucideIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import useCLParamsStore from '@/hooks/useCLParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
@@ -153,6 +155,11 @@ export default function SportsEventDetail(): React.JSX.Element {
 							{
 								title: t('pages.event.eMail'),
 								value: sportsEvent.eMail ?? undefined,
+								icon: {
+									ios: 'envelope',
+									android: 'mail' as MaterialIcon,
+									web: 'Mail' as LucideIcon
+								},
 								onPress: () => {
 									void Linking.openURL(`mailto:${sportsEvent.eMail}`)
 								},
@@ -165,6 +172,11 @@ export default function SportsEventDetail(): React.JSX.Element {
 							{
 								title: t('pages.event.invitationLink'),
 								value: 'Link',
+								icon: {
+									ios: 'link',
+									android: 'link' as MaterialIcon,
+									web: 'Link' as LucideIcon
+								},
 								onPress: () => {
 									void Linking.openURL(sportsEvent.invitationLink ?? '')
 								},

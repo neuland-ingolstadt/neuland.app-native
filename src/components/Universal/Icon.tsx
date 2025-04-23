@@ -58,12 +58,6 @@ export const linkIcon = {
 	web: 'Link' as LucideIcon
 }
 
-export const chevronIcon = {
-	ios: 'chevron.forward',
-	android: 'chevron_right' as MaterialIcon,
-	web: 'ChevronRight' satisfies LucideIcon as LucideIcon
-}
-
 const PlatformIcon = ({
 	android,
 	ios,

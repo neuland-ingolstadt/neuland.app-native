@@ -343,9 +343,9 @@ export default function Settings(): React.JSX.Element {
 				{
 					title: t('menu.formlist.legal.about'),
 					icon: {
-						ios: 'chevron.forward',
-						android: 'chevron_right',
-						web: 'ChevronRight'
+						ios: 'info.circle',
+						android: 'info',
+						web: 'Info'
 					},
 					onPress: () => {
 						router.navigate('/about')
@@ -503,7 +503,7 @@ export default function Settings(): React.JSX.Element {
 								)}
 							</View>
 						</Pressable>
-						<Divider iosPaddingLeft={16} />
+						<Divider paddingLeft={60} />
 						<GradesButton />
 					</View>
 				) : (

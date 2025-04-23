@@ -139,7 +139,9 @@ export default function ClSportsPage({
 						{data.map((event, index) => (
 							<React.Fragment key={event.id}>
 								<SportsRow event={event} />
-								{index < data.length - 1 && <Divider iosPaddingLeft={16} />}
+								{index < data.length - 1 && (
+									<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
+								)}
 							</React.Fragment>
 						))}
 					</View>

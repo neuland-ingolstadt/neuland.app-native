@@ -36,7 +36,7 @@
 		}
 	},
 	"viewModes": {
-		"list": "Listenansicht",
+		"list": "Liste",
 		"oneDay": "Ein Tag",
 		"threeDays": "Drei Tage",
 		"fiveDays": "Wochentage (Mo-Fr)",

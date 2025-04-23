@@ -38,7 +38,7 @@ export const CurvedText = ({
 						key={index}
 						style={{
 							position: 'absolute',
-							left: radius + radius * Math.cos(angle) - size / 2 + 1.5,
+							left: radius + radius * Math.cos(angle) - size / 2,
 							top: radius + radius * Math.sin(angle) - size / 2,
 							width: size,
 							height: size,

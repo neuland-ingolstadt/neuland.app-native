@@ -1,5 +1,4 @@
 import FormList from '@/components/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import type { FormListSections } from '@/types/components'
 import { useRouter } from 'expo-router'
@@ -19,19 +18,31 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: t('legal.formlist.legal.privacy'),
-					icon: linkIcon,
+					icon: {
+						ios: 'lock.shield',
+						android: 'shield_lock',
+						web: 'ShieldCheck'
+					},
 					onPress: async () =>
 						(await Linking.openURL(PRIVACY_URL)) as Promise<void>
 				},
 				{
 					title: t('legal.formlist.legal.imprint'),
-					icon: linkIcon,
+					icon: {
+						ios: 'doc.text',
+						android: 'description',
+						web: 'FileText'
+					},
 					onPress: async () =>
 						(await Linking.openURL(IMPRINT_URL)) as Promise<void>
 				},
 				{
 					title: t('navigation.licenses.title', { ns: 'navigation' }),
-					icon: chevronIcon,
+					icon: {
+						ios: 'shield',
+						android: 'shield',
+						web: 'Shield'
+					},
 					onPress: () => {
 						router.navigate('/licenses')
 					}
@@ -43,7 +54,11 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: 'Neuland Ingolstadt e.V.',
-					icon: linkIcon,
+					icon: {
+						ios: 'building.2',
+						android: 'apartment',
+						web: 'Building2'
+					},
 					onPress: async () =>
 						(await Linking.openURL(
 							'https://neuland-ingolstadt.de/'
@@ -52,11 +67,10 @@ export default function About(): React.JSX.Element {
 				{
 					title: t('legal.formlist.us.source'),
 					icon: {
-						ios: 'safari',
-						android: 'github',
-						web: 'Github'
+						ios: 'chevron.left.slash.chevron.right',
+						android: 'code',
+						web: 'Code'
 					},
-
 					onPress: async () =>
 						(await Linking.openURL(
 							'https://github.com/neuland-ingolstadt/neuland.app-native'
@@ -65,11 +79,10 @@ export default function About(): React.JSX.Element {
 				{
 					title: t('legal.formlist.us.faq'),
 					icon: {
-						ios: 'safari',
-						android: 'link',
-						web: 'Link'
+						ios: 'questionmark.circle',
+						android: 'help',
+						web: 'CircleHelp'
 					},
-
 					onPress: async () =>
 						(await Linking.openURL(
 							`https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}app/faq`

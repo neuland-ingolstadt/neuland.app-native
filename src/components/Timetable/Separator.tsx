@@ -12,7 +12,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	separator: {
 		backgroundColor: theme.colors.border,
 		height: 1,
-		marginLeft: 50 + 12,
+		marginLeft: 60, // Aligned with where the text begins in FormList
 		marginVertical: 13
 	}
 }))
