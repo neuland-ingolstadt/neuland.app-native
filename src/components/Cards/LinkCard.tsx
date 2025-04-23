@@ -4,7 +4,14 @@ import type { MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import {
+	Linking,
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
@@ -59,6 +66,7 @@ const LinkCard = (): React.JSX.Element => {
 									name: link.icon.web as LucideIcon,
 									size: 21
 								}}
+								style={styles.cardIcon}
 							/>
 							<Text
 								style={styles.eventTitle}
@@ -85,7 +93,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: 10,
-		paddingTop: 12
+		paddingTop: 10
 	},
 	eventTitle: {
 		color: theme.colors.text,
@@ -96,13 +104,24 @@ const stylesheet = createStyleSheet((theme) => ({
 	linkBox: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.cardButton,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		borderRadius: theme.radius.md,
 		flex: 1,
 		gap: Platform.OS === 'android' ? 2 : 7,
-		justifyContent: 'space-between',
-		paddingBottom: 7,
-		paddingHorizontal: 8,
-		paddingTop: 12
+		justifyContent: 'center',
+		paddingBottom: 8,
+		paddingHorizontal: 12,
+		paddingTop: 12,
+		minHeight: 70,
+		shadowColor: theme.colors.text,
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.05,
+		shadowRadius: 2,
+		elevation: 1
+	},
+	cardIcon: {
+		color: theme.colors.text
 	}
 }))
 

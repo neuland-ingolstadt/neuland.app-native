@@ -26,7 +26,7 @@ import { router } from 'expo-router'
 import type React from 'react'
 import { memo, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
@@ -308,6 +308,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexWrap: 'wrap'
 	},
 	flagsBox: {
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		alignContent: 'center',
 		alignItems: 'center',
 		borderRadius: theme.radius.sm,
@@ -365,6 +367,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	variantContainer: {
 		borderRadius: theme.radius.sm,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		maxWidth: '10%',
 		paddingHorizontal: 6,
 		paddingVertical: 2

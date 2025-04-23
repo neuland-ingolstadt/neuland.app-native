@@ -12,6 +12,7 @@ export interface SectionGroup {
 		web: LucideIcon
 		iosFallback?: boolean
 		androidVariant?: 'outlined' | 'filled'
+		ignoreDivider?: boolean
 	}
 	disabled?: boolean
 	onPress?: () => Promise<void> | void

@@ -78,7 +78,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text,
 		fontSize: 23,
 		fontWeight: '600',
-		paddingBottom: 10,
+		paddingBottom: 14,
 		paddingTop: 5
 	},
 	page: {

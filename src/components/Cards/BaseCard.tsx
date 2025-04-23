@@ -158,12 +158,11 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	contentWrapper: {
 		padding: theme.margins.card,
-		marginVertical: 2
+		marginVertical: 1.5
 	},
 	pressable: {
 		width: '100%'
 	},
-
 	cardDisabled: {
 		opacity: 0.8
 	},
@@ -189,7 +188,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	title: {
 		color: theme.colors.text,
 		flex: 1,
-		fontSize: 17,
+		fontSize: 16,
 		fontWeight: '600'
 	},
 	titleView: {

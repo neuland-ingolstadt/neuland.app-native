@@ -57,7 +57,7 @@ const EventsCard = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarFilled: {
-		paddingTop: 10
+		paddingTop: 8
 	},
 	calendarView: {
 		gap: 8,
