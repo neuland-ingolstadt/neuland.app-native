@@ -1,7 +1,7 @@
 import Divider from '@/components/Universal/Divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import React from 'react'
-import { Text, View, type ViewStyle } from 'react-native'
+import { Platform, Text, View, type ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { Pressable } from 'react-native'
@@ -179,7 +179,9 @@ const RenderSectionItems: React.FC<{
 
 					{index < items.length - 1 && (
 						<View style={styles.dividerContainer}>
-							<Divider paddingLeft={item.icon ? 60 : 16} />
+							<Divider
+								paddingLeft={item.icon ? 60 : Platform.OS === 'ios' ? 16 : 0}
+							/>
 						</View>
 					)}
 				</React.Fragment>

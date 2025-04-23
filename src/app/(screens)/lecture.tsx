@@ -205,7 +205,8 @@ export default function TimetableDetails(): React.JSX.Element {
 							}}
 							android={{
 								name: 'calendar_month',
-								size: 24
+								size: 24,
+								variant: 'outlined'
 							}}
 							web={{
 								name: 'Clock',
@@ -274,7 +275,8 @@ export default function TimetableDetails(): React.JSX.Element {
 									}}
 									android={{
 										name: 'place',
-										size: 24
+										size: 24,
+										variant: 'outlined'
 									}}
 									web={{
 										name: 'MapPin',
@@ -327,7 +329,8 @@ export default function TimetableDetails(): React.JSX.Element {
 									}}
 									android={{
 										name: 'person',
-										size: 24
+										size: 24,
+										variant: 'outlined'
 									}}
 									web={{
 										name: 'User',

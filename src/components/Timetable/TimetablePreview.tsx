@@ -338,7 +338,7 @@ const previewStylesheet = createStyleSheet((theme) => ({
 	previewContainer: {
 		opacity: 1,
 		paddingVertical: 16,
-		paddingHorizontal: 20,
+		paddingHorizontal: 16,
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
 		shadowColor: theme.colors.text,

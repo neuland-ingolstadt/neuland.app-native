@@ -7,7 +7,13 @@ import { networkError } from '@/utils/api-utils'
 import type { UseQueryResult } from '@tanstack/react-query'
 import React, { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, RefreshControl, ScrollView, View } from 'react-native'
+import {
+	Animated,
+	Platform,
+	RefreshControl,
+	ScrollView,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
@@ -71,7 +77,7 @@ export default function ClEventsPage({
 								<React.Fragment key={index}>
 									<MemoizedEventRow event={event} />
 									{index !== clEventsResult.data.length - 1 && (
-										<Divider paddingLeft={16} />
+										<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 									)}
 								</React.Fragment>
 							))}

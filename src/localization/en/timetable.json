@@ -36,7 +36,7 @@
 		}
 	},
 	"viewModes": {
-		"list": "List View",
+		"list": "List",
 		"oneDay": "Single Day",
 		"threeDays": "Three Days",
 		"fiveDays": "Weekdays (Mon-Fri)",

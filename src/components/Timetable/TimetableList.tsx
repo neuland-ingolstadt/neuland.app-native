@@ -166,7 +166,7 @@ export default function TimetableList({
 				<Text style={styles.sectionTitle(isToday)}>
 					{formatFriendlyDate(title, { weekday: 'long' })}
 				</Text>
-				<Divider paddingLeft={16} width={'100%'} />
+				<Divider width={'100%'} />
 			</View>
 		)
 	}

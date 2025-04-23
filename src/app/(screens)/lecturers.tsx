@@ -421,7 +421,7 @@ export default function LecturersScreen(): React.JSX.Element {
 						>
 							<LecturerRow item={item} />
 							{index !== section.data.length - 1 && (
-								<Divider paddingLeft={16} />
+								<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 							)}
 						</View>
 					)}

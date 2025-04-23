@@ -146,7 +146,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								/>
 							)}
 						</View>
-						<Divider paddingLeft={16} />
+						<Divider />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.time')}
@@ -177,7 +177,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								/>
 							)}
 						</View>
-						<Divider paddingLeft={16} />
+						<Divider />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.duration')}
@@ -188,7 +188,7 @@ export default function AdvancedSearch(): React.JSX.Element {
 								onSelect={setDuration}
 							/>
 						</View>
-						<Divider paddingLeft={16} />
+						<Divider />
 						<View style={styles.optionsRow}>
 							<Text style={styles.optionTitle}>
 								{t('pages.rooms.options.building')}

@@ -1,6 +1,6 @@
 import Divider from '@/components/Universal/Divider'
 import React from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from './Icon'
@@ -73,7 +73,9 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 							)}
 						</View>
 					</Pressable>
-					{index < elements.length - 1 && <Divider paddingLeft={16} />}
+					{index < elements.length - 1 && (
+						<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
+					)}
 				</React.Fragment>
 			))}
 		</>

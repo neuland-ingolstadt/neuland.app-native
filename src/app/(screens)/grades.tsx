@@ -262,7 +262,7 @@ export default function GradesSCreen(): React.JSX.Element {
 										<React.Fragment key={index}>
 											<GradesRow item={grade} />
 											{index !== filteredGrades.finished.length - 1 && (
-												<Divider paddingLeft={16} />
+												<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 											)}
 										</React.Fragment>
 									))}
@@ -277,7 +277,7 @@ export default function GradesSCreen(): React.JSX.Element {
 									<React.Fragment key={index}>
 										<GradesRow item={grade} />
 										{index !== filteredGrades.missing.length - 1 && (
-											<Divider paddingLeft={16} />
+											<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
 										)}
 									</React.Fragment>
 								))}
