@@ -1,5 +1,5 @@
 import FormList from '@/components/Universal/FormList'
-import { chevronIcon, linkIcon } from '@/components/Universal/Icon'
+import { linkIcon } from '@/components/Universal/Icon'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { PRIVACY_URL, STATUS_URL } from '@/data/constants'
@@ -88,13 +88,22 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: 'Version',
+					icon: {
+						ios: 'info.circle',
+						android: 'info',
+						web: 'Info'
+					},
+					layout: 'row',
 					value: version,
-					onPress: toggleVersion,
-					selectable: true
+					onPress: toggleVersion
 				},
 				{
 					title: 'Changelog',
-					icon: chevronIcon,
+					icon: {
+						ios: 'list.bullet.rectangle',
+						android: 'article',
+						web: 'FileText'
+					},
 					onPress: () => {
 						router.navigate('/changelog')
 					}
@@ -165,7 +174,11 @@ export default function About(): React.JSX.Element {
 			items: [
 				{
 					title: t('about.formlist.legal.button'),
-					icon: chevronIcon,
+					icon: {
+						ios: 'shield',
+						android: 'shield',
+						web: 'Shield'
+					},
 					onPress: () => {
 						router.navigate('/legal')
 					}

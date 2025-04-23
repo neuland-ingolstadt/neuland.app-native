@@ -80,7 +80,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		marginRight: 8,
 		paddingHorizontal: 6,
-		paddingVertical: 4
+		paddingVertical: 6
 	},
 	text: {
 		color: theme.colors.text,

@@ -96,7 +96,6 @@ const RenderSectionItems: React.FC<{
 								...rowStyle
 							}}
 						>
-							{/* Icon on the left */}
 							{item.icon != null && (
 								<View style={styles.leftIconContainer}>
 									<PlatformIcon
@@ -121,7 +120,6 @@ const RenderSectionItems: React.FC<{
 								</View>
 							)}
 
-							{/* Content */}
 							<View
 								style={[
 									styles.contentContainer,
@@ -150,8 +148,12 @@ const RenderSectionItems: React.FC<{
 								)}
 							</View>
 
-							{/* Chevron for navigation */}
-							{item.onPress != null && (
+							{/* Add right padding container when there's a value but no chevron */}
+							{item.value != null && (
+								<View style={styles.rightPaddingContainer} />
+							)}
+
+							{item.onPress != null && item.value == null && (
 								<View style={styles.chevronContainer}>
 									<PlatformIcon
 										ios={{
@@ -273,14 +275,13 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	rowDetails: {
 		fontSize: 16,
-		color: theme.colors.labelSecondaryColor,
 		textAlign: 'right',
-		paddingLeft: 8
+		paddingLeft: 8,
+		flexShrink: 1
 	},
 	rowTitle: {
 		color: theme.colors.text,
 		fontSize: 16,
-		flexShrink: 1,
 		paddingRight: 8
 	},
 	wrapper: {
@@ -298,17 +299,23 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	contentContainer: {
 		flex: 1,
-		justifyContent: 'center',
-		paddingLeft: 16 // Increased spacing between icon and content for better alignment
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingLeft: 16,
+		paddingRight: 8
 	},
 	contentWithoutIcon: {
-		paddingLeft: 16 // Consistent padding when no icon
+		paddingLeft: 16
+	},
+	rightPaddingContainer: {
+		marginRight: 12
 	},
 	chevronContainer: {
-		marginRight: 16, // Only right margin for better consistency
+		marginRight: 16,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 16 // Fixed width for consistency
+		width: 16
 	},
 	chevronIcon: {
 		color: theme.colors.labelTertiaryColor
