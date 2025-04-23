@@ -205,7 +205,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	description: {
 		color: theme.colors.text,
 		fontSize: 15,
-		marginTop: 14
+		marginTop: 12
 	},
 	footer: {
 		color: theme.colors.labelColor,

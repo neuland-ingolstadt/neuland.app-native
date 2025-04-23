@@ -180,7 +180,13 @@ const RenderSectionItems: React.FC<{
 					{index < items.length - 1 && (
 						<View style={styles.dividerContainer}>
 							<Divider
-								paddingLeft={item.icon ? 60 : Platform.OS === 'ios' ? 16 : 0}
+								paddingLeft={
+									item.icon && (item.icon.ignoreDivider ?? false) !== true
+										? 60
+										: Platform.OS === 'ios'
+											? 16
+											: 0
+								}
 							/>
 						</View>
 					)}

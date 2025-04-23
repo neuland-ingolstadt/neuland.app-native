@@ -284,7 +284,8 @@ export default function FoodDetail(): React.JSX.Element {
 						? {
 								android: 'check_circle',
 								ios: 'checkmark.seal',
-								web: 'BadgeCheck'
+								web: 'BadgeCheck',
+								ignoreDivider: true
 							}
 						: undefined,
 					iconColor: theme.colors.success,
@@ -310,7 +311,8 @@ export default function FoodDetail(): React.JSX.Element {
 							? {
 									android: 'warning',
 									ios: 'exclamationmark.triangle',
-									web: 'TriangleAlert'
+									web: 'TriangleAlert',
+									ignoreDivider: true
 								}
 							: undefined,
 						iconColor: theme.colors.notification,
