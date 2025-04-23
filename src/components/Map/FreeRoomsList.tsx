@@ -3,7 +3,7 @@ import { formatFriendlyTime } from '@/utils/date-utils'
 import { useRouter } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { Pressable } from 'react-native'
@@ -50,7 +50,9 @@ export const FreeRoomsList: React.FC<FreeRoomsListProps> = ({ rooms }) => {
 					</Text>
 				</View>
 
-				{index !== rooms.length - 1 ? <Divider iosPaddingLeft={16} /> : null}
+				{index !== rooms.length - 1 ? (
+					<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
+				) : null}
 			</View>
 		))
 	) : (
@@ -96,6 +98,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 15,
 		justifyContent: 'space-between',
 		paddingHorizontal: 16,
-		paddingVertical: 8
+		paddingVertical: 9
 	}
 }))

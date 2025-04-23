@@ -55,7 +55,7 @@ export const dashboardStyles = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		gap: 14,
 		justifyContent: 'center',
-		minHeight: 48,
+		minHeight: 50,
 		paddingHorizontal: 16
 	},
 	sectionHeaderText: {

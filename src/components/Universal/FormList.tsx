@@ -83,7 +83,8 @@ const RenderSectionItems: React.FC<{
 						style={({ pressed }) => [
 							{
 								opacity: pressed ? 0.9 : 1
-							}
+							},
+							styles.pressableContainer
 						]}
 						disabled={item.disabled ?? item.onPress === undefined}
 					>
@@ -95,60 +96,100 @@ const RenderSectionItems: React.FC<{
 								...rowStyle
 							}}
 						>
-							{item.title != null && (
-								<Text style={styles.rowTitle}>{item.title}</Text>
-							)}
-
-							{item.value != null && !privacyHidden && (
-								<Text
-									style={[
-										item.layout === 'column'
-											? styles.columnDetails
-											: styles.rowDetails,
-										{
-											color: item.textColor ?? theme.colors.labelColor,
-											fontWeight: item.fontWeight ?? 'normal'
-										}
-									]}
-									selectable={item.selectable ?? false}
-								>
-									{item.value}
-								</Text>
-							)}
 							{item.icon != null && (
-								<PlatformIcon
-									ios={{
-										name: item.icon.ios,
-										fallback: item.icon.iosFallback,
+								<View style={styles.leftIconContainer}>
+									<PlatformIcon
+										ios={{
+											name: item.icon.ios,
+											fallback: item.icon.iosFallback,
+											size: (item.icon.iosFallback ?? false) ? 22 : 18
+										}}
+										android={{
+											name: item.icon.android,
+											size: 20,
+											variant: item.icon.androidVariant ?? 'outlined'
+										}}
+										web={{
+											name: item.icon.web,
+											size: 20
+										}}
+										style={{
+											color: item.iconColor ?? theme.colors.text
+										}}
+									/>
+								</View>
+							)}
 
-										size: (item.icon.iosFallback ?? false) ? 20 : 16
-									}}
-									android={{
-										name: item.icon.android,
-										size: 18,
-										variant: item.icon.androidVariant
-									}}
-									web={{
-										name: item.icon.web,
-										size: 18
-									}}
-									// eslint-disable-next-line react-native/no-inline-styles
-									style={{
-										marginLeft: item.value != null ? 6 : 0,
-										marginTop: Platform.OS === 'android' ? 2 : 0,
-										color: item.iconColor ?? theme.colors.labelSecondaryColor
-									}}
-								/>
+							<View
+								style={[
+									styles.contentContainer,
+									!item.icon && styles.contentWithoutIcon,
+									item.layout === 'column' && styles.columnContentContainer
+								]}
+							>
+								{item.title != null && (
+									<Text style={styles.rowTitle}>{item.title}</Text>
+								)}
+
+								{item.value != null && !privacyHidden && (
+									<Text
+										style={[
+											item.layout === 'column'
+												? styles.columnDetails
+												: styles.rowDetails,
+											{
+												color: item.textColor ?? theme.colors.labelColor,
+												fontWeight: item.fontWeight ?? 'normal'
+											}
+										]}
+										selectable={item.selectable ?? false}
+									>
+										{item.value}
+									</Text>
+								)}
+							</View>
+
+							{/* Add right padding container when there's a value but no chevron */}
+							{item.value != null && (
+								<View style={styles.rightPaddingContainer} />
+							)}
+
+							{item.onPress != null && item.value == null && (
+								<View style={styles.chevronContainer}>
+									<PlatformIcon
+										ios={{
+											name: 'chevron.right',
+											size: 14,
+											weight: 'semibold'
+										}}
+										android={{
+											name: 'chevron_right',
+											size: 16
+										}}
+										web={{
+											name: 'ChevronRight',
+											size: 16
+										}}
+										style={styles.chevronIcon}
+									/>
+								</View>
 							)}
 						</View>
 					</Pressable>
 
-					{index < items.length - 1 && <Divider iosPaddingLeft={16} />}
+					{index < items.length - 1 && (
+						<View style={styles.dividerContainer}>
+							<Divider
+								paddingLeft={item.icon ? 60 : Platform.OS === 'ios' ? 16 : 0}
+							/>
+						</View>
+					)}
 				</React.Fragment>
 			))}
 		</View>
 	)
 }
+
 /**
  * A component that renders a list of forms with headers and footers.
  * @param {FormListSections[]} sections - An array of sections, each containing a header, footer, and an array of items.
@@ -198,7 +239,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	blockCard: {
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md
+		borderRadius: theme.radius.md,
+		overflow: 'hidden'
 	},
 	blockFooter: {
 		color: theme.colors.labelSecondaryColor,
@@ -212,16 +254,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		textTransform: 'uppercase'
 	},
 	cardColumn: {
+		flexDirection: 'row',
 		alignItems: 'flex-start',
-		flexDirection: 'column',
-		marginVertical: 13,
-		paddingHorizontal: 15
+		paddingVertical: 14,
+		paddingHorizontal: 0
 	},
 	cardRow: {
-		alignItems: 'center',
 		flexDirection: 'row',
-		marginVertical: 13,
-		paddingHorizontal: 16
+		alignItems: 'center',
+		paddingVertical: 15
 	},
 	columnDetails: {
 		color: theme.colors.text,
@@ -237,18 +278,58 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	rowDetails: {
 		fontSize: 16,
-		maxWidth: '65%',
-		textAlign: 'right'
+		textAlign: 'right',
+		paddingLeft: 1,
+		flexShrink: 1
 	},
 	rowTitle: {
 		color: theme.colors.text,
-		flexGrow: 1,
-		flexShrink: 1,
-		flexWrap: 'wrap',
-		fontSize: 16
+		fontSize: 16,
+		paddingRight: 8
 	},
 	wrapper: {
 		gap: 16,
+		width: '100%'
+	},
+	pressableContainer: {
+		width: '100%'
+	},
+	leftIconContainer: {
+		width: 28,
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginLeft: 16
+	},
+	contentContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingLeft: 16,
+		paddingRight: 8
+	},
+	contentWithoutIcon: {
+		paddingLeft: 16
+	},
+	columnContentContainer: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		gap: 4
+	},
+	rightPaddingContainer: {
+		marginRight: 12
+	},
+	chevronContainer: {
+		marginRight: 16,
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: 16
+	},
+	chevronIcon: {
+		color: theme.colors.labelTertiaryColor
+	},
+	dividerContainer: {
 		width: '100%'
 	}
 }))

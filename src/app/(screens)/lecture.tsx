@@ -5,7 +5,7 @@ import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
 import Separator from '@/components/Timetable/Separator'
 import ShareCard from '@/components/Timetable/ShareCard'
 import FormList from '@/components/Universal/FormList'
-import PlatformIcon, { chevronIcon } from '@/components/Universal/Icon'
+import PlatformIcon from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { FormListSections, SectionGroup } from '@/types/components'
@@ -110,7 +110,6 @@ export default function TimetableDetails(): React.JSX.Element {
 		if (html !== null) {
 			return {
 				title: t(titleKey),
-				icon: chevronIcon,
 				onPress: () => {
 					router.navigate({
 						pathname: '/webview',
@@ -206,7 +205,8 @@ export default function TimetableDetails(): React.JSX.Element {
 							}}
 							android={{
 								name: 'calendar_month',
-								size: 24
+								size: 24,
+								variant: 'outlined'
 							}}
 							web={{
 								name: 'Clock',
@@ -275,7 +275,8 @@ export default function TimetableDetails(): React.JSX.Element {
 									}}
 									android={{
 										name: 'place',
-										size: 24
+										size: 24,
+										variant: 'outlined'
 									}}
 									web={{
 										name: 'MapPin',
@@ -328,7 +329,8 @@ export default function TimetableDetails(): React.JSX.Element {
 									}}
 									android={{
 										name: 'person',
-										size: 24
+										size: 24,
+										variant: 'outlined'
 									}}
 									web={{
 										name: 'User',

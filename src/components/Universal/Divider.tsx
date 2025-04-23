@@ -13,7 +13,7 @@ interface DividerProps {
 	width?: DimensionValue
 	color?: ColorValue
 	position?: FlexAlignType
-	iosPaddingLeft?: number
+	paddingLeft?: number
 }
 
 /**
@@ -23,16 +23,11 @@ interface DividerProps {
  * @param {string} [color='grey'] - The color of the line. Defaults to 'grey'.
  * @returns {JSX.Element} - A View component that renders a horizontal line.
  */
-const Divider: FC<DividerProps> = ({
-	width,
-	color,
-	position,
-	iosPaddingLeft
-}) => {
+const Divider: FC<DividerProps> = ({ width, color, position, paddingLeft }) => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
-		<View style={styles.container({ position, iosPaddingLeft })}>
+		<View style={styles.container({ position, paddingLeft })}>
 			<View style={styles.line({ width, color })} />
 		</View>
 	)
@@ -41,14 +36,14 @@ const Divider: FC<DividerProps> = ({
 const stylesheet = createStyleSheet((theme) => ({
 	container: ({
 		position,
-		iosPaddingLeft
+		paddingLeft
 	}: {
 		position?: FlexAlignType
-		iosPaddingLeft?: number
+		paddingLeft?: number
 	}) => ({
 		width: '100%',
 		alignSelf: position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
-		paddingLeft: Platform.OS === 'android' ? 0 : (iosPaddingLeft ?? 0)
+		paddingLeft: paddingLeft ?? 0
 	}),
 	line: ({
 		width,

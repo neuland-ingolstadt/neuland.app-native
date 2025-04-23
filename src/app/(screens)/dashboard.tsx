@@ -33,7 +33,7 @@ import { useStyles } from 'react-native-unistyles'
 const { width } = Dimensions.get('window')
 
 export default function DashboardEdit(): React.JSX.Element {
-	const childrenHeight = 48
+	const childrenHeight = 50
 
 	const {
 		shownDashboardEntries,

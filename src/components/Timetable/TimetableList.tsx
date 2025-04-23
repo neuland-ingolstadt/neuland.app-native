@@ -166,7 +166,7 @@ export default function TimetableList({
 				<Text style={styles.sectionTitle(isToday)}>
 					{formatFriendlyDate(title, { weekday: 'long' })}
 				</Text>
-				<Divider iosPaddingLeft={16} width={'100%'} />
+				<Divider width={'100%'} />
 			</View>
 		)
 	}
@@ -176,7 +176,7 @@ export default function TimetableList({
 	}
 
 	function renderItemSeparator(): React.JSX.Element {
-		return <Divider color={theme.colors.border} iosPaddingLeft={16} />
+		return <Divider color={theme.colors.border} paddingLeft={16} />
 	}
 
 	function renderCalendarItem({
