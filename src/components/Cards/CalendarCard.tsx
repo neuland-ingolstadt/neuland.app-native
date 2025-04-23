@@ -128,7 +128,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 8
 	},
 	calendarFilled: {
-		paddingTop: 12
+		paddingTop: 10
 	},
 	eventDetails: {
 		color: theme.colors.labelColor,

@@ -85,7 +85,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: 10,
-		paddingTop: 14
+		paddingTop: 12
 	},
 	eventTitle: {
 		color: theme.colors.text,

@@ -8,7 +8,21 @@ import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { memo, useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Pressable, Text, View } from 'react-native'
+import {
+	Linking,
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+	withTiming,
+	interpolate
+} from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon from '../Universal/Icon'
@@ -23,6 +37,28 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { t } = useTranslation('navigation')
 	const { userKind = 'guest' } = useContext(UserKindContext)
 	const { styles } = useStyles(stylesheet)
+
+	const scale = useSharedValue(1)
+	const rotation = useSharedValue(0)
+
+	const animatedIconStyle = useAnimatedStyle(() => {
+		return {
+			transform: [
+				{ scale: scale.value },
+				{ rotate: `${interpolate(rotation.value, [0, 1], [0, 3.5])}deg` }
+			]
+		}
+	})
+
+	const handlePressIn = () => {
+		scale.value = withSpring(1.1, { damping: 10, stiffness: 100 })
+		rotation.value = withTiming(1, { duration: 150 })
+	}
+
+	const handlePressOut = () => {
+		scale.value = withSpring(1, { damping: 10, stiffness: 100 })
+		rotation.value = withTiming(0, { duration: 150 })
+	}
 
 	const filterAnnouncements = useCallback(
 		(
@@ -76,34 +112,56 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 
 	const { id, title, description, url } = filteredAnnouncements[0]
 
+	const cardStyle = [styles.card]
+
 	return (
-		<Pressable onPress={handlePressLink(url, id)} style={styles.card}>
-			<View style={styles.titleView}>
-				<PlatformIcon
-					ios={{ name: 'megaphone.fill', size: 18 }}
-					android={{ name: 'campaign', size: 24 }}
-					web={{ name: 'Megaphone', size: 24 }}
-				/>
-				<Text style={styles.title}>
-					{/* @ts-expect-error cannot verify that title is a valid key */}
-					{title[i18n.language]}
+		<Pressable
+			onPress={handlePressLink(url, id)}
+			onPressIn={handlePressIn}
+			onPressOut={handlePressOut}
+			style={cardStyle}
+		>
+			<View style={styles.contentWrapper}>
+				<View style={styles.titleView}>
+					<View style={styles.iconContainer}>
+						<Animated.View style={animatedIconStyle}>
+							<PlatformIcon
+								ios={{ name: 'megaphone.fill', size: 15 }}
+								android={{ name: 'campaign', size: 23, variant: 'outlined' }}
+								web={{ name: 'Megaphone', size: 20 }}
+								style={styles.cardIcon}
+							/>
+						</Animated.View>
+					</View>
+					<Text style={styles.title}>
+						{
+							// @ts-expect-error type check
+							title[i18n.language]
+						}
+					</Text>
+					<Pressable
+						onPress={handlePressClose(id)}
+						hitSlop={10}
+						style={styles.closeButton}
+					>
+						<PlatformIcon
+							ios={{ name: 'xmark', size: 16 }}
+							android={{ name: 'close', size: 24 }}
+							web={{ name: 'X', size: 20 }}
+							style={styles.closeIcon}
+						/>
+					</Pressable>
+				</View>
+				<Text style={styles.description}>
+					{
+						// @ts-expect-error type check
+						description[i18n.language]
+					}
 				</Text>
-				<Pressable onPress={handlePressClose(id)} hitSlop={10}>
-					<PlatformIcon
-						ios={{ name: 'xmark', size: 16 }}
-						android={{ name: 'close', size: 26 }}
-						web={{ name: 'X', size: 26 }}
-						style={styles.closeIcon}
-					/>
-				</Pressable>
+				{url != null && (
+					<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
+				)}
 			</View>
-			<Text style={styles.description}>
-				{/* @ts-expect-error cannot verify that description is a valid key */}
-				{description[i18n.language]}
-			</Text>
-			{url != null && (
-				<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
-			)}
 		</Pressable>
 	)
 }
@@ -112,32 +170,55 @@ const stylesheet = createStyleSheet((theme) => ({
 	card: {
 		backgroundColor: theme.colors.card,
 		borderColor: theme.colors.border,
-		borderRadius: theme.radius.md,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderRadius: theme.radius.lg,
 		marginHorizontal: theme.margins.page,
 		marginVertical: 6,
-		paddingBottom: 14,
-		paddingHorizontal: theme.margins.card,
-		paddingTop: theme.margins.card
+		width: 'auto',
+		overflow: 'hidden'
+	},
+	contentWrapper: {
+		padding: theme.margins.card
+	},
+	closeButton: {
+		width: 32,
+		height: 32,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	closeIcon: {
-		color: theme.colors.labelColor
+		color: theme.colors.labelColor,
+		opacity: 0.7
+	},
+	iconContainer: {
+		width: 36,
+		height: 36,
+		borderRadius: 18,
+		backgroundColor: theme.colors.cardIconBackground,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginRight: 4
+	},
+	cardIcon: {
+		color: theme.colors.primary
 	},
 	description: {
 		color: theme.colors.text,
 		fontSize: 15,
-		marginTop: 10
+		marginTop: 14
 	},
 	footer: {
 		color: theme.colors.labelColor,
-		fontSize: 11,
-		marginTop: 10,
+		fontSize: 12,
+		marginTop: 14,
 		textAlign: 'right'
 	},
 	title: {
 		color: theme.colors.text,
 		flex: 1,
-		fontSize: 16,
-		fontWeight: '500'
+		fontSize: 17,
+		fontWeight: '600',
+		paddingBottom: Platform.OS === 'android' ? 2 : 0
 	},
 	titleView: {
 		alignItems: 'center',

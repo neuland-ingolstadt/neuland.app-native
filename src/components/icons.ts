@@ -5,6 +5,7 @@ import type { LucideIcon } from './Universal/Icon'
 // Define the type for individual platform icons
 interface PlatformIcon {
 	ios: string
+	iosScale?: number
 	android: MaterialIcon
 	web: LucideIcon
 }
@@ -25,6 +26,7 @@ interface CardIcons {
 export const cardIcons: CardIcons = {
 	timetable: {
 		ios: 'clock.fill',
+		iosScale: 1.05,
 		android: 'calendar_month',
 		web: 'CalendarDays'
 	},
@@ -40,6 +42,7 @@ export const cardIcons: CardIcons = {
 	},
 	library: {
 		ios: 'books.vertical.fill',
+		iosScale: 0.9,
 		android: 'book_2',
 		web: 'BookOpen'
 	},
@@ -60,6 +63,7 @@ export const cardIcons: CardIcons = {
 	},
 	links: {
 		ios: 'safari.fill',
+		iosScale: 1.05,
 		android: 'link',
 		web: 'Link'
 	}
