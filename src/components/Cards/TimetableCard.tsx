@@ -188,12 +188,15 @@ const TimetableCard: React.FC = () => {
 
 			return () => {
 				setScreenIsFocused(false)
-				// Keep routeFocusRef true - it tracks if this route was ever focused
 			}
 		}, [userKind, refreshAll])
 	)
 
-	useInterval(refreshAll, refreshInterval)
+	// Only run the interval when app is active and screen is focused
+	useInterval(
+		refreshAll,
+		appState === 'active' && screenIsFocused ? refreshInterval : null
+	)
 
 	useEffect(() => {
 		if (timetable != null) {
