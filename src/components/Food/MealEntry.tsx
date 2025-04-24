@@ -280,14 +280,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		padding: theme.margins.card,
-		shadowColor: theme.colors.text,
-		shadowOffset: {
-			width: 0,
-			height: 1
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 1,
 		width: '100%'
 	},
 	contextMenu: { zIndex: 3 },
@@ -340,7 +335,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%'
 	},
 	pressable: {
-		marginTop: 8
+		marginTop: 10
 	},
 	price: {
 		alignSelf: 'flex-end',

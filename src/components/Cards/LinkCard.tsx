@@ -114,10 +114,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 12,
 		paddingTop: 12,
 		minHeight: 70,
-		shadowColor: theme.colors.text,
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.05,
-		shadowRadius: 2,
 		elevation: 1
 	},
 	cardIcon: {
