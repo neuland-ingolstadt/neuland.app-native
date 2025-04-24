@@ -1,0 +1,26 @@
+diff --git a/dist/reactnative/platform/web/viewrenderer/ViewRenderer.js b/dist/reactnative/platform/web/viewrenderer/ViewRenderer.js
+index c24ecf0d90a737722755a51f8c7e3980cc2c8ef5..3a228813282f4d34cfcc28a04650d74ffaec6658 100644
+--- a/dist/reactnative/platform/web/viewrenderer/ViewRenderer.js
++++ b/dist/reactnative/platform/web/viewrenderer/ViewRenderer.js
+@@ -92,7 +92,7 @@ var ViewRenderer = /** @class */ (function (_super) {
+         if (fromObserver === void 0) { fromObserver = false; }
+         if (this.props.forceNonDeterministicRendering && this.props.onSizeChanged) {
+             var mainDiv = this._mainDiv;
+-            if (mainDiv) {
++            if (mainDiv && mainDiv.clientWidth && mainDiv.clientHeight) {
+                 this._dim.width = mainDiv.clientWidth;
+                 this._dim.height = mainDiv.clientHeight;
+                 if (this.props.width !== this._dim.width || this.props.height !== this._dim.height) {
+diff --git a/src/platform/web/viewrenderer/ViewRenderer.tsx b/src/platform/web/viewrenderer/ViewRenderer.tsx
+index 6652efa848db20a12de1fa5ab63f095a90ba2c46..b5d92a285d52344a2cec6ae71b2fbe311b6f3b78 100644
+--- a/src/platform/web/viewrenderer/ViewRenderer.tsx
++++ b/src/platform/web/viewrenderer/ViewRenderer.tsx
+@@ -85,7 +85,7 @@ export default class ViewRenderer extends BaseViewRenderer<any> {
+     private _checkSizeChange(fromObserver: boolean = false): void {
+         if (this.props.forceNonDeterministicRendering && this.props.onSizeChanged) {
+             const mainDiv = this._mainDiv;
+-            if (mainDiv) {
++            if (mainDiv && mainDiv.clientWidth && mainDiv.clientHeight) {
+                 this._dim.width = mainDiv.clientWidth;
+                 this._dim.height = mainDiv.clientHeight;
+                 if (this.props.width !== this._dim.width || this.props.height !== this._dim.height) {
