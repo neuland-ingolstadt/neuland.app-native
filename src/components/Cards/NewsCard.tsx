@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, Linking, Pressable, Text, View } from 'react-native'
+import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import BaseCard from './BaseCard'
@@ -75,7 +75,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		padding: 8,
 		borderRadius: theme.radius.md,
 		alignItems: 'center',
-		backgroundColor: theme.colors.cardButton
+		backgroundColor: theme.colors.cardButton,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
+		shadowColor: theme.colors.text,
+		paddingHorizontal: 12,
+		paddingVertical: 10,
+		minHeight: 70,
+		elevation: 1
 	},
 	thumbnail: {
 		width: '30%',

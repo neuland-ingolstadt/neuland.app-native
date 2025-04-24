@@ -153,8 +153,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: theme.radius.lg,
 		borderColor: theme.colors.border,
-		width: '100%',
-		overflow: 'hidden'
+		width: '100%'
 	},
 	contentWrapper: {
 		padding: theme.margins.card,

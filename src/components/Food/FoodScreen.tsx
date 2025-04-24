@@ -21,6 +21,7 @@ import {
 	Pressable,
 	RefreshControl,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -277,16 +278,11 @@ export const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		height: 60,
 		justifyContent: 'space-evenly',
 		paddingVertical: 8,
-		shadowColor: theme.colors.text,
-		shadowOffset: {
-			width: 0,
-			height: 1
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 1,
 		width: '100%'
 	},
 	dayText: (selected: boolean) => ({
