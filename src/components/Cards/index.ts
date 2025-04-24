@@ -3,13 +3,6 @@ import CalendarCard from './CalendarCard'
 import EventsCard from './EventsCard'
 import LinkCard from './LinkCard'
 import LoginCard from './LoginCard'
-import TimetableCard from './TimetableCard'
+import UpNextCard from './UpNextCard'
 
-export {
-	EventsCard,
-	CalendarCard,
-	BaseCard,
-	TimetableCard,
-	LoginCard,
-	LinkCard
-}
+export { EventsCard, CalendarCard, BaseCard, UpNextCard, LoginCard, LinkCard }

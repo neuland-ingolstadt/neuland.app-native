@@ -23,7 +23,7 @@ import { AppState, type AppStateStatus, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
-const TimetableCard: React.FC = () => {
+const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
@@ -540,4 +540,4 @@ const stylesheet = createStyleSheet((theme) => ({
 	}
 }))
 
-export default TimetableCard
+export default UpNextCard
