@@ -162,7 +162,11 @@ const UpNextCard: React.FC = () => {
 
 				// Force an immediate refresh when coming back to foreground
 				if (nextAppState === 'active' && routeFocusRef.current) {
-					refreshAll()
+					const now = new Date()
+					setCurrentTime(now)
+					if (timetable != null) {
+						updateData()
+					}
 				}
 			}
 		})
@@ -171,7 +175,7 @@ const UpNextCard: React.FC = () => {
 			isMountedRef.current = false
 			subscription.remove()
 		}
-	}, [refreshAll])
+	}, [timetable, updateData])
 
 	// Track screen focus with Expo Router
 	useFocusEffect(
@@ -181,7 +185,12 @@ const UpNextCard: React.FC = () => {
 
 			// Ensure we refresh when focused
 			if (userKind !== USER_GUEST) {
-				refreshAll()
+				// Only refresh if we have data to work with
+				if (timetable != null) {
+					const now = new Date()
+					setCurrentTime(now)
+					updateData()
+				}
 			} else if (userKind === USER_GUEST) {
 				setLoadingState(LoadingState.ERROR)
 			}
@@ -189,7 +198,7 @@ const UpNextCard: React.FC = () => {
 			return () => {
 				setScreenIsFocused(false)
 			}
-		}, [userKind, refreshAll])
+		}, [userKind, timetable, updateData])
 	)
 
 	// Only run the interval when app is active and screen is focused
@@ -199,10 +208,11 @@ const UpNextCard: React.FC = () => {
 	)
 
 	useEffect(() => {
+		// Only refresh when timetable data first becomes available
 		if (timetable != null) {
 			refreshAll()
 		}
-	}, [timetable, refreshAll])
+	}, [timetable])
 
 	const eventStatus = useMemo(() => {
 		if (!currentEvent) return null
@@ -277,7 +287,7 @@ const UpNextCard: React.FC = () => {
 		}
 
 		return <Text style={styles.statusText}>{statusText}</Text>
-	}, [currentEvent, eventStatus, t, styles.statusText])
+	}, [currentEvent, eventStatus, t])
 
 	const RoomInfo = useMemo(() => {
 		if (!currentEvent) return null
@@ -325,7 +335,7 @@ const UpNextCard: React.FC = () => {
 				</Text>
 			</View>
 		)
-	}, [nextEvent, currentEvent, currentTime])
+	}, [nextEvent, currentEvent, currentTime, formatFriendlyTime])
 
 	const Stats = useMemo(() => {
 		if (todayStats.total === 0) return null
