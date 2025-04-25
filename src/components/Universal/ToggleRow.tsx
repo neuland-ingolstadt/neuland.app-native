@@ -1,6 +1,6 @@
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const ToggleRow = ({
@@ -50,16 +50,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		paddingHorizontal: theme.margins.page,
 		paddingVertical: 10,
-		shadowColor: theme.colors.text,
-
-		shadowOffset: {
-			width: 0,
-			height: 1
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 1,
 		width: '100%'
 	},
 	buttonRow: {

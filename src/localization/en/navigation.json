@@ -45,7 +45,7 @@
 	},
 	"cards": {
 		"titles": {
-			"timetable": "Timetable",
+			"timetable": "Up Next",
 			"calendar": "THI Calendar",
 			"rooms": "Rooms",
 			"lecturers": "Lecturers",
@@ -79,7 +79,18 @@
 			"startingSoon_plural": "starts in {{count}} mins",
 			"ongoing": "ends at {{time}}",
 			"endingSoon": "ends in {{count}} min",
-			"endingSoon_plural": "ends in {{count}} mins"
+			"endingSoon_plural": "ends in {{count}} mins",
+			"lecturesRemaining": "{{count}} lecture left today",
+			"lecturesRemaining_one": "{{count}} lecture left today",
+			"lecturesRemaining_plural": "{{count}} lectures left today",
+			"ongoingLectures": "{{count}} ongoing lecture",
+			"ongoingLectures_one": "{{count}} ongoing lecture",
+			"ongoingLectures_plural": "{{count}} ongoing lectures",
+			"ongoingAndRemaining": "{{ongoing}} ongoing, {{remaining}} left today",
+			"noMoreLectures": "No more lectures today",
+			"noEvents": "No upcoming lectures",
+			"enjoyDay": "Enjoy your day!",
+			"nextEvent": "Next"
 		},
 		"login": {
 			"title": "Timetable, grades, room status and more",
