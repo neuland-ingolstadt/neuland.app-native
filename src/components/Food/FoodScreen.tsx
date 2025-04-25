@@ -12,7 +12,14 @@ import { pausedToast } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import {
+	memo,
+	useCallback,
+	useDeferredValue,
+	useEffect,
+	useRef,
+	useState
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Animated,
@@ -39,6 +46,11 @@ function FoodScreen(): React.JSX.Element {
 		(state) => state.allergenSelection
 	)
 
+	// Use deferredValue for filtering states to prevent UI blocking during expensive updates
+	const deferredSelectedRestaurants = useDeferredValue(selectedRestaurants)
+	const deferredShowStatic = useDeferredValue(showStatic)
+	const deferredAllergenSelection = useDeferredValue(allergenSelection)
+
 	const [data, setData] = useState<Food[]>([])
 	const { t, i18n } = useTranslation('common')
 	const {
@@ -50,8 +62,9 @@ function FoodScreen(): React.JSX.Element {
 		isSuccess,
 		refetch
 	} = useQuery({
-		queryKey: ['meals', selectedRestaurants, showStatic],
-		queryFn: async () => await loadFoodEntries(selectedRestaurants, showStatic),
+		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
+		queryFn: async () =>
+			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
 		staleTime: 1000 * 60 * 0, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
@@ -162,7 +175,8 @@ function FoodScreen(): React.JSX.Element {
 	const screenHeight = Dimensions.get('window').height
 	const scrollY = new Animated.Value(0)
 	const showAllergensBanner =
-		allergenSelection.length === 1 && allergenSelection[0] === 'not-configured'
+		deferredAllergenSelection.length === 1 &&
+		deferredAllergenSelection[0] === 'not-configured'
 
 	return (
 		<SafeAreaProvider>

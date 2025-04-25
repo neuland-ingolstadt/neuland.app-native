@@ -24,7 +24,7 @@ import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import type React from 'react'
-import { memo, useContext, useMemo, useState } from 'react'
+import { memo, useContext, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -44,16 +44,22 @@ export const MealEntry = memo(
 			(state) => state.allergenSelection
 		)
 		const foodLanguage = useFoodFilterStore((state) => state.foodLanguage)
+
+		// Use deferredValue for filter properties to prevent UI blocking
+		const deferredPreferences = useDeferredValue(preferencesSelection)
+		const deferredAllergens = useDeferredValue(allergenSelection)
+		const deferredFoodLanguage = useDeferredValue(foodLanguage)
+
 		const { t, i18n } = useTranslation('food')
 		const { styles, theme } = useStyles(stylesheet)
 		const userAllergens = useMemo(
 			() =>
 				convertRelevantAllergens(
 					meal.allergens ?? [],
-					allergenSelection,
+					deferredAllergens,
 					i18n.language
 				),
-			[meal.allergens, allergenSelection, i18n.language]
+			[meal.allergens, deferredAllergens, i18n.language]
 		)
 		const { userKind = USER_GUEST } =
 			useContext<UserKindContextType>(UserKindContext)
@@ -61,10 +67,10 @@ export const MealEntry = memo(
 			() =>
 				convertRelevantFlags(
 					meal.flags ?? [],
-					preferencesSelection,
+					deferredPreferences,
 					i18n.language
 				),
-			[meal.flags, preferencesSelection, i18n.language]
+			[meal.flags, deferredPreferences, i18n.language]
 		)
 		const setSelectedMeal = useRouteParamsStore(
 			(state) => state.setSelectedMeal
@@ -74,10 +80,10 @@ export const MealEntry = memo(
 			price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : ''
 
 		const isNotConfigured =
-			allergenSelection.length === 1 &&
-			allergenSelection[0] === 'not-configured'
+			deferredAllergens.length === 1 &&
+			deferredAllergens[0] === 'not-configured'
 		const hasSelectedAllergens =
-			allergenSelection.length > 0 && !isNotConfigured
+			deferredAllergens.length > 0 && !isNotConfigured
 		const hasUserAllergens = userAllergens.length > 0 && !isNotConfigured
 		const hasNoMealAllergens = hasSelectedAllergens && meal.allergens === null
 
@@ -157,7 +163,7 @@ export const MealEntry = memo(
 								<Text style={styles.title} numberOfLines={2}>
 									{mealName(
 										meal.name,
-										foodLanguage,
+										deferredFoodLanguage,
 										i18n.language as LanguageKey
 									)}
 								</Text>
