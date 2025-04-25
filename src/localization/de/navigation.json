@@ -44,7 +44,7 @@
 	},
 	"cards": {
 		"titles": {
-			"timetable": "Stundenplan",
+			"timetable": "Als nächstes",
 			"calendar": "THI Kalender",
 			"rooms": "Räume",
 			"lecturers": "Dozenten",
@@ -78,7 +78,18 @@
 			"startingSoon_plural": "startet in {{count}} mins",
 			"ongoing": "endet um {{time}}",
 			"endingSoon": "endet in {{count}} min",
-			"endingSoon_plural": "endet in {{count}} mins"
+			"endingSoon_plural": "endet in {{count}} mins",
+			"lecturesRemaining": "{{count}} Vorlesung verbleibend",
+			"lecturesRemaining_one": "{{count}} Vorlesung verbleibend",
+			"lecturesRemaining_plural": "{{count}} Vorlesungen verbleibend",
+			"ongoingLectures": "{{count}} laufende Vorlesung",
+			"ongoingLectures_one": "{{count}} laufende Vorlesung",
+			"ongoingLectures_plural": "{{count}} laufende Vorlesungen",
+			"ongoingAndRemaining": "{{ongoing}} laufend, {{remaining}} später heute",
+			"noMoreLectures": "Keine weiteren Vorlesungen heute",
+			"noEvents": "Keine anstehenden Vorlesungen",
+			"enjoyDay": "Genieße deinen Tag!",
+			"nextEvent": "Nächste"
 		},
 		"login": {
 			"title": "Stundenplan, Noten, Raum-Status und mehr",
