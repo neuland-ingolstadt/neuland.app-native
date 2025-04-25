@@ -76,13 +76,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderRadius: theme.radius.md,
 		alignItems: 'center',
 		backgroundColor: theme.colors.cardButton,
-		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border,
-		shadowColor: theme.colors.text,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
-		minHeight: 70,
-		elevation: 1
+		borderWidth: StyleSheet.hairlineWidth
 	},
 	thumbnail: {
 		width: '30%',

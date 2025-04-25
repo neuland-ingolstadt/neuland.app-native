@@ -6,7 +6,7 @@ import {
 	EventsCard,
 	LinkCard,
 	LoginCard,
-	TimetableCard
+	UpNextCard
 } from './Cards'
 import NewsCard from './Cards/NewsCard'
 
@@ -16,7 +16,7 @@ export const AllCards: Card[] = [
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE],
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <TimetableCard />
+		card: () => <UpNextCard />
 	},
 
 	{

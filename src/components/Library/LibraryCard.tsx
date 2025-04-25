@@ -64,7 +64,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flexDirection: 'column',
 		flex: 1,
-		gap: 4,
+		gap: 6,
 		justifyContent: 'center'
 	},
 	description: { color: theme.colors.text, fontSize: 14 },

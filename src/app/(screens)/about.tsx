@@ -14,7 +14,7 @@ import Constants from 'expo-constants'
 import * as Haptics from 'expo-haptics'
 import { useRouter } from 'expo-router'
 import type React from 'react'
-import { useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -23,6 +23,7 @@ import {
 	Platform,
 	Pressable,
 	ScrollView,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -175,7 +176,7 @@ export default function About(): React.JSX.Element {
 				{
 					title: t('about.formlist.legal.button'),
 					icon: {
-						ios: 'shield',
+						ios: 'hand.raised',
 						android: 'privacy_tip',
 						web: 'ShieldEllipsis'
 					},
@@ -187,10 +188,13 @@ export default function About(): React.JSX.Element {
 		}
 	]
 
-	const handlePress = (): void => {
-		setPressCount(pressCount + 1)
+	// Use useRef instead of useState to prevent re-renders
+	const pressCountRef = useRef(0)
 
-		if (pressCount === 7) {
+	const handlePress = useCallback((): void => {
+		pressCountRef.current += 1
+
+		if (pressCountRef.current === 7) {
 			if (Platform.OS !== 'web') {
 				Alert.alert(
 					t('about.easterEgg.title'),
@@ -218,10 +222,10 @@ export default function About(): React.JSX.Element {
 				if (Platform.OS === 'ios') addUnlockedAppIcon('cat')
 			}
 
-			setPressCount(0)
+			pressCountRef.current = 0
 		}
-	}
-	const [pressCount, setPressCount] = useState(0)
+	}, [t, unlockedAppIcons, addUnlockedAppIcon])
+
 	const handleWebsitePress = (): void => {
 		void Linking.openURL('https://neuland-ingolstadt.de/')
 	}
@@ -230,6 +234,7 @@ export default function About(): React.JSX.Element {
 		const url = `https://next.neuland.app/${i18n.language === 'en' ? 'en/' : ''}about/contributors`
 		void Linking.openURL(url)
 	}
+
 	return (
 		<ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
@@ -324,6 +329,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	logoIcon: {
 		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: 9,
 		boxShadow: `4 4 10 0 ${theme.colors.labelTertiaryColor}`
 	},

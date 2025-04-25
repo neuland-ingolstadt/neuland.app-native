@@ -113,7 +113,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 8,
 		paddingHorizontal: 12,
 		paddingTop: 12,
-		minHeight: 70,
+		minHeight: 65,
 		elevation: 1
 	},
 	cardIcon: {
