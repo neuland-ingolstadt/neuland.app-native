@@ -55,7 +55,7 @@
 			[
 				"expo-custom-assets",
 				{
-				  "assetsPaths": ["./src/assets/"]
+					"assetsPaths": ["./src/assets/expo-custom-assets/"]
 				}
 			],
 			[
@@ -135,6 +135,18 @@
 				"expo-screen-orientation",
 				{
 					"initialOrientation": "DEFAULT"
+				}
+			],
+			[
+				"expo-splash-screen",
+				{
+					"backgroundColor": "#ffffff",
+					"image": "./src/assets/splash/splashIconDark.png",
+					"dark": {
+						"image": "./src/assets/splash/splashIconLight.png",
+						"backgroundColor": "#000000"
+					},
+					"imageWidth": 200
 				}
 			],
 			[

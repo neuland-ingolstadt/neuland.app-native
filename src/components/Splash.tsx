@@ -1,39 +1,45 @@
-import { SplashScreen } from "expo-router";
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import Rive from "rive-react-native";
+import { View } from 'react-native'
+import {
+	UnistylesRuntime,
+	createStyleSheet,
+	useStyles
+} from 'react-native-unistyles'
+import Rive from 'rive-react-native'
 
 interface AnimatedScreenProps {
-    handleAnimationEnd: () => void
+	handleAnimationEnd: () => void
 }
 
-export default function Splash({
-    handleAnimationEnd,
-}: AnimatedScreenProps) {
-
-    return (
-        <View style={styles.container}>
-            <Rive
-                autoplay
-                resourceName="neuland.app-native-splashscreen"
-                style={styles.animation}
-                onStop={handleAnimationEnd}
-                onPause={handleAnimationEnd}
-                onError={e => console.error("Splash screen animation error:", e)}
-            />
-        </View>
-    );
+export default function Splash({ handleAnimationEnd }: AnimatedScreenProps) {
+	const { styles } = useStyles(stylesheet)
+	const isDark = UnistylesRuntime.themeName === 'dark'
+	return (
+		<View style={styles.container}>
+			<Rive
+				autoplay
+				resourceName={
+					isDark
+						? 'neuland.app-native-splashscreen-dark'
+						: 'neuland.app-native-splashscreen'
+				}
+				style={styles.animation}
+				onStop={handleAnimationEnd}
+				onPause={handleAnimationEnd}
+				onError={(e) => console.error('Splash screen animation error:', e)}
+			/>
+		</View>
+	)
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center", 
-        alignItems: "center", 
-        backgroundColor: "#ffffff", 
-    },
-    animation: {
-        width: "100%",
-        height: "100%",
-    },
-});
+const stylesheet = createStyleSheet((theme) => ({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: theme.colors.background
+	},
+	animation: {
+		width: '100%',
+		height: '100%'
+	}
+}))

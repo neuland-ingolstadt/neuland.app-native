@@ -13,7 +13,7 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Linking, Platform, View, StyleSheet } from 'react-native'
+import { AppState, Linking, Platform, StyleSheet, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
@@ -38,8 +38,8 @@ function RootLayout(): React.JSX.Element {
 	const [showAnimation, setShowAnimation] = useState(true)
 
 	const handleAnimationEnd = async () => {
-		setShowAnimation(false);
-	};
+		setShowAnimation(false)
+	}
 
 	useEffect(() => {
 		if (Platform.OS === 'web') {
@@ -514,7 +514,6 @@ function RootLayout(): React.JSX.Element {
 					<Splash handleAnimationEnd={handleAnimationEnd} />
 				</View>
 			)}
-
 		</>
 	)
 }
