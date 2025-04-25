@@ -22,7 +22,6 @@
 		B74A5BCC2D46BB2F00D11E5D /* LaunchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B74A5BBD2D46BB2C00D11E5D /* LaunchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B7DF72B12CFFBAE000ACB9EA /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = AD30A63D034D40011FCFCC70 /* MapLibre */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		FAB59AE32DBBB08300803261 /* neuland.app-native-splashscreen.riv in Resources */ = {isa = PBXBuildFile; fileRef = FAB59AE12DBBB08300803261 /* neuland.app-native-splashscreen.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,8 +79,9 @@
 		D899BC7923295025333DF65C /* Pods_NeulandNext.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NeulandNext.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7208147937BDB07AB0D2168 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NeulandNext/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FAB59AE12DBBB08300803261 /* neuland.app-native-splashscreen.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "neuland.app-native-splashscreen.riv"; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-NeulandNext/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		FAE4ADA82DBBEA4200C9B3F5 /* neuland.app-native-splashscreen.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "neuland.app-native-splashscreen.riv"; sourceTree = "<group>"; };
+		FAE4ADA92DBBEA4200C9B3F5 /* neuland.app-native-splashscreen-dark.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "neuland.app-native-splashscreen-dark.riv"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -174,7 +174,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				FAB59AE22DBBB08300803261 /* Assets */,
+				FAE4ADA72DBBEA2600C9B3F5 /* assets */,
 				13B07FAE1A68108700A75B9A /* NeulandNext */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				B74A5BC02D46BB2C00D11E5D /* LaunchWidget */,
@@ -241,12 +241,13 @@
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
-		FAB59AE22DBBB08300803261 /* Assets */ = {
+		FAE4ADA72DBBEA2600C9B3F5 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				FAB59AE12DBBB08300803261 /* neuland.app-native-splashscreen.riv */,
+				FAE4ADA82DBBEA4200C9B3F5 /* neuland.app-native-splashscreen.riv */,
+				FAE4ADA92DBBEA4200C9B3F5 /* neuland.app-native-splashscreen-dark.riv */,
 			);
-			path = Assets;
+			path = assets;
 			sourceTree = "<group>";
 		};
 		FC5A4D2925984AB9BCEC6012 /* de.lproj */ = {
@@ -361,7 +362,6 @@
 				8EF18E5BB6C34BAE889761C1 /* InfoPlist.strings in Resources */,
 				A157FAD860B84E5EB217F054 /* InfoPlist.strings in Resources */,
 				360194F820633262CFF9AA20 /* PrivacyInfo.xcprivacy in Resources */,
-				FAB59AE32DBBB08300803261 /* neuland.app-native-splashscreen.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
