@@ -1,9 +1,9 @@
 name: CI - Biome and TypeScript
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
   pull_request:
-    branches: [develop, main]
+    branches: [main]
 jobs:
   test:
     name: Run biome and typescript checks

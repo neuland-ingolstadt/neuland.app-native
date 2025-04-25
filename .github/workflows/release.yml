@@ -5,6 +5,10 @@ on:
     tags:
       - "*"
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/webapp
+
 jobs:
   changelog:
     name: Generate changelog
@@ -44,6 +48,66 @@ jobs:
           tag: ${{ github.ref }}
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
+
+  build-docker-image:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+    needs: changelog
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine if prerelease
+        run: |
+          if [[ "${{ github.ref }}" =~ - ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+              echo "TAG_TYPE=beta" >> $GITHUB_ENV
+              echo "ENDPOINT=DEV" >> $GITHUB_ENV
+          else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+              echo "TAG_TYPE=release" >> $GITHUB_ENV
+              echo "ENDPOINT=PROD" >> $GITHUB_ENV
+          fi
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract tag name
+        id: tag_name
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.tag_name.outputs.TAG }}
+            type=raw,value=${{ env.TAG_TYPE }}-latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            type=${{ env.TAG_TYPE }}
+          build-args: |
+            EXPO_PUBLIC_THI_API_KEY=${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+            EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ vars.GRAPHQL_ENDPOINT_PROD }}
+            EXPO_PUBLIC_APTABASE_KEY=${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+            EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
 
   build-android:
     name: Build Android app
