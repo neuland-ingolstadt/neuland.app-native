@@ -46,6 +46,7 @@
 		"titles": {
 			"timetable": "Als nächstes",
 			"calendar": "THI Kalender",
+			"slot_machine": "Spielautomat",
 			"rooms": "Räume",
 			"lecturers": "Dozenten",
 			"news": "THI Neuigkeiten",
@@ -113,5 +114,10 @@
 		"error": {
 			"button": "Primuss"
 		}
+	},
+	"slots": {
+		"win_text": "GEWONNEN!",
+		"spinning": "Dreht sich...",
+		"pull": "Tippen zum Drehen!"
 	}
 }

@@ -20,6 +20,7 @@ interface CardIcons {
 	news: PlatformIcon
 	login: PlatformIcon
 	links: PlatformIcon
+	slot_machine: PlatformIcon
 }
 
 // Define the card icons object with the specified type
@@ -66,5 +67,10 @@ export const cardIcons: CardIcons = {
 		iosScale: 1.05,
 		android: 'link',
 		web: 'Link'
+	},
+	slot_machine: {
+		ios: 'sparkles',
+		android: 'auto_awesome',
+		web: 'Sparkles'
 	}
 }

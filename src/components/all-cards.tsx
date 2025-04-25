@@ -1,13 +1,8 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
-import {
-	BaseCard,
-	CalendarCard,
-	EventsCard,
-	LinkCard,
-	LoginCard,
-	UpNextCard
-} from './Cards'
+import { BaseCard, EventsCard, LinkCard, LoginCard, UpNextCard } from './Cards'
+// Import SlotMachineCard directly from the file
+import SlotMachineCard from './Cards/CalendarCard'
 import NewsCard from './Cards/NewsCard'
 
 export const AllCards: Card[] = [
@@ -20,11 +15,11 @@ export const AllCards: Card[] = [
 	},
 
 	{
-		key: 'calendar',
+		key: 'slot_machine',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		card: () => <CalendarCard />
+		card: () => <SlotMachineCard />
 	},
 
 	{

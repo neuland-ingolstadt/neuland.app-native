@@ -47,6 +47,7 @@
 		"titles": {
 			"timetable": "Up Next",
 			"calendar": "THI Calendar",
+			"slot_machine": "Slot Machine",
 			"rooms": "Rooms",
 			"lecturers": "Lecturers",
 			"news": "THI News",
@@ -114,5 +115,10 @@
 		"error": {
 			"button": "Primuss"
 		}
+	},
+	"slots": {
+		"win_text": "WINNER!",
+		"spinning": "Spinning...",
+		"pull": "Tap to Spin!"
 	}
 }
