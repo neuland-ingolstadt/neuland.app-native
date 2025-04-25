@@ -10,6 +10,7 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { FormListSections } from '@/types/components'
 import { useRouter } from 'expo-router'
 import type React from 'react'
+import { startTransition } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -59,6 +60,24 @@ export default function FoodPreferences(): React.JSX.Element {
 		(state) => state.toggleFoodLanguage
 	)
 
+	const handleToggleRestaurant = (name: string) => {
+		startTransition(() => {
+			toggleSelectedRestaurant(name)
+		})
+	}
+
+	const handleSetShowStatic = (value: boolean) => {
+		startTransition(() => {
+			setShowStatic(value)
+		})
+	}
+
+	const handleToggleLanguage = (language: string) => {
+		startTransition(() => {
+			toggleFoodLanguage(language)
+		})
+	}
+
 	const sections: FormListSections[] = [
 		{
 			header: 'Labels',
@@ -86,14 +105,14 @@ export default function FoodPreferences(): React.JSX.Element {
 					<MultiSectionPicker
 						elements={elemtents}
 						selectedItems={selectedRestaurants}
-						action={toggleSelectedRestaurant}
+						action={handleToggleRestaurant}
 					/>
 				</SectionView>
 				<SectionView title={'Filter'}>
 					<SingleSectionPicker
 						title={t('preferences.formlist.static')}
 						selectedItem={showStatic ?? false}
-						action={setShowStatic}
+						action={handleSetShowStatic}
 						state={false}
 					/>
 				</SectionView>
@@ -104,7 +123,7 @@ export default function FoodPreferences(): React.JSX.Element {
 					<MultiSectionRadio
 						elements={languages}
 						selectedItem={foodLanguage}
-						action={toggleFoodLanguage}
+						action={handleToggleLanguage}
 					/>
 				</SectionView>
 			</View>
