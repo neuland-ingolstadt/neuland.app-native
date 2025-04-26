@@ -132,7 +132,6 @@ export default function NotesDetails(): React.JSX.Element {
 		)
 	}
 
-	// For native platforms, use WebView with a properly styled loading view
 	return (
 		<View style={styles.container}>
 			<WebView
