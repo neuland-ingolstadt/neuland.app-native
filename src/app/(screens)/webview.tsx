@@ -2,7 +2,7 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useNavigation } from 'expo-router'
 import type React from 'react'
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -18,6 +18,7 @@ export default function NotesDetails(): React.JSX.Element {
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
 	const [loaded, setLoaded] = useState(false)
+	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
 
 	const htmlContent = useRouteParamsStore((state) => state.htmlContent)
 
@@ -90,24 +91,37 @@ export default function NotesDetails(): React.JSX.Element {
 		})
 	}, [navigation, htmlContent?.title, t])
 
+	useEffect(() => {
+		return () => {
+			if (timeoutId) {
+				clearTimeout(timeoutId)
+			}
+		}
+	}, [timeoutId])
+
 	// For web platforms, render the content directly in a ScrollView
 	if (Platform.OS === 'web') {
-		// Convert the HTML string to plaintext with basic formatting
+		const decodeHtmlEntities = (html: string) => {
+			const textarea = document.createElement('textarea')
+			textarea.innerHTML = html
+			return textarea.value
+		}
+
 		const plainTextContent = sanitizedHtml
 			.replace(
 				/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gi,
-				(_match, content) => `\n\n${content}\n`
+				(_match, content) => `\n\n${decodeHtmlEntities(content)}\n`
 			)
-			.replace(/<p[^>]*>(.*?)<\/p>/gi, (_match, content) => `\n${content}\n`)
+			.replace(
+				/<p[^>]*>(.*?)<\/p>/gi,
+				(_match, content) => `\n${decodeHtmlEntities(content)}\n`
+			)
 			.replace(/<br\s*\/?>/gi, '\n')
-			.replace(/<li[^>]*>(.*?)<\/li>/gi, (_match, content) => `\n• ${content}`)
-			.replace(/<(?:.|\n)*?>/gm, '') // Remove remaining HTML tags
-			.replace(/&nbsp;/gi, ' ')
-			.replace(/&amp;/gi, '&')
-			.replace(/&lt;/gi, '<')
-			.replace(/&gt;/gi, '>')
-			.replace(/&quot;/gi, '"')
-			.replace(/&#39;/gi, "'")
+			.replace(
+				/<li[^>]*>(.*?)<\/li>/gi,
+				(_match, content) => `\n• ${decodeHtmlEntities(content)}`
+			)
+			.replace(/<(?:.|\n)*?>/gm, '')
 			.replace(/\n\s*\n\s*\n/g, '\n\n')
 			.trim()
 
@@ -126,9 +140,11 @@ export default function NotesDetails(): React.JSX.Element {
 				scalesPageToFit
 				style={styles.webview}
 				onLoadEnd={() => {
-					setTimeout(() => {
+					const timeoutId = setTimeout(() => {
 						setLoaded(true)
 					}, LOADING_TIMEOUT)
+
+					setTimeoutId(timeoutId)
 				}}
 				backgroundColor={theme.colors.background}
 				originWhitelist={['*']}
