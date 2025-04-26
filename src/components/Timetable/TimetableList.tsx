@@ -1,7 +1,6 @@
 import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
-import Divider from '@/components/Universal/Divider'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
@@ -19,22 +18,20 @@ import {
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import Color from 'color'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import type React from 'react'
 import { startTransition, useCallback, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, SectionList, Text, View } from 'react-native'
-import {
-	UnistylesRuntime,
-	createStyleSheet,
-	useStyles
-} from 'react-native-unistyles'
+import { Animated, Pressable, SectionList, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import i18n from '@/localization/i18n'
 import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
+
+// Create an Animated SectionList component to properly support native scroll events
+const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
 
 export type CalendarEntry = {
 	date: Date
@@ -87,6 +84,9 @@ export default function TimetableList({
 		(state) => state.setSelectedLecture
 	)
 	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
+
+	// Animation value for item appearance
+	const scrollY = useRef(new Animated.Value(0)).current
 
 	// Reset pending update state when returning to the screen
 	useFocusEffect(
@@ -142,13 +142,6 @@ export default function TimetableList({
 	const filteredTimetable = groupedTimetable.filter(
 		(section) => section.title >= today
 	)
-	const isDark = UnistylesRuntime.themeName === 'dark'
-	function getLineColor(color: string): string {
-		return Color(color)
-			.darken(isDark ? 0.2 : 0)
-			.lighten(isDark ? 0 : 0.2)
-			.hex()
-	}
 
 	/**
 	 * Functions
@@ -160,13 +153,22 @@ export default function TimetableList({
 
 	function renderSectionHeader(title: Date): React.JSX.Element {
 		const isToday = formatISODate(title) === formatISODate(today)
+		const formattedDate = formatFriendlyDate(title, { weekday: 'long' })
+		const dateParts = formattedDate.split(', ')
 
 		return (
-			<View style={styles.sectionView}>
-				<Text style={styles.sectionTitle(isToday)}>
-					{formatFriendlyDate(title, { weekday: 'long' })}
-				</Text>
-				<Divider width={'100%'} />
+			<View style={styles.sectionHeaderContainer}>
+				<View style={styles.sectionView}>
+					<View style={styles.sectionHeaderContent}>
+						<View style={styles.dayContainer}>
+							<Text style={styles.weekdayText(isToday)}>{dateParts[0]}</Text>
+							{dateParts.length > 1 && (
+								<Text style={styles.dateText(isToday)}>{dateParts[1]}</Text>
+							)}
+						</View>
+						<View style={styles.dateIndicator(isToday)} />
+					</View>
+				</View>
 			</View>
 		)
 	}
@@ -176,7 +178,7 @@ export default function TimetableList({
 	}
 
 	function renderItemSeparator(): React.JSX.Element {
-		return <Divider color={theme.colors.border} paddingLeft={16} />
+		return <View style={styles.itemSeparator} />
 	}
 
 	function renderCalendarItem({
@@ -206,46 +208,57 @@ export default function TimetableList({
 				: t('calendar.thiCalendar')
 
 		return (
-			<Pressable
-				onPress={() => router.navigate('/calendar')}
-				style={styles.pressable}
+			<DragDropView
+				mode="drag"
+				scope="system"
+				dragValue={`${eventName} (${infoText})`}
 			>
-				<View style={styles.eventWrapper}>
-					<LinearGradient
-						colors={[
-							theme.colors.calendarItem,
-							getLineColor(theme.colors.calendarItem)
-						]}
-						start={[0, 0.9]}
-						end={[0.7, 0.25]}
-						style={styles.indicator}
-					/>
-					<View style={styles.nameView}>
-						<Text style={styles.titleText} numberOfLines={1}>
-							{eventName}
-						</Text>
-						<Text style={styles.calendarInfoText}>{infoText}</Text>
-					</View>
-					{item.isAllDay ? (
-						<View style={styles.allDayContainer}>
-							<Text style={styles.allDayText}>
-								{t('dates.allDay', { ns: 'common' })}
-							</Text>
-						</View>
-					) : (
-						<View>
-							<Text style={styles.time}>
-								{formatFriendlyTime(item.startDate)}
-							</Text>
-							{item.endDate && (
-								<Text style={styles.time2}>
-									{formatFriendlyTime(item.endDate)}
+				<Pressable
+					onPress={() => router.navigate('/calendar')}
+					style={styles.cardPressable}
+					android_ripple={{
+						color: Color(theme.colors.calendarItem).alpha(0.1).string()
+					}}
+				>
+					<View style={styles.eventCard}>
+						<View
+							style={[
+								styles.eventColorBand,
+								{ backgroundColor: theme.colors.calendarItem }
+							]}
+						/>
+						<View style={styles.eventContent}>
+							<View style={styles.eventHeader}>
+								<Text style={styles.eventTitle} numberOfLines={1}>
+									{eventName}
 								</Text>
-							)}
+								{item.isAllDay ? (
+									<View style={styles.eventBadge}>
+										<Text style={styles.badgeText}>
+											{t('dates.allDay', { ns: 'common' })}
+										</Text>
+									</View>
+								) : (
+									<View style={styles.timeContainer}>
+										<Text style={styles.startTime}>
+											{formatFriendlyTime(item.startDate)}
+										</Text>
+										{item.endDate && (
+											<>
+												<View style={styles.timeSeparator} />
+												<Text style={styles.endTime}>
+													{formatFriendlyTime(item.endDate)}
+												</Text>
+											</>
+										)}
+									</View>
+								)}
+							</View>
+							<Text style={styles.eventInfo}>{infoText}</Text>
 						</View>
-					)}
-				</View>
-			</Pressable>
+					</View>
+				</Pressable>
+			</DragDropView>
 		)
 	}
 
@@ -268,43 +281,47 @@ export default function TimetableList({
 					onPress={() => {
 						showEventDetails(item)
 					}}
-					style={styles.pressable}
+					style={styles.cardPressable}
+					android_ripple={{
+						color: Color(theme.colors.primary).alpha(0.1).string()
+					}}
 				>
-					<View style={styles.eventWrapper}>
-						<LinearGradient
-							colors={[
-								theme.colors.primary,
-								getLineColor(theme.colors.primary)
+					<View style={styles.eventCard}>
+						<View
+							style={[
+								styles.eventColorBand,
+								{ backgroundColor: theme.colors.primary }
 							]}
-							start={[0, 0.9]}
-							end={[0.7, 0.25]}
-							style={{
-								...styles.indicator
-							}}
 						/>
-						<View style={styles.nameView}>
-							<Text style={styles.titleText} numberOfLines={1}>
-								{item.name}
-							</Text>
-							<View style={styles.itemRow}>
-								<Text style={styles.descriptionText}>
-									{item.rooms.join(', ')}
+						<View style={styles.eventContent}>
+							<View style={styles.eventHeader}>
+								<Text style={styles.eventTitle} numberOfLines={1}>
+									{item.name}
 								</Text>
+								<View style={styles.timeContainer}>
+									<Text style={styles.startTime}>
+										{formatFriendlyTime(item.startDate)}
+									</Text>
+									<View style={styles.timeSeparator} />
+									<Text style={styles.endTime}>
+										{formatFriendlyTime(item.endDate)}
+									</Text>
+								</View>
 							</View>
-						</View>
-						<View>
-							<Text style={styles.time}>
-								{formatFriendlyTime(item.startDate)}
-							</Text>
-							<Text style={styles.time2}>
-								{formatFriendlyTime(item.endDate)}
-							</Text>
+							{item.rooms.length > 0 && (
+								<View style={styles.eventLocation}>
+									<Text style={styles.locationText}>
+										{item.rooms.join(', ')}
+									</Text>
+								</View>
+							)}
 						</View>
 					</View>
 				</Pressable>
 			</DragDropView>
 		)
 	}
+
 	function renderExamItem({ exam }: { exam: ExamEntry }): React.JSX.Element {
 		const navigateToPage = (): void => {
 			setSelectedExam(exam)
@@ -320,36 +337,46 @@ export default function TimetableList({
 					onPress={() => {
 						navigateToPage()
 					}}
-					style={styles.pressable}
+					style={styles.cardPressable}
+					android_ripple={{
+						color: Color(theme.colors.notification).alpha(0.1).string()
+					}}
 				>
-					<View style={styles.eventWrapper}>
-						<LinearGradient
-							colors={[
-								theme.colors.notification,
-								getLineColor(theme.colors.notification)
+					<View style={styles.eventCard}>
+						<View
+							style={[
+								styles.eventColorBand,
+								{ backgroundColor: theme.colors.notification }
 							]}
-							start={[0, 0.9]}
-							end={[0.7, 0.25]}
-							style={styles.indicator}
 						/>
-						<View style={styles.nameView}>
-							<Text style={styles.titleText} numberOfLines={2}>
-								{t('cards.calendar.exam', {
-									ns: 'navigation',
-									name: exam.name
-								})}
-							</Text>
-							<View style={styles.itemRow}>
-								<Text style={styles.descriptionText}>
-									{exam.seat ?? exam.rooms}
+						<View style={styles.eventContent}>
+							<View style={styles.eventHeader}>
+								<Text style={styles.eventTitle} numberOfLines={2}>
+									{t('cards.calendar.exam', {
+										ns: 'navigation',
+										name: exam.name
+									})}
 								</Text>
+								<View style={styles.timeContainer}>
+									<Text style={styles.startTime}>
+										{formatFriendlyTime(exam.date)}
+									</Text>
+									<View style={styles.timeSeparator} />
+									<Text style={styles.endTime}>
+										{formatFriendlyTime(exam.endDate)}
+									</Text>
+								</View>
 							</View>
-						</View>
-						<View>
-							<Text style={styles.time}>{formatFriendlyTime(exam.date)}</Text>
-							<Text style={styles.time2}>
-								{formatFriendlyTime(exam.endDate)}
-							</Text>
+							{(exam.seat || exam.rooms) && (
+								<View style={styles.eventLocation}>
+									<Text style={styles.locationText}>
+										{exam.seat ?? exam.rooms}
+									</Text>
+								</View>
+							)}
+							<View style={styles.examBadge}>
+								<Text style={styles.examBadgeText}>Exam</Text>
+							</View>
 						</View>
 					</View>
 				</Pressable>
@@ -385,7 +412,7 @@ export default function TimetableList({
 					isCritical={false}
 				/>
 			) : (
-				<SectionList
+				<AnimatedSectionList
 					ref={listRef}
 					sections={filteredTimetable}
 					renderItem={renderItem}
@@ -407,6 +434,11 @@ export default function TimetableList({
 					viewabilityConfig={{
 						itemVisiblePercentThreshold: 10
 					}}
+					onScroll={Animated.event(
+						[{ nativeEvent: { contentOffset: { y: scrollY } } }],
+						{ useNativeDriver: true }
+					)}
+					showsVerticalScrollIndicator={false}
 				/>
 			)}
 		</>
@@ -418,64 +450,158 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 80,
 		paddingHorizontal: theme.margins.page
 	},
-	descriptionText: {
-		color: theme.colors.labelColor,
-		fontSize: 15
+	// Section header styling
+	sectionHeaderContainer: {
+		paddingVertical: 8,
+		backgroundColor: theme.colors.background,
+		zIndex: 1
 	},
-	eventWrapper: {
-		display: 'flex',
+	sectionView: {
+		paddingVertical: 10,
+		paddingTop: theme.margins.page,
+		marginBottom: 10
+	},
+	sectionHeaderContent: {
 		flexDirection: 'row',
-		gap: 10
+		alignItems: 'center',
+		justifyContent: 'space-between'
 	},
-	indicator: {
+	dayContainer: {
+		flexDirection: 'column'
+	},
+	weekdayText: (isToday: boolean) => ({
+		fontSize: 22,
+		fontWeight: '700',
+		color: isToday ? theme.colors.primary : theme.colors.text,
+		marginBottom: 2
+	}),
+	dateText: (isToday: boolean) => ({
+		fontSize: 15,
+		color: isToday ? theme.colors.primary : theme.colors.labelColor,
+		fontWeight: isToday ? '600' : '400'
+	}),
+	dateIndicator: (isToday: boolean) => ({
+		width: isToday ? 8 : 0,
+		height: isToday ? 8 : 0,
+		borderRadius: 4,
 		backgroundColor: theme.colors.primary,
-		borderRadius: 2,
-		height: '100%',
-		width: 4
+		marginRight: isToday ? 4 : 0
+	}),
+
+	// Event card styling
+	cardPressable: {
+		marginBottom: 8,
+		borderRadius: theme.radius.md,
+		overflow: 'hidden'
+	},
+	eventCard: {
+		flexDirection: 'row',
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.md,
+		overflow: 'hidden',
+		shadowColor: theme.colors.text,
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 2,
+		minHeight: 80
+	},
+	eventColorBand: {
+		width: 6,
+		borderTopLeftRadius: theme.radius.md,
+		borderBottomLeftRadius: theme.radius.md
+	},
+	eventContent: {
+		flex: 1,
+		padding: 14,
+		position: 'relative'
+	},
+	eventHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
+		marginBottom: 8
+	},
+	eventTitle: {
+		fontSize: 16,
+		fontWeight: '600',
+		color: theme.colors.text,
+		flex: 1,
+		marginRight: 8
+	},
+	eventInfo: {
+		fontSize: 14,
+		color: theme.colors.labelColor,
+		marginTop: 2
+	},
+	eventLocation: {
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	locationText: {
+		fontSize: 14,
+		color: theme.colors.labelColor
+	},
+	timeContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: Color(theme.colors.background).alpha(0.5).string(),
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		borderRadius: 12
+	},
+	startTime: {
+		fontSize: 14,
+		fontWeight: '500',
+		color: theme.colors.text,
+		fontVariant: ['tabular-nums']
+	},
+	timeSeparator: {
+		width: 3,
+		height: 3,
+		borderRadius: 1.5,
+		backgroundColor: theme.colors.labelColor,
+		marginHorizontal: 4
+	},
+	endTime: {
+		fontSize: 14,
+		color: theme.colors.labelColor,
+		fontVariant: ['tabular-nums']
 	},
 
-	itemRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 4
+	// Badge styling
+	eventBadge: {
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		backgroundColor: Color(theme.colors.calendarItem).alpha(0.15).string(),
+		borderRadius: 12
 	},
-	nameView: {
-		flexGrow: 1,
-		flexShrink: 1,
-		marginRight: 12
+	badgeText: {
+		fontSize: 12,
+		color: theme.colors.calendarItem,
+		fontWeight: '500'
 	},
-	pressable: {
-		paddingVertical: 8
+	examBadge: {
+		position: 'absolute',
+		top: 14,
+		right: 14,
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		backgroundColor: Color(theme.colors.notification).alpha(0.15).string(),
+		borderRadius: 12
+	},
+	examBadgeText: {
+		fontSize: 12,
+		color: theme.colors.notification,
+		fontWeight: '500'
+	},
+
+	// Other styling
+	itemSeparator: {
+		height: 8
 	},
 	sectionFooter: {
 		height: 20
-	},
-	sectionTitle: (isToday: boolean) => ({
-		fontSize: 15,
-		fontWeight: 'bold',
-		textTransform: 'uppercase',
-		color: isToday ? theme.colors.primary : theme.colors.text
-	}),
-	sectionView: {
-		backgroundColor: theme.colors.background,
-		gap: 6,
-		marginBottom: 8,
-		paddingTop: theme.margins.page
-	},
-	time: {
-		color: theme.colors.text,
-		fontSize: 15,
-		fontVariant: ['tabular-nums']
-	},
-	time2: {
-		color: theme.colors.labelColor,
-		fontSize: 15,
-		fontVariant: ['tabular-nums']
-	},
-	titleText: {
-		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '500'
 	},
 	pendingContainer: {
 		flex: 1,
@@ -485,16 +611,5 @@ const stylesheet = createStyleSheet((theme) => ({
 	pendingText: {
 		color: theme.colors.text,
 		fontSize: 16
-	},
-	allDayContainer: {
-		justifyContent: 'center'
-	},
-	allDayText: {
-		color: theme.colors.labelColor,
-		fontSize: 14
-	},
-	calendarInfoText: {
-		color: theme.colors.labelColor,
-		fontSize: 14
 	}
 }))
