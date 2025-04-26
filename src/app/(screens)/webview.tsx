@@ -1,63 +1,173 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { useNavigation } from 'expo-router'
 import type React from 'react'
 import { useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
+import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import WebView from 'react-native-webview'
 import sanitizeHtml from 'sanitize-html'
 
-const PADDING = 4
+const PADDING = 16
+const LOADING_TIMEOUT = 100
+const BOTTOM_PADDING = 80
 
 export default function NotesDetails(): React.JSX.Element {
 	const navigation = useNavigation()
-	const { title, html } = useLocalSearchParams<{
-		title: string
-		html: string
-	}>()
-	const [loaded, setLoaded] = useState(false)
-
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
-	const sanitizedHtml = sanitizeHtml(html ?? '')
+	const [loaded, setLoaded] = useState(false)
+
+	const htmlContent = useRouteParamsStore((state) => state.htmlContent)
+
+	const sanitizedHtml = sanitizeHtml(htmlContent?.html ?? '', {
+		allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3']),
+		allowedAttributes: {
+			...sanitizeHtml.defaults.allowedAttributes,
+			'*': ['style', 'class']
+		}
+	})
+
+	// Style the HTML content
 	const styledHtml = `
-    <html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-    <style>
-    body {
-        padding: ${PADDING}px;
-        color: ${theme.colors.text};
-        background-color: ${theme.colors.background};
-        font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-size: 15px;
-    }
-    </style>
-    ${sanitizedHtml}`
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          html, body {
+            background-color: ${theme.colors.background};
+            margin: 0;
+            padding: 0;
+            height: 100%;
+          }
+          body {
+            padding: ${PADDING}px;
+            color: ${theme.colors.text};
+            background-color: ${theme.colors.background};
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+          }
+          .content-wrapper {
+            padding-bottom: ${BOTTOM_PADDING}px;
+          }
+          h1, h2, h3 {
+            color: ${theme.colors.text};
+            margin-top: 16px;
+            margin-bottom: 8px;
+          }
+          p {
+            margin-bottom: 16px;
+          }
+          a {
+            color: ${theme.colors.primary};
+            text-decoration: none;
+          }
+          ul, ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+          }
+          li {
+            margin-bottom: 4px;
+          }
+          .spacer {
+            height: ${BOTTOM_PADDING}px;
+            width: 100%;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="content-wrapper">
+          ${sanitizedHtml}
+          <div class="spacer"></div>
+        </div>
+      </body>
+    </html>`
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
-			title: title ?? t('details.title')
+			title: htmlContent?.title ?? t('details.title')
 		})
-	}, [navigation])
+	}, [navigation, htmlContent?.title, t])
 
+	// For web platforms, render the content directly in a ScrollView
+	if (Platform.OS === 'web') {
+		// Convert the HTML string to plaintext with basic formatting
+		const plainTextContent = sanitizedHtml
+			.replace(
+				/<h[1-3][^>]*>(.*?)<\/h[1-3]>/gi,
+				(_match, content) => `\n\n${content}\n`
+			)
+			.replace(/<p[^>]*>(.*?)<\/p>/gi, (_match, content) => `\n${content}\n`)
+			.replace(/<br\s*\/?>/gi, '\n')
+			.replace(/<li[^>]*>(.*?)<\/li>/gi, (_match, content) => `\n• ${content}`)
+			.replace(/<(?:.|\n)*?>/gm, '') // Remove remaining HTML tags
+			.replace(/&nbsp;/gi, ' ')
+			.replace(/&amp;/gi, '&')
+			.replace(/&lt;/gi, '<')
+			.replace(/&gt;/gi, '>')
+			.replace(/&quot;/gi, '"')
+			.replace(/&#39;/gi, "'")
+			.replace(/\n\s*\n\s*\n/g, '\n\n') // Remove extra line breaks
+			.trim()
+
+		return (
+			<ScrollView contentContainerStyle={styles.webContentContainer}>
+				<Text style={styles.webContent}>{plainTextContent}</Text>
+			</ScrollView>
+		)
+	}
+
+	// For native platforms, use WebView with a properly styled loading view
 	return (
-		<>
+		<View style={styles.container}>
 			<WebView
 				source={{ html: styledHtml }}
 				scalesPageToFit
+				style={styles.webview}
 				onLoadEnd={() => {
-					if (!loaded) {
+					setTimeout(() => {
 						setLoaded(true)
-					}
+					}, LOADING_TIMEOUT)
 				}}
+				backgroundColor={theme.colors.background}
+				originWhitelist={['*']}
+				showsVerticalScrollIndicator={true}
 			/>
-			{!loaded && <View style={styles.container} />}
-		</>
+			{!loaded && (
+				<View style={styles.loadingContainer}>
+					<LoadingIndicator />
+				</View>
+			)}
+		</View>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
+		flex: 1,
+		backgroundColor: theme.colors.background
+	},
+	loadingContainer: {
 		...StyleSheet.absoluteFillObject,
+		backgroundColor: theme.colors.background,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	webContentContainer: {
+		padding: PADDING,
+		paddingBottom:
+			BOTTOM_PADDING /* Use the same large bottom padding for web view */,
+		backgroundColor: theme.colors.background
+	},
+	webContent: {
+		color: theme.colors.text,
+		fontSize: 16,
+		lineHeight: 24
+	},
+	webview: {
+		flex: 1,
 		backgroundColor: theme.colors.background
 	}
 }))
