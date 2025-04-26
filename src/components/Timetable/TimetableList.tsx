@@ -22,7 +22,7 @@ import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import type React from 'react'
 import { startTransition, useCallback, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, Pressable, SectionList, Text, View } from 'react-native'
+import { Pressable, SectionList, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import i18n from '@/localization/i18n'
@@ -30,8 +30,15 @@ import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
-// Create an Animated SectionList component to properly support native scroll events
-const AnimatedSectionList = Animated.createAnimatedComponent(SectionList)
+type TimetableSection = {
+	title: Date
+	data: (TimetableEntry | ExamEntry | CalendarEntry)[]
+}
+
+type TimetableItem = TimetableEntry | ExamEntry | CalendarEntry
+
+// Regular SectionList, removed animation
+const TimetableSectionList = SectionList
 
 export type CalendarEntry = {
 	date: Date
@@ -67,7 +74,7 @@ export default function TimetableList({
 	 */
 	const router = useRouter()
 	const navigation = useNavigation()
-	const listRef = useRef<SectionList<TimetableEntry | ExamEntry>>(null)
+	const listRef = useRef<SectionList<TimetableItem, TimetableSection>>(null)
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
 	const showExams = useTimetableStore((state) => state.showExams)
@@ -84,9 +91,6 @@ export default function TimetableList({
 		(state) => state.setSelectedLecture
 	)
 	const setSelectedExam = useRouteParamsStore((state) => state.setSelectedExam)
-
-	// Animation value for item appearance
-	const scrollY = useRef(new Animated.Value(0)).current
 
 	// Reset pending update state when returning to the screen
 	useFocusEffect(
@@ -151,7 +155,12 @@ export default function TimetableList({
 		router.navigate('/lecture')
 	}
 
-	function renderSectionHeader(title: Date): React.JSX.Element {
+	function renderSectionHeader({
+		section
+	}: {
+		section: TimetableSection
+	}): React.JSX.Element {
+		const title = section.title
 		const isToday = formatISODate(title) === formatISODate(today)
 		const formattedDate = formatFriendlyDate(title, { weekday: 'long' })
 		const dateParts = formattedDate.split(', ')
@@ -207,6 +216,29 @@ export default function TimetableList({
 				? `${t('calendar.thiCalendar')}: ${formatCompactDateRange(item.originalStartDate || item.startDate, item.originalEndDate || null)}`
 				: t('calendar.thiCalendar')
 
+		// Time display text
+		const timeDisplay = item.isAllDay ? (
+			<View style={styles.eventBadge}>
+				<Text style={styles.badgeText}>
+					{t('dates.allDay', { ns: 'common' })}
+				</Text>
+			</View>
+		) : (
+			<View style={styles.timeContainer}>
+				<Text style={styles.startTime}>
+					{formatFriendlyTime(item.startDate)}
+				</Text>
+				{item.endDate && (
+					<>
+						<View style={styles.timeSeparator} />
+						<Text style={styles.endTime}>
+							{formatFriendlyTime(item.endDate)}
+						</Text>
+					</>
+				)}
+			</View>
+		)
+
 		return (
 			<DragDropView
 				mode="drag"
@@ -232,29 +264,11 @@ export default function TimetableList({
 								<Text style={styles.eventTitle} numberOfLines={1}>
 									{eventName}
 								</Text>
-								{item.isAllDay ? (
-									<View style={styles.eventBadge}>
-										<Text style={styles.badgeText}>
-											{t('dates.allDay', { ns: 'common' })}
-										</Text>
-									</View>
-								) : (
-									<View style={styles.timeContainer}>
-										<Text style={styles.startTime}>
-											{formatFriendlyTime(item.startDate)}
-										</Text>
-										{item.endDate && (
-											<>
-												<View style={styles.timeSeparator} />
-												<Text style={styles.endTime}>
-													{formatFriendlyTime(item.endDate)}
-												</Text>
-											</>
-										)}
-									</View>
-								)}
 							</View>
-							<Text style={styles.eventInfo}>{infoText}</Text>
+							<View style={styles.eventInfoRow}>
+								<Text style={styles.eventInfo}>{infoText}</Text>
+								{timeDisplay}
+							</View>
 						</View>
 					</View>
 				</Pressable>
@@ -298,6 +312,13 @@ export default function TimetableList({
 								<Text style={styles.eventTitle} numberOfLines={1}>
 									{item.name}
 								</Text>
+							</View>
+							<View style={styles.eventInfoRow}>
+								<View style={styles.eventLocation}>
+									<Text style={styles.locationText}>
+										{item.rooms.length > 0 ? item.rooms.join(', ') : ''}
+									</Text>
+								</View>
 								<View style={styles.timeContainer}>
 									<Text style={styles.startTime}>
 										{formatFriendlyTime(item.startDate)}
@@ -308,13 +329,6 @@ export default function TimetableList({
 									</Text>
 								</View>
 							</View>
-							{item.rooms.length > 0 && (
-								<View style={styles.eventLocation}>
-									<Text style={styles.locationText}>
-										{item.rooms.join(', ')}
-									</Text>
-								</View>
-							)}
 						</View>
 					</View>
 				</Pressable>
@@ -357,6 +371,14 @@ export default function TimetableList({
 										name: exam.name
 									})}
 								</Text>
+								<View style={styles.examBadge}>
+									<Text style={styles.examBadgeText}>Exam</Text>
+								</View>
+							</View>
+							<View style={styles.eventInfoRow}>
+								<Text style={styles.locationText}>
+									{exam.seat ?? exam.rooms}
+								</Text>
 								<View style={styles.timeContainer}>
 									<Text style={styles.startTime}>
 										{formatFriendlyTime(exam.date)}
@@ -366,16 +388,6 @@ export default function TimetableList({
 										{formatFriendlyTime(exam.endDate)}
 									</Text>
 								</View>
-							</View>
-							{(exam.seat || exam.rooms) && (
-								<View style={styles.eventLocation}>
-									<Text style={styles.locationText}>
-										{exam.seat ?? exam.rooms}
-									</Text>
-								</View>
-							)}
-							<View style={styles.examBadge}>
-								<Text style={styles.examBadgeText}>Exam</Text>
 							</View>
 						</View>
 					</View>
@@ -412,32 +424,22 @@ export default function TimetableList({
 					isCritical={false}
 				/>
 			) : (
-				<AnimatedSectionList
+				<TimetableSectionList
 					ref={listRef}
 					sections={filteredTimetable}
 					renderItem={renderItem}
-					renderSectionHeader={({ section: { title } }) => {
-						if (!(title instanceof Date)) {
-							console.error('Invalid section title')
-							return null
-						}
-						return renderSectionHeader(title)
-					}}
+					renderSectionHeader={renderSectionHeader}
 					renderSectionFooter={renderSectionFooter}
 					ItemSeparatorComponent={renderItemSeparator}
 					contentContainerStyle={styles.container}
 					stickySectionHeadersEnabled={true}
 					initialNumToRender={20}
-					keyExtractor={(item, index) => {
+					keyExtractor={(item: TimetableItem, index: number) => {
 						return `${item.name}${index}${item.date.toString()}`
 					}}
 					viewabilityConfig={{
 						itemVisiblePercentThreshold: 10
 					}}
-					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: scrollY } } }],
-						{ useNativeDriver: true }
-					)}
 					showsVerticalScrollIndicator={false}
 				/>
 			)}
@@ -542,13 +544,19 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 14,
 		color: theme.colors.labelColor
 	},
+	eventInfoRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
+	},
 	timeContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: Color(theme.colors.background).alpha(0.5).string(),
 		paddingHorizontal: 8,
 		paddingVertical: 3,
-		borderRadius: 12
+		borderRadius: 12,
+		marginLeft: 8
 	},
 	startTime: {
 		fontSize: 14,
