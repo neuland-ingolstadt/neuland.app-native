@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { Pressable } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
@@ -189,6 +189,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	radiusBg: {
 		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: 14,
 		overflow: 'hidden'
 	},

@@ -8,7 +8,7 @@ import type { FeatureCollection } from 'geojson'
 import type { Position } from 'geojson'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { Pressable } from 'react-native'
@@ -131,6 +131,8 @@ const stylesheet = createStyleSheet((theme) => ({
 
 	radiusBg: {
 		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: 14,
 		overflow: 'hidden'
 	},
