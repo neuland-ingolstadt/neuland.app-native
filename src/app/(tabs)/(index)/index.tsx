@@ -168,7 +168,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	item: {
 		gap: 0,
 		marginHorizontal: theme.margins.page,
-		marginVertical: 4.5
+		marginVertical: 5
 	},
 	page: {
 		backgroundColor: theme.colors.background
