@@ -29,7 +29,6 @@ export default function NotesDetails(): React.JSX.Element {
 		}
 	})
 
-	// Style the HTML content
 	const styledHtml = `
     <html>
       <head>
@@ -109,7 +108,7 @@ export default function NotesDetails(): React.JSX.Element {
 			.replace(/&gt;/gi, '>')
 			.replace(/&quot;/gi, '"')
 			.replace(/&#39;/gi, "'")
-			.replace(/\n\s*\n\s*\n/g, '\n\n') // Remove extra line breaks
+			.replace(/\n\s*\n\s*\n/g, '\n\n')
 			.trim()
 
 		return (
@@ -157,8 +156,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	webContentContainer: {
 		padding: PADDING,
-		paddingBottom:
-			BOTTOM_PADDING /* Use the same large bottom padding for web view */,
+		paddingBottom: BOTTOM_PADDING,
 		backgroundColor: theme.colors.background
 	},
 	webContent: {
