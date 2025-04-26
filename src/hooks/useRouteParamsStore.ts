@@ -15,6 +15,8 @@ interface RouteParamsStore {
 	setSelectedExam: (selectedExam: Exam) => void
 	selectedLecturer: NormalizedLecturer | undefined
 	setSelectedLecturer: (selectedLecturer: NormalizedLecturer) => void
+	htmlContent: { title: string; html: string } | undefined
+	setHtmlContent: (htmlContent: { title: string; html: string }) => void
 }
 
 const useRouteParamsStore = create<RouteParamsStore>((set) => ({
@@ -33,6 +35,10 @@ const useRouteParamsStore = create<RouteParamsStore>((set) => ({
 	selectedLecturer: undefined,
 	setSelectedLecturer: (selectedLecturer: NormalizedLecturer) => {
 		set({ selectedLecturer })
+	},
+	htmlContent: undefined,
+	setHtmlContent: (htmlContent: { title: string; html: string }) => {
+		set({ htmlContent })
 	}
 }))
 

@@ -34,6 +34,7 @@ export default function TimetableDetails(): React.JSX.Element {
 	const { t } = useTranslation('timetable')
 	const shareRef = useRef<ViewShot>(null)
 	const lecture = useRouteParamsStore((state) => state.selectedLecture)
+	const setHtmlContent = useRouteParamsStore((state) => state.setHtmlContent)
 	const ref = useAnimatedRef<Animated.ScrollView>()
 	const scroll = useScrollViewOffset(ref)
 	const headerStyle = useAnimatedStyle(() => {
@@ -111,13 +112,11 @@ export default function TimetableDetails(): React.JSX.Element {
 			return {
 				title: t(titleKey),
 				onPress: () => {
-					router.navigate({
-						pathname: '/webview',
-						params: {
-							title: t(titleKey),
-							html
-						}
+					setHtmlContent({
+						title: t(titleKey),
+						html: html ?? ''
 					})
+					router.navigate('/webview')
 				}
 			}
 		}
