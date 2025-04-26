@@ -7,7 +7,7 @@ import Color from 'color'
 import type { FeatureCollection } from 'geojson'
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native'
 import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
@@ -232,6 +232,8 @@ const stylesheet = createStyleSheet((theme) => ({
 						.darken(Platform.OS === 'ios' ? 0.03 : 0.01)
 						.hex(),
 		borderRadius: theme.radius.mg,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		color: theme.colors.text,
 		flex: 1,
 		fontSize: 17,

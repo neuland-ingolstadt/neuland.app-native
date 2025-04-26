@@ -3,7 +3,7 @@ import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
+import { formatFriendlyTime, formatNearDate } from '@/utils/date-utils'
 import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
@@ -283,7 +283,7 @@ const UpNextCard: React.FC = () => {
 				count: eventStatus.timeRemaining
 			})
 		} else {
-			statusText = formatFriendlyDateTime(currentEvent.startDate) ?? ''
+			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
 		return <Text style={styles.statusText}>{statusText}</Text>
@@ -406,13 +406,15 @@ const UpNextCard: React.FC = () => {
 						{ProgressBar}
 
 						<View style={styles.eventContent}>
-							<Text style={styles.eventTitle} numberOfLines={1}>
+							<Text style={styles.eventTitle} numberOfLines={2}>
 								{currentEvent.name}
 							</Text>
 							{RoomInfo}
 						</View>
 
-						<Divider width="100%" color={theme.colors.border} />
+						{todayStats.total > 0 && (
+							<Divider width="100%" color={theme.colors.border} />
+						)}
 
 						{Stats}
 					</View>
