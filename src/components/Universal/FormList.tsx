@@ -96,7 +96,7 @@ const RenderSectionItems: React.FC<{
 								...rowStyle
 							}}
 						>
-							{item.icon != null && (
+							{item.icon != null && item.icon.endIcon !== true && (
 								<View style={styles.leftIconContainer}>
 									<PlatformIcon
 										ios={{
@@ -154,25 +154,51 @@ const RenderSectionItems: React.FC<{
 								<View style={styles.rightPaddingContainer} />
 							)}
 
-							{item.onPress != null && item.value == null && (
+							{item.icon?.endIcon ? (
 								<View style={styles.chevronContainer}>
 									<PlatformIcon
 										ios={{
-											name: 'chevron.right',
-											size: 14,
-											weight: 'semibold'
+											name: item.icon.ios,
+											fallback: item.icon.iosFallback,
+											size: (item.icon.iosFallback ?? false) ? 22 : 18
 										}}
 										android={{
-											name: 'chevron_right',
-											size: 16
+											name: item.icon.android,
+											size: 20,
+											variant: item.icon.androidVariant ?? 'outlined'
 										}}
 										web={{
-											name: 'ChevronRight',
-											size: 16
+											name: item.icon.web,
+											size: 20
 										}}
-										style={styles.chevronIcon}
+										style={{
+											color: item.iconColor ?? theme.colors.text
+										}}
 									/>
 								</View>
+							) : (
+								item.onPress != null &&
+								item.hideChevron !== true &&
+								item.value == null && (
+									<View style={styles.chevronContainer}>
+										<PlatformIcon
+											ios={{
+												name: 'chevron.right',
+												size: 14,
+												weight: 'semibold'
+											}}
+											android={{
+												name: 'chevron_right',
+												size: 16
+											}}
+											web={{
+												name: 'ChevronRight',
+												size: 16
+											}}
+											style={styles.chevronIcon}
+										/>
+									</View>
+								)
 							)}
 						</View>
 					</Pressable>
@@ -181,7 +207,7 @@ const RenderSectionItems: React.FC<{
 						<View style={styles.dividerContainer}>
 							<Divider
 								paddingLeft={
-									item.icon && (item.icon.ignoreDivider ?? false) !== true
+									item.icon && (item.icon.endIcon ?? false) !== true
 										? 60
 										: Platform.OS === 'ios'
 											? 16
