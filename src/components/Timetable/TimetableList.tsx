@@ -29,9 +29,12 @@ import {
 	useMemo,
 	useRef
 } from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
-import Animated, { FadeIn, Easing } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+	UnistylesRuntime,
+	createStyleSheet,
+	useStyles
+} from 'react-native-unistyles'
 
 import i18n from '@/localization/i18n'
 import { calendar } from '@/utils/calendar-utils'
@@ -70,21 +73,15 @@ export type CalendarEntry = {
 
 export type FlashListItems = FriendlyTimetableEntry | Date | string
 
-// Define an animated timetable item component with simpler fade-in animation
+// Define a timetable item component without animations
 const AnimatedTimetableItem = ({
 	item,
-	renderContent,
-	index
+	renderContent
 }: {
 	item: TimetableItem
 	renderContent: (item: TimetableItem) => React.ReactNode
-	index: number
 }) => {
-	return (
-		<Animated.View entering={FadeIn.duration(300).delay((index % 10) * 30)}>
-			{renderContent(item)}
-		</Animated.View>
-	)
+	return <View>{renderContent(item)}</View>
 }
 
 // Create a separate component for section headers to properly use hooks
@@ -98,10 +95,7 @@ const SectionHeader = React.memo(
 		const dateParts = formattedDate.split(', ')
 
 		return (
-			<Animated.View
-				style={styles.sectionHeaderContainer}
-				entering={FadeIn.duration(300).easing(Easing.out(Easing.ease))}
-			>
+			<View style={styles.sectionHeaderContainer}>
 				<View style={styles.sectionView}>
 					<View style={styles.sectionHeaderContent}>
 						<View style={styles.dayContainer}>
@@ -113,7 +107,7 @@ const SectionHeader = React.memo(
 						{isToday && <View style={styles.dateIndicator(isToday)} />}
 					</View>
 				</View>
-			</Animated.View>
+			</View>
 		)
 	}
 )
@@ -165,46 +159,6 @@ export default function TimetableList({
 		}, [hasPendingUpdate])
 	)
 
-	useLayoutEffect(() => {
-		navigation.setOptions({
-			headerRight: () => (
-				<HeaderRight
-					setToday={() => {
-						// Find the index of the 'today' header in the flat list
-						const todayIndex = flatData.findIndex(
-							(item) =>
-								item.type === 'header' &&
-								formatISODate(item.title) === formatISODate(today)
-						)
-						if (todayIndex !== -1 && listRef.current) {
-							listRef.current.scrollToIndex({
-								index: todayIndex,
-								animated: true,
-								viewPosition: 0 // Scroll to top
-							})
-						}
-					}}
-				/>
-			),
-			headerLeft: () => (
-				<HeaderLeft
-					onPressPreferences={() => router.navigate('/timetable-preferences')}
-				/>
-			)
-		})
-	}, [navigation])
-
-	/**
-	 * Constants
-	 */
-	if (hasPendingUpdate) {
-		return (
-			<View style={styles.pendingContainer}>
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
 	const examsList = showExams ? exams : []
 
 	// Memoize the grouped and filtered timetable data
@@ -233,6 +187,48 @@ export default function TimetableList({
 		}
 		return data
 	}, [filteredTimetableSections])
+
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<HeaderRight
+					setToday={() => {
+						const todayIndex = flatData.findIndex(
+							(item) =>
+								item.type === 'header' &&
+								formatISODate(item.title) === formatISODate(today)
+						)
+
+						if (todayIndex !== -1 && listRef.current) {
+							listRef.current.scrollToIndex({
+								index: todayIndex,
+								animated: true,
+								viewPosition: 0
+							})
+						} else if (listRef.current) {
+							listRef.current.scrollToOffset({ offset: 0, animated: true })
+						}
+					}}
+				/>
+			),
+			headerLeft: () => (
+				<HeaderLeft
+					onPressPreferences={() => router.navigate('/timetable-preferences')}
+				/>
+			)
+		})
+	}, [navigation, flatData, today, router])
+
+	/**
+	 * Constants
+	 */
+	if (hasPendingUpdate) {
+		return (
+			<View style={styles.pendingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
 
 	/**
 	 * Functions
@@ -268,8 +264,11 @@ export default function TimetableList({
 		// Only show date range for multi-day events
 		const infoText =
 			isMultiDayEvent && item.originalStartDate
-				? `${t('calendar.thiCalendar')}: ${formatCompactDateRange(item.originalStartDate || item.startDate, item.originalEndDate || null)}`
-				: t('calendar.thiCalendar')
+				? formatCompactDateRange(
+						item.originalStartDate || item.startDate,
+						item.originalEndDate || null
+					)
+				: ''
 
 		// Time display text
 		const timeDisplay = item.isAllDay ? (
@@ -321,7 +320,12 @@ export default function TimetableList({
 								</Text>
 							</View>
 							<View style={styles.eventInfoRow}>
-								<Text style={styles.eventInfo}>{infoText}</Text>
+								<View style={styles.infoContainer}>
+									{infoText && <Text style={styles.eventInfo}>{infoText}</Text>}
+									<View style={styles.calendarBadge}>
+										<Text style={styles.calendarBadgeText}>THI</Text>
+									</View>
+								</View>
 								{timeDisplay}
 							</View>
 						</View>
@@ -424,19 +428,20 @@ export default function TimetableList({
 						<View style={styles.eventContent}>
 							<View style={styles.eventHeader}>
 								<Text style={styles.eventTitle} numberOfLines={2}>
-									{t('cards.calendar.exam', {
-										ns: 'navigation',
-										name: exam.name
-									})}
+									{exam.name}
 								</Text>
-								<View style={styles.examBadge}>
-									<Text style={styles.examBadgeText}>Exam</Text>
-								</View>
 							</View>
 							<View style={styles.eventInfoRow}>
-								<Text style={styles.locationText}>
-									{exam.seat ?? exam.rooms}
-								</Text>
+								<View style={styles.locationContainer}>
+									{(exam.seat ?? exam.rooms) != null && (
+										<Text style={styles.locationText}>
+											{exam.seat ?? exam.rooms}
+										</Text>
+									)}
+									<View style={styles.examBadge}>
+										<Text style={styles.examBadgeText}>Exam</Text>
+									</View>
+								</View>
 								<View style={styles.timeContainer}>
 									<Text style={styles.startTime}>
 										{formatFriendlyTime(exam.date)}
@@ -469,9 +474,7 @@ export default function TimetableList({
 		}
 
 		if (item.type === 'item') {
-			// Render the actual timetable item card
 			const data = item.data
-			const originalIndex = item.originalIndex // Use original index for animation delay
 
 			const renderContent = (data: TimetableItem) => {
 				if (data.eventType === 'exam') {
@@ -483,13 +486,7 @@ export default function TimetableList({
 				return renderTimetableItem({ item: data as FriendlyTimetableEntry })
 			}
 
-			return (
-				<AnimatedTimetableItem
-					item={data}
-					renderContent={renderContent}
-					index={originalIndex} // Pass original index for animation
-				/>
-			)
+			return <AnimatedTimetableItem item={data} renderContent={renderContent} />
 		}
 
 		// Handle potential 'footer' type or return null for unknown types
@@ -511,6 +508,7 @@ export default function TimetableList({
 				/>
 			) : (
 				<FlashList
+					key={`flashlist-${UnistylesRuntime.themeName}`}
 					ref={listRef}
 					data={flatData}
 					renderItem={renderItem}
@@ -609,14 +607,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
 		overflow: 'hidden',
-		shadowColor: theme.colors.text,
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.08,
-		shadowRadius: 5,
-		elevation: 3,
-		minHeight: 80,
-		borderWidth: 0.5,
-		borderColor: Color(theme.colors.border).alpha(0.2).toString()
+		minHeight: 75,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
 	},
 	eventColorBand: {
 		width: 6,
@@ -642,16 +635,20 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 8
 	},
 	eventInfo: {
-		fontSize: 14,
-		color: theme.colors.labelColor,
-		marginTop: 2
+		fontSize: 15,
+		color: theme.colors.labelColor
 	},
 	eventLocation: {
 		flexDirection: 'row',
 		alignItems: 'center'
 	},
+	locationContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8
+	},
 	locationText: {
-		fontSize: 14,
+		fontSize: 15,
 		color: theme.colors.labelColor
 	},
 	eventInfoRow: {
@@ -663,14 +660,14 @@ const stylesheet = createStyleSheet((theme) => ({
 	timeContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		backgroundColor: Color(theme.colors.background).alpha(0.6).string(),
+		backgroundColor: theme.colors.cardButton,
 		paddingHorizontal: 10,
 		paddingVertical: 5,
-		borderRadius: 14,
+		borderRadius: 8,
 		marginLeft: 8
 	},
 	startTime: {
-		fontSize: 14,
+		fontSize: 12,
 		fontWeight: '500',
 		color: theme.colors.text,
 		fontVariant: ['tabular-nums']
@@ -683,7 +680,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginHorizontal: 4
 	},
 	endTime: {
-		fontSize: 14,
+		fontSize: 12,
 		color: theme.colors.labelColor,
 		fontVariant: ['tabular-nums']
 	},
@@ -692,26 +689,34 @@ const stylesheet = createStyleSheet((theme) => ({
 	eventBadge: {
 		paddingHorizontal: 10,
 		paddingVertical: 4,
-		backgroundColor: Color(theme.colors.calendarItem).alpha(0.15).string(),
-		borderRadius: 14
+		backgroundColor: theme.colors.cardButton,
+		borderRadius: 8
 	},
 	badgeText: {
 		fontSize: 12,
-		color: theme.colors.calendarItem,
+		color: theme.colors.text,
 		fontWeight: '500'
 	},
 	examBadge: {
-		position: 'absolute',
-		top: 14,
-		right: 14,
-		paddingHorizontal: 10,
-		paddingVertical: 4,
+		paddingHorizontal: 6,
+		paddingVertical: 2,
 		backgroundColor: Color(theme.colors.notification).alpha(0.15).string(),
-		borderRadius: 14
+		borderRadius: 6
 	},
 	examBadgeText: {
 		fontSize: 12,
 		color: theme.colors.notification,
+		fontWeight: '500'
+	},
+	calendarBadge: {
+		paddingHorizontal: 6,
+		paddingVertical: 2,
+		backgroundColor: theme.colors.cardButton,
+		borderRadius: 6
+	},
+	calendarBadgeText: {
+		fontSize: 12,
+		color: theme.colors.labelColor,
 		fontWeight: '500'
 	},
 
@@ -724,5 +729,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	pendingText: {
 		color: theme.colors.text,
 		fontSize: 16
+	},
+	infoContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 10
 	}
 }))
