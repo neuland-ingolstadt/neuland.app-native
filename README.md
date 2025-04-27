@@ -44,7 +44,7 @@ Learn more about the app on the [Neuland Next website](https://next.neuland.app)
 
 ### Architecture
 
-<img src="assets/github/architecture.svg" alt="Architecture" width="600px" />
+<img src="assets/github/architecture.svg" alt="Architecture" width="800px" />
 
 ## Contributing
 
