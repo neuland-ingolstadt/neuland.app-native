@@ -50,6 +50,7 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
 			collapsed: false,
 			items: [
 				{ text: 'Ways to Contribute', link: 'contribute' },
+				{ text: 'Architecture', link: 'architecture' },
 				{ text: 'Setup Development Environment', link: 'setup' },
 				{ text: 'Setup Web Development', link: 'setup-web' }
 			]
