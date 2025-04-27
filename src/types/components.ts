@@ -13,11 +13,13 @@ export interface SectionGroup {
 		iosFallback?: boolean
 		androidVariant?: 'outlined' | 'filled'
 		ignoreDivider?: boolean
+		endIcon?: boolean
 	}
 	disabled?: boolean
 	onPress?: () => Promise<void> | void
 	iconColor?: ColorValue
 	textColor?: ColorValue
+	hideChevron?: boolean
 	layout?: 'row' | 'column'
 	fontWeight?:
 		| 'normal'
