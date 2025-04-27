@@ -50,7 +50,7 @@
 		"showExams": "Prüfungen anzeigen"
 	},
 	"calendar": {
-		"thiCalendar": "THI Events",
+		"thiCalendar": "THI Kalender",
 		"weekDayShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
 		"more": "mehr"
 	},
