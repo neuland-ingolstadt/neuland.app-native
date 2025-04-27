@@ -60,7 +60,7 @@ function TimetableScreen(): React.JSX.Element {
 	})
 
 	const { data: exams } = useQuery({
-		queryKey: ['exams'],
+		queryKey: ['examjs'],
 		queryFn: loadExamList,
 		staleTime: 1000 * 60 * 10,
 		gcTime: 1000 * 60 * 60 * 24,

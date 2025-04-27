@@ -1,6 +1,10 @@
 import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
+import Badge from '@/components/Universal/Badge'
+import ColorBand from '@/components/Universal/ColorBand'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import TimeDisplay from '@/components/Universal/TimeDisplay'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import type { ITimetableViewProps } from '@/types/timetable'
@@ -39,7 +43,6 @@ import {
 import i18n from '@/localization/i18n'
 import { calendar } from '@/utils/calendar-utils'
 import { useTranslation } from 'react-i18next'
-import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderLeft, HeaderRight } from './HeaderButtons'
 
 type TimetableSection = {
@@ -270,27 +273,14 @@ export default function TimetableList({
 					)
 				: ''
 
-		// Time display text
-		const timeDisplay = item.isAllDay ? (
-			<View style={styles.eventBadge}>
-				<Text style={styles.badgeText}>
-					{t('dates.allDay', { ns: 'common' })}
-				</Text>
-			</View>
+		// Time display or all day badge
+		const timeElement = item.isAllDay ? (
+			<Badge text={t('dates.allDay', { ns: 'common' })} type="allDay" />
 		) : (
-			<View style={styles.timeContainer}>
-				<Text style={styles.startTime}>
-					{formatFriendlyTime(item.startDate)}
-				</Text>
-				{item.endDate && (
-					<>
-						<View style={styles.timeSeparator} />
-						<Text style={styles.endTime}>
-							{formatFriendlyTime(item.endDate)}
-						</Text>
-					</>
-				)}
-			</View>
+			<TimeDisplay
+				startTime={formatFriendlyTime(item.startDate)}
+				endTime={item.endDate ? formatFriendlyTime(item.endDate) : undefined}
+			/>
 		)
 
 		return (
@@ -307,12 +297,7 @@ export default function TimetableList({
 					}}
 				>
 					<View style={styles.eventCard}>
-						<View
-							style={[
-								styles.eventColorBand,
-								{ backgroundColor: theme.colors.calendarItem }
-							]}
-						/>
+						<ColorBand color={theme.colors.calendarItem} />
 						<View style={styles.eventContent}>
 							<View style={styles.eventHeader}>
 								<Text style={styles.eventTitle} numberOfLines={1}>
@@ -322,11 +307,9 @@ export default function TimetableList({
 							<View style={styles.eventInfoRow}>
 								<View style={styles.infoContainer}>
 									{infoText && <Text style={styles.eventInfo}>{infoText}</Text>}
-									<View style={styles.calendarBadge}>
-										<Text style={styles.calendarBadgeText}>THI</Text>
-									</View>
+									<Badge text="THI" type="calendar" />
 								</View>
-								{timeDisplay}
+								{timeElement}
 							</View>
 						</View>
 					</View>
@@ -360,12 +343,7 @@ export default function TimetableList({
 					}}
 				>
 					<View style={styles.eventCard}>
-						<View
-							style={[
-								styles.eventColorBand,
-								{ backgroundColor: theme.colors.primary }
-							]}
-						/>
+						<ColorBand color={theme.colors.primary} />
 						<View style={styles.eventContent}>
 							<View style={styles.eventHeader}>
 								<Text style={styles.eventTitle} numberOfLines={1}>
@@ -378,15 +356,10 @@ export default function TimetableList({
 										{item.rooms.length > 0 ? item.rooms.join(', ') : ''}
 									</Text>
 								</View>
-								<View style={styles.timeContainer}>
-									<Text style={styles.startTime}>
-										{formatFriendlyTime(item.startDate)}
-									</Text>
-									<View style={styles.timeSeparator} />
-									<Text style={styles.endTime}>
-										{formatFriendlyTime(item.endDate)}
-									</Text>
-								</View>
+								<TimeDisplay
+									startTime={formatFriendlyTime(item.startDate)}
+									endTime={formatFriendlyTime(item.endDate)}
+								/>
 							</View>
 						</View>
 					</View>
@@ -419,12 +392,7 @@ export default function TimetableList({
 					}}
 				>
 					<View style={styles.eventCard}>
-						<View
-							style={[
-								styles.eventColorBand,
-								{ backgroundColor: theme.colors.notification }
-							]}
-						/>
+						<ColorBand color={theme.colors.notification} />
 						<View style={styles.eventContent}>
 							<View style={styles.eventHeader}>
 								<Text style={styles.eventTitle} numberOfLines={2}>
@@ -438,19 +406,12 @@ export default function TimetableList({
 											{exam.seat ?? exam.rooms}
 										</Text>
 									)}
-									<View style={styles.examBadge}>
-										<Text style={styles.examBadgeText}>Exam</Text>
-									</View>
+									<Badge text="Exam" type="exam" />
 								</View>
-								<View style={styles.timeContainer}>
-									<Text style={styles.startTime}>
-										{formatFriendlyTime(exam.date)}
-									</Text>
-									<View style={styles.timeSeparator} />
-									<Text style={styles.endTime}>
-										{formatFriendlyTime(exam.endDate)}
-									</Text>
-								</View>
+								<TimeDisplay
+									startTime={formatFriendlyTime(exam.date)}
+									endTime={formatFriendlyTime(exam.endDate)}
+								/>
 							</View>
 						</View>
 					</View>
@@ -611,11 +572,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border
 	},
-	eventColorBand: {
-		width: 6,
-		borderTopLeftRadius: theme.radius.md,
-		borderBottomLeftRadius: theme.radius.md
-	},
 	eventContent: {
 		flex: 1,
 		padding: 16,
@@ -656,68 +612,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		marginTop: 4
-	},
-	timeContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: theme.colors.cardButton,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-		borderRadius: 8,
-		marginLeft: 8
-	},
-	startTime: {
-		fontSize: 12,
-		fontWeight: '500',
-		color: theme.colors.text,
-		fontVariant: ['tabular-nums']
-	},
-	timeSeparator: {
-		width: 3,
-		height: 3,
-		borderRadius: 1.5,
-		backgroundColor: theme.colors.labelColor,
-		marginHorizontal: 4
-	},
-	endTime: {
-		fontSize: 12,
-		color: theme.colors.labelColor,
-		fontVariant: ['tabular-nums']
-	},
-
-	// Badge styling
-	eventBadge: {
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		backgroundColor: theme.colors.cardButton,
-		borderRadius: 8
-	},
-	badgeText: {
-		fontSize: 12,
-		color: theme.colors.text,
-		fontWeight: '500'
-	},
-	examBadge: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
-		backgroundColor: Color(theme.colors.notification).alpha(0.15).string(),
-		borderRadius: 6
-	},
-	examBadgeText: {
-		fontSize: 12,
-		color: theme.colors.notification,
-		fontWeight: '500'
-	},
-	calendarBadge: {
-		paddingHorizontal: 6,
-		paddingVertical: 2,
-		backgroundColor: theme.colors.cardButton,
-		borderRadius: 6
-	},
-	calendarBadgeText: {
-		fontSize: 12,
-		color: theme.colors.labelColor,
-		fontWeight: '500'
 	},
 
 	// Other styling

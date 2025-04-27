@@ -24,7 +24,7 @@ body = """
 {%- endmacro -%}
 
 {% macro print_commit(commit) -%}
-  - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
+  - {% if commit.scope %}**{{ commit.scope }}**: {% endif %}\
     {% if commit.breaking %}[**breaking**] {% endif %}\
     {{ commit.message | upper_first }} - \
      
