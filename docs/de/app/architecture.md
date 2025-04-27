@@ -2,7 +2,7 @@
 Das Neuland Next Ökosystem besteht aus mehreren Komponenten, die zusammenarbeiten, um ein nahtloses Erlebnis für die Nutzer zu schaffen. Die Architektur ist modular und skalierbar gestaltet, sodass neue Funktionen und Verbesserungen im Laufe der Zeit einfach integriert werden können.
 
 ## Architektur-Schema
-![Neuland Next Architektur](/assets/architecture.svg)
+![Neuland Next Architektur](/assets/architecture.png)
 
 
 ## Komponenten
