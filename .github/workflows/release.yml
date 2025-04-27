@@ -21,33 +21,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v4
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: --latest --strip all
-        env:
-          OUTPUT: CHANGES.md
-          GITHUB_REPO: ${{ github.repository }}
-
       - name: Determine if prerelease
         id: prerelease_check
         run: |
           if [[ "${{ github.ref }}" =~ - ]]; then
-              echo "PRERELEASE=true" >> $GITHUB_ENV
+            echo "PRERELEASE=true" >> $GITHUB_ENV
           else
-              echo "PRERELEASE=false" >> $GITHUB_ENV
+            echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Upload the binary releases
-        uses: svenstaro/upload-release-action@v2
+      - name: Find latest stable tag
+        id: latest_stable_tag
+        run: |
+          LATEST_TAG=$(git tag --sort=-creatordate | grep -v "-" | head -n1)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        id: git-cliff
+        uses: orhun/git-cliff-action@v4
         with:
-          file: /
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          body: ${{ steps.git-cliff.outputs.content }}
-          prerelease: ${{ env.PRERELEASE }}
+          config: cliff.toml
+          args: ${{ env.PRERELEASE == 'true' && '--latest --strip all' || format('{0}..HEAD --strip all', env.LATEST_TAG) }}
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
 
   build-docker-image:
     name: Build and publish Docker image
