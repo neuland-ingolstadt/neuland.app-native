@@ -93,6 +93,7 @@ function sidebarApp(): DefaultTheme.SidebarItem[] {
 			collapsed: false,
 			items: [
 				{ text: 'Wege zur Mitarbeit', link: 'contribute' },
+				{ text: 'Architektur', link: 'architecture' },
 				{ text: 'Entwicklungsumgebung einrichten', link: 'setup' },
 				{ text: 'Webentwicklung einrichten', link: 'setup-web' }
 			]

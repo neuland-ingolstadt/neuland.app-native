@@ -11,6 +11,7 @@ const members = [
     title: 'Founder & Project Lead Neuland Next',
     links: [
       { icon: 'github', link: 'https://github.com/Robert27' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/roberteggl/' },
     ]
   },
   
@@ -20,6 +21,7 @@ const members = [
     title: 'Project Lead neuland.app',
     links: [
       { icon: 'github', link: 'https://github.com/BuildmodeOne' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/philipp-opheys/' },
     ]
   },
   {
@@ -27,7 +29,8 @@ const members = [
     name: 'Alexander Horn',
     title: 'Founder of neuland.app',
     links: [
-      { icon: 'github', link: 'https://github.com/BuildmodeOne' },
+      { icon: 'github', link: 'https://github.com/alexhorn' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/alexhorn29/' },
     ]
   },
    {
@@ -36,6 +39,7 @@ const members = [
     title: 'Founder of neuland.app',
     links: [
       { icon: 'github', link: 'https://github.com/M4GNV5' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/jakob-löw-1814431b4/' },
     ]
   },
     {
@@ -47,9 +51,7 @@ const members = [
       { icon: 'linkedin', link: 'https://linkedin.com/neuland_ing' },
       { icon: 'instagram', link: 'https://instagram.com/neuland_ing' }
     ]
-  },
-
-
+  }
 ]
 </script>
 
