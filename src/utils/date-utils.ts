@@ -32,7 +32,7 @@ export function formatFriendlyDate(
 		.locale(i18n.language)
 		.format(options.weekday === 'short' ? 'ddd' : 'dddd')
 	// Format the day, month, and year in German
-	const dayMonthYear = date.locale('de').format('D.M.YYYY')
+	const dayMonthYear = date.locale('de').format('DD.MM.YYYY')
 	return `${weekday}, ${dayMonthYear}`
 }
 
@@ -452,7 +452,7 @@ export function formatCompactDateRange(
 	const end = endDate ? moment(endDate) : null
 
 	// Format just the day and month (1.10)
-	const formatDayMonth = (date: moment.Moment): string => date.format('D.M')
+	const formatDayMonth = (date: moment.Moment): string => date.format('DD.MM')
 
 	// If no end date or start and end are the same day
 	if (!end || (end && start.isSame(end, 'day'))) {
