@@ -20,8 +20,6 @@ import {
 	shareMeal
 } from '@/utils/food-utils'
 import { trackEvent } from '@aptabase/react-native'
-import Color from 'color'
-import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import type React from 'react'
 import { memo, useContext, useDeferredValue, useMemo, useState } from 'react'
@@ -51,7 +49,7 @@ export const MealEntry = memo(
 		const deferredFoodLanguage = useDeferredValue(foodLanguage)
 
 		const { t, i18n } = useTranslation('food')
-		const { styles, theme } = useStyles(stylesheet)
+		const { styles } = useStyles(stylesheet)
 		const userAllergens = useMemo(
 			() =>
 				convertRelevantAllergens(
@@ -168,19 +166,11 @@ export const MealEntry = memo(
 									)}
 								</Text>
 								{meal.variants?.length > 0 && (
-									<LinearGradient
-										style={styles.variantContainer}
-										colors={[
-											theme.colors.labelBackground,
-											Color(theme.colors.labelBackground).lighten(0.15).hex()
-										]}
-										start={[0, 1]}
-										end={[1, 0]}
-									>
+									<View style={styles.variantContainer}>
 										<Text style={styles.variantText}>
 											{`+ ${meal.variants.length}`}
 										</Text>
-									</LinearGradient>
+									</View>
 								)}
 							</View>
 							<View style={styles.detailsContainer}>
@@ -191,18 +181,7 @@ export const MealEntry = memo(
 												flag: { name: string; isVeg: boolean },
 												index: number
 											) => (
-												<LinearGradient
-													key={index}
-													style={styles.flagsBox}
-													colors={[
-														theme.colors.labelBackground,
-														Color(theme.colors.labelBackground)
-															.lighten(0.15)
-															.hex()
-													]}
-													start={[0, 0]}
-													end={[1, 0]}
-												>
+												<View key={index} style={styles.flagsBox}>
 													{flag.isVeg && (
 														<PlatformIcon
 															ios={{
@@ -224,7 +203,7 @@ export const MealEntry = memo(
 													)}
 
 													<Text style={styles.flagsText}>{flag.name}</Text>
-												</LinearGradient>
+												</View>
 											)
 										)}
 									</View>
@@ -285,7 +264,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
+		borderRadius: theme.radius.mg,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		padding: theme.margins.card,
@@ -313,7 +292,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderWidth: StyleSheet.hairlineWidth,
 		alignContent: 'center',
 		alignItems: 'center',
-		borderRadius: theme.radius.sm,
+		borderRadius: theme.radius.mg,
+		backgroundColor: theme.colors.labelBackground,
 		flexDirection: 'row',
 		marginBottom: 2,
 		marginRight: 4
@@ -321,7 +301,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	flagsText: {
 		color: theme.colors.text,
 		fontSize: 12,
-		paddingHorizontal: 4,
+		paddingHorizontal: 6,
 		paddingVertical: 2
 	},
 	icon: {
@@ -332,7 +312,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	vegIcon: {
 		alignSelf: 'center',
 		color: theme.colors.vegGreen,
-		marginLeft: 5
+		marginLeft: 7,
+		marginRight: -2
 	},
 	innerContainer: {
 		alignItems: 'flex-start',
@@ -367,9 +348,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		maxWidth: '88%'
 	},
 	variantContainer: {
-		borderRadius: theme.radius.sm,
+		borderRadius: theme.radius.mg,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
+		backgroundColor: theme.colors.labelBackground,
 		maxWidth: '10%',
 		paddingHorizontal: 6,
 		paddingVertical: 2

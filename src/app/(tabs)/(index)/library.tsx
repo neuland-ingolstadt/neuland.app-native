@@ -28,7 +28,7 @@ export default function LibraryScreen(): React.JSX.Element {
 						})
 					}}
 					iconProps={{
-						ios: { name: 'chair', size: 18 },
+						ios: { name: 'studentdesk', size: 18 },
 						android: {
 							name: 'chair',
 							size: 22,

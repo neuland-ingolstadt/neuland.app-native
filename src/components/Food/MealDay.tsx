@@ -11,6 +11,31 @@ import { EmptyFoodAnimation } from './EmptyFoodAnimation'
 import { MealEntry } from './MealEntry'
 
 /**
+ * Sorts categories by priority with main dishes first, soups lower in the order
+ * @param categories - An array of category names
+ * @returns A sorted array of category names
+ */
+const sortCategoriesByPriority = (categories: string[]): string[] => {
+	const categoryPriority: Record<string, number> = {
+		main: 1,
+		side: 2,
+		dessert: 3,
+		soup: 4
+		// Any other categories will be sorted alphabetically after these
+	}
+
+	return [...categories].sort((a, b) => {
+		const priorityA = categoryPriority[a] || 10
+		const priorityB = categoryPriority[b] || 10
+
+		if (priorityA === priorityB) {
+			return a.localeCompare(b) // If same priority, sort alphabetically
+		}
+		return priorityA - priorityB
+	})
+}
+
+/**
  * Renders a group of meals for a given category.
  * @param group - An object containing meals grouped by category.
  * @returns A JSX element representing the group of meals.
@@ -20,10 +45,12 @@ const MealGroup = ({
 }: {
 	group: Record<string, Meal[]>
 }): React.JSX.Element => {
+	const sortedCategories = sortCategoriesByPriority(Object.keys(group))
+
 	return (
 		<>
-			{Object.entries(group).map(([key, value]) => (
-				<MealCategory key={key} category={key} meals={value} />
+			{sortedCategories.map((key) => (
+				<MealCategory key={key} category={key} meals={group[key]} />
 			))}
 		</>
 	)
@@ -190,7 +217,7 @@ export const MealDay = ({
 	return mealData.isEmpty ? (
 		<EmptyFoodAnimation />
 	) : (
-		<View key={index}>
+		<View key={index} style={styles.foodContainer}>
 			{renderRestaurantView({
 				restaurantName: 'Mensa Ingolstadt',
 				meals: mealData.ingolstadtMensa,
@@ -245,5 +272,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		color: theme.colors.primary,
 		marginRight: 4
+	},
+	foodContainer: {
+		paddingBottom: theme.margins.bottomSafeArea
 	}
 }))
