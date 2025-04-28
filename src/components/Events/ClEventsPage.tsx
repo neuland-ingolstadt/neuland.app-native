@@ -54,7 +54,7 @@ export default function ClEventsPage({
 						<FlashList
 							data={clEventsResult.data}
 							renderItem={renderItem}
-							estimatedItemSize={100}
+							estimatedItemSize={70}
 							contentContainerStyle={styles.flashListContainer}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}

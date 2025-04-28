@@ -147,7 +147,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	toggleContainer: {
 		borderColor: theme.colors.border,
-		paddingBottom: 12,
+		paddingBottom: 20,
 		paddingHorizontal: theme.margins.page
 	},
 	pageContainer: {

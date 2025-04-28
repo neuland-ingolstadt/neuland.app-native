@@ -38,6 +38,7 @@ import {
 	RefreshControl,
 	ScrollView,
 	Share,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -654,6 +655,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.mg,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		width: '100%'
 	},
 	contentContainer: {
