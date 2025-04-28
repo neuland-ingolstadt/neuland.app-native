@@ -46,6 +46,35 @@ jobs:
           OUTPUT: CHANGES.md
           GITHUB_REPO: ${{ github.repository }}
 
+      - name: Upload the binary releases
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: /
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          body: ${{ steps.git-cliff.outputs.content }}
+          prerelease: ${{ env.PRERELEASE }}
+
+  github-releases-to-discord:
+    runs-on: ubuntu-latest
+    needs: changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1.16.2
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          color: "2105893"
+          username: "Neuland Next Release Bot"
+          avatar_url: "https://avatars.githubusercontent.com/u/76657022?s=200&v=4.png"
+          content: ${{ needs.changelog.outputs.release_body }}
+          footer_title: "Changelog: ${{ github.ref_name }}"
+          footer_icon_url: "https://avatars.githubusercontent.com/u/76657022?s=200&v=4.png"
+          footer_timestamp: true
+          max_description: "4096"
+          reduce_headings: true
+
   build-docker-image:
     name: Build and publish Docker image
     runs-on: ubuntu-latest

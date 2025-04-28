@@ -23,7 +23,6 @@ import {
 import { getGroupedTimetable } from '@/utils/timetable-utils'
 import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
 import Color from 'color'
-import * as Haptics from 'expo-haptics'
 import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
 import React from 'react'
 import {
@@ -33,7 +32,7 @@ import {
 	useMemo,
 	useRef
 } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import {
 	UnistylesRuntime,
 	createStyleSheet,
@@ -237,9 +236,6 @@ export default function TimetableList({
 	 * Functions
 	 */
 	function showEventDetails(entry: FriendlyTimetableEntry): void {
-		if (Platform.OS === 'ios') {
-			void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-		}
 		setSelectedLecture(entry)
 		router.navigate('/lecture')
 	}
@@ -370,9 +366,6 @@ export default function TimetableList({
 
 	function renderExamItem({ exam }: { exam: ExamEntry }): React.JSX.Element {
 		const navigateToPage = (): void => {
-			if (Platform.OS === 'ios') {
-				void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-			}
 			setSelectedExam(exam)
 			router.navigate('/exam')
 		}
@@ -420,7 +413,6 @@ export default function TimetableList({
 		)
 	}
 
-	// Update renderItem for FlashList with FlatListItem type
 	function renderItem({
 		item
 	}: ListRenderItemInfo<FlatListItem>): React.JSX.Element | null {
