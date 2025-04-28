@@ -8,7 +8,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import type React from 'react'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, View } from 'react-native'
+import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
@@ -66,6 +66,11 @@ export default function ClEventsPage({
 									}}
 								/>
 							}
+							ListHeaderComponent={
+								<Text style={styles.labelText}>
+									{t('pages.clEvents.events.subtitle')}
+								</Text>
+							}
 						/>
 					) : (
 						<ErrorView
@@ -98,7 +103,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	flashListContainer: {
 		paddingHorizontal: theme.margins.page,
-		paddingVertical: 4,
 		paddingBottom: theme.margins.bottomSafeArea
 	},
 	rowWrapper: {
@@ -110,5 +114,12 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: theme.margins.bottomSafeArea,
 		paddingHorizontal: theme.margins.page,
 		width: '100%'
+	},
+	labelText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: 'normal',
+		marginBottom: 4,
+		textTransform: 'uppercase'
 	}
 }))

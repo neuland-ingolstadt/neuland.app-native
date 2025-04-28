@@ -66,7 +66,7 @@ export const darkTheme = {
 		inputBackground: '#383838',
 		contrast: '#000000',
 		cardContrast: '#1c1c1d',
-		border: 'rgb(31, 31, 33)',
+		border: 'rgb(39, 39, 41)',
 		text: 'rgb(229, 229, 231)',
 		primary: '#0b83ff',
 		sheetButton: '#262626',

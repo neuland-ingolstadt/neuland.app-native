@@ -302,9 +302,11 @@ export default function LecturersScreen(): React.JSX.Element {
 			</View>
 		) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
 			<FlashList
+				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
 				keyExtractor={(_, index) => index.toString()}
 				contentContainerStyle={styles.loadedRows}
+				estimatedItemSize={70}
 				refreshControl={
 					<RefreshControl
 						refreshing={
@@ -462,23 +464,27 @@ export default function LecturersScreen(): React.JSX.Element {
 							}}
 							ref={pagerViewRef}
 						>
-							<LecturerList
-								lecturers={personalLecturersResult.data}
-								isPaused={personalLecturersResult.isPaused}
-								isError={personalLecturersResult.isError}
-								isSuccess={personalLecturersResult.isSuccess}
-								error={personalLecturersResult.error}
-								isLoading={personalLecturersResult.isLoading}
-								isPersonal
-							/>
-							<LecturerList
-								lecturers={facultyData}
-								isPaused={allLecturersResult.isPaused}
-								isError={allLecturersResult.isError}
-								isSuccess={allLecturersResult.isSuccess}
-								error={allLecturersResult.error}
-								isLoading={allLecturersResult.isLoading}
-							/>
+							<View key="personal" style={styles.page}>
+								<LecturerList
+									lecturers={personalLecturersResult.data}
+									isPaused={personalLecturersResult.isPaused}
+									isError={personalLecturersResult.isError}
+									isSuccess={personalLecturersResult.isSuccess}
+									error={personalLecturersResult.error}
+									isLoading={personalLecturersResult.isLoading}
+									isPersonal
+								/>
+							</View>
+							<View key="faculty" style={styles.page}>
+								<LecturerList
+									lecturers={facultyData}
+									isPaused={allLecturersResult.isPaused}
+									isError={allLecturersResult.isError}
+									isSuccess={allLecturersResult.isSuccess}
+									error={allLecturersResult.error}
+									isLoading={allLecturersResult.isLoading}
+								/>
+							</View>
 						</PagerView>
 					</View>
 				) : (

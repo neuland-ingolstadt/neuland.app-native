@@ -7,9 +7,10 @@ import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import type { Calendar } from '@/types/data'
 import type { Exam } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
-import { calendar, loadExamList } from '@/utils/calendar-utils'
+import { loadExamList, semesters } from '@/utils/calendar-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
@@ -21,6 +22,7 @@ import {
 	Linking,
 	RefreshControl,
 	ScrollView,
+	SectionList,
 	Text,
 	View,
 	useWindowDimensions
@@ -30,7 +32,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function CalendarPage(): React.JSX.Element {
 	const { userKind = USER_GUEST } = React.useContext(UserKindContext)
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('common')
+	const { t, i18n } = useTranslation('common')
 	const displayTypes = [
 		t('pages.calendar.events.title'),
 		t('pages.calendar.exams.title')
@@ -42,6 +44,9 @@ export default function CalendarPage(): React.JSX.Element {
 			selectedData === 0 ? t('pages.calendar.calendar.link') : primussUrl
 		)
 	}
+
+	// Get the current language for display
+	const currentLang = i18n.language === 'de' ? 'de' : 'en'
 
 	const {
 		data: exams,
@@ -93,6 +98,20 @@ export default function CalendarPage(): React.JSX.Element {
 		</View>
 	)
 
+	const renderCalendarItem = ({ item }: { item: Calendar }) => (
+		<View style={styles.rowWrapper}>
+			<CalendarRow event={item} />
+		</View>
+	)
+
+	const renderSectionHeader = ({
+		section: { title }
+	}: { section: { title: string } }) => (
+		<View style={styles.sectionHeaderContainer}>
+			<Text style={styles.sectionHeaderText}>{title}</Text>
+		</View>
+	)
+
 	return (
 		<View
 			style={{
@@ -125,24 +144,27 @@ export default function CalendarPage(): React.JSX.Element {
 				scrollEnabled
 				overdrag
 			>
-				{/* Page 1: Events */}
-				<ScrollView
-					contentContainerStyle={styles.itemsContainer}
-					scrollEventThrottle={16}
-				>
-					<View>
-						{calendar?.length > 0 &&
-							calendar.map((item, index) => (
-								<View key={`event_${index}`} style={styles.rowWrapper}>
-									<CalendarRow event={item} />
-								</View>
-							))}
-					</View>
-					<CalendarFooter />
-				</ScrollView>
+				{/* Page 1: Events (organized by semester) */}
+				<View style={styles.flashListContainer}>
+					{semesters && semesters.length > 0 && (
+						<SectionList
+							sections={semesters.map((semester) => ({
+								title: semester.name[currentLang],
+								data: semester.events
+							}))}
+							renderItem={renderCalendarItem}
+							renderSectionHeader={renderSectionHeader}
+							keyExtractor={(item, index) => item.name[currentLang] + index}
+							contentContainerStyle={styles.flashListContentContainer}
+							showsVerticalScrollIndicator={false}
+							scrollEventThrottle={16}
+							stickySectionHeadersEnabled={true}
+							ListFooterComponent={<CalendarFooter />}
+						/>
+					)}
+				</View>
 
 				{/* Page 2: Exams */}
-
 				<View style={styles.flashListContainer}>
 					{isLoading ? (
 						<LoadingIndicator />
@@ -176,6 +198,11 @@ export default function CalendarPage(): React.JSX.Element {
 											}}
 										/>
 									}
+									ListHeaderComponent={
+										<Text style={styles.labelText}>
+											{t('pages.calendar.exams.subtitle')}
+										</Text>
+									}
 									ListFooterComponent={<CalendarFooter />}
 								/>
 							) : (
@@ -208,8 +235,7 @@ export default function CalendarPage(): React.JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
 	footerContainer: {
-		marginVertical: 10,
-		paddingHorizontal: theme.margins.page,
+		marginVertical: 4,
 		paddingBottom: theme.margins.bottomSafeArea
 	},
 	footerText1: {
@@ -257,5 +283,22 @@ const stylesheet = createStyleSheet((theme) => ({
 	emptyStateContainer: {
 		flexGrow: 1,
 		paddingHorizontal: theme.margins.page
+	},
+	labelText: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: 'normal',
+		marginBottom: 2,
+		textTransform: 'uppercase'
+	},
+	sectionHeaderContainer: {
+		backgroundColor: theme.colors.background,
+		paddingVertical: 8,
+		marginBottom: 4
+	},
+	sectionHeaderText: {
+		color: theme.colors.text,
+		fontSize: 19,
+		fontWeight: '600'
 	}
 }))
