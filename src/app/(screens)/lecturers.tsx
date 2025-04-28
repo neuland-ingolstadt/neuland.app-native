@@ -3,7 +3,6 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
 import PagerView from '@/components/Layout/PagerView'
 import LecturerRow from '@/components/Rows/LecturerRow'
-import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
@@ -19,6 +18,7 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
+import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -26,7 +26,6 @@ import type React from 'react'
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-	FlatList,
 	Linking,
 	Platform,
 	RefreshControl,
@@ -302,7 +301,7 @@ export default function LecturersScreen(): React.JSX.Element {
 				/>
 			</View>
 		) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-			<FlatList
+			<FlashList
 				data={lecturers}
 				keyExtractor={(_, index) => index.toString()}
 				contentContainerStyle={styles.loadedRows}
@@ -321,19 +320,20 @@ export default function LecturersScreen(): React.JSX.Element {
 				renderItem={({ item, index }) => (
 					<View
 						key={index}
-						// eslint-disable-next-line react-native/no-inline-styles
-						style={{
-							overflow: 'hidden',
-							borderTopStartRadius: index === 0 ? theme.radius.md : 0,
-							borderTopEndRadius: index === 0 ? theme.radius.md : 0,
-							borderBottomStartRadius:
-								index === lecturers.length - 1 ? theme.radius.md : 0,
-							borderBottomEndRadius:
-								index === lecturers.length - 1 ? theme.radius.md : 0
-						}}
+						style={[
+							styles.rowContainer,
+							{
+								overflow: 'hidden',
+								borderTopStartRadius: index === 0 ? theme.radius.md : 0,
+								borderTopEndRadius: index === 0 ? theme.radius.md : 0,
+								borderBottomStartRadius:
+									index === lecturers.length - 1 ? theme.radius.md : 0,
+								borderBottomEndRadius:
+									index === lecturers.length - 1 ? theme.radius.md : 0
+							}
+						]}
 					>
 						<LecturerRow item={item} />
-						{index !== lecturers.length - 1 && <Divider paddingLeft={16} />}
 					</View>
 				)}
 			/>
@@ -407,22 +407,21 @@ export default function LecturersScreen(): React.JSX.Element {
 					renderItem={({ item, index, section }) => (
 						<View
 							key={index}
-							// eslint-disable-next-line react-native/no-inline-styles
-							style={{
-								overflow: 'hidden',
-								backgroundColor: theme.colors.card,
-								borderTopLeftRadius: index === 0 ? 8 : 0,
-								borderTopRightRadius: index === 0 ? 8 : 0,
-								borderBottomLeftRadius:
-									index === section.data.length - 1 ? 8 : 0,
-								borderBottomRightRadius:
-									index === section.data.length - 1 ? 8 : 0
-							}}
+							style={[
+								styles.rowContainer,
+								{
+									overflow: 'hidden',
+									backgroundColor: theme.colors.card,
+									borderTopLeftRadius: index === 0 ? 8 : 0,
+									borderTopRightRadius: index === 0 ? 8 : 0,
+									borderBottomLeftRadius:
+										index === section.data.length - 1 ? 8 : 0,
+									borderBottomRightRadius:
+										index === section.data.length - 1 ? 8 : 0
+								}
+							]}
 						>
 							<LecturerRow item={item} />
-							{index !== section.data.length - 1 && (
-								<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-							)}
 						</View>
 					)}
 					renderSectionHeader={({ section: { title } }) => (
@@ -535,5 +534,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	viewHorizontal: {
 		paddingHorizontal: theme.margins.page
+	},
+	rowContainer: {
+		marginBottom: 8 // Adding spacing between rows
 	}
 }))

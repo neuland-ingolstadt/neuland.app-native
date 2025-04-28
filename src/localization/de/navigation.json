@@ -85,8 +85,7 @@
 			"ongoingLectures": "{{count}} laufende Vorlesung",
 			"ongoingLectures_one": "{{count}} laufende Vorlesung",
 			"ongoingLectures_plural": "{{count}} laufende Vorlesungen",
-			"ongoingAndRemaining": "{{ongoing}} laufend, {{remaining}} später heute",
-			"noMoreLectures": "Keine weiteren Vorlesungen heute",
+			"noMoreLectures": "Keine weiteren Vorlesungen",
 			"noEvents": "Keine anstehenden Vorlesungen",
 			"enjoyDay": "Genieße deinen Tag!",
 			"nextEvent": "Nächste"

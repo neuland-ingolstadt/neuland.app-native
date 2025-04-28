@@ -30,6 +30,10 @@ const CLEventRow = ({
 	}
 	const end = event.endDateTime != null ? new Date(event.endDateTime) : null
 
+	// Determine if event is active (ongoing)
+	const isActive =
+		begin != null && begin < new Date() && end != null && end > new Date()
+
 	const onPressRow = (): void => {
 		setSelectedClEvent(event as CLEvents)
 		router.navigate({
@@ -41,24 +45,26 @@ const CLEventRow = ({
 			title={event.titles[i18n.language as LanguageKey] ?? ''}
 			onPress={onPressRow}
 			leftChildren={
-				<>
+				<View style={styles.leftContainer}>
 					<Text style={styles.leftText1} numberOfLines={2}>
 						{event.host.name}
 					</Text>
 					<Text style={styles.leftText2} numberOfLines={2}>
 						{formatFriendlyDateTimeRange(begin, end)}
 					</Text>
-				</>
+				</View>
 			}
-			rightChildren=<View style={styles.rightContainer}>
-				<Text style={styles.rightText}>
-					{begin != null &&
-						(end != null && begin < new Date()
-							? `${t('dates.ends')} ${formatFriendlyRelativeTime(end)}`
-							: formatFriendlyRelativeTime(begin))}
-				</Text>
-			</View>
-			maxTitleWidth={'70%'}
+			rightChildren={
+				<View style={styles.rightContainer}>
+					{isActive && <View style={styles.activeDot} />}
+					<Text style={[styles.rightText, isActive && styles.activeText]}>
+						{begin != null &&
+							(end != null && begin < new Date()
+								? `${t('dates.ends')} ${formatFriendlyRelativeTime(end)}`
+								: formatFriendlyRelativeTime(begin))}
+					</Text>
+				</View>
+			}
 		/>
 	)
 }
@@ -66,7 +72,7 @@ const CLEventRow = ({
 const stylesheet = createStyleSheet((theme) => ({
 	leftText1: {
 		color: theme.colors.labelColor,
-		fontSize: 15,
+		fontSize: 14,
 		fontWeight: '500',
 		marginBottom: 4
 	},
@@ -74,15 +80,31 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontSize: 13
 	},
+	leftContainer: {
+		marginTop: 2
+	},
 	rightContainer: {
-		flexDirection: 'column',
 		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding
+		padding: theme.margins.rowPadding,
+		alignItems: 'flex-end',
+		flexDirection: 'row',
+		gap: 6
 	},
 	rightText: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
 		fontWeight: '400'
+	},
+	activeText: {
+		color: theme.colors.primary,
+		fontWeight: '500'
+	},
+	activeDot: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		backgroundColor: theme.colors.primary,
+		marginBottom: 3
 	}
 }))
 

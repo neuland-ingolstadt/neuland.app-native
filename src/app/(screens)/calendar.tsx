@@ -2,15 +2,16 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
 import PagerView from '@/components/Layout/PagerView'
 import { CalendarRow, ExamRow } from '@/components/Rows/CalendarRow'
-import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
+import type { Exam } from '@/types/utils'
 import { guestError, networkError } from '@/utils/api-utils'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
 import { trackEvent } from '@aptabase/react-native'
+import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import React, { useRef, useState } from 'react'
@@ -18,7 +19,6 @@ import { useTranslation } from 'react-i18next'
 import {
 	Animated,
 	Linking,
-	Platform,
 	RefreshControl,
 	ScrollView,
 	Text,
@@ -71,7 +71,6 @@ export default function CalendarPage(): React.JSX.Element {
 	function setPage(page: number): void {
 		pagerViewRef.current?.setPage(page)
 	}
-	const scrollY = new Animated.Value(0)
 	const pages = ['events', 'exams']
 
 	const CalendarFooter = (): React.JSX.Element => {
@@ -88,6 +87,12 @@ export default function CalendarPage(): React.JSX.Element {
 		)
 	}
 
+	const renderExamItem = ({ item }: { item: Exam }) => (
+		<View style={styles.rowWrapper}>
+			<ExamRow event={item} />
+		</View>
+	)
+
 	return (
 		<View
 			style={{
@@ -95,16 +100,7 @@ export default function CalendarPage(): React.JSX.Element {
 				...styles.pagerContainer
 			}}
 		>
-			<Animated.View
-				style={{
-					borderBottomWidth: scrollY.interpolate({
-						inputRange: [0, 0, 1],
-						outputRange: [0, 0, 0.5],
-						extrapolate: 'clamp'
-					}),
-					...styles.toggleContainer
-				}}
-			>
+			<Animated.View style={styles.toggleContainer}>
 				<ToggleRow
 					items={displayTypes}
 					selectedElement={selectedData}
@@ -132,27 +128,14 @@ export default function CalendarPage(): React.JSX.Element {
 				{/* Page 1: Events */}
 				<ScrollView
 					contentContainerStyle={styles.itemsContainer}
-					onScroll={Animated.event(
-						[
-							{
-								nativeEvent: {
-									contentOffset: { y: scrollY }
-								}
-							}
-						],
-						{ useNativeDriver: false }
-					)}
 					scrollEventThrottle={16}
 				>
-					<View style={styles.contentBorder}>
+					<View>
 						{calendar?.length > 0 &&
 							calendar.map((item, index) => (
-								<React.Fragment key={`event_${index}`}>
+								<View key={`event_${index}`} style={styles.rowWrapper}>
 									<CalendarRow event={item} />
-									{index !== calendar.length - 1 && (
-										<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-									)}
-								</React.Fragment>
+								</View>
 							))}
 					</View>
 					<CalendarFooter />
@@ -160,29 +143,7 @@ export default function CalendarPage(): React.JSX.Element {
 
 				{/* Page 2: Exams */}
 
-				<ScrollView
-					contentContainerStyle={styles.itemsContainer}
-					onScroll={Animated.event(
-						[
-							{
-								nativeEvent: {
-									contentOffset: { y: scrollY }
-								}
-							}
-						],
-						{ useNativeDriver: false }
-					)}
-					refreshControl={
-						<RefreshControl
-							refreshing={isRefetchingByUser}
-							onRefresh={() => {
-								void refetchByUser()
-							}}
-						/>
-					}
-					scrollEventThrottle={16}
-					scrollEnabled={!isError}
-				>
+				<View style={styles.flashListContainer}>
 					{isLoading ? (
 						<LoadingIndicator />
 					) : isError ? (
@@ -198,22 +159,27 @@ export default function CalendarPage(): React.JSX.Element {
 					) : userKind === USER_GUEST ? (
 						<ErrorView title={guestError} inModal />
 					) : (
-						<View>
-							<View style={styles.contentBorder}>
-								{exams != null && exams.length > 0 ? (
-									<>
-										{exams.map((item, index) => (
-											<React.Fragment key={`exam_${index}`}>
-												<ExamRow event={item} />
-												{index !== exams.length - 1 && (
-													<Divider
-														paddingLeft={Platform.OS === 'ios' ? 16 : 0}
-													/>
-												)}
-											</React.Fragment>
-										))}
-									</>
-								) : (
+						<View style={styles.examPageContainer}>
+							{exams && exams.length > 0 ? (
+								<FlashList
+									data={exams}
+									renderItem={renderExamItem}
+									estimatedItemSize={100}
+									contentContainerStyle={styles.flashListContentContainer}
+									showsVerticalScrollIndicator={false}
+									scrollEventThrottle={16}
+									refreshControl={
+										<RefreshControl
+											refreshing={isRefetchingByUser}
+											onRefresh={() => {
+												void refetchByUser()
+											}}
+										/>
+									}
+									ListFooterComponent={<CalendarFooter />}
+								/>
+							) : (
+								<ScrollView contentContainerStyle={styles.emptyStateContainer}>
 									<ErrorView
 										title={t('pages.calendar.exams.noExams.title')}
 										message={t('pages.calendar.exams.noExams.subtitle')}
@@ -229,24 +195,21 @@ export default function CalendarPage(): React.JSX.Element {
 										inModal
 										isCritical={false}
 									/>
-								)}
-							</View>
-							<CalendarFooter />
+									<CalendarFooter />
+								</ScrollView>
+							)}
 						</View>
 					)}
-				</ScrollView>
+				</View>
 			</PagerView>
 		</View>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	contentBorder: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md
-	},
 	footerContainer: {
 		marginVertical: 10,
+		paddingHorizontal: theme.margins.page,
 		paddingBottom: theme.margins.bottomSafeArea
 	},
 	footerText1: {
@@ -276,5 +239,23 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	viewTop: {
 		paddingTop: theme.margins.page
+	},
+	rowWrapper: {
+		marginBottom: 8
+	},
+	flashListContainer: {
+		flex: 1,
+		width: '100%'
+	},
+	examPageContainer: {
+		flex: 1,
+		width: '100%'
+	},
+	flashListContentContainer: {
+		paddingHorizontal: theme.margins.page
+	},
+	emptyStateContainer: {
+		flexGrow: 1,
+		paddingHorizontal: theme.margins.page
 	}
 }))

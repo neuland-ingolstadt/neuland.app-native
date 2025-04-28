@@ -2,7 +2,6 @@ import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
 import GradesRow from '@/components/Rows/GradesRow'
-import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import SectionView from '@/components/Universal/SectionsView'
 import { useRefreshByUser } from '@/hooks'
@@ -256,30 +255,24 @@ export default function GradesSCreen(): React.JSX.Element {
 										)}
 								</View>
 							</SectionView>
-							<SectionView title={t('grades.finished')}>
+							<SectionView title={t('grades.finished')} hideBackground>
 								<React.Fragment>
 									{filteredGrades?.finished.map((grade, index) => (
-										<React.Fragment key={index}>
+										<View key={index} style={styles.rowContainer}>
 											<GradesRow item={grade} />
-											{index !== filteredGrades.finished.length - 1 && (
-												<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-											)}
-										</React.Fragment>
+										</View>
 									))}
 								</React.Fragment>
 							</SectionView>
 						</>
 					)}
 					{filteredGrades?.missing.length !== 0 && (
-						<SectionView title={t('grades.open')}>
+						<SectionView title={t('grades.open')} hideBackground>
 							<React.Fragment>
 								{filteredGrades?.missing.map((grade, index) => (
-									<React.Fragment key={index}>
+									<View key={index} style={styles.rowContainer}>
 										<GradesRow item={grade} />
-										{index !== filteredGrades.missing.length - 1 && (
-											<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-										)}
-									</React.Fragment>
+									</View>
 								))}
 							</React.Fragment>
 						</SectionView>
@@ -345,5 +338,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: 'normal',
 		paddingTop: 8,
 		textAlign: 'left'
+	},
+	rowContainer: {
+		marginBottom: 8
 	}
 }))

@@ -49,24 +49,25 @@ const LecturerRow = ({
 					</Text>
 				</>
 			}
-			rightChildren=<View style={styles.rightContainer}>
-				{item.room_short !== null && item.room_short !== '' && (
-					<View style={styles.container}>
-						<Text style={styles.rightText1}>
-							{t('pages.lecturer.contact.room', {
-								ns: 'common'
-							})}
-							{': '}
-						</Text>
-						<Text style={styles.rightText2} onPress={onPressRoom}>
-							{item.room_short}
-						</Text>
-					</View>
-				)}
-			</View>
+			rightChildren={
+				<View style={styles.rightContainer}>
+					{item.room_short !== null && item.room_short !== '' && (
+						<View style={styles.container}>
+							<Text style={styles.rightText1}>
+								{t('pages.lecturer.contact.room', {
+									ns: 'common'
+								})}
+								{': '}
+							</Text>
+							<Text style={styles.rightText2} onPress={onPressRoom}>
+								{item.room_short}
+							</Text>
+						</View>
+					)}
+				</View>
+			}
 			backgroundColor={theme.colors.card}
 			onPress={onPressRow}
-			maxTitleWidth={'75%'}
 		/>
 	)
 }
@@ -75,7 +76,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: { flexDirection: 'row' },
 	leftText1: {
 		color: theme.colors.labelColor,
-
 		fontSize: 15,
 		fontWeight: '500',
 		marginBottom: 4
@@ -87,7 +87,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	rightContainer: {
 		flexDirection: 'column',
 		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding
+		alignItems: 'flex-end'
 	},
 	rightText1: {
 		color: theme.colors.labelColor,
