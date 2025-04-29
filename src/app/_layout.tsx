@@ -1,5 +1,5 @@
-import { Splash } from '@/Splash'
 import CrashView from '@/components/Error/CrashView'
+import { Splash } from '@/components/Splash'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import Provider from '@/components/provider'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
@@ -171,12 +171,6 @@ function RootLayout(): React.JSX.Element {
 						name="(screens)/changelog"
 						options={{
 							title: 'Changelog'
-						}}
-					/>
-					<Stack.Screen
-						name="index"
-						options={{
-							headerShown: false
 						}}
 					/>
 					<Stack.Screen
