@@ -203,10 +203,9 @@ export default function ClSportsPage({
 					onButtonPress={() => {
 						void refetchByUserSports()
 					}}
-					inModal
 				/>
 			) : sportsResult.isPaused && !sportsResult.isSuccess ? (
-				<ErrorView title={networkError} inModal />
+				<ErrorView title={networkError} />
 			) : (
 				<View>
 					<Text style={styles.campusHeader}>{'Campus'}</Text>
@@ -231,7 +230,6 @@ export default function ClSportsPage({
 									web: 'Dumbbell'
 								}}
 								message={t('pages.clEvents.sports.noEvents.subtitle')}
-								inModal
 								isCritical={false}
 							/>
 						)}

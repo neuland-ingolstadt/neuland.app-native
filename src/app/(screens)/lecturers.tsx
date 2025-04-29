@@ -270,7 +270,12 @@ export default function LecturersScreen(): React.JSX.Element {
 		isPersonal?: boolean
 	}): React.JSX.Element => {
 		return isPaused && !isSuccess ? (
-			<View style={styles.viewHorizontal}>
+			<View
+				style={{
+					...styles.viewHorizontal,
+					...styles.page
+				}}
+			>
 				<ErrorView
 					title={networkError}
 					refreshing={
@@ -508,7 +513,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	loadingContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingTop: 40
+		flex: 1
 	},
 	page: {
 		flex: 1

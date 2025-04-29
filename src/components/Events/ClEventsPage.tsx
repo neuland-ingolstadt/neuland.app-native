@@ -44,10 +44,9 @@ export default function ClEventsPage({
 					onButtonPress={() => {
 						void refetchByUserClEvents()
 					}}
-					inModal
 				/>
 			) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
-				<ErrorView title={networkError} inModal />
+				<ErrorView title={networkError} />
 			) : (
 				<View style={styles.contentContainer}>
 					{clEventsResult.data != null && clEventsResult.data.length > 0 ? (
@@ -67,7 +66,7 @@ export default function ClEventsPage({
 								/>
 							}
 							ListHeaderComponent={
-								<Text style={styles.labelText}>
+								<Text style={styles.sectionHeaderText}>
 									{t('pages.clEvents.events.subtitle')}
 								</Text>
 							}
@@ -81,7 +80,6 @@ export default function ClEventsPage({
 								android: 'calendar_clock',
 								web: 'CalendarClock'
 							}}
-							inModal
 							isCritical={false}
 						/>
 					)}
@@ -94,7 +92,7 @@ export default function ClEventsPage({
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flex: 1,
-		width: '100%'
+		paddingHorizontal: theme.margins.page
 	},
 	contentContainer: {
 		backgroundColor: 'transparent',
@@ -102,7 +100,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%'
 	},
 	flashListContainer: {
-		paddingHorizontal: theme.margins.page,
 		paddingBottom: theme.margins.bottomSafeArea
 	},
 	rowWrapper: {
@@ -111,15 +108,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	itemsContainer: {
 		alignSelf: 'center',
 		justifyContent: 'center',
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
+		paddingBottom: theme.margins.bottomSafeArea
 	},
-	labelText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: 'normal',
-		marginBottom: 4,
-		textTransform: 'uppercase'
+	sectionHeaderText: {
+		color: theme.colors.text,
+		fontSize: 19,
+		fontWeight: '600',
+		paddingBottom: 8
 	}
 }))
