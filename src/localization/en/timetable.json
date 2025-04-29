@@ -19,6 +19,13 @@
 	"time": {
 		"minutes": "minutes"
 	},
+	"dots": {
+		"title": "Lecture Status",
+		"completed": "Completed lectures",
+		"ongoing": "Ongoing lecture",
+		"upcoming": "Upcoming lectures",
+		"total": "The total number of dots shows how many lectures you have on this day"
+	},
 	"error": {
 		"empty": {
 			"title": "Timetable not configured",
