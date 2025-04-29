@@ -15,7 +15,7 @@ import LoadingIndicator from '../Universal/LoadingIndicator'
 
 const MemoizedEventRow = memo(CLEventRow)
 
-function ClEventsPage({
+export default function ClEventsPage({
 	clEventsResult
 }: {
 	clEventsResult: UseQueryResult<CampusLifeEventFieldsFragment[], Error>
@@ -57,8 +57,7 @@ function ClEventsPage({
 							contentContainerStyle={styles.flashListContainer}
 							showsVerticalScrollIndicator={false}
 							scrollEventThrottle={16}
-							disableAutoLayoutAnimation
-							keyExtractor={(item) => item.titles.de.toString()} // Add this line
+							disableAutoLayout
 							refreshControl={
 								<RefreshControl
 									refreshing={isRefetchingByUserClEvents}
@@ -119,5 +118,3 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 8
 	}
 }))
-
-export default memo(ClEventsPage)
