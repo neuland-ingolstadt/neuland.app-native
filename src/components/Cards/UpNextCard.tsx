@@ -23,6 +23,7 @@ import {
 	AppState,
 	type AppStateStatus,
 	Pressable,
+	StyleSheet,
 	Text,
 	View
 } from 'react-native'
@@ -507,7 +508,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		opacity: 0.5
 	},
 	dotRemaining: {
-		backgroundColor: theme.colors.ongoingDot
+		backgroundColor: theme.colors.soonDot,
+		borderColor: theme.colors.labelColor,
+		borderWidth: StyleSheet.hairlineWidth
 	},
 	progressBarContainer: {
 		height: 4,

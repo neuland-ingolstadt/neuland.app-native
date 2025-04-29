@@ -95,10 +95,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	dotOngoing: {
 		backgroundColor: theme.colors.success,
-		opacity: 0.5
+		opacity: 0.6
 	},
 	dotRemaining: {
-		backgroundColor: theme.colors.ongoingDot,
+		backgroundColor: theme.colors.soonDot,
 		borderColor: theme.colors.labelColor,
 		borderWidth: 1
 	},
