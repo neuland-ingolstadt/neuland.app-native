@@ -189,7 +189,7 @@ const RenderSectionItems: React.FC<{
 											}}
 											android={{
 												name: 'chevron_right',
-												size: 16
+												size: 19
 											}}
 											web={{
 												name: 'ChevronRight',
@@ -358,7 +358,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 16,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 16
+		width: 22
 	},
 	chevronIcon: {
 		color: theme.colors.labelTertiaryColor

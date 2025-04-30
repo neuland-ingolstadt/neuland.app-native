@@ -18,7 +18,6 @@ import {
 } from '@/utils/api-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { FlashList } from '@shopify/flash-list'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -26,6 +25,7 @@ import type React from 'react'
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	FlatList,
 	Linking,
 	Platform,
 	RefreshControl,
@@ -306,12 +306,12 @@ export default function LecturersScreen(): React.JSX.Element {
 				/>
 			</View>
 		) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
-			<FlashList
+			<FlatList
 				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
 				keyExtractor={(_, index) => index.toString()}
 				contentContainerStyle={styles.loadedRows}
-				estimatedItemSize={70}
+				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl
 						refreshing={

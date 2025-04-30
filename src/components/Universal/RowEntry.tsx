@@ -55,7 +55,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden',
-		paddingHorizontal: 12,
+		paddingHorizontal: 14,
 		paddingVertical: 16
 	},
 	eventContainer: {

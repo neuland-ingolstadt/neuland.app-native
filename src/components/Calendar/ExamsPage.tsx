@@ -107,6 +107,11 @@ export default function ExamsPage({
 									}}
 								/>
 							}
+							ListHeaderComponent={
+								<Text style={styles.sectionHeaderText}>
+									{t('pages.calendar.exams.subtitle')}
+								</Text>
+							}
 							ListFooterComponent={<CalendarFooter />}
 						/>
 					) : (
@@ -167,5 +172,12 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	emptyStateContainer: {
 		paddingHorizontal: theme.margins.page
+	},
+	sectionHeaderText: {
+		color: theme.colors.text,
+		fontSize: 19,
+		fontWeight: '600',
+		paddingBottom: 12,
+		paddingTop: 8
 	}
 }))
