@@ -82,7 +82,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: '100%'
 	},
 	leftChildrenContainer: {
-		flex: 1,
+		flex: 2,
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start'
 	},
