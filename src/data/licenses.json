@@ -191,6 +191,12 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
+    "expo-dev-client@5.0.20": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
     "expo-haptics@14.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
@@ -198,6 +204,12 @@
         "parents": "neuland"
     },
     "expo-linear-gradient@14.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
+    "expo-linking@7.0.5": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",

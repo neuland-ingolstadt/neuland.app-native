@@ -86,7 +86,6 @@
 			"ongoingLectures": "{{count}} ongoing lecture",
 			"ongoingLectures_one": "{{count}} ongoing lecture",
 			"ongoingLectures_plural": "{{count}} ongoing lectures",
-			"ongoingAndRemaining": "{{ongoing}} ongoing, {{remaining}} left today",
 			"noMoreLectures": "No more lectures today",
 			"noEvents": "No upcoming lectures",
 			"enjoyDay": "Enjoy your day!",

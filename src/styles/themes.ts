@@ -30,7 +30,7 @@ export const lightTheme = {
 		plateShadow: '#444',
 		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d',
-		ongoingDot: '#dfdfdf'
+		soonDot: '#dfdfdf'
 	},
 	margins: {
 		page: 12,
@@ -80,7 +80,7 @@ export const darkTheme = {
 		plateShadow: '#777777',
 		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767',
-		ongoingDot: '#4b4b4b'
+		soonDot: '#4b4b4b'
 	},
 	margins: {
 		page: 12,

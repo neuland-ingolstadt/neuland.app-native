@@ -1,19 +1,14 @@
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/ErrorView'
 import CLEventRow from '@/components/Rows/EventRow'
-import Divider from '@/components/Universal/Divider'
 import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
+import { FlashList } from '@shopify/flash-list'
 import type { UseQueryResult } from '@tanstack/react-query'
-import React, { memo } from 'react'
+import type React from 'react'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Animated,
-	Platform,
-	RefreshControl,
-	ScrollView,
-	View
-} from 'react-native'
+import { RefreshControl, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import LoadingIndicator from '../Universal/LoadingIndicator'
@@ -33,30 +28,14 @@ export default function ClEventsPage({
 		refetchByUser: refetchByUserClEvents
 	} = useRefreshByUser(clEventsResult.refetch)
 
-	const scrollY = new Animated.Value(0)
+	const renderItem = ({ item }: { item: CampusLifeEventFieldsFragment }) => (
+		<View style={styles.rowWrapper}>
+			<MemoizedEventRow event={item} />
+		</View>
+	)
+
 	return (
-		<ScrollView
-			contentContainerStyle={styles.itemsContainer}
-			onScroll={Animated.event(
-				[
-					{
-						nativeEvent: {
-							contentOffset: { y: scrollY }
-						}
-					}
-				],
-				{ useNativeDriver: false }
-			)}
-			scrollEventThrottle={16}
-			refreshControl={
-				<RefreshControl
-					refreshing={isRefetchingByUserClEvents}
-					onRefresh={() => {
-						void refetchByUserClEvents()
-					}}
-				/>
-			}
-		>
+		<View style={styles.container}>
 			{clEventsResult.isLoading ? (
 				<LoadingIndicator />
 			) : clEventsResult.isError ? (
@@ -65,23 +44,34 @@ export default function ClEventsPage({
 					onButtonPress={() => {
 						void refetchByUserClEvents()
 					}}
-					inModal
 				/>
 			) : clEventsResult.isPaused && !clEventsResult.isSuccess ? (
-				<ErrorView title={networkError} inModal />
+				<ErrorView title={networkError} />
 			) : (
-				<View style={styles.contentBorder}>
+				<View style={styles.contentContainer}>
 					{clEventsResult.data != null && clEventsResult.data.length > 0 ? (
-						<View style={styles.contentBorder}>
-							{clEventsResult.data?.map((event, index) => (
-								<React.Fragment key={index}>
-									<MemoizedEventRow event={event} />
-									{index !== clEventsResult.data.length - 1 && (
-										<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-									)}
-								</React.Fragment>
-							))}
-						</View>
+						<FlashList
+							data={clEventsResult.data}
+							renderItem={renderItem}
+							estimatedItemSize={70}
+							contentContainerStyle={styles.flashListContainer}
+							showsVerticalScrollIndicator={false}
+							scrollEventThrottle={16}
+							disableAutoLayout
+							refreshControl={
+								<RefreshControl
+									refreshing={isRefetchingByUserClEvents}
+									onRefresh={() => {
+										void refetchByUserClEvents()
+									}}
+								/>
+							}
+							ListHeaderComponent={
+								<Text style={styles.sectionHeaderText}>
+									{t('pages.clEvents.events.subtitle')}
+								</Text>
+							}
+						/>
 					) : (
 						<ErrorView
 							title={t('pages.clEvents.events.noEvents.title')}
@@ -91,26 +81,40 @@ export default function ClEventsPage({
 								android: 'calendar_clock',
 								web: 'CalendarClock'
 							}}
-							inModal
 							isCritical={false}
 						/>
 					)}
 				</View>
 			)}
-		</ScrollView>
+		</View>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	contentBorder: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md
+	container: {
+		flex: 1,
+		paddingHorizontal: theme.margins.page
+	},
+	contentContainer: {
+		backgroundColor: 'transparent',
+		flex: 1,
+		width: '100%'
+	},
+	flashListContainer: {
+		paddingBottom: theme.margins.bottomSafeArea
+	},
+	rowWrapper: {
+		marginBottom: 8
 	},
 	itemsContainer: {
 		alignSelf: 'center',
 		justifyContent: 'center',
-		paddingBottom: theme.margins.bottomSafeArea,
-		paddingHorizontal: theme.margins.page,
-		width: '100%'
+		paddingBottom: theme.margins.bottomSafeArea
+	},
+	sectionHeaderText: {
+		color: theme.colors.text,
+		fontSize: 19,
+		fontWeight: '600',
+		paddingBottom: 8
 	}
 }))

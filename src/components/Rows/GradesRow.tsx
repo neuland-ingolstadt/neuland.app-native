@@ -34,13 +34,14 @@ const GradesRow = ({ item }: { item: Grade }): React.JSX.Element => {
 					)}
 				</View>
 			}
-			maxTitleWidth={'75%'}
 		/>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	leftContainer: { paddingTop: 3 },
+	leftContainer: {
+		paddingTop: 3
+	},
 	leftText1: {
 		color: theme.colors.labelColor,
 		fontSize: 15,
@@ -50,7 +51,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	rightContainer: {
 		flexDirection: 'column',
 		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding
+		alignItems: 'flex-end'
 	},
 	rightInnerContainer: {
 		alignItems: 'flex-end',

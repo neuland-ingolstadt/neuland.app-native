@@ -20,19 +20,27 @@ import RowEntry from '../Universal/RowEntry'
 const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
+
+	// Determine if event is active (ongoing)
+	const isActive =
+		event.begin < new Date() && event.end != null && event.end > new Date()
+
 	return (
 		<RowEntry
 			title={event.name[i18n.language as LanguageKey]}
 			leftChildren={
-				<Text style={styles.leftText} numberOfLines={2}>
-					{event.hasHours === true
-						? formatFriendlyDateTimeRange(event.begin, event.end ?? null)
-						: formatFriendlyDateRange(event.begin, event.end)}
-				</Text>
+				<View style={styles.leftContainer}>
+					<Text style={styles.leftText} numberOfLines={2}>
+						{event.hasHours === true
+							? formatFriendlyDateTimeRange(event.begin, event.end ?? null)
+							: formatFriendlyDateRange(event.begin, event.end)}
+					</Text>
+				</View>
 			}
 			rightChildren={
 				<View style={styles.rightContainer}>
-					<Text style={styles.rightText}>
+					{isActive && <View style={styles.statusIndicator} />}
+					<Text style={[styles.rightText, isActive && styles.highlightText]}>
 						{event.begin != null &&
 							(event.end != null && event.begin < new Date()
 								? `${t('dates.ends')} ${formatFriendlyRelativeTime(event.end)}`
@@ -40,7 +48,6 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 					</Text>
 				</View>
 			}
-			maxTitleWidth={'60%'}
 		/>
 	)
 }
@@ -60,37 +67,49 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 		event.rooms !== '' ||
 		event.seat != null
 
+	// Calculate if the exam is today
+	const examDate = new Date(event.date)
+	const now = new Date()
+	const isToday =
+		examDate.getDate() === now.getDate() &&
+		examDate.getMonth() === now.getMonth() &&
+		examDate.getFullYear() === now.getFullYear()
+
 	return (
 		<RowEntry
 			title={event.name}
 			leftChildren={
-				showDetails ? (
-					<>
+				<View style={styles.examDetailsContainer}>
+					{showDetails ? (
+						<>
+							<Text style={styles.mainText1} numberOfLines={2}>
+								{formatFriendlyDateTime(event.date)}
+							</Text>
+							<View style={styles.examInfoCol}>
+								<Text style={styles.mainText2} numberOfLines={1}>
+									{`${t('pages.exam.details.room')}: ${event.rooms ?? 'n/a'}`}
+								</Text>
+								<Text style={styles.mainText2} numberOfLines={1}>
+									{`${t('pages.exam.details.seat')}: ${event.seat ?? 'n/a'}`}
+								</Text>
+							</View>
+						</>
+					) : (
 						<Text style={styles.mainText1} numberOfLines={2}>
-							{formatFriendlyDateTime(event.date)}
+							{`${t('pages.exam.about.registration')}: ${formatFriendlyDate(event.enrollment)}`}
 						</Text>
-						<Text style={styles.mainText2} numberOfLines={2}>
-							{`${t('pages.exam.details.room')}: ${event.rooms ?? 'n/a'}`}
-						</Text>
-						<Text style={styles.mainText2} numberOfLines={2}>
-							{`${t('pages.exam.details.seat')}: ${event.seat ?? 'n/a'}`}
-						</Text>
-					</>
-				) : (
-					<Text style={styles.mainText1} numberOfLines={2}>
-						{`${t('pages.exam.about.registration')}: ${formatFriendlyDate(event.enrollment)}`}
-					</Text>
-				)
+					)}
+				</View>
 			}
 			rightChildren={
-				<View style={styles.rightContainerExam}>
-					<Text style={styles.rightTextExam}>
+				<View style={styles.rightContainer}>
+					{isToday && <View style={styles.statusIndicator} />}
+					<Text style={[styles.rightText, isToday && styles.highlightText]}>
 						{formatFriendlyRelativeTime(new Date(event.date))}
 					</Text>
 				</View>
 			}
 			onPress={navigateToPage}
-			maxTitleWidth={'70%'}
 		/>
 	)
 }
@@ -98,30 +117,50 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 const stylesheet = createStyleSheet((theme) => ({
 	leftText: {
 		color: theme.colors.labelColor,
-		fontSize: 13
+		fontSize: 14
+	},
+	leftContainer: {
+		marginTop: 2
 	},
 	mainText1: {
 		color: theme.colors.text,
-		fontSize: 13
+		fontSize: 14,
+		fontWeight: '500'
 	},
 	mainText2: {
 		color: theme.colors.labelColor,
 		fontSize: 13
 	},
+	examInfoCol: {
+		flexDirection: 'column',
+		gap: 2,
+		marginTop: 4
+	},
+	examDetailsContainer: {
+		marginTop: 2,
+		width: '100%'
+	},
 	rightContainer: {
 		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: 6
 	},
-	rightContainerExam: { justifyContent: 'flex-end', padding: 5 },
 	rightText: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
 		fontWeight: '400'
 	},
-	rightTextExam: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '400'
+	highlightText: {
+		color: theme.colors.primary,
+		fontWeight: '500'
+	},
+	statusIndicator: {
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		backgroundColor: theme.colors.primary,
+		marginTop: 2
 	}
 }))
 

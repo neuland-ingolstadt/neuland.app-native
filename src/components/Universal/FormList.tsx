@@ -1,7 +1,7 @@
 import Divider from '@/components/Universal/Divider'
 import type { FormListSections, SectionGroup } from '@/types/components'
 import React from 'react'
-import { Platform, Text, View, type ViewStyle } from 'react-native'
+import { Platform, StyleSheet, Text, View, type ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { Pressable } from 'react-native'
@@ -189,7 +189,7 @@ const RenderSectionItems: React.FC<{
 											}}
 											android={{
 												name: 'chevron_right',
-												size: 16
+												size: 19
 											}}
 											web={{
 												name: 'ChevronRight',
@@ -272,6 +272,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	blockCard: {
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		overflow: 'hidden'
 	},
 	blockFooter: {
@@ -356,7 +358,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginRight: 16,
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: 16
+		width: 22
 	},
 	chevronIcon: {
 		color: theme.colors.labelTertiaryColor

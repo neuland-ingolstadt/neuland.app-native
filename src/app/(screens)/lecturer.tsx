@@ -4,7 +4,7 @@ import type { FormListSections } from '@/types/components'
 import { Redirect, router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Text, View } from 'react-native'
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LecturerDetail(): React.JSX.Element {
@@ -137,6 +137,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		marginBottom: 20,
 		paddingHorizontal: 5,
 		paddingVertical: 10,

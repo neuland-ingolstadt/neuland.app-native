@@ -3,7 +3,6 @@ import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
 import PagerView from '@/components/Layout/PagerView'
 import LecturerRow from '@/components/Rows/LecturerRow'
-import Divider from '@/components/Universal/Divider'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import { UserKindContext } from '@/components/contexts'
@@ -271,7 +270,12 @@ export default function LecturersScreen(): React.JSX.Element {
 		isPersonal?: boolean
 	}): React.JSX.Element => {
 		return isPaused && !isSuccess ? (
-			<View style={styles.viewHorizontal}>
+			<View
+				style={{
+					...styles.viewHorizontal,
+					...styles.page
+				}}
+			>
 				<ErrorView
 					title={networkError}
 					refreshing={
@@ -303,9 +307,11 @@ export default function LecturersScreen(): React.JSX.Element {
 			</View>
 		) : isSuccess && lecturers != null && lecturers?.length > 0 ? (
 			<FlatList
+				key={`lecturers-list-${isPersonal ? 'personal' : 'faculty'}`}
 				data={lecturers}
 				keyExtractor={(_, index) => index.toString()}
 				contentContainerStyle={styles.loadedRows}
+				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl
 						refreshing={
@@ -321,19 +327,20 @@ export default function LecturersScreen(): React.JSX.Element {
 				renderItem={({ item, index }) => (
 					<View
 						key={index}
-						// eslint-disable-next-line react-native/no-inline-styles
-						style={{
-							overflow: 'hidden',
-							borderTopStartRadius: index === 0 ? theme.radius.md : 0,
-							borderTopEndRadius: index === 0 ? theme.radius.md : 0,
-							borderBottomStartRadius:
-								index === lecturers.length - 1 ? theme.radius.md : 0,
-							borderBottomEndRadius:
-								index === lecturers.length - 1 ? theme.radius.md : 0
-						}}
+						style={[
+							styles.rowContainer,
+							{
+								overflow: 'hidden',
+								borderTopStartRadius: index === 0 ? theme.radius.md : 0,
+								borderTopEndRadius: index === 0 ? theme.radius.md : 0,
+								borderBottomStartRadius:
+									index === lecturers.length - 1 ? theme.radius.md : 0,
+								borderBottomEndRadius:
+									index === lecturers.length - 1 ? theme.radius.md : 0
+							}
+						]}
 					>
 						<LecturerRow item={item} />
-						{index !== lecturers.length - 1 && <Divider paddingLeft={16} />}
 					</View>
 				)}
 			/>
@@ -407,22 +414,21 @@ export default function LecturersScreen(): React.JSX.Element {
 					renderItem={({ item, index, section }) => (
 						<View
 							key={index}
-							// eslint-disable-next-line react-native/no-inline-styles
-							style={{
-								overflow: 'hidden',
-								backgroundColor: theme.colors.card,
-								borderTopLeftRadius: index === 0 ? 8 : 0,
-								borderTopRightRadius: index === 0 ? 8 : 0,
-								borderBottomLeftRadius:
-									index === section.data.length - 1 ? 8 : 0,
-								borderBottomRightRadius:
-									index === section.data.length - 1 ? 8 : 0
-							}}
+							style={[
+								styles.rowContainer,
+								{
+									overflow: 'hidden',
+									backgroundColor: theme.colors.card,
+									borderTopLeftRadius: index === 0 ? 8 : 0,
+									borderTopRightRadius: index === 0 ? 8 : 0,
+									borderBottomLeftRadius:
+										index === section.data.length - 1 ? 8 : 0,
+									borderBottomRightRadius:
+										index === section.data.length - 1 ? 8 : 0
+								}
+							]}
 						>
 							<LecturerRow item={item} />
-							{index !== section.data.length - 1 && (
-								<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-							)}
 						</View>
 					)}
 					renderSectionHeader={({ section: { title } }) => (
@@ -463,23 +469,27 @@ export default function LecturersScreen(): React.JSX.Element {
 							}}
 							ref={pagerViewRef}
 						>
-							<LecturerList
-								lecturers={personalLecturersResult.data}
-								isPaused={personalLecturersResult.isPaused}
-								isError={personalLecturersResult.isError}
-								isSuccess={personalLecturersResult.isSuccess}
-								error={personalLecturersResult.error}
-								isLoading={personalLecturersResult.isLoading}
-								isPersonal
-							/>
-							<LecturerList
-								lecturers={facultyData}
-								isPaused={allLecturersResult.isPaused}
-								isError={allLecturersResult.isError}
-								isSuccess={allLecturersResult.isSuccess}
-								error={allLecturersResult.error}
-								isLoading={allLecturersResult.isLoading}
-							/>
+							<View key="personal" style={styles.page}>
+								<LecturerList
+									lecturers={personalLecturersResult.data}
+									isPaused={personalLecturersResult.isPaused}
+									isError={personalLecturersResult.isError}
+									isSuccess={personalLecturersResult.isSuccess}
+									error={personalLecturersResult.error}
+									isLoading={personalLecturersResult.isLoading}
+									isPersonal
+								/>
+							</View>
+							<View key="faculty" style={styles.page}>
+								<LecturerList
+									lecturers={facultyData}
+									isPaused={allLecturersResult.isPaused}
+									isError={allLecturersResult.isError}
+									isSuccess={allLecturersResult.isSuccess}
+									error={allLecturersResult.error}
+									isLoading={allLecturersResult.isLoading}
+								/>
+							</View>
 						</PagerView>
 					</View>
 				) : (
@@ -503,7 +513,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	loadingContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingTop: 40
+		flex: 1
 	},
 	page: {
 		flex: 1
@@ -535,5 +545,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	viewHorizontal: {
 		paddingHorizontal: theme.margins.page
+	},
+	rowContainer: {
+		marginBottom: 8 // Adding spacing between rows
 	}
 }))
