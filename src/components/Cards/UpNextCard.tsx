@@ -8,7 +8,7 @@ import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import type React from 'react'
 import {
 	useCallback,
@@ -19,7 +19,14 @@ import {
 	useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, type AppStateStatus, Text, View } from 'react-native'
+import {
+	AppState,
+	type AppStateStatus,
+	Pressable,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
@@ -337,6 +344,10 @@ const UpNextCard: React.FC = () => {
 		)
 	}, [nextEvent, currentEvent, currentTime, formatFriendlyTime])
 
+	const navigateDots = () => {
+		router.navigate('/dots')
+	}
+
 	const Stats = useMemo(() => {
 		if (todayStats.total === 0) return null
 
@@ -358,7 +369,7 @@ const UpNextCard: React.FC = () => {
 		return (
 			<View style={styles.statsContainer}>
 				{NextEvent}
-				<View style={styles.statsRow}>
+				<Pressable style={styles.statsRow} onPress={navigateDots}>
 					<View style={styles.progressDots}>
 						{Array.from({ length: todayStats.total }).map((_, index) =>
 							index < todayStats.completed ? (
@@ -373,7 +384,7 @@ const UpNextCard: React.FC = () => {
 					<Text style={styles.statsText} numberOfLines={1}>
 						{statsText}
 					</Text>
-				</View>
+				</Pressable>
 			</View>
 		)
 	}, [NextEvent, t, todayStats])
@@ -497,7 +508,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		opacity: 0.5
 	},
 	dotRemaining: {
-		backgroundColor: theme.colors.ongoingDot
+		backgroundColor: theme.colors.soonDot,
+		borderColor: theme.colors.labelColor,
+		borderWidth: StyleSheet.hairlineWidth
 	},
 	progressBarContainer: {
 		height: 4,

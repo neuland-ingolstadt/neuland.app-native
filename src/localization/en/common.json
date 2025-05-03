@@ -102,6 +102,7 @@
 		"calendar": {
 			"exams": {
 				"title": "Exams",
+				"subtitle": "Your exams",
 				"error": "Not a student",
 				"errorSubtitle": "Sign in to see your exams.",
 				"noExams": {
@@ -303,6 +304,7 @@
 			},
 			"events": {
 				"title": "Events",
+				"subtitle": "Events of the clubs",
 				"noEvents": {
 					"title": "No events found",
 					"subtitle": "Check back later."

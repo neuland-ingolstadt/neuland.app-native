@@ -16,7 +16,7 @@ const SportsRow = ({
 }: {
 	event: UniversitySportsFieldsFragment
 }): React.JSX.Element => {
-	const { styles, theme } = useStyles(stylesheet)
+	const { styles } = useStyles(stylesheet)
 	const setSelectedSportsEvent = useCLParamsStore(
 		(state) => state.setSelectedSportsEvent
 	)
@@ -25,25 +25,28 @@ const SportsRow = ({
 		router.navigate('/sports-event')
 	}
 	const dateRange = formatFriendlyTimeRange(event.startTime, event.endTime)
+
 	return (
 		<RowEntry
 			title={event.title[i18n.language as LanguageKey] ?? ''}
 			onPress={onPressRow}
-			backgroundColor={theme.colors.card}
 			leftChildren={
-				<>
+				<View style={styles.leftContainer}>
 					<Text style={styles.leftText1} numberOfLines={1}>
 						{event.location}
 					</Text>
-
-					<Text style={styles.rightText}>{event.campus}</Text>
-				</>
+					<Text style={styles.leftText2} numberOfLines={1}>
+						{event.campus}
+					</Text>
+				</View>
 			}
-			rightChildren=<View style={styles.rightContainer}>
-				<Text style={styles.leftText2} numberOfLines={2}>
-					{dateRange}
-				</Text>
-			</View>
+			rightChildren={
+				<View style={styles.rightContainer}>
+					<Text style={styles.rightText} numberOfLines={2}>
+						{dateRange}
+					</Text>
+				</View>
+			}
 			icon={
 				Platform.OS === 'web' ? (
 					<></>
@@ -65,7 +68,6 @@ const SportsRow = ({
 					/>
 				)
 			}
-			maxTitleWidth={'70%'}
 		/>
 	)
 }
@@ -73,7 +75,7 @@ const SportsRow = ({
 const stylesheet = createStyleSheet((theme) => ({
 	leftText1: {
 		color: theme.colors.labelColor,
-		fontSize: 15,
+		fontSize: 14,
 		fontWeight: '500',
 		marginBottom: 4
 	},
@@ -81,10 +83,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelColor,
 		fontSize: 13
 	},
+	leftContainer: {
+		marginTop: 2
+	},
 	rightContainer: {
-		flexDirection: 'column',
 		justifyContent: 'flex-end',
-		padding: theme.margins.rowPadding
+		padding: theme.margins.rowPadding,
+		alignItems: 'flex-end',
+		flexDirection: 'row',
+		gap: 6
 	},
 	rightText: {
 		color: theme.colors.labelColor,

@@ -102,6 +102,7 @@
 		"calendar": {
 			"exams": {
 				"title": "Prüfungen",
+				"subtitle": "Deine Prüfungen",
 				"error": "Kein Studierender",
 				"errorSubtitle": "Melde dich an, um deine Prüfungen zu sehen.",
 				"noExams": {
@@ -303,6 +304,7 @@
 			},
 			"events": {
 				"title": "Veranstaltungen",
+				"subtitle": "Veranstaltungen der Vereine",
 				"noEvents": {
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."

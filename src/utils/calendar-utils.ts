@@ -1,14 +1,22 @@
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
 import type { LanguageKey } from '@/localization/i18n'
-import type { Calendar } from '@/types/data'
+import type { Calendar, Semester } from '@/types/data'
 import type { CalendarEvent, Exam } from '@/types/utils'
 import type { i18n } from 'i18next'
 
 import { ignoreTime } from './date-utils'
 
 export const compileTime = new Date()
-export const calendar: Calendar[] = rawCalendar
+
+// Extract and flatten events from all semesters
+export const calendar: Calendar[] = rawCalendar.semesters
+	.flatMap((semester: Semester) =>
+		semester.events.map((event) => ({
+			...event,
+			semesterName: semester.name
+		}))
+	)
 	.map((x: unknown) => {
 		const event: Calendar = {
 			...(x as Calendar),
@@ -26,6 +34,30 @@ export const calendar: Calendar[] = rawCalendar
 	)
 	.sort((a, b) => (a.end?.getTime() ?? 0) - (b.end?.getTime() ?? 0))
 	.sort((a, b) => a.begin.getTime() - b.begin.getTime())
+
+// Get the raw semesters for displaying in sections
+export const semesters = rawCalendar.semesters
+	.filter((semester) =>
+		semester.events.some((event) => {
+			const beginDate = new Date(event.begin)
+			const endDate = event.end ? new Date(event.end) : beginDate
+			return endDate > compileTime
+		})
+	)
+	.map((semester) => ({
+		...semester,
+		events: semester.events
+			.map((event) => ({
+				...event,
+				begin: new Date(event.begin),
+				end: event.end ? new Date(event.end) : undefined
+			}))
+			.filter(
+				(event) =>
+					(event.end && event.end > compileTime) || event.begin > compileTime
+			)
+			.sort((a, b) => a.begin.getTime() - b.begin.getTime())
+	}))
 
 /**
  * Fetches and parses the exam list

@@ -11,7 +11,8 @@ import { useRefreshByUser } from '@/hooks'
 import { networkError } from '@/utils/api-utils'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import type React from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Animated,
@@ -25,8 +26,6 @@ import {
 } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import Divider from '../Universal/Divider'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 
 export default function ClSportsPage({
@@ -136,13 +135,10 @@ export default function ClSportsPage({
 				</Pressable>
 				<Collapsible collapsed={collapsed}>
 					<View style={styles.contentContainer}>
-						{data.map((event, index) => (
-							<React.Fragment key={event.id}>
+						{data.map((event, _index) => (
+							<View key={event.id} style={styles.rowWrapper}>
 								<SportsRow event={event} />
-								{index < data.length - 1 && (
-									<Divider paddingLeft={Platform.OS === 'ios' ? 16 : 0} />
-								)}
-							</React.Fragment>
+							</View>
 						))}
 					</View>
 				</Collapsible>
@@ -207,10 +203,9 @@ export default function ClSportsPage({
 					onButtonPress={() => {
 						void refetchByUserSports()
 					}}
-					inModal
 				/>
 			) : sportsResult.isPaused && !sportsResult.isSuccess ? (
-				<ErrorView title={networkError} inModal />
+				<ErrorView title={networkError} />
 			) : (
 				<View>
 					<Text style={styles.campusHeader}>{'Campus'}</Text>
@@ -235,7 +230,6 @@ export default function ClSportsPage({
 									web: 'Dumbbell'
 								}}
 								message={t('pages.clEvents.sports.noEvents.subtitle')}
-								inModal
 								isCritical={false}
 							/>
 						)}
@@ -315,5 +309,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'flex-end',
 		marginRight: 4
 	},
-	weekdaysContainer: { marginBottom: 10 }
+	weekdaysContainer: { marginBottom: 10 },
+	rowWrapper: {
+		marginBottom: 8
+	}
 }))

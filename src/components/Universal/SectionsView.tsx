@@ -1,17 +1,19 @@
 import type React from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const SectionView = ({
 	title,
 	footer,
 	children,
-	link
+	link,
+	hideBackground = false
 }: {
 	title?: string
 	footer?: string
 	children: JSX.Element
 	link?: { text: string; destination: () => void }
+	hideBackground?: boolean
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
@@ -20,7 +22,11 @@ const SectionView = ({
 				{title !== '' && title !== undefined && (
 					<Text style={styles.labelText}>{title}</Text>
 				)}
-				<View style={styles.sectionBox}>{children}</View>
+				<View
+					style={[styles.sectionBox, hideBackground && styles.noBackground]}
+				>
+					{children}
+				</View>
 			</View>
 			{footer != null && (
 				<Text style={styles.footerText(false)}>
@@ -55,9 +61,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		justifyContent: 'center',
 		marginTop: 2,
 		width: '100%'
+	},
+	noBackground: {
+		backgroundColor: 'transparent',
+		borderColor: 'transparent'
 	},
 	sectionContainer: {
 		alignSelf: 'center',
