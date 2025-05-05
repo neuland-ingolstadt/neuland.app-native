@@ -1,9 +1,6 @@
 import { NoSessionError } from '@/api/thi-session-handler'
 import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
-import { Avatar, NameBox } from '@/components/Settings'
-import GradesButton from '@/components/Settings/GradesButton'
-import Divider from '@/components/Universal/Divider'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -16,16 +13,18 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import type { Exam } from '@/types/utils'
 import {
 	animatedHapticFeedback,
 	useRandomColor,
 	withBouncing
 } from '@/utils/animation-utils'
 import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { loadExamList } from '@/utils/calendar-utils'
 import { loadSecureAsync, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useQuery } from '@tanstack/react-query'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,6 +44,9 @@ import {
 import { Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 
+// Additional static imports for lecturers
+import API from '@/api/authenticated-api'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,
@@ -54,6 +56,9 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import Avatar from './Avatar'
+import InfoBox from './InfoBox'
+import NameBox from './NameBox'
 
 export default function Settings(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -194,6 +199,7 @@ export default function Settings(): React.JSX.Element {
 		)
 	}
 
+	// Query for personal data (includes printer balance)
 	const { data, error, isLoading, isSuccess, refetch, isError } = useQuery({
 		queryKey: ['personalData'],
 		queryFn: getPersonalData,
@@ -211,6 +217,40 @@ export default function Settings(): React.JSX.Element {
 		},
 		enabled: userKind === USER_STUDENT
 	})
+
+	// Query for exam data
+	const { data: exams } = useQuery({
+		queryKey: ['examjs'],
+		queryFn: loadExamList,
+		staleTime: 1000 * 60 * 10, // 10 minutes
+		gcTime: 1000 * 60 * 60 * 24, // 24 hours
+		retry(failureCount, error) {
+			if (error instanceof NoSessionError) {
+				router.navigate('/login')
+				return false
+			}
+			return failureCount < 2
+		},
+		enabled: userKind === USER_STUDENT
+	})
+
+	// Query for lecturers data
+	const lecturersResults = useQueries({
+		queries: [
+			{
+				queryKey: ['personalLecturers'],
+				queryFn: async () => {
+					const rawData = await API.getPersonalLecturers()
+					return normalizeLecturers(rawData)
+				},
+				staleTime: 1000 * 60 * 30, // 30 minutes
+				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+				enabled: userKind === USER_STUDENT
+			}
+		]
+	})
+
+	const personalLecturersResult = lecturersResults[0]
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
@@ -236,6 +276,25 @@ export default function Settings(): React.JSX.Element {
 	}, [isLoading, isSuccess])
 
 	const isBouncing = tapCount === 2
+
+	// Calculate real values for the info boxes
+	const printerBalance = data?.pcounter || '0.00'
+
+	// Calculate exams progress
+	const completedExams =
+		exams?.filter((exam: Exam) => new Date(exam.date) < new Date()).length || 0
+	const totalExams = exams?.length || 0
+	const examsDisplay =
+		totalExams > 0 ? `${completedExams}/${totalExams}` : 'N/A'
+
+	// Get lecturers count
+	const lecturersCount = personalLecturersResult.data?.length || 0
+	const lecturersDisplay =
+		personalLecturersResult.isSuccess && lecturersCount > 0
+			? lecturersCount.toString()
+			: personalLecturersResult.isLoading
+				? '-'
+				: '0'
 
 	const sections: FormListSections[] = [
 		{
@@ -410,6 +469,7 @@ export default function Settings(): React.JSX.Element {
 				scrollY.current = event.nativeEvent.contentOffset.y
 				setTapCount(0)
 			}}
+			contentInsetAdjustmentBehavior="automatic"
 			contentContainerStyle={styles.contentContainer}
 		>
 			<View style={styles.wrapper}>
@@ -421,8 +481,7 @@ export default function Settings(): React.JSX.Element {
 							}}
 							// Keep the white background and rounded top corners
 							style={{
-								borderTopLeftRadius: theme.radius.mg,
-								borderTopRightRadius: theme.radius.mg,
+								borderRadius: theme.radius.mg,
 								overflow: 'hidden'
 							}}
 						>
@@ -504,8 +563,6 @@ export default function Settings(): React.JSX.Element {
 								)}
 							</View>
 						</Pressable>
-						<Divider paddingLeft={60} />
-						<GradesButton />
 					</View>
 				) : (
 					<Pressable
@@ -562,6 +619,53 @@ export default function Settings(): React.JSX.Element {
 						</View>
 					</Pressable>
 				)}
+
+				<View style={styles.infoBoxesSection}>
+					<View style={styles.infoBoxesContainer}>
+						<InfoBox
+							title="Printer Balance"
+							value={`€${printerBalance}`}
+							icon={{
+								ios: 'printer',
+								android: 'print',
+								web: 'Printer'
+							}}
+						/>
+						<InfoBox
+							title="Exams"
+							value={examsDisplay}
+							icon={{
+								ios: 'doc.text',
+								android: 'description',
+								web: 'FileText'
+							}}
+							onPress={() => router.navigate('/grades')}
+						/>
+					</View>
+					<View style={styles.infoBoxesContainer}>
+						<InfoBox
+							title="Lecturers"
+							value={lecturersDisplay}
+							icon={{
+								ios: 'person.2',
+								android: 'groups',
+								web: 'Users'
+							}}
+							onPress={() => router.navigate('/lecturers')}
+						/>
+						<InfoBox
+							title="Grades"
+							value="Ø 1.1"
+							icon={{
+								ios: 'calendar.badge.clock',
+								android: 'event_available',
+								web: 'CalendarClock'
+							}}
+							onPress={() => router.navigate('/cl-events')}
+						/>
+					</View>
+				</View>
+
 				<View style={styles.formlistContainer}>
 					<FormList sections={sections} />
 				</View>
@@ -657,7 +761,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderRadius: theme.radius.mg,
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
-		width: '100%'
+		width: '100%',
+		marginTop: 16
 	},
 	contentContainer: {
 		paddingBottom: 60
@@ -678,6 +783,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: 'white',
 		marginTop: Platform.OS === 'android' ? 2 : 0
 	},
+	infoBoxesSection: {
+		marginTop: 12
+	},
+	infoBoxesContainer: {
+		flexDirection: 'row',
+		gap: 10,
+		marginBottom: 10
+	},
 	loading: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -693,7 +806,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	nameInnerContainer: {
 		flexDirection: 'row',
 		paddingHorizontal: 14,
-		paddingVertical: 20,
+		paddingVertical: 30,
 		width: '100%'
 	},
 	nameOuterContainer: { flexDirection: 'column', flex: 1 },
@@ -702,5 +815,5 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		paddingTop: 20
 	},
-	wrapper: { paddingHorizontal: 16, paddingTop: 20 }
+	wrapper: { paddingHorizontal: 12 }
 }))

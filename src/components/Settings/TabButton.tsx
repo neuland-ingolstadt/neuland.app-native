@@ -1,11 +1,12 @@
 import { Avatar } from '@/components/Settings'
-import PlatformIcon from '@/components/Universal/Icon'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import type { MaterialIcon } from '@/types/material-icons'
 import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
-import { getContrastColor, getInitials } from '@/utils/ui-utils'
+import { getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -13,10 +14,17 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderContextMenu } from './HeaderContextMenu'
+interface IndexHeaderRightProps {
+	color?: string
+	size?: number
+	focused?: boolean
+}
 
-export const IndexHeaderRight = (): React.JSX.Element => {
+export const SettingsTabButton = ({
+	color,
+	size = 24,
+	focused = false
+}: IndexHeaderRightProps): React.JSX.Element => {
 	const { t } = useTranslation(['navigation', 'settings'])
 	const router = useRouter()
 	const { styles, theme } = useStyles(stylesheet)
@@ -26,6 +34,8 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	const [username, setUsername] = useState<string>('')
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)
 	const [initials, setInitials] = useState('')
+
+	const iconColor = color || theme.colors.text
 
 	useEffect(() => {
 		const loadUsername = async (): Promise<void> => {
@@ -63,7 +73,8 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	useEffect(() => {
 		const fetchUsernameAndSetInitials = async (): Promise<void> => {
 			if (userKind === USER_STUDENT && persData !== undefined) {
-				const initials = getInitials(`${persData.vname} ${persData.name}`)
+				const fullName = `${persData.vname} ${persData.name}`
+				const initials = getInitials(fullName)
 				setInitials(initials)
 			} else if (userKind === USER_EMPLOYEE) {
 				if (username !== undefined) {
@@ -77,13 +88,36 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 	}, [persData, userKind, username])
 
 	const IconComponent = (): React.JSX.Element => {
+		const avatarStyle = focused
+			? { backgroundColor: iconColor, borderWidth: 0 }
+			: {
+					backgroundColor: 'transparent',
+					borderWidth: 1.5,
+					borderColor: '#8e8e8f'
+				}
+
+		const defaultIconProps = {
+			ios: {
+				name: focused ? 'person.crop.circle.fill' : 'person.crop.circle',
+				size
+			},
+			android: { name: 'account_circle' as MaterialIcon, size: size + 2 },
+			web: {
+				name: (focused ? 'CircleUserRound' : 'CircleUser') as LucideIcon,
+				size
+			}
+		}
+		const defaultUserIcon = (
+			<PlatformIcon
+				{...defaultIconProps}
+				style={{ ...styles.icon, color: iconColor }}
+			/>
+		)
+
 		return userKind === USER_EMPLOYEE ? (
-			<Avatar size={28}>
+			<Avatar size={size + 0} style={avatarStyle}>
 				<Text
-					style={{
-						color: getContrastColor(theme.colors.primary),
-						...styles.iconText
-					}}
+					style={styles.iconText(focused)}
 					numberOfLines={1}
 					adjustsFontSizeToFit={true}
 				>
@@ -91,46 +125,31 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 				</Text>
 			</Avatar>
 		) : userKind === USER_GUEST || isError ? (
-			<PlatformIcon
-				ios={{
-					name: 'person.crop.circle',
-					size: 24
-				}}
-				android={{
-					name: 'account_circle',
-					size: 26
-				}}
-				web={{
-					name: 'CircleUser',
-					size: 24
-				}}
-				style={styles.icon}
-			/>
+			defaultUserIcon
 		) : userKind === USER_STUDENT &&
 			isSuccess &&
 			persData?.mtknr === undefined ? (
 			<PlatformIcon
 				ios={{
-					name: 'person.crop.circle.badge.exclamationmark',
-					size: 24
+					name: focused
+						? 'person.crop.circle.badge.exclamationmark.fill'
+						: 'person.crop.circle.badge.exclamationmark',
+					size: size
 				}}
 				android={{
 					name: 'account_circle_off',
-					size: 26
+					size: size + 2
 				}}
 				web={{
 					name: 'UserX',
-					size: 24
+					size: size
 				}}
-				style={styles.icon}
+				style={{ ...styles.icon, color: iconColor }}
 			/>
 		) : initials !== '' || !showLoadingIndicator ? (
-			<Avatar size={28}>
+			<Avatar size={size + 4} style={avatarStyle}>
 				<Text
-					style={{
-						color: getContrastColor(theme.colors.primary),
-						...styles.iconText
-					}}
+					style={styles.iconText(focused)}
 					numberOfLines={1}
 					adjustsFontSizeToFit={true}
 				>
@@ -138,37 +157,33 @@ export const IndexHeaderRight = (): React.JSX.Element => {
 				</Text>
 			</Avatar>
 		) : (
-			<LoadingIndicator style={styles.center} />
+			defaultUserIcon
 		)
 	}
 
 	const MemoIcon = React.useMemo(
 		() => <IconComponent />,
-		[userKind, initials, showLoadingIndicator, theme.colors]
+		[
+			userKind,
+			initials,
+			showLoadingIndicator,
+			theme.colors,
+			iconColor,
+			size,
+			focused
+		]
 	)
 
-	// Prepare person name for context menu subtitle if available
-	const personName =
-		userKind === 'student' && persData
-			? `${persData.vname} ${persData.name}`
-			: undefined
-
+	// Create the avatar or icon component with proper styling
 	return (
-		<HeaderContextMenu personName={personName}>
-			<Pressable
-				onPress={() => {
-					router.navigate('/settings')
-				}}
-				delayLongPress={300}
-				onLongPress={() => {
-					/* nothing */
-				}}
-				accessibilityLabel={t('navigation.settings')}
-				style={styles.element}
-			>
-				{MemoIcon}
-			</Pressable>
-		</HeaderContextMenu>
+		<Pressable
+			onPress={() => {
+				router.navigate('/settings')
+			}}
+			accessibilityLabel={t('navigation.settings')}
+		>
+			{MemoIcon}
+		</Pressable>
 	)
 }
 
@@ -183,8 +198,9 @@ const stylesheet = createStyleSheet((theme) => ({
 	icon: {
 		color: theme.colors.text
 	},
-	iconText: {
+	iconText: (isActive: boolean) => ({
 		fontSize: 13,
-		fontWeight: 'bold'
-	}
+		fontWeight: 'bold',
+		color: isActive ? theme.colors.contrast : '#8e8e8f'
+	})
 }))

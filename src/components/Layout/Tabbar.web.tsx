@@ -4,12 +4,13 @@ import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
+import { SettingsTabButton } from '../Settings/TabButton'
 
 export function useBottomTabBarHeight(): number {
 	return 60
 }
 
-const DefaultTabs = (): React.JSX.Element => {
+const TabLayout = (): React.JSX.Element => {
 	const { theme: styleTheme } = useStyles()
 	const { t } = useTranslation('navigation')
 	const isMobile = Dimensions.get('window').width < 900
@@ -21,13 +22,18 @@ const DefaultTabs = (): React.JSX.Element => {
 				screenOptions={{
 					tabBarPosition: isMobile ? 'bottom' : 'left',
 					tabBarActiveBackgroundColor: styleTheme.colors.card,
-					tabBarActiveTintColor: styleTheme.colors.primary,
+					tabBarActiveTintColor: styleTheme.colors.text,
 					tabBarInactiveTintColor: styleTheme.colors.labelColor,
 					tabBarInactiveBackgroundColor: styleTheme.colors.card,
 					tabBarStyle: {
-						backgroundColor: styleTheme.colors.card,
-						height: isMobile ? 50 : undefined
+						paddingTop: 6,
+						backgroundColor: styleTheme.colors.card
 					},
+					tabBarLabelStyle: {
+						paddingTop: 4
+					},
+
+					tabBarShowLabel: !isMobile,
 					tabBarLabelPosition: isMobile
 						? undefined
 						: isPad
@@ -41,12 +47,12 @@ const DefaultTabs = (): React.JSX.Element => {
 					options={{
 						title: 'Home',
 						headerShown: false,
-						tabBarIcon: ({ color, size }) => (
+						tabBarIcon: ({ color, size, focused }) => (
 							<PlatformIcon
 								ios={{
 									name: 'house',
-									variant: 'fill',
-									size: size - 4
+									variant: focused ? 'fill' : 'outline',
+									size: size
 								}}
 								android={{
 									name: 'home',
@@ -69,12 +75,13 @@ const DefaultTabs = (): React.JSX.Element => {
 					options={{
 						headerShown: Platform.OS === 'web',
 						title: t('navigation.timetable'),
-						tabBarIcon: ({ color, size }) => (
+						tabBarIcon: ({ color, size, focused }) => (
 							<PlatformIcon
 								ios={{
 									name: 'clock',
-									variant: 'fill',
-									size: size - 4
+									variant: focused ? 'fill' : 'outline',
+
+									size: size
 								}}
 								android={{
 									name: 'calendar_month',
@@ -97,12 +104,12 @@ const DefaultTabs = (): React.JSX.Element => {
 					options={{
 						title: t('navigation.map'),
 						headerShown: false,
-						tabBarIcon: ({ color, size }) => (
+						tabBarIcon: ({ color, size, focused }) => (
 							<PlatformIcon
 								ios={{
 									name: 'map',
-									variant: 'fill',
-									size: size - 4
+									size: size,
+									variant: focused ? 'fill' : 'outline'
 								}}
 								android={{
 									name: 'map',
@@ -126,11 +133,13 @@ const DefaultTabs = (): React.JSX.Element => {
 						title: t('navigation.food'),
 						headerShown: Platform.OS === 'web',
 						tabBarLabel: t('navigation.food'),
-						tabBarIcon: ({ color, size }) => (
+						tabBarIcon: ({ color, size, focused }) => (
 							<PlatformIcon
 								ios={{
 									name: 'fork.knife',
-									size: size - 4
+									variant: focused ? 'fill' : 'outline',
+
+									size: size
 								}}
 								android={{
 									name: 'restaurant',
@@ -147,9 +156,20 @@ const DefaultTabs = (): React.JSX.Element => {
 						)
 					}}
 				/>
+				<Tabs.Screen
+					name="settings"
+					options={{
+						title: t('navigation.profile'),
+						headerShown: true,
+						tabBarLabel: t('navigation.profile'),
+						tabBarIcon: ({ color, size, focused }) => (
+							<SettingsTabButton color={color} size={size} focused={focused} />
+						)
+					}}
+				/>
 			</Tabs>
 		</>
 	)
 }
 
-export default DefaultTabs
+export default TabLayout

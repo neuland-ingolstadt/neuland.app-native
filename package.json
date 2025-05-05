@@ -135,7 +135,6 @@
 	"patchedDependencies": {
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
 		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
-		"react-native-drag-sort@2.4.4": "patches/react-native-drag-sort@2.4.4.patch",
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
 		"recyclerlistview@4.2.1": "patches/recyclerlistview@4.2.1.patch"
 	},

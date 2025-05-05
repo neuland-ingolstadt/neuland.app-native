@@ -1,105 +1,140 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import Color from 'color'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
-import { UnistylesRuntime, useStyles } from 'react-native-unistyles'
+import { useStyles } from 'react-native-unistyles'
 
+import PlatformIcon from '@/components/Universal/Icon'
+import { BottomTabBar } from '@react-navigation/bottom-tabs'
+import { Dimensions } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { SettingsTabButton } from '../Settings/TabButton'
 import { Tabs } from './NativeBottomTabs'
 
+import type { BottomTabBarProps } from '@bottom-tabs/react-navigation'
+
 export const useBottomTabBarHeight = _useBottomTabBarHeight
+
+const CustomTabBar = (props: BottomTabBarProps) => {
+	const insets = useSafeAreaInsets()
+	// @ts-expect-error internally correct
+	return <BottomTabBar insets={insets} {...props} />
+}
 
 export default function TabLayout(): React.JSX.Element {
 	const { theme } = useStyles()
 	const { t } = useTranslation('navigation')
 	const isAndroid = Platform.OS === 'android'
+	const isMobile = Dimensions.get('window').width < 900
+	const isPad = Dimensions.get('window').width < 1300
 	return (
 		<Tabs
-			sidebarAdaptable={false}
-			tabBarActiveTintColor={theme.colors.primary}
-			tabBarStyle={{
-				backgroundColor: isAndroid
-					? UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.04)
-								.hex()
-						: Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.1)
-								.hex()
-					: undefined
+			tabBar={CustomTabBar}
+			screenOptions={{
+				tabBarActiveTintColor: theme.colors.text,
+				// @ts-expect-error internally correct
+				tabBarStyle: {
+					paddingTop: 6,
+					backgroundColor: theme.colors.card,
+					borderColor: theme.colors.border
+				},
+				tabBarLabelStyle: { paddingTop: 5, fontSize: 10 },
+				tabBarLabelPosition: isMobile
+					? undefined
+					: isPad
+						? 'below-icon'
+						: 'beside-icon'
 			}}
+			disablePageAnimations={isAndroid}
 			translucent
-			// eslint-disable-next-line react-native/no-inline-styles
-			tabLabelStyle={{
-				fontSize: 11
-			}}
-			labeled
-			disablePageAnimations={Platform.OS === 'android'}
-			activeIndicatorColor={
-				isAndroid
-					? UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.06)
-								.lighten(1.4)
-								.saturate(1)
-								.hex()
-						: Color(theme.colors.card)
-								.mix(Color(theme.colors.primary), 0.3)
-								.darken(0.05)
-								.saturate(0.1)
-								.hex()
-					: undefined
-			}
 		>
 			<Tabs.Screen
 				name="(index)"
 				options={{
 					title: 'Home',
-					tabBarIcon: ({ focused }: { focused: boolean }) =>
-						isAndroid
-							? focused
-								? require('../../assets/tabbar/home_fill.svg')
-								: require('../../assets/tabbar/home.svg')
-							: { sfSymbol: 'house.fill' }
+					headerShown: false,
+					// @ts-expect-error internally correct
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'house',
+								variant: focused ? 'fill' : 'outline',
+								size
+							}}
+							android={{ name: 'home', size }}
+							web={{ name: 'House', size: size - 2 }}
+							style={{ color }}
+						/>
+					)
 				}}
 			/>
 			<Tabs.Screen
 				name="timetable"
 				options={{
 					title: t('navigation.timetable'),
-					tabBarIcon: ({ focused }: { focused: boolean }) =>
-						isAndroid
-							? focused
-								? require('../../assets/tabbar/calendar_month_fill.svg')
-								: require('../../assets/tabbar/calendar_month.svg')
-							: { sfSymbol: 'clock.fill' }
+					headerShown: false,
+					// @ts-expect-error internally correct
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'clock',
+								variant: focused ? 'fill' : 'outline',
+								size
+							}}
+							android={{ name: 'calendar_month', size }}
+							web={{ name: 'Clock', size: size - 2 }}
+							style={{ color }}
+						/>
+					)
 				}}
 			/>
 			<Tabs.Screen
 				name="map"
 				options={{
 					title: t('navigation.map'),
-					tabBarIcon: ({ focused }: { focused: boolean }) =>
-						isAndroid
-							? focused
-								? require('../../assets/tabbar/map_fill.svg')
-								: require('../../assets/tabbar/map.svg')
-							: { sfSymbol: 'map.fill' }
+					headerShown: false,
+					// @ts-expect-error internally correct
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{ name: 'map', variant: focused ? 'fill' : 'outline', size }}
+							android={{ name: 'map', size }}
+							web={{ name: 'Map', size: size - 2 }}
+							style={{ color }}
+						/>
+					)
 				}}
 			/>
 			<Tabs.Screen
 				name="food"
 				options={{
 					title: t('navigation.food'),
-					tabBarIcon: ({ focused }: { focused: boolean }) =>
-						isAndroid
-							? focused
-								? require('../../assets/tabbar/food_fill.svg')
-								: require('../../assets/tabbar/food.svg')
-							: { sfSymbol: 'fork.knife' }
+					headerShown: false,
+					tabBarLabel: t('navigation.food'),
+					// @ts-expect-error internally correct
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'fork.knife',
+								variant: focused ? 'fill' : 'outline',
+								size
+							}}
+							android={{ name: 'restaurant', size }}
+							web={{ name: 'Utensils', size: size - 2 }}
+							style={{ color }}
+						/>
+					)
+				}}
+			/>
+			<Tabs.Screen
+				name="settings"
+				options={{
+					title: t('navigation.profile'),
+					headerShown: true,
+					tabBarLabel: t('navigation.profile'),
+					// @ts-expect-error internally correct
+					tabBarIcon: ({ color, size, focused }) => (
+						<SettingsTabButton color={color} size={size} focused={focused} />
+					)
 				}}
 			/>
 		</Tabs>
