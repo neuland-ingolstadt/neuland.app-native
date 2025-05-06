@@ -33,12 +33,15 @@ export default function TabLayout(): React.JSX.Element {
 			screenOptions={{
 				tabBarActiveTintColor: theme.colors.text,
 				// @ts-expect-error internally correct
+				tabBarInactiveTintColor: theme.colors.tabbarInactive,
 				tabBarStyle: {
-					paddingTop: 6,
 					backgroundColor: theme.colors.card,
 					borderColor: theme.colors.border
 				},
-				tabBarLabelStyle: { paddingTop: 5, fontSize: 10 },
+				tabBarLabelStyle: {
+					paddingTop: Platform.OS === 'ios' ? 4 : 2,
+					fontSize: 10
+				},
 				tabBarLabelPosition: isMobile
 					? undefined
 					: isPad
@@ -59,9 +62,9 @@ export default function TabLayout(): React.JSX.Element {
 							ios={{
 								name: 'house',
 								variant: focused ? 'fill' : 'outline',
-								size
+								size: size - 1
 							}}
-							android={{ name: 'home', size }}
+							android={{ name: 'home', size: size + 1 }}
 							web={{ name: 'House', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -79,9 +82,9 @@ export default function TabLayout(): React.JSX.Element {
 							ios={{
 								name: 'clock',
 								variant: focused ? 'fill' : 'outline',
-								size
+								size: size - 1
 							}}
-							android={{ name: 'calendar_month', size }}
+							android={{ name: 'calendar_month', size: size + 1 }}
 							web={{ name: 'Clock', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -96,8 +99,12 @@ export default function TabLayout(): React.JSX.Element {
 					// @ts-expect-error internally correct
 					tabBarIcon: ({ color, size, focused }) => (
 						<PlatformIcon
-							ios={{ name: 'map', variant: focused ? 'fill' : 'outline', size }}
-							android={{ name: 'map', size }}
+							ios={{
+								name: 'map',
+								variant: focused ? 'fill' : 'outline',
+								size: size - 1
+							}}
+							android={{ name: 'map', size: size + 1 }}
 							web={{ name: 'Map', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -116,9 +123,9 @@ export default function TabLayout(): React.JSX.Element {
 							ios={{
 								name: 'fork.knife',
 								variant: focused ? 'fill' : 'outline',
-								size
+								size: size - 1
 							}}
-							android={{ name: 'restaurant', size }}
+							android={{ name: 'restaurant', size: size + 1 }}
 							web={{ name: 'Utensils', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -133,7 +140,11 @@ export default function TabLayout(): React.JSX.Element {
 					tabBarLabel: t('navigation.profile'),
 					// @ts-expect-error internally correct
 					tabBarIcon: ({ color, size, focused }) => (
-						<SettingsTabButton color={color} size={size} focused={focused} />
+						<SettingsTabButton
+							color={color}
+							size={size + (Platform.OS === 'ios' && 2)}
+							focused={focused}
+						/>
 					)
 				}}
 			/>

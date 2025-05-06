@@ -93,7 +93,7 @@ export const SettingsTabButton = ({
 			: {
 					backgroundColor: 'transparent',
 					borderWidth: 1.5,
-					borderColor: '#8e8e8f'
+					borderColor: theme.colors.tabbarInactive
 				}
 
 		const defaultIconProps = {
@@ -115,7 +115,7 @@ export const SettingsTabButton = ({
 		)
 
 		return userKind === USER_EMPLOYEE ? (
-			<Avatar size={size + 0} style={avatarStyle}>
+			<Avatar size={size} style={avatarStyle}>
 				<Text
 					style={styles.iconText(focused)}
 					numberOfLines={1}
@@ -147,7 +147,7 @@ export const SettingsTabButton = ({
 				style={{ ...styles.icon, color: iconColor }}
 			/>
 		) : initials !== '' || !showLoadingIndicator ? (
-			<Avatar size={size + 4} style={avatarStyle}>
+			<Avatar size={size} style={avatarStyle}>
 				<Text
 					style={styles.iconText(focused)}
 					numberOfLines={1}
@@ -199,8 +199,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.text
 	},
 	iconText: (isActive: boolean) => ({
-		fontSize: 13,
+		fontSize: 12,
 		fontWeight: 'bold',
-		color: isActive ? theme.colors.contrast : '#8e8e8f'
+		color: isActive ? theme.colors.contrast : theme.colors.tabbarInactive
 	})
 }))
