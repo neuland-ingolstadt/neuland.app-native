@@ -52,14 +52,7 @@
 			"typedRoutes": true
 		},
 		"plugins": [
-			[
-				"react-native-edge-to-edge",
-				{
-					"android": {
-						"parentTheme": "Material3"
-					}
-				}
-			],
+			["react-native-edge-to-edge"],
 			[
 				"expo-router",
 				{
@@ -109,12 +102,6 @@
 			],
 			["expo-secure-store"],
 			["expo-localization"],
-			[
-				"expo-local-authentication",
-				{
-					"faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
-				}
-			],
 			["@maplibre/maplibre-react-native"],
 			[
 				"expo-build-properties",

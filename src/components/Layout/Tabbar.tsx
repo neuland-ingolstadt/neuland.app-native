@@ -35,13 +35,11 @@ export default function TabLayout(): React.JSX.Element {
 				// @ts-expect-error internally correct
 				tabBarInactiveTintColor: theme.colors.tabbarInactive,
 				tabBarStyle: {
+					paddingTop: 8,
 					backgroundColor: theme.colors.card,
 					borderColor: theme.colors.border
 				},
-				tabBarLabelStyle: {
-					paddingTop: Platform.OS === 'ios' ? 4 : 2,
-					fontSize: 10
-				},
+				tabBarShowLabel: !isMobile,
 				tabBarLabelPosition: isMobile
 					? undefined
 					: isPad
@@ -64,7 +62,11 @@ export default function TabLayout(): React.JSX.Element {
 								variant: focused ? 'fill' : 'outline',
 								size: size - 1
 							}}
-							android={{ name: 'home', size: size + 1 }}
+							android={{
+								name: 'home',
+								size: size + 2,
+								variant: focused ? 'filled' : 'outlined'
+							}}
 							web={{ name: 'House', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -84,7 +86,11 @@ export default function TabLayout(): React.JSX.Element {
 								variant: focused ? 'fill' : 'outline',
 								size: size - 1
 							}}
-							android={{ name: 'calendar_month', size: size + 1 }}
+							android={{
+								name: 'calendar_month',
+								size: size + 2,
+								variant: focused ? 'filled' : 'outlined'
+							}}
 							web={{ name: 'Clock', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -104,7 +110,11 @@ export default function TabLayout(): React.JSX.Element {
 								variant: focused ? 'fill' : 'outline',
 								size: size - 1
 							}}
-							android={{ name: 'map', size: size + 1 }}
+							android={{
+								name: 'map',
+								size: size + 2,
+								variant: focused ? 'filled' : 'outlined'
+							}}
 							web={{ name: 'Map', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -125,7 +135,11 @@ export default function TabLayout(): React.JSX.Element {
 								variant: focused ? 'fill' : 'outline',
 								size: size - 1
 							}}
-							android={{ name: 'restaurant', size: size + 1 }}
+							android={{
+								name: 'restaurant',
+								size: size + 2,
+								variant: focused ? 'filled' : 'outlined'
+							}}
 							web={{ name: 'Utensils', size: size - 2 }}
 							style={{ color }}
 						/>
@@ -138,6 +152,7 @@ export default function TabLayout(): React.JSX.Element {
 					title: t('navigation.profile'),
 					headerShown: true,
 					tabBarLabel: t('navigation.profile'),
+
 					// @ts-expect-error internally correct
 					tabBarIcon: ({ color, size, focused }) => (
 						<SettingsTabButton

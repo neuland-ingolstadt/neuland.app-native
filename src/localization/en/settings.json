@@ -2,7 +2,12 @@
 	"menu": {
 		"guest": {
 			"title": "Sign in",
-			"subtitle": "Sign in to unlock all features of the app"
+			"subtitle": "Sign in to unlock all features of the app",
+			"banner": {
+				"title": "Your THI Dashboard",
+				"message": "After signing in, you'll see your grades, library card, printer balance and other important information right here.",
+				"button": "Get Started"
+			}
 		},
 		"employee": {
 			"subtitle1": "Employee account",

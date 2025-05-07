@@ -10,13 +10,11 @@ interface PlatformIcon {
 	web: LucideIcon
 }
 
-// Define the type for the card icons object
 interface CardIcons {
 	timetable: PlatformIcon
 	calendar: PlatformIcon
 	events: PlatformIcon
 	library: PlatformIcon
-	lecturers: PlatformIcon
 	news: PlatformIcon
 	login: PlatformIcon
 	links: PlatformIcon
@@ -45,11 +43,6 @@ export const cardIcons: CardIcons = {
 		iosScale: 0.9,
 		android: 'book_2',
 		web: 'BookOpen'
-	},
-	lecturers: {
-		ios: 'person.2.fill',
-		android: 'group',
-		web: 'Users'
 	},
 	news: {
 		ios: 'newspaper.fill',

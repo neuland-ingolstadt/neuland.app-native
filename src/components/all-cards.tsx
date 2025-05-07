@@ -56,13 +56,6 @@ export const AllCards: Card[] = [
 		card: () => <NewsCard />
 	},
 	{
-		key: 'lecturers',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />
-	},
-	{
 		key: 'login',
 		removable: false,
 		initial: [USER_GUEST],

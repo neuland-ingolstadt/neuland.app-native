@@ -101,7 +101,11 @@ export const SettingsTabButton = ({
 				name: focused ? 'person.crop.circle.fill' : 'person.crop.circle',
 				size
 			},
-			android: { name: 'account_circle' as MaterialIcon, size: size + 2 },
+			android: {
+				name: 'account_circle' as MaterialIcon,
+				size: size + 2,
+				variant: focused ? 'filled' : 'outlined'
+			},
 			web: {
 				name: (focused ? 'CircleUserRound' : 'CircleUser') as LucideIcon,
 				size

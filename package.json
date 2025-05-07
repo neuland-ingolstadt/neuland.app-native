@@ -60,7 +60,6 @@
 		"expo-haptics": "~14.0.1",
 		"expo-linear-gradient": "~14.0.2",
 		"expo-linking": "~7.0.5",
-		"expo-local-authentication": "~15.0.2",
 		"expo-localization": "~16.0.1",
 		"expo-navigation-bar": "~4.0.9",
 		"expo-quick-actions": "^4.0.2",

@@ -1,3 +1,4 @@
+import NeulandAPI from '@/api/neuland-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
@@ -13,18 +14,21 @@ import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
-import type { Exam } from '@/types/utils'
 import {
 	animatedHapticFeedback,
 	useRandomColor,
 	withBouncing
 } from '@/utils/animation-utils'
-import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { loadExamList } from '@/utils/calendar-utils'
+import {
+	extractSpoName,
+	getPersonalData,
+	performLogout
+} from '@/utils/api-utils'
+import { loadGradeAverage } from '@/utils/grades-utils'
 import { loadSecureAsync, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,10 +47,6 @@ import {
 } from 'react-native'
 import { Pressable } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-
-// Additional static imports for lecturers
-import API from '@/api/authenticated-api'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,
@@ -56,9 +56,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import packageInfo from '../../../package.json'
 import Avatar from './Avatar'
-import InfoBox from './InfoBox'
+import GuestInfoSection from './GuestInfoSection'
 import NameBox from './NameBox'
+import StudentInfoSection from './StudentInfoSection'
 
 export default function Settings(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -218,39 +220,26 @@ export default function Settings(): React.JSX.Element {
 		enabled: userKind === USER_STUDENT
 	})
 
-	// Query for exam data
-	const { data: exams } = useQuery({
-		queryKey: ['examjs'],
-		queryFn: loadExamList,
-		staleTime: 1000 * 60 * 10, // 10 minutes
-		gcTime: 1000 * 60 * 60 * 24, // 24 hours
-		retry(failureCount, error) {
-			if (error instanceof NoSessionError) {
-				router.navigate('/login')
-				return false
-			}
-			return failureCount < 2
+	// Query for SPO weights
+	const { data: spoWeights } = useQuery({
+		queryKey: ['spoWeights', packageInfo.version],
+		queryFn: async () => await NeulandAPI.getSpoWeights(),
+		staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+		gcTime: 1000 * 60 * 60 * 24 * 14 // 2 weeks
+	})
+
+	// Query for grade average
+	const { data: gradeAverage } = useQuery({
+		queryKey: ['gradeAverage'],
+		queryFn: async () => {
+			if (!data) return null
+			const spoName = extractSpoName(data)
+			return await loadGradeAverage(spoWeights ?? null, spoName ?? null)
 		},
-		enabled: userKind === USER_STUDENT
+		staleTime: 1000 * 60 * 30, // 30 minutes
+		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
+		enabled: userKind === USER_STUDENT && !!data && !!spoWeights
 	})
-
-	// Query for lecturers data
-	const lecturersResults = useQueries({
-		queries: [
-			{
-				queryKey: ['personalLecturers'],
-				queryFn: async () => {
-					const rawData = await API.getPersonalLecturers()
-					return normalizeLecturers(rawData)
-				},
-				staleTime: 1000 * 60 * 30, // 30 minutes
-				gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
-				enabled: userKind === USER_STUDENT
-			}
-		]
-	})
-
-	const personalLecturersResult = lecturersResults[0]
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
@@ -276,25 +265,6 @@ export default function Settings(): React.JSX.Element {
 	}, [isLoading, isSuccess])
 
 	const isBouncing = tapCount === 2
-
-	// Calculate real values for the info boxes
-	const printerBalance = data?.pcounter || '0.00'
-
-	// Calculate exams progress
-	const completedExams =
-		exams?.filter((exam: Exam) => new Date(exam.date) < new Date()).length || 0
-	const totalExams = exams?.length || 0
-	const examsDisplay =
-		totalExams > 0 ? `${completedExams}/${totalExams}` : 'N/A'
-
-	// Get lecturers count
-	const lecturersCount = personalLecturersResult.data?.length || 0
-	const lecturersDisplay =
-		personalLecturersResult.isSuccess && lecturersCount > 0
-			? lecturersCount.toString()
-			: personalLecturersResult.isLoading
-				? '-'
-				: '0'
 
 	const sections: FormListSections[] = [
 		{
@@ -621,49 +591,14 @@ export default function Settings(): React.JSX.Element {
 				)}
 
 				<View style={styles.infoBoxesSection}>
-					<View style={styles.infoBoxesContainer}>
-						<InfoBox
-							title="Printer Balance"
-							value={`€${printerBalance}`}
-							icon={{
-								ios: 'printer',
-								android: 'print',
-								web: 'Printer'
-							}}
+					{userKind === USER_GUEST ? (
+						<GuestInfoSection />
+					) : (
+						<StudentInfoSection
+							gradeAverage={gradeAverage}
+							printerBalance={data?.pcounter}
 						/>
-						<InfoBox
-							title="Exams"
-							value={examsDisplay}
-							icon={{
-								ios: 'doc.text',
-								android: 'description',
-								web: 'FileText'
-							}}
-							onPress={() => router.navigate('/grades')}
-						/>
-					</View>
-					<View style={styles.infoBoxesContainer}>
-						<InfoBox
-							title="Lecturers"
-							value={lecturersDisplay}
-							icon={{
-								ios: 'person.2',
-								android: 'groups',
-								web: 'Users'
-							}}
-							onPress={() => router.navigate('/lecturers')}
-						/>
-						<InfoBox
-							title="Grades"
-							value="Ø 1.1"
-							icon={{
-								ios: 'calendar.badge.clock',
-								android: 'event_available',
-								web: 'CalendarClock'
-							}}
-							onPress={() => router.navigate('/cl-events')}
-						/>
-					</View>
+					)}
 				</View>
 
 				<View style={styles.formlistContainer}>
@@ -784,7 +719,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: Platform.OS === 'android' ? 2 : 0
 	},
 	infoBoxesSection: {
-		marginTop: 12
+		marginTop: 6
 	},
 	infoBoxesContainer: {
 		flexDirection: 'row',
@@ -815,5 +750,45 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		paddingTop: 20
 	},
-	wrapper: { paddingHorizontal: 12 }
+	wrapper: { paddingHorizontal: 12 },
+	guestBanner: {
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.mg,
+		padding: 20,
+		marginVertical: 8,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		gap: 16
+	},
+	guestBannerContent: {
+		flex: 1
+	},
+	guestBannerTitle: {
+		color: theme.colors.text,
+		fontSize: 16,
+		fontWeight: '600',
+		marginBottom: 4
+	},
+	guestBannerMessage: {
+		color: theme.colors.labelColor,
+		fontSize: 13,
+		lineHeight: 18
+	},
+	guestBannerIcon: {
+		color: theme.colors.labelSecondaryColor
+	},
+	guestBannerButton: {
+		backgroundColor: theme.colors.primary,
+		borderRadius: theme.radius.sm,
+		paddingVertical: 8,
+		paddingHorizontal: 16,
+		minWidth: 100,
+		alignItems: 'center'
+	},
+	guestBannerButtonText: {
+		color: getContrastColor(theme.colors.primary),
+		fontSize: 14,
+		fontWeight: '500'
+	}
 }))
