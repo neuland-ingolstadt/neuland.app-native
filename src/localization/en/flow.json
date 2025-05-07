@@ -54,6 +54,7 @@
 		"username": "Username",
 		"password": "Password",
 		"button": "Sign in",
-		"guest": "or continue as guest"
+		"guest": "continue as guest",
+		"or": "or"
 	}
 }

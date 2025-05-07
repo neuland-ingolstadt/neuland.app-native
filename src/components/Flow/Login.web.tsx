@@ -5,7 +5,7 @@ import type { OnboardingCardData } from '@/types/data'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Text, View } from 'react-native'
+import { Linking, Platform, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -146,15 +146,19 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		alignSelf: 'center',
 		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		gap: 10,
+		borderRadius: 24,
+		gap: 16,
 		maxWidth: 1000,
-		padding: 14
+		padding: 24,
+		marginTop: 40,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
+		width: '100%'
 	},
 	innerContainer: {
 		flexDirection: 'column',
 		gap: 40,
-		paddingTop: 30
+		paddingTop: 50
 	},
 	linkContainer: {
 		alignItems: 'center',
