@@ -14,7 +14,6 @@ interface CardIcons {
 	timetable: PlatformIcon
 	calendar: PlatformIcon
 	events: PlatformIcon
-	library: PlatformIcon
 	news: PlatformIcon
 	login: PlatformIcon
 	links: PlatformIcon
@@ -37,12 +36,6 @@ export const cardIcons: CardIcons = {
 		ios: 'figure.2',
 		android: 'celebration',
 		web: 'PartyPopper'
-	},
-	library: {
-		ios: 'books.vertical.fill',
-		iosScale: 0.9,
-		android: 'book_2',
-		web: 'BookOpen'
 	},
 	news: {
 		ios: 'newspaper.fill',

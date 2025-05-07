@@ -1,5 +1,4 @@
 export { default as GuestUserNote } from './GuestUserNote'
-export { default as HiddenDashboardItems } from './HiddenDashboardItems'
 export { default as OrderableRowItem } from './OrderableRowItem'
 export { default as ResetOrderButton } from './ResetOrderButton'
 export { dashboardStyles } from './styles'

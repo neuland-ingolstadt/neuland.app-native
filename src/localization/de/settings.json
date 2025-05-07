@@ -2,7 +2,11 @@
 	"menu": {
 		"guest": {
 			"title": "Anmelden",
-			"subtitle": "Melde dich an, um alle Funktionen der App freizuschalten."
+			"subtitle": "Melde dich an, um alle Funktionen der App freizuschalten.",
+			"banner": {
+				"title": "Loslegen",
+				"message": "Nachdem du dich angemeldet hast, siehst du deine Noten, deine Bibliothekskarte, dein Druckguthaben und andere wichtige Informationen hier."
+			}
 		},
 		"employee": {
 			"subtitle1": "Mitarbeitenden Account",
@@ -166,7 +170,7 @@
 		"noShownButton": "Konfigurieren",
 		"noShownDescription": "Füge Karten zu deinem Dashboard hinzu, um loszulegen.",
 		"reset": "Reihenfolge zurücksetzen",
-		"footer": "Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst. Verstecke Karten, indem du auf das Entfernen-Symbol drückst.",
+		"footer": "Passe dein Dashboard an, indem du die Karten per Drag & Drop in die gewünschte Reihenfolge ziehst.",
 		"unavailable": {
 			"title": "Nicht verfügbare Karten",
 			"message": "Um alle Funktionen der App nutzen zu können, musst du dich anmelden. Tippe um mit deinem THI-Account fortzufahren."

@@ -20,16 +20,14 @@ import { CardContextMenu } from './CardContextMenu'
 
 interface BaseCardProps {
 	title: string
-	onPressRoute?: string
-	removable?: boolean
+	onPressRoute?: RelativePathString
 	children?: React.ReactNode
 }
 
 const BaseCard: React.FC<BaseCardProps> = ({
 	title,
 	onPressRoute,
-	children,
-	removable = true
+	children
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
@@ -56,7 +54,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		rotation.value = withTiming(0, { duration: 300 })
 	}
 
-	const { hideDashboardEntry, resetOrder } = useContext(DashboardContext)
+	const { resetOrder } = useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 
 	const cardStyle = [styles.card, onPressRoute == null && styles.cardDisabled]
@@ -138,9 +136,6 @@ const BaseCard: React.FC<BaseCardProps> = ({
 					{cardContent}
 				</Pressable>
 			}
-			title={title}
-			removable={removable}
-			hideDashboardEntry={hideDashboardEntry}
 			resetOrder={resetOrder}
 			userKind={userKind}
 		/>
@@ -169,7 +164,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 36,
 		height: 36,
 		borderRadius: 18,
-		backgroundColor: theme.colors.cardIconBackground,
+		backgroundColor: `${theme.colors.primary}20`,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4

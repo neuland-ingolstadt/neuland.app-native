@@ -1,43 +1,24 @@
-import type { GradeAverage } from '@/types/utils'
 import { useRouter } from 'expo-router'
 import { View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import InfoBox from './InfoBox'
 
 interface StudentInfoSectionProps {
-	gradeAverage?: GradeAverage
+	ects?: number
 	printerBalance?: string
+	personalLecturersCount?: number
 }
 
 export default function StudentInfoSection({
-	gradeAverage,
-	printerBalance
+	ects,
+	printerBalance,
+	personalLecturersCount
 }: StudentInfoSectionProps): React.JSX.Element {
 	const router = useRouter()
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<>
-			<View style={styles.infoBoxesContainer}>
-				<InfoBox
-					title="Grade Average"
-					value={gradeAverage?.result ? `Ø ${gradeAverage.result}` : '-'}
-					icon={{
-						ios: 'chart.bar',
-						android: 'bar_chart',
-						web: 'BarChart'
-					}}
-					onPress={() => router.navigate('/grades')}
-				/>
-				<InfoBox
-					title="Library Card"
-					value="View"
-					icon={{
-						ios: 'barcode.viewfinder',
-						android: 'qr_code_scanner',
-						web: 'Barcode'
-					}}
-					onPress={() => router.navigate('/library-code')}
-				/>
-			</View>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
 					title="Printer Balance"
@@ -49,15 +30,47 @@ export default function StudentInfoSection({
 					}}
 					onPress={() => router.navigate('/profile')}
 				/>
+				<InfoBox
+					title="Grades & Subjects"
+					value={ects !== undefined ? `${ects} ECTS` : '-'}
+					icon={{
+						ios: 'chart.bar',
+						android: 'bar_chart',
+						web: 'Activity'
+					}}
+					onPress={() => router.navigate('/grades')}
+				/>
+			</View>
+			<View style={styles.infoBoxesContainer}>
+				<InfoBox
+					title="Lecturers"
+					value={personalLecturersCount?.toString() ?? '-'}
+					icon={{
+						ios: 'person.2',
+						android: 'group',
+						web: 'Users'
+					}}
+					onPress={() => router.navigate('/lecturers')}
+				/>
+				<InfoBox
+					title="Library"
+					value="View"
+					icon={{
+						ios: 'barcode',
+						android: 'qr_code_scanner',
+						web: 'Barcode'
+					}}
+					onPress={() => router.navigate('/library-code')}
+				/>
 			</View>
 		</>
 	)
 }
 
-const styles = {
+const stylesheet = createStyleSheet(() => ({
 	infoBoxesContainer: {
-		flexDirection: 'row',
+		flexDirection: 'row' as const,
 		gap: 10,
 		marginBottom: 10
 	}
-}
+}))

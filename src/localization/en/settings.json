@@ -4,9 +4,8 @@
 			"title": "Sign in",
 			"subtitle": "Sign in to unlock all features of the app",
 			"banner": {
-				"title": "Your THI Dashboard",
-				"message": "After signing in, you'll see your grades, library card, printer balance and other important information right here.",
-				"button": "Get Started"
+				"title": "Get started",
+				"message": "After signing in, you'll see your grades, library card, printer balance and other important information right here."
 			}
 		},
 		"employee": {
@@ -172,7 +171,7 @@
 		"noShown": "Dashboard is empty",
 		"noShownDescription": "Add some cards to your dashboard to get started.",
 		"noShownButton": "Configure",
-		"footer": "Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.",
+		"footer": "Customize your dashboard by dragging and dropping the cards to your preferred order.",
 		"unavailable": {
 			"title": "Unavailable cards",
 			"message": "To use all features of the app, you need to sign in. Tap to continue with your THI account."

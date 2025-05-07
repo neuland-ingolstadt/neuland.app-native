@@ -82,7 +82,9 @@
 		"studVer": "StudVer",
 		"marketplace": "Marketplace",
 		"thi": "THI",
-		"press": "PressReader"
+		"press": "PressReader",
+		"librarySeat": "Library Seat",
+		"libraryCatalog": "Library Catalog"
 	},
 	"pages": {
 		"quicklinks": {
@@ -95,7 +97,9 @@
 				"studVer": "Student Representation",
 				"marketplace": "Marketplace",
 				"thi": "THI Website",
-				"press": "PressReader"
+				"press": "PressReader",
+				"librarySeat": "Library Seat Reservation",
+				"libraryCatalog": "Library Catalog"
 			},
 			"more": "more links"
 		},

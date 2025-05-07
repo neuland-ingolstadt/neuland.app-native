@@ -1,7 +1,6 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
 import {
-	BaseCard,
 	CalendarCard,
 	EventsCard,
 	LinkCard,
@@ -33,13 +32,6 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <EventsCard />
-	},
-	{
-		key: 'library',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <BaseCard title="library" onPressRoute="library" />
 	},
 	{
 		key: 'links',

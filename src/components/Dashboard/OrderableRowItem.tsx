@@ -2,7 +2,7 @@ import PlatformIcon from '@/components/Universal/Icon'
 import type { ExtendedCard } from '@/components/all-cards'
 import { cardIcons } from '@/components/icons'
 import type React from 'react'
-import { Dimensions, Pressable, Text, View } from 'react-native'
+import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const { width } = Dimensions.get('window')
@@ -13,7 +13,6 @@ interface OrderableRowItemProps {
 	isLast: boolean
 	onMoveUp: () => void
 	onMoveDown: () => void
-	onPressDelete: () => void
 	isFirstItem: boolean
 	isLastItem: boolean
 }
@@ -23,12 +22,12 @@ export default function OrderableRowItem({
 	isLast,
 	onMoveUp,
 	onMoveDown,
-	onPressDelete,
 	isFirstItem,
 	isLastItem
 }: OrderableRowItemProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const bottomWidth = isLast ? 0 : 1
+	const isWeb = Platform.OS === 'web'
 
 	return (
 		<View>
@@ -62,104 +61,67 @@ export default function OrderableRowItem({
 
 				<Text style={styles.text}>{item.text}</Text>
 
-				<View style={styles.actionButtons}>
-					{/* Move Up Button */}
-					<Pressable
-						onPress={onMoveUp}
-						disabled={isFirstItem}
-						style={({ pressed }) => [
-							styles.arrowButton,
-							{
-								opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
-							}
-						]}
-						accessibilityLabel="Move up"
-					>
-						<PlatformIcon
-							ios={{
-								name: 'chevron.up',
-								size: 16
-							}}
-							android={{
-								name: 'keyboard_arrow_up',
-								size: 20
-							}}
-							web={{
-								name: 'ChevronUp',
-								size: 18
-							}}
-							style={styles.arrowIcon}
-						/>
-					</Pressable>
-
-					{/* Move Down Button */}
-					<Pressable
-						onPress={onMoveDown}
-						disabled={isLastItem}
-						style={({ pressed }) => [
-							styles.arrowButton,
-							{
-								opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
-							}
-						]}
-						accessibilityLabel="Move down"
-					>
-						<PlatformIcon
-							ios={{
-								name: 'chevron.down',
-								size: 16
-							}}
-							android={{
-								name: 'keyboard_arrow_down',
-								size: 20
-							}}
-							web={{
-								name: 'ChevronDown',
-								size: 18
-							}}
-							style={styles.arrowIcon}
-						/>
-					</Pressable>
-
-					{/* Delete Button or empty spacer for alignment */}
-					<View style={styles.deleteButtonContainer}>
-						{item.removable ? (
-							<Pressable
-								onPress={onPressDelete}
-								style={({ pressed }) => [
-									styles.deleteButton,
-									{
-										opacity: pressed ? 0.5 : 1
-									}
-								]}
-								hitSlop={{
-									top: 13,
-									right: 15,
-									bottom: 13,
-									left: 15
+				{isWeb && (
+					<View style={styles.actionButtons}>
+						{/* Move Up Button */}
+						<Pressable
+							onPress={onMoveUp}
+							disabled={isFirstItem}
+							style={({ pressed }) => [
+								styles.arrowButton,
+								{
+									opacity: isFirstItem ? 0.3 : pressed ? 0.7 : 1
+								}
+							]}
+							accessibilityLabel="Move up"
+						>
+							<PlatformIcon
+								ios={{
+									name: 'chevron.up',
+									size: 16
 								}}
-								accessibilityLabel="Remove item"
-							>
-								<PlatformIcon
-									ios={{
-										name: 'minus.circle',
-										size: 20
-									}}
-									android={{
-										name: 'do_not_disturb_on',
-										variant: 'outlined',
-										size: 24
-									}}
-									web={{
-										name: 'CircleMinus',
-										size: 24
-									}}
-									style={styles.minusIcon}
-								/>
-							</Pressable>
-						) : null}
+								android={{
+									name: 'keyboard_arrow_up',
+									size: 20
+								}}
+								web={{
+									name: 'ChevronUp',
+									size: 18
+								}}
+								style={styles.arrowIcon}
+							/>
+						</Pressable>
+
+						{/* Move Down Button */}
+						<Pressable
+							onPress={onMoveDown}
+							disabled={isLastItem}
+							style={({ pressed }) => [
+								styles.arrowButton,
+								{
+									opacity: isLastItem ? 0.3 : pressed ? 0.7 : 1
+								}
+							]}
+							accessibilityLabel="Move down"
+						>
+							<PlatformIcon
+								ios={{
+									name: 'chevron.down',
+									size: 16
+								}}
+								android={{
+									name: 'keyboard_arrow_down',
+									size: 20
+								}}
+								web={{
+									name: 'ChevronDown',
+									size: 18
+								}}
+								style={styles.arrowIcon}
+							/>
+						</Pressable>
 					</View>
-				</View>
+				)}
 			</View>
 		</View>
 	)
@@ -204,15 +166,5 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 24,
 		alignItems: 'center',
 		justifyContent: 'center'
-	},
-	deleteButtonContainer: {
-		width: 24,
-		marginLeft: 8,
-		alignItems: 'center',
-		justifyContent: 'center'
-	},
-	deleteButton: {
-		justifyContent: 'center',
-		alignItems: 'center'
 	}
 }))

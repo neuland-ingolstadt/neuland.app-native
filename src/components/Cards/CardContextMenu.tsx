@@ -8,18 +8,12 @@ import ContextMenuItemTitle from '../ContextMenu/ContextMenuItemTitle'
 
 interface CardContextMenuProps {
 	card: JSX.Element
-	title: string
-	removable?: boolean
-	hideDashboardEntry?: (title: string) => void
 	resetOrder?: (userKind: string) => void
 	userKind?: string
 }
 
 export function CardContextMenu({
 	card,
-	title,
-	removable = true,
-	hideDashboardEntry,
 	resetOrder,
 	userKind
 }: CardContextMenuProps): JSX.Element {
@@ -28,9 +22,6 @@ export function CardContextMenu({
 	const handleItemPress = (action: string) => {
 		if (action === t('contextMenu.settings')) {
 			router.navigate('/dashboard')
-		}
-		if (action === t('contextMenu.hide') && hideDashboardEntry) {
-			hideDashboardEntry(title)
 		}
 		if (action === t('contextMenu.reset') && resetOrder && userKind) {
 			resetOrder(userKind)
@@ -58,25 +49,6 @@ export function CardContextMenu({
 					</ContextMenuItemTitle>
 				</ContextMenuItem>
 
-				{removable && (
-					<>
-						<ContextMenuSeparator />
-						<ContextMenuItem
-							key="hide"
-							destructive
-							onSelect={() => handleItemPress(t('contextMenu.hide'))}
-						>
-							<ContextMenu.ItemIcon
-								ios={{
-									name: 'eye.slash'
-								}}
-							/>
-							<ContextMenuItemTitle destructive>
-								{t('contextMenu.hide')}
-							</ContextMenuItemTitle>
-						</ContextMenuItem>
-					</>
-				)}
 				<ContextMenuSeparator />
 				<ContextMenuItem
 					key="reset"

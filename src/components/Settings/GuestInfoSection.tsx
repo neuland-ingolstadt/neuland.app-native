@@ -1,6 +1,6 @@
 import PlatformIcon from '@/components/Universal/Icon'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function GuestInfoSection(): React.JSX.Element {
@@ -32,9 +32,10 @@ export default function GuestInfoSection(): React.JSX.Element {
 const stylesheet = createStyleSheet((theme) => ({
 	guestBanner: {
 		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: theme.radius.mg,
 		padding: 20,
-		marginVertical: 8,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -55,7 +56,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		lineHeight: 18
 	},
 	iconContainer: {
-		backgroundColor: `${theme.colors.primary}15`,
+		backgroundColor: `${theme.colors.primary}20`,
 		borderRadius: theme.radius.lg,
 		padding: 12
 	},

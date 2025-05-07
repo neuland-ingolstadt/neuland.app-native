@@ -1,12 +1,11 @@
 import {
 	GuestUserNote,
-	HiddenDashboardItems,
 	OrderableRowItem,
 	ResetOrderButton,
 	dashboardStyles
 } from '@/components/Dashboard'
 import Divider from '@/components/Universal/Divider'
-import type { Card, ExtendedCard } from '@/components/all-cards'
+import type { ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
@@ -21,21 +20,12 @@ import { useStyles } from 'react-native-unistyles'
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 48
 
-	const {
-		shownDashboardEntries,
-		hiddenDashboardEntries,
-		hideDashboardEntry,
-		bringBackDashboardEntry,
-		resetOrder,
-		updateDashboardOrder
-	} = useContext(DashboardContext)
+	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
+		useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 	const { styles, theme } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
-	const [unavailableCards, setUnavailableCards] = useState<Card[]>([])
-	const [filteredHiddenDashboardEntries, setFilteredHiddenDashboardEntries] =
-		useState<Card[]>([])
 	const [transShownDashboardEntries, setTransShownDashboardEntries] = useState<
 		ExtendedCard[]
 	>([])
@@ -55,12 +45,6 @@ export default function DashboardEdit(): React.JSX.Element {
 		})
 		setTransShownDashboardEntries(translatedEntries)
 	}, [shownDashboardEntries, t])
-
-	useEffect(() => {
-		setFilteredHiddenDashboardEntries(
-			hiddenDashboardEntries.concat(unavailableCards)
-		)
-	}, [hiddenDashboardEntries, userKind, unavailableCards])
 
 	const handleMoveItem = useCallback(
 		(index: number, direction: 'up' | 'down') => {
@@ -100,14 +84,6 @@ export default function DashboardEdit(): React.JSX.Element {
 		[transShownDashboardEntries]
 	)
 
-	const handleRestore = useCallback(
-		(item: Card) => {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
-			bringBackDashboardEntry(item.key)
-		},
-		[bringBackDashboardEntry]
-	)
-
 	const handleReset = useCallback(() => {
 		resetOrder(userKind)
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -117,8 +93,7 @@ export default function DashboardEdit(): React.JSX.Element {
 	}, [resetOrder, userKind])
 
 	useEffect(() => {
-		const { hidden, shown } = getDefaultDashboardOrder(userKind)
-		const defaultHidden = hidden.map((item) => item)
+		const { shown } = getDefaultDashboardOrder(userKind)
 		const defaultShown = shown.map((item) => item)
 
 		if (shownDashboardEntries == null) {
@@ -126,31 +101,12 @@ export default function DashboardEdit(): React.JSX.Element {
 		}
 		setHasUserDefaultOrder(
 			arraysEqual(
-				defaultHidden,
+				defaultShown,
 				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-				hiddenDashboardEntries.filter(Boolean).map((item) => item.key) || []
-			) &&
-				arraysEqual(
-					defaultShown,
-					// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-					shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
-				)
+				shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
+			)
 		)
-	}, [shownDashboardEntries, hiddenDashboardEntries, userKind])
-
-	useEffect(() => {
-		const keys = getDefaultDashboardOrder(userKind).unavailable
-		const cards = keys.map((key) => {
-			return {
-				key,
-				removable: false,
-				initial: [],
-				allowed: [],
-				card: () => <></>
-			}
-		})
-		setUnavailableCards(cards)
-	}, [userKind])
+	}, [shownDashboardEntries, userKind])
 
 	return (
 		<View>
@@ -184,12 +140,7 @@ export default function DashboardEdit(): React.JSX.Element {
 												isLast={index === transShownDashboardEntries.length - 1}
 												onMoveUp={() => handleMoveItem(index, 'up')}
 												onMoveDown={() => handleMoveItem(index, 'down')}
-												onPressDelete={() => {
-													LayoutAnimation.configureNext(
-														LayoutAnimation.Presets.easeInEaseOut
-													)
-													hideDashboardEntry(item.key)
-												}}
+												onPressDelete={() => {}}
 												isFirstItem={index === 0}
 												isLastItem={
 													index === transShownDashboardEntries.length - 1
@@ -207,11 +158,6 @@ export default function DashboardEdit(): React.JSX.Element {
 							)}
 						</View>
 					</View>
-
-					<HiddenDashboardItems
-						filteredHiddenDashboardEntries={filteredHiddenDashboardEntries}
-						handleRestore={handleRestore}
-					/>
 
 					<ResetOrderButton
 						hasUserDefaultOrder={hasUserDefaultOrder}

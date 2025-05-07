@@ -1,8 +1,10 @@
 import ErrorView from '@/components/Error/ErrorView'
+import LibraryCard from '@/components/Library/LibraryCard'
 import FormList from '@/components/Universal/FormList'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { UserKindContext } from '@/components/contexts'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { libraryLink, vscoutLink } from '@/data/constants'
 import { useRefreshByUser } from '@/hooks'
 import type { FormListSections } from '@/types/components'
 import {
@@ -17,7 +19,14 @@ import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
+import {
+	Dimensions,
+	Linking,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function LibraryCode(): React.JSX.Element {
@@ -142,6 +151,44 @@ export default function LibraryCode(): React.JSX.Element {
 							{t('pages.library.code.footer')}
 						</Text>
 					</View>
+					<View style={styles.linksContainer}>
+						<LibraryCard
+							onPress={() => {
+								Linking.openURL(vscoutLink).catch((err) => {
+									console.error(err)
+								})
+							}}
+							iconProps={{
+								ios: { name: 'studentdesk', size: 18 },
+								android: {
+									name: 'chair',
+									size: 22,
+									variant: 'outlined'
+								},
+								web: { name: 'Armchair', size: 20 }
+							}}
+							title={t('pages.library.seatReservation.title')}
+							description={t('pages.library.seatReservation.description')}
+						/>
+						<LibraryCard
+							onPress={() => {
+								Linking.openURL(libraryLink).catch((err) => {
+									console.error(err)
+								})
+							}}
+							iconProps={{
+								ios: { name: 'text.magnifyingglass', size: 18 },
+								android: {
+									name: 'library_books',
+									size: 22,
+									variant: 'outlined'
+								},
+								web: { name: 'Search', size: 20 }
+							}}
+							title={t('pages.library.catalog.title')}
+							description={t('pages.library.catalog.description')}
+						/>
+					</View>
 				</View>
 			) : (
 				<ErrorView
@@ -184,6 +231,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 40
+	},
+	linksContainer: {
+		gap: theme.margins.page,
+		width: '100%'
 	},
 	notesContainer: {
 		alignSelf: 'center',

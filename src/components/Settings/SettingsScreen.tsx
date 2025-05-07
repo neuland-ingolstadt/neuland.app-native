@@ -1,4 +1,4 @@
-import NeulandAPI from '@/api/neuland-api'
+import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
@@ -19,12 +19,9 @@ import {
 	useRandomColor,
 	withBouncing
 } from '@/utils/animation-utils'
-import {
-	extractSpoName,
-	getPersonalData,
-	performLogout
-} from '@/utils/api-utils'
-import { loadGradeAverage } from '@/utils/grades-utils'
+import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { calculateECTS } from '@/utils/grades-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { loadSecureAsync, storage } from '@/utils/storage'
 import { getContrastColor, getInitials } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -56,7 +53,6 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import packageInfo from '../../../package.json'
 import Avatar from './Avatar'
 import GuestInfoSection from './GuestInfoSection'
 import NameBox from './NameBox'
@@ -220,25 +216,36 @@ export default function Settings(): React.JSX.Element {
 		enabled: userKind === USER_STUDENT
 	})
 
-	// Query for SPO weights
-	const { data: spoWeights } = useQuery({
-		queryKey: ['spoWeights', packageInfo.version],
-		queryFn: async () => await NeulandAPI.getSpoWeights(),
-		staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-		gcTime: 1000 * 60 * 60 * 24 * 14 // 2 weeks
-	})
-
-	// Query for grade average
-	const { data: gradeAverage } = useQuery({
-		queryKey: ['gradeAverage'],
-		queryFn: async () => {
-			if (!data) return null
-			const spoName = extractSpoName(data)
-			return await loadGradeAverage(spoWeights ?? null, spoName ?? null)
-		},
+	const { data: ects } = useQuery({
+		queryKey: ['ects'],
+		queryFn: calculateECTS,
 		staleTime: 1000 * 60 * 30, // 30 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7, // 1 week
-		enabled: userKind === USER_STUDENT && !!data && !!spoWeights
+		enabled: userKind === USER_STUDENT
+	})
+
+	// Query for personal lecturers
+	const { data: personalLecturers } = useQuery({
+		queryKey: ['personalLecturers'],
+		queryFn: async () => {
+			const rawData = await API.getPersonalLecturers()
+			const normalizedData = normalizeLecturers(rawData)
+			return normalizedData
+		},
+		staleTime: 1000 * 60 * 30, // 30 minutes
+		gcTime: 1000 * 60 * 60 * 24 * 7, // 7 days
+		retry(failureCount, error) {
+			if (error instanceof NoSessionError) {
+				router.replace('/login')
+				return false
+			}
+			if (userKind !== 'student') {
+				return false
+			}
+			return failureCount < 2
+		},
+		select: (data) => data.length,
+		enabled: userKind === USER_STUDENT
 	})
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
@@ -463,6 +470,7 @@ export default function Settings(): React.JSX.Element {
 												title={`${data?.vname} ${data?.name}`}
 												subTitle1={`${data?.stgru ?? ''}. Semester`}
 												subTitle2={data?.fachrich ?? ''}
+												showChevron={true}
 											>
 												<Avatar>
 													<Text style={styles.avatarText}>
@@ -470,12 +478,6 @@ export default function Settings(): React.JSX.Element {
 													</Text>
 												</Avatar>
 											</NameBox>
-											<PlatformIcon
-												ios={{ name: 'chevron.forward', size: 16 }}
-												android={{ name: 'chevron_right', size: 26 }}
-												web={{ name: 'ChevronRight', size: 26 }}
-												style={styles.iconAlign}
-											/>
 										</View>
 									</View>
 								) : isSuccess ? (
@@ -485,6 +487,7 @@ export default function Settings(): React.JSX.Element {
 												title={t('menu.error.noData.title')}
 												subTitle1={t('menu.error.noData.subtitle1')}
 												subTitle2={t('menu.error.noData.subtitle2')}
+												showChevron={true}
 											>
 												<Avatar background={theme.colors.labelTertiaryColor}>
 													<PlatformIcon
@@ -499,12 +502,6 @@ export default function Settings(): React.JSX.Element {
 													/>
 												</Avatar>
 											</NameBox>
-											<PlatformIcon
-												ios={{ name: 'chevron.forward', size: 16 }}
-												android={{ name: 'chevron_right', size: 26 }}
-												web={{ name: 'ChevronRight', size: 26 }}
-												style={styles.iconAlign}
-											/>
 										</View>
 									</View>
 								) : isLoading ? (
@@ -568,6 +565,7 @@ export default function Settings(): React.JSX.Element {
 										title={t('menu.guest.title')}
 										subTitle1={t('menu.guest.subtitle')}
 										subTitle2={''}
+										showChevron={true}
 									>
 										<Avatar background={theme.colors.labelTertiaryColor}>
 											<PlatformIcon
@@ -578,12 +576,6 @@ export default function Settings(): React.JSX.Element {
 											/>
 										</Avatar>
 									</NameBox>
-									<PlatformIcon
-										ios={{ name: 'chevron.forward', size: 16 }}
-										android={{ name: 'chevron_right', size: 26 }}
-										web={{ name: 'ChevronRight', size: 26 }}
-										style={styles.iconAlign}
-									/>
 								</View>
 							)}
 						</View>
@@ -593,11 +585,14 @@ export default function Settings(): React.JSX.Element {
 				<View style={styles.infoBoxesSection}>
 					{userKind === USER_GUEST ? (
 						<GuestInfoSection />
-					) : (
+					) : userKind === USER_STUDENT ? (
 						<StudentInfoSection
-							gradeAverage={gradeAverage}
+							ects={ects}
 							printerBalance={data?.pcounter}
+							personalLecturersCount={personalLecturers}
 						/>
+					) : (
+						<></>
 					)}
 				</View>
 
@@ -697,7 +692,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderColor: theme.colors.border,
 		borderWidth: StyleSheet.hairlineWidth,
 		width: '100%',
-		marginTop: 16
+		marginTop: 12
 	},
 	contentContainer: {
 		paddingBottom: 60
@@ -719,7 +714,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: Platform.OS === 'android' ? 2 : 0
 	},
 	infoBoxesSection: {
-		marginTop: 6
+		marginTop: 10
 	},
 	infoBoxesContainer: {
 		flexDirection: 'row',
@@ -740,8 +735,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	nameInnerContainer: {
 		flexDirection: 'row',
-		paddingHorizontal: 14,
-		paddingVertical: 30,
+		paddingVertical: 12,
 		width: '100%'
 	},
 	nameOuterContainer: { flexDirection: 'column', flex: 1 },

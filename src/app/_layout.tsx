@@ -446,12 +446,7 @@ function RootLayout(): React.JSX.Element {
 				<Stack.Screen
 					name="(screens)/library-code"
 					options={{
-						title: t('navigation.libraryCode'),
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.libraryCode')
 					}}
 				/>
 				<Stack.Screen
