@@ -54,6 +54,7 @@
 		"username": "Benutzername",
 		"password": "Passwort",
 		"button": "Anmelden",
-		"guest": "oder als Gast fortfahren"
+		"guest": "als Gast fortfahren",
+		"or": "oder"
 	}
 }
