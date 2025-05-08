@@ -60,7 +60,6 @@
 			"contact": {
 				"title": "Contact",
 				"feedback": "Feedback",
-
 				"rateAndroid": "Rate on Play Store",
 				"rateiOS": "Rate on App Store"
 			}
@@ -165,7 +164,7 @@
 		}
 	},
 	"dashboard": {
-		"shown": "Shown cards",
+		"shown": "All cards",
 		"hidden": "Hidden cards",
 		"reset": "Reset order",
 		"noShown": "Dashboard is empty",
@@ -188,6 +187,13 @@
 		"exactAverage": "Based on {{number}} weighted grades.",
 		"temporarilyUnavailable": "Grades are temporarily unavailable.",
 		"footer": "This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information."
+	},
+	"infoBoxes": {
+		"printerBalance": "Printer Balance",
+		"gradesAndSubjects": "Grades & Subjects",
+		"lecturers": "Lecturers",
+		"library": "Your card",
+		"view": "Library"
 	},
 	"appIcon": {
 		"error": {

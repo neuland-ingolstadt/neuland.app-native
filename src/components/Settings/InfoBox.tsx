@@ -1,7 +1,7 @@
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import type React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface InfoBoxProps {
@@ -37,16 +37,16 @@ const InfoBox = ({
 				<PlatformIcon
 					ios={{
 						name: icon.ios,
-						size: 20,
+						size: 19,
 						variant: icon.variant
 					}}
 					android={{
 						name: icon.android,
-						size: 22
+						size: 24
 					}}
 					web={{
 						name: icon.web,
-						size: 20
+						size: 21
 					}}
 					style={styles.icon}
 				/>
@@ -75,11 +75,12 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 8
 	},
 	icon: {
-		color: theme.colors.text
+		color: theme.colors.text,
+		marginBottom: Platform.OS === 'android' ? -4 : 2
 	},
 	value: {
 		color: theme.colors.text,
-		fontSize: 18,
+		fontSize: 17,
 		fontWeight: 'bold'
 	},
 	title: {

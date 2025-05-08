@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import InfoBox from './InfoBox'
@@ -16,12 +17,13 @@ export default function StudentInfoSection({
 }: StudentInfoSectionProps): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
+	const { t } = useTranslation('settings')
 
 	return (
 		<>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
-					title="Printer Balance"
+					title={t('infoBoxes.printerBalance')}
 					value={printerBalance ?? '-'}
 					icon={{
 						ios: 'printer',
@@ -31,19 +33,19 @@ export default function StudentInfoSection({
 					onPress={() => router.navigate('/profile')}
 				/>
 				<InfoBox
-					title="Grades & Subjects"
+					title={t('infoBoxes.gradesAndSubjects')}
 					value={ects !== undefined ? `${ects} ECTS` : '-'}
 					icon={{
-						ios: 'chart.bar',
+						ios: 'chart.xyaxis.line',
 						android: 'bar_chart',
-						web: 'Activity'
+						web: 'ChartColumnIncreasing'
 					}}
 					onPress={() => router.navigate('/grades')}
 				/>
 			</View>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
-					title="Lecturers"
+					title={t('infoBoxes.lecturers')}
 					value={personalLecturersCount?.toString() ?? '-'}
 					icon={{
 						ios: 'person.2',
@@ -53,14 +55,14 @@ export default function StudentInfoSection({
 					onPress={() => router.navigate('/lecturers')}
 				/>
 				<InfoBox
-					title="Library"
-					value="View"
+					value={t('infoBoxes.library')}
+					title={t('infoBoxes.view')}
 					icon={{
-						ios: 'barcode',
-						android: 'qr_code_scanner',
-						web: 'Barcode'
+						ios: 'books.vertical',
+						android: 'book_5',
+						web: 'Library'
 					}}
-					onPress={() => router.navigate('/library-code')}
+					onPress={() => router.navigate('/library')}
 				/>
 			</View>
 		</>

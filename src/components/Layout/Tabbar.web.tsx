@@ -21,18 +21,14 @@ const TabLayout = (): React.JSX.Element => {
 			<Tabs
 				screenOptions={{
 					tabBarPosition: isMobile ? 'bottom' : 'left',
-					tabBarActiveBackgroundColor: styleTheme.colors.card,
 					tabBarActiveTintColor: styleTheme.colors.text,
-					tabBarInactiveTintColor: styleTheme.colors.labelColor,
-					tabBarInactiveBackgroundColor: styleTheme.colors.card,
+					tabBarInactiveTintColor: styleTheme.colors.tabbarInactive,
 					tabBarStyle: {
-						paddingTop: 6,
 						backgroundColor: styleTheme.colors.card
 					},
 					tabBarLabelStyle: {
-						paddingTop: 4
+						paddingTop: !isMobile && !isPad ? 0 : 4
 					},
-
 					tabBarShowLabel: !isMobile,
 					tabBarLabelPosition: isMobile
 						? undefined

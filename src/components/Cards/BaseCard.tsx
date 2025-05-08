@@ -12,7 +12,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-import { type RelativePathString, router } from 'expo-router'
+import { type Href, type RelativePathString, router } from 'expo-router'
 import PlatformIcon from '../Universal/Icon'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
@@ -20,7 +20,7 @@ import { CardContextMenu } from './CardContextMenu'
 
 interface BaseCardProps {
 	title: string
-	onPressRoute?: RelativePathString
+	onPressRoute?: Href
 	children?: React.ReactNode
 }
 

@@ -164,7 +164,7 @@
 		}
 	},
 	"dashboard": {
-		"shown": "Angezeigte Karten",
+		"shown": "Alle Karten",
 		"hidden": "Ausgeblendete Karten",
 		"noShown": "Dashboard ist leer",
 		"noShownButton": "Konfigurieren",
@@ -187,6 +187,13 @@
 		"averageError": "Noten-Durchschnitt ist derzeit nicht verfügbar.",
 		"temporarilyUnavailable": "Noten sind vorübergehend nicht verfügbar.",
 		"footer": "Diese Übersicht dient nur zur allgemeinen Information und ist rechtlich nicht bindend. Für verbindliche Informationen nutze das offizielle Notenblatt auf Primuss."
+	},
+	"infoBoxes": {
+		"printerBalance": "Druckguthaben",
+		"gradesAndSubjects": "Noten & Fächer",
+		"lecturers": "Dozenten",
+		"library": "Deine Karte",
+		"view": "Bibliothek"
 	},
 	"appIcon": {
 		"error": {

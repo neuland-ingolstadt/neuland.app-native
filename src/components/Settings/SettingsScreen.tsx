@@ -4,7 +4,6 @@ import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
 import LogoTextSVG from '@/components/Flow/svgs/logoText'
 import FormList from '@/components/Universal/FormList'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { queryClient } from '@/components/provider'
 import type { UserKindContextType } from '@/contexts/userKind'
@@ -30,6 +29,7 @@ import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	ActivityIndicator,
 	Alert,
 	Dimensions,
 	LayoutAnimation,
@@ -197,7 +197,6 @@ export default function Settings(): React.JSX.Element {
 		)
 	}
 
-	// Query for personal data (includes printer balance)
 	const { data, error, isLoading, isSuccess, refetch, isError } = useQuery({
 		queryKey: ['personalData'],
 		queryFn: getPersonalData,
@@ -472,8 +471,12 @@ export default function Settings(): React.JSX.Element {
 												subTitle2={data?.fachrich ?? ''}
 												showChevron={true}
 											>
-												<Avatar>
-													<Text style={styles.avatarText}>
+												<Avatar background={`${theme.colors.primary}25`}>
+													<Text
+														style={StyleSheet.compose(styles.avatarText, {
+															color: theme.colors.primary
+														})}
+													>
 														{getInitials(`${data?.vname} ${data?.name}`)}
 													</Text>
 												</Avatar>
@@ -489,7 +492,9 @@ export default function Settings(): React.JSX.Element {
 												subTitle2={t('menu.error.noData.subtitle2')}
 												showChevron={true}
 											>
-												<Avatar background={theme.colors.labelTertiaryColor}>
+												<Avatar
+													background={`${theme.colors.labelTertiaryColor}25`}
+												>
 													<PlatformIcon
 														ios={{
 															name: 'exclamationmark.triangle',
@@ -498,35 +503,49 @@ export default function Settings(): React.JSX.Element {
 														}}
 														android={{ name: 'warning', size: 28 }}
 														web={{ name: 'TriangleAlert', size: 28 }}
-														style={styles.iconGuest}
+														style={{
+															...styles.iconGuest,
+															color: theme.colors.labelTertiaryColor
+														}}
 													/>
 												</Avatar>
 											</NameBox>
 										</View>
 									</View>
 								) : isLoading ? (
-									<View style={styles.nameInnerContainer}>
-										<LoadingIndicator />
+									<View style={styles.nameOuterContainer}>
+										<View style={styles.nameInnerContainer}>
+											<ActivityIndicator style={styles.loading} />
+										</View>
 									</View>
 								) : (
-									<NameBox
-										title="Error"
-										subTitle1={error?.message ?? 'Unknown error'}
-										subTitle2={t('menu.error.subtitle2')}
-									>
-										<Avatar background={theme.colors.labelTertiaryColor}>
-											<PlatformIcon
-												ios={{
-													name: 'exclamationmark.triangle',
-													variant: 'fill',
-													size: 26
-												}}
-												android={{ name: 'warning', size: 28 }}
-												web={{ name: 'TriangleAlert', size: 28 }}
-												style={styles.iconGuest}
-											/>
-										</Avatar>
-									</NameBox>
+									<View style={styles.nameOuterContainer}>
+										<View style={styles.nameInnerContainer}>
+											<NameBox
+												title="Error"
+												subTitle1={error?.message ?? 'Unknown error'}
+												subTitle2={t('menu.error.subtitle2')}
+											>
+												<Avatar
+													background={`${theme.colors.labelTertiaryColor}25`}
+												>
+													<PlatformIcon
+														ios={{
+															name: 'exclamationmark.triangle',
+															variant: 'fill',
+															size: 26
+														}}
+														android={{ name: 'warning', size: 28 }}
+														web={{ name: 'TriangleAlert', size: 28 }}
+														style={{
+															...styles.iconGuest,
+															color: theme.colors.labelTertiaryColor
+														}}
+													/>
+												</Avatar>
+											</NameBox>
+										</View>
+									</View>
 								)}
 							</View>
 						</Pressable>
@@ -552,8 +571,12 @@ export default function Settings(): React.JSX.Element {
 										subTitle1={t('menu.employee.subtitle1')}
 										subTitle2={t('menu.employee.subtitle2')}
 									>
-										<Avatar>
-											<Text style={styles.avatarText}>
+										<Avatar background={`${theme.colors.primary}25`}>
+											<Text
+												style={StyleSheet.compose(styles.avatarText, {
+													color: theme.colors.primary
+												})}
+											>
 												{getInitials((username as string) ?? '')}
 											</Text>
 										</Avatar>
@@ -567,12 +590,15 @@ export default function Settings(): React.JSX.Element {
 										subTitle2={''}
 										showChevron={true}
 									>
-										<Avatar background={theme.colors.labelTertiaryColor}>
+										<Avatar background={`${theme.colors.primary}25`}>
 											<PlatformIcon
 												ios={{ name: 'person', variant: 'fill', size: 26 }}
 												android={{ name: 'account_circle', size: 32 }}
 												web={{ name: 'User', size: 32 }}
-												style={styles.iconGuest}
+												style={{
+													...styles.iconGuest,
+													color: theme.colors.primary
+												}}
 											/>
 										</Avatar>
 									</NameBox>
@@ -601,7 +627,7 @@ export default function Settings(): React.JSX.Element {
 				</View>
 			</View>
 
-			<Text style={styles.copyrigth}>
+			<Text style={styles.copyright}>
 				{t('menu.copyright', { year: new Date().getFullYear() })}
 			</Text>
 			{Platform.OS !== 'web' && (
@@ -677,7 +703,6 @@ export default function Settings(): React.JSX.Element {
 
 const stylesheet = createStyleSheet((theme) => ({
 	avatarText: {
-		color: getContrastColor(theme.colors.primary),
 		fontSize: 20,
 		fontWeight: 'bold'
 	},
@@ -697,14 +722,14 @@ const stylesheet = createStyleSheet((theme) => ({
 	contentContainer: {
 		paddingBottom: 60
 	},
-	copyrigth: {
+	copyright: {
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 12,
 		marginBottom: -10,
 		marginTop: 20,
 		textAlign: 'center'
 	},
-	formlistContainer: { marginVertical: 16 },
+	formlistContainer: { marginVertical: 16, marginTop: 24 },
 	iconAlign: {
 		alignSelf: 'center',
 		color: theme.colors.labelSecondaryColor
@@ -714,7 +739,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginTop: Platform.OS === 'android' ? 2 : 0
 	},
 	infoBoxesSection: {
-		marginTop: 10
+		marginTop: 16
 	},
 	infoBoxesContainer: {
 		flexDirection: 'row',
@@ -726,7 +751,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		flex: 1,
 		justifyContent: 'center',
-		marginRight: 10
+		marginVertical: 25
 	},
 	nameBox: {
 		alignItems: 'center',

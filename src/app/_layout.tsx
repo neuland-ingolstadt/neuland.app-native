@@ -444,7 +444,7 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/library-code"
+					name="(screens)/library"
 					options={{
 						title: t('navigation.libraryCode')
 					}}

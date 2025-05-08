@@ -56,6 +56,7 @@ export default function OrderableRowItem({
 							name: cardIcons[item.key as keyof typeof cardIcons].web,
 							size: 21
 						}}
+						style={styles.icon}
 					/>
 				</View>
 
@@ -166,5 +167,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 24,
 		alignItems: 'center',
 		justifyContent: 'center'
+	},
+	icon: {
+		color: theme.colors.text
 	}
 }))

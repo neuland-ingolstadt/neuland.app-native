@@ -140,7 +140,6 @@ export default function DashboardEdit(): React.JSX.Element {
 												isLast={index === transShownDashboardEntries.length - 1}
 												onMoveUp={() => handleMoveItem(index, 'up')}
 												onMoveDown={() => handleMoveItem(index, 'down')}
-												onPressDelete={() => {}}
 												isFirstItem={index === 0}
 												isLastItem={
 													index === transShownDashboardEntries.length - 1

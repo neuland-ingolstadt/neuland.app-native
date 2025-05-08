@@ -151,44 +151,6 @@ export default function LibraryCode(): React.JSX.Element {
 							{t('pages.library.code.footer')}
 						</Text>
 					</View>
-					<View style={styles.linksContainer}>
-						<LibraryCard
-							onPress={() => {
-								Linking.openURL(vscoutLink).catch((err) => {
-									console.error(err)
-								})
-							}}
-							iconProps={{
-								ios: { name: 'studentdesk', size: 18 },
-								android: {
-									name: 'chair',
-									size: 22,
-									variant: 'outlined'
-								},
-								web: { name: 'Armchair', size: 20 }
-							}}
-							title={t('pages.library.seatReservation.title')}
-							description={t('pages.library.seatReservation.description')}
-						/>
-						<LibraryCard
-							onPress={() => {
-								Linking.openURL(libraryLink).catch((err) => {
-									console.error(err)
-								})
-							}}
-							iconProps={{
-								ios: { name: 'text.magnifyingglass', size: 18 },
-								android: {
-									name: 'library_books',
-									size: 22,
-									variant: 'outlined'
-								},
-								web: { name: 'Search', size: 20 }
-							}}
-							title={t('pages.library.catalog.title')}
-							description={t('pages.library.catalog.description')}
-						/>
-					</View>
 				</View>
 			) : (
 				<ErrorView
@@ -202,6 +164,46 @@ export default function LibraryCode(): React.JSX.Element {
 					onRefresh={refetchByUser}
 					refreshing={isRefetchingByUser}
 				/>
+			)}
+			{userKind === USER_STUDENT && (
+				<View style={[styles.container, styles.linksContainer]}>
+					<LibraryCard
+						onPress={() => {
+							Linking.openURL(vscoutLink).catch((err) => {
+								console.error(err)
+							})
+						}}
+						iconProps={{
+							ios: { name: 'studentdesk', size: 18 },
+							android: {
+								name: 'chair',
+								size: 22,
+								variant: 'outlined'
+							},
+							web: { name: 'Armchair', size: 20 }
+						}}
+						title={t('pages.library.seatReservation.title')}
+						description={t('pages.library.seatReservation.description')}
+					/>
+					<LibraryCard
+						onPress={() => {
+							Linking.openURL(libraryLink).catch((err) => {
+								console.error(err)
+							})
+						}}
+						iconProps={{
+							ios: { name: 'text.magnifyingglass', size: 18 },
+							android: {
+								name: 'library_books',
+								size: 22,
+								variant: 'outlined'
+							},
+							web: { name: 'Search', size: 20 }
+						}}
+						title={t('pages.library.catalog.title')}
+						description={t('pages.library.catalog.description')}
+					/>
+				</View>
 			)}
 		</View>
 	)
