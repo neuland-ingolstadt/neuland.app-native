@@ -26,7 +26,6 @@ export default function TabLayout(): React.JSX.Element {
 	const { t } = useTranslation('navigation')
 	const isAndroid = Platform.OS === 'android'
 	const isMobile = Dimensions.get('window').width < 900
-	const isPad = Dimensions.get('window').width < 1300
 	return (
 		<Tabs
 			tabBar={CustomTabBar}
@@ -40,11 +39,7 @@ export default function TabLayout(): React.JSX.Element {
 					borderColor: theme.colors.border
 				},
 				tabBarShowLabel: !isMobile,
-				tabBarLabelPosition: isMobile
-					? undefined
-					: isPad
-						? 'below-icon'
-						: 'beside-icon'
+				tabBarLabelPosition: isMobile ? undefined : 'below-icon'
 			}}
 			disablePageAnimations={isAndroid}
 			translucent
