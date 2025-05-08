@@ -1,7 +1,13 @@
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import type React from 'react'
-import { type GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import {
+	type GestureResponderEvent,
+	Pressable,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface LibraryCardProps {
@@ -71,6 +77,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	pressable: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.card,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
 		borderRadius: 8,
 		flexDirection: 'row',
 		gap: 6,
@@ -80,7 +88,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	row: {
 		alignItems: 'center',
 		flexDirection: 'row',
-		gap: 6
+		gap: 10
 	},
 	title: {
 		color: theme.colors.text,

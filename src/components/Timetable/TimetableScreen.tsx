@@ -121,7 +121,7 @@ function TimetableScreen(): React.JSX.Element {
 					/>
 				) : userKind === USER_GUEST ? (
 					<ErrorView title={guestError} />
-				) : (
+				) : error ? (
 					<ErrorView
 						title={error?.message ?? t('error.title', { ns: 'common' })}
 						refreshing={isRefetchingByUser}
@@ -129,7 +129,7 @@ function TimetableScreen(): React.JSX.Element {
 							void refetchByUser()
 						}}
 					/>
-				)}
+				) : null}
 			</SafeAreaView>
 		</SafeAreaProvider>
 	)

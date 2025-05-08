@@ -3,12 +3,12 @@ import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import { formatFriendlyDateTime, formatFriendlyTime } from '@/utils/date-utils'
+import { formatFriendlyTime, formatNearDate } from '@/utils/date-utils'
 import { getOngoingOrNextEvent } from '@/utils/map-screen-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import type React from 'react'
 import {
 	useCallback,
@@ -19,7 +19,14 @@ import {
 	useState
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, type AppStateStatus, Text, View } from 'react-native'
+import {
+	AppState,
+	type AppStateStatus,
+	Pressable,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import BaseCard from './BaseCard'
 
@@ -283,10 +290,14 @@ const UpNextCard: React.FC = () => {
 				count: eventStatus.timeRemaining
 			})
 		} else {
-			statusText = formatFriendlyDateTime(currentEvent.startDate) ?? ''
+			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return <Text style={styles.statusText}>{statusText}</Text>
+		return (
+			<View style={styles.dateContainer}>
+				<Text style={styles.eventDate}>{statusText}</Text>
+			</View>
+		)
 	}, [currentEvent, eventStatus, t])
 
 	const RoomInfo = useMemo(() => {
@@ -337,6 +348,10 @@ const UpNextCard: React.FC = () => {
 		)
 	}, [nextEvent, currentEvent, currentTime, formatFriendlyTime])
 
+	const navigateDots = () => {
+		router.navigate('/dots')
+	}
+
 	const Stats = useMemo(() => {
 		if (todayStats.total === 0) return null
 
@@ -358,7 +373,7 @@ const UpNextCard: React.FC = () => {
 		return (
 			<View style={styles.statsContainer}>
 				{NextEvent}
-				<View style={styles.statsRow}>
+				<Pressable style={styles.statsRow} onPress={navigateDots}>
 					<View style={styles.progressDots}>
 						{Array.from({ length: todayStats.total }).map((_, index) =>
 							index < todayStats.completed ? (
@@ -373,7 +388,7 @@ const UpNextCard: React.FC = () => {
 					<Text style={styles.statsText} numberOfLines={1}>
 						{statsText}
 					</Text>
-				</View>
+				</Pressable>
 			</View>
 		)
 	}, [NextEvent, t, todayStats])
@@ -406,13 +421,15 @@ const UpNextCard: React.FC = () => {
 						{ProgressBar}
 
 						<View style={styles.eventContent}>
-							<Text style={styles.eventTitle} numberOfLines={1}>
+							<Text style={styles.eventTitle} numberOfLines={2}>
 								{currentEvent.name}
 							</Text>
 							{RoomInfo}
 						</View>
 
-						<Divider width="100%" color={theme.colors.border} />
+						{todayStats.total > 0 && (
+							<Divider width="100%" color={theme.colors.border} />
+						)}
 
 						{Stats}
 					</View>
@@ -495,7 +512,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		opacity: 0.5
 	},
 	dotRemaining: {
-		backgroundColor: theme.colors.ongoingDot
+		backgroundColor: theme.colors.soonDot,
+		borderColor: theme.colors.labelColor,
+		borderWidth: StyleSheet.hairlineWidth
 	},
 	progressBarContainer: {
 		height: 4,
@@ -547,6 +566,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 14,
 		fontWeight: '400'
+	},
+	dateContainer: {
+		backgroundColor: `${theme.colors.primary}15`,
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		borderRadius: theme.radius.sm
+	},
+	eventDate: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '500'
 	}
 }))
 

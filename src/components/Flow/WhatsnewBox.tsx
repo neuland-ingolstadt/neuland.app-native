@@ -1,6 +1,6 @@
 import type { MaterialIcon } from '@/types/material-icons'
 import type { FC } from 'react'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
@@ -63,30 +63,36 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.cardContrast,
-		borderRadius: theme.radius.mg,
+		borderRadius: 16,
 		flexDirection: 'row',
-		gap: 18,
+		gap: 16,
 		paddingHorizontal: 20,
-		paddingVertical: 15,
-		width: '100%'
+		paddingVertical: 16,
+		width: '100%',
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
 	},
 	description: {
 		color: theme.colors.labelColor,
-		fontSize: 14.5,
+		fontSize: 14,
+		lineHeight: 20,
 		textAlign: 'left'
 	},
 	iconContainer: {
+		backgroundColor: `${theme.colors.primary}15`,
+		borderRadius: 12,
+		padding: 12,
 		flexShrink: 0
 	},
 	textContainer: {
 		flexDirection: 'column',
 		flexShrink: 1,
-		paddingRight: 40
+		gap: 4
 	},
 	title: {
 		color: theme.colors.text,
 		fontSize: 16,
-		fontWeight: 'bold',
+		fontWeight: '600',
 		textAlign: 'left'
 	}
 }))

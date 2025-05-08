@@ -19,6 +19,13 @@
 	"time": {
 		"minutes": "Minuten"
 	},
+	"dots": {
+		"title": "Vorlesungsstatus",
+		"completed": "Abgeschlossene Vorlesungen",
+		"ongoing": "Laufende Vorlesung",
+		"upcoming": "Anstehende Vorlesungen",
+		"total": "Die Gesamtanzahl der Punkte zeigt, wie viele Vorlesungen du an diesem Tag hast"
+	},
 	"error": {
 		"empty": {
 			"title": "Stundenplan nicht konfiguriert",
@@ -50,7 +57,7 @@
 		"showExams": "Prüfungen anzeigen"
 	},
 	"calendar": {
-		"thiCalendar": "THI Events",
+		"thiCalendar": "THI Kalender",
 		"weekDayShort": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
 		"more": "mehr"
 	},

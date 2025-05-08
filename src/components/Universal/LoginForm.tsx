@@ -19,6 +19,7 @@ import {
 	Alert,
 	Linking,
 	Platform,
+	StyleSheet,
 	Text,
 	TextInput,
 	TouchableOpacity,
@@ -29,6 +30,7 @@ import {
 	createStyleSheet,
 	useStyles
 } from 'react-native-unistyles'
+import PlatformIcon from './Icon'
 
 const LoginForm = ({
 	navigateHome
@@ -42,11 +44,11 @@ const LoginForm = ({
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const { styles, theme } = useStyles(stylesheet)
-	// No guest fallback is provided, so the guest session will be created correctly
 	const { userKind, toggleUserKind } = React.useContext(UserKindContext)
 	const [loading, setLoading] = useState(false)
 	const { t } = useTranslation('flow')
 	const { resetOrder } = useContext(DashboardContext)
+	const [showPassword, setShowPassword] = useState(false)
 
 	async function login(): Promise<void> {
 		let showStatus = true
@@ -176,62 +178,108 @@ const LoginForm = ({
 	return (
 		<View style={styles.container}>
 			<View style={styles.loginContainer}>
-				<Text
-					style={styles.header}
-					adjustsFontSizeToFit
-					minimumFontScale={0.8}
-					numberOfLines={1}
-				>
-					{'THI Account'}
-				</Text>
-				<View style={styles.userNameContainer}>
-					<Text style={styles.userNameLabel}>{t('login.username')}</Text>
-					<TextInput
-						style={styles.textInput}
-						selectionColor={theme.colors.primary}
-						placeholderTextColor={theme.colors.labelColor}
-						defaultValue={username}
-						placeholder="abc1234"
-						returnKeyType="next"
-						onChangeText={(text) => {
-							setUsername(text)
-						}}
-						autoCapitalize="none"
-						clearButtonMode="while-editing"
-						autoComplete="email"
-						textContentType="emailAddress"
-						autoCorrect={false}
-					/>
-				</View>
-				<View style={styles.passwordContainer}>
-					<Text style={styles.userNameLabel}>{t('login.password')}</Text>
+				<Text style={styles.welcomeText}>{t('login.getStarted')}</Text>
+				<Text style={styles.subtitleText}>{t('login.title2')}</Text>
 
-					<TextInput
-						style={styles.textInput}
-						selectionColor={theme.colors.primary}
-						placeholderTextColor={theme.colors.labelColor}
-						placeholder={t('login.password')}
-						defaultValue={password}
-						returnKeyType="done"
-						onChangeText={(text) => {
-							setPassword(text)
-						}}
-						onSubmitEditing={() => {
-							if (username !== '') {
-								login().catch((error: unknown) => {
-									console.debug(error)
-								})
-							}
-						}}
-						selectTextOnFocus={true}
-						secureTextEntry={true}
-						autoCapitalize="none"
-						clearButtonMode="while-editing"
-						autoComplete="current-password"
-						textContentType="password"
-						autoCorrect={false}
-					/>
+				<View style={styles.inputContainer}>
+					<View style={styles.inputWrapper}>
+						<PlatformIcon
+							ios={{
+								name: 'person',
+								size: 20
+							}}
+							android={{
+								name: 'person',
+								size: 24
+							}}
+							web={{
+								name: 'User',
+								size: 20
+							}}
+							style={{ color: theme.colors.labelColor }}
+						/>
+						<TextInput
+							style={styles.textInput}
+							selectionColor={theme.colors.primary}
+							placeholderTextColor={theme.colors.labelColor}
+							defaultValue={username}
+							placeholder="abc1234"
+							returnKeyType="next"
+							onChangeText={(text) => {
+								setUsername(text)
+							}}
+							autoCapitalize="none"
+							clearButtonMode="while-editing"
+							autoComplete="email"
+							textContentType="emailAddress"
+							autoCorrect={false}
+						/>
+					</View>
+
+					<View style={styles.inputWrapper}>
+						<PlatformIcon
+							ios={{
+								name: 'lock',
+								size: 20
+							}}
+							android={{
+								name: 'lock',
+								size: 24
+							}}
+							web={{
+								name: 'Lock',
+								size: 20
+							}}
+							style={{ color: theme.colors.labelColor }}
+						/>
+						<TextInput
+							style={styles.textInput}
+							selectionColor={theme.colors.primary}
+							placeholderTextColor={theme.colors.labelColor}
+							placeholder={t('login.password')}
+							defaultValue={password}
+							returnKeyType="done"
+							onChangeText={(text) => {
+								setPassword(text)
+							}}
+							onSubmitEditing={() => {
+								if (username !== '') {
+									login().catch((error: unknown) => {
+										console.debug(error)
+									})
+								}
+							}}
+							selectTextOnFocus={true}
+							secureTextEntry={!showPassword}
+							autoCapitalize="none"
+							clearButtonMode="while-editing"
+							autoComplete="current-password"
+							textContentType="password"
+							autoCorrect={false}
+						/>
+						<TouchableOpacity
+							style={styles.eyeIcon}
+							onPress={() => setShowPassword(!showPassword)}
+						>
+							<PlatformIcon
+								ios={{
+									name: showPassword ? 'eye.slash' : 'eye',
+									size: 16
+								}}
+								android={{
+									name: showPassword ? 'visibility_off' : 'visibility',
+									size: 20
+								}}
+								web={{
+									name: showPassword ? 'EyeOff' : 'Eye',
+									size: 18
+								}}
+								style={{ color: theme.colors.labelColor }}
+							/>
+						</TouchableOpacity>
+					</View>
 				</View>
+
 				<TouchableOpacity
 					disabled={signInDisabled}
 					onPress={() => {
@@ -252,101 +300,135 @@ const LoginForm = ({
 						</Text>
 					)}
 				</TouchableOpacity>
-				<View style={styles.guestContainer}>
-					<TouchableOpacity
-						onPress={() => {
-							guestLogin().catch((error: unknown) => {
-								console.debug(error)
-							})
-						}}
-					>
-						<Text style={styles.guestText}>{t('login.guest')}</Text>
-					</TouchableOpacity>
+
+				<View style={styles.dividerContainer}>
+					<View style={styles.divider} />
+					<Text style={styles.dividerText}>{t('login.or')}</Text>
+					<View style={styles.divider} />
 				</View>
+
+				<TouchableOpacity
+					style={styles.guestButton}
+					onPress={() => {
+						guestLogin().catch((error: unknown) => {
+							console.debug(error)
+						})
+					}}
+				>
+					<Text style={styles.guestText}>{t('login.guest')}</Text>
+				</TouchableOpacity>
 			</View>
 		</View>
 	)
 }
 
-const black = '#000000'
 const stylesheet = createStyleSheet((theme) => ({
-	buttonText: (disabled: boolean) => ({
-		fontWeight: 'bold',
-		fontSize: 15,
-		color: disabled
-			? UnistylesRuntime.themeName === 'dark'
-				? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
-				: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
-			: getContrastColor(theme.colors.primary)
-	}),
-	container: { alignItems: 'center', justifyContent: 'center' },
-	guestContainer: {
+	container: {
 		alignItems: 'center',
-		paddingTop: 24
+		justifyContent: 'center',
+		width: '100%'
 	},
-	guestText: {
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 14.5
+	loginContainer: {
+		backgroundColor: theme.colors.card,
+		borderRadius: 24,
+		justifyContent: 'center',
+		maxWidth: 400,
+		paddingBottom: 30,
+		paddingHorizontal: 25,
+		paddingTop: 30,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
+		width: '100%',
+		elevation: 5
 	},
-	header: {
+	logoContainer: {
+		alignItems: 'center',
+		marginBottom: 20
+	},
+	logo: {
+		width: 80,
+		height: 80
+	},
+	welcomeText: {
 		color: theme.colors.text,
-		fontSize: 23,
-		fontWeight: '600',
-		marginBottom: 14,
-		textAlign: 'left'
+		fontSize: 28,
+		fontWeight: '700',
+		textAlign: 'center',
+		marginBottom: 8
+	},
+	subtitleText: {
+		color: theme.colors.labelColor,
+		fontSize: 16,
+		textAlign: 'center',
+		marginBottom: 30
+	},
+	inputContainer: {
+		gap: 16
+	},
+	inputWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: theme.colors.inputBackground,
+		borderRadius: 12,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border,
+		paddingHorizontal: 12
+	},
+	textInput: {
+		flex: 1,
+		color: theme.colors.text,
+		fontSize: 16,
+		paddingVertical: 12,
+		marginLeft: 8
+	},
+	eyeIcon: {
+		padding: 4
 	},
 	loginButton: (disabled: boolean) => ({
-		height: 40,
+		height: 50,
 		justifyContent: 'center',
-		paddingHorizontal: 20,
-		marginTop: 25,
-		borderRadius: 7,
 		alignItems: 'center',
+		marginTop: 24,
+		borderRadius: 12,
 		backgroundColor: disabled
 			? UnistylesRuntime.themeName === 'dark'
 				? Color(theme.colors.primary).darken(0.3).hex()
 				: Color(theme.colors.primary).lighten(0.3).hex()
 			: theme.colors.primary
 	}),
-
-	loginContainer: {
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.mg,
-		justifyContent: 'center',
-		maxWidth: 400,
-		paddingBottom: 30,
-		paddingHorizontal: 25,
-		paddingTop: 30,
-		shadowColor: black,
-		shadowOffset: {
-			width: 0,
-			height: 2
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		width: '100%'
-	},
-	passwordContainer: {
-		paddingTop: 15
-	},
-
-	textInput: {
-		backgroundColor: theme.colors.inputBackground,
-		borderColor: theme.colors.border,
-		borderRadius: 7,
-		borderWidth: 1,
-		color: theme.colors.text,
+	buttonText: (disabled: boolean) => ({
+		fontWeight: '600',
 		fontSize: 16,
-		paddingHorizontal: 10,
-		paddingVertical: 10
+		color: disabled
+			? UnistylesRuntime.themeName === 'dark'
+				? Color(getContrastColor(theme.colors.primary)).lighten(0.1).hex()
+				: Color(getContrastColor(theme.colors.primary)).darken(0.1).hex()
+			: getContrastColor(theme.colors.primary)
+	}),
+	dividerContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 26
 	},
-	userNameContainer: {
-		paddingTop: 3
+	divider: {
+		flex: 1,
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: theme.colors.border
 	},
-	userNameLabel: {
-		color: theme.colors.text,
-		fontSize: 15,
-		paddingBottom: 5
+	dividerText: {
+		color: theme.colors.labelColor,
+		marginHorizontal: 10,
+		fontSize: 13
+	},
+	guestButton: {
+		alignItems: 'center',
+		paddingTop: 6,
+		marginTop: 14
+	},
+	guestText: {
+		color: theme.colors.labelColor,
+		fontSize: 14,
+		fontWeight: '400'
 	}
 }))
 

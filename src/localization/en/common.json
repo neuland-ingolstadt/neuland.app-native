@@ -82,7 +82,9 @@
 		"studVer": "StudVer",
 		"marketplace": "Marketplace",
 		"thi": "THI",
-		"press": "PressReader"
+		"press": "PressReader",
+		"librarySeat": "Library Seat",
+		"libraryCatalog": "Library Catalog"
 	},
 	"pages": {
 		"quicklinks": {
@@ -95,13 +97,16 @@
 				"studVer": "Student Representation",
 				"marketplace": "Marketplace",
 				"thi": "THI Website",
-				"press": "PressReader"
+				"press": "PressReader",
+				"librarySeat": "Library Seat Reservation",
+				"libraryCatalog": "Library Catalog"
 			},
 			"more": "more links"
 		},
 		"calendar": {
 			"exams": {
 				"title": "Exams",
+				"subtitle": "Your exams",
 				"error": "Not a student",
 				"errorSubtitle": "Sign in to see your exams.",
 				"noExams": {
@@ -303,6 +308,7 @@
 			},
 			"events": {
 				"title": "Events",
+				"subtitle": "Events of the clubs",
 				"noEvents": {
 					"title": "No events found",
 					"subtitle": "Check back later."

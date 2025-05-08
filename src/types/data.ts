@@ -13,6 +13,17 @@ export interface Calendar {
 	comments?: string[]
 	end?: Date
 	hasHours?: boolean
+	semesterName?: LanguageClass
+}
+
+export interface Semester {
+	name: LanguageClass
+	events: {
+		name: LanguageClass
+		begin: string
+		end?: string
+		hasHours?: boolean
+	}[]
 }
 
 export interface LanguageClass {

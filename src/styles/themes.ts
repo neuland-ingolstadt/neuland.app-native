@@ -5,7 +5,8 @@ export const lightTheme = {
 		labelTertiaryColor: '#99999a',
 		labelSecondaryColor: '#777778',
 		labelColor: '#606062',
-		labelBackground: '#d4d2d2',
+		labelBackground: '#e5dede',
+		tabbarInactive: '#999999',
 		success: '#21bc21',
 		datePickerBackground: '#ebebec',
 		card: 'rgb(255, 255, 255)',
@@ -30,7 +31,7 @@ export const lightTheme = {
 		plateShadow: '#444',
 		plateInnerShadow: '#777',
 		calendarItem: '#5d5d5d',
-		ongoingDot: '#dfdfdf'
+		soonDot: '#dfdfdf'
 	},
 	margins: {
 		page: 12,
@@ -55,7 +56,8 @@ export const darkTheme = {
 		labelSecondaryColor: '#8e8e8f',
 		labelTertiaryColor: '#4b4b4c',
 		labelColor: '#a4a4a5',
-		labelBackground: '#4a4a4a',
+		labelBackground: '#444444',
+		tabbarInactive: '#757575',
 		success: '#37d837',
 		datePickerBackground: '#2a2a2c',
 		card: 'rgb(18, 18, 18)',
@@ -80,7 +82,7 @@ export const darkTheme = {
 		plateShadow: '#777777',
 		plateInnerShadow: '#3d3d3d',
 		calendarItem: '#676767',
-		ongoingDot: '#4b4b4b'
+		soonDot: '#4b4b4b'
 	},
 	margins: {
 		page: 12,

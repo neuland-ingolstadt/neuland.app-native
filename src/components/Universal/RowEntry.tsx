@@ -1,5 +1,5 @@
 import type React from 'react'
-import { type DimensionValue, Pressable, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const RowEntry = ({
@@ -7,7 +7,6 @@ const RowEntry = ({
 	leftChildren,
 	rightChildren,
 	onPress,
-	maxTitleWidth,
 	backgroundColor,
 	icon
 }: {
@@ -16,54 +15,81 @@ const RowEntry = ({
 	rightChildren: JSX.Element
 	onPress?: () => void
 	isExamCard?: boolean
-	maxTitleWidth?: DimensionValue
 	backgroundColor?: string
 	icon?: JSX.Element
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 	return (
-		<Pressable onPress={onPress}>
-			<View style={{ ...styles.eventContainer, backgroundColor }}>
-				<View style={[styles.detailsContainer, { maxWidth: maxTitleWidth }]}>
-					<View style={styles.titleContainer}>
-						{icon}
-						<Text
-							style={styles.titleText}
-							numberOfLines={2}
-							textBreakStrategy="highQuality"
-						>
-							{title}
-						</Text>
-					</View>
-					{leftChildren}
+		<Pressable
+			disabled={!onPress}
+			onPress={onPress}
+			style={({ pressed }) => [styles.cardContainer, pressed && styles.pressed]}
+		>
+			<View style={[styles.eventContainer, { backgroundColor }]}>
+				{/* Title section */}
+				<View style={styles.titleContainer}>
+					{icon}
+					<Text
+						style={styles.titleText}
+						numberOfLines={2}
+						textBreakStrategy="highQuality"
+					>
+						{title}
+					</Text>
 				</View>
 
-				{rightChildren}
+				{/* Children section */}
+				<View style={styles.childrenContainer}>
+					<View style={styles.leftChildrenContainer}>{leftChildren}</View>
+					<View style={styles.rightChildrenContainer}>{rightChildren}</View>
+				</View>
 			</View>
 		</Pressable>
 	)
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	detailsContainer: {
-		alignItems: 'flex-start',
-
-		flexDirection: 'column',
-		maxWidth: '70%',
-		padding: theme.margins.rowPadding
+	cardContainer: {
+		borderRadius: theme.radius.md,
+		backgroundColor: theme.colors.card,
+		borderColor: theme.colors.border,
+		borderWidth: StyleSheet.hairlineWidth,
+		overflow: 'hidden',
+		paddingHorizontal: 14,
+		paddingVertical: 16
 	},
 	eventContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingHorizontal: 10,
-		paddingVertical: 12
+		flexDirection: 'column',
+		borderRadius: theme.radius.md,
+		justifyContent: 'center'
 	},
-	titleContainer: { flexDirection: 'row', gap: 4, paddingBottom: 2 },
+	pressed: {
+		opacity: 0.9
+	},
+	titleContainer: {
+		flexDirection: 'row',
+		gap: 4,
+		paddingBottom: 6
+	},
 	titleText: {
 		color: theme.colors.text,
 		fontSize: 16,
-		fontWeight: '600',
-		marginBottom: 1
+		fontWeight: '600'
+	},
+	childrenContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%'
+	},
+	leftChildrenContainer: {
+		flex: 2,
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start'
+	},
+	rightChildrenContainer: {
+		flex: 1,
+		alignItems: 'flex-end',
+		justifyContent: 'flex-end'
 	}
 }))
 

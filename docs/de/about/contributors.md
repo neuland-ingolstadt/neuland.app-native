@@ -11,14 +11,17 @@ const members = [
     title: 'Gründer & Projektleiter Neuland Next',
     links: [
       { icon: 'github', link: 'https://github.com/Robert27' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/roberteggl/' },
     ]
   },
+  
     {
     avatar: 'https://github.com/BuildmodeOne.png',
     name: 'Philipp Opheys',
     title: 'Projektleiter neuland.app',
     links: [
       { icon: 'github', link: 'https://github.com/BuildmodeOne' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/philipp-opheys/' },
     ]
   },
   {
@@ -26,7 +29,8 @@ const members = [
     name: 'Alexander Horn',
     title: 'Gründer neuland.app',
     links: [
-      { icon: 'github', link: 'https://github.com/BuildmodeOne' },
+      { icon: 'github', link: 'https://github.com/alexhorn' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/alexhorn29/' },
     ]
   },
    {
@@ -35,6 +39,7 @@ const members = [
     title: 'Gründer neuland.app',
     links: [
       { icon: 'github', link: 'https://github.com/M4GNV5' },
+      { icon: 'linkedin', link: 'https://www.linkedin.com/in/jakob-löw-1814431b4/' },
     ]
   },
     {
@@ -47,8 +52,6 @@ const members = [
       { icon: 'instagram', link: 'https://instagram.com/neuland_ing' }
     ]
   },
-
-
 ]
 </script>
 

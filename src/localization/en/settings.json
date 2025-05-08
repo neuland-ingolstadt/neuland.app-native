@@ -2,7 +2,11 @@
 	"menu": {
 		"guest": {
 			"title": "Sign in",
-			"subtitle": "Sign in to unlock all features of the app"
+			"subtitle": "Sign in to unlock all features of the app",
+			"banner": {
+				"title": "Get started",
+				"message": "After signing in, you'll see your grades, library card, printer balance and other important information right here."
+			}
 		},
 		"employee": {
 			"subtitle1": "Employee account",
@@ -56,7 +60,6 @@
 			"contact": {
 				"title": "Contact",
 				"feedback": "Feedback",
-
 				"rateAndroid": "Rate on Play Store",
 				"rateiOS": "Rate on App Store"
 			}
@@ -161,13 +164,13 @@
 		}
 	},
 	"dashboard": {
-		"shown": "Shown cards",
+		"shown": "All cards",
 		"hidden": "Hidden cards",
 		"reset": "Reset order",
 		"noShown": "Dashboard is empty",
 		"noShownDescription": "Add some cards to your dashboard to get started.",
 		"noShownButton": "Configure",
-		"footer": "Customize your dashboard by dragging and dropping the cards to your preferred order. Hide cards by pressing on the remove icon.",
+		"footer": "Customize your dashboard by dragging and dropping the cards to your preferred order.",
 		"unavailable": {
 			"title": "Unavailable cards",
 			"message": "To use all features of the app, you need to sign in. Tap to continue with your THI account."
@@ -184,6 +187,13 @@
 		"exactAverage": "Based on {{number}} weighted grades.",
 		"temporarilyUnavailable": "Grades are temporarily unavailable.",
 		"footer": "This is overview is only for general information and is not legally binding. Please refer to the official grades sheet on Primuss for binding information."
+	},
+	"infoBoxes": {
+		"printerBalance": "Printer Balance",
+		"gradesAndSubjects": "Grades & Subjects",
+		"lecturers": "Lecturers",
+		"library": "Your card",
+		"view": "Library"
 	},
 	"appIcon": {
 		"error": {

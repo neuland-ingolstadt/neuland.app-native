@@ -82,7 +82,9 @@
 		"studVer": "StudVer",
 		"marketplace": "Marktplatz",
 		"thi": "THI",
-		"press": "PressReader"
+		"press": "PressReader",
+		"librarySeat": "Bibliotheksplatz",
+		"libraryCatalog": "Bibliothekskatalog"
 	},
 	"pages": {
 		"quicklinks": {
@@ -95,13 +97,16 @@
 				"studVer": "Studierendenvertretung",
 				"marketplace": "Marktplatz",
 				"thi": "THI Website",
-				"press": "PressReader"
+				"press": "PressReader",
+				"librarySeat": "Bibliotheksplatzreservierung",
+				"libraryCatalog": "Bibliothekskatalog"
 			},
 			"more": "Mehr"
 		},
 		"calendar": {
 			"exams": {
 				"title": "Prüfungen",
+				"subtitle": "Deine Prüfungen",
 				"error": "Kein Studierender",
 				"errorSubtitle": "Melde dich an, um deine Prüfungen zu sehen.",
 				"noExams": {
@@ -303,6 +308,7 @@
 			},
 			"events": {
 				"title": "Veranstaltungen",
+				"subtitle": "Veranstaltungen der Vereine",
 				"noEvents": {
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."

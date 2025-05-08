@@ -2,7 +2,6 @@ import { getFragmentData } from '@/__generated__/gql'
 import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
-import { IndexHeaderRight } from '@/components/Dashboard/HeaderRight'
 import ErrorView from '@/components/Error/ErrorView'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
@@ -24,7 +23,6 @@ export default function HomeRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
 				<title>Dashboard</title>
 				<meta name="Dashboard" content="Customizable Dashboard" />
 				<meta property="expo:handoff" content="true" />
@@ -37,7 +35,6 @@ export default function HomeRootScreen(): React.JSX.Element {
 				component={isPageOpen ? HomeScreen : () => <></>}
 				largeTitle={true}
 				transparent={true}
-				headerRightElement={IndexHeaderRight}
 				androidFallback
 			/>
 		</>
@@ -168,7 +165,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	item: {
 		gap: 0,
 		marginHorizontal: theme.margins.page,
-		marginVertical: 4.5
+		marginVertical: 5
 	},
 	page: {
 		backgroundColor: theme.colors.background

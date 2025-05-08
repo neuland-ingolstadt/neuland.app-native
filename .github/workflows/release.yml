@@ -5,6 +5,10 @@ on:
     tags:
       - "*"
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/webapp
+
 jobs:
   changelog:
     name: Generate changelog
@@ -17,24 +21,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v4
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: --latest --strip all
-        env:
-          OUTPUT: CHANGES.md
-          GITHUB_REPO: ${{ github.repository }}
-
       - name: Determine if prerelease
         id: prerelease_check
         run: |
           if [[ "${{ github.ref }}" =~ - ]]; then
-              echo "PRERELEASE=true" >> $GITHUB_ENV
+            echo "PRERELEASE=true" >> $GITHUB_ENV
           else
-              echo "PRERELEASE=false" >> $GITHUB_ENV
+            echo "PRERELEASE=false" >> $GITHUB_ENV
           fi
+
+      - name: Find latest stable tag
+        id: latest_stable_tag
+        run: |
+          LATEST_TAG=$(git tag --sort=-creatordate | grep -v "-" | head -n1)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        id: git-cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: ${{ env.PRERELEASE == 'true' && '--latest --strip all' || format('{0}..HEAD --strip all', env.LATEST_TAG) }}
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
 
       - name: Upload the binary releases
         uses: svenstaro/upload-release-action@v2
@@ -45,9 +55,90 @@ jobs:
           body: ${{ steps.git-cliff.outputs.content }}
           prerelease: ${{ env.PRERELEASE }}
 
+  github-releases-to-discord:
+    runs-on: ubuntu-latest
+    needs: changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Github Releases To Discord
+        uses: SethCohen/github-releases-to-discord@v1.16.2
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          color: "2105893"
+          username: "Neuland Next Release Bot"
+          avatar_url: "https://avatars.githubusercontent.com/u/76657022?s=200&v=4.png"
+          content: ${{ needs.changelog.outputs.release_body }}
+          footer_title: "Changelog: ${{ github.ref_name }}"
+          footer_icon_url: "https://avatars.githubusercontent.com/u/76657022?s=200&v=4.png"
+          footer_timestamp: true
+          max_description: "4096"
+          reduce_headings: true
+
+  build-docker-image:
+    name: Build and publish Docker image
+    runs-on: ubuntu-latest
+    needs: changelog
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine if prerelease
+        run: |
+          if [[ "${{ github.ref }}" =~ - ]]; then
+              echo "PRERELEASE=true" >> $GITHUB_ENV
+              echo "TAG_TYPE=beta" >> $GITHUB_ENV
+              echo "ENDPOINT=DEV" >> $GITHUB_ENV
+          else
+              echo "PRERELEASE=false" >> $GITHUB_ENV
+              echo "TAG_TYPE=release" >> $GITHUB_ENV
+              echo "ENDPOINT=PROD" >> $GITHUB_ENV
+          fi
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract tag name
+        id: tag_name
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.tag_name.outputs.TAG }}
+            type=raw,value=${{ env.TAG_TYPE }}-latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            type=${{ env.TAG_TYPE }}
+          build-args: |
+            EXPO_PUBLIC_THI_API_KEY=${{ secrets.EXPO_PUBLIC_THI_API_KEY }}
+            EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ vars.GRAPHQL_ENDPOINT_PROD }}
+            EXPO_PUBLIC_APTABASE_KEY=${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
+            EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
+
   build-android:
     name: Build Android app
     runs-on: ubuntu-latest
+    needs: changelog
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
