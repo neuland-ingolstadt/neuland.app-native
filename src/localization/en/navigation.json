@@ -72,7 +72,11 @@
 		},
 		"calendar": {
 			"exam": "Exam: {{name}}",
-			"ends": "ends "
+			"ends": "ends ",
+			"type": {
+				"exam": "Exam",
+				"event": "THI Event"
+			}
 		},
 		"timetable": {
 			"startingSoon": "starts in {{count}} min",
