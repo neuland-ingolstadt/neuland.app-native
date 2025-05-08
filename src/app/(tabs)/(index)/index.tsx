@@ -63,7 +63,7 @@ const HomeScreen = memo(function HomeScreen() {
 	useEffect(() => {
 		const handleOrientationChange = (): void => {
 			setOrientation(Dimensions.get('window').width)
-			setColumns(Math.floor(Dimensions.get('window').width < 500 ? 1 : 2))
+			setColumns(Math.floor(Dimensions.get('window').width < 700 ? 1 : 2))
 		}
 
 		const subscription = Dimensions.addEventListener(

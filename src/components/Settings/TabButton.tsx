@@ -8,10 +8,9 @@ import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface IndexHeaderRightProps {
@@ -26,7 +25,6 @@ export const SettingsTabButton = ({
 	focused = false
 }: IndexHeaderRightProps): React.JSX.Element => {
 	const { t } = useTranslation(['navigation', 'settings'])
-	const router = useRouter()
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
 		useContext<UserKindContextType>(UserKindContext)
@@ -178,17 +176,7 @@ export const SettingsTabButton = ({
 		]
 	)
 
-	// Create the avatar or icon component with proper styling
-	return (
-		<Pressable
-			onPress={() => {
-				router.navigate('/settings')
-			}}
-			accessibilityLabel={t('navigation.settings')}
-		>
-			{MemoIcon}
-		</Pressable>
-	)
+	return <View accessibilityLabel={t('navigation.settings')}>{MemoIcon}</View>
 }
 
 const stylesheet = createStyleSheet((theme) => ({
