@@ -40,7 +40,10 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 			rightChildren={
 				<View style={styles.rightContainer}>
 					{isActive && <View style={styles.statusIndicator} />}
-					<Text style={[styles.rightText, isActive && styles.highlightText]}>
+					<Text
+						style={[styles.rightText, isActive && styles.highlightText]}
+						numberOfLines={1}
+					>
 						{event.begin != null &&
 							(event.end != null && event.begin < new Date()
 								? `${t('dates.ends')} ${formatFriendlyRelativeTime(event.end)}`
@@ -104,7 +107,10 @@ const ExamRow = ({ event }: { event: Exam }): React.JSX.Element => {
 			rightChildren={
 				<View style={styles.rightContainer}>
 					{isToday && <View style={styles.statusIndicator} />}
-					<Text style={[styles.rightText, isToday && styles.highlightText]}>
+					<Text
+						style={[styles.rightText, isToday && styles.highlightText]}
+						numberOfLines={1}
+					>
 						{formatFriendlyRelativeTime(new Date(event.date))}
 					</Text>
 				</View>
@@ -148,6 +154,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	rightText: {
 		color: theme.colors.labelColor,
+
 		fontSize: 14,
 		fontWeight: '400'
 	},

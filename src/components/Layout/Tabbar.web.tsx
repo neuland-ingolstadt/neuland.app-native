@@ -24,11 +24,13 @@ const TabLayout = (): React.JSX.Element => {
 					tabBarActiveTintColor: styleTheme.colors.text,
 					tabBarInactiveTintColor: styleTheme.colors.tabbarInactive,
 					tabBarStyle: {
-						backgroundColor: styleTheme.colors.card
+						backgroundColor: styleTheme.colors.card,
+						paddingTop: 4
 					},
 					tabBarLabelStyle: {
-						paddingTop: !isMobile && !isPad ? 0 : 4
+						paddingTop: isPad ? 4 : 0
 					},
+
 					tabBarShowLabel: !isMobile,
 					tabBarLabelPosition: isMobile
 						? undefined

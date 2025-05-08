@@ -445,6 +445,7 @@ export default function Settings(): React.JSX.Element {
 				scrollY.current = event.nativeEvent.contentOffset.y
 				setTapCount(0)
 			}}
+			scrollEventThrottle={16}
 			contentInsetAdjustmentBehavior="automatic"
 			contentContainerStyle={styles.contentContainer}
 		>
