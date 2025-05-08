@@ -168,12 +168,6 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/settings"
-						options={{
-							title: t('navigation.settings')
-						}}
-					/>
-					<Stack.Screen
 						name="(screens)/changelog"
 						options={{
 							title: 'Changelog'
