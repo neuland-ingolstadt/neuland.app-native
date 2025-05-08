@@ -95,17 +95,17 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 			SplashScreen.hideAsync()
 			intro.value = withTiming(0.2, { duration: 300 }, () => {
 				intro.value = withTiming(0.4, { duration: 200 }, () => {
-						intro.value = withTiming(
-							1,
-							{ duration: 600, easing: Easing.out(Easing.exp) },
-							() => {
-								introBackground.value = withTiming(1, { duration: 400 }, () => {
-									runOnJS(setHideSplash)(true)
-								})
-							}
-						)
-					})
+					intro.value = withTiming(
+						1,
+						{ duration: 600, easing: Easing.out(Easing.exp) },
+						() => {
+							introBackground.value = withTiming(1, { duration: 400 }, () => {
+								runOnJS(setHideSplash)(true)
+							})
+						}
+					)
 				})
+			})
 		}
 	}, [isReady, loaded])
 
