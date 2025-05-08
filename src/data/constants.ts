@@ -78,6 +78,24 @@ export const quicklinks = [
 			android: 'newspaper',
 			web: 'Newspaper'
 		}
+	},
+	{
+		key: 'librarySeat',
+		url: vscoutLink,
+		icon: {
+			ios: 'studentdesk',
+			android: 'chair',
+			web: 'Armchair'
+		}
+	},
+	{
+		key: 'libraryCatalog',
+		url: libraryLink,
+		icon: {
+			ios: 'text.magnifyingglass',
+			android: 'library_books',
+			web: 'Search'
+		}
 	}
 ]
 

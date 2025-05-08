@@ -13,13 +13,6 @@ export const UserKindContext = createContext<UserKindContextType>({
 
 export const DashboardContext = createContext<Dashboard>({
 	shownDashboardEntries: [],
-	hiddenDashboardEntries: [],
-	hideDashboardEntry: () => {
-		throw new Error('hideDashboardEntry not implemented')
-	},
-	bringBackDashboardEntry: () => {
-		throw new Error('bringBackDashboardEntry not implemented')
-	},
 	resetOrder: () => {
 		throw new Error('resetOrder not implemented')
 	},

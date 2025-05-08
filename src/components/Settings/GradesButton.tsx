@@ -1,4 +1,3 @@
-import { handleBiometricAuth } from '@/utils/app-utils'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -6,6 +5,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import { Pressable } from 'react-native'
 
+import { router } from 'expo-router'
 import PlatformIcon from '../Universal/Icon'
 
 const GradesButton = (): React.JSX.Element => {
@@ -14,7 +14,7 @@ const GradesButton = (): React.JSX.Element => {
 	return (
 		<Pressable
 			onPress={() => {
-				void handleBiometricAuth('grades')
+				router.navigate('/grades')
 			}}
 			style={({ pressed }) => [
 				{

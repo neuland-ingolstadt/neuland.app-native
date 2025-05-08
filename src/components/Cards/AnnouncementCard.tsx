@@ -129,7 +129,6 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 								ios={{ name: 'megaphone.fill', size: 15 }}
 								android={{ name: 'campaign', size: 23, variant: 'outlined' }}
 								web={{ name: 'Megaphone', size: 20 }}
-								style={styles.cardIcon}
 							/>
 						</Animated.View>
 					</View>
@@ -194,13 +193,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 36,
 		height: 36,
 		borderRadius: 18,
-		backgroundColor: theme.colors.cardIconBackground,
+		backgroundColor: `${theme.colors.primary}20`,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4
-	},
-	cardIcon: {
-		color: theme.colors.primary
 	},
 	description: {
 		color: theme.colors.text,

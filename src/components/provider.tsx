@@ -161,24 +161,6 @@ export default function Provider({
 		}
 	}, [dashboard.shownDashboardEntries, analyticsInitialized])
 
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
-
-		const entries: Record<string, string> = {}
-
-		for (const entry of dashboard.hiddenDashboardEntries) {
-			if (entry !== undefined) {
-				entries[entry.key] = 'Card hidden'
-			}
-		}
-
-		if (Object.keys(entries).length > 0) {
-			trackEvent('Dashboard', entries)
-		}
-	}, [dashboard.hiddenDashboardEntries, analyticsInitialized])
-
 	useEffect((): void => {
 		if (!analyticsInitialized) {
 			return

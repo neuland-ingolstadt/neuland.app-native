@@ -215,12 +215,6 @@
         "licenseUrl": "https://github.com/expo/expo",
         "parents": "neuland"
     },
-    "expo-local-authentication@15.0.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/expo/expo",
-        "licenseUrl": "https://github.com/expo/expo",
-        "parents": "neuland"
-    },
     "expo-localization@16.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",

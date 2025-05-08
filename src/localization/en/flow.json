@@ -29,6 +29,7 @@
 	},
 	"login": {
 		"title1": "Sign in",
+		"getStarted": "Get started",
 		"title2": "with your THI account",
 		"toast": "Login successful",
 		"alert": {

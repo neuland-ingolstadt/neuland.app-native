@@ -30,6 +30,7 @@
 	"login": {
 		"title1": "Anmelden",
 		"title2": "mit deinem THI-Account",
+		"getStarted": "Los geht's",
 		"toast": "Anmeldung erfolgreich",
 		"alert": {
 			"error": {

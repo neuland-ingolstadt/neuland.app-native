@@ -37,11 +37,10 @@
         "expo-clipboard": "~7.0.1",
         "expo-constants": "~17.0.8",
         "expo-crypto": "~14.0.2",
-       
+        "expo-dev-client": "~5.0.20",
         "expo-haptics": "~14.0.1",
         "expo-linear-gradient": "~14.0.2",
         "expo-linking": "~7.0.5",
-        "expo-local-authentication": "~15.0.2",
         "expo-localization": "~16.0.1",
         "expo-navigation-bar": "~4.0.9",
         "expo-quick-actions": "^4.0.2",
@@ -92,7 +91,6 @@
         "zustand": "^5.0.3",
       },
       "devDependencies": {
-        "expo-dev-client": "~5.0.20",
         "@0no-co/graphqlsp": "^1.12.16",
         "@babel/core": "^7.26.10",
         "@biomejs/biome": "1.9.4",
@@ -121,7 +119,6 @@
   ],
   "patchedDependencies": {
     "@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
-    "react-native-drag-sort@2.4.4": "patches/react-native-drag-sort@2.4.4.patch",
     "recyclerlistview@4.2.1": "patches/recyclerlistview@4.2.1.patch",
     "getenv@1.0.0": "patches/getenv@1.0.0.patch",
     "@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
@@ -1262,8 +1259,6 @@
     "expo-linear-gradient": ["expo-linear-gradient@14.0.2", "", { "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" } }, "sha512-nvac1sPUfFFJ4mY25UkvubpUV/olrBH+uQw5k+beqSvQaVQiUfFtYzfRr+6HhYBNb4AEsOtpsCRkpDww3M2iGQ=="],
 
     "expo-linking": ["expo-linking@7.0.5", "", { "dependencies": { "expo-constants": "~17.0.5", "invariant": "^2.2.4" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-3KptlJtcYDPWohk0MfJU75MJFh2ybavbtcSd84zEPfw9s1q3hjimw3sXnH03ZxP54kiEWldvKmmnGcVffBDB1g=="],
-
-    "expo-local-authentication": ["expo-local-authentication@15.0.2", "", { "dependencies": { "invariant": "^2.2.4" }, "peerDependencies": { "expo": "*" } }, "sha512-v7TOfovuivGWffA8B0FudEas+njMKTrjhaPpJYLASiTLTP3zUYqtumNgZ9pkaDB6Cagq0+DeNH39AI8tdEBUkQ=="],
 
     "expo-localization": ["expo-localization@16.0.1", "", { "dependencies": { "rtl-detect": "^1.0.2" }, "peerDependencies": { "expo": "*", "react": "*" } }, "sha512-kUrXiV/Pq9r7cG+TMt+Qa49IUQ9Y/czVwen4hmiboTclTopcWdIeCzYZv6JGtufoPpjEO9vVx1QJrXYl9V2u0Q=="],
 
