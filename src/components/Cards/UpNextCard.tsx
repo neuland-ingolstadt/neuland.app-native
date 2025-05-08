@@ -293,7 +293,11 @@ const UpNextCard: React.FC = () => {
 			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return <Text style={styles.statusText}>{statusText}</Text>
+		return (
+			<View style={styles.dateContainer}>
+				<Text style={styles.eventDate}>{statusText}</Text>
+			</View>
+		)
 	}, [currentEvent, eventStatus, t])
 
 	const RoomInfo = useMemo(() => {
@@ -562,6 +566,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 14,
 		fontWeight: '400'
+	},
+	dateContainer: {
+		backgroundColor: `${theme.colors.primary}15`,
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		borderRadius: theme.radius.sm
+	},
+	eventDate: {
+		color: theme.colors.primary,
+		fontSize: 14,
+		fontWeight: '500'
 	}
 }))
 

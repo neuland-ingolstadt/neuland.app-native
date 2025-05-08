@@ -1,5 +1,4 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import Divider from '@/components/Universal/Divider'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
@@ -14,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+import Divider from '../Universal/Divider'
 import BaseCard from './BaseCard'
 
 const CalendarCard = (): React.JSX.Element => {
@@ -28,15 +28,16 @@ const CalendarCard = (): React.JSX.Element => {
 		name: string
 		begin: Date
 		end?: Date
+		isExam?: boolean
 	}
 
 	async function loadExams(): Promise<CardExams[]> {
 		let exams: CardExams[] = []
 		try {
-			// TODO: extract the fetch logic into a separate function to improve caching
 			exams = (await loadExamList()).map((x) => ({
 				name: t('cards.calendar.exam', { name: x.name }),
-				begin: new Date(x.date)
+				begin: new Date(x.date),
+				isExam: true
 			}))
 		} catch (e) {
 			if (e instanceof NoSessionError) {
@@ -68,20 +69,19 @@ const CalendarCard = (): React.JSX.Element => {
 	})
 
 	useEffect(() => {
-		const combined = [...calendar, ...(exams ?? [])]
+		const combined = [
+			...calendar.map((item) => ({ ...item, isExam: false })),
+			...(exams ?? [])
+		]
 			.map((item) => ({ ...item, begin: new Date(item.begin) }))
 			.filter((x) => x.begin > time || (x.end ?? time) > time)
 			.sort((a, b) => {
-				// First compare by start date
 				const dateComparison = a.begin.getTime() - b.begin.getTime()
-
-				// If events start on the same day, prioritize single-day events
 				if (dateComparison === 0) {
 					const aIsSingleDay = !a.end
 					const bIsSingleDay = !b.end
 					return aIsSingleDay ? -1 : bIsSingleDay ? 1 : 0
 				}
-
 				return dateComparison
 			}) as Combined[]
 
@@ -92,29 +92,37 @@ const CalendarCard = (): React.JSX.Element => {
 
 	return (
 		<BaseCard title="calendar" onPressRoute="/calendar">
-			<View
-				style={{
-					...styles.calendarView,
-					...(mixedCalendar.length > 0 && styles.calendarFilled)
-				}}
-			>
+			<View style={styles.calendarContainer}>
 				{mixedCalendar.map((event, index) => (
 					<React.Fragment key={index}>
-						<View>
-							<Text style={styles.eventTitle} numberOfLines={2}>
-								{typeof event.name === 'object'
-									? event.name[i18n.language as LanguageKey]
-									: event.name}
-							</Text>
-							<Text style={styles.eventDetails} numberOfLines={1}>
-								{event.end != null && event.begin < time
-									? t('cards.calendar.ends') +
-										formatFriendlyRelativeTime(event.end)
-									: formatFriendlyRelativeTime(event.begin)}
-							</Text>
+						<View style={styles.eventItem}>
+							<View style={styles.eventContent}>
+								<View style={styles.eventHeader}>
+									<Text style={styles.eventTitle} numberOfLines={2}>
+										{typeof event.name === 'object'
+											? event.name[i18n.language as LanguageKey]
+											: event.name}
+									</Text>
+									<View style={styles.dateContainer}>
+										<Text style={styles.eventDate}>
+											{event.end != null && event.begin < time
+												? t('cards.calendar.ends') +
+													formatFriendlyRelativeTime(event.end)
+												: formatFriendlyRelativeTime(event.begin)}
+										</Text>
+									</View>
+								</View>
+								<View style={styles.eventFooter}>
+									<Text style={styles.eventDetails} numberOfLines={1}>
+										{(event as CardExams).isExam
+											? t('cards.calendar.type.exam')
+											: t('cards.calendar.type.event')}
+									</Text>
+								</View>
+							</View>
 						</View>
-						{mixedCalendar.length - 1 !== index && (
-							<Divider color={theme.colors.border} width={'100%'} />
+						{index < mixedCalendar.length - 1 && (
+							<Divider color={theme.colors.border} />
 						)}
 					</React.Fragment>
 				))}
@@ -124,20 +132,48 @@ const CalendarCard = (): React.JSX.Element => {
 }
 
 const stylesheet = createStyleSheet((theme) => ({
-	calendarView: {
+	calendarContainer: {
+		paddingTop: -4
+	},
+	eventItem: {
+		paddingVertical: 12
+	},
+	eventContent: {
+		gap: 6
+	},
+	eventHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
 		gap: 8
-	},
-	calendarFilled: {
-		paddingTop: 8
-	},
-	eventDetails: {
-		color: theme.colors.labelColor,
-		fontSize: 15
 	},
 	eventTitle: {
 		color: theme.colors.text,
 		fontSize: 16,
+		fontWeight: '600',
+		flex: 1
+	},
+	dateContainer: {
+		backgroundColor: `${theme.colors.primary}15`,
+		paddingHorizontal: 8,
+		paddingVertical: 3,
+		borderRadius: theme.radius.sm
+	},
+	eventDate: {
+		color: theme.colors.primary,
+		fontSize: 14,
 		fontWeight: '500'
+	},
+	eventFooter: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		gap: 8
+	},
+	eventDetails: {
+		color: theme.colors.labelColor,
+		fontSize: 14,
+		flex: 1
 	}
 }))
 
