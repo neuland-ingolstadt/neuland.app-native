@@ -1,3 +1,4 @@
+import PlatformIcon from '@/components/Universal/Icon'
 import type React from 'react'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
@@ -8,6 +9,7 @@ interface NameBoxProps {
 	title: string
 	subTitle1: string
 	subTitle2?: string
+	showChevron?: boolean
 }
 
 /**
@@ -18,18 +20,20 @@ interface NameBoxProps {
  * @param {string} props.title - The title of the box.
  * @param {string} props.subTitle1 - The first subtitle of the box.
  * @param {string} [props.subTitle2] - The second subtitle of the box (optional).
+ * @param {boolean} [props.showChevron] - Whether to show the chevron icon (optional).
  * @returns {JSX.Element} - The JSX element representing the component.
  */
 const NameBox = ({
 	children,
 	title,
 	subTitle1,
-	subTitle2
+	subTitle2,
+	showChevron
 }: NameBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
 	return (
-		<>
+		<View style={styles.wrapper}>
 			{children}
 			<View style={styles.container}>
 				<Text style={styles.title} numberOfLines={1}>
@@ -46,13 +50,30 @@ const NameBox = ({
 					</Text>
 				)}
 			</View>
-		</>
+			{showChevron && (
+				<View style={styles.chevronContainer}>
+					<PlatformIcon
+						ios={{ name: 'chevron.forward', size: 16 }}
+						android={{ name: 'chevron_right', size: 26 }}
+						web={{ name: 'ChevronRight', size: 26 }}
+						style={styles.chevronIcon}
+					/>
+				</View>
+			)}
+		</View>
 	)
 }
 
 export default NameBox
 
 const stylesheet = createStyleSheet((theme) => ({
+	wrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 16,
+		paddingVertical: 15,
+		width: '100%'
+	},
 	container: {
 		alignItems: 'flex-start',
 		flex: 1,
@@ -71,5 +92,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 18,
 		fontWeight: 'bold',
 		overflow: 'hidden'
+	},
+	chevronContainer: {
+		marginLeft: 8,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	chevronIcon: {
+		color: theme.colors.labelSecondaryColor
 	}
 }))

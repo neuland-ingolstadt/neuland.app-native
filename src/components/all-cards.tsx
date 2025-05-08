@@ -1,7 +1,6 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
 import {
-	BaseCard,
 	CalendarCard,
 	EventsCard,
 	LinkCard,
@@ -35,13 +34,6 @@ export const AllCards: Card[] = [
 		card: () => <EventsCard />
 	},
 	{
-		key: 'library',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <BaseCard title="library" onPressRoute="library" />
-	},
-	{
 		key: 'links',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
@@ -54,13 +46,6 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE],
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
 		card: () => <NewsCard />
-	},
-	{
-		key: 'lecturers',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE],
-		allowed: [USER_STUDENT, USER_EMPLOYEE],
-		card: () => <BaseCard title="lecturers" onPressRoute="lecturers" />
 	},
 	{
 		key: 'login',

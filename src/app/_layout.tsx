@@ -12,7 +12,7 @@ import * as ScreenOrientation from 'expo-screen-orientation'
 import type React from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AppState, Linking, Platform } from 'react-native'
+import { AppState, Linking, LogBox, Platform } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
@@ -29,6 +29,12 @@ configureReanimatedLogger({
 export const unstable_settings = {
 	initialRouteName: '/'
 }
+
+// Ignore common React Native warnings
+LogBox.ignoreLogs([
+	/VirtualizedLists should never be nested inside plain ScrollViews/, // avoid nested list warnings
+	/Invalid prop `isParentDetached` supplied to .*React\.Fragment/ // ignore isParentDetached fragment prop warning
+])
 
 function RootLayout(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
@@ -151,12 +157,6 @@ function RootLayout(): React.JSX.Element {
 						headerShown: false,
 						headerBackVisible: false,
 						headerBackButtonMenuEnabled: false
-					}}
-				/>
-				<Stack.Screen
-					name="(screens)/settings"
-					options={{
-						title: t('navigation.settings')
 					}}
 				/>
 				<Stack.Screen
@@ -444,14 +444,9 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/library-code"
+					name="(screens)/library"
 					options={{
-						title: t('navigation.libraryCode'),
-						...Platform.select({
-							ios: {
-								presentation: 'modal'
-							}
-						})
+						title: t('navigation.libraryCode')
 					}}
 				/>
 				<Stack.Screen

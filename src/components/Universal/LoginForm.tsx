@@ -178,7 +178,7 @@ const LoginForm = ({
 	return (
 		<View style={styles.container}>
 			<View style={styles.loginContainer}>
-				<Text style={styles.welcomeText}>{t('login.title1')}</Text>
+				<Text style={styles.welcomeText}>{t('login.getStarted')}</Text>
 				<Text style={styles.subtitleText}>{t('login.title2')}</Text>
 
 				<View style={styles.inputContainer}>

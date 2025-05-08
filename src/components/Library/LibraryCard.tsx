@@ -88,7 +88,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	row: {
 		alignItems: 'center',
 		flexDirection: 'row',
-		gap: 6
+		gap: 10
 	},
 	title: {
 		color: theme.colors.text,
