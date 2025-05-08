@@ -76,13 +76,13 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 			{
 				scale: interpolate(
 					intro.value,
-					[0, 0.2, 0.4, 0.7, 0.9, 1],
-					[1, 1.25, 1, 1, 1, 10],
+					[0, 0.2, 0.4, 1],
+					[1, 1, 0.8, 10],
 					'clamp'
 				)
 			}
 		],
-		opacity: interpolate(intro.value, [0, 0.7, 0.9, 1], [1, 1, 1, 0], 'clamp')
+		opacity: interpolate(intro.value, [0, 0.7, 0.8, 1], [1, 1, 0.4, 0], 'clamp')
 	}))
 
 	const animatedBackgroundStyle = useAnimatedStyle(() => ({
@@ -94,20 +94,18 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		if (isReady && loaded) {
 			SplashScreen.hideAsync()
 			intro.value = withTiming(0.2, { duration: 300 }, () => {
-				intro.value = withTiming(0.4, { duration: 300 }, () => {
-					intro.value = withTiming(0.7, { duration: 400 }, () => {
+				intro.value = withTiming(0.4, { duration: 200 }, () => {
 						intro.value = withTiming(
 							1,
-							{ duration: 800, easing: Easing.out(Easing.exp) },
+							{ duration: 600, easing: Easing.out(Easing.exp) },
 							() => {
-								introBackground.value = withTiming(1, { duration: 500 }, () => {
+								introBackground.value = withTiming(1, { duration: 400 }, () => {
 									runOnJS(setHideSplash)(true)
 								})
 							}
 						)
 					})
 				})
-			})
 		}
 	}, [isReady, loaded])
 
