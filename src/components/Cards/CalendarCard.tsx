@@ -1,4 +1,5 @@
 import { NoSessionError } from '@/api/thi-session-handler'
+import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
@@ -95,28 +96,27 @@ const CalendarCard = (): React.JSX.Element => {
 			<View style={styles.calendarContainer}>
 				{mixedCalendar.map((event, index) => (
 					<React.Fragment key={index}>
-						<View style={styles.eventItem}>
-							<View style={styles.eventContent}>
-								<View style={styles.eventHeader}>
-									<Text style={styles.eventTitle} numberOfLines={2}>
-										{typeof event.name === 'object'
-											? event.name[i18n.language as LanguageKey]
-											: event.name}
-									</Text>
-									<View style={styles.dateContainer}>
-										<Text style={styles.eventDate}>
-											{event.end != null && event.begin < time
-												? t('cards.calendar.ends') +
-													formatFriendlyRelativeTime(event.end)
-												: formatFriendlyRelativeTime(event.begin)}
-										</Text>
-									</View>
-								</View>
-								<View style={styles.eventFooter}>
-									<Text style={styles.eventDetails} numberOfLines={1}>
-										{(event as CardExams).isExam
-											? t('cards.calendar.type.exam')
-											: t('cards.calendar.type.event')}
+						<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+							<View style={styles.verticalLine} />
+							<View style={{ flex: 1 }}>
+								<Text style={styles.eventTitle} numberOfLines={2}>
+									{typeof event.name === 'object'
+										? event.name[i18n.language as LanguageKey]
+										: event.name}
+								</Text>
+								<Text style={styles.eventSubtitle}>THI Event</Text>
+								<View style={styles.eventTimeRow}>
+									<PlatformIcon
+										ios={{ name: 'clock', size: 11 }}
+										android={{ name: 'schedule', size: 16 }}
+										web={{ name: 'Clock', size: 16 }}
+										style={{ marginRight: 4, color: theme.colors.primary }}
+									/>
+									<Text style={styles.eventDate}>
+										{event.end != null && event.begin < time
+											? t('cards.calendar.ends') +
+												formatFriendlyRelativeTime(event.end)
+											: formatFriendlyRelativeTime(event.begin)}
 									</Text>
 								</View>
 							</View>
@@ -133,47 +133,39 @@ const CalendarCard = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	calendarContainer: {
-		paddingTop: -4
+		gap: 10,
+		marginTop: 10
 	},
-	eventItem: {
-		paddingVertical: 12
-	},
-	eventContent: {
-		gap: 6
-	},
-	eventHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'flex-start',
-		gap: 8
-	},
+
 	eventTitle: {
 		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		flex: 1
+		fontSize: 15,
+		fontWeight: '700'
 	},
-	dateContainer: {
-		backgroundColor: `${theme.colors.primary}15`,
-		paddingHorizontal: 8,
-		paddingVertical: 3,
-		borderRadius: theme.radius.sm
-	},
-	eventDate: {
-		color: theme.colors.primary,
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	eventFooter: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 8
-	},
-	eventDetails: {
+	eventSubtitle: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
-		flex: 1
+		marginTop: 2,
+		marginBottom: 4
+	},
+	eventTimeRow: {
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	eventDate: {
+		marginStart: 2,
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: '500'
+	},
+	verticalLine: {
+		width: 2,
+		height: '100%',
+		borderRadius: 2,
+		backgroundColor: theme.colors.primary,
+		opacity: 0.4,
+		marginRight: 10,
+		marginTop: 1
 	}
 }))
 
