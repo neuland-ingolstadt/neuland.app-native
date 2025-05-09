@@ -96,7 +96,7 @@ const stylesheet = createStyleSheet(() => ({
 		fontWeight: '500'
 	},
 	allDayBadge: {
-		paddingHorizontal: 10,
+		paddingHorizontal: 6,
 		paddingVertical: 4,
 		borderRadius: 8
 	},
