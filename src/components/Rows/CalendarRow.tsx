@@ -42,7 +42,7 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 					{isActive && <View style={styles.statusIndicator} />}
 					<Text
 						style={[styles.rightText, isActive && styles.highlightText]}
-						numberOfLines={1}
+						numberOfLines={2}
 					>
 						{event.begin != null &&
 							(event.end != null && event.begin < new Date()
@@ -154,7 +154,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	rightText: {
 		color: theme.colors.labelColor,
-
+		textAlign: 'right',
 		fontSize: 14,
 		fontWeight: '400'
 	},

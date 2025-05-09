@@ -293,11 +293,7 @@ const UpNextCard: React.FC = () => {
 			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return (
-			<View style={styles.dateContainer}>
-				<Text style={styles.eventDate}>{statusText}</Text>
-			</View>
-		)
+		return <Text style={styles.eventDate}>{statusText}</Text>
 	}, [currentEvent, eventStatus, t])
 
 	const RoomInfo = useMemo(() => {
@@ -442,7 +438,7 @@ const UpNextCard: React.FC = () => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	mainContainer: {
-		gap: 10,
+		gap: 8,
 		paddingTop: 8
 	},
 	eventHeader: {
@@ -465,9 +461,9 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	eventTitle: {
 		color: theme.colors.text,
-		fontSize: 17,
+		fontSize: 16,
 		fontWeight: '600',
-		lineHeight: 22
+		lineHeight: 20
 	},
 	roomContainer: {
 		flexDirection: 'row',
@@ -501,8 +497,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	dot: {
 		width: 8,
 		height: 8,
-		borderRadius: 4,
-		overflow: 'visible' // Allow the ping effect to exceed dot boundaries
+		borderRadius: 4
 	},
 	dotCompleted: {
 		backgroundColor: theme.colors.success
@@ -566,12 +561,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		color: theme.colors.labelSecondaryColor,
 		fontSize: 14,
 		fontWeight: '400'
-	},
-	dateContainer: {
-		backgroundColor: `${theme.colors.primary}15`,
-		paddingHorizontal: 8,
-		paddingVertical: 3,
-		borderRadius: theme.radius.sm
 	},
 	eventDate: {
 		color: theme.colors.primary,

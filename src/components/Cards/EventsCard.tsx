@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+import PlatformIcon from '@/components/Universal/Icon'
 import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 import Divider from '../Universal/Divider'
 import BaseCard from './BaseCard'
@@ -27,32 +28,41 @@ const EventsCard = (): React.JSX.Element => {
 				<View style={styles.eventsContainer}>
 					{data.slice(0, 2).map((event, index) => (
 						<React.Fragment key={index}>
-							<View style={styles.eventItem}>
-								<View style={styles.eventContent}>
-									<View style={styles.eventHeader}>
-										<Text style={styles.eventTitle} numberOfLines={2}>
-											{event.titles[i18n.language as LanguageKey]}
-										</Text>
-										{event.startDateTime && (
-											<View style={styles.dateContainer}>
-												<Text style={styles.eventDate}>
-													{formatFriendlyRelativeTime(
-														new Date(event.startDateTime)
-													)}
+							<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+								<View style={styles.verticalLine} />
+								<View style={{ flex: 1 }}>
+									<Text style={styles.eventTitle} numberOfLines={2}>
+										{event.titles[i18n.language as LanguageKey]}
+									</Text>
+									<Text style={styles.eventSubtitle} numberOfLines={1}>
+										{t('cards.events.by', { name: event.host.name })}
+									</Text>
+									<View style={styles.eventTimeRow}>
+										<View
+											style={{ flexDirection: 'row', alignItems: 'center' }}
+										>
+											<PlatformIcon
+												ios={{ name: 'clock', size: 11 }}
+												android={{ name: 'schedule', size: 16 }}
+												web={{ name: 'Clock', size: 16 }}
+												style={{ marginRight: 4, color: theme.colors.primary }}
+											/>
+											<Text style={styles.eventDate}>
+												{event.startDateTime
+													? formatFriendlyRelativeTime(
+															new Date(event.startDateTime)
+														)
+													: ''}
+											</Text>
+										</View>
+										{event.location && (
+											<View
+												style={{ flexDirection: 'row', alignItems: 'center' }}
+											>
+												<Text style={styles.eventLocation} numberOfLines={1}>
+													{event.location}
 												</Text>
 											</View>
-										)}
-									</View>
-									<View style={styles.eventFooter}>
-										<Text style={styles.eventDetails} numberOfLines={1}>
-											{t('cards.events.by', {
-												name: event.host.name
-											})}
-										</Text>
-										{event.location && (
-											<Text style={styles.eventLocation} numberOfLines={1}>
-												{event.location}
-											</Text>
 										)}
 									</View>
 								</View>
@@ -70,59 +80,44 @@ const EventsCard = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	eventsContainer: {
-		paddingTop: -4
-	},
-	eventItem: {
-		paddingVertical: 12
-	},
-	eventContent: {
-		gap: 6
-	},
-	eventHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'flex-start',
-		gap: 8
+		marginTop: 10,
+		gap: 10
 	},
 	eventTitle: {
 		color: theme.colors.text,
-		fontSize: 16,
-		fontWeight: '600',
-		flex: 1
+		fontSize: 15,
+		fontWeight: '700'
 	},
-	dateContainer: {
-		backgroundColor: `${theme.colors.primary}15`,
-		paddingHorizontal: 8,
-		paddingVertical: 3,
-		borderRadius: theme.radius.sm
-	},
-	eventDate: {
-		color: theme.colors.primary,
-		fontSize: 14,
-		fontWeight: '500'
-	},
-	eventFooter: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 8
-	},
-	eventDetails: {
+	eventSubtitle: {
 		color: theme.colors.labelColor,
 		fontSize: 14,
-		flex: 1
+		marginTop: 2,
+		marginBottom: 4
+	},
+	eventTimeRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	eventDate: {
+		color: theme.colors.labelSecondaryColor,
+		fontSize: 13,
+		fontWeight: '500',
+		marginStart: 2
 	},
 	eventLocation: {
 		color: theme.colors.labelColor,
-		fontSize: 14
+		fontSize: 13,
+		marginTop: 2
 	},
-	moreContainer: {
-		paddingTop: 4
-	},
-	moreText: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		fontWeight: '500'
+	verticalLine: {
+		width: 2,
+		height: '100%',
+		borderRadius: 2,
+		backgroundColor: theme.colors.primary,
+		opacity: 0.4,
+		marginRight: 10,
+		marginTop: 1
 	}
 }))
 

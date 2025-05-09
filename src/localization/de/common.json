@@ -295,8 +295,7 @@
 			"virtualCard": {
 				"title": "Virtuelle Bibliothekskarte",
 				"description": "Verwende die virtuelle Bibliothekskarte, um Bücher und andere Medien auszuleihen."
-			},
-			"note": "Aufgrund des neuen Buchungs-Systems ist es nicht mehr möglich Sitzplätze über die App zu buchen."
+			}
 		},
 		"clEvents": {
 			"sports": {

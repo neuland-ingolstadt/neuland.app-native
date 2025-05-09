@@ -369,7 +369,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: theme.colors.inputBackground,
-		borderRadius: 12,
+		borderRadius: 8,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border,
 		paddingHorizontal: 12
@@ -385,11 +385,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		padding: 4
 	},
 	loginButton: (disabled: boolean) => ({
-		height: 50,
+		height: 48,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 24,
-		borderRadius: 12,
+		borderRadius: 8,
 		backgroundColor: disabled
 			? UnistylesRuntime.themeName === 'dark'
 				? Color(theme.colors.primary).darken(0.3).hex()
