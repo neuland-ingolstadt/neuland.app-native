@@ -67,8 +67,19 @@ jobs:
         with:
           discord-hook-url: ${{ secrets.WEBHOOK_URL }}
           title: "Neuland Next Release: ${{ github.ref_name }}"
-          message: ${{ needs.changelog.outputs.release_body }}
-          message-color: "2105893"
+          message: |
+            A new version of Neuland Next has been published! ✨
+            Check out the latest updates and improvements! 🎉
+
+            📝 Release Notes:
+            https://github.com/neuland-ingolstadt/neuland.app-native/releases/tag/${{github.ref_name}}
+
+            📱 Download the app:
+            http://next.neuland.app/get
+
+            🧪 Beta Version:
+            https://next.neuland.app/app/beta
+          message-color: "48120"
           branch: ${{ github.ref_name }}
           sha: ${{ github.sha }}
           actionUrl: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
