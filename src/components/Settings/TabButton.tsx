@@ -91,7 +91,10 @@ export const SettingsTabButton = ({
 			: {
 					backgroundColor: 'transparent',
 					borderWidth: 1.5,
-					borderColor: theme.colors.tabbarInactive
+					borderColor:
+						Platform.OS === 'web'
+							? theme.colors.labelColor
+							: theme.colors.tabbarInactive
 				}
 
 		const defaultIconProps = {
@@ -193,6 +196,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	iconText: (isActive: boolean) => ({
 		fontSize: 12,
 		fontWeight: 'bold',
-		color: isActive ? theme.colors.contrast : theme.colors.tabbarInactive
+		color: isActive
+			? theme.colors.contrast
+			: Platform.OS === 'web'
+				? theme.colors.labelColor
+				: theme.colors.tabbarInactive
 	})
 }))

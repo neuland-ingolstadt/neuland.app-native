@@ -1,20 +1,19 @@
 import { NoSessionError } from '@/api/thi-session-handler'
-import PlatformIcon from '@/components/Universal/Icon'
 import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST, USER_STUDENT } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar } from '@/types/data'
 import { calendar, loadExamList } from '@/utils/calendar-utils'
-import { formatFriendlyRelativeTime } from '@/utils/date-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 import Divider from '../Universal/Divider'
+import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
 
 const CalendarCard = (): React.JSX.Element => {
@@ -96,31 +95,17 @@ const CalendarCard = (): React.JSX.Element => {
 			<View style={styles.calendarContainer}>
 				{mixedCalendar.map((event, index) => (
 					<React.Fragment key={index}>
-						<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-							<View style={styles.verticalLine} />
-							<View style={{ flex: 1 }}>
-								<Text style={styles.eventTitle} numberOfLines={2}>
-									{typeof event.name === 'object'
-										? event.name[i18n.language as LanguageKey]
-										: event.name}
-								</Text>
-								<Text style={styles.eventSubtitle}>THI Event</Text>
-								<View style={styles.eventTimeRow}>
-									<PlatformIcon
-										ios={{ name: 'clock', size: 11 }}
-										android={{ name: 'schedule', size: 16 }}
-										web={{ name: 'Clock', size: 16 }}
-										style={{ marginRight: 4, color: theme.colors.primary }}
-									/>
-									<Text style={styles.eventDate}>
-										{event.end != null && event.begin < time
-											? t('cards.calendar.ends') +
-												formatFriendlyRelativeTime(event.end)
-											: formatFriendlyRelativeTime(event.begin)}
-									</Text>
-								</View>
-							</View>
-						</View>
+						<EventItem
+							title={
+								typeof event.name === 'object'
+									? event.name[i18n.language as LanguageKey]
+									: event.name
+							}
+							subtitle="THI Event"
+							startDateTime={event.begin}
+							endDateTime={event.end}
+							showEndTime={true}
+						/>
 						{index < mixedCalendar.length - 1 && (
 							<Divider color={theme.colors.border} />
 						)}
@@ -131,41 +116,10 @@ const CalendarCard = (): React.JSX.Element => {
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
 	calendarContainer: {
 		gap: 10,
 		marginTop: 10
-	},
-
-	eventTitle: {
-		color: theme.colors.text,
-		fontSize: 15,
-		fontWeight: '700'
-	},
-	eventSubtitle: {
-		color: theme.colors.labelColor,
-		fontSize: 14,
-		marginTop: 2,
-		marginBottom: 4
-	},
-	eventTimeRow: {
-		flexDirection: 'row',
-		alignItems: 'center'
-	},
-	eventDate: {
-		marginStart: 2,
-		color: theme.colors.labelSecondaryColor,
-		fontSize: 13,
-		fontWeight: '500'
-	},
-	verticalLine: {
-		width: 2,
-		height: '100%',
-		borderRadius: 2,
-		backgroundColor: theme.colors.primary,
-		opacity: 0.4,
-		marginRight: 10,
-		marginTop: 1
 	}
 }))
 
