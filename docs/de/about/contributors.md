@@ -48,8 +48,8 @@ const members = [
     org: 'von Neuland Ingolstadt e.V.',
     links: [
       { icon: 'github', link: 'https://github.com/neuland-ingolstadt' },
-      { icon: 'linkedin', link: 'https://linkedin.com/neuland_ing' },
-      { icon: 'instagram', link: 'https://instagram.com/neuland_ing' }
+      { icon: 'linkedin', link: 'https://linkedin.com/company/neuland-ingolstadt' },
+      { icon: 'instagram', link: 'https://instagram.com/neuland_ingolstadt' }
     ]
   },
 ]

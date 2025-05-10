@@ -243,7 +243,6 @@ export default function TimetableList({
 	function renderCalendarItem({
 		item
 	}: { item: CalendarEntry }): React.JSX.Element {
-		// Get proper name value as a string
 		const eventName =
 			typeof item.name === 'object'
 				? item.name[i18n.language as 'en' | 'de'] ||
@@ -442,7 +441,6 @@ export default function TimetableList({
 			return <AnimatedTimetableItem item={data} renderContent={renderContent} />
 		}
 
-		// Handle potential 'footer' type or return null for unknown types
 		return null
 	}
 
@@ -531,13 +529,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'column'
 	},
 	weekdayText: (isToday: boolean) => ({
-		fontSize: 22,
+		fontSize: 19,
 		fontWeight: '700',
 		color: isToday ? theme.colors.primary : theme.colors.text,
 		marginBottom: 2
 	}),
 	dateText: (isToday: boolean) => ({
-		fontSize: 15,
+		fontSize: 14,
 		color: isToday ? theme.colors.primary : theme.colors.labelColor,
 		fontWeight: isToday ? '600' : '400'
 	}),
@@ -560,13 +558,13 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		borderRadius: theme.radius.md,
 		overflow: 'hidden',
-		minHeight: 75,
+		minHeight: 70,
 		borderWidth: StyleSheet.hairlineWidth,
 		borderColor: theme.colors.border
 	},
 	eventContent: {
 		flex: 1,
-		padding: 16,
+		padding: 14,
 		position: 'relative'
 	},
 	eventHeader: {
@@ -576,14 +574,14 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginBottom: 8
 	},
 	eventTitle: {
-		fontSize: 16,
+		fontSize: 15.5,
 		fontWeight: '600',
 		color: theme.colors.text,
 		flex: 1,
 		marginRight: 8
 	},
 	eventInfo: {
-		fontSize: 15,
+		fontSize: 14,
 		color: theme.colors.labelColor
 	},
 	eventLocation: {
@@ -596,7 +594,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 8
 	},
 	locationText: {
-		fontSize: 15,
+		fontSize: 14,
 		color: theme.colors.labelColor
 	},
 	eventInfoRow: {
@@ -614,7 +612,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	pendingText: {
 		color: theme.colors.text,
-		fontSize: 16
+		fontSize: 15
 	},
 	infoContainer: {
 		flexDirection: 'row',

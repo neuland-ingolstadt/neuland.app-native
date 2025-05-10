@@ -61,8 +61,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: theme.colors.cardButton,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
+		paddingHorizontal: 6,
+		paddingVertical: 4,
 		borderRadius: 8,
 		marginLeft: 8
 	},
