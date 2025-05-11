@@ -2,7 +2,7 @@ import { USER_GUEST } from '@/data/constants'
 import type React from 'react'
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, type TextStyle, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -23,14 +23,6 @@ interface BaseCardProps {
 	onPressRoute?: Href
 	children?: React.ReactNode
 }
-
-export const cardColors = {
-	timetable: '#0b83ff',
-	events: '#9f710e',
-	calendar: '#0b83ff',
-	links: '#94690d',
-	news: '#0b83ff'
-} as const
 
 const BaseCard: React.FC<BaseCardProps> = ({
 	title,
@@ -66,19 +58,12 @@ const BaseCard: React.FC<BaseCardProps> = ({
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
 
 	const cardStyle = [styles.card, onPressRoute == null && styles.cardDisabled]
-	const cardColor =
-		cardColors[title as keyof typeof cardColors] ?? styles.cardIcon.color
 
 	const cardContent = (
 		<View style={cardStyle}>
 			<View style={styles.contentWrapper}>
 				<View style={styles.titleView}>
-					<View
-						style={[
-							styles.iconContainer,
-							{ backgroundColor: `${cardColor}15` }
-						]}
-					>
+					<View style={[styles.iconContainer]}>
 						<Animated.View style={animatedIconStyle}>
 							<PlatformIcon
 								ios={{
@@ -96,7 +81,6 @@ const BaseCard: React.FC<BaseCardProps> = ({
 									name: cardIcons[title as keyof typeof cardIcons]?.web,
 									size: 20
 								}}
-								style={{ color: cardColor } as TextStyle}
 							/>
 						</Animated.View>
 					</View>
@@ -181,7 +165,8 @@ const stylesheet = createStyleSheet((theme) => ({
 		borderRadius: 18,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 4
+		marginRight: 4,
+		backgroundColor: `${theme.colors.primary}15`
 	},
 	cardIcon: {
 		color: theme.colors.primary

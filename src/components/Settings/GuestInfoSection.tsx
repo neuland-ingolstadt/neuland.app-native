@@ -1,6 +1,7 @@
 import PlatformIcon from '@/components/Universal/Icon'
+import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function GuestInfoSection(): React.JSX.Element {
@@ -8,7 +9,12 @@ export default function GuestInfoSection(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 
 	return (
-		<View style={styles.guestBanner}>
+		<Pressable
+			style={styles.guestBanner}
+			onPress={() => {
+				router.navigate('/login')
+			}}
+		>
 			<View style={styles.guestBannerContent}>
 				<Text style={styles.guestBannerTitle}>
 					{t('menu.guest.banner.title')}
@@ -25,7 +31,7 @@ export default function GuestInfoSection(): React.JSX.Element {
 					style={styles.guestBannerIcon}
 				/>
 			</View>
-		</View>
+		</Pressable>
 	)
 }
 
@@ -56,11 +62,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		lineHeight: 18
 	},
 	iconContainer: {
-		backgroundColor: `${theme.colors.primary}20`,
+		backgroundColor: `${theme.colors.secondary}20`,
 		borderRadius: theme.radius.lg,
 		padding: 12
 	},
 	guestBannerIcon: {
-		color: theme.colors.primary
+		color: theme.colors.secondary
 	}
 }))

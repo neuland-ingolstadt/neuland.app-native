@@ -77,24 +77,24 @@ export const AllergensBanner = ({
 
 const stylesheet = createStyleSheet((theme) => ({
 	bannerContainer: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.secondary,
 		borderRadius: theme.radius.md,
 		marginBottom: 10,
 		marginTop: 2,
 		padding: 10
 	},
 	bannerText: {
-		color: getContrastColor(theme.colors.primary),
+		color: getContrastColor(theme.colors.secondary),
 		fontSize: 14,
 		marginTop: 3
 	},
 	bannerTitle: {
-		color: getContrastColor(theme.colors.primary),
+		color: getContrastColor(theme.colors.secondary),
 		fontSize: 16,
 		fontWeight: 'bold'
 	},
 	contrastColor: {
-		color: getContrastColor(theme.colors.primary)
+		color: getContrastColor(theme.colors.secondary)
 	},
 	dismissButton: {
 		borderRadius: theme.radius.md,

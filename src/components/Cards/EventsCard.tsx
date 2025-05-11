@@ -6,13 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import EventItem from '../Universal/EventItem'
-import BaseCard, { cardColors } from './BaseCard'
+import BaseCard from './BaseCard'
 
 const EventsCard = (): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { theme, styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation('navigation')
-	const cardColor = cardColors.events
-
 	const { data, isSuccess } = useQuery({
 		queryKey: ['campusLifeEventsV2'],
 		queryFn: loadCampusLifeEvents,
@@ -37,7 +35,7 @@ const EventsCard = (): React.JSX.Element => {
 								location={event.location ?? undefined}
 								subtitleTranslationKey="cards.events.by"
 								subtitleTranslationParams={{ name: event.host.name ?? '' }}
-								color={cardColor}
+								color={theme.colors.secondary}
 							/>
 						</React.Fragment>
 					))}
