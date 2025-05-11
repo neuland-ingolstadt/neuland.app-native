@@ -267,12 +267,6 @@ function RootLayout(): React.JSX.Element {
 					}}
 				/>
 				<Stack.Screen
-					name="(screens)/accent"
-					options={{
-						title: t('navigation.accent')
-					}}
-				/>
-				<Stack.Screen
 					name="(screens)/timetable-preferences"
 					options={{
 						title: t('navigation.timetablePreferences')

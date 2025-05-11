@@ -17,7 +17,13 @@ export const AllCards: Card[] = [
 		allowed: [USER_STUDENT, USER_EMPLOYEE],
 		card: () => <UpNextCard />
 	},
-
+	{
+		key: 'events',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		card: () => <EventsCard />
+	},
 	{
 		key: 'calendar',
 		removable: true,
@@ -26,13 +32,6 @@ export const AllCards: Card[] = [
 		card: () => <CalendarCard />
 	},
 
-	{
-		key: 'events',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		card: () => <EventsCard />
-	},
 	{
 		key: 'links',
 		removable: true,

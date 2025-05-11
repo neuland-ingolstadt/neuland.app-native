@@ -23,16 +23,6 @@ export default function StudentInfoSection({
 		<>
 			<View style={styles.infoBoxesContainer}>
 				<InfoBox
-					title={t('infoBoxes.printerBalance')}
-					value={printerBalance ?? '-'}
-					icon={{
-						ios: 'printer',
-						android: 'print',
-						web: 'Printer'
-					}}
-					onPress={() => router.navigate('/profile')}
-				/>
-				<InfoBox
 					title={t('infoBoxes.gradesAndSubjects')}
 					value={ects !== undefined ? `${ects} ECTS` : '-'}
 					icon={{
@@ -41,9 +31,8 @@ export default function StudentInfoSection({
 						web: 'ChartColumnIncreasing'
 					}}
 					onPress={() => router.navigate('/grades')}
+					style={styles.wideBox}
 				/>
-			</View>
-			<View style={styles.infoBoxesContainer}>
 				<InfoBox
 					title={t('infoBoxes.lecturers')}
 					value={personalLecturersCount?.toString() ?? '-'}
@@ -53,7 +42,22 @@ export default function StudentInfoSection({
 						web: 'Users'
 					}}
 					onPress={() => router.navigate('/lecturers')}
+					style={styles.narrowBox}
 				/>
+			</View>
+			<View style={styles.infoBoxesContainer}>
+				<InfoBox
+					title={t('infoBoxes.printerBalance')}
+					value={printerBalance ?? '-'}
+					icon={{
+						ios: 'printer',
+						android: 'print',
+						web: 'Printer'
+					}}
+					onPress={() => router.navigate('/profile')}
+					style={styles.narrowBox}
+				/>
+
 				<InfoBox
 					value={t('infoBoxes.library')}
 					title={t('infoBoxes.view')}
@@ -63,6 +67,7 @@ export default function StudentInfoSection({
 						web: 'Library'
 					}}
 					onPress={() => router.navigate('/library')}
+					style={styles.wideBox}
 				/>
 			</View>
 		</>
@@ -74,5 +79,11 @@ const stylesheet = createStyleSheet(() => ({
 		flexDirection: 'row' as const,
 		gap: 10,
 		marginBottom: 10
+	},
+	wideBox: {
+		flex: 2
+	},
+	narrowBox: {
+		flex: 1
 	}
 }))

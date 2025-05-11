@@ -11,10 +11,8 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import Divider from '../Universal/Divider'
 import EventItem from '../Universal/EventItem'
-import BaseCard from './BaseCard'
+import BaseCard, { cardColors } from './BaseCard'
 
 const CalendarCard = (): React.JSX.Element => {
 	type Combined = Calendar | CardExams
@@ -24,6 +22,8 @@ const CalendarCard = (): React.JSX.Element => {
 	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
 	const { userKind = USER_GUEST } = React.useContext(UserKindContext)
+	const cardColor = cardColors.calendar
+
 	interface CardExams {
 		name: string
 		begin: Date
@@ -88,7 +88,7 @@ const CalendarCard = (): React.JSX.Element => {
 		setMixedCalendar(combined.slice(0, 2))
 	}, [calendar, exams])
 
-	const { styles, theme } = useStyles(stylesheet)
+	const { styles } = useStyles(stylesheet)
 
 	return (
 		<BaseCard title="calendar" onPressRoute="/calendar">
@@ -105,10 +105,8 @@ const CalendarCard = (): React.JSX.Element => {
 							startDateTime={event.begin}
 							endDateTime={event.end}
 							showEndTime={true}
+							color={cardColor}
 						/>
-						{index < mixedCalendar.length - 1 && (
-							<Divider color={theme.colors.border} />
-						)}
 					</React.Fragment>
 				))}
 			</View>
@@ -118,7 +116,7 @@ const CalendarCard = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet(() => ({
 	calendarContainer: {
-		gap: 10,
+		gap: 12,
 		marginTop: 10
 	}
 }))
