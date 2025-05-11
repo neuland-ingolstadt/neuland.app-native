@@ -17,7 +17,7 @@ import type React from 'react'
 import { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv'
+import { useMMKVBoolean } from 'react-native-mmkv'
 
 import { appIcons } from '../(screens)/app-icon'
 
@@ -45,14 +45,12 @@ export default function HomeLayout(): React.JSX.Element {
 	const toggleSelectedAllergens = useFoodFilterStore(
 		(state) => state.toggleSelectedAllergens
 	)
-	const setAccentColor = usePreferencesStore((state) => state.setAccentColor)
 	const { userKind: userKindInitial } = useContext(UserKindContext)
 	const userKind = userKindInitial ?? USER_GUEST
 	const updatedVersion = useFlowStore((state) => state.updatedVersion)
 	const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')
 	const [analyticsV1] = useMMKVBoolean('analytics')
 	const oldAllergens = storage.getString('selectedUserAllergens')
-	const [oldAccentColor] = useMMKVString('accentColor')
 	// migration of old settings
 	if (isOnboardedV1 === true) {
 		setOnboarded()
@@ -62,10 +60,7 @@ export default function HomeLayout(): React.JSX.Element {
 		setAnalyticsAllowed(true)
 		storage.delete('analytics')
 	}
-	if (oldAccentColor != null) {
-		setAccentColor(oldAccentColor)
-		storage.delete('accentColor')
-	}
+
 	if (oldAllergens != null) {
 		const allergens = JSON.parse(oldAllergens) as string[]
 		if (allergens.length === 1 && allergens[0] === 'not-configured') {

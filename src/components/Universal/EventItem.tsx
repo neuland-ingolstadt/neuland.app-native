@@ -15,6 +15,7 @@ interface EventItemProps {
 	showEndTime?: boolean
 	subtitleTranslationKey?: string
 	subtitleTranslationParams?: Record<string, string>
+	color?: string
 }
 
 const EventItem = ({
@@ -25,16 +26,17 @@ const EventItem = ({
 	location,
 	showEndTime = false,
 	subtitleTranslationKey,
-	subtitleTranslationParams
+	subtitleTranslationParams,
+	color
 }: EventItemProps): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('navigation')
 
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-			<VerticalLine />
+			<VerticalLine color={color} />
 			<View style={{ flex: 1 }}>
-				<Text style={styles.eventTitle} numberOfLines={2}>
+				<Text style={styles.eventTitle} numberOfLines={1}>
 					{title}
 				</Text>
 				{subtitle && (
@@ -57,9 +59,9 @@ const EventItem = ({
 								variant: 'outlined'
 							}}
 							web={{ name: 'Clock', size: 13 }}
-							style={{ marginRight: 4, color: theme.colors.primary }}
+							style={{ marginRight: 4, color: color ?? theme.colors.primary }}
 						/>
-						<Text style={styles.eventDate}>
+						<Text style={[styles.eventDate, color ? { color } : {}]}>
 							{showEndTime &&
 							endDateTime &&
 							startDateTime &&

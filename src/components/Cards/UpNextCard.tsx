@@ -1,5 +1,4 @@
 import Divider from '@/components/Universal/Divider'
-import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useInterval } from '@/hooks/useInterval'
 import type { FriendlyTimetableEntry } from '@/types/utils'
@@ -28,7 +27,8 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import BaseCard from './BaseCard'
+import { UserKindContext } from '../contexts'
+import BaseCard, { cardColors } from './BaseCard'
 
 const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)
@@ -52,6 +52,7 @@ const UpNextCard: React.FC = () => {
 	)
 	const [screenIsFocused, setScreenIsFocused] = useState(false) // Default to false, only true when focused
 	const routeFocusRef = useRef(false)
+	const cardColor = cardColors.timetable
 
 	const isMountedRef = useRef(true)
 
@@ -263,12 +264,15 @@ const UpNextCard: React.FC = () => {
 				<View
 					style={[
 						styles.progressBar,
-						{ width: `${eventStatus.progress * 100}%` }
+						{
+							width: `${eventStatus.progress * 100}%`,
+							backgroundColor: cardColor
+						}
 					]}
 				/>
 			</View>
 		)
-	}, [eventStatus, styles.progressBar, styles.progressBarContainer])
+	}, [eventStatus, styles.progressBar, styles.progressBarContainer, cardColor])
 
 	const EventStatus = useMemo(() => {
 		if (!currentEvent || !eventStatus) return null
@@ -293,8 +297,10 @@ const UpNextCard: React.FC = () => {
 			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return <Text style={styles.eventDate}>{statusText}</Text>
-	}, [currentEvent, eventStatus, t])
+		return (
+			<Text style={[styles.eventDate, { color: cardColor }]}>{statusText}</Text>
+		)
+	}, [currentEvent, eventStatus, t, cardColor])
 
 	const RoomInfo = useMemo(() => {
 		if (!currentEvent) return null
@@ -519,7 +525,6 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	progressBar: {
 		height: '100%',
-		backgroundColor: theme.colors.primary,
 		borderRadius: 2
 	},
 	emptyContainer: {

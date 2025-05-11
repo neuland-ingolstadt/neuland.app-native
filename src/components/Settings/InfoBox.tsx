@@ -1,7 +1,14 @@
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
 import type { MaterialIcon } from '@/types/material-icons'
 import type React from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	View,
+	type ViewStyle
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface InfoBoxProps {
@@ -14,13 +21,15 @@ interface InfoBoxProps {
 		variant?: 'fill' | 'outline'
 	}
 	onPress?: () => void
+	style?: ViewStyle
 }
 
 const InfoBox = ({
 	title,
 	value,
 	icon,
-	onPress
+	onPress,
+	style
 }: InfoBoxProps): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
 
@@ -28,6 +37,7 @@ const InfoBox = ({
 		<Pressable
 			style={({ pressed }) => [
 				styles.container,
+				style,
 				pressed && onPress ? { opacity: 0.8 } : {}
 			]}
 			onPress={onPress}
@@ -48,7 +58,7 @@ const InfoBox = ({
 						name: icon.web,
 						size: 21
 					}}
-					style={styles.icon}
+					style={{ ...styles.icon }}
 				/>
 			</View>
 			<Text style={styles.value}>{value}</Text>

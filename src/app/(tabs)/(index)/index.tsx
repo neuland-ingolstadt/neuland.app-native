@@ -159,13 +159,13 @@ const HomeScreen = memo(function HomeScreen() {
 
 const stylesheet = createStyleSheet((theme) => ({
 	container: {
-		paddingTop: 4.5
+		paddingTop: 6
 	},
 	errorContainer: { flex: 1, paddingTop: 110 },
 	item: {
 		gap: 0,
 		marginHorizontal: theme.margins.page,
-		marginVertical: 5
+		marginVertical: 6
 	},
 	page: {
 		backgroundColor: theme.colors.background

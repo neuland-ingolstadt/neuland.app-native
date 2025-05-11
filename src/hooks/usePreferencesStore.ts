@@ -3,16 +3,12 @@ import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-const DEFAULT_ACCENT_COLOR = 'blue'
-
 interface PreferencesStore {
-	accentColor: string
 	theme: string
 	language: 'de' | 'en' | undefined
 	appIcon: string | undefined
 	unlockedAppIcons: string[]
 	recentQuicklinks: string[]
-	setAccentColor: (language: string) => void
 	setTheme: (theme: string) => void
 	setLanguage: (language: 'en' | 'de') => void
 	setAppIcon: (name: string) => void
@@ -23,7 +19,6 @@ interface PreferencesStore {
 
 const initialState: Omit<
 	PreferencesStore,
-	| 'setAccentColor'
 	| 'setTheme'
 	| 'setAppIcon'
 	| 'addUnlockedAppIcon'
@@ -31,7 +26,6 @@ const initialState: Omit<
 	| 'reset'
 	| 'setLanguage'
 > = {
-	accentColor: DEFAULT_ACCENT_COLOR,
 	appIcon: undefined,
 	language: undefined,
 	theme: 'auto',
@@ -43,9 +37,6 @@ export const usePreferencesStore = create<PreferencesStore>()(
 	persist(
 		(set) => ({
 			...initialState,
-			setAccentColor: (accentColor: string) => {
-				set({ accentColor })
-			},
 			setTheme: (theme: string) => {
 				set({ theme })
 			},
