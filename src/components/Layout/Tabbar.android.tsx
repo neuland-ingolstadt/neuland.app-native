@@ -19,12 +19,16 @@ export default function TabLayout(): React.JSX.Element {
 	return (
 		<Tabs
 			sidebarAdaptable={false}
-			tabBarActiveTintColor={'#9f710e'}
+			tabBarActiveTintColor={theme.colors.primary}
 			tabBarStyle={{
 				backgroundColor: isAndroid
 					? UnistylesRuntime.themeName === 'dark'
-						? Color(theme.colors.card).mix(Color('#9f710e'), 0.04).hex()
-						: Color(theme.colors.card).mix(Color('#9f710e'), 0.1).hex()
+						? Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.04)
+								.hex()
+						: Color(theme.colors.card)
+								.mix(Color(theme.colors.primary), 0.1)
+								.hex()
 					: undefined
 			}}
 			translucent
@@ -37,12 +41,12 @@ export default function TabLayout(): React.JSX.Element {
 				isAndroid
 					? UnistylesRuntime.themeName === 'dark'
 						? Color(theme.colors.card)
-								.mix(Color('#9f710e'), 0.06)
+								.mix(Color(theme.colors.primary), 0.06)
 								.lighten(1.4)
 								.saturate(1)
 								.hex()
 						: Color(theme.colors.card)
-								.mix(Color('#9f710e'), 0.3)
+								.mix(Color(theme.colors.primary), 0.3)
 								.darken(0.05)
 								.saturate(0.1)
 								.hex()

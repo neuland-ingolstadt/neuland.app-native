@@ -17,17 +17,17 @@ export default function SettingsMenu(): React.JSX.Element {
 		{
 			header: t('menu.formlist.preferences.title'),
 			items: [
-				// {
-				// 	title: 'Dashboard',
-				// 	icon: {
-				// 		ios: 'rectangle.stack',
-				// 		android: 'dashboard_customize',
-				// 		web: 'LayoutDashboard'
-				// 	},
-				// 	onPress: () => {
-				// 		router.navigate('/dashboard')
-				// 	}
-				// },
+				{
+					title: 'Dashboard',
+					icon: {
+						ios: 'rectangle.stack',
+						android: 'dashboard_customize',
+						web: 'LayoutDashboard'
+					},
+					onPress: () => {
+						router.navigate('/dashboard')
+					}
+				},
 				{
 					title: t('menu.formlist.preferences.food'),
 					icon: {

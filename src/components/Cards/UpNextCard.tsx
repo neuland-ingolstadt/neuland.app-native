@@ -28,7 +28,7 @@ import {
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '../contexts'
-import BaseCard, { cardColors } from './BaseCard'
+import BaseCard from './BaseCard'
 
 const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)
@@ -52,7 +52,6 @@ const UpNextCard: React.FC = () => {
 	)
 	const [screenIsFocused, setScreenIsFocused] = useState(false) // Default to false, only true when focused
 	const routeFocusRef = useRef(false)
-	const cardColor = cardColors.timetable
 
 	const isMountedRef = useRef(true)
 
@@ -265,14 +264,18 @@ const UpNextCard: React.FC = () => {
 					style={[
 						styles.progressBar,
 						{
-							width: `${eventStatus.progress * 100}%`,
-							backgroundColor: cardColor
+							width: `${eventStatus.progress * 100}%`
 						}
 					]}
 				/>
 			</View>
 		)
-	}, [eventStatus, styles.progressBar, styles.progressBarContainer, cardColor])
+	}, [
+		eventStatus,
+		styles.progressBar,
+		styles.progressBarContainer,
+		theme.colors.primary
+	])
 
 	const EventStatus = useMemo(() => {
 		if (!currentEvent || !eventStatus) return null
@@ -297,10 +300,8 @@ const UpNextCard: React.FC = () => {
 			statusText = formatNearDate(currentEvent.startDate) ?? ''
 		}
 
-		return (
-			<Text style={[styles.eventDate, { color: cardColor }]}>{statusText}</Text>
-		)
-	}, [currentEvent, eventStatus, t, cardColor])
+		return <Text style={styles.eventDate}>{statusText}</Text>
+	}, [currentEvent, eventStatus, t, theme.colors.secondary])
 
 	const RoomInfo = useMemo(() => {
 		if (!currentEvent) return null
@@ -525,7 +526,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	progressBar: {
 		height: '100%',
-		borderRadius: 2
+		borderRadius: 2,
+		backgroundColor: theme.colors.primary
 	},
 	emptyContainer: {
 		paddingTop: 8
@@ -568,7 +570,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '400'
 	},
 	eventDate: {
-		color: theme.colors.primary,
+		color: theme.colors.secondary,
 		fontSize: 14,
 		fontWeight: '500'
 	}

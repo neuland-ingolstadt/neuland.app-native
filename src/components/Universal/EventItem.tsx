@@ -59,9 +59,9 @@ const EventItem = ({
 								variant: 'outlined'
 							}}
 							web={{ name: 'Clock', size: 13 }}
-							style={{ marginRight: 4, color: color ?? theme.colors.primary }}
+							style={{ marginRight: 4, color: theme.colors.secondary }}
 						/>
-						<Text style={[styles.eventDate, color ? { color } : {}]}>
+						<Text style={[styles.eventDate]}>
 							{showEndTime &&
 							endDateTime &&
 							startDateTime &&
@@ -110,7 +110,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		marginStart: 2
 	},
 	eventLocation: {
-		color: theme.colors.labelColor,
+		color: theme.colors.labelSecondaryColor,
 		fontSize: 13,
 		marginTop: 2
 	}
