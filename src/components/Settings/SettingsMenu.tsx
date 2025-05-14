@@ -1,17 +1,51 @@
 import FormList from '@/components/Universal/FormList'
 import type { LucideIcon } from '@/components/Universal/Icon'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
+import { storage } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { useRouter } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share } from 'react-native'
+import { Alert, Linking, Platform, Share } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 
 export default function SettingsMenu(): React.JSX.Element {
 	const router = useRouter()
-	const { t } = useTranslation(['settings'])
+	const { t, i18n } = useTranslation(['settings'])
+	const setLanguage = usePreferencesStore((state) => state.setLanguage)
+
+	const languageAlert = (): void => {
+		const newLocale = i18n.language === 'en' ? 'de' : 'en'
+		if (Platform.OS === 'web') {
+			if (!window.confirm(t('menu.formlist.language.message'))) {
+				/* empty */
+			} else {
+				setLanguage(newLocale)
+				void i18n.changeLanguage(newLocale)
+			}
+		} else {
+			Alert.alert(
+				t('menu.formlist.language.title'),
+				t('menu.formlist.language.message'),
+				[
+					{
+						text: t('profile.logout.alert.cancel'),
+						style: 'default'
+					},
+					{
+						text: t('menu.formlist.language.confirm'),
+						style: 'destructive',
+						onPress: () => {
+							storage.set('language', newLocale)
+							void i18n.changeLanguage(newLocale)
+						}
+					}
+				]
+			)
+		}
+	}
 
 	const sections: FormListSections[] = [
 		{
@@ -64,8 +98,7 @@ export default function SettingsMenu(): React.JSX.Element {
 						) {
 							await Linking.openSettings()
 						} else {
-							// Language alert will be handled by parent component
-							router.navigate('/language')
+							languageAlert()
 						}
 					}
 				}
