@@ -53,6 +53,10 @@ export const HomeHeaderRight = (): React.JSX.Element => {
 	// const { t } = useTranslation(['accessibility'])
 	const { styles } = useStyles(stylesheet)
 
+	if (Platform.OS === 'ios') {
+		return <></>
+	}
+
 	return (
 		<Pressable
 			onPress={() => {
