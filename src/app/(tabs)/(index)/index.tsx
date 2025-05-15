@@ -69,7 +69,7 @@ export const HomeHeaderRight = (): React.JSX.Element => {
 			<View>
 				<PlatformIcon
 					ios={{ name: 'gear', size: 22 }}
-					android={{ name: 'settings', size: 24, variant: 'filled' }}
+					android={{ name: 'lists', size: 24 }}
 					web={{ name: 'Settings', size: 24 }}
 					style={styles.icon}
 				/>
