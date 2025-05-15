@@ -92,7 +92,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	container: {
 		flexDirection: 'row',
-		gap: 5,
+		gap: Platform.OS !== 'ios' ? 10 : 20,
 		marginHorizontal: Platform.OS !== 'ios' ? 6 : 0
 	},
 	subButtons: {
