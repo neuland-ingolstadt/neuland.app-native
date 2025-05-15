@@ -50,7 +50,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 }
 
 export const HomeHeaderRight = (): React.JSX.Element => {
-	// const { t } = useTranslation(['accessibility'])
+	const { t } = useTranslation(['accessibility'])
 	const { styles } = useStyles(stylesheet)
 
 	if (Platform.OS === 'ios') {
@@ -64,7 +64,7 @@ export const HomeHeaderRight = (): React.JSX.Element => {
 			}}
 			hitSlop={10}
 			style={styles.headerButton}
-			// accessibilityLabel={t('button.settingsLogo')}
+			accessibilityLabel={t('button.settingsDashboard')}
 		>
 			<View>
 				<PlatformIcon
