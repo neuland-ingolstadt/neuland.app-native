@@ -56,6 +56,7 @@ export default function About(): React.JSX.Element {
 		let message = `Version: ${version}`
 		if (Platform.OS !== 'web') {
 			message += `\nBuild: ${Application.nativeBuildVersion ?? '0'}`
+			message += `\nID: ${Application.applicationId ?? '0'}`
 			if (commitHash) {
 				message += `\nCommit: ${commitHashShort}`
 			}
@@ -260,7 +261,13 @@ export default function About(): React.JSX.Element {
 					<View style={styles.logoTextContainer}>
 						<View style={styles.appTitleContainer}>
 							<Text style={styles.header}>{'Neuland Next'}</Text>
-							<Text style={styles.text}>{'Native Version'}</Text>
+							<Text style={styles.text}>
+								{Platform.OS !== 'web' ? 'Native' : 'Native Web'}
+								{(Application.applicationId?.endsWith('.dev') ?? false)
+									? ' Dev'
+									: ''}
+								{' Version'}
+							</Text>
 						</View>
 						<View>
 							<Text style={styles.subHeader}>
