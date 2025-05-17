@@ -193,7 +193,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 36,
 		height: 36,
 		borderRadius: 18,
-		backgroundColor: theme.colors.cardIconBackground,
+		backgroundColor: theme.colors.primaryBackground,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4
