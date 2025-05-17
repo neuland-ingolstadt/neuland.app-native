@@ -9,12 +9,14 @@ import type React from 'react'
 import { memo, useCallback, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+	Image,
 	Linking,
 	Platform,
 	Pressable,
 	StyleSheet,
 	Text,
-	View
+	View,
+	useWindowDimensions
 } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -24,7 +26,6 @@ import Animated, {
 	interpolate
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
 import PlatformIcon from '../Universal/Icon'
 import { DashboardContext, UserKindContext } from '../contexts'
 
@@ -37,6 +38,8 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { t } = useTranslation('navigation')
 	const { userKind = 'guest' } = useContext(UserKindContext)
 	const { styles } = useStyles(stylesheet)
+	const { width } = useWindowDimensions()
+	const isLargeScreen = width > 768
 
 	const scale = useSharedValue(1)
 	const rotation = useSharedValue(0)
@@ -110,7 +113,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 		return null
 	}
 
-	const { id, title, description, url } = filteredAnnouncements[0]
+	const { id, title, description, url, imageUrl } = filteredAnnouncements[0]
 
 	const cardStyle = [styles.card]
 
@@ -151,12 +154,25 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 						/>
 					</Pressable>
 				</View>
-				<Text style={styles.description}>
-					{
-						// @ts-expect-error type check
-						description[i18n.language]
-					}
-				</Text>
+				<View
+					style={[
+						styles.contentContainer,
+						!isLargeScreen && styles.contentContainerMobile
+					]}
+				>
+					<Text style={styles.description}>
+						{
+							// @ts-expect-error type check
+							description[i18n.language]
+						}
+					</Text>
+					{imageUrl && (
+						<Image
+							source={{ uri: imageUrl }}
+							style={[styles.image, isLargeScreen && styles.imageDesktop]}
+						/>
+					)}
+				</View>
 				{url != null && (
 					<Text style={styles.footer}>{t('cards.announcements.readMore')}</Text>
 				)}
@@ -198,15 +214,24 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		marginRight: 4
 	},
+	contentContainer: {
+		flexDirection: 'row',
+		gap: theme.margins.card,
+		alignItems: 'flex-start'
+	},
+	contentContainerMobile: {
+		flexDirection: 'column'
+	},
 	description: {
 		color: theme.colors.text,
 		fontSize: 15,
-		marginTop: 12
+		marginTop: 12,
+		flex: 1
 	},
 	footer: {
 		color: theme.colors.labelColor,
 		fontSize: 12,
-		marginTop: 14,
+		marginTop: 12,
 		textAlign: 'right'
 	},
 	title: {
@@ -220,6 +245,21 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		gap: 10
+	},
+	image: {
+		width: '100%',
+		alignSelf: 'center',
+		borderRadius: theme.radius.md,
+		maxWidth: 450,
+		height: 130,
+		...(Platform.OS === 'web'
+			? { resizeMode: 'cover' }
+			: { objectFit: 'cover' })
+	},
+	imageDesktop: {
+		width: 450,
+		marginTop: 0,
+		flex: 1
 	}
 }))
 
