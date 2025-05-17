@@ -98,12 +98,12 @@ android {
     productFlavors {
         development {
             dimension "default"
-            applicationId 'app.neuland'
+            applicationId "app.neuland.dev"
             resValue "string", "app_name", "Neuland Next (Dev)"
         }
         production {
             dimension "default"
-            applicationId 'app.neuland'
+            applicationId "app.neuland"
             resValue "string", "app_name", "Neuland Next"
         }
     }

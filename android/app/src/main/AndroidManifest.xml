@@ -34,41 +34,5 @@
         <data android:scheme="exp+neuland-app-native"/>
       </intent-filter>
     </activity>
-    <activity-alias android:name=".MainActivityCat" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_cat" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
-    <activity-alias android:name=".MainActivityRainbowNeon" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_rainbow_neon" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
-    <activity-alias android:name=".MainActivityRetro" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_retro" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
-    <activity-alias android:name=".MainActivityModernGreen" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_modern_green" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
-    <activity-alias android:name=".MainActivityModernPink" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_modern_pink" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
-    <activity-alias android:name=".MainActivityRainbowMoonLight" android:enabled="false" android:exported="true" android:icon="@mipmap/ic_launcher_rainbow_moon_light" android:targetActivity=".MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity-alias>
   </application>
 </manifest>
