@@ -4,7 +4,7 @@
 		"slug": "neuland-app-native",
 		"scheme": "neuland",
 		"owner": "neuland-ingolstadt",
-		"version": "0.12.2",
+		"version": "0.13.0",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": false,
@@ -52,7 +52,10 @@
 			"typedRoutes": true
 		},
 		"plugins": [
-			["react-native-edge-to-edge"],
+			[
+				"react-native-edge-to-edge",
+				{ "android": { "parentTheme": "Material3" } }
+			],
 			[
 				"expo-router",
 				{

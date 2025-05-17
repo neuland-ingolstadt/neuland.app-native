@@ -259,6 +259,9 @@ const MapScreen = (): React.JSX.Element => {
 			const buildingRooms = rooms.filter(
 				(room) => room.properties.Gebaeude === (building as Gebaeude)
 			)
+			if (buildingRooms.length === 0) {
+				return null
+			}
 			const floorCount = Array.from(
 				new Set(buildingRooms.map((room) => room.properties.Ebene))
 			).length
@@ -280,11 +283,13 @@ const MapScreen = (): React.JSX.Element => {
 					icon: getIcon(SEARCH_TYPES.BUILDING)
 				},
 				geometry: {
-					type: 'Point',
+					type: 'Point' as const,
 					coordinates: center
 				}
 			} satisfies Feature
-		})
+		}).filter(
+			(building): building is NonNullable<typeof building> => building !== null
+		)
 		return {
 			type: 'FeatureCollection',
 			features: [...rooms, ...buildings]
@@ -462,7 +467,7 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		setFilteredGeoJSON(newGeoJSON)
-	}, [currentFloor, allRooms, mapOverlay]) // Ensure dependencies are correctly listed
+	}, [currentFloor, allRooms, mapOverlay])
 
 	const roomData: RoomData = useMemo(() => {
 		switch (clickedElement?.type) {

@@ -28,7 +28,6 @@ import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
 
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { useDashboard, useUserKind } from '../contexts'
-import { accentColors } from './colors'
 import { DashboardContext, UserKindContext } from './contexts'
 
 interface ProviderProps {
@@ -66,7 +65,6 @@ export default function Provider({
 	useOnlineManager()
 	useAppState(onAppStateChange)
 	const theme = usePreferencesStore((state) => state.theme)
-	const accentColor = usePreferencesStore((state) => state.accentColor)
 	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const appIcon = usePreferencesStore((state) => state.appIcon)
 	const selectedRestaurants = useFoodFilterStore(
@@ -99,19 +97,10 @@ export default function Provider({
 		if (!analyticsInitialized) {
 			return
 		}
-		trackEvent('AccentColor', {
-			color: accentColor
-		})
-	}, [accentColor, analyticsInitialized])
-
-	useEffect(() => {
-		if (!analyticsInitialized) {
-			return
-		}
 		trackEvent('Theme', {
 			theme: theme
 		})
-	}, [accentColor, analyticsInitialized])
+	}, [theme, analyticsInitialized])
 
 	useEffect(() => {
 		if (!analyticsInitialized) {
@@ -187,39 +176,6 @@ export default function Provider({
 			timetableMode: timetableMode ?? 'list'
 		})
 	}, [timetableMode, analyticsInitialized])
-
-	/**
-	 * Returns the primary color for a given color scheme.
-	 * @param scheme - The color scheme to get the primary color for. Can be either 'light' or 'dark'.
-	 * @returns The primary color for the given color scheme.
-	 */
-	const getPrimary = (scheme: 'light' | 'dark'): string => {
-		try {
-			const primary = accentColors[accentColor][scheme]
-			return primary
-		} catch {
-			return accentColors.blue[scheme]
-		}
-	}
-
-	useEffect(() => {
-		UnistylesRuntime.updateTheme('dark', (currentTheme) => ({
-			...currentTheme,
-			colors: {
-				...currentTheme.colors,
-				// @ts-expect-error cannot verify that the new primary color is valid
-				primary: getPrimary('dark')
-			}
-		}))
-		UnistylesRuntime.updateTheme('light', (currentTheme) => ({
-			...currentTheme,
-			colors: {
-				...currentTheme.colors,
-				// @ts-expect-error cannot verify that the new primary color is valid
-				primary: getPrimary('light')
-			}
-		}))
-	}, [accentColor])
 
 	useEffect(() => {
 		const subscription = Appearance.addChangeListener(() => {

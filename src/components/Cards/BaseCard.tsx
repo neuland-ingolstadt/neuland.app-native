@@ -63,7 +63,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		<View style={cardStyle}>
 			<View style={styles.contentWrapper}>
 				<View style={styles.titleView}>
-					<View style={styles.iconContainer}>
+					<View style={[styles.iconContainer]}>
 						<Animated.View style={animatedIconStyle}>
 							<PlatformIcon
 								ios={{
@@ -81,16 +81,15 @@ const BaseCard: React.FC<BaseCardProps> = ({
 									name: cardIcons[title as keyof typeof cardIcons]?.web,
 									size: 20
 								}}
-								style={styles.cardIcon}
 							/>
 						</Animated.View>
 					</View>
 
 					<Text style={styles.title}>
-						{
+						{t(
 							// @ts-expect-error type check
-							t(`cards.titles.${title}`)
-						}
+							`cards.titles.${title}`
+						)}
 					</Text>
 					{onPressRoute != null && (
 						<PlatformIcon
@@ -106,7 +105,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
 								name: 'ChevronRight',
 								size: 24
 							}}
-							style={styles.chevronIcon}
+							style={styles.labelColor}
 						/>
 					)}
 				</View>
@@ -164,20 +163,17 @@ const stylesheet = createStyleSheet((theme) => ({
 		width: 36,
 		height: 36,
 		borderRadius: 18,
-		backgroundColor: theme.colors.cardIconBackground,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 4
+		marginRight: 4,
+		backgroundColor: `${theme.colors.primary}15`
 	},
 	cardIcon: {
 		color: theme.colors.primary
 	},
-	chevronIcon: {
-		color: theme.colors.labelColor,
-		opacity: 0.7
-	},
 	labelColor: {
-		color: theme.colors.labelColor
+		color: theme.colors.labelColor,
+		opacity: 0.6
 	},
 	title: {
 		color: theme.colors.text,

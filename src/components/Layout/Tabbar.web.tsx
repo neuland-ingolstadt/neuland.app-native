@@ -17,156 +17,155 @@ const TabLayout = (): React.JSX.Element => {
 	const isPad = Dimensions.get('window').width < 1300
 
 	return (
-		<>
-			<Tabs
-				screenOptions={{
-					tabBarPosition: isMobile ? 'bottom' : 'left',
-					tabBarActiveTintColor: styleTheme.colors.text,
-					tabBarInactiveTintColor: styleTheme.colors.labelColor,
-					tabBarStyle: {
-						backgroundColor: styleTheme.colors.card,
-						paddingTop: 4
-					},
-					tabBarLabelStyle: {
-						paddingTop: isPad ? 4 : 0
-					},
+		<Tabs
+			screenOptions={{
+				tabBarPosition: isMobile ? 'bottom' : 'left',
+				tabBarActiveTintColor: styleTheme.colors.text,
+				tabBarActiveBackgroundColor: styleTheme.colors.card,
+				tabBarInactiveTintColor: styleTheme.colors.labelColor,
+				tabBarStyle: {
+					backgroundColor: styleTheme.colors.card,
+					paddingTop: 4
+				},
+				tabBarLabelStyle: {
+					paddingTop: isPad ? 4 : 0
+				},
 
-					tabBarShowLabel: !isMobile,
-					tabBarLabelPosition: isMobile
-						? undefined
-						: isPad
-							? 'below-icon'
-							: 'beside-icon',
-					tabBarVariant: isMobile ? 'uikit' : 'material'
+				tabBarShowLabel: !isMobile,
+				tabBarLabelPosition: isMobile
+					? undefined
+					: isPad
+						? 'below-icon'
+						: 'beside-icon',
+				tabBarVariant: isMobile ? 'uikit' : 'material'
+			}}
+		>
+			<Tabs.Screen
+				name="(index)"
+				options={{
+					title: 'Home',
+					headerShown: false,
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'house',
+								variant: focused ? 'fill' : 'outline',
+								size: size
+							}}
+							android={{
+								name: 'home',
+								size
+							}}
+							web={{
+								name: 'House',
+								size: size - 2
+							}}
+							style={{
+								color
+							}}
+						/>
+					)
 				}}
-			>
-				<Tabs.Screen
-					name="(index)"
-					options={{
-						title: 'Home',
-						headerShown: false,
-						tabBarIcon: ({ color, size, focused }) => (
-							<PlatformIcon
-								ios={{
-									name: 'house',
-									variant: focused ? 'fill' : 'outline',
-									size: size
-								}}
-								android={{
-									name: 'home',
-									size
-								}}
-								web={{
-									name: 'House',
-									size: size - 2
-								}}
-								style={{
-									color
-								}}
-							/>
-						)
-					}}
-				/>
+			/>
 
-				<Tabs.Screen
-					name="timetable"
-					options={{
-						headerShown: Platform.OS === 'web',
-						title: t('navigation.timetable'),
-						tabBarIcon: ({ color, size, focused }) => (
-							<PlatformIcon
-								ios={{
-									name: 'clock',
-									variant: focused ? 'fill' : 'outline',
+			<Tabs.Screen
+				name="timetable"
+				options={{
+					headerShown: Platform.OS === 'web',
+					title: t('navigation.timetable'),
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'clock',
+								variant: focused ? 'fill' : 'outline',
 
-									size: size
-								}}
-								android={{
-									name: 'calendar_month',
-									size
-								}}
-								web={{
-									name: 'Clock',
-									size: size - 2
-								}}
-								style={{
-									color
-								}}
-							/>
-						)
-					}}
-				/>
+								size: size
+							}}
+							android={{
+								name: 'calendar_month',
+								size
+							}}
+							web={{
+								name: 'Clock',
+								size: size - 2
+							}}
+							style={{
+								color
+							}}
+						/>
+					)
+				}}
+			/>
 
-				<Tabs.Screen
-					name="map"
-					options={{
-						title: t('navigation.map'),
-						headerShown: false,
-						tabBarIcon: ({ color, size, focused }) => (
-							<PlatformIcon
-								ios={{
-									name: 'map',
-									size: size,
-									variant: focused ? 'fill' : 'outline'
-								}}
-								android={{
-									name: 'map',
-									size
-								}}
-								web={{
-									name: 'Map',
-									size: size - 2
-								}}
-								style={{
-									color
-								}}
-							/>
-						)
-					}}
-				/>
+			<Tabs.Screen
+				name="map"
+				options={{
+					title: t('navigation.map'),
+					headerShown: false,
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'map',
+								size: size,
+								variant: focused ? 'fill' : 'outline'
+							}}
+							android={{
+								name: 'map',
+								size
+							}}
+							web={{
+								name: 'Map',
+								size: size - 2
+							}}
+							style={{
+								color
+							}}
+						/>
+					)
+				}}
+			/>
 
-				<Tabs.Screen
-					name="food"
-					options={{
-						title: t('navigation.food'),
-						headerShown: Platform.OS === 'web',
-						tabBarLabel: t('navigation.food'),
-						tabBarIcon: ({ color, size, focused }) => (
-							<PlatformIcon
-								ios={{
-									name: 'fork.knife',
-									variant: focused ? 'fill' : 'outline',
+			<Tabs.Screen
+				name="food"
+				options={{
+					title: t('navigation.food'),
+					headerShown: Platform.OS === 'web',
+					tabBarLabel: t('navigation.food'),
+					tabBarIcon: ({ color, size, focused }) => (
+						<PlatformIcon
+							ios={{
+								name: 'fork.knife',
+								variant: focused ? 'fill' : 'outline',
 
-									size: size
-								}}
-								android={{
-									name: 'restaurant',
-									size
-								}}
-								web={{
-									name: 'Utensils',
-									size: size - 2
-								}}
-								style={{
-									color
-								}}
-							/>
-						)
-					}}
-				/>
-				<Tabs.Screen
-					name="settings"
-					options={{
-						title: t('navigation.profile'),
-						headerShown: true,
-						tabBarLabel: t('navigation.profile'),
-						tabBarIcon: ({ color, size, focused }) => (
-							<SettingsTabButton color={color} size={size} focused={focused} />
-						)
-					}}
-				/>
-			</Tabs>
-		</>
+								size: size
+							}}
+							android={{
+								name: 'restaurant',
+								size
+							}}
+							web={{
+								name: 'Utensils',
+								size: size - 2
+							}}
+							style={{
+								color
+							}}
+						/>
+					)
+				}}
+			/>
+			<Tabs.Screen
+				name="settings"
+				options={{
+					title: t('navigation.profile'),
+					headerShown: true,
+					tabBarLabel: t('navigation.profile'),
+					tabBarIcon: ({ color, size, focused }) => (
+						<SettingsTabButton color={color} size={size} focused={focused} />
+					)
+				}}
+			/>
+		</Tabs>
 	)
 }
 
