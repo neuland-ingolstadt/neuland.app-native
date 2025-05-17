@@ -41,5 +41,5 @@ export interface FormListSections {
 	header?: string
 	footer?: string
 	items?: SectionGroup[]
-	item?: string
+	item?: string | React.ReactNode
 }

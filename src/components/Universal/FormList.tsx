@@ -34,7 +34,11 @@ const RenderSectionItem: React.FC<RenderSectionItemProps> = ({
 	return (
 		<View key={sectionIndex} style={styles.block}>
 			<View style={[styles.blockCard, styles.itemBlock]}>
-				<Text style={styles.columnDetails}>{section.item}</Text>
+				{typeof section.item === 'string' ? (
+					<Text style={styles.columnDetails}>{section.item}</Text>
+				) : (
+					section.item
+				)}
 			</View>
 		</View>
 	)
