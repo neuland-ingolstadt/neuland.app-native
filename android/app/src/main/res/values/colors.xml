@@ -1,9 +1,15 @@
 <resources>
   <color name="splashscreen_background">#ffffff</color>
-  <color name="colorPrimary">#8a8a8a</color>
+  <color name="colorPrimary">#023c69</color>
   <color name="colorPrimaryDark">#ffffff</color>
   <color name="account_background_color">#ffffff</color>
   <color name="link_background_color">#ffffff</color>
   <color name="food_background_color">#ffffff</color>
   <color name="calendar_background_color">#ffffff</color>
+  <color name="iconBackgroundRainbowMoonLight">#FFFFFF</color>
+  <color name="iconBackgroundModernPink">#FFFFFF</color>
+  <color name="iconBackgroundModernGreen">#FFFFFF</color>
+  <color name="iconBackgroundRetro">#FFFFFF</color>
+  <color name="iconBackgroundRainbowNeon">#FFFFFF</color>
+  <color name="iconBackgroundCat">#FFFFFF</color>
 </resources>

@@ -93,13 +93,13 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	useEffect(() => {
 		if (isReady && loaded) {
 			SplashScreen.hideAsync()
-			intro.value = withTiming(0.2, { duration: 300 }, () => {
+			intro.value = withTiming(0.2, { duration: 100 }, () => {
 				intro.value = withTiming(0.4, { duration: 200 }, () => {
 					intro.value = withTiming(
 						1,
-						{ duration: 600, easing: Easing.out(Easing.exp) },
+						{ duration: 500, easing: Easing.out(Easing.exp) },
 						() => {
-							introBackground.value = withTiming(1, { duration: 400 }, () => {
+							introBackground.value = withTiming(1, { duration: 200 }, () => {
 								runOnJS(setHideSplash)(true)
 							})
 						}
@@ -120,7 +120,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 					<Logo
 						width={logoWidth}
 						height={logoHeight}
-						color={isDark ? '#f9f9f9' : '#1a1a1a'}
+						color={isDark ? theme.colors.secondary : '#1a1a1a'}
 						opacity={isDark ? 0.25 : 0.5}
 						style={[logoInitial, animatedLogoStyle]}
 					/>
