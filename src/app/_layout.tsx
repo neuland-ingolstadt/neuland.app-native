@@ -174,12 +174,6 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="index"
-						options={{
-							headerShown: false
-						}}
-					/>
-					<Stack.Screen
 						name="(screens)/food-preferences"
 						options={{
 							title: t('navigation.preferences')
