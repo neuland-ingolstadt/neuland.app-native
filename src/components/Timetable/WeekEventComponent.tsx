@@ -1,20 +1,16 @@
 import { useTimetableStore } from '@/hooks/useTimetableStore'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { getContrastColor } from '@/utils/ui-utils'
 import type { PackedEvent } from '@howljs/calendar-kit'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
-import { Platform, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import {
 	type UnistylesTheme,
 	createStyleSheet,
 	useStyles
 } from 'react-native-unistyles'
 
-const isIOS =
-	Platform.OS === 'ios' ||
-	(Platform.OS === 'web' && navigator.userAgent.includes('Safari'))
 const EventComponent = ({
 	event,
 	theme,
@@ -88,7 +84,7 @@ const EventComponent = ({
 				backgroundColor: background
 			}}
 		>
-			{isIOS && <EventLine color={lineColorByType} />}
+			<EventLine color={lineColorByType} />
 			<View style={styles.eventText}>
 				<View>
 					<Text
@@ -135,47 +131,37 @@ const EventComponent = ({
 }
 
 const eventBackgroundColor = (color: string, isDark: boolean): string =>
-	isIOS
-		? Color(color)
-				.alpha(0.73)
-				.lighten(isDark ? 0 : 0.6)
-				.darken(isDark ? 0.65 : 0)
-				.rgb()
-				.string()
-		: color
+	Color(color)
+		.alpha(0.73)
+		.lighten(isDark ? 0 : 0.6)
+		.darken(isDark ? 0.65 : 0)
+		.rgb()
+		.string()
 
 const textColor = (
 	color: string,
 	background: string,
 	isDark: boolean
 ): string => {
-	let textColor = isIOS
-		? Color(color)
-				.darken(isDark ? 0 : 0.5)
-				.lighten(isDark ? 0.65 : 0)
-				.saturate(0.5)
-				.hex()
-		: getContrastColor(background)
+	let textColor = Color(color)
+		.darken(isDark ? 0 : 0.5)
+		.lighten(isDark ? 0.65 : 0)
+		.saturate(0.5)
+		.hex()
 
 	const contrast = Color(background).contrast(Color(textColor))
 
-	if (contrast < 3.5 && isIOS) {
+	if (contrast < 3.5) {
 		textColor = Color(background).isLight() ? '#000000' : '#FFFFFF'
 	}
 	return textColor
 }
 
-const lineColor = (
-	color: string,
-	eventBackgroundColor: string,
-	isDark: boolean
-): string =>
-	isIOS
-		? Color(color)
-				.darken(isDark ? 0.2 : 0)
-				.lighten(isDark ? 0 : 0.2)
-				.hex()
-		: eventBackgroundColor
+const lineColor = (color: string, _: string, isDark: boolean): string =>
+	Color(color)
+		.darken(isDark ? 0.2 : 0)
+		.lighten(isDark ? 0 : 0.2)
+		.hex()
 
 const stylesheet = createStyleSheet(() => ({
 	eventContainer: {
@@ -195,7 +181,7 @@ const stylesheet = createStyleSheet(() => ({
 		flex: 1,
 		flexDirection: 'column',
 		justifyContent: 'space-between',
-		paddingLeft: isIOS ? 3 : 4,
+		paddingLeft: 3,
 		paddingRight: 2,
 		paddingVertical: 3
 	},

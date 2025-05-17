@@ -35,7 +35,7 @@ const EventsCard = (): React.JSX.Element => {
 								location={event.location ?? undefined}
 								subtitleTranslationKey="cards.events.by"
 								subtitleTranslationParams={{ name: event.host.name ?? '' }}
-								color={theme.colors.secondary}
+								color={theme.colors.primary}
 							/>
 						</React.Fragment>
 					))}
