@@ -166,7 +166,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4,
-		backgroundColor: `${theme.colors.primary}15`
+		backgroundColor: theme.colors.primaryBackground
 	},
 	cardIcon: {
 		color: theme.colors.primary
