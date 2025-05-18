@@ -21,7 +21,7 @@ import {
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Share, Text, View } from 'react-native'
+import { Linking, Platform, Pressable, Share, Text, View } from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
@@ -29,6 +29,35 @@ import Animated, {
 	useScrollViewOffset
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+
+const URL_REGEX = /(https?:\/\/[^\s]+)/g
+
+const LinkText: React.FC<{ text: string; color: string }> = ({
+	text,
+	color
+}) => {
+	const { styles } = useStyles(stylesheet)
+	const parts = text.split(URL_REGEX)
+	return (
+		<Text style={styles.columnDetails}>
+			{parts.map((part, index) => {
+				if (part.match(URL_REGEX)) {
+					return (
+						<Pressable
+							key={index}
+							onPress={() => {
+								void Linking.openURL(part)
+							}}
+						>
+							<Text style={[styles.columnDetails, { color }]}>{part}</Text>
+						</Pressable>
+					)
+				}
+				return <Text key={index}>{part}</Text>
+			})}
+		</Text>
+	)
+}
 
 export default function ClEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -190,7 +219,12 @@ export default function ClEventDetail(): React.JSX.Element {
 			? [
 					{
 						header: t('pages.event.description'),
-						item: clEvent.descriptions[i18n.language as LanguageKey]
+						item: (
+							<LinkText
+								text={clEvent.descriptions[i18n.language as LanguageKey]}
+								color={theme.colors.primary}
+							/>
+						)
 					}
 				]
 			: [])
@@ -265,6 +299,12 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 24,
 		fontWeight: '600',
 		paddingTop: 16,
+		textAlign: 'left'
+	},
+	columnDetails: {
+		color: theme.colors.text,
+		fontSize: 16,
+		paddingTop: 2,
 		textAlign: 'left'
 	}
 }))

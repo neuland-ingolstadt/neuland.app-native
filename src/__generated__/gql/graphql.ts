@@ -37,6 +37,8 @@ export type Announcement = {
   endDateTime: Scalars['DateTime']['output'];
   /** Unique identifier of the announcement */
   id: Scalars['ID']['output'];
+  /** Image URL for the announcement */
+  imageUrl?: Maybe<Scalars['String']['output']>;
   /** Platform where the announcement is displayed */
   platform: Array<Platform>;
   /** Priority of the announcement, higher are more important */
@@ -59,6 +61,8 @@ export type AnnouncementInput = {
   description: MultiLanguageStringInput;
   /** End date and time when the announcement is displayed */
   endDateTime: Scalars['DateTime']['input'];
+  /** Image URL for the announcement */
+  imageUrl?: InputMaybe<Scalars['String']['input']>;
   /** Platform where the announcement is displayed */
   platform: Array<Platform>;
   /** Priority of the announcement, higher are more important */
@@ -78,6 +82,27 @@ export enum CampusType {
   Ingolstadt = 'Ingolstadt',
   Neuburg = 'Neuburg'
 }
+
+/** Career Service Event data type. Information about a specific event from the career service. */
+export type CareerServiceEvent = {
+  __typename?: 'CareerServiceEvent';
+  /** Available slots for the event */
+  availableSlots: Scalars['Int']['output'];
+  /** Date of the event */
+  date: Scalars['DateTime']['output'];
+  /** Unique identifier of the event */
+  id: Scalars['ID']['output'];
+  /** Maximum waiting list for the event */
+  maxWaitingList: Scalars['Int']['output'];
+  /** Title of the event in German */
+  title: Scalars['String']['output'];
+  /** Total slots for the event */
+  totalSlots: Scalars['Int']['output'];
+  /** URL for more information about the event */
+  url?: Maybe<Scalars['String']['output']>;
+  /** Waiting list for the event */
+  waitingList: Scalars['Int']['output'];
+};
 
 /** Campus Life Event data type. Information about a specific event on campus. */
 export type ClEvent = {
@@ -245,6 +270,8 @@ export type Mutation = {
   deleteAppAnnouncement?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a manual campus life event by ID. Note: This mutation is only available for authenticated users. */
   deleteManualClEvent?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a Neuland event by ID. Note: This mutation is only available for authenticated users. */
+  deleteNeulandEvent?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a university sports event by ID. Note: This mutation is only available for authenticated users. */
   deleteUniversitySport?: Maybe<Scalars['Boolean']['output']>;
   /** Resolve a room report by ID. Note: This mutation is only available for authenticated users. */
@@ -253,6 +280,8 @@ export type Mutation = {
   upsertAppAnnouncement?: Maybe<UpsertResponse>;
   /** Create or update a manual campus life event. Note: This mutation is only available for authenticated users. */
   upsertManualClEvent?: Maybe<UpsertResponse>;
+  /** Create or update a Neuland event. If an ID is provided, the event is updated, otherwise a new event is created. Note: This mutation is only available for authenticated users. */
+  upsertNeulandEvent?: Maybe<UpsertResponse>;
   /** Create or update a university sports event. If an ID is provided, the event is updated, otherwise a new event is created. Note: This mutation is only available for authenticated users. */
   upsertUniversitySport?: Maybe<UpsertResponse>;
 };
@@ -272,6 +301,12 @@ export type MutationDeleteAppAnnouncementArgs = {
 
 /** Mutation type to update data. */
 export type MutationDeleteManualClEventArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+/** Mutation type to update data. */
+export type MutationDeleteNeulandEventArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -304,9 +339,55 @@ export type MutationUpsertManualClEventArgs = {
 
 
 /** Mutation type to update data. */
+export type MutationUpsertNeulandEventArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  input: NeulandEventInput;
+};
+
+
+/** Mutation type to update data. */
 export type MutationUpsertUniversitySportArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   input: UniversitySportsInput;
+};
+
+/** Events by Neuland Ingolstadt e.V. */
+export type NeulandEvent = {
+  __typename?: 'NeulandEvent';
+  /** Creation date and time of the event */
+  createdAt: Scalars['DateTime']['output'];
+  /** Description of the event in different languages */
+  description?: Maybe<MultiLanguageString>;
+  /** End date and time of the event */
+  endTime?: Maybe<Scalars['DateTime']['output']>;
+  /** Unique identifier of the event */
+  id: Scalars['ID']['output'];
+  /** Location where the event takes place */
+  location?: Maybe<Scalars['String']['output']>;
+  /** Recurrence rule for recurring events (uses iCalendar RRULE format) */
+  rrule?: Maybe<Scalars['String']['output']>;
+  /** Start date and time of the event */
+  startTime?: Maybe<Scalars['DateTime']['output']>;
+  /** Title of the event in different languages */
+  title: MultiLanguageString;
+  /** Last update date and time of the event */
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+/** Input type for a event by Neuland Ingolstadt e.V. */
+export type NeulandEventInput = {
+  /** Description of the event in different languages */
+  description?: InputMaybe<MultiLanguageStringInput>;
+  /** End date and time of the event */
+  endTime?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Location where the event takes place */
+  location?: InputMaybe<Scalars['String']['input']>;
+  /** Recurrence rule for recurring events (uses iCalendar RRULE format) */
+  rrule?: InputMaybe<Scalars['String']['input']>;
+  /** Start date and time of the event */
+  startTime?: InputMaybe<Scalars['DateTime']['input']>;
+  /** Title of the event in different languages */
+  title: MultiLanguageStringInput;
 };
 
 /** Nutritional values for a meal. Currently only available at Mensa. Values are per average portion. */
@@ -384,14 +465,26 @@ export type Query = {
   announcements: Array<Announcement>;
   /** Get the current in app announcements. */
   appAnnouncements: Array<Announcement>;
+  /** Get all events of the career service. */
+  careerServiceEvents: Array<CareerServiceEvent>;
+  /** Get all campus life clubs */
+  clClubs: Array<Host>;
   /** Get the campus life events */
   clEvents: Array<ClEvent>;
   /** Get the meal plan for a specific restaurant. */
   food: FoodResponse;
+  /** Get all events by Neuland Ingolstadt e.V. */
+  neulandEvents: Array<NeulandEvent>;
   /** Get the room reports. Note: This query is only available for authenticated users. */
   roomReports: Array<RoomReport>;
   /** Get the university sports events. This includes all sports events from all campuses. */
   universitySports?: Maybe<Array<UniversitySports>>;
+};
+
+
+/** Root query */
+export type QueryAppAnnouncementsArgs = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -606,7 +699,7 @@ export type AppAnnouncementsQuery = { __typename?: 'Query', appAnnouncements: Ar
     & { ' $fragmentRefs'?: { 'AnnouncementFieldsFragment': AnnouncementFieldsFragment } }
   )> };
 
-export type AnnouncementFieldsFragment = { __typename?: 'Announcement', id: string, startDateTime: Date, endDateTime: Date, priority: number, url?: string | null, platform: Array<Platform>, userKind: Array<UserKind>, title: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null }, description: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null } } & { ' $fragmentName'?: 'AnnouncementFieldsFragment' };
+export type AnnouncementFieldsFragment = { __typename?: 'Announcement', id: string, startDateTime: Date, endDateTime: Date, priority: number, url?: string | null, platform: Array<Platform>, userKind: Array<UserKind>, imageUrl?: string | null, title: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null }, description: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null } } & { ' $fragmentName'?: 'AnnouncementFieldsFragment' };
 
 export type FoodPlanQueryVariables = Exact<{
   locations: Array<Scalars['LocationInput']['input']> | Scalars['LocationInput']['input'];
@@ -652,9 +745,13 @@ export class TypedDocumentString<TResult, TVariables>
   implements DocumentTypeDecoration<TResult, TVariables>
 {
   __apiType?: DocumentTypeDecoration<TResult, TVariables>['__apiType'];
+  private value: string;
+  public __meta__?: Record<string, any> | undefined;
 
-  constructor(private value: string, public __meta__?: Record<string, any> | undefined) {
+  constructor(value: string, __meta__?: Record<string, any> | undefined) {
     super(value);
+    this.value = value;
+    this.__meta__ = __meta__;
   }
 
   toString(): string & DocumentTypeDecoration<TResult, TVariables> {
@@ -678,6 +775,7 @@ export const AnnouncementFieldsFragmentDoc = new TypedDocumentString(`
   url
   platform
   userKind
+  imageUrl
 }
     `, {"fragmentName":"AnnouncementFields"}) as unknown as TypedDocumentString<AnnouncementFieldsFragment, unknown>;
 export const FoodFieldsFragmentDoc = new TypedDocumentString(`
@@ -806,6 +904,7 @@ export const AppAnnouncementsDocument = new TypedDocumentString(`
   url
   platform
   userKind
+  imageUrl
 }`) as unknown as TypedDocumentString<AppAnnouncementsQuery, AppAnnouncementsQueryVariables>;
 export const FoodPlanDocument = new TypedDocumentString(`
     query FoodPlan($locations: [LocationInput!]!) {

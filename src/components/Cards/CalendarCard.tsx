@@ -104,7 +104,7 @@ const CalendarCard = (): React.JSX.Element => {
 							startDateTime={event.begin}
 							endDateTime={event.end}
 							showEndTime={true}
-							color={theme.colors.secondary}
+							color={theme.colors.primary}
 						/>
 					</React.Fragment>
 				))}

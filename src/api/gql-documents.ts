@@ -27,6 +27,7 @@ const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
         url
         platform
         userKind
+        imageUrl
     }
 `)
 
