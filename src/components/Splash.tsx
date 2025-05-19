@@ -62,7 +62,8 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	const logoWidth = logoSize
 	const logoHeight = logoSize
 	const iosXShift = 20
-	const iosMarginStyle: ViewStyle = Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
+	const iosMarginStyle: ViewStyle =
+		Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
 
 	const animatedLogoStyle = useAnimatedStyle(() => ({
 		transform: [
