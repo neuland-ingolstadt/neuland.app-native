@@ -3,7 +3,7 @@ import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import ErrorView from '@/components/Error/ErrorView'
-import PlatformIcon from '@/components/Universal/Icon'
+import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
 import { FlashList, MasonryFlashList } from '@shopify/flash-list'
@@ -12,13 +12,7 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-	Dimensions,
-	LayoutAnimation,
-	Platform,
-	Pressable,
-	View
-} from 'react-native'
+import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function HomeRootScreen(): React.JSX.Element {
@@ -46,35 +40,6 @@ export default function HomeRootScreen(): React.JSX.Element {
 				headerRightElement={HomeHeaderRight}
 			/>
 		</>
-	)
-}
-
-export const HomeHeaderRight = (): React.JSX.Element => {
-	const { t } = useTranslation(['accessibility'])
-	const { styles } = useStyles(stylesheet)
-
-	if (Platform.OS === 'ios') {
-		return <></>
-	}
-
-	return (
-		<Pressable
-			onPress={() => {
-				router.navigate('/dashboard')
-			}}
-			hitSlop={10}
-			style={styles.headerButton}
-			accessibilityLabel={t('button.settingsDashboard')}
-		>
-			<View>
-				<PlatformIcon
-					ios={{ name: 'gear', size: 22 }}
-					android={{ name: 'lists', size: 24 }}
-					web={{ name: 'Settings', size: 24 }}
-					style={styles.icon}
-				/>
-			</View>
-		</Pressable>
 	)
 }
 
@@ -206,11 +171,5 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	page: {
 		backgroundColor: theme.colors.background
-	},
-	headerButton: {
-		marginHorizontal: Platform.OS !== 'ios' ? 14 : 0
-	},
-	icon: {
-		color: theme.colors.text
 	}
 }))
