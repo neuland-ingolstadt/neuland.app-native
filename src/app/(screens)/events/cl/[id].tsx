@@ -1,39 +1,36 @@
-import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { View, Text, Platform, Pressable } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { Linking } from 'react-native'
+import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
+import ErrorView from '@/components/Error/ErrorView'
 import FormList from '@/components/Universal/FormList'
-import type { FormListSections, SectionGroup } from '@/types/components'
 import { linkIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
+import { QUERY_KEYS, loadCampusLifeEvents } from '@/utils/events-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
+import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
 import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import { router } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, Text, View } from 'react-native'
+import { Linking } from 'react-native'
 import { Share } from 'react-native'
-import { isValidRoom } from '@/utils/timetable-utils'
-import { router } from 'expo-router'
-import type { LanguageKey } from '@/localization/i18n'
-import neulandAPI from '@/api/neuland-api'
-import ErrorView from '@/components/Error/ErrorView'
-import { QUERY_KEYS } from '@/utils/events-utils'
-import { trackEvent } from '@aptabase/react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
 } from 'react-native-reanimated'
-import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
-import { getFragmentData } from '@/__generated__/gql'
-import { CampusLifeEventFieldsFragmentDoc } from '@/__generated__/gql/graphql'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 
@@ -74,15 +71,13 @@ export default function ClEventDetail(): React.JSX.Element {
 		isLoading,
 		error
 	} = useQuery({
-		queryKey: ['campusLifeEventsV2'],
-		queryFn: () => neulandAPI.getCampusLifeEvents()
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
+		queryFn: loadCampusLifeEvents,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 
-	const event = queryData?.clEvents
-		?.map((eventCandidate) =>
-			getFragmentData(CampusLifeEventFieldsFragmentDoc, eventCandidate)
-		)
-		.find((fragment) => (fragment as any).id === id)
+	const event = queryData?.find((event) => event.id === id)
 
 	const eventData: CampusLifeEventFieldsFragment | null = event ?? null
 

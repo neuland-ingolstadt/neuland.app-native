@@ -33,7 +33,7 @@ const CLEventRow = ({
 	// Determine if event is active (ongoing)
 	const isActive =
 		begin != null && begin < new Date() && end != null && end > new Date()
-
+	console.log(event)
 	const onPressRow = (): void => {
 		setSelectedClEvent(event as CLEvents)
 		router.navigate({

@@ -748,7 +748,7 @@ export type CampusLifeEventsQuery = { __typename?: 'Query', clEvents: Array<(
     & { ' $fragmentRefs'?: { 'CampusLifeEventFieldsFragment': CampusLifeEventFieldsFragment } }
   )> };
 
-export type CampusLifeEventFieldsFragment = { __typename?: 'ClEvent', startDateTime?: Date | null, endDateTime?: Date | null, location?: string | null, host: { __typename?: 'Host', name: string, website?: string | null, instagram?: string | null }, titles: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null }, descriptions?: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null } | null } & { ' $fragmentName'?: 'CampusLifeEventFieldsFragment' };
+export type CampusLifeEventFieldsFragment = { __typename?: 'ClEvent', id: string, startDateTime?: Date | null, endDateTime?: Date | null, location?: string | null, host: { __typename?: 'Host', name: string, website?: string | null, instagram?: string | null }, titles: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null }, descriptions?: { __typename?: 'MultiLanguageString', de?: string | null, en?: string | null } | null } & { ' $fragmentName'?: 'CampusLifeEventFieldsFragment' };
 
 export type UniversitySportsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -889,6 +889,7 @@ export const FoodFieldsFragmentDoc = new TypedDocumentString(`
     `, {"fragmentName":"FoodFields"}) as unknown as TypedDocumentString<FoodFieldsFragment, unknown>;
 export const CampusLifeEventFieldsFragmentDoc = new TypedDocumentString(`
     fragment CampusLifeEventFields on ClEvent {
+  id
   host {
     name
     website
@@ -1052,6 +1053,7 @@ export const CampusLifeEventsDocument = new TypedDocumentString(`
   }
 }
     fragment CampusLifeEventFields on ClEvent {
+  id
   host {
     name
     website

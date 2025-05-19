@@ -1,19 +1,28 @@
-import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { Linking } from 'react-native'
+import { getFragmentData } from '@/__generated__/gql'
+import {
+	type StudentAdvisoryEventFieldsFragment,
+	StudentAdvisoryEventFieldsFragmentDoc,
+	type StudentAdvisoryEventsQuery
+} from '@/__generated__/gql/graphql'
+import neulandAPI from '@/api/neuland-api'
+import ErrorView from '@/components/Error/ErrorView'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
+import { QUERY_KEYS } from '@/utils/events-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
 import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Text, View } from 'react-native'
+import { Linking } from 'react-native'
 import { Platform, Share } from 'react-native'
 import Animated, {
 	interpolate,
@@ -21,16 +30,7 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import neulandAPI from '@/api/neuland-api'
-import ErrorView from '@/components/Error/ErrorView'
-import type { FormListSections } from '@/types/components'
-import { QUERY_KEYS } from '@/utils/events-utils'
-import { getFragmentData } from '@/__generated__/gql'
-import {
-	StudentAdvisoryEventFieldsFragmentDoc,
-	type StudentAdvisoryEventsQuery,
-	type StudentAdvisoryEventFieldsFragment
-} from '@/__generated__/gql/graphql'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)

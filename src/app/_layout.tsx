@@ -391,7 +391,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/events/student-advisory/[id]"
+						name="(screens)/events/advisory/[id]"
 						options={{
 							title: 'Event Details',
 							...Platform.select({
@@ -417,7 +417,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/events/career-service/[id]"
+						name="(screens)/events/career/[id]"
 						options={{
 							title: 'Event Details',
 							...Platform.select({

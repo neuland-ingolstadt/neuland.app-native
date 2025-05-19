@@ -1,18 +1,13 @@
 import type { StudentAdvisoryEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/ErrorView'
-import { useRefreshByUser } from '@/hooks'
-import { networkError } from '@/utils/api-utils'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { FlashList } from '@shopify/flash-list'
-import type { UseQueryResult } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import type React from 'react'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { RefreshControl, Text, View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { router } from 'expo-router'
-
-import LoadingIndicator from '../Universal/LoadingIndicator'
 
 const MemoizedEventRow = memo(StudentAdvisoryEventRow)
 
@@ -26,13 +21,13 @@ function StudentAdvisoryEventRow({
 
 	const handlePress = () => {
 		router.push({
-			pathname: '/events/student-advisory/[id]',
+			pathname: '/events/advisory/[id]',
 			params: { id: event.id }
 		})
 	}
 
 	return (
-		<View style={styles.eventItem} onTouchEnd={handlePress}>
+		<Pressable style={styles.eventItem} onPress={handlePress}>
 			<View style={styles.eventContent}>
 				<Text style={styles.eventTitle}>{event.title}</Text>
 				<Text style={styles.eventDate}>{formatFriendlyDate(event.date)}</Text>
@@ -59,7 +54,7 @@ function StudentAdvisoryEventRow({
 					)}
 				</View>
 			</View>
-		</View>
+		</Pressable>
 	)
 }
 

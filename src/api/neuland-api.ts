@@ -1,13 +1,13 @@
 import type {
 	AppAnnouncementsQuery,
 	CampusLifeEventsQuery,
+	CareerServiceEventsQuery,
 	CreateRoomReportMutation,
 	FoodPlanQuery,
 	RoomReportInput,
+	StudentAdvisoryEventsQuery,
 	TypedDocumentString,
-	UniversitySportsQuery,
-	CareerServiceEventsQuery,
-	StudentAdvisoryEventsQuery
+	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
 import type { SpoWeights } from '@/types/asset-api'
 import type { FeatureCollection } from 'geojson'
@@ -16,11 +16,11 @@ import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
 	CAMPUS_LIFE_EVENTS_QUERY,
+	CAREER_SERVICE_EVENTS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
-	UNIVERSITY_SPORTS_QUERY,
-	CAREER_SERVICE_EVENTS_QUERY,
-	STUDENT_ADVISORY_EVENTS_QUERY
+	STUDENT_ADVISORY_EVENTS_QUERY,
+	UNIVERSITY_SPORTS_QUERY
 } from './gql-documents'
 
 const GRAPHQL_ENDPOINT: string =

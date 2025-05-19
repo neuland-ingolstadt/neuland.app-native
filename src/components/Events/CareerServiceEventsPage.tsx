@@ -2,12 +2,12 @@ import type { CareerServiceEventFieldsFragment } from '@/__generated__/gql/graph
 import ErrorView from '@/components/Error/ErrorView'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { FlashList } from '@shopify/flash-list'
+import { router } from 'expo-router'
 import type React from 'react'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { router } from 'expo-router'
 
 const MemoizedEventRow = memo(CareerServiceEventRow)
 
@@ -21,7 +21,7 @@ function CareerServiceEventRow({
 
 	const handlePress = () => {
 		router.navigate({
-			pathname: '/events/career-service/[id]',
+			pathname: '/events/career/[id]',
 			params: { id: event.id }
 		})
 	}

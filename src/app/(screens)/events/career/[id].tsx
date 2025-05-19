@@ -1,37 +1,37 @@
-import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
-import { useTranslation } from 'react-i18next'
-import { View, Text, Platform } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { Linking } from 'react-native'
 import FormList from '@/components/Universal/FormList'
-import type { FormListSections } from '@/types/components'
 import { linkIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
 import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Text, View } from 'react-native'
+import { Linking } from 'react-native'
 import { Share } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+import { getFragmentData } from '@/__generated__/gql'
+import {
+	type CareerServiceEventFieldsFragment,
+	CareerServiceEventFieldsFragmentDoc,
+	type CareerServiceEventsQuery
+} from '@/__generated__/gql/graphql'
 import neulandAPI from '@/api/neuland-api'
 import ErrorView from '@/components/Error/ErrorView'
 import { QUERY_KEYS } from '@/utils/events-utils'
-import {
-	CareerServiceEventFieldsFragmentDoc,
-	type CareerServiceEventsQuery,
-	type CareerServiceEventFieldsFragment
-} from '@/__generated__/gql/graphql'
+import { trackEvent } from '@aptabase/react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
 	useAnimatedStyle,
 	useSharedValue
 } from 'react-native-reanimated'
-import { getFragmentData } from '@/__generated__/gql'
-import { trackEvent } from '@aptabase/react-native'
 
 export default function CareerServiceEvent(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()

@@ -114,6 +114,7 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
 // biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
+        id
         host {
             name
             website

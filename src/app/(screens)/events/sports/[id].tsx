@@ -1,19 +1,25 @@
-import type { WeekdayType } from '@/__generated__/gql/graphql'
+import type {
+	UniversitySportsFieldsFragment,
+	WeekdayType
+} from '@/__generated__/gql/graphql'
+import ErrorView from '@/components/Error/ErrorView'
 import FormList from '@/components/Universal/FormList'
 import type { LucideIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import useCLParamsStore from '@/hooks/useCLParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { QUERY_KEYS, loadUniversitySportsEvents } from '@/utils/events-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
 import {
 	Stack,
 	useFocusEffect,
-	useNavigation,
-	useLocalSearchParams
+	useLocalSearchParams,
+	useNavigation
 } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
@@ -30,8 +36,21 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function SportsEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { id } = useLocalSearchParams<{ id: string }>()
-	const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
 	const { t, i18n } = useTranslation('common')
+
+	const {
+		data: queryData,
+		isLoading,
+		error
+	} = useQuery({
+		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryFn: loadUniversitySportsEvents,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+	})
+
+	const sportsEvent: UniversitySportsFieldsFragment | null | undefined =
+		queryData?.flatMap((group) => group.data).find((event) => event.id === id)
 
 	const ref = useAnimatedRef<Animated.ScrollView>()
 	const scroll = useScrollViewOffset(ref)
@@ -80,11 +99,15 @@ export default function SportsEventDetail(): React.JSX.Element {
 					/>
 				)
 			})
-		}, [])
+		}, [navigation, sportsEvent, t, i18n.language])
 	)
 
-	if (sportsEvent == null) {
-		return <></>
+	if (isLoading) {
+		return <LoadingIndicator />
+	}
+
+	if (error || sportsEvent == null) {
+		return <ErrorView title={t('error.noData') as string} />
 	}
 
 	const isDescriptionAvailable =

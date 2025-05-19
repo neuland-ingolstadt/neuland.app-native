@@ -4,6 +4,7 @@ import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import {
+	QUERY_KEYS,
 	loadCampusLifeEvents,
 	loadUniversitySportsEvents
 } from '@/utils/events-utils'
@@ -22,13 +23,13 @@ export default function Events(): React.JSX.Element {
 	const results = useQueries({
 		queries: [
 			{
-				queryKey: ['campusLifeEventsV2'],
+				queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
 				queryFn: loadCampusLifeEvents,
 				staleTime: 1000 * 60 * 60, // 60 minutes
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours
 			},
 			{
-				queryKey: ['universitySports'],
+				queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
 				queryFn: loadUniversitySportsEvents,
 				staleTime: 1000 * 60 * 60, // 60 minutes
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours

@@ -1,3 +1,10 @@
+import { getFragmentData } from '@/__generated__/gql'
+import {
+	CareerServiceEventFieldsFragmentDoc,
+	type CareerServiceEventsQuery,
+	StudentAdvisoryEventFieldsFragmentDoc,
+	type StudentAdvisoryEventsQuery
+} from '@/__generated__/gql/graphql'
 import CareerServiceEventsPage from '@/components/Events/CareerServiceEventsPage'
 import StudentAdvisoryEventsPage from '@/components/Events/StudentAdvisoryEventsPage'
 import PagerView from '@/components/Layout/PagerView'
@@ -16,13 +23,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, View, useWindowDimensions } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { getFragmentData } from '@/__generated__/gql'
-import {
-	CareerServiceEventFieldsFragmentDoc,
-	StudentAdvisoryEventFieldsFragmentDoc,
-	type CareerServiceEventsQuery,
-	type StudentAdvisoryEventsQuery
-} from '@/__generated__/gql/graphql'
 
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')

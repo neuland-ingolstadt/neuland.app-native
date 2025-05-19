@@ -1,22 +1,22 @@
 import { getFragmentData } from '@/__generated__/gql'
 import {
-	CareerServiceEventFieldsFragmentDoc,
-	StudentAdvisoryEventFieldsFragmentDoc,
 	type CareerServiceEventFieldsFragment,
-	type StudentAdvisoryEventFieldsFragment,
+	CareerServiceEventFieldsFragmentDoc,
 	type CareerServiceEventsQuery,
+	type StudentAdvisoryEventFieldsFragment,
+	StudentAdvisoryEventFieldsFragmentDoc,
 	type StudentAdvisoryEventsQuery
 } from '@/__generated__/gql/graphql'
+import neulandAPI from '@/api/neuland-api'
+import { QUERY_KEYS } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { View, Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import BaseCard from './BaseCard'
-import LoadingIndicator from '../Universal/LoadingIndicator'
 import EventItem from '../Universal/EventItem'
-import { QUERY_KEYS } from '@/utils/events-utils'
-import neulandAPI from '@/api/neuland-api'
+import LoadingIndicator from '../Universal/LoadingIndicator'
+import BaseCard from './BaseCard'
 
 const CareerCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
@@ -102,6 +102,7 @@ const CareerCard = (): React.JSX.Element => {
 
 const stylesheet = createStyleSheet((theme) => ({
 	eventsContainer: {
+		marginTop: 10,
 		gap: 12
 	},
 	noEvents: {
