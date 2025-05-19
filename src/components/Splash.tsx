@@ -1,7 +1,7 @@
 import * as SplashScreen from 'expo-splash-screen'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { Dimensions, StyleSheet, View, type ViewStyle } from 'react-native'
+import { Platform, StyleSheet, View, type ViewStyle } from 'react-native'
 import Animated, {
 	Easing,
 	interpolate,
@@ -58,18 +58,12 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		setLoaded(true)
 	}, [])
 
-	const { width, height } = Dimensions.get('window')
-	const logoWidth = 190
-	const logoHeight = 190
-	const xShift = 10
-
-	const logoInitial = {
-		position: 'absolute' as const,
-		left: (width - logoWidth - xShift) / 2,
-		top: (height - logoHeight) / 2,
-		width: logoWidth,
-		height: logoHeight
-	}
+	const logoSize = 190
+	const logoWidth = logoSize
+	const logoHeight = logoSize
+	const iosXShift = 20
+	const iosMarginStyle: ViewStyle =
+		Platform.OS === 'ios' ? { marginLeft: -iosXShift / 2 } : {}
 
 	const animatedLogoStyle = useAnimatedStyle(() => ({
 		transform: [
@@ -112,18 +106,25 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 	return (
 		<View style={StyleSheet.absoluteFill}>
 			{children}
-			{!hideSplash && (
+			{!hideSplash && Platform.OS !== 'web' && (
 				<>
 					<Animated.View
 						style={[StyleSheet.absoluteFill, animatedBackgroundStyle]}
 					/>
-					<Logo
-						width={logoWidth}
-						height={logoHeight}
-						color={isDark ? theme.colors.secondary : '#1a1a1a'}
-						opacity={isDark ? 0.25 : 0.5}
-						style={[logoInitial, animatedLogoStyle]}
-					/>
+					<Animated.View
+						style={[
+							StyleSheet.absoluteFill,
+							{ justifyContent: 'center', alignItems: 'center' }
+						]}
+					>
+						<Logo
+							width={logoWidth}
+							height={logoHeight}
+							color={isDark ? theme.colors.secondary : '#1a1a1a'}
+							opacity={isDark ? 0.25 : 0.5}
+							style={[animatedLogoStyle, iosMarginStyle]}
+						/>
+					</Animated.View>
 				</>
 			)}
 		</View>
