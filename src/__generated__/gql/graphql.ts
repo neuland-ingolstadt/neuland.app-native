@@ -87,21 +87,23 @@ export enum CampusType {
 export type CareerServiceEvent = {
   __typename?: 'CareerServiceEvent';
   /** Available slots for the event */
-  availableSlots: Scalars['Int']['output'];
+  availableSlots?: Maybe<Scalars['Int']['output']>;
   /** Date of the event */
   date: Scalars['DateTime']['output'];
   /** Unique identifier of the event */
   id: Scalars['ID']['output'];
   /** Maximum waiting list for the event */
-  maxWaitingList: Scalars['Int']['output'];
+  maxWaitingList?: Maybe<Scalars['Int']['output']>;
   /** Title of the event in German */
   title: Scalars['String']['output'];
   /** Total slots for the event */
-  totalSlots: Scalars['Int']['output'];
+  totalSlots?: Maybe<Scalars['Int']['output']>;
+  /** Unlimited slots for the event */
+  unlimitedSlots: Scalars['Boolean']['output'];
   /** URL for more information about the event */
   url?: Maybe<Scalars['String']['output']>;
   /** Waiting list for the event */
-  waitingList: Scalars['Int']['output'];
+  waitingList?: Maybe<Scalars['Int']['output']>;
 };
 
 /** Campus Life Event data type. Information about a specific event on campus. */
@@ -477,6 +479,8 @@ export type Query = {
   neulandEvents: Array<NeulandEvent>;
   /** Get the room reports. Note: This query is only available for authenticated users. */
   roomReports: Array<RoomReport>;
+  /** Get all events of the student advisory service. */
+  studentAdvisoryEvents: Array<StudentAdvisoryEvent>;
   /** Get the university sports events. This includes all sports events from all campuses. */
   universitySports?: Maybe<Array<UniversitySports>>;
 };
@@ -576,6 +580,29 @@ export enum SportsCategoryType {
   Waterpolo = 'Waterpolo',
   Yoga = 'Yoga'
 }
+
+/** Student advisory Service Event data type. Information about a specific event from the student advisory service. */
+export type StudentAdvisoryEvent = {
+  __typename?: 'StudentAdvisoryEvent';
+  /** Available slots for the event */
+  availableSlots?: Maybe<Scalars['Int']['output']>;
+  /** Date of the event */
+  date: Scalars['DateTime']['output'];
+  /** Unique identifier of the event */
+  id: Scalars['ID']['output'];
+  /** Maximum waiting list for the event */
+  maxWaitingList?: Maybe<Scalars['Int']['output']>;
+  /** Title of the event in German */
+  title: Scalars['String']['output'];
+  /** Total slots for the event */
+  totalSlots?: Maybe<Scalars['Int']['output']>;
+  /** Unlimited slots for the event */
+  unlimitedSlots: Scalars['Boolean']['output'];
+  /** URL for more information about the event */
+  url?: Maybe<Scalars['String']['output']>;
+  /** Waiting list for the event */
+  waitingList?: Maybe<Scalars['Int']['output']>;
+};
 
 /** University sports event. Represents a sports event from the university sports program. */
 export type UniversitySports = {
@@ -740,6 +767,26 @@ export type CreateRoomReportMutationVariables = Exact<{
 
 export type CreateRoomReportMutation = { __typename?: 'Mutation', createRoomReport?: { __typename?: 'UpsertResponse', id?: string | null } | null };
 
+export type CareerServiceEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CareerServiceEventsQuery = { __typename?: 'Query', careerServiceEvents: Array<(
+    { __typename?: 'CareerServiceEvent' }
+    & { ' $fragmentRefs'?: { 'CareerServiceEventFieldsFragment': CareerServiceEventFieldsFragment } }
+  )> };
+
+export type CareerServiceEventFieldsFragment = { __typename?: 'CareerServiceEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'CareerServiceEventFieldsFragment' };
+
+export type StudentAdvisoryEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudentAdvisoryEventsQuery = { __typename?: 'Query', studentAdvisoryEvents: Array<(
+    { __typename?: 'StudentAdvisoryEvent' }
+    & { ' $fragmentRefs'?: { 'StudentAdvisoryEventFieldsFragment': StudentAdvisoryEventFieldsFragment } }
+  )> };
+
+export type StudentAdvisoryEventFieldsFragment = { __typename?: 'StudentAdvisoryEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'StudentAdvisoryEventFieldsFragment' };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -882,6 +929,32 @@ export const UniversitySportsFieldsFragmentDoc = new TypedDocumentString(`
   sportsCategory
 }
     `, {"fragmentName":"UniversitySportsFields"}) as unknown as TypedDocumentString<UniversitySportsFieldsFragment, unknown>;
+export const CareerServiceEventFieldsFragmentDoc = new TypedDocumentString(`
+    fragment CareerServiceEventFields on CareerServiceEvent {
+  id
+  title
+  date
+  unlimitedSlots
+  availableSlots
+  totalSlots
+  waitingList
+  maxWaitingList
+  url
+}
+    `, {"fragmentName":"CareerServiceEventFields"}) as unknown as TypedDocumentString<CareerServiceEventFieldsFragment, unknown>;
+export const StudentAdvisoryEventFieldsFragmentDoc = new TypedDocumentString(`
+    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+  id
+  title
+  date
+  unlimitedSlots
+  availableSlots
+  totalSlots
+  waitingList
+  maxWaitingList
+  url
+}
+    `, {"fragmentName":"StudentAdvisoryEventFields"}) as unknown as TypedDocumentString<StudentAdvisoryEventFieldsFragment, unknown>;
 export const AppAnnouncementsDocument = new TypedDocumentString(`
     query AppAnnouncements {
   appAnnouncements {
@@ -1029,3 +1102,37 @@ export const CreateRoomReportDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CreateRoomReportMutation, CreateRoomReportMutationVariables>;
+export const CareerServiceEventsDocument = new TypedDocumentString(`
+    query CareerServiceEvents {
+  careerServiceEvents {
+    ...CareerServiceEventFields
+  }
+}
+    fragment CareerServiceEventFields on CareerServiceEvent {
+  id
+  title
+  date
+  unlimitedSlots
+  availableSlots
+  totalSlots
+  waitingList
+  maxWaitingList
+  url
+}`) as unknown as TypedDocumentString<CareerServiceEventsQuery, CareerServiceEventsQueryVariables>;
+export const StudentAdvisoryEventsDocument = new TypedDocumentString(`
+    query StudentAdvisoryEvents {
+  studentAdvisoryEvents {
+    ...StudentAdvisoryEventFields
+  }
+}
+    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+  id
+  title
+  date
+  unlimitedSlots
+  availableSlots
+  totalSlots
+  waitingList
+  maxWaitingList
+  url
+}`) as unknown as TypedDocumentString<StudentAdvisoryEventsQuery, StudentAdvisoryEventsQueryVariables>;

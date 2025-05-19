@@ -1,34 +1,39 @@
+import { useQuery } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
+import { useTranslation } from 'react-i18next'
+import { View, Text, Platform, Pressable } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { Linking } from 'react-native'
 import FormList from '@/components/Universal/FormList'
+import type { FormListSections, SectionGroup } from '@/types/components'
 import { linkIcon } from '@/components/Universal/Icon'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import useCLParamsStore from '@/hooks/useCLParamsStore'
-import type { LanguageKey } from '@/localization/i18n'
-import type { FormListSections, SectionGroup } from '@/types/components'
 import {
 	formatFriendlyDateTime,
 	formatFriendlyDateTimeRange
 } from '@/utils/date-utils'
-import { isValidRoom } from '@/utils/timetable-utils'
-import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
-import {
-	Redirect,
-	Stack,
-	router,
-	useFocusEffect,
-	useNavigation
-} from 'expo-router'
+import { Stack, useFocusEffect, useNavigation } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Linking, Platform, Pressable, Share, Text, View } from 'react-native'
+import { Share } from 'react-native'
+import { isValidRoom } from '@/utils/timetable-utils'
+import { router } from 'expo-router'
+import type { LanguageKey } from '@/localization/i18n'
+import neulandAPI from '@/api/neuland-api'
+import ErrorView from '@/components/Error/ErrorView'
+import { QUERY_KEYS } from '@/utils/events-utils'
+import { trackEvent } from '@aptabase/react-native'
 import Animated, {
 	interpolate,
 	useAnimatedRef,
 	useAnimatedStyle,
 	useScrollViewOffset
 } from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
+import { getFragmentData } from '@/__generated__/gql'
+import { CampusLifeEventFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 
 const URL_REGEX = /(https?:\/\/[^\s]+)/g
 
@@ -61,7 +66,25 @@ const LinkText: React.FC<{ text: string; color: string }> = ({
 
 export default function ClEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-	const clEvent = useCLParamsStore((state) => state.selectedClEvent)
+	const { id } = useLocalSearchParams<{ id: string }>()
+	const { t, i18n } = useTranslation('common')
+
+	const {
+		data: queryData,
+		isLoading,
+		error
+	} = useQuery({
+		queryKey: ['campusLifeEventsV2'],
+		queryFn: () => neulandAPI.getCampusLifeEvents()
+	})
+
+	const event = queryData?.clEvents
+		?.map((eventCandidate) =>
+			getFragmentData(CampusLifeEventFieldsFragmentDoc, eventCandidate)
+		)
+		.find((fragment) => (fragment as any).id === id)
+
+	const eventData: CampusLifeEventFieldsFragment | null = event ?? null
 
 	const ref = useAnimatedRef<Animated.ScrollView>()
 	const scroll = useScrollViewOffset(ref)
@@ -79,19 +102,19 @@ export default function ClEventDetail(): React.JSX.Element {
 			]
 		}
 	})
-	const { t, i18n } = useTranslation('common')
-	const isMultiDayEvent =
-		clEvent?.startDateTime != null &&
-		clEvent.endDateTime != null &&
-		new Date(clEvent.startDateTime).toDateString() !==
-			new Date(clEvent.endDateTime).toDateString()
 
-	const isWebsiteAvailable = clEvent?.host.website != null
-	const isInstagramAvailable = clEvent?.host.instagram != null
+	const isMultiDayEvent =
+		eventData?.startDateTime != null &&
+		eventData.endDateTime != null &&
+		new Date(eventData.startDateTime).toDateString() !==
+			new Date(eventData.endDateTime).toDateString()
+
+	const isWebsiteAvailable = eventData?.host.website != null
+	const isInstagramAvailable = eventData?.host.instagram != null
 
 	const dateRange = formatFriendlyDateTimeRange(
-		clEvent?.startDateTime != null ? new Date(clEvent.startDateTime) : null,
-		clEvent?.endDateTime != null ? new Date(clEvent.endDateTime) : null
+		eventData?.startDateTime != null ? new Date(eventData.startDateTime) : null,
+		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
 	)
 	const navigation = useNavigation()
 
@@ -106,8 +129,8 @@ export default function ClEventDetail(): React.JSX.Element {
 							})
 							await Share.share({
 								message: t('pages.event.shareMessage', {
-									title: clEvent?.titles[i18n.language as LanguageKey],
-									organizer: clEvent?.host.name,
+									title: eventData?.titles[i18n.language as LanguageKey],
+									organizer: eventData?.host.name,
 									date: dateRange
 								})
 							})
@@ -115,12 +138,20 @@ export default function ClEventDetail(): React.JSX.Element {
 					/>
 				)
 			})
-		}, [])
+		}, [navigation, t, eventData, id, i18n.language, dateRange])
 	)
+
+	if (isLoading) {
+		return <LoadingIndicator />
+	}
+
+	if (error || !eventData) {
+		return <ErrorView title={t('error.noData') as string} />
+	}
 
 	const sections: FormListSections[] = [
 		{
-			header: 'Details',
+			header: t('pages.event.details'),
 			items: [
 				...(!isMultiDayEvent
 					? [
@@ -130,43 +161,43 @@ export default function ClEventDetail(): React.JSX.Element {
 							}
 						]
 					: [
-							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-							...(clEvent.startDateTime != null
+							...(eventData.startDateTime != null
 								? [
 										{
 											title: t('pages.event.begin'),
 											value:
 												formatFriendlyDateTime(
-													new Date(clEvent.startDateTime)
+													new Date(eventData.startDateTime)
 												) ?? undefined
 										}
 									]
 								: []),
-							...(clEvent.endDateTime != null
+							...(eventData.endDateTime != null
 								? [
 										{
 											title: t('pages.event.end'),
 											value:
-												formatFriendlyDateTime(new Date(clEvent.endDateTime)) ??
-												undefined
+												formatFriendlyDateTime(
+													new Date(eventData.endDateTime)
+												) ?? undefined
 										}
 									]
 								: [])
 						]),
-				...(clEvent?.location != null && clEvent.location !== ''
+				...(eventData?.location != null && eventData.location !== ''
 					? [
 							Object.assign(
 								{
 									title: t('pages.event.location'),
-									value: clEvent?.location
+									value: eventData?.location
 								},
-								isValidRoom(clEvent.location)
+								isValidRoom(eventData.location)
 									? {
 											onPress: () => {
 												router.dismissTo({
 													pathname: '/map',
 													params: {
-														room: clEvent?.location
+														room: eventData?.location
 													}
 												})
 											},
@@ -179,21 +210,23 @@ export default function ClEventDetail(): React.JSX.Element {
 
 				{
 					title: t('pages.event.organizer'),
-					value: clEvent?.host.name
+					value: eventData?.host.name
 				}
 			]
 		},
 		...(isWebsiteAvailable || isInstagramAvailable
 			? [
 					{
-						header: 'Links',
+						header: t('pages.event.links'),
 						items: [
 							isWebsiteAvailable
 								? {
 										title: 'Website',
 										icon: linkIcon,
 										onPress: () => {
-											void Linking.openURL(clEvent.host.website)
+											if (eventData?.host.website) {
+												void Linking.openURL(eventData.host.website)
+											}
 										}
 									}
 								: null,
@@ -207,7 +240,9 @@ export default function ClEventDetail(): React.JSX.Element {
 											iosFallback: true
 										},
 										onPress: () => {
-											void Linking.openURL(clEvent.host.instagram)
+											if (eventData?.host.instagram) {
+												void Linking.openURL(eventData.host.instagram)
+											}
 										}
 									}
 								: null
@@ -215,13 +250,15 @@ export default function ClEventDetail(): React.JSX.Element {
 					}
 				]
 			: []),
-		...(clEvent?.descriptions != null
+		...(eventData?.descriptions != null
 			? [
 					{
 						header: t('pages.event.description'),
 						item: (
 							<LinkText
-								text={clEvent.descriptions[i18n.language as LanguageKey]}
+								text={
+									eventData.descriptions[i18n.language as LanguageKey] ?? ''
+								}
 								color={theme.colors.primary}
 							/>
 						)
@@ -230,9 +267,6 @@ export default function ClEventDetail(): React.JSX.Element {
 			: [])
 	]
 
-	if (clEvent == null) {
-		return <Redirect href={'/cl-events'} />
-	}
 	return (
 		<Animated.ScrollView
 			style={styles.page}
@@ -245,7 +279,7 @@ export default function ClEventDetail(): React.JSX.Element {
 						<View style={styles.headerTitle}>
 							<Animated.View style={headerStyle}>
 								<HeaderTitle {...props} tintColor={theme.colors.text}>
-									{clEvent.titles[i18n.language as LanguageKey]}
+									{eventData.titles[i18n.language as LanguageKey] ?? ''}
 								</HeaderTitle>
 							</Animated.View>
 						</View>
@@ -260,7 +294,7 @@ export default function ClEventDetail(): React.JSX.Element {
 					minimumFontScale={0.8}
 					numberOfLines={3}
 				>
-					{clEvent.titles[i18n.language as LanguageKey]}
+					{eventData.titles[i18n.language as LanguageKey] ?? ''}
 				</Text>
 			</View>
 			<View style={styles.formList}>

@@ -17,6 +17,7 @@ interface CardIcons {
 	news: PlatformIcon
 	login: PlatformIcon
 	links: PlatformIcon
+	career: PlatformIcon
 }
 
 // Define the card icons object with the specified type
@@ -36,6 +37,11 @@ export const cardIcons: CardIcons = {
 		ios: 'figure.2',
 		android: 'celebration',
 		web: 'PartyPopper'
+	},
+	career: {
+		ios: 'briefcase.fill',
+		android: 'work',
+		web: 'Briefcase'
 	},
 	news: {
 		ios: 'newspaper.fill',

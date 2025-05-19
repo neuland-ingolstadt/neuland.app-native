@@ -391,6 +391,64 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
+						name="(screens)/events/student-advisory/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/career-service/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/career-events"
+						options={{
+							title: t('navigation.career')
+						}}
+					/>
+					<Stack.Screen
 						name="(screens)/calendar"
 						options={{
 							title: t('navigation.calendar')
@@ -491,6 +549,58 @@ function RootLayout(): React.JSX.Element {
 									presentation: 'modal'
 								}
 							})
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/cl/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/sports/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
 						}}
 					/>
 				</Stack>

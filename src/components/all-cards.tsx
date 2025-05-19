@@ -3,6 +3,7 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import {
 	CalendarCard,
 	EventsCard,
+	CareerCard,
 	LinkCard,
 	LoginCard,
 	UpNextCard
@@ -23,6 +24,13 @@ export const AllCards: Card[] = [
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <EventsCard />
+	},
+	{
+		key: 'career',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		card: () => <CareerCard />
 	},
 	{
 		key: 'calendar',

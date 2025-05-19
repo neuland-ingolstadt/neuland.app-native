@@ -1,0 +1,34 @@
+{
+	"pages": {
+		"events": {
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Student Advisory"
+			}
+		}
+	},
+	"events": {
+		"registration": "Registration",
+		"unlimitedSlots": "Unlimited slots available",
+		"availableSlots": "{{available}} of {{total}} slots available",
+		"waitingList": "{{current}} of {{max}} on waiting list",
+		"registerNow": "Register now"
+	},
+	"cards": {
+		"career": "Career Events",
+		"events": {
+			"by": "by {{name}}"
+		}
+	},
+	"careerService": {
+		"title": "Career Service"
+	},
+	"studentAdvisory": {
+		"title": "Student Advisory"
+	},
+	"errors": {
+		"eventNotFound": "No events found"
+	}
+}

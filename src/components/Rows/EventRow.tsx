@@ -37,7 +37,8 @@ const CLEventRow = ({
 	const onPressRow = (): void => {
 		setSelectedClEvent(event as CLEvents)
 		router.navigate({
-			pathname: '/cl-event'
+			pathname: '/events/cl/[id]',
+			params: { id: event.id }
 		})
 	}
 	return (

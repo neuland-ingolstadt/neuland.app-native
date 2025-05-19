@@ -5,7 +5,9 @@ import type {
 	FoodPlanQuery,
 	RoomReportInput,
 	TypedDocumentString,
-	UniversitySportsQuery
+	UniversitySportsQuery,
+	CareerServiceEventsQuery,
+	StudentAdvisoryEventsQuery
 } from '@/__generated__/gql/graphql'
 import type { SpoWeights } from '@/types/asset-api'
 import type { FeatureCollection } from 'geojson'
@@ -16,7 +18,9 @@ import {
 	CAMPUS_LIFE_EVENTS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
-	UNIVERSITY_SPORTS_QUERY
+	UNIVERSITY_SPORTS_QUERY,
+	CAREER_SERVICE_EVENTS_QUERY,
+	STUDENT_ADVISORY_EVENTS_QUERY
 } from './gql-documents'
 
 const GRAPHQL_ENDPOINT: string =
@@ -108,6 +112,22 @@ class NeulandAPIClient {
 	 */
 	async getUniversitySports(): Promise<UniversitySportsQuery> {
 		return await this.executeGql(UNIVERSITY_SPORTS_QUERY)
+	}
+
+	/**
+	 * Gets the career service events
+	 * @returns {Promise<CareerServiceEventsQuery>} A promise that resolves with the career service events data
+	 */
+	async getCareerServiceEvents(): Promise<CareerServiceEventsQuery> {
+		return await this.executeGql(CAREER_SERVICE_EVENTS_QUERY)
+	}
+
+	/**
+	 * Gets the student advisory events
+	 * @returns {Promise<StudentAdvisoryEventsQuery>} A promise that resolves with the student advisory events data
+	 */
+	async getStudentAdvisoryEvents(): Promise<StudentAdvisoryEventsQuery> {
+		return await this.executeGql(STUDENT_ADVISORY_EVENTS_QUERY)
 	}
 
 	/**

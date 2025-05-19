@@ -1,0 +1,34 @@
+{
+	"pages": {
+		"events": {
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Studienberatung"
+			}
+		}
+	},
+	"events": {
+		"registration": "Anmeldung",
+		"unlimitedSlots": "Unbegrenzte Plätze verfügbar",
+		"availableSlots": "{{available}} von {{total}} Plätzen verfügbar",
+		"waitingList": "{{current}} von {{max}} auf der Warteliste",
+		"registerNow": "Jetzt anmelden"
+	},
+	"cards": {
+		"career": "Karriere-Events",
+		"events": {
+			"by": "von {{name}}"
+		}
+	},
+	"careerService": {
+		"title": "Career Service"
+	},
+	"studentAdvisory": {
+		"title": "Studienberatung"
+	},
+	"errors": {
+		"eventNotFound": "Keine Events gefunden"
+	}
+}

@@ -41,7 +41,8 @@
 		"login": "Anmelden",
 		"legal": "Rechtliches",
 		"sports": "Hochschulsport",
-		"roomReport": "Problem mit einem Raum melden"
+		"roomReport": "Problem mit einem Raum melden",
+		"career": "Berufsservice & Studentenberatung"
 	},
 	"cards": {
 		"titles": {
@@ -59,7 +60,8 @@
 			"food": "Essen",
 			"login": "Anmelden",
 			"links": "Quick Links",
-			"sports": "Hochschulsport"
+			"sports": "Hochschulsport",
+			"career": "Berufsservice & Studentenberatung"
 		},
 		"announcements": {
 			"readMore": "Tippe, um mehr zu erfahren."

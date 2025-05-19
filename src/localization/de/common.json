@@ -17,6 +17,7 @@
 		"button": "Erneut versuchen",
 		"noSession": "Nicht angemeldet.",
 		"pull": "Ziehe zum Aktualisieren nach unten",
+		"noData": "Keine Daten verfügbar.",
 		"network": {
 			"title": "Keine Internetverbindung",
 			"description": "Bitte überprüfe deine Internetverbindung."
@@ -312,6 +313,37 @@
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."
 				}
+			}
+		},
+		"careerService": {
+			"title": "Berufsservice",
+			"noEvents": {
+				"title": "Keine Berufsserviceveranstaltungen",
+				"subtitle": "Bitte versuche es später erneut."
+			}
+		},
+		"studentAdvisory": {
+			"title": "Studentenberatung",
+			"noEvents": {
+				"title": "Keine Studentenberatungveranstaltungen",
+				"subtitle": "Bitte versuche es später erneut."
+			}
+		},
+		"events": {
+			"title": "Events",
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Studienberatung"
+			},
+			"registration": {
+				"unlimitedSlots": "Unbegrenzte Plätze verfügbar",
+				"availableSlots": "{{available}} von {{total}} Plätzen verfügbar",
+				"waitingList": "{{current}} von {{max}} auf der Warteliste",
+				"waitingList.title": "Warteliste",
+				"waitingList.value": "{{current}} / {{max}}",
+				"unlimitedShort": "Unbegrenzt"
 			}
 		}
 	},

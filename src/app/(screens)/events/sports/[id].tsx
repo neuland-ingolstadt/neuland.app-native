@@ -9,7 +9,12 @@ import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
-import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import {
+	Stack,
+	useFocusEffect,
+	useNavigation,
+	useLocalSearchParams
+} from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +29,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-
+	const { id } = useLocalSearchParams<{ id: string }>()
 	const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
 	const { t, i18n } = useTranslation('common')
 

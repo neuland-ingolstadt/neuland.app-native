@@ -41,7 +41,8 @@
 		"login": "Sign in",
 		"dashboard": "Neuland Next",
 		"sports": "University Sports",
-		"roomReport": "Report Room Issue"
+		"roomReport": "Report Room Issue",
+		"career": "Career Service & Student Advisory"
 	},
 	"cards": {
 		"titles": {
@@ -59,7 +60,8 @@
 			"food": "Food",
 			"login": "Sign in",
 			"links": "Quick Links",
-			"sports": "University Sports"
+			"sports": "University Sports",
+			"career": "Career Service & Student Advisory"
 		},
 		"announcements": {
 			"readMore": "Tap to learn more."

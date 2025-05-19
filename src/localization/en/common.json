@@ -17,6 +17,7 @@
 		"button": "Retry",
 		"noSession": "Not signed in.",
 		"pull": "Pull down to refresh",
+		"noData": "No data available.",
 		"network": {
 			"title": "No internet connection",
 			"description": "Please check your internet connection."
@@ -186,7 +187,10 @@
 			"invitationLink": "Invitation link",
 			"eMail": "E-Mail",
 			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
-			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en"
+			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en",
+			"details": "Details",
+			"links": "Links",
+			"registerNow": "Register now"
 		},
 		"map": {
 			"search": {
@@ -312,6 +316,37 @@
 					"title": "No events found",
 					"subtitle": "Check back later."
 				}
+			}
+		},
+		"careerService": {
+			"title": "Career Service",
+			"noEvents": {
+				"title": "No career service events found",
+				"subtitle": "Check back later."
+			}
+		},
+		"studentAdvisory": {
+			"title": "Student Advisory",
+			"noEvents": {
+				"title": "No student advisory events found",
+				"subtitle": "Check back later."
+			}
+		},
+		"events": {
+			"title": "Events",
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Student Advisory"
+			},
+			"registration": {
+				"unlimitedSlots": "Unlimited slots",
+				"availableSlots": "{{available}} / {{total}} available",
+				"waitingList": "Waiting List: {{current}} / {{max}}",
+				"waitingList.title": "Waiting List",
+				"waitingList.value": "{{current}} / {{max}}",
+				"unlimitedShort": "Unlimited"
 			}
 		}
 	},
