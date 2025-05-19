@@ -58,7 +58,7 @@ export function Splash({ isReady, children }: React.PropsWithChildren<Props>) {
 		setLoaded(true)
 	}, [])
 
-	const logoSize = Platform.OS === 'android' ? 190 : 190
+	const logoSize = 190
 	const logoWidth = logoSize
 	const logoHeight = logoSize
 	const iosXShift = 20
