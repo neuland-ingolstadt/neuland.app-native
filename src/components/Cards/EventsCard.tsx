@@ -14,8 +14,8 @@ const EventsCard = (): React.JSX.Element => {
 	const { data, isSuccess } = useQuery({
 		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
 		queryFn: loadCampusLifeEvents,
-		staleTime: 1000 * 60 * 5, // 5 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	return (
