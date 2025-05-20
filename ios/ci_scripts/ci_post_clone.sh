@@ -2,11 +2,6 @@
 set -e 
 set -x
 
-echo "===== Installing Git LFS ====="
-brew install git-lfs
-git lfs install
-git lfs pull
-
 echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
 brew install cocoapods
