@@ -6,57 +6,39 @@ import PlatformIcon from '../Universal/Icon'
 
 interface HeaderRightProps {
 	setToday: () => void
-}
-
-export function HeaderRight({ setToday }: HeaderRightProps): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation(['accessibility'])
-	return (
-		<Pressable
-			onPress={setToday}
-			style={styles.container}
-			hitSlop={10}
-			accessibilityLabel={t('button.timetableBack')}
-		>
-			<PlatformIcon
-				ios={{
-					name: 'arrow.uturn.left',
-					size: 22
-				}}
-				android={{
-					name: 'keyboard_return',
-					size: 24
-				}}
-				web={{
-					name: 'Undo2',
-					size: 24
-				}}
-				style={styles.icon}
-			/>
-		</Pressable>
-	)
-}
-
-interface HeaderLeftProps {
 	onPressPreferences: () => void
 	onPressPrevious?: () => void
 	onPressNext?: () => void
 }
 
-export function HeaderLeft({
+export function HeaderRight({
+	setToday,
 	onPressPreferences,
 	onPressPrevious,
 	onPressNext
-}: HeaderLeftProps): React.JSX.Element {
+}: HeaderRightProps): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { t } = useTranslation('accessibility')
+	const { t } = useTranslation(['accessibility'])
 	return (
 		<View style={styles.container}>
-			<Pressable onPress={onPressPreferences} hitSlop={10}>
+			<Pressable
+				onPress={setToday}
+				hitSlop={10}
+				accessibilityLabel={t('button.timetableBack')}
+			>
 				<PlatformIcon
-					ios={{ name: 'gear', size: 22 }}
-					android={{ name: 'settings', size: 24, variant: 'outlined' }}
-					web={{ name: 'Settings', size: 24 }}
+					ios={{
+						name: 'arrow.uturn.left',
+						size: 22
+					}}
+					android={{
+						name: 'calendar_today',
+						size: 24
+					}}
+					web={{
+						name: 'Undo2',
+						size: 24
+					}}
 					style={styles.icon}
 				/>
 			</Pressable>
@@ -88,6 +70,18 @@ export function HeaderLeft({
 					</Pressable>
 				</View>
 			)}
+			<Pressable
+				onPress={onPressPreferences}
+				style={styles.container}
+				hitSlop={10}
+			>
+				<PlatformIcon
+					ios={{ name: 'gear', size: 22 }}
+					android={{ name: 'settings', size: 24, variant: 'filled' }}
+					web={{ name: 'Settings', size: 24 }}
+					style={styles.icon}
+				/>
+			</Pressable>
 		</View>
 	)
 }
@@ -98,8 +92,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	container: {
 		flexDirection: 'row',
-		gap: 8,
-		marginHorizontal: Platform.OS !== 'ios' ? 14 : 0
+		gap: Platform.OS !== 'ios' ? 10 : 20,
+		marginHorizontal: Platform.OS !== 'ios' ? 6 : 0
 	},
 	subButtons: {
 		marginLeft: 8,
