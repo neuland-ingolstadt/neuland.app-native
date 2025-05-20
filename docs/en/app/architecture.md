@@ -1,9 +1,10 @@
 # Architecture
+
 The Neuland Next ecosystem consists of several components that work together to provide a seamless experience for users. The architecture is designed to be modular and scalable, allowing for easy integration of new features and improvements over time.
 
 ## Architecture Scheme
-![Neuland Next Architecture](/assets/architecture.png)
 
+![Neuland Next Architecture](/assets/architecture.png)
 
 ## Components
 
