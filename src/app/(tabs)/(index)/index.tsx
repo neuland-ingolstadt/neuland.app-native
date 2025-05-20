@@ -3,6 +3,7 @@ import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import AnnouncementCard from '@/components/Cards/AnnouncementCard'
 import ErrorView from '@/components/Error/ErrorView'
+import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
 import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { DashboardContext } from '@/components/contexts'
 import { FlashList, MasonryFlashList } from '@shopify/flash-list'
@@ -36,6 +37,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 				largeTitle={true}
 				transparent={true}
 				androidFallback
+				headerRightElement={HomeHeaderRight}
 			/>
 		</>
 	)

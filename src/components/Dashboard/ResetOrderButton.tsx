@@ -21,10 +21,8 @@ export default function ResetOrderButton({
 
 	return (
 		<View style={[styles.card, styles.blockContainer]}>
-			<Pressable onPress={onPress} disabled={hasUserDefaultOrder}>
-				<Text style={styles.reset(hasUserDefaultOrder)}>
-					{t('dashboard.reset')}
-				</Text>
+			<Pressable onPress={onPress}>
+				<Text style={styles.reset}>{t('dashboard.reset')}</Text>
 			</Pressable>
 		</View>
 	)
@@ -40,10 +38,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		backgroundColor: theme.colors.card,
 		marginTop: 6
 	},
-	reset: (hasUserDefaultOrder: boolean) => ({
+	reset: {
 		fontSize: 16,
 		marginVertical: 13,
 		alignSelf: 'center',
-		color: hasUserDefaultOrder ? theme.colors.labelColor : theme.colors.text
-	})
+		color: theme.colors.notification
+	}
 }))
