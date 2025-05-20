@@ -25,6 +25,10 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 - **Quick Links**: Access key university platforms such as moodle, PRIMUSS or your webmail with a single tap
 - **THI News**: Stay up to date with the latest news from THI
 
+<img src="assets/github/1.jpg" alt="Screenshot 1" width="250"/>
+<img src="assets/github/2.jpg" alt="Screenshot 2" width="250"/>
+<img src="assets/github/3.jpg" alt="Screenshot 3" width="250"/>
+
 ## About
 
 ### App
