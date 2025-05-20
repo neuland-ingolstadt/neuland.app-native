@@ -19,6 +19,7 @@ Zum Testen oder zum Beheben von Fehlern in der Web-App empfehlen wir die Verwend
 3. Installiere die benötigten Abhängigkeiten:
 
    - [Node.js](https://nodejs.org/en/) 22 LTS oder höher
+   - [Git LFS](https://git-lfs.github.com/)
    - [Bun](https://bun.sh) oder nutze npm, wenn du die Abhängigkeiten nicht änderst
    - [Watchman](https://facebook.github.io/watchman/docs/install) (für Linux- oder macOS-Nutzer)
 

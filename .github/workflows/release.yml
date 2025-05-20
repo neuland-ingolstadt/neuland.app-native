@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          lfs: true
 
       - name: Determine if prerelease
         id: prerelease_check
@@ -61,6 +62,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          lfs: true
+
       - name: Discord Hook Action
         uses: Poss111/discord-hook-action@v1.6.13
         with:
@@ -95,6 +99,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Determine if prerelease
         run: |
@@ -150,6 +156,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Setup Node JS environment
         uses: actions/setup-node@v4
@@ -202,6 +210,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
+        with:
+          lfs: true
 
       - name: Setup Node JS environment
         uses: actions/setup-node@v4
