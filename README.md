@@ -1,7 +1,7 @@
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml)
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
 
-# Neuland Next - native version of neuland.app
+# Neuland Next - Your unofficial app for THI
 
 <div style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
@@ -15,6 +15,12 @@
 Neuland Next is an unofficial app for students of the Technische Hochschule Ingolstadt (THI). It's an open source, mobile app developed using React Native, designed to provide a modern alternative to the official THI app with a better user experience and more features.
 
 ## Features
+
+<p align="center">
+  <img src="assets/github/1.jpg" alt="Neuland Next Dashbaord" width="200"/>
+  <img src="assets/github/2.jpg" alt="Neuland Next Timetable" width="200"/>
+  <img src="assets/github/3.jpg" alt="Neuland Next Map" width="200"/>
+</p>
 
 - **Timetable & Exams**: View your personal timetable from PRIMUSS and your exams at a glance
 - **Calendar & Events**: Access all important semester dates, campus events and university sports in one place
@@ -45,6 +51,17 @@ Learn more about the app on the [Neuland Next website](https://next.neuland.app)
 ### Architecture
 
 <img src="assets/github/architecture.svg" alt="Architecture" width="800px" />
+
+## System Status
+
+The real-time system status is available at [status.neuland.app](https://status.neuland.app). Here you find information about the current status of the different services and APIs that Neuland Next depends on.
+
+| Service | Status |  Uptime (24h)
+|---------|--------|--------|
+| THI API | ![THI API Status](https://status.neuland.app/api/badge/9/status?upColor=%2331c753) | ![THI API Status](https://status.neuland.app/api/badge/9/uptime?upColor=%2331c753) |
+| Neuland API | ![Neuland API Status](https://status.neuland.app/api/badge/6/status?upColor=%2331c753) | ![Neuland API Status](https://status.neuland.app/api/badge/6/uptime?upColor=%2331c753) |
+| Neuland Next Web | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/1/uptime?upColor=%2331c753) |
+| Neuland Next Web (dev) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/8/status?upColor=%2331c753) | ![Neuland Next Web Status](https://status.neuland.app/api/badge/8/uptime?upColor=%2331c753) |
 
 ## Contributing
 
