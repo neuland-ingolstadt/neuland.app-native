@@ -19,6 +19,7 @@ For testing purposes or web-only bug fixing, we recommend using the more lightwe
 3.  Install the required dependencies:
 
     - [Node.js](https://nodejs.org/en/) 22 LTS or higher
+    - [Git LFS](https://git-lfs.github.com/)
     - [Bun](https://bun.sh) or use npm if you dont't change dependencies
     - [Watchman](https://facebook.github.io/watchman/docs/install) (for Linux or macOS users)
 
