@@ -116,31 +116,45 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		</View>
 	)
 
-	if (Platform.OS !== 'ios') {
-		return cardContent
+	if (Platform.OS === 'ios') {
+		return (
+			<CardContextMenu
+				card={
+					<Pressable
+						disabled={onPressRoute == null}
+						onPress={() => {
+							if (onPressRoute != null) {
+								router.navigate(onPressRoute as RelativePathString)
+							}
+						}}
+						delayLongPress={300}
+						onPressIn={handlePressIn}
+						onPressOut={handlePressOut}
+						onLongPress={() => {}}
+						style={styles.pressable}
+					>
+						{cardContent}
+					</Pressable>
+				}
+				resetOrder={resetOrder}
+				userKind={userKind}
+			/>
+		)
 	}
 	return (
-		<CardContextMenu
-			card={
-				<Pressable
-					disabled={onPressRoute == null}
-					onPress={() => {
-						if (onPressRoute != null) {
-							router.navigate(onPressRoute as RelativePathString)
-						}
-					}}
-					delayLongPress={300}
-					onPressIn={handlePressIn}
-					onPressOut={handlePressOut}
-					onLongPress={() => {}}
-					style={styles.pressable}
-				>
-					{cardContent}
-				</Pressable>
-			}
-			resetOrder={resetOrder}
-			userKind={userKind}
-		/>
+		<Pressable
+			disabled={onPressRoute == null}
+			onPress={() => {
+				if (onPressRoute != null) {
+					router.navigate(onPressRoute as RelativePathString)
+				}
+			}}
+			onPressIn={handlePressIn}
+			onPressOut={handlePressOut}
+			style={styles.pressable}
+		>
+			{cardContent}
+		</Pressable>
 	)
 }
 
