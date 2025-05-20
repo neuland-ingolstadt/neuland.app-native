@@ -129,7 +129,7 @@ export const SettingsTabButton = ({
 					{getInitials((username as string) ?? '')}
 				</Text>
 			</Avatar>
-		) : userKind === USER_GUEST || isError ? (
+		) : userKind === USER_GUEST || isError || showLoadingIndicator ? (
 			defaultUserIcon
 		) : userKind === USER_STUDENT &&
 			isSuccess &&
@@ -151,7 +151,7 @@ export const SettingsTabButton = ({
 				}}
 				style={{ ...styles.icon, color: iconColor }}
 			/>
-		) : initials !== '' || !showLoadingIndicator ? (
+		) : initials !== '' ? (
 			<Avatar size={size} style={avatarStyle}>
 				<Text
 					style={styles.iconText(focused)}
