@@ -1,7 +1,7 @@
 [![CodeQL](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/codeql.yml)
 [![CI - Biome & Tests](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml/badge.svg)](https://github.com/neuland-ingolstadt/neuland.app-native/actions/workflows/ci.yml)
 
-# Neuland Next - native version of neuland.app
+# Neuland Next - Your unofficial app for THI
 
 <div style="display: flex; align-items: center; gap: 15px;">
   <a href="https://apps.apple.com/app/neuland-next/id1617096811">
@@ -16,6 +16,12 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 
 ## Features
 
+<div style="display: flex; gap: 15px; margin-bottom: 20px;">
+  <img src="assets/github/1.jpg" alt="Screenshot 1" width="250"/>
+  <img src="assets/github/2.jpg" alt="Screenshot 2" width="250"/>
+  <img src="assets/github/3.jpg" alt="Screenshot 3" width="250"/>
+</div>
+
 - **Timetable & Exams**: View your personal timetable from PRIMUSS and your exams at a glance
 - **Calendar & Events**: Access all important semester dates, campus events and university sports in one place
 - **Profile**: View your grades, printer credits and much more information about your studies
@@ -24,10 +30,6 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 - **Library**: Use your virtual library ID to check out at terminals to borrow and return books
 - **Quick Links**: Access key university platforms such as moodle, PRIMUSS or your webmail with a single tap
 - **THI News**: Stay up to date with the latest news from THI
-
-<img src="assets/github/1.jpg" alt="Screenshot 1" width="250"/>
-<img src="assets/github/2.jpg" alt="Screenshot 2" width="250"/>
-<img src="assets/github/3.jpg" alt="Screenshot 3" width="250"/>
 
 ## About
 
