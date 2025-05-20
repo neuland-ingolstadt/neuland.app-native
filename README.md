@@ -16,11 +16,11 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 
 ## Features
 
-<div style="display: flex; gap: 15px; margin-bottom: 30px;  border-radius: 12px; overflow: hidden;">
+<p align="center">
   <img src="assets/github/1.jpg" alt="Screenshot 1" width="200"/>
   <img src="assets/github/2.jpg" alt="Screenshot 2" width="200"/>
   <img src="assets/github/3.jpg" alt="Screenshot 3" width="200"/>
-</div>
+</p>
 
 - **Timetable & Exams**: View your personal timetable from PRIMUSS and your exams at a glance
 - **Calendar & Events**: Access all important semester dates, campus events and university sports in one place
