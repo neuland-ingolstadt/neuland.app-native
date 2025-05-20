@@ -31,7 +31,7 @@ import {
 
 import { useTranslation } from 'react-i18next'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { HeaderLeft, HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './HeaderButtons'
 import EventComponent from './WeekEventComponent'
 import WeekHeaderEvent from './WeekHeaderEvent'
 
@@ -254,10 +254,6 @@ export default function TimetableWeek({
 							calendarRef.current?.goToDate({ date: targetDate })
 						}
 					}}
-				/>
-			),
-			headerLeft: () => (
-				<HeaderLeft
 					onPressPreferences={() => router.navigate('/timetable-preferences')}
 					onPressPrevious={onPressPrevious}
 					onPressNext={onPressNext}

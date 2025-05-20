@@ -2,7 +2,7 @@ import { USER_GUEST } from '@/data/constants'
 import type React from 'react'
 import { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -116,6 +116,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		</View>
 	)
 
+	if (Platform.OS !== 'ios') {
+		return cardContent
+	}
 	return (
 		<CardContextMenu
 			card={

@@ -42,7 +42,7 @@ import {
 import i18n from '@/localization/i18n'
 import { calendar } from '@/utils/calendar-utils'
 import { useTranslation } from 'react-i18next'
-import { HeaderLeft, HeaderRight } from './HeaderButtons'
+import { HeaderRight } from './HeaderButtons'
 
 type TimetableSection = {
 	title: Date
@@ -211,10 +211,6 @@ export default function TimetableList({
 							listRef.current.scrollToOffset({ offset: 0, animated: true })
 						}
 					}}
-				/>
-			),
-			headerLeft: () => (
-				<HeaderLeft
 					onPressPreferences={() => router.navigate('/timetable-preferences')}
 				/>
 			)

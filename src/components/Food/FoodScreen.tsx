@@ -65,7 +65,7 @@ function FoodScreen(): React.JSX.Element {
 		queryKey: ['meals', deferredSelectedRestaurants, deferredShowStatic],
 		queryFn: async () =>
 			await loadFoodEntries(deferredSelectedRestaurants, deferredShowStatic),
-		staleTime: 1000 * 60 * 0, // 10 minutes
+		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
