@@ -42,7 +42,9 @@
 		"dashboard": "Neuland Next",
 		"sports": "University Sports",
 		"roomReport": "Report Room Issue",
-		"career": "Career Service & Student Advisory"
+		"thiServices": "THI Services",
+		"clEvents": "Campus Life Events",
+		"advisory": "Student Advisory"
 	},
 	"cards": {
 		"titles": {
@@ -61,7 +63,7 @@
 			"login": "Sign in",
 			"links": "Quick Links",
 			"sports": "University Sports",
-			"career": "Career Service & Student Advisory"
+			"thiServices": "THI Services"
 		},
 		"announcements": {
 			"readMore": "Tap to learn more."

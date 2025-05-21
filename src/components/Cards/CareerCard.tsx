@@ -54,7 +54,7 @@ const CareerCard = (): React.JSX.Element => {
 			: []
 
 	return (
-		<BaseCard title="career" onPressRoute="/career-events">
+		<BaseCard title="thiServices" onPressRoute="/thi-services">
 			<View style={styles.eventsContainer}>
 				{careerServiceEvents[0] && (
 					<EventItem

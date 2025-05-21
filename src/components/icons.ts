@@ -1,6 +1,6 @@
 import type { MaterialIcon } from '@/types/material-icons'
-
 import type { LucideIcon } from './Universal/Icon'
+import type { AllCards } from './all-cards'
 
 // Define the type for individual platform icons
 interface PlatformIcon {
@@ -10,17 +10,10 @@ interface PlatformIcon {
 	web: LucideIcon
 }
 
-interface CardIcons {
-	timetable: PlatformIcon
-	calendar: PlatformIcon
-	events: PlatformIcon
-	news: PlatformIcon
-	login: PlatformIcon
-	links: PlatformIcon
-	career: PlatformIcon
-}
+type CardKey = (typeof AllCards)[number]['key']
 
-// Define the card icons object with the specified type
+type CardIcons = Record<CardKey, PlatformIcon>
+
 export const cardIcons: CardIcons = {
 	timetable: {
 		ios: 'clock.fill',
@@ -38,7 +31,7 @@ export const cardIcons: CardIcons = {
 		android: 'celebration',
 		web: 'PartyPopper'
 	},
-	career: {
+	thiServices: {
 		ios: 'briefcase.fill',
 		android: 'work',
 		web: 'Briefcase'

@@ -13,11 +13,14 @@
 	"error": {
 		"title": "Ein Fehler ist aufgetreten",
 		"description": "Beim Laden der Daten ist ein Fehler aufgetreten.",
-		"refreshPull": "Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.",
-		"button": "Erneut versuchen",
+		"refreshPull": "Beim Laden der Daten ist ein Fehler aufgetreten.\nZum Aktualisieren nach unten ziehen.",
+		"button": "Wiederholen",
 		"noSession": "Nicht angemeldet.",
-		"pull": "Ziehe zum Aktualisieren nach unten",
+		"pull": "Zum Aktualisieren nach unten ziehen",
 		"noData": "Keine Daten verfügbar.",
+		"eventNotFound": "Veranstaltung nicht gefunden",
+		"eventNotFoundDescription": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
+		"backToEventList": "Zurück zu {{type}}",
 		"network": {
 			"title": "Keine Internetverbindung",
 			"description": "Bitte überprüfe deine Internetverbindung."

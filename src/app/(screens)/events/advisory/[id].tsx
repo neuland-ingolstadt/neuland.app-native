@@ -5,7 +5,7 @@ import {
 	type StudentAdvisoryEventsQuery
 } from '@/__generated__/gql/graphql'
 import neulandAPI from '@/api/neuland-api'
-import ErrorView from '@/components/Error/ErrorView'
+import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -106,12 +106,16 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 		}, [navigation, t, eventData, id])
 	)
 
-	if (isLoading) {
-		return <LoadingIndicator />
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
 	}
 
 	if (error || !eventData) {
-		return <ErrorView title={t('error.noData') as string} />
+		return <EventErrorView eventType="advisory" />
 	}
 
 	const sections: FormListSections[] = [
@@ -238,5 +242,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '600',
 		paddingTop: 16,
 		textAlign: 'left'
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 }))

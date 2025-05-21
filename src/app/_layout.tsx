@@ -392,9 +392,9 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/career-events"
+						name="(screens)/thi-services"
 						options={{
-							title: t('navigation.career')
+							title: t('navigation.thiServices')
 						}}
 					/>
 					<Stack.Screen

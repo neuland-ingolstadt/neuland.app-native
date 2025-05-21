@@ -40,7 +40,7 @@ export const AllCards: Card[] = [
 		card: () => <LinkCard />
 	},
 	{
-		key: 'career',
+		key: 'thiServices',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],

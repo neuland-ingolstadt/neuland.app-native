@@ -2,7 +2,7 @@ import type {
 	UniversitySportsFieldsFragment,
 	WeekdayType
 } from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
+import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import type { LucideIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -103,12 +103,16 @@ export default function SportsEventDetail(): React.JSX.Element {
 		}, [navigation, sportsEvent, t, i18n.language])
 	)
 
-	if (isLoading) {
-		return <LoadingIndicator />
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
 	}
 
 	if (error || sportsEvent == null) {
-		return <ErrorView title={t('error.noData') as string} />
+		return <EventErrorView eventType="sports" />
 	}
 
 	const isDescriptionAvailable =
@@ -288,5 +292,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	warning: (active: boolean) => ({
 		color: active ? theme.colors.warning : theme.colors.success
-	})
+	}),
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
 }))

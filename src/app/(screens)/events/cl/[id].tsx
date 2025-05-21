@@ -1,5 +1,5 @@
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
+import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import { linkIcon } from '@/components/Universal/Icon'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
@@ -78,8 +78,19 @@ export default function ClEventDetail(): React.JSX.Element {
 	})
 
 	const event = queryData?.find((event) => event.id === id)
-
 	const eventData: CampusLifeEventFieldsFragment | null = event ?? null
+
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (error || !eventData) {
+		return <EventErrorView eventType="clEvents" />
+	}
 
 	const ref = useAnimatedRef<Animated.ScrollView>()
 	const scroll = useScrollViewOffset(ref)
@@ -136,14 +147,6 @@ export default function ClEventDetail(): React.JSX.Element {
 			})
 		}, [navigation, t, eventData, id, i18n.language, dateRange])
 	)
-
-	if (isLoading) {
-		return <LoadingIndicator />
-	}
-
-	if (error || !eventData) {
-		return <ErrorView title={t('error.noData') as string} />
-	}
 
 	const sections: FormListSections[] = [
 		{
@@ -336,5 +339,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16,
 		paddingTop: 2,
 		textAlign: 'left'
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 }))

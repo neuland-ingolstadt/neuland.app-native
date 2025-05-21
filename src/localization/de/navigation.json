@@ -42,7 +42,9 @@
 		"legal": "Rechtliches",
 		"sports": "Hochschulsport",
 		"roomReport": "Problem mit einem Raum melden",
-		"career": "Berufsservice & Studentenberatung"
+		"thiServices": "THI Services",
+		"clEvents": "Campus Life Veranstaltungen",
+		"advisory": "Studienberatung"
 	},
 	"cards": {
 		"titles": {
@@ -61,7 +63,7 @@
 			"login": "Anmelden",
 			"links": "Quick Links",
 			"sports": "Hochschulsport",
-			"career": "Berufsservice & Studentenberatung"
+			"thiServices": "THI Services"
 		},
 		"announcements": {
 			"readMore": "Tippe, um mehr zu erfahren."

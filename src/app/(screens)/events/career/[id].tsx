@@ -23,7 +23,7 @@ import {
 	type CareerServiceEventsQuery
 } from '@/__generated__/gql/graphql'
 import neulandAPI from '@/api/neuland-api'
-import ErrorView from '@/components/Error/ErrorView'
+import { EventErrorView } from '@/components/Error/EventErrorView'
 import { QUERY_KEYS } from '@/utils/events-utils'
 import { trackEvent } from '@aptabase/react-native'
 import Animated, {
@@ -60,6 +60,18 @@ export default function CareerServiceEvent(): React.JSX.Element {
 	const eventData: CareerServiceEventFieldsFragment | null = rawEvent
 		? getFragmentData(CareerServiceEventFieldsFragmentDoc, rawEvent)
 		: null
+
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (error || !eventData) {
+		return <EventErrorView eventType="career" />
+	}
 
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
@@ -103,14 +115,6 @@ export default function CareerServiceEvent(): React.JSX.Element {
 			})
 		}, [navigation, t, eventData, id])
 	)
-
-	if (isLoading) {
-		return <LoadingIndicator />
-	}
-
-	if (error || !eventData) {
-		return <ErrorView title={t('error.noData') as string} />
-	}
 
 	const sections: FormListSections[] = [
 		{
@@ -236,5 +240,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 24,
 		fontWeight: '600',
 		paddingTop: 16
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 }))
