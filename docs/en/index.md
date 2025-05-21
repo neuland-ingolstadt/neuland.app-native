@@ -31,7 +31,7 @@ features:
   - title: University Sports
     icon: 🏃
     details: Stay active with the current university sports program and activities.
-    link: /en/app/features#calendar-events
+    link: /en/app/features#university-sports
   - title: Profile
     icon: 👤
     details: View your grades, printer credits and much more information about your studies.
