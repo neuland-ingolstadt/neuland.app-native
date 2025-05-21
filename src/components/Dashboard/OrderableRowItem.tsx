@@ -62,7 +62,7 @@ export default function OrderableRowItem({
 
 				<Text style={styles.text}>{item.text}</Text>
 
-				{isWeb && (
+				{isWeb ? (
 					<View style={styles.actionButtons}>
 						{/* Move Up Button */}
 						<Pressable
@@ -122,6 +122,24 @@ export default function OrderableRowItem({
 							/>
 						</Pressable>
 					</View>
+				) : (
+					<View style={styles.gripContainer}>
+						<PlatformIcon
+							ios={{
+								name: 'line.3.horizontal',
+								size: 18
+							}}
+							android={{
+								name: 'drag_handle',
+								size: 22
+							}}
+							web={{
+								name: 'GripVertical',
+								size: 18
+							}}
+							style={styles.gripIcon}
+						/>
+					</View>
 				)}
 			</View>
 		</View>
@@ -170,5 +188,11 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	icon: {
 		color: theme.colors.text
+	},
+	gripContainer: {
+		marginLeft: 4
+	},
+	gripIcon: {
+		color: theme.colors.labelSecondaryColor
 	}
 }))
