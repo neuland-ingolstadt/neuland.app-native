@@ -36,22 +36,22 @@ function StudentAdvisoryEventRow({
 						<Text style={styles.slotsText}>
 							{t('pages.events.registration.unlimitedSlots')}
 						</Text>
-					) : (
+					) : typeof event.availableSlots === 'number' &&
+						event.availableSlots > 0 ? (
 						<Text style={styles.slotsText}>
 							{t('pages.events.registration.availableSlots', {
 								available: event.availableSlots,
 								total: event.totalSlots
 							})}
 						</Text>
-					)}
-					{event.waitingList && event.waitingList > 0 && (
+					) : event.waitingList && event.waitingList > 0 ? (
 						<Text style={styles.waitingListText}>
 							{t('pages.events.registration.waitingList', {
 								current: event.waitingList,
 								max: event.maxWaitingList
 							})}
 						</Text>
-					)}
+					) : null}
 				</View>
 			</View>
 		</Pressable>

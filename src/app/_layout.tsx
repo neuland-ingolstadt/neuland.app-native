@@ -340,31 +340,6 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/sports-event"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
 						name="(screens)/events/advisory/[id]"
 						options={{
 							title: 'Event Details',
