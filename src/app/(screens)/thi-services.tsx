@@ -102,7 +102,6 @@ export default function Events(): React.JSX.Element {
 						getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
 					)
 				: []
-			console.log('career-events.tsx careerServiceEvents:', events) // For debugging
 			return <CareerServiceEventsPage events={events} />
 		}
 
@@ -113,7 +112,6 @@ export default function Events(): React.JSX.Element {
 					getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
 				)
 			: []
-		console.log('career-events.tsx studentAdvisoryEvents:', events) // For debugging
 		return <StudentAdvisoryEventsPage events={events} />
 	}
 
