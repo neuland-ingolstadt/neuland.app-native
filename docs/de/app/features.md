@@ -36,7 +36,12 @@ Greife mit einem Tap auf wichtige Uni-Plattformen wie Moodle, PRIMUSS oder dein 
 ### THI News
 
 Bleib up-to-date mit den neuesten News von der THI.
-\
+
+### Berufsservice & Studentenberatung
+
+Bleibe über alle Berufsservice- und Studentenberatungsereignisse informiert.
+Zugang zu Workshops, Beratungssitzungen und anderen professionellen Entwicklungsmöglichkeiten, um deine akademische und berufliche Reise zu unterstützen.
+
 \
 Und vieles mehr – regelmäßige Updates basierend auf eurem Feedback sind schon in Arbeit!
 

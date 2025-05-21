@@ -34,6 +34,11 @@ Access key university platforms such as moodle, PRIMUSS or your webmail with a s
 ### THI News
 
 Stay up to date with the **latest news** from the THI.
+
+### Career Service & Student Advisory
+
+Stay informed about all career service and student advisory events.
+Get access to workshops, counseling sessions, and other professional development opportunities to support your academic and career journey.
 \
 \
 And more - regular updates based on feedback are on their way!
