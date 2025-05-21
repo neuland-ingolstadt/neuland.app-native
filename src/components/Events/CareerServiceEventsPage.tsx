@@ -46,7 +46,7 @@ function CareerServiceEventRow({
 						</Text>
 					) : event.waitingList && event.waitingList > 0 ? (
 						<Text style={styles.waitingListText}>
-							{t('pages.events.registration.waitingList', {
+							{t('pages.events.registration.waitingList.row', {
 								current: event.waitingList,
 								max: event.maxWaitingList
 							})}

@@ -202,7 +202,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/meal"
+						name="(screens)/food/[id]"
 						options={{
 							title: t('navigation.details'),
 							...Platform.select({

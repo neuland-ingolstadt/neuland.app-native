@@ -75,16 +75,16 @@ export function EventErrorView({
 	const handleBackToList = (): void => {
 		switch (eventType) {
 			case 'clEvents':
-				router.navigate('/(screens)/cl-events')
+				router.navigate('/cl-events')
 				break
 			case 'sports':
-				router.navigate('/(screens)/cl-events')
+				router.navigate('/cl-events')
 				break
 			case 'career':
-				router.navigate('/(screens)/career-evcents')
+				router.navigate('/thi-services')
 				break
 			case 'advisory':
-				router.navigate('/(screens)/advisory-events')
+				router.navigate('/thi-services')
 				break
 		}
 	}
@@ -149,7 +149,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		maxWidth: 400
 	},
 	textContainer: {
-		marginTop: 16,
+		marginTop: 24,
 		width: '100%',
 		alignItems: 'center',
 		textAlign: 'center'
@@ -182,7 +182,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 16,
 		paddingVertical: 8,
 		borderRadius: 8,
-		marginTop: 8
+		marginTop: 16
 	},
 	buttonText: {
 		color: theme.colors.background,

@@ -20,7 +20,7 @@ function StudentAdvisoryEventRow({
 	const { t } = useTranslation('common')
 
 	const handlePress = () => {
-		router.push({
+		router.navigate({
 			pathname: '/events/advisory/[id]',
 			params: { id: event.id }
 		})
@@ -46,7 +46,7 @@ function StudentAdvisoryEventRow({
 						</Text>
 					) : event.waitingList && event.waitingList > 0 ? (
 						<Text style={styles.waitingListText}>
-							{t('pages.events.registration.waitingList', {
+							{t('pages.events.registration.waitingList.row', {
 								current: event.waitingList,
 								max: event.maxWaitingList
 							})}

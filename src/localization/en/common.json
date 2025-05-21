@@ -346,9 +346,11 @@
 			"registration": {
 				"unlimitedSlots": "Unlimited slots",
 				"availableSlots": "{{available}} / {{total}} available",
-				"waitingList": "Waiting List: {{current}} / {{max}}",
-				"waitingList.title": "Waiting List",
-				"waitingList.value": "{{current}} / {{max}}",
+				"waitingList": {
+					"row": "Waiting List: {{current}} / {{max}}",
+					"title": "Waiting List",
+					"value": "{{current}} / {{max}}"
+				},
 				"unlimitedShort": "Unlimited"
 			}
 		}
