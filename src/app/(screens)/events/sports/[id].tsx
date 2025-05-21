@@ -92,7 +92,8 @@ export default function SportsEventDetail(): React.JSX.Element {
 									time: formatFriendlyTimeRange(
 										sportsEvent.startTime,
 										sportsEvent.endTime
-									)
+									),
+									link: `https://neuland.app/events/sports/${id}`
 								})
 							})
 						}}

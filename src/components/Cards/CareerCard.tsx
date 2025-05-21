@@ -12,10 +12,9 @@ import { QUERY_KEYS } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import EventItem from '../Universal/EventItem'
-import LoadingIndicator from '../Universal/LoadingIndicator'
 import BaseCard from './BaseCard'
 
 const CareerCard = (): React.JSX.Element => {
@@ -54,60 +53,44 @@ const CareerCard = (): React.JSX.Element => {
 				)
 			: []
 
-	const isLoading =
-		careerServiceQuery.isLoading || studentAdvisoryQuery.isLoading
-	const hasDisplayableData =
-		(careerServiceEvents.length > 0 && careerServiceEvents[0] != null) ||
-		(studentAdvisoryEvents.length > 0 && studentAdvisoryEvents[0] != null)
-
 	return (
 		<BaseCard title="career" onPressRoute="/career-events">
-			{isLoading ? (
-				<LoadingIndicator />
-			) : hasDisplayableData ? (
-				<View style={styles.eventsContainer}>
-					{careerServiceEvents[0] && (
-						<EventItem
-							title={careerServiceEvents[0].title}
-							subtitle={t('pages.events.careerService.title')}
-							startDateTime={
-								careerServiceEvents[0].date
-									? new Date(careerServiceEvents[0].date)
-									: undefined
-							}
-							subtitleTranslationKey="pages.events.careerService.title"
-							color={theme.colors.primary}
-						/>
-					)}
-					{studentAdvisoryEvents[0] && (
-						<EventItem
-							title={studentAdvisoryEvents[0].title}
-							subtitle={t('pages.events.studentAdvisory.title')}
-							startDateTime={
-								studentAdvisoryEvents[0].date
-									? new Date(studentAdvisoryEvents[0].date)
-									: undefined
-							}
-							subtitleTranslationKey="pages.events.studentAdvisory.title"
-							color={theme.colors.primary}
-						/>
-					)}
-				</View>
-			) : (
-				<Text style={styles.noEvents}>{t('error.noData')}</Text>
-			)}
+			<View style={styles.eventsContainer}>
+				{careerServiceEvents[0] && (
+					<EventItem
+						title={careerServiceEvents[0].title}
+						subtitle={t('pages.events.careerService.title')}
+						startDateTime={
+							careerServiceEvents[0].date
+								? new Date(careerServiceEvents[0].date)
+								: undefined
+						}
+						subtitleTranslationKey="pages.events.careerService.title"
+						color={theme.colors.primary}
+					/>
+				)}
+				{studentAdvisoryEvents[0] && (
+					<EventItem
+						title={studentAdvisoryEvents[0].title}
+						subtitle={t('pages.events.studentAdvisory.title')}
+						startDateTime={
+							studentAdvisoryEvents[0].date
+								? new Date(studentAdvisoryEvents[0].date)
+								: undefined
+						}
+						subtitleTranslationKey="pages.events.studentAdvisory.title"
+						color={theme.colors.primary}
+					/>
+				)}
+			</View>
 		</BaseCard>
 	)
 }
 
-const stylesheet = createStyleSheet((theme) => ({
+const stylesheet = createStyleSheet(() => ({
 	eventsContainer: {
 		marginTop: 10,
 		gap: 12
-	},
-	noEvents: {
-		color: theme.colors.text,
-		textAlign: 'center'
 	}
 }))
 

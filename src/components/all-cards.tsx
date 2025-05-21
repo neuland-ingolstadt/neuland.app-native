@@ -26,26 +26,25 @@ export const AllCards: Card[] = [
 		card: () => <EventsCard />
 	},
 	{
-		key: 'career',
-		removable: true,
-		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-		card: () => <CareerCard />
-	},
-	{
 		key: 'calendar',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <CalendarCard />
 	},
-
 	{
 		key: 'links',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <LinkCard />
+	},
+	{
+		key: 'career',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		card: () => <CareerCard />
 	},
 	{
 		key: 'news',

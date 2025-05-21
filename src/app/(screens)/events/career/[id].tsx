@@ -89,7 +89,7 @@ export default function CareerServiceEvent(): React.JSX.Element {
 					<ShareHeaderButton
 						onPress={async () => {
 							trackEvent('Share', { type: 'careerServiceEvent' })
-							const deepLinkUrl = `https://next.neuland.app/events/career-service/${id}`
+							const deepLinkUrl = `https://neuland.app/events/career/${id}`
 							await Share.share({
 								message: t('pages.event.shareMessage', {
 									title: eventData?.title,

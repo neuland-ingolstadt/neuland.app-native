@@ -186,8 +186,8 @@
 			"optional": "Optional",
 			"invitationLink": "Invitation link",
 			"eMail": "E-Mail",
-			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
-			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en",
+			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\n{{link}}",
+			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",
 			"registerNow": "Register now"
