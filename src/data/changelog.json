@@ -142,6 +142,53 @@
 					"web": "Bug"
 				}
 			}
+		],
+		"0.13": [
+			{
+				"title": {
+					"de": "Neues Design",
+					"en": "New Design"
+				},
+				"description": {
+					"de": "Das Dashboard und die gesamte App wurden mit einem frischen, modernen Design überarbeitet.",
+					"en": "The dashboard and the entire app have been redesigned with a fresh, modern look."
+				},
+				"icon": {
+					"ios": "paintbrush",
+					"android": "palette",
+					"web": "Paintbrush"
+				}
+			},
+			{
+				"title": {
+					"de": "Profil Tab",
+					"en": "Profile Tab"
+				},
+				"description": {
+					"de": "Erreiche deine persönlichen Informationen und Einstellungen schneller über den neuen Profil Tab.",
+					"en": "Access your personal information and settings faster through the new profile tab."
+				},
+				"icon": {
+					"ios": "person",
+					"android": "person",
+					"web": "UserCircle"
+				}
+			},
+			{
+				"title": {
+					"de": "THI Services",
+					"en": "THI Services"
+				},
+				"description": {
+					"de": "Alle Events und Workshops des THI Karriere Service und Studienberatung sind jetzt verfügbar.",
+					"en": "All events and workshops of the THI Career Service and Student Advisory are now available."
+				},
+				"icon": {
+					"ios": "briefcase",
+					"android": "business",
+					"web": "Building"
+				}
+			}
 		]
 	}
 }

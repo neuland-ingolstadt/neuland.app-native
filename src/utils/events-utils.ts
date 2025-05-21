@@ -218,8 +218,8 @@ export const sportsCategories: Record<string, SportsCategory> = {
 }
 
 export const QUERY_KEYS = {
-	CAREER_SERVICE_EVENTS: 'careerServiceEvents',
-	STUDENT_ADVISORY_EVENTS: 'studentAdvisoryEvents',
+	CAREER_SERVICE_EVENTS: 'thi-services-career',
+	STUDENT_ADVISORY_EVENTS: 'thi-services-student-advisory',
 	UNIVERSITY_SPORTS: 'universitySports',
 	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV5'
 } as const
