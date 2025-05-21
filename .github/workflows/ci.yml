@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          lfs: true
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
