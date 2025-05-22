@@ -105,9 +105,9 @@ export default function CareerServiceEvent(): React.JSX.Element {
 							await Share.share({
 								message: t('pages.event.shareCareerMessage', {
 									title: eventData?.title,
-									date: formatFriendlyDate(eventData?.date ?? '')
-								}),
-								url: deepLinkUrl
+									date: formatFriendlyDate(eventData?.date ?? ''),
+									link: deepLinkUrl
+								})
 							})
 						}}
 					/>

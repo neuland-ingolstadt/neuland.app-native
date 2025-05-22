@@ -244,7 +244,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	campusHeader: {
 		color: theme.colors.text,
 		fontSize: 16,
-		fontWeight: '500',
+		fontWeight: '600',
 		verticalAlign: 'middle'
 	},
 	categoryContainer: {
