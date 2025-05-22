@@ -26,8 +26,12 @@ features:
     link: /en/app/features#timetable-exams
   - title: Calendar & Events
     icon: 🎉
-    details: All important semester dates, Campus events and university sports in one place. Never miss a deadline or event again.
+    details: All important semester dates and campus events in one place.
     link: /en/app/features#calendar-events
+  - title: University Sports
+    icon: 🏃
+    details: Stay active with the current university sports program and activities.
+    link: /en/app/features#university-sports
   - title: Profile
     icon: 👤
     details: View your grades, printer credits and much more information about your studies.
@@ -44,4 +48,12 @@ features:
     icon: 📚
     details: Use your virtual library ID to check out at the terminals to borrow and return books.
     link: /en/app/features#library
+  - title: Quick Links
+    icon: 🔗
+    details: Access key university platforms such as moodle, PRIMUSS or your webmail with a single tap.
+    link: /en/app/features#quick-links
+  - title: Career Service
+    icon: 💼
+    details: Discover workshops, counseling sessions, job fairs, and other professional development opportunities.
+    link: /en/app/features#career-service
 ---

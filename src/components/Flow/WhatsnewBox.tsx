@@ -79,7 +79,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	iconContainer: {
-		backgroundColor: `${theme.colors.primary}15`,
+		backgroundColor: theme.colors.primaryBackground,
 		borderRadius: 12,
 		padding: 12,
 		flexShrink: 0

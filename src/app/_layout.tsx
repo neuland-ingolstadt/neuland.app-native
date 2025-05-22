@@ -202,7 +202,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/meal"
+						name="(screens)/food/[id]"
 						options={{
 							title: t('navigation.details'),
 							...Platform.select({
@@ -340,32 +340,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/sports-event"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/cl-event"
+						name="(screens)/events/advisory/[id]"
 						options={{
 							title: 'Event Details',
 							...Platform.select({
@@ -388,6 +363,38 @@ function RootLayout(): React.JSX.Element {
 									}}
 								/>
 							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/career/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/thi-services"
+						options={{
+							title: t('navigation.thiServices')
 						}}
 					/>
 					<Stack.Screen
@@ -491,6 +498,58 @@ function RootLayout(): React.JSX.Element {
 									presentation: 'modal'
 								}
 							})
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/cl/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
+						}}
+					/>
+					<Stack.Screen
+						name="(screens)/events/sports/[id]"
+						options={{
+							title: 'Event Details',
+							...Platform.select({
+								ios: {
+									headerStyle: {
+										backgroundColor: 'transparent'
+									},
+									presentation: 'formSheet',
+									sheetAllowedDetents: [0.7, 1],
+									sheetInitialDetentIndex: 0,
+									sheetGrabberVisible: true,
+									sheetCornerRadius: 16,
+									headerTitleAlign: 'center'
+								}
+							}),
+							headerRight: () => (
+								<ShareHeaderButton
+									onPress={() => {
+										/* do nothing yet */
+									}}
+								/>
+							)
 						}}
 					/>
 				</Stack>

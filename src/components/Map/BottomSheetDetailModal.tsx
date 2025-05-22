@@ -48,7 +48,7 @@ const ReportLink = ({ roomTitle }: ReportLinkProps): React.JSX.Element => {
 	const { t } = useTranslation('common')
 
 	const handleReportRoom = useCallback(() => {
-		router.push({
+		router.navigate({
 			pathname: '/room-report',
 			params: { room: roomTitle }
 		})

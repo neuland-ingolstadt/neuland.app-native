@@ -17,6 +17,10 @@
 		"button": "Retry",
 		"noSession": "Not signed in.",
 		"pull": "Pull down to refresh",
+		"noData": "No data available.",
+		"eventNotFound": "Event not found",
+		"eventNotFoundDescription": "The event you're looking for doesn't exist or has been removed.",
+		"backToEventList": "Back to {{type}}",
 		"network": {
 			"title": "No internet connection",
 			"description": "Please check your internet connection."
@@ -185,8 +189,13 @@
 			"optional": "Optional",
 			"invitationLink": "Invitation link",
 			"eMail": "E-Mail",
-			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\nhttps://next.neuland.app/en",
-			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\nhttps://next.neuland.app/en"
+			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\n{{link}}",
+			"shareCareerMessage": "Check out this career event:\n{{title}} by Career Service on {{date}}\n{{link}}",
+			"shareAdvisoryMessage": "Check out this advisory event:\n{{title}} by Student Advisory on {{date}}\n{{link}}",
+			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
+			"details": "Details",
+			"links": "Links",
+			"registerNow": "Register now"
 		},
 		"map": {
 			"search": {
@@ -312,6 +321,39 @@
 					"title": "No events found",
 					"subtitle": "Check back later."
 				}
+			}
+		},
+		"careerService": {
+			"title": "Career Service",
+			"noEvents": {
+				"title": "No career service events found",
+				"subtitle": "Check back later."
+			}
+		},
+		"studentAdvisory": {
+			"title": "Student Advisory",
+			"noEvents": {
+				"title": "No student advisory events found",
+				"subtitle": "Check back later."
+			}
+		},
+		"events": {
+			"title": "Events",
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Student Advisory"
+			},
+			"registration": {
+				"unlimitedSlots": "Unlimited slots",
+				"availableSlots": "{{available}} / {{total}} available",
+				"waitingList": {
+					"row": "Waiting List: {{current}} / {{max}}",
+					"title": "Waiting List",
+					"value": "{{current}} / {{max}}"
+				},
+				"unlimitedShort": "Unlimited"
 			}
 		}
 	},

@@ -42,7 +42,7 @@ export interface Dashboard {
 export function useDashboard(): Dashboard {
 	const [shownDashboardEntries, setShownDashboardEntries] = useMMKVObject<
 		string[]
-	>('shownDashboardEntriesV6')
+	>('shownDashboardEntriesV7')
 	const [hiddenAnnouncements, setHiddenAnnouncements] = useMMKVObject<string[]>(
 		'hiddenAnnouncements'
 	)

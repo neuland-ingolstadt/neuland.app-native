@@ -41,7 +41,10 @@
 		"login": "Anmelden",
 		"legal": "Rechtliches",
 		"sports": "Hochschulsport",
-		"roomReport": "Problem mit einem Raum melden"
+		"roomReport": "Problem mit einem Raum melden",
+		"thiServices": "THI Services",
+		"clEvents": "Campus Life Veranstaltungen",
+		"advisory": "Studienberatung"
 	},
 	"cards": {
 		"titles": {
@@ -59,7 +62,8 @@
 			"food": "Essen",
 			"login": "Anmelden",
 			"links": "Quick Links",
-			"sports": "Hochschulsport"
+			"sports": "Hochschulsport",
+			"thiServices": "THI Services"
 		},
 		"announcements": {
 			"readMore": "Tippe, um mehr zu erfahren."

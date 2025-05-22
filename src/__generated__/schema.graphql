@@ -66,21 +66,23 @@ Career Service Event data type. Information about a specific event from the care
 """
 type CareerServiceEvent {
   """Available slots for the event"""
-  availableSlots: Int!
+  availableSlots: Int
   """Date of the event"""
   date: DateTime!
   """Unique identifier of the event"""
   id: ID!
   """Maximum waiting list for the event"""
-  maxWaitingList: Int!
+  maxWaitingList: Int
   """Title of the event in German"""
   title: String!
   """Total slots for the event"""
-  totalSlots: Int!
+  totalSlots: Int
+  """Unlimited slots for the event"""
+  unlimitedSlots: Boolean!
   """URL for more information about the event"""
   url: String
   """Waiting list for the event"""
-  waitingList: Int!
+  waitingList: Int
 }
 
 """
@@ -418,6 +420,8 @@ type Query {
   Get the room reports. Note: This query is only available for authenticated users.
   """
   roomReports: [RoomReport!]!
+  """Get all events of the student advisory service."""
+  studentAdvisoryEvents: [StudentAdvisoryEvent!]!
   """
   Get the university sports events. This includes all sports events from all campuses.
   """
@@ -513,6 +517,30 @@ enum SportsCategoryType {
   Volleyball
   Waterpolo
   Yoga
+}
+
+"""
+Student advisory Service Event data type. Information about a specific event from the student advisory service.
+"""
+type StudentAdvisoryEvent {
+  """Available slots for the event"""
+  availableSlots: Int
+  """Date of the event"""
+  date: DateTime!
+  """Unique identifier of the event"""
+  id: ID!
+  """Maximum waiting list for the event"""
+  maxWaitingList: Int
+  """Title of the event in German"""
+  title: String!
+  """Total slots for the event"""
+  totalSlots: Int
+  """Unlimited slots for the event"""
+  unlimitedSlots: Boolean!
+  """URL for more information about the event"""
+  url: String
+  """Waiting list for the event"""
+  waitingList: Int
 }
 
 """
