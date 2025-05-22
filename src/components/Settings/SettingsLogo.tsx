@@ -5,11 +5,13 @@ import {
 	useRandomColor,
 	withBouncing
 } from '@/utils/animation-utils'
+import { useFocusEffect } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable } from 'react-native'
 import Animated, {
 	cancelAnimation,
+	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withSequence,
@@ -41,6 +43,11 @@ export default function SettingsLogo({
 	const bottomBoundX = 0
 	const topBoundX = width - logoWidth
 
+	const isBouncing = tapCount === 2
+	const logoInactiveOpacity = isBouncing ? 0 : 1
+	const logoActiveOpacity = isBouncing ? 1 : 0
+	const logoActiveHeight = isBouncing ? 18 : 0
+
 	React.useEffect(() => {
 		const { bottomBoundY, topBoundY } = getBounds()
 		if (isBouncing) {
@@ -60,7 +67,19 @@ export default function SettingsLogo({
 			cancelAnimation(translateX)
 			cancelAnimation(translateY)
 		}
-	}, [tapCount])
+	}, [isBouncing])
+
+	useFocusEffect(
+		React.useCallback(() => {
+			return () => {
+				cancelAnimation(translateX)
+				cancelAnimation(translateY)
+				translateX.value = 0
+				translateY.value = 0
+				runOnJS(setTapCount)(0)
+			}
+		}, [])
+	)
 
 	const logoBounceAnimation = useAnimatedStyle(() => {
 		return {
@@ -96,11 +115,6 @@ export default function SettingsLogo({
 			)
 		}
 	}
-
-	const isBouncing = tapCount === 2
-	const logoInactiveOpacity = isBouncing ? 0 : 1
-	const logoActiveOpacity = isBouncing ? 1 : 0
-	const logoActiveHeight = isBouncing ? 18 : 0
 
 	return (
 		<>
