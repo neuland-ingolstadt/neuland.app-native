@@ -2,6 +2,7 @@ import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
 import {
 	CalendarCard,
+	CareerCard,
 	EventsCard,
 	LinkCard,
 	LoginCard,
@@ -31,13 +32,19 @@ export const AllCards: Card[] = [
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <CalendarCard />
 	},
-
 	{
 		key: 'links',
 		removable: true,
 		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
 		card: () => <LinkCard />
+	},
+	{
+		key: 'thiServices',
+		removable: true,
+		initial: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		allowed: [USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+		card: () => <CareerCard />
 	},
 	{
 		key: 'news',

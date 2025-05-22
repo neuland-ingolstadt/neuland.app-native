@@ -1,9 +1,11 @@
 import type {
 	AppAnnouncementsQuery,
 	CampusLifeEventsQuery,
+	CareerServiceEventsQuery,
 	CreateRoomReportMutation,
 	FoodPlanQuery,
 	RoomReportInput,
+	StudentAdvisoryEventsQuery,
 	TypedDocumentString,
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
@@ -14,8 +16,10 @@ import packageInfo from '../../package.json'
 import {
 	ANNOUNCEMENT_QUERY,
 	CAMPUS_LIFE_EVENTS_QUERY,
+	CAREER_SERVICE_EVENTS_QUERY,
 	CREATE_ROOM_REPORT,
 	FOOD_QUERY,
+	STUDENT_ADVISORY_EVENTS_QUERY,
 	UNIVERSITY_SPORTS_QUERY
 } from './gql-documents'
 
@@ -108,6 +112,22 @@ class NeulandAPIClient {
 	 */
 	async getUniversitySports(): Promise<UniversitySportsQuery> {
 		return await this.executeGql(UNIVERSITY_SPORTS_QUERY)
+	}
+
+	/**
+	 * Gets the career service events
+	 * @returns {Promise<CareerServiceEventsQuery>} A promise that resolves with the career service events data
+	 */
+	async getCareerServiceEvents(): Promise<CareerServiceEventsQuery> {
+		return await this.executeGql(CAREER_SERVICE_EVENTS_QUERY)
+	}
+
+	/**
+	 * Gets the student advisory events
+	 * @returns {Promise<StudentAdvisoryEventsQuery>} A promise that resolves with the student advisory events data
+	 */
+	async getStudentAdvisoryEvents(): Promise<StudentAdvisoryEventsQuery> {
+		return await this.executeGql(STUDENT_ADVISORY_EVENTS_QUERY)
 	}
 
 	/**

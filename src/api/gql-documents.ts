@@ -114,6 +114,7 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
 // biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
+        id
         host {
             name
             website
@@ -170,5 +171,51 @@ export const CREATE_ROOM_REPORT = graphql(/* GraphQL */ `
         createRoomReport(input: $input) {
             id
         }
+    }
+`)
+
+export const CAREER_SERVICE_EVENTS_QUERY = graphql(/* GraphQL */ `
+    query CareerServiceEvents {
+        careerServiceEvents {
+            ...CareerServiceEventFields
+        }
+    }
+`)
+
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
+const CAREER_SERVICE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
+    fragment CareerServiceEventFields on CareerServiceEvent {
+        id
+        title
+        date
+        unlimitedSlots
+        availableSlots
+        totalSlots
+        waitingList
+        maxWaitingList
+        url
+    }
+`)
+
+export const STUDENT_ADVISORY_EVENTS_QUERY = graphql(/* GraphQL */ `
+    query StudentAdvisoryEvents {
+        studentAdvisoryEvents {
+            ...StudentAdvisoryEventFields
+        }
+    }
+`)
+
+// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
+const STUDENT_ADVISORY_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
+    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+        id
+        title
+        date
+        unlimitedSlots
+        availableSlots
+        totalSlots
+        waitingList
+        maxWaitingList
+        url
     }
 `)

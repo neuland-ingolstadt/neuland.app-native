@@ -1,5 +1,5 @@
 import type { LanguageKey } from '@/localization/i18n'
-import { loadCampusLifeEvents } from '@/utils/events-utils'
+import { QUERY_KEYS, loadCampusLifeEvents } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,10 +12,10 @@ const EventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation('navigation')
 	const { data, isSuccess } = useQuery({
-		queryKey: ['campusLifeEventsV2'],
+		queryKey: [QUERY_KEYS.CAMPUS_LIFE_EVENTS],
 		queryFn: loadCampusLifeEvents,
-		staleTime: 1000 * 60 * 5, // 5 minutes
-		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 60 * 24
 	})
 
 	return (

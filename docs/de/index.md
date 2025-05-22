@@ -25,7 +25,11 @@ features:
     link: /app/features#stundenplan-prufungen
   - title: Kalender & Events
     icon: 🎉
-    details: Alle wichtigen Semestertermine, Campus-Events und Hochschulsport an einem Ort. Verpasse nie wieder eine Frist oder ein Event.
+    details: Alle wichtigen Semestertermine und Campus-Events an einem Ort.
+    link: /app/features#kalender-events
+  - title: Hochschulsport
+    icon: 🏃
+    details: Bleibe aktiv mit dem aktuellen Hochschulsportprogramm und den Aktivitäten.
     link: /app/features#kalender-events
   - title: Profil
     icon: 👤
@@ -43,4 +47,12 @@ features:
     icon: 📚
     details: Nutze deine virtuelle Bibliotheks-ID, um Bücher an den Terminals auszuleihen und zurückzugeben.
     link: /app/features#bibliothek
+  - title: Quick Links
+    icon: 🔗
+    details: Greife mit einem Klick auf wichtige Hochschulplattformen wie moodle, PRIMUSS oder dein Webmail zu.
+    link: /app/features#quick-links
+  - title: Career Service
+    icon: 💼
+    details: Entdecke Workshops, Beratungsgespräche, Jobmessen und weitere Karriereentwicklungsmöglichkeiten.
+    link: /app/features#career-service
 ---

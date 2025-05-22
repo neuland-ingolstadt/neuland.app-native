@@ -1,15 +1,26 @@
-import type { WeekdayType } from '@/__generated__/gql/graphql'
+import type {
+	UniversitySportsFieldsFragment,
+	WeekdayType
+} from '@/__generated__/gql/graphql'
+import { EventErrorView } from '@/components/Error/EventErrorView'
 import FormList from '@/components/Universal/FormList'
 import type { LucideIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import useCLParamsStore from '@/hooks/useCLParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
+import { QUERY_KEYS, loadUniversitySportsEvents } from '@/utils/events-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
-import { Stack, useFocusEffect, useNavigation } from 'expo-router'
+import { useQuery } from '@tanstack/react-query'
+import {
+	Stack,
+	useFocusEffect,
+	useLocalSearchParams,
+	useNavigation
+} from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,9 +35,22 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function SportsEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
-
-	const sportsEvent = useCLParamsStore((state) => state.selectedSportsEvent)
+	const { id } = useLocalSearchParams<{ id: string }>()
 	const { t, i18n } = useTranslation('common')
+
+	const {
+		data: queryData,
+		isLoading,
+		error
+	} = useQuery({
+		queryKey: [QUERY_KEYS.UNIVERSITY_SPORTS],
+		queryFn: loadUniversitySportsEvents,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+		gcTime: 1000 * 60 * 60 * 24 // 24 hours
+	})
+
+	const sportsEvent: UniversitySportsFieldsFragment | null | undefined =
+		queryData?.flatMap((group) => group.data).find((event) => event.id === id)
 
 	const ref = useAnimatedRef<Animated.ScrollView>()
 	const scroll = useScrollViewOffset(ref)
@@ -68,18 +92,27 @@ export default function SportsEventDetail(): React.JSX.Element {
 									time: formatFriendlyTimeRange(
 										sportsEvent.startTime,
 										sportsEvent.endTime
-									)
+									),
+									link: `https://neuland.app/events/sports/${id}`
 								})
 							})
 						}}
 					/>
 				)
 			})
-		}, [])
+		}, [navigation, sportsEvent, t, i18n.language])
 	)
 
-	if (sportsEvent == null) {
-		return <></>
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (error || sportsEvent == null) {
+		return <EventErrorView eventType="sports" />
 	}
 
 	const isDescriptionAvailable =
@@ -259,5 +292,10 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	warning: (active: boolean) => ({
 		color: active ? theme.colors.warning : theme.colors.success
-	})
+	}),
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
 }))

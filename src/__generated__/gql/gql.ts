@@ -20,10 +20,14 @@ type Documents = {
     "\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n": typeof types.FoodPlanDocument,
     "\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n": typeof types.FoodFieldsFragmentDoc,
     "\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n": typeof types.CampusLifeEventsDocument,
-    "\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n": typeof types.CampusLifeEventFieldsFragmentDoc,
+    "\n    fragment CampusLifeEventFields on ClEvent {\n        id\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n": typeof types.CampusLifeEventFieldsFragmentDoc,
     "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n": typeof types.UniversitySportsDocument,
     "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n": typeof types.UniversitySportsFieldsFragmentDoc,
     "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n": typeof types.CreateRoomReportDocument,
+    "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": typeof types.CareerServiceEventsDocument,
+    "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": typeof types.CareerServiceEventFieldsFragmentDoc,
+    "\n    query StudentAdvisoryEvents {\n        studentAdvisoryEvents {\n            ...StudentAdvisoryEventFields\n        }\n    }\n": typeof types.StudentAdvisoryEventsDocument,
+    "\n    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": typeof types.StudentAdvisoryEventFieldsFragmentDoc,
 };
 const documents: Documents = {
     "\n    query AppAnnouncements {\n        appAnnouncements {\n            ...AnnouncementFields\n        }\n    }\n": types.AppAnnouncementsDocument,
@@ -31,10 +35,14 @@ const documents: Documents = {
     "\n    query FoodPlan($locations: [LocationInput!]!) {\n        food(locations: $locations) {\n            ...FoodFields\n        }\n    }\n": types.FoodPlanDocument,
     "\n    fragment FoodFields on FoodResponse {\n        foodData {\n            timestamp\n            meals {\n                name {\n                    de\n                    en\n                }\n                id\n                category\n                prices {\n                    student\n                    employee\n                    guest\n                }\n                allergens\n                flags\n                nutrition {\n                    kj\n                    kcal\n                    fat\n                    fatSaturated\n                    carbs\n                    sugar\n                    fiber\n                    protein\n                    salt\n                }\n                variants {\n                    name {\n                        de\n                        en\n                    }\n                    additional\n                    id\n                    allergens\n                    flags\n                    originalLanguage\n                    static\n                    restaurant\n                    parent {\n                        id\n                        category\n                    }\n                    prices {\n                        student\n                        employee\n                        guest\n                    }\n                }\n                originalLanguage\n                static\n                restaurant\n            }\n        }\n        errors {\n            location\n            message\n        }\n    }\n": types.FoodFieldsFragmentDoc,
     "\n    query CampusLifeEvents {\n        clEvents {\n            ...CampusLifeEventFields\n        }\n    }\n": types.CampusLifeEventsDocument,
-    "\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n": types.CampusLifeEventFieldsFragmentDoc,
+    "\n    fragment CampusLifeEventFields on ClEvent {\n        id\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n": types.CampusLifeEventFieldsFragmentDoc,
     "\n    query UniversitySports {\n        universitySports {\n            ...UniversitySportsFields\n        }\n    }\n": types.UniversitySportsDocument,
     "\n    fragment UniversitySportsFields on UniversitySports {\n        id\n        title {\n            de\n            en\n        }\n        description {\n            de\n            en\n        }\n        campus\n        location\n        weekday\n        startTime\n        endTime\n        requiresRegistration\n        invitationLink\n        eMail\n        sportsCategory\n    }\n": types.UniversitySportsFieldsFragmentDoc,
     "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n": types.CreateRoomReportDocument,
+    "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n": types.CareerServiceEventsDocument,
+    "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": types.CareerServiceEventFieldsFragmentDoc,
+    "\n    query StudentAdvisoryEvents {\n        studentAdvisoryEvents {\n            ...StudentAdvisoryEventFields\n        }\n    }\n": types.StudentAdvisoryEventsDocument,
+    "\n    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n": types.StudentAdvisoryEventFieldsFragmentDoc,
 };
 
 /**
@@ -60,7 +68,7 @@ export function graphql(source: "\n    query CampusLifeEvents {\n        clEvent
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    fragment CampusLifeEventFields on ClEvent {\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n"): typeof import('./graphql').CampusLifeEventFieldsFragmentDoc;
+export function graphql(source: "\n    fragment CampusLifeEventFields on ClEvent {\n        id\n        host {\n            name\n            website\n            instagram\n        }\n        titles {\n            de\n            en\n        }\n        startDateTime\n        endDateTime\n        location\n        descriptions {\n            de\n            en\n        }\n    }\n"): typeof import('./graphql').CampusLifeEventFieldsFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -73,6 +81,22 @@ export function graphql(source: "\n    fragment UniversitySportsFields on Univer
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation CreateRoomReport($input: RoomReportInput!) {\n        createRoomReport(input: $input) {\n            id\n        }\n    }\n"): typeof import('./graphql').CreateRoomReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query CareerServiceEvents {\n        careerServiceEvents {\n            ...CareerServiceEventFields\n        }\n    }\n"): typeof import('./graphql').CareerServiceEventsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    fragment CareerServiceEventFields on CareerServiceEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n"): typeof import('./graphql').CareerServiceEventFieldsFragmentDoc;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query StudentAdvisoryEvents {\n        studentAdvisoryEvents {\n            ...StudentAdvisoryEventFields\n        }\n    }\n"): typeof import('./graphql').StudentAdvisoryEventsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {\n        id\n        title\n        date\n        unlimitedSlots\n        availableSlots\n        totalSlots\n        waitingList\n        maxWaitingList\n        url\n    }\n"): typeof import('./graphql').StudentAdvisoryEventFieldsFragmentDoc;
 
 
 export function graphql(source: string) {

@@ -101,7 +101,8 @@ export const MealEntry = memo(
 		const itemPressed = (): void => {
 			setSelectedMeal(meal)
 			router.navigate({
-				pathname: '/meal'
+				pathname: '/food/[id]',
+				params: { id: meal.id }
 			})
 		}
 		return (

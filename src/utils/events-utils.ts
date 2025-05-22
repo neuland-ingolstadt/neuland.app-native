@@ -216,3 +216,20 @@ export const sportsCategories: Record<string, SportsCategory> = {
 		androidIcon: 'sports'
 	}
 }
+
+export const QUERY_KEYS = {
+	CAREER_SERVICE_EVENTS: 'thi-services-career',
+	STUDENT_ADVISORY_EVENTS: 'thi-services-student-advisory',
+	UNIVERSITY_SPORTS: 'universitySports',
+	CAMPUS_LIFE_EVENTS: 'campusLifeEventsV5'
+} as const
+
+export const loadCareerServiceEvents = async () => {
+	const res = await NeulandAPI.getCareerServiceEvents()
+	return res.careerServiceEvents
+}
+
+export const loadStudentAdvisoryEvents = async () => {
+	const res = await NeulandAPI.getStudentAdvisoryEvents()
+	return res.studentAdvisoryEvents
+}

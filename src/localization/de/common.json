@@ -13,10 +13,14 @@
 	"error": {
 		"title": "Ein Fehler ist aufgetreten",
 		"description": "Beim Laden der Daten ist ein Fehler aufgetreten.",
-		"refreshPull": "Ein Fehler ist beim Laden der Daten aufgetreten.\nZiehe zum Aktualisieren nach unten.",
-		"button": "Erneut versuchen",
+		"refreshPull": "Beim Laden der Daten ist ein Fehler aufgetreten.\nZum Aktualisieren nach unten ziehen.",
+		"button": "Wiederholen",
 		"noSession": "Nicht angemeldet.",
-		"pull": "Ziehe zum Aktualisieren nach unten",
+		"pull": "Zum Aktualisieren nach unten ziehen",
+		"noData": "Keine Daten verfügbar.",
+		"eventNotFound": "Veranstaltung nicht gefunden",
+		"eventNotFoundDescription": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
+		"backToEventList": "Zurück zu {{type}}",
 		"network": {
 			"title": "Keine Internetverbindung",
 			"description": "Bitte überprüfe deine Internetverbindung."
@@ -185,8 +189,10 @@
 			"optional": "Optional",
 			"invitationLink": "Einladungslink",
 			"eMail": "E-Mail",
-			"shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} um {{date}}\nhttps://next.neuland.app/",
-			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\nhttps://next.neuland.app/"
+			"shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} am {{date}}\n{{link}}",
+			"shareCareerMessage": "Schau dir dieses Karriere-Event an:\n{{title}} vom Karriere Service am {{date}}\n{{link}}",
+			"shareAdvisoryMessage": "Schau dir dieses Beratungs-Event an:\n{{title}} von der Studierendenberatung am {{date}}\n{{link}}",
+			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}"
 		},
 		"map": {
 			"search": {
@@ -312,6 +318,37 @@
 					"title": "Keine anstehenden Veranstaltungen",
 					"subtitle": "Bitte versuche es später erneut."
 				}
+			}
+		},
+		"careerService": {
+			"title": "Berufsservice",
+			"noEvents": {
+				"title": "Keine Berufsserviceveranstaltungen",
+				"subtitle": "Bitte versuche es später erneut."
+			}
+		},
+		"studentAdvisory": {
+			"title": "Studentenberatung",
+			"noEvents": {
+				"title": "Keine Studentenberatungveranstaltungen",
+				"subtitle": "Bitte versuche es später erneut."
+			}
+		},
+		"events": {
+			"title": "Events",
+			"careerService": {
+				"title": "Career Service"
+			},
+			"studentAdvisory": {
+				"title": "Studienberatung"
+			},
+			"registration": {
+				"unlimitedSlots": "Unbegrenzte Plätze verfügbar",
+				"availableSlots": "{{available}} von {{total}} Plätzen verfügbar",
+				"waitingList": "{{current}} von {{max}} auf der Warteliste",
+				"waitingList.title": "Warteliste",
+				"waitingList.value": "{{current}} / {{max}}",
+				"unlimitedShort": "Unbegrenzt"
 			}
 		}
 	},
