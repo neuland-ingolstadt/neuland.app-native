@@ -190,6 +190,8 @@
 			"invitationLink": "Invitation link",
 			"eMail": "E-Mail",
 			"shareMessage": "Check out this event:\n{{title}} by {{organizer}} on {{date}}\n{{link}}",
+			"shareCareerMessage": "Check out this career event:\n{{title}} by Career Service on {{date}}\n{{link}}",
+			"shareAdvisoryMessage": "Check out this advisory event:\n{{title}} by Student Advisory on {{date}}\n{{link}}",
 			"shareSports": "Check out this sports event:\n{{title}} every {{weekday}} at {{time}}\n{{link}}",
 			"details": "Details",
 			"links": "Links",

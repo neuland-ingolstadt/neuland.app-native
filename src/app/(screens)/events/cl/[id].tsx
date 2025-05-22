@@ -310,8 +310,8 @@ const stylesheet = createStyleSheet((theme) => ({
 	},
 	formList: {
 		alignSelf: 'center',
-		paddingBottom: 12,
-		width: '100%'
+		width: '100%',
+		paddingBottom: 100
 	},
 	headerTitle: {
 		marginBottom: Platform.OS === 'ios' ? -10 : 0,

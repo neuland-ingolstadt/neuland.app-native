@@ -93,7 +93,7 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 							})
 							const deepLinkUrl = `https://neuland.app/events/advisory/${id}`
 							await Share.share({
-								message: t('pages.event.shareMessage', {
+								message: t('pages.event.shareAdvisoryMessage', {
 									title: eventData?.title,
 									date: formatFriendlyDate(eventData?.date ?? '')
 								}),

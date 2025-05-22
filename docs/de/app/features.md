@@ -37,9 +37,9 @@ Greife mit einem Tap auf wichtige Uni-Plattformen wie Moodle, PRIMUSS oder dein 
 
 Bleib up-to-date mit den neuesten News von der THI.
 
-### Berufsservice & Studentenberatung
+### Career Service & Studierendenberatung
 
-Bleibe über alle Berufsservice- und Studentenberatungsereignisse informiert.
+Bleibe über alle Events des Career Service und der Studierendenberatung informiert.
 Zugang zu Workshops, Beratungssitzungen und anderen professionellen Entwicklungsmöglichkeiten, um deine akademische und berufliche Reise zu unterstützen.
 
 \
