@@ -18,6 +18,7 @@ import {
 import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQueries } from '@tanstack/react-query'
+import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,6 +28,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
+	const { tab } = useLocalSearchParams<{ tab?: string }>()
 	const results = useQueries({
 		queries: [
 			{
@@ -56,10 +58,14 @@ export default function Events(): React.JSX.Element {
 	}
 
 	const scrollY = useRef(new Animated.Value(0)).current
-	const [selectedData, setSelectedData] = useState<number>(0)
+	const [selectedData, setSelectedData] = useState<number>(
+		tab === 'student-advisory' ? 1 : 0
+	)
 	const screenHeight = useWindowDimensions().height
 
-	const [viewedPages, setViewedPages] = useState<Set<number>>(new Set([0]))
+	const [viewedPages, setViewedPages] = useState<Set<number>>(
+		new Set([selectedData])
+	)
 
 	useEffect(() => {
 		if (
@@ -140,7 +146,7 @@ export default function Events(): React.JSX.Element {
 					...styles.pagerContainer,
 					height: screenHeight
 				}}
-				initialPage={0}
+				initialPage={selectedData}
 				onPageSelected={(e) => {
 					const page = e.nativeEvent.position
 					setSelectedData(page)

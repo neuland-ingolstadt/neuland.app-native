@@ -61,18 +61,6 @@ export default function CareerServiceEvent(): React.JSX.Element {
 		? getFragmentData(CareerServiceEventFieldsFragmentDoc, rawEvent)
 		: null
 
-	if (isLoading || !queryData) {
-		return (
-			<View style={styles.loadingContainer}>
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
-	if (error || !eventData) {
-		return <EventErrorView eventType="career" />
-	}
-
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
 			scrollOffset.value = event.contentOffset.y
@@ -115,6 +103,18 @@ export default function CareerServiceEvent(): React.JSX.Element {
 			})
 		}, [navigation, t, eventData, id])
 	)
+
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (error || !eventData) {
+		return <EventErrorView eventType="career" />
+	}
 
 	const sections: FormListSections[] = [
 		{

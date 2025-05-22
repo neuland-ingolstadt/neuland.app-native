@@ -75,16 +75,16 @@ export function EventErrorView({
 	const handleBackToList = (): void => {
 		switch (eventType) {
 			case 'clEvents':
-				router.navigate('/cl-events')
+				router.navigate('/cl-events?tab=events')
 				break
 			case 'sports':
-				router.navigate('/cl-events')
+				router.navigate('/cl-events?tab=sports')
 				break
 			case 'career':
-				router.navigate('/thi-services')
+				router.navigate('/thi-services?tab=career-service')
 				break
 			case 'advisory':
-				router.navigate('/thi-services')
+				router.navigate('/thi-services?tab=student-advisory')
 				break
 		}
 	}
