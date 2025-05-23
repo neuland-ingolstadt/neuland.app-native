@@ -63,7 +63,9 @@ export default function CareerServiceEvent(): React.JSX.Element {
 
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
-			scrollOffset.value = event.contentOffset.y
+			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = event.contentOffset.y
+			}
 		}
 	})
 

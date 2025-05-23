@@ -26,9 +26,9 @@ import { Linking } from 'react-native'
 import { Share } from 'react-native'
 import Animated, {
 	interpolate,
-	useAnimatedRef,
+	useAnimatedScrollHandler,
 	useAnimatedStyle,
-	useScrollViewOffset
+	useSharedValue
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
@@ -92,14 +92,21 @@ export default function ClEventDetail(): React.JSX.Element {
 		return <EventErrorView eventType="clEvents" />
 	}
 
-	const ref = useAnimatedRef<Animated.ScrollView>()
-	const scroll = useScrollViewOffset(ref)
+	const scrollOffset = useSharedValue(0)
+	const scrollHandler = useAnimatedScrollHandler({
+		onScroll: (event) => {
+			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = event.contentOffset.y
+			}
+		}
+	})
+
 	const headerStyle = useAnimatedStyle(() => {
 		return {
 			transform: [
 				{
 					translateY: interpolate(
-						scroll.value,
+						scrollOffset.value,
 						[0, 30, 65],
 						[25, 25, 0],
 						'clamp'
@@ -270,7 +277,8 @@ export default function ClEventDetail(): React.JSX.Element {
 		<Animated.ScrollView
 			style={styles.page}
 			contentContainerStyle={styles.container}
-			ref={ref}
+			onScroll={scrollHandler}
+			scrollEventThrottle={16}
 		>
 			<Stack.Screen
 				options={{
