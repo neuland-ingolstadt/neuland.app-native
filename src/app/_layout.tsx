@@ -28,9 +28,9 @@ configureReanimatedLogger({
 })
 
 export const unstable_settings = {
-	initialRouteName: '/'
+	// Ensure any route can link back to `/`
+	initialRouteName: '(tabs)'
 }
-
 // Ignore common React Native warnings
 LogBox.ignoreLogs([
 	/VirtualizedLists should never be nested inside plain ScrollViews/, // avoid nested list warnings
