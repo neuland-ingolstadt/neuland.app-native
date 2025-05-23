@@ -44,7 +44,18 @@
 		},
 		"android": {
 			"package": "app.neuland",
-			"userInterfaceStyle": "automatic"
+			"userInterfaceStyle": "automatic",
+			"intentFilters": [
+				{
+					"action": "VIEW",
+					"autoVerify": true,
+					"data": {
+						"scheme": "https",
+						"host": "*.neuland.app"
+					},
+					"category": ["BROWSABLE", "DEFAULT"]
+				}
+			]
 		},
 		"sdkVersion": "52.0.0",
 		"experiments": {
