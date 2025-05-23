@@ -61,7 +61,9 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 	const scrollOffset = useSharedValue(0)
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: ({ contentOffset }) => {
-			scrollOffset.value = contentOffset.y
+			if (scrollOffset && typeof scrollOffset.value !== 'undefined') {
+				scrollOffset.value = contentOffset.y
+			}
 		}
 	})
 
