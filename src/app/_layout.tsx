@@ -65,6 +65,13 @@ function RootLayout(): React.JSX.Element {
 			}
 		}
 
+		Linking.getInitialURL().then((url) => {
+			if (url) {
+				handleOpenURL({ url })
+			}
+		})
+
+		// Handle subsequent URLs when app is in foreground
 		const linkingSubscription = Linking.addEventListener('url', handleOpenURL)
 
 		return () => {
