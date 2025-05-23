@@ -36,22 +36,23 @@ const CareerCard = (): React.JSX.Element => {
 	})
 
 	const rawCareerEvents = careerServiceQuery.data?.careerServiceEvents
-	const careerServiceEvents: CareerServiceEventFieldsFragment[] = Array.isArray(
-		rawCareerEvents
-	)
-		? rawCareerEvents.map((event) =>
-				getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
-			)
-		: []
+	const careerServiceEvents: CareerServiceEventFieldsFragment[] = (
+		Array.isArray(rawCareerEvents)
+			? rawCareerEvents.map((event) =>
+					getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
+				)
+			: []
+	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
 	const rawStudentAdvisoryEvents =
 		studentAdvisoryQuery.data?.studentAdvisoryEvents
-	const studentAdvisoryEvents: StudentAdvisoryEventFieldsFragment[] =
+	const studentAdvisoryEvents: StudentAdvisoryEventFieldsFragment[] = (
 		Array.isArray(rawStudentAdvisoryEvents)
 			? rawStudentAdvisoryEvents.map((event) =>
 					getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
 				)
 			: []
+	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
 	return (
 		<BaseCard title="thiServices" onPressRoute="/thi-services">
