@@ -103,21 +103,26 @@ export default function Events(): React.JSX.Element {
 
 		if (index === 0) {
 			const rawCareerEventsArray = careerServiceResult.data?.careerServiceEvents
-			const events = Array.isArray(rawCareerEventsArray)
-				? rawCareerEventsArray.map((event) =>
-						getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
-					)
-				: []
+			const events = (
+				Array.isArray(rawCareerEventsArray)
+					? rawCareerEventsArray.map((event) =>
+							getFragmentData(CareerServiceEventFieldsFragmentDoc, event)
+						)
+					: []
+			).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
 			return <CareerServiceEventsPage events={events} />
 		}
 
 		const rawStudentAdvisoryEventsArray =
 			studentAdvisoryResult.data?.studentAdvisoryEvents
-		const events = Array.isArray(rawStudentAdvisoryEventsArray)
-			? rawStudentAdvisoryEventsArray.map((event) =>
-					getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
-				)
-			: []
+		const events = (
+			Array.isArray(rawStudentAdvisoryEventsArray)
+				? rawStudentAdvisoryEventsArray.map((event) =>
+						getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
+					)
+				: []
+		).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 		return <StudentAdvisoryEventsPage events={events} />
 	}
 
