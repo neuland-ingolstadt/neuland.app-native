@@ -16,7 +16,7 @@ function CareerServiceEventRow({
 }: {
 	event: CareerServiceEventFieldsFragment
 }): React.JSX.Element {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	const handlePress = () => {
@@ -45,13 +45,29 @@ function CareerServiceEventRow({
 							})}
 						</Text>
 					) : event.waitingList && event.waitingList > 0 ? (
-						<Text style={styles.waitingListText}>
+						<Text
+							style={[
+								styles.waitingListText,
+								event.waitingList >= (event.maxWaitingList ?? 0) && {
+									color: theme.colors.notification
+								}
+							]}
+						>
 							{t('pages.events.registration.waitingList.row', {
 								current: event.waitingList,
 								max: event.maxWaitingList
 							})}
 						</Text>
-					) : null}
+					) : (
+						<Text
+							style={[
+								styles.waitingListText,
+								{ color: theme.colors.notification }
+							]}
+						>
+							{t('pages.events.registration.fullyBooked')}
+						</Text>
+					)}
 				</View>
 			</View>
 		</Pressable>
