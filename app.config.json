@@ -51,7 +51,16 @@
 					"autoVerify": true,
 					"data": {
 						"scheme": "https",
-						"host": "*.neuland.app"
+						"host": "dev.neuland.app"
+					},
+					"category": ["BROWSABLE", "DEFAULT"]
+				},
+				{
+					"action": "VIEW",
+					"autoVerify": true,
+					"data": {
+						"scheme": "https",
+						"host": "neuland.app"
 					},
 					"category": ["BROWSABLE", "DEFAULT"]
 				}
@@ -70,7 +79,8 @@
 			[
 				"expo-router",
 				{
-					"headOrigin": "https://neuland.app"
+					"headOrigin": "https://neuland.app",
+					"sitemap": false
 				}
 			],
 			[
@@ -180,6 +190,8 @@
 			"name": "Neuland Next - Deine inoffizielle App für die THI",
 			"description": "Neuland Next ist eine inoffizielle App für die Technische Hochschule Ingolstadt. Sie bietet dir alle Funktionen, die du für dein Studium benötigst, an einem Ort.",
 			"lang": "de",
+			"themeColor": "#007aff",
+			"darkThemeColor": "#0e83fd",
 			"preferRelatedApplications": true,
 			"output": "single",
 			"bundler": "metro"
