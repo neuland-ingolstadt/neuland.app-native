@@ -1,4 +1,3 @@
-import type { Meal } from '@/types/neuland-api'
 import type {
 	Exam,
 	FriendlyTimetableEntry,
@@ -7,8 +6,6 @@ import type {
 import { create } from 'zustand'
 
 interface RouteParamsStore {
-	selectedMeal: Meal | undefined
-	setSelectedMeal: (selectedMeal: Meal) => void
 	selectedLecture: FriendlyTimetableEntry | undefined
 	setSelectedLecture: (selectedLecture: FriendlyTimetableEntry) => void
 	selectedExam: Exam | undefined
@@ -20,10 +17,6 @@ interface RouteParamsStore {
 }
 
 const useRouteParamsStore = create<RouteParamsStore>((set) => ({
-	selectedMeal: undefined,
-	setSelectedMeal: (selectedMeal: Meal) => {
-		set({ selectedMeal })
-	},
 	selectedLecture: undefined,
 	setSelectedLecture: (selectedLecture: FriendlyTimetableEntry) => {
 		set({ selectedLecture })

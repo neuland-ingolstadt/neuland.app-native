@@ -6,7 +6,6 @@ import { UserKindContext } from '@/components/contexts'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Meal } from '@/types/neuland-api'
 import {
@@ -70,9 +69,6 @@ export const MealEntry = memo(
 				),
 			[meal.flags, deferredPreferences, i18n.language]
 		)
-		const setSelectedMeal = useRouteParamsStore(
-			(state) => state.setSelectedMeal
-		)
 		const price = getUserSpecificPrice(meal, userKind ?? 'guest')
 		const label =
 			price !== '' ? getUserSpecificLabel(userKind ?? 'guest', t) : ''
@@ -99,7 +95,6 @@ export const MealEntry = memo(
 		const [key, setKey] = useState(Math.random())
 
 		const itemPressed = (): void => {
-			setSelectedMeal(meal)
 			router.navigate({
 				pathname: '/food/[id]',
 				params: { id: meal.id }

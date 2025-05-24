@@ -2,32 +2,29 @@ import WhatsNewBox from '@/components/Flow/WhatsnewBox'
 import LoginForm from '@/components/Universal/LoginForm'
 import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import type { OnboardingCardData } from '@/types/data'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking, Platform, StyleSheet, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
+import { useFlowStore } from '@/hooks/useFlowStore'
 import LoginAnimatedText from './LoginAnimatedText'
 
 export default function Login(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('flow')
-	const { fromOnboarding } = useLocalSearchParams<{
-		fromOnboarding: string
-	}>()
+	const analyticsAllowed = useFlowStore((state) => state.analyticsAllowed)
+	const setAnalyticsAllowed = useFlowStore((state) => state.setAnalyticsAllowed)
 
 	const navigateHome = (): void => {
-		if (fromOnboarding === 'true') {
-			router.dismissAll()
-			router.replace('/')
-			return
+		// on web there is no onboarding screen to enable analytics
+		// if the user has not set any preferences, we can assume they want to enable analytics
+		if (analyticsAllowed === undefined) {
+			setAnalyticsAllowed(true)
 		}
-		router.dismissAll()
-		if (Platform.OS === 'web') {
-			router.replace('/')
-		}
+		router.replace('/')
 	}
 
 	const data: OnboardingCardData[] = [

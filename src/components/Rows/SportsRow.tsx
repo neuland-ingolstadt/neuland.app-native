@@ -1,5 +1,4 @@
 import type { UniversitySportsFieldsFragment } from '@/__generated__/gql/graphql'
-import useCLParamsStore from '@/hooks/useCLParamsStore'
 import i18n, { type LanguageKey } from '@/localization/i18n'
 import { formatFriendlyTimeRange } from '@/utils/date-utils'
 import { sportsCategories } from '@/utils/events-utils'
@@ -17,11 +16,7 @@ const SportsRow = ({
 	event: UniversitySportsFieldsFragment
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const setSelectedSportsEvent = useCLParamsStore(
-		(state) => state.setSelectedSportsEvent
-	)
 	const onPressRow = (): void => {
-		setSelectedSportsEvent(event)
 		router.navigate({
 			pathname: '/events/sports/[id]',
 			params: { id: event.id }
