@@ -1,7 +1,5 @@
 import type { CampusLifeEventFieldsFragment } from '@/__generated__/gql/graphql'
-import useCLParamsStore from '@/hooks/useCLParamsStore'
 import type { LanguageKey } from '@/localization/i18n'
-import type { CLEvents } from '@/types/neuland-api'
 import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
@@ -20,9 +18,7 @@ const CLEventRow = ({
 	event: CampusLifeEventFieldsFragment
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const setSelectedClEvent = useCLParamsStore(
-		(state) => state.setSelectedClEvent
-	)
+
 	const { t, i18n } = useTranslation('common')
 	let begin = null
 	if (event.startDateTime != null) {
@@ -34,7 +30,6 @@ const CLEventRow = ({
 	const isActive =
 		begin != null && begin < new Date() && end != null && end > new Date()
 	const onPressRow = (): void => {
-		setSelectedClEvent(event as CLEvents)
 		router.navigate({
 			pathname: '/events/cl/[id]',
 			params: { id: event.id }

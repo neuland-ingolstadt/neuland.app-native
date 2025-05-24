@@ -79,18 +79,7 @@ export default function ClEventDetail(): React.JSX.Element {
 
 	const event = queryData?.find((event) => event.id === id)
 	const eventData: CampusLifeEventFieldsFragment | null = event ?? null
-
-	if (isLoading || !queryData) {
-		return (
-			<View style={styles.loadingContainer}>
-				<LoadingIndicator />
-			</View>
-		)
-	}
-
-	if (error || !eventData) {
-		return <EventErrorView eventType="clEvents" />
-	}
+	const navigation = useNavigation()
 
 	const scrollOffset = useSharedValue(0)
 	const scrollHandler = useAnimatedScrollHandler({
@@ -116,6 +105,49 @@ export default function ClEventDetail(): React.JSX.Element {
 		}
 	})
 
+	const dateRange = formatFriendlyDateTimeRange(
+		eventData?.startDateTime != null ? new Date(eventData.startDateTime) : null,
+		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
+	)
+
+	useFocusEffect(
+		useCallback(() => {
+			if (eventData) {
+				navigation.setOptions({
+					headerRight: () => (
+						<ShareHeaderButton
+							onPress={async () => {
+								trackEvent('Share', {
+									type: 'clEvent'
+								})
+								await Share.share({
+									message: t('pages.event.shareMessage', {
+										title: eventData?.titles[i18n.language as LanguageKey],
+										organizer: eventData?.host.name,
+										date: dateRange,
+										link: `https://neuland.app/events/cl/${id}`
+									})
+								})
+							}}
+						/>
+					)
+				})
+			}
+		}, [navigation, t, eventData, id, i18n.language, dateRange])
+	)
+
+	if (isLoading || !queryData) {
+		return (
+			<View style={styles.loadingContainer}>
+				<LoadingIndicator />
+			</View>
+		)
+	}
+
+	if (error || !eventData) {
+		return <EventErrorView eventType="clEvents" />
+	}
+
 	const isMultiDayEvent =
 		eventData?.startDateTime != null &&
 		eventData.endDateTime != null &&
@@ -124,36 +156,6 @@ export default function ClEventDetail(): React.JSX.Element {
 
 	const isWebsiteAvailable = eventData?.host.website != null
 	const isInstagramAvailable = eventData?.host.instagram != null
-
-	const dateRange = formatFriendlyDateTimeRange(
-		eventData?.startDateTime != null ? new Date(eventData.startDateTime) : null,
-		eventData?.endDateTime != null ? new Date(eventData.endDateTime) : null
-	)
-	const navigation = useNavigation()
-
-	useFocusEffect(
-		useCallback(() => {
-			navigation.setOptions({
-				headerRight: () => (
-					<ShareHeaderButton
-						onPress={async () => {
-							trackEvent('Share', {
-								type: 'clEvent'
-							})
-							await Share.share({
-								message: t('pages.event.shareMessage', {
-									title: eventData?.titles[i18n.language as LanguageKey],
-									organizer: eventData?.host.name,
-									date: dateRange,
-									link: `https://neuland.app/events/cl/${id}`
-								})
-							})
-						}}
-					/>
-				)
-			})
-		}, [navigation, t, eventData, id, i18n.language, dateRange])
-	)
 
 	const sections: FormListSections[] = [
 		{

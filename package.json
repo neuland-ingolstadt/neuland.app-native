@@ -72,7 +72,7 @@
 		"graphql": "^16.11.0",
 		"i18next": "^24.2.3",
 		"idb": "^8.0.3",
-		"lucide-react-native": "0.487.0",
+		"lucide-react-native": "0.511.0",
 		"maplibre-gl": "^5.5.0",
 		"metro": "^0.81.5",
 		"moment": "^2.30.1",
@@ -133,9 +133,9 @@
 	},
 	"patchedDependencies": {
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
-		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
-		"recyclerlistview@4.2.1": "patches/recyclerlistview@4.2.1.patch"
+		"recyclerlistview@4.2.1": "patches/recyclerlistview@4.2.1.patch",
+		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch"
 	},
 	"expo": {
 		"install": {

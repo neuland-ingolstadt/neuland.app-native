@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
 
+import Constants from 'expo-constants'
 import { appIcons } from '../(screens)/app-icon'
 
 export default function HomeLayout(): React.JSX.Element {
@@ -152,7 +153,12 @@ export default function HomeLayout(): React.JSX.Element {
 		console.debug('Analytics allowed:', analyticsAllowed)
 		if (aptabaseKey != null && analyticsAllowed === true) {
 			Aptabase.init(aptabaseKey, {
-				host: 'https://analytics.neuland.app'
+				host: 'https://analytics.neuland.app',
+				appVersion:
+					Platform.OS === 'web'
+						? `${Constants.expoConfig?.version}-web`
+						: undefined,
+				enableWeb: true
 			})
 			// we need to mark the analytics as initialized to trigger the initial events sent in provider.tsx
 			initializeAnalytics()

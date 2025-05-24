@@ -43,7 +43,6 @@ export default function Login(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const floatingKeyboard = useIsFloatingKeyboard()
 	const { t } = useTranslation('flow')
-
 	const { fromOnboarding } = useLocalSearchParams<{
 		fromOnboarding: string
 	}>()
@@ -55,9 +54,6 @@ export default function Login(): React.JSX.Element {
 			return
 		}
 		router.dismissAll()
-		if (Platform.OS === 'web') {
-			router.replace('/(tabs)')
-		}
 	}
 
 	const insets = useSafeAreaInsets()
