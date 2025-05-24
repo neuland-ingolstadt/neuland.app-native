@@ -12,10 +12,12 @@ import { QUERY_KEYS } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
+import { router } from 'expo-router'
+import { Platform } from 'react-native'
 
 const CareerCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
@@ -54,34 +56,70 @@ const CareerCard = (): React.JSX.Element => {
 			: []
 	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
+	const handleEventItemPress = (id: string, studentAdvisory?: boolean) => {
+		if (Platform.OS !== 'ios') {
+			if (studentAdvisory) {
+				router.navigate({
+					pathname: '/events/advisory/[id]',
+					params: { id }
+				})
+			} else {
+				router.navigate({
+					pathname: '/events/career/[id]',
+					params: { id }
+				})
+			}
+			return
+		}
+
+		router.navigate({
+			pathname: '/thi-services',
+			params: {
+				openEvent: 'true',
+				id,
+				tab: studentAdvisory ? 'student-advisory' : undefined
+			}
+		})
+	}
+
 	return (
 		<BaseCard title="thiServices" onPressRoute="/thi-services">
 			<View style={styles.eventsContainer}>
 				{careerServiceEvents[0] && (
-					<EventItem
-						title={careerServiceEvents[0].title}
-						subtitle={t('pages.events.careerService.title')}
-						startDateTime={
-							careerServiceEvents[0].date
-								? new Date(careerServiceEvents[0].date)
-								: undefined
-						}
-						subtitleTranslationKey="pages.events.careerService.title"
-						color={theme.colors.primary}
-					/>
+					<Pressable
+						onPress={() => handleEventItemPress(careerServiceEvents[0].id)}
+					>
+						<EventItem
+							title={careerServiceEvents[0].title}
+							subtitle={t('pages.events.careerService.title')}
+							startDateTime={
+								careerServiceEvents[0].date
+									? new Date(careerServiceEvents[0].date)
+									: undefined
+							}
+							subtitleTranslationKey="pages.events.careerService.title"
+							color={theme.colors.primary}
+						/>
+					</Pressable>
 				)}
 				{studentAdvisoryEvents[0] && (
-					<EventItem
-						title={studentAdvisoryEvents[0].title}
-						subtitle={t('pages.events.studentAdvisory.title')}
-						startDateTime={
-							studentAdvisoryEvents[0].date
-								? new Date(studentAdvisoryEvents[0].date)
-								: undefined
+					<Pressable
+						onPress={() =>
+							handleEventItemPress(studentAdvisoryEvents[0].id, true)
 						}
-						subtitleTranslationKey="pages.events.studentAdvisory.title"
-						color={theme.colors.primary}
-					/>
+					>
+						<EventItem
+							title={studentAdvisoryEvents[0].title}
+							subtitle={t('pages.events.studentAdvisory.title')}
+							startDateTime={
+								studentAdvisoryEvents[0].date
+									? new Date(studentAdvisoryEvents[0].date)
+									: undefined
+							}
+							subtitleTranslationKey="pages.events.studentAdvisory.title"
+							color={theme.colors.primary}
+						/>
+					</Pressable>
 				)}
 			</View>
 		</BaseCard>

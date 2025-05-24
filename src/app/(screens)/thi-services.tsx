@@ -18,17 +18,26 @@ import {
 import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQueries } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, View, useWindowDimensions } from 'react-native'
+import {
+	Animated,
+	InteractionManager,
+	View,
+	useWindowDimensions
+} from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')
 	const { styles } = useStyles(stylesheet)
-	const { tab } = useLocalSearchParams<{ tab?: string }>()
+	const { tab, openEvent, id } = useLocalSearchParams<{
+		tab?: string
+		openEvent?: string
+		id?: string
+	}>()
 	const results = useQueries({
 		queries: [
 			{
@@ -125,6 +134,27 @@ export default function Events(): React.JSX.Element {
 		).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 		return <StudentAdvisoryEventsPage events={events} />
 	}
+
+	useFocusEffect(
+		useCallback(() => {
+			if (openEvent === 'true' && id) {
+				InteractionManager.runAfterInteractions(() => {
+					router.setParams({ openEvent: 'false' })
+					if (selectedData === 1) {
+						router.navigate({
+							pathname: '/events/advisory/[id]',
+							params: { id }
+						})
+					} else {
+						router.navigate({
+							pathname: '/events/career/[id]',
+							params: { id }
+						})
+					}
+				})
+			}
+		}, [openEvent, id, selectedData])
+	)
 
 	return (
 		<View style={styles.page}>
