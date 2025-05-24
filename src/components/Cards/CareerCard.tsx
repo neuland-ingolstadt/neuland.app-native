@@ -10,14 +10,14 @@ import {
 import neulandAPI from '@/api/neuland-api'
 import { QUERY_KEYS } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, View } from 'react-native'
+import { Platform } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
-import { router } from 'expo-router'
-import { Platform } from 'react-native'
 
 const CareerCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)

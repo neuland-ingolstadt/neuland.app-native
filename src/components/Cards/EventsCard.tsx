@@ -1,13 +1,13 @@
 import type { LanguageKey } from '@/localization/i18n'
 import { QUERY_KEYS, loadCampusLifeEvents } from '@/utils/events-utils'
 import { useQuery } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import EventItem from '../Universal/EventItem'
 import BaseCard from './BaseCard'
-import { router } from 'expo-router'
 
 const EventsCard = (): React.JSX.Element => {
 	const { theme, styles } = useStyles(stylesheet)
