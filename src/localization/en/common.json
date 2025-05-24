@@ -353,7 +353,8 @@
 					"title": "Waiting List",
 					"value": "{{current}} / {{max}}"
 				},
-				"unlimitedShort": "Unlimited"
+				"unlimitedShort": "Unlimited",
+				"fullyBooked": "Fully booked"
 			}
 		}
 	},
