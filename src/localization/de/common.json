@@ -192,7 +192,10 @@
 			"shareMessage": "Schau dir dieses Event an:\n{{title}} von {{organizer}} am {{date}}\n{{link}}",
 			"shareCareerMessage": "Schau dir dieses Karriere-Event an:\n{{title}} vom Karriere Service am {{date}}\n{{link}}",
 			"shareAdvisoryMessage": "Schau dir dieses Beratungs-Event an:\n{{title}} von der Studierendenberatung am {{date}}\n{{link}}",
-			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}"
+			"shareSports": "Schau dir dieses Sportevent an:\n{{title}} jeden {{weekday}} um {{time}}\n{{link}}",
+			"details": "Details",
+			"links": "Links",
+			"registerNow": "Jetzt anmelden"
 		},
 		"map": {
 			"search": {
@@ -345,9 +348,11 @@
 			"registration": {
 				"unlimitedSlots": "Unbegrenzte Plätze verfügbar",
 				"availableSlots": "{{available}} von {{total}} Plätzen verfügbar",
-				"waitingList": "{{current}} von {{max}} auf der Warteliste",
-				"waitingList.title": "Warteliste",
-				"waitingList.value": "{{current}} / {{max}}",
+				"waitingList": {
+					"row": "Warteliste: {{current}} / {{max}}",
+					"title": "Warteliste",
+					"value": "{{current}} / {{max}}"
+				},
 				"unlimitedShort": "Unbegrenzt",
 				"fullyBooked": "Ausgebucht"
 			}
