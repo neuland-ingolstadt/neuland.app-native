@@ -108,7 +108,7 @@ export const SettingsTabButton = ({
 				variant: focused ? 'filled' : ('outlined' as 'filled' | 'outlined')
 			},
 			web: {
-				name: (focused ? 'CircleUserRound' : 'CircleUser') as LucideIcon,
+				name: 'CircleUserRound' as LucideIcon,
 				size
 			}
 		}
