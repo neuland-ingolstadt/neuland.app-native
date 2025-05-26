@@ -143,7 +143,7 @@ export default function NotesDetails(): React.JSX.Element {
 						setLoaded(true)
 					}, LOADING_TIMEOUT)
 
-					setTimeoutId(id as number)
+					setTimeoutId(id as unknown as number)
 				}}
 				backgroundColor={theme.colors.background}
 				originWhitelist={['*']}
