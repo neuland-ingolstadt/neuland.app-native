@@ -1,0 +1,9 @@
+{
+	"rules": {
+		"ci": [".github/workflows/build-webapp.yml"],
+		"documentation": ["docs/"],
+		"android": ["android/"],
+		"ios": ["ios/"],
+		"dependencies": ["package.json"]
+	}
+}

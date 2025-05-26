@@ -90,9 +90,7 @@
 		"react-native-draggable-flatlist": "^4.0.3",
 		"react-native-edge-to-edge": "^1.6.0",
 		"react-native-gesture-handler": "~2.24.0",
-		"react-native-ios-context-menu": "3.1.2",
-		"react-native-ios-utilities": "^5.1.5",
-		"react-native-mmkv": "3.2.0",
+		"react-native-mmkv": "^2.12.2",
 		"react-native-pager-view": "6.8.0",
 		"react-native-reanimated": "~3.17.5",
 		"react-native-safe-area-context": "5.4.0",
@@ -106,7 +104,6 @@
 		"sanitize-html": "^2.17.0",
 		"sweet-sfsymbols": "0.7.2",
 		"swiftui-react-native": "^6.3.3",
-		"zeego": "^3.0.6",
 		"zustand": "^5.0.5"
 	},
 	"devDependencies": {

@@ -172,7 +172,7 @@ const stylesheet = createStyleSheet((theme) => ({
 	suggestionRow: {
 		flexDirection: 'row',
 		paddingHorizontal: 12,
-		paddingVertical: 14
+		paddingVertical: 18
 	},
 	suggestionSectionHeader: {
 		color: theme.colors.text,

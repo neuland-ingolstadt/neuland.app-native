@@ -1,9 +1,6 @@
 import { RoomReportCategory } from '@/__generated__/gql/graphql'
 import neulandApi from '@/api/neuland-api'
-import DropdownMenuContent from '@/components/Menu/DropdownMenuContent'
-import DropdownMenuItem from '@/components/Menu/DropdownMenuItem'
-import DropdownMenuItemTitle from '@/components/Menu/DropdownMenuItemTitle'
-import DropdownMenuTrigger from '@/components/Menu/DropdownMenuTrigger'
+import { CustomDropdown } from '@/components/Menu/CustomDropdown'
 import { getContrastColor } from '@/utils/ui-utils'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'burnt'
@@ -19,7 +16,6 @@ import {
 	createStyleSheet,
 	useStyles
 } from 'react-native-unistyles'
-import * as DropdownMenu from 'zeego/dropdown-menu'
 
 export default function RoomReport(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
@@ -95,33 +91,16 @@ export default function RoomReport(): React.JSX.Element {
 				<Text style={styles.inputLabel}>
 					{t('pages.rooms.report.category.title')}
 				</Text>
-				<DropdownMenu.Root>
-					<DropdownMenuTrigger
-						style={{ ...styles.textInput, ...styles.trigger }}
-					>
-						<Text style={styles.triggerText}>
-							{reportCategory
-								? t(`pages.rooms.report.category.type.${reportCategory}`)
-								: t('pages.rooms.report.category.placeholder')}
-						</Text>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent>
-						{reportCategories.map((categroy) => {
-							return (
-								<DropdownMenuItem
-									key={categroy}
-									onSelect={() => {
-										setReportCategory(categroy)
-									}}
-								>
-									<DropdownMenuItemTitle style={styles.inputLabel}>
-										{t(`pages.rooms.report.category.type.${categroy}`)}
-									</DropdownMenuItemTitle>
-								</DropdownMenuItem>
-							)
-						})}
-					</DropdownMenuContent>
-				</DropdownMenu.Root>
+				<CustomDropdown
+					value={reportCategory}
+					onChange={setReportCategory}
+					options={reportCategories.map((category) => ({
+						label: t(`pages.rooms.report.category.type.${category}`),
+						value: category
+					}))}
+					placeholder={t('pages.rooms.report.category.placeholder')}
+					style={styles.textInput}
+				/>
 
 				<Text style={styles.inputLabel}>
 					{t('pages.rooms.report.description.title')}
@@ -212,7 +191,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 10
 	},
 	multilineTextInput: {
-		height: 200
+		height: 200,
+		paddingTop: 10,
+		textAlignVertical: 'top'
 	},
 	submitButton: (disabled: boolean) => ({
 		height: 40,
@@ -238,14 +219,5 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingHorizontal: 10,
 		borderColor: theme.colors.border,
 		borderWidth: 1
-	},
-	trigger: {
-		backgroundColor: theme.colors.inputBackground,
-		flex: 1,
-		justifyContent: 'center'
-	},
-	triggerText: {
-		color: theme.colors.text,
-		fontSize: 17
 	}
 }))
