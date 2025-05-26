@@ -148,6 +148,7 @@ export function getGroupedTimetable(
 
 				while (currentDate <= endDate) {
 					eventDays.push({
+						id: event.id,
 						date: new Date(currentDate),
 						startDate: new Date(currentDate),
 						endDate: null,

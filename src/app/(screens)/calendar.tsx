@@ -4,6 +4,7 @@ import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import { trackEvent } from '@aptabase/react-native'
+import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { Suspense, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +14,9 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function CalendarPage(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
+	const { event } = useLocalSearchParams<{
+		event: string
+	}>()
 	const displayTypes = [
 		t('pages.calendar.events.title'),
 		t('pages.calendar.exams.title')
@@ -52,7 +56,10 @@ export default function CalendarPage(): React.JSX.Element {
 					}
 				>
 					{index === 0 ? (
-						<CalendarEventsPage handleLinkPress={handleLinkPress} />
+						<CalendarEventsPage
+							handleLinkPress={handleLinkPress}
+							selectedEventId={event}
+						/>
 					) : (
 						<ExamsPage
 							primussUrl={primussUrl}
