@@ -29,7 +29,7 @@ configureReanimatedLogger({
 
 export const unstable_settings = {
 	// Ensure any route can link back to `/`
-	initialRouteName: '(tabs)'
+	initialRouteName: 'index'
 }
 // Ignore common React Native warnings
 LogBox.ignoreLogs([
@@ -56,12 +56,17 @@ function RootLayout(): React.JSX.Element {
 
 	useEffect(() => {
 		const handleOpenURL = (event: { url: string }) => {
-			const base = 'neuland://'
-			if (event.url.startsWith(base)) {
-				const fullPath = event.url.replace(base, '')
-				// Extract first path segment and remove query parameters
-				const firstPath = fullPath.split('/')[0].split('?')[0]
-				router.navigate(firstPath as Href)
+			console.log('handleOpenURL', event.url)
+			const bases = ['https://neuland.app', 'https://dev.neuland.app']
+
+			const matchingBase = bases.find((base) => event.url.startsWith(base))
+			if (matchingBase) {
+				// Remove the base URL and any trailing slashes, but keep the rest of the path and query params
+				const fullPath = event.url.replace(matchingBase, '').replace(/^\/+/, '')
+
+				if (fullPath) {
+					router.navigate(fullPath as Href)
+				}
 			}
 		}
 

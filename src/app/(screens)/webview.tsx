@@ -18,7 +18,7 @@ export default function NotesDetails(): React.JSX.Element {
 	const { t } = useTranslation('timetable')
 	const { styles, theme } = useStyles(stylesheet)
 	const [loaded, setLoaded] = useState(false)
-	const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+	const [timeoutId, setTimeoutId] = useState<number | null>(null)
 
 	const htmlContent = useRouteParamsStore((state) => state.htmlContent)
 
@@ -139,11 +139,11 @@ export default function NotesDetails(): React.JSX.Element {
 				scalesPageToFit
 				style={styles.webview}
 				onLoadEnd={() => {
-					const timeoutId = setTimeout(() => {
+					const id = setTimeout(() => {
 						setLoaded(true)
 					}, LOADING_TIMEOUT)
 
-					setTimeoutId(timeoutId)
+					setTimeoutId(id as unknown as number)
 				}}
 				backgroundColor={theme.colors.background}
 				originWhitelist={['*']}
