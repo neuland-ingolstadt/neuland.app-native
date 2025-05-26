@@ -30,7 +30,10 @@ const CareerCard = (): React.JSX.Element => {
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const studentCounsellingQuery = useQuery<StudentCounsellingEventsQuery, Error>({
+	const studentCounsellingQuery = useQuery<
+		StudentCounsellingEventsQuery,
+		Error
+	>({
 		queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
 		queryFn: () => neulandAPI.getStudentCounsellingEvents(),
 		staleTime: 1000 * 60 * 5,

@@ -79,7 +79,8 @@ export default function Events(): React.JSX.Element {
 	useEffect(() => {
 		if (
 			(careerServiceResult.isPaused && careerServiceResult.data != null) ||
-			(studentCounsellingResult.isPaused && studentCounsellingResult.data != null)
+			(studentCounsellingResult.isPaused &&
+				studentCounsellingResult.data != null)
 		) {
 			pausedToast()
 		}
