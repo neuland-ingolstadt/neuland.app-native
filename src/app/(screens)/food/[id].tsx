@@ -708,26 +708,25 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	page: {
-		marginHorizontal: theme.margins.page,
-		backgroundColor: theme.colors.background
+		marginHorizontal: theme.margins.page
+	},
+	subtitleText: {
+		color: theme.colors.labelColor,
+		fontSize: 16,
+		fontWeight: '600'
 	},
 	titleContainer: {
 		alignItems: 'flex-start',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingBottom: 6,
-		backgroundColor: theme.colors.card,
-		borderRadius: theme.radius.md,
-		padding: 16,
-		marginTop: 16,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
+		paddingBottom: 6
 	},
 	titleText: {
 		color: theme.colors.text,
 		flex: 1,
 		fontSize: 22,
 		fontWeight: '700',
+		paddingTop: 16,
 		textAlign: 'left'
 	},
 	loadingContainer: {
@@ -761,8 +760,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		flexDirection: 'row',
 		gap: 8,
 		marginBottom: 16,
-		flexWrap: 'wrap',
-		paddingHorizontal: 4
+		flexWrap: 'wrap'
 	},
 	tagContainer: {
 		flexDirection: 'row',
