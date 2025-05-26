@@ -191,7 +191,9 @@ const stylesheet = createStyleSheet((theme) => ({
 		paddingBottom: 10
 	},
 	multilineTextInput: {
-		height: 200
+		height: 200,
+		paddingTop: 10,
+		textAlignVertical: 'top'
 	},
 	submitButton: (disabled: boolean) => ({
 		height: 40,
