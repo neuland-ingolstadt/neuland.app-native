@@ -508,31 +508,32 @@ export default function FoodDetail(): React.JSX.Element {
 					{title}
 				</Text>
 			</View>
-			{mealWithDate?.date && (
-				<View style={styles.dateContainer}>
-					<PlatformIcon
-						ios={{
-							name: 'calendar',
-							variant: 'fill',
-							size: 13
-						}}
-						android={{
-							name: 'calendar_today',
-							size: 15
-						}}
-						web={{
-							name: 'Calendar',
-							size: 15
-						}}
-						style={styles.dateIcon}
-					/>
-					<Text style={styles.dateText}>
-						{formatFriendlyDate(mealWithDate.date)}
-					</Text>
-				</View>
-			)}
 
 			<View style={styles.tagsContainer}>
+				{mealWithDate?.date && (
+					<View style={styles.tagContainer}>
+						<PlatformIcon
+							ios={{
+								name: 'calendar',
+								variant: 'fill',
+								size: 13
+							}}
+							android={{
+								name: 'calendar_today',
+								size: 15
+							}}
+							web={{
+								name: 'Calendar',
+								size: 15
+							}}
+							style={styles.tagIcon}
+						/>
+						<Text style={styles.tagText}>
+							{formatFriendlyDate(mealWithDate.date)}
+						</Text>
+					</View>
+				)}
+
 				<View style={styles.tagContainer}>
 					<PlatformIcon
 						ios={{
@@ -551,26 +552,6 @@ export default function FoodDetail(): React.JSX.Element {
 						style={styles.tagIcon}
 					/>
 					<Text style={styles.tagText}>{humanLocation}</Text>
-				</View>
-
-				<View style={styles.tagContainer}>
-					<PlatformIcon
-						ios={{
-							name: 'tag',
-							variant: 'outline',
-							size: 13
-						}}
-						android={{
-							name: 'sell',
-							size: 15
-						}}
-						web={{
-							name: 'Tag',
-							size: 15
-						}}
-						style={styles.tagIcon}
-					/>
-					<Text style={styles.tagText}>{humanCategory}</Text>
 				</View>
 			</View>
 
@@ -734,33 +715,11 @@ const stylesheet = createStyleSheet((theme) => ({
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	dateContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 6,
-		marginBottom: 8,
-		backgroundColor: theme.colors.card,
-		paddingHorizontal: 12,
-		paddingVertical: 6,
-		borderRadius: theme.radius.md,
-		alignSelf: 'flex-start',
-		marginTop: 8,
-		borderWidth: StyleSheet.hairlineWidth,
-		borderColor: theme.colors.border
-	},
-	dateIcon: {
-		color: theme.colors.primary
-	},
-	dateText: {
-		color: theme.colors.text,
-		fontSize: 14,
-		fontWeight: '500'
-	},
 	tagsContainer: {
 		flexDirection: 'row',
 		gap: 8,
 		marginBottom: 16,
-		flexWrap: 'wrap'
+		alignItems: 'center'
 	},
 	tagContainer: {
 		flexDirection: 'row',

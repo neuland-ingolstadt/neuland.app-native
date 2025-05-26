@@ -76,7 +76,9 @@ export default function ExamsPage({
 	return (
 		<View style={styles.container}>
 			{isLoading ? (
-				<LoadingIndicator />
+				<View style={styles.loadingContainer}>
+					<LoadingIndicator />
+				</View>
 			) : isError ? (
 				<ErrorView
 					title={error?.message ?? t('error.title')}
@@ -144,6 +146,11 @@ const stylesheet = createStyleSheet((theme) => ({
 	container: {
 		flex: 1,
 		width: '100%'
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	footerContainer: {
 		marginVertical: 4,
