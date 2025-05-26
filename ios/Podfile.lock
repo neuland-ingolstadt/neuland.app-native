@@ -1746,7 +1746,7 @@ PODS:
     - React-Core
     - React-RCTFabric
     - ReactCommon/turbomodule/core
-  - react-native-ios-context-menu (3.1.0):
+  - react-native-ios-context-menu (3.1.2):
     - ContextMenuAuxiliaryPreview (~> 0.5)
     - DGSwiftUtilities
     - DoubleConversion
@@ -1763,6 +1763,8 @@ PODS:
     - React-hermes
     - React-ImageManager
     - React-jsi
+    - React-jsinspector
+    - React-jsinspectortracing
     - react-native-ios-utilities
     - React-NativeModulesApple
     - React-RCTAppDelegate
@@ -1854,7 +1856,7 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-pager-view (6.7.1):
+  - react-native-pager-view (6.8.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2373,7 +2375,7 @@ PODS:
     - Yoga
   - RNDeviceInfo (14.0.4):
     - React-Core
-  - RNFlashList (1.7.6):
+  - RNFlashList (1.8.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2597,7 +2599,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.11.2):
+  - RNSVG (15.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2620,9 +2622,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.11.2)
+    - RNSVG/common (= 15.12.0)
     - Yoga
-  - RNSVG/common (15.11.2):
+  - RNSVG/common (15.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -3135,12 +3137,12 @@ SPEC CHECKSUMS:
   react-native-bottom-tabs: 7b19050df9e9250f4f090319515e45c3c18ee861
   react-native-context-menu-view: 3a8fb510448efa9d477f645dafa889ef1c78daaa
   react-native-drag-drop-ios: ed387dcc961a8e857b4501b8126e624a4bc3f29c
-  react-native-ios-context-menu: 2b57d0e6a7108e550b5067af76bffc24a737e197
+  react-native-ios-context-menu: c422be33a2cd21b6ab58caaf2301335e6e96684c
   react-native-ios-utilities: 2d8c2596afad6c0cfb5faa2d6e1fa95821d53ee8
   react-native-menu: f683dfc6c942f8d44f48533385d8c5cf65bbabb1
   react-native-mmkv: c8da06f2c3ed40726ac6b51ed4e3653d099f0b6a
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-pager-view: 04ff926ac8977b63970da40effd02963b60e0970
+  react-native-pager-view: ea78496a626af2500ce381cf1708a1c5cedbcfd7
   react-native-safe-area-context: 5928d84c879db2f9eb6969ca70e68f58623dbf25
   react-native-unistyles: c8a1ad2a93aa4e5582d6f7b98fc6254d57c80ce1
   react-native-view-shot: aacb5b315b442a2326b1212c9de49b78c0e91cf9
@@ -3178,11 +3180,11 @@ SPEC CHECKSUMS:
   ReactCommon: 1511ef100f1afa4c199fe52fe7a8d2529a41429a
   RNDateTimePicker: 8c6faabd27163a374ee08ea8d64cbc0b104c5d9b
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
-  RNFlashList: 1897a8ba91227cd2c1dfcf2e893ebbd25f61786e
+  RNFlashList: 528d0d55ee143bd4ddf1a1b8c0f87c9b55688b18
   RNGestureHandler: 8ff2b1434b0ff8bab28c8242a656fb842990bbc8
   RNReanimated: a3f55346df73f35c38bf0b446294d3d0b1ac8cf9
   RNScreens: a25b818417609cbd805474dffd2d28b229704cfc
-  RNSVG: 4470464e129f6bc58b78b961850b054dbbea8ef7
+  RNSVG: 45e3c3210465e75ab6374c9f746179e75d76ce48
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageSVGCoder: 8e10c8f6cc879c7dfb317b284e13dd589379f01c
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748

@@ -95,25 +95,25 @@
         "licenseUrl": "https://github.com/react-navigation/react-navigation/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@shopify/flash-list@1.7.6": {
+    "@shopify/flash-list@1.8.0": {
         "licenses": "MIT",
         "repository": "https://github.com/Shopify/flash-list",
         "licenseUrl": "https://github.com/Shopify/flash-list/raw/master/LICENSE.md",
         "parents": "neuland"
     },
-    "@tanstack/query-sync-storage-persister@5.76.1": {
+    "@tanstack/query-sync-storage-persister@5.77.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query-persist-client@5.76.1": {
+    "@tanstack/react-query-persist-client@5.77.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "@tanstack/react-query@5.76.1": {
+    "@tanstack/react-query@5.77.1": {
         "licenses": "MIT",
         "repository": "https://github.com/TanStack/query",
         "licenseUrl": "https://github.com/TanStack/query/raw/master/LICENSE",
@@ -274,7 +274,7 @@
         "licenseUrl": "https://github.com/graphql/graphql-js/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "i18next@24.2.3": {
+    "i18next@25.2.1": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/i18next",
         "licenseUrl": "https://github.com/i18next/i18next/raw/master/LICENSE",
@@ -304,7 +304,7 @@
         "licenseUrl": "https://github.com/facebook/metro",
         "parents": "neuland"
     },
-    "moment-timezone@0.5.48": {
+    "moment-timezone@0.6.0": {
         "licenses": "MIT",
         "repository": "https://github.com/moment/moment-timezone",
         "licenseUrl": "https://github.com/moment/moment-timezone/raw/master/LICENSE",
@@ -328,7 +328,7 @@
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-i18next@15.5.1": {
+    "react-i18next@15.5.2": {
         "licenses": "MIT",
         "repository": "https://github.com/i18next/react-i18next",
         "licenseUrl": "https://github.com/i18next/react-i18next/raw/master/LICENSE",
@@ -382,7 +382,7 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-ios-context-menu@3.1.0": {
+    "react-native-ios-context-menu@3.1.2": {
         "licenses": "MIT",
         "repository": "https://github.com/dominicstop/react-native-ios-context-menu",
         "licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
@@ -400,7 +400,7 @@
         "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
         "parents": "neuland"
     },
-    "react-native-pager-view@6.7.1": {
+    "react-native-pager-view@6.8.0": {
         "licenses": "MIT",
         "repository": "https://github.com/callstack/react-native-pager-view",
         "licenseUrl": "https://github.com/callstack/react-native-pager-view/raw/master/LICENSE",
@@ -430,7 +430,7 @@
         "licenseUrl": "https://github.com/AdelRedaa97/react-native-select-dropdown/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-svg@15.11.2": {
+    "react-native-svg@15.12.0": {
         "licenses": "MIT",
         "repository": "https://github.com/react-native-community/react-native-svg",
         "licenseUrl": "https://github.com/react-native-community/react-native-svg/raw/master/LICENSE",
@@ -496,7 +496,7 @@
         "licenseUrl": "https://github.com/nandorojo/zeego/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "zustand@5.0.4": {
+    "zustand@5.0.5": {
         "licenses": "MIT",
         "repository": "https://github.com/pmndrs/zustand",
         "licenseUrl": "https://github.com/pmndrs/zustand/raw/master/LICENSE",
