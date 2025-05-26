@@ -12,6 +12,7 @@
 			},
 			"events": [
 				{
+					"id": "start-ss25",
 					"name": {
 						"de": "Vorlesungsbeginn und Semesterstart",
 						"en": "Start of lectures and semester"
@@ -19,6 +20,7 @@
 					"begin": "2025-03-17"
 				},
 				{
+					"id": "easter-ss25",
 					"name": {
 						"de": "Vorlesungsfrei (Ostern)",
 						"en": "No lectures (Easter)"
@@ -27,6 +29,7 @@
 					"end": "2025-04-22"
 				},
 				{
+					"id": "reg-ss25",
 					"name": {
 						"de": "Prüfungsanmeldung",
 						"en": "Registration for exams"
@@ -35,6 +38,7 @@
 					"end": "2025-05-09"
 				},
 				{
+					"id": "dereg-ss25",
 					"name": {
 						"de": "Prüfungsabmeldung",
 						"en": "Deregistration for exams"
@@ -43,6 +47,7 @@
 					"end": "2025-06-26"
 				},
 				{
+					"id": "whitsun-ss25",
 					"name": {
 						"de": "Vorlesungsfrei (Pfingsten)",
 						"en": "No lectures (Whitsun)"
@@ -51,6 +56,7 @@
 					"end": "2025-06-10"
 				},
 				{
+					"id": "corpus-ss25",
 					"name": {
 						"de": "Vorlesungsfrei (Fronleichnam, Brückentag)",
 						"en": "No lectures (Corpus Christi, Bridge Day)"
@@ -59,6 +65,7 @@
 					"end": "2025-06-20"
 				},
 				{
+					"id": "pred-ss25",
 					"name": {
 						"de": "Notenmeldung Prädikate (ZV)",
 						"en": "Recording grades predicates (admission requirements)"
@@ -67,6 +74,7 @@
 					"hasHours": true
 				},
 				{
+					"id": "rereg-ws25-ss25",
 					"name": {
 						"de": "Rückmeldung zum Wintersemester 2025/2026",
 						"en": "Re-registration for winter semester 2025/2026"
@@ -75,6 +83,7 @@
 					"end": "2025-08-07"
 				},
 				{
+					"id": "add-exam-ss25",
 					"name": {
 						"de": "Erweiterter Prüfungszeitraum",
 						"en": "Additional exam period"
@@ -83,6 +92,7 @@
 					"end": "2025-07-10"
 				},
 				{
+					"id": "end-ss25",
 					"name": {
 						"de": "Ende der Vorlesungszeit",
 						"en": "End of lecture period"
@@ -90,6 +100,7 @@
 					"begin": "2025-07-10"
 				},
 				{
+					"id": "exam-ss25",
 					"name": {
 						"de": "Prüfungszeitraum",
 						"en": "Exam period"
@@ -98,6 +109,7 @@
 					"end": "2025-07-23"
 				},
 				{
+					"id": "rec-ss25",
 					"name": {
 						"de": "Notenmeldung",
 						"en": "Recording grades"
@@ -106,6 +118,7 @@
 					"hasHours": true
 				},
 				{
+					"id": "ann-ss25",
 					"name": {
 						"de": "Notenbekanntgabe",
 						"en": "Announcement of grades"
@@ -114,6 +127,7 @@
 					"hasHours": true
 				},
 				{
+					"id": "break-ss25",
 					"name": {
 						"de": "Semesterferien",
 						"en": "Semester break"
@@ -130,6 +144,7 @@
 			},
 			"events": [
 				{
+					"id": "start-ws25",
 					"name": {
 						"de": "Vorlesungsbeginn und Semesterstart",
 						"en": "Start of lectures and semester"
@@ -137,6 +152,7 @@
 					"begin": "2025-10-01"
 				},
 				{
+					"id": "saints-ws25",
 					"name": {
 						"de": "Vorlesungsfrei (Allerheiligen)",
 						"en": "No lectures (All Saints´ Day)"
@@ -144,6 +160,7 @@
 					"begin": "2025-11-01"
 				},
 				{
+					"id": "reg-ws25",
 					"name": {
 						"de": "Prüfungsanmeldung",
 						"en": "Registration for exams"
@@ -152,6 +169,7 @@
 					"end": "2025-11-13"
 				},
 				{
+					"id": "dereg-ws25",
 					"name": {
 						"de": "Prüfungsabmeldung",
 						"en": "Deregistration for exams"
@@ -160,6 +178,7 @@
 					"end": "2026-01-08"
 				},
 				{
+					"id": "xmas-ws25",
 					"name": {
 						"de": "Vorlesungsfrei (Weihnachten)",
 						"en": "No lectures (Christmas)"
@@ -168,6 +187,7 @@
 					"end": "2026-01-06"
 				},
 				{
+					"id": "rereg-ss26-ws25",
 					"name": {
 						"de": "Rückmeldung zum Sommersemester 2026",
 						"en": "Re-registration for summer semester 2026"
@@ -176,6 +196,7 @@
 					"end": "2026-01-31"
 				},
 				{
+					"id": "add-exam-ws25",
 					"name": {
 						"de": "Erweiterter Prüfungszeitraum",
 						"en": "Additional exam period"
@@ -184,6 +205,7 @@
 					"end": "2026-01-23"
 				},
 				{
+					"id": "end-ws25",
 					"name": {
 						"de": "Ende der Vorlesungszeit",
 						"en": "End of lecture period"
@@ -191,6 +213,7 @@
 					"begin": "2026-01-23"
 				},
 				{
+					"id": "exam-ws25",
 					"name": {
 						"de": "Prüfungszeitraum",
 						"en": "Exam period"
@@ -199,6 +222,7 @@
 					"end": "2026-02-04"
 				},
 				{
+					"id": "ann-ws25",
 					"name": {
 						"de": "Notenbekanntgabe",
 						"en": "Announcement of grades"
@@ -207,6 +231,7 @@
 					"hasHours": true
 				},
 				{
+					"id": "break-ws25",
 					"name": {
 						"de": "Semesterferien",
 						"en": "Semester break"
@@ -223,6 +248,7 @@
 			},
 			"events": [
 				{
+					"id": "start-ss26",
 					"name": {
 						"de": "Vorlesungsbeginn und Semesterstart",
 						"en": "Start of lectures and semester"
@@ -230,6 +256,7 @@
 					"begin": "2026-03-16"
 				},
 				{
+					"id": "easter-ss26",
 					"name": {
 						"de": "Vorlesungsfrei (Ostern)",
 						"en": "No lectures (Easter)"
@@ -238,6 +265,7 @@
 					"end": "2026-04-07"
 				},
 				{
+					"id": "reg-ss26",
 					"name": {
 						"de": "Prüfungsanmeldung",
 						"en": "Registration for exams"
@@ -246,6 +274,7 @@
 					"end": "2026-05-07"
 				},
 				{
+					"id": "dereg-ss26",
 					"name": {
 						"de": "Prüfungsabmeldung",
 						"en": "Deregistration for exams"
@@ -254,6 +283,7 @@
 					"end": "2026-06-25"
 				},
 				{
+					"id": "whitsun-ss26",
 					"name": {
 						"de": "Vorlesungsfrei (Pfingsten)",
 						"en": "No lectures (Whitsun)"
@@ -262,6 +292,7 @@
 					"end": "2026-05-26"
 				},
 				{
+					"id": "corpus-ss26",
 					"name": {
 						"de": "Vorlesungsfrei (Fronleichnam, Brückentag)",
 						"en": "No lectures (Corpus Christi, Bridge Day)"
@@ -270,6 +301,7 @@
 					"end": "2026-06-05"
 				},
 				{
+					"id": "rereg-ws26-ss26",
 					"name": {
 						"de": "Rückmeldung zum Wintersemester 2026/2027",
 						"en": "Re-registration for winter semester 2026/2027"
@@ -278,6 +310,7 @@
 					"end": "2026-08-07"
 				},
 				{
+					"id": "add-exam-ss26",
 					"name": {
 						"de": "Erweiterter Prüfungszeitraum",
 						"en": "Additional exam period"
@@ -286,6 +319,7 @@
 					"end": "2026-07-10"
 				},
 				{
+					"id": "end-ss26",
 					"name": {
 						"de": "Ende der Vorlesungszeit",
 						"en": "End of lecture period"
@@ -293,6 +327,7 @@
 					"begin": "2026-07-10"
 				},
 				{
+					"id": "exam-ss26",
 					"name": {
 						"de": "Prüfungszeitraum",
 						"en": "Exam period"
@@ -301,6 +336,7 @@
 					"end": "2026-07-22"
 				},
 				{
+					"id": "ann-ss26",
 					"name": {
 						"de": "Notenbekanntgabe",
 						"en": "Announcement of grades"
@@ -309,6 +345,7 @@
 					"hasHours": true
 				},
 				{
+					"id": "break-ss26",
 					"name": {
 						"de": "Semesterferien",
 						"en": "Semester break"

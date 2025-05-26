@@ -9,7 +9,7 @@ import {
 	formatFriendlyDateTimeRange,
 	formatFriendlyRelativeTime
 } from '@/utils/date-utils'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
@@ -19,18 +19,26 @@ import RowEntry from '../Universal/RowEntry'
 
 const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 	const { t, i18n } = useTranslation('common')
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
+	const { event: selectedEventId } = useLocalSearchParams<{
+		event: string
+	}>()
 
 	// Determine if event is active (ongoing)
 	const isActive =
 		event.begin < new Date() && event.end != null && event.end > new Date()
+
+	const isSelected = selectedEventId === event.id
 
 	return (
 		<RowEntry
 			title={event.name[i18n.language as LanguageKey]}
 			leftChildren={
 				<View style={styles.leftContainer}>
-					<Text style={styles.leftText} numberOfLines={2}>
+					<Text
+						style={[styles.leftText, isSelected && styles.selectedText]}
+						numberOfLines={2}
+					>
 						{event.hasHours === true
 							? formatFriendlyDateTimeRange(event.begin, event.end ?? null)
 							: formatFriendlyDateRange(event.begin, event.end)}
@@ -41,7 +49,10 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 				<View style={styles.rightContainer}>
 					{isActive && <View style={styles.statusIndicator} />}
 					<Text
-						style={[styles.rightText, isActive && styles.highlightText]}
+						style={[
+							styles.rightText,
+							(isActive || isSelected) && styles.highlightText
+						]}
 						numberOfLines={2}
 					>
 						{event.begin != null &&
@@ -50,6 +61,9 @@ const CalendarRow = ({ event }: { event: Calendar }): React.JSX.Element => {
 								: formatFriendlyRelativeTime(event.begin))}
 					</Text>
 				</View>
+			}
+			backgroundColor={
+				isSelected ? `${theme.colors.primary}15` : `${theme.colors.card}`
 			}
 		/>
 	)
@@ -159,6 +173,10 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontWeight: '400'
 	},
 	highlightText: {
+		color: theme.colors.primary,
+		fontWeight: '500'
+	},
+	selectedText: {
 		color: theme.colors.primary,
 		fontWeight: '500'
 	},

@@ -57,6 +57,7 @@ type FlatListItem =
 	| { type: 'item'; data: TimetableItem; originalIndex: number }
 
 export type CalendarEntry = {
+	id: string
 	date: Date
 	startDate: Date
 	endDate: Date | null
@@ -273,7 +274,6 @@ export default function TimetableList({
 				endTime={item.endDate ? formatFriendlyTime(item.endDate) : undefined}
 			/>
 		)
-
 		return (
 			<DragDropView
 				mode="drag"
@@ -281,7 +281,12 @@ export default function TimetableList({
 				dragValue={`${eventName} (${infoText})`}
 			>
 				<Pressable
-					onPress={() => router.navigate('/calendar')}
+					onPress={() => {
+						router.push({
+							pathname: '/calendar',
+							params: { event: item.id }
+						})
+					}}
 					style={styles.cardPressable}
 					android_ripple={{
 						color: Color(theme.colors.calendarItem).alpha(0.1).string()

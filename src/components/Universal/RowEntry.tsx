@@ -24,9 +24,13 @@ const RowEntry = ({
 		<Pressable
 			disabled={!onPress}
 			onPress={onPress}
-			style={({ pressed }) => [styles.cardContainer, pressed && styles.pressed]}
+			style={({ pressed }) => [
+				styles.cardContainer,
+				{ backgroundColor },
+				pressed && styles.pressed
+			]}
 		>
-			<View style={[styles.eventContainer, { backgroundColor }]}>
+			<View style={styles.eventContainer}>
 				{/* Title section */}
 				<View style={styles.titleContainer}>
 					{icon}

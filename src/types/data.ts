@@ -8,6 +8,7 @@ export interface Allergens {
 }
 
 export interface Calendar {
+	id: string
 	name: LanguageClass
 	begin: Date
 	comments?: string[]

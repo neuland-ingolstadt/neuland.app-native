@@ -145,7 +145,10 @@ export default function TimetableWeek({
 			setSelectedExam(entry as unknown as Exam)
 			router.navigate('/exam')
 		} else if (entry.eventType === 'calendar') {
-			router.navigate('/calendar')
+			router.navigate({
+				pathname: '/calendar',
+				params: { event: entry.id }
+			})
 		}
 	}
 
@@ -184,7 +187,7 @@ export default function TimetableWeek({
 		if (showCalendarEvents && calendar?.length > 0) {
 			calendarEvents = calendar
 				.filter((event) => event.begin) // Filter out events without a date
-				.map((event, index) => {
+				.map((event) => {
 					let startDate: Date
 					let endDate: Date
 					const isAllDay = !event.hasHours
@@ -209,7 +212,7 @@ export default function TimetableWeek({
 						title: eventName,
 						name: eventName,
 						eventType: 'calendar',
-						id: `calendar_${index}`,
+						id: event.id,
 						allDay: isAllDay,
 						start: { dateTime: startDate },
 						end: { dateTime: endDate }
