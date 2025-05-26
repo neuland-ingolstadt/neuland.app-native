@@ -151,7 +151,7 @@ export default function WhatsNewScreen(): React.JSX.Element {
 					style={styles.button}
 					onPress={() => {
 						toggleUpdated()
-						router.navigate('/(tabs)/(index)')
+						router.replace('/(tabs)/(index)')
 					}}
 				>
 					<Text style={styles.buttonText}>{t('whatsnew.continue')}</Text>

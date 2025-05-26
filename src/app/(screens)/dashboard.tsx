@@ -4,23 +4,21 @@ import {
 	ResetOrderButton,
 	dashboardStyles
 } from '@/components/Dashboard'
-import type { Card, ExtendedCard } from '@/components/all-cards'
+import type { ExtendedCard } from '@/components/all-cards'
 import { DashboardContext, UserKindContext } from '@/components/contexts'
 import { getDefaultDashboardOrder } from '@/contexts/dashboard'
 import { USER_GUEST } from '@/data/constants'
 import { arraysEqual } from '@/utils/app-utils'
-import { toast } from 'burnt'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, LayoutAnimation, Platform, Text, View } from 'react-native'
-import { DragSortableView } from 'react-native-drag-sort'
+import { LayoutAnimation, Platform, Text, View } from 'react-native'
+import DraggableFlatList, {
+	ScaleDecorator
+} from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
-import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated'
 import { useStyles } from 'react-native-unistyles'
-
-const { width } = Dimensions.get('window')
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
@@ -28,9 +26,8 @@ export default function DashboardEdit(): React.JSX.Element {
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
 		useContext(DashboardContext)
 	const { userKind = USER_GUEST } = useContext(UserKindContext)
-	const { styles, theme } = useStyles(dashboardStyles)
+	const { styles } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
-	const [draggedId, setDraggedId] = useState<number | null>(null)
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)
 
 	// add translation to shownDashboardEntries with new key transText
@@ -44,22 +41,6 @@ export default function DashboardEdit(): React.JSX.Element {
 			}) as string
 		}
 	})
-
-	const newHoveredKeyShared = useSharedValue(-1)
-
-	const updateHoveredKeyWorklet = (newKey: number): void => {
-		'worklet'
-		if (newHoveredKeyShared.value !== newKey) {
-			if (Platform.OS === 'ios' && newHoveredKeyShared.value !== -1) {
-				runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
-			}
-			newHoveredKeyShared.value = newKey
-		}
-	}
-
-	const resetHoveredKey = (): void => {
-		newHoveredKeyShared.value = -1
-	}
 
 	const handleReset = useCallback(() => {
 		resetOrder(userKind)
@@ -85,13 +66,45 @@ export default function DashboardEdit(): React.JSX.Element {
 		)
 	}, [shownDashboardEntries, userKind])
 
+	const renderItem = useCallback(
+		({
+			item,
+			drag,
+			isActive
+		}: { item: ExtendedCard; drag: () => void; isActive: boolean }) => {
+			return (
+				<ScaleDecorator>
+					<OrderableRowItem
+						item={item}
+						index={transShownDashboardEntries.findIndex(
+							(x) => x.key === item.key
+						)}
+						isLast={
+							transShownDashboardEntries[transShownDashboardEntries.length - 1]
+								.key === item.key
+						}
+						onMoveUp={() => {}}
+						onMoveDown={() => {}}
+						isFirstItem={transShownDashboardEntries[0].key === item.key}
+						isLastItem={
+							transShownDashboardEntries[transShownDashboardEntries.length - 1]
+								.key === item.key
+						}
+						drag={drag}
+						isActive={isActive}
+					/>
+				</ScaleDecorator>
+			)
+		},
+		[transShownDashboardEntries]
+	)
+
 	return (
 		<View>
 			<ScrollView
 				contentContainerStyle={styles.page}
 				bounces={false}
 				contentInsetAdjustmentBehavior="automatic"
-				scrollEnabled={draggedId === null}
 			>
 				<View style={styles.wrapper}>
 					{userKind === USER_GUEST && <GuestUserNote />}
@@ -110,79 +123,28 @@ export default function DashboardEdit(): React.JSX.Element {
 								</View>
 							) : (
 								<View style={styles.outer}>
-									<DragSortableView
-										keyExtractor={(item) =>
-											// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-											item.key as string
-										}
-										dataSource={transShownDashboardEntries ?? []}
-										childrenWidth={width}
-										childrenHeight={childrenHeight}
-										parentWidth={width}
-										renderItem={(params: ExtendedCard, index: number) => (
-											<OrderableRowItem
-												item={params}
-												index={index}
-												isLast={
-													shownDashboardEntries[
-														shownDashboardEntries.length - 1
-													].key === params.key
-												}
-												onMoveUp={() => {}}
-												onMoveDown={() => {}}
-												isFirstItem={index === 0}
-												isLastItem={
-													index === transShownDashboardEntries.length - 1
-												}
-											/>
-										)}
-										onDataChange={(data: Card[]) => {
-											updateDashboardOrder(data.map((x) => x.key))
-										}}
-										onClickItem={() => {
-											toast({
-												title: t('toast.dashboard', {
-													ns: 'common'
-												}),
-												preset: 'custom',
-												haptic: 'warning',
-												duration: 2,
-												from: 'top',
-												icon: {
-													ios: {
-														name: 'hand.draw',
-														color: theme.colors.primary
-													}
-												}
-											})
-										}}
-										onDragging={(
-											_gestureState: unknown,
-											_left: number,
-											_top: number,
-											moveToIndex: number
-										) => {
-											runOnUI(updateHoveredKeyWorklet)(moveToIndex)
-										}}
-										onDragStart={(index: number) => {
-											setDraggedId(index)
+									<DraggableFlatList
+										data={transShownDashboardEntries}
+										onDragBegin={() => {
 											if (Platform.OS === 'ios') {
 												void Haptics.impactAsync(
 													Haptics.ImpactFeedbackStyle.Rigid
 												)
 											}
 										}}
-										onDragEnd={() => {
-											resetHoveredKey()
-											setDraggedId(null)
+										onDragEnd={({ data }) => {
+											updateDashboardOrder(data.map((x) => x.key))
 											if (Platform.OS === 'ios') {
 												void Haptics.impactAsync(
 													Haptics.ImpactFeedbackStyle.Soft
 												)
 											}
 										}}
-										maxScale={1.05}
-										delayLongPress={100}
+										keyExtractor={(item) => item.key}
+										renderItem={renderItem}
+										containerStyle={styles.outer}
+										activationDistance={10}
+										autoscrollThreshold={50}
 									/>
 								</View>
 							)}

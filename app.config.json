@@ -7,7 +7,7 @@
 		"version": "0.13.0",
 		"githubUrl": "https://github.com/neuland-ingolstadt/neuland.app-native/",
 		"userInterfaceStyle": "automatic",
-		"newArchEnabled": false,
+		"newArchEnabled": true,
 		"ios": {
 			"bundleIdentifier": "de.neuland-ingolstadt.neuland-app",
 			"buildNumber": "199",
@@ -66,7 +66,7 @@
 				}
 			]
 		},
-		"sdkVersion": "52.0.0",
+		"sdkVersion": "53.0.0",
 		"experiments": {
 			"tsconfigPaths": true,
 			"typedRoutes": true
