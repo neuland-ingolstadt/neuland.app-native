@@ -2,18 +2,18 @@ import { getFragmentData } from '@/__generated__/gql'
 import {
 	CareerServiceEventFieldsFragmentDoc,
 	type CareerServiceEventsQuery,
-	StudentAdvisoryEventFieldsFragmentDoc,
-	type StudentAdvisoryEventsQuery
+	StudentCounsellingEventFieldsFragmentDoc,
+	type StudentCounsellingEventsQuery
 } from '@/__generated__/gql/graphql'
 import CareerServiceEventsPage from '@/components/Events/CareerServiceEventsPage'
-import StudentAdvisoryEventsPage from '@/components/Events/StudentAdvisoryEventsPage'
+import StudentCounsellingEventsPage from '@/components/Events/StudentCounsellingEventsPage'
 import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import {
 	QUERY_KEYS,
 	loadCareerServiceEvents,
-	loadStudentAdvisoryEvents
+	loadStudentCounsellingEvents
 } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
@@ -48,7 +48,7 @@ export default function Events(): React.JSX.Element {
 			},
 			{
 				queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
-				queryFn: loadStudentAdvisoryEvents,
+				queryFn: loadStudentCounsellingEvents,
 				staleTime: 1000 * 60 * 60, // 60 minutes
 				gcTime: 1000 * 60 * 60 * 24 // 24 hours
 			}
@@ -60,15 +60,15 @@ export default function Events(): React.JSX.Element {
 		isLoading: boolean
 		isPaused: boolean /* ...other useQueryResult props */
 	}
-	const studentAdvisoryResult = results[1] as {
-		data?: StudentAdvisoryEventsQuery
+	const studentCounsellingResult = results[1] as {
+		data?: StudentCounsellingEventsQuery
 		isLoading: boolean
 		isPaused: boolean /* ...other useQueryResult props */
 	}
 
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [selectedData, setSelectedData] = useState<number>(
-		tab === 'student-advisory' ? 1 : 0
+		tab === 'student-counselling' ? 1 : 0
 	)
 	const screenHeight = useWindowDimensions().height
 
@@ -79,15 +79,15 @@ export default function Events(): React.JSX.Element {
 	useEffect(() => {
 		if (
 			(careerServiceResult.isPaused && careerServiceResult.data != null) ||
-			(studentAdvisoryResult.isPaused && studentAdvisoryResult.data != null)
+			(studentCounsellingResult.isPaused && studentCounsellingResult.data != null)
 		) {
 			pausedToast()
 		}
 	}, [
 		careerServiceResult.isPaused,
-		studentAdvisoryResult.isPaused,
+		studentCounsellingResult.isPaused,
 		careerServiceResult.data,
-		studentAdvisoryResult.data
+		studentCounsellingResult.data
 	])
 
 	const pagerViewRef = useRef<PagerView>(null)
@@ -96,16 +96,16 @@ export default function Events(): React.JSX.Element {
 	}
 	const displayTypes = [
 		t('pages.events.careerService.title'),
-		t('pages.events.studentAdvisory.title')
+		t('pages.events.studentCounselling.title')
 	]
-	const pages = ['career-service', 'student-advisory']
+	const pages = ['career-service', 'student-counselling']
 
 	const renderPage = (index: number) => {
 		if (
 			!viewedPages.has(index) &&
 			(index === 0
 				? careerServiceResult.isLoading
-				: studentAdvisoryResult.isLoading)
+				: studentCounsellingResult.isLoading)
 		) {
 			return <LoadingIndicator />
 		}
@@ -123,16 +123,16 @@ export default function Events(): React.JSX.Element {
 			return <CareerServiceEventsPage events={events} />
 		}
 
-		const rawStudentAdvisoryEventsArray =
-			studentAdvisoryResult.data?.studentAdvisoryEvents
+		const rawStudentCounsellingEventsArray =
+			studentCounsellingResult.data?.studentCounsellingEvents
 		const events = (
-			Array.isArray(rawStudentAdvisoryEventsArray)
-				? rawStudentAdvisoryEventsArray.map((event) =>
-						getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
+			Array.isArray(rawStudentCounsellingEventsArray)
+				? rawStudentCounsellingEventsArray.map((event) =>
+						getFragmentData(StudentCounsellingEventFieldsFragmentDoc, event)
 					)
 				: []
 		).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-		return <StudentAdvisoryEventsPage events={events} />
+		return <StudentCounsellingEventsPage events={events} />
 	}
 
 	useFocusEffect(
@@ -142,7 +142,7 @@ export default function Events(): React.JSX.Element {
 					router.setParams({ openEvent: 'false' })
 					if (selectedData === 1) {
 						router.navigate({
-							pathname: '/events/advisory/[id]',
+							pathname: '/events/counselling/[id]',
 							params: { id }
 						})
 					} else {
