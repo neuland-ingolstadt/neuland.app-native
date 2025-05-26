@@ -10,6 +10,8 @@ import flagMap from '@/data/mensa-flags.json'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
+import type { Meal } from '@/types/neuland-api'
+import { formatFriendlyDate } from '@/utils/date-utils'
 import {
 	formatPrice,
 	humanLocations,
@@ -25,7 +27,15 @@ import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Linking, Platform, Share, Text, View } from 'react-native'
+import {
+	Alert,
+	Linking,
+	Platform,
+	Share,
+	StyleSheet,
+	Text,
+	View
+} from 'react-native'
 import Animated, {
 	interpolate,
 	useAnimatedScrollHandler,
@@ -81,9 +91,22 @@ export default function FoodDetail(): React.JSX.Element {
 		gcTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 
-	const foodData = queryData
-		?.flatMap((day) => day.meals)
-		.find((m) => m.id === id)
+	// Find both the meal and its parent Food object
+	const mealWithDate = queryData?.reduce<{
+		meal: Meal | undefined
+		date: string | undefined
+	}>(
+		(acc, day) => {
+			const meal = day.meals.find((m) => m.id === id)
+			if (meal) {
+				return { meal, date: day.timestamp.toString() }
+			}
+			return acc
+		},
+		{ meal: undefined, date: undefined }
+	)
+
+	const foodData = mealWithDate?.meal
 
 	useFocusEffect(
 		useCallback(() => {
@@ -241,30 +264,6 @@ export default function FoodDetail(): React.JSX.Element {
 	const guestPrice = formatPrice(foodData?.prices?.guest)
 	const isPriceAvailable =
 		studentPrice !== '' && employeePrice !== '' && guestPrice !== ''
-	const priceSection: FormListSections[] = isPriceAvailable
-		? [
-				{
-					header: t('details.formlist.prices.title'),
-					items: [
-						{
-							title: t('details.formlist.prices.student'),
-							value: studentPrice,
-							fontWeight: userKind === USER_STUDENT ? '600' : 'normal'
-						},
-						{
-							title: t('details.formlist.prices.employee'),
-							value: employeePrice,
-							fontWeight: userKind === USER_EMPLOYEE ? '600' : 'normal'
-						},
-						{
-							title: t('details.formlist.prices.guest'),
-							value: guestPrice,
-							fontWeight: userKind === USER_GUEST ? '600' : 'normal'
-						}
-					]
-				}
-			]
-		: []
 
 	const isNutritionAvailable =
 		foodData?.nutrition != null &&
@@ -472,8 +471,8 @@ export default function FoodDetail(): React.JSX.Element {
 	const sections: FormListSections[] =
 		foodData?.restaurant === 'IngolstadtMensa' ||
 		foodData?.restaurant === 'NeuburgMensa'
-			? [...priceSection, ...variantsSection, ...mensaSection, ...aboutSection]
-			: [...priceSection, ...variantsSection, ...aboutSection]
+			? [...variantsSection, ...mensaSection, ...aboutSection]
+			: [...variantsSection, ...aboutSection]
 
 	const title = foodData
 		? mealName(foodData.name, foodLanguage, i18n.language as LanguageKey)
@@ -509,10 +508,131 @@ export default function FoodDetail(): React.JSX.Element {
 					{title}
 				</Text>
 			</View>
+			{mealWithDate?.date && (
+				<View style={styles.dateContainer}>
+					<PlatformIcon
+						ios={{
+							name: 'calendar',
+							variant: 'fill',
+							size: 13
+						}}
+						android={{
+							name: 'calendar_today',
+							size: 15
+						}}
+						web={{
+							name: 'Calendar',
+							size: 15
+						}}
+						style={styles.dateIcon}
+					/>
+					<Text style={styles.dateText}>
+						{formatFriendlyDate(mealWithDate.date)}
+					</Text>
+				</View>
+			)}
 
-			<Text style={styles.subtitleText}>
-				{humanLocation} - {humanCategory}
-			</Text>
+			<View style={styles.tagsContainer}>
+				<View style={styles.tagContainer}>
+					<PlatformIcon
+						ios={{
+							name: 'mappin.and.ellipse',
+							variant: 'fill',
+							size: 13
+						}}
+						android={{
+							name: 'place',
+							size: 15
+						}}
+						web={{
+							name: 'MapPin',
+							size: 15
+						}}
+						style={styles.tagIcon}
+					/>
+					<Text style={styles.tagText}>{humanLocation}</Text>
+				</View>
+
+				<View style={styles.tagContainer}>
+					<PlatformIcon
+						ios={{
+							name: 'tag',
+							variant: 'outline',
+							size: 13
+						}}
+						android={{
+							name: 'sell',
+							size: 15
+						}}
+						web={{
+							name: 'Tag',
+							size: 15
+						}}
+						style={styles.tagIcon}
+					/>
+					<Text style={styles.tagText}>{humanCategory}</Text>
+				</View>
+			</View>
+
+			{isPriceAvailable && (
+				<View style={styles.pricesContainer}>
+					<View
+						style={[
+							styles.priceCard,
+							userKind === USER_STUDENT && styles.priceCardActive
+						]}
+					>
+						<Text style={styles.priceLabel}>
+							{t('details.formlist.prices.student')}
+						</Text>
+						<Text
+							style={[
+								styles.priceValue,
+								userKind === USER_STUDENT && styles.priceValueActive
+							]}
+						>
+							{studentPrice}
+						</Text>
+					</View>
+					<View
+						style={[
+							styles.priceCard,
+							userKind === USER_EMPLOYEE && styles.priceCardActive
+						]}
+					>
+						<Text style={styles.priceLabel}>
+							{t('details.formlist.prices.employee')}
+						</Text>
+						<Text
+							style={[
+								styles.priceValue,
+								userKind === USER_EMPLOYEE && styles.priceValueActive
+							]}
+						>
+							{employeePrice}
+						</Text>
+					</View>
+					<View
+						style={[
+							styles.priceCard,
+							userKind === USER_GUEST && styles.priceCardActive
+						]}
+					>
+						<Text style={styles.priceLabel}>
+							{t('details.formlist.prices.guest')}
+						</Text>
+						<Text
+							style={[
+								styles.priceValue,
+								userKind === USER_GUEST && styles.priceValueActive
+							]}
+						>
+							{guestPrice}
+						</Text>
+					</View>
+				</View>
+			)}
+
 			<View style={styles.formList}>
 				<FormList sections={sections} />
 			</View>
@@ -569,12 +689,15 @@ const stylesheet = createStyleSheet((theme) => ({
 		gap: 10,
 		paddingHorizontal: 14,
 		paddingVertical: 8,
-		width: '100%'
+		width: '100%',
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
 	},
 	notesContainer: {
 		alignSelf: 'center',
 		marginBottom: theme.margins.bottomSafeArea,
-		marginTop: 20
+		marginTop: 20,
+		paddingHorizontal: 4
 	},
 	notesText: {
 		color: theme.colors.labelColor,
@@ -585,30 +708,113 @@ const stylesheet = createStyleSheet((theme) => ({
 		textAlign: 'left'
 	},
 	page: {
-		marginHorizontal: theme.margins.page
-	},
-	subtitleText: {
-		color: theme.colors.labelColor,
-		fontSize: 16,
-		fontWeight: '600'
+		marginHorizontal: theme.margins.page,
+		backgroundColor: theme.colors.background
 	},
 	titleContainer: {
 		alignItems: 'flex-start',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingBottom: 6
+		paddingBottom: 6,
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.md,
+		padding: 16,
+		marginTop: 16,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
 	},
 	titleText: {
 		color: theme.colors.text,
 		flex: 1,
 		fontSize: 22,
 		fontWeight: '700',
-		paddingTop: 16,
 		textAlign: 'left'
 	},
 	loadingContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+	dateContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 6,
+		marginBottom: 8,
+		backgroundColor: theme.colors.card,
+		paddingHorizontal: 12,
+		paddingVertical: 6,
+		borderRadius: theme.radius.md,
+		alignSelf: 'flex-start',
+		marginTop: 8,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
+	},
+	dateIcon: {
+		color: theme.colors.primary
+	},
+	dateText: {
+		color: theme.colors.text,
+		fontSize: 14,
+		fontWeight: '500'
+	},
+	tagsContainer: {
+		flexDirection: 'row',
+		gap: 8,
+		marginBottom: 16,
+		flexWrap: 'wrap',
+		paddingHorizontal: 4
+	},
+	tagContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 6,
+		backgroundColor: theme.colors.card,
+		paddingHorizontal: 12,
+		paddingVertical: 6,
+		borderRadius: theme.radius.md,
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
+	},
+	tagIcon: {
+		color: theme.colors.primary
+	},
+	tagText: {
+		color: theme.colors.text,
+		fontSize: 14,
+		fontWeight: '500'
+	},
+	pricesContainer: {
+		flexDirection: 'row',
+		gap: 8,
+		marginBottom: 16,
+		paddingHorizontal: 4
+	},
+	priceCard: {
+		flex: 1,
+		backgroundColor: theme.colors.card,
+		borderRadius: theme.radius.md,
+		padding: 12,
+		alignItems: 'center',
+		borderWidth: StyleSheet.hairlineWidth,
+		borderColor: theme.colors.border
+	},
+	priceCardActive: {
+		backgroundColor: `${theme.colors.primary}15`,
+		borderColor: theme.colors.primary
+	},
+	priceLabel: {
+		color: theme.colors.labelColor,
+		fontSize: 12,
+		marginBottom: 4,
+		textAlign: 'center'
+	},
+	priceValue: {
+		color: theme.colors.text,
+		fontSize: 16,
+		fontWeight: '600',
+		textAlign: 'center'
+	},
+	priceValueActive: {
+		color: theme.colors.primary
 	}
 }))
