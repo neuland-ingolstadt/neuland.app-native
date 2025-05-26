@@ -382,22 +382,10 @@
         "licenseUrl": "https://github.com/software-mansion/react-native-gesture-handler/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-native-ios-context-menu@3.1.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/dominicstop/react-native-ios-context-menu",
-        "licenseUrl": "https://github.com/dominicstop/react-native-ios-context-menu/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-ios-utilities@5.1.5": {
-        "licenses": "MIT",
-        "repository": "https://github.com/dominicstop/react-native-ios-utilities",
-        "licenseUrl": "https://github.com/dominicstop/react-native-ios-utilities/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "react-native-mmkv@3.2.0": {
+    "react-native-mmkv@2.12.2": {
         "licenses": "(MIT AND BSD-3-Clause)",
         "repository": "https://github.com/mrousavy/react-native-mmkv",
-        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv",
+        "licenseUrl": "https://github.com/mrousavy/react-native-mmkv/raw/master/LICENSE",
         "parents": "neuland"
     },
     "react-native-pager-view@6.8.0": {
@@ -488,12 +476,6 @@
         "licenses": "MIT",
         "repository": "https://github.com/andrew-levy/swiftui-react-native",
         "licenseUrl": "https://github.com/andrew-levy/swiftui-react-native/raw/master/LICENSE",
-        "parents": "neuland"
-    },
-    "zeego@3.0.6": {
-        "licenses": "MIT",
-        "repository": "https://github.com/nandorojo/zeego",
-        "licenseUrl": "https://github.com/nandorojo/zeego/raw/master/LICENSE",
         "parents": "neuland"
     },
     "zustand@5.0.5": {
