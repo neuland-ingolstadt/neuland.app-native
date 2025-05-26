@@ -117,6 +117,7 @@
 		"@graphql-codegen/cli": "5.0.5",
 		"@graphql-codegen/client-preset": "4.7.0",
 		"@graphql-codegen/schema-ast": "^4.1.0",
+		"@slvssb/eas-github-cache": "^1.0.0",
 		"@types/bun": "latest",
 		"@types/color": "^4.2.0",
 		"@types/geojson": "^7946.0.16",

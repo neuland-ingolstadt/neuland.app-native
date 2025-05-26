@@ -69,7 +69,16 @@
 		"sdkVersion": "53.0.0",
 		"experiments": {
 			"tsconfigPaths": true,
-			"typedRoutes": true
+			"typedRoutes": true,
+			"remoteBuildCache": {
+				"provider": {
+					"plugin": "@slvssb/eas-github-cache",
+					"options": {
+						"owner": "neuland-ingolstadt",
+						"repo": "neuland.app-build-cache"
+					}
+				}
+			}
 		},
 		"plugins": [
 			[
