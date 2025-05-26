@@ -139,11 +139,11 @@ export default function NotesDetails(): React.JSX.Element {
 				scalesPageToFit
 				style={styles.webview}
 				onLoadEnd={() => {
-					const timeoutId = setTimeout(() => {
+					const id = setTimeout(() => {
 						setLoaded(true)
 					}, LOADING_TIMEOUT)
 
-					setTimeoutId(timeoutId)
+					setTimeoutId(id as number)
 				}}
 				backgroundColor={theme.colors.background}
 				originWhitelist={['*']}
