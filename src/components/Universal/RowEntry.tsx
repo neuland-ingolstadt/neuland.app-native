@@ -19,14 +19,14 @@ const RowEntry = ({
 	backgroundColor?: string
 	icon?: JSX.Element
 }): React.JSX.Element => {
-	const { styles } = useStyles(stylesheet)
+	const { styles, theme } = useStyles(stylesheet)
 	return (
 		<Pressable
 			disabled={!onPress}
 			onPress={onPress}
 			style={({ pressed }) => [
 				styles.cardContainer,
-				{ backgroundColor },
+				{ backgroundColor: backgroundColor ?? theme.colors.card },
 				pressed && styles.pressed
 			]}
 		>
