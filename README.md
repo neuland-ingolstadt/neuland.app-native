@@ -30,7 +30,7 @@ Neuland Next is an unofficial app for students of the Technische Hochschule Ingo
 - **Library**: Use your virtual library ID to check out at terminals to borrow and return books
 - **Quick Links**: Access key university platforms such as moodle, PRIMUSS or your webmail with a single tap
 - **THI News**: Stay up to date with the latest news from THI
-- **Career Service & Student Advisory**: Discover workshops, counseling sessions, job fairs, and other professional development opportunities.
+- **Career Service & Student Counselling**: Discover workshops, counseling sessions, job fairs, and other professional development opportunities.
 
 ## About
 

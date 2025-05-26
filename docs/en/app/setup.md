@@ -113,7 +113,7 @@ Step 8 is required every time the dependencies are updated.
 You can use the following commands to check and format the code:
 
 - `bun lint` to check for linting errors
-- `bun format` to format the code using Biome
+- `bun fmt` to format the code using Biome
 
 ## Issues and Discussions
 

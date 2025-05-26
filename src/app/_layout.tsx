@@ -352,7 +352,7 @@ function RootLayout(): React.JSX.Element {
 						}}
 					/>
 					<Stack.Screen
-						name="(screens)/events/advisory/[id]"
+						name="(screens)/events/counselling/[id]"
 						options={{
 							title: 'Event Details',
 							...Platform.select({
