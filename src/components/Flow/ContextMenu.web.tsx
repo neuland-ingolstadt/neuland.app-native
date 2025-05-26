@@ -1,4 +1,5 @@
 import type React from 'react'
+import type { JSX } from 'react'
 
 export default function ContextMenu({
 	children

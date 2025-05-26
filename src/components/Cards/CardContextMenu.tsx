@@ -1,4 +1,5 @@
 import { router } from 'expo-router'
+import type { JSX } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as ContextMenu from 'zeego/context-menu'
 import ContextMenuContent from '../ContextMenu/ContextMenuContent'
