@@ -420,8 +420,8 @@ type Query {
   Get the room reports. Note: This query is only available for authenticated users.
   """
   roomReports: [RoomReport!]!
-  """Get all events of the student advisory service."""
-  studentAdvisoryEvents: [StudentAdvisoryEvent!]!
+  """Get all events of the Student Counselling Office."""
+  studentCounsellingEvents: [StudentCounsellingEvent!]!
   """
   Get the university sports events. This includes all sports events from all campuses.
   """
@@ -520,9 +520,9 @@ enum SportsCategoryType {
 }
 
 """
-Student advisory Service Event data type. Information about a specific event from the student advisory service.
+Information about a specific event from the student Counselling Office.
 """
-type StudentAdvisoryEvent {
+type StudentCounsellingEvent {
   """Available slots for the event"""
   availableSlots: Int
   """Date of the event"""

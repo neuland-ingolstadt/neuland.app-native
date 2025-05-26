@@ -1,8 +1,8 @@
 import { getFragmentData } from '@/__generated__/gql'
 import {
-	type StudentAdvisoryEventFieldsFragment,
-	StudentAdvisoryEventFieldsFragmentDoc,
-	type StudentAdvisoryEventsQuery
+	type StudentCounsellingEventFieldsFragment,
+	StudentCounsellingEventFieldsFragmentDoc,
+	type StudentCounsellingEventsQuery
 } from '@/__generated__/gql/graphql'
 import neulandAPI from '@/api/neuland-api'
 import { EventErrorView } from '@/components/Error/EventErrorView'
@@ -32,7 +32,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-export default function StudentAdvisoryEventDetail(): React.JSX.Element {
+export default function StudentCounsellingEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -41,21 +41,21 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 		data: queryData,
 		isLoading,
 		error
-	} = useQuery<StudentAdvisoryEventsQuery, Error>({
+	} = useQuery<StudentCounsellingEventsQuery, Error>({
 		queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
-		queryFn: () => neulandAPI.getStudentAdvisoryEvents()
+		queryFn: () => neulandAPI.getStudentCounsellingEvents()
 	})
 
-	const rawEventsArray = queryData?.studentAdvisoryEvents ?? []
+	const rawEventsArray = queryData?.studentCounsellingEvents ?? []
 	const rawEvent = rawEventsArray.find((eventCandidate) => {
 		const fragment = getFragmentData(
-			StudentAdvisoryEventFieldsFragmentDoc,
+			StudentCounsellingEventFieldsFragmentDoc,
 			eventCandidate
 		)
 		return fragment?.id === id
 	})
-	const eventData: StudentAdvisoryEventFieldsFragment | null = rawEvent
-		? getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, rawEvent)
+	const eventData: StudentCounsellingEventFieldsFragment | null = rawEvent
+		? getFragmentData(StudentCounsellingEventFieldsFragmentDoc, rawEvent)
 		: null
 
 	const scrollOffset = useSharedValue(0)
@@ -91,11 +91,11 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 					<ShareHeaderButton
 						onPress={async () => {
 							trackEvent('Share', {
-								type: 'studentAdvisoryEvent'
+								type: 'studentCounsellingEvent'
 							})
-							const deepLinkUrl = `https://neuland.app/events/advisory/${id}`
+							const deepLinkUrl = `https://neuland.app/events/counselling/${id}`
 							await Share.share({
-								message: t('pages.event.shareAdvisoryMessage', {
+								message: t('pages.event.shareCounsellingMessage', {
 									title: eventData?.title,
 									date: formatFriendlyDate(eventData?.date ?? ''),
 									link: deepLinkUrl
@@ -117,7 +117,7 @@ export default function StudentAdvisoryEventDetail(): React.JSX.Element {
 	}
 
 	if (error || !eventData) {
-		return <EventErrorView eventType="advisory" />
+		return <EventErrorView eventType="counselling" />
 	}
 
 	const sections: FormListSections[] = [
