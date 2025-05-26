@@ -1,5 +1,6 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 
+import type { JSX } from 'react'
 import {
 	CalendarCard,
 	CareerCard,

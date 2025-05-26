@@ -22,7 +22,7 @@ import PlatformIcon from '../Universal/Icon'
 import BottomSheetBackground from './BottomSheetBackground'
 
 interface BottomSheetDetailModalProps {
-	bottomSheetModalRef: React.RefObject<BottomSheetModal>
+	bottomSheetModalRef: React.RefObject<BottomSheetModal | null>
 	handleSheetChangesModal: () => void
 	currentPositionModal: SharedValue<number>
 	roomData: RoomData

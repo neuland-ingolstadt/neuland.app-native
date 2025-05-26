@@ -21,7 +21,7 @@ import { router } from 'expo-router'
 import type React from 'react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, Text, View } from 'react-native'
+import { Platform, Text, View } from 'react-native'
 import { Linking } from 'react-native'
 import { Share } from 'react-native'
 import Animated, {
@@ -45,17 +45,18 @@ const LinkText: React.FC<{ text: string; color: string }> = ({
 			{parts.map((part, index) => {
 				if (part.match(URL_REGEX)) {
 					return (
-						<Pressable
+						<Text
 							key={index}
 							onPress={() => {
 								void Linking.openURL(part)
 							}}
+							style={{ color }}
 						>
-							<Text style={[styles.columnDetails, { color }]}>{part}</Text>
-						</Pressable>
+							{part}
+						</Text>
 					)
 				}
-				return <Text key={index}>{part}</Text>
+				return part
 			})}
 		</Text>
 	)

@@ -1,4 +1,5 @@
 import type React from 'react'
+import type { JSX } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 

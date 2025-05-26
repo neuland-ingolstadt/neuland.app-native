@@ -15,6 +15,8 @@ interface OrderableRowItemProps {
 	onMoveDown: () => void
 	isFirstItem: boolean
 	isLastItem: boolean
+	drag?: () => void
+	isActive?: boolean
 }
 
 export default function OrderableRowItem({
@@ -23,7 +25,9 @@ export default function OrderableRowItem({
 	onMoveUp,
 	onMoveDown,
 	isFirstItem,
-	isLastItem
+	isLastItem,
+	drag,
+	isActive
 }: OrderableRowItemProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const bottomWidth = isLast ? 0 : 1
@@ -31,13 +35,15 @@ export default function OrderableRowItem({
 
 	return (
 		<View>
-			<View
+			<Pressable
+				onLongPress={drag}
 				style={[
 					styles.row,
 					styles.outerRow,
 					{
 						width: width - theme.margins.page * 2,
-						borderBottomWidth: bottomWidth
+						borderBottomWidth: bottomWidth,
+						opacity: isActive ? 0.8 : 1
 					}
 				]}
 			>
@@ -141,7 +147,7 @@ export default function OrderableRowItem({
 						/>
 					</View>
 				)}
-			</View>
+			</Pressable>
 		</View>
 	)
 }

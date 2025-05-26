@@ -30,7 +30,7 @@ import SearchHistory from './SearchHistory'
 import SearchResults from './SearchResuts'
 
 interface MapBottomSheetProps {
-	bottomSheetRef: React.RefObject<BottomSheet>
+	bottomSheetRef: React.RefObject<BottomSheet | null>
 	currentPosition: SharedValue<number>
 	handlePresentModalPress: () => void
 	allRooms: FeatureCollection

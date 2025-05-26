@@ -1,4 +1,5 @@
 import type React from 'react'
+import type { JSX } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function DetailsRow({
