@@ -59,3 +59,47 @@ jobs:
             EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ vars.GRAPHQL_ENDPOINT_DEV }}
             EXPO_PUBLIC_APTABASE_KEY=${{ secrets.EXPO_PUBLIC_APTABASE_KEY }}
             EXPO_PUBLIC_GIT_COMMIT_HASH=${{ github.sha }}
+
+  deploy:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'staging',
+              auto_merge: false,
+              required_contexts: []
+            })
+
+      - name: Deploy
+        uses: darnfish/watchtower-update@v3.2
+        with:
+          url: "${{ secrets.WATCHTOWER_URL }}"
+          api_token: "${{ secrets.WATCHTOWER_API_TOKEN }}"
+          images: "ghcr.io/neuland-ingolstadt/neuland.app-native/webapp:staging-latest"
+
+      - name: Update deployment status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployments = await github.rest.repos.listDeployments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'staging'
+            });
+
+            if (deployments.data.length > 0) {
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployments.data[0].id,
+                state: 'success'
+              });
+            }
