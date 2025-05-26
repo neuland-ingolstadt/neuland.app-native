@@ -9,7 +9,7 @@ import { useStyles } from 'react-native-unistyles'
 import { createStyleSheet } from 'react-native-unistyles'
 
 interface EventErrorViewProps {
-	eventType: 'clEvents' | 'sports' | 'career' | 'advisory'
+	eventType: 'clEvents' | 'sports' | 'career' | 'counselling'
 	title?: string
 	message?: string
 }
@@ -42,7 +42,7 @@ export function EventErrorView({
 					android: 'work' satisfies MaterialIcon,
 					web: 'Briefcase' satisfies LucideIcon
 				}
-			case 'advisory':
+			case 'counselling':
 				return {
 					ios: 'person.fill.questionmark',
 					android: 'person_search' satisfies MaterialIcon,
@@ -65,8 +65,8 @@ export function EventErrorView({
 				return t('pages.clEvents.sports.title')
 			case 'career':
 				return t('pages.careerService.title')
-			case 'advisory':
-				return t('pages.studentAdvisory.title')
+			case 'counselling':
+				return t('pages.studentCounselling.title')
 			default:
 				return t('pages.events.title')
 		}
@@ -83,8 +83,8 @@ export function EventErrorView({
 			case 'career':
 				router.navigate('/thi-services?tab=career-service')
 				break
-			case 'advisory':
-				router.navigate('/thi-services?tab=student-advisory')
+			case 'counselling':
+				router.navigate('/thi-services?tab=student-counselling')
 				break
 		}
 	}

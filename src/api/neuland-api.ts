@@ -5,7 +5,7 @@ import type {
 	CreateRoomReportMutation,
 	FoodPlanQuery,
 	RoomReportInput,
-	StudentAdvisoryEventsQuery,
+	StudentCounsellingEventsQuery,
 	TypedDocumentString,
 	UniversitySportsQuery
 } from '@/__generated__/gql/graphql'
@@ -123,10 +123,10 @@ class NeulandAPIClient {
 	}
 
 	/**
-	 * Gets the student advisory events
-	 * @returns {Promise<StudentAdvisoryEventsQuery>} A promise that resolves with the student advisory events data
+	 * Gets the student counselling events
+	 * @returns {Promise<StudentCounsellingEventsQuery>} A promise that resolves with the student counselling events data
 	 */
-	async getStudentAdvisoryEvents(): Promise<StudentAdvisoryEventsQuery> {
+	async getStudentCounsellingEvents(): Promise<StudentCounsellingEventsQuery> {
 		return await this.executeGql(STUDENT_ADVISORY_EVENTS_QUERY)
 	}
 

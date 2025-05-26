@@ -3,9 +3,9 @@ import {
 	type CareerServiceEventFieldsFragment,
 	CareerServiceEventFieldsFragmentDoc,
 	type CareerServiceEventsQuery,
-	type StudentAdvisoryEventFieldsFragment,
-	StudentAdvisoryEventFieldsFragmentDoc,
-	type StudentAdvisoryEventsQuery
+	type StudentCounsellingEventFieldsFragment,
+	StudentCounsellingEventFieldsFragmentDoc,
+	type StudentCounsellingEventsQuery
 } from '@/__generated__/gql/graphql'
 import neulandAPI from '@/api/neuland-api'
 import { QUERY_KEYS } from '@/utils/events-utils'
@@ -30,9 +30,12 @@ const CareerCard = (): React.JSX.Element => {
 		gcTime: 1000 * 60 * 60 * 24
 	})
 
-	const studentAdvisoryQuery = useQuery<StudentAdvisoryEventsQuery, Error>({
+	const studentCounsellingQuery = useQuery<
+		StudentCounsellingEventsQuery,
+		Error
+	>({
 		queryKey: [QUERY_KEYS.STUDENT_ADVISORY_EVENTS],
-		queryFn: () => neulandAPI.getStudentAdvisoryEvents(),
+		queryFn: () => neulandAPI.getStudentCounsellingEvents(),
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 60 * 24
 	})
@@ -46,21 +49,21 @@ const CareerCard = (): React.JSX.Element => {
 			: []
 	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-	const rawStudentAdvisoryEvents =
-		studentAdvisoryQuery.data?.studentAdvisoryEvents
-	const studentAdvisoryEvents: StudentAdvisoryEventFieldsFragment[] = (
-		Array.isArray(rawStudentAdvisoryEvents)
-			? rawStudentAdvisoryEvents.map((event) =>
-					getFragmentData(StudentAdvisoryEventFieldsFragmentDoc, event)
+	const rawStudentCounsellingEvents =
+		studentCounsellingQuery.data?.studentCounsellingEvents
+	const studentCounsellingEvents: StudentCounsellingEventFieldsFragment[] = (
+		Array.isArray(rawStudentCounsellingEvents)
+			? rawStudentCounsellingEvents.map((event) =>
+					getFragmentData(StudentCounsellingEventFieldsFragmentDoc, event)
 				)
 			: []
 	).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
-	const handleEventItemPress = (id: string, studentAdvisory?: boolean) => {
+	const handleEventItemPress = (id: string, studentCounselling?: boolean) => {
 		if (Platform.OS !== 'ios') {
-			if (studentAdvisory) {
+			if (studentCounselling) {
 				router.navigate({
-					pathname: '/events/advisory/[id]',
+					pathname: '/events/counselling/[id]',
 					params: { id }
 				})
 			} else {
@@ -77,7 +80,7 @@ const CareerCard = (): React.JSX.Element => {
 			params: {
 				openEvent: 'true',
 				id,
-				tab: studentAdvisory ? 'student-advisory' : undefined
+				tab: studentCounselling ? 'student-counselling' : undefined
 			}
 		})
 	}
@@ -102,21 +105,21 @@ const CareerCard = (): React.JSX.Element => {
 						/>
 					</Pressable>
 				)}
-				{studentAdvisoryEvents[0] && (
+				{studentCounsellingEvents[0] && (
 					<Pressable
 						onPress={() =>
-							handleEventItemPress(studentAdvisoryEvents[0].id, true)
+							handleEventItemPress(studentCounsellingEvents[0].id, true)
 						}
 					>
 						<EventItem
-							title={studentAdvisoryEvents[0].title}
-							subtitle={t('pages.events.studentAdvisory.title')}
+							title={studentCounsellingEvents[0].title}
+							subtitle={t('pages.events.studentCounselling.title')}
 							startDateTime={
-								studentAdvisoryEvents[0].date
-									? new Date(studentAdvisoryEvents[0].date)
+								studentCounsellingEvents[0].date
+									? new Date(studentCounsellingEvents[0].date)
 									: undefined
 							}
-							subtitleTranslationKey="pages.events.studentAdvisory.title"
+							subtitleTranslationKey="pages.events.studentCounselling.title"
 							color={theme.colors.primary}
 						/>
 					</Pressable>

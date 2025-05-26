@@ -479,8 +479,8 @@ export type Query = {
   neulandEvents: Array<NeulandEvent>;
   /** Get the room reports. Note: This query is only available for authenticated users. */
   roomReports: Array<RoomReport>;
-  /** Get all events of the student advisory service. */
-  studentAdvisoryEvents: Array<StudentAdvisoryEvent>;
+  /** Get all events of the Student Counselling Office. */
+  studentCounsellingEvents: Array<StudentCounsellingEvent>;
   /** Get the university sports events. This includes all sports events from all campuses. */
   universitySports?: Maybe<Array<UniversitySports>>;
 };
@@ -581,9 +581,9 @@ export enum SportsCategoryType {
   Yoga = 'Yoga'
 }
 
-/** Student advisory Service Event data type. Information about a specific event from the student advisory service. */
-export type StudentAdvisoryEvent = {
-  __typename?: 'StudentAdvisoryEvent';
+/** Information about a specific event from the student Counselling Office. */
+export type StudentCounsellingEvent = {
+  __typename?: 'StudentCounsellingEvent';
   /** Available slots for the event */
   availableSlots?: Maybe<Scalars['Int']['output']>;
   /** Date of the event */
@@ -777,15 +777,15 @@ export type CareerServiceEventsQuery = { __typename?: 'Query', careerServiceEven
 
 export type CareerServiceEventFieldsFragment = { __typename?: 'CareerServiceEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'CareerServiceEventFieldsFragment' };
 
-export type StudentAdvisoryEventsQueryVariables = Exact<{ [key: string]: never; }>;
+export type StudentCounsellingEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StudentAdvisoryEventsQuery = { __typename?: 'Query', studentAdvisoryEvents: Array<(
-    { __typename?: 'StudentAdvisoryEvent' }
-    & { ' $fragmentRefs'?: { 'StudentAdvisoryEventFieldsFragment': StudentAdvisoryEventFieldsFragment } }
+export type StudentCounsellingEventsQuery = { __typename?: 'Query', studentCounsellingEvents: Array<(
+    { __typename?: 'StudentCounsellingEvent' }
+    & { ' $fragmentRefs'?: { 'StudentCounsellingEventFieldsFragment': StudentCounsellingEventFieldsFragment } }
   )> };
 
-export type StudentAdvisoryEventFieldsFragment = { __typename?: 'StudentAdvisoryEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'StudentAdvisoryEventFieldsFragment' };
+export type StudentCounsellingEventFieldsFragment = { __typename?: 'StudentCounsellingEvent', id: string, title: string, date: Date, unlimitedSlots: boolean, availableSlots?: number | null, totalSlots?: number | null, waitingList?: number | null, maxWaitingList?: number | null, url?: string | null } & { ' $fragmentName'?: 'StudentCounsellingEventFieldsFragment' };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -943,8 +943,8 @@ export const CareerServiceEventFieldsFragmentDoc = new TypedDocumentString(`
   url
 }
     `, {"fragmentName":"CareerServiceEventFields"}) as unknown as TypedDocumentString<CareerServiceEventFieldsFragment, unknown>;
-export const StudentAdvisoryEventFieldsFragmentDoc = new TypedDocumentString(`
-    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+export const StudentCounsellingEventFieldsFragmentDoc = new TypedDocumentString(`
+    fragment StudentCounsellingEventFields on StudentCounsellingEvent {
   id
   title
   date
@@ -955,7 +955,7 @@ export const StudentAdvisoryEventFieldsFragmentDoc = new TypedDocumentString(`
   maxWaitingList
   url
 }
-    `, {"fragmentName":"StudentAdvisoryEventFields"}) as unknown as TypedDocumentString<StudentAdvisoryEventFieldsFragment, unknown>;
+    `, {"fragmentName":"StudentCounsellingEventFields"}) as unknown as TypedDocumentString<StudentCounsellingEventFieldsFragment, unknown>;
 export const AppAnnouncementsDocument = new TypedDocumentString(`
     query AppAnnouncements {
   appAnnouncements {
@@ -1121,13 +1121,13 @@ export const CareerServiceEventsDocument = new TypedDocumentString(`
   maxWaitingList
   url
 }`) as unknown as TypedDocumentString<CareerServiceEventsQuery, CareerServiceEventsQueryVariables>;
-export const StudentAdvisoryEventsDocument = new TypedDocumentString(`
-    query StudentAdvisoryEvents {
-  studentAdvisoryEvents {
-    ...StudentAdvisoryEventFields
+export const StudentCounsellingEventsDocument = new TypedDocumentString(`
+    query StudentCounsellingEvents {
+  studentCounsellingEvents {
+    ...StudentCounsellingEventFields
   }
 }
-    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+    fragment StudentCounsellingEventFields on StudentCounsellingEvent {
   id
   title
   date
@@ -1137,4 +1137,4 @@ export const StudentAdvisoryEventsDocument = new TypedDocumentString(`
   waitingList
   maxWaitingList
   url
-}`) as unknown as TypedDocumentString<StudentAdvisoryEventsQuery, StudentAdvisoryEventsQueryVariables>;
+}`) as unknown as TypedDocumentString<StudentCounsellingEventsQuery, StudentCounsellingEventsQueryVariables>;

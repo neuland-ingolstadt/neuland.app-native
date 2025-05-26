@@ -1,4 +1,4 @@
-import type { StudentAdvisoryEventFieldsFragment } from '@/__generated__/gql/graphql'
+import type { StudentCounsellingEventFieldsFragment } from '@/__generated__/gql/graphql'
 import ErrorView from '@/components/Error/ErrorView'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { FlashList } from '@shopify/flash-list'
@@ -9,19 +9,19 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-const MemoizedEventRow = memo(StudentAdvisoryEventRow)
+const MemoizedEventRow = memo(StudentCounsellingEventRow)
 
-function StudentAdvisoryEventRow({
+function StudentCounsellingEventRow({
 	event
 }: {
-	event: StudentAdvisoryEventFieldsFragment
+	event: StudentCounsellingEventFieldsFragment
 }): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	const handlePress = () => {
 		router.navigate({
-			pathname: '/events/advisory/[id]',
+			pathname: '/events/counselling/[id]',
 			params: { id: event.id }
 		})
 	}
@@ -74,17 +74,17 @@ function StudentAdvisoryEventRow({
 	)
 }
 
-export default function StudentAdvisoryEventsPage({
+export default function StudentCounsellingEventsPage({
 	events
 }: {
-	events: StudentAdvisoryEventFieldsFragment[]
+	events: StudentCounsellingEventFieldsFragment[]
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 
 	const renderItem = ({
 		item
-	}: { item: StudentAdvisoryEventFieldsFragment }) => (
+	}: { item: StudentCounsellingEventFieldsFragment }) => (
 		<View style={styles.rowWrapper}>
 			<MemoizedEventRow event={item} />
 		</View>
@@ -103,7 +103,7 @@ export default function StudentAdvisoryEventsPage({
 					disableAutoLayout
 					ListHeaderComponent={
 						<Text style={styles.sectionHeaderText}>
-							{t('pages.events.studentAdvisory.title')}
+							{t('pages.events.studentCounselling.title')}
 						</Text>
 					}
 				/>

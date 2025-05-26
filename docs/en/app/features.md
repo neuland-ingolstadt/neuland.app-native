@@ -35,9 +35,9 @@ Access key university platforms such as moodle, PRIMUSS or your webmail with a s
 
 Stay up to date with the **latest news** from the THI.
 
-### Career Service & Student Advisory
+### Career Service & Student Counselling
 
-Stay informed about all career service and student advisory events.
+Stay informed about all career service and student counselling events.
 Get access to workshops, counseling sessions, and other professional development opportunities to support your academic and career journey.
 \
 \

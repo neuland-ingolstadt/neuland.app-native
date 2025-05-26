@@ -109,7 +109,7 @@ Dies ermöglicht es dir, die App mit dem zuvor erstellten Entwicklungs-Build aus
 Du kannst diese Befehle zur Code-Überprüfung verwenden:
 
 - `bun lint` um nach Linting-Fehlern zu suchen
-- `bun format` um den Code mit Biome zu formatieren
+- `bun fmt` um den Code mit Biome zu formatieren
 
 ## Probleme und Diskussionen
 

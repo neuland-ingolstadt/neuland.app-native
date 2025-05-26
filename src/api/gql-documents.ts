@@ -198,16 +198,16 @@ const CAREER_SERVICE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
 `)
 
 export const STUDENT_ADVISORY_EVENTS_QUERY = graphql(/* GraphQL */ `
-    query StudentAdvisoryEvents {
-        studentAdvisoryEvents {
-            ...StudentAdvisoryEventFields
+    query StudentCounsellingEvents {
+        studentCounsellingEvents {
+            ...StudentCounsellingEventFields
         }
     }
 `)
 
 // biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const STUDENT_ADVISORY_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
-    fragment StudentAdvisoryEventFields on StudentAdvisoryEvent {
+    fragment StudentCounsellingEventFields on StudentCounsellingEvent {
         id
         title
         date
