@@ -115,6 +115,6 @@ const stylesheet = createStyleSheet((theme) => ({
 		fontSize: 16
 	},
 	selectedOptionText: {
-		color: theme.colors.primaryContrast
+		color: theme.colors.contrast
 	}
 }))
