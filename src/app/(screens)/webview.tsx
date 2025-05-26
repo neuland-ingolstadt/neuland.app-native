@@ -139,7 +139,7 @@ export default function NotesDetails(): React.JSX.Element {
 				scalesPageToFit
 				style={styles.webview}
 				onLoadEnd={() => {
-					const timeoutId: number = setTimeout(() => {
+					const timeoutId = setTimeout(() => {
 						setLoaded(true)
 					}, LOADING_TIMEOUT)
 
