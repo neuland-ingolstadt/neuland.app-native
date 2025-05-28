@@ -33,6 +33,11 @@ interface AnnouncementCardProps {
 	data: AnnouncementFieldsFragment[]
 }
 
+const isStaging = process.env.EXPO_PUBLIC_ENV === 'staging'
+const platform = (
+	isStaging ? 'WEB_DEV' : Platform.OS.toUpperCase()
+) as AppPlatform
+
 const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 	const { hiddenAnnouncements, hideAnnouncement } = use(DashboardContext)
 	const { t } = useTranslation('navigation')
@@ -71,9 +76,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
 			return announcements
 				.filter(
 					(announcement) =>
-						announcement?.platform?.includes(
-							Platform.OS.toUpperCase() as AppPlatform
-						) &&
+						announcement?.platform?.includes(platform) &&
 						announcement?.userKind?.includes(
 							userKind?.toUpperCase() as UserKind
 						) &&
