@@ -958,7 +958,7 @@ export const StudentCounsellingEventFieldsFragmentDoc = new TypedDocumentString(
     `, {"fragmentName":"StudentCounsellingEventFields"}) as unknown as TypedDocumentString<StudentCounsellingEventFieldsFragment, unknown>;
 export const AppAnnouncementsDocument = new TypedDocumentString(`
     query AppAnnouncements {
-  appAnnouncements {
+  appAnnouncements(active: true) {
     ...AnnouncementFields
   }
 }
