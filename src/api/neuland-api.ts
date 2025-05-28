@@ -26,7 +26,7 @@ import {
 const GRAPHQL_ENDPOINT: string =
 	process.env.EXPO_PUBLIC_NEULAND_GRAPHQL_ENDPOINT ??
 	'https://api.neuland.app/graphql'
-console.info('Using GraphQL endpoint:', GRAPHQL_ENDPOINT)
+const GRAPHQL_ENDPOINT_PROD = 'https://api.neuland.app/graphql'
 const ASSET_ENDPOINT = 'https://assets.neuland.app'
 const USER_AGENT = `neuland.app-native/${packageInfo.version} (+${packageInfo.homepage})`
 
@@ -61,20 +61,24 @@ class NeulandAPIClient {
 	 */
 	async executeGql<TResult, TVariables>(
 		query: TypedDocumentString<TResult, TVariables>,
+		forceProd = false,
 		...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
 	): Promise<TResult> {
-		const resp = await fetch(GRAPHQL_ENDPOINT, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/graphql-response+json',
-				'User-Agent': USER_AGENT
-			},
-			body: JSON.stringify({
-				query,
-				variables
-			})
-		})
+		const resp = await fetch(
+			forceProd ? GRAPHQL_ENDPOINT_PROD : GRAPHQL_ENDPOINT,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/graphql-response+json',
+					'User-Agent': USER_AGENT
+				},
+				body: JSON.stringify({
+					query,
+					variables
+				})
+			}
+		)
 
 		const json = (await resp.json()) as { data?: TResult; errors?: unknown }
 
@@ -91,11 +95,11 @@ class NeulandAPIClient {
 	 * @returns {Promise<AppAnnouncementsQuery>} A promise that resolves with the announcement data
 	 */
 	async getAnnouncements(): Promise<AppAnnouncementsQuery> {
-		return await this.executeGql(ANNOUNCEMENT_QUERY)
+		return await this.executeGql(ANNOUNCEMENT_QUERY, true)
 	}
 
 	async getFoodPlan(locations: string[]): Promise<FoodPlanQuery> {
-		return await this.executeGql(FOOD_QUERY, { locations })
+		return await this.executeGql(FOOD_QUERY, false, { locations })
 	}
 
 	/**
@@ -157,7 +161,7 @@ class NeulandAPIClient {
 	async createRoomReport(
 		input: RoomReportInput
 	): Promise<CreateRoomReportMutation> {
-		return await this.executeGql(CREATE_ROOM_REPORT, { input })
+		return await this.executeGql(CREATE_ROOM_REPORT, false, { input })
 	}
 }
 
