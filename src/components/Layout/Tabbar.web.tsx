@@ -11,6 +11,7 @@ export function useBottomTabBarHeight(): number {
 }
 
 const TabLayout = (): React.JSX.Element => {
+	'use no memo'
 	const { theme: styleTheme } = useStyles()
 	const { t } = useTranslation('navigation')
 	const isMobile = Dimensions.get('window').width < 900
@@ -24,12 +25,15 @@ const TabLayout = (): React.JSX.Element => {
 				tabBarActiveBackgroundColor: styleTheme.colors.primaryBackground,
 				tabBarInactiveTintColor: styleTheme.colors.labelColor,
 				tabBarStyle: {
-					backgroundColor: styleTheme.colors.card
+					backgroundColor: styleTheme.colors.card,
+					height: isMobile ? 65 : undefined
 				},
 				tabBarLabelStyle: {
 					paddingTop: isPad ? 4 : 0
 				},
-
+				tabBarIconStyle: {
+					marginTop: isMobile ? 10 : undefined
+				},
 				tabBarShowLabel: !isMobile,
 				tabBarLabelPosition: isMobile
 					? undefined
