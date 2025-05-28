@@ -6,7 +6,7 @@ import type {
 import i18n from '@/localization/i18n'
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { memo, use, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Image,
@@ -34,9 +34,9 @@ interface AnnouncementCardProps {
 }
 
 const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ data }) => {
-	const { hiddenAnnouncements, hideAnnouncement } = useContext(DashboardContext)
+	const { hiddenAnnouncements, hideAnnouncement } = use(DashboardContext)
 	const { t } = useTranslation('navigation')
-	const { userKind = 'guest' } = useContext(UserKindContext)
+	const { userKind = 'guest' } = use(UserKindContext)
 	const { styles } = useStyles(stylesheet)
 	const { width } = useWindowDimensions()
 	const isLargeScreen = width > 768

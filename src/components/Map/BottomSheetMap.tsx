@@ -5,7 +5,7 @@ import { MapContext } from '@/contexts/map'
 import BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import type { FeatureCollection } from 'geojson'
-import React, { useContext, useRef } from 'react'
+import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native'
@@ -44,7 +44,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 }) => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
-	const { localSearch, setLocalSearch, searchHistory } = useContext(MapContext)
+	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const textInputRef = useRef<any>(null)

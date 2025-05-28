@@ -12,7 +12,7 @@ import { getContrastColor } from '@/utils/ui-utils'
 import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	ActivityIndicator,
@@ -44,10 +44,10 @@ const LoginForm = ({
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const { styles, theme } = useStyles(stylesheet)
-	const { userKind, toggleUserKind } = React.useContext(UserKindContext)
+	const { userKind, toggleUserKind } = React.use(UserKindContext)
 	const [loading, setLoading] = useState(false)
 	const { t } = useTranslation('flow')
-	const { resetOrder } = useContext(DashboardContext)
+	const { resetOrder } = use(DashboardContext)
 	const [showPassword, setShowPassword] = useState(false)
 
 	async function login(): Promise<void> {

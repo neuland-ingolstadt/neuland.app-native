@@ -12,7 +12,7 @@ import { loadExamList } from '@/utils/calendar-utils'
 import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
-import { useContext } from 'react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
@@ -32,7 +32,7 @@ function TimetableScreen(): React.JSX.Element {
 
 	const { t } = useTranslation(['timetable'])
 
-	const { userKind } = useContext(UserKindContext)
+	const { userKind } = use(UserKindContext)
 
 	const {
 		data: timetable,

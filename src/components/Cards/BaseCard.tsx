@@ -1,6 +1,6 @@
 import { USER_GUEST } from '@/data/constants'
 import type React from 'react'
-import { useContext } from 'react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, {
@@ -54,8 +54,8 @@ const BaseCard: React.FC<BaseCardProps> = ({
 		rotation.value = withTiming(0, { duration: 300 })
 	}
 
-	const { resetOrder } = useContext(DashboardContext)
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { resetOrder } = use(DashboardContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 
 	const cardStyle = [styles.card, onPressRoute == null && styles.cardDisabled]
 
