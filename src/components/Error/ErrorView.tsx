@@ -168,9 +168,7 @@ export default function ErrorView({
 			refreshControl={
 				refreshing != null && title !== guestError ? (
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				) : (
-					<></>
-				)
+				) : undefined
 			}
 			scrollEnabled={!inModal}
 			contentContainerStyle={styles.container(inModal)}

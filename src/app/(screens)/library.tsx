@@ -17,7 +17,7 @@ import Barcode from '@kichiyaki/react-native-barcode-generator'
 import { useQuery } from '@tanstack/react-query'
 import * as Brightness from 'expo-brightness'
 import { useFocusEffect } from 'expo-router'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Dimensions,
@@ -32,7 +32,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function LibraryCode(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [brightness, setBrightness] = useState<number>(0)
 	const brightnessRef = useRef<number>(0)
 

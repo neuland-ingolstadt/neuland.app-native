@@ -11,7 +11,7 @@ import { USER_GUEST } from '@/data/constants'
 import { arraysEqual } from '@/utils/app-utils'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutAnimation, Platform, Text, View } from 'react-native'
 import DraggableFlatList, {
@@ -24,8 +24,8 @@ export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
 
 	const { shownDashboardEntries, resetOrder, updateDashboardOrder } =
-		useContext(DashboardContext)
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+		use(DashboardContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { styles } = useStyles(dashboardStyles)
 	const { t } = useTranslation(['settings'])
 	const [hasUserDefaultOrder, setHasUserDefaultOrder] = useState(true)

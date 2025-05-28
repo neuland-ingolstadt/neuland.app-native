@@ -12,7 +12,7 @@ import { networkError } from '@/utils/api-utils'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { selectionAsync } from 'expo-haptics'
 import type React from 'react'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Animated,
@@ -40,7 +40,7 @@ export default function ClSportsPage({
 	>
 }): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { userCampus } = useContext(UserKindContext)
+	const { userCampus } = use(UserKindContext)
 	const [selectedLocation, setSelectedLocation] = useState<string>('Ingolstadt')
 
 	useEffect(() => {

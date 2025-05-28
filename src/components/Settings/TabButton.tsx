@@ -8,7 +8,7 @@ import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -26,8 +26,7 @@ export const SettingsTabButton = ({
 }: IndexHeaderRightProps): React.JSX.Element => {
 	const { t } = useTranslation(['navigation', 'settings'])
 	const { styles, theme } = useStyles(stylesheet)
-	const { userKind = USER_GUEST } =
-		useContext<UserKindContextType>(UserKindContext)
+	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 
 	const [username, setUsername] = useState<string>('')
 	const [showLoadingIndicator, setShowLoadingIndicator] = useState(false)

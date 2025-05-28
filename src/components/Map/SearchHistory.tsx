@@ -1,7 +1,7 @@
 import { MapContext } from '@/contexts/map'
 import type { SearchResult } from '@/types/map'
 import { selectionAsync } from 'expo-haptics'
-import React, { useContext } from 'react'
+import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutAnimation, Platform, Text, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
@@ -22,7 +22,7 @@ const SearchHistory: React.FC<SearchHistoryProps> = ({
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
-	const { searchHistory, updateSearchHistory } = useContext(MapContext)
+	const { searchHistory, updateSearchHistory } = use(MapContext)
 
 	function addToSearchHistory(newHistory: SearchResult): void {
 		const newSearchHistory = searchHistory.filter(

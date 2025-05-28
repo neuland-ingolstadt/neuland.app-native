@@ -3,7 +3,7 @@ import { MapContext } from '@/contexts/map'
 import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
-import { memo, useContext } from 'react'
+import { memo, use } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import {
 	UnistylesRuntime,
@@ -25,7 +25,7 @@ const FloorPicker: React.FC<FloorPickerProps> = ({
 	setCameraTriggerKey
 }): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)
-	const { currentFloor, setCurrentFloor } = useContext(MapContext)
+	const { currentFloor, setCurrentFloor } = use(MapContext)
 
 	return (
 		<View style={styles.ButtonArea}>

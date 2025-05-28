@@ -14,7 +14,7 @@ import * as Application from 'expo-application'
 import * as QuickActions from 'expo-quick-actions'
 import { Redirect, type RelativePathString, useRouter } from 'expo-router'
 import type React from 'react'
-import { useContext, useEffect } from 'react'
+import { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useMMKVBoolean } from 'react-native-mmkv'
@@ -46,7 +46,7 @@ export default function HomeLayout(): React.JSX.Element {
 	const toggleSelectedAllergens = useFoodFilterStore(
 		(state) => state.toggleSelectedAllergens
 	)
-	const { userKind: userKindInitial } = useContext(UserKindContext)
+	const { userKind: userKindInitial } = use(UserKindContext)
 	const userKind = userKindInitial ?? USER_GUEST
 	const updatedVersion = useFlowStore((state) => state.updatedVersion)
 	const [isOnboardedV1] = useMMKVBoolean('isOnboardedv1')

@@ -5,7 +5,7 @@ import { trackEvent } from '@aptabase/react-native'
 import Fuse from 'fuse.js'
 import type { FeatureCollection } from 'geojson'
 import type React from 'react'
-import { memo, useCallback, useContext, useEffect, useMemo } from 'react'
+import { memo, use, useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Platform, SectionList, Text } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -24,8 +24,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 }) => {
 	const { styles } = useStyles(stylesheet)
 	const { t, i18n } = useTranslation('common')
-	const { searchHistory, updateSearchHistory, localSearch } =
-		useContext(MapContext)
+	const { searchHistory, updateSearchHistory, localSearch } = use(MapContext)
 	const unlockedAppIcons = usePreferencesStore(
 		(state) => state.unlockedAppIcons
 	)

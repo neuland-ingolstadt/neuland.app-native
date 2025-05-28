@@ -131,6 +131,12 @@
         "licenseUrl": "https://github.com/visgl/react-map-gl/raw/master/LICENSE",
         "parents": "neuland"
     },
+    "babel-plugin-react-compiler@19.1.0-rc.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/facebook/react",
+        "licenseUrl": "https://github.com/facebook/react",
+        "parents": "neuland"
+    },
     "burnt@0.13.0": {
         "licenses": "MIT",
         "repository": "https://github.com/nandorojo/burnt",
@@ -174,6 +180,12 @@
         "parents": "neuland"
     },
     "expo-clipboard@7.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/expo/expo",
+        "licenseUrl": "https://github.com/expo/expo",
+        "parents": "neuland"
+    },
+    "expo-constants@17.1.6": {
         "licenses": "MIT",
         "repository": "https://github.com/expo/expo",
         "licenseUrl": "https://github.com/expo/expo",
@@ -322,7 +334,7 @@
         "licenseUrl": "https://github.com/danilowoz/react-content-loader/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react-dom@19.0.0": {
+    "react-dom@19.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",
@@ -454,7 +466,7 @@
         "licenseUrl": "https://github.com/facebook/react-native/raw/master/LICENSE",
         "parents": "neuland"
     },
-    "react@19.0.0": {
+    "react@19.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/facebook/react",
         "licenseUrl": "https://github.com/facebook/react/raw/master/LICENSE",

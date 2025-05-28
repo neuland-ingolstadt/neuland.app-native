@@ -6,7 +6,7 @@ import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import type { FeatureCollection } from 'geojson'
 import type { Position } from 'geojson'
-import React, { useContext } from 'react'
+import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -25,8 +25,7 @@ const NextLectureSuggestion: React.FC<NextLectureSuggestionsProps> = ({
 	allRooms,
 	handlePresentModalPress
 }) => {
-	const { setClickedElement, nextLecture, setCurrentFloor } =
-		useContext(MapContext)
+	const { setClickedElement, nextLecture, setCurrentFloor } = use(MapContext)
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 	if (nextLecture == null || nextLecture.length === 0) {

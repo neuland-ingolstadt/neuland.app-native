@@ -16,7 +16,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { Toaster } from 'burnt/web'
 import { useSegments } from 'expo-router'
 import type React from 'react'
-import { useEffect } from 'react'
+import { StrictMode, useEffect } from 'react'
 import {
 	type AppStateStatus,
 	Appearance,
@@ -198,29 +198,31 @@ export default function Provider({
 	}, [theme])
 
 	return (
-		<GestureHandlerRootView style={styles.container}>
-			<PersistQueryClientProvider
-				client={queryClient}
-				persistOptions={{ persister: syncStoragePersister }}
-			>
-				<UnistylesProvider>
-					<ThemeProvider
-						value={
-							UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
-						}
-					>
-						<BottomSheetModalProvider>
-							<UserKindContext.Provider value={userKind}>
-								<DashboardContext.Provider value={dashboard}>
-									<Toaster />
-									{children}
-								</DashboardContext.Provider>
-							</UserKindContext.Provider>
-						</BottomSheetModalProvider>
-					</ThemeProvider>
-				</UnistylesProvider>
-			</PersistQueryClientProvider>
-		</GestureHandlerRootView>
+		<StrictMode>
+			<GestureHandlerRootView style={styles.container}>
+				<PersistQueryClientProvider
+					client={queryClient}
+					persistOptions={{ persister: syncStoragePersister }}
+				>
+					<UnistylesProvider>
+						<ThemeProvider
+							value={
+								UnistylesRuntime.themeName === 'dark' ? DarkTheme : DefaultTheme
+							}
+						>
+							<BottomSheetModalProvider>
+								<UserKindContext.Provider value={userKind}>
+									<DashboardContext.Provider value={dashboard}>
+										<Toaster />
+										{children}
+									</DashboardContext.Provider>
+								</UserKindContext.Provider>
+							</BottomSheetModalProvider>
+						</ThemeProvider>
+					</UnistylesProvider>
+				</PersistQueryClientProvider>
+			</GestureHandlerRootView>
+		</StrictMode>
 	)
 }
 

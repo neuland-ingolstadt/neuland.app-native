@@ -15,7 +15,7 @@ import { useQuery } from '@tanstack/react-query'
 import { toast } from 'burnt'
 import * as Clipboard from 'expo-clipboard'
 import { useRouter } from 'expo-router'
-import React, { useContext, useEffect } from 'react'
+import React, { use, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -34,8 +34,8 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles'
 export default function Profile(): React.JSX.Element {
 	const router = useRouter()
 	const { styles } = useStyles(stylesheet)
-	const { toggleUserKind, userKind } = useContext(UserKindContext)
-	const { resetOrder } = useContext(DashboardContext)
+	const { toggleUserKind, userKind } = use(UserKindContext)
+	const { resetOrder } = use(DashboardContext)
 	const { t } = useTranslation('settings')
 	const [isLoggingOut, setIsLoggingOut] = React.useState(false)
 	const resetPreferences = usePreferencesStore((state) => state.reset)

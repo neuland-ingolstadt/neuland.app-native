@@ -45,7 +45,7 @@ export default function HomeRootScreen(): React.JSX.Element {
 
 const HomeScreen = memo(function HomeScreen() {
 	const { styles, theme } = useStyles(stylesheet)
-	const { shownDashboardEntries } = React.useContext(DashboardContext)
+	const { shownDashboardEntries } = React.use(DashboardContext)
 	const [orientation, setOrientation] = useState(Dimensions.get('window').width)
 	const [columns, setColumns] = useState(
 		Math.floor(Dimensions.get('window').width < 800 ? 1 : 2)
