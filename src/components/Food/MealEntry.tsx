@@ -21,7 +21,7 @@ import {
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
-import { memo, useContext, useDeferredValue, useMemo, useState } from 'react'
+import { memo, use, useDeferredValue, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -58,8 +58,7 @@ export const MealEntry = memo(
 				),
 			[meal.allergens, deferredAllergens, i18n.language]
 		)
-		const { userKind = USER_GUEST } =
-			useContext<UserKindContextType>(UserKindContext)
+		const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
 		const userFlags = useMemo(
 			() =>
 				convertRelevantFlags(

@@ -1,5 +1,7 @@
 import FormList from '@/components/Universal/FormList'
 import type { LucideIcon } from '@/components/Universal/Icon'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import type { FormListSections } from '@/types/components'
 import type { MaterialIcon } from '@/types/material-icons'
@@ -7,6 +9,7 @@ import { storage } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { useRouter } from 'expo-router'
 import type React from 'react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking, Platform, Share } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
@@ -15,6 +18,7 @@ export default function SettingsMenu(): React.JSX.Element {
 	const router = useRouter()
 	const { t, i18n } = useTranslation(['settings'])
 	const setLanguage = usePreferencesStore((state) => state.setLanguage)
+	const { userKind } = use(UserKindContext)
 
 	const languageAlert = (): void => {
 		const newLocale = i18n.language === 'en' ? 'de' : 'en'
@@ -73,17 +77,21 @@ export default function SettingsMenu(): React.JSX.Element {
 						router.navigate('/food-preferences')
 					}
 				},
-				{
-					title: t('menu.formlist.preferences.timetable'),
-					icon: {
-						ios: 'calendar',
-						android: 'event',
-						web: 'Calendar'
-					},
-					onPress: () => {
-						router.navigate('/timetable-preferences')
-					}
-				},
+				...(userKind !== USER_GUEST
+					? [
+							{
+								title: t('menu.formlist.preferences.timetable'),
+								icon: {
+									ios: 'calendar',
+									android: 'event' as MaterialIcon,
+									web: 'Calendar' as LucideIcon
+								},
+								onPress: () => {
+									router.navigate('/timetable-preferences')
+								}
+							}
+						]
+					: []),
 				{
 					title: t('menu.formlist.preferences.language'),
 					icon: {

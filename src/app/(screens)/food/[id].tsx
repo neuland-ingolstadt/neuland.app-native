@@ -25,7 +25,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Stack, router, useFocusEffect, useNavigation } from 'expo-router'
 import { useLocalSearchParams } from 'expo-router'
 import type React from 'react'
-import { useCallback, useContext } from 'react'
+import { use, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -62,7 +62,7 @@ export default function FoodDetail(): React.JSX.Element {
 		(state) => state.toggleSelectedAllergens
 	)
 	const { t, i18n } = useTranslation('food')
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const dataSources = {
 		IngolstadtMensa: 'https://www.werkswelt.de/?id=ingo',
 		NeuburgMensa: 'https://www.werkswelt.de/?id=mtneuburg',

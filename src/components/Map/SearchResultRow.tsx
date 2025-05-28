@@ -7,7 +7,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import type { Position } from 'geojson'
 import type React from 'react'
-import { memo, useContext } from 'react'
+import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -25,8 +25,7 @@ const ResultRow: React.FC<{
 	handlePresentModalPress,
 	updateSearchHistory
 }): React.JSX.Element => {
-	const { setClickedElement, setLocalSearch, setCurrentFloor } =
-		useContext(MapContext)
+	const { setClickedElement, setLocalSearch, setCurrentFloor } = use(MapContext)
 	const { styles } = useStyles(stylesheet)
 	const { i18n } = useTranslation()
 	const roomTypeKey = i18n.language === 'de' ? 'Funktion_de' : 'Funktion_en'

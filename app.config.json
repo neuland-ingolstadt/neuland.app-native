@@ -68,6 +68,8 @@
 		},
 		"sdkVersion": "53.0.0",
 		"experiments": {
+			"reactCompiler": true,
+			"reactCanary": true,
 			"tsconfigPaths": true,
 			"typedRoutes": true,
 			"remoteBuildCache": {

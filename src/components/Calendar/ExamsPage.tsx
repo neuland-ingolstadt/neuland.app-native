@@ -11,7 +11,7 @@ import { FlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import type React from 'react'
-import { useContext } from 'react'
+import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, RefreshControl, ScrollView, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -24,7 +24,7 @@ export default function ExamsPage({
 	primussUrl: string
 	handleLinkPress: () => void
 }): React.JSX.Element {
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { styles } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
 

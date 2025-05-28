@@ -31,7 +31,7 @@ export default function SettingsHeader({
 }: SettingsHeaderProps): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)
 	const { userKind = USER_GUEST } =
-		React.useContext<UserKindContextType>(UserKindContext)
+		React.use<UserKindContextType>(UserKindContext)
 	const router = useRouter()
 	const { t } = useTranslation(['settings'])
 	const [username, setUsername] = React.useState<string>('')

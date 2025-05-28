@@ -7,7 +7,7 @@ import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type { FeatureCollection } from 'geojson'
 import type { Position } from 'geojson'
-import React, { useContext } from 'react'
+import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -30,13 +30,13 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 }) => {
 	const { styles, theme } = useStyles(stylesheet)
 	const { t } = useTranslation('common')
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const {
 		setClickedElement,
 		availableRooms,
 
 		setCurrentFloor
-	} = useContext(MapContext)
+	} = use(MapContext)
 	return (
 		<View>
 			<View style={styles.suggestionSectionHeaderContainer}>

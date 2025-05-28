@@ -22,7 +22,7 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
 import type React from 'react'
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { use, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	FlatList,
@@ -45,7 +45,7 @@ export default function LecturersScreen(): React.JSX.Element {
 	const [filteredLecturers, setFilteredLecturers] = useState<
 		NormalizedLecturer[]
 	>([])
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const navigation = useNavigation()
 	const [selectedPage, setSelectedPage] = useState(0)
 	const { styles, theme } = useStyles(stylesheet)

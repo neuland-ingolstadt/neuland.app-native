@@ -46,14 +46,7 @@ import { toast } from 'burnt'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import type { Feature, FeatureCollection, Position } from 'geojson'
 import type React from 'react'
-import {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useRef,
-	useState
-} from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Appearance, LayoutAnimation, Linking, Text, View } from 'react-native'
 import Animated, {
@@ -95,7 +88,7 @@ const MapScreen = (): React.JSX.Element => {
 	const { styles, theme } = useStyles(stylesheet)
 	const isDark = UnistylesRuntime.themeName === 'dark'
 	const params = useLocalSearchParams<{ room: string }>()
-	const { userKind, userFaculty } = useContext(UserKindContext)
+	const { userKind, userFaculty } = use(UserKindContext)
 	const [mapCenter, setMapCenter] = useState(INGOLSTADT_CENTER)
 	const { t, i18n } = useTranslation('common')
 	const bottomSheetRef = useRef<BottomSheet>(null)
@@ -111,7 +104,7 @@ const MapScreen = (): React.JSX.Element => {
 		currentFloor,
 		setCurrentFloor,
 		setNextLecture
-	} = useContext(MapContext)
+	} = use(MapContext)
 	const [_disableFollowUser, setDisableFollowUser] = useState(false)
 	const [showAllFloors, setShowAllFloors] = useState(false)
 	const mapRef = useRef(null)

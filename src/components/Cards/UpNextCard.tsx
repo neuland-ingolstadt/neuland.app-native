@@ -9,14 +9,7 @@ import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { router, useFocusEffect } from 'expo-router'
 import type React from 'react'
-import {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useRef,
-	useState
-} from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	AppState,
@@ -32,7 +25,7 @@ import BaseCard from './BaseCard'
 
 const UpNextCard: React.FC = () => {
 	const { styles, theme } = useStyles(stylesheet)
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const [loadingState, setLoadingState] = useState(LoadingState.LOADING)
 	const [currentEvent, setCurrentEvent] =
 		useState<FriendlyTimetableEntry | null>(null)

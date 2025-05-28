@@ -5,7 +5,8 @@
 	"homepage": "https://github.com/neuland-ingolstadt/neuland.app-native",
 	"private": true,
 	"scripts": {
-		"dev": "EXPO_USE_FAST_RESOLVER=1 expo",
+		"dev": "EXPO_USE_FAST_RESOLVER=1 expo start",
+		"start": "EXPO_USE_FAST_RESOLVER=1 expo start --no-dev --clear --port 3000",
 		"atlas": "EXPO_UNSTABLE_ATLAS=true npx expo export --platform all",
 		"web": "expo start --web --port 3000",
 		"android": "expo run:android --device --variant=developmentDebug",
@@ -45,6 +46,7 @@
 		"@tanstack/react-query-persist-client": "^5.77.1",
 		"@th3rdwave/react-navigation-bottom-sheet": "0.3.2",
 		"@vis.gl/react-maplibre": "^8.0.4",
+		"babel-plugin-react-compiler": "^19.1.0-rc.2",
 		"burnt": "0.13.0",
 		"color": "^5.0.0",
 		"expo": "^53.0.0",
@@ -77,9 +79,9 @@
 		"metro": "^0.82.0",
 		"moment": "^2.30.1",
 		"moment-timezone": "^0.6.0",
-		"react": "19.0.0",
+		"react": "19.1.0",
 		"react-content-loader": "^7.0.2",
-		"react-dom": "19.0.0",
+		"react-dom": "19.1.0",
 		"react-i18next": "^15.5.2",
 		"react-native": "0.79.2",
 		"react-native-bottom-tabs": "^0.9.1",
@@ -120,7 +122,7 @@
 		"@types/geojson": "^7946.0.16",
 		"@types/node": "^22.15.18",
 		"@types/prop-types": "^15.7.14",
-		"@types/react": "~19.0.10",
+		"@types/react": "19.1.6",
 		"@types/sanitize-html": "^2.16.0",
 		"ajv": "^8.17.1",
 		"babel-plugin-formatjs": "^10.5.38",
@@ -133,7 +135,8 @@
 		"@th3rdwave/react-navigation-bottom-sheet@0.3.2": "patches/@th3rdwave%2Freact-navigation-bottom-sheet@0.3.2.patch",
 		"getenv@1.0.0": "patches/getenv@1.0.0.patch",
 		"recyclerlistview@4.2.1": "patches/recyclerlistview@4.2.1.patch",
-		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch"
+		"@aptabase/react-native@0.3.10": "patches/@aptabase%2Freact-native@0.3.10.patch",
+		"luxon@3.6.1": "patches/luxon@3.6.1.patch"
 	},
 	"trustedDependencies": ["@biomejs/biome"]
 }

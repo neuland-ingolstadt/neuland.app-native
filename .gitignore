@@ -46,3 +46,6 @@ junit.xml
 
 # google
 service.json
+
+# kotlin
+android/.kotlin

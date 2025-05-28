@@ -12,7 +12,7 @@ import { calculateECTS } from '@/utils/grades-utils'
 import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import React, { useContext, useRef } from 'react'
+import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
 	Alert,
@@ -33,9 +33,8 @@ import StudentInfoSection from './StudentInfoSection'
 
 export default function Settings(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
-	const { userKind = USER_GUEST } =
-		useContext<UserKindContextType>(UserKindContext)
-	const { resetOrder } = useContext(DashboardContext)
+	const { userKind = USER_GUEST } = use<UserKindContextType>(UserKindContext)
+	const { resetOrder } = use(DashboardContext)
 	const insets = useSafeAreaInsets()
 	const windowView = Dimensions.get('window')
 	const width = windowView.width - insets.left - insets.right
@@ -123,7 +122,7 @@ export default function Settings(): React.JSX.Element {
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-	const { toggleUserKind } = React.useContext(UserKindContext)
+	const { toggleUserKind } = React.use(UserKindContext)
 
 	React.useEffect(() => {
 		if (isLoading || isSuccess) {

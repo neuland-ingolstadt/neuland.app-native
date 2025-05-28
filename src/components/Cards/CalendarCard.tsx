@@ -21,7 +21,7 @@ const CalendarCard = (): React.JSX.Element => {
 	const { i18n, t } = useTranslation('navigation')
 	const [mixedCalendar, setMixedCalendar] = useState<Combined[]>([])
 	const isOnboarded = useFlowStore((state) => state.isOnboarded)
-	const { userKind = USER_GUEST } = React.useContext(UserKindContext)
+	const { userKind = USER_GUEST } = React.use(UserKindContext)
 
 	interface CardExams {
 		name: string

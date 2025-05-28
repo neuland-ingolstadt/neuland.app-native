@@ -3,7 +3,7 @@ import { UserKindContext } from '@/components/contexts'
 import { USER_GUEST } from '@/data/constants'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { useContext, useRef } from 'react'
+import { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
@@ -14,7 +14,7 @@ const NewsCard: React.FC = () => {
 	const ref = useRef(null)
 	const { t } = useTranslation('navigation')
 	const { styles } = useStyles(stylesheet)
-	const { userKind = USER_GUEST } = useContext(UserKindContext)
+	const { userKind = USER_GUEST } = use(UserKindContext)
 	const { data } = useQuery({
 		queryKey: ['thiNews'],
 		queryFn: async () => await API.getThiNews(),
