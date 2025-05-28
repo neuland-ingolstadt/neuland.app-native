@@ -54,7 +54,7 @@ const HomeScreen = memo(function HomeScreen() {
 	const { data } = useQuery({
 		queryKey: ['announcements'],
 		queryFn: async () => await NeulandAPI.getAnnouncements(),
-		staleTime: 1000 * 60 * 30, // 30 minutes
+		staleTime: 1000 * 60 * 10, // 10 minutes
 		gcTime: 1000 * 60 * 60 * 24 * 7 // 7 days
 	})
 
@@ -85,7 +85,7 @@ const HomeScreen = memo(function HomeScreen() {
 	const announcementHeader = useMemo(
 		() =>
 			announcements != null ? <AnnouncementCard data={announcements} /> : null,
-		[announcements]
+		[data]
 	)
 
 	const renderSingleColumnItem = useCallback(
