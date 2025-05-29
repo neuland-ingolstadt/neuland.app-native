@@ -1,5 +1,3 @@
-// @ts-expect-error - no types available
-
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
@@ -8,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { UserKindContext } from '@/components/contexts'
+// @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import ContextMenu from '@/components/Flow/ContextMenu'
 import PlatformIcon from '@/components/Universal/Icon'
