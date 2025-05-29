@@ -86,7 +86,6 @@ export class AnonymousAPIClient {
 		})
 
 		if (res.status !== 0) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			throw new APIError(res.status, res.data)
 		}
 

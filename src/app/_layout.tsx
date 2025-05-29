@@ -130,7 +130,6 @@ function RootLayout(): React.JSX.Element {
 	return (
 		<Splash isReady={isReady}>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
 				<title>Neuland Next</title>
 				<meta
 					name="description"

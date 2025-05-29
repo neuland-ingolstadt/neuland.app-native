@@ -7,7 +7,6 @@ import {
 } from '@th3rdwave/react-navigation-bottom-sheet'
 import { withLayoutContext } from 'expo-router'
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const { Navigator } = createBottomSheetNavigator()
 
 const BottomSheet = withLayoutContext<

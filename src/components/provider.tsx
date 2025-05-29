@@ -138,7 +138,6 @@ export default function Provider({
 
 		const entries: Record<string, string> = {}
 		dashboard.shownDashboardEntries.forEach((entry, index) => {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (entry !== undefined) {
 				entries[entry.key] = `Position ${(index + 1).toString()}`
 			}

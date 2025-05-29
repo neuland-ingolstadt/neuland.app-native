@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-
 import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -82,7 +80,6 @@ export default function MapRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text */}
 				<title>{t('navigation.map')}</title>
 				<meta name="Campus Map" content="Interactive Campus Map" />
 				<meta property="expo:handoff" content="true" />

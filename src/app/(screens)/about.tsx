@@ -250,7 +250,6 @@ export default function About(): React.JSX.Element {
 					>
 						<View style={styles.logoIcon}>
 							<Image
-								// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
 								source={require('@/assets/appIcons/default.png')}
 								alt="Neuland Next Logo"
 								style={styles.logoImage}

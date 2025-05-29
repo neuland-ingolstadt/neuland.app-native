@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import {
 	getAppIconName,
 	resetAppIcon,
@@ -17,7 +15,6 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-/* eslint-disable @typescript-eslint/no-require-imports */
 import ErrorView from '@/components/Error/ErrorView'
 import Divider from '@/components/Universal/Divider'
 import PlatformIcon from '@/components/Universal/Icon'

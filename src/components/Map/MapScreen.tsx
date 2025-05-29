@@ -604,7 +604,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		return () => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			clearTimeout(timer)
 		}
 	}, [regionChange, isVisible, opacity])
@@ -634,7 +633,6 @@ const MapScreen = (): React.JSX.Element => {
 			)}
 
 			<View
-				// eslint-disable-next-line react-native/no-inline-styles
 				style={{
 					...styles.map,
 					marginBottom: 0
@@ -674,9 +672,7 @@ const MapScreen = (): React.JSX.Element => {
 						nativeAssetImages={['pin']}
 						images={{
 							// https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
-							'map-marker':
-								// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-								require('@/assets/map-marker.png')
+							'map-marker': require('@/assets/map-marker.png')
 						}}
 					/>
 					<Camera
@@ -718,7 +714,6 @@ const MapScreen = (): React.JSX.Element => {
 						>
 							<SymbolLayer
 								id="clickedElementMarker"
-								// eslint-disable-next-line react-native/no-inline-styles
 								style={{
 									iconImage: 'map-marker',
 									iconColor: theme.colors.primary,

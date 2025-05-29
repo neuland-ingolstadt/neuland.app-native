@@ -206,7 +206,6 @@ function FoodScreen(): React.JSX.Element {
 				) : isSuccess && data.length > 0 ? (
 					<>
 						<Animated.View
-							// eslint-disable-next-line react-native/no-inline-styles
 							style={{
 								...styles.animtedContainer,
 

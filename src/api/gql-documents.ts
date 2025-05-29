@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+// biome-ignore-all lint/correctness/noUnusedVariables: needed for codegen
+
 import { graphql } from '@/__generated__/gql'
 
 export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
@@ -9,7 +10,6 @@ export const ANNOUNCEMENT_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const APP_ANNOUNCEMENT_FRAGMENT = graphql(/* GraphQL */ `
     fragment AnnouncementFields on Announcement {
         id
@@ -39,7 +39,6 @@ export const FOOD_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const FOOD_FRAGMENT = graphql(/* GraphQL */ `
     fragment FoodFields on FoodResponse {
         foodData {
@@ -111,7 +110,6 @@ export const CAMPUS_LIFE_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const CAMPUS_LIFE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CampusLifeEventFields on ClEvent {
         id
@@ -142,7 +140,6 @@ export const UNIVERSITY_SPORTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const UNIVERSITY_SPORTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment UniversitySportsFields on UniversitySports {
         id
@@ -182,7 +179,6 @@ export const CAREER_SERVICE_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const CAREER_SERVICE_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment CareerServiceEventFields on CareerServiceEvent {
         id
@@ -205,7 +201,6 @@ export const STUDENT_ADVISORY_EVENTS_QUERY = graphql(/* GraphQL */ `
     }
 `)
 
-// biome-ignore lint/correctness/noUnusedVariables: needed for codegen
 const STUDENT_ADVISORY_EVENTS_FRAGMENT = graphql(/* GraphQL */ `
     fragment StudentCounsellingEventFields on StudentCounsellingEvent {
         id

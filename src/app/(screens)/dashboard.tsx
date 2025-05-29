@@ -35,7 +35,6 @@ export default function DashboardEdit(): React.JSX.Element {
 		return {
 			...item,
 			// @ts-expect-error cannot verify the type
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			text: t(`cards.titles.${item.key}`, {
 				ns: 'navigation'
 			}) as string
@@ -60,7 +59,6 @@ export default function DashboardEdit(): React.JSX.Element {
 		setHasUserDefaultOrder(
 			arraysEqual(
 				defaultShown,
-				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 				shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
 			)
 		)

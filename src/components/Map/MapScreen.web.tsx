@@ -602,7 +602,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		return () => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			clearTimeout(timer)
 		}
 	}, [regionChange, isVisible, opacity])

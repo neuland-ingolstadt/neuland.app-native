@@ -28,9 +28,7 @@ export const modalSection = (
 
 	if (
 		roomData.type === SEARCH_TYPES.ROOM &&
-		((roomData.occupancies !== null &&
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			roomData.occupancies !== undefined) ||
+		((roomData.occupancies !== null && roomData.occupancies !== undefined) ||
 			(roomData.properties !== null && roomData.properties !== undefined))
 	) {
 		const occupancies = roomData.occupancies as AvailableRoom
@@ -91,7 +89,6 @@ export const modalSection = (
 								ns: 'common'
 							}),
 							items: [
-								// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 								...(occupancies != null
 									? [
 											{
@@ -129,10 +126,8 @@ export const modalSection = (
 								{
 									title: 'Campus',
 									value:
-										locations[
-											// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-											roomData.properties?.Standort
-										] ?? t('misc.unknown', { ns: 'common' })
+										locations[roomData.properties?.Standort] ??
+										t('misc.unknown', { ns: 'common' })
 								}
 							]
 						}

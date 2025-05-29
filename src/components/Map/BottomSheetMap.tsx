@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import type { FeatureCollection } from 'geojson'
@@ -24,7 +22,6 @@ import {
 	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { MapContext } from '@/contexts/map'
 import AttributionLink from './AttributionLink'
 import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'

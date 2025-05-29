@@ -29,7 +29,6 @@ export default function FoodRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text */}
 				<title>{t('navigation.food')}</title>
 				<meta name="Food" content="Meal plan for the canteens" />
 				<meta property="expo:handoff" content="true" />

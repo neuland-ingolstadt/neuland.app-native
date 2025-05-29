@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import type { Position } from 'geojson'
