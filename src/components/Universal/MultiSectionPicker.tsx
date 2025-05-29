@@ -1,7 +1,7 @@
-import Divider from '@/components/Universal/Divider'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import Divider from '@/components/Universal/Divider'
 
 import PlatformIcon from './Icon'
 
@@ -68,9 +68,7 @@ const MultiSectionPicker: React.FC<SectionPickerProps> = ({
 									}}
 									style={item.disabled ? styles.iconDisabled : undefined}
 								/>
-							) : (
-								<></>
-							)}
+							) : undefined}
 						</View>
 					</Pressable>
 					{index < elements.length - 1 && (

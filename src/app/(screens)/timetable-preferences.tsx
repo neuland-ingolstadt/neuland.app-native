@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+import { ScrollView, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import MultiSectionRadio, {
 	type FoodLanguageElement
 } from '@/components/Food/FoodLanguageSection'
@@ -6,9 +9,6 @@ import MultiSectionPicker from '@/components/Universal/MultiSectionPicker'
 import SectionView from '@/components/Universal/SectionsView'
 import SingleSectionPicker from '@/components/Universal/SingleSectionPicker'
 import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
-import { useTranslation } from 'react-i18next'
-import { ScrollView, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function TimetablePreferences(): React.JSX.Element {
 	const { t } = useTranslation(['navigation', 'timetable'])

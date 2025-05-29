@@ -1,15 +1,3 @@
-import ErrorView from '@/components/Error/ErrorView'
-import TimetableList from '@/components/Timetable/TimetableList'
-import TimetableWeek from '@/components/Timetable/TimetableWeek'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { UserKindContext } from '@/components/contexts'
-import { USER_GUEST } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
-import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
-import type { FriendlyTimetableEntry } from '@/types/utils'
-import { guestError, networkError } from '@/utils/api-utils'
-import { loadExamList } from '@/utils/calendar-utils'
-import { getFriendlyTimetable } from '@/utils/timetable-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import { use } from 'react'
@@ -17,6 +5,18 @@ import { useTranslation } from 'react-i18next'
 import { Linking, View } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import TimetableList from '@/components/Timetable/TimetableList'
+import TimetableWeek from '@/components/Timetable/TimetableWeek'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { USER_GUEST } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import type { FriendlyTimetableEntry } from '@/types/utils'
+import { guestError, networkError } from '@/utils/api-utils'
+import { loadExamList } from '@/utils/calendar-utils'
+import { getFriendlyTimetable } from '@/utils/timetable-utils'
 export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	const timetable = await getFriendlyTimetable(new Date(), true)
 	if (timetable.length === 0) {
@@ -25,6 +25,14 @@ export const loadTimetable = async (): Promise<FriendlyTimetableEntry[]> => {
 	return timetable
 }
 
+const LoadingView = (): React.JSX.Element => {
+	const { styles } = useStyles(stylesheet)
+	return (
+		<View style={styles.loadingView}>
+			<LoadingIndicator />
+		</View>
+	)
+}
 function TimetableScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
 
@@ -69,13 +77,6 @@ function TimetableScreen(): React.JSX.Element {
 
 	const { isRefetchingByUser, refetchByUser } = useRefreshByUser(refetch)
 
-	const LoadingView = (): React.JSX.Element => {
-		return (
-			<View style={styles.loadingView}>
-				<LoadingIndicator />
-			</View>
-		)
-	}
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={styles.page} edges={['top']}>

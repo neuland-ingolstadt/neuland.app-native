@@ -1,13 +1,11 @@
-import { MapContext } from '@/contexts/map'
-import type { SearchResult } from '@/types/map'
 import { selectionAsync } from 'expo-haptics'
 import React, { use } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LayoutAnimation, Platform, Text, View } from 'react-native'
+import { LayoutAnimation, Platform, Pressable, Text, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
+import { MapContext } from '@/contexts/map'
+import type { SearchResult } from '@/types/map'
 
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'

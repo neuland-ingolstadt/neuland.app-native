@@ -1,3 +1,16 @@
+import { trackEvent } from '@aptabase/react-native'
+import { useQueries } from '@tanstack/react-query'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import type React from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+	Animated,
+	InteractionManager,
+	useWindowDimensions,
+	View
+} from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	CareerServiceEventFieldsFragmentDoc,
@@ -11,24 +24,11 @@ import PagerView from '@/components/Layout/PagerView'
 import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import ToggleRow from '@/components/Universal/ToggleRow'
 import {
-	QUERY_KEYS,
 	loadCareerServiceEvents,
-	loadStudentCounsellingEvents
+	loadStudentCounsellingEvents,
+	QUERY_KEYS
 } from '@/utils/events-utils'
 import { pausedToast } from '@/utils/ui-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { useQueries } from '@tanstack/react-query'
-import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
-import type React from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import {
-	Animated,
-	InteractionManager,
-	View,
-	useWindowDimensions
-} from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')

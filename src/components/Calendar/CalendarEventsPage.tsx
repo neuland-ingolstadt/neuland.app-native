@@ -1,10 +1,10 @@
-import type { Calendar } from '@/types/data'
-import { semesters } from '@/utils/calendar-utils'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SectionList, type SectionListData, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { Calendar } from '@/types/data'
+import { semesters } from '@/utils/calendar-utils'
 import { CalendarRow } from '../Rows/CalendarRow'
 
 type Section = {
@@ -75,6 +75,7 @@ export default function CalendarEventsPage({
 		</View>
 	)
 
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const CalendarFooter = (): React.JSX.Element => {
 		return (
 			<View style={styles.footerContainer}>

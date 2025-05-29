@@ -1,11 +1,11 @@
+import type { QueryClient } from '@tanstack/react-query'
+import { router } from 'expo-router'
 import API from '@/api/authenticated-api'
 import { createGuestSession } from '@/api/thi-session-handler'
 import { USER_GUEST } from '@/data/constants'
 import courseShortNames from '@/data/course-short-names.json'
 import type { CourseShortNames } from '@/types/data'
 import type { PersDataDetails } from '@/types/thi-api'
-import type { QueryClient } from '@tanstack/react-query'
-import { router } from 'expo-router'
 
 import { loadSecureAsync } from './storage'
 

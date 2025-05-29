@@ -1,10 +1,10 @@
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { getContrastColor } from '@/utils/ui-utils'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Text, TouchableOpacity, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { getContrastColor } from '@/utils/ui-utils'
 
 import PlatformIcon from '../Universal/Icon'
 

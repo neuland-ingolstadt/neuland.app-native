@@ -74,7 +74,7 @@
 			"typedRoutes": true,
 			"remoteBuildCache": {
 				"provider": {
-					"plugin": "@slvssb/eas-github-cache",
+					"plugin": "@eggl-js/expo-github-cache",
 					"options": {
 						"owner": "neuland-ingolstadt",
 						"repo": "neuland.app-build-cache"

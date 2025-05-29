@@ -1,6 +1,6 @@
-import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { zustandStorage } from '@/utils/storage'
 
 export enum TimetableMode {
 	List = 'list',

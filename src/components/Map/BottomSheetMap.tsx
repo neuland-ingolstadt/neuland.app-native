@@ -1,27 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { MapContext } from '@/contexts/map'
 import BottomSheet from '@gorhom/bottom-sheet'
 import Color from 'color'
 import type { FeatureCollection } from 'geojson'
 import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform, StyleSheet, Text, View } from 'react-native'
-import { TextInput } from 'react-native'
-import Animated, { type SharedValue } from 'react-native-reanimated'
 import {
+	Platform,
+	Pressable,
+	StyleSheet,
+	Text,
+	TextInput,
+	View
+} from 'react-native'
+import Animated, {
+	type SharedValue,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming
 } from 'react-native-reanimated'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { MapContext } from '@/contexts/map'
 import AttributionLink from './AttributionLink'
 import AvailableRoomsSuggestions from './AvailableRoomsSuggestions'
 import BottomSheetBackground from './BottomSheetBackground'
@@ -46,7 +50,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 	const { t } = useTranslation('common')
 	const { localSearch, setLocalSearch, searchHistory } = use(MapContext)
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	const textInputRef = useRef<any>(null)
 	const [searchFocused, setSearchFocused] = React.useState(false)
 	const cancelWidth = useSharedValue(0)

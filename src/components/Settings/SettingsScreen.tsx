@@ -1,15 +1,3 @@
-import API from '@/api/authenticated-api'
-import { NoSessionError } from '@/api/thi-session-handler'
-import { DashboardContext, UserKindContext } from '@/components/contexts'
-import { queryClient } from '@/components/provider'
-import type { UserKindContextType } from '@/contexts/userKind'
-import { USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { getPersonalData, performLogout } from '@/utils/api-utils'
-import { calculateECTS } from '@/utils/grades-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import React, { use, useRef } from 'react'
@@ -25,6 +13,18 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import API from '@/api/authenticated-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import { queryClient } from '@/components/provider'
+import type { UserKindContextType } from '@/contexts/userKind'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { getPersonalData, performLogout } from '@/utils/api-utils'
+import { calculateECTS } from '@/utils/grades-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
 import GuestInfoSection from './GuestInfoSection'
 import SettingsHeader from './SettingsHeader'
 import SettingsLogo from './SettingsLogo'
@@ -161,9 +161,7 @@ export default function Settings(): React.JSX.Element {
 							printerBalance={data?.pcounter?.toString() ?? '0'}
 							personalLecturersCount={personalLecturers}
 						/>
-					) : (
-						<></>
-					)}
+					) : undefined}
 				</View>
 
 				<View style={styles.formlistContainer}>

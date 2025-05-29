@@ -1,7 +1,7 @@
-import Divider from '@/components/Universal/Divider'
 import React from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import Divider from '@/components/Universal/Divider'
 
 import PlatformIcon from '../Universal/Icon'
 
@@ -62,9 +62,7 @@ const MultiSectionRadio: React.FC<FoodLanguagePickerProps> = ({
 										size: 18
 									}}
 								/>
-							) : (
-								<></>
-							)}
+							) : undefined}
 						</View>
 					</Pressable>
 					{index < elements.length - 1 && (

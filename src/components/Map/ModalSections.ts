@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import i18n from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import {
@@ -7,7 +8,6 @@ import {
 } from '@/types/map'
 import type { AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { t } from 'i18next'
 
 type LocationsType = Record<string, string>
 
@@ -60,8 +60,7 @@ export const modalSection = (
 												}),
 												value: (() => {
 													const timeLeft =
-														new Date(occupancies.until).getTime() -
-														new Date().getTime()
+														new Date(occupancies.until).getTime() - Date.now()
 													const minutes = Math.floor(
 														(timeLeft / 1000 / 60) % 60
 													)

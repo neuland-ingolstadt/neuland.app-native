@@ -1,14 +1,3 @@
-import {
-	GuestUserNote,
-	OrderableRowItem,
-	ResetOrderButton,
-	dashboardStyles
-} from '@/components/Dashboard'
-import type { ExtendedCard } from '@/components/all-cards'
-import { DashboardContext, UserKindContext } from '@/components/contexts'
-import { getDefaultDashboardOrder } from '@/contexts/dashboard'
-import { USER_GUEST } from '@/data/constants'
-import { arraysEqual } from '@/utils/app-utils'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { use, useCallback, useEffect, useState } from 'react'
@@ -19,6 +8,17 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useStyles } from 'react-native-unistyles'
+import type { ExtendedCard } from '@/components/all-cards'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import {
+	dashboardStyles,
+	GuestUserNote,
+	OrderableRowItem,
+	ResetOrderButton
+} from '@/components/Dashboard'
+import { getDefaultDashboardOrder } from '@/contexts/dashboard'
+import { USER_GUEST } from '@/data/constants'
+import { arraysEqual } from '@/utils/app-utils'
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 50
@@ -71,7 +71,11 @@ export default function DashboardEdit(): React.JSX.Element {
 			item,
 			drag,
 			isActive
-		}: { item: ExtendedCard; drag: () => void; isActive: boolean }) => {
+		}: {
+			item: ExtendedCard
+			drag: () => void
+			isActive: boolean
+		}) => {
 			return (
 				<ScaleDecorator>
 					<OrderableRowItem

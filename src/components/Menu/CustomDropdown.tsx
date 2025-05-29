@@ -1,7 +1,7 @@
 import type React from 'react'
 import { useState } from 'react'
-import { Modal, Pressable, Text, View } from 'react-native'
 import type { ViewStyle } from 'react-native'
+import { Modal, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface CustomDropdownProps<T> {

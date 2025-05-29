@@ -1,17 +1,14 @@
+import type { BottomTabBarProps } from '@bottom-tabs/react-navigation'
+import { BottomTabBar } from '@react-navigation/bottom-tabs'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 import { useBottomTabBarHeight as _useBottomTabBarHeight } from 'react-native-bottom-tabs'
-import { useStyles } from 'react-native-unistyles'
-
-import PlatformIcon from '@/components/Universal/Icon'
-import { BottomTabBar } from '@react-navigation/bottom-tabs'
-import { Dimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 import { SettingsTabButton } from '../Settings/TabButton'
 import { Tabs } from './NativeBottomTabs'
-
-import type { BottomTabBarProps } from '@bottom-tabs/react-navigation'
 
 export const useBottomTabBarHeight = _useBottomTabBarHeight
 

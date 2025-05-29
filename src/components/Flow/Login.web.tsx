@@ -1,15 +1,14 @@
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
-import LoginForm from '@/components/Universal/LoginForm'
-import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
-import type { OnboardingCardData } from '@/types/data'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import LoginForm from '@/components/Universal/LoginForm'
+import { IMPRINT_URL, PRIVACY_URL } from '@/data/constants'
 import { useFlowStore } from '@/hooks/useFlowStore'
+import type { OnboardingCardData } from '@/types/data'
 import LoginAnimatedText from './LoginAnimatedText'
 
 export default function Login(): React.JSX.Element {

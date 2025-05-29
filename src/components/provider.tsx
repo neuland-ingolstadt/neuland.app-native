@@ -1,9 +1,3 @@
-import { useAppState, useOnlineManager } from '@/hooks'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import { useSessionStore } from '@/hooks/useSessionStore'
-import i18n from '@/localization/i18n'
-import { syncStoragePersister } from '@/utils/storage'
 import { trackEvent } from '@aptabase/react-native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import {
@@ -11,22 +5,27 @@ import {
 	DefaultTheme,
 	ThemeProvider
 } from '@react-navigation/native'
-import { QueryClient, focusManager } from '@tanstack/react-query'
+import { focusManager, QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Toaster } from 'burnt/web'
 import { useSegments } from 'expo-router'
 import type React from 'react'
 import { StrictMode, useEffect } from 'react'
 import {
-	type AppStateStatus,
 	Appearance,
+	type AppStateStatus,
 	Platform,
 	StyleSheet
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { UnistylesProvider, UnistylesRuntime } from 'react-native-unistyles'
-
+import { useAppState, useOnlineManager } from '@/hooks'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import { useSessionStore } from '@/hooks/useSessionStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
+import i18n from '@/localization/i18n'
+import { syncStoragePersister } from '@/utils/storage'
 import { useDashboard, useUserKind } from '../contexts'
 import { DashboardContext, UserKindContext } from './contexts'
 

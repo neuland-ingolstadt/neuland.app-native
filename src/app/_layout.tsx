@@ -1,12 +1,12 @@
 import CrashView from '@/components/Error/CrashView'
+import Provider from '@/components/provider'
 import { Splash } from '@/components/Splash'
 import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import Provider from '@/components/provider'
 import { usePreferencesStore } from '@/hooks/usePreferencesStore'
 import i18n from '@/localization/i18n'
 import '@/styles/unistyles'
 import { getLocales } from 'expo-localization'
-import { type Href, Stack, router } from 'expo-router'
+import { type Href, router, Stack } from 'expo-router'
 import { Try } from 'expo-router/build/views/Try'
 import Head from 'expo-router/head'
 import * as ScreenOrientation from 'expo-screen-orientation'
@@ -18,8 +18,8 @@ import DeviceInfo from 'react-native-device-info'
 import { SystemBars } from 'react-native-edge-to-edge'
 import { configureReanimatedLogger } from 'react-native-reanimated'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
 
@@ -129,442 +129,440 @@ function RootLayout(): React.JSX.Element {
 
 	return (
 		<Splash isReady={isReady}>
-			<>
-				<Head>
-					{/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
-					<title>Neuland Next</title>
-					<meta
-						name="description"
-						content="An unofficial campus app for TH Ingolstadt"
-					/>
-					<meta
-						property="og:description"
-						content="An unofficial campus app for TH Ingolstadt"
-					/>
-					<meta property="expo:handoff" content="true" />
-					<meta property="expo:spotlight" content="true" />
-				</Head>
-				{Platform.OS === 'android' && (
-					<SystemBars
-						style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
-					/>
-				)}
-				<Stack
-					screenOptions={{
-						contentStyle: styles.background,
-						headerStyle: styles.headerBackground,
-						headerTintColor: uniTheme.colors.primary,
-						headerTitleStyle: styles.headerTextStyle
+			<Head>
+				{/* eslint-disable-next-line react-native/no-raw-text, i18next/no-literal-string */}
+				<title>Neuland Next</title>
+				<meta
+					name="description"
+					content="An unofficial campus app for TH Ingolstadt"
+				/>
+				<meta
+					property="og:description"
+					content="An unofficial campus app for TH Ingolstadt"
+				/>
+				<meta property="expo:handoff" content="true" />
+				<meta property="expo:spotlight" content="true" />
+			</Head>
+			{Platform.OS === 'android' && (
+				<SystemBars
+					style={UnistylesRuntime.themeName === 'dark' ? 'light' : 'dark'}
+				/>
+			)}
+			<Stack
+				screenOptions={{
+					contentStyle: styles.background,
+					headerStyle: styles.headerBackground,
+					headerTintColor: uniTheme.colors.primary,
+					headerTitleStyle: styles.headerTextStyle
+				}}
+			>
+				<Stack.Screen
+					name="(tabs)"
+					options={{
+						title: 'Home',
+						headerShown: false,
+						animation: 'none',
+						gestureEnabled: false
 					}}
-				>
-					<Stack.Screen
-						name="(tabs)"
-						options={{
-							title: 'Home',
-							headerShown: false,
-							animation: 'none',
-							gestureEnabled: false
-						}}
-					/>
+				/>
 
-					<Stack.Screen
-						name="(screens)/login"
-						options={{
-							title: 'Account',
-							animation: 'none',
-							gestureEnabled: false,
-							headerShown: false,
-							headerBackVisible: false,
-							headerBackButtonMenuEnabled: false
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/changelog"
-						options={{
-							title: 'Changelog'
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/food-preferences"
-						options={{
-							title: t('navigation.preferences')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/food-flags"
-						options={{
-							headerShown: false,
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/food-allergens"
-						options={{
-							headerShown: false,
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/food/[id]"
-						options={{
-							title: t('navigation.details'),
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/lecture"
-						options={{
-							title: t('navigation.details'),
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.8, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/webview"
-						options={{
-							title: t('navigation.details'),
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/theme"
-						options={{
-							title: t('navigation.theme')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/timetable-preferences"
-						options={{
-							title: t('navigation.timetablePreferences')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/app-icon"
-						options={{
-							title: 'App Icon'
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/profile"
-						options={{
-							title: t('navigation.profile')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/about"
-						options={{
-							title: t('navigation.about')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/legal"
-						options={{
-							title: t('navigation.legal')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/licenses"
-						options={{
-							title: t('navigation.licenses.title')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/license"
-						options={{
-							title: t('navigation.license'),
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/dashboard"
-						options={{
-							title: 'Dashboard'
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/grades"
-						options={{
-							title: t('navigation.grades.title')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/room-search"
-						options={{
-							title: t('navigation.advancedSearch')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/cl-events"
-						options={{
-							title: 'Campus Life Events'
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/events/counselling/[id]"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16,
-									headerTitleAlign: 'center'
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/events/career/[id]"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16,
-									headerTitleAlign: 'center'
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/thi-services"
-						options={{
-							title: t('navigation.thiServices')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/calendar"
-						options={{
-							title: t('navigation.calendar')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/exam"
-						options={{
-							title: t('navigation.examDetails'),
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.8, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16,
-									headerRight: () => (
-										<ShareHeaderButton
-											noShare
-											onPress={() => {
-												/* do nothing yet */
-											}}
-										/>
-									)
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/lecturers"
-						options={{
-							title: t('navigation.lecturers.title')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/lecturer"
-						options={{
-							title: t('navigation.lecturer'),
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/library"
-						options={{
-							title: t('navigation.libraryCode')
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/news"
-						options={{
-							title: t('navigation.news'),
-							...Platform.select({
-								ios: {
-									headerStyle: undefined,
-									headerTransparent: true,
-									headerBlurEffect: 'regular'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(flow)/onboarding"
-						options={{
-							headerShown: false,
+				<Stack.Screen
+					name="(screens)/login"
+					options={{
+						title: 'Account',
+						animation: 'none',
+						gestureEnabled: false,
+						headerShown: false,
+						headerBackVisible: false,
+						headerBackButtonMenuEnabled: false
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/changelog"
+					options={{
+						title: 'Changelog'
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/food-preferences"
+					options={{
+						title: t('navigation.preferences')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/food-flags"
+					options={{
+						headerShown: false,
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/food-allergens"
+					options={{
+						headerShown: false,
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/food/[id]"
+					options={{
+						title: t('navigation.details'),
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.7, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/lecture"
+					options={{
+						title: t('navigation.details'),
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.8, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/webview"
+					options={{
+						title: t('navigation.details'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/theme"
+					options={{
+						title: t('navigation.theme')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/timetable-preferences"
+					options={{
+						title: t('navigation.timetablePreferences')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/app-icon"
+					options={{
+						title: 'App Icon'
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/profile"
+					options={{
+						title: t('navigation.profile')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/about"
+					options={{
+						title: t('navigation.about')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/legal"
+					options={{
+						title: t('navigation.legal')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/licenses"
+					options={{
+						title: t('navigation.licenses.title')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/license"
+					options={{
+						title: t('navigation.license'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/dashboard"
+					options={{
+						title: 'Dashboard'
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/grades"
+					options={{
+						title: t('navigation.grades.title')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/room-search"
+					options={{
+						title: t('navigation.advancedSearch')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/cl-events"
+					options={{
+						title: 'Campus Life Events'
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/counselling/[id]"
+					options={{
+						title: 'Event Details',
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.7, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16,
+								headerTitleAlign: 'center'
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/career/[id]"
+					options={{
+						title: 'Event Details',
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.7, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16,
+								headerTitleAlign: 'center'
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/thi-services"
+					options={{
+						title: t('navigation.thiServices')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/calendar"
+					options={{
+						title: t('navigation.calendar')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/exam"
+					options={{
+						title: t('navigation.examDetails'),
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.8, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16,
+								headerRight: () => (
+									<ShareHeaderButton
+										noShare
+										onPress={() => {
+											/* do nothing yet */
+										}}
+									/>
+								)
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/lecturers"
+					options={{
+						title: t('navigation.lecturers.title')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/lecturer"
+					options={{
+						title: t('navigation.lecturer'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/library"
+					options={{
+						title: t('navigation.libraryCode')
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/news"
+					options={{
+						title: t('navigation.news'),
+						...Platform.select({
+							ios: {
+								headerStyle: undefined,
+								headerTransparent: true,
+								headerBlurEffect: 'regular'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(flow)/onboarding"
+					options={{
+						headerShown: false,
 
-							animation: 'none',
-							gestureEnabled: false,
-							...Platform.select({
-								ios: {
-									presentation: 'fullScreenModal'
-								}
-							})
-						}}
-					/>
+						animation: 'none',
+						gestureEnabled: false,
+						...Platform.select({
+							ios: {
+								presentation: 'fullScreenModal'
+							}
+						})
+					}}
+				/>
 
-					<Stack.Screen
-						name="(flow)/whatsnew"
-						options={{
-							headerShown: false,
-							gestureEnabled: false,
-							animation: 'fade_from_bottom'
-						}}
-					/>
+				<Stack.Screen
+					name="(flow)/whatsnew"
+					options={{
+						headerShown: false,
+						gestureEnabled: false,
+						animation: 'fade_from_bottom'
+					}}
+				/>
 
-					<Stack.Screen
-						name="(screens)/room-report"
-						options={{
-							title: t('navigation.roomReport'),
-							...Platform.select({
-								ios: {
-									presentation: 'modal'
-								}
-							})
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/events/cl/[id]"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16,
-									headerTitleAlign: 'center'
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-					<Stack.Screen
-						name="(screens)/events/sports/[id]"
-						options={{
-							title: 'Event Details',
-							...Platform.select({
-								ios: {
-									headerStyle: {
-										backgroundColor: 'transparent'
-									},
-									presentation: 'formSheet',
-									sheetAllowedDetents: [0.7, 1],
-									sheetInitialDetentIndex: 0,
-									sheetGrabberVisible: true,
-									sheetCornerRadius: 16,
-									headerTitleAlign: 'center'
-								}
-							}),
-							headerRight: () => (
-								<ShareHeaderButton
-									onPress={() => {
-										/* do nothing yet */
-									}}
-								/>
-							)
-						}}
-					/>
-				</Stack>
-			</>
+				<Stack.Screen
+					name="(screens)/room-report"
+					options={{
+						title: t('navigation.roomReport'),
+						...Platform.select({
+							ios: {
+								presentation: 'modal'
+							}
+						})
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/cl/[id]"
+					options={{
+						title: 'Event Details',
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.7, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16,
+								headerTitleAlign: 'center'
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+				<Stack.Screen
+					name="(screens)/events/sports/[id]"
+					options={{
+						title: 'Event Details',
+						...Platform.select({
+							ios: {
+								headerStyle: {
+									backgroundColor: 'transparent'
+								},
+								presentation: 'formSheet',
+								sheetAllowedDetents: [0.7, 1],
+								sheetInitialDetentIndex: 0,
+								sheetGrabberVisible: true,
+								sheetCornerRadius: 16,
+								headerTitleAlign: 'center'
+							}
+						}),
+						headerRight: () => (
+							<ShareHeaderButton
+								onPress={() => {
+									/* do nothing yet */
+								}}
+							/>
+						)
+					}}
+				/>
+			</Stack>
 		</Splash>
 	)
 }

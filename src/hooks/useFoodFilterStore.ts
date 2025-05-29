@@ -1,7 +1,7 @@
-import type { LanguageKey } from '@/localization/i18n'
-import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import type { LanguageKey } from '@/localization/i18n'
+import { zustandStorage } from '@/utils/storage'
 
 export type FoodLanguage = LanguageKey | 'default'
 

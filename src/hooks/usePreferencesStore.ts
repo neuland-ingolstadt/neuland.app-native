@@ -1,7 +1,7 @@
-import { defaultQuicklinks } from '@/data/constants'
-import { zustandStorage } from '@/utils/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { defaultQuicklinks } from '@/data/constants'
+import { zustandStorage } from '@/utils/storage'
 
 interface PreferencesStore {
 	theme: string

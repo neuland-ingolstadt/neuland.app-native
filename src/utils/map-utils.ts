@@ -1,10 +1,10 @@
+import { trackEvent } from '@aptabase/react-native'
+import type { GeoJsonProperties, Position } from 'geojson'
+import { Platform, Share } from 'react-native'
 import { SEARCH_TYPES } from '@/types/map'
 import type { MaterialIcon } from '@/types/material-icons'
 import type { Rooms, TypeStunde } from '@/types/thi-api'
 import type { AvailableRoom } from '@/types/utils'
-import { trackEvent } from '@aptabase/react-native'
-import type { GeoJsonProperties, Position } from 'geojson'
-import { Platform, Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
 
@@ -119,7 +119,6 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 	const isoDate = formatISODate(date)
 	const openings: RoomOpenings = {}
 	// get todays rooms
-	// biome-ignore lint/complexity/noForEach: <explanation>
 	rooms
 		.filter((room) => room.datum.startsWith(isoDate))
 		// flatten room types
@@ -159,7 +158,7 @@ export function getRoomOpenings(rooms: Rooms[], date: Date): RoomOpenings {
 				capacity: number
 			}) => {
 				// initialize room
-				// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+				// biome-ignore lint/suspicious/noAssignInExpressions: TODO
 				const roomOpenings = openings[room] ?? (openings[room] = [])
 				// find overlapping opening
 				// ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly

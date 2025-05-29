@@ -1,8 +1,8 @@
-import { convertToMajorMinorPatch } from '@/utils/app-utils'
-import { zustandStorage } from '@/utils/storage'
 import * as Application from 'expo-application'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { convertToMajorMinorPatch } from '@/utils/app-utils'
+import { zustandStorage } from '@/utils/storage'
 
 interface FlowStore {
 	isOnboarded: boolean | undefined

@@ -1,5 +1,3 @@
-import LoginForm from '@/components/Universal/LoginForm'
-import { PRIVACY_URL } from '@/data/constants'
 import { router, useLocalSearchParams } from 'expo-router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -18,6 +16,8 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import LoginForm from '@/components/Universal/LoginForm'
+import { PRIVACY_URL } from '@/data/constants'
 
 import LoginAnimatedText from './LoginAnimatedText'
 

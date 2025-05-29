@@ -1,4 +1,3 @@
-import type { MaterialIcon } from '@/types/material-icons'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { FileWarning, icons } from 'lucide-react-native'
 import type React from 'react'
@@ -6,6 +5,7 @@ import { Platform, Text, type TextStyle, type ViewStyle } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import SweetSFSymbol from 'sweet-sfsymbols'
 import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
+import type { MaterialIcon } from '@/types/material-icons'
 
 export type LucideIcon = keyof typeof icons
 interface PlatformIconProps {

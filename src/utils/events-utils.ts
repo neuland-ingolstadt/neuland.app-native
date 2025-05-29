@@ -1,3 +1,4 @@
+import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	type CampusLifeEventFieldsFragment,
@@ -8,7 +9,6 @@ import {
 } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
 import type { MaterialIcon } from '@/types/material-icons'
-import type { SystemName } from 'sweet-sfsymbols/build/SweetSFSymbols.types'
 
 /**
  * Fetches and parses the campus life events

@@ -1,19 +1,20 @@
-import PlatformIcon from '@/components/Universal/Icon'
-import type { MaterialIcon } from '@/types/material-icons'
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: TODO */
 import type React from 'react'
 import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import Animated, {
-	useSharedValue,
-	useAnimatedStyle,
-	withRepeat,
-	withTiming,
 	Easing,
+	useAnimatedStyle,
+	useSharedValue,
 	withDelay,
-	withSequence
+	withRepeat,
+	withSequence,
+	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
+import type { MaterialIcon } from '@/types/material-icons'
 import CurvedText from './CurvedText'
 
 interface PlateAnimationProps {
@@ -277,7 +278,7 @@ export const PlateAnimation = ({
 							variant: 'outlined'
 						}}
 						web={{
-							// biome-ignore lint/suspicious/noExplicitAny:
+							// biome-ignore lint/suspicious/noExplicitAny: TODO
 							name: foodIcon.web as any,
 							size: size * 0.25
 						}}

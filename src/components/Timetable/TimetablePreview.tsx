@@ -1,16 +1,16 @@
-import { TimetableMode } from '@/hooks/useTimetableStore'
 import { t } from 'i18next'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { Text, View } from 'react-native'
 import Animated, {
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
+	Easing,
 	interpolate,
-	Easing
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { TimetableMode } from '@/hooks/useTimetableStore'
 
 interface TimetablePreviewProps {
 	mode: TimetableMode

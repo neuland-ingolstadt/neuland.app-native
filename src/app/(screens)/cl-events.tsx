@@ -1,14 +1,3 @@
-import ClEventsPage from '@/components/Events/ClEventsPage'
-import ClSportsPage from '@/components/Events/ClSportsPage'
-import PagerView from '@/components/Layout/PagerView'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ToggleRow from '@/components/Universal/ToggleRow'
-import {
-	QUERY_KEYS,
-	loadCampusLifeEvents,
-	loadUniversitySportsEvents
-} from '@/utils/events-utils'
-import { pausedToast } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { useQueries } from '@tanstack/react-query'
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
@@ -18,10 +7,21 @@ import { useTranslation } from 'react-i18next'
 import {
 	Animated,
 	InteractionManager,
-	View,
-	useWindowDimensions
+	useWindowDimensions,
+	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import ClEventsPage from '@/components/Events/ClEventsPage'
+import ClSportsPage from '@/components/Events/ClSportsPage'
+import PagerView from '@/components/Layout/PagerView'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
+import {
+	loadCampusLifeEvents,
+	loadUniversitySportsEvents,
+	QUERY_KEYS
+} from '@/utils/events-utils'
+import { pausedToast } from '@/utils/ui-utils'
 
 export default function Events(): React.JSX.Element {
 	const { t } = useTranslation('common')

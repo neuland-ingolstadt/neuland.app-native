@@ -1,8 +1,8 @@
-import PlatformIcon from '@/components/Universal/Icon'
 import type React from 'react'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 
 interface NameBoxProps {
 	children: ReactNode

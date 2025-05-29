@@ -1,8 +1,8 @@
-import PlatformIcon from '@/components/Universal/Icon'
 import { router } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 
 export default function GuestInfoSection(): React.JSX.Element {
 	const { t } = useTranslation('settings')

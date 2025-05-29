@@ -45,13 +45,7 @@ const stylesheet = createStyleSheet((theme) => ({
 		alignSelf: position ?? (Platform.OS === 'android' ? 'center' : 'flex-end'),
 		paddingLeft: paddingLeft ?? 0
 	}),
-	line: ({
-		width,
-		color
-	}: {
-		width?: DimensionValue
-		color?: ColorValue
-	}) => ({
+	line: ({ width, color }: { width?: DimensionValue; color?: ColorValue }) => ({
 		width: width ?? '100%',
 		borderBottomColor: color ?? theme.colors.labelTertiaryColor,
 		borderBottomWidth: Platform.OS !== 'web' ? StyleSheet.hairlineWidth : 0.1

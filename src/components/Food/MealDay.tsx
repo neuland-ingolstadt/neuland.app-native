@@ -1,11 +1,11 @@
-import PlatformIcon from '@/components/Universal/Icon'
-import type { Food, Meal } from '@/types/neuland-api'
 import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
+import type { Food, Meal } from '@/types/neuland-api'
 import { EmptyFoodAnimation } from './EmptyFoodAnimation'
 
 import { MealEntry } from './MealEntry'
@@ -135,7 +135,7 @@ const filterMealsByRestaurant = (meals: Meal[], restaurant: string): Meal[] => {
 const groupMealsByCategory = (meals: Meal[]): Record<string, Meal[]> => {
 	return meals.reduce((r: Record<string, Meal[]>, a: Meal) => {
 		const category = a.category
-		if (Object.prototype.hasOwnProperty.call(r, category)) {
+		if (Object.hasOwn(r, category)) {
 			r[category].push(a)
 		} else {
 			r[category] = [a]

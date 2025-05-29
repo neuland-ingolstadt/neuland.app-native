@@ -1,6 +1,3 @@
-import { quicklinks } from '@/data/constants'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import type { MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +10,9 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { MaterialIcon } from '@/types/material-icons'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import BaseCard from './BaseCard'
