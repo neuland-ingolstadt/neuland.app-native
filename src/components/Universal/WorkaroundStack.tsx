@@ -6,15 +6,15 @@ import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import type { SearchBarProps } from 'react-native-screens'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
 
 export interface WorkaroundStackProps {
 	name: string
 	titleKey: string
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	component: React.ComponentType<any>
 	transparent?: boolean
 	largeTitle?: boolean

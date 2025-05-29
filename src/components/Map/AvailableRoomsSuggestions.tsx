@@ -1,23 +1,19 @@
+import { trackEvent } from '@aptabase/react-native'
+import { router } from 'expo-router'
+import type { FeatureCollection, Position } from 'geojson'
+import React, { use } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { SEARCH_TYPES } from '@/types/map'
 import { formatFriendlyTime } from '@/utils/date-utils'
 import { getContrastColor, roomNotFoundToast } from '@/utils/ui-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { router } from 'expo-router'
-import type { FeatureCollection } from 'geojson'
-import type { Position } from 'geojson'
-import React, { use } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import { Pressable, StyleSheet } from 'react-native'
-
+import { UserKindContext } from '../contexts'
 import Divider from '../Universal/Divider'
 import PlatformIcon from '../Universal/Icon'
 import LoadingIndicator from '../Universal/LoadingIndicator'
-import { UserKindContext } from '../contexts'
 
 interface AvailableRoomsSuggestionsProps {
 	allRooms: FeatureCollection
@@ -142,15 +138,13 @@ const AvailableRoomsSuggestions: React.FC<AvailableRoomsSuggestionsProps> = ({
 										<View style={styles.suggestionContent}>
 											<Text style={styles.suggestionTitle}>{room.room}</Text>
 											<Text style={styles.suggestionSubtitle}>
-												<>
-													{room.type}
-													{room.capacity !== undefined && (
-														<>
-															{' '}
-															({room.capacity} {t('pages.rooms.options.seats')})
-														</>
-													)}
-												</>
+												{room.type}
+												{room.capacity !== undefined && (
+													<>
+														{' '}
+														({room.capacity} {t('pages.rooms.options.seats')})
+													</>
+												)}
 											</Text>
 										</View>
 									</View>

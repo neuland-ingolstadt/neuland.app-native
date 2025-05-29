@@ -6,8 +6,8 @@ import { BlurView } from 'expo-blur'
 import type React from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
 

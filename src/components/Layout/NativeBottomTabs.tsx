@@ -1,7 +1,7 @@
 import {
+	createNativeBottomTabNavigator,
 	type NativeBottomTabNavigationEventMap,
-	type NativeBottomTabNavigationOptions,
-	createNativeBottomTabNavigator
+	type NativeBottomTabNavigationOptions
 } from '@bottom-tabs/react-navigation'
 import type {
 	ParamListBase,

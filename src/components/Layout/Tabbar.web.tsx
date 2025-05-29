@@ -1,9 +1,9 @@
-import PlatformIcon from '@/components/Universal/Icon'
 import { Tabs } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Platform } from 'react-native'
 import { useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 import { SettingsTabButton } from '../Settings/TabButton'
 
 export function useBottomTabBarHeight(): number {

@@ -1,29 +1,13 @@
-import ErrorView from '@/components/Error/ErrorView'
-import FormList from '@/components/Universal/FormList'
-import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import { UserKindContext } from '@/components/contexts'
-import allergenMap from '@/data/allergens.json'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
-import flagMap from '@/data/mensa-flags.json'
-import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
-import type { LanguageKey } from '@/localization/i18n'
-import type { FormListSections } from '@/types/components'
-import type { Meal } from '@/types/neuland-api'
-import { formatFriendlyDate } from '@/utils/date-utils'
-import {
-	formatPrice,
-	humanLocations,
-	mealName,
-	shareMeal
-} from '@/utils/food-utils'
-import { loadFoodEntries } from '@/utils/food-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
 import { useQuery } from '@tanstack/react-query'
-import { Stack, router, useFocusEffect, useNavigation } from 'expo-router'
-import { useLocalSearchParams } from 'expo-router'
+import {
+	router,
+	Stack,
+	useFocusEffect,
+	useLocalSearchParams,
+	useNavigation
+} from 'expo-router'
 import type React from 'react'
 import { use, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,6 +27,27 @@ import Animated, {
 	useSharedValue
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon, { linkIcon } from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import allergenMap from '@/data/allergens.json'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
+import flagMap from '@/data/mensa-flags.json'
+import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
+import type { LanguageKey } from '@/localization/i18n'
+import type { FormListSections } from '@/types/components'
+import type { Meal } from '@/types/neuland-api'
+import { formatFriendlyDate } from '@/utils/date-utils'
+import {
+	formatPrice,
+	humanLocations,
+	loadFoodEntries,
+	mealName,
+	shareMeal
+} from '@/utils/food-utils'
 
 export default function FoodDetail(): React.JSX.Element {
 	const { id } = useLocalSearchParams<{ id: string }>()

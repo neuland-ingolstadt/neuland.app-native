@@ -1,15 +1,15 @@
-import FormList from '@/components/Universal/FormList'
-import type { LucideIcon } from '@/components/Universal/Icon'
-import { quicklinks } from '@/data/constants'
-import { usePreferencesStore } from '@/hooks/usePreferencesStore'
-import type { FormListSections } from '@/types/components'
-import type { MaterialIcon } from '@/types/material-icons'
 import { trackEvent } from '@aptabase/react-native'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import FormList from '@/components/Universal/FormList'
+import type { LucideIcon } from '@/components/Universal/Icon'
+import { quicklinks } from '@/data/constants'
+import { usePreferencesStore } from '@/hooks/usePreferencesStore'
+import type { FormListSections } from '@/types/components'
+import type { MaterialIcon } from '@/types/material-icons'
 
 const LinkScreen = (): React.JSX.Element => {
 	const { styles } = useStyles(stylesheet)

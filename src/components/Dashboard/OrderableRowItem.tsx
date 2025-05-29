@@ -1,9 +1,9 @@
-import PlatformIcon from '@/components/Universal/Icon'
-import type { ExtendedCard } from '@/components/all-cards'
-import { cardIcons } from '@/components/icons'
 import type React from 'react'
 import { Dimensions, Platform, Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { ExtendedCard } from '@/components/all-cards'
+import { cardIcons } from '@/components/icons'
+import PlatformIcon from '@/components/Universal/Icon'
 
 const { width } = Dimensions.get('window')
 

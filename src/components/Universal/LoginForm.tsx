@@ -1,14 +1,3 @@
-import { createGuestSession, createSession } from '@/api/thi-session-handler'
-import { DashboardContext, UserKindContext } from '@/components/contexts'
-import {
-	STATUS_URL,
-	USER_EMPLOYEE,
-	USER_GUEST,
-	USER_STUDENT
-} from '@/data/constants'
-import { trimErrorMsg } from '@/utils/api-utils'
-import { loadSecureAsync } from '@/utils/storage'
-import { getContrastColor } from '@/utils/ui-utils'
 import { toast } from 'burnt'
 import Color from 'color'
 import * as Haptics from 'expo-haptics'
@@ -26,10 +15,21 @@ import {
 	View
 } from 'react-native'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
+import { createGuestSession, createSession } from '@/api/thi-session-handler'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import {
+	STATUS_URL,
+	USER_EMPLOYEE,
+	USER_GUEST,
+	USER_STUDENT
+} from '@/data/constants'
+import { trimErrorMsg } from '@/utils/api-utils'
+import { loadSecureAsync } from '@/utils/storage'
+import { getContrastColor } from '@/utils/ui-utils'
 import PlatformIcon from './Icon'
 
 const LoginForm = ({

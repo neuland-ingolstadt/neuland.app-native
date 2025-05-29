@@ -1,9 +1,9 @@
+import { create } from 'zustand'
 import type {
 	Exam,
 	FriendlyTimetableEntry,
 	NormalizedLecturer
 } from '@/types/utils'
-import { create } from 'zustand'
 
 interface RouteParamsStore {
 	selectedLecture: FriendlyTimetableEntry | undefined

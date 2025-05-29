@@ -1,12 +1,12 @@
+import type React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import FormList from '@/components/Universal/FormList'
 import changelogData from '@/data/changelog.json'
 import type { LanguageKey } from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import type { Changelog } from '@/types/data'
-import type React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Linking, ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function Theme(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)
@@ -23,7 +23,7 @@ export default function Theme(): React.JSX.Element {
 				return 0
 			})
 			.reduce(
-				// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+				// biome-ignore lint/performance/noAccumulatingSpread: TODO
 				(obj, key) => ({ ...obj, [key]: changelog.version[key] }),
 				{}
 			)

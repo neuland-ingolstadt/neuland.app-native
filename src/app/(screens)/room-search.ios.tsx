@@ -1,3 +1,12 @@
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'expo-router'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Picker, useBinding } from 'swiftui-react-native'
 import API from '@/api/authenticated-api'
 import { NoSessionError } from '@/api/thi-session-handler'
 import ErrorView from '@/components/Error/ErrorView'
@@ -17,15 +26,6 @@ import {
 	getNextValidDate
 } from '@/utils/map-utils'
 import { LoadingState } from '@/utils/ui-utils'
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'expo-router'
-import type React from 'react'
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { Picker, useBinding } from 'swiftui-react-native'
 
 const DURATIONS = [
 	'00:15',

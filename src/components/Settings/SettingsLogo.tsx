@@ -1,10 +1,3 @@
-import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
-import LogoTextSVG from '@/components/Flow/svgs/logoText'
-import {
-	animatedHapticFeedback,
-	useRandomColor,
-	withBouncing
-} from '@/utils/animation-utils'
 import { useFocusEffect } from 'expo-router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +11,13 @@ import Animated, {
 	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import AnimatedLogoText from '@/components/Flow/svgs/AnimatedLogoText'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import {
+	animatedHapticFeedback,
+	useRandomColor,
+	withBouncing
+} from '@/utils/animation-utils'
 
 interface SettingsLogoProps {
 	scrollY: number

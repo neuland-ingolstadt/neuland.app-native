@@ -1,5 +1,3 @@
-import type { MaterialIcon } from '@/types/material-icons'
-import { guestError, networkError, permissionError } from '@/utils/api-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { router, usePathname } from 'expo-router'
 import type React from 'react'
@@ -13,6 +11,8 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { MaterialIcon } from '@/types/material-icons'
+import { guestError, networkError, permissionError } from '@/utils/api-utils'
 
 import PlatformIcon, { type LucideIcon } from '../Universal/Icon'
 import StatusBox from './ActionBox'
@@ -120,6 +120,7 @@ export default function ErrorView({
 		}
 	}
 
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const ErrorButton = (): React.JSX.Element => {
 		const buttonAction = (): void => {
 			switch (title) {
@@ -159,6 +160,7 @@ export default function ErrorView({
 				</View>
 			</Pressable>
 		) : (
+			// biome-ignore lint/complexity/noUselessFragments: okay here
 			<></>
 		)
 	}

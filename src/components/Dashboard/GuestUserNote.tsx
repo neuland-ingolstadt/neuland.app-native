@@ -1,9 +1,9 @@
-import PlatformIcon from '@/components/Universal/Icon'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
 
 export default function GuestUserNote(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

@@ -1,15 +1,14 @@
-/* eslint-disable react-native/no-color-literals */
-import MapScreen, { requestPermission } from '@/components/Map/MapScreen'
-import { MapContext } from '@/contexts/map'
-import type { ClickedMapElement, SearchResult } from '@/types/map'
-import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
-import { storage } from '@/utils/storage'
 import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import MapScreen, { requestPermission } from '@/components/Map/MapScreen'
+import { MapContext } from '@/contexts/map'
+import type { ClickedMapElement, SearchResult } from '@/types/map'
+import type { AvailableRoom, FriendlyTimetableEntry } from '@/types/utils'
+import { storage } from '@/utils/storage'
 
 export default function MapRootScreen(): React.JSX.Element {
 	const { t } = useTranslation(['navigation'])
@@ -81,7 +80,6 @@ export default function MapRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text */}
 				<title>{t('navigation.map')}</title>
 				<meta name="Campus Map" content="Interactive Campus Map" />
 				<meta property="expo:handoff" content="true" />
@@ -92,9 +90,7 @@ export default function MapRootScreen(): React.JSX.Element {
 					<MapContext.Provider value={contextValue}>
 						<MapScreen />
 					</MapContext.Provider>
-				) : (
-					<></>
-				)}
+				) : undefined}
 			</View>
 		</>
 	)

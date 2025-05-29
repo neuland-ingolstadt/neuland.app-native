@@ -1,15 +1,15 @@
-import { useTimetableStore } from '@/hooks/useTimetableStore'
-import { formatFriendlyTime } from '@/utils/date-utils'
 import type { PackedEvent } from '@howljs/calendar-kit'
 import Color from 'color'
 import { LinearGradient } from 'expo-linear-gradient'
 import type React from 'react'
 import { Text, View } from 'react-native'
 import {
-	type UnistylesTheme,
 	createStyleSheet,
+	type UnistylesTheme,
 	useStyles
 } from 'react-native-unistyles'
+import { useTimetableStore } from '@/hooks/useTimetableStore'
+import { formatFriendlyTime } from '@/utils/date-utils'
 
 const EventComponent = ({
 	event,
@@ -21,10 +21,10 @@ const EventComponent = ({
 	isDark: boolean
 }): React.JSX.Element | null => {
 	const { styles } = useStyles(stylesheet)
+	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	if (event.start.dateTime === undefined || event.end.dateTime === undefined) {
 		return null
 	}
-	const timetableMode = useTimetableStore((state) => state.timetableMode)
 	const isExam = event.eventType === 'exam'
 	const isCalendar = event.eventType === 'calendar'
 	const begin = new Date(event.start.dateTime)
@@ -60,6 +60,7 @@ const EventComponent = ({
 
 	const timeToDisplay = `${formatFriendlyTime(begin)}${timetableMode === 'timeline-7' ? ' ' : ' - '}${formatFriendlyTime(end)}`
 
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const EventLine = ({ color }: { color: string }) => {
 		return (
 			<LinearGradient

@@ -1,21 +1,21 @@
-import {
-	GuestUserNote,
-	OrderableRowItem,
-	ResetOrderButton,
-	dashboardStyles
-} from '@/components/Dashboard'
-import Divider from '@/components/Universal/Divider'
-import type { ExtendedCard } from '@/components/all-cards'
-import { DashboardContext, UserKindContext } from '@/components/contexts'
-import { getDefaultDashboardOrder } from '@/contexts/dashboard'
-import { USER_GUEST } from '@/data/constants'
-import { arraysEqual } from '@/utils/app-utils'
 import * as Haptics from 'expo-haptics'
-import React, { useCallback, use, useEffect, useState } from 'react'
+import React, { use, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutAnimation, Platform, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useStyles } from 'react-native-unistyles'
+import type { ExtendedCard } from '@/components/all-cards'
+import { DashboardContext, UserKindContext } from '@/components/contexts'
+import {
+	dashboardStyles,
+	GuestUserNote,
+	OrderableRowItem,
+	ResetOrderButton
+} from '@/components/Dashboard'
+import Divider from '@/components/Universal/Divider'
+import { getDefaultDashboardOrder } from '@/contexts/dashboard'
+import { USER_GUEST } from '@/data/constants'
+import { arraysEqual } from '@/utils/app-utils'
 
 export default function DashboardEdit(): React.JSX.Element {
 	const childrenHeight = 48
@@ -37,7 +37,6 @@ export default function DashboardEdit(): React.JSX.Element {
 			return {
 				...item,
 				// @ts-expect-error cannot verify the type
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 				text: t(`cards.titles.${item.key}`, {
 					ns: 'navigation'
 				}) as string
@@ -102,7 +101,6 @@ export default function DashboardEdit(): React.JSX.Element {
 		setHasUserDefaultOrder(
 			arraysEqual(
 				defaultShown,
-				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 				shownDashboardEntries.filter(Boolean).map((item) => item.key) || []
 			)
 		)

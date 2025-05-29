@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { MapContext } from '@/contexts/map'
-import type { SEARCH_TYPES, SearchResult } from '@/types/map'
-import type { MaterialIcon } from '@/types/material-icons'
-import { getContrastColor } from '@/utils/ui-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
 import type { Position } from 'geojson'
@@ -11,6 +6,10 @@ import { memo, use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { MapContext } from '@/contexts/map'
+import type { SEARCH_TYPES, SearchResult } from '@/types/map'
+import type { MaterialIcon } from '@/types/material-icons'
+import { getContrastColor } from '@/utils/ui-utils'
 
 import PlatformIcon from '../Universal/Icon'
 

@@ -1,3 +1,4 @@
+import moment from 'moment'
 import type { Calendar } from '@/types/data'
 import type {
 	CalendarEvent,
@@ -5,7 +6,6 @@ import type {
 	FriendlyTimetableEntry,
 	TimetableSections
 } from '@/types/utils'
-import moment from 'moment'
 
 import API from '../api/authenticated-api'
 import { combineDateTime } from './date-utils'
@@ -178,7 +178,7 @@ export function getGroupedTimetable(
 		})
 
 		const flattenedCalendarEvents = processedCalendarEvents.flat()
-		// biome-ignore lint/suspicious/noExplicitAny:
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		combinedData.push(...(flattenedCalendarEvents as any))
 	}
 

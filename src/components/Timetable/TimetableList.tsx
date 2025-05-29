@@ -1,3 +1,20 @@
+import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
+import Color from 'color'
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
+import React, {
+	startTransition,
+	useCallback,
+	useLayoutEffect,
+	useMemo,
+	useRef
+} from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+	createStyleSheet,
+	UnistylesRuntime,
+	useStyles
+} from 'react-native-unistyles'
 import ErrorView from '@/components/Error/ErrorView'
 // @ts-expect-error no types available
 import DragDropView from '@/components/Exclusive/DragView'
@@ -7,12 +24,14 @@ import LoadingIndicator from '@/components/Universal/LoadingIndicator'
 import TimeDisplay from '@/components/Universal/TimeDisplay'
 import useRouteParamsStore from '@/hooks/useRouteParamsStore'
 import { useTimetableStore } from '@/hooks/useTimetableStore'
+import i18n from '@/localization/i18n'
 import type { ITimetableViewProps } from '@/types/timetable'
 import type {
 	ExamEntry,
 	FriendlyTimetableEntry,
 	TimetableEntry
 } from '@/types/utils'
+import { calendar } from '@/utils/calendar-utils'
 import {
 	formatCompactDateRange,
 	formatFriendlyDate,
@@ -21,27 +40,6 @@ import {
 	formatISODate
 } from '@/utils/date-utils'
 import { getGroupedTimetable } from '@/utils/timetable-utils'
-import { FlashList, type ListRenderItemInfo } from '@shopify/flash-list'
-import Color from 'color'
-import { useFocusEffect, useNavigation, useRouter } from 'expo-router'
-import React from 'react'
-import {
-	startTransition,
-	useCallback,
-	useLayoutEffect,
-	useMemo,
-	useRef
-} from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import {
-	UnistylesRuntime,
-	createStyleSheet,
-	useStyles
-} from 'react-native-unistyles'
-
-import i18n from '@/localization/i18n'
-import { calendar } from '@/utils/calendar-utils'
-import { useTranslation } from 'react-i18next'
 import { HeaderRight } from './HeaderButtons'
 
 type TimetableSection = {
@@ -239,7 +237,9 @@ export default function TimetableList({
 
 	function renderCalendarItem({
 		item
-	}: { item: CalendarEntry }): React.JSX.Element {
+	}: {
+		item: CalendarEntry
+	}): React.JSX.Element {
 		const eventName =
 			typeof item.name === 'object'
 				? item.name[i18n.language as 'en' | 'de'] ||

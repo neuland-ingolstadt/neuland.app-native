@@ -1,3 +1,6 @@
+import { trackEvent } from '@aptabase/react-native'
+import type { i18n, TFunction } from 'i18next'
+import { Share } from 'react-native'
 import { getFragmentData } from '@/__generated__/gql'
 import { FoodFieldsFragmentDoc } from '@/__generated__/gql/graphql'
 import NeulandAPI from '@/api/neuland-api'
@@ -8,9 +11,6 @@ import type { FoodLanguage } from '@/hooks/useFoodFilterStore'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Food, Meal, Name } from '@/types/neuland-api'
 import type { Labels, Prices } from '@/types/utils'
-import { trackEvent } from '@aptabase/react-native'
-import type { TFunction, i18n } from 'i18next'
-import { Share } from 'react-native'
 
 import { formatISODate } from './date-utils'
 
@@ -47,7 +47,7 @@ export async function loadFoodEntries(
 	const isoDates = days.map((x) => formatISODate(x))
 	return isoDates.map((day) => {
 		const dayEntries: Meal[] = data.flatMap(
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: TODO
 			(r: any) => r.find((x: Food) => x.timestamp === day)?.meals ?? []
 		) as Meal[]
 		// remove static meals if includeStatic is false. otherwise return all meals

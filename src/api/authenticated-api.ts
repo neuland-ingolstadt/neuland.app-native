@@ -1,3 +1,4 @@
+import { toast } from 'burnt'
 import type {
 	Exams,
 	Grade,
@@ -7,9 +8,7 @@ import type {
 	ThiNews,
 	TimetableResponse
 } from '@/types/thi-api'
-
-import { toast } from 'burnt'
-import { APIError, AnonymousAPIClient } from './anonymous-api'
+import { AnonymousAPIClient, APIError } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 
 export interface PersonalData {
@@ -25,7 +24,7 @@ export interface PersonalData {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AuthenticatedAPIClient extends AnonymousAPIClient {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	private readonly sessionHandler: any
 
 	constructor() {
@@ -39,9 +38,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 	 * @param {object} params Request data
 	 * @returns {object}
 	 */
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	async requestAuthenticated(params: object): Promise<any> {
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		return this.sessionHandler(async (session: any) => {
 			const res = await this.request({
 				session,
@@ -140,7 +139,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 			}
 
 			return res
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			// biome-ignore lint/suspicious/noExplicitAny: TODO
 		} catch (e: any) {
 			// when you have no exams the API sometimes returns "No exam data available"
 			if (

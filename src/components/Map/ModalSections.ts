@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import i18n from '@/localization/i18n'
 import type { FormListSections } from '@/types/components'
 import {
@@ -7,7 +8,6 @@ import {
 } from '@/types/map'
 import type { AvailableRoom } from '@/types/utils'
 import { formatFriendlyTime } from '@/utils/date-utils'
-import { t } from 'i18next'
 
 type LocationsType = Record<string, string>
 
@@ -28,9 +28,7 @@ export const modalSection = (
 
 	if (
 		roomData.type === SEARCH_TYPES.ROOM &&
-		((roomData.occupancies !== null &&
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			roomData.occupancies !== undefined) ||
+		((roomData.occupancies !== null && roomData.occupancies !== undefined) ||
 			(roomData.properties !== null && roomData.properties !== undefined))
 	) {
 		const occupancies = roomData.occupancies as AvailableRoom
@@ -60,8 +58,7 @@ export const modalSection = (
 												}),
 												value: (() => {
 													const timeLeft =
-														new Date(occupancies.until).getTime() -
-														new Date().getTime()
+														new Date(occupancies.until).getTime() - Date.now()
 													const minutes = Math.floor(
 														(timeLeft / 1000 / 60) % 60
 													)
@@ -92,7 +89,6 @@ export const modalSection = (
 								ns: 'common'
 							}),
 							items: [
-								// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 								...(occupancies != null
 									? [
 											{
@@ -130,10 +126,8 @@ export const modalSection = (
 								{
 									title: 'Campus',
 									value:
-										locations[
-											// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-											roomData.properties?.Standort
-										] ?? t('misc.unknown', { ns: 'common' })
+										locations[roomData.properties?.Standort] ??
+										t('misc.unknown', { ns: 'common' })
 								}
 							]
 						}

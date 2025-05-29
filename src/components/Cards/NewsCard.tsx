@@ -1,12 +1,11 @@
-import API from '@/api/authenticated-api'
-import { UserKindContext } from '@/components/contexts'
-import { USER_GUEST } from '@/data/constants'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
-import { use, useRef } from 'react'
+import React, { use, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import API from '@/api/authenticated-api'
+import { UserKindContext } from '@/components/contexts'
+import { USER_GUEST } from '@/data/constants'
 
 import BaseCard from './BaseCard'
 

@@ -1,5 +1,5 @@
-import type { CommunityIcon, LucideIcon } from '@/components/Universal/Icon'
 import type { ColorValue } from 'react-native'
+import type { CommunityIcon, LucideIcon } from '@/components/Universal/Icon'
 
 import type { MaterialIcon } from './material-icons'
 

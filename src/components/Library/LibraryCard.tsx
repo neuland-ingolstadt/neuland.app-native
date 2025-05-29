@@ -1,5 +1,3 @@
-import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
-import type { MaterialIcon } from '@/types/material-icons'
 import type React from 'react'
 import {
 	type GestureResponderEvent,
@@ -9,6 +7,8 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
+import type { MaterialIcon } from '@/types/material-icons'
 
 interface LibraryCardProps {
 	onPress: ((event: GestureResponderEvent) => void) | null | undefined

@@ -1,3 +1,23 @@
+import { trackEvent } from '@aptabase/react-native'
+import { HeaderTitle } from '@react-navigation/elements'
+import { useQuery } from '@tanstack/react-query'
+import {
+	Stack,
+	useFocusEffect,
+	useLocalSearchParams,
+	useNavigation
+} from 'expo-router'
+import type React from 'react'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Platform, Share, Text, View } from 'react-native'
+import Animated, {
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue
+} from 'react-native-reanimated'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { getFragmentData } from '@/__generated__/gql'
 import {
 	type StudentCounsellingEventFieldsFragment,
@@ -13,24 +33,6 @@ import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
 import type { FormListSections } from '@/types/components'
 import { formatFriendlyDate } from '@/utils/date-utils'
 import { QUERY_KEYS } from '@/utils/events-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { HeaderTitle } from '@react-navigation/elements'
-import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
-import { Stack, useFocusEffect, useNavigation } from 'expo-router'
-import type React from 'react'
-import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Text, View } from 'react-native'
-import { Linking } from 'react-native'
-import { Platform, Share } from 'react-native'
-import Animated, {
-	interpolate,
-	useAnimatedScrollHandler,
-	useAnimatedStyle,
-	useSharedValue
-} from 'react-native-reanimated'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 export default function StudentCounsellingEventDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)

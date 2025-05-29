@@ -1,17 +1,17 @@
+import { useQuery } from '@tanstack/react-query'
+import React, { use, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { UserKindContext } from '@/components/contexts'
 import { Avatar } from '@/components/Settings'
 import PlatformIcon, { type LucideIcon } from '@/components/Universal/Icon'
-import { UserKindContext } from '@/components/contexts'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import type { MaterialIcon } from '@/types/material-icons'
 import { getPersonalData } from '@/utils/api-utils'
 import { loadSecureAsync } from '@/utils/storage'
 import { getInitials } from '@/utils/ui-utils'
-import { useQuery } from '@tanstack/react-query'
-import React, { use, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Platform, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 interface IndexHeaderRightProps {
 	color?: string
@@ -84,6 +84,7 @@ export const SettingsTabButton = ({
 		void fetchUsernameAndSetInitials()
 	}, [persData, userKind, username])
 
+	// biome-ignore lint/nursery/noNestedComponentDefinitions: not a problem here
 	const IconComponent = (): React.JSX.Element => {
 		const avatarStyle = focused
 			? { backgroundColor: iconColor, borderWidth: 0 }

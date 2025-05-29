@@ -1,6 +1,3 @@
-import type { StudentCounsellingEventFieldsFragment } from '@/__generated__/gql/graphql'
-import ErrorView from '@/components/Error/ErrorView'
-import { formatFriendlyDate } from '@/utils/date-utils'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
 import type React from 'react'
@@ -8,6 +5,9 @@ import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { StudentCounsellingEventFieldsFragment } from '@/__generated__/gql/graphql'
+import ErrorView from '@/components/Error/ErrorView'
+import { formatFriendlyDate } from '@/utils/date-utils'
 
 const MemoizedEventRow = memo(StudentCounsellingEventRow)
 
@@ -84,7 +84,9 @@ export default function StudentCounsellingEventsPage({
 
 	const renderItem = ({
 		item
-	}: { item: StudentCounsellingEventFieldsFragment }) => (
+	}: {
+		item: StudentCounsellingEventFieldsFragment
+	}) => (
 		<View style={styles.rowWrapper}>
 			<MemoizedEventRow event={item} />
 		</View>

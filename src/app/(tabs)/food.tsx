@@ -1,12 +1,12 @@
-import FoodScreen from '@/components/Food/FoodScreen'
-import { FoodHeaderRight } from '@/components/Food/HeaderRight'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 import { useNavigation } from 'expo-router'
 import Head from 'expo-router/head'
 import type React from 'react'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import FoodScreen from '@/components/Food/FoodScreen'
+import { FoodHeaderRight } from '@/components/Food/HeaderRight'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 
 export default function FoodRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
@@ -29,7 +29,6 @@ export default function FoodRootScreen(): React.JSX.Element {
 	return (
 		<>
 			<Head>
-				{/* eslint-disable-next-line react-native/no-raw-text */}
 				<title>{t('navigation.food')}</title>
 				<meta name="Food" content="Meal plan for the canteens" />
 				<meta property="expo:handoff" content="true" />

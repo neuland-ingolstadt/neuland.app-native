@@ -1,8 +1,8 @@
+import type { Feature, FeatureCollection } from 'geojson'
+import type { i18n, TFunction } from 'i18next'
 import type { FeatureProperties } from '@/types/asset-api'
 import { type RoomData, SEARCH_TYPES } from '@/types/map'
 import type { FriendlyTimetableEntry } from '@/types/utils'
-import type { Feature, FeatureCollection } from 'geojson'
-import type { TFunction, i18n } from 'i18next'
 
 /**
  * Get the ongoing event or next upcoming event from a timetable

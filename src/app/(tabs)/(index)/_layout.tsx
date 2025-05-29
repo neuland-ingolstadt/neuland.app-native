@@ -4,12 +4,10 @@ import {
 	renderBackdrop
 } from '@/components/Universal/BottomSheetRootBackground'
 import '@react-navigation/elements'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Slot } from 'expo-router'
 import type React from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const unstable_settings = {
 	initialRouteName: '/'
 }

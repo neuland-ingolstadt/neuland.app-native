@@ -1,23 +1,4 @@
-import API from '@/api/authenticated-api'
-import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
-import PagerView from '@/components/Layout/PagerView'
-import LecturerRow from '@/components/Rows/LecturerRow'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import ToggleRow from '@/components/Universal/ToggleRow'
-import { UserKindContext } from '@/components/contexts'
-import { USER_GUEST, USER_STUDENT } from '@/data/constants'
-import { useRefreshByUser } from '@/hooks'
-import { Funktion, type Lecturers } from '@/types/thi-api'
-import type { NormalizedLecturer } from '@/types/utils'
-import {
-	extractFacultyFromPersonal,
-	getPersonalData,
-	guestError,
-	networkError
-} from '@/utils/api-utils'
-import { normalizeLecturers } from '@/utils/lecturers-utils'
-import { pausedToast } from '@/utils/ui-utils'
+/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { useNavigation, useRouter } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -35,10 +16,30 @@ import {
 } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
+import API from '@/api/authenticated-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import { UserKindContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import PagerView from '@/components/Layout/PagerView'
+import LecturerRow from '@/components/Rows/LecturerRow'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import ToggleRow from '@/components/Universal/ToggleRow'
+import { USER_GUEST, USER_STUDENT } from '@/data/constants'
+import { useRefreshByUser } from '@/hooks'
+import { Funktion, type Lecturers } from '@/types/thi-api'
+import type { NormalizedLecturer } from '@/types/utils'
+import {
+	extractFacultyFromPersonal,
+	getPersonalData,
+	guestError,
+	networkError
+} from '@/utils/api-utils'
+import { normalizeLecturers } from '@/utils/lecturers-utils'
+import { pausedToast } from '@/utils/ui-utils'
 
 export default function LecturersScreen(): React.JSX.Element {
 	const router = useRouter()

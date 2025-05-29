@@ -34,7 +34,7 @@ export class AnonymousAPIClient {
 	 * Submits an API request to the THI backend using a WebSocket proxy
 	 */
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	async request(params: Record<string, string>): Promise<any> {
 		const apiKey = process.env.EXPO_PUBLIC_THI_API_KEY ?? ''
 		const headersObj: Record<string, string> = {
@@ -86,7 +86,6 @@ export class AnonymousAPIClient {
 		})
 
 		if (res.status !== 0) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			throw new APIError(res.status, res.data)
 		}
 

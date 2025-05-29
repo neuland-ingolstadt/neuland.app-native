@@ -1,11 +1,3 @@
-import { getFragmentData } from '@/__generated__/gql'
-import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
-import NeulandAPI from '@/api/neuland-api'
-import AnnouncementCard from '@/components/Cards/AnnouncementCard'
-import ErrorView from '@/components/Error/ErrorView'
-import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
-import WorkaroundStack from '@/components/Universal/WorkaroundStack'
-import { DashboardContext } from '@/components/contexts'
 import { FlashList, MasonryFlashList } from '@shopify/flash-list'
 import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
@@ -14,6 +6,14 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, LayoutAnimation, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { getFragmentData } from '@/__generated__/gql'
+import { AnnouncementFieldsFragmentDoc } from '@/__generated__/gql/graphql'
+import NeulandAPI from '@/api/neuland-api'
+import AnnouncementCard from '@/components/Cards/AnnouncementCard'
+import { DashboardContext } from '@/components/contexts'
+import ErrorView from '@/components/Error/ErrorView'
+import { HomeHeaderRight } from '@/components/Home/HomeHeaderRight'
+import WorkaroundStack from '@/components/Universal/WorkaroundStack'
 
 export default function HomeRootScreen(): React.JSX.Element {
 	const [isPageOpen, setIsPageOpen] = useState(false)
@@ -89,13 +89,13 @@ const HomeScreen = memo(function HomeScreen() {
 	)
 
 	const renderSingleColumnItem = useCallback(
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		({ item }: { item: any }) => <View style={styles.item}>{item.card()}</View>,
 		[styles.item]
 	)
 
 	const renderMasonryItem = useCallback(
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		({ item, index }: { item: any; index: number }) => {
 			const paddingStyle =
 				index % 2 === 0
@@ -107,7 +107,7 @@ const HomeScreen = memo(function HomeScreen() {
 		[styles.item, theme.margins.page]
 	)
 
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint/suspicious/noExplicitAny: TODO
 	const keyExtractor = useCallback((item: { key: any }) => item.key, [])
 
 	return shownDashboardEntries === null ||

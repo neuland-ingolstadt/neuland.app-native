@@ -1,12 +1,3 @@
-import API from '@/api/authenticated-api'
-import ErrorView from '@/components/Error/ErrorView'
-import Divider from '@/components/Universal/Divider'
-import PlatformIcon from '@/components/Universal/Icon'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import { useRefreshByUser } from '@/hooks'
-import { breakpoints } from '@/styles/breakpoints'
-import { networkError } from '@/utils/api-utils'
-import { formatFriendlyDate } from '@/utils/date-utils'
 import { useQuery } from '@tanstack/react-query'
 import type React from 'react'
 import {
@@ -18,10 +9,19 @@ import {
 	RefreshControl,
 	StyleSheet,
 	Text,
-	View,
-	useWindowDimensions
+	useWindowDimensions,
+	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import API from '@/api/authenticated-api'
+import ErrorView from '@/components/Error/ErrorView'
+import Divider from '@/components/Universal/Divider'
+import PlatformIcon from '@/components/Universal/Icon'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import { useRefreshByUser } from '@/hooks'
+import { breakpoints } from '@/styles/breakpoints'
+import { networkError } from '@/utils/api-utils'
+import { formatFriendlyDate } from '@/utils/date-utils'
 
 export default function NewsScreen(): React.JSX.Element {
 	const { styles } = useStyles(stylesheet)

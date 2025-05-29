@@ -1,10 +1,10 @@
+import { useCallback, useEffect, useMemo } from 'react'
+import { useMMKVString } from 'react-native-mmkv'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '@/data/constants'
 import {
 	extractFacultyFromPersonalData,
 	getPersonalData
 } from '@/utils/api-utils'
-import { useCallback, useEffect, useMemo } from 'react'
-import { useMMKVString } from 'react-native-mmkv'
 
 export interface UserKindContextType {
 	userKind: 'guest' | 'student' | 'employee' | undefined

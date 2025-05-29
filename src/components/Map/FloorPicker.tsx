@@ -1,15 +1,15 @@
-import PlatformIcon from '@/components/Universal/Icon'
-import { MapContext } from '@/contexts/map'
-import { getContrastColor } from '@/utils/ui-utils'
 import * as Haptics from 'expo-haptics'
 import type React from 'react'
 import { memo, use } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
+import PlatformIcon from '@/components/Universal/Icon'
+import { MapContext } from '@/contexts/map'
+import { getContrastColor } from '@/utils/ui-utils'
 
 interface FloorPickerProps {
 	floors: string[]

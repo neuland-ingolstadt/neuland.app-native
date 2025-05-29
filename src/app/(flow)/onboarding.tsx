@@ -1,13 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import WhatsNewBox from '@/components/Flow/WhatsnewBox'
-import AnimatedText from '@/components/Flow/svgs/AnimatedText'
-import LogoSVG from '@/components/Flow/svgs/logo'
-import LogoTextSVG from '@/components/Flow/svgs/logoText'
-import PlatformIcon from '@/components/Universal/Icon'
-import { PRIVACY_URL } from '@/data/constants'
-import { useFlowStore } from '@/hooks/useFlowStore'
-import type { OnboardingCardData } from '@/types/data'
-import { getContrastColor } from '@/utils/ui-utils'
+/** biome-ignore-all lint/nursery/noNestedComponentDefinitions: not a problem here */
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: not a problem here */
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import type React from 'react'
@@ -19,8 +11,8 @@ import {
 	Platform,
 	Pressable,
 	Text,
-	View,
-	useWindowDimensions
+	useWindowDimensions,
+	View
 } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import Animated, {
@@ -34,6 +26,15 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import AnimatedText from '@/components/Flow/svgs/AnimatedText'
+import LogoSVG from '@/components/Flow/svgs/logo'
+import LogoTextSVG from '@/components/Flow/svgs/logoText'
+import WhatsNewBox from '@/components/Flow/WhatsnewBox'
+import PlatformIcon from '@/components/Universal/Icon'
+import { PRIVACY_URL } from '@/data/constants'
+import { useFlowStore } from '@/hooks/useFlowStore'
+import type { OnboardingCardData } from '@/types/data'
+import { getContrastColor } from '@/utils/ui-utils'
 
 export default function OnboardingScreen(): React.JSX.Element {
 	const { t, i18n } = useTranslation('flow')

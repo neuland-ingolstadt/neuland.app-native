@@ -1,8 +1,8 @@
-import type { Grade } from '@/types/thi-api'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import type { Grade } from '@/types/thi-api'
 
 import RowEntry from '../Universal/RowEntry'
 

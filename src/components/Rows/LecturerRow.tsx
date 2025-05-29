@@ -1,10 +1,10 @@
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import type { NormalizedLecturer } from '@/types/utils'
 import { router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { NormalizedLecturer } from '@/types/utils'
 
 import RowEntry from '../Universal/RowEntry'
 

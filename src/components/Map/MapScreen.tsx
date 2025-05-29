@@ -1,14 +1,61 @@
+import { trackEvent } from '@aptabase/react-native'
+import type BottomSheet from '@gorhom/bottom-sheet'
+import type { BottomSheetModal } from '@gorhom/bottom-sheet'
+import type {
+	CameraRef,
+	MapViewRef,
+	UserLocationRef
+} from '@maplibre/maplibre-react-native'
+import {
+	Camera,
+	FillLayer,
+	Images,
+	LineLayer,
+	MapView,
+	requestAndroidLocationPermissions,
+	ShapeSource,
+	SymbolLayer,
+	UserLocation,
+	UserTrackingMode
+} from '@maplibre/maplibre-react-native'
+import { useQuery } from '@tanstack/react-query'
+import { toast } from 'burnt'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import type { Feature, FeatureCollection, Position } from 'geojson'
+import type React from 'react'
+import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+	Appearance,
+	LayoutAnimation,
+	Linking,
+	Platform,
+	Pressable,
+	Text,
+	View
+} from 'react-native'
+import Animated, {
+	runOnJS,
+	useAnimatedStyle,
+	useSharedValue,
+	withTiming
+} from 'react-native-reanimated'
+import {
+	createStyleSheet,
+	UnistylesRuntime,
+	useStyles
+} from 'react-native-unistyles'
 import API from '@/api/authenticated-api'
 import NeulandAPI from '@/api/neuland-api'
 import {
 	NoSessionError,
 	UnavailableSessionError
 } from '@/api/thi-session-handler'
+import { UserKindContext } from '@/components/contexts'
 import ErrorView from '@/components/Error/ErrorView'
 import { BottomSheetDetailModal } from '@/components/Map/BottomSheetDetailModal'
 import MapBottomSheet from '@/components/Map/BottomSheetMap'
 import FloorPicker from '@/components/Map/FloorPicker'
-import { UserKindContext } from '@/components/contexts'
 import { MapContext } from '@/contexts/map'
 import { USER_GUEST } from '@/data/constants'
 import { type FeatureProperties, Gebaeude } from '@/types/asset-api'
@@ -29,63 +76,15 @@ import {
 	BUILDINGS,
 	FLOOR_ORDER,
 	FLOOR_SUBSTITUTES,
-	INGOLSTADT_CENTER,
-	NEUBURG_CENTER,
 	filterRooms,
 	getCenter,
 	getCenterSingle,
-	getIcon
+	getIcon,
+	INGOLSTADT_CENTER,
+	NEUBURG_CENTER
 } from '@/utils/map-utils'
 import { loadTimetable } from '@/utils/timetable-utils'
 import { LoadingState, roomNotFoundToast } from '@/utils/ui-utils'
-import { trackEvent } from '@aptabase/react-native'
-import type BottomSheet from '@gorhom/bottom-sheet'
-import type { BottomSheetModal } from '@gorhom/bottom-sheet'
-import {
-	Camera,
-	FillLayer,
-	Images,
-	LineLayer,
-	MapView,
-	ShapeSource,
-	SymbolLayer,
-	UserLocation,
-	UserTrackingMode,
-	requestAndroidLocationPermissions
-} from '@maplibre/maplibre-react-native'
-import type {
-	CameraRef,
-	MapViewRef,
-	UserLocationRef
-} from '@maplibre/maplibre-react-native'
-import { useQuery } from '@tanstack/react-query'
-import { toast } from 'burnt'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
-import type { Feature, FeatureCollection, Position } from 'geojson'
-import type React from 'react'
-import { use, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import {
-	Appearance,
-	LayoutAnimation,
-	Linking,
-	Platform,
-	Text,
-	View
-} from 'react-native'
-import Animated, {
-	runOnJS,
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming
-} from 'react-native-reanimated'
-import {
-	UnistylesRuntime,
-	createStyleSheet,
-	useStyles
-} from 'react-native-unistyles'
-
-import { Pressable } from 'react-native'
 
 import packageInfo from '../../../package.json'
 import LoadingIndicator from '../Universal/LoadingIndicator'
@@ -605,7 +604,6 @@ const MapScreen = (): React.JSX.Element => {
 		}
 
 		return () => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			clearTimeout(timer)
 		}
 	}, [regionChange, isVisible, opacity])
@@ -623,21 +621,18 @@ const MapScreen = (): React.JSX.Element => {
 
 	return (
 		<View style={styles.map}>
-			<>
-				{mapLoadState === LoadingState.ERROR && (
-					<View style={styles.errorContainer}>
-						<ErrorView title={t('error.map.mapLoadError')} />
-					</View>
-				)}
-				{mapLoadState === LoadingState.LOADING && (
-					<View style={styles.errorContainer}>
-						<LoadingIndicator />
-					</View>
-				)}
-			</>
+			{mapLoadState === LoadingState.ERROR && (
+				<View style={styles.errorContainer}>
+					<ErrorView title={t('error.map.mapLoadError')} />
+				</View>
+			)}
+			{mapLoadState === LoadingState.LOADING && (
+				<View style={styles.errorContainer}>
+					<LoadingIndicator />
+				</View>
+			)}
 
 			<View
-				// eslint-disable-next-line react-native/no-inline-styles
 				style={{
 					...styles.map,
 					marginBottom: 0
@@ -677,9 +672,7 @@ const MapScreen = (): React.JSX.Element => {
 						nativeAssetImages={['pin']}
 						images={{
 							// https://iconduck.com/icons/71717/map-marker - License: Creative Commons Zero v1.0 Universal
-							'map-marker':
-								// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
-								require('@/assets/map-marker.png')
+							'map-marker': require('@/assets/map-marker.png')
 						}}
 					/>
 					<Camera
@@ -721,7 +714,6 @@ const MapScreen = (): React.JSX.Element => {
 						>
 							<SymbolLayer
 								id="clickedElementMarker"
-								// eslint-disable-next-line react-native/no-inline-styles
 								style={{
 									iconImage: 'map-marker',
 									iconColor: theme.colors.primary,

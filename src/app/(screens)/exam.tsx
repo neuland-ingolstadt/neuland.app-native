@@ -1,7 +1,3 @@
-import FormList from '@/components/Universal/FormList'
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import type { FormListSections } from '@/types/components'
-import { formatFriendlyDateTime } from '@/utils/date-utils'
 import { HeaderTitle } from '@react-navigation/elements'
 import { Stack } from 'expo-router'
 import type React from 'react'
@@ -14,6 +10,10 @@ import Animated, {
 	useScrollViewOffset
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections } from '@/types/components'
+import { formatFriendlyDateTime } from '@/utils/date-utils'
 
 export default function ExamDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)

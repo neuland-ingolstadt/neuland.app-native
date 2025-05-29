@@ -1,11 +1,11 @@
-import FormList from '@/components/Universal/FormList'
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import type { FormListSections } from '@/types/components'
 import { Redirect, router } from 'expo-router'
 import type React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import FormList from '@/components/Universal/FormList'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections } from '@/types/components'
 
 export default function LecturerDetail(): React.JSX.Element {
 	const { styles, theme } = useStyles(stylesheet)

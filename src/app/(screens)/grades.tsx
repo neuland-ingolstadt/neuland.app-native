@@ -1,18 +1,3 @@
-import NeulandAPI from '@/api/neuland-api'
-import { NoSessionError } from '@/api/thi-session-handler'
-import ErrorView from '@/components/Error/ErrorView'
-import GradesRow from '@/components/Rows/GradesRow'
-import LoadingIndicator from '@/components/Universal/LoadingIndicator'
-import SectionView from '@/components/Universal/SectionsView'
-import { useRefreshByUser } from '@/hooks'
-import type { GradeAverage } from '@/types/utils'
-import {
-	extractSpoName,
-	getPersonalData,
-	networkError
-} from '@/utils/api-utils'
-import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
-import { LoadingState } from '@/utils/ui-utils'
 import { useQuery } from '@tanstack/react-query'
 import { router, useNavigation } from 'expo-router'
 import Fuse from 'fuse.js'
@@ -28,6 +13,21 @@ import {
 	View
 } from 'react-native'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import NeulandAPI from '@/api/neuland-api'
+import { NoSessionError } from '@/api/thi-session-handler'
+import ErrorView from '@/components/Error/ErrorView'
+import GradesRow from '@/components/Rows/GradesRow'
+import LoadingIndicator from '@/components/Universal/LoadingIndicator'
+import SectionView from '@/components/Universal/SectionsView'
+import { useRefreshByUser } from '@/hooks'
+import type { GradeAverage } from '@/types/utils'
+import {
+	extractSpoName,
+	getPersonalData,
+	networkError
+} from '@/utils/api-utils'
+import { loadGradeAverage, loadGrades } from '@/utils/grades-utils'
+import { LoadingState } from '@/utils/ui-utils'
 
 import packageInfo from '../../../package.json'
 

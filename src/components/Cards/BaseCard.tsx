@@ -1,21 +1,20 @@
-import { USER_GUEST } from '@/data/constants'
+import { type Href, type RelativePathString, router } from 'expo-router'
 import type React from 'react'
 import { use } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, {
+	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
-	withTiming,
-	interpolate
+	withTiming
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-
-import { type Href, type RelativePathString, router } from 'expo-router'
-import PlatformIcon from '../Universal/Icon'
+import { USER_GUEST } from '@/data/constants'
 import { DashboardContext, UserKindContext } from '../contexts'
 import { cardIcons } from '../icons'
+import PlatformIcon from '../Universal/Icon'
 import { CardContextMenu } from './CardContextMenu'
 
 interface BaseCardProps {

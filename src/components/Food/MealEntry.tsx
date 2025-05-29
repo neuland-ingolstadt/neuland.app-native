@@ -1,8 +1,15 @@
+import { trackEvent } from '@aptabase/react-native'
+import { router } from 'expo-router'
+import type React from 'react'
+import { memo, use, useDeferredValue, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { UserKindContext } from '@/components/contexts'
 // @ts-expect-error - no types available
 import DragDropView from '@/components/Exclusive/DragView'
 import ContextMenu from '@/components/Flow/ContextMenu'
 import PlatformIcon from '@/components/Universal/Icon'
-import { UserKindContext } from '@/components/contexts'
 import type { UserKindContextType } from '@/contexts/userKind'
 import { USER_GUEST } from '@/data/constants'
 import { useFoodFilterStore } from '@/hooks/useFoodFilterStore'
@@ -18,13 +25,6 @@ import {
 	mealName,
 	shareMeal
 } from '@/utils/food-utils'
-import { trackEvent } from '@aptabase/react-native'
-import { router } from 'expo-router'
-import type React from 'react'
-import { memo, use, useDeferredValue, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
 
 /**
  * Renders a single meal entry in the food menu.

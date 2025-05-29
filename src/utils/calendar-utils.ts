@@ -1,9 +1,9 @@
+import type { i18n } from 'i18next'
 import API from '@/api/authenticated-api'
 import rawCalendar from '@/data/calendar.json'
 import type { LanguageKey } from '@/localization/i18n'
 import type { Calendar, Semester } from '@/types/data'
 import type { CalendarEvent, Exam } from '@/types/utils'
-import type { i18n } from 'i18next'
 
 import { ignoreTime } from './date-utils'
 

@@ -1,5 +1,4 @@
-// biome-ignore lint/style/useNodejsImportProtocol: <explanation>
-import path from 'path'
+import path from 'node:path'
 import express from 'express'
 
 const app = express()

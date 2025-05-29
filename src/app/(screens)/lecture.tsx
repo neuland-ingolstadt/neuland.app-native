@@ -1,16 +1,3 @@
-import ErrorView from '@/components/Error/ErrorView'
-import DetailsBody from '@/components/Timetable/DetailsBody'
-import DetailsRow from '@/components/Timetable/DetailsRow'
-import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
-import Separator from '@/components/Timetable/Separator'
-import ShareCard from '@/components/Timetable/ShareCard'
-import FormList from '@/components/Universal/FormList'
-import PlatformIcon from '@/components/Universal/Icon'
-import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import type { FormListSections, SectionGroup } from '@/types/components'
-import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
-import { isValidRoom } from '@/utils/timetable-utils'
 import { trackEvent } from '@aptabase/react-native'
 import { HeaderTitle } from '@react-navigation/elements'
 import { Stack, useFocusEffect, useNavigation, useRouter } from 'expo-router'
@@ -26,6 +13,19 @@ import Animated, {
 } from 'react-native-reanimated'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import ViewShot, { captureRef } from 'react-native-view-shot'
+import ErrorView from '@/components/Error/ErrorView'
+import DetailsBody from '@/components/Timetable/DetailsBody'
+import DetailsRow from '@/components/Timetable/DetailsRow'
+import DetailsSymbol from '@/components/Timetable/DetailsSymbol'
+import Separator from '@/components/Timetable/Separator'
+import ShareCard from '@/components/Timetable/ShareCard'
+import FormList from '@/components/Universal/FormList'
+import PlatformIcon from '@/components/Universal/Icon'
+import ShareHeaderButton from '@/components/Universal/ShareHeaderButton'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import type { FormListSections, SectionGroup } from '@/types/components'
+import { formatFriendlyDate, formatFriendlyTime } from '@/utils/date-utils'
+import { isValidRoom } from '@/utils/timetable-utils'
 
 export default function TimetableDetails(): React.JSX.Element {
 	const router = useRouter()
@@ -187,6 +187,7 @@ export default function TimetableDetails(): React.JSX.Element {
 						{lecture.shortName.length > 0 ? (
 							<Text style={styles.eventShortName}>{lecture.shortName}</Text>
 						) : (
+							// biome-ignore lint/complexity/noUselessFragments: okay here
 							<></>
 						)}
 					</DetailsBody>

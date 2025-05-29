@@ -1,8 +1,3 @@
-import useRouteParamsStore from '@/hooks/useRouteParamsStore'
-import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
-import type { ITimetableViewProps } from '@/types/timetable'
-import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
-import { calendar } from '@/utils/calendar-utils'
 import {
 	CalendarBody,
 	CalendarContainer,
@@ -17,19 +12,23 @@ import moment from 'moment-timezone'
 import React, {
 	startTransition,
 	useCallback,
+	useDeferredValue,
 	useEffect,
 	useLayoutEffect,
-	useRef,
-	useDeferredValue
+	useRef
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import {
-	UnistylesRuntime,
 	createStyleSheet,
+	UnistylesRuntime,
 	useStyles
 } from 'react-native-unistyles'
-
-import { useTranslation } from 'react-i18next'
+import useRouteParamsStore from '@/hooks/useRouteParamsStore'
+import { TimetableMode, useTimetableStore } from '@/hooks/useTimetableStore'
+import type { ITimetableViewProps } from '@/types/timetable'
+import type { Exam, FriendlyTimetableEntry } from '@/types/utils'
+import { calendar } from '@/utils/calendar-utils'
 import LoadingIndicator from '../Universal/LoadingIndicator'
 import { HeaderRight } from './HeaderButtons'
 import EventComponent from './WeekEventComponent'
@@ -165,7 +164,7 @@ export default function TimetableWeek({
 			})
 		)
 
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		// biome-ignore lint/suspicious/noExplicitAny: TODO
 		let friendlyExams: any[] = []
 		if (showExams && exams.length > 0) {
 			friendlyExams = exams.map((entry, index) => {
